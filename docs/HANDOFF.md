@@ -70,14 +70,22 @@ low mode (default on touch devices) stays inside it. Initial transfer: ~213 KB g
 
 ## Deployment status
 
-- Workflow `.github/workflows/deploy-pages.yml` uses verified current versions of the official actions
-  (checkout v7, setup-node v7, configure-pages v6, upload-pages-artifact v5, deploy-pages v5).
-- This session could push to the repository but **could not enable GitHub Pages**: the Pages API is not
-  reachable through this session's network proxy. Pages was not enabled (`has_pages: false`) at the time of the push.
-- **Remaining one-time step for a repo admin:** Settings → Pages → Build and deployment → Source: **GitHub
-  Actions**. Then Actions → *Build and deploy to GitHub Pages* → *Run workflow* on the default branch.
-- The deploy job runs only on the repository's default branch. The configured default branch is `main`, which did
-  not exist; this work lives on `ccr-75ef4113-kfkimm`. Merge it into `main` (or make it the default branch) to deploy.
+- Pushed to `ccr-75ef4113-kfkimm`. Because the repository was empty, GitHub made this first-pushed branch the
+  **default branch** (`default_branch: ccr-75ef4113-kfkimm`); the deploy job therefore runs on it.
+- First CI run on GitHub ([run 37244156035](https://github.com/Algolon/Feh-Lu-We/actions/runs/37244156035)):
+  **build job succeeded** on GitHub's runner (`npm ci`, typecheck, 30 unit tests, production build, Pages artifact
+  upload). **Deploy job failed** at `actions/configure-pages@v6` with *"Get Pages site failed … Not Found"* —
+  GitHub Pages is not enabled for the repository (`has_pages: false`).
+- This session cannot enable Pages: the Pages REST endpoint is refused by the session's network proxy, and
+  `configure-pages`' `enablement` option needs a personal access token or GitHub App token (not `GITHUB_TOKEN`).
+  No credentials were requested or stored.
+- **Remaining one-time step (repo admin, works from a phone browser):**
+  1. github.com/Algolon/Feh-Lu-We → **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+  2. **Actions → Build and deploy to GitHub Pages → Run workflow** (branch `ccr-75ef4113-kfkimm`), or re-run the failed run.
+  3. Expected URL: https://algolon.github.io/Feh-Lu-We/ — **not live/verified until that run's deploy job is green.**
+- Workflow uses verified current versions of the official actions (checkout v7, setup-node v7, configure-pages v6,
+  upload-pages-artifact v5, deploy-pages v5). If you later rename/merge to `main` and make it the default branch,
+  deployment follows the default branch automatically.
 
 ## Commands
 

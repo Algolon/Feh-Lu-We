@@ -102,7 +102,9 @@ Paths and the pond count as part of their landscape region. Roofs stay on in pla
 `.github/workflows/deploy-pages.yml` runs on every push: `npm ci`, typecheck, unit tests, build, upload of
 `dist/` as the Pages artifact. On the repository's **default branch** it then runs `configure-pages` and
 `deploy-pages`. One-time setup by a repository admin: **Settings → Pages → Build and deployment → Source:
-GitHub Actions**, then re-run the workflow (Actions tab → *Run workflow*) or push again.
+GitHub Actions**, then re-run the workflow (Actions tab → *Run workflow*) or push again. Until that is done the
+deploy job fails with "Get Pages site failed" while the build job still validates every push. Current status:
+[`docs/HANDOFF.md`](docs/HANDOFF.md#deployment-status).
 
 Vite is configured with `base: '/Feh-Lu-We/'`; all assets are bundled or generated at runtime, so the site
 works under that sub-path. No server-side routing is used.
