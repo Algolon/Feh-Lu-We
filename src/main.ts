@@ -1,0 +1,50 @@
+import './ui/style.css';
+import { Game, TEST_HOOKS } from './core/game';
+import { UI } from './ui/ui';
+
+function webglAvailable(): boolean {
+  if (new URLSearchParams(location.search).has('nowebgl')) return false; // test hook for the failure path
+  try {
+    const c = document.createElement('canvas');
+    return !!(c.getContext('webgl2') || c.getContext('webgl'));
+  } catch {
+    return false;
+  }
+}
+
+function fail(msg: string) {
+  new UI().showStart({
+    hasSave: false,
+    onContinue: () => {},
+    onNew: () => {},
+    error: `<b>Dit apparaat kan Feh Lu We niet tonen.</b><br><br>${msg}<br><br>Probeer een recente versie van Chrome, Safari, Firefox of Edge, zet hardwareversnelling aan, of probeer een ander apparaat. Je voortgang (als je die had) blijft bewaard.`,
+  });
+}
+
+function boot() {
+  const canvas = document.getElementById('game') as HTMLCanvasElement;
+  if (!webglAvailable()) {
+    fail('Je browser ondersteunt geen WebGL (3D-graphics), of het staat uit.');
+    return;
+  }
+  let game: Game;
+  try {
+    game = new Game(canvas);
+  } catch (e) {
+    console.error(e);
+    fail('Het 3D-beeld kon niet worden gestart.');
+    return;
+  }
+  if (TEST_HOOKS) (window as unknown as { __game: Game }).__game = game;
+  const begin = async (fresh: boolean) => {
+    try {
+      await game.start(fresh);
+    } catch (e) {
+      console.error(e);
+      fail('Er ging iets mis bij het laden van de wereld.');
+    }
+  };
+  game.ui.showStart({ hasSave: game.hasSave(), onContinue: () => begin(false), onNew: () => begin(true) });
+}
+
+boot();
