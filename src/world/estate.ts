@@ -276,6 +276,12 @@ function buildGarden(w: World, g: GameApi, c: ReturnType<typeof makeCtx>, veg: V
     if (r() < 0.6) veg.smallThing('flower', x, z, 0.14, purple[Math.floor(r() * 4)], 'garden');
     else veg.smallThing('shrub', x, z, 0.4 + r() * 0.3, '#5a8a3e', 'garden');
   }
+  // forecourt planter: a small clipped tree and flowers
+  veg.tree({ x: 60, z: 47.5, h: 2.0, r: 1.0, kind: 'oak', hue: 0.2 }, 'garden');
+  for (let i = 0; i < 18; i++) {
+    const a = (i / 18) * Math.PI * 2, d = 0.9 + (i % 3) * 0.2;
+    veg.smallThing(i % 4 === 0 ? 'shrub' : 'flower', 60 + Math.cos(a) * d, 47.5 + Math.sin(a) * d, i % 4 === 0 ? 0.35 : 0.14, i % 4 === 0 ? '#4f7f38' : purple[i % 4], 'garden', 0.46);
+  }
   // hedges along the manor front
   for (let x = 48.5; x < 71.5; x += 1.1) if (Math.abs(x - 60) > 2.6) veg.smallThing('shrub', x, 51.2, 0.55, '#4a7a36', 'garden');
   void part; void cyl;
