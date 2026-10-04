@@ -181,7 +181,288 @@ async function walkthrough() {
   await ctx.close();
 }
 
-await walkthrough();
+// ------------------------------------------------------------------------------------------------
+// Helper: start directly in the estate from an injected save (test setup only — not used by the walkthrough).
+const ESSENTIALS = ['invitation', 'torch', 'matches', 'notebook', 'frontKey'];
+async function startEstate(page, extra = {}) {
+  await page.goto(BASE + '?autotest=1');
+  await page.evaluate((save) => localStorage.setItem('fehluwe.save', JSON.stringify(save)), {
+    version: 2, scene: 'estate', inventory: ESSENTIALS, flags: { leftHome: true }, unlocked: ['lock.door.front'], open: { 'door.front': true }, ...extra,
+  });
+  await page.reload();
+  await page.click('[data-cont]');
+  await page.waitForFunction(() => window.__game?.world?.id === 'estate');
+  await page.evaluate(helpers);
+}
+
+async function collisionChecks() {
+  const { ctx, page } = await newPage();
+  try {
+    await startEstate(page, { player: { estate: { x: 60, y: 0.15, z: 58.8, yaw: 0, pitch: 0 } } });
+    const r = await E(page, () => {
+      const out = {};
+      const P = () => T.G().player;
+      // wall blocks (hall west wall W1, between console and arch)
+      try { T.walkTo(53.5, 58.8, false, 4); } catch { /* expected to stop */ }
+      out.wall = P().x >= 56.3;
+      // closed door blocks; open door lets through
+      T.walk([[60, 66], [57.6, 68.6]]);
+      try { T.walkTo(57.6, 71.2, false, 4); } catch { /* blocked */ }
+      out.closedDoor = P().z < 69.8;
+      T.act('door.corridor', 'Openen'); T.wait(1.2);
+      T.walkTo(57.6, 71.0);
+      out.openDoor = P().z > 70.6;
+      // door refuses to close on the player standing in the doorway
+      T.walkTo(57.6, 70.0);
+      T.act('door.corridor', 'Sluiten');
+      out.noCrush = T.G().state.open['door.corridor'] === true;
+      T.walkTo(57.6, 68.6);
+      // stairs up and down
+      T.walk([[60, 66], [63, 62.2], [63, 70.6]]);
+      out.upY = +P().y.toFixed(2);
+      T.walk([[63, 62.3]]);
+      out.downY = +P().y.toFixed(2);
+      // the upstairs gallery railing stops a fall into the hall
+      T.walk([[63, 70.6], [59, 71.5], [59, 64.2]]);
+      try { T.walkTo(59, 61.0, false, 4); } catch { /* railing */ }
+      out.railing = P().z > 63.2 && P().y > 3.3;
+      return out;
+    });
+    log('collision: wall blocks movement', r.wall);
+    log('collision: closed door blocks, open door passes', r.closedDoor && r.openDoor);
+    log('collision: door will not close onto the player', r.noCrush);
+    log('collision: stairs reach upper floor and back', Math.abs(r.upY - 3.35) < 0.02 && Math.abs(r.downY - 0.15) < 0.02, `up ${r.upY}, down ${r.downY}`);
+    log('collision: gallery railing prevents falling', r.railing);
+    // pool + glass + pickup through wall
+    await startEstate(page, { player: { estate: { x: 78, y: 0.15, z: 65.2, yaw: 0, pitch: 0 } } });
+    const r2 = await E(page, () => {
+      const P = () => T.G().player;
+      try { T.walkTo(78, 74, false, 5); } catch { /* pool edge */ }
+      const pool = P().z < 66.8 && P().y > 0.1;
+      try { T.walkTo(78, 60, false, 5); } catch { /* glass */ }
+      const glass = P().z > 64.05;
+      return { pool, glass };
+    });
+    log('collision: pool edge is solid, no fall-through', r2.pool);
+    log('collision: conservatory glass is solid', r2.glass);
+    await startEstate(page, { inventory: [...ESSENTIALS, 'shedKey'], player: { estate: { x: 26.4, y: 0, z: 23.85, yaw: 0, pitch: 0 } } });
+    const r3 = await E(page, () => {
+      T.lookAtId('pk.kindling');
+      const blocked = T.G().metrics().target !== 'pk.kindling';
+      return { blocked, target: T.G().metrics().target };
+    });
+    log('interaction: no pickup through a wall', r3.blocked, `reticle target: ${r3.target}`);
+  } catch (e) {
+    log('collision checks', false, e.message.split('\n')[0]);
+  }
+  if (page.problems.length) log('collision: no console errors', false, page.problems.slice(0, 3).join(' | '));
+  await ctx.close();
+}
+
+async function saveChecks() {
+  const { ctx, page } = await newPage();
+  try {
+    await startGame(page);
+    await E(page, () => { T.walk([[3.2, 2.5]]); T.act('pk.invitation'); T.closeModal(); T.act('pk.torch'); T.walk([[2.2, 2.4], [1.3, 3.2]]); T.act('home.drawer'); T.wait(1); T.G().saveNow(); });
+    await page.reload();
+    await page.click('[data-cont]');
+    await page.waitForFunction(() => window.__game?.world);
+    await page.evaluate(helpers);
+    const r = await E(page, () => {
+      const g = T.G();
+      return {
+        inv: g.state.inventory, taken: g.state.taken, drawer: g.state.open['home.drawer'],
+        invHidden: !g.world.byId.get('pk.invitation').obj.visible,
+        pos: T.pos(), notebook: g.state.clues.includes('c.invitation'),
+      };
+    });
+    log('save: pickups survive reload and stay removed from the world', r.inv.includes('invitation') && r.inv.includes('torch') && r.invHidden, JSON.stringify(r.inv));
+    log('save: drawer state survives reload', r.drawer === true);
+    log('save: position restored', Math.hypot(r.pos.x - 1.3, r.pos.z - 3.2) < 0.6, JSON.stringify(r.pos));
+    // upstairs + puzzle flags
+    await startEstate(page, { flags: { leftHome: true, drawerLockSolved: true }, unlocked: ['lock.door.front', 'lock.hallDrawer'], open: { 'hall.drawer': true }, player: { estate: { x: 59, y: 3.35, z: 72, yaw: 0, pitch: 0 } } });
+    const r2 = await E(page, () => ({ y: T.G().player.y, flag: T.G().state.flags.drawerLockSolved, obj: T.G().ui.hud.querySelector('#objective').textContent }));
+    log('save: upstairs pose + puzzle flags restored', Math.abs(r2.y - 3.35) < 0.01 && r2.flag, `y=${r2.y}, objective="${r2.obj}"`);
+    // pose inside closed geometry → moved to a valid checkpoint
+    await startEstate(page, { player: { estate: { x: 56.0, y: 0.15, z: 58.0, yaw: 0, pitch: 0 } } });
+    const r3 = await E(page, () => T.pos());
+    log('save: invalid saved pose falls back to a checkpoint', !(Math.abs(r3.x - 56) < 0.3 && Math.abs(r3.z - 58) < 0.3), JSON.stringify(r3));
+    // corrupted save → new game, no crash
+    await page.goto(BASE + '?autotest=1'); // fresh, not-started instance
+    await page.evaluate(() => localStorage.setItem('fehluwe.save', '{"version":2,"scene":"estate","inventory":"oops"'));
+    await page.reload();
+    const hasNewOnly = await page.evaluate(() => !!document.querySelector('[data-new]') && !document.querySelector('[data-cont]'));
+    log('save: corrupted save is ignored safely', hasNewOnly);
+    // reset via pause menu
+    await startEstate(page);
+    await page.click('#b-menu');
+    await page.click('[data-restart]');
+    await Promise.all([page.waitForNavigation(), page.click('[data-yes]')]);
+    const afterReset = await page.evaluate(() => ({ save: localStorage.getItem('fehluwe.save'), cont: !!document.querySelector('[data-cont]') }));
+    log('save: reset with confirmation clears progress', !afterReset.save && !afterReset.cont);
+  } catch (e) {
+    log('save checks', false, e.message.split('\n')[0]);
+  }
+  await ctx.close();
+}
+
+async function touchChecks() {
+  const { ctx, page } = await newPage({ viewport: { width: 844, height: 390 }, hasTouch: true, isMobile: true, deviceScaleFactor: 2 });
+  try {
+    await startGame(page);
+    const cdp = await ctx.newCDPSession(page);
+    const touch = (type, points) => cdp.send('Input.dispatchTouchEvent', { type, touchPoints: points.map(([x, y, id]) => ({ x, y, id, radiusX: 4, radiusY: 4, force: 1 })) });
+    const st = () => page.evaluate(() => ({ x: __game.player.x, z: __game.player.z, yaw: __game.player.yaw, pitch: __game.player.pitch }));
+    // a) simultaneous move (left thumb) + look (right thumb)
+    const s0 = await st();
+    await touch('touchStart', [[120, 300, 1]]);
+    await touch('touchStart', [[120, 300, 1], [650, 200, 2]]);
+    for (let i = 1; i <= 10; i++) {
+      await touch('touchMove', [[120, 300 - i * 5, 1], [650 + i * 8, 200, 2]]);
+      await page.waitForTimeout(60);
+    }
+    await page.waitForTimeout(900);
+    const s1 = await st();
+    await touch('touchEnd', []);
+    const moved = Math.hypot(s1.x - s0.x, s1.z - s0.z), turned = Math.abs(s1.yaw - s0.yaw);
+    log('touch: simultaneous joystick move + look drag', moved > 0.2 && turned > 0.1, `moved ${moved.toFixed(2)} m, turned ${(turned * 57.3).toFixed(0)}°`);
+    // b) movement stops after release; pointercancel also clears
+    await page.waitForTimeout(400);
+    const s2 = await st();
+    await page.waitForTimeout(600);
+    const s3 = await st();
+    log('touch: release stops movement', Math.hypot(s3.x - s2.x, s3.z - s2.z) < 0.02);
+    await touch('touchStart', [[120, 300, 3]]);
+    await touch('touchMove', [[120, 240, 3]]);
+    await page.waitForTimeout(300);
+    await touch('touchCancel', []);
+    await page.waitForTimeout(300);
+    const c0 = await st();
+    await page.waitForTimeout(600);
+    const c1 = await st();
+    log('touch: touchcancel clears joystick (no stuck movement)', Math.hypot(c1.x - c0.x, c1.z - c0.z) < 0.02);
+    // c) a drag that starts on an object looks around; a short tap on it interacts (screen-space raycast)
+    const project = () => page.evaluate(() => {
+      T.lookAt(4.3, 0.8, 3.05);
+      const c = T.hitCenter('pk.torch');
+      const v = new (window.__game.camera.position.constructor)(c.x, c.y, -c.z).project(window.__game.camera);
+      return { x: (v.x + 1) / 2 * innerWidth + 40, y: (1 - v.y) / 2 * innerHeight, target: __game.metrics().target };
+    });
+    await page.evaluate(() => T.walk([[3.2, 2.5]]));
+    const p1 = await project();
+    const y0 = (await st()).yaw;
+    await touch('touchStart', [[p1.x, p1.y, 5]]);
+    for (let i = 1; i <= 6; i++) { await touch('touchMove', [[p1.x + i * 20, p1.y, 5]]); await page.waitForTimeout(16); }
+    await touch('touchEnd', []);
+    await page.waitForTimeout(300);
+    const afterDrag = await page.evaluate(() => ({ taken: __game.state.taken.slice(), yaw: __game.player.yaw }));
+    log('touch: drag starting on an object looks around instead of picking it', !afterDrag.taken.includes('pk.torch') && Math.abs(afterDrag.yaw - y0) > 0.05, `yaw Δ ${((afterDrag.yaw - y0) * 57.3).toFixed(0)}°`);
+    // aim so the torch sits off-centre (reticle elsewhere), then tap directly on it
+    const p2 = await page.evaluate(() => {
+      T.lookAt(4.3, 0.8, 3.05);
+      const pl = __game.player; pl.yaw -= 0.25; T.tick(2);
+      const c = T.hitCenter('pk.torch');
+      const v = new (window.__game.camera.position.constructor)(c.x, c.y, -c.z).project(window.__game.camera);
+      return { x: (v.x + 1) / 2 * innerWidth, y: (1 - v.y) / 2 * innerHeight, centre: __game.metrics().target };
+    });
+    await touch('touchStart', [[p2.x, p2.y, 6]]);
+    await page.waitForTimeout(60);
+    await touch('touchEnd', []);
+    await page.waitForTimeout(300);
+    const tapped = await page.evaluate(() => __game.state.taken.includes('pk.torch'));
+    log('touch: direct tap on a visible nearby object picks it up', tapped, `tap at ${p2.x.toFixed(0)},${p2.y.toFixed(0)}; reticle target was ${p2.centre}`);
+    // d) overlay blocks world input
+    await page.tap('#b-bag');
+    await page.waitForSelector('.modal');
+    const o0 = await st();
+    await touch('touchStart', [[120, 300, 7]]);
+    await touch('touchMove', [[120, 230, 7]]);
+    await page.waitForTimeout(600);
+    await touch('touchEnd', []);
+    const o1 = await st();
+    log('touch: open overlay blocks movement and look', Math.hypot(o1.x - o0.x, o1.z - o0.z) < 0.01 && Math.abs(o1.yaw - o0.yaw) < 1e-6);
+    // inventory: select an item via touch
+    await page.tap('.inv button[data-id="torch"]');
+    await page.tap('#inv-actions .btn.primary');
+    const torchOn = await page.evaluate(() => !!__game.state.lit.torch);
+    log('touch: inventory interaction (torch on via bag)', torchOn);
+    // e) touch targets ≥ 48 px
+    const small = await page.evaluate(() => [...document.querySelectorAll('#hud button:not([hidden])')].filter((b) => { const r = b.getBoundingClientRect(); return r.width && (r.width < 48 || r.height < 48); }).map((b) => b.id));
+    log('touch: HUD buttons are at least 48 px', small.length === 0, small.join(','));
+    // f) pause / resume
+    await page.tap('#b-menu');
+    await page.waitForSelector('[data-resume]');
+    await page.tap('[data-resume]');
+    const resumed = await page.evaluate(() => document.getElementById('overlay').hidden && __game.input.enabled);
+    log('touch: pause and resume', resumed);
+    // g) orientation change / resize
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.waitForTimeout(500);
+    const port = await page.evaluate(() => ({ w: __game.renderer.domElement.width, h: __game.renderer.domElement.height, aspect: __game.camera.aspect, btn: document.getElementById('action').getBoundingClientRect().bottom <= innerHeight }));
+    await page.screenshot({ path: `${OUT}/touch-portrait.png` });
+    await page.setViewportSize({ width: 844, height: 390 });
+    await page.waitForTimeout(500);
+    await page.screenshot({ path: `${OUT}/touch-landscape.png` });
+    log('touch: portrait resize keeps canvas + controls usable', port.h > port.w && port.aspect < 1 && port.btn, JSON.stringify(port));
+  } catch (e) {
+    log('touch checks', false, e.message.split('\n')[0]);
+  }
+  if (page.problems.length) log('touch: no console errors', false, page.problems.slice(0, 3).join(' | '));
+  await ctx.close();
+}
+
+async function webglFailure() {
+  const { ctx, page } = await newPage();
+  await page.goto(BASE + '?nowebgl=1');
+  const txt = await page.textContent('#start');
+  log('WebGL failure path (forced) shows an understandable message', /kan Feh Lu We niet tonen/.test(txt ?? ''));
+  await ctx.close();
+  const b2 = await chromium.launch({ executablePath: exe, args: ['--disable-gpu', '--disable-webgl', '--disable-3d-apis'] });
+  const p2 = await b2.newPage();
+  await p2.goto(BASE);
+  const t2 = await p2.textContent('#start');
+  log('WebGL failure path (browser with WebGL disabled)', /kan Feh Lu We niet tonen/.test(t2 ?? ''));
+  await b2.close();
+}
+
+async function metrics() {
+  const { ctx, page } = await newPage();
+  const views = [
+    ['gate (driveway)', { x: 60, y: 0, z: 3, yaw: 0, pitch: 0.02 }],
+    ['forecourt → manor', { x: 60, y: 0, z: 40, yaw: 0, pitch: 0.05 }],
+    ['entrance hall', { x: 60, y: 0.15, z: 56.5, yaw: 0, pitch: 0.1 }],
+    ['garden → manor + conservatory', { x: 62, y: 0, z: 96, yaw: Math.PI * 0.95, pitch: 0 }],
+    ['forest (shed area)', { x: 40, y: 0, z: 36, yaw: -2.2, pitch: 0 }],
+    ['conservatory pool', { x: 76, y: 0.15, z: 65.4, yaw: 0.3, pitch: -0.2 }],
+  ];
+  const rows = [];
+  for (const [name, pose] of views) {
+    await startEstate(page, { player: { estate: pose } });
+    await page.waitForTimeout(1500);
+    // measure one frame per quality mode; "high" includes the shadow-map pass
+    const m = await page.evaluate(() => {
+      const g = __game, out = {};
+      for (const q of ['low', 'high']) {
+        g.settings.quality = q; g.applyQuality(true);
+        g.tick(1 / 30); g.renderer.render(g.world.scene, g.camera);
+        const i = g.renderer.info.render; out[q] = { calls: i.calls, triangles: i.triangles };
+      }
+      return out;
+    });
+    rows.push({ name, ...m });
+    await page.screenshot({ path: `${OUT}/view-${name.replace(/\W+/g, '_')}.png` });
+  }
+  for (const r of rows) {
+    log(`render low (mobile default): ${r.name}`, r.low.calls < 150 && r.low.triangles < 200000, `${r.low.calls} calls, ${r.low.triangles} tris`);
+    log(`render high (desktop, +shadows): ${r.name}`, r.high.calls < 150 * 1.6 && r.high.triangles < 300000, `${r.high.calls} calls, ${r.high.triangles} tris`);
+  }
+  writeFileSync(`${OUT}/metrics.json`, JSON.stringify(rows, null, 2));
+  await ctx.close();
+}
+
+const only = process.env.E2E_ONLY?.split(',');
+const suites = { walkthrough, collisionChecks, saveChecks, touchChecks, webglFailure, metrics };
+for (const [name, fn] of Object.entries(suites)) if (!only || only.includes(name)) await fn();
 
 const failed = results.filter((r) => !r.ok);
 writeFileSync(`${OUT}/results.json`, JSON.stringify(results, null, 2));

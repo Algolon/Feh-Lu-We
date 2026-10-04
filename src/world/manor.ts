@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, wall, floor, ceiling, stairsZ, railing, hipRoof, windowAt } from './arch';
 import { box, boxMM, cyl, blob, compound, v3, hitbox } from './kit';
-import { table, chair, sofa, armchair, bookshelf, bed, counter, rug, plant, painting, crate, tableLamp, floorLamp, chandelier, wallSconce, flame, lantern, part } from './furniture';
+import { table, chair, sofa, armchair, bookshelf, bed, counter, rug, plant, painting, crate, tableLamp, floorLamp, chandelier, wallSconce, flame, part, staticLantern, staticSconce } from './furniture';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place } from '../interactions/props';
 import { plaqueTexture, forestMapTexture } from './textures';
 import { drawSymbol } from '../content/symbols';
@@ -50,10 +50,11 @@ export function buildManor(w: World, g: GameApi, c: Ctx) {
   for (const x of [58.4, 61.6]) w.col.addCircle(x, 51.1, 0.2, 0, 3);
   boxMM(c.b, k.M.slate, '#7d879c', 57.9, 62.1, 3.05, 3.3, 50.6, 52.1, { chunk: c.chunk });
   for (const x of [58.6, 61.4]) {
-    const l = lantern(w, x, 2.2, 51.95, 0.8);
-    makeLamp(w, g, { id: `lamp.porch.${x}`, ...l, toggle: false, defaultOn: true, intensity: 4, distance: 7 });
+    staticLantern(c, w, x, 2.2, 51.95, 0.8, 0, 4, 7);
   }
 
+  // everything from here on is interior: its own chunk, hidden when the player is outside and away
+  c.chunk = 'manorIn';
   // ---------------------------------------------------------------- floors / ceilings
   floor(c, 56, 64, 52.4, 72, GF, k.M.tile, '#efe4cc', 0.2, false, 1.6); // hall, vestibule, corridor
   floor(c, 48.4, 56, 52.4, 72, GF, k.M.wood, '#b07e4e', 0.2, false, 2.2); // living
@@ -134,8 +135,7 @@ export function buildManor(w: World, g: GameApi, c: Ctx) {
   w.scene.add(sw);
   makeLamp(w, g, { id: 'lamp.hallChandelier', obj: sw, glow: ch.glow, light: ch.light, name: 'kroonluchter', defaultOn: true, intensity: 9, distance: 12, hit: [0.4, 0.4, 0.3], hitOffset: [0, 0.05, 0] });
   for (const [x, z, yaw] of [[56.15, 64.5, Math.PI / 2], [63.85, 61.5, -Math.PI / 2]] as const) {
-    const s = wallSconce(w, x, 2.2, z, yaw);
-    makeLamp(w, g, { id: `lamp.sconce.${z}`, ...s, toggle: false, defaultOn: true, intensity: 3, distance: 6 });
+    staticSconce(c, w, x, 2.2, z, yaw, 3, 6);
   }
   // console (ladekast) with the symbol-dial drawer — beat 1
   const cx = 56.32, cz = 57.6;
@@ -294,8 +294,7 @@ export function buildManor(w: World, g: GameApi, c: Ctx) {
 
   // ---------------------------------------------------------------- service corridor + billiard room
   for (const x of [57, 62.5]) {
-    const s = wallSconce(w, x, 2.1, 70.1, 0);
-    makeLamp(w, g, { id: `lamp.corridor.${x}`, ...s, toggle: false, defaultOn: true, intensity: 2.5, distance: 5 });
+    staticSconce(c, w, x, 2.1, 70.1, 0, 2.5, 5);
   }
   rug(c, 55, 75.8, GF + 0.01, 4.2, 5.6, 0, '#c8b0a0');
   // billiard table (balls double as the optional panel's evidence)

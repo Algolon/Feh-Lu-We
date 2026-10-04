@@ -260,6 +260,7 @@ export interface LampOpts {
 
 export function makeLamp(w: World, g: GameApi, o: LampOpts) {
   const isOn = () => g.state.lit[o.id] ?? o.defaultOn ?? false;
+  o.obj.userData.cullDist = 30; // lit lamps read from further away than plain props
   const onC = new THREE.Color(o.onColor ?? '#ffd27a');
   const offC = new THREE.Color('#5a5046');
   w.lamps.push({ id: o.id, pos: o.light, color: o.color ?? 0xffc77a, intensity: o.intensity ?? 6, distance: o.distance ?? 9, on: isOn, flicker: o.flicker });

@@ -4,6 +4,7 @@ import { type Ctx } from './arch';
 import { box, cyl, blob, compound, planMatrix, v3, getKit } from './kit';
 import { paintingTexture } from './textures';
 import type { World } from '../interactions/world';
+import type { Batcher } from './kit';
 
 const rot = (dx: number, dz: number, yaw: number): [number, number] => [dx * Math.cos(yaw) + dz * Math.sin(yaw), -dx * Math.sin(yaw) + dz * Math.cos(yaw)];
 
@@ -286,3 +287,29 @@ export function flame(w: World, x: number, y: number, z: number, s = 1) {
 }
 
 export { P as part };
+
+/** Always-on decorative lantern baked into the static batch (no per-lamp draw calls) + pooled light. */
+export function staticLantern(c: Ctx, w: World, x: number, y0: number, z: number, s = 1, yaw = 0, intensity = 3, distance = 7) {
+  const k = c.k;
+  const b: Batcher = c.b;
+  const o = { yaw, chunk: c.chunk, shadow: false };
+  box(b, k.M.paint, '#2b2622', x, y0, z, 0.3 * s, 0.04 * s, 0.3 * s, o);
+  box(b, k.M.paint, '#2b2622', x, y0 + 0.42 * s, z, 0.34 * s, 0.05 * s, 0.34 * s, o);
+  cyl(b, k.M.paint, '#2b2622', x, y0 + 0.47 * s, z, 0.02 * s, 0.17 * s, 0.12 * s, 4, { ...o, yaw: yaw + Math.PI / 4 });
+  for (const dx of [-1, 1]) for (const dz of [-1, 1]) {
+    const [rx, rz] = rot(dx * 0.14 * s, dz * 0.14 * s, yaw);
+    box(b, k.M.paint, '#2b2622', x + rx, y0, z + rz, 0.03 * s, 0.44 * s, 0.03 * s, o);
+  }
+  box(b, k.M.glow, '#ffd27a', x, y0 + 0.04 * s, z, 0.25 * s, 0.36 * s, 0.25 * s, { ...o, jitter: 0 });
+  w.lamps.push({ id: `fixed.${x.toFixed(2)}.${z.toFixed(2)}`, pos: v3(x, y0 + 0.25 * s, z), color: 0xffc77a, intensity, distance, on: () => true });
+}
+
+/** Always-on wall sconce baked into the static batch. Faces plan heading yaw (away from the wall). */
+export function staticSconce(c: Ctx, w: World, x: number, y: number, z: number, yaw: number, intensity = 3, distance = 6) {
+  const k = c.k;
+  P(c, k.M.paint, '#b8892f', x, z, yaw, 0, y - 0.12, -0.03 + 0.03, 0.1, 0.24, 0.04);
+  P(c, k.M.paint, '#b8892f', x, z, yaw, 0, y - 0.02, 0.08, 0.04, 0.04, 0.2);
+  const [fx, fz] = [Math.sin(yaw), Math.cos(yaw)];
+  cyl(c.b, k.M.glow, '#ffe2a8', x + fx * 0.18, y, z + fz * 0.18, 0.07, 0.11, 0.16, 10, { chunk: c.chunk, shadow: false, jitter: 0 });
+  w.lamps.push({ id: `fixed.${x.toFixed(2)}.${z.toFixed(2)}`, pos: v3(x + fx * 0.4, y + 0.1, z + fz * 0.4), color: 0xffc77a, intensity, distance, on: () => true });
+}

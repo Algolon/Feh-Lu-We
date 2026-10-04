@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, wall, floor, ceiling, hipRoof } from './arch';
 import { box, boxMM, cyl, blob, compound, v3 } from './kit';
-import { table, chair, plant, lantern, part, flame } from './furniture';
+import { table, chair, plant, lantern, part, flame, staticLantern } from './furniture';
 import { makeDoor, makeLamp, makeInspect, makeAction, place } from '../interactions/props';
 import { drawSymbol } from '../content/symbols';
 
@@ -24,7 +24,9 @@ export function buildCottage(w: World, g: GameApi, c: Ctx) {
   hipRoof(c, 25, 92, 10, 8, TOPW, 2.2, k.M.terracotta, '#ffffff', 0.55);
   box(c.b, k.M.plaster, '#fbf6ec', 21.2, 4.0, 94.6, 0.8, 2.0, 0.8, { chunk: c.chunk });
   box(c.b, k.M.terracotta, '#ffffff', 21.2, 6.0, 94.6, 1.0, 0.15, 1.0, { chunk: c.chunk });
-  // interior
+  // interior (own chunk, culled from afar)
+  const outChunk = c.chunk;
+  c.chunk = 'cottageIn';
   floor(c, 20.3, 29.7, 88.3, 95.7, Y, k.M.wood, '#b88a5a', 0.3, true, 2);
   ceiling(c, 20.3, 29.7, 88.3, 95.7, 3.05, '#f4ead6');
   for (let x = 21; x < 30; x += 1.6) box(c.b, k.M.wood, '#6b4426', x, 2.88, 92, 0.16, 0.17, 7.4, { chunk: c.chunk, uv: 1 });
@@ -145,6 +147,7 @@ export function buildCottage(w: World, g: GameApi, c: Ctx) {
     }
   });
 
+  c.chunk = outChunk;
   // ---------------------------------------------------------------- terraces + pond
   floor(c, 20.4, 29.6, 85.7, 88.0, 0.15, k.M.terracotta, '#e8b090', 0.3, true, 1.2);
   floor(c, 30.0, 32.4, 89.0, 95.2, 0.15, k.M.terracotta, '#e8b090', 0.3, true, 1.2);
@@ -155,8 +158,7 @@ export function buildCottage(w: World, g: GameApi, c: Ctx) {
   part(c, k.M.wood, '#7a5232', 31.6, 92.2, Math.PI / 2, 0, 0.15, 0, 1.6, 0.45, 0.45, 1); // terrace bench
   w.col.addBoxC(31.6, 92.2, 0.5, 1.7, 0, 0.6);
   for (const x of [24.0, 26.0]) {
-    const l = lantern(w, x, 2.3, 88.0, 0.7);
-    makeLamp(w, g, { id: `lamp.cottageDoor.${x}`, ...l, toggle: false, defaultOn: true, intensity: 3, distance: 6 });
+    staticLantern(c, w, x, 2.3, 88.0, 0.7, 0, 3, 6);
   }
   // pond with lily pads and rocks
   const pondMat = w.material(new THREE.MeshLambertMaterial({ color: '#2f6f78', transparent: true, opacity: 0.88, emissive: new THREE.Color('#0a2a30') }));

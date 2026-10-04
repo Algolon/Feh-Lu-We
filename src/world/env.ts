@@ -8,8 +8,8 @@ const A = {
   hemiSky: new THREE.Color('#dbe8f2'), hemiGround: new THREE.Color('#7a6440'), fog: new THREE.Color('#e9d9b6'),
 };
 const D = {
-  zenith: new THREE.Color('#2f3c70'), horizon: new THREE.Color('#ee8e62'), sun: new THREE.Color('#ff9a5c'),
-  hemiSky: new THREE.Color('#8a90b8'), hemiGround: new THREE.Color('#4a3a2a'), fog: new THREE.Color('#9a7e78'),
+  zenith: new THREE.Color('#4a5a92'), horizon: new THREE.Color('#f29a6a'), sun: new THREE.Color('#ffa868'),
+  hemiSky: new THREE.Color('#b8b4cc'), hemiGround: new THREE.Color('#5a4a36'), fog: new THREE.Color('#c09a86'),
 };
 
 export interface Env {
@@ -67,13 +67,13 @@ export function addEnvironment(w: World): Env {
       uni.uHorizon.value.lerpColors(A.horizon, D.horizon, t);
       uni.uSunCol.value.lerpColors(A.sun, D.sun, t);
       sun.color.lerpColors(A.sun, D.sun, t);
-      sun.intensity = 2.4 - 1.5 * t;
+      sun.intensity = 2.4 - 1.0 * t;
       hemi.color.lerpColors(A.hemiSky, D.hemiSky, t);
       hemi.groundColor.lerpColors(A.hemiGround, D.hemiGround, t);
-      hemi.intensity = 1.6 - 0.75 * t;
+      hemi.intensity = 1.6 - 0.4 * t;
       (w.scene.fog as THREE.Fog).color.lerpColors(A.fog, D.fog, t);
       // sun sinks in the west-south-west
-      const elev = THREE.MathUtils.degToRad(34 - 27 * t);
+      const elev = THREE.MathUtils.degToRad(34 - 22 * t);
       const az = THREE.MathUtils.degToRad(245); // plan azimuth clockwise from north
       tmp.set(Math.sin(az) * Math.cos(elev), Math.sin(elev), -Math.cos(az) * Math.cos(elev));
       uni.uSunDir.value.copy(tmp);

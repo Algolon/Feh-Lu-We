@@ -63,7 +63,7 @@ export function boxGeo(sx: number, sy: number, sz: number, uvScale = 0): THREE.B
   return g;
 }
 
-interface Group { mat: THREE.Material; geos: THREE.BufferGeometry[]; shadow: boolean }
+interface Group { mat: THREE.Material; geos: THREE.BufferGeometry[]; shadow: boolean; chunk: string }
 
 /** Accumulates transformed, vertex-coloured geometry and merges it per material+chunk. */
 export class Batcher {
@@ -85,7 +85,7 @@ export class Batcher {
     g.setAttribute('color', new THREE.BufferAttribute(col, 3));
     const key = `${mat.uuid}|${chunk}|${shadow}`;
     let grp = this.groups.get(key);
-    if (!grp) this.groups.set(key, (grp = { mat, geos: [], shadow }));
+    if (!grp) this.groups.set(key, (grp = { mat, geos: [], shadow, chunk }));
     grp.geos.push(g);
   }
   build(parent: THREE.Object3D, castShadow = true): THREE.Mesh[] {
@@ -97,7 +97,10 @@ export class Batcher {
       if (!merged) continue;
       merged.computeBoundingSphere();
       const mesh = new THREE.Mesh(merged, grp.mat);
-      mesh.castShadow = castShadow && grp.shadow && !(grp.mat as THREE.Material).transparent;
+      // interiors sit inside shadow-casting shells already; their own shadows would only cost draw calls
+      mesh.castShadow = castShadow && grp.shadow && !(grp.mat as THREE.Material).transparent && !grp.chunk.endsWith('In');
+      mesh.userData.chunk = grp.chunk;
+      mesh.userData.static = true;
       mesh.receiveShadow = true;
       mesh.matrixAutoUpdate = false;
       mesh.updateMatrix();
@@ -233,7 +236,7 @@ export function mesh(geom: THREE.BufferGeometry, mat: THREE.Material, color?: TH
 }
 
 /** Merge parts built with a temporary Batcher into ONE object (one draw call per material). */
-export function compound(build: (b: Batcher) => void, castShadow = true): THREE.Group {
+export function compound(build: (b: Batcher) => void, castShadow = false): THREE.Group {
   const b = new Batcher();
   build(b);
   const grp = new THREE.Group();

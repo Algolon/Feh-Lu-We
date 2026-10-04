@@ -5,7 +5,7 @@ import { World, type GameApi } from '../interactions/world';
 import type { SceneExtras } from '../core/game';
 import { makeCtx, floor } from './arch';
 import { Batcher, box, boxMM, cyl, blob, getKit, v3 } from './kit';
-import { table, chair, lantern, part, plant } from './furniture';
+import { table, chair, lantern, part, plant, staticLantern } from './furniture';
 import { Vegetation, scatter, distToPolyline, ribbon, smooth } from './nature';
 import { buildManor } from './manor';
 import { buildConservatory } from './conservatory';
@@ -50,6 +50,10 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
 
   for (const c of [ground, manorC, consC, cotC, forestC, gardenC]) c.b.build(w.scene);
   veg.build(w.scene, true);
+  const nearRect = (x0: number, x1: number, z0: number, z1: number, m: number) => (x: number, z: number) => x > x0 - m && x < x1 + m && z > z0 - m && z < z1 + m;
+  // interiors (and the props inside them) are hidden when the player is outside and away
+  w.cullZone('manorIn', nearRect(48, 72, 52, 80, 12), nearRect(48.3, 71.7, 52.3, 79.7, 0));
+  w.cullZone('cottageIn', nearRect(20, 30, 88, 96, 10), nearRect(20.2, 29.8, 88.2, 95.8, 0));
 
   w.spawn = { x: 60, y: 0, z: 3, yaw: 0, pitch: 0.02 };
   w.checkpoints.push({ name: 'garden', pose: { x: 58, y: 0.08, z: 87, yaw: Math.PI, pitch: 0 } });
@@ -105,11 +109,13 @@ function buildGround(w: World) {
   for (let i = 0; i < n.count; i++) n.setXYZ(i, 0, 1, 0);
   const mesh = new THREE.Mesh(geo, k.M.grass);
   mesh.receiveShadow = true;
+  mesh.userData.noCull = true;
   w.scene.add(mesh);
   // the land beyond the estate + distant hills
   const outer = new THREE.Mesh(new THREE.PlaneGeometry(700, 700), w.material(new THREE.MeshLambertMaterial({ color: '#5f7d3a' })));
   outer.rotation.x = -Math.PI / 2;
   outer.position.set(60, -0.04, -50);
+  outer.userData.noCull = true;
   w.scene.add(outer);
   const hills = new Batcher();
   for (let i = 0; i < 18; i++) {
@@ -151,8 +157,7 @@ function buildBoundary(w: World, g: GameApi, c: ReturnType<typeof makeCtx>, veg:
   for (const x of [57.3, 62.7]) {
     box(c.b, k.M.stone, '#d8ccb0', x, 0, 0.3, 0.7, 2.6, 0.7, { chunk: 'wall', uv: 1 });
     box(c.b, k.M.stone, '#c8bca0', x, 2.6, 0.3, 0.85, 0.15, 0.85, { chunk: 'wall' });
-    const l = lantern(w, x, 2.75, 0.3, 0.8);
-    makeLamp(w, g, { id: `lamp.gate.${x}`, ...l, toggle: false, defaultOn: true, intensity: 3, distance: 7 });
+    staticLantern(c, w, x, 2.75, 0.3, 0.8, 0, 3, 7);
   }
   // front gate leaves stand closed behind you (the way in, not the way on)
   makeDoor(w, g, { id: 'gate.front', x: 57.65, z: 0.3, dir: 'x+', width: 2.35, height: 1.9, y0: 0, swing: -1, style: 'gate', unlock: 'never', lockedMsg: 'Het hek is achter je dichtgevallen. Het weekend ligt de andere kant op.' });
@@ -174,10 +179,10 @@ function buildBoundary(w: World, g: GameApi, c: ReturnType<typeof makeCtx>, veg:
   fence(0.2, 99.8, 119.8, 99.8);
   // woodland continues beyond the fence (visual only): low-poly crowns
   const r = mulberry32(77);
-  const outside = scatter(r, -16, 136, -16, 116, 4.2, 6000, (x, z) => x < -0.8 || x > 120.8 || z < -1.5 || z > 100.8);
+  const outside = scatter(r, -16, 136, -16, 116, 5.2, 5000, (x, z) => x < -0.8 || x > 120.8 || z < -1.5 || z > 100.8);
   for (const [x, z] of outside) {
     const kind = r() < 0.2 ? 'pine' : 'oak';
-    veg.tree({ x, z, h: kind === 'pine' ? 6 + r() * 3 : 3.5 + r() * 2.5, r: 1.8 + r() * 1.0, kind, hue: r() - 0.5 }, `outer${Math.floor((x + 16) / 40)}${Math.floor((z + 16) / 40)}`);
+    veg.tree({ x, z, h: kind === 'pine' ? 6 + r() * 3 : 3.5 + r() * 2.5, r: 1.8 + r() * 1.0, kind, hue: r() - 0.5 }, `outer${x < 0 ? 'W' : x > 120 ? 'E' : z < 0 ? 'S' : 'N'}`);
   }
 }
 
@@ -196,8 +201,7 @@ function buildGarden(w: World, g: GameApi, c: ReturnType<typeof makeCtx>, veg: V
     makeLamp(w, g, { id: `lamp.terrace.${x}`, ...l, name: 'tafellantaarn', defaultOn: true, intensity: 3, distance: 6, hit: [0.3, 0.4, 0.3] });
   }
   for (const [x, z] of [[52, 80.6], [64, 80.6], [52.2, 85], [66.8, 85]] as const) plant(c, x, z, 0.08, 1.2, '#c9774a');
-  const bd = lantern(w, 67.6, 2.2, 80.25, 0.7);
-  makeLamp(w, g, { id: 'lamp.backdoor', ...bd, toggle: false, defaultOn: true, intensity: 3, distance: 7 });
+  staticLantern(c, w, 67.6, 2.2, 80.25, 0.7, 0, 3, 7);
 
   // three lantern posts on the open lawn — beat 5
   for (const L of LANTERNS) {
@@ -257,7 +261,7 @@ function buildGarden(w: World, g: GameApi, c: ReturnType<typeof makeCtx>, veg: V
   const patch = (cx: number, cz: number, rad: number, n: number, colors: string[]) => {
     for (let i = 0; i < n; i++) {
       const a = r() * Math.PI * 2, d = Math.sqrt(r()) * rad;
-      veg.smallThing('flower', cx + Math.cos(a) * d, cz + Math.sin(a) * d, 0.25 + r() * 0.2, colors[Math.floor(r() * colors.length)], 'garden');
+      veg.smallThing('flower', cx + Math.cos(a) * d, cz + Math.sin(a) * d, 0.12 + r() * 0.08, colors[Math.floor(r() * colors.length)], 'garden');
     }
   };
   const purple = ['#b89ad8', '#9a7ac8', '#f2f0e6', '#e8a8c8'];
@@ -269,11 +273,11 @@ function buildGarden(w: World, g: GameApi, c: ReturnType<typeof makeCtx>, veg: V
   patch(50, 86.5, 1.5, 12, purple);
   const clearOf = (x: number, z: number) => !inRect(x, z, 45, 90, 49, 86) && !inRect(x, z, 17, 41, 83, 98) && !LANTERNS.some((l) => Math.hypot(x - l.x, z - l.z) < 2) && distToPolyline(x, z, GARDEN_PATH) > 1.4;
   for (const [x, z] of scatter(r, 2, 118, 51, 99, 4.5, 900, clearOf)) {
-    if (r() < 0.6) veg.smallThing('flower', x, z, 0.3, purple[Math.floor(r() * 4)], 'garden');
-    else veg.smallThing('shrub', x, z, 0.5 + r() * 0.4, '#5a8a3e', 'garden');
+    if (r() < 0.6) veg.smallThing('flower', x, z, 0.14, purple[Math.floor(r() * 4)], 'garden');
+    else veg.smallThing('shrub', x, z, 0.4 + r() * 0.3, '#5a8a3e', 'garden');
   }
   // hedges along the manor front
-  for (let x = 48.5; x < 71.5; x += 1.1) if (Math.abs(x - 60) > 2.6) veg.smallThing('shrub', x, 51.2, 0.7, '#4a7a36', 'garden');
+  for (let x = 48.5; x < 71.5; x += 1.1) if (Math.abs(x - 60) > 2.6) veg.smallThing('shrub', x, 51.2, 0.55, '#4a7a36', 'garden');
   void part; void cyl;
 }
 

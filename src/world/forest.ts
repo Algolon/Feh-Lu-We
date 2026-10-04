@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, floor, gableRoof } from './arch';
 import { box, boxMM, cyl, blob, compound, v3 } from './kit';
-import { lantern, flame, crate, part } from './furniture';
+import { lantern, flame, crate, part, staticLantern } from './furniture';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeAction, makeInspect, place } from '../interactions/props';
 import { Vegetation, scatter, distToPolyline, smooth } from './nature';
 import { mulberry32 } from '../core/rng';
@@ -52,17 +52,17 @@ export function buildForest(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
     const kind = roll < 0.14 ? 'pine' : roll < 0.28 ? 'birch' : 'oak';
     const h = kind === 'pine' ? 6 + r() * 3 : 3.2 + r() * 2.6;
     const rad = kind === 'pine' ? 1.5 + r() * 0.6 : 1.7 + r() * 1.1;
-    veg.tree({ x, z, h, r: rad, kind, hue: r() - 0.5 }, `f${Math.floor(x / 24)}${Math.floor(z / 25)}`);
+    veg.tree({ x, z, h, r: rad, kind, hue: r() - 0.5 }, `f${Math.floor(x / 40)}`);
     w.col.addCircle(x, z, kind === 'birch' ? 0.22 : 0.34, 0, 6);
   }
   // undergrowth (no collision): ferns, shrubs, rocks
-  for (const [x, z] of scatter(r, 1, 119, 1, 49.5, 1.6, 6000, (x, z) => z < 49.5 && !(Math.abs(x - 60) < 2.6) && !FOREST_PATHS.some((p) => distToPolyline(x, z, p) < 1.3))) {
+  for (const [x, z] of scatter(r, 1, 119, 1, 49.5, 3.3, 4000, (x, z) => z < 49.5 && !(Math.abs(x - 60) < 2.6) && !FOREST_PATHS.some((p) => distToPolyline(x, z, p) < 1.3))) {
     const roll = r();
-    const chunk = `f${Math.floor(x / 24)}${Math.floor(z / 25)}`;
-    if (roll < 0.55) veg.smallThing('fern', x, z, 0.5 + r() * 0.5, r() < 0.5 ? '#5f8f3a' : '#4f7f34', chunk);
-    else if (roll < 0.8) veg.smallThing('shrub', x, z, 0.6 + r() * 0.6, r() < 0.5 ? '#4a7a36' : '#5a8a3e', chunk);
-    else if (roll < 0.9) veg.smallThing('rock', x, z, 0.3 + r() * 0.4, '#8a8a80', chunk);
-    else veg.smallThing('flower', x, z, 0.3, r() < 0.5 ? '#b89ad8' : '#f2f0e6', chunk);
+    const chunk = `f${Math.floor(x / 40)}`;
+    if (roll < 0.45) veg.smallThing('fern', x, z, 0.35 + r() * 0.3, r() < 0.5 ? '#6a9a3e' : '#557f34', chunk);
+    else if (roll < 0.7) veg.smallThing('shrub', x, z, 0.45 + r() * 0.4, r() < 0.5 ? '#4f7f38' : '#5f8f40', chunk);
+    else if (roll < 0.8) veg.smallThing('rock', x, z, 0.25 + r() * 0.3, '#9a968a', chunk);
+    else veg.smallThing('flower', x, z, 0.14, r() < 0.5 ? '#b89ad8' : '#f2f0e6', chunk);
   }
 
   buildShed(w, g, c);
@@ -73,8 +73,7 @@ export function buildForest(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
   // a few forest lanterns along the loop for orientation at dusk
   for (const [x, z] of [[47, 43.6], [33.5, 29.8], [19.5, 16], [40, 7], [78, 10.2], [99.8, 15], [86, 37.6], [62.6, 20], [57.6, 34]] as const) {
     cyl(c.b, k.M.wood, '#5a3a22', x, 0, z, 0.06, 0.07, 1.4, 6, { chunk: c.chunk });
-    const l = lantern(w, x, 1.4, z, 0.6);
-    makeLamp(w, g, { id: `lamp.path.${x}.${z}`, ...l, toggle: false, defaultOn: true, intensity: 2.2, distance: 6, onColor: '#ffcf7a' });
+    staticLantern(c, w, x, 1.4, z, 0.6, 0, 2.2, 6);
     w.col.addCircle(x, z, 0.12, 0, 2);
   }
   w.checkpoints.push(
@@ -120,8 +119,7 @@ function buildShed(w: World, g: GameApi, c: Ctx) {
     tg.dispose(); tg2.dispose();
   }
   makeDoor(w, g, { id: 'door.shed', x: X1, z: 25.7, dir: 'z+', width: 1.0, height: 2.2, y0: 0.1, swing: -1, color: '#6b4a2a', style: 'plank', key: 'shedKey' });
-  const dl = lantern(w, X1 + 0.15, 2.0, 27.2, 0.6);
-  makeLamp(w, g, { id: 'lamp.shedDoor', ...dl, toggle: false, defaultOn: true, intensity: 2.5, distance: 6 });
+  staticLantern(c, w, X1 + 0.15, 2.0, 27.2, 0.6, 0, 2.5, 6);
   // log pile + chopping stump outside
   for (let i = 0; i < 9; i++) cyl(c.b, k.M.bark, '#8a6a4a', X1 + 0.6, 0.15 + Math.floor(i / 3) * 0.28, 24.8 - (i % 3) * 0.3 - (Math.floor(i / 3) % 2) * 0.15, 0.14, 0.14, 1.0, 7, { chunk: c.chunk, rz: Math.PI / 2, yaw: Math.PI / 2 });
   w.col.addBox(X1 + 0.05, X1 + 1.15, 23.9, 25.0, 0, 1);

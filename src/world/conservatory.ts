@@ -5,8 +5,8 @@ import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, floor } from './arch';
 import { Batcher, box, boxMM, cyl, blob, compound, v3, getKit } from './kit';
-import { chair as _c, plant, lantern, part } from './furniture';
-import { makeDoor, makePickup, makeLamp, makeInspect, makeAction, place } from '../interactions/props';
+import { chair as _c, plant, part, staticLantern } from './furniture';
+import { makeDoor, makePickup, makeInspect, makeAction, place } from '../interactions/props';
 import { drawSymbol } from '../content/symbols';
 import { addClue } from '../core/state';
 import { GF } from './manor';
@@ -201,8 +201,7 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
   for (let i = 0; i < 3; i++) box(c.b, k.M.paint, ['#6fae9a', '#f2ead8', '#9aa8d8'][i], 83.0, GF + 0.5 + i * 0.07, 73.0, 0.4, 0.07, 0.3, { chunk: c.chunk });
   w.col.addCircle(83, 73, 0.4, 0, 0.8);
   for (const [x, z] of [[75, 66], [81, 66], [75, 80], [81, 80]] as const) {
-    const l = lantern(w, x, 2.6, z, 1.0);
-    makeLamp(w, g, { id: `lamp.cons.${x}.${z}`, ...l, toggle: false, defaultOn: true, intensity: 3.5, distance: 7 });
+    staticLantern(c, w, x, 2.6, z, 1.0, 0, 3.5, 7);
     box(c.b, k.M.paint, '#2b2622', x, 3.0, z, 0.02, 0.4, 0.02, { chunk: c.chunk });
   }
 
@@ -383,8 +382,7 @@ function buildSauna(w: World, g: GameApi, c: Ctx) {
   w.scene.add(boardHit);
   makeInspect(w, g, { id: 'inspect.saunaBoard', obj: boardHit, clue: 'c.saunaDiagram', hit: [0.9, 1.1, 0.3], hitOffset: [0, 0.5, 0], label: 'Bekijken: houten bord' });
   // small lamp
-  const lmp = lantern(w, SX - 0.85, FY + 1.5, Z0 + 0.45, 0.6);
-  makeLamp(w, g, { id: 'lamp.sauna', ...lmp, toggle: false, defaultOn: true, intensity: 2.5, distance: 5 });
+  staticLantern(c, w, SX - 0.85, FY + 1.5, Z0 + 0.45, 0.6, 0, 2.5, 5);
   // sauna door (glass), opens outward to the north
   makeDoor(w, g, { id: 'door.sauna', x: SX - 0.38, z: Z1 + 0.02, dir: 'x+', width: 0.76, height: 1.78, y0: FY, swing: 1, style: 'glass' });
   // a little bucket + ladle outside

@@ -73,7 +73,7 @@ export class Vegetation {
 
   smallThing(kind: 'fern' | 'shrub' | 'flower' | 'rock', x: number, z: number, s: number, color: THREE.ColorRepresentation, chunk: string) {
     const r = this.r;
-    const sy = kind === 'fern' ? s * 0.45 : kind === 'flower' ? s * 0.35 : kind === 'rock' ? s * 0.6 : s * 0.75;
+    const sy = kind === 'fern' ? s * 0.38 : kind === 'flower' ? s * 0.5 : kind === 'rock' ? s * 0.55 : s * 0.7;
     this.small.push({ m: this.mat(x, kind === 'rock' ? s * 0.1 : sy * 0.6, z, s, sy, s * (0.8 + r() * 0.4), r() * 6), c: new THREE.Color(color), chunk, kind });
   }
 
@@ -98,7 +98,8 @@ export class Vegetation {
     const lowCrown = shadeVertically(withColor(new THREE.IcosahedronGeometry(1, 0)));
     for (const t of this.crowns) push(`crown|${t.chunk}`, t.chunk.startsWith('outer') ? lowCrown : crownGeo, k.M.foliage, t, !t.chunk.startsWith('outer'));
     for (const t of this.cones) push(`cone|${t.chunk}`, coneGeo, k.M.foliage, t, true);
-    for (const t of this.small) push(`${t.kind}|${t.chunk}`, t.kind === 'rock' ? rockGeo : blobGeo, t.kind === 'rock' ? rockMat : k.M.foliage, t, t.kind === 'rock');
+    const softGeo = shadeVertically(withColor(new THREE.IcosahedronGeometry(1, 1)), 0.6, 1.1);
+    for (const t of this.small) push(`${t.kind}|${t.chunk}`, t.kind === 'rock' ? rockGeo : t.kind === 'flower' ? blobGeo : softGeo, t.kind === 'rock' ? rockMat : k.M.foliage, t, false);
     const meshes: THREE.InstancedMesh[] = [];
     for (const g of groups.values()) {
       const im = new THREE.InstancedMesh(g.geo, g.mat, g.items.length);

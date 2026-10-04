@@ -61,7 +61,44 @@ export class World {
   ambience: 'home' | 'estate' = 'estate';
   /** Named sound emitters (fire crackle, water, heater) — audio reads these each frame. */
   readonly emitters: { kind: 'fire' | 'water' | 'steam'; pos: THREE.Vector3; on: () => boolean }[] = [];
+  /** Small objects hidden beyond a size-dependent distance; whole interior chunks hidden by zone. */
+  private cullables: { meshes: THREE.Object3D[]; pos: THREE.Vector3; dist2: number; on: boolean; zone: { on: boolean } | null }[] = [];
+  private zones: { meshes: THREE.Object3D[]; near: (x: number, z: number) => boolean; inside: (x: number, z: number) => boolean; on: boolean }[] = [];
   constructor(public readonly id: SceneId) {}
+
+  /** Register every non-static top-level object for distance culling. Call once after building. */
+  setupCulling() {
+    const box = new THREE.Box3(), sph = new THREE.Sphere();
+    for (const o of this.scene.children) {
+      if (o.userData.static || o.userData.noCull || (o as THREE.InstancedMesh).isInstancedMesh || (o as THREE.Light).isLight || !o.visible && !o.children.length) continue;
+      if ((o as THREE.Mesh).isMesh && (o as THREE.Mesh).frustumCulled === false) continue;
+      const meshes: THREE.Object3D[] = [];
+      o.traverse((c) => { if ((c as THREE.Mesh).isMesh && !c.userData.hit) meshes.push(c); });
+      if (!meshes.length) continue;
+      o.updateWorldMatrix(true, true);
+      box.setFromObject(o, false);
+      if (box.isEmpty()) continue;
+      box.getBoundingSphere(sph);
+      const d = Math.max(o.userData.cullDist ?? 0, 16 + 25 * sph.radius);
+      const zone = this.zones.find((zz) => zz.inside(sph.center.x, -sph.center.z)) ?? null;
+      this.cullables.push({ meshes, pos: sph.center.clone(), dist2: d * d, on: true, zone });
+    }
+  }
+  /** Hide the meshes of a batched chunk unless `near(planX, planZ)` holds. */
+  cullZone(chunk: string, near: (x: number, z: number) => boolean, inside: (x: number, z: number) => boolean) {
+    const meshes = this.scene.children.filter((o) => o.userData.chunk === chunk);
+    this.zones.push({ meshes, near, inside, on: true });
+  }
+  updateCulling(eye: THREE.Vector3) {
+    for (const z of this.zones) {
+      const on = z.near(eye.x, -eye.z);
+      if (on !== z.on) { z.on = on; for (const m of z.meshes) m.visible = on; }
+    }
+    for (const c of this.cullables) {
+      const on = (!c.zone || c.zone.on) && c.pos.distanceToSquared(eye) < c.dist2;
+      if (on !== c.on) { c.on = on; for (const m of c.meshes) m.visible = on; }
+    }
+  }
 
   add(i: Interactable) {
     if (this.byId.has(i.id)) throw new Error(`Duplicate interactable id ${i.id}`);
@@ -113,6 +150,7 @@ export class LightPool {
   readonly lights: THREE.PointLight[] = [];
   private timer = 0;
   private assigned: (LampSource | null)[] = [];
+  reducedMotion = false;
   constructor(scene: THREE.Scene, count: number) {
     for (let i = 0; i < count; i++) {
       const l = new THREE.PointLight(0xffc77a, 0, 8, 1.6);
@@ -143,7 +181,7 @@ export class LightPool {
         l.distance = a.distance;
         l.intensity = 0;
       }
-      const f = a.flicker ? 1 - a.flicker * (0.5 + 0.5 * Math.sin(t * 13.1 + i) * Math.sin(t * 7.3)) : 1;
+      const f = a.flicker && !this.reducedMotion ? 1 - a.flicker * (0.5 + 0.5 * Math.sin(t * 13.1 + i) * Math.sin(t * 7.3)) : 1;
       const target = a.intensity * f;
       l.intensity += (target - l.intensity) * Math.min(1, dt * 10);
     }

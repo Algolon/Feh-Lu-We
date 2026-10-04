@@ -49,6 +49,7 @@ export class Game implements GameApi {
   private raycaster = new THREE.Raycaster();
   private saveTimer = 0;
   private poseTimer = 0;
+  private cullTimer = 0;
   private switching = false;
   private fpsAcc = { n: 0, t: 0, fps: 0 };
   private debugEl: HTMLDivElement | null = null;
@@ -143,6 +144,8 @@ export class Game implements GameApi {
     this.pool = new LightPool(world.scene, this.settings.quality === 'high' ? 4 : 3);
     this.audio.ambience = world.ambience;
     world.syncAll();
+    world.setupCulling();
+    this.cullTimer = 0;
     this.restorePose(world, this.state.player[id]);
     this.applyQuality();
     this.updateHud();
@@ -323,12 +326,9 @@ export class Game implements GameApi {
         Object.assign(this.settings, s);
         storage.set(SETTINGS_KEY, JSON.stringify(this.settings));
         this.audio.setMuted(s.muted);
-        if (qualityChanged) this.applyQuality(true);
+        this.applyQuality(qualityChanged);
       },
-      onRestart: () => {
-        storage.remove(SAVE_KEY);
-        location.reload();
-      },
+      onRestart: () => this.wipeAndReload(),
       onPointerLock: canLock ? () => this.input.requestPointerLock() : undefined,
       onFullscreen: canFs ? () => document.documentElement.requestFullscreen?.().catch(() => {}) : undefined,
       onMap: this.state.scene === 'estate' ? () => this.ui.map(estateMapSvg()) : undefined,
@@ -451,9 +451,14 @@ export class Game implements GameApi {
       this.player.update(dt, mx, my, run, w.col);
     }
     this.player.applyCamera(this.camera);
+    this.cullTimer -= dt;
+    if (this.cullTimer <= 0) {
+      this.cullTimer = 0.25;
+      w.updateCulling(this.camera.position);
+    }
     w.update(dt, this.time);
     this.pool?.update(dt, this.time, w.lamps, this.camera.position);
-    const targetDusk = Math.min(1, solvedCount(this.state) / 8 + (this.state.finished ? 0.2 : 0));
+    const targetDusk = Math.min(1, (solvedCount(this.state) / 8) * 0.85 + (this.state.finished ? 0.15 : 0));
     this.dusk += (targetDusk - this.dusk) * Math.min(1, dt * 0.3);
     this.extras.env?.update(this.dusk, this.camera.position);
     this.audio.dusk = this.dusk;
@@ -512,12 +517,21 @@ export class Game implements GameApi {
     }
   }
 
+  /** Stop saving first: the pagehide handler must not write the old state back during the reload. */
+  wipeAndReload() {
+    this.running = false;
+    clearTimeout(this.saveTimer);
+    storage.remove(SAVE_KEY);
+    location.reload();
+  }
+
   saveSoon() {
     clearTimeout(this.saveTimer);
     this.saveTimer = window.setTimeout(() => this.saveNow(), 300);
   }
   saveNow() {
     clearTimeout(this.saveTimer);
+    if (!this.running) return; // never overwrite a save from the start screen
     if (this.world && !this.switching) {
       const sup = this.world.col.supportHeight(this.player.x, this.player.z, this.player.y, PLAYER.stepUp);
       if (Math.abs(sup - this.player.y) < 0.05) this.state.player[this.world.id] = this.player.pose();
@@ -545,19 +559,25 @@ export class Game implements GameApi {
   // ------------------------------------------------------------------ rendering quality
   applyQuality(rebuildPool = false) {
     const high = this.settings.quality === 'high';
+    document.body.classList.toggle('reduced-motion', this.settings.reducedMotion);
+    if (this.pool) this.pool.reducedMotion = this.settings.reducedMotion;
     const dpr = Math.min(window.devicePixelRatio || 1, high ? 1.5 : 1);
     this.renderer.setPixelRatio(dpr);
+    const shadowsChanged = this.renderer.shadowMap.enabled !== high;
     this.renderer.shadowMap.enabled = high;
     const mobile = matchMedia('(pointer: coarse)').matches;
     this.extras.env?.setShadows(high, mobile ? 1024 : 2048);
-    if (this.world) {
+    if (this.world && shadowsChanged) {
       this.world.scene.traverse((o) => {
         const m = (o as THREE.Mesh).material as THREE.Material | undefined;
         if (m) m.needsUpdate = true;
       });
+    }
+    if (this.world) {
       if (rebuildPool && this.pool) {
         for (const l of this.pool.lights) { this.world.scene.remove(l); l.dispose(); }
         this.pool = new LightPool(this.world.scene, high ? 4 : 3);
+        this.pool.reducedMotion = this.settings.reducedMotion;
       }
     }
     this.resize();
@@ -586,8 +606,7 @@ export class Game implements GameApi {
         const cp = this.world?.checkpoints.find((c) => c.name === b.dataset.cp);
         if (cp) this.player.setPose(cp.pose);
       } else if (b.dataset.reset) {
-        storage.remove(SAVE_KEY);
-        location.reload();
+        this.wipeAndReload();
       }
     });
   }
