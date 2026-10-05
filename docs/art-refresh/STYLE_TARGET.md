@@ -41,6 +41,20 @@ baseline does not support it (§3).
     - **Neutral lighting (material behaviour):** keeps materials and fixtures, but no fog, white sky/sun and
       exposure 1.
 
+**What the interior sample changed in the recommendation** (evidence: [`INTERIOR_SAMPLE.md`](INTERIOR_SAMPLE.md)):
+- **Tone mapping.** Keep ACES. Neutral at the same exposure made the warm interior more orange and darker in the
+  mid-tones.
+- **Interior light.**
+  - Shape the vertical gradient: a cool window sky above and a warm, dim floor bounce below.
+  - Reduce fill by about a quarter.
+  - Raise fixture light by about a third.
+  - Do not merely darken. The effect is modest; assets, trims and grounding carry most of the improvement.
+- **Contact shadows.** They must be dense out to the footprint edge with a 15–20 cm falloff. A centred blob is
+  hidden under the furniture.
+- **Rounded boxes that will be deformed** (cushions) need interior face vertices (`softBox(..., mid)`).
+- **Ceilings** that are the underside of floor slabs read as dark wood. Rooms meant to feel bright need a plaster
+  ceiling between the beams.
+
 Evidence labels used below:
 - **[V]** is visible in the baseline captures (phone quality, 844 × 390).
 - **[S]** is inferred from source code (file named).

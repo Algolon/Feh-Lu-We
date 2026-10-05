@@ -1,0 +1,361 @@
+{
+  "query": "(baseline)",
+  "viewport": {
+    "width": 844,
+    "height": 390
+  },
+  "deviceScaleFactor": 1,
+  "quality": "low",
+  "fovDeg": 68,
+  "exposure": 1.15,
+  "renderer": "Chromium 141 + SwiftShader (software WebGL2)",
+  "hud": "hidden",
+  "neutral": "fog off, hemisphere #ffffff/#8a8a8a ×2.0, sun #ffffff ×1.6, exposure 1.0; fixtures unchanged",
+  "clay": "white sky/sun only; all lit surfaces matte #c9c3b8; no textures, vertex/instance colours, glows, flames, light pools, contact decals or point lights",
+  "shots": [
+    {
+      "name": "01-hearth-wide",
+      "pose": {
+        "x": 80.6,
+        "y": 0.15,
+        "z": 84.4,
+        "yaw": -1.268,
+        "pitch": -0.071,
+        "eye": 1.65
+      },
+      "lookAt": [
+        72.6,
+        1.2,
+        86.9
+      ],
+      "calls": 92,
+      "callsMin": 92,
+      "triangles": 179318,
+      "room": "living"
+    },
+    {
+      "name": "02-mantel-front",
+      "pose": {
+        "x": 75.4,
+        "y": 0.15,
+        "z": 86.7,
+        "yaw": -1.571,
+        "pitch": -0.159,
+        "eye": 1.65
+      },
+      "lookAt": [
+        72.6,
+        1.35,
+        86.7
+      ],
+      "calls": 95,
+      "callsMin": 95,
+      "triangles": 156906,
+      "room": "living"
+    },
+    {
+      "name": "03-mantel-near",
+      "pose": {
+        "x": 73.9,
+        "y": 0.15,
+        "z": 87,
+        "yaw": -1.92,
+        "pitch": -0.404,
+        "eye": 1.65
+      },
+      "lookAt": [
+        72.8,
+        1.3,
+        86.6
+      ],
+      "calls": 93,
+      "callsMin": 93,
+      "triangles": 156070,
+      "room": "living"
+    },
+    {
+      "name": "04-armchair-near",
+      "pose": {
+        "x": 78.2,
+        "y": 0.15,
+        "z": 81.9,
+        "yaw": -1.022,
+        "pitch": -0.569,
+        "eye": 1.65
+      },
+      "lookAt": [
+        76.4,
+        0.45,
+        83
+      ],
+      "calls": 90,
+      "callsMin": 90,
+      "triangles": 173426,
+      "room": "living"
+    },
+    {
+      "name": "16-oblique-furniture",
+      "pose": {
+        "x": 74.2,
+        "y": 0.15,
+        "z": 82,
+        "yaw": 0.666,
+        "pitch": -0.181,
+        "eye": 1.65
+      },
+      "lookAt": [
+        78.6,
+        0.5,
+        87.6
+      ],
+      "calls": 185,
+      "callsMin": 185,
+      "triangles": 179947,
+      "room": "living"
+    },
+    {
+      "name": "17-doorway-from-hall",
+      "pose": {
+        "x": 86.6,
+        "y": 0.15,
+        "z": 88.5,
+        "yaw": -1.699,
+        "pitch": -0.042,
+        "eye": 1.65
+      },
+      "lookAt": [
+        72.6,
+        1.2,
+        86.7
+      ],
+      "calls": 109,
+      "callsMin": 109,
+      "triangles": 178848,
+      "room": "hall"
+    },
+    {
+      "name": "18-armchair-front",
+      "pose": {
+        "x": 77.2,
+        "y": 0.15,
+        "z": 84.9,
+        "yaw": -2.743,
+        "pitch": -0.545,
+        "eye": 1.65
+      },
+      "lookAt": [
+        76.4,
+        0.55,
+        83
+      ],
+      "calls": 101,
+      "callsMin": 101,
+      "triangles": 169138,
+      "room": "living"
+    },
+    {
+      "name": "19-armchair-rear",
+      "pose": {
+        "x": 75.6,
+        "y": 0.15,
+        "z": 81.3,
+        "yaw": 0.442,
+        "pitch": -0.536,
+        "eye": 1.65
+      },
+      "lookAt": [
+        76.5,
+        0.55,
+        83.2
+      ],
+      "calls": 157,
+      "callsMin": 157,
+      "triangles": 168563,
+      "room": "living"
+    },
+    {
+      "name": "20-sofa-seated",
+      "pose": {
+        "x": 77.9,
+        "y": 0.15,
+        "z": 88.2,
+        "yaw": -1.847,
+        "pitch": -0.045,
+        "eye": 1.1
+      },
+      "lookAt": [
+        72.6,
+        1,
+        86.7
+      ],
+      "seated": true,
+      "calls": 94,
+      "callsMin": 94,
+      "triangles": 153908,
+      "room": "living"
+    },
+    {
+      "name": "21-hearth-oblique",
+      "pose": {
+        "x": 75.6,
+        "y": 0.15,
+        "z": 89.6,
+        "yaw": -2.388,
+        "pitch": -0.246,
+        "eye": 1.65
+      },
+      "lookAt": [
+        72.6,
+        0.7,
+        86.4
+      ],
+      "calls": 97,
+      "callsMin": 97,
+      "triangles": 158638,
+      "room": "living"
+    },
+    {
+      "name": "22-hearth-wide-off",
+      "pose": {
+        "x": 80.6,
+        "y": 0.15,
+        "z": 84.4,
+        "yaw": -1.268,
+        "pitch": -0.071,
+        "eye": 1.65
+      },
+      "lookAt": [
+        72.6,
+        1.2,
+        86.9
+      ],
+      "off": true,
+      "calls": 89,
+      "callsMin": 89,
+      "triangles": 176910,
+      "room": "living"
+    },
+    {
+      "name": "23-mantel-front-off",
+      "pose": {
+        "x": 75.4,
+        "y": 0.15,
+        "z": 86.7,
+        "yaw": -1.571,
+        "pitch": -0.159,
+        "eye": 1.65
+      },
+      "lookAt": [
+        72.6,
+        1.35,
+        86.7
+      ],
+      "off": true,
+      "calls": 92,
+      "callsMin": 92,
+      "triangles": 154498,
+      "room": "living"
+    },
+    {
+      "name": "24-floor-lamp",
+      "pose": {
+        "x": 82.4,
+        "y": 0.15,
+        "z": 85,
+        "yaw": 2.232,
+        "pitch": -0.298,
+        "eye": 1.65
+      },
+      "lookAt": [
+        84.2,
+        1.1,
+        83.6
+      ],
+      "calls": 134,
+      "callsMin": 134,
+      "triangles": 184632,
+      "room": "living"
+    },
+    {
+      "name": "25-floor-lamp-off",
+      "pose": {
+        "x": 82.4,
+        "y": 0.15,
+        "z": 85,
+        "yaw": 2.232,
+        "pitch": -0.298,
+        "eye": 1.65
+      },
+      "lookAt": [
+        84.2,
+        1.1,
+        83.6
+      ],
+      "off": true,
+      "calls": 134,
+      "callsMin": 134,
+      "triangles": 184632,
+      "room": "living"
+    },
+    {
+      "name": "26-window-near",
+      "pose": {
+        "x": 74.4,
+        "y": 0.15,
+        "z": 91.6,
+        "yaw": -2.074,
+        "pitch": -0.087,
+        "eye": 1.65
+      },
+      "lookAt": [
+        72.4,
+        1.6,
+        90.5
+      ],
+      "calls": 92,
+      "callsMin": 92,
+      "triangles": 152746,
+      "room": "living"
+    },
+    {
+      "name": "27-table-near",
+      "pose": {
+        "x": 78,
+        "y": 0.15,
+        "z": 84.5,
+        "yaw": -0.308,
+        "pitch": -0.576,
+        "eye": 1.65
+      },
+      "lookAt": [
+        77.3,
+        0.3,
+        86.7
+      ],
+      "calls": 102,
+      "callsMin": 102,
+      "triangles": 161744,
+      "room": "living"
+    },
+    {
+      "name": "28-sofa-front",
+      "pose": {
+        "x": 75.2,
+        "y": 0.15,
+        "z": 86.2,
+        "yaw": 1.44,
+        "pitch": -0.327,
+        "eye": 1.65
+      },
+      "lookAt": [
+        79,
+        0.5,
+        86.7
+      ],
+      "calls": 194,
+      "callsMin": 194,
+      "triangles": 191027,
+      "room": "living"
+    }
+  ]
+}

@@ -24,8 +24,7 @@ Companion documents:
    - Inspect the mantel.
    - Douse the fire with the action button, relight it with the matches from the bag.
    - Switch the floor lamp off and on.
-   - Look at the room from the hall arch, from a seat-height crouch (not available; stand next to the sofa instead)
-     and close up.
+   - Look at the room from the hall arch, from beside the sofa, and close up.
 5. **Isolation.** The review runs on a temporary in-memory save. Your own save, backup save and settings are never
    read, written, reset or migrated by opening or using the review link (tested; §7).
 6. Leave via the link on the start card, or open the plain URL. The normal game is unchanged.
@@ -138,4 +137,201 @@ Poses:
 The walkthrough video is `interior-sample/walkthrough.webm`: 844 × 390, real-time frames on a software renderer,
 so it is choppy.
 
-RESULTS_PLACEHOLDER
+## 5. What the comparisons show
+
+The sheets in `compare/` show four variants per pose:
+- **Before:** the original room.
+- **New assets, existing rendering**
+- **New assets + interior lighting:** the proposal.
+- **The proposal with Neutral tone mapping**
+
+`compare/clay/` shows before vs after in clay.
+
+### Assets, under the existing renderer
+
+This is the material change. In clay, the original room was:
+- a notched cube for each armchair;
+- three slabs for the sofa;
+- a plank on sticks for the table;
+- a flat slab for the chimney breast.
+
+Now, in clay:
+- **Armchairs:** recognisable from the front, side, rear and at seat height, with feet, crowned cushions, a raked
+  arched back and rolled arms.
+- **Sofa:** one family with the armchairs.
+- **Table:** has a top edge, an apron and a shelf.
+- **Surround:** an arched opening, plinths, a keystone, a shaped shelf on corbels, and depth in the firebox.
+
+At 1.2 m on the mantel:
+- The pinecone reads as a tapered, shingled cone.
+- The cup has a saucer and a handle.
+- The feather has vanes, barbs and a quill.
+- The brass stands have a turned three-part profile and the only metallic highlight on the shelf.
+
+With the fire and lamp off (shots 22, 23 and 25), the room and the evidence stay readable.
+
+### Interior lighting treatment
+
+The treatment is opt-in (`light=sample`); `src/world/env.ts` and `Game.tick` hold its constants. Indoors only,
+smoothed at doorways, it does three things:
+1. Hemisphere fill × 0.72.
+2. The hemisphere sky colour moves toward a cool window white and its ground colour toward a warm, dim floor bounce.
+   This replaces the outdoor earth colour, giving a vertical gradient that models cushions and mouldings without
+   shadow maps.
+3. The fixture lights (fire, lamps) get × 1.35 through `LightPool.gain`.
+
+The sun keeps its share, so the east wall still reads as daylight and the hearth wall is lit by the fire. Measured
+on shot 01 (sampled pixels, ACES):
+
+| Point | Existing | Treatment |
+|---|---|---|
+| West wall | 139 | 124 |
+| Armchair | 84 | 69 |
+| East (sunlit) wall | 189 | 181 |
+| Chimney breast near the fire | 179 | 184 |
+
+The contrast shifts toward the fire rather than the whole frame getting darker. **Honest assessment:** the effect
+is modest and mostly mood: warmer pools, less uniform fill. Almost all of the visible improvement comes from the
+assets, trims and grounding.
+
+A first attempt cut fill by about 45 % and raised the floor bounce. It mainly darkened the room and flattened
+cushions, so it was rejected (§8).
+
+### Tone mapping
+
+| Point (shot 01) | ACES | Neutral |
+|---|---|---|
+| West wall | 124 | 103 |
+| Floor | 131 | 116 |
+| Chimney breast | 184/128/79 | 163/104/51 |
+
+Exposure was unchanged (1.15). Under Neutral the plaster, ceiling and floor go noticeably more orange and saturated,
+and mid-tones darken. ACES keeps whites creamier and the fire reads hotter than its surroundings.
+
+**Recommendation: stay on ACES.** Neutral does change the result, but not for the better in this warm interior. It
+would also be an estate-wide switch.
+
+### Material and grounding behaviour
+
+The neutral-light passes (`after/*-neutral.jpg`) show the separation without mood lighting:
+- **Wood:** grain along each member.
+- **Cloth:** soft weave, piping darker.
+- **Stone:** coursed blocks.
+- **Brass and glaze:** small highlights.
+- **Plaster:** calm.
+
+Contact shadows are visible as soft darkening at furniture feet and under the hearth slab. There are no halos,
+no z-fighting on the rug, and nothing extends across unrelated surfaces. They are static occlusion only; nothing
+that toggles depends on them.
+
+## 6. Cost (phone quality, settled over 30 frames; two runs agree)
+
+| Pose | Before calls | Before triangles | After calls (Δ) | After triangles (Δ) |
+|---|---|---|---|---|
+| 01-hearth-wide | 92 | 179 318 | 99 (+7) | 216 746 (+37 428) |
+| 02-mantel-front | 95 | 156 906 | 101 (+6) | 194 274 (+37 368) |
+| 03-mantel-near | 93 | 156 070 | 98 (+5) | 193 426 (+37 356) |
+| 04-armchair-near | 90 | 173 426 | 97 (+7) | 210 854 (+37 428) |
+| 16-oblique-furniture | **185** | 179 947 | **194 (+9)** | 218 623 (+38 676) |
+| 17-doorway-from-hall | 109 | 178 848 | 117 (+8) | 217 384 (+38 536) |
+| 18-armchair-front | 101 | 169 138 | 108 (+7) | 205 062 (+35 924) |
+| 19-armchair-rear | **157** | 168 563 | **166 (+9)** | 207 239 (+38 676) |
+| 20-sofa-seated | 94 | 153 908 | 101 (+7) | 191 336 (+37 428) |
+| 21-hearth-oblique | 97 | 158 638 | 103 (+6) | 196 006 (+37 368) |
+| 22-hearth-wide-off | 89 | 176 910 | 95 (+6) | 214 018 (+37 108) |
+| 23-mantel-front-off | 92 | 154 498 | 97 (+5) | 191 546 (+37 048) |
+| 24/25-floor-lamp | 134 | 184 632 | 142 (+8) | 219 456 (+34 824) |
+| 26-window-near | 92 | 152 746 | 98 (+6) | 190 114 (+37 368) |
+| 27-table-near | 102 | 161 744 | 109 (+7) | 199 172 (+37 428) |
+| 28-sofa-front | **194** | 191 027 | **203 (+9)** | 228 187 (+37 160) |
+
+**Calls: +5 to +9 per view.** Seven new materials in the room batch, one contact-shadow mesh, one soft light-pool
+mesh, and the lamp's shade, trim and bulb objects. Each new material costs one call per area, not per part:
+cushions, trims and pinecone scales are merged.
+
+**Three poses exceed 150 calls in both versions** (16, 19, 28). They look through the hall arch and the open front
+door to the outdoors. The overrun pre-dates the sample; it adds 9 there.
+
+**Triangles: about +37 k everywhere the room is visible** (measured). The per-asset split is counted from the
+construction, not measured separately:
+- Each subdivided cushion is 768 triangles: the sofa has 8 cushions (≈ 6 k plus about 1.5 k of frame), and each
+  armchair has 2 (≈ 2.5 k).
+- The pinecone has 100 scales of about 60 triangles each (≈ 6 k).
+- Small rounded parts are 300 triangles each.
+
+Every pose stays ≤ 228 k against the 250 k guide. If a phone shows strain, the cheapest cut is the pinecone (rows
+of 10 → 7) and cushion subdivision (`mid` 4 → 2), roughly −6 k by the same count, without changing silhouettes.
+
+**Materials and lights:**
+- Two new Phong materials (brass, glazed ceramic) on small surfaces only.
+- Everything else stays Lambert.
+- No shadow maps, post-processing or new light slots.
+- Interior treatment: fixture light × 1.35 and fill × 0.72 indoors. This changes light intensity only, not cost.
+
+**Transfer:**
+
+| | Before | After | Δ |
+|---|---|---|---|
+| JS | 904.8 kB, gzip 259.9 kB | 937.6 kB, gzip 271.6 kB | +11.7 kB gzip |
+| CSS | | | +0.45 kB |
+
+No new files are downloaded; textures are generated at load. Load-time work is a few extra canvas textures and
+geometry generation for one room.
+
+**Frame rate:** not measured here. Software rendering only. **Real-device validation is pending your phone test**
+(`?review=living&debug=1` shows FPS).
+
+## 7. Verification
+
+| Kind | Result |
+|---|---|
+| Typecheck | clean |
+| Unit tests | **73 / 73**, including 8 new `tests/artkit.test.ts`. These check that Batcher colour handling is unchanged for unflagged geometry, that authored colours are kept when flagged, that normals transform, and the bounds/normals of softBox, cushion crown, moulding, projectUV and lathe. The cushion-crown test caught a real defect: the first rounded box had no interior vertices, so cushions could not crown. |
+| Production build | OK |
+| Default game unchanged | Baseline poses 01–04 give the identical draw calls and triangles as the step-1 baseline (01: 92 / 179 318). Pixel difference against the step-1 JPEGs: mean 1.2–2.7 (JPEG and flame-animation noise). |
+| Browser: art-sample suite (new, in `scripts/e2e.mjs`) | E2E_ARTSAMPLE_PLACEHOLDER |
+| Browser: full regression suite on the final build | E2E_FULL_PLACEHOLDER |
+| Real device | **not done**; pending owner review |
+
+## 8. Iteration log (what was inspected and corrected)
+
+1. **Draw calls.** The first pass cost +23 calls. Ember pebbles were 16 separate meshes, so they were merged into
+   one; shadow-flag splits were unified. Final: +5 to +9.
+2. **Ceiling.** In the wide view it was the dark-red underside of the upstairs floorboards. A plaster ceiling was
+   added between the beams, which now read.
+3. **Rug.** The old rug, and the first new one, were the most saturated thing in the room. Recoloured to a muted
+   field with a small medallion. The floor tint is less orange.
+4. **Pinecone, first version.** It read as a pagoda in clay (horizontal disc scales). Rebuilt as shingled plates
+   on a tapered core.
+5. **Vase.** Kinked shading from a sharp lathe profile; now a spline profile.
+6. **Contact shadows.** Version 1 was invisible (hidden under the furniture). Version 2 was a hairline rim
+   (diagnosed by tinting them red). Version 3 is dense out to the footprint edge with a 15–20 cm soft falloff.
+7. **Lighting.** First treatment (fill −45 %, bright bounce) mainly darkened the room and flattened cushions;
+   rejected. Final: fill −28 %, cool top / warm dim bottom, fixtures +35 %. The indoor factor also has to snap at
+   load; it previously ramped from 0 and made captures look untreated.
+8. **Smaller fixes.**
+   - Keystone hung below the arch: made flush.
+   - Table apron z-fought with the top's lip: moved down.
+   - Painting overlapped a window: moved.
+   - Cushions could not crown: new subdividable rounded box.
+   - Hearth contact-shadow decals were oriented across the wall: fixed.
+
+## 9. Limitations and open points
+
+- **Still primitive or generated-looking:**
+  - The bookshelf, plant and painting are unchanged originals; the plant's blob foliage especially stands out next
+    to the new furniture.
+  - Curtain panels are flat pleated sheets with no gathering at the rod.
+  - Floorboards are the original texture.
+  - The flame shapes are the existing teardrop shader.
+- **Walls** are plain plaster; the room has no cornice, and the chimney breast is deliberately plain so that the
+  mantel objects silhouette clearly.
+- **No seated camera in the game.** Shot 20 lowers the capture camera only.
+- **The lighting treatment is subtle.** Without shadow maps there is no window light falling across the floor. A
+  baked light pattern or a lightmap would need a second UV set (not in scope).
+- **Code-built organic forms** (pinecone, feather) work at this scale. A hero tree may not (step-1 plan).
+- **Software rendering only.** Colours and frame rate on a real phone screen are unverified.
+
+## 10. Build and URLs
+
+DEPLOY_PLACEHOLDER

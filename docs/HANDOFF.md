@@ -2,6 +2,15 @@
 
 Last updated: 2026-10-05. Branch: `ccr-75ef4113-kfkimm` (the repository was empty before this work).
 
+## Art refresh, step 2 (5 Oct 2026) — interior sample (proposed, not approved)
+
+The living-room hearth corner is rebuilt with a small art kit.
+- **Opt-in only:** `?review=living` (a sandboxed review mode with a comparison bar) or `?art=sample&light=sample`.
+- **Normal game unchanged:** without parameters it builds the original room (identical metrics and pixels at the
+  baseline poses).
+- **Details:** [`art-refresh/INTERIOR_SAMPLE.md`](art-refresh/INTERIOR_SAMPLE.md).
+- **Not started:** the exterior sample and any estate-wide rollout. Both wait for the owner's review.
+
 ## Art refresh, step 1 (5 Oct 2026) — target, baseline, review gate (no game changes)
 
 Planning only. The visual target is a crafted European woodland manor:
