@@ -289,8 +289,23 @@ geometry generation for one room.
 | Unit tests | **73 / 73**, including 8 new `tests/artkit.test.ts`. These check that Batcher colour handling is unchanged for unflagged geometry, that authored colours are kept when flagged, that normals transform, and the bounds/normals of softBox, cushion crown, moulding, projectUV and lathe. The cushion-crown test caught a real defect: the first rounded box had no interior vertices, so cushions could not crown. |
 | Production build | OK |
 | Default game unchanged | Baseline poses 01–04 give the identical draw calls and triangles as the step-1 baseline (01: 92 / 179 318). Pixel difference against the step-1 JPEGs: mean 1.2–2.7 (JPEG and flame-animation noise). |
-| Browser: art-sample suite (new, in `scripts/e2e.mjs`) | E2E_ARTSAMPLE_PLACEHOLDER |
-| Browser: full regression suite on the final build | E2E_FULL_PLACEHOLDER |
+| Browser: art-sample suite (new, in `scripts/e2e.mjs`) | **12 / 12 on the final build.** The suite checks:
+- Collision identical to the original room (36 colliders).
+- The same 13 interactables and 5 light sources (ids, positions, intensities).
+- The reticle targets the same objects from the same poses.
+- Mantel inspect → hall drawer solved with Veer–Dennenappel–Kopje through real movement and the dial panel.
+- Fire doused and lamp off persist through reload; relighting restores the flame and the shade glow.
+- Reduced motion keeps flame and embers visible.
+- From the hall the room is drawn and lit and its flame visible.
+- Sofa, armchair, hearth and table block movement.
+- No console errors.
+- Review mode: starts at the arch with the bar, toggles work, the player's own save/backup/settings are
+  byte-identical afterwards, and the normal entry is unchanged.
+
+The first run found two real issues, both fixed. The floor lamp's light sat 15 cm lower than the original, which
+changed light-slot ranking from the hall; it is now the original position. The other was a test reading the wrong
+emissive. |
+| Browser: full regression suite on the final build | **83 / 83 on the final build** (`node scripts/e2e.mjs`): the 71 existing checks — the full normal-control route home → finale (A → B → C), lighting L1–L6, collision, saves and migration, touch, WebGL-failure paths, render budgets — plus the 12 art-sample checks. The normal game's phone render metrics are unchanged. |
 | Real device | **not done**; pending owner review |
 
 ## 8. Iteration log (what was inspected and corrected)
@@ -334,4 +349,4 @@ geometry generation for one room.
 
 ## 10. Build and URLs
 
-DEPLOY_PLACEHOLDER
+DEPLOY_STATUS
