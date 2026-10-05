@@ -4,7 +4,8 @@ import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, floor, gableRoof } from './arch';
 import { box, boxMM, cyl, blob, compound, v3 } from './kit';
-import { lantern, flame, crate, part, staticLantern } from './furniture';
+import { lantern, crate, part, staticLantern } from './furniture';
+import { makeFire } from './fire';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeAction, makeInspect, place } from '../interactions/props';
 import { Vegetation, scatter, distToPolyline, smooth } from './nature';
 import { mulberry32 } from '../core/rng';
@@ -197,7 +198,7 @@ function buildFireClearing(w: World, g: GameApi, c: Ctx) {
   });
   place(logs, FX, 0, FZ);
   w.scene.add(logs);
-  const fire = flame(w, FX, 0.1, FZ, 1.3);
+  const fire = makeFire(w, { kind: 'campfire', x: FX, y: 0.14, z: FZ, s: 1.15 });
   w.lamps.push({ id: 'fire.clearing', pos: v3(FX, 1.2, FZ), color: '#ff9a4a', intensity: 14, distance: 14, on: () => !!g.state.lit['fire.clearing'], flicker: 0.3 });
   w.emitters.push({ kind: 'fire', pos: v3(FX, 0.5, FZ), on: () => !!g.state.lit['fire.clearing'] });
   w.onSync(() => {

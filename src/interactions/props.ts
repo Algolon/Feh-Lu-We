@@ -276,6 +276,8 @@ export interface LampOpts {
   toggle?: boolean; // false → not player-operated (driven by puzzles)
   flicker?: number;
   onColor?: THREE.ColorRepresentation;
+  flames?: THREE.Object3D; // candle/fire visual shown while on (independent of the light pool)
+  patch?: { y: number; r: number; strength?: number }; // painted floor glow under the fixture while on
 }
 
 export function makeLamp(w: World, g: GameApi, o: LampOpts) {
@@ -286,7 +288,9 @@ export function makeLamp(w: World, g: GameApi, o: LampOpts) {
   w.lamps.push({ id: o.id, pos: o.light, color: o.color ?? 0xffc77a, intensity: o.intensity ?? 6, distance: o.distance ?? 9, on: isOn, flicker: o.flicker });
   w.onSync(() => {
     for (const m of o.glow) m.color.copy(isOn() ? onC : offC);
+    if (o.flames) o.flames.visible = isOn();
   });
+  if (o.patch) w.patches.add(o.light.x, o.patch.y, -o.light.z, o.patch.r, o.color ?? '#ffc77a', isOn, o.patch.strength ?? 0.45);
   if (o.toggle === false) return { isOn };
   const s = o.hit ?? [0.5, 0.6, 0.5];
   const off = o.hitOffset ?? [0, s[1] / 2, 0];

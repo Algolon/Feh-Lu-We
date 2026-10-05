@@ -1,105 +1,196 @@
-// Symbol vocabulary shared by 3D props (drawn to canvas) and HTML UI (inline SVG).
-// Every symbol pairs a distinct SHAPE with a colour, so colour is never the only cue.
+// Pictorial symbol vocabulary shared by 3D props (drawn to canvas), dials, notebook, hints and panels.
+// One definition per symbol: the same silhouette, interior detail, orientation and Dutch name everywhere.
+// Colour is supplementary; every symbol is recognisable by shape and inner detail alone (viewBox 0 0 100 100).
 
+export interface Layer {
+  d: string;
+  fill?: string; // omitted → no fill
+  stroke?: string; // omitted → no stroke
+  w?: number; // stroke width
+}
 export interface SymbolDef {
   id: string;
   name: string; // Dutch, player-facing
-  color: string;
-  fill: string; // SVG path (viewBox 0 0 100 100), filled
-  line?: string; // optional SVG path drawn as stroke only
+  color: string; // dominant colour (supplementary cue)
+  layers: Layer[];
 }
 
+const INK = '#2b2118';
+const circ = (cx: number, cy: number, r: number) => `M${cx - r} ${cy} A${r} ${r} 0 1 0 ${cx + r} ${cy} A${r} ${r} 0 1 0 ${cx - r} ${cy} Z`;
+
 export const SYMBOLS: Record<string, SymbolDef> = {
-  // Beat 1: objects on the mantelpiece
+  // ---------------------------------------------------------------- mantelpiece objects (hall drawer)
   veer: {
-    id: 'veer', name: 'Veer', color: '#d9cfb8',
-    fill: 'M80 10 C56 16 30 40 24 78 L30 80 C46 62 66 40 80 10 Z',
-    line: 'M16 92 L58 44',
+    id: 'veer', name: 'Veer', color: '#efe8d6',
+    layers: [
+      { d: 'M30 79 C46 72 62 58 70 44 C76 32 80 20 82 8 C70 14 58 24 48 34 C38 46 30 60 26 74 Z', fill: '#efe8d6', stroke: INK, w: 3 },
+      { d: 'M38 68 L50 71 M44 59 L58 61 M51 50 L65 50 M58 41 L71 39 M65 32 L76 28 M38 64 L31 57 M45 55 L38 46 M52 46 L46 37 M60 37 L56 27 M67 28 L65 19', stroke: '#a89a80', w: 2 },
+      { d: 'M14 95 C26 80 40 60 52 44 C62 31 72 20 82 8', stroke: '#6b5a44', w: 3.5 },
+      { d: 'M14 95 L24 82', stroke: INK, w: 4.5 },
+    ],
   },
   dennenappel: {
     id: 'dennenappel', name: 'Dennenappel', color: '#9a6a3a',
-    fill: 'M50 10 C70 26 76 56 64 80 C58 92 42 92 36 80 C24 56 30 26 50 10 Z',
-    line: 'M36 38 L64 38 M33 54 L67 54 M36 70 L64 70 M44 26 L56 26',
+    layers: [
+      { d: 'M50 16 C68 20 78 40 76 60 C74 80 62 92 50 92 C38 92 26 80 24 60 C22 40 32 20 50 16 Z', fill: '#9a6a3a', stroke: INK, w: 3 },
+      { d: 'M34 30 Q42 40 50 30 Q58 40 66 30 M27 44 Q35 54 43 44 Q51 54 59 44 Q67 54 74 44 M25 58 Q33 68 41 58 Q49 68 57 58 Q65 68 75 58 M29 72 Q37 82 45 72 Q53 82 61 72 Q67 80 72 72', stroke: '#4e3018', w: 3 },
+      { d: 'M38 36 L42 34 M54 36 L58 34 M31 50 L35 48 M47 50 L51 48 M63 50 L67 48 M37 64 L41 62 M53 64 L57 62', stroke: '#c8955a', w: 2.5 },
+      { d: 'M46 17 C45 11 47 6 52 3 C55 8 55 12 54 17 Z', fill: '#6b4a2a', stroke: INK, w: 2.5 },
+    ],
   },
   kopje: {
-    id: 'kopje', name: 'Kopje', color: '#7fa7c9',
-    fill: 'M18 36 H72 V58 C72 76 60 84 45 84 C30 84 18 76 18 58 Z',
-    line: 'M72 44 C88 44 88 66 70 64 M10 92 H82',
+    id: 'kopje', name: 'Kopje', color: '#8fb4d8',
+    layers: [
+      { d: 'M38 26 C34 20 42 16 38 9 M55 26 C51 20 59 16 55 9', stroke: '#9aa6b2', w: 3 },
+      { d: 'M8 82 C8 76 92 76 92 82 C92 89 8 89 8 82 Z', fill: '#f2efe6', stroke: INK, w: 3 },
+      { d: 'M72 46 C90 44 92 66 70 66', stroke: INK, w: 8 },
+      { d: 'M72 46 C90 44 92 66 70 66', stroke: '#8fb4d8', w: 3.5 },
+      { d: 'M18 36 H76 C76 61 66 77 47 77 C28 77 18 61 18 36 Z', fill: '#8fb4d8', stroke: INK, w: 3 },
+      { d: 'M22 52 C34 57 60 57 73 52', stroke: '#f2efe6', w: 3 },
+      { d: 'M18 36 C18 30 76 30 76 36 C76 42 18 42 18 36 Z', fill: '#e3edf6', stroke: INK, w: 3 },
+      { d: 'M25 36 C25 33.5 69 33.5 69 36 C69 38.5 25 38.5 25 36 Z', fill: '#a8723c' },
+    ],
   },
   kaars: {
-    id: 'kaars', name: 'Kaars', color: '#efe6c8',
-    fill: 'M40 42 H60 V92 H40 Z M50 10 C59 22 59 32 50 36 C41 32 41 22 50 10 Z',
+    id: 'kaars', name: 'Kaars', color: '#f3ead0',
+    layers: [
+      { d: 'M18 84 C18 78 82 78 82 84 C82 90 18 90 18 84 Z', fill: '#c9a44c', stroke: INK, w: 3 },
+      { d: 'M38 40 H62 V82 H38 Z', fill: '#f3ead0', stroke: INK, w: 3 },
+      { d: 'M52 40 V55 C52 59 57 59 57 55 V40', fill: '#fbf7ea', stroke: INK, w: 2 },
+      { d: 'M50 40 V31', stroke: INK, w: 3 },
+      { d: 'M50 6 C61 19 61 29 50 33 C39 29 39 19 50 6 Z', fill: '#f2a23a', stroke: INK, w: 2.5 },
+      { d: 'M50 16 C55 22 55 28 50 30 C45 28 45 22 50 16 Z', fill: '#fff3b0' },
+    ],
   },
   klok: {
-    id: 'klok', name: 'Klok', color: '#c9a35a',
-    fill: 'M50 14 A36 36 0 1 0 50.1 14 Z',
-    line: 'M50 50 L50 26 M50 50 L66 58',
+    id: 'klok', name: 'Klok', color: '#a8743f',
+    layers: [
+      { d: 'M24 88 H34 V94 H24 Z M66 88 H76 V94 H66 Z', fill: '#6b4426', stroke: INK, w: 2 },
+      { d: 'M20 88 V46 C20 20 80 20 80 46 V88 Z', fill: '#a8743f', stroke: INK, w: 3 },
+      { d: circ(50, 52, 21), fill: '#f6efdc', stroke: INK, w: 3 },
+      { d: 'M50 33 V37 M69 52 H65 M50 71 V67 M31 52 H35', stroke: INK, w: 2.5 },
+      { d: 'M50 52 L50 38 M50 52 L61 58', stroke: INK, w: 3.5 },
+      { d: 'M26 82 H74', stroke: '#6b4426', w: 3 },
+    ],
+  },
+  vaas: {
+    id: 'vaas', name: 'Vaas', color: '#4f7fa8',
+    layers: [
+      { d: 'M50 42 C50 32 52 22 55 15', stroke: '#4f8a3a', w: 4 },
+      { d: 'M52 31 C60 24 67 26 70 28 C63 33 57 33 52 31 Z', fill: '#5f9a44', stroke: INK, w: 2 },
+      { d: 'M55 3 C61 3 63 9 59 12 C65 11 67 19 61 19 C63 25 55 26 55 21 C53 26 46 24 48 19 C42 19 42 11 49 12 C46 8 49 3 55 3 Z', fill: '#e8c547', stroke: INK, w: 2 },
+      { d: circ(55, 12, 3.5), fill: '#c9774a' },
+      { d: 'M37 50 C30 59 28 71 32 82 C34 88 66 88 68 82 C72 71 70 59 63 50 C61 47 61 44 63 41 H37 C39 44 39 47 37 50 Z', fill: '#4f7fa8', stroke: INK, w: 3 },
+      { d: 'M34 41 H66', stroke: INK, w: 4 },
+      { d: 'M33 66 C44 70 56 70 67 66', stroke: '#c9dbe9', w: 3 },
+    ],
   },
   ster: {
     id: 'ster', name: 'Ster', color: '#e8c547',
-    fill: 'M50 8 L61 38 L93 38 L67 57 L77 89 L50 70 L23 89 L33 57 L7 38 L39 38 Z',
+    layers: [{ d: 'M50 8 L61 38 L93 38 L67 57 L77 89 L50 70 L23 89 L33 57 L7 38 L39 38 Z', fill: '#e8c547', stroke: INK, w: 3.5 }],
   },
-  // Beat 2: forest landmarks
+  // ---------------------------------------------------------------- forest landmarks (study route)
   put: {
-    id: 'put', name: 'Put', color: '#8f97a3',
-    fill: 'M20 54 H80 V90 H20 Z M12 34 L50 12 L88 34 Z',
-    line: 'M28 34 V54 M72 34 V54 M50 34 V46',
+    id: 'put', name: 'Put', color: '#b8b0a0',
+    layers: [
+      { d: 'M12 34 L50 10 L88 34 Z', fill: '#7a8070', stroke: INK, w: 3 },
+      { d: 'M26 34 V58 M74 34 V58', stroke: '#6b4a2a', w: 5 },
+      { d: 'M26 42 H74', stroke: '#6b4a2a', w: 3 },
+      { d: 'M50 42 V50', stroke: INK, w: 2 },
+      { d: 'M43 50 H57 L55 58 H45 Z', fill: '#8a6a4a', stroke: INK, w: 2 },
+      { d: 'M16 58 H84 V90 H16 Z', fill: '#b8b0a0', stroke: INK, w: 3 },
+      { d: 'M16 69 H84 M16 80 H84 M32 58 V69 M56 58 V69 M74 58 V69 M24 69 V80 M46 69 V80 M68 69 V80 M36 80 V90 M60 80 V90', stroke: '#6a6458', w: 2 },
+    ],
   },
   schuur: {
     id: 'schuur', name: 'Schuur', color: '#a8743f',
-    fill: 'M14 50 L50 16 L86 50 V90 H14 Z',
-    line: 'M42 90 V64 H58 V90',
+    layers: [
+      { d: 'M18 50 L50 22 L82 50 V90 H18 Z', fill: '#a8743f', stroke: INK, w: 3 },
+      { d: 'M30 56 V90 M70 56 V90', stroke: '#7a4f2c', w: 2.5 },
+      { d: 'M40 90 V62 H60 V90 Z', fill: '#6b4426', stroke: INK, w: 3 },
+      { d: 'M41 64 L59 88', stroke: '#3f2814', w: 2.5 },
+      { d: 'M8 52 L50 14 L92 52 L86 57 L50 25 L14 57 Z', fill: '#6a6a5a', stroke: INK, w: 3 },
+    ],
   },
   vuur: {
     id: 'vuur', name: 'Vuur', color: '#e3742f',
-    fill: 'M50 8 C66 30 78 46 72 66 C68 82 58 92 50 92 C38 92 28 82 28 66 C28 52 38 44 42 30 C46 40 50 44 54 46 C56 34 54 20 50 8 Z',
+    layers: [
+      { d: 'M16 88 L84 72 M16 72 L84 88', stroke: INK, w: 13 },
+      { d: 'M16 88 L84 72 M16 72 L84 88', stroke: '#8a5a33', w: 8 },
+      { d: 'M50 6 C64 24 78 40 72 60 C68 74 58 80 50 80 C38 80 28 74 28 60 C28 48 38 40 42 28 C46 38 50 42 54 44 C56 32 54 20 50 6 Z', fill: '#e3742f', stroke: INK, w: 3 },
+      { d: 'M50 40 C58 50 62 58 58 68 C56 74 52 76 50 76 C44 76 40 72 40 66 C40 58 46 54 48 46 C50 52 52 54 54 56 C54 50 52 46 50 40 Z', fill: '#f6c544' },
+    ],
   },
-  // Beat 4/5: lantern symbols
+  // ---------------------------------------------------------------- garden lanterns
   maan: {
     id: 'maan', name: 'Maan', color: '#b9c3e6',
-    fill: 'M60 10 A40 40 0 1 0 90 68 A32 32 0 1 1 60 10 Z',
+    layers: [
+      { d: 'M60 8 A42 42 0 1 0 92 70 A33 33 0 1 1 60 8 Z', fill: '#b9c3e6', stroke: INK, w: 3.5 },
+      { d: circ(34, 46, 4) + circ(38, 68, 3) + circ(28, 60, 2.5), fill: '#8f9bc4' },
+    ],
   },
   zon: {
     id: 'zon', name: 'Zon', color: '#f2b233',
-    fill: 'M50 30 A20 20 0 1 0 50.1 30 Z',
-    line: 'M50 6 V20 M50 80 V94 M6 50 H20 M80 50 H94 M19 19 L29 29 M71 71 L81 81 M19 81 L29 71 M71 29 L81 19',
+    layers: [
+      { d: 'M50 4 V18 M50 82 V96 M4 50 H18 M82 50 H96 M17 17 L27 27 M73 73 L83 83 M17 83 L27 73 M73 27 L83 17', stroke: INK, w: 10 },
+      { d: 'M50 4 V18 M50 82 V96 M4 50 H18 M82 50 H96 M17 17 L27 27 M73 73 L83 83 M17 83 L27 73 M73 27 L83 17', stroke: '#f2b233', w: 5 },
+      { d: circ(50, 50, 24), fill: '#f2b233', stroke: INK, w: 3.5 },
+    ],
   },
   blad: {
     id: 'blad', name: 'Blad', color: '#6fae4f',
-    fill: 'M50 92 C18 70 16 30 50 8 C84 30 82 70 50 92 Z',
-    line: 'M50 92 V22 M50 50 L34 38 M50 66 L66 54',
+    layers: [
+      { d: 'M50 92 V80', stroke: '#3f6a2a', w: 5 },
+      { d: 'M50 82 C18 66 16 30 50 6 C84 30 82 66 50 82 Z', fill: '#6fae4f', stroke: INK, w: 3.5 },
+      { d: 'M50 80 V18 M50 44 L35 32 M50 58 L34 47 M50 44 L65 32 M50 58 L66 47', stroke: '#3f6a2a', w: 3 },
+    ],
   },
-  // Beat 6: pool tile shapes
-  driehoek: { id: 'driehoek', name: 'Driehoek', color: '#e07a3a', fill: 'M50 10 L92 86 H8 Z' },
-  cirkel: { id: 'cirkel', name: 'Cirkel', color: '#3f7fd0', fill: 'M50 12 A38 38 0 1 0 50.1 12 Z' },
-  ruit: { id: 'ruit', name: 'Ruit', color: '#4fa35a', fill: 'M50 6 L90 50 L50 94 L10 50 Z' },
+  // ---------------------------------------------------------------- pool mosaic (geometric on purpose)
+  driehoek: { id: 'driehoek', name: 'Driehoek', color: '#e07a3a', layers: [{ d: 'M50 10 L92 86 H8 Z', fill: '#e07a3a', stroke: INK, w: 4 }] },
+  cirkel: { id: 'cirkel', name: 'Cirkel', color: '#3f7fd0', layers: [{ d: circ(50, 50, 38), fill: '#3f7fd0', stroke: INK, w: 4 }] },
+  ruit: { id: 'ruit', name: 'Ruit', color: '#4fa35a', layers: [{ d: 'M50 6 L90 50 L50 94 L10 50 Z', fill: '#4fa35a', stroke: INK, w: 4 }] },
   golf: {
     id: 'golf', name: 'Golf', color: '#9a64c4',
-    fill: 'M6 46 C22 28 36 28 50 44 C64 60 78 60 94 42 V62 C78 80 64 80 50 64 C36 48 22 48 6 66 Z',
+    layers: [{ d: 'M6 46 C22 28 36 28 50 44 C64 60 78 60 94 42 V62 C78 80 64 80 50 64 C36 48 22 48 6 66 Z', fill: '#9a64c4', stroke: INK, w: 4 }],
   },
-  // Story objects
+  // ---------------------------------------------------------------- story objects (iteration 2 route)
   wapen: {
     id: 'wapen', name: 'Wapen', color: '#c0504d',
-    fill: 'M20 12 H80 V48 C80 72 64 86 50 94 C36 86 20 72 20 48 Z',
-    line: 'M50 22 V78 M30 42 H70',
+    layers: [
+      { d: 'M20 12 H80 V48 C80 72 64 86 50 94 C36 86 20 72 20 48 Z', fill: '#c0504d', stroke: INK, w: 4 },
+      { d: 'M50 22 V78 M30 42 H70', stroke: '#f2e6c8', w: 6 },
+    ],
   },
   penning: {
     id: 'penning', name: 'Penning', color: '#b98a4e',
-    fill: 'M50 8 A42 42 0 1 0 50.1 8 Z',
-    line: 'M50 80 V44 M50 44 L34 30 M50 44 L66 30 M50 58 L36 50 M50 58 L64 50',
+    layers: [
+      { d: circ(50, 50, 42), fill: '#b98a4e', stroke: INK, w: 4 },
+      { d: 'M50 80 V44 M50 44 L34 30 M50 44 L66 30 M50 58 L36 50 M50 58 L64 50', stroke: '#5a3a1a', w: 5 },
+    ],
   },
 };
 
+/** Symbol as an SVG <g> placed at (x, y) with size s (for composite diagrams). */
+export function symbolG(id: string, x: number, y: number, s: number): string {
+  const d = SYMBOLS[id];
+  if (!d) return '';
+  return `<g transform="translate(${x},${y}) scale(${s / 100})" stroke-linejoin="round" stroke-linecap="round">` +
+    d.layers.map((l) => `<path d="${l.d}" fill="${l.fill ?? 'none'}"${l.stroke ? ` stroke="${l.stroke}" stroke-width="${l.w ?? 4}"` : ''}/>`).join('') + '</g>';
+}
+
+/** Render a symbol as inline SVG (UI). */
 export function symbolSvg(id: string, size = 40, extraClass = ''): string {
   const s = SYMBOLS[id];
   if (!s) return '';
-  return `<svg class="sym ${extraClass}" width="${size}" height="${size}" viewBox="0 0 100 100" aria-hidden="true">` +
-    `<path d="${s.fill}" fill="${s.color}" stroke="#2b2118" stroke-width="4" stroke-linejoin="round"/>` +
-    (s.line ? `<path d="${s.line}" fill="none" stroke="#2b2118" stroke-width="5" stroke-linecap="round"/>` : '') +
+  return `<svg class="sym ${extraClass}" width="${size}" height="${size}" viewBox="0 0 100 100" role="img" aria-label="${s.name}" stroke-linejoin="round" stroke-linecap="round">` +
+    s.layers.map((l) => `<path d="${l.d}" fill="${l.fill ?? 'none'}"${l.stroke ? ` stroke="${l.stroke}" stroke-width="${l.w ?? 4}"` : ''}/>`).join('') +
     `</svg>`;
 }
 
-/** Draw a symbol on a 2D canvas context into the square (x, y, size). Works with Path2D(SVG string). */
+/**
+ * Draw a symbol on a 2D canvas into the square (x, y, size). `color` replaces every fill and `ink` every stroke
+ * (used for monochrome cut-outs and engraved plates); otherwise the full-colour artwork is drawn.
+ */
 export function drawSymbol(ctx: CanvasRenderingContext2D, id: string, x: number, y: number, size: number, opts?: { color?: string; ink?: string }) {
   const s = SYMBOLS[id];
   if (!s || typeof Path2D === 'undefined') return;
@@ -108,15 +199,10 @@ export function drawSymbol(ctx: CanvasRenderingContext2D, id: string, x: number,
   ctx.scale(size / 100, size / 100);
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
-  const f = new Path2D(s.fill);
-  ctx.fillStyle = opts?.color ?? s.color;
-  ctx.fill(f);
-  ctx.strokeStyle = opts?.ink ?? '#2b2118';
-  ctx.lineWidth = 4;
-  ctx.stroke(f);
-  if (s.line) {
-    ctx.lineWidth = 5;
-    ctx.stroke(new Path2D(s.line));
+  for (const l of s.layers) {
+    const p = new Path2D(l.d);
+    if (l.fill) { ctx.fillStyle = opts?.color ?? l.fill; ctx.fill(p); }
+    if (l.stroke) { ctx.strokeStyle = opts?.ink ?? l.stroke; ctx.lineWidth = l.w ?? 4; ctx.stroke(p); }
   }
   ctx.restore();
 }

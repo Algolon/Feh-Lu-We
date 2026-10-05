@@ -59,6 +59,9 @@ body.playing-off .zone { pointer-events: none; }
 #action { position: absolute; right: calc(18px + var(--safe-r)); bottom: calc(28px + var(--safe-b)); min-width: 110px; min-height: 72px;
   border-radius: 36px; font-size: 17px; font-weight: bold; background: rgba(217, 164, 65, 0.92); color: var(--ink); border-color: #fff3; padding: 0 20px; }
 #action[disabled] { opacity: .35; background: var(--hud); color: var(--paper); }
+#action { gap: 8px; }
+#action .ic { flex: none; }
+#held { gap: 8px; padding: 0 10px; }
 #held { position: absolute; right: calc(18px + var(--safe-r)); bottom: calc(112px + var(--safe-b)); font-size: 13px; }
 #held[hidden] { display: none; }
 #toast { position: absolute; left: 50%; top: calc(64px + var(--safe-t)); transform: translateX(-50%); max-width: min(88vw, 560px);
@@ -96,7 +99,7 @@ body.playing-off .zone { pointer-events: none; }
 .inv { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; }
 .inv button { min-height: 96px; border-radius: 14px; border: 2px solid #c9a46a; background: #fff8e8; font: inherit; font-size: 13px; color: var(--ink);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 6px; cursor: pointer; }
-.inv button .e { font-size: 30px; }
+.inv button .e { font-size: 30px; line-height: 0; }
 .inv button.sel { border-color: #b5651d; background: #ffe2a8; box-shadow: 0 0 0 3px #e4a54a inset; }
 .desc { margin-top: 12px; padding: 10px; background: #fff8e8; border-radius: 12px; min-height: 48px; }
 .clue { border-bottom: 1px dashed #c9a46a; padding: 8px 0; }

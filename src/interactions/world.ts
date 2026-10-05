@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { CollisionWorld, type Collider } from '../player/collision';
 import type { GameState, PlayerPose, SceneId } from '../core/state';
 import type { Outcome, Sfx } from '../puzzles/rules';
+import { type RoomGraph, type LampCandidate, chooseLamps } from '../world/rooms';
 
 export interface Interactable {
   id: string;
@@ -49,6 +50,7 @@ export interface LampSource {
   distance: number;
   on: () => boolean;
   flicker?: number;
+  room?: string; // explicit room (otherwise derived from the position)
 }
 
 export interface Checkpoint { name: string; pose: PlayerPose }
@@ -62,6 +64,7 @@ export class World {
   readonly syncers: (() => void)[] = [];
   readonly lamps: LampSource[] = [];
   readonly checkpoints: Checkpoint[] = [];
+  readonly patches = new LightPatches();
   readonly ownMaterials: THREE.Material[] = [];
   readonly ownTextures: THREE.Texture[] = [];
   spawn: PlayerPose = { x: 0, y: 0, z: 0, yaw: 0, pitch: 0 };
@@ -165,63 +168,112 @@ export class World {
   }
 }
 
-/** A small, fixed pool of point lights assigned to the nearest lit lamps (avoids shader recompiles). */
+/**
+ * A small, fixed pool of point lights (no shader recompiles). Which lamps get a real light is decided by
+ * room/portal relevance (current room + rooms seen through OPEN doors/arches; outdoor lamps through
+ * windows), never by view direction. Logical lamp state and the emissive fixture never depend on this:
+ * losing a pooled light only fades its illumination, the source stays visibly lit.
+ */
 export class LightPool {
   readonly lights: THREE.PointLight[] = [];
   private timer = 0;
-  private assigned: (LampSource | null)[] = [];
+  private want: (string | null)[] = [];
+  private shown: (LampSource | null)[] = [];
   reducedMotion = false;
+  here = 'out';
   constructor(scene: THREE.Scene, count: number) {
     for (let i = 0; i < count; i++) {
       const l = new THREE.PointLight(0xffc77a, 0, 8, 1.6);
       l.castShadow = false;
       scene.add(l);
       this.lights.push(l);
-      this.assigned.push(null);
+      this.want.push(null);
+      this.shown.push(null);
     }
   }
-  private zoneCache = new Map<LampSource, string>();
-  /**
-   * Assign pooled lights to lit lamps in the player's own zone (room/building/outdoors), so a lamp never lights
-   * the far side of a wall. Hysteresis: an assigned lamp keeps its light unless a candidate is clearly closer.
-   */
-  update(dt: number, t: number, lamps: LampSource[], eye: THREE.Vector3, zoneOf?: (x: number, y: number, z: number) => string) {
+  private roomCache = new Map<LampSource, string>();
+  update(dt: number, t: number, lamps: LampSource[], eye: THREE.Vector3, rooms?: RoomGraph, isOpen: (door: string) => boolean = () => true) {
     this.timer -= dt;
     if (this.timer <= 0) {
-      this.timer = 0.3;
-      const zone = (l: LampSource) => {
-        let z = this.zoneCache.get(l);
-        if (z === undefined) { z = zoneOf ? zoneOf(l.pos.x, l.pos.y, -l.pos.z) : ''; this.zoneCache.set(l, z); }
-        return z;
+      this.timer = 0.25;
+      const roomOf = (l: LampSource) => {
+        let r = this.roomCache.get(l);
+        if (r === undefined) { r = l.room ?? (rooms ? rooms.roomAt(l.pos.x, l.pos.y, -l.pos.z) : 'out'); this.roomCache.set(l, r); }
+        return r;
       };
-      const here = zoneOf ? zoneOf(eye.x, eye.y - 1.6, -eye.z) : '';
-      const d2 = (l: LampSource) => l.pos.distanceToSquared(eye);
-      const cands = lamps.filter((l) => l.on() && zone(l) === here).sort((a, b) => d2(a) - d2(b));
-      const best = cands.slice(0, this.lights.length);
-      const keep = this.assigned.filter((a): a is LampSource => !!a && best.length > 0 && cands.includes(a) && Math.sqrt(d2(a)) < Math.sqrt(d2(best[best.length - 1])) + 1.5);
-      const next: LampSource[] = [...keep];
-      for (const c of best) if (next.length < this.lights.length && !next.includes(c)) next.push(c);
-      // stable slots: lamps that stay keep the same light object
-      const slots: (LampSource | null)[] = this.assigned.map((a) => (a && next.includes(a) ? a : null));
-      for (const c of next) if (!slots.includes(c)) { const free = slots.indexOf(null); if (free >= 0) slots[free] = c; }
-      for (let i = 0; i < this.lights.length; i++) this.assigned[i] = slots[i] ?? null;
+      this.here = rooms ? rooms.roomAt(eye.x, eye.y - 0.8, -eye.z) : 'out';
+      const rel = rooms ? rooms.relevant(this.here, isOpen) : null;
+      const byId = new Map<string, LampSource>();
+      const cands: LampCandidate[] = [];
+      for (const l of lamps) {
+        if (!l.on()) continue;
+        const room = roomOf(l);
+        if (rel && !rel.has(room)) continue;
+        byId.set(l.id, l);
+        cands.push({ id: l.id, room, d: l.pos.distanceTo(eye), w: 0.2 * l.intensity });
+      }
+      this.want = chooseLamps(cands, this.here, this.want, this.lights.length);
+      this.lookup = byId;
     }
     for (let i = 0; i < this.lights.length; i++) {
       const l = this.lights[i];
-      const a = this.assigned[i];
-      if (!a || !a.on()) {
-        l.intensity = Math.max(0, l.intensity - dt * 8);
+      const target = this.want[i] ? this.lookup.get(this.want[i]!) ?? null : null;
+      const cur = this.shown[i];
+      if (cur !== target) {
+        // fade the old source out before the light moves: no pop when a slot changes hands
+        l.intensity = Math.max(0, l.intensity - dt * 30);
+        if (l.intensity > 0.05 && cur) continue;
+        this.shown[i] = target;
+        if (target) { l.position.copy(target.pos); l.color.set(target.color); l.distance = target.distance; }
+        l.intensity = 0;
         continue;
       }
-      if (l.position.distanceToSquared(a.pos) > 0.01) {
-        l.position.copy(a.pos);
-        l.color.set(a.color);
-        l.distance = a.distance;
-        l.intensity = 0;
-      }
-      const f = a.flicker && !this.reducedMotion ? 1 - a.flicker * (0.5 + 0.5 * Math.sin(t * 13.1 + i) * Math.sin(t * 7.3)) : 1;
-      const target = a.intensity * f;
-      l.intensity += (target - l.intensity) * Math.min(1, dt * 10);
+      if (!cur || !cur.on()) { l.intensity = Math.max(0, l.intensity - dt * 20); continue; }
+      const f = cur.flicker && !this.reducedMotion ? 1 - cur.flicker * (0.5 + 0.5 * Math.sin(t * 13.1 + i) * Math.sin(t * 7.3)) : 1;
+      l.intensity += (cur.intensity * f - l.intensity) * Math.min(1, dt * 5);
     }
+  }
+  private lookup = new Map<string, LampSource>();
+  /** Lamp ids currently holding a real light (tests/debug). */
+  assigned() { return this.shown.map((l) => l?.id ?? null); }
+}
+
+/**
+ * Cheap painted "light pools" on floors under fixtures (one instanced mesh, additive). They follow the
+ * lamp's logical state only, so a room keeps its warm read even when its pooled point light moves away.
+ */
+export class LightPatches {
+  private items: { x: number; y: number; z: number; r: number; color: THREE.Color; on: () => boolean }[] = [];
+  private mesh: THREE.InstancedMesh | null = null;
+  add(x: number, y: number, z: number, r: number, color: THREE.ColorRepresentation, on: () => boolean, strength = 0.55) {
+    this.items.push({ x, y, z, r, color: new THREE.Color(color).multiplyScalar(strength), on });
+  }
+  build(w: World) {
+    if (!this.items.length) return;
+    const cv = document.createElement('canvas');
+    cv.width = cv.height = 64;
+    const x = cv.getContext('2d')!;
+    const g = x.createRadialGradient(32, 32, 0, 32, 32, 32);
+    g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(0.45, 'rgba(255,255,255,0.45)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+    x.fillStyle = g; x.fillRect(0, 0, 64, 64);
+    const tex = w.texture(new THREE.CanvasTexture(cv));
+    const geo = new THREE.PlaneGeometry(1, 1);
+    geo.rotateX(-Math.PI / 2);
+    const mat = w.material(new THREE.MeshBasicMaterial({ map: tex, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4 }));
+    const m = new THREE.InstancedMesh(geo, mat, this.items.length);
+    const mtx = new THREE.Matrix4();
+    this.items.forEach((p, i) => { m.setMatrixAt(i, mtx.makeScale(p.r * 2, 1, p.r * 2).setPosition(p.x, p.y, -p.z)); m.setColorAt(i, p.color); });
+    m.computeBoundingSphere();
+    m.renderOrder = 1;
+    m.userData.noCull = true;
+    w.scene.add(m);
+    this.mesh = m;
+    w.onSync(() => this.sync());
+  }
+  private black = new THREE.Color(0, 0, 0);
+  sync() {
+    if (!this.mesh) return;
+    this.items.forEach((p, i) => this.mesh!.setColorAt(i, p.on() ? p.color : this.black));
+    if (this.mesh.instanceColor) this.mesh.instanceColor.needsUpdate = true;
   }
 }

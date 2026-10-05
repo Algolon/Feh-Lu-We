@@ -4,7 +4,8 @@ import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, wall, floor, ceiling, hipRoof } from './arch';
 import { box, boxMM, cyl, blob, compound, v3 } from './kit';
-import { table, chair, plant, lantern, part, flame, staticLantern } from './furniture';
+import { table, chair, plant, lantern, part, staticLantern } from './furniture';
+import { makeFire } from './fire';
 import { makeDoor, makeLamp, makeInspect, makeAction, place } from '../interactions/props';
 import { drawSymbol } from '../content/symbols';
 
@@ -114,11 +115,11 @@ export function buildCottage(w: World, g: GameApi, c: Ctx) {
   blob(c.b, k.M.paint, '#f0d070', 26, Y + 0.82, 93.4, 0.15, 0.07, 0.15, { chunk: c.chunk }); // cheese
   cyl(c.b, k.M.paint, '#7a2a30', 25, Y + 0.76, 93.4, 0.06, 0.06, 0.28, 8, { chunk: c.chunk }); // bottle
   const lit = () => !!g.state.flags.cottageSolved;
-  const candleFl: THREE.Group[] = [];
   for (const x of [23.5, 26.5]) {
-    cyl(c.b, k.M.paint, '#efe6c8', x, Y + 0.76, 93.4, 0.03, 0.03, 0.22, 6, { chunk: c.chunk });
-    candleFl.push(flame(w, x, Y + 0.98, 93.4, 0.1));
+    cyl(c.b, k.M.paint, '#c9a44c', x, Y + 0.76, 93.4, 0.06, 0.07, 0.02, 10, { chunk: c.chunk });
+    cyl(c.b, k.M.paint, '#efe6c8', x, Y + 0.78, 93.4, 0.03, 0.03, 0.22, 8, { chunk: c.chunk });
   }
+  const candleFl = [makeFire(w, { kind: 'candles', x: 25, y: Y + 1.0, z: 93.4, wicks: [[-1.5, 0, 0], [1.5, 0, 0]] })];
   w.lamps.push({ id: 'cottage.table', pos: v3(25, Y + 1.6, 93.4), color: '#ffc06a', intensity: 9, distance: 9, on: lit, flicker: 0.15 });
   const bunting: THREE.MeshBasicMaterial[] = [];
   for (let i = 0; i < 9; i++) {

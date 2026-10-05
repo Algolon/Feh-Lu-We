@@ -2,6 +2,7 @@
 // Every function mutates the given GameState and returns a player-facing outcome.
 import { type GameState, has, flag, give, consume, addClue } from '../core/state';
 import { ESSENTIALS, ITEMS } from '../content/items';
+import { MANTEL_ANSWER, DRAWER_DIAL, MANTEL_HINTS } from '../content/canon';
 
 export type Sfx = 'click' | 'pickup' | 'success' | 'fail' | 'locked' | 'unlock' | 'fire' | 'chime' | 'crank' | 'none';
 
@@ -15,7 +16,7 @@ const no = (msg: string, sfx: Sfx = 'fail'): Outcome => ({ ok: false, msg, sfx }
 
 // Fixed, deterministic solutions. Documented in docs/PUZZLE_SOLUTIONS.md.
 export const SOLUTIONS = {
-  drawerLock: ['veer', 'dennenappel', 'kopje'],
+  drawerLock: MANTEL_ANSWER, // brass-stand objects on the mantel, left → right (src/content/canon.ts)
   studyLock: ['put', 'schuur', 'vuur'],
   gardenLanterns: ['maan', 'blad', 'zon'],
   cabinetPanel: ['ruit', 'golf', 'driehoek', 'cirkel'],
@@ -24,7 +25,7 @@ export const SOLUTIONS = {
 };
 
 export const LOCK_OPTIONS = {
-  drawerLock: ['kaars', 'veer', 'klok', 'dennenappel', 'ster', 'kopje'],
+  drawerLock: DRAWER_DIAL,
   studyLock: ['put', 'schuur', 'vuur'],
   cabinetPanel: ['driehoek', 'cirkel', 'ruit', 'golf'],
 };
@@ -41,6 +42,8 @@ export interface PuzzleDef {
   discovered: (s: GameState) => boolean;
   objective: string;
   hints: [string, string, string];
+  /** Clue ids that carry the evidence (for the notebook "solved" mark and consistency tests). */
+  evidence?: string[];
 }
 
 const owns = (s: GameState, i: string) => has(s, i) || s.used.includes(i) || Object.values(s.slots).includes(i);
@@ -59,11 +62,8 @@ export const PUZZLES: PuzzleDef[] = [
   {
     id: 'p1.drawer', title: 'De lade in de hal', solved: (s) => flag(s, 'drawerLockSolved'), discovered: (s) => s.scene === 'estate',
     objective: 'Vind uit wat er in de hal voor je klaarstaat.',
-    hints: [
-      'Lees de uitnodiging nog eens, en bekijk de schoorsteenmantel in de woonkamer links van de hal.',
-      'De drie tekeningetjes op de uitnodiging staan ook op de mantel. Hun volgorde van links naar rechts is de code voor het slot op de lade in de hal.',
-      'Zet de wieltjes op: Veer – Dennenappel – Kopje.',
-    ],
+    hints: MANTEL_HINTS,
+    evidence: ['c.invitation', 'c.mantel', 'c.drawerLock'],
   },
   {
     id: 'p2.study', title: 'De studeerkamer', solved: (s) => flag(s, 'studyLockSolved'), discovered: (s) => owns(s, 'studyKey') || seen(s, 'c.studyNote', 'c.forestMap'),

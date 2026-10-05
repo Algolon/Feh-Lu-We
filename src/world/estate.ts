@@ -18,6 +18,7 @@ import { pressLantern } from '../puzzles/rules';
 import { addClue } from '../core/state';
 import { drawSymbol, SYMBOLS } from '../content/symbols';
 import { mulberry32 } from '../core/rng';
+import { RoomGraph, type RoomDef, type PortalDef } from './rooms';
 
 export const GARDEN_PATH: [number, number][] = smooth([[51.2, 82.6], [45, 84.4], [38, 85.6], [31.5, 86.6], [26, 85.3]]);
 // A compact lantern circle on the open lawn (a wrong attempt never means crossing the whole garden).
@@ -72,24 +73,8 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
     if (Math.hypot(x - 60, z - 47) < 7.5) return 'stone';
     return 'grass';
   };
-  const zoneAt = (x: number, y: number, z: number) => {
-    if (inRect(x, z, 48.2, 71.8, 52.2, 79.8)) {
-      if (inRect(x, z, 56, 64, 55.5, 63)) return 'manor-hall'; // double-height hall: chandelier lights the hall
-      if (y > 2.2) return 'manor-up';
-      if (inRect(x, z, 48.2, 56, 52.2, 72)) return 'manor-living';
-      if (inRect(x, z, 64, 71.8, 52.2, 64)) return 'manor-dining';
-      if (inRect(x, z, 64, 71.8, 64, 79.8)) return 'manor-kitchen';
-      if (inRect(x, z, 48.2, 64, 72, 79.8)) return 'manor-billiard';
-      return 'manor-hall'; // vestibule, hall, corridor
-    }
-    if (inRect(x, z, 72, 84, 64, 82)) return 'cons';
-    if (inRect(x, z, 85, 89, 69, 73)) return 'sauna';
-    if (inRect(x, z, 20, 30, 88, 91)) return 'cottage-entry';
-    if (inRect(x, z, 20, 30, 91, 96)) return 'cottage-room';
-    if (inRect(x, z, 25.5, 30.5, 24.5, 28)) return 'shed';
-    return 'out';
-  };
-  return { world: w, extras: { env, isIndoor, surfaceAt, zoneAt } };
+  const rooms = estateRooms();
+  return { world: w, extras: { env, isIndoor, surfaceAt, rooms } };
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -416,3 +401,36 @@ export function estateMapSvg(v: MapView = {}): string {
 }
 
 void v3;
+
+/** Rooms and light portals of the estate buildings (most specific rooms first). */
+export function estateRooms(): RoomGraph {
+  const R = (id: string, name: string, floor: RoomDef['floor'], x0: number, x1: number, z0: number, z1: number, y0: number, y1: number): RoomDef => ({ id, name, floor, x0, x1, z0, z1, y0, y1 });
+  const rooms: RoomDef[] = [
+    R('study', 'Studeerkamer', 'u', 48.4, 56, 63, 74, 3.0, 6.3),
+    R('storage', 'Opslag', 'u', 64, 70, 68, 74, 3.0, 6.3),
+    R('landing', 'Overloop', 'u', 56, 64, 63, 74, 3.0, 6.3),
+    R('hall', 'Hal', 'g', 56, 64, 52.4, 70, -0.5, 6.3),
+    R('corridor', 'Gang', 'g', 56, 64, 70, 72, -0.5, 3.2),
+    R('living', 'Woonkamer', 'g', 48.4, 56, 52.4, 72, -0.5, 3.2),
+    R('billiard', 'Biljartkamer', 'g', 48.4, 64, 72, 79.6, -0.5, 3.2),
+    R('dining', 'Eetkamer', 'g', 64, 71.6, 52.4, 64, -0.5, 3.2),
+    R('kitchen', 'Keuken', 'g', 64, 71.6, 64, 79.6, -0.5, 3.2),
+    R('cons', 'Serre', 'g', 72, 84, 64, 82, -3, 6),
+    R('sauna', 'Sauna', 'x', 85, 89, 69, 73, -0.5, 4.2),
+    R('cottageEntry', 'Huisje', 'x', 20.3, 29.7, 88.3, 91, -0.5, 3.1),
+    R('cottageRoom', 'Zaal', 'x', 20.3, 29.7, 91, 95.7, -0.5, 3.1),
+    R('shed', 'Schuur', 'x', 25.5, 30.5, 24.5, 28, -0.5, 2.6),
+  ];
+  const P = (a: string, b: string, kind: PortalDef['kind'], door?: string): PortalDef => ({ a, b, kind, door });
+  const portals: PortalDef[] = [
+    P('living', 'hall', 'arch'), P('hall', 'dining', 'arch'), P('hall', 'landing', 'stair'),
+    P('hall', 'corridor', 'door', 'door.corridor'), P('corridor', 'billiard', 'door', 'door.billiard'), P('corridor', 'kitchen', 'arch'),
+    P('kitchen', 'dining', 'arch'), P('hall', 'out', 'door', 'door.front'), P('kitchen', 'out', 'door', 'door.kitchenBack'),
+    P('kitchen', 'cons', 'door', 'door.conservatory'), P('cons', 'out', 'door', 'door.conservatoryEast'), P('cons', 'out', 'window'),
+    P('landing', 'study', 'door', 'door.study'), P('landing', 'storage', 'door', 'door.storage'),
+    P('sauna', 'out', 'door', 'door.sauna'), P('cottageEntry', 'out', 'door', 'door.cottage'), P('cottageEntry', 'cottageRoom', 'door', 'door.gathering'),
+    P('shed', 'out', 'door', 'door.shed'),
+    ...['living', 'dining', 'kitchen', 'billiard', 'study', 'landing', 'hall', 'cottageEntry', 'cottageRoom'].map((r) => P(r, 'out', 'window')),
+  ];
+  return new RoomGraph(rooms, portals);
+}

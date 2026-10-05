@@ -1,6 +1,8 @@
 // Notebook entries. Inspecting the matching object in the world records the entry.
 // Answers must always be derivable from these texts + the 3D world (see docs/PUZZLE_SOLUTIONS.md).
 import { MEMORIES } from './memories';
+import { MANTEL_TEXT, DRAWER_DIAL } from './canon';
+import { SYMBOLS } from './symbols';
 
 export interface ClueDef {
   id: string;
@@ -8,7 +10,7 @@ export interface ClueDef {
   text: string;
   symbols?: string[];
   symbolsLayout?: 'ring' | 'row' | 'arrow';
-  diagram?: 'forestMap' | 'saunaPool' | 'billiardExamples' | 'poolTiles';
+  diagram?: 'forestMap' | 'saunaPool' | 'billiardExamples' | 'poolTiles' | 'mantel' | 'brassStands';
   memory?: boolean;
 }
 
@@ -18,21 +20,19 @@ export const CLUES: Record<string, ClueDef> = {
   'c.invitation': {
     id: 'c.invitation',
     title: 'Uitnodiging',
-    text: `“We hebben alles klaargezet. Zoek uit waar we samenkomen.”\n\nDe voordeur van het landhuis gaat open met de sleutel die je meeneemt. Drie dingen staan daar al voor je klaar — ze staan op de schoorsteenmantel in de woonkamer. Lees ze van links naar rechts.\n\n${K}`,
-    symbols: ['kopje', 'veer', 'dennenappel'],
-    symbolsLayout: 'ring',
+    text: `“We hebben alles klaargezet. Zoek uit waar we samenkomen.”\n\nDe voordeur van het landhuis gaat open met de sleutel die je meeneemt. In de hal staat een ladekast met een slot.\n\nOp de schoorsteenmantel staan drie voorwerpen op kleine messing voetjes. Alleen die drie horen bij de lade. Lees ze van links naar rechts, terwijl je voor de haard staat.\n\n${K}`,
+    diagram: 'brassStands',
   },
   'c.mantel': {
     id: 'c.mantel',
     title: 'Schoorsteenmantel',
-    text: 'Op de mantel boven de open haard staan, van links naar rechts: een kaars, een veer, een klokje, een dennenappel, een vaasje en een kopje.',
-    symbols: ['kaars', 'veer', 'klok', 'dennenappel', 'kopje'],
-    symbolsLayout: 'row',
+    text: MANTEL_TEXT,
+    diagram: 'mantel',
   },
   'c.drawerLock': {
     id: 'c.drawerLock',
     title: 'Slot op de ladekast in de hal',
-    text: 'De lade van de ladekast in de hal zit vast met een slot van drie draaiwieltjes. Op elk wieltje staan dezelfde zes tekeningetjes: kaars, veer, klok, dennenappel, ster en kopje.',
+    text: `De lade van de ladekast in de hal zit vast met een slot van drie draaiwieltjes. Op elk wieltje staan dezelfde zes tekeningetjes: ${DRAWER_DIAL.map((d) => SYMBOLS[d].name.toLowerCase()).join(', ')}.`,
   },
   'c.studyNote': {
     id: 'c.studyNote',

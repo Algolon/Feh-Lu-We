@@ -50,9 +50,8 @@ describe('code locks', () => {
     expect(CLUES['c.firePlate'].symbols).toEqual(SOLUTIONS.gardenLanterns);
     // Pool tiles read shallow→deep; the sauna board says read deep→shallow.
     expect([...CLUES['c.poolTiles'].symbols!].reverse()).toEqual(SOLUTIONS.cabinetPanel);
-    // Mantel order filtered to invitation pictograms gives the drawer code.
-    const pict = new Set(CLUES['c.invitation'].symbols);
-    expect(CLUES['c.mantel'].symbols!.filter((x) => pict.has(x))).toEqual(SOLUTIONS.drawerLock);
+    // The mantel's brass-stand objects, read left → right, give the drawer code (see tests/canon.test.ts).
+    expect(CLUES['c.mantel'].diagram).toBe('mantel');
   });
 });
 

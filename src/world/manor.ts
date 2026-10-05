@@ -4,10 +4,12 @@
 import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, wall, floor, ceiling, stairsZ, railing, hipRoof, gableRoof, windowAt } from './arch';
-import { box, boxMM, cyl, blob, compound, v3, hitbox, type Batcher } from './kit';
-import { table, chair, sofa, armchair, bookshelf, bed, counter, rug, plant, painting, crate, tableLamp, floorLamp, chandelier, wallSconce, flame, part, staticLantern, staticSconce } from './furniture';
-import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place, lightableItemLabel } from '../interactions/props';
-import { plaqueTexture, forestMapTexture } from './textures';
+import { box, boxMM, cyl, blob, compound, v3, hitbox } from './kit';
+import { table, chair, sofa, armchair, bookshelf, bed, counter, rug, plant, painting, crate, tableLamp, floorLamp, chandelier, wallSconce, part, staticLantern, staticSconce } from './furniture';
+import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place } from '../interactions/props';
+import { forestMapTexture } from './textures';
+import { buildHearth } from './hearth';
+import { makeFire } from './fire';
 import { drawSymbol } from '../content/symbols';
 import { addClue, has } from '../core/state';
 
@@ -162,7 +164,7 @@ export function buildManor(w: World, g: GameApi, c: Ctx) {
   const sw = compound((b) => box(b, k.M.paint, '#c9a44c', 0, 0, 0, 0.12, 0.18, 0.03));
   place(sw, 61.5, 1.35, 55.6, 0);
   w.scene.add(sw);
-  makeLamp(w, g, { id: 'lamp.hallChandelier', obj: sw, glow: ch.glow, light: ch.light, name: 'kroonluchter', defaultOn: true, intensity: 9, distance: 12, hit: [0.4, 0.4, 0.3], hitOffset: [0, 0.05, 0] });
+  makeLamp(w, g, { id: 'lamp.hallChandelier', obj: sw, glow: ch.glow, light: ch.light, name: 'kroonluchter', defaultOn: true, intensity: 9, distance: 12, patch: { y: GF + 0.02, r: 2.6 }, hit: [0.4, 0.4, 0.3], hitOffset: [0, 0.05, 0] });
   for (const [x, z, yaw] of [[56.15, 64.5, Math.PI / 2], [63.85, 61.5, -Math.PI / 2]] as const) {
     staticSconce(c, w, x, 2.2, z, yaw, 3, 6);
   }
@@ -172,15 +174,15 @@ export function buildManor(w: World, g: GameApi, c: Ctx) {
   box(c.b, k.M.wood, '#5a3a22', cx + 0.02, GF + 0.84, cz, 0.52, 0.05, 1.4, { chunk: c.chunk, uv: 1 });
   for (const sx of [-1, 1]) box(c.b, k.M.paint, '#4a2f1a', cx + 0.2, GF, cz + sx * 0.6, 0.06, 0.1, 0.06, { chunk: c.chunk });
   w.col.addBox(56.08, 56.6, cz - 0.7, cz + 0.7, 0, GF + 0.9);
-  const dialPlate = new THREE.Mesh(new THREE.PlaneGeometry(0.34, 0.12), w.material(new THREE.MeshLambertMaterial({ map: w.texture(plaqueTexture({ w: 192, h: 64, bg: '#c9a44c', symbols: ['kaars', 'veer', 'klok'], symbolColor: '#3a2a1a' })) })));
   const hallDrawer = makeDrawer(w, g, {
     id: 'hall.drawer', x: cx + 0.02, y: GF + 0.66, z: cz, yaw: Math.PI / 2, w: 1.0, h: 0.2, d: 0.42, color: '#7a5232',
     unlock: 'lock.hallDrawer', lockedLabel: 'Slot bekijken',
     onLocked: () => { if (addClue(g.state, 'c.drawerLock')) g.changed(); g.openPanel('drawerLock'); },
   });
-  dialPlate.position.set(0.28, -0.02, -0.235);
-  dialPlate.rotation.y = Math.PI;
-  hallDrawer.slider.add(dialPlate);
+  // three small brass dials on the drawer front (neutral ornament: no pictures that could read as a code)
+  const dials = compound((b) => { for (let i = 0; i < 3; i++) cyl(b, k.M.paint, '#c9a44c', -0.12 + i * 0.12, 0, 0, 0.035, 0.035, 0.025, 12, { rx: Math.PI / 2 }); });
+  dials.position.set(0, -0.1, -0.235);
+  hallDrawer.slider.add(dials);
   const brass = compound((b) => {
     box(b, k.M.paint, '#d9b14a', 0, 0, 0, 0.04, 0.012, 0.13);
     cyl(b, k.M.paint, '#d9b14a', 0, 0, -0.08, 0.03, 0.03, 0.012, 10);
@@ -207,104 +209,8 @@ export function buildManor(w: World, g: GameApi, c: Ctx) {
   plant(c, 55.4, 52.9, GF, 1.2);
   painting(c, 52, 2.1, 52.42, 0, 1.2, 0.85, 3);
   painting(c, 55.9, 2.0, 67, -Math.PI / 2, 0.9, 0.7, 6);
-  // fireplace on the west wall with the mantelpiece — beat 1 evidence
-  const fz = 62;
-  boxMM(c.b, k.M.stone, '#e2d2b2', 48.4, 49.05, GF, 1.25, fz - 1.4, fz + 1.4, { chunk: c.chunk, uv: 1.2 });
-  boxMM(c.b, k.M.paint, '#1d1712', 48.42, 49.07, GF, 0.95, fz - 0.7, fz + 0.7, { chunk: c.chunk });
-  boxMM(c.b, k.M.stone, '#d8c6a4', 48.4, 49.15, 1.25, 1.33, fz - 1.7, fz + 1.7, { chunk: c.chunk, uv: 1.2 });
-  boxMM(c.b, k.M.stone, '#e8dcc0', 48.4, 48.68, 1.33, CEIL, fz - 1.2, fz + 1.2, { chunk: c.chunk, uv: 1.6 }); // shallow breast: mantel objects stand clear of it
-  boxMM(c.b, k.M.stone, '#cbb898', 48.6, 49.6, GF, GF + 0.06, fz - 1.3, fz + 1.3, { chunk: c.chunk });
-  w.col.addBox(48.4, 49.15, fz - 1.4, fz + 1.4, 0, 1.3);
-  for (let i = 0; i < 3; i++) cyl(c.b, k.M.bark, '#7a5a3a', 48.75, GF + 0.08 + i * 0.05, fz - 0.3 + i * 0.3, 0.07, 0.07, 0.8, 6, { chunk: c.chunk, rx: Math.PI / 2, yaw: 0.3 * i });
-  const mantelY = 1.33, mx = 48.98;
-  const mantel = new THREE.Group();
-  w.scene.add(mantel);
-  const mz = [60.65, 61.22, 61.8, 62.38, 62.96, 63.48];
-  // Each object is modelled around its own origin and shown at 1.6× so its silhouette reads from the room.
-  const trinket = (z: number, build: (b: Batcher) => void) => {
-    const t = compound(build);
-    t.position.copy(v3(mx, mantelY, z));
-    t.scale.setScalar(1.6);
-    mantel.add(t);
-  };
-  // kaars (candle) with a holder
-  trinket(mz[0], (b) => {
-    cyl(b, k.M.paint, '#b8892f', 0, 0, 0, 0.07, 0.08, 0.02, 10);
-    cyl(b, k.M.paint, '#f3ead0', 0, 0.02, 0, 0.035, 0.035, 0.24, 8);
-    blob(b, k.M.glow, '#ffcf6a', 0, 0.29, 0, 0.018, 0.035, 0.018);
-  });
-  // veer (feather) standing upright in a small inkpot: long curved vane + dark quill
-  trinket(mz[1], (b) => {
-    cyl(b, k.M.paint, '#2f3a4a', 0, 0, 0, 0.04, 0.045, 0.06, 10);
-    box(b, k.M.paint, '#8a6a4a', 0, 0.04, 0, 0.01, 0.12, 0.01, { rz: 0.15 });
-    box(b, k.M.paint, '#f2ead8', -0.02, 0.12, 0, 0.012, 0.26, 0.08, { rz: 0.18 });
-    box(b, k.M.paint, '#d8cbb0', -0.045, 0.3, 0, 0.012, 0.1, 0.05, { rz: 0.32 });
-  });
-  // klok (clock) — a distractor
-  trinket(mz[2], (b) => {
-    box(b, k.M.wood, '#6b4426', 0, 0, 0, 0.14, 0.28, 0.24, { uv: 0.5 });
-    cyl(b, k.M.paint, '#f5ecd6', 0.075, 0.16, 0, 0.085, 0.085, 0.01, 14, { rz: Math.PI / 2 });
-    box(b, k.M.paint, '#2b2118', 0.082, 0.16, 0.02, 0.004, 0.006, 0.05);
-  });
-  // dennenappel (pinecone): stacked scales
-  trinket(mz[3], (b) => {
-    blob(b, k.M.paint, '#8a5a2a', 0, 0.09, 0, 0.06, 0.1, 0.06);
-    for (let i = 0; i < 9; i++) box(b, k.M.paint, i % 2 ? '#6b4220' : '#7a4e26', Math.cos(i * 2.1) * 0.052, 0.03 + i * 0.016, Math.sin(i * 2.1) * 0.052, 0.035, 0.022, 0.035, { yaw: i * 2.1 });
-  });
-  // vaas (vase) with a flower — a distractor
-  trinket(mz[4], (b) => {
-    cyl(b, k.M.paint, '#4f7fa8', 0, 0, 0, 0.05, 0.08, 0.24, 10);
-    cyl(b, k.M.paint, '#4f8a3a', 0, 0.24, 0, 0.008, 0.008, 0.18, 4);
-    blob(b, k.M.paint, '#d9c45a', 0, 0.44, 0, 0.04, 0.04, 0.04);
-  });
-  // kopje (teacup) on a saucer
-  trinket(mz[5], (b) => {
-    cyl(b, k.M.paint, '#f5f0e6', 0, 0, 0, 0.08, 0.08, 0.015, 12);
-    cyl(b, k.M.paint, '#8fb4d8', 0, 0.015, 0, 0.06, 0.045, 0.08, 12);
-    box(b, k.M.paint, '#8fb4d8', 0, 0.04, 0.075, 0.015, 0.05, 0.03);
-  });
-  // brass reading-direction plaque on the mantel edge: a visual anchor for "left to right"
-  {
-    const cv = document.createElement('canvas'); cv.width = 512; cv.height = 64;
-    const x = cv.getContext('2d')!;
-    x.fillStyle = '#c9a44c'; x.fillRect(0, 0, 512, 64);
-    x.strokeStyle = '#7a5a1a'; x.lineWidth = 4; x.strokeRect(3, 3, 506, 58);
-    x.fillStyle = '#3a2a1a'; x.font = 'bold 34px Georgia'; x.textAlign = 'center'; x.fillText('links  ⟶  rechts', 256, 44);
-    const tex = w.texture(new THREE.CanvasTexture(cv)); tex.colorSpace = THREE.SRGBColorSpace;
-    const pl = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.11), w.material(new THREE.MeshLambertMaterial({ map: tex })));
-    pl.position.copy(v3(49.162, 1.285, 61.0));
-    pl.rotation.y = Math.PI / 2;
-    w.scene.add(pl);
-  }
-  const trinkets = new THREE.Group();
-  mantel.add(trinkets);
-  const mh = new THREE.Group();
-  place(mh, 48.85, mantelY, fz, 0);
-  w.scene.add(mh);
-  makeInspect(w, g, { id: 'inspect.mantel', obj: mh, clue: 'c.mantel', hit: [0.6, 0.6, 3.4], hitOffset: [0, 0.25, 0], label: 'Bekijken: schoorsteenmantel' });
-  // the fire itself: light with matches, put out again
-  const fireGrp = flame(w, 48.75, GF + 0.1, fz, 0.7);
-  w.lamps.push({ id: 'fire.living', pos: v3(49.4, GF + 0.6, fz), color: '#ff9a4a', intensity: 7, distance: 9, on: () => !!g.state.lit['fire.living'], flicker: 0.3 });
-  w.emitters.push({ kind: 'fire', pos: v3(48.8, 0.6, fz), on: () => !!g.state.lit['fire.living'] });
-  w.onSync(() => { fireGrp.visible = !!g.state.lit['fire.living']; });
-  const fireHit = new THREE.Group();
-  place(fireHit, 49.0, GF, fz);
-  w.scene.add(fireHit);
-  makeAction(w, {
-    id: 'fire.living', obj: fireHit, hit: [0.5, 0.8, 1.4], hitOffset: [0, 0.4, 0],
-    label: () => (g.state.lit['fire.living'] ? 'Vuur doven' : 'Open haard'),
-    run: () => {
-      if (g.state.lit['fire.living']) { g.state.lit['fire.living'] = false; g.act({ ok: true, msg: 'Je dooft het vuur.', sfx: 'click' }); return; }
-      g.toast(has(g.state, 'matches') ? 'Er ligt hout klaar. Neem de lucifers in de hand om het aan te steken.' : 'Er ligt hout klaar, maar je hebt niets om het aan te steken.');
-    },
-    itemLabel: lightableItemLabel(() => !!g.state.lit['fire.living']),
-    useItem: (item) => {
-      if (item !== 'matches') { g.act({ ok: false, msg: 'Daarmee krijg je de haard niet aan.', sfx: 'fail' }, { save: false }); return; }
-      if (g.state.lit['fire.living']) { g.toast('Het vuur brandt al.'); return; }
-      g.state.lit['fire.living'] = true;
-      g.act({ ok: true, msg: 'Het droge hout vat meteen vlam. De kamer wordt warm en oranje.', sfx: 'fire' });
-    },
-  });
+  // fireplace on the west wall with the canonical mantelpiece — beat 1 evidence (src/content/canon.ts)
+  buildHearth(w, g, c, { id: 'fire.living', x: 48.4, z: 62, y: GF, facing: Math.PI / 2, ceil: CEIL, mantel: true, defaultLit: true });
   // side table with photo (memory), floor lamp
   table(c, 54.8, 69.6, GF, 0.6, 0.6, 0, '#6b4426', 0.62);
   const photo = compound((b) => { box(b, k.M.paint, '#b8892f', 0, 0, 0, 0.22, 0.17, 0.03); box(b, k.M.glow, '#c8b8a0', 0, 0.02, 0.018, 0.17, 0.12, 0.005); });
@@ -312,7 +218,7 @@ export function buildManor(w: World, g: GameApi, c: Ctx) {
   w.scene.add(photo);
   makeInspect(w, g, { id: 'mem.living.photo', obj: photo, clue: 'mem.living.photo', hit: [0.35, 0.3, 0.35] });
   const fl = floorLamp(w, 55.3, GF, 64.9);
-  makeLamp(w, g, { id: 'lamp.livingFloor', ...fl, name: 'staande lamp', defaultOn: true, hit: [0.5, 1.9, 0.5], intensity: 5, distance: 8 });
+  makeLamp(w, g, { id: 'lamp.livingFloor', ...fl, name: 'staande lamp', defaultOn: true, hit: [0.5, 1.9, 0.5], intensity: 5, distance: 8, patch: { y: GF + 0.02, r: 1.5 } });
 
   // ---------------------------------------------------------------- dining room (east, front)
   rug(c, 68, 58.3, GF + 0.01, 3.0, 5.4, 0, '#e0c8a8');
@@ -322,7 +228,15 @@ export function buildManor(w: World, g: GameApi, c: Ctx) {
     chair(c, 67.05, z, GF, Math.PI / 2, '#b5643c');
     chair(c, 68.95, z, GF, -Math.PI / 2, '#b5643c');
   }
-  for (let i = 0; i < 3; i++) cyl(c.b, k.M.paint, '#efe6c8', 68, GF + 0.76, 57.3 + i, 0.03, 0.03, 0.22, 6, { chunk: c.chunk });
+  for (let i = 0; i < 3; i++) {
+    cyl(c.b, k.M.paint, '#c9a44c', 68, GF + 0.76, 57.3 + i, 0.06, 0.07, 0.02, 10, { chunk: c.chunk });
+    cyl(c.b, k.M.paint, '#efe6c8', 68, GF + 0.78, 57.3 + i, 0.03, 0.03, 0.22, 8, { chunk: c.chunk });
+    cyl(c.b, k.M.paint, '#2b2118', 68, GF + 1.0, 57.3 + i, 0.004, 0.004, 0.02, 4, { chunk: c.chunk });
+  }
+  // decorative candles burn from the start (never consume matches); no puzzle depends on them
+  makeFire(w, { kind: 'candles', x: 68, y: GF + 1.01, z: 57.3, wicks: [[0, 0, 0], [0, 0, 1], [0, 0, 2]] });
+  w.lamps.push({ id: 'candles.dining', pos: v3(68, GF + 1.3, 58.3), color: '#ffb35a', intensity: 2.5, distance: 5, on: () => true, flicker: 0.2 });
+  w.patches.add(68, GF + 0.8, 58.3, 1.2, '#ffb35a', () => true, 0.35);
   box(c.b, k.M.wood, '#5a3a22', 71.3, GF, 58.3, 0.5, 0.9, 2.2, { chunk: c.chunk, uv: 1 });
   w.col.addBox(71.0, 71.6, 57.2, 59.4, 0, 1);
   painting(c, 71.38, 2.1, 61.5, -Math.PI / 2, 0.8, 0.6, 7);
@@ -330,7 +244,7 @@ export function buildManor(w: World, g: GameApi, c: Ctx) {
   const dsw = compound((b) => box(b, k.M.paint, '#c9a44c', 0, 0, 0, 0.12, 0.18, 0.03));
   place(dsw, 64.09, 1.35, 61.0, Math.PI / 2);
   w.scene.add(dsw);
-  makeLamp(w, g, { id: 'lamp.dining', obj: dsw, glow: dch.glow, light: dch.light, name: 'kroonluchter', defaultOn: false, intensity: 7, distance: 10, hit: [0.3, 0.4, 0.4], hitOffset: [0, 0.05, 0] });
+  makeLamp(w, g, { id: 'lamp.dining', obj: dsw, glow: dch.glow, light: dch.light, name: 'kroonluchter', defaultOn: false, intensity: 7, distance: 10, patch: { y: GF + 0.02, r: 2.2 }, hit: [0.3, 0.4, 0.4], hitOffset: [0, 0.05, 0] });
 
   // ---------------------------------------------------------------- kitchen (east, rear)
   counter(c, 65.2, 79.25, GF, Math.PI, 1.6);
@@ -354,7 +268,7 @@ export function buildManor(w: World, g: GameApi, c: Ctx) {
   w.scene.add(list);
   makeInspect(w, g, { id: 'mem.kitchen.list', obj: list, clue: 'mem.kitchen.list', hit: [0.35, 0.15, 0.4] });
   const kl = wallSconce(w, 64.1, 2.2, 67.5, Math.PI / 2);
-  makeLamp(w, g, { id: 'lamp.kitchen', ...kl, name: 'wandlamp', defaultOn: true, intensity: 4, distance: 8, hit: [0.4, 0.5, 0.4] });
+  makeLamp(w, g, { id: 'lamp.kitchen', ...kl, name: 'wandlamp', defaultOn: true, intensity: 4, distance: 8, hit: [0.4, 0.5, 0.4], patch: { y: GF + 0.02, r: 1.3 } });
   plant(c, 64.6, 79.1, GF, 0.9, '#d0a070');
 
   // ---------------------------------------------------------------- service corridor + billiard room
@@ -405,14 +319,14 @@ export function buildManor(w: World, g: GameApi, c: Ctx) {
   w.scene.add(ex);
   makeInspect(w, g, { id: 'inspect.billiardExamples', obj: ex, clue: 'c.billiardExamples', hit: [1.1, 0.5, 0.3], hitOffset: [0, 0.2, 0] });
   const bl = floorLamp(w, 62.8, GF, 78.9);
-  makeLamp(w, g, { id: 'lamp.billiard', ...bl, name: 'staande lamp', defaultOn: false, hit: [0.5, 1.9, 0.5], intensity: 5, distance: 8 });
+  makeLamp(w, g, { id: 'lamp.billiard', ...bl, name: 'staande lamp', defaultOn: false, hit: [0.5, 1.9, 0.5], intensity: 5, distance: 8, patch: { y: GF + 0.02, r: 1.5 } });
 
   // ---------------------------------------------------------------- upstairs: landing, study, storage
   rug(c, 59, 72, UF + 0.01, 4.0, 2.4, 0, '#d0b8a0');
   plant(c, 56.6, 73.4, UF, 1.0);
   painting(c, 59, UF + 1.7, 73.92, Math.PI, 1.1, 0.8, 2);
   const ls = wallSconce(w, 61, UF + 1.9, 73.9, Math.PI);
-  makeLamp(w, g, { id: 'lamp.landing', ...ls, name: 'wandlamp', defaultOn: true, intensity: 4, distance: 7, hit: [0.4, 0.5, 0.4] });
+  makeLamp(w, g, { id: 'lamp.landing', ...ls, name: 'wandlamp', defaultOn: true, intensity: 4, distance: 7, hit: [0.4, 0.5, 0.4], patch: { y: UF + 0.02, r: 1.3 } });
   // study (west upstairs room)
   rug(c, 52, 68.5, UF + 0.01, 3.0, 3.6, 0, '#b8a0c0');
   bed(c, 50.0, 71.8, UF, Math.PI / 2);
@@ -446,7 +360,7 @@ export function buildManor(w: World, g: GameApi, c: Ctx) {
   w.scene.add(note);
   makeInspect(w, g, { id: 'inspect.studyNote', obj: note, clue: 'c.studyNote', hit: [0.35, 0.15, 0.4], label: 'Lezen: briefje' });
   const dl = tableLamp(w, dkx - 0.15, UF + 0.78, dkz + 0.55);
-  makeLamp(w, g, { id: 'lamp.study', ...dl, name: 'bureaulamp', defaultOn: false, hit: [0.4, 0.7, 0.4], intensity: 4, distance: 6 });
+  makeLamp(w, g, { id: 'lamp.study', ...dl, name: 'bureaulamp', defaultOn: false, hit: [0.4, 0.7, 0.4], intensity: 4, distance: 6, patch: { y: UF + 0.79, r: 0.5, strength: 0.35 } });
   // framed forest map on the south wall, facing north
   const mapMat = w.material(new THREE.MeshLambertMaterial({ map: w.texture(forestMapTexture()) }));
   const mapMesh = new THREE.Mesh(new THREE.PlaneGeometry(1.28, 1.0), mapMat);

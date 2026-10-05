@@ -92,19 +92,23 @@ export class UI {
     this.notebookBtn.style.display = on ? '' : 'none';
   }
 
-  setTarget(label: string | null, actionLabel: string | null) {
+  private actionKey = '';
+  /** Reticle label + action button. When the action uses the held item, the button shows that item's picture. */
+  setTarget(label: string | null, actionLabel: string | null, item: string | null = null) {
     this.reticle.classList.toggle('on', !!actionLabel);
     this.label.textContent = label ?? '';
     this.actionBtn.disabled = !actionLabel;
-    if (this.actionBtn.textContent !== (actionLabel ?? '—')) {
-      this.actionBtn.textContent = actionLabel ?? '—';
+    const key = `${actionLabel ?? '—'}|${item ?? ''}`;
+    if (this.actionKey !== key) {
+      this.actionKey = key;
+      this.actionBtn.innerHTML = item && actionLabel ? `${itemIcon(item, 30)}<span>${esc(actionLabel)}</span>` : esc(actionLabel ?? '—');
       this.actionBtn.setAttribute('aria-label', actionLabel ?? 'Geen actie');
     }
   }
 
   setHeld(name: string | null, itemId: string | null = null) {
     this.held.hidden = !name;
-    this.held.innerHTML = name ? `${itemIcon(itemId ?? '', 22)}<span>${esc(name)}</span>${icon('close', 18)}` : '';
+    this.held.innerHTML = name ? `${itemIcon(itemId ?? '', 30)}<span>${esc(name)}</span>${icon('close', 18)}` : '';
     this.held.setAttribute('aria-label', name ? `${name} in de hand — tik om los te laten` : '');
   }
 
@@ -205,7 +209,7 @@ export class UI {
 
   inventory(opts: { items: string[]; selected: string | null; torchOn: boolean; onSelect: (id: string | null) => void; onTorch: () => void; onRead: (id: string) => void }) {
     const body = this.modal('Tas', opts.items.length
-      ? `<div class="inv">${opts.items.map((id) => `<button data-id="${id}" class="${opts.selected === id ? 'sel' : ''}"><span class="e">${itemIcon(id)}</span>${esc(ITEMS[id]?.name ?? id)}</button>`).join('')}</div><div class="desc" id="inv-desc">Tik op een voorwerp.</div><div class="row" id="inv-actions" style="margin-top:10px"></div>`
+      ? `<div class="inv">${opts.items.map((id) => `<button data-id="${id}" class="${opts.selected === id ? 'sel' : ''}"><span class="e">${itemIcon(id, 46)}</span>${esc(ITEMS[id]?.name ?? id)}</button>`).join('')}</div><div class="desc" id="inv-desc">Tik op een voorwerp.</div><div class="row" id="inv-actions" style="margin-top:10px"></div>`
       : '<p>Je tas is nog leeg.</p>');
     let cur: string | null = opts.selected;
     const render = () => {
@@ -336,10 +340,10 @@ export class UI {
     const render = () => {
       const n = (side: 'left' | 'right') => {
         const it = side === 'left' ? opts.left : opts.right;
-        return `<div class="niche"><b>${side === 'left' ? 'Linkernis' : 'Rechternis'}</b>${it ? `<span class="e">${itemIcon(it)}</span>${esc(ITEMS[it].name)}<button class="btn" data-take="${side}">Terugpakken</button>` : '<span class="muted">leeg</span>'}</div>`;
+        return `<div class="niche"><b>${side === 'left' ? 'Linkernis' : 'Rechternis'}</b>${it ? `<span class="e">${itemIcon(it, 46)}</span>${esc(ITEMS[it].name)}<button class="btn" data-take="${side}">Terugpakken</button>` : '<span class="muted">leeg</span>'}</div>`;
       };
       body.innerHTML = `<p>${esc(opts.hint)}</p><div class="niches">${n('left')}${n('right')}</div>` +
-        (opts.candidates.length ? `<p class="muted">Kies wat je in een nis legt:</p>${opts.candidates.map((c) => `<div class="row" style="margin-bottom:8px"><span style="min-width:150px;display:inline-flex;gap:6px;align-items:center">${itemIcon(c, 22)} ${esc(ITEMS[c]?.name ?? c)}</span><button class="btn" data-place="left" data-item="${c}">← links</button><button class="btn" data-place="right" data-item="${c}">rechts →</button></div>`).join('')}` : '<p class="muted">Je hebt niets bij je wat in een nis past.</p>');
+        (opts.candidates.length ? `<p class="muted">Kies wat je in een nis legt:</p>${opts.candidates.map((c) => `<div class="row" style="margin-bottom:8px"><span style="min-width:150px;display:inline-flex;gap:6px;align-items:center">${itemIcon(c, 30)} ${esc(ITEMS[c]?.name ?? c)}</span><button class="btn" data-place="left" data-item="${c}">← links</button><button class="btn" data-place="right" data-item="${c}">rechts →</button></div>`).join('')}` : '<p class="muted">Je hebt niets bij je wat in een nis past.</p>');
       body.querySelectorAll<HTMLButtonElement>('[data-take]').forEach((b) => b.addEventListener('click', () => opts.onTake(b.dataset.take as 'left' | 'right')));
       body.querySelectorAll<HTMLButtonElement>('[data-place]').forEach((b) => b.addEventListener('click', () => opts.onPlace(b.dataset.place as 'left' | 'right', b.dataset.item!)));
     };

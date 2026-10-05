@@ -17,13 +17,15 @@ import { MEMORIES } from '../content/memories';
 import { buildHome } from '../world/home';
 import { buildEstate, estateMapSvg, MAP_SITES } from '../world/estate';
 import type { Env } from '../world/env';
+import type { RoomGraph } from '../world/rooms';
+import { tickFires, FIRE_UNIFORMS } from '../world/fire';
 
 export interface SceneExtras {
   env?: Env;
   isIndoor?: (x: number, z: number, y: number) => boolean;
   surfaceAt?: (x: number, z: number, y: number) => 'grass' | 'wood' | 'stone';
-  /** Lighting zone of a plan position (room/building/outdoors); lamps only light their own zone. */
-  zoneAt?: (x: number, y: number, z: number) => string;
+  /** Authored rooms + portals: lighting relevance and the floor-aware map. */
+  rooms?: RoomGraph;
 }
 
 const DEBUG = new URLSearchParams(location.search).has('debug');
@@ -166,6 +168,7 @@ export class Game implements GameApi {
     this.pool = new LightPool(world.scene, this.settings.quality === 'high' ? 4 : 3);
     this.audio.ambience = world.ambience;
     this.trackSolved(false);
+    world.patches.build(world);
     world.syncAll();
     world.setupCulling();
     this.cullTimer = 0;
@@ -545,7 +548,8 @@ export class Game implements GameApi {
       if (w.id === 'estate') this.markVisited();
     }
     w.update(dt, this.time);
-    this.pool?.update(dt, this.time, w.lamps, this.camera.position, this.extras.zoneAt);
+    this.pool?.update(dt, this.time, w.lamps, this.camera.position, this.extras.rooms, (d) => this.state.open[d] === true);
+    tickFires(this.time, this.settings.reducedMotion);
     const targetDusk = Math.min(1, (solvedCount(this.state) / 8) * 0.85 + (this.state.finished ? 0.15 : 0));
     this.dusk += (targetDusk - this.dusk) * Math.min(1, dt * 0.3);
     this.extras.env?.update(this.dusk, this.camera.position);
@@ -557,7 +561,7 @@ export class Game implements GameApi {
       const it = p && !p.tooFar ? p.it : null;
       this.target = it;
       const al = it ? this.actionLabel(it) : null;
-      this.ui.setTarget(al, al);
+      this.ui.setTarget(al, al, it && this.itemAction(it) !== null ? this.selected : null);
     }
     this.updateAudio(dt);
     // periodic safe-position save
@@ -744,12 +748,15 @@ export class Game implements GameApi {
         const f = Object.keys(this.state.flags).filter((k) => this.state.flags[k]).join(', ');
         this.debugEl.innerHTML = `FPS ${fs.fps} (median) · p95 ${fs.p95Ms} ms · calls ${info.calls} · tris ${info.triangles}<br>` +
           `pos ${this.player.x.toFixed(1)}, ${this.player.y.toFixed(2)}, ${this.player.z.toFixed(1)} yaw ${(this.player.yaw * 57.3).toFixed(0)}°<br>` +
-          `target ${this.target?.id ?? '—'}<br>flags: ${f || '—'}<br>` +
+          `target ${this.target?.id ?? '—'} · room ${this.pool?.here ?? '—'} · lights ${this.pool?.assigned().map((a) => a ?? '·').join(' ') ?? ''}<br>flags: ${f || '—'}<br>` +
           (this.world?.checkpoints.map((c) => `<button data-cp="${c.name}">${c.name}</button>`).join('') ?? '') +
           `<button data-reset="1">reset</button>`;
       }
     }
   }
+
+  /** Flame flutter on (1) or held steady (0) — reduced-motion check. */
+  fireMotion() { return FIRE_UNIFORMS.uMotion.value; }
 
   /** Stats for automated tests and the debug overlay. */
   metrics() {

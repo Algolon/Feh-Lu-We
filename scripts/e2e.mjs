@@ -527,20 +527,17 @@ async function regressions() {
       return { closed };
     });
     log('B2 no taking through closed glass/cabinet', r.glass.closed !== 'pk.crest', JSON.stringify(r.glass));
-    // F10 — reduced motion stills procedural fire
+    // F10 — reduced motion holds every flame steady (shader flutter off) but keeps it visible
     await startEstate(page, { lit: { 'fire.living': true }, player: { estate: { x: 50.2, y: 0.15, z: 62, yaw: -Math.PI / 2, pitch: 0 } } });
     r.rm = await E(page, () => {
       const g = T.G();
       g.settings.reducedMotion = true; g.applyQuality();
-      g.tick(1 / 30); // the setting takes effect on the next simulation step
-      const flames = [];
-      g.world.scene.traverse((o) => { if (o.isMesh && o.geometry?.type === 'ConeGeometry' && o.material?.transparent) flames.push(o); });
-      const a = flames.map((f) => f.scale.y.toFixed(3)).join(',');
-      for (let i = 0; i < 20; i++) g.tick(1 / 30);
-      const b = flames.map((f) => f.scale.y.toFixed(3)).join(',');
-      return { n: flames.length, still: a === b && flames.every((f) => f.scale.y === 1), cls: document.body.classList.contains('reduced-motion') };
+      g.tick(1 / 30);
+      const fires = []; g.world.scene.traverse((o) => { if (o.userData.fire) fires.push(o); });
+      const living = fires.filter((f) => f.visible).length;
+      return { n: fires.length, motion: g.fireMotion(), visibleLit: living, cls: document.body.classList.contains('reduced-motion') };
     });
-    log('F10 reduced motion stills fire animation + UI transitions', r.rm.n > 0 && r.rm.still && r.rm.cls, JSON.stringify(r.rm));
+    log('F10 reduced motion holds flames steady but visible + UI transitions off', r.rm.n > 0 && r.rm.motion === 0 && r.rm.visibleLit > 0 && r.rm.cls, JSON.stringify(r.rm));
     // F12 — unknown ids in a save are dropped at load; the bag still opens
     await startEstate(page, { inventory: [...ESSENTIALS, 'ghostItem'], slots: { left: 'nope' } });
     r.ids = await E(page, () => { T.G().openBag(); const n = document.querySelectorAll('.inv button').length; T.closeModal(); return { inv: T.G().state.inventory, n, slots: T.G().state.slots }; });
@@ -621,8 +618,83 @@ async function regressions() {
   await t.ctx.close();
 }
 
+// ------------------------------------------------------------------------------------------------
+// Iteration 3: persistent lights + visible flames (room/portal relevance, no view-dependent toggling)
+async function lighting() {
+  const { ctx, page } = await newPage();
+  try {
+    // L1 — from the hall, the lit living-room hearth (through the open arch) keeps a real light and a visible flame
+    await startEstate(page, { player: { estate: { x: 58.5, y: 0.15, z: 61.5, yaw: -Math.PI / 2, pitch: 0 } } });
+    const l1 = await E(page, () => {
+      T.tick(20);
+      const g = T.G(); const fire = []; g.world.scene.traverse((o) => { if (o.userData.fire) fire.push(o); });
+      const hearth = fire.find((f) => Math.abs(f.position.x - 48.72) < 0.3 && Math.abs(-f.position.z - 62) < 0.3);
+      const livingLamps = g.world.lamps.filter((l) => g.extras.rooms.roomAt(l.pos.x, l.pos.y, -l.pos.z) === 'living').map((l) => l.id);
+      return { room: g.pool.here, assigned: g.pool.assigned(), livingLit: g.pool.assigned().some((a) => livingLamps.includes(a)), flameVisible: !!hearth && hearth.visible && !g.world.isCulled(hearth), defaultLit: g.state.lit['fire.living'] === undefined };
+    });
+    log('L1 seen from the hall, the living room keeps real light and its hearth flame stays visible (open arch)', l1.room === 'hall' && l1.livingLit && l1.flameVisible && l1.defaultLit, JSON.stringify(l1));
+    // L2 — looking around never reorders the pooled lights
+    const l2 = await E(page, () => {
+      const g = T.G(); const before = g.pool.assigned().join(',');
+      let changes = 0;
+      for (let i = 0; i < 24; i++) { g.player.yaw += Math.PI / 12; T.tick(3); if (g.pool.assigned().join(',') !== before) changes++; }
+      return { before, changes };
+    });
+    log('L2 looking away and back does not toggle or reorder lights', l2.changes === 0, JSON.stringify(l2));
+    // L3 — walking across the threshold: no abrupt light jumps, flames stay visible throughout
+    const l3 = await E(page, () => {
+      const g = T.G(); let maxJump = 0, slotChanges = 0, hidden = 0;
+      let prev = g.pool.lights.map((l) => l.intensity), prevA = g.pool.assigned().join(',');
+      g.autopilot = { x: 52.5, z: 61.0, run: false };
+      for (let i = 0; i < 120; i++) {
+        g.tick(1 / 30);
+        const cur = g.pool.lights.map((l) => l.intensity);
+        cur.forEach((v, j) => { maxJump = Math.max(maxJump, Math.abs(v - prev[j])); });
+        prev = cur;
+        const a = g.pool.assigned().join(','); if (a !== prevA) { slotChanges++; prevA = a; }
+        const fire = []; g.world.scene.traverse((o) => { if (o.userData.fire && Math.abs(-o.position.z - 62) < 0.3 && o.position.x < 49) fire.push(o); });
+        if (!fire[0]?.visible) hidden++;
+      }
+      g.autopilot = null;
+      return { room: g.pool.here, maxJump: +maxJump.toFixed(2), slotChanges, hiddenFrames: hidden };
+    });
+    log('L3 crossing the threshold changes nothing abruptly (smooth light, flame always visible)', l3.room === 'living' && l3.maxJump < 2.5 && l3.slotChanges <= 3 && l3.hiddenFrames === 0, JSON.stringify(l3));
+    // L4 — a closed door blocks the other room's light; opening it lets it through
+    await startEstate(page, { lit: { 'lamp.billiard': true }, player: { estate: { x: 57.6, y: 0.15, z: 71.0, yaw: Math.PI / 2, pitch: 0 } } });
+    const l4 = await E(page, () => {
+      const g = T.G(); T.tick(15);
+      const closed = g.pool.assigned().includes('lamp.billiard');
+      g.state.open['door.billiard'] = true; g.changed(); T.tick(30);
+      const open = g.pool.assigned().includes('lamp.billiard');
+      return { room: g.pool.here, closed, open };
+    });
+    log('L4 closed door blocks the neighbouring room light; open door lets it through', l4.room === 'corridor' && !l4.closed && l4.open, JSON.stringify(l4));
+    // L5 — the lamp's emissive fixture is independent of the pool: still lit when it holds no real light
+    const l5 = await E(page, () => {
+      const g = T.G(); g.state.open['door.billiard'] = false; g.changed(); T.tick(30);
+      const it = g.world.byId.get('lamp.billiard');
+      let glow = null; it.obj.traverse((o) => { if (o.isMesh && !o.userData.hit && o.material?.type === 'MeshBasicMaterial') glow = o.material.color.getHexString(); });
+      return { assigned: g.pool.assigned().includes('lamp.billiard'), lit: g.state.lit['lamp.billiard'], glow };
+    });
+    log('L5 fixture glow follows logical state, not light-slot ownership', !l5.assigned && l5.lit && l5.glow === 'ffd27a', JSON.stringify(l5));
+    // L6 — candles: decorative dining candles show real flames from the start; reload keeps a doused hearth doused
+    await startEstate(page, { lit: { 'fire.living': false }, player: { estate: { x: 66, y: 0.15, z: 56, yaw: 0.6, pitch: -0.2 } } });
+    const l6 = await E(page, () => {
+      const g = T.G(); T.tick(5); const fires = []; g.world.scene.traverse((o) => { if (o.userData.fire) fires.push(o); });
+      const dining = fires.find((f) => Math.abs(f.position.x - 68) < 0.1 && Math.abs(-f.position.z - 57.3) < 0.1);
+      const living = fires.find((f) => Math.abs(-f.position.z - 62) < 0.3 && f.position.x < 49);
+      return { diningCandles: !!dining?.visible, livingAfterReload: !!living?.visible };
+    });
+    log('L6 decorative candles burn; a doused fireplace stays doused after reload', l6.diningCandles && !l6.livingAfterReload, JSON.stringify(l6));
+  } catch (e) {
+    log('lighting checks', false, e.message.split('\n')[0]);
+  }
+  if (page.problems.length) log('lighting: no console errors', false, page.problems.slice(0, 3).join(' | '));
+  await ctx.close();
+}
+
 const only = process.env.E2E_ONLY?.split(',');
-const suites = { regressions, walkthrough, collisionChecks, saveChecks, touchChecks, webglFailure, metrics };
+const suites = { regressions, lighting, walkthrough, collisionChecks, saveChecks, touchChecks, webglFailure, metrics };
 for (const [name, fn] of Object.entries(suites)) if (!only || only.includes(name)) await fn();
 
 const failed = results.filter((r) => !r.ok);

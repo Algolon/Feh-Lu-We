@@ -1,0 +1,62 @@
+[
+  {
+    "name": "render low (mobile default): gate (driveway)",
+    "ok": true,
+    "detail": "96 calls, 164613 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): gate (driveway)",
+    "ok": true,
+    "detail": "118 calls, 252529 tris"
+  },
+  {
+    "name": "render low (mobile default): forecourt → manor",
+    "ok": true,
+    "detail": "96 calls, 97623 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): forecourt → manor",
+    "ok": true,
+    "detail": "132 calls, 190809 tris"
+  },
+  {
+    "name": "render low (mobile default): entrance hall",
+    "ok": true,
+    "detail": "131 calls, 100946 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): entrance hall",
+    "ok": true,
+    "detail": "170 calls, 196452 tris"
+  },
+  {
+    "name": "render low (mobile default): garden → manor + conservatory",
+    "ok": true,
+    "detail": "122 calls, 161415 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): garden → manor + conservatory",
+    "ok": true,
+    "detail": "154 calls, 210351 tris"
+  },
+  {
+    "name": "render low (mobile default): forest (shed area)",
+    "ok": true,
+    "detail": "47 calls, 99726 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): forest (shed area)",
+    "ok": true,
+    "detail": "84 calls, 194888 tris"
+  },
+  {
+    "name": "render low (mobile default): conservatory pool",
+    "ok": true,
+    "detail": "81 calls, 66141 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): conservatory pool",
+    "ok": true,
+    "detail": "120 calls, 161647 tris"
+  }
+]

@@ -1,10 +1,35 @@
 // Inline SVG diagrams for notebook/inspect overlays (accessible textual clues accompany each).
-import { SYMBOLS } from '../content/symbols';
+import { symbolG as sym, SYMBOLS } from '../content/symbols';
+import { MANTEL } from '../content/canon';
 
-function sym(id: string, x: number, y: number, s: number) {
-  const d = SYMBOLS[id];
-  return `<g transform="translate(${x},${y}) scale(${s / 100})"><path d="${d.fill}" fill="${d.color}" stroke="#2b2118" stroke-width="5"/>` +
-    (d.line ? `<path d="${d.line}" fill="none" stroke="#2b2118" stroke-width="6" stroke-linecap="round"/>` : '') + '</g>';
+/** Drawn base under a mantel object; the three identical brass stands are the selection cue. */
+function base(kind: string, cx: number, y: number) {
+  if (kind === 'brass') return `<path d="M${cx - 16} ${y + 14} H${cx + 16} L${cx + 12} ${y + 10} H${cx + 5} V${y + 4} H${cx + 10} V${y} H${cx - 10} V${y + 4} H${cx - 5} V${y + 10} H${cx - 12} Z" fill="#d9b14a" stroke="#2b2118" stroke-width="1.6" stroke-linejoin="round"/>`;
+  if (kind === 'tin') return `<ellipse cx="${cx}" cy="${y + 8}" rx="19" ry="5" fill="#a9adb3" stroke="#2b2118" stroke-width="1.6"/>`;
+  if (kind === 'plinth') return `<rect x="${cx - 17}" y="${y}" width="34" height="14" fill="#7a4f2c" stroke="#2b2118" stroke-width="1.6"/>`;
+  return `<path d="M${cx - 20} ${y + 9} q4 -6 8 0 q4 -6 8 0 q4 -6 8 0 q4 -6 8 0 q4 -6 8 0 q-20 8 -40 0 Z" fill="#fbf8f0" stroke="#2b2118" stroke-width="1.4"/>`;
+}
+
+/** The mantelpiece row as seen standing in front of the fireplace (left → right). */
+export function mantelSvg() {
+  const W = 380, step = 60, x0 = 40;
+  const items = MANTEL.map((o, i) => {
+    const cx = x0 + i * step;
+    return `${sym(o.sym, cx - 21, 44, 42)}${base(o.base, cx, 88)}<text x="${cx}" y="122" font-size="12" text-anchor="middle">${SYMBOLS[o.sym].name}</text>`;
+  }).join('');
+  return `<svg class="diagram" viewBox="0 0 ${W} 170" width="${W}" role="img" aria-label="Schoorsteenmantel van links naar rechts: ${MANTEL.map((o) => `${SYMBOLS[o.sym].name} op ${o.baseName}`).join(', ')}">
+  <rect x="8" y="102" width="${W - 16}" height="8" fill="#cbb898" stroke="#5a4630" stroke-width="1.5"/>
+  ${items}
+  <text x="16" y="24" font-size="13" fill="#3a2a1a">← links</text><text x="${W - 16}" y="24" font-size="13" text-anchor="end" fill="#3a2a1a">rechts →</text>
+  <text x="${W / 2}" y="158" font-size="12" font-style="italic" text-anchor="middle" fill="#5a4630">zoals je het ziet als je recht voor de haard staat</text>
+</svg>`;
+}
+
+/** Three empty brass stands (illustration on the invitation). */
+export function brassStandsSvg() {
+  return `<svg class="diagram" viewBox="0 0 220 70" width="220" role="img" aria-label="Drie kleine messing voetjes">
+  ${[50, 110, 170].map((cx) => base('brass', cx, 30)).join('')}
+  <text x="110" y="64" font-size="11" font-style="italic" text-anchor="middle" fill="#5a4630">kleine messing voetjes</text></svg>`;
 }
 
 export function forestMapSvg() {
@@ -76,6 +101,8 @@ export function billiardExamplesSvg() {
 }
 
 export const DIAGRAMS: Record<string, () => string> = {
+  mantel: mantelSvg,
+  brassStands: brassStandsSvg,
   forestMap: forestMapSvg,
   saunaPool: saunaPoolSvg,
   poolTiles: poolTilesSvg,

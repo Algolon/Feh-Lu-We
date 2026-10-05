@@ -3,8 +3,9 @@
 import * as THREE from 'three';
 import { World, type GameApi } from '../interactions/world';
 import { makeCtx, wall, floor, ceiling } from './arch';
-import { box, cyl, compound, v3 } from './kit';
-import { table as _t, roundTable, chair, bookshelf, armchair, rug, plant, painting, tableLamp, floorLamp, flame, part } from './furniture';
+import { box, cyl, blob, compound, v3 } from './kit';
+import { table as _t, roundTable, chair, bookshelf, armchair, rug, plant, painting, tableLamp, floorLamp, part } from './furniture';
+import { makeFire } from './fire';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place, lightableItemLabel } from '../interactions/props';
 import type { SceneExtras } from '../core/game';
 import { has } from '../core/state';
@@ -128,10 +129,12 @@ export function buildHome(g: GameApi): { world: World; extras: SceneExtras } {
   const candle = compound((b) => {
     cyl(b, k.M.paint, '#b8892f', 0, 0, 0, 0.06, 0.07, 0.02, 10);
     cyl(b, k.M.paint, '#f3ead0', 0, 0.02, 0, 0.025, 0.025, 0.14, 8);
+    blob(b, k.M.paint, '#fbf6e6', 0.018, 0.13, 0, 0.008, 0.025, 0.008); // wax drip
+    cyl(b, k.M.paint, '#2b2118', 0, 0.16, 0, 0.003, 0.003, 0.016, 4); // wick
   });
   place(candle, 4.42, y, 3.4);
   w.scene.add(candle);
-  const fl2 = flame(w, 4.42, y + 0.16, 3.4, 0.12);
+  const fl2 = makeFire(w, { kind: 'candle', x: 4.42, y: y + 0.172, z: 3.4, s: 1.1 });
   w.lamps.push({ id: 'home.candle', pos: v3(4.42, y + 0.3, 3.4), color: '#ffb35a', intensity: 2.5, distance: 4, on: () => !!g.state.lit['home.candle'], flicker: 0.25 });
   w.onSync(() => { fl2.visible = !!g.state.lit['home.candle']; });
   makeAction(w, {

@@ -5,6 +5,7 @@ import { box, cyl, blob, compound, planMatrix, v3, getKit } from './kit';
 import { paintingTexture } from './textures';
 import type { World } from '../interactions/world';
 import type { Batcher } from './kit';
+import { makeFire } from './fire';
 
 const rot = (dx: number, dz: number, yaw: number): [number, number] => [dx * Math.cos(yaw) + dz * Math.sin(yaw), -dx * Math.sin(yaw) + dz * Math.cos(yaw)];
 
@@ -145,7 +146,7 @@ export function painting(c: Ctx, x: number, y: number, z: number, yaw: number, w
 }
 
 // ---------------------------------------------------------------- light models (individual objects)
-export interface LampModel { obj: THREE.Group; glow: THREE.MeshBasicMaterial[]; light: THREE.Vector3 }
+export interface LampModel { obj: THREE.Group; glow: THREE.MeshBasicMaterial[]; light: THREE.Vector3; flames?: THREE.Object3D }
 
 function glowPart(w: World, geom: THREE.BufferGeometry, color = '#ffd27a') {
   const m = w.material(new THREE.MeshBasicMaterial({ color }));
@@ -182,7 +183,7 @@ export function floorLamp(w: World, x: number, y0: number, z: number): LampModel
   return { obj, glow: [shade.m], light: v3(x, y0 + 1.6, z) };
 }
 
-/** Hanging candle chandelier. */
+/** Hanging candle chandelier with real candle flames (shown while the lamp is on). */
 export function chandelier(w: World, x: number, yTop: number, z: number, r = 0.8, drop = 1.2): LampModel {
   const k = getKit();
   const obj = new THREE.Group();
@@ -194,25 +195,19 @@ export function chandelier(w: World, x: number, yTop: number, z: number, r = 0.8
     }
     for (let i = 0; i < 6; i++) {
       const a = (i / 6) * Math.PI * 2;
-      cyl(b, k.M.paint, '#efe6c8', Math.cos(a) * r, -drop, Math.sin(a) * r, 0.03, 0.03, 0.16, 6);
+      cyl(b, k.M.paint, '#b8892f', Math.cos(a) * r, -drop, Math.sin(a) * r, 0.05, 0.045, 0.02, 8);
+      cyl(b, k.M.paint, '#efe6c8', Math.cos(a) * r, -drop + 0.02, Math.sin(a) * r, 0.026, 0.026, 0.16, 8);
     }
   });
   obj.add(frame);
-  const flames = glowPart(w, new THREE.BufferGeometry(), '#ffd27a');
-  const geos: THREE.BufferGeometry[] = [];
-  for (let i = 0; i < 6; i++) {
-    const a = (i / 6) * Math.PI * 2;
-    const g = new THREE.SphereGeometry(0.04, 6, 4);
-    g.scale(1, 1.8, 1);
-    g.translate(Math.cos(a) * r, -drop + 0.22, -Math.sin(a) * r);
-    geos.push(g);
-  }
-  flames.mesh.geometry.dispose();
-  flames.mesh.geometry = mergeAll(geos);
-  obj.add(flames.mesh);
   obj.position.copy(v3(x, yTop, z));
   w.scene.add(obj);
-  return { obj, glow: [flames.m], light: v3(x, yTop - drop + 0.1, z) };
+  const wicks: [number, number, number][] = [];
+  for (let i = 0; i < 6; i++) { const a = (i / 6) * Math.PI * 2; wicks.push([Math.cos(a) * r, 0, Math.sin(a) * r]); }
+  const flames = makeFire(w, { kind: 'candles', x, y: yTop - drop + 0.185, z, wicks, s: 1.2 });
+  // an invisible material handle keeps the LampModel contract (no glow sphere needed)
+  const glow = w.material(new THREE.MeshBasicMaterial({ color: '#ffd27a' }));
+  return { obj, glow: [glow], light: v3(x, yTop - drop + 0.1, z), flames };
 }
 
 /** Lantern box (iron frame + glowing glass), optionally with a symbol cut-out panel. */
@@ -249,47 +244,6 @@ export function wallSconce(w: World, x: number, y: number, z: number, yaw: numbe
   return { obj, glow: [shade.m], light: v3(x + fx * 0.4, y + 0.1, z + fz * 0.4) };
 }
 
-function mergeAll(geos: THREE.BufferGeometry[]) {
-  const pos: number[] = [];
-  for (const g of geos) {
-    const gg = g.index ? g.toNonIndexed() : g;
-    pos.push(...(gg.attributes.position.array as Float32Array));
-    g.dispose();
-  }
-  const out = new THREE.BufferGeometry();
-  out.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-  return out;
-}
-
-/** Simple animated flame cluster (cheap: a few stretched glowing cones). */
-export function flame(w: World, x: number, y: number, z: number, s = 1) {
-  const grp = new THREE.Group();
-  const mats: THREE.MeshBasicMaterial[] = [];
-  const cols = ['#ff9a3a', '#ffcf5a', '#ff6a2a'];
-  for (let i = 0; i < 3; i++) {
-    const m = w.material(new THREE.MeshBasicMaterial({ color: cols[i], transparent: true, opacity: 0.9, depthWrite: false }));
-    mats.push(m);
-    const mesh = new THREE.Mesh(new THREE.ConeGeometry(0.22 * s * (1 - i * 0.2), 0.8 * s * (1 - i * 0.15), 7), m);
-    mesh.position.set((i - 1) * 0.12 * s, 0.35 * s, ((i % 2) - 0.5) * 0.1 * s);
-    grp.add(mesh);
-  }
-  grp.position.copy(v3(x, y, z));
-  w.scene.add(grp);
-  w.onUpdate((_dt, t) => {
-    if (!grp.visible) return;
-    if (w.reducedMotion) {
-      // still flame: clearly lit, no flicker or deformation
-      grp.children.forEach((c) => { c.scale.set(1, 1, 1); c.rotation.y = 0; });
-      return;
-    }
-    grp.children.forEach((c, i) => {
-      c.scale.y = 0.85 + 0.25 * Math.sin(t * (9 + i * 3) + i);
-      c.scale.x = c.scale.z = 0.9 + 0.12 * Math.sin(t * (7 + i * 2) + i * 2);
-      c.rotation.y = t * (0.6 + i * 0.4);
-    });
-  });
-  return grp;
-}
 
 export { P as part };
 
