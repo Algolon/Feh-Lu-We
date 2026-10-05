@@ -17,6 +17,12 @@ verge.
   guide. Not measured on a phone.
 - **Details, evidence and self-critique:**
   [`art-refresh/EXTERIOR_SAMPLE.md`](art-refresh/EXTERIOR_SAMPLE.md).
+- **Revision 1 (owner feedback on variety):**
+  - Four tree species: oak, beech, birch and Scots pine, with three variants each.
+  - Hazel and holly bushes, three variants each.
+  - Six plant kinds with three or four variants each, placed by ecology.
+  - Everything renders in three batched meshes. The door view drops to 142 draw calls (baseline 154), and
+    triangles peak at ~350 k.
 - **Not started:** estate-wide propagation. It waits for the owner's review of both samples.
 
 ## Art refresh, step 2 (5 Oct 2026) — interior sample (proposed, not approved)

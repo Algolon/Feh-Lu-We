@@ -151,6 +151,7 @@ for (const [name, stand, target, opt = {}] of SETS[SET].filter(([n]) => !ONLY ||
         if (nm === null || (Array.isArray(nm) && nm.includes(null))) { o.visible = false; return; }
         o.material = nm;
         if (o.isInstancedMesh) o.instanceColor = null;
+        if (o.isBatchedMesh && o._colorsTexture) { o._colorsTexture.image.data.fill(1); o._colorsTexture.needsUpdate = true; } // batch colours apply whatever the material
       });
       // the pooled lights live outside the scene graph traversal order sometimes: switch every one off
       for (const l of g.pool?.lights ?? []) l.visible = false;
