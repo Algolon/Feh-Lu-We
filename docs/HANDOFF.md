@@ -104,9 +104,13 @@ low mode (default on touch devices) stays inside it. Initial transfer: ~213 KB g
 
 ## Deployment status
 
-- **Iteration 3:** see the dated entry added at the end of this section for the run that deployed the iteration-3
-  build. As before, the live page cannot be loaded from the authoring session; a successful workflow is reported as
-  "workflow-verified", not as verified live.
+- **Iteration 3 deployed (workflow-verified only, 5 Oct 2026).** Run
+  [37351203312](https://github.com/Algolon/Feh-Lu-We/actions/runs/37351203312) for commit `6faa465`: build job
+  (npm ci, typecheck, 65 unit tests, build, Pages artifact upload) and deploy job (`configure-pages@v6` +
+  `deploy-pages@v5`) both succeeded. Earlier iteration-3 runs: 37349594462 (`1997ea8`), 37316537547 (`5e84349`),
+  both successful. The live page was **not** loaded from the authoring session: the proxy refuses github.io
+  (`CONNECT tunnel failed, response 403`). To confirm on a phone, open https://algolon.github.io/Feh-Lu-We/ →
+  Pauze: the build id must start with `6faa465` or a later commit of this branch.
 
 - **Iteration 2 deployed (workflow-verified only).** Run
   [37292481735](https://github.com/Algolon/Feh-Lu-We/actions/runs/37292481735) for commit `f8ba812`: build job
