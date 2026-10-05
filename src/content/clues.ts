@@ -37,12 +37,12 @@ export const CLUES: Record<string, ClueDef> = {
   'c.studyNote': {
     id: 'c.studyNote',
     title: 'Briefje op het bureau',
-    text: `Voor de schuursleutel: druk de drie plekken uit het bos in de volgorde waarin de ochtendzon ze raakt. Ze komt op in het oosten en gaat onder in het westen.\n\n${K}`,
+    text: `Voor de schuursleutel: druk de drie plekken van mijn ochtendwandeling in, in de volgorde van de gestippelde route op de kaart aan de muur.\n\n${K}`,
   },
   'c.forestMap': {
     id: 'c.forestMap',
     title: 'Ingelijste kaart van het bos',
-    text: 'Een kaart van het bos voor het landhuis, met een windroos. Ingetekend: de put (ver naar het oosten), de schuur (in het westen) en de vuurplaats (nog verder naar het westen). Het landhuis ligt erboven, in het noorden.',
+    text: 'Een kaart van het bos voor het landhuis. Een gestippelde lijn met pijltjes, „ochtendwandeling”, begint bij de put (oost), loopt naar de schuur (west) en eindigt bij de vuurplaats (zuidwest).',
     diagram: 'forestMap',
   },
   'c.toolboard': {
@@ -60,7 +60,7 @@ export const CLUES: Record<string, ClueDef> = {
   'c.lanterns': {
     id: 'c.lanterns',
     title: 'Drie lantaarns in de tuin',
-    text: 'Op het grasveld staan drie lantaarns op stenen zuiltjes, elk met een uitgesneden teken: een zon, een maan en een blad. Ze lijken bij elkaar te horen.',
+    text: 'Op het grasveld staan drie lantaarns in een kring, elk met een uitgesneden teken: een zon, een maan en een blad. Wie ze aansteekt, ziet pas bij de derde of de volgorde goed was.',
     symbols: ['zon', 'maan', 'blad'],
     symbolsLayout: 'row',
   },
@@ -75,13 +75,13 @@ export const CLUES: Record<string, ClueDef> = {
   'c.saunaDiagram': {
     id: 'c.saunaDiagram',
     title: 'Houten bord in de sauna',
-    text: 'Een ingebrande tekening van het zwembad van bovenaf, met “diep” en “ondiep” aan de uiteinden. Een pijl loopt van het diepe naar het ondiepe eind, met vier lege vakjes langs de pijl. Erbij staat: “Zoals de stoom opstijgt: van diep naar ondiep.”',
+    text: 'Een ingebrande tekening van het zwembad van bovenaf, met „diep” en „ondiep” aan de uiteinden. Langs een pijl van het diepe naar het ondiepe eind staan vier vakjes, genummerd 1 (bij diep) tot 4 (bij ondiep). Erbij staat: „Zoals de stoom opstijgt: van diep naar ondiep.”',
     diagram: 'saunaPool',
   },
   'c.cabinet': {
     id: 'c.cabinet',
     title: 'Kast in de serre',
-    text: 'Een hoge kast met een glazen bovenkast. Op de bovenkast zit een paneel met vier knoppen: driehoek, cirkel, ruit en golf. De onderkast heeft geen sleutelgat; er loopt een dun draadje vanaf, naar buiten, de tuin in.',
+    text: 'Een hoge kast met een glazen bovenkast. Boven de glazen deur zitten vier draaibare tegels, genummerd 1 tot 4; elke tegel toont een driehoek, cirkel, ruit of golf. De onderkast heeft geen sleutelgat: een dun draadje loopt van de kast door de vloer naar buiten, richting de lantaarns in de tuin.',
   },
   'c.wellNote': {
     id: 'c.wellNote',
@@ -105,3 +105,21 @@ export const CLUES: Record<string, ClueDef> = {
 for (const m of Object.values(MEMORIES)) {
   CLUES[m.id] = { id: m.id, title: m.title, text: m.text, memory: true };
 }
+
+/** Notebook grouping by area, and the puzzle each clue serves (for the "solved" mark). */
+export const CLUE_GROUP: Record<string, { area: string; puzzle?: string }> = {
+  'c.invitation': { area: 'Landhuis · hal en woonkamer', puzzle: 'p1.drawer' },
+  'c.mantel': { area: 'Landhuis · hal en woonkamer', puzzle: 'p1.drawer' },
+  'c.drawerLock': { area: 'Landhuis · hal en woonkamer', puzzle: 'p1.drawer' },
+  'c.billiardExamples': { area: 'Landhuis · hal en woonkamer' },
+  'c.studyNote': { area: 'Landhuis · boven', puzzle: 'p2.study' },
+  'c.forestMap': { area: 'Landhuis · boven', puzzle: 'p2.study' },
+  'c.toolboard': { area: 'Bos', puzzle: 'p4.fire' },
+  'c.firePlate': { area: 'Bos', puzzle: 'p5.lanterns' },
+  'c.lanterns': { area: 'Tuin', puzzle: 'p5.lanterns' },
+  'c.poolTiles': { area: 'Serre en sauna', puzzle: 'p6.cabinet' },
+  'c.saunaDiagram': { area: 'Serre en sauna', puzzle: 'p6.cabinet' },
+  'c.cabinet': { area: 'Serre en sauna', puzzle: 'p6.cabinet' },
+  'c.wellNote': { area: 'Bos', puzzle: 'p7.well' },
+  'c.fragment': { area: 'Huisje', puzzle: 'p8.cottage' },
+};

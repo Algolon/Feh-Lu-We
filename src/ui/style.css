@@ -147,3 +147,15 @@ body.reduced-motion * { transition: none !important; animation: none !important;
 .seq.shake { animation: shake .35s; }
 @keyframes shake { 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-5px); } 80% { transform: translateX(5px); } }
 .btn.loading { opacity: .6; pointer-events: none; }
+
+.ic { flex: none; }
+.inv button .e { color: #5a3a1a; }
+.niche .e { color: #5a3a1a; }
+#held .ic { color: var(--amber-2); }
+
+.clue summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; }
+.clue summary::-webkit-details-marker { display: none; }
+.clue summary h3::before { content: '▸ '; color: #8a6a3a; }
+.clue[open] summary h3::before { content: '▾ '; }
+.badge { font-size: 12px; background: #dfe9c8; color: #2f4a1a; border-radius: 10px; padding: 2px 8px; white-space: nowrap; }
+.grp { margin: 12px 0 2px; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: #8a6a3a; }

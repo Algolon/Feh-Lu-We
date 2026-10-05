@@ -277,6 +277,11 @@ export function flame(w: World, x: number, y: number, z: number, s = 1) {
   w.scene.add(grp);
   w.onUpdate((_dt, t) => {
     if (!grp.visible) return;
+    if (w.reducedMotion) {
+      // still flame: clearly lit, no flicker or deformation
+      grp.children.forEach((c) => { c.scale.set(1, 1, 1); c.rotation.y = 0; });
+      return;
+    }
     grp.children.forEach((c, i) => {
       c.scale.y = 0.85 + 0.25 * Math.sin(t * (9 + i * 3) + i);
       c.scale.x = c.scale.z = 0.9 + 0.12 * Math.sin(t * (7 + i * 2) + i * 2);

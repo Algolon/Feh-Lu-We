@@ -9,13 +9,13 @@ import { World, LightPool, type GameApi, type Interactable } from '../interactio
 import { UI } from '../ui/ui';
 import { Audio } from '../audio/audio';
 import {
-  type Outcome, type Sfx, PUZZLES, currentPuzzle, viewHint, tutorialMissing, leaveHome as leaveHomeRule, submitCode, LOCK_OPTIONS,
+  type Outcome, type Sfx, PUZZLES, currentPuzzle, openPuzzles, viewHint, tutorialMissing, leaveHome as leaveHomeRule, submitCode, LOCK_OPTIONS,
   placeInSlot, takeFromSlot, submitBilliard, solvedCount,
 } from '../puzzles/rules';
 import { ITEMS, ESSENTIALS } from '../content/items';
 import { MEMORIES } from '../content/memories';
 import { buildHome } from '../world/home';
-import { buildEstate, estateMapSvg } from '../world/estate';
+import { buildEstate, estateMapSvg, MAP_SITES } from '../world/estate';
 import type { Env } from '../world/env';
 
 export interface SceneExtras {
@@ -25,6 +25,7 @@ export interface SceneExtras {
 }
 
 const DEBUG = new URLSearchParams(location.search).has('debug');
+export const BUILD: string = typeof __BUILD__ === 'string' ? __BUILD__ : 'dev';
 const AUTOTEST = new URLSearchParams(location.search).has('autotest');
 
 export class Game implements GameApi {
@@ -32,6 +33,9 @@ export class Game implements GameApi {
   settings: Settings;
   selected: string | null = null;
   readonly playerRadius = PLAYER.radius;
+  get reducedMotion() {
+    return this.settings.reducedMotion;
+  }
   readonly ui = new UI();
   readonly audio = new Audio();
   readonly player = new Player();
@@ -159,6 +163,7 @@ export class Game implements GameApi {
     world.scene.add(this.camera);
     this.pool = new LightPool(world.scene, this.settings.quality === 'high' ? 4 : 3);
     this.audio.ambience = world.ambience;
+    this.trackSolved(false);
     world.syncAll();
     world.setupCulling();
     this.cullTimer = 0;
@@ -189,6 +194,7 @@ export class Game implements GameApi {
 
   // ------------------------------------------------------------------ GameApi for world objects
   act(o: Outcome, opts: { save?: boolean } = {}) {
+    if (!o.ok && (o.sfx === 'locked' || o.sfx === 'fail')) logEvent(this.state, 'refused', this.target?.id);
     if (o.msg) this.ui.toast(o.msg);
     if (o.sfx !== 'none') this.sfx(o.sfx);
     if (opts.save !== false) this.changed();
@@ -199,7 +205,15 @@ export class Game implements GameApi {
   toast(msg: string) {
     this.ui.toast(msg);
   }
+  private solvedSeen = new Set<string>();
+  private trackSolved(log: boolean) {
+    for (const p of PUZZLES) if (p.solved(this.state) && !this.solvedSeen.has(p.id)) {
+      this.solvedSeen.add(p.id);
+      if (log) logEvent(this.state, 'solved', p.id);
+    }
+  }
   changed() {
+    this.trackSolved(true);
     if (this.selected && !has(this.state, this.selected)) this.select(null);
     this.world?.syncAll();
     this.updateHud();
@@ -249,9 +263,11 @@ export class Game implements GameApi {
 
   openPanel(kind: string) {
     const s = this.state;
+    logEvent(s, 'panel', kind);
     const opens: Record<string, string> = { drawerLock: 'hall.drawer', studyLock: 'study.compartment', cabinetPanel: 'cab.upper' };
     const tryCode = (p: 'drawerLock' | 'studyLock' | 'cabinetPanel') => (seq: string[]) => {
       const r = submitCode(s, p, seq);
+      logEvent(s, r.ok ? 'code-ok' : 'code-wrong', p);
       if (r.ok) s.open[opens[p]] = true; // the solved lock springs open by itself
       this.act(r);
       return r.ok;
@@ -266,7 +282,10 @@ export class Game implements GameApi {
       const open = () => this.ui.slots({
         left: s.slots.left ?? null, right: s.slots.right ?? null,
         candidates: s.inventory.filter((i) => !ESSENTIALS.includes(i) && !['fragment'].includes(i)),
-        hint: s.clues.includes('c.fragment') ? 'Je denkt aan de snipper: links wat uit het bos komt, rechts wat uit het huis komt.' : 'Twee lege nissen in de muur, elk met een ondiepe uitsparing.',
+        hint: (s.clues.includes('c.fragment') ? 'Je denkt aan de snipper: links wat uit het bos komt, rechts wat uit het huis komt.' : 'Twee lege nissen in de muur, elk met een ondiepe uitsparing.') +
+          // recovery: name where a missing piece is, without solving the placement
+          (!has(s, 'token') && !Object.values(s.slots).includes('token') ? ' Iets uit het bos heb je nog niet bij je — lag er in de schuur niet nog iets in de lade van de werkbank?' : '') +
+          (!has(s, 'crest') && !Object.values(s.slots).includes('crest') ? ' Iets uit het huis ontbreekt nog — in de serre stond een kast met een glazen bovenkast.' : ''),
         onPlace: (slot, item) => {
           const r = placeInSlot(s, slot, item);
           if (s.flags.cottageSolved) s.open['door.gathering'] = true;
@@ -290,7 +309,7 @@ export class Game implements GameApi {
   // ------------------------------------------------------------------ player-facing menus
   select(item: string | null) {
     this.selected = item;
-    this.ui.setHeld(item ? ITEMS[item].name : null, item ? ITEMS[item].icon : '');
+    this.ui.setHeld(item ? ITEMS[item].name : null, item);
     if (item) this.ui.toast(`${ITEMS[item].name} in de hand. Richt op iets en gebruik de actieknop.`);
   }
   openBag() {
@@ -321,17 +340,27 @@ export class Game implements GameApi {
       this.ui.toast('Je hebt je notitieboek nog niet. Het ligt op de tafel.');
       return;
     }
-    this.ui.notebook(this.state.clues, this.state.scene === 'estate' ? () => this.ui.map(estateMapSvg()) : undefined);
+    this.ui.notebook({ clues: this.state.clues, solved: new Set(PUZZLES.filter((p) => p.solved(this.state)).map((p) => p.id)), onMap: this.state.scene === 'estate' ? () => this.ui.map(this.mapSvg(), () => this.openNotebook()) : undefined });
   }
-  openHint() {
-    const p = currentPuzzle(this.state);
-    if (!p) {
+  openHint(puzzleId?: string) {
+    const open = openPuzzles(this.state);
+    if (!open.length) {
       this.ui.showText('Hint', 'Je hebt alles gevonden. Kijk gerust nog rond.');
       return;
     }
-    this.ui.hints(p.title, p.hints, this.state.hints[p.id] ?? 0, () => {
-      viewHint(this.state, p.id);
-      this.saveSoon();
+    const p = open.find((q) => q.id === puzzleId) ?? currentPuzzle(this.state) ?? open[0];
+    this.ui.hints({
+      title: p.title,
+      hints: p.hints,
+      shown: this.state.hints[p.id] ?? 0,
+      choices: open.map((q) => ({ id: q.id, title: q.title })),
+      current: p.id,
+      onPick: (id) => this.openHint(id),
+      onMore: () => {
+        const lvl = viewHint(this.state, p.id);
+        logEvent(this.state, `hint${lvl}`, p.id);
+        this.saveSoon();
+      },
     });
   }
   openPause() {
@@ -339,6 +368,7 @@ export class Game implements GameApi {
     const canFs = !!document.documentElement.requestFullscreen && !document.fullscreenElement;
     this.ui.pause(this.settings, {
       playMinutes: Math.round(this.state.stats.activeMs / 60000),
+      build: BUILD,
       onChange: (s) => {
         const qualityChanged = s.quality !== this.settings.quality;
         Object.assign(this.settings, s);
@@ -349,7 +379,7 @@ export class Game implements GameApi {
       onRestart: () => this.wipeAndReload(),
       onPointerLock: canLock ? () => this.input.requestPointerLock() : undefined,
       onFullscreen: canFs ? () => document.documentElement.requestFullscreen?.().catch(() => {}) : undefined,
-      onMap: this.state.scene === 'estate' ? () => this.ui.map(estateMapSvg()) : undefined,
+      onMap: this.state.scene === 'estate' ? () => this.ui.map(this.mapSvg(), () => this.openPause()) : undefined,
     });
   }
   private key(code: string) {
@@ -495,6 +525,12 @@ export class Game implements GameApi {
       }
       const [lx, ly] = this.input.consumeLook();
       this.player.look(lx, ly);
+      if (w.id === 'home' && !this.autopilot) {
+        // tutorial progress for the coach line (looked around / walked a little)
+        this.lookAcc += Math.abs(lx) + Math.abs(ly);
+        if (!this.state.flags.tLooked && this.lookAcc > 0.6) { this.state.flags.tLooked = true; this.updateHud(); }
+        if (this.state.flags.tLooked && !this.state.flags.tWalked && this.player.distance > 1.5) { this.state.flags.tWalked = true; this.updateHud(); }
+      }
       const px = this.player.x, pz = this.player.z;
       this.player.update(dt, mx, my, run, w.col);
       this.movedLastTick = Math.abs(this.player.x - px) + Math.abs(this.player.z - pz) > 1e-4;
@@ -504,6 +540,7 @@ export class Game implements GameApi {
     if (this.cullTimer <= 0) {
       this.cullTimer = 0.25;
       w.updateCulling(this.camera.position);
+      if (w.id === 'estate') this.markVisited();
     }
     w.update(dt, this.time);
     this.pool?.update(dt, this.time, w.lamps, this.camera.position);
@@ -557,8 +594,7 @@ export class Game implements GameApi {
       this.ui.setChecklist([
         ...ESSENTIALS.map((i) => ({ name: ITEMS[i].name, done: has(s, i) })),
       ]);
-      const missing = tutorialMissing(s);
-      this.ui.setObjective(missing.length ? 'Pak je spullen voor het weekend.' : 'Alles ingepakt. Vertrek via de voordeur.');
+      this.ui.setObjective(this.coachLine());
     } else {
       this.ui.setChecklist(null);
       const p = currentPuzzle(s);
@@ -573,6 +609,36 @@ export class Game implements GameApi {
     storage.remove(SAVE_KEY);
     location.reload();
   }
+
+  mapSvg() {
+    return estateMapSvg({ pose: this.player.pose(), visited: (id) => !!this.state.flags[`visited.${id}`] });
+  }
+  /** Mark map landmarks as visited when the player comes near (checked a few times per second). */
+  private markVisited() {
+    for (const m of MAP_SITES) {
+      const k = `visited.${m.id}`;
+      if (!this.state.flags[k] && Math.hypot(this.player.x - m.x, this.player.z - m.z) < 9) {
+        this.state.flags[k] = true;
+        logEvent(this.state, 'visited', m.id);
+        this.saveSoon();
+      }
+    }
+  }
+
+  /** In-context tutorial: one short cue at a time; each disappears once the player has done it. */
+  private coachLine(): string {
+    const s = this.state, f = s.flags, touch = matchMedia('(pointer: coarse)').matches;
+    if (!f.tLooked) return touch ? 'Sleep met je duim over de rechterkant om rond te kijken.' : 'Sleep met de muis om rond te kijken (of Pauze → Muis vastzetten).';
+    if (!f.tWalked) return touch ? 'Duw met je linkerduim om te lopen. Verder duwen = sneller.' : 'Loop met W A S D of de pijltjes (Shift = rennen).';
+    if (!has(s, 'invitation')) return touch ? 'Richt op de envelop op de ronde tafel en tik op de grote knop — of tik direct op de envelop.' : 'Richt op de envelop op de ronde tafel en druk E — of klik erop.';
+    if (!s.open['home.drawer'] && !has(s, 'frontKey')) return 'Open de lade van het dressoir tegen de muur.';
+    if (!has(s, 'frontKey')) return 'Pak de sleutel uit de lade.';
+    const missing = tutorialMissing(s);
+    if (missing.length) return `Pak ook nog: ${missing.map((m) => ITEMS[m].name.toLowerCase()).join(', ')}.`;
+    if (!f.usedItemTutorial) return 'Klaar om te gaan. Probeer eerst: Tas → lucifers in de hand nemen → kaars aansteken. Of vertrek via de voordeur.';
+    return 'Alles ingepakt. Vertrek via de voordeur.';
+  }
+  private lookAcc = 0;
 
   saveSoon() {
     clearTimeout(this.saveTimer);
@@ -594,9 +660,14 @@ export class Game implements GameApi {
 
   private copyFeedback(text: string, minutes: number) {
     const s = this.state;
+    const st = s.stats;
+    const min = (ms: number | null) => (ms === null ? null : +(ms / 60000).toFixed(1));
     const report = {
-      game: 'Feh Lu We prototype', minutes, finished: s.finished, hints: s.hints, wrongAttempts: s.wrong,
-      cluesFound: s.clues.length, device: navigator.userAgent, quality: this.settings.quality, feedback: text,
+      game: 'Feh Lu We prototype', build: BUILD, finished: s.finished,
+      minutes: { reported: minutes, activeIncludingReading: min(st.activeMs), atFinish: min(st.finishedActiveMs), moving: min(st.moveMs), pausedOrHidden: min(st.pausedMs) },
+      hints: s.hints, wrongAttempts: s.wrong, cluesFound: s.clues.length,
+      device: navigator.userAgent, quality: this.settings.quality, feedback: text,
+      events: s.events,
     };
     const str = JSON.stringify(report, null, 2);
     navigator.clipboard?.writeText(str).then(
@@ -610,6 +681,7 @@ export class Game implements GameApi {
     const high = this.settings.quality === 'high';
     document.body.classList.toggle('reduced-motion', this.settings.reducedMotion);
     if (this.pool) this.pool.reducedMotion = this.settings.reducedMotion;
+    if (this.world) this.world.reducedMotion = this.settings.reducedMotion;
     const dpr = Math.min(window.devicePixelRatio || 1, high ? 1.5 : 1);
     this.renderer.setPixelRatio(dpr);
     const shadowsChanged = this.renderer.shadowMap.enabled !== high;

@@ -9,6 +9,7 @@ import { chair as _c, plant, part, staticLantern } from './furniture';
 import { makeDoor, makePickup, makeInspect, makeAction, place } from '../interactions/props';
 import { drawSymbol } from '../content/symbols';
 import { addClue } from '../core/state';
+import { turnWheel, wheels, WHEEL_SYMBOLS } from '../puzzles/rules';
 import { GF } from './manor';
 void _c;
 
@@ -59,7 +60,8 @@ function saunaBoardTexture() {
   x.beginPath(); x.moveTo(128, 60); x.lineTo(128, 240); x.stroke();
   x.beginPath(); x.moveTo(112, 222); x.lineTo(128, 250); x.lineTo(144, 222); x.closePath(); x.fill();
   x.lineWidth = 3;
-  for (let i = 0; i < 4; i++) x.strokeRect(150, 64 + i * 46, 28, 28);
+  x.font = 'bold 18px Georgia';
+  for (let i = 0; i < 4; i++) { x.strokeRect(150, 64 + i * 46, 28, 28); x.fillText(String(i + 1), 164, 85 + i * 46); }
   x.font = 'italic 15px Georgia';
   x.fillText('Zoals de stoom opstijgt:', 128, 316 - 0);
   return new THREE.CanvasTexture(cv);
@@ -112,7 +114,7 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
   water.position.copy(v3(78, -0.06, 73));
   water.renderOrder = 2;
   w.scene.add(water);
-  w.onUpdate((_dt, t) => { waterTex.offset.set(Math.sin(t * 0.2) * 0.05, t * 0.02); });
+  w.onUpdate((_dt, t) => { if (!w.reducedMotion) waterTex.offset.set(Math.sin(t * 0.2) * 0.05, t * 0.02); });
   w.emitters.push({ kind: 'water', pos: v3(78, 0, 73), on: () => true });
   // depth signs on the coping
   for (const [z, txt, rotY] of [[66.45, 'ONDIEP · 1,0 m', 0], [79.55, 'DIEP · 2,0 m', Math.PI]] as const) {
@@ -208,23 +210,62 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
   // ---------------------------------------------------------------- the cabinet (beats 5 + 6)
   const cbz = 66.2;
   boxMM(c.b, k.M.wood, '#5f3f26', 72.2, 72.75, GF, GF + 0.05, cbz - 0.62, cbz + 0.62, { chunk: c.chunk });
-  boxMM(c.b, k.M.wood, '#5f3f26', 72.2, 72.75, GF + 2.05, GF + 2.2, cbz - 0.65, cbz + 0.65, { chunk: c.chunk });
+  boxMM(c.b, k.M.wood, '#5f3f26', 72.2, 72.75, GF + 2.05, GF + 2.47, cbz - 0.65, cbz + 0.65, { chunk: c.chunk });
   for (const s of [-1, 1]) boxMM(c.b, k.M.wood, '#5f3f26', 72.2, 72.75, GF, GF + 2.05, cbz + s * 0.6 - 0.04, cbz + s * 0.6 + 0.04, { chunk: c.chunk });
   boxMM(c.b, k.M.wood, '#5f3f26', 72.2, 72.75, GF + 0.9, GF + 0.96, cbz - 0.6, cbz + 0.6, { chunk: c.chunk });
   boxMM(c.b, k.M.wood, '#4a2f1a', 72.2, 72.25, GF, GF + 2.05, cbz - 0.6, cbz + 0.6, { chunk: c.chunk });
   boxMM(c.b, k.M.wood, '#5f3f26', 72.2, 72.7, GF + 1.45, GF + 1.48, cbz - 0.56, cbz + 0.56, { chunk: c.chunk });
-  w.col.addBox(72.2, 72.8, cbz - 0.66, cbz + 0.66, 0, 2.4);
-  // panel tiles on the cornice (shapes paired with colours)
-  const tileMat = w.material(new THREE.MeshLambertMaterial({ map: w.texture((() => {
-    const cv = document.createElement('canvas'); cv.width = 256; cv.height = 64;
-    const x = cv.getContext('2d')!; x.fillStyle = '#c9a44c'; x.fillRect(0, 0, 256, 64);
-    ['driehoek', 'cirkel', 'ruit', 'golf'].forEach((s, i) => drawSymbol(x, s, 8 + i * 62, 6, 52));
-    const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; return t;
-  })()) }));
-  const tiles = new THREE.Mesh(new THREE.PlaneGeometry(1.0, 0.25), tileMat);
-  tiles.position.copy(v3(72.77, GF + 2.12, cbz));
-  tiles.rotation.y = Math.PI / 2;
-  w.scene.add(tiles);
+  w.col.addBox(72.2, 72.8, cbz - 0.66, cbz + 0.66, 0, 2.6);
+  // Beat 6: four numbered, turnable symbol wheels in the crown board (left→right = 1→4 when facing the cabinet).
+  const symMat: Record<string, THREE.MeshLambertMaterial> = {};
+  for (const sname of WHEEL_SYMBOLS) {
+    const cv = document.createElement('canvas'); cv.width = cv.height = 96;
+    const x = cv.getContext('2d')!; x.fillStyle = '#efe2c2'; x.fillRect(0, 0, 96, 96);
+    x.strokeStyle = '#6b4a2a'; x.lineWidth = 6; x.strokeRect(3, 3, 90, 90);
+    drawSymbol(x, sname, 14, 14, 68);
+    const t = w.texture(new THREE.CanvasTexture(cv)); t.colorSpace = THREE.SRGBColorSpace;
+    symMat[sname] = w.material(new THREE.MeshLambertMaterial({ map: t }));
+  }
+  const woodSide = w.material(new THREE.MeshLambertMaterial({ color: '#8a5a33' }));
+  const numCv = document.createElement('canvas'); numCv.width = 256; numCv.height = 32;
+  { const x = numCv.getContext('2d')!; x.fillStyle = '#5f3f26'; x.fillRect(0, 0, 256, 32); x.fillStyle = '#f3dca0'; x.font = 'bold 24px Georgia'; x.textAlign = 'center'; ['1', '2', '3', '4'].forEach((n, i) => x.fillText(n, 32 + i * 64, 25)); }
+  const numTex = w.texture(new THREE.CanvasTexture(numCv)); numTex.colorSpace = THREE.SRGBColorSpace;
+  const nums = new THREE.Mesh(new THREE.PlaneGeometry(1.04, 0.13), w.material(new THREE.MeshLambertMaterial({ map: numTex })));
+  nums.position.copy(v3(72.765, GF + 2.385, cbz));
+  nums.rotation.y = Math.PI / 2;
+  w.scene.add(nums);
+  const wheelMeshes: THREE.Mesh[] = [];
+  const spin = [0, 0, 0, 0];
+  for (let i = 0; i < 4; i++) {
+    const zc = cbz - 0.39 + i * 0.26;
+    const grp = new THREE.Group();
+    grp.position.copy(v3(72.78, GF + 2.2, zc));
+    const mesh = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.22, 0.22), [symMat.driehoek, woodSide, woodSide, woodSide, woodSide, woodSide]);
+    grp.add(mesh);
+    w.scene.add(grp);
+    wheelMeshes.push(mesh);
+    makeAction(w, {
+      id: `cab.wheel.${i + 1}`, obj: grp, hit: [0.14, 0.26, 0.25], hitOffset: [0, 0, 0], reach: 2.8,
+      label: () => (g.state.flags.cabinetPanelSolved ? null : `Tegel ${i + 1} draaien`),
+      run: () => {
+        addClue(g.state, 'c.cabinet');
+        const r = turnWheel(g.state, i);
+        spin[i] = g.reducedMotion ? 0 : Math.PI / 2;
+        g.act(r);
+      },
+    });
+  }
+  w.onSync(() => {
+    const cur = wheels(g.state);
+    cur.forEach((sname, i) => { (wheelMeshes[i].material as THREE.Material[])[0] = symMat[sname]; });
+  });
+  w.onUpdate((dt) => {
+    for (let i = 0; i < 4; i++) {
+      if (spin[i] <= 0) { wheelMeshes[i].rotation.x = 0; continue; }
+      spin[i] = Math.max(0, spin[i] - dt * 9);
+      wheelMeshes[i].rotation.x = -spin[i];
+    }
+  });
   const lower = makeDoor(w, g, { id: 'cab.lower', x: 72.78, z: cbz - 0.56, dir: 'z+', width: 1.12, height: 0.84, y0: GF + 0.05, swing: -1, color: '#7a5232', unlock: 'lock.cabinetLower', thickness: 0.04 });
   const upper = makeDoor(w, g, { id: 'cab.upper', x: 72.78, z: cbz - 0.56, dir: 'z+', width: 1.12, height: 1.08, y0: GF + 0.96, swing: -1, style: 'glass', unlock: 'lock.cabinetUpper', thickness: 0.04 });
   void lower; void upper;
@@ -236,11 +277,11 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
     addClue(g.state, 'c.cabinet');
     g.act({ ok: false, msg: 'De onderkast zit dicht en heeft geen sleutelgat. Een dun draadje loopt van de kast door de vloer naar buiten, de tuin in.', sfx: 'locked' });
   };
-  upIt.label = () => (g.state.unlocked.includes('lock.cabinetUpper') ? (g.state.open['cab.upper'] ? 'Sluiten' : 'Openen') : 'Paneel bekijken');
+  upIt.label = () => (g.state.unlocked.includes('lock.cabinetUpper') ? (g.state.open['cab.upper'] ? 'Sluiten' : 'Openen') : 'Glazen deur');
   upIt.run = () => {
     if (g.state.unlocked.includes('lock.cabinetUpper')) return upRun();
-    if (addClue(g.state, 'c.cabinet')) g.changed();
-    g.openPanel('cabinetPanel');
+    addClue(g.state, 'c.cabinet');
+    g.act({ ok: false, msg: 'De glazen deur zit vast. Erboven zitten vier draaibare tegels, genummerd 1 tot 4.', sfx: 'locked' });
   };
   // crank inside the lower compartment
   const crank = compound((b) => {
@@ -344,8 +385,9 @@ function buildSauna(w: World, g: GameApi, c: Ctx) {
     stonesMat.emissive.set(heaterOn() ? '#a8401a' : '#000000');
     for (const p of puffs) p.visible = heaterOn();
   });
-  w.onUpdate((_dt, t) => {
+  w.onUpdate((_dt, t0) => {
     if (!heaterOn()) return;
+    const t = w.reducedMotion ? 0 : t0; // still steam column when motion is reduced
     puffs.forEach((p, i) => {
       const ph = (t * 0.35 + i / puffs.length) % 1;
       p.position.copy(v3(SX + Math.sin(i * 2 + t) * 0.2, FY + 0.9 + ph * 1.6, Z0 + 0.4 + Math.cos(i) * 0.1));

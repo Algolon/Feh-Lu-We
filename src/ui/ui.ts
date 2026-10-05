@@ -1,9 +1,10 @@
 // HTML user interface: HUD, toasts, modal overlays and puzzle panels. No hover-only actions;
 // every control is a ≥48px button. Overlays block world input while open.
 import { ITEMS } from '../content/items';
-import { CLUES, type ClueDef } from '../content/clues';
+import { CLUES, CLUE_GROUP, type ClueDef } from '../content/clues';
 import { symbolSvg, SYMBOLS } from '../content/symbols';
 import { DIAGRAMS } from './diagrams';
+import { icon, itemIcon } from './icons';
 import type { Settings } from '../core/state';
 
 const $ = <T extends HTMLElement>(sel: string, root: ParentNode = document) => root.querySelector(sel) as T;
@@ -42,12 +43,12 @@ export class UI {
   buildHud(h: HudHandlers) {
     this.hud.innerHTML = `
       <div id="topbar-l">
-        <button class="hud-btn" id="b-menu" aria-label="Pauze en instellingen"><span class="ico">☰</span><span class="lbl">Pauze</span></button>
-        <button class="hud-btn" id="b-hint" aria-label="Hint"><span class="ico">💡</span><span class="lbl">Hint</span></button>
+        <button class="hud-btn" id="b-menu" aria-label="Pauze en instellingen">${icon('menu')}<span class="lbl">Pauze</span></button>
+        <button class="hud-btn" id="b-hint" aria-label="Hint">${icon('hint')}<span class="lbl">Hint</span></button>
       </div>
       <div id="topbar-r">
-        <button class="hud-btn" id="b-notes" aria-label="Notitieboek"><span class="ico">📓</span><span class="lbl">Notities</span></button>
-        <button class="hud-btn" id="b-bag" aria-label="Tas"><span class="ico">🎒</span><span class="lbl">Tas</span></button>
+        <button class="hud-btn" id="b-notes" aria-label="Notitieboek">${icon('notes')}<span class="lbl">Notities</span></button>
+        <button class="hud-btn" id="b-bag" aria-label="Tas">${icon('bag')}<span class="lbl">Tas</span></button>
       </div>
       <div id="objective" aria-live="polite"></div>
       <div id="checklist" hidden></div>
@@ -76,6 +77,15 @@ export class UI {
     this.overlay.addEventListener('click', (e) => {
       if (e.target === this.overlay) this.closeModal();
     });
+    // keep Tab inside the open dialog
+    this.overlay.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab') return;
+      const els = [...this.overlay.querySelectorAll<HTMLElement>('button, input, textarea, select')].filter((x) => !x.hasAttribute('disabled'));
+      if (!els.length) return;
+      const first = els[0], last = els[els.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
   }
 
   setNotebookEnabled(on: boolean) {
@@ -86,12 +96,16 @@ export class UI {
     this.reticle.classList.toggle('on', !!actionLabel);
     this.label.textContent = label ?? '';
     this.actionBtn.disabled = !actionLabel;
-    this.actionBtn.textContent = actionLabel ?? '—';
+    if (this.actionBtn.textContent !== (actionLabel ?? '—')) {
+      this.actionBtn.textContent = actionLabel ?? '—';
+      this.actionBtn.setAttribute('aria-label', actionLabel ?? 'Geen actie');
+    }
   }
 
-  setHeld(name: string | null, icon = '') {
+  setHeld(name: string | null, itemId: string | null = null) {
     this.held.hidden = !name;
-    this.held.innerHTML = name ? `<span class="ico">${icon}</span><span>${esc(name)} ✕</span>` : '';
+    this.held.innerHTML = name ? `${itemIcon(itemId ?? '', 22)}<span>${esc(name)}</span>${icon('close', 18)}` : '';
+    this.held.setAttribute('aria-label', name ? `${name} in de hand — tik om los te laten` : '');
   }
 
   toast(msg: string, ms = 3600) {
@@ -121,8 +135,16 @@ export class UI {
   // ---------------------------------------------------------------- modal plumbing
   /** Kind of the open modal ('pause' counts as paused time for playtest timing). */
   modalKind: string | null = null;
+  private returnFocus: HTMLElement | null = null;
+  /** Move keyboard focus into the open modal (first control after the close button, else the close button). */
+  focusFirst() {
+    const els = this.overlay.querySelectorAll<HTMLElement>('.body button, .body input, .body textarea, [data-close]');
+    (els[0] ?? null)?.focus({ preventScroll: true });
+  }
   modal(title: string, bodyHtml: string, onClose?: () => void, kind = 'panel'): HTMLElement {
+    const wasOpen = !this.overlay.hidden;
     this.closeModal(true);
+    if (!wasOpen) this.returnFocus = document.activeElement as HTMLElement | null;
     this.modalKind = kind;
     this.overlay.innerHTML = `<div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}">
       <header><h2>${esc(title)}</h2><button class="btn close" data-close aria-label="Sluiten">✕</button></header>
@@ -131,6 +153,7 @@ export class UI {
     this.modalClose = onClose ?? null;
     $('[data-close]', this.overlay).addEventListener('click', () => this.closeModal());
     this.onModalChange(true);
+    queueMicrotask(() => this.focusFirst());
     return $('.body', this.overlay);
   }
 
@@ -142,7 +165,11 @@ export class UI {
     const cb = this.modalClose;
     this.modalClose = null;
     cb?.();
-    if (!silent) this.onModalChange(false);
+    if (!silent) {
+      this.onModalChange(false);
+      this.returnFocus?.focus?.({ preventScroll: true });
+      this.returnFocus = null;
+    }
   }
 
   // ---------------------------------------------------------------- content renderers
@@ -178,7 +205,7 @@ export class UI {
 
   inventory(opts: { items: string[]; selected: string | null; torchOn: boolean; onSelect: (id: string | null) => void; onTorch: () => void; onRead: (id: string) => void }) {
     const body = this.modal('Tas', opts.items.length
-      ? `<div class="inv">${opts.items.map((id) => `<button data-id="${id}" class="${opts.selected === id ? 'sel' : ''}"><span class="e">${ITEMS[id]?.icon ?? '•'}</span>${esc(ITEMS[id]?.name ?? id)}</button>`).join('')}</div><div class="desc" id="inv-desc">Tik op een voorwerp.</div><div class="row" id="inv-actions" style="margin-top:10px"></div>`
+      ? `<div class="inv">${opts.items.map((id) => `<button data-id="${id}" class="${opts.selected === id ? 'sel' : ''}"><span class="e">${itemIcon(id)}</span>${esc(ITEMS[id]?.name ?? id)}</button>`).join('')}</div><div class="desc" id="inv-desc">Tik op een voorwerp.</div><div class="row" id="inv-actions" style="margin-top:10px"></div>`
       : '<p>Je tas is nog leeg.</p>');
     let cur: string | null = opts.selected;
     const render = () => {
@@ -206,37 +233,60 @@ export class UI {
     render();
   }
 
-  notebook(clueIds: string[], onMap?: () => void) {
-    const clues = clueIds.map((id) => CLUES[id]).filter(Boolean);
+  notebook(o: { clues: string[]; solved: Set<string>; onMap?: () => void }) {
+    const clues = o.clues.map((id) => CLUES[id]).filter(Boolean);
     const main = clues.filter((c) => !c.memory);
     const mem = clues.filter((c) => c.memory);
-    const body = this.modal('Notitieboek', `<div class="tabs"><button class="btn on" data-t="a">Aanwijzingen (${main.length})</button><button class="btn" data-t="b">Herinneringen (${mem.length})</button>${onMap ? '<button class="btn" data-t="m">Kaart</button>' : ''}</div><div id="nb"></div>`);
+    const body = this.modal('Notitieboek', `<div class="tabs" role="tablist"><button class="btn on" data-t="a">Aanwijzingen (${main.length})</button><button class="btn" data-t="b">Herinneringen (${mem.length})</button>${o.onMap ? '<button class="btn" data-t="m">Kaart</button>' : ''}</div><div id="nb"></div>`);
     const nb = $('#nb', body);
-    const show = (list: ClueDef[]) => {
-      nb.innerHTML = list.length ? [...list].reverse().map((c) => `<div class="clue"><h3>${esc(c.title)}</h3>${this.clueHtml(c)}</div>`).join('') : '<p class="muted">Nog niets genoteerd. Bekijk dingen in de wereld om ze te bewaren.</p>';
+    const card = (c: ClueDef, open: boolean) => {
+      const pz = CLUE_GROUP[c.id]?.puzzle;
+      const done = pz && o.solved.has(pz) ? '<span class="badge">✓ opgelost</span>' : '';
+      return `<details class="clue" ${open ? 'open' : ''}><summary><h3>${esc(c.title)}</h3>${done}</summary>${this.clueHtml(c)}</details>`;
     };
-    show(main);
+    const showMain = () => {
+      if (!main.length) { nb.innerHTML = '<p class="muted">Nog niets genoteerd. Bekijk dingen in de wereld om ze te bewaren.</p>'; return; }
+      const recent = main.slice(-2).reverse();
+      const groups = new Map<string, ClueDef[]>();
+      for (const c of main) {
+        const g = CLUE_GROUP[c.id]?.area ?? 'Overig';
+        if (!groups.has(g)) groups.set(g, []);
+        groups.get(g)!.push(c);
+      }
+      nb.innerHTML = `<h4 class="grp">Nieuwste</h4>${recent.map((c) => card(c, true)).join('')}` +
+        [...groups].map(([g, list]) => `<h4 class="grp">${esc(g)}</h4>${list.map((c) => card(c, false)).join('')}`).join('');
+    };
+    const showMem = () => {
+      nb.innerHTML = mem.length ? [...mem].reverse().map((c) => card(c, true)).join('') : '<p class="muted">Nog geen herinneringen gevonden.</p>';
+    };
+    showMain();
     body.querySelectorAll<HTMLButtonElement>('.tabs .btn').forEach((b) => b.addEventListener('click', () => {
-      if (b.dataset.t === 'm') { onMap?.(); return; }
+      if (b.dataset.t === 'm') { o.onMap?.(); return; }
       body.querySelectorAll('.tabs .btn').forEach((x) => x.classList.toggle('on', x === b));
-      show(b.dataset.t === 'a' ? main : mem);
+      if (b.dataset.t === 'a') showMain(); else showMem();
     }));
   }
 
-  map(svg: string) {
-    this.modal('Kaart van het landgoed', svg);
+  map(svg: string, onBack?: () => void) {
+    const body = this.modal('Kaart van het landgoed', svg + (onBack ? '<div class="row center" style="margin-top:8px"><button class="btn" data-back>Terug</button></div>' : ''));
+    body.querySelector('[data-back]')?.addEventListener('click', () => onBack?.());
   }
 
-  hints(title: string, hints: string[], shown: number, onMore: () => void) {
-    const body = this.modal(`Hint · ${title}`, '');
+  hints(o: { title: string; hints: string[]; shown: number; choices: { id: string; title: string }[]; current: string; onPick: (id: string) => void; onMore: () => void }) {
+    const body = this.modal(`Hint · ${o.title}`, '');
     const render = (n: number) => {
-      body.innerHTML = `<p class="muted">Hints zijn optioneel. Ze worden bijgehouden voor de testronde.</p>` +
-        hints.slice(0, n).map((h, i) => `<div class="hint"><b>${['Waar kijken', 'Hoe denken', 'Oplossing'][i]}:</b> ${esc(h)}</div>`).join('') +
+      const picker = o.choices.length > 1
+        ? `<div class="tabs" role="tablist" aria-label="Kies een raadsel">${o.choices.map((c) => `<button class="btn ${c.id === o.current ? 'on' : ''}" role="tab" aria-selected="${c.id === o.current}" data-pick="${c.id}">${esc(c.title)}</button>`).join('')}</div>`
+        : '';
+      body.innerHTML = picker + `<p class="muted">Hints zijn optioneel en worden alleen op dit apparaat bijgehouden voor de testronde.</p>` +
+        o.hints.slice(0, n).map((h, i) => `<div class="hint"><b>${['Waar kijken', 'Hoe denken', 'Oplossing'][i]}:</b> ${esc(h)}</div>`).join('') +
         `<div class="row center">${n < 3 ? `<button class="btn primary" data-more>${n === 0 ? 'Toon een hint' : n === 2 ? 'Toon de oplossing' : 'Nog een hint'}</button>` : ''}<button class="btn" data-ok>Terug</button></div>`;
-      body.querySelector('[data-more]')?.addEventListener('click', () => { onMore(); render(n + 1); });
+      body.querySelector('[data-more]')?.addEventListener('click', () => { o.onMore(); render(n + 1); });
+      body.querySelectorAll<HTMLButtonElement>('[data-pick]').forEach((b) => b.addEventListener('click', () => { if (b.dataset.pick !== o.current) o.onPick(b.dataset.pick!); }));
       $('[data-ok]', body).addEventListener('click', () => this.closeModal());
+      this.focusFirst();
     };
-    render(shown);
+    render(o.shown);
   }
 
   // ---------------------------------------------------------------- puzzle panels
@@ -286,10 +336,10 @@ export class UI {
     const render = () => {
       const n = (side: 'left' | 'right') => {
         const it = side === 'left' ? opts.left : opts.right;
-        return `<div class="niche"><b>${side === 'left' ? 'Linkernis' : 'Rechternis'}</b>${it ? `<span class="e">${ITEMS[it].icon}</span>${esc(ITEMS[it].name)}<button class="btn" data-take="${side}">Terugpakken</button>` : '<span class="muted">leeg</span>'}</div>`;
+        return `<div class="niche"><b>${side === 'left' ? 'Linkernis' : 'Rechternis'}</b>${it ? `<span class="e">${itemIcon(it)}</span>${esc(ITEMS[it].name)}<button class="btn" data-take="${side}">Terugpakken</button>` : '<span class="muted">leeg</span>'}</div>`;
       };
       body.innerHTML = `<p>${esc(opts.hint)}</p><div class="niches">${n('left')}${n('right')}</div>` +
-        (opts.candidates.length ? `<p class="muted">Kies wat je in een nis legt:</p>${opts.candidates.map((c) => `<div class="row" style="margin-bottom:8px"><span style="min-width:150px">${ITEMS[c].icon} ${esc(ITEMS[c].name)}</span><button class="btn" data-place="left" data-item="${c}">← links</button><button class="btn" data-place="right" data-item="${c}">rechts →</button></div>`).join('')}` : '<p class="muted">Je hebt niets bij je wat in een nis past.</p>');
+        (opts.candidates.length ? `<p class="muted">Kies wat je in een nis legt:</p>${opts.candidates.map((c) => `<div class="row" style="margin-bottom:8px"><span style="min-width:150px;display:inline-flex;gap:6px;align-items:center">${itemIcon(c, 22)} ${esc(ITEMS[c]?.name ?? c)}</span><button class="btn" data-place="left" data-item="${c}">← links</button><button class="btn" data-place="right" data-item="${c}">rechts →</button></div>`).join('')}` : '<p class="muted">Je hebt niets bij je wat in een nis past.</p>');
       body.querySelectorAll<HTMLButtonElement>('[data-take]').forEach((b) => b.addEventListener('click', () => opts.onTake(b.dataset.take as 'left' | 'right')));
       body.querySelectorAll<HTMLButtonElement>('[data-place]').forEach((b) => b.addEventListener('click', () => opts.onPlace(b.dataset.place as 'left' | 'right', b.dataset.item!)));
     };
@@ -309,7 +359,7 @@ export class UI {
   }
 
   // ---------------------------------------------------------------- menus
-  pause(s: Settings, h: { onChange: (s: Settings) => void; onRestart: () => void; onPointerLock?: () => void; onFullscreen?: () => void; onMap?: () => void; playMinutes: number }) {
+  pause(s: Settings, h: { onChange: (s: Settings) => void; onRestart: () => void; onPointerLock?: () => void; onFullscreen?: () => void; onMap?: () => void; playMinutes: number; build: string }) {
     const body = this.modal('Pauze', `
       <div class="row" style="margin-bottom:10px"><button class="btn primary" data-resume>Verder spelen</button>${h.onMap ? '<button class="btn" data-map>Kaart</button>' : ''}${h.onFullscreen ? '<button class="btn" data-fs>Volledig scherm</button>' : ''}${h.onPointerLock ? '<button class="btn" data-pl>Muis vastzetten</button>' : ''}</div>
       <label class="set">Kijkgevoeligheid <input type="range" min="0.3" max="2.5" step="0.1" value="${s.lookSensitivity}" data-k="lookSensitivity"></label>
@@ -318,7 +368,7 @@ export class UI {
       <label class="set">Minder beweging <input type="checkbox" ${s.reducedMotion ? 'checked' : ''} data-k="reducedMotion"></label>
       <label class="set">Kijkrichting omkeren <input type="checkbox" ${s.invertY ? 'checked' : ''} data-k="invertY"></label>
       <label class="set">Geluid uit <input type="checkbox" ${s.muted ? 'checked' : ''} data-k="muted"></label>
-      <p class="muted">Speeltijd tot nu toe: ${h.playMinutes} min. Voortgang wordt automatisch bewaard op dit apparaat.</p>
+      <p class="muted">Speeltijd tot nu toe: ${h.playMinutes} min. Voortgang wordt automatisch bewaard op dit apparaat. Versie: ${esc(h.build)}</p>
       <p class="muted">Bediening — telefoon: linkerduim loopt, rechts slepen kijkt, tik op iets of gebruik de grote knop. Computer: WASD/pijltjes, Shift rennen, slepen of muis vastzetten om te kijken, E = actie, I = tas, N = notities, H = hint, F = zaklamp, Esc = pauze.</p>
       <div class="row" style="margin-top:8px"><button class="btn danger" data-restart>Opnieuw beginnen…</button></div>`, undefined, 'pause');
     const cur = { ...s };

@@ -3,7 +3,7 @@ import { defaultState, give, has, type GameState } from '../src/core/state';
 import {
   SOLUTIONS, submitCode, pressLantern, useOnFirePit, lightPostLantern, readFirePlate, useOnWell, openWellBox,
   placeInSlot, takeFromSlot, leaveHome, tutorialMissing, unlockWithKey, pickup, currentPuzzle, PUZZLES, viewHint,
-  submitBilliard, LOCK_OPTIONS,
+  submitBilliard, LOCK_OPTIONS, turnWheel, wheels, openPuzzles,
 } from '../src/puzzles/rules';
 import { ESSENTIALS } from '../src/content/items';
 import { CLUES } from '../src/content/clues';
@@ -99,16 +99,71 @@ describe('fire clearing', () => {
   });
 });
 
-describe('garden lanterns', () => {
-  it('wrong lantern resets only the attempt', () => {
+describe('garden lanterns (complete attempt, F08)', () => {
+  it('gives identical feedback for correct and wrong partial inputs; evaluates only the full attempt', () => {
+    const a = packedState(), b = packedState();
+    const ra = pressLantern(a, 'maan'), rb = pressLantern(b, 'zon');
+    expect(ra.result).toBe('progress');
+    expect(rb.result).toBe('progress');
+    expect(ra.outcome.msg).toBe(rb.outcome.msg); // no prefix leak
+    pressLantern(b, 'maan');
+    expect(pressLantern(b, 'blad').result).toBe('wrong');
+    expect(b.seq.gardenLanterns).toEqual([]);
+    expect(b.wrong.gardenLanterns).toBe(1);
+  });
+  it('solves with Maan, Blad, Zon and opens the lower cabinet lock', () => {
     const s = packedState();
-    expect(pressLantern(s, 'maan').result).toBe('progress');
-    expect(pressLantern(s, 'zon').result).toBe('wrong');
-    expect(s.seq.gardenLanterns).toEqual([]);
-    expect(pressLantern(s, 'maan').result).toBe('progress');
+    pressLantern(s, 'maan');
     expect(pressLantern(s, 'blad').result).toBe('progress');
     expect(pressLantern(s, 'zon').result).toBe('solved');
     expect(s.unlocked).toContain('lock.cabinetLower');
+  });
+});
+
+describe('cabinet wheels (physical manipulation)', () => {
+  it('starts on the untransformed mosaic reading and opens only on the deep→shallow order', () => {
+    const s = packedState();
+    expect(wheels(s)).toEqual(['cirkel', 'driehoek', 'golf', 'ruit']);
+    const target = SOLUTIONS.cabinetPanel;
+    for (let i = 0; i < 4; i++) {
+      let guard = 0;
+      while (wheels(s)[i] !== target[i] && guard++ < 4) turnWheel(s, i);
+    }
+    expect(s.flags.cabinetPanelSolved).toBe(true);
+    expect(s.open['cab.upper']).toBe(true);
+    expect(turnWheel(s, 0).msg).toMatch(/vast/);
+    expect(wheels(s)).toEqual(target);
+  });
+  it('a save solved with the old panel stays solved', () => {
+    const s = packedState();
+    submitCode(s, 'cabinetPanel', SOLUTIONS.cabinetPanel);
+    expect(wheels(s)).toEqual(SOLUTIONS.cabinetPanel);
+  });
+});
+
+describe('guidance (F06) and hint discovery', () => {
+  it('the shed beat stays open until both kindling AND token are owned', () => {
+    const s = packedState();
+    leaveHome(s);
+    for (const f of ['drawerLockSolved', 'studyLockSolved']) s.flags[f] = true;
+    give(s, 'shedKey');
+    give(s, 'kindling');
+    expect(currentPuzzle(s)?.id).toBe('p3.shed');
+    useOnFirePit(s, 'kindling'); // kindling consumed still counts
+    expect(currentPuzzle(s)?.id).toBe('p3.shed');
+    give(s, 'token');
+    expect(currentPuzzle(s)?.id).toBe('p4.fire');
+    placeInSlot(s, 'left', 'token'); // token in a niche still counts as owned
+    expect(currentPuzzle(s)?.id).toBe('p4.fire');
+  });
+  it('hint menu offers discovered unsolved puzzles, not only the first global one', () => {
+    const s = packedState();
+    leaveHome(s);
+    s.clues.push('c.poolTiles');
+    const ids = openPuzzles(s).map((p) => p.id);
+    expect(ids).toContain('p1.drawer');
+    expect(ids).toContain('p6.cabinet');
+    expect(ids).not.toContain('p7.well');
   });
 });
 
@@ -185,7 +240,7 @@ describe('full progression', () => {
     readFirePlate(s);
     for (const l of SOLUTIONS.gardenLanterns) pressLantern(s, l);
     pickup(s, 'pk.crank', 'crank');
-    submitCode(s, 'cabinetPanel', SOLUTIONS.cabinetPanel);
+    for (let i = 0; i < 4; i++) while (wheels(s)[i] !== SOLUTIONS.cabinetPanel[i]) turnWheel(s, i);
     pickup(s, 'pk.crest', 'crest');
     useOnWell(s, 'crank');
     useOnWell(s, null);

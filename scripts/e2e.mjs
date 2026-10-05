@@ -114,20 +114,25 @@ async function walkthrough() {
     await step('light post lantern, read plate', () => { T.act('lantern.firepost.act', 'Lantaarn'); T.act('plate.fire', 'plaat'); if (!T.modalOpen()) throw new Error('plate not shown'); T.closeModal(); });
     await shot(page, '10-fire');
     // --- beat 5: garden lanterns
-    await step('back through the forest to the garden', () => T.walk([[17.2, 15.6], [21, 17.5], [26.5, 23.4], [32.8, 23.0], [32.8, 27.8], [38, 34], [47, 42], [55, 46.5], [53, 50.0], [51.5, 51.35], [46, 51.35], [45.3, 60], [45.3, 84], [52, 92.6], [57.5, 92.6]], true));
+    await step('back through the forest to the garden', () => T.walk([[17.2, 15.6], [21, 17.5], [26.5, 23.4], [32.8, 23.0], [32.8, 27.8], [38, 34], [47, 42], [55, 46.5], [53, 50.0], [51.5, 51.35], [46, 51.35], [45.3, 60], [45.3, 84], [52, 89.5], [55.6, 90.8]], true));
     await shot(page, '11-garden');
-    await step('wrong lantern order resets only the attempt', () => {
-      T.act('garden.lantern.maan', 'maan');
-      T.walk([[50, 91.5], [44.4, 90.2]]); T.act('garden.lantern.zon', 'zon');
+    await step('a complete wrong lantern order resets the attempt (no prefix feedback)', () => {
+      T.act('garden.lantern.zon', 'zon');
+      T.walk([[59.6, 94.6]]); T.act('garden.lantern.maan', 'maan');
+      const two = (T.G().state.seq.gardenLanterns ?? []).length;
+      T.walk([[60.6, 90.9]]); T.act('garden.lantern.blad', 'blad');
+      if (two !== 2) throw new Error('second lantern gave different feedback/state: ' + two);
       if ((T.G().state.seq.gardenLanterns ?? []).length) throw new Error('wrong order kept');
-      T.walk([[50, 91.5], [57.5, 92.6]]);
+      T.wait(1.5);
     });
     await step('lanterns Maan → Blad → Zon', () => {
-      T.act('garden.lantern.maan', 'maan');
-      T.walk([[64, 91.5], [71.2, 90.2]]); T.act('garden.lantern.blad', 'blad');
-      T.walk([[58, 89.5], [44.4, 90.2]]); T.act('garden.lantern.zon', 'zon');
+      T.walk([[59.6, 94.6]]); T.act('garden.lantern.maan', 'maan');
+      T.walk([[60.6, 90.9]]); T.act('garden.lantern.blad', 'blad');
+      T.walk([[55.6, 90.8]]); T.act('garden.lantern.zon', 'zon');
       if (!T.G().state.flags.lanternsSolved) throw new Error('lanterns not solved');
+      T.wait(3);
     });
+    await shot(page, '11b-garden-link-lights');
     // --- beat 6: conservatory + sauna
     await step('walk to the conservatory', () => T.walk([[58, 88], [76, 86.5], [87.6, 84.5], [87.6, 76.6], [85.6, 75.5]], true));
     await step('open conservatory door', () => { T.act('door.conservatoryEast', 'Openen'); T.wait(1.2); T.walk([[83, 75.5], [82.0, 74], [82.0, 66.2], [78, 65.4], [74.2, 65.9]]); });
@@ -143,13 +148,17 @@ async function walkthrough() {
       T.act('inspect.saunaBoard', 'bord'); T.closeModal();
     });
     await shot(page, '13-sauna');
-    await step('cabinet panel Ruit–Golf–Driehoek–Cirkel', () => {
+    await step('turn cabinet wheels to 1 Ruit 2 Golf 3 Driehoek 4 Cirkel', () => {
       T.walk([[87, 73.6], [87, 75.2], [85.6, 75.5], [83, 75.5], [82.0, 74], [82.0, 66.2], [78, 65.4], [74.2, 66.4]]);
-      T.act('cab.upper', 'Paneel');
-      for (const k of ['ruit', 'golf', 'driehoek', 'cirkel']) document.querySelector(`[data-k="${k}"]`).click();
+      T.act('cab.upper', 'Glazen deur'); // locked glass door explains the wheels
+      const order = ['driehoek', 'cirkel', 'ruit', 'golf'], target = ['ruit', 'golf', 'driehoek', 'cirkel'];
+      const cur = ['cirkel', 'driehoek', 'golf', 'ruit'];
+      for (let i = 0; i < 4; i++) {
+        while (cur[i] !== target[i]) { T.act(`cab.wheel.${i + 1}`, `Tegel ${i + 1}`); cur[i] = order[(order.indexOf(cur[i]) + 1) % 4]; }
+      }
+      if (!T.G().state.flags.cabinetPanelSolved) throw new Error('wheels did not open the cabinet');
     });
-    await page.waitForTimeout(500);
-    await step('take crest + read well note', () => { T.wait(1.5); if (!T.G().state.flags.cabinetPanelSolved) throw new Error('panel'); T.act('pk.crest', 'Wapenschild'); T.act('inspect.wellNote', 'aanwijzing'); T.closeModal(); });
+    await step('take crest + read well note', () => { T.wait(1.5); T.act('pk.crest', 'Wapenschild'); T.act('inspect.wellNote', 'aanwijzing'); T.closeModal(); });
     // --- beat 7: well
     await step('walk to the well', () => T.walk([[78, 65.4], [82.0, 66.2], [82.0, 74], [83, 75.5], [85.6, 75.5], [90, 74], [90, 62], [75, 52], [66, 49.8], [65.5, 46.6], [70.8, 44.3], [76, 42], [82, 38.5], [88, 35], [91.3, 32], [94.6, 29], [96, 28.3]], true));
     await shot(page, '14-well');
@@ -170,8 +179,8 @@ async function walkthrough() {
     await shot(page, '16-ending');
     await step('close ending, look at the room', () => { T.closeModal(); T.lookAt(25, 1.0, 93.4); });
     await shot(page, '17-gathering-room');
-    const st = await E(page, () => ({ clues: T.G().state.clues.length, minutes: T.G().state.stats.playMs / 60000, flags: T.G().state.flags }));
-    log('walkthrough tutorial → ending', true, `${steps.length} steps, ${st.clues} clues, simulated play ${st.minutes.toFixed(1)} min`);
+    const st = await E(page, () => ({ clues: T.G().state.clues.length, minutes: T.G().state.stats.activeMs / 60000, flags: T.G().state.flags }));
+    log('walkthrough tutorial → ending', true, `${steps.length} steps, ${st.clues} clues, real-time frames ${st.minutes.toFixed(1)} min (route uses fixed-step simulation)`);
     writeFileSync(`${OUT}/walkthrough-steps.txt`, steps.join('\n'));
   } catch (e) {
     log('walkthrough tutorial → ending', false, e.message);

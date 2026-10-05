@@ -19,11 +19,15 @@ import { drawSymbol, SYMBOLS } from '../content/symbols';
 import { mulberry32 } from '../core/rng';
 
 export const GARDEN_PATH: [number, number][] = smooth([[51.2, 82.6], [45, 84.4], [38, 85.6], [31.5, 86.6], [26, 85.3]]);
+// A compact lantern circle on the open lawn (a wrong attempt never means crossing the whole garden).
+export const LANTERN_CIRCLE = { x: 58, z: 92.4 };
 export const LANTERNS = [
-  { sym: 'zon', x: 43, z: 90 },
-  { sym: 'maan', x: 57.5, z: 94 },
-  { sym: 'blad', x: 72.5, z: 90 },
+  { sym: 'zon', x: 54.6, z: 92.0 },
+  { sym: 'maan', x: 58.0, z: 95.2 },
+  { sym: 'blad', x: 61.4, z: 92.0 },
 ];
+/** Ground lights that run from the lantern circle to the conservatory once the lanterns are solved. */
+const LINK_PATH: [number, number][] = [[61.8, 90.6], [66, 88.4], [70.5, 86.2], [75, 84.4], [78.5, 82.6]];
 
 const inRect = (x: number, z: number, x0: number, x1: number, z0: number, z1: number) => x >= x0 && x <= x1 && z >= z0 && z <= z1;
 
@@ -203,7 +207,11 @@ function buildGarden(w: World, g: GameApi, c: ReturnType<typeof makeCtx>, veg: V
   for (const [x, z] of [[52, 80.6], [64, 80.6], [52.2, 85], [66.8, 85]] as const) plant(c, x, z, 0.08, 1.2, '#c9774a');
   staticLantern(c, w, 67.6, 2.2, 80.25, 0.7, 0, 3, 7);
 
-  // three lantern posts on the open lawn — beat 5
+  // three lantern posts in a circle on the open lawn — beat 5
+  let flashAll = 0;
+  w.onUpdate((dt) => {
+    if (flashAll > 0) { flashAll -= dt; if (flashAll <= 0) { flashAll = 0; g.changed(); } }
+  });
   for (const L of LANTERNS) {
     box(c.b, k.M.stone, '#e2d6bc', L.x, 0, L.z, 0.55, 1.15, 0.55, { chunk: c.chunk, uv: 1 });
     box(c.b, k.M.stone, '#d0c4a8', L.x, 1.15, L.z, 0.65, 0.08, 0.65, { chunk: c.chunk });
@@ -213,7 +221,7 @@ function buildGarden(w: World, g: GameApi, c: ReturnType<typeof makeCtx>, veg: V
     const cv = document.createElement('canvas'); cv.width = cv.height = 64;
     const x = cv.getContext('2d')!;
     x.fillStyle = '#2b2622'; x.fillRect(0, 0, 64, 64);
-    drawSymbol(x, L.sym, 8, 8, 48, { color: '#fff3c8', ink: '#2b2622' });
+    x.lineWidth = 2; drawSymbol(x, L.sym, 6, 6, 52, { color: '#fff3c8', ink: '#fff3c8' }); // light silhouette: rays and veins stay visible
     const t = w.texture(new THREE.CanvasTexture(cv));
     t.colorSpace = THREE.SRGBColorSpace;
     const symMat = w.material(new THREE.MeshBasicMaterial({ map: t, color: '#6a6050' }));
@@ -224,7 +232,7 @@ function buildGarden(w: World, g: GameApi, c: ReturnType<typeof makeCtx>, veg: V
       p.rotation.y = a;
       lm.obj.add(p);
     }
-    const isLit = () => !!g.state.flags.lanternsSolved || (g.state.seq.gardenLanterns ?? []).includes(L.sym);
+    const isLit = () => flashAll > 0 || !!g.state.flags.lanternsSolved || (g.state.seq.gardenLanterns ?? []).includes(L.sym);
     w.lamps.push({ id: `garden.${L.sym}`, pos: lm.light, color: '#ffcf7a', intensity: 6, distance: 9, on: isLit });
     w.onSync(() => {
       const on = isLit();
@@ -238,10 +246,48 @@ function buildGarden(w: World, g: GameApi, c: ReturnType<typeof makeCtx>, veg: V
         addClue(g.state, 'c.lanterns');
         const { result, outcome } = pressLantern(g.state, L.sym);
         if (result === 'solved') g.state.open['cab.lower'] = true;
+        if (result === 'wrong') {
+          // show all three burning for a moment before they go out, so the attempt reads as complete
+          flashAll = 1.1;
+        }
         g.act(outcome);
       },
     });
   }
+
+  // centre stone of the lantern circle (a landmark with a bench-height plinth) + the link lights
+  cyl(c.b, k.M.stone, '#d8ccb0', LANTERN_CIRCLE.x, 0, LANTERN_CIRCLE.z + 0.9, 0.55, 0.65, 0.42, 12, { chunk: c.chunk, uv: 1 });
+  w.col.addCircle(LANTERN_CIRCLE.x, LANTERN_CIRCLE.z + 0.9, 0.65, 0, 0.5);
+  const linkMat = w.material(new THREE.MeshBasicMaterial({ color: '#4a443c' }));
+  const studs: THREE.Mesh[] = [];
+  const studGeo = new THREE.CylinderGeometry(0.09, 0.12, 0.08, 8);
+  for (let i = 0; i < LINK_PATH.length - 1; i++) {
+    const [ax, az] = LINK_PATH[i], [bx, bz] = LINK_PATH[i + 1];
+    for (let t = 0; t < 1; t += 0.34) {
+      const m = new THREE.Mesh(studGeo, linkMat.clone());
+      w.material(m.material as THREE.Material);
+      m.position.copy(v3(ax + (bx - ax) * t, 0.04, az + (bz - az) * t));
+      w.scene.add(m);
+      studs.push(m);
+    }
+  }
+  let linkT = -1; // animation clock for the lighting run (-1 = idle)
+  const studsOn = (n: number) => studs.forEach((m, i) => (m.material as THREE.MeshBasicMaterial).color.set(i < n ? '#ffd27a' : '#4a443c'));
+  let firstSync = true;
+  w.onSync(() => {
+    if (!g.state.flags.lanternsSolved) { studsOn(0); linkT = -1; }
+    else if (linkT < 0) {
+      // solved in an earlier session: lit at once; solved just now: lights run towards the conservatory
+      if (firstSync || g.reducedMotion) { studsOn(studs.length); linkT = 99; } else linkT = 0;
+    }
+    firstSync = false;
+  });
+  w.onUpdate((dt) => {
+    if (linkT < 0 || linkT > 3) return;
+    linkT += dt;
+    studsOn(g.reducedMotion ? studs.length : Math.floor((linkT / 2.5) * studs.length));
+  });
+  w.lamps.push({ id: 'garden.link', pos: v3(78.5, 0.5, 82.6), color: '#ffcf7a', intensity: 3, distance: 6, on: () => !!g.state.flags.lanternsSolved });
 
   // a few scattered trees + cypresses (the lawn stays open)
   const oaks: [number, number][] = [[40, 66], [36, 79], [12, 70], [8, 88], [100, 61], [110, 78], [97, 92], [84, 96], [48, 97.5], [14, 56], [92, 54], [106, 96], [4, 60], [116, 58]];
@@ -287,30 +333,57 @@ function buildGarden(w: World, g: GameApi, c: ReturnType<typeof makeCtx>, veg: V
   void part; void cyl;
 }
 
-/** Overview map for the notebook/pause menu (plan view, north up). */
-export function estateMapSvg(): string {
-  const S = 3.2; // px per unit
+/** Landmarks whose name appears on the map only once visited (no puzzle answers are ever shown). */
+export const MAP_SITES = [
+  { id: 'shed', x: SITES.shed.x, z: SITES.shed.z - 4, label: 'schuur' },
+  { id: 'fire', x: SITES.fire.x, z: SITES.fire.z, label: 'vuurplaats' },
+  { id: 'well', x: SITES.well.x, z: SITES.well.z, label: 'put' },
+  { id: 'gate', x: SITES.gate.x, z: SITES.gate.z, label: 'oud hek' },
+  { id: 'lanterns', x: LANTERN_CIRCLE.x, z: LANTERN_CIRCLE.z, label: 'lantaarnkring' },
+  { id: 'sauna', x: 87, z: 71, label: 'sauna' },
+  { id: 'cottage', x: 25, z: 92, label: 'huisje' },
+];
+
+export interface MapView { pose?: { x: number; y: number; z: number; yaw: number }; visited?: (id: string) => boolean }
+
+/** Overview map (plan view, north up) with "you are here" and discovered landmarks. */
+export function estateMapSvg(v: MapView = {}): string {
+  const S = 3.2; // px per unit; plan x → svg x, plan z (north) → svg y = (100 - z)
   const X = (x: number) => (x * S).toFixed(1), Z = (z: number) => ((100 - z) * S).toFixed(1);
+  const known = (id: string) => v.visited?.(id) ?? true;
   const line = (pts: readonly (readonly [number, number])[], wdt: number, col: string) => `<polyline points="${pts.map(([x, z]) => `${X(x)},${Z(z)}`).join(' ')}" fill="none" stroke="${col}" stroke-width="${wdt}" stroke-linecap="round" stroke-linejoin="round"/>`;
   const rect = (x0: number, z0: number, x1: number, z1: number, fill: string, label = '') =>
     `<rect x="${X(x0)}" y="${Z(z1)}" width="${((x1 - x0) * S).toFixed(1)}" height="${((z1 - z0) * S).toFixed(1)}" fill="${fill}" stroke="#3a2a1a" stroke-width="1.5"/>` +
     (label ? `<text x="${X((x0 + x1) / 2)}" y="${Z((z0 + z1) / 2)}" font-size="11" text-anchor="middle" dominant-baseline="middle">${label}</text>` : '');
-  const dot = (x: number, z: number, label: string) => `<circle cx="${X(x)}" cy="${Z(z)}" r="5" fill="#c4553d" stroke="#2b2118"/><text x="${X(x)}" y="${(+Z(z) - 8).toFixed(1)}" font-size="11" text-anchor="middle">${label}</text>`;
-  return `<svg class="diagram" viewBox="0 0 ${120 * S} ${100 * S}" width="${120 * S}" role="img" aria-label="Plattegrond van het landgoed">
+  const site = (s: (typeof MAP_SITES)[number]) => known(s.id)
+    ? `<circle cx="${X(s.x)}" cy="${Z(s.z)}" r="5" fill="#c4553d" stroke="#2b2118"/><text x="${X(s.x)}" y="${(+Z(s.z) - 8).toFixed(1)}" font-size="11" text-anchor="middle">${s.label}</text>`
+    : `<circle cx="${X(s.x)}" cy="${Z(s.z)}" r="6" fill="#efe6d2" stroke="#7a6a5a" stroke-dasharray="2 2"/><text x="${X(s.x)}" y="${(+Z(s.z) + 4).toFixed(1)}" font-size="10" text-anchor="middle" fill="#5a4a3a">?</text>`;
+  let me = '';
+  if (v.pose) {
+    const deg = (v.pose.yaw * 180) / Math.PI; // yaw 0 = north = up on the map
+    me = `<g transform="translate(${X(v.pose.x)},${Z(v.pose.z)}) rotate(${deg.toFixed(1)})"><circle r="9" fill="rgba(255,255,255,.55)"/><path d="M0 -10 L6 6 L0 2 L-6 6 Z" fill="#1f5fbf" stroke="#fff" stroke-width="1.5"/></g>`;
+  }
+  const upstairs = v.pose && v.pose.y > 2 && v.pose.x > 48 && v.pose.x < 72 && v.pose.z > 52 && v.pose.z < 80;
+  const inset = upstairs
+    ? `<g transform="translate(8,8)"><rect width="150" height="96" rx="6" fill="#fff8e8" stroke="#3a2a1a"/><text x="75" y="15" font-size="11" text-anchor="middle" font-weight="bold">Landhuis · boven</text>
+      <rect x="10" y="24" width="45" height="62" fill="#efe2c4" stroke="#3a2a1a"/><text x="32" y="58" font-size="9" text-anchor="middle">studeer-</text><text x="32" y="69" font-size="9" text-anchor="middle">kamer</text>
+      <rect x="55" y="24" width="48" height="62" fill="#f6efdf" stroke="#3a2a1a"/><text x="79" y="58" font-size="9" text-anchor="middle">overloop</text>
+      <rect x="103" y="24" width="37" height="34" fill="#efe2c4" stroke="#3a2a1a"/><text x="121" y="45" font-size="9" text-anchor="middle">opslag</text>
+      <rect x="91" y="58" width="12" height="28" fill="#c9a46a"/><text x="121" y="76" font-size="8" text-anchor="middle">trap</text></g>`
+    : '';
+  return `<svg class="diagram" viewBox="0 0 ${120 * S} ${100 * S}" width="${120 * S}" role="img" aria-label="Plattegrond van het landgoed${v.pose ? ' met jouw positie' : ''}">
   <rect width="${120 * S}" height="${100 * S}" fill="#a9c47a"/>
   <rect y="${Z(50)}" width="${120 * S}" height="${50 * S}" fill="#6f8c4a"/>
   <text x="${X(8)}" y="${Z(46)}" font-size="12" fill="#fff">bos</text><text x="${X(8)}" y="${Z(97)}" font-size="12">tuin</text>
   ${line(smooth(DRIVEWAY, 2), 9, '#e2d2b0')}${FOREST_PATHS.map((p) => line(p, 4, '#d9c49a')).join('')}${line(GARDEN_PATH, 4, '#efe4cc')}
   ${rect(48, 52, 72, 80, '#efe2c4', 'landhuis')}${rect(72, 64, 84, 82, '#cfe8e4', 'serre')}${rect(85, 69, 89, 73, '#c48a52', '')}
-  <text x="${X(90)}" y="${Z(68)}" font-size="10">sauna</text>
-  ${rect(20, 88, 30, 96, '#fbf6ec', 'huisje')}<ellipse cx="${X(36)}" cy="${Z(92)}" rx="${3.2 * S}" ry="${2.6 * S}" fill="#2f6f78"/>
+  ${rect(20, 88, 30, 96, '#fbf6ec', '')}<ellipse cx="${X(36)}" cy="${Z(92)}" rx="${3.2 * S}" ry="${2.6 * S}" fill="#2f6f78"/>
   ${rect(25.5, 24.5, 30.5, 28, '#8a5a33', '')}
-  ${dot(SITES.shed.x, SITES.shed.z - 4, 'schuur')}${dot(SITES.fire.x, SITES.fire.z, 'vuurplaats')}${dot(SITES.well.x, SITES.well.z, 'put')}${dot(SITES.gate.x, SITES.gate.z, 'oud hek')}
-  ${LANTERNS.map((l) => `<circle cx="${X(l.x)}" cy="${Z(l.z)}" r="4" fill="#f3c45a" stroke="#2b2118"/>`).join('')}
-  <text x="${X(58)}" y="${Z(88)}" font-size="10" text-anchor="middle">terras · lantaarns</text>
+  ${MAP_SITES.map(site).join('')}
   <text x="${X(60)}" y="${Z(2.5)}" font-size="11" text-anchor="middle">hek</text>
+  ${me}${inset}
   <g transform="translate(${120 * S - 26},26)" font-size="11" font-weight="bold" text-anchor="middle"><line x1="0" y1="-14" x2="0" y2="14" stroke="#2b2118" stroke-width="2"/><path d="M-5 -8 L0 -16 L5 -8 Z"/><text y="-19">N</text></g>
-</svg>`;
+</svg>${v.pose ? `<p class="muted" style="text-align:center">Blauwe pijl: jij${upstairs ? ' (boven in het landhuis)' : ''}. Vraagtekens: plekken die je nog niet hebt bezocht.</p>` : ''}`;
 }
 
 void v3;

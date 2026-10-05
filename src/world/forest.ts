@@ -168,7 +168,7 @@ function buildShed(w: World, g: GameApi, c: Ctx) {
     id: 'inspect.toolboard', obj: bgp, hit: [1.5, 1.2, 0.3], hitOffset: [0, 0, 0], label: 'Bekijken: gereedschapsbord',
     onInspect: () => {
       if (!g.state.lit.torch) {
-        g.toast(has(g.state, 'torch') ? 'Te donker om het bord te lezen. Zet je zaklamp aan (🎒 → Zaklamp aan, of F).' : 'Te donker om het bord te lezen.');
+        g.toast(has(g.state, 'torch') ? 'Te donker om het bord te lezen. Zet je zaklamp aan (Tas → Zaklamp aan, of F).' : 'Te donker om het bord te lezen.');
         return false;
       }
       g.inspect('c.toolboard');

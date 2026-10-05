@@ -37,13 +37,18 @@ export interface PuzzleDef {
   id: string;
   title: string;
   solved: (s: GameState) => boolean;
+  /** The player has run into this puzzle (seen its lock/evidence or holds its entry item). */
+  discovered: (s: GameState) => boolean;
   objective: string;
   hints: [string, string, string];
 }
 
+const owns = (s: GameState, i: string) => has(s, i) || s.used.includes(i) || Object.values(s.slots).includes(i);
+const seen = (s: GameState, ...c: string[]) => c.some((x) => s.clues.includes(x));
+
 export const PUZZLES: PuzzleDef[] = [
   {
-    id: 'p0.home', title: 'Inpakken', solved: (s) => s.scene === 'estate' || flag(s, 'leftHome'),
+    id: 'p0.home', title: 'Inpakken', solved: (s) => s.scene === 'estate' || flag(s, 'leftHome'), discovered: () => true,
     objective: 'Pak je spullen en vertrek via de voordeur.',
     hints: [
       'Kijk op de ronde tafel en in de lade van het dressoir.',
@@ -52,7 +57,7 @@ export const PUZZLES: PuzzleDef[] = [
     ],
   },
   {
-    id: 'p1.drawer', title: 'De lade in de hal', solved: (s) => flag(s, 'drawerLockSolved'),
+    id: 'p1.drawer', title: 'De lade in de hal', solved: (s) => flag(s, 'drawerLockSolved'), discovered: (s) => s.scene === 'estate',
     objective: 'Vind uit wat er in de hal voor je klaarstaat.',
     hints: [
       'Lees de uitnodiging nog eens, en bekijk de schoorsteenmantel in de woonkamer links van de hal.',
@@ -61,25 +66,25 @@ export const PUZZLES: PuzzleDef[] = [
     ],
   },
   {
-    id: 'p2.study', title: 'De studeerkamer', solved: (s) => flag(s, 'studyLockSolved'),
+    id: 'p2.study', title: 'De studeerkamer', solved: (s) => flag(s, 'studyLockSolved'), discovered: (s) => owns(s, 'studyKey') || seen(s, 'c.studyNote', 'c.forestMap'),
     objective: 'Ga met de messing sleutel naar boven.',
     hints: [
       'De studeerkamer is boven, links op de overloop. Lees het briefje op het bureau en bekijk de ingelijste kaart.',
-      'Op de kaart staan put, schuur en vuurplaats. De zon komt op in het oosten: begin bij de plek die het verst naar het oosten ligt.',
+      'Op de kaart loopt een gestippelde ochtendwandeling met pijltjes langs drie plekken. Het briefje zegt: druk ze in die volgorde.',
       'Druk op het bureauslot: Put – Schuur – Vuur.',
     ],
   },
   {
-    id: 'p3.shed', title: 'De schuur', solved: (s) => has(s, 'kindling') || flag(s, 'firewood') || s.used.includes('kindling'),
-    objective: 'Zoek de schuur in het westelijke bos.',
+    id: 'p3.shed', title: 'De schuur', solved: (s) => owns(s, 'kindling') && owns(s, 'token'), discovered: (s) => owns(s, 'shedKey') || owns(s, 'kindling') || owns(s, 'token'),
+    objective: 'Zoek de schuur in het westelijke bos — en neem alles mee wat er voor je ligt.',
     hints: [
       'De schuur staat in het bos ten westen van de oprijlaan. Volg het pad vanaf het voorplein naar links.',
-      'Open de schuur met de schuursleutel. Het is er donker: zet je zaklamp aan via je tas en bekijk alles goed.',
+      'Open de schuur met de schuursleutel. Het is er donker: zet je zaklamp aan en kijk ook in de lade van de werkbank.',
       'Pak het aanmaakhout, open de lade van de werkbank voor de houten penning en lees het gereedschapsbord.',
     ],
   },
   {
-    id: 'p4.fire', title: 'De vuurplaats', solved: (s) => flag(s, 'firePlateRead'),
+    id: 'p4.fire', title: 'De vuurplaats', solved: (s) => flag(s, 'firePlateRead'), discovered: (s) => owns(s, 'kindling') || seen(s, 'c.toolboard') || flag(s, 'firewood'),
     objective: 'Maak vuur bij de vuurplaats in het bos.',
     hints: [
       'De vuurplaats ligt in het zuidwesten van het bos, voorbij de schuur.',
@@ -88,25 +93,25 @@ export const PUZZLES: PuzzleDef[] = [
     ],
   },
   {
-    id: 'p5.lanterns', title: 'De tuinlantaarns', solved: (s) => flag(s, 'lanternsSolved'),
+    id: 'p5.lanterns', title: 'De tuinlantaarns', solved: (s) => flag(s, 'lanternsSolved'), discovered: (s) => seen(s, 'c.lanterns', 'c.firePlate', 'c.cabinet'),
     objective: 'Ontsteek de lantaarns in de tuin.',
     hints: [
-      'De drie lantaarns staan op het grasveld achter het landhuis.',
-      'De koperen plaat bij de vuurplaats geeft de volgorde waarin je ze aansteekt.',
+      'De drie lantaarns staan in een kring op het grasveld achter het landhuis.',
+      'Steek alle drie aan. Pas als de derde brandt, zie je of de volgorde klopt. De koperen plaat bij de vuurplaats geeft de volgorde.',
       'Steek ze aan in de volgorde Maan, Blad, Zon.',
     ],
   },
   {
-    id: 'p6.cabinet', title: 'De kast in de serre', solved: (s) => flag(s, 'cabinetPanelSolved'),
+    id: 'p6.cabinet', title: 'De kast in de serre', solved: (s) => flag(s, 'cabinetPanelSolved'), discovered: (s) => seen(s, 'c.cabinet', 'c.poolTiles', 'c.saunaDiagram'),
     objective: 'Open de bovenkast in de serre.',
     hints: [
-      'Bekijk de mozaïektekens op de bodem van het zwembad, en het houten bord in de barrelsauna naast de serre.',
-      'Het bord zegt dat je van diep naar ondiep leest. Het trapje zit aan het ondiepe eind; lees de tekens dus in omgekeerde volgorde.',
-      'Druk op het paneel: Ruit – Golf – Driehoek – Cirkel.',
+      'Boven de glazen deur van de kast zitten vier draaibare tegels, genummerd 1 tot 4. Bekijk het mozaïek op de bodem van het zwembad en het houten bord in de sauna.',
+      'Het bord nummert de vakjes 1 tot 4 vanaf het diepe eind. Het trapje zit aan het ondiepe eind: tegel 1 is dus het teken dat het diepst ligt.',
+      'Draai de tegels naar: 1 Ruit – 2 Golf – 3 Driehoek – 4 Cirkel.',
     ],
   },
   {
-    id: 'p7.well', title: 'De put', solved: (s) => has(s, 'cottageKey') || s.used.includes('cottageKey'),
+    id: 'p7.well', title: 'De put', solved: (s) => owns(s, 'cottageKey'), discovered: (s) => owns(s, 'crank') || seen(s, 'c.wellNote') || flag(s, 'wellRaised'),
     objective: 'Haal op wat er in de put ligt.',
     hints: [
       'De put staat in het oostelijke bos. Je hebt de zwengel uit de onderkast in de serre nodig.',
@@ -115,7 +120,7 @@ export const PUZZLES: PuzzleDef[] = [
     ],
   },
   {
-    id: 'p8.cottage', title: 'Het huisje', solved: (s) => flag(s, 'cottageSolved'),
+    id: 'p8.cottage', title: 'Het huisje', solved: (s) => flag(s, 'cottageSolved'), discovered: (s) => owns(s, 'cottageKey') || seen(s, 'c.fragment'),
     objective: 'Ga naar het huisje bij de vijver.',
     hints: [
       'Het witte huisje met het oranje dak staat in de noordwesthoek van de tuin, bij de vijver.',
@@ -127,6 +132,13 @@ export const PUZZLES: PuzzleDef[] = [
 
 export function currentPuzzle(s: GameState): PuzzleDef | null {
   return PUZZLES.find((p) => !p.solved(s)) ?? null;
+}
+
+/** Puzzles the player has discovered but not solved (the hint menu offers these), main-route order. */
+export function openPuzzles(s: GameState): PuzzleDef[] {
+  const cur = currentPuzzle(s);
+  const list = PUZZLES.filter((p) => !p.solved(s) && (p.discovered(s) || p === cur));
+  return list;
 }
 
 export function viewHint(s: GameState, puzzleId: string): number {
@@ -237,25 +249,57 @@ export function readFirePlate(s: GameState): Outcome {
 
 export type LanternResult = 'progress' | 'solved' | 'wrong' | 'already';
 
+/**
+ * Lighting a lantern always gives the same acknowledgement; only when all three burn is the ORDER evaluated.
+ * A wrong complete attempt puts all three out (attempt only, no world progress lost). No prefix feedback.
+ */
 export function pressLantern(s: GameState, sym: string): { result: LanternResult; outcome: Outcome } {
   if (flag(s, 'lanternsSolved')) return { result: 'already', outcome: ok('De lantaarns branden al.', 'none') };
   const cur = s.seq.gardenLanterns ?? [];
   if (cur.includes(sym)) return { result: 'progress', outcome: no('Deze lantaarn brandt al.', 'none') };
   const next = [...cur, sym];
   const sol = SOLUTIONS.gardenLanterns;
-  if (next[next.length - 1] !== sol[next.length - 1]) {
-    s.seq.gardenLanterns = [];
-    s.wrong.gardenLanterns = (s.wrong.gardenLanterns ?? 0) + 1;
-    return { result: 'wrong', outcome: no('Sssst… alle lantaarns doven. Die volgorde klopt niet.', 'fail') };
+  if (next.length < sol.length) {
+    s.seq.gardenLanterns = next;
+    return { result: 'progress', outcome: ok('De lantaarn gaat zacht branden.', 'fire') };
   }
-  if (next.length === sol.length) {
+  if (seqEquals(next, sol)) {
     s.seq.gardenLanterns = next;
     s.flags.lanternsSolved = true;
     s.unlocked.push('lock.cabinetLower');
-    return { result: 'solved', outcome: ok('De drie lantaarns branden. In de verte, uit de serre, klinkt een klik.', 'chime') };
+    return { result: 'solved', outcome: ok('De drie lantaarns gloeien op. Een rij lichtjes in het gras loopt naar de serre.', 'chime') };
   }
-  s.seq.gardenLanterns = next;
-  return { result: 'progress', outcome: ok('De lantaarn gaat zacht branden.', 'fire') };
+  s.seq.gardenLanterns = [];
+  s.wrong.gardenLanterns = (s.wrong.gardenLanterns ?? 0) + 1;
+  return { result: 'wrong', outcome: no('De derde lantaarn brandt… dan flakkeren ze en doven alle drie. Deze volgorde is het niet.', 'fail') };
+}
+
+// ---------------------------------------------------------------------------------------------
+// Beat 6: four numbered symbol wheels on the conservatory cabinet (physical manipulation)
+
+export const WHEEL_SYMBOLS = ['driehoek', 'cirkel', 'ruit', 'golf'];
+/** Initial wheel faces: the pool's mosaic order read from the steps — the tempting, untransformed reading. */
+export const WHEEL_START = ['cirkel', 'driehoek', 'golf', 'ruit'];
+
+export function wheels(s: GameState): string[] {
+  if (flag(s, 'cabinetPanelSolved')) return [...SOLUTIONS.cabinetPanel];
+  const w = s.seq.cabinetWheels;
+  return w && w.length === 4 ? w : [...WHEEL_START];
+}
+
+export function turnWheel(s: GameState, i: number): Outcome {
+  if (flag(s, 'cabinetPanelSolved')) return ok('De tegels zitten nu vast.', 'none');
+  if (!(i >= 0 && i < 4)) return no('', 'none');
+  const w = [...wheels(s)];
+  w[i] = WHEEL_SYMBOLS[(WHEEL_SYMBOLS.indexOf(w[i]) + 1) % WHEEL_SYMBOLS.length];
+  s.seq.cabinetWheels = w;
+  if (seqEquals(w, SOLUTIONS.cabinetPanel)) {
+    s.flags.cabinetPanelSolved = true;
+    if (!s.unlocked.includes('lock.cabinetUpper')) s.unlocked.push('lock.cabinetUpper');
+    s.open['cab.upper'] = true;
+    return ok('Klik — de vier tegels vallen op hun plek en de glazen deur zwaait open.', 'unlock');
+  }
+  return ok('', 'click');
 }
 
 // ---------------------------------------------------------------------------------------------

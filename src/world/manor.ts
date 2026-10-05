@@ -4,7 +4,7 @@
 import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, wall, floor, ceiling, stairsZ, railing, hipRoof, windowAt } from './arch';
-import { box, boxMM, cyl, blob, compound, v3, hitbox } from './kit';
+import { box, boxMM, cyl, blob, compound, v3, hitbox, type Batcher } from './kit';
 import { table, chair, sofa, armchair, bookshelf, bed, counter, rug, plant, painting, crate, tableLamp, floorLamp, chandelier, wallSconce, flame, part, staticLantern, staticSconce } from './furniture';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place, lightableItemLabel } from '../interactions/props';
 import { plaqueTexture, forestMapTexture } from './textures';
@@ -191,29 +191,64 @@ export function buildManor(w: World, g: GameApi, c: Ctx) {
   const mantelY = 1.33, mx = 48.82;
   const mantel = new THREE.Group();
   w.scene.add(mantel);
-  const mz = [60.6, 61.2, 61.8, 62.4, 63.0, 63.5];
-  const trinkets = compound((b) => {
-    // kaars (candle)
-    cyl(b, k.M.paint, '#b8892f', mx, mantelY, mz[0], 0.07, 0.08, 0.02, 10);
-    cyl(b, k.M.paint, '#f3ead0', mx, mantelY + 0.02, mz[0], 0.035, 0.035, 0.24, 8);
-    // veer (feather): long thin tilted blade + quill
-    box(b, k.M.paint, '#efe6d2', mx, mantelY + 0.02, mz[1], 0.03, 0.34, 0.09, { rz: 0.0, rx: -0.5 });
-    box(b, k.M.paint, '#8a6a4a', mx, mantelY, mz[1] - 0.06, 0.012, 0.12, 0.012, { rx: -0.5 });
-    // klok (clock)
-    box(b, k.M.wood, '#6b4426', mx, mantelY, mz[2], 0.14, 0.28, 0.24, { uv: 0.5 });
-    cyl(b, k.M.paint, '#f5ecd6', mx + 0.075, mantelY + 0.16, mz[2], 0.085, 0.085, 0.01, 14, { rz: Math.PI / 2 });
-    // dennenappel (pinecone)
-    blob(b, k.M.paint, '#8a5a2a', mx, mantelY + 0.09, mz[3], 0.06, 0.1, 0.06);
-    for (let i = 0; i < 6; i++) box(b, k.M.paint, '#6b4220', mx + Math.cos(i) * 0.05, mantelY + 0.04 + i * 0.022, mz[3] + Math.sin(i) * 0.05, 0.03, 0.02, 0.03, { yaw: i });
-    // vaas (vase) with a flower
-    cyl(b, k.M.paint, '#4f7fa8', mx, mantelY, mz[4], 0.05, 0.08, 0.24, 10);
-    cyl(b, k.M.paint, '#4f8a3a', mx, mantelY + 0.24, mz[4], 0.008, 0.008, 0.18, 4);
-    blob(b, k.M.paint, '#d9c45a', mx, mantelY + 0.44, mz[4], 0.04, 0.04, 0.04);
-    // kopje (teacup) on saucer
-    cyl(b, k.M.paint, '#f5f0e6', mx, mantelY, mz[5], 0.08, 0.08, 0.015, 12);
-    cyl(b, k.M.paint, '#8fb4d8', mx, mantelY + 0.015, mz[5], 0.06, 0.045, 0.08, 12);
-    box(b, k.M.paint, '#8fb4d8', mx, mantelY + 0.04, mz[5] + 0.075, 0.015, 0.05, 0.03);
+  const mz = [60.65, 61.22, 61.8, 62.38, 62.96, 63.48];
+  // Each object is modelled around its own origin and shown at 1.6× so its silhouette reads from the room.
+  const trinket = (z: number, build: (b: Batcher) => void) => {
+    const t = compound(build);
+    t.position.copy(v3(mx, mantelY, z));
+    t.scale.setScalar(1.6);
+    mantel.add(t);
+  };
+  // kaars (candle) with a holder
+  trinket(mz[0], (b) => {
+    cyl(b, k.M.paint, '#b8892f', 0, 0, 0, 0.07, 0.08, 0.02, 10);
+    cyl(b, k.M.paint, '#f3ead0', 0, 0.02, 0, 0.035, 0.035, 0.24, 8);
+    blob(b, k.M.glow, '#ffcf6a', 0, 0.29, 0, 0.018, 0.035, 0.018);
   });
+  // veer (feather) standing upright in a small inkpot: long curved vane + dark quill
+  trinket(mz[1], (b) => {
+    cyl(b, k.M.paint, '#2f3a4a', 0, 0, 0, 0.04, 0.045, 0.06, 10);
+    box(b, k.M.paint, '#8a6a4a', 0, 0.04, 0, 0.01, 0.12, 0.01, { rz: 0.15 });
+    box(b, k.M.paint, '#f2ead8', -0.02, 0.12, 0, 0.012, 0.26, 0.08, { rz: 0.18 });
+    box(b, k.M.paint, '#d8cbb0', -0.045, 0.3, 0, 0.012, 0.1, 0.05, { rz: 0.32 });
+  });
+  // klok (clock) — a distractor
+  trinket(mz[2], (b) => {
+    box(b, k.M.wood, '#6b4426', 0, 0, 0, 0.14, 0.28, 0.24, { uv: 0.5 });
+    cyl(b, k.M.paint, '#f5ecd6', 0.075, 0.16, 0, 0.085, 0.085, 0.01, 14, { rz: Math.PI / 2 });
+    box(b, k.M.paint, '#2b2118', 0.082, 0.16, 0.02, 0.004, 0.006, 0.05);
+  });
+  // dennenappel (pinecone): stacked scales
+  trinket(mz[3], (b) => {
+    blob(b, k.M.paint, '#8a5a2a', 0, 0.09, 0, 0.06, 0.1, 0.06);
+    for (let i = 0; i < 9; i++) box(b, k.M.paint, i % 2 ? '#6b4220' : '#7a4e26', Math.cos(i * 2.1) * 0.052, 0.03 + i * 0.016, Math.sin(i * 2.1) * 0.052, 0.035, 0.022, 0.035, { yaw: i * 2.1 });
+  });
+  // vaas (vase) with a flower — a distractor
+  trinket(mz[4], (b) => {
+    cyl(b, k.M.paint, '#4f7fa8', 0, 0, 0, 0.05, 0.08, 0.24, 10);
+    cyl(b, k.M.paint, '#4f8a3a', 0, 0.24, 0, 0.008, 0.008, 0.18, 4);
+    blob(b, k.M.paint, '#d9c45a', 0, 0.44, 0, 0.04, 0.04, 0.04);
+  });
+  // kopje (teacup) on a saucer
+  trinket(mz[5], (b) => {
+    cyl(b, k.M.paint, '#f5f0e6', 0, 0, 0, 0.08, 0.08, 0.015, 12);
+    cyl(b, k.M.paint, '#8fb4d8', 0, 0.015, 0, 0.06, 0.045, 0.08, 12);
+    box(b, k.M.paint, '#8fb4d8', 0, 0.04, 0.075, 0.015, 0.05, 0.03);
+  });
+  // brass reading-direction plaque on the mantel edge: a visual anchor for "left to right"
+  {
+    const cv = document.createElement('canvas'); cv.width = 512; cv.height = 64;
+    const x = cv.getContext('2d')!;
+    x.fillStyle = '#c9a44c'; x.fillRect(0, 0, 512, 64);
+    x.strokeStyle = '#7a5a1a'; x.lineWidth = 4; x.strokeRect(3, 3, 506, 58);
+    x.fillStyle = '#3a2a1a'; x.font = 'bold 34px Georgia'; x.textAlign = 'center'; x.fillText('links  ⟶  rechts', 256, 44);
+    const tex = w.texture(new THREE.CanvasTexture(cv)); tex.colorSpace = THREE.SRGBColorSpace;
+    const pl = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.11), w.material(new THREE.MeshLambertMaterial({ map: tex })));
+    pl.position.copy(v3(49.162, 1.285, 61.0));
+    pl.rotation.y = Math.PI / 2;
+    w.scene.add(pl);
+  }
+  const trinkets = new THREE.Group();
   mantel.add(trinkets);
   const mh = new THREE.Group();
   place(mh, 48.85, mantelY, fz, 0);

@@ -14,10 +14,17 @@ export function forestMapSvg() {
   let seed = 7;
   const r = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
   for (let i = 0; i < 70; i++) trees += `<circle cx="${mx(r() * 120)}" cy="${mz(r() * 48)}" r="${3 + r() * 3}" fill="#9db57e"/>`;
-  return `<svg class="diagram" viewBox="0 0 320 240" width="320" height="240" role="img" aria-label="Kaart van het bos met put in het oosten, schuur en vuurplaats in het westen">
+  return `<svg class="diagram" viewBox="0 0 320 240" width="320" height="240" role="img" aria-label="Kaart van het bos: een gestippelde ochtendwandeling begint bij de put, gaat naar de schuur en eindigt bij de vuurplaats">
   <rect x="4" y="4" width="312" height="232" fill="none" stroke="#5a4630" stroke-width="3"/>${trees}
   <rect x="${mx(58)}" y="${mz(50)}" width="9" height="180" fill="#c9b48a"/>
   <rect x="${mx(52)}" y="10" width="${mx(68) - mx(52)}" height="24" fill="#b8a07a"/><text x="${mx(60)}" y="27" font-size="12" text-anchor="middle" fill="#3a2a1a">landhuis</text>
+  <polyline points="${[[96, 26], [78, 33], [52, 30], [28, 26], [20, 18], [14, 12]].map(([x, z]) => `${mx(x)},${mz(z)}`).join(' ')}" fill="none" stroke="#8a2f1a" stroke-width="2.5" stroke-dasharray="6 5"/>
+  ${[[[78, 33], [52, 30]], [[52, 30], [28, 26]], [[20, 18], [14, 12]]].map(([[ax, az], [bx, bz]]) => {
+    const px = mx((ax + bx) / 2), pz = mz((az + bz) / 2), ang = (Math.atan2(mz(bz) - mz(az), mx(bx) - mx(ax)) * 180) / Math.PI;
+    return `<path d="M7 0 L-5 -5 L-5 5 Z" fill="#8a2f1a" transform="translate(${px},${pz}) rotate(${ang})"/>`;
+  }).join('')}
+  <text x="${mx(64)}" y="${mz(38)}" font-size="12" font-style="italic" text-anchor="middle" fill="#8a2f1a">ochtendwandeling</text>
+  <text x="${mx(96)}" y="${mz(26) + 42}" font-size="11" font-style="italic" text-anchor="middle" fill="#8a2f1a">start</text>
   ${sym('put', mx(96) - 15, mz(26) - 15, 30)}<text x="${mx(96)}" y="${mz(26) + 28}" font-size="12" text-anchor="middle">put</text>
   ${sym('schuur', mx(28) - 15, mz(26) - 15, 30)}<text x="${mx(28)}" y="${mz(26) + 28}" font-size="12" text-anchor="middle">schuur</text>
   ${sym('vuur', mx(14) - 13, mz(12) - 18, 28)}<text x="${mx(14) + 4}" y="${mz(12) + 24}" font-size="12" text-anchor="middle">vuur</text>

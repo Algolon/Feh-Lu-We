@@ -97,7 +97,7 @@ export function buildHome(g: GameApi): { world: World; extras: SceneExtras } {
   });
   place(torch, 4.3, y + 0.04, 3.05, 1.2);
   w.scene.add(torch);
-  makePickup(w, g, { id: 'pk.torch', item: 'torch', obj: torch, after: () => g.toast('Zaklamp ingepakt. Aan/uit via je tas (🎒) of met F.') });
+  makePickup(w, g, { id: 'pk.torch', item: 'torch', obj: torch, after: () => g.toast('Zaklamp ingepakt. Aan/uit via de Tas-knop (of F).') });
 
   const matches = compound((b) => {
     box(b, k.M.paint, '#e6dcc0', 0, 0, 0, 0.1, 0.03, 0.06);
@@ -116,7 +116,7 @@ export function buildHome(g: GameApi): { world: World; extras: SceneExtras } {
   });
   place(nb, 3.82, y, 2.8, -0.2);
   w.scene.add(nb);
-  makePickup(w, g, { id: 'pk.notebook', item: 'notebook', obj: nb, after: () => g.toast('Notitieboek ingepakt. Alles wat je bekijkt, wordt erin bewaard (📓).') });
+  makePickup(w, g, { id: 'pk.notebook', item: 'notebook', obj: nb, after: () => g.toast('Notitieboek ingepakt. Alles wat je bekijkt, wordt erin bewaard (knop Notities).') });
 
   // bag (decor) and candle (optional item-use lesson)
   const bag = compound((b) => {
@@ -139,7 +139,7 @@ export function buildHome(g: GameApi): { world: World; extras: SceneExtras } {
     label: () => (g.state.lit['home.candle'] ? 'Uitblazen' : 'Kaars'),
     run: () => {
       if (g.state.lit['home.candle']) { g.state.lit['home.candle'] = false; g.changed(); return; }
-      g.toast(has(g.state, 'matches') ? 'Kies de lucifers in je tas (🎒 → In de hand nemen) en gebruik ze hier.' : 'Een kaars. Met lucifers kun je hem aansteken.');
+      g.toast(has(g.state, 'matches') ? 'Neem de lucifers in de hand (Tas → In de hand nemen) en gebruik ze hier.' : 'Een kaars. Met lucifers kun je hem aansteken.');
     },
     itemLabel: lightableItemLabel(() => !!g.state.lit['home.candle']),
     useItem: (item) => {

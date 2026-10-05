@@ -36,6 +36,7 @@ export interface GameApi {
   openPanel(kind: string, data?: Record<string, unknown>): void;
   playerXZ(): { x: number; z: number; y: number };
   playerRadius: number;
+  readonly reducedMotion: boolean;
   leaveHome(): void;
   finish(): void;
 }
@@ -64,6 +65,8 @@ export class World {
   readonly ownMaterials: THREE.Material[] = [];
   readonly ownTextures: THREE.Texture[] = [];
   spawn: PlayerPose = { x: 0, y: 0, z: 0, yaw: 0, pitch: 0 };
+  /** Reduced-motion: procedural animation (fire, steam, water, flicker) holds a still, informative pose. */
+  reducedMotion = false;
   ambience: 'home' | 'estate' = 'estate';
   /** Named sound emitters (fire crackle, water, heater) — audio reads these each frame. */
   readonly emitters: { kind: 'fire' | 'water' | 'steam'; pos: THREE.Vector3; on: () => boolean }[] = [];
