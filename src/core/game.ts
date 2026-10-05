@@ -22,6 +22,8 @@ export interface SceneExtras {
   env?: Env;
   isIndoor?: (x: number, z: number, y: number) => boolean;
   surfaceAt?: (x: number, z: number, y: number) => 'grass' | 'wood' | 'stone';
+  /** Lighting zone of a plan position (room/building/outdoors); lamps only light their own zone. */
+  zoneAt?: (x: number, y: number, z: number) => string;
 }
 
 const DEBUG = new URLSearchParams(location.search).has('debug');
@@ -470,7 +472,7 @@ export class Game implements GameApi {
     const dt = Math.min(0.1, realMs / 1000); // capped simulation step
     this.last = now;
     if (!this.world || this.contextLost) return;
-    this.account(Math.min(realMs, 1000));
+    this.account(Math.min(realMs, 5000)); // off-tab time is excluded via visibilitychange; cap only guards stalls
     this.tick(dt);
     this.renderer.render(this.world.scene, this.camera);
     this.frameMs[this.frameIdx++ % this.frameMs.length] = realMs;
@@ -543,7 +545,7 @@ export class Game implements GameApi {
       if (w.id === 'estate') this.markVisited();
     }
     w.update(dt, this.time);
-    this.pool?.update(dt, this.time, w.lamps, this.camera.position);
+    this.pool?.update(dt, this.time, w.lamps, this.camera.position, this.extras.zoneAt);
     const targetDusk = Math.min(1, (solvedCount(this.state) / 8) * 0.85 + (this.state.finished ? 0.15 : 0));
     this.dusk += (targetDusk - this.dusk) * Math.min(1, dt * 0.3);
     this.extras.env?.update(this.dusk, this.camera.position);

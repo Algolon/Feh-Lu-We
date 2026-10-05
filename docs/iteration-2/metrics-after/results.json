@@ -1,0 +1,132 @@
+[
+  {
+    "name": "F01 saved-open doors are visually open after reload",
+    "ok": true,
+    "detail": "{\"corridor\":1.6,\"front\":1.6}"
+  },
+  {
+    "name": "F02 upstairs desk/note not reachable through the ceiling",
+    "ok": true,
+    "detail": "[null,null,null]"
+  },
+  {
+    "name": "F03 selected key does not block opening an unlocked door",
+    "ok": true,
+    "detail": "{\"before\":false,\"after\":true,\"label\":\"Openen\"}"
+  },
+  {
+    "name": "F04 no stale delayed submission closes a newer modal",
+    "ok": true,
+    "detail": "{\"wrong\":0,\"modal\":\"Tas\"}"
+  },
+  {
+    "name": "B1 closing a door with the player in its swing path is refused",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "B2 no taking through closed glass/cabinet",
+    "ok": true,
+    "detail": "{\"closed\":\"cab.upper\"}"
+  },
+  {
+    "name": "F10 reduced motion stills fire animation + UI transitions",
+    "ok": true,
+    "detail": "{\"n\":12,\"still\":true,\"cls\":true}"
+  },
+  {
+    "name": "F12 unknown saved ids are dropped; inventory UI works",
+    "ok": true,
+    "detail": "{\"inv\":[\"invitation\",\"torch\",\"matches\",\"notebook\",\"frontKey\"],\"n\":5,\"slots\":{\"left\":null}}"
+  },
+  {
+    "name": "F07 playtime counts panel reading as active and pause as paused",
+    "ok": true,
+    "detail": "{\"activeDuringPanel\":5017,\"pausedDuringPause\":2983,\"activeDuringPause\":0}"
+  },
+  {
+    "name": "B4 context loss pauses with a recovery dialog and resumes on restore",
+    "ok": true,
+    "detail": "{\"shown\":\"Beeld onderbroken\",\"after\":true,\"lost\":false}"
+  },
+  {
+    "name": "B4 repeated Start presses create one game loop",
+    "ok": true,
+    "detail": "rAF/s 5 (software-rendered)"
+  },
+  {
+    "name": "F05 stationary tap on the left side of the screen interacts",
+    "ok": true,
+    "detail": "tap at 270,192"
+  },
+  {
+    "name": "walkthrough tutorial → ending",
+    "ok": true,
+    "detail": "53 steps, 13 clues, real-time frames 1.1 min (route uses fixed-step simulation)"
+  },
+  {
+    "name": "walkthrough: no console errors / 404s",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "render low (mobile default): gate (driveway)",
+    "ok": true,
+    "detail": "96 calls, 164613 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): gate (driveway)",
+    "ok": true,
+    "detail": "118 calls, 252529 tris"
+  },
+  {
+    "name": "render low (mobile default): forecourt → manor",
+    "ok": true,
+    "detail": "96 calls, 97623 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): forecourt → manor",
+    "ok": true,
+    "detail": "132 calls, 190809 tris"
+  },
+  {
+    "name": "render low (mobile default): entrance hall",
+    "ok": true,
+    "detail": "131 calls, 100946 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): entrance hall",
+    "ok": true,
+    "detail": "170 calls, 196452 tris"
+  },
+  {
+    "name": "render low (mobile default): garden → manor + conservatory",
+    "ok": true,
+    "detail": "122 calls, 161415 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): garden → manor + conservatory",
+    "ok": true,
+    "detail": "154 calls, 210351 tris"
+  },
+  {
+    "name": "render low (mobile default): forest (shed area)",
+    "ok": true,
+    "detail": "47 calls, 99726 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): forest (shed area)",
+    "ok": true,
+    "detail": "84 calls, 194888 tris"
+  },
+  {
+    "name": "render low (mobile default): conservatory pool",
+    "ok": true,
+    "detail": "81 calls, 66141 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): conservatory pool",
+    "ok": true,
+    "detail": "120 calls, 161647 tris"
+  }
+]

@@ -8,9 +8,10 @@ Portuguese cottage where everyone gathers. Player-facing text is Dutch.
 **Status:** playable prototype, end-to-end solvable. Prototype content (notes, memories) is placeholder text
 by a fictional organiser ("de Kwartiermaker") and is meant to be replaced — see [Memory content](#memory-content).
 
-- Expected Pages URL (once Pages is enabled — see [Deploy](#deploy)): https://algolon.github.io/Feh-Lu-We/
+- Published at https://algolon.github.io/Feh-Lu-We/ (GitHub Pages; see [Deploy](#deploy))
 - Build brief and concept art: [`docs/BUILD_BRIEF.md`](docs/BUILD_BRIEF.md), [`docs/concept-art/`](docs/concept-art/)
 - Spoilers: [`docs/PUZZLE_SOLUTIONS.md`](docs/PUZZLE_SOLUTIONS.md) · Playtest guide: [`docs/PLAYTEST.md`](docs/PLAYTEST.md) · Status/next steps: [`docs/HANDOFF.md`](docs/HANDOFF.md)
+- Iteration 2 (review fixes): [`docs/ITERATION_2_REVIEW.md`](docs/ITERATION_2_REVIEW.md) · [`docs/ITERATION_2_VALIDATION.md`](docs/ITERATION_2_VALIDATION.md)
 
 ## Run locally
 
@@ -31,23 +32,28 @@ npm run e2e          # browser checks against the preview server (see below)
 It runs a complete tutorial→ending walkthrough plus collision, save/reload/reset, multi-touch, WebGL-failure
 and render-budget checks, writing screenshots to `scripts/out/`.
 
-URL flags: `?debug=1` shows FPS, draw calls, triangles, position, reticle target, puzzle flags, safe checkpoint
-buttons and a reset button. `?autotest=1` exposes `window.__game` for automated tests. Neither changes saves.
+URL flags: `?debug=1` shows median FPS and 95th-percentile frame time (from real, uncapped frame times), draw calls,
+triangles, position, reticle target, puzzle flags, safe checkpoint buttons and a reset button. `?autotest=1` exposes `window.__game` for automated tests. Neither changes saves.
 
 ## Controls
 
 | | Phone / tablet | Desktop |
 |---|---|---|
-| Walk | Left thumb anywhere on the left side: floating joystick (push to the rim to jog) | WASD / arrow keys, Shift to run |
+| Walk | Left thumb anywhere on the left side: floating joystick. Speed follows the thumb smoothly; the outer fifth blends into a jog | WASD / arrow keys, Shift to run |
 | Look | Drag on the right side | Drag with the mouse, or *Pauze → Muis vastzetten* (pointer lock, `L`) |
-| Interact | Big amber button bottom-right, or tap the object directly | `E` / Enter / Space, or click the object |
-| Bag / notes / hint | 🎒 / 📓 / 💡 buttons | `I` / `N` / `H` |
+| Interact | Big amber button bottom-right, or a short tap directly on the object (left or right side of the screen) | `E` / Enter / Space, or click the object |
+| Bag / notes / hint | Tas / Notities / Hint buttons (top corners) | `I` / `N` / `H` |
 | Torch | Bag → Zaklamp aan/uit | `F` |
-| Pause & settings | ☰ | `Esc` |
+| Pause & settings | Pauze button (top left) | `Esc` |
 
-Using an item: open the bag, pick an item, *In de hand nemen*; the action button then reads *Gebruik: …* on
-targets that accept items (wrong combinations explain themselves). Tap the held-item chip to put it away.
-Keys are used automatically on their locks.
+Using an item: open the bag, pick an item, *In de hand nemen*; the action button then names what the item will do
+on targets where it matters (*Aansteken*, *Zwengel plaatsen*, or *Gebruik: …* with an explanation for wrong items).
+Where a held item doesn't matter (an unlocked door, a burning fire) the normal action applies. Tap the held-item
+chip to put it away. Keys are used automatically on their locks.
+
+Notebook: clues grouped by area with the newest on top and a ✓ for solved puzzles; *Kaart* shows where you are
+(blue arrow), unvisited places as "?", and an upstairs sketch inside the manor. Hints (Hint button) can be chosen for any
+discovered, unsolved puzzle.
 
 Settings (pause menu): look and joystick sensitivity, low/high quality (high = shadows, sharper, 1.5× pixel
 ratio cap; low = 1× cap, no shadows; phones default to low), reduced motion, invert look, mute, optional
@@ -68,7 +74,9 @@ src/puzzles/     rules.ts (pure puzzle/progression rules, hints)
 src/content/     items.ts, clues.ts, symbols.ts, memories.ts (editable placeholder memories)
 src/ui/          ui.ts (HUD, overlays, puzzle panels), diagrams.ts (SVG clues), style.css
 src/audio/       audio.ts (WebAudio-synthesised sound, no files)
-tests/           vitest unit tests        scripts/  e2e.mjs + e2e-helpers.js (Playwright), shot.mjs (screenshot helper)
+tests/           vitest unit tests
+scripts/         e2e.mjs + e2e-helpers.js (Playwright suites), views.mjs (fixed-viewpoint screenshots),
+                 png2jpg.mjs, shot.mjs (screenshot helpers)
 ```
 
 Key design points:

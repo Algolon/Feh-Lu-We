@@ -1,0 +1,53 @@
+walk to table
+take invitation (opens it)
+take torch
+take matches
+take notebook
+use matches on candle
+door refuses while key missing
+table lamp on
+open dressoir drawer
+take estate key from drawer
+leave home
+walk the driveway to the manor
+unlock front door
+enter hall
+read mantelpiece
+drawer lock panel
+enter Veer–Dennenappel–Kopje
+take brass study key
+climb the stairs
+unlock study door
+read study note + map
+desk lock Put–Schuur–Vuur
+take shed key
+down the stairs and out
+forest path to the shed
+unlock shed
+tool board needs light
+take kindling
+open workbench drawer + token
+walk to the fire clearing
+matches before kindling fail
+lantern refuses without fire
+kindling + matches → fire
+light post lantern, read plate
+back through the forest to the garden
+a complete wrong lantern order resets the attempt (no prefix feedback)
+lanterns Maan → Blad → Zon
+walk to the conservatory
+open conservatory door
+take crank from opened lower cabinet
+look at pool tiles
+to the sauna
+open sauna, enter, heater, board
+turn cabinet wheels to 1 Ruit 2 Golf 3 Driehoek 4 Cirkel
+take crest + read well note
+walk to the well
+install crank and wind up
+walk to the cottage
+unlock cottage
+gathering door is gated
+niches: token left, crest right
+enter gathering room → ending
+close ending, look at the room

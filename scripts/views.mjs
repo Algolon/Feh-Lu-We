@@ -13,7 +13,7 @@ const views = [
   ['01-home-table', null, { x: 2.6, y: 0, z: 1.9, yaw: 0.85, pitch: -0.35 }],
   ['02-forecourt', {}, { x: 60, y: 0, z: 41, yaw: 0, pitch: 0.06 }],
   ['03-hall', {}, { x: 60, y: 0.15, z: 54.2, yaw: 0, pitch: 0.12 }],
-  ['04-living-mantel', {}, { x: 51.4, y: 0.15, z: 62, yaw: -Math.PI / 2, pitch: -0.05 }],
+  ['04-living-mantel', {}, { x: 50.1, y: 0.15, z: 60.4, yaw: -1.15, pitch: -0.12 }],
   ['05-landing', { inventory: [...ESS, 'studyKey'] }, { x: 59, y: 3.35, z: 72.5, yaw: -2.2, pitch: -0.05 }],
   ['06-pool', {}, { x: 75.5, y: 0.15, z: 65.2, yaw: 0.35, pitch: -0.25 }],
   ['07-sauna', { open: { 'door.front': true, 'door.sauna': true } }, { x: 87, y: 0.8, z: 72.2, yaw: Math.PI, pitch: 0.05 }],

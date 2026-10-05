@@ -180,13 +180,31 @@ export class LightPool {
       this.assigned.push(null);
     }
   }
-  update(dt: number, t: number, lamps: LampSource[], eye: THREE.Vector3) {
+  private zoneCache = new Map<LampSource, string>();
+  /**
+   * Assign pooled lights to lit lamps in the player's own zone (room/building/outdoors), so a lamp never lights
+   * the far side of a wall. Hysteresis: an assigned lamp keeps its light unless a candidate is clearly closer.
+   */
+  update(dt: number, t: number, lamps: LampSource[], eye: THREE.Vector3, zoneOf?: (x: number, y: number, z: number) => string) {
     this.timer -= dt;
     if (this.timer <= 0) {
       this.timer = 0.3;
-      const on = lamps.filter((l) => l.on());
-      on.sort((a, b) => a.pos.distanceToSquared(eye) - b.pos.distanceToSquared(eye));
-      for (let i = 0; i < this.lights.length; i++) this.assigned[i] = on[i] ?? null;
+      const zone = (l: LampSource) => {
+        let z = this.zoneCache.get(l);
+        if (z === undefined) { z = zoneOf ? zoneOf(l.pos.x, l.pos.y, -l.pos.z) : ''; this.zoneCache.set(l, z); }
+        return z;
+      };
+      const here = zoneOf ? zoneOf(eye.x, eye.y - 1.6, -eye.z) : '';
+      const d2 = (l: LampSource) => l.pos.distanceToSquared(eye);
+      const cands = lamps.filter((l) => l.on() && zone(l) === here).sort((a, b) => d2(a) - d2(b));
+      const best = cands.slice(0, this.lights.length);
+      const keep = this.assigned.filter((a): a is LampSource => !!a && best.length > 0 && cands.includes(a) && Math.sqrt(d2(a)) < Math.sqrt(d2(best[best.length - 1])) + 1.5);
+      const next: LampSource[] = [...keep];
+      for (const c of best) if (next.length < this.lights.length && !next.includes(c)) next.push(c);
+      // stable slots: lamps that stay keep the same light object
+      const slots: (LampSource | null)[] = this.assigned.map((a) => (a && next.includes(a) ? a : null));
+      for (const c of next) if (!slots.includes(c)) { const free = slots.indexOf(null); if (free >= 0) slots[free] = c; }
+      for (let i = 0; i < this.lights.length; i++) this.assigned[i] = slots[i] ?? null;
     }
     for (let i = 0; i < this.lights.length; i++) {
       const l = this.lights[i];

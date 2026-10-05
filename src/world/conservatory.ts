@@ -100,7 +100,7 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
     const m = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.7), mat);
     m.rotation.order = 'YXZ';
     m.rotation.x = -Math.PI / 2 - tilt;
-    m.position.copy(v3(78, poolDepth(z) + 0.02, z));
+    m.position.copy(v3(78, poolDepth(z) + 0.075, z)); // floor box top is 0.05 above poolDepth
     w.scene.add(m);
   });
   // water

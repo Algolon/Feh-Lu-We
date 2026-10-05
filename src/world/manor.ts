@@ -3,7 +3,7 @@
 // Upstairs (via a real staircase + hidden ramp): landing/gallery, study (locked), storage room.
 import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
-import { type Ctx, wall, floor, ceiling, stairsZ, railing, hipRoof, windowAt } from './arch';
+import { type Ctx, wall, floor, ceiling, stairsZ, railing, hipRoof, gableRoof, windowAt } from './arch';
 import { box, boxMM, cyl, blob, compound, v3, hitbox, type Batcher } from './kit';
 import { table, chair, sofa, armchair, bookshelf, bed, counter, rug, plant, painting, crate, tableLamp, floorLamp, chandelier, wallSconce, flame, part, staticLantern, staticSconce } from './furniture';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place, lightableItemLabel } from '../interactions/props';
@@ -34,9 +34,37 @@ export function buildManor(w: World, g: GameApi, c: Ctx) {
   boxMM(c.b, k.M.paint, '#e8dcc0', 47.9, 72.1, 3.3, 3.45, 51.9, 52.0, { chunk: c.chunk });
   boxMM(c.b, k.M.paint, '#e8dcc0', 47.9, 72.1, 3.3, 3.45, 80.0, 80.1, { chunk: c.chunk });
   // roof, chimneys, turret
-  hipRoof(c, 60, 66, 24, 28, TOP, 5.2, k.M.slate, '#8a93a8', 0.7);
-  for (const [x, z] of [[49.6, 62], [66, 75], [56, 58]] as const) box(c.b, k.M.stone, '#e6d6b6', x, 8, z, 1.1, 5.2, 1.1, { chunk: c.chunk, uv: 2 });
-  for (const [x, z] of [[49.6, 62], [66, 75], [56, 58]] as const) box(c.b, k.M.paint, '#8a4a32', x, 13.2, z, 0.5, 0.5, 0.5, { chunk: c.chunk });
+  // steeper slate roof (≈30°) with dormers: reads as a manor from eye height, not a flat slab
+  const RH = 7.5, RUN = 12.7;
+  hipRoof(c, 60, 66, 24, 28, TOP, RH, k.M.slate, '#8a93a8', 0.7);
+  for (const [x, z] of [[49.6, 62], [66, 75], [56, 58]] as const) box(c.b, k.M.stone, '#e6d6b6', x, 8, z, 1.1, 7.6, 1.1, { chunk: c.chunk, uv: 2 });
+  for (const [x, z] of [[49.6, 62], [66, 75], [56, 58]] as const) box(c.b, k.M.paint, '#8a4a32', x, 15.6, z, 0.5, 0.5, 0.5, { chunk: c.chunk });
+  const dormer = (x: number, z: number, face: 'S' | 'N' | 'E' | 'W') => {
+    const alongX = face === 'E' || face === 'W'; // dormer ridge runs perpendicular to its wall
+    const [fx, fz] = face === 'S' ? [0, -1] : face === 'N' ? [0, 1] : face === 'E' ? [1, 0] : [-1, 0];
+    const top = TOP + (RH * 2.2) / RUN + 0.2;
+    const sx = alongX ? 2.4 : 1.8, sz = alongX ? 1.8 : 2.4;
+    box(c.b, k.M.stone, '#efe2c4', x - fx * 1.0, TOP - 0.2, z - fz * 1.0, sx, top - TOP + 0.2, sz, { chunk: c.chunk, uv: 1.5 });
+    gableRoof(c, x - fx * 1.0, z - fz * 1.0, alongX ? 2.6 : 2.6, 2.1, top, 0.8, alongX, k.M.slate, '#7d879c');
+    // window on the outward face
+    const wx = x - fx * 1.0 + fx * (alongX ? 1.21 : 0), wz = z - fz * 1.0 + fz * (alongX ? 0 : 1.21);
+    box(c.b, k.M.glow, '#ffc96e', wx, TOP + 0.25, wz, alongX ? 0.04 : 0.8, 1.0, alongX ? 0.8 : 0.04, { chunk: c.chunk, shadow: false, jitter: 0 });
+    box(c.b, k.M.paint, '#f3ead6', wx + fx * 0.02, TOP + 0.72, wz + fz * 0.02, alongX ? 0.05 : 0.86, 0.05, alongX ? 0.86 : 0.05, { chunk: c.chunk, shadow: false });
+  };
+  for (const x of [52.5, 67.5]) { dormer(x, 51.6, 'S'); dormer(x, 80.4, 'N'); }
+  for (const z of [58, 66, 74]) { dormer(47.6, z, 'W'); dormer(72.4, z, 'E'); }
+  // projecting central entrance bay with a pediment and round window (keeps a clear door opening)
+  const bay = (x0: number, x1: number, y0: number, y1: number) => {
+    boxMM(c.b, k.M.stone, '#f6ead0', x0, x1, y0, y1, 51.55, 52.02, { chunk: c.chunk, uv: 2.4 });
+    if (y0 < 2) w.col.addBox(x0, x1, 51.55, 52.02, 0, y1, { occludes: true });
+  };
+  bay(56.8, 59.05, 0.5, TOP);
+  bay(60.95, 63.2, 0.5, TOP);
+  bay(59.05, 60.95, 3.0, TOP);
+  boxMM(c.b, k.M.stone, '#e2d2b2', 56.6, 63.4, TOP, TOP + 0.25, 51.45, 52.05, { chunk: c.chunk });
+  gableRoof(c, 60, 51.8, 0.6, 7.0, TOP + 0.25, 2.4, false, k.M.stone, '#f6ead0');
+  cyl(c.b, k.M.glow, '#ffc96e', 60, TOP + 0.9, 51.48, 0.45, 0.45, 0.05, 16, { chunk: c.chunk, rx: Math.PI / 2, shadow: false, jitter: 0 });
+  windowAt(c, 'x', 51.55, -1, 60, 4.0, 1.2, 1.6, true);
   cyl(c.b, k.M.stone, '#efe2c4', 72.1, 0, 52.4, 2.2, 2.2, 8.2, 18, { chunk: c.chunk });
   cyl(c.b, k.M.slate, '#7d879c', 72.1, 8.2, 52.4, 0.05, 2.6, 4.2, 18, { chunk: c.chunk });
   w.col.addCircle(72.1, 52.4, 2.2, 0, 8);
@@ -184,11 +212,11 @@ export function buildManor(w: World, g: GameApi, c: Ctx) {
   boxMM(c.b, k.M.stone, '#e2d2b2', 48.4, 49.05, GF, 1.25, fz - 1.4, fz + 1.4, { chunk: c.chunk, uv: 1.2 });
   boxMM(c.b, k.M.paint, '#1d1712', 48.42, 49.07, GF, 0.95, fz - 0.7, fz + 0.7, { chunk: c.chunk });
   boxMM(c.b, k.M.stone, '#d8c6a4', 48.4, 49.15, 1.25, 1.33, fz - 1.7, fz + 1.7, { chunk: c.chunk, uv: 1.2 });
-  boxMM(c.b, k.M.stone, '#e8dcc0', 48.4, 48.9, 1.33, CEIL, fz - 1.2, fz + 1.2, { chunk: c.chunk, uv: 1.6 });
+  boxMM(c.b, k.M.stone, '#e8dcc0', 48.4, 48.68, 1.33, CEIL, fz - 1.2, fz + 1.2, { chunk: c.chunk, uv: 1.6 }); // shallow breast: mantel objects stand clear of it
   boxMM(c.b, k.M.stone, '#cbb898', 48.6, 49.6, GF, GF + 0.06, fz - 1.3, fz + 1.3, { chunk: c.chunk });
   w.col.addBox(48.4, 49.15, fz - 1.4, fz + 1.4, 0, 1.3);
   for (let i = 0; i < 3; i++) cyl(c.b, k.M.bark, '#7a5a3a', 48.75, GF + 0.08 + i * 0.05, fz - 0.3 + i * 0.3, 0.07, 0.07, 0.8, 6, { chunk: c.chunk, rx: Math.PI / 2, yaw: 0.3 * i });
-  const mantelY = 1.33, mx = 48.82;
+  const mantelY = 1.33, mx = 48.98;
   const mantel = new THREE.Group();
   w.scene.add(mantel);
   const mz = [60.65, 61.22, 61.8, 62.38, 62.96, 63.48];

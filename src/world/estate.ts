@@ -1,6 +1,7 @@
 // The estate: 120 × 100 units (1 unit ≈ 1 m). X east, Z north, Y up. Front gate on the south edge.
 // Southern half (Z 0–50): forest. Northern half: manor, conservatory, sauna, cottage and an open garden.
 import * as THREE from 'three';
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { World, type GameApi } from '../interactions/world';
 import type { SceneExtras } from '../core/game';
 import { makeCtx, floor } from './arch';
@@ -71,7 +72,24 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
     if (Math.hypot(x - 60, z - 47) < 7.5) return 'stone';
     return 'grass';
   };
-  return { world: w, extras: { env, isIndoor, surfaceAt } };
+  const zoneAt = (x: number, y: number, z: number) => {
+    if (inRect(x, z, 48.2, 71.8, 52.2, 79.8)) {
+      if (inRect(x, z, 56, 64, 55.5, 63)) return 'manor-hall'; // double-height hall: chandelier lights the hall
+      if (y > 2.2) return 'manor-up';
+      if (inRect(x, z, 48.2, 56, 52.2, 72)) return 'manor-living';
+      if (inRect(x, z, 64, 71.8, 52.2, 64)) return 'manor-dining';
+      if (inRect(x, z, 64, 71.8, 64, 79.8)) return 'manor-kitchen';
+      if (inRect(x, z, 48.2, 64, 72, 79.8)) return 'manor-billiard';
+      return 'manor-hall'; // vestibule, hall, corridor
+    }
+    if (inRect(x, z, 72, 84, 64, 82)) return 'cons';
+    if (inRect(x, z, 85, 89, 69, 73)) return 'sauna';
+    if (inRect(x, z, 20, 30, 88, 91)) return 'cottage-entry';
+    if (inRect(x, z, 20, 30, 91, 96)) return 'cottage-room';
+    if (inRect(x, z, 25.5, 30.5, 24.5, 28)) return 'shed';
+    return 'out';
+  };
+  return { world: w, extras: { env, isIndoor, surfaceAt, zoneAt } };
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -116,9 +134,16 @@ function buildGround(w: World) {
   mesh.userData.noCull = true;
   w.scene.add(mesh);
   // the land beyond the estate + distant hills
-  const outer = new THREE.Mesh(new THREE.PlaneGeometry(700, 700), w.material(new THREE.MeshLambertMaterial({ color: '#5f7d3a' })));
-  outer.rotation.x = -Math.PI / 2;
-  outer.position.set(60, -0.04, -50);
+  // the land beyond the estate: a frame AROUND the estate (not under it, where it would hide the pool basin)
+  const outerMat = w.material(new THREE.MeshLambertMaterial({ color: '#5f7d3a' }));
+  const parts = ([[-300, 420, -300, 0], [-300, 420, 100, 400], [-300, 0, 0, 100], [120, 420, 0, 100]] as const).map(([x0, x1, z0, z1]) => {
+    const pg = new THREE.PlaneGeometry(x1 - x0, z1 - z0);
+    pg.rotateX(-Math.PI / 2);
+    pg.translate((x0 + x1) / 2, -0.04, -(z0 + z1) / 2);
+    return pg;
+  });
+  const outer = new THREE.Mesh(mergeGeometries(parts)!, outerMat); // one draw call
+  parts.forEach((pg) => pg.dispose());
   outer.userData.noCull = true;
   w.scene.add(outer);
   const hills = new Batcher();
@@ -258,21 +283,25 @@ function buildGarden(w: World, g: GameApi, c: ReturnType<typeof makeCtx>, veg: V
   // centre stone of the lantern circle (a landmark with a bench-height plinth) + the link lights
   cyl(c.b, k.M.stone, '#d8ccb0', LANTERN_CIRCLE.x, 0, LANTERN_CIRCLE.z + 0.9, 0.55, 0.65, 0.42, 12, { chunk: c.chunk, uv: 1 });
   w.col.addCircle(LANTERN_CIRCLE.x, LANTERN_CIRCLE.z + 0.9, 0.65, 0, 0.5);
-  const linkMat = w.material(new THREE.MeshBasicMaterial({ color: '#4a443c' }));
-  const studs: THREE.Mesh[] = [];
+  // one instanced mesh for all link lights (one draw call); colour per instance
   const studGeo = new THREE.CylinderGeometry(0.09, 0.12, 0.08, 8);
+  const studPos: THREE.Vector3[] = [];
   for (let i = 0; i < LINK_PATH.length - 1; i++) {
     const [ax, az] = LINK_PATH[i], [bx, bz] = LINK_PATH[i + 1];
-    for (let t = 0; t < 1; t += 0.34) {
-      const m = new THREE.Mesh(studGeo, linkMat.clone());
-      w.material(m.material as THREE.Material);
-      m.position.copy(v3(ax + (bx - ax) * t, 0.04, az + (bz - az) * t));
-      w.scene.add(m);
-      studs.push(m);
-    }
+    for (let t = 0; t < 1; t += 0.34) studPos.push(v3(ax + (bx - ax) * t, 0.04, az + (bz - az) * t));
   }
+  const studMesh = new THREE.InstancedMesh(studGeo, w.material(new THREE.MeshBasicMaterial({ color: '#ffffff' })), studPos.length);
+  const mtx = new THREE.Matrix4();
+  studPos.forEach((p, i) => { studMesh.setMatrixAt(i, mtx.makeTranslation(p.x, p.y, p.z)); });
+  studMesh.computeBoundingSphere();
+  w.scene.add(studMesh);
+  const studs = studPos;
+  const cOn = new THREE.Color('#ffd27a'), cOff = new THREE.Color('#4a443c');
   let linkT = -1; // animation clock for the lighting run (-1 = idle)
-  const studsOn = (n: number) => studs.forEach((m, i) => (m.material as THREE.MeshBasicMaterial).color.set(i < n ? '#ffd27a' : '#4a443c'));
+  const studsOn = (n: number) => {
+    for (let i = 0; i < studs.length; i++) studMesh.setColorAt(i, i < n ? cOn : cOff);
+    if (studMesh.instanceColor) studMesh.instanceColor.needsUpdate = true;
+  };
   let firstSync = true;
   w.onSync(() => {
     if (!g.state.flags.lanternsSolved) { studsOn(0); linkT = -1; }
@@ -322,8 +351,8 @@ function buildGarden(w: World, g: GameApi, c: ReturnType<typeof makeCtx>, veg: V
     if (r() < 0.6) veg.smallThing('flower', x, z, 0.14, purple[Math.floor(r() * 4)], 'garden');
     else veg.smallThing('shrub', x, z, 0.4 + r() * 0.3, '#5a8a3e', 'garden');
   }
-  // forecourt planter: a small clipped tree and flowers
-  veg.tree({ x: 60, z: 47.5, h: 2.0, r: 1.0, kind: 'oak', hue: 0.2 }, 'garden');
+  // forecourt planter: low shrubs and flowers
+  // (no tree here: the approach must frame the front door)
   for (let i = 0; i < 18; i++) {
     const a = (i / 18) * Math.PI * 2, d = 0.9 + (i % 3) * 0.2;
     veg.smallThing(i % 4 === 0 ? 'shrub' : 'flower', 60 + Math.cos(a) * d, 47.5 + Math.sin(a) * d, i % 4 === 0 ? 0.35 : 0.14, i % 4 === 0 ? '#4f7f38' : purple[i % 4], 'garden', 0.46);

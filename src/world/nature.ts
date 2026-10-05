@@ -73,7 +73,7 @@ export class Vegetation {
 
   smallThing(kind: 'fern' | 'shrub' | 'flower' | 'rock', x: number, z: number, s: number, color: THREE.ColorRepresentation, chunk: string, yOff = 0) {
     const r = this.r;
-    const sy = kind === 'fern' ? s * 0.38 : kind === 'flower' ? s * 0.5 : kind === 'rock' ? s * 0.55 : s * 0.7;
+    const sy = kind === 'fern' ? s * 0.38 : kind === 'flower' ? s * 0.85 : kind === 'rock' ? s * 0.55 : s * 0.7;
     this.small.push({ m: this.mat(x, yOff + (kind === 'rock' ? s * 0.1 : sy * 0.6), z, s, sy, s * (0.8 + r() * 0.4), r() * 6), c: new THREE.Color(color), chunk, kind });
   }
 

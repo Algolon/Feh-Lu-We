@@ -18,11 +18,11 @@ takes ~4 simulated minutes because it knows every answer and walks in straight l
 |---|---|---|
 | 0 | Pack at home and leave | Do they discover look-drag + joystick quickly? Do they find the sideboard drawer? Do they try the candle (item use)? |
 | 1 | Find what's "klaargezet" in the hall | Do they connect the invitation pictograms to the mantelpiece and read left→right? |
-| 2 | Upstairs study | Stairs comfortable? Do they use the compass/"ochtendzon" rule or brute-force the 3 buttons? |
+| 2 | Upstairs study | Stairs comfortable? Do they follow the dashed route on the map or brute-force the 3 buttons? |
 | 3 | Shed in the forest | Do they find the path west from the forecourt? Do they think of the torch for the dark board? |
 | 4 | Fire clearing | Do they understand *select item → use* (kindling, then matches) and lighting the lantern from the fire? |
-| 5 | Garden lanterns | Do they remember/look up the plate order in the notebook? |
-| 6 | Conservatory + sauna | Do they see the pool mosaic, find the board in the sauna, and reverse the order? |
+| 5 | Garden lanterns | Do they remember/look up the plate order? Do they understand that only the third lantern tells right from wrong? |
+| 6 | Conservatory + sauna | Do they see the pool mosaic, find the numbered board in the sauna, and turn the numbered wheels into the deep→shallow order? |
 | 7 | Well | Do they understand the missing-crest message if they come too early? |
 | 8 | Cottage | Do they read the fragment's left/right rule? Ending reached? |
 
@@ -51,7 +51,13 @@ Memories we should add:
 ```
 
 The in-game ending screen's **Kopieer feedback + statistieken** button copies the free-text feedback together
-with play time, hint levels, wrong attempts, clue count, device user-agent and quality setting.
+with the build id (also shown in the pause menu), timing, hint levels, wrong attempts, clue count, device
+user-agent, quality setting and a local event log (puzzle panels opened, code attempts, refusals, hints, places
+visited, solves). Nothing is sent anywhere; it only goes to the clipboard.
+
+Timing fields: `activeIncludingReading` (game visible and running, including reading clues, puzzle panels,
+notebook and hints), `atFinish` (frozen at the ending), `moving`, `pausedOrHidden` (pause menu open or tab in the
+background — excluded from active time).
 
 ## Known limitations to tell testers
 

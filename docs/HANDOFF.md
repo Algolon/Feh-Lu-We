@@ -2,6 +2,21 @@
 
 Last updated: 2026-10-04. Branch: `ccr-75ef4113-kfkimm` (the repository was empty before this work).
 
+## Iteration 2 (5 Oct 2026) — independent review fixes
+
+Work driven by [`REVIEW_ITERATION_2_PROMPT.md`](REVIEW_ITERATION_2_PROMPT.md). Findings, reproductions and fixes:
+[`ITERATION_2_REVIEW.md`](ITERATION_2_REVIEW.md); tests, before/after metrics and screenshots:
+[`ITERATION_2_VALIDATION.md`](ITERATION_2_VALIDATION.md).
+
+- All 13 review findings handled (F09 partly by design); F01–F05 were reproduced in the browser on the baseline first.
+- Two additional evidence bugs found from screenshots and fixed: mantel objects hidden in the chimney breast (the
+  feather pictogram was invisible) and a pool mosaic that was never visible.
+- Reworked puzzles: lantern circle with complete-attempt evaluation and a visible link to the conservatory; cabinet
+  opened by four numbered in-world symbol wheels; study rule replaced by an explicit dashed route.
+- Save format v3 (automatic migration from v2). Timing now separates active/moving/paused; local event log and build
+  id in feedback.
+- Still pending: real-phone checks, human playtest, audio listening, room-light leakage on a real GPU.
+
 ## What runs
 
 A complete static browser game (TypeScript + Vite + Three.js) that is solvable from the home tutorial to the

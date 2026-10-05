@@ -1,0 +1,68 @@
+[
+  {
+    "name": "gate (driveway)",
+    "low": {
+      "calls": 97,
+      "triangles": 163859
+    },
+    "high": {
+      "calls": 119,
+      "triangles": 252043
+    }
+  },
+  {
+    "name": "forecourt → manor",
+    "low": {
+      "calls": 97,
+      "triangles": 96869
+    },
+    "high": {
+      "calls": 133,
+      "triangles": 190067
+    }
+  },
+  {
+    "name": "entrance hall",
+    "low": {
+      "calls": 130,
+      "triangles": 100132
+    },
+    "high": {
+      "calls": 169,
+      "triangles": 195602
+    }
+  },
+  {
+    "name": "garden → manor + conservatory",
+    "low": {
+      "calls": 121,
+      "triangles": 160657
+    },
+    "high": {
+      "calls": 153,
+      "triangles": 209557
+    }
+  },
+  {
+    "name": "forest (shed area)",
+    "low": {
+      "calls": 47,
+      "triangles": 99988
+    },
+    "high": {
+      "calls": 84,
+      "triangles": 195114
+    }
+  },
+  {
+    "name": "conservatory pool",
+    "low": {
+      "calls": 80,
+      "triangles": 65327
+    },
+    "high": {
+      "calls": 119,
+      "triangles": 160797
+    }
+  }
+]

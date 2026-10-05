@@ -19,8 +19,8 @@ and is covered by `tests/rules.test.ts`, including a full-route progression test
 | 2 | Study desk | Buttons **Put – Schuur – Vuur** |
 | 3 | Shed | Shed key; torch on; read tool board; take kindling; open workbench drawer, take token |
 | 4 | Fire clearing | Kindling on pit → matches on pit → light post lantern → read plate: **Maan → Blad → Zon** |
-| 5 | Garden lanterns | Light **Maan, then Blad, then Zon** |
-| 6 | Conservatory cabinet panel | **Ruit – Golf – Driehoek – Cirkel** |
+| 5 | Garden lanterns (circle on the lawn) | Light **Maan, then Blad, then Zon** — evaluated only when the third burns |
+| 6 | Conservatory cabinet wheels | Turn wheels to **1 Ruit · 2 Golf · 3 Driehoek · 4 Cirkel** |
 | 7 | Well | Crank on well → wind → crest opens the box |
 | 8 | Cottage niches | **Token left, crest right** |
 
@@ -48,10 +48,10 @@ and is covered by `tests/rules.test.ts`, including a full-route progression test
 ## Beat 2 — Study desk (upstairs, west room)
 - **Prerequisites:** brass study key (unlocks `door.study` on the landing).
 - **Clues:**
-  - Desk note (`c.studyNote`): press the three forest places in the order the **morning sun** reaches them; it rises in the east and sets in the west.
-  - Framed map (`c.forestMap`) on the study's south wall: forest with compass; **put** far east (96, 26), **schuur** west (28, 26), **vuurplaats** further west (14, 12). Also recorded in the notebook with the same diagram.
-- **Answer:** east → west = `put, schuur, vuur`.
-- **Output:** flag `studyLockSolved`, compartment opens; *schuursleutel* inside. The notebook's map doubles as forest navigation.
+  - Desk note (`c.studyNote`): press the three forest places of the organiser's *ochtendwandeling* in the order of the dashed route on the wall map.
+  - Framed map (`c.forestMap`) on the study's south wall: a dashed route with arrowheads and "start" at the **put** (96, 26) → **schuur** (28, 26) → **vuurplaats** (14, 12). The notebook stores the same diagram.
+- **Answer:** `put, schuur, vuur`. (Iteration 1 used a "morning sun reaches east first" rule; replaced by an explicit route because the game does not simulate sunrise.)
+- **Output:** flag `studyLockSolved`, compartment opens; *schuursleutel* inside.
 - **Recovery:** unlimited retries.
 
 ## Beat 3 — Timber shed (forest, ≈ (28, 26))
@@ -68,21 +68,23 @@ and is covered by `tests/rules.test.ts`, including a full-route progression test
 - **Wrong combinations:** matches before kindling → explained failure; other items → "Dat helpt niet om vuur te maken."
 - **Recovery:** the fire can be put out and relit (wood stays in the pit; matches are reusable). Once read, the plate stays recorded in the notebook.
 
-## Beat 5 — Garden lanterns (open lawn north of the manor)
-- **Positions:** Zon (43, 90), Maan (57.5, 94), Blad (72.5, 90). Each shows its symbol on four sides (shape + colour).
+## Beat 5 — Garden lanterns (lantern circle on the open lawn)
+- **Positions:** a compact circle around a low stone near (58, 92.4): Zon (54.6, 92.0), Maan (58.0, 95.2), Blad (61.4, 92.0). Each shows its symbol as a light cut-out on four sides (shape + colour).
 - **Answer:** light `maan`, then `blad`, then `zon`.
-- **Wrong entry:** all lanterns go out and the attempt resets (`seq.gardenLanterns = []`); no world progress is lost.
-- **Output:** flag `lanternsSolved`, lock `lock.cabinetLower` → the conservatory cabinet's lower compartment opens; take the *zwengel* (crank).
-- **Recovery:** unlimited retries; order can be brute-forced (6 permutations) but the plate gives it directly.
+- **Feedback design:** the first and second lantern always give the same acknowledgement ("De lantaarn gaat zacht branden"), right or wrong. Only when the third burns is the order evaluated. Wrong: all three burn for a moment, then go out (`seq.gardenLanterns = []`, attempt counter +1); no world progress is lost.
+- **Output:** flag `lanternsSolved`, lock `lock.cabinetLower`; a row of ground lights runs from the circle to the conservatory (visible cause → effect), and the conservatory cabinet's lower compartment opens: take the *zwengel* (crank).
+- **Recovery:** unlimited retries; the circle is small, so an attempt never requires crossing the garden.
 
-## Beat 6 — Conservatory cabinet panel (+ barrel sauna)
-- **Clues:**
-  - Pool mosaic (`c.poolTiles`): from the shallow end with the steps (south) to the deep end (north): **cirkel, driehoek, golf, ruit**. "ONDIEP" / "DIEP" signs on the coping.
-  - Sauna board (`c.saunaDiagram`) inside the barrel sauna (outside, east of the conservatory): pool seen from above, arrow from **deep to shallow**, four boxes, "Zoals de stoom opstijgt: van diep naar ondiep."
-- **Answer:** reverse of the mosaic order = `ruit, golf, driehoek, cirkel`.
+## Beat 6 — Conservatory cabinet wheels (+ barrel sauna)
+- **Evidence:**
+  - Pool mosaic (`c.poolTiles`), visible on the pool floor from the shallow end with the steps (south) to the deep end (north): **cirkel, driehoek, golf, ruit**. "ONDIEP" / "DIEP" signs on the coping.
+  - Sauna board (`c.saunaDiagram`) inside the barrel sauna (outside, east of the conservatory): the pool from above, an arrow from **deep to shallow**, four boxes numbered **1 (deep) … 4 (shallow)**, "Zoals de stoom opstijgt: van diep naar ondiep."
+  - Cabinet (`c.cabinet`): four turnable symbol wheels numbered **1–4** (left → right) above the glass door. They start on the mosaic's untransformed reading (cirkel, driehoek, golf, ruit).
+- **Reasoning:** box 1 is the deep end, so wheel 1 = the deepest mosaic symbol.
+- **Answer:** wheels `1 ruit, 2 golf, 3 driehoek, 4 cirkel`. Each tap turns one wheel through driehoek → cirkel → ruit → golf. The glass door opens as soon as all four match.
 - **Output:** flag `cabinetPanelSolved`, upper glass display opens: *wapenschild* (crest) + well instructions note (`c.wellNote`).
 - **Optional:** sauna heater on/off (glowing stones, steam, sound). Never a timer or gate.
-- **Recovery:** unlimited retries; the panel can be tried before or after lanterns (order-independent).
+- **Compatibility:** saves solved with iteration 1's 4-button panel show the wheels solved.
 
 ## Beat 7 — Well (forest east, ≈ (96, 26))
 - **Prerequisites:** crank (beat 5). Crest (beat 6) to open the box.

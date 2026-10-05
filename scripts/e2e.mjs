@@ -511,10 +511,91 @@ async function regressions() {
     await page.waitForTimeout(500);
     r.f04 = await E(page, () => ({ wrong: T.G().state.wrong.studyLock ?? 0, modal: document.querySelector('.modal h2')?.textContent }));
     log('F04 no stale delayed submission closes a newer modal', r.f04.modal === 'Tas', JSON.stringify(r.f04));
+    // B1 — door closing never sweeps through the player; a closing door waits while the player stands in its path
+    await startEstate(page, { open: { 'door.corridor': true }, player: { estate: { x: 58.0, y: 0.15, z: 70.5, yaw: Math.PI, pitch: 0 } } });
+    r.sweep = await E(page, () => {
+      T.act('door.corridor', 'Sluiten');
+      const refused = T.G().state.open['door.corridor'] === true;
+      return { refused };
+    });
+    log('B1 closing a door with the player in its swing path is refused', r.sweep.refused);
+    // B2 — the crest in the closed glass display is visible but not takeable; becomes takeable once open
+    await startEstate(page, { player: { estate: { x: 73.6, y: 0.15, z: 66.0, yaw: -Math.PI / 2, pitch: 0 } } });
+    r.glass = await E(page, () => {
+      T.lookAtId('pk.crest');
+      const closed = T.G().metrics().target;
+      return { closed };
+    });
+    log('B2 no taking through closed glass/cabinet', r.glass.closed !== 'pk.crest', JSON.stringify(r.glass));
+    // F10 — reduced motion stills procedural fire
+    await startEstate(page, { lit: { 'fire.living': true }, player: { estate: { x: 50.2, y: 0.15, z: 62, yaw: -Math.PI / 2, pitch: 0 } } });
+    r.rm = await E(page, () => {
+      const g = T.G();
+      g.settings.reducedMotion = true; g.applyQuality();
+      g.tick(1 / 30); // the setting takes effect on the next simulation step
+      const flames = [];
+      g.world.scene.traverse((o) => { if (o.isMesh && o.geometry?.type === 'ConeGeometry' && o.material?.transparent) flames.push(o); });
+      const a = flames.map((f) => f.scale.y.toFixed(3)).join(',');
+      for (let i = 0; i < 20; i++) g.tick(1 / 30);
+      const b = flames.map((f) => f.scale.y.toFixed(3)).join(',');
+      return { n: flames.length, still: a === b && flames.every((f) => f.scale.y === 1), cls: document.body.classList.contains('reduced-motion') };
+    });
+    log('F10 reduced motion stills fire animation + UI transitions', r.rm.n > 0 && r.rm.still && r.rm.cls, JSON.stringify(r.rm));
+    // F12 — unknown ids in a save are dropped at load; the bag still opens
+    await startEstate(page, { inventory: [...ESSENTIALS, 'ghostItem'], slots: { left: 'nope' } });
+    r.ids = await E(page, () => { T.G().openBag(); const n = document.querySelectorAll('.inv button').length; T.closeModal(); return { inv: T.G().state.inventory, n, slots: T.G().state.slots }; });
+    log('F12 unknown saved ids are dropped; inventory UI works', !r.ids.inv.includes('ghostItem') && r.ids.n === ESSENTIALS.length && r.ids.slots.left === null, JSON.stringify(r.ids));
+    // F07/G — time reading a panel counts as active; the pause menu counts as paused
+    r.time = await E(page, async () => {
+      T.G().settings.quality = 'low'; T.G().applyQuality(true); // software rendering: keep frames short
+      await new Promise((res) => setTimeout(res, 4000)); // let shader recompilation settle
+      const st = T.G().state.stats;
+      const a0 = st.activeMs, p0 = st.pausedMs;
+      T.G().openPanel('studyLock');
+      await new Promise((res) => setTimeout(res, 3000));
+      const a1 = st.activeMs;
+      T.closeModal(); T.G().openPause();
+      await new Promise((res) => setTimeout(res, 3000));
+      const p1 = st.pausedMs, a2 = st.activeMs;
+      T.closeModal();
+      return { activeDuringPanel: Math.round(a1 - a0), pausedDuringPause: Math.round(p1 - p0), activeDuringPause: Math.round(a2 - a1) };
+    });
+    log('F07 playtime counts panel reading as active and pause as paused', r.time.activeDuringPanel > 1500 && r.time.pausedDuringPause > 1500 && r.time.activeDuringPause < 800, JSON.stringify(r.time));
+    // B4 — WebGL context loss shows recovery and resumes on restore
+    r.ctx = await E(page, async () => {
+      const gl = T.G().renderer.getContext();
+      const ext = gl.getExtension('WEBGL_lose_context');
+      if (!ext) return { skipped: true };
+      ext.loseContext();
+      await new Promise((res) => setTimeout(res, 300));
+      const shown = document.querySelector('.modal h2')?.textContent;
+      ext.restoreContext();
+      await new Promise((res) => setTimeout(res, 800));
+      return { shown, after: document.getElementById('overlay').hidden, lost: T.G().contextLost };
+    });
+    log('B4 context loss pauses with a recovery dialog and resumes on restore', r.ctx.skipped || (r.ctx.shown === 'Beeld onderbroken' && r.ctx.after && !r.ctx.lost), JSON.stringify(r.ctx));
   } catch (e) {
     log('regressions', false, e.message.split('\n')[0]);
   }
+  if (page.problems.filter((p) => !/context/i.test(p)).length) log('regressions: no console errors', false, page.problems.slice(0, 3).join(' | '));
   await ctx.close();
+  // B4 — Start/Continue are idempotent (double click → one game loop, no errors)
+  {
+    const d = await newPage();
+    await d.page.goto(BASE + '?autotest=1');
+    await d.page.evaluate(() => localStorage.clear());
+    await d.page.reload();
+    await d.page.evaluate(() => { const b = document.querySelector('[data-new]'); b.click(); b.click(); b.click(); });
+    await d.page.waitForFunction(() => window.__game?.world);
+    await d.page.waitForTimeout(800);
+    const r2 = await d.page.evaluate(() => {
+      let n = 0; const orig = window.requestAnimationFrame;
+      window.requestAnimationFrame = (cb) => { n++; return orig(cb); };
+      return new Promise((res) => setTimeout(() => { window.requestAnimationFrame = orig; res({ perSecond: n }); }, 1000));
+    });
+    log('B4 repeated Start presses create one game loop', d.page.problems.length === 0 && r2.perSecond < 90, `rAF/s ${r2.perSecond} (software-rendered)`);
+    await d.ctx.close();
+  }
   // F05 — a stationary tap on an object in the LEFT part of the screen interacts (touch).
   const t = await newPage({ viewport: { width: 844, height: 390 }, hasTouch: true, isMobile: true, deviceScaleFactor: 2 });
   try {
