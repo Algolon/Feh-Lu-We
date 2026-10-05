@@ -2,7 +2,9 @@
 // renders exactly as before (baseline assets, baseline lighting, ACES tone mapping).
 //
 //   ?review=living      art-review mode: isolated in-memory save, starts in the living room, comparison bar
-//   &art=base|sample    which living-room asset set to build (review mode defaults to "sample")
+//   ?review=boslust     the same for the BOSLUST exterior sample (starts at the fork signpost)
+//   &art=base|sample    which living-room asset set to build (living review defaults to "sample")
+//   &ext=base|sample    which BOSLUST-approach asset set to build (boslust review defaults to "sample")
 //   &light=base|sample  interior lighting treatment (review mode defaults to "sample")
 //   &tm=aces|neutral    tone mapping (default "aces", exposure unchanged at 1.15)
 //
@@ -17,10 +19,11 @@ const q = typeof location !== 'undefined' ? new URLSearchParams(location.search)
 const pick = <T extends string>(v: string | null, ok: readonly T[], d: T): T => (ok as readonly string[]).includes(v ?? '') ? (v as T) : d;
 
 /** Art-review mode: isolated state (see state.ts `storage`), review bar, direct start in the room under review. */
-export const REVIEW: 'living' | null = q.get('review') === 'living' ? 'living' : null;
+export const REVIEW: 'living' | 'boslust' | null = pick(q.get('review'), ['living', 'boslust'] as const, '' as never) || null;
 
-export const ART: { set: ArtSet; light: LightSet; tm: ToneSet } = {
-  set: pick(q.get('art'), ['base', 'sample'] as const, REVIEW ? 'sample' : 'base'),
+export const ART: { set: ArtSet; ext: ArtSet; light: LightSet; tm: ToneSet } = {
+  set: pick(q.get('art'), ['base', 'sample'] as const, REVIEW === 'living' ? 'sample' : 'base'),
+  ext: pick(q.get('ext'), ['base', 'sample'] as const, REVIEW === 'boslust' ? 'sample' : 'base'),
   light: pick(q.get('light'), ['base', 'sample'] as const, REVIEW ? 'sample' : 'base'),
   tm: pick(q.get('tm'), ['aces', 'neutral'] as const, 'aces'),
 };

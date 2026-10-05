@@ -300,10 +300,13 @@ function contactTex() {
  * Static occlusion only: they never depend on a lamp being on. Each quad lies just above the surface below it.
  */
 export class ContactShadows {
-  private items: { x: number; y: number; z: number; sx: number; sz: number; yaw: number; k: number }[] = [];
-  /** Plan position, quad size (sx across, sz along heading `yaw`; ≈ footprint + 0.35 m), strength 0–1. */
-  add(x: number, y: number, z: number, sx: number, sz: number, yaw = 0, k = 0.55) {
-    this.items.push({ x, y, z, sx, sz, yaw, k });
+  private items: { x: number; y: number; z: number; sx: number; sz: number; yaw: number; k: number; n?: THREE.Vector3 }[] = [];
+  /**
+   * Plan position, quad size (sx across, sz along heading `yaw`; ≈ footprint + 0.35 m), strength 0–1, and an
+   * optional ground normal (three.js space) so the decal lies on sloping terrain instead of cutting into it.
+   */
+  add(x: number, y: number, z: number, sx: number, sz: number, yaw = 0, k = 0.55, n?: THREE.Vector3) {
+    this.items.push({ x, y, z, sx, sz, yaw, k, n });
   }
   build(scene: THREE.Scene, region: string, tint: THREE.ColorRepresentation = '#3a2618') {
     if (!this.items.length) return null;
@@ -329,6 +332,7 @@ export class ContactShadows {
     const q = new THREE.Quaternion(), s = new THREE.Vector3(), p = new THREE.Vector3(), mx = new THREE.Matrix4(), col = new THREE.Color();
     this.items.forEach((it, i) => {
       q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), -it.yaw);
+      if (it.n) q.premultiply(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), it.n));
       mx.compose(p.set(it.x, it.y, -it.z), q, s.set(it.sx, 1, it.sz));
       m.setMatrixAt(i, mx);
       m.setColorAt(i, col.setRGB(it.k, it.k, it.k));

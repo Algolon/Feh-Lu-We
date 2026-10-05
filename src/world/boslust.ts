@@ -19,6 +19,9 @@ import { addClue } from '../core/state';
 import { openCipherCover, plateRotations, turnPlate, pullPlateLever } from '../puzzles/rules';
 import { HILL_CUT, UG, UGCEIL, BF } from './layout';
 import { HUT, gridHeight, hillHeight } from './terrain';
+import { Batcher } from './kit';
+import { ART } from '../core/artflags';
+import { cutRocks, entranceV2 } from './boslustSample';
 
 const DOOR_X = 63, DOOR_Z = 18.2;
 
@@ -34,7 +37,10 @@ export function buildBoslust(w: World, g: GameApi, c: Ctx, u: Ctx, veg: Vegetati
 
 // ---------------------------------------------------------------------------------------------
 /** The flat cut in the hill's south face: dry-stone retaining walls that grow taller towards the door. */
-function cut(w: World, c: Ctx, veg: Vegetation) {
+function cut(w: World, c0: Ctx, veg: Vegetation) {
+  // art sample: the same colliders, but the stone-block visuals go to a batcher that is never built (rock instead)
+  const sample = ART.ext === 'sample';
+  const c: Ctx = sample ? { ...c0, b: new Batcher() } : c0;
   const k = c.k;
   const { x0, x1, z0, z1 } = HILL_CUT;
   for (const [xa, xb, xs] of [[x0 - 0.6, x0, x0 - 0.6], [x1, x1 + 0.6, x1 + 0.6]] as const) {
@@ -47,7 +53,8 @@ function cut(w: World, c: Ctx, veg: Vegetation) {
     }
   }
   // gravel floor of the cut and a few ferns along the wall feet
-  boxMM(c.b, k.M.dirt, '#bfae8a', x0, x1, -0.05, 0.02, z0, z1, { chunk: c.chunk, shadow: false });
+  boxMM(c0.b, k.M.dirt, sample ? '#958a76' : '#bfae8a', x0, x1, -0.05, 0.02, z0, z1, { chunk: c.chunk, shadow: false });
+  if (sample) cutRocks(c0);
   for (let z = z0 + 4.8; z < z1 - 0.5; z += 1.7) {
     veg.smallThing('fern', x0 + 0.35, z, 0.42, '#6a9a3e', 'forest');
     veg.smallThing('fern', x1 - 0.35, z + 0.8, 0.38, '#557f34', 'forest');
@@ -56,10 +63,14 @@ function cut(w: World, c: Ctx, veg: Vegetation) {
 
 // ---------------------------------------------------------------------------------------------
 /** Stone headwall with the door, the BOSLUST sign, the engraved inscription, the cipher lock and the hut. */
-function entrance(w: World, g: GameApi, c: Ctx, u: Ctx) {
+function entrance(w: World, g: GameApi, c0: Ctx, u: Ctx) {
+  // art sample: the headwall keeps its collider (wall() on a discarded batcher); its visuals come from entranceV2
+  const sample = ART.ext === 'sample';
+  const c: Ctx = sample ? { ...c0, b: new Batcher() } : c0;
   const k = c.k;
   const stone = { mat: k.M.stone, color: '#c2b8a0', uv: 2 };
   wall(c, 'x', DOOR_Z, 59.4, 66.6, 0, 3.6, { ...stone, t: 0.4, openings: [{ at: DOOR_X, w: 1.2, h: 2.3 }] });
+  if (sample) entranceV2(w, c0);
   boxMM(c.b, k.M.stone, '#d0c6ae', 59.3, 66.7, 3.6, 3.75, 17.95, 18.45, { chunk: c.chunk, uv: 1 });
   // timber frame + roots draping over the parapet
   for (const x of [61.95, 64.05]) box(c.b, k.M.wood, '#5a3a22', x, 0, 17.92, 0.22, 2.55, 0.18, { chunk: c.chunk, uv: 1 });
@@ -76,7 +87,7 @@ function entrance(w: World, g: GameApi, c: Ctx, u: Ctx) {
     x.strokeStyle = '#3a2614'; x.lineWidth = 8; x.strokeRect(4, 4, W - 8, H - 8);
     x.fillStyle = '#f2e2b8'; x.font = `bold ${Math.round(H * 0.62)}px Georgia`; x.textAlign = 'center'; x.textBaseline = 'middle';
     x.fillText('BOSLUST', W / 2, H / 2 + 4);
-  }, 512, '#3a2614');
+  }, 512, sample ? null : '#3a2614'); // sample: the oak board behind it is the frame
   // engraved stone tablet left of the door (the inscription)
   canvasPanel(w, 60.75, 1.55, 17.97, Math.PI, 1.1, 0.62, (x, W, H) => {
     x.fillStyle = '#b8ae96'; x.fillRect(0, 0, W, H);
@@ -85,7 +96,7 @@ function entrance(w: World, g: GameApi, c: Ctx, u: Ctx) {
     const [a, b2, cc, d] = CIPHER.cipher.split(' ');
     x.fillText(`${a} ${b2}`, W / 2, H * 0.42);
     x.fillText(`${cc} ${d}`, W / 2, H * 0.78);
-  }, 256, '#8a8270');
+  }, 256, sample ? null : '#8a8270'); // sample: a stone surround in the batch is the frame
   const tab = new THREE.Group();
   place(tab, 60.75, 1.2, 17.9, 0);
   w.scene.add(tab);

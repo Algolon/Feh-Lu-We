@@ -3,6 +3,7 @@
 import * as THREE from 'three';
 import type { World } from '../interactions/world';
 import { ART } from '../core/artflags';
+import { zoneWeight } from './boslustZone';
 
 const A = {
   zenith: new THREE.Color('#79a9d8'), horizon: new THREE.Color('#f7dcae'), sun: new THREE.Color('#fff0cf'),
@@ -12,6 +13,10 @@ const A = {
  * floor bounce below (instead of the outdoor earth colour) — a vertical gradient that models cushions and mouldings
  * without shadow maps — plus somewhat less flat fill and stronger fixture light (LightPool.gain, see Game.tick). */
 const IN = { sky: new THREE.Color('#e4ebf2'), bounce: new THREE.Color('#857160') };
+/** Art-refresh exterior treatment in the BOSLUST sample zone (opt-in: ART.light and ART.ext === 'sample'): a cooler,
+ * greener woodland haze that starts nearer (layered depth: warm foreground, cool distance), a slightly cooler sky
+ * fill and a warmer earth bounce, a touch more sun for a readable light direction. */
+const WOOD = { fog: new THREE.Color('#c4cfc0'), sky: new THREE.Color('#d0deeb'), earth: new THREE.Color('#6e5a3c'), sun: new THREE.Color('#fff0c8') };
 const D = {
   zenith: new THREE.Color('#4a5a92'), horizon: new THREE.Color('#f29a6a'), sun: new THREE.Color('#ffa868'),
   hemiSky: new THREE.Color('#b8b4cc'), hemiGround: new THREE.Color('#5a4a36'), fog: new THREE.Color('#c09a86'),
@@ -70,15 +75,18 @@ export function addEnvironment(w: World): Env {
     update(dusk, focus, indoor = 0) {
       const t = Math.min(1, Math.max(0, dusk));
       const k = ART.light === 'sample' ? Math.min(1, Math.max(0, indoor)) : 0;
+      const kw = ART.light === 'sample' && ART.ext === 'sample' ? zoneWeight(focus.x, -focus.z) * (1 - k) * (1 - t * 0.5) : 0;
       uni.uZenith.value.lerpColors(A.zenith, D.zenith, t);
       uni.uHorizon.value.lerpColors(A.horizon, D.horizon, t);
       uni.uSunCol.value.lerpColors(A.sun, D.sun, t);
-      sun.color.lerpColors(A.sun, D.sun, t);
-      sun.intensity = (2.4 - 1.0 * t) * (1 - 0.05 * k); // daylight through the windows keeps its share: direction
-      hemi.color.lerpColors(A.hemiSky, D.hemiSky, t).lerp(IN.sky, 0.6 * k);
-      hemi.groundColor.lerpColors(A.hemiGround, D.hemiGround, t).lerp(IN.bounce, 0.6 * k);
-      hemi.intensity = (1.6 - 0.4 * t) * (1 - 0.28 * k); // less flat fill indoors; top-lit vs warm bounce gradient models form
-      (w.scene.fog as THREE.Fog).color.lerpColors(A.fog, D.fog, t);
+      sun.color.lerpColors(A.sun, D.sun, t).lerp(WOOD.sun, 0.5 * kw);
+      sun.intensity = (2.4 - 1.0 * t) * (1 - 0.05 * k) * (1 + 0.08 * kw); // daylight through the windows keeps its share: direction
+      hemi.color.lerpColors(A.hemiSky, D.hemiSky, t).lerp(IN.sky, 0.6 * k).lerp(WOOD.sky, 0.4 * kw);
+      hemi.groundColor.lerpColors(A.hemiGround, D.hemiGround, t).lerp(IN.bounce, 0.6 * k).lerp(WOOD.earth, 0.5 * kw);
+      hemi.intensity = (1.6 - 0.4 * t) * (1 - 0.28 * k) * (1 - 0.1 * kw); // less flat fill indoors; top-lit vs warm bounce gradient models form
+      const fog = w.scene.fog as THREE.Fog;
+      fog.color.lerpColors(A.fog, D.fog, t).lerp(WOOD.fog, 0.55 * kw);
+      fog.near = 30 - 8 * kw; fog.far = 125 - 15 * kw;
       // sun sinks in the west-south-west
       const elev = THREE.MathUtils.degToRad(34 - 22 * t);
       const az = THREE.MathUtils.degToRad(245); // plan azimuth clockwise from north

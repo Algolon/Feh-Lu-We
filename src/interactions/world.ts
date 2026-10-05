@@ -148,6 +148,8 @@ export class World {
     while (p.parent && p.parent !== this.scene) p = p.parent;
     return this.culledRoots.has(p);
   }
+  /** Called after each culling pass with the camera position (art-sample LOD instancing). */
+  readonly cullHooks: ((eye: THREE.Vector3) => void)[] = [];
   updateCulling(eye: THREE.Vector3) {
     if (this.rooms) {
       this.hereRoom = this.rooms.roomAt(eye.x, eye.y - 0.8, -eye.z);
@@ -182,6 +184,7 @@ export class World {
         if (on) this.culledRoots.delete(c.root); else this.culledRoots.add(c.root);
       }
     }
+    for (const h of this.cullHooks) h(eye);
   }
 
   add(i: Interactable) {

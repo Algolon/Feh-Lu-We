@@ -921,8 +921,133 @@ async function artSample() {
   await c2.close();
 }
 
+// ------------------------------------------------------------------------------------------------
+// BOSLUST exterior sample (art step 3, ?ext=sample): same gameplay contract as the original approach.
+async function boslustSample() {
+  const { ctx, page } = await newPage();
+  const SAMPLE = 'ext=sample&light=sample';
+  const start = async (q, extra = {}) => {
+    await page.goto(BASE + '?autotest=1' + (q ? '&' + q : ''));
+    await page.evaluate((save) => localStorage.setItem('fehluwe.save', JSON.stringify(save)), {
+      version: 4, scene: 'estate', inventory: ESSENTIALS, flags: { leftHome: true }, unlocked: ['lock.door.front'], open: { 'door.front': true }, ...extra,
+    });
+    await page.reload();
+    await page.click('[data-cont]');
+    await page.waitForFunction(() => window.__game?.world?.id === 'estate');
+    await page.evaluate(helpers);
+  };
+  // colliders, interaction targets and light sources of the zone (fork → cut → entrance → stair), as plain data
+  const zoneContract = () => {
+    const g = T.G(), w = g.world;
+    const inZ = (x, z) => x > 38 && x < 88 && z > 0.6 && z < 48;
+    const r = (v) => Math.round(v * 100) / 100;
+    const cols = w.col.colliders.filter((c) => c.kind === 'circle' ? inZ(c.x, c.z) : inZ((c.minX + c.maxX) / 2, (c.minZ + c.maxZ) / 2))
+      .map((c) => c.kind === 'circle' ? `c ${r(c.x)} ${r(c.z)} ${r(c.r)} ${r(c.minY)} ${r(c.maxY)}` : `b ${r(c.minX)} ${r(c.maxX)} ${r(c.minZ)} ${r(c.maxZ)} ${r(c.minY)} ${r(c.maxY)} ${c.occludes ? 'o' : ''}`).sort();
+    const items = w.items.filter((it) => { const p = it.focus ?? it.obj.getWorldPosition(new it.obj.position.constructor()); return inZ(p.x, -p.z); }).map((it) => it.id).sort();
+    const lamps = w.lamps.filter((l) => inZ(l.pos.x, -l.pos.z)).map((l) => `${l.id} ${r(l.pos.x)} ${r(l.pos.y)} ${r(-l.pos.z)} ${l.intensity} ${l.distance}`).sort();
+    // the old forest OUTSIDE the zone (3 m margin: crowns of zone trees overhang its edge): every vegetation
+    // instance position and colour must be untouched by the sample
+    const out3 = (x, z) => x < 35 || x > 91 || z > 51;
+    const veg = []; const m = new w.scene.matrix.constructor(), v = new w.scene.position.constructor();
+    w.scene.traverse((o) => { if (o.isInstancedMesh && o.userData.veg) for (let i = 0; i < o.count; i++) { o.getMatrixAt(i, m); v.setFromMatrixPosition(m); if (out3(v.x, -v.z)) { const ca = o.instanceColor?.array; veg.push(`${o.userData.veg}:${r(v.x)},${r(v.y)},${r(-v.z)} ${ca ? r(ca[i * 3]) + ',' + r(ca[i * 3 + 1]) : ''}`); } } });
+    return { cols, items, lamps, veg: veg.sort() };
+  };
+  // the reticle from fixed poses: signpost, inscription, lock, door, sign-side
+  const aims = [[[53.6, 7.0], [54.4, 1.75, 7.9]], [[61.4, 16.4], [60.75, 1.6, 17.97]], [[64.4, 16.6], [64.85, 1.15, 17.94]], [[63, 16.8], [63, 1.2, 18.2]], [[57.5, 8.0], [54.3, 1.8, 7.8]]];
+  const aimAll = (list) => list.map(([[x, z], [tx, ty, tz]]) => { const g = T.G(); g.player.x = x; g.player.z = z; g.player.y = g.world.col.ground(x, z); T.lookAt(tx, ty, tz); return g.metrics().target; });
+  try {
+    await start('');
+    const base = await E(page, zoneContract);
+    const baseAims = await E(page, aimAll, aims);
+    await start(SAMPLE);
+    const smp = await E(page, zoneContract);
+    const smpAims = await E(page, aimAll, aims);
+    const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+    const diff = (a, b) => ({ base: a.filter((c) => !b.includes(c)).slice(0, 5), sample: b.filter((c) => !a.includes(c)).slice(0, 5) });
+    log('boslust sample: zone collision identical to the original (trees, stumps, cut walls, headwall, signpost, stair)', same(base.cols, smp.cols), `${smp.cols.length} colliders${same(base.cols, smp.cols) ? '' : ' DIFF ' + JSON.stringify(diff(base.cols, smp.cols))}`);
+    log('boslust sample: same interactables in the zone', same(base.items, smp.items), same(base.items, smp.items) ? `${smp.items.length}: ${smp.items.join(', ')}` : JSON.stringify(diff(base.items, smp.items)));
+    const added = smp.lamps.filter((l) => !base.lamps.includes(l)), removed = base.lamps.filter((l) => !smp.lamps.includes(l));
+    log('boslust sample: every original light kept; only the two fixed entrance lanterns added', !removed.length && added.length === 2 && added.every((l) => l.startsWith('fixed.boslust.')), JSON.stringify({ added, removed }));
+    log('boslust sample: the forest outside the zone is unchanged (all vegetation instances identical)', same(base.veg, smp.veg), `${smp.veg.length} instances${same(base.veg, smp.veg) ? '' : ' DIFF ' + JSON.stringify(diff(base.veg, smp.veg))}`);
+    log('boslust sample: reticle targets the same objects from the same poses', same(baseAims, smpAims) && smpAims.slice(0, 4).every(Boolean), JSON.stringify({ base: baseAims, sample: smpAims }));
+    // the whole entrance by real movement and the real panels: fork → cut → inscription → cover → 2413 → stair
+    await start(SAMPLE, { inventory: [...ESSENTIALS, 'cipherStrip'], flags: { leftHome: true, routeRestored: true }, clues: ['c.routeRestored', 'c.letterstrook'], player: { estate: { x: 70, y: 0, z: 9.4, yaw: -Math.PI / 2, pitch: 0 } } });
+    const seq = await E(page, () => {
+      const out = {};
+      T.walk([[57.5, 8.0]], true); T.act('inspect.fork', 'wegwijzer'); out.fork = T.G().state.clues.includes('c.fork'); T.closeModal();
+      T.walk([[59.5, 10.4], [63, 12.4], [63, 16.4]]);
+      T.act('inspect.boslust', 'gravure'); out.inscription = T.G().state.clues.includes('c.boslust'); T.closeModal();
+      T.walk([[64.4, 16.6]]); T.act('boslust.lock', 'Klepje'); out.cover = !!T.G().state.flags.boslustCover;
+      [2, 4, 1, 3].forEach((d, i) => { for (let k = 0; k < d; k++) document.querySelector(`[data-up="${i}"]`).click(); }); document.querySelector('[data-try]').click(); T.wait(1.5);
+      out.open = !!T.G().state.flags.boslustOpen;
+      const p = T.walk([[63, 17.4], [63, 19.4], [63, 25.6], [63, 30]]); out.under = p.y < -3.2;
+      return out;
+    });
+    log('boslust sample: fork clue, inscription, cover, cipher 2413, door and stair work by walking', Object.values(seq).every(Boolean), JSON.stringify(seq));
+    // save/restore at the approach and underground
+    const sv = await E(page, () => { T.G().saveNow(); return T.G().player.pose(); });
+    await page.reload(); await page.click('[data-cont]'); await page.waitForFunction(() => window.__game?.world?.id === 'estate'); await page.evaluate(helpers);
+    const back1 = await E(page, () => { const g = T.G(); T.tick(5); return { pose: g.player.pose(), open: !!g.state.flags.boslustOpen, trees: (() => { let n = 0; g.world.scene.traverse((o) => { if (o.userData.artTrees === true) n++; }); return n; })() }; });
+    await E(page, () => { const g = T.G(); g.player.x = 60.5; g.player.z = 9.6; g.player.y = 0; T.tick(5); g.saveNow(); });
+    await page.reload(); await page.click('[data-cont]'); await page.waitForFunction(() => window.__game?.world?.id === 'estate'); await page.evaluate(helpers);
+    const back2 = await E(page, () => T.G().player.pose());
+    log('boslust sample: save restores underground and on the approach (sample world rebuilt)', Math.abs(back1.pose.y - sv.y) < 0.2 && Math.abs(back1.pose.z - sv.z) < 0.3 && back1.open && back1.trees > 0 && Math.abs(back2.x - 60.5) < 0.3 && Math.abs(back2.z - 9.6) < 0.3, JSON.stringify({ sv, back1, back2 }));
+    // lighting and culling along the approach: entrance lanterns assigned from the cut mouth and the door; trees,
+    // understory and roots drawn; nothing in the zone hidden by room culling outdoors
+    const lc = await E(page, () => {
+      const g = T.G(), out = {};
+      for (const [name, x, z, tx, ty, tz] of [['fork', 51, 7.2, 63, 2, 16], ['cutMouth', 63, 10.2, 63, 1.8, 18.2], ['door', 63, 15.4, 63, 1.4, 18.2], ['reverse', 63, 16.4, 55, 1.4, 6]]) {
+        g.player.x = x; g.player.z = z; g.player.y = g.world.col.ground(x, z); T.lookAt(tx, ty, tz); T.tick(8);
+        g.renderer.render(g.world.scene, g.camera);
+        let near = 0, far = 0, under = 0; g.world.scene.traverse((o) => { if (!o.isInstancedMesh || !(o.layers.mask & 1) || !o.visible) return; if (o.userData.lod === 'near') near += o.count; else if (o.userData.lod === 'far') far += o.count; else if (o.userData.understory) under += o.count; });
+        out[name] = { lanterns: g.pool.assigned().filter((a) => a?.startsWith('fixed.boslust')).length, near, far, under };
+      }
+      return out;
+    });
+    log('boslust sample: entrance lanterns lit from the cut mouth and the door; trees and understory drawn at every pose', lc.cutMouth.lanterns === 2 && lc.door.lanterns === 2 && Object.values(lc).every((v) => v.near + v.far > 0) && lc.fork.under > 0, JSON.stringify(lc));
+    // reduced motion: fixed lanterns stay on at constant intensity, no errors
+    const rm = await E(page, () => { const g = T.G(); g.settings.reducedMotion = true; g.applyQuality(); g.player.x = 63; g.player.z = 15.4; T.tick(4); const a = g.pool.assigned().filter((x) => x?.startsWith('fixed.boslust')); const l = g.world.lamps.filter((x) => x.id.startsWith('fixed.boslust')); return { a: a.length, on: l.every((x) => x.on()), flicker: l.map((x) => x.flicker ?? 0) }; });
+    log('boslust sample: reduced motion keeps the entrance lanterns steady and lit', rm.a === 2 && rm.on && rm.flicker.every((f) => f === 0), JSON.stringify(rm));
+    if (page.problems.length) log('boslust sample: no console errors', false, page.problems.slice(0, 3).join(' | '));
+    else log('boslust sample: no console errors', true);
+  } catch (e) {
+    log('boslust sample checks', false, e.message.split('\n')[0]);
+  }
+  await ctx.close();
+  // review mode (?review=boslust): phone context, sandboxed state, start at the fork, ext toggle rebuilds
+  const { ctx: c2, page: p2 } = await newPage({ viewport: { width: 844, height: 390 }, deviceScaleFactor: 2, hasTouch: true, isMobile: true });
+  try {
+    await p2.goto(BASE);
+    const mine = JSON.stringify({ version: 4, scene: 'estate', inventory: ['invitation', 'shedKey'], flags: { leftHome: true }, player: { home: null, estate: { x: 90, y: 0, z: 3, yaw: 0, pitch: 0 } } });
+    await p2.evaluate((m) => { localStorage.clear(); localStorage.setItem('fehluwe.save', m); localStorage.setItem('fehluwe.save.prev', '{"version":3}'); localStorage.setItem('fehluwe.settings', '{"quality":"low"}'); }, mine);
+    const before = await p2.evaluate(() => JSON.stringify(Object.entries(localStorage).sort()));
+    await p2.goto(BASE + '?review=boslust&autotest=1');
+    await p2.tap('[data-review-start]');
+    await p2.waitForFunction(() => window.__game?.world?.id === 'estate', null, { timeout: 60000 });
+    await p2.evaluate(helpers);
+    const r1 = await p2.evaluate(() => { const g = window.__game; let trees = 0; g.world.scene.traverse((o) => { if (o.userData.artTrees === true) trees++; }); return { pose: g.player.pose(), trees, bar: !!document.getElementById('review-bar'), strip: g.state.inventory.includes('cipherStrip') }; });
+    await p2.tap('#review-bar button'); await p2.tap('#review-bar [data-k="art"]');
+    await p2.waitForFunction(() => !document.getElementById('review-bar').classList.contains('busy'), null, { timeout: 60000 });
+    const r2 = await p2.evaluate(() => { const g = window.__game; let trees = 0; g.world.scene.traverse((o) => { if (o.userData.artTrees === true) trees++; }); return { trees, pose: g.player.pose() }; });
+    await p2.tap('#review-bar [data-k="art"]');
+    await p2.waitForFunction(() => !document.getElementById('review-bar').classList.contains('busy'), null, { timeout: 60000 });
+    const r3 = await p2.evaluate(() => { const g = window.__game; T.walk([[57.5, 8.0], [59.5, 10.4], [63, 12.4], [64.4, 16.6]]); T.act('boslust.lock', 'Klepje'); const cover = !!g.state.flags.boslustCover; T.closeModal(); g.saveNow(); return { cover }; });
+    const after = await p2.evaluate(() => JSON.stringify(Object.entries(localStorage).sort()));
+    log('review=boslust: starts at the fork with the sample, bar toggles old/new at the same pose, temporary progress opens the cover', Math.abs(r1.pose.x - 53.2) < 0.2 && Math.abs(r1.pose.z - 6.8) < 0.2 && r1.trees > 0 && r1.bar && r1.strip && r2.trees === 0 && Math.abs(r2.pose.x - r1.pose.x) < 0.5 && r3.cover, JSON.stringify({ r1, r2, r3 }));
+    log('review=boslust: the player\'s own save, backup and settings are untouched (sandboxed state)', before === after, before === after ? '' : after);
+    await p2.goto(BASE + '?autotest=1');
+    await p2.waitForSelector('[data-cont]');
+    const plain = await p2.evaluate(() => ({ bar: !!document.getElementById('review-bar'), cont: !!document.querySelector('[data-cont]') }));
+    log('review=boslust: normal entry afterwards still offers "Verder spelen", no review bar', !plain.bar && plain.cont, JSON.stringify(plain));
+    if (p2.problems.length) log('review=boslust: no console errors', false, p2.problems.slice(0, 3).join(' | '));
+  } catch (e) {
+    log('review=boslust checks', false, e.message.split('\n')[0]);
+  }
+  await c2.close();
+}
+
 const only = process.env.E2E_ONLY?.split(',');
-const suites = { regressions, lighting, walkthrough, collisionChecks, saveChecks, touchChecks, webglFailure, metrics, artSample };
+const suites = { regressions, lighting, walkthrough, collisionChecks, saveChecks, touchChecks, webglFailure, metrics, artSample, boslustSample };
 for (const [name, fn] of Object.entries(suites)) if (!only || only.includes(name)) await fn();
 
 const failed = results.filter((r) => !r.ok);

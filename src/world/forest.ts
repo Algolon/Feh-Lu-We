@@ -16,6 +16,8 @@ import { has } from '../core/state';
 import { ITEMS } from '../content/items';
 import { ESTATE, SITES, DRIVEWAY, CLEARINGS, SHED, HILL } from './layout';
 import { FOREST_PATHS, terrainHeight } from './terrain';
+import { ART } from '../core/artflags';
+import { inZone, buildWoodland, signpostV2, stumpsV2, type ZoneTree } from './boslustSample';
 
 export function forestTreeOk(x: number, z: number) {
   if (z > ESTATE.forestEdge - 0.8 || z < 1.8) return false;
@@ -27,11 +29,19 @@ export function forestTreeOk(x: number, z: number) {
   return true;
 }
 
+/** The tree positions (the forest scatter is the first consumer of its random stream, so this repeats it exactly). */
+export function forestTreePoints() {
+  return scatter(mulberry32(42), 1.2, ESTATE.w - 1.2, 1.2, ESTATE.forestEdge, 4.0, 14000, forestTreeOk);
+}
+
 export function buildForest(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
   const k = c.k;
   const r = mulberry32(42);
   // trees: Poisson-disc spacing ≥ 4.0 m keeps ≥ 2 m gaps between trunks — never a sealed wall
   const pts = scatter(r, 1.2, ESTATE.w - 1.2, 1.2, ESTATE.forestEdge, 4.0, 14000, forestTreeOk);
+  // art sample: trees in the BOSLUST zone keep their position and collision but get the new models (the
+  // Vegetation drop filter set by estate.ts discards their old visuals without changing the random sequence)
+  const zoneTrees: ZoneTree[] = [], zoneStumps: { x: number; z: number; y: number; s: number }[] = [];
   for (const [x, z] of pts) {
     const roll = r();
     const onHill = Math.hypot(x - HILL.x, z - HILL.z) < HILL.r;
@@ -39,7 +49,9 @@ export function buildForest(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
     const h = kind === 'pine' ? 6 + r() * 3 : 3.2 + r() * 2.6;
     const rad = kind === 'pine' ? 1.5 + r() * 0.6 : 1.7 + r() * 1.1;
     const y = terrainHeight(x, z);
-    veg.tree({ x, z, h, r: rad, kind, hue: r() - 0.5, y }, `f${Math.floor(x / 45)}_${Math.floor(z / 36)}`);
+    const spec = { x, z, h, r: rad, kind, hue: r() - 0.5, y } as const;
+    veg.tree(spec, `f${Math.floor(x / 45)}_${Math.floor(z / 36)}`);
+    if (ART.ext === 'sample' && inZone(x, z)) zoneTrees.push(spec);
     w.col.addCircle(x, z, kind === 'birch' ? 0.22 : 0.34, y - 0.5, y + 6);
   }
   // undergrowth (no collision): ferns, shrubs, rocks, flowers
@@ -64,6 +76,7 @@ export function buildForest(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
   for (const [x, z] of scatter(r, 3, ESTATE.w - 3, 3, ESTATE.forestEdge - 2, 11, 1200, forestTreeOk)) {
     const y = terrainHeight(x, z), sc = 0.25 + r() * 0.2;
     veg.smallThing('stump', x, z, sc, '#8a6a4a', `f${Math.floor(x / 45)}_${Math.floor(z / 36)}`, y);
+    if (ART.ext === 'sample' && inZone(x, z)) zoneStumps.push({ x, z, y, s: sc });
     w.col.addCircle(x, z, sc, y - 0.2, y + sc * 0.9);
     if (r() < 0.5) veg.mushrooms(x + sc + 0.15, z, y, `f${Math.floor(x / 45)}_${Math.floor(z / 36)}`, 2);
   }
@@ -81,7 +94,11 @@ export function buildForest(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
   buildFireClearing(w, g, c);
   buildWell(w, g, c);
   buildSideGate(w, g, c);
-  buildFork(w, g, c);
+  if (ART.ext === 'sample') {
+    buildWoodland(w, c, zoneTrees);
+    stumpsV2(c, zoneStumps);
+    signpostV2(w, g, c);
+  } else buildFork(w, g, c);
 
   // forest lanterns along the paths for orientation at dusk (every ~30 m, just off the path)
   let li = 0;

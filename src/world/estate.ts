@@ -13,9 +13,11 @@ import { Vegetation, scatter, distToPolyline, smooth } from './nature';
 import { buildManor } from './manor';
 import { buildConservatory } from './conservatory';
 import { buildCottage } from './cottage';
-import { buildForest } from './forest';
+import { buildForest, forestTreePoints } from './forest';
 import { buildBoslust } from './boslust';
 import { addEnvironment } from './env';
+import { ART } from '../core/artflags';
+import { inZone, zoneGround, zonePathWidth, zonePathTint, finishZone } from './boslustSample';
 import { makeLamp, makeAction, makeDoor, makePickup, makeInspect, place } from '../interactions/props';
 import { pressLantern } from '../puzzles/rules';
 import { addClue } from '../core/state';
@@ -58,8 +60,12 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   buildManor(w, g, manorC, manorIn, manorB);
   buildConservatory(w, g, consC);
   buildCottage(w, g, cotC);
+  // art sample (?ext=sample): old visuals in the BOSLUST zone are generated but discarded
+  if (ART.ext === 'sample') veg.drop = (x, z) => inZone(x, z); // zone stumps are rebuilt by stumpsV2 (same colliders)
   buildForest(w, g, forestC, veg);
   buildBoslust(w, g, forestC, ugC, veg);
+  veg.drop = null;
+  if (ART.ext === 'sample') finishZone(w);
   buildGarden(w, g, gardenC, veg);
 
   for (const c of [ground, manorC, manorIn, manorB, consC, cotC, forestC, gardenC, ugC]) c.b.build(w.scene);
@@ -111,6 +117,7 @@ function buildGround(w: World) {
   const { NX, NZ } = TERRAIN_DIMS;
   const n = (NX + 1) * (NZ + 1);
   const pos = new Float32Array(n * 3), uv = new Float32Array(n * 2), col = new Float32Array(n * 3);
+  const zoneTreePts = ART.ext === 'sample' ? forestTreePoints().filter(([x, z]) => inZone(x, z)) : null;
   const forest = new THREE.Color('#6f8c43'), lawn = new THREE.Color('#9cc05e'), moss = new THREE.Color('#5d7a38'), dirt = new THREE.Color('#9a8456'), hillC = new THREE.Color('#7f9a4a');
   const c = new THREE.Color();
   for (let j = 0; j <= NZ; j++) for (let i = 0; i <= NX; i++) {
@@ -124,6 +131,7 @@ function buildGround(w: World) {
     let dp = Infinity;
     for (const p of FOREST_PATHS) dp = Math.min(dp, distToPolyline(x, z, p));
     if (dp < 3) c.lerp(dirt, (1 - dp / 3) * 0.35);
+    if (zoneTreePts) zoneGround(x, z, c, zoneTreePts);
     col.set([c.r, c.g, c.b], vi * 3);
   }
   const idx: number[] = [];
@@ -151,7 +159,7 @@ function buildGround(w: World) {
     for (let j = 0; j <= N; j++) for (let i = 0; i <= N; i++) {
       const x = x0 + i * S, z = z0 + j * S, h = entranceMound(x, z);
       mp.push(x, h, -z); mu.push(x / 5, z / 5);
-      c.copy(hillC).lerp(moss, 0.35 + 0.3 * Math.sin(i * 1.7 + j)); mc.push(c.r, c.g, c.b);
+      c.copy(hillC).lerp(moss, 0.35 + 0.3 * Math.sin(i * 1.7 + j)); if (zoneTreePts) zoneGround(x, z, c, zoneTreePts); mc.push(c.r, c.g, c.b);
     }
     for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) { const a = j * (N + 1) + i; mi.push(a, a + 1, a + N + 2, a, a + N + 2, a + N + 1); }
     const mg = new THREE.BufferGeometry();
@@ -190,7 +198,7 @@ function buildGround(w: World) {
 }
 
 /** Path ribbon draped on the terrain (densified along the line, three vertices across). */
-function drape(pts: readonly (readonly [number, number])[], width: number, lift = 0.035): THREE.BufferGeometry {
+function drape(pts: readonly (readonly [number, number])[], width: number, lift = 0.035, widthAt?: (x: number, z: number, d: number) => number): THREE.BufferGeometry {
   const dense: [number, number][] = [];
   for (let i = 0; i < pts.length - 1; i++) {
     const [ax, az] = pts[i], [bx, bz] = pts[i + 1];
@@ -207,7 +215,9 @@ function drape(pts: readonly (readonly [number, number])[], width: number, lift 
     dx /= len; dz /= len;
     if (i > 0) dist += Math.hypot(p[0] - dense[i - 1][0], p[1] - dense[i - 1][1]);
     for (let s = -1; s <= 1; s++) {
-      const x = p[0] - dz * s * width / 2, z = p[1] + dx * s * width / 2;
+      // optional per-side width (art sample: irregular, wandering edges inside the BOSLUST zone)
+      const wd = widthAt ? widthAt(p[0], p[1], dist + s * 7.3) : width;
+      const x = p[0] - dz * s * wd / 2, z = p[1] + dx * s * wd / 2;
       pos.push(x, terrainHeight(x, z) + lift, -z);
       uv.push(((s + 1) / 2) * width / 3, dist / 3);
       col.push(1, 1, 1);
@@ -238,7 +248,8 @@ function buildPaths(w: World, c: Ctx) {
     gg.dispose();
   };
   add(smooth(DRIVEWAY, 2), 4.2, '#d8c3a0');
-  for (const p of FOREST_PATHS) add(p, 1.9, '#c8ad80');
+  if (ART.ext === 'sample') for (const p of FOREST_PATHS) { const gg = zonePathTint(drape(p, 1.9, 0.035, zonePathWidth)); c.b.add(k.M.dirt, gg, new THREE.Matrix4(), '#c8ad80', 'paths', false, 0); gg.dispose(); }
+  else for (const p of FOREST_PATHS) add(p, 1.9, '#c8ad80');
   add(smooth(GARDEN_PATH, 2), 1.5, '#e2d2b0');
   add(smooth([[90, 117], [90, 124.2]], 1), 1.6, '#e2d2b0'); // terrace → lantern circle
   add(smooth([[102, 113.5], [114, 113.5], [126, 113.8], [133, 108], [134, 104.5]], 2), 1.5, '#e2d2b0'); // terrace → cons + sauna

@@ -33,6 +33,11 @@ export class Vegetation {
   private cones: { m: THREE.Matrix4; c: THREE.Color; chunk: string }[] = [];
   private small: { m: THREE.Matrix4; c: THREE.Color; chunk: string; kind: 'fern' | 'shrub' | 'flower' | 'rock' | 'cap' | 'stem' | 'stump' | 'grass' }[] = [];
   private r: Rng;
+  /**
+   * Art sample: entries for which this returns true are generated (so the random sequence, and with it every
+   * other tree and plant, stays exactly as in the base build) but not kept. Used while the BOSLUST zone is built.
+   */
+  drop: ((x: number, z: number, kind: string) => boolean) | null = null;
   constructor(seed = 5) {
     this.r = mulberry32(seed);
   }
@@ -44,6 +49,12 @@ export class Vegetation {
   }
 
   tree(t: TreeSpec, chunk: string) {
+    const n0 = [this.trunks.length, this.crowns.length, this.cones.length];
+    this.treeParts(t, chunk);
+    if (this.drop?.(t.x, t.z, t.kind ?? 'oak')) { this.trunks.length = n0[0]; this.crowns.length = n0[1]; this.cones.length = n0[2]; }
+  }
+
+  private treeParts(t: TreeSpec, chunk: string) {
     const r = this.r;
     const y0 = (t.y ?? 0) - 0.15; // sink the trunk a little so it never floats on a slope
     if (t.kind === 'cypress') {
@@ -74,6 +85,12 @@ export class Vegetation {
   }
 
   smallThing(kind: 'fern' | 'shrub' | 'flower' | 'rock' | 'cap' | 'stem' | 'stump' | 'grass', x: number, z: number, s: number, color: THREE.ColorRepresentation, chunk: string, yOff = 0) {
+    const n0 = this.small.length;
+    this.smallPart(kind, x, z, s, color, chunk, yOff);
+    if (this.drop?.(x, z, kind)) this.small.length = n0;
+  }
+
+  private smallPart(kind: 'fern' | 'shrub' | 'flower' | 'rock' | 'cap' | 'stem' | 'stump' | 'grass', x: number, z: number, s: number, color: THREE.ColorRepresentation, chunk: string, yOff = 0) {
     const r = this.r;
     if (kind === 'cap' || kind === 'stem' || kind === 'stump' || kind === 'grass') {
       // these geometries stand on their own base (y = 0 at the ground)

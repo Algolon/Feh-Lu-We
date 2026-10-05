@@ -3,7 +3,7 @@
 //
 // Usage: node scripts/art-capture.mjs <outDir> "<query>" [set] [baseUrl]
 //   query  extra URL parameters, e.g. "art=sample&light=sample&tm=aces"  ("" = baseline)
-//   set    living (default) | quick
+//   set    living (default) | quick | boslust
 // Passes per pose: <name>.jpg (game), -neutral.jpg (material behaviour: no fog, white sky/sun, exposure 1,
 // fixtures unchanged), -clay.jpg (shape only: one matte grey material, NO textures, vertex/instance colours,
 // emissive glows, flames, light pools, contact decals or point lights — white sky/sun only).
@@ -40,6 +40,24 @@ const SETS = {
     ['26-window-near', { x: 74.4, z: 91.6 }, [72.4, 1.6, 90.5]],
     ['27-table-near', { x: 78.0, z: 84.5 }, [77.3, 0.3, 86.7]],
     ['28-sofa-front', { x: 75.2, z: 86.2 }, [79.0, 0.5, 86.7]],
+  ],
+  // BOSLUST approach (step 3). 11/13/14/15 are the step-1 baseline poses, unchanged.
+  boslust: [
+    ['11-southern-loop', { x: 40, z: 9.3 }, [55.5, 1.4, 8.6]],
+    ['13-boslust-fork', { x: 51.0, z: 7.2 }, [63.0, 2.0, 16.0]],
+    ['14-boslust-cut', { x: 63, z: 10.2 }, [63, 1.8, 18.2]],
+    ['15-boslust-door-near', { x: 63, z: 15.4 }, [63, 1.4, 18.2]],
+    ['30-approach-mid', { x: 58.6, z: 9.6 }, [63.2, 1.8, 18.0]],
+    ['31-reverse-from-door', { x: 63, z: 16.4 }, [55.0, 1.4, 6.0]],
+    ['32-side-busy', { x: 70.5, z: 8.6 }, [61.5, 1.6, 16.5]],
+    ['33-oak-roots-near', { x: 57.0, z: 10.0 }, [55.83, 0.5, 11.65]],
+    ['34-oak-canopy-below', { x: 56.4, z: 11.0 }, [55.8, 7.0, 12.2]],
+    ['35-oak-side', { x: 50.5, z: 7.6 }, [55.8, 3.2, 11.65]],
+    ['36-pine-silhouette', { x: 60.5, z: 9.0 }, [69.2, 5.5, 16.1]],
+    ['37-rocks-near', { x: 61.6, z: 12.0 }, [59.7, 0.7, 13.8]],
+    ['38-fern-verge-near', { x: 57.4, z: 8.8 }, [56.4, 0.15, 10.6]],
+    ['39-door-oblique', { x: 61.0, z: 15.6 }, [63.6, 1.6, 18.2]],
+    ['40-signpost-near', { x: 52.6, z: 6.4 }, [54.3, 1.7, 7.8]],
   ],
   quick: [
     ['01-hearth-wide', { x: 80.6, z: 84.4 }, [72.6, 1.2, 86.9]],
