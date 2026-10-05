@@ -62,6 +62,20 @@ Evidence labels used below:
 
 ---
 
+## Step-3 notes (learned building the BOSLUST exterior sample; see [`EXTERIOR_SAMPLE.md`](EXTERIOR_SAMPLE.md))
+
+1. **Terrain colour is texture × vertex colour.** The grass texture is strongly green, so any forest-floor tint must
+   be authored as *target albedo ÷ texture mean*, or it disappears. That is why the baseline floor reads as lawn.
+2. **No DoubleSide for thin foliage.** three.js flips the normal on back faces, so half of each grass clump or fern
+   shades as if it faced the ground (black blades). Duplicate the triangles with shared up-biased normals instead.
+3. **Canopy undersides need upward-biased normals.** Vertex-colour occlusion alone cannot lift a face that receives
+   no light; undersides otherwise go near-black from below.
+4. **Silhouette over tessellation for trees.** Several major masses, each with smaller clumps on its outer side,
+   read as broadleaf; one mass per crown reads as a ball or a pillow. Keep both LODs on the same layout so the
+   switch does not pop.
+5. **Instancing must cull per instance.** An InstancedMesh is drawn whole if any part is in view; the sample culls
+   tree and understory instances against the camera every frame.
+
 ## 0. Recommendation in brief
 
 1. **Direction: a crafted European woodland manor.** A Veluwe country house and its woods, built like a

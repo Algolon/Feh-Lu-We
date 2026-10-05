@@ -2,6 +2,23 @@
 
 Last updated: 2026-10-05. Branch: `ccr-75ef4113-kfkimm` (the repository was empty before this work).
 
+## Art refresh, step 3 (5 Oct 2026) — BOSLUST exterior sample (proposed, not approved)
+
+The approach from the fork signpost through the hillside cut to the BOSLUST door is rebuilt in a bounded zone
+(plan X 38–88, Z 0.6–48). It adds a broadleaf oak (two variants), a Scots pine, rocks, understory, a rock-walled
+cut, an embedded rubble entrance with an oak frame and lanterns, a jointed signpost, a forest floor and the path
+verge.
+- **Opt-in only:** `?review=boslust` (sandboxed review mode, starts at the fork, comparison bar) or
+  `?ext=sample&light=sample`.
+- **Normal game unchanged:** pixel-identical captures and identical metrics at the step-1 BOSLUST poses.
+- **Gameplay contract tested identical:** colliders, interactables and lights in the zone; vegetation outside it;
+  the full entrance sequence by walking.
+- **Cost:** door view 151 draw calls (baseline 154). Triangles ~300 k in the busiest views, above the 250 k
+  guide. Not measured on a phone.
+- **Details, evidence and self-critique:**
+  [`art-refresh/EXTERIOR_SAMPLE.md`](art-refresh/EXTERIOR_SAMPLE.md).
+- **Not started:** estate-wide propagation. It waits for the owner's review of both samples.
+
 ## Art refresh, step 2 (5 Oct 2026) — interior sample (proposed, not approved)
 
 The living-room hearth corner is rebuilt with a small art kit.
@@ -9,7 +26,7 @@ The living-room hearth corner is rebuilt with a small art kit.
 - **Normal game unchanged:** without parameters it builds the original room (identical metrics and pixels at the
   baseline poses).
 - **Details:** [`art-refresh/INTERIOR_SAMPLE.md`](art-refresh/INTERIOR_SAMPLE.md).
-- **Not started:** the exterior sample and any estate-wide rollout. Both wait for the owner's review.
+- **Not started (at step 2):** the exterior sample (now step 3, above) and any estate-wide rollout.
 
 ## Art refresh, step 1 (5 Oct 2026) — target, baseline, review gate (no game changes)
 
