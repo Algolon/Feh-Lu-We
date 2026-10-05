@@ -9,6 +9,8 @@ import { makeFire } from './fire';
 import { makeInspect, makeAction, place, lightableItemLabel } from '../interactions/props';
 import { MANTEL, mantelSlots } from '../content/canon';
 import { has } from '../core/state';
+import { hearthV2, mantelV2, embers } from './livingSample';
+import type { ContactShadows } from './artkit';
 
 export interface HearthOpts {
   id: string; // lit-state id, e.g. 'fire.living'
@@ -19,6 +21,9 @@ export interface HearthOpts {
   mantel?: boolean; // place the canonical mantel objects
   defaultLit?: boolean;
   name?: string;
+  /** Art-refresh sample: 'v2' builds the new surround/mantel (batched into the room) instead of the original. */
+  style?: 'v2';
+  shadows?: ContactShadows;
 }
 
 /** Local frame: lx = distance from the wall into the room, lz = along the wall (+lz = viewer's right). */
@@ -34,6 +39,8 @@ export function buildHearth(w: World, g: GameApi, c: Ctx, o: HearthOpts) {
   const yaw = o.facing - Math.PI / 2;
   const Y = o.y;
   // surround + firebox in a local compound placed at the wall point (rotated as one piece)
+  if (o.style === 'v2') hearthV2(c, o.shadows!, o, o.ceil);
+  else {
   const body = compound((b: Batcher) => {
     const B = (x0: number, x1: number, y0: number, y1: number, z0: number, z1: number, mat: THREE.Material, col: string, uv = 1.2) =>
       box(b, mat, col, (x0 + x1) / 2, y0, (z0 + z1) / 2, x1 - x0, y1 - y0, z1 - z0, { uv });
@@ -57,6 +64,7 @@ export function buildHearth(w: World, g: GameApi, c: Ctx, o: HearthOpts) {
   place(body, o.x, Y, o.z, yaw);
   body.userData.noCull = true; // large static piece; the room chunk decides its visibility
   w.scene.add(body);
+  }
   // collision for the whole fireplace footprint (rotated rectangle → AABB of its corners)
   const corners = [P(0, -1.75), P(0.8, -1.75), P(0, 1.75), P(0.8, 1.75)];
   c.col.addBox(Math.min(...corners.map((p) => p.x)), Math.max(...corners.map((p) => p.x)), Math.min(...corners.map((p) => p.z)), Math.max(...corners.map((p) => p.z)), Y - 0.2, Y + 1.32, { occludes: false });
@@ -68,8 +76,14 @@ export function buildHearth(w: World, g: GameApi, c: Ctx, o: HearthOpts) {
   const lp = P(0.95, 0);
   w.lamps.push({ id: o.id, pos: v3(lp.x, Y + 0.6, lp.z), color: '#ff9a4a', intensity: 7, distance: 8, on: lit, flicker: 0.3 });
   w.emitters.push({ kind: 'fire', pos: v3(fp.x, Y + 0.5, fp.z), on: lit });
-  const pp = P(1.25, 0);
-  w.patches.add(pp.x, Y + 0.03, pp.z, 1.7, '#ff8a3a', lit, 0.5);
+  if (o.style === 'v2') {
+    embers(fire, w);
+    const pp = P(1.15, 0); // softer, wider pool spread along the hearth
+    w.patches.add(pp.x, Y + 0.03, pp.z, 1.45, '#ff8a3a', lit, 0.34, { soft: true, aspect: 1.35, yaw: o.facing });
+  } else {
+    const pp = P(1.25, 0);
+    w.patches.add(pp.x, Y + 0.03, pp.z, 1.7, '#ff8a3a', lit, 0.5);
+  }
   w.onSync(() => { fire.visible = lit(); });
   const fireHit = new THREE.Group();
   const hp = P(0.4, 0);
@@ -91,7 +105,7 @@ export function buildHearth(w: World, g: GameApi, c: Ctx, o: HearthOpts) {
     },
   });
 
-  if (o.mantel) buildMantel(w, g, o);
+  if (o.mantel) buildMantel(w, g, o, c);
   return { lit };
 }
 
@@ -135,7 +149,7 @@ function latheGeo(profile: [number, number][], seg = 14) {
  * objects stand on identical brass stands; the others have clearly different bases (tin dish, wooden
  * plinth, lace doily). All static: one compound, so the row costs two draw calls.
  */
-function buildMantel(w: World, g: GameApi, o: HearthOpts) {
+function buildMantel(w: World, g: GameApi, o: HearthOpts, c: Ctx) {
   const k = getKit();
   const P = frame(o);
   const top = o.y + 1.33;
@@ -143,6 +157,8 @@ function buildMantel(w: World, g: GameApi, o: HearthOpts) {
   const slots = mantelSlots(centre.x, centre.z, o.facing, 0.56);
   const face = o.facing; // objects show their front to the room
   const S = 1.45; // shown larger than life so silhouettes read from the room
+  if (o.style === 'v2') mantelV2(c, o, centre);
+  else {
   const grp = compound((b) => {
     MANTEL.forEach((m, i) => {
       const { x, z } = slots[i];
@@ -227,6 +243,7 @@ function buildMantel(w: World, g: GameApi, o: HearthOpts) {
   });
   grp.userData.noCull = true;
   w.scene.add(grp);
+  }
   // brass reading-direction plaque on the shelf edge (a visual anchor for "left → right")
   const cv = document.createElement('canvas'); cv.width = 512; cv.height = 64;
   const x = cv.getContext('2d')!;
@@ -235,8 +252,8 @@ function buildMantel(w: World, g: GameApi, o: HearthOpts) {
   x.fillStyle = '#3a2a1a'; x.font = 'bold 34px Georgia'; x.textAlign = 'center'; x.fillText('links  ⟶  rechts', 256, 44);
   const tex = w.texture(new THREE.CanvasTexture(cv)); tex.colorSpace = THREE.SRGBColorSpace;
   const pl = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.075), w.material(new THREE.MeshLambertMaterial({ map: tex })));
-  const pp = P(0.785, 0);
-  pl.position.copy(v3(pp.x, o.y + 1.29, pp.z));
+  const pp = P(o.style === 'v2' ? 0.808 : 0.785, 0); // v2: on the shelf's flat fascia
+  pl.position.copy(v3(pp.x, o.y + (o.style === 'v2' ? 1.262 : 1.29), pp.z));
   pl.rotation.y = Math.PI - o.facing; // plane normal points into the room
   w.scene.add(pl);
   // one inspect target over the whole shelf

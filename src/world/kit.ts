@@ -72,6 +72,8 @@ export class Batcher {
   add(mat: THREE.Material, geo: THREE.BufferGeometry, m: THREE.Matrix4, color: THREE.ColorRepresentation, chunk = 'main', shadow = true, jitter = 0.04) {
     let g = geo.index ? geo.toNonIndexed() : geo.clone();
     g.applyMatrix4(m);
+    // opt-in (art kit): geometry flagged keepColor brings authored vertex colours (baked shading), multiplied by the tint
+    const authored = geo.userData.keepColor && g.attributes.color ? Float32Array.from((g.attributes.color as THREE.BufferAttribute).array) : null;
     for (const name of Object.keys(g.attributes)) if (!['position', 'normal', 'uv'].includes(name)) g.deleteAttribute(name);
     if (!g.attributes.uv) g.setAttribute('uv', new THREE.Float32BufferAttribute(new Float32Array(g.attributes.position.count * 2), 2));
     if (!g.attributes.normal) g.computeVertexNormals();
@@ -82,6 +84,7 @@ export class Batcher {
     const n = g.attributes.position.count;
     const col = new Float32Array(n * 3);
     for (let i = 0; i < n; i++) { col[i * 3] = tmpColor.r * k; col[i * 3 + 1] = tmpColor.g * k; col[i * 3 + 2] = tmpColor.b * k; }
+    if (authored) for (let i = 0; i < n * 3; i++) col[i] *= authored[i];
     g.setAttribute('color', new THREE.BufferAttribute(col, 3));
     const key = `${mat.uuid}|${chunk}|${shadow}`;
     let grp = this.groups.get(key);

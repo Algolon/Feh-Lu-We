@@ -1,5 +1,6 @@
 // Game orchestrator: renderer + loop, input → player, interaction picking, save/restore, scenes, UI glue.
 import * as THREE from 'three';
+import { ART } from './artflags';
 import {
   type GameState, type Settings, type SceneId, type PlayerPose, SAVE_KEY, SETTINGS_KEY, BACKUP_KEY, defaultState, parseSave, parseSettings, storage, addClue, has, flag, logEvent,
 } from './state';
@@ -66,6 +67,7 @@ export class Game implements GameApi {
   private fpsAcc = { t: 0, fps: 0 };
   private debugEl: HTMLDivElement | null = null;
   private dusk = 0;
+  private indoor = 0;
   autopilot: { x: number; z: number; run: boolean } | null = null;
   contextLost = false;
   private started = false;
@@ -75,7 +77,7 @@ export class Game implements GameApi {
     this.settings = parseSettings(storage.get(SETTINGS_KEY), coarse);
     this.state = parseSave(storage.get(SAVE_KEY)) ?? defaultState();
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: this.settings.quality === 'high', powerPreference: 'high-performance' });
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    this.renderer.toneMapping = ART.tm === 'neutral' ? THREE.NeutralToneMapping : THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.15;
     this.renderer.shadowMap.type = THREE.PCFShadowMap;
     // Context loss: pause rendering + input, save, offer recovery; resume automatically if the context returns.
@@ -206,6 +208,8 @@ export class Game implements GameApi {
     world.setupCulling();
     this.cullTimer = 0;
     this.restorePose(world, this.state.player[id]);
+    // art lighting: start fully indoors/outdoors (smoothing is only for walking through a doorway)
+    this.indoor = world.rooms && world.rooms.roomAt(this.player.x, this.player.y + 0.8, this.player.z) !== 'out' ? 1 : 0;
     this.applyQuality();
     this.updateHud();
     // compile shaders up-front to avoid hitches on first view
@@ -640,7 +644,10 @@ export class Game implements GameApi {
     tickFires(this.time, this.settings.reducedMotion);
     const targetDusk = Math.min(1, (solvedCount(this.state) / REQUIRED_COUNT) * 0.85 + (this.state.finished ? 0.15 : 0));
     this.dusk += (targetDusk - this.dusk) * Math.min(1, dt * 0.3);
-    this.extras.env?.update(this.dusk, this.camera.position);
+    // art-refresh lighting comparison (opt-in): indoor factor for the environment, gain for fixture light
+    this.indoor += ((w.hereRoom !== 'out' ? 1 : 0) - this.indoor) * Math.min(1, dt * 2.5);
+    if (this.pool) this.pool.gain = ART.light === 'sample' ? 1 + 0.35 * this.indoor : 1;
+    this.extras.env?.update(this.dusk, this.camera.position, this.indoor);
     this.audio.dusk = this.dusk;
     this.torch.intensity = this.state.lit.torch ? 30 : 0;
     // pick reticle target

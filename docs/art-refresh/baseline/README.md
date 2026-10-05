@@ -77,7 +77,7 @@ Observed directly in the captures above. Interpretation and proposals are in [`.
   clearly at 2.8 m (good for the puzzle), but the frame is three planks.
 - **Colour (sampled pixels).** Greens lose almost all blue on screen: the lawn displays around `#508d10`, hill
   grass and crowns near `#222207`–`#285901`. Source check: surfaces multiply a coloured texture by a coloured vertex
-  tint (lawn: grass texture base `#8fb35a` × vertex colour `#9cc05e` ≈ `#578621` *before* lighting), so saturation
-  is effectively squared; strong fill light and ACES tone mapping at exposure 1.15 then push foliage toward acid green
+  tint (lawn: grass texture base `#8fb35a` × vertex colour `#9cc05e` ≈ `#578621` *before* lighting), which compounds
+  saturation when both are saturated in the same hue (step-2 correction: not literally "squared"); strong fill light and ACES tone mapping at exposure 1.15 then push foliage toward acid green
   in light and near-black olive in shade. The authored hex values in `ART_DIRECTION.md` are therefore not what the
   player sees, and the woods read as uniformly vivid green.

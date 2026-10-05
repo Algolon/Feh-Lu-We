@@ -253,6 +253,8 @@ export class LightPool {
     }
   }
   private roomCache = new Map<LampSource, string>();
+  /** Global multiplier for fixture light (art-refresh lighting comparison; 1 = original behaviour). */
+  gain = 1;
   update(dt: number, t: number, lamps: LampSource[], eye: THREE.Vector3, rooms?: RoomGraph, isOpen: (door: string) => boolean = () => true) {
     this.timer -= dt;
     if (this.timer <= 0) {
@@ -291,7 +293,7 @@ export class LightPool {
       }
       if (!cur || !cur.on()) { l.intensity = Math.max(0, l.intensity - dt * 20); continue; }
       const f = cur.flicker && !this.reducedMotion ? 1 - cur.flicker * (0.5 + 0.5 * Math.sin(t * 13.1 + i) * Math.sin(t * 7.3)) : 1;
-      l.intensity += (cur.intensity * f - l.intensity) * Math.min(1, dt * 5);
+      l.intensity += (cur.intensity * f * this.gain - l.intensity) * Math.min(1, dt * 5);
     }
   }
   private lookup = new Map<string, LampSource>();
@@ -304,37 +306,59 @@ export class LightPool {
  * lamp's logical state only, so a room keeps its warm read even when its pooled point light moves away.
  */
 export class LightPatches {
-  private items: { x: number; y: number; z: number; r: number; color: THREE.Color; on: () => boolean }[] = [];
-  private mesh: THREE.InstancedMesh | null = null;
-  add(x: number, y: number, z: number, r: number, color: THREE.ColorRepresentation, on: () => boolean, strength = 0.55) {
-    this.items.push({ x, y, z, r, color: new THREE.Color(color).multiplyScalar(strength), on });
+  private items: { x: number; y: number; z: number; r: number; color: THREE.Color; on: () => boolean; soft: boolean; aspect: number; yaw: number }[] = [];
+  private meshes: { m: THREE.InstancedMesh; items: LightPatches['items'] }[] = [];
+  /** `soft` (art sample) uses a wide gaussian falloff instead of the plateau disc; `aspect` stretches it along `yaw`. */
+  add(x: number, y: number, z: number, r: number, color: THREE.ColorRepresentation, on: () => boolean, strength = 0.55, o: { soft?: boolean; aspect?: number; yaw?: number } = {}) {
+    this.items.push({ x, y, z, r, color: new THREE.Color(color).multiplyScalar(strength), on, soft: !!o.soft, aspect: o.aspect ?? 1, yaw: o.yaw ?? 0 });
   }
   build(w: World) {
-    if (!this.items.length) return;
-    const cv = document.createElement('canvas');
-    cv.width = cv.height = 64;
-    const x = cv.getContext('2d')!;
-    const g = x.createRadialGradient(32, 32, 0, 32, 32, 32);
-    g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(0.45, 'rgba(255,255,255,0.45)'); g.addColorStop(1, 'rgba(255,255,255,0)');
-    x.fillStyle = g; x.fillRect(0, 0, 64, 64);
-    const tex = w.texture(new THREE.CanvasTexture(cv));
-    const geo = new THREE.PlaneGeometry(1, 1);
-    geo.rotateX(-Math.PI / 2);
-    const mat = w.material(new THREE.MeshBasicMaterial({ map: tex, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4 }));
-    const m = new THREE.InstancedMesh(geo, mat, this.items.length);
-    const mtx = new THREE.Matrix4();
-    this.items.forEach((p, i) => { m.setMatrixAt(i, mtx.makeScale(p.r * 2, 1, p.r * 2).setPosition(p.x, p.y, -p.z)); m.setColorAt(i, p.color); });
-    m.computeBoundingSphere();
-    m.renderOrder = 1;
-    m.userData.noCull = true;
-    w.scene.add(m);
-    this.mesh = m;
-    w.onSync(() => this.sync());
+    for (const soft of [false, true]) {
+      const items = this.items.filter((p) => p.soft === soft);
+      if (!items.length) continue;
+      const cv = document.createElement('canvas');
+      cv.width = cv.height = 64;
+      const x = cv.getContext('2d')!;
+      if (soft) {
+        const img = x.createImageData(64, 64);
+        for (let j = 0; j < 64; j++) for (let i = 0; i < 64; i++) {
+          const d = Math.hypot((i + 0.5) / 32 - 1, (j + 0.5) / 32 - 1);
+          const a = d >= 1 ? 0 : Math.exp(-3.2 * d * d) * (1 - d * d); // gaussian, forced to 0 at the rim
+          const k = (j * 64 + i) * 4;
+          img.data[k] = img.data[k + 1] = img.data[k + 2] = Math.round(a * 255); img.data[k + 3] = 255;
+        }
+        x.putImageData(img, 0, 0);
+      } else {
+        const g = x.createRadialGradient(32, 32, 0, 32, 32, 32);
+        g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(0.45, 'rgba(255,255,255,0.45)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+        x.fillStyle = g; x.fillRect(0, 0, 64, 64);
+      }
+      const tex = w.texture(new THREE.CanvasTexture(cv));
+      const geo = new THREE.PlaneGeometry(1, 1);
+      geo.rotateX(-Math.PI / 2);
+      const mat = w.material(new THREE.MeshBasicMaterial({ map: tex, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4 }));
+      const m = new THREE.InstancedMesh(geo, mat, items.length);
+      const mtx = new THREE.Matrix4(), rot = new THREE.Matrix4();
+      items.forEach((p, i) => {
+        mtx.makeScale(p.r * 2 * p.aspect, 1, p.r * 2);
+        if (p.yaw) mtx.premultiply(rot.makeRotationY(-p.yaw));
+        m.setMatrixAt(i, mtx.setPosition(p.x, p.y, -p.z));
+        m.setColorAt(i, p.color);
+      });
+      m.computeBoundingSphere();
+      m.renderOrder = 1;
+      m.userData.noCull = true;
+      m.userData.lightPatches = true;
+      w.scene.add(m);
+      this.meshes.push({ m, items });
+    }
+    if (this.meshes.length) w.onSync(() => this.sync());
   }
   private black = new THREE.Color(0, 0, 0);
   sync() {
-    if (!this.mesh) return;
-    this.items.forEach((p, i) => this.mesh!.setColorAt(i, p.on() ? p.color : this.black));
-    if (this.mesh.instanceColor) this.mesh.instanceColor.needsUpdate = true;
+    for (const { m, items } of this.meshes) {
+      items.forEach((p, i) => m.setColorAt(i, p.on() ? p.color : this.black));
+      if (m.instanceColor) m.instanceColor.needsUpdate = true;
+    }
   }
 }

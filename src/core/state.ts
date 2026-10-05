@@ -1,6 +1,7 @@
 // Authoritative, versioned game state. Everything that must survive a reload lives here.
 // World visuals are derived from this state (see World.syncAll), never the other way round.
 import { ITEMS, LEGACY_ITEMS, SEALS } from '../content/items';
+import { REVIEW } from './artflags';
 import { CLUES } from '../content/clues';
 import { SYMBOLS } from '../content/symbols';
 import { SERVICE, CATALOG, CONSOLE_SOCKETS } from '../content/canon';
@@ -294,9 +295,18 @@ export function parseSettings(text: string | null, coarse: boolean): Settings {
   }
 }
 
+/** In art-review mode (?review=…) nothing is written to or read from the real save slots: the review runs on an
+ * in-memory sandbox, so opening a review link can never overwrite, reset or migrate the player's own game.
+ * Settings are the one key read through from localStorage (read-only) so quality/sensitivity match the device. */
+const sandbox: Map<string, string> | null = REVIEW ? new Map() : null;
+
 /** localStorage wrapper that never throws (private mode, quota, disabled storage). */
 export const storage = {
   get(key: string): string | null {
+    if (sandbox) {
+      if (sandbox.has(key)) return sandbox.get(key)!;
+      if (key !== SETTINGS_KEY) return null;
+    }
     try {
       return globalThis.localStorage?.getItem(key) ?? null;
     } catch {
@@ -304,6 +314,7 @@ export const storage = {
     }
   },
   set(key: string, value: string): boolean {
+    if (sandbox) { sandbox.set(key, value); return true; }
     try {
       globalThis.localStorage?.setItem(key, value);
       return true;
@@ -312,6 +323,7 @@ export const storage = {
     }
   },
   remove(key: string) {
+    if (sandbox) { sandbox.delete(key); return; }
     try {
       globalThis.localStorage?.removeItem(key);
     } catch {

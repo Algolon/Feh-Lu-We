@@ -785,8 +785,144 @@ async function lighting() {
   await ctx.close();
 }
 
+
+// ------------------------------------------------------------------------------------------------
+// Art-refresh interior sample (?art=sample&light=sample, and ?review=living). The sample must keep the room's
+// gameplay contract: identical collision, identical interaction targets from the same poses, the mantel → drawer
+// progression, persistent fire/lamp state, reduced motion, visibility from the hall, and save isolation in review.
+async function artSample() {
+  const { ctx, page } = await newPage();
+  const SAMPLE = 'art=sample&light=sample';
+  const start = async (q, extra = {}) => {
+    await page.goto(BASE + '?autotest=1' + (q ? '&' + q : ''));
+    await page.evaluate((save) => localStorage.setItem('fehluwe.save', JSON.stringify(save)), {
+      version: 4, scene: 'estate', inventory: ESSENTIALS, flags: { leftHome: true }, unlocked: ['lock.door.front'], open: { 'door.front': true }, ...extra,
+    });
+    await page.reload();
+    await page.click('[data-cont]');
+    await page.waitForFunction(() => window.__game?.world?.id === 'estate');
+    await page.evaluate(helpers);
+  };
+  // the colliders and interaction targets of the living room, as plain data
+  const roomContract = () => {
+    const g = T.G(), w = g.world;
+    const inRoom = (x, z) => x > 72 && x < 85.2 && z > 80 && z < 94.3;
+    const r = (v) => Math.round(v * 100) / 100;
+    const cols = w.col.colliders.filter((c) => c.kind === 'circle' ? inRoom(c.x, c.z) : inRoom((c.minX + c.maxX) / 2, (c.minZ + c.maxZ) / 2))
+      .map((c) => c.kind === 'circle' ? `c ${r(c.x)} ${r(c.z)} ${r(c.r)} ${r(c.minY)} ${r(c.maxY)}` : `b ${r(c.minX)} ${r(c.maxX)} ${r(c.minZ)} ${r(c.maxZ)} ${r(c.minY)} ${r(c.maxY)} ${c.occludes ? 'o' : ''}`).sort();
+    const items = w.items.filter((it) => { const p = it.focus ?? it.obj.getWorldPosition(new it.obj.position.constructor()); return inRoom(p.x, -p.z); }).map((it) => it.id).sort();
+    const lamps = w.lamps.filter((l) => inRoom(l.pos.x, -l.pos.z)).map((l) => `${l.id} ${r(l.pos.x)} ${r(l.pos.y)} ${r(-l.pos.z)} ${l.intensity} ${l.distance}`).sort();
+    return { cols, items, lamps };
+  };
+  // what the reticle targets from fixed poses (the same physical aiming as a player)
+  const aims = [[[75.4, 86.7], [72.9, 1.55, 86.7]], [[75.2, 86.0], [72.75, 0.5, 86.7]], [[82.6, 85.0], [84.2, 1.2, 83.6]], [[82.6, 91.2], [83.9, 0.7, 92.4]], [[77.2, 86.7], [72.9, 1.45, 85.0]]];
+  const aimAll = (list) => list.map(([[x, z], [tx, ty, tz]]) => { const g = T.G(); g.player.x = x; g.player.z = z; g.player.y = 0.15; T.lookAt(tx, ty, tz); return g.metrics().target; });
+  try {
+    await start('');
+    const base = await E(page, roomContract);
+    const baseAims = await E(page, aimAll, aims);
+    await start(SAMPLE);
+    const smp = await E(page, roomContract);
+    const smpAims = await E(page, aimAll, aims);
+    const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+    log('art sample: living-room collision identical to the original room', same(base.cols, smp.cols), `${smp.cols.length} colliders${same(base.cols, smp.cols) ? '' : ' DIFF ' + JSON.stringify({ base: base.cols.filter((c) => !smp.cols.includes(c)), sample: smp.cols.filter((c) => !base.cols.includes(c)) })}`);
+    log('art sample: same interactables and light sources (ids, positions, intensities)', same(base.items, smp.items) && same(base.lamps, smp.lamps), JSON.stringify({ items: smp.items, lamps: smp.lamps.length }));
+    log('art sample: reticle targets the same objects from the same poses', same(baseAims, smpAims) && smpAims.every(Boolean), JSON.stringify({ base: baseAims, sample: smpAims }));
+    // mantel evidence → hall drawer with the canonical answer, through real movement and the dial panel
+    await start(SAMPLE, { player: { estate: { x: 86.5, y: 0.15, z: 88.5, yaw: -Math.PI / 2, pitch: 0 } } });
+    const prog = await E(page, () => {
+      T.walk([[83, 89.2], [77.5, 89.2], [75.2, 88.6], [74.6, 86.7]]);
+      T.act('inspect.mantel'); const clue = T.G().state.clues.includes('c.mantel'); T.closeModal();
+      T.walk([[75.2, 88.6], [77.5, 89.2], [83, 89.2], [86.5, 88.5], [86.5, 85.5]]);
+      T.act('hall.drawer', 'Slot bekijken');
+      const down = (i, n) => { for (let k = 0; k < n; k++) document.querySelector(`[data-down="${i}"]`).click(); };
+      down(0, 1); down(1, 3); down(2, 5); document.querySelector('[data-try]').click(); T.wait(1.2);
+      return { clue, solved: !!T.G().state.flags.drawerLockSolved };
+    });
+    log('art sample: mantel clue readable via the inspect target, drawer opens with Veer–Dennenappel–Kopje', prog.clue && prog.solved, JSON.stringify(prog));
+    // mantel objects: three identical brass stands under feather, pinecone, cup (geometry present at the slots)
+    // fire + floor lamp: toggle with the real action, state survives reload, visuals follow the state
+    await start(SAMPLE, { player: { estate: { x: 75.4, y: 0.15, z: 86.0, yaw: -Math.PI / 2, pitch: 0 } } });
+    const t1 = await E(page, () => {
+      T.act('fire.living', 'Vuur doven'); const firstOff = T.G().state.lit['fire.living'] === false;
+      T.G().player.x = 82.6; T.G().player.z = 85.0; T.act('lamp.livingFloor', 'Uitdoen');
+      T.G().saveNow(); return { firstOff, lamp: T.G().state.lit['lamp.livingFloor'] };
+    });
+    await page.reload(); await page.click('[data-cont]'); await page.waitForFunction(() => window.__game?.world?.id === 'estate'); await page.evaluate(helpers);
+    const t2 = await E(page, () => {
+      const g = T.G(); T.tick(5);
+      const fires = []; g.world.scene.traverse((o) => { if (o.userData.fire) fires.push(o); });
+      const hearth = fires.find((f) => Math.abs(-f.position.z - 86.7) < 0.3 && f.position.x < 73);
+      const lamp = g.world.byId.get('lamp.livingFloor');
+      let shadeEm = null; lamp.obj.traverse((o) => { if (o.isMesh && o.material?.emissive) shadeEm = o.material.emissive.getHexString(); });
+      const before = { fire: !!hearth?.visible, shadeEm };
+      g.select('matches'); T.lookAtId('fire.living'); g.doAction(); T.tick(3); g.select(null);
+      g.player.x = 82.6; g.player.z = 85.0; T.act('lamp.livingFloor', 'Aandoen'); T.tick(3);
+      let shadeOn = null; lamp.obj.traverse((o) => { if (o.isMesh && o.material?.emissive) shadeOn = o.material.emissive.getHexString(); });
+      return { before, fireLitAgain: !!g.state.lit['fire.living'] && hearth.visible, shadeOn };
+    });
+    log('art sample: doused fire and switched-off lamp persist through reload; relighting restores flame and shade glow', t1.firstOff && t1.lamp === false && !t2.before.fire && t2.before.shadeEm === '000000' && t2.fireLitAgain && t2.shadeOn !== '000000', JSON.stringify({ t1, t2 }));
+    // reduced motion keeps the hearth flame (and its embers) visible
+    await start(SAMPLE, { player: { estate: { x: 76, y: 0.15, z: 86.7, yaw: -Math.PI / 2, pitch: 0 } } });
+    const rm = await E(page, () => { const g = T.G(); g.settings.reducedMotion = true; g.applyQuality(); T.tick(5); const f = []; g.world.scene.traverse((o) => { if (o.userData.fire && o.position.x < 73 && Math.abs(-o.position.z - 86.7) < 0.3) f.push(o); }); return { visible: !!f[0]?.visible, embers: f[0]?.children.length }; });
+    log('art sample: reduced motion holds the hearth flame and embers visible', rm.visible && rm.embers >= 3, JSON.stringify(rm));
+    // seen from the hall through the open arch (as L1): real light assigned and flame not culled
+    await start(SAMPLE, { player: { estate: { x: 89, y: 0.15, z: 88.5, yaw: -Math.PI / 2, pitch: 0 } } });
+    const vis = await E(page, () => {
+      T.tick(20); const g = T.G(); const fire = []; g.world.scene.traverse((o) => { if (o.userData.fire && o.position.x < 73 && Math.abs(-o.position.z - 86.7) < 0.3) fire.push(o); });
+      const liv = g.world.lamps.filter((l) => g.extras.rooms.roomAt(l.pos.x, l.pos.y, -l.pos.z) === 'living').map((l) => l.id);
+      let roomMeshes = 0; g.world.scene.traverse((o) => { if (o.userData.chunk === 'mHall' && o.visible) roomMeshes++; });
+      return { room: g.pool.here, livingLit: g.pool.assigned().some((a) => liv.includes(a)), flame: !!fire[0]?.visible && !g.world.isCulled(fire[0]), roomMeshes };
+    });
+    log('art sample: from the hall the sample room is drawn, lit, and its flame visible', vis.room === 'hall' && vis.livingLit && vis.flame && vis.roomMeshes > 0, JSON.stringify(vis));
+    // collision around the new props: walking into the sofa, armchair and hearth is blocked exactly as before
+    const walkBlock = await E(page, () => {
+      const g = T.G(); const out = {};
+      for (const [name, from, to] of [['sofa', [80.4, 86.7], [78.6, 86.7]], ['armchair', [78.2, 81.9], [76.4, 83.0]], ['hearth', [75.4, 86.7], [72.6, 86.7]], ['table', [77.3, 84.4], [77.3, 86.7]]]) {
+        g.player.x = from[0]; g.player.z = from[1]; g.player.y = 0.15; T.tick(2);
+        try { T.walkTo(to[0], to[1], false, 4); out[name] = 'reached'; } catch { out[name] = { x: +g.player.x.toFixed(2), z: +g.player.z.toFixed(2) }; }
+      }
+      return out;
+    });
+    log('art sample: sofa, armchair, hearth and table block movement', Object.values(walkBlock).every((v) => v !== 'reached'), JSON.stringify(walkBlock));
+    if (page.problems.length) log('art sample: no console errors', false, page.problems.slice(0, 3).join(' | '));
+    else log('art sample: no console errors', true);
+  } catch (e) {
+    log('art sample checks', false, e.message.split('\n')[0]);
+  }
+  await ctx.close();
+  // review mode: phone context, sandboxed state (the player's save is never read or written)
+  const { ctx: c2, page: p2 } = await newPage({ viewport: { width: 844, height: 390 }, deviceScaleFactor: 2, hasTouch: true, isMobile: true });
+  try {
+    await p2.goto(BASE);
+    const mine = JSON.stringify({ version: 4, scene: 'estate', inventory: ['invitation', 'shedKey'], flags: { leftHome: true }, player: { home: null, estate: { x: 90, y: 0, z: 3, yaw: 0, pitch: 0 } } });
+    await p2.evaluate((m) => { localStorage.clear(); localStorage.setItem('fehluwe.save', m); localStorage.setItem('fehluwe.save.prev', '{"version":3}'); localStorage.setItem('fehluwe.settings', '{"quality":"low"}'); }, mine);
+    const before = await p2.evaluate(() => JSON.stringify(Object.entries(localStorage).sort()));
+    await p2.goto(BASE + '?review=living&autotest=1');
+    await p2.tap('[data-review-start]');
+    await p2.waitForFunction(() => window.__game?.world?.id === 'estate', null, { timeout: 60000 });
+    const r1 = await p2.evaluate(() => ({ room: window.__game.world.hereRoom, inv: window.__game.state.inventory.length, bar: !!document.getElementById('review-bar') }));
+    await p2.tap('#review-bar button'); await p2.tap('#review-bar [data-k="art"]');
+    await p2.waitForFunction(() => !document.getElementById('review-bar').classList.contains('busy'), null, { timeout: 60000 });
+    await p2.tap('#review-bar [data-k="tm"]'); await p2.tap('#review-bar [data-k="light"]');
+    const r2 = await p2.evaluate(() => { window.__game.saveNow(); return { pose: window.__game.player.pose(), tm: window.__game.renderer.toneMapping }; });
+    const after = await p2.evaluate(() => JSON.stringify(Object.entries(localStorage).sort()));
+    log('review mode: starts in the living-room doorway with a comparison bar; toggles work', r1.room === 'hall' && r1.inv === 5 && r1.bar && Math.abs(r2.pose.x - 85.6) < 0.01 && r2.tm === 7, JSON.stringify({ r1, r2 }));
+    log('review mode: the player\'s own save, backup and settings are untouched (sandboxed state)', before === after, before === after ? '' : after);
+    // the ordinary game is unaffected: without parameters there is no review bar and the original room is built
+    await p2.goto(BASE + '?autotest=1');
+    await p2.waitForSelector('[data-cont]');
+    const plain = await p2.evaluate(() => ({ bar: !!document.getElementById('review-bar'), cont: !!document.querySelector('[data-cont]') }));
+    log('review mode: normal entry still offers "Verder spelen" for the untouched save, no review bar', !plain.bar && plain.cont, JSON.stringify(plain));
+    if (p2.problems.length) log('review mode: no console errors', false, p2.problems.slice(0, 3).join(' | '));
+  } catch (e) {
+    log('review mode checks', false, e.message.split('\n')[0]);
+  }
+  await c2.close();
+}
+
 const only = process.env.E2E_ONLY?.split(',');
-const suites = { regressions, lighting, walkthrough, collisionChecks, saveChecks, touchChecks, webglFailure, metrics };
+const suites = { regressions, lighting, walkthrough, collisionChecks, saveChecks, touchChecks, webglFailure, metrics, artSample };
 for (const [name, fn] of Object.entries(suites)) if (!only || only.includes(name)) await fn();
 
 const failed = results.filter((r) => !r.ok);

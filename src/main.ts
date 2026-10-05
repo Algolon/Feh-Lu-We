@@ -1,6 +1,8 @@
 import './ui/style.css';
 import { Game, TEST_HOOKS } from './core/game';
 import { UI } from './ui/ui';
+import { REVIEW } from './core/artflags';
+import { reviewState, showReviewStart, mountReviewBar } from './ui/review';
 
 function webglAvailable(): boolean {
   if (new URLSearchParams(location.search).has('nowebgl')) return false; // test hook for the failure path
@@ -47,11 +49,18 @@ function boot() {
     await new Promise((r) => setTimeout(r, 30)); // let the loading state paint before the synchronous build
     try {
       await game.start(fresh);
+      if (REVIEW) mountReviewBar(game);
     } catch (e) {
       console.error(e);
       fail('Er ging iets mis bij het laden van de wereld. Herlaad de pagina; je bewaarde voortgang blijft staan.');
     }
   };
+  if (REVIEW) {
+    // art-review mode: sandboxed state (never the player's save), its own start card and comparison bar
+    game.state = reviewState();
+    showReviewStart(() => begin(false));
+    return;
+  }
   game.ui.showStart({
     hasSave: game.hasSave(), hasBackup: game.hasBackup(),
     onContinue: () => begin(false), onNew: () => begin(true),

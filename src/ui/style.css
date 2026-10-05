@@ -162,3 +162,10 @@ body.reduced-motion * { transition: none !important; animation: none !important;
 .clue[open] summary h3::before { content: '▾ '; }
 .badge { font-size: 12px; background: #dfe9c8; color: #2f4a1a; border-radius: 10px; padding: 2px 8px; white-space: nowrap; }
 .grp { margin: 12px 0 2px; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: #8a6a3a; }
+
+/* art-review comparison bar (?review=living only) */
+#review-bar { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 8px); left: 50%; transform: translateX(-50%); z-index: 26;
+  display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; max-width: min(560px, calc(100vw - 260px)); }
+#review-bar button { min-height: 40px; padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,.35);
+  background: rgba(30,22,16,.78); color: #f5ead2; font: 600 13px/1.2 Georgia, serif; cursor: pointer; }
+#review-bar.busy { opacity: .5; pointer-events: none; }

@@ -19,8 +19,8 @@ A sample is not reviewable until every item below exists in `docs/art-refresh/<s
 | # | Evidence | How |
 |---|---|---|
 | E1 | **Equal-pose before/after**: same poses, viewport, quality and save state as the baseline | `scripts/art-baseline.mjs` (extend `SHOTS` for new poses; keep the baseline poses unchanged). Phone quality, 844 × 390. Before = [`baseline/`](baseline/README.md), or a fresh capture of the parent commit if the baseline is stale. |
-| E2 | **Neutral-light pass** for every pose | `-neutral.jpg` (fog off, white fill, white sun, exposure 1) |
-| E3 | **Clay pass** for every pose | `-clay.jpg` (one grey material, no textures/colours) |
+| E2 | **Neutral-light pass** for every pose (material behaviour) | `-neutral.jpg` (fog off, white fill, white sun, exposure 1; materials and fixtures unchanged) |
+| E3 | **Clay pass** for every pose (shape only) | `-clay.jpg`: one matte grey material; no textures, vertex/instance colours, emissive glows, flames, coloured light pools, contact decals or point lights — white sky/sun only (`scripts/art-capture.mjs`) |
 | E4 | **Near-distance checks**: the 0.8–1 m shots listed in the sample spec | Added poses in the same script |
 | E5 | **Short moving walkthrough**: 10–20 s at walking speed along the sample's route, looking where a player would | Video if the capture environment supports it; otherwise a frame sequence at ≥ 4 fps plus a contact sheet. Taken through the real movement code, not camera teleports. |
 | E6 | **Metrics**: draw calls and triangles per pose at phone quality, two runs each; JS bundle size (gzip) before/after | Script output + `npm run build` |
@@ -114,7 +114,9 @@ Each line is **Pass / Fail / n.a.** An optional 1–5 score per section can be n
   must be listed in E9 and covered by a passing test.
 
 ### H. Performance at phone default
-- [ ] Draw calls at every sample pose are within the sample's stated budget and ≤ 150. Two runs agree.
+- [ ] Draw calls at every sample pose are within the sample's stated budget, measured settled over ≥ 30 frames,
+  two runs agreeing. Budgets are engineering guides: an overrun is acceptable only with a measured, explained
+  trade-off, and never replaces the device frame-time check below.
 - [ ] Triangles are within the sample budget and ≤ 250 k.
 - [ ] JS gzip growth is within the sample budget. Any model or texture downloads are listed with sizes.
 - [ ] No new per-frame CPU work proportional to object count (e.g. per-object decal updates).

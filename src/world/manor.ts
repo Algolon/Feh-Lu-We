@@ -18,6 +18,9 @@ import {
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place } from '../interactions/props';
 import { forestMapTexture } from './textures';
 import { buildHearth } from './hearth';
+import { ART } from '../core/artflags';
+import { livingRoomV2 } from './livingSample';
+import { ContactShadows } from './artkit';
 import { makeFire } from './fire';
 import { drawSymbol } from '../content/symbols';
 import { EMBLEMS, SERVICE, CATALOG, CONSOLE_SOCKETS, ROUTE_LINES } from '../content/canon';
@@ -116,7 +119,7 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   floor(c, 92, 95, 98, 99.6, GF, k.M.wood, '#7a5232', 0.2, false, 1.2); // basement stair landing
   floor(c, 85, 95, 104.8, 109.6, GF, k.M.wood, '#9a6a3e', 0.2, false, 2.2); // billiard
   floor(c, 85, 92, 104, 104.8, GF, k.M.wood, '#9a6a3e', 0.2, false, 2.2);
-  floor(c, 72.4, 85, 80.4, 94, GF, k.M.wood, '#b07e4e', 0.2, false, 2.2); // living
+  floor(c, 72.4, 85, 80.4, 94, GF, k.M.wood, ART.set === 'sample' ? '#9c7552' : '#b07e4e', 0.2, false, 2.2); // living (sample: less orange oak)
   floor(c, 72.4, 85, 94, 109.6, GF, k.M.wood, '#8a5a34', 0.2, false, 2.2); // library
   floor(c, 95, 107.6, 80.4, 92, GF, k.M.wood, '#a8754a', 0.2, false, 2.2); // dining
   floor(c, 95, 107.6, 92, 109.6, GF, k.M.tile, '#e6d2b0', 0.2, false, 1.2); // kitchen
@@ -139,7 +142,7 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   slab(72.4, 85, 107.8, 109.6); // library gallery (north side)
   // beams under ground-floor ceilings (not in the double-height spaces)
   for (let x = 74; x < 107; x += 2.4) {
-    if (x < 85) boxMM(c.b, k.M.wood, '#6b4426', x - 0.1, x + 0.1, CEIL - 0.22, CEIL, 80.4, 94, { chunk: c.chunk, uv: 1.5 });
+    if (x < 85 && ART.set !== 'sample') boxMM(c.b, k.M.wood, '#6b4426', x - 0.1, x + 0.1, CEIL - 0.22, CEIL, 80.4, 94, { chunk: c.chunk, uv: 1.5 }); // sample: livingSample beams
     if (x > 95) boxMM(c.b, k.M.wood, '#6b4426', x - 0.1, x + 0.1, CEIL - 0.22, CEIL, 80.4, 109.6, { chunk: c.chunk, uv: 1.5 });
   }
   ceiling(c, 72.4, 107.6, 80.4, 109.6, UCEIL, '#efe4cc');
@@ -327,6 +330,13 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   makeLamp(w, g, { id: 'lamp.hallConsole', ...tl, name: 'lamp', defaultOn: false, hit: [0.4, 0.7, 0.4], intensity: 4, distance: 6 });
 
   // ---------------------------------------------------------------- living room (west, front)
+  if (ART.set === 'sample') {
+    // art-refresh interior sample (review mode / ?art=sample): same gameplay contract, new assets
+    const sh = new ContactShadows();
+    buildHearth(w, g, c, { id: 'fire.living', x: 72.4, z: 86.7, y: GF, facing: Math.PI / 2, ceil: CEIL, mantel: true, defaultLit: true, style: 'v2', shadows: sh });
+    livingRoomV2(w, g, c, sh);
+    sh.build(w.scene, c.chunk);
+  } else {
   buildHearth(w, g, c, { id: 'fire.living', x: 72.4, z: 86.7, y: GF, facing: Math.PI / 2, ceil: CEIL, mantel: true, defaultLit: true });
   rug(c, 77.4, 86.7, GF + 0.01, 4.2, 5.4, 0);
   sofa(c, 79.0, 86.7, GF, -Math.PI / 2, 2.6, '#5f7a45');
@@ -344,6 +354,7 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   const fl = floorLamp(w, 84.2, GF, 83.6);
   makeLamp(w, g, { id: 'lamp.livingFloor', ...fl, name: 'staande lamp', defaultOn: true, hit: [0.5, 1.9, 0.5], intensity: 5, distance: 8, patch: { y: GF + 0.03, r: 1.5 } });
   for (const z of [83, 90.5]) curtains(c, 72.45, z, GF + 0.85, Math.PI / 2, 1.1, 2.0, '#7a3a3a');
+  }
 
   c.chunk = 'mLib';
   library(w, g, c);

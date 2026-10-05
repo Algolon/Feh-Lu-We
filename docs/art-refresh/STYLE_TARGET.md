@@ -7,6 +7,40 @@ baseline does not support it (§3).
 **Companion documents:** [`REVIEW_CHECKLIST.md`](REVIEW_CHECKLIST.md) (the gate every sample must pass),
 [`baseline/README.md`](baseline/README.md) (captures, poses, metrics), [`palette.svg`](palette.svg) (swatches).
 
+## Step-2 revisions (owner feedback on step 1) — these override the text below where they conflict
+
+1. **Palette:** keep it earthy, but keep warmth, lively highlights and selected colour accents. Not everything should
+   be brown, grey and olive.
+2. **The palette is a starting vocabulary.** Colours are validated together in the rendered scene, not swatch by
+   swatch.
+3. **Three colour layers.** Separate base material colour (albedo), authored shading (baked occlusion in vertex
+   colour) and expected lit appearance.
+   - The "lit / mid / shade" swatches are not to be applied as shading.
+   - Doing so would duplicate the shading that light and baked occlusion already provide.
+4. **Texture × tint is not "colour squared".** The step-1 shorthand was wrong. The actual chain is:
+   1. Texture (sRGB, decoded to linear).
+   2. × vertex/part tint (linear).
+   3. × (hemisphere + sun + point light).
+   4. → ACES at exposure 1.15 → sRGB.
+
+   Two coloured multipliers do compound saturation when both are saturated in the same hue, as the grass texture
+   and green tint are. The bigger factors are the strong fill and ACES on saturated inputs.
+5. **Value-only textures are an option** for reusable materials, not a mandatory rule. The step-2 sample uses
+   near-neutral weave/grain/ashlar textures plus coloured parts, and a fully coloured rug texture.
+6. **R3's production method is unknown.** Only its visible forms and craftsmanship are borrowed.
+7. **Halving the daylight fill is not predetermined.** Test balance and direction; do not merely darken. See
+   [`INTERIOR_SAMPLE.md`](INTERIOR_SAMPLE.md) §5: the recommended treatment changes the vertical gradient and
+   fixture share, with fill reduced by about a quarter.
+8. **Procedural-first is a starting approach, not an obligation.** If a representative asset stays weak after
+   focused revision, revise its construction or use an authored asset route.
+9. **Draw-call and triangle targets are engineering guides,** not substitutes for performance evidence (real-device
+   frame time).
+10. **Two diagnostics, not one.**
+    - **Clay (shape):** removes textures, vertex and instance colours, emissive glows, flames, coloured light pools,
+      contact decals and point lights.
+    - **Neutral lighting (material behaviour):** keeps materials and fixtures, but no fog, white sky/sun and
+      exposure 1.
+
 Evidence labels used below:
 - **[V]** is visible in the baseline captures (phone quality, 844 × 390).
 - **[S]** is inferred from source code (file named).
@@ -28,14 +62,16 @@ Evidence labels used below:
       notched cubes, trunks are straight pipes, the facade is a flat box.
    2. Nothing is grounded. There are no contact shadows or plinths, and the path has no edge.
    3. Lighting at phone quality is almost pure uniform fill, so light does not model form.
-   4. Colour is squared (coloured texture × coloured tint) and then tone-mapped. The result is acid greens and
+   4. Colour runs through several transforms (coloured texture × coloured tint × strong fill × ACES); see §3.5 for
+      the corrected diagnosis. The result is acid greens and
       muddy shades.
    5. Surfaces are covered in procedural blotch noise instead of material character such as grain direction,
       coursework or weave.
-3. **Pipeline: procedural-first hybrid.**
+3. **Pipeline: hybrid, starting procedural** (a starting approach, not an obligation; see §6.3).
    - Extend the existing code kit with profiled and bevelled module functions: rounded boxes, lathes, profile sweeps
      and convex rock hulls.
-   - Make textures value-only, with colour coming from vertex or instance colour.
+   - Where a material is reused widely, prefer near-neutral (value) textures with colour from the part; elsewhere
+     a coloured texture is fine (see the step-2 revisions).
    - Add one instanced contact-shadow decal layer.
    - Make the Batcher able to keep authored vertex colours and indices.
    - GLB is used only where code cannot reach the shape (organic hero trees), and only after the owner decides who
@@ -92,7 +128,7 @@ The analysis below is of what is visible. Shaders, polygon counts and production
 |---|---|---|
 | **R1** Mahasona settlement | Rocky promontory beside blue water:<br>• cliffs of large, chunky stone blocks with softened edges<br>• tall dark trunks under teal canopies<br>• lanterns on timber posts throwing warm pools onto a pale path<br>• split-rail fences, flagstone stepping stones<br>• broad-leaf plant clumps along the edges<br>• a plank boardwalk with posts<br>• warm-windowed cottages<br>• cool blue haze between layers | Elevated, ¾ |
 | **R2** DEVDIARIES pier | A timber shack on a pier:<br>• every plank, post, beam, stair stringer, railing and net frame is a separate, believable member<br>• simple shapes with almost no surface detail<br>• warm orange-brown wood against saturated blue water<br>• soft shading in the corners | High, near top-down |
-| **R3** furnished room | A **painted illustration**, not a real-time render:<br>• puffy upholstered sofa with tufted cushions, beanbag<br>• skirting, cornice and pilasters with bases<br>• plank floor<br>• rounded edges on every object<br>• a soft contact shadow under everything<br>• saturated toy palette and branded game props | Exaggerated wide perspective, from above |
+| **R3** furnished room | An illustration-like image (production method unknown):<br>• puffy upholstered sofa with tufted cushions, beanbag<br>• skirting, cornice and pilasters with bases<br>• plank floor<br>• rounded edges on every object<br>• a soft contact shadow under everything<br>• saturated toy palette and branded game props | Exaggerated wide perspective, from above |
 | **R4** broad-canopy forest | Near eye level:<br>• huge trunks flaring into roots, twisting branches<br>• umbrella canopies with flat undersides and scalloped leaf-clump rims<br>• strong atmospheric perspective toward blue<br>• cracked flagstone path, flower clumps<br>• magenta/orange fantasy trees, a snow peak | Eye level |
 | **R5** Sunday Sundae | Pale faceted cliffs made of a few large deliberate planes:<br>• a rope bridge with wooden planks and posts<br>• a red-brown path cut into the rock<br>• soft haze | Mid-elevation |
 | **R6** forest path to a lit house | Near eye level:<br>• an earth path climbing between bushes, grass tufts and edging stones<br>• stylised conifers with drooping layered branches<br>• dappled sun and shadow<br>• a warm, lit cabin as the destination | Eye level, closest to first person |
@@ -103,7 +139,7 @@ The analysis below is of what is visible. Shaders, polygon counts and production
 |---|---|---|---|---|
 | **Construction benchmark** | R2 | Every structural member is its own believable piece: posts carry beams, stairs have stringers, railings have rails and balusters. Few details, all purposeful. | Apply the same "how was it built" logic to manor doors, porch, beams, furniture frames, fences, the BOSLUST portal and the signpost. | Waterfront/pier theme. Saturated blue. The top-down camera's reliance on silhouette from above. |
 | **Exterior composition + atmosphere** | R1, R6 | Layered vegetation that frames the route. Substantial trunks. Warm destinations (lanterns, windows) against cooler surroundings. Edges between path and ground made of stones, plants and level changes. | Apply this at eye height: frame the path with near trunks and understory, keep the destination readable mid-frame, and let haze separate layers. R6 is the main eye-level guide. | Pirate/fishing-village props, graveyard crosses, deep-blue night grade, and R6's hard dappled shadows as a *requirement* (phone quality has no shadow maps; see §5.5). |
-| **Interior construction** | R3 | Shaped upholstery (seat cushions, rolled arms, shaped backs). Consistent softened edges. Skirting/cornice/pilaster framing. Separation between wood, cloth, plaster and metal. Every object grounded by a soft contact shadow. | Translate it to a Dutch manor: oak, linen, oxblood and bottle-green cloth, brass and ceramic. Edge softness should be a little crisper than R3. | The gaming theme, branded props, toy saturation, neon lighting, and R3's exaggerated illustrative perspective (it is a painting; first-person cannot reproduce that camera). |
+| **Interior construction** | R3 | Shaped upholstery (seat cushions, rolled arms, shaped backs). Consistent softened edges. Skirting/cornice/pilaster framing. Separation between wood, cloth, plaster and metal. Every object grounded by a soft contact shadow. | Translate it to a Dutch manor: oak, linen, oxblood and bottle-green cloth, brass and ceramic. Edge softness should be a little crisper than R3. | The gaming theme, branded props, toy saturation, neon lighting, and R3's exaggerated wide perspective (a first-person camera cannot reproduce it). |
 | **Selective shape** | R4 | Trunk taper, root flare and visible branching. Canopies with a distinctive silhouette and a flatter underside. Depth through value steps. | Use European species: oak and beech for broad canopies; Scots pine (characteristic of the Veluwe) for the high umbrella crown on a tall bare trunk. | Magenta/orange fantasy foliage, giant fantasy scale, the snow peak, and saturation levels. |
 | **Selective shape** | R5 | Rock as a few large deliberate planes with restrained detail. Plank-and-rope rhythm. Haze. | Rock outcrops in the hill and cut. Planes are bevelled, not razor-faceted, and sit in vegetation. | Making *everything* faceted (trees, terrain, buildings), and the monochrome scheme. |
 
@@ -239,7 +275,8 @@ Each category lists:
   - Stone courses and mortar.
   - Plaster with very low-contrast broad mottling.
   - Textile weave/pile.
-- Make textures **value-only** (near-neutral grey) and take colour from vertex or instance colour.
+- For widely reused materials, consider near-neutral (value) textures with colour from the part; this is an option,
+  not a rule (step-2 revision).
 - Add a low-shininess "sheen" material only for small hero surfaces: brass, glaze, glass, water, varnished tops.
 
 **Benefit**
@@ -519,7 +556,7 @@ swatch board is part of the interior sample).
 
 | Role | Swatches |
 |---|---|
-| Plaster | lit `#E6DAC2`, mid `#D3C4A6`, shade `#ADA391`<br>Room tints (max one per room): sage `#C7C9AC`, ochre `#DCC38F`, dove `#B9C0BE` |
+| Plaster | base `#E6DAC2`; darker variants `#D3C4A6`, `#ADA391` are alternative bases, **not** shading steps<br>Room tints (max one per room): sage `#C7C9AC`, ochre `#DCC38F`, dove `#B9C0BE` |
 | Timber | oak light `#A87A4E`, oak `#7E5636`, walnut `#4E3320`, soot beam `#3A2A1E`, weathered exterior `#8C7C68`, painted green `#4F6650` |
 | Stone | sandstone lit `#CDBE9E`, sandstone `#A89A7E`, shade `#7C766B`, moss stone `#7D8160`, slate `#5E6670`, slate dark `#434951` |
 | Foliage | sunlit leaf `#8EA058`, canopy `#61763F`, canopy shade `#3D5031`, conifer `#36503F`, fern `#6C8744`, meadow `#9AAD69` |
@@ -601,7 +638,8 @@ No asset gets full PBR maps (normal, roughness, metalness, AO) by default.
 - Lower the hemisphere fill and give the sun a larger share. Faces toward the sun should be clearly lighter than
   faces away, even without shadow maps.
 - Sky colour: cool. Ground colour: earth. Sun: warm.
-- Exact intensities are tuned on the samples and approved visually; the starting point is roughly halving the
+- Exact intensities are tuned on the samples and approved visually. (Step-2 revision: halving the fill is not a
+  predetermined answer — test balance and direction, do not merely darken; the original note read: roughly halving the
   current fill-to-sun ratio. The atmosphere/dusk progression stays.
 
 **Interiors [P]**
@@ -724,7 +762,7 @@ These are small, contained changes for step 2:
 | **C. Code-generated GLB** (generator scripts export assets) | Same as A | Slower than A for no visual gain | Same as A | Same as B | Same as B | Worse than A: two representations |
 | **D. Hybrid: A by default, B for organic hero assets only** | Good everywhere it matters | Fast for most; slower only where the payoff is real | High | Native for most; GLB only for passive scenery | Excellent | Good |
 
-**Recommendation: D, executed procedural-first.**
+**Recommendation: D, starting procedural** (step-2 revision: a practical starting point, not an obligation).
 - Step 2 is built entirely with option A plus the pipeline changes in §6.2 (1–5). That proves the style rules in the
   existing pipeline, with no new tooling.
 - GLB (option B) is held in reserve for the one asset family where code is most likely to fall short: the broadleaf
@@ -896,7 +934,7 @@ Every area passes the same checklist with before/after poses.
 
 | Question | Assessment | Revision made |
 |---|---|---|
-| **Do the references conflict?** | Yes:<br>• R3/R4 are saturated; R1/R6 earthy.<br>• R5 faceted; R3 soft.<br>• R3 is a painting. | Explicit hierarchy (§2). R3/R4/R5 contribute shape rules only. Facets restricted to stone/slate. |
+| **Do the references conflict?** | Yes:<br>• R3/R4 are saturated; R1/R6 earthy.<br>• R5 faceted; R3 soft.<br>• R3 looks illustrated (method unknown). | Explicit hierarchy (§2). R3/R4/R5 contribute shape rules only. Facets restricted to stone/slate. |
 | **Do elevated/diorama images transfer to first person?** | Partly:<br>• Construction logic, materials and grounding transfer.<br>• Elevated composition, rooftop reads and layout-as-silhouette do not.<br>• R6 and R4 are the only eye-level references. | Composition rules come from R6/R4. Each sample is judged at eye height (1.65 m) and at near distance, not from above. |
 | **Is the asset quality feasible in the current pipeline?** | For made things and rock, yes:<br>• Rounded boxes, lathes, extrusions and convex hulls are available.<br>• The Batcher keeps normals.<br>For organic hero trees, uncertain: procedural trees often look "generated". | The Batcher changes are listed (§6.2). An explicit fallback for the oak only (GLB), decided by the owner. |
 | **Is the sample scope too broad?** | 12 designs plus lighting, tone mapping, decals and textures is a lot for one step. | Pipeline changes 1–5 are prerequisites, not separate deliverables. The tone-mapping switch is an owner decision tested by A/B, not assumed. Each species is 1 generator, not a family. If time runs short, the interior sample is finished first. |
