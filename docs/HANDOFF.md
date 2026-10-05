@@ -85,7 +85,13 @@ low mode (default on touch devices) stays inside it. Initial transfer: ~213 KB g
 
 ## Deployment status
 
-- **Deployed.** After Pages was enabled (Source: GitHub Actions), workflow run
+- **Iteration 2 deployed (workflow-verified only).** Run
+  [37292481735](https://github.com/Algolon/Feh-Lu-We/actions/runs/37292481735) for commit `f8ba812`: build job
+  (npm ci, typecheck, 40 unit tests, build, Pages artifact 220 kB uploaded) and deploy job (`configure-pages` +
+  `deploy-pages`) both succeeded. Later docs-only commits redeploy the same game code. The page was **not** loaded
+  from the authoring session (github.io blocked); check the build id in the pause menu on a phone matches the
+  latest commit's short sha.
+- Iteration 1: after Pages was enabled (Source: GitHub Actions), workflow run
   [37275022509](https://github.com/Algolon/Feh-Lu-We/actions/runs/37275022509) succeeded: build (npm ci,
   typecheck, 30 unit tests, build) and deploy (`configure-pages` + `deploy-pages` reported success) for commit
   `aaa65d5`. Environment URL: https://algolon.github.io/Feh-Lu-We/
