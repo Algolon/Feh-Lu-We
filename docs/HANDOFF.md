@@ -2,6 +2,20 @@
 
 Last updated: 2026-10-05. Branch: `ccr-75ef4113-kfkimm` (the repository was empty before this work).
 
+## Art refresh, step 1 (5 Oct 2026) — target, baseline, review gate (no game changes)
+
+Planning only. The visual target is a crafted European woodland manor:
+[`art-refresh/STYLE_TARGET.md`](art-refresh/STYLE_TARGET.md). The gate every sample must pass is
+[`art-refresh/REVIEW_CHECKLIST.md`](art-refresh/REVIEW_CHECKLIST.md).
+
+Baseline captures (15 poses at phone quality, each as game, neutral-light and clay) are in
+[`art-refresh/baseline/`](art-refresh/baseline/README.md), made with `scripts/art-baseline.mjs`.
+
+**Measured finding:** the BOSLUST door pose uses 154 draw calls, over the 150 phone budget.
+
+**Next:** two bounded samples (hearth corner, BOSLUST approach), after the owner decides the open questions in
+STYLE_TARGET §9.
+
 ## Iteration 3 (5 Oct 2026) — "Het huis dat zich herinnert"
 
 Driven by the iteration-3 implementation prompt and five art-direction images. Design: [`ITERATION_3_DESIGN.md`](ITERATION_3_DESIGN.md);

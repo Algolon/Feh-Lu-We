@@ -1,0 +1,285 @@
+{
+  "viewport": {
+    "width": 844,
+    "height": 390
+  },
+  "deviceScaleFactor": 1,
+  "quality": "low",
+  "renderer": "Chromium 141 + SwiftShader (software WebGL2)",
+  "neutral": "fog disabled, hemisphere #ffffff/#8a8a8a ×2.0, sun #ffffff ×1.6, exposure 1.0; fixture lights unchanged",
+  "clay": "neutral lighting + all MeshLambertMaterial surfaces replaced by matte #c9c3b8 (instance colours removed)",
+  "hud": "hidden (#hud, #stick, #toast) so the frame shows only the world",
+  "saveState": "fresh estate start (essentials, front door open), dusk ≈ 0",
+  "shots": [
+    {
+      "name": "01-hearth-wide",
+      "pose": {
+        "x": 80.6,
+        "y": 0.15,
+        "z": 84.4,
+        "yaw": -1.268,
+        "pitch": -0.071
+      },
+      "lookAt": [
+        72.6,
+        1.2,
+        86.9
+      ],
+      "calls": 92,
+      "triangles": 179318,
+      "room": "living"
+    },
+    {
+      "name": "02-mantel-front",
+      "pose": {
+        "x": 75.4,
+        "y": 0.15,
+        "z": 86.7,
+        "yaw": -1.571,
+        "pitch": -0.159
+      },
+      "lookAt": [
+        72.6,
+        1.35,
+        86.7
+      ],
+      "calls": 112,
+      "triangles": 156528,
+      "room": "living"
+    },
+    {
+      "name": "03-mantel-near",
+      "pose": {
+        "x": 73.9,
+        "y": 0.15,
+        "z": 87,
+        "yaw": -1.92,
+        "pitch": -0.404
+      },
+      "lookAt": [
+        72.8,
+        1.3,
+        86.6
+      ],
+      "calls": 93,
+      "triangles": 156070,
+      "room": "living"
+    },
+    {
+      "name": "04-armchair-near",
+      "pose": {
+        "x": 78.2,
+        "y": 0.15,
+        "z": 81.9,
+        "yaw": -1.022,
+        "pitch": -0.569
+      },
+      "lookAt": [
+        76.4,
+        0.45,
+        83
+      ],
+      "calls": 90,
+      "triangles": 173426,
+      "room": "living"
+    },
+    {
+      "name": "05-library-wide",
+      "pose": {
+        "x": 82.4,
+        "y": 0.15,
+        "z": 97.5,
+        "yaw": -0.861,
+        "pitch": -0.024
+      },
+      "lookAt": [
+        76,
+        1.6,
+        103
+      ],
+      "calls": 43,
+      "triangles": 53466,
+      "room": "library"
+    },
+    {
+      "name": "06-library-table-near",
+      "pose": {
+        "x": 82.4,
+        "y": 0.15,
+        "z": 99.4,
+        "yaw": -0.785,
+        "pitch": -0.391
+      },
+      "lookAt": [
+        80.6,
+        0.75,
+        101.2
+      ],
+      "calls": 41,
+      "triangles": 50830,
+      "room": "library"
+    },
+    {
+      "name": "07-bookshelf-near",
+      "pose": {
+        "x": 74.6,
+        "y": 0.15,
+        "z": 98.2,
+        "yaw": -1.153,
+        "pitch": -0.249
+      },
+      "lookAt": [
+        72.8,
+        1.3,
+        99
+      ],
+      "calls": 17,
+      "triangles": 48190,
+      "room": "library"
+    },
+    {
+      "name": "08-manor-forecourt",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 66,
+        "yaw": 0,
+        "pitch": 0.201
+      },
+      "lookAt": [
+        90,
+        4.5,
+        80
+      ],
+      "calls": 139,
+      "triangles": 141039,
+      "room": "out"
+    },
+    {
+      "name": "09-manor-porch-near",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 75.8,
+        "yaw": 0,
+        "pitch": 0.083
+      },
+      "lookAt": [
+        90,
+        2,
+        80
+      ],
+      "calls": 124,
+      "triangles": 125417,
+      "room": "out"
+    },
+    {
+      "name": "10-woodland-path",
+      "pose": {
+        "x": 66.5,
+        "y": 0,
+        "z": 57.6,
+        "yaw": -2.257,
+        "pitch": -0.018
+      },
+      "lookAt": [
+        56,
+        1.4,
+        49
+      ],
+      "calls": 82,
+      "triangles": 147900,
+      "room": "out"
+    },
+    {
+      "name": "11-southern-loop",
+      "pose": {
+        "x": 40,
+        "y": 0,
+        "z": 9.3,
+        "yaw": 1.616,
+        "pitch": -0.016
+      },
+      "lookAt": [
+        55.5,
+        1.4,
+        8.6
+      ],
+      "calls": 121,
+      "triangles": 202478,
+      "room": "out"
+    },
+    {
+      "name": "12-path-edge-near",
+      "pose": {
+        "x": 47.5,
+        "y": 0,
+        "z": 41.5,
+        "yaw": 0.747,
+        "pitch": -0.422
+      },
+      "lookAt": [
+        50,
+        0,
+        44.2
+      ],
+      "calls": 127,
+      "triangles": 201910,
+      "room": "out"
+    },
+    {
+      "name": "13-boslust-fork",
+      "pose": {
+        "x": 51,
+        "y": 0.11,
+        "z": 7.2,
+        "yaw": 0.938,
+        "pitch": 0.016
+      },
+      "lookAt": [
+        63,
+        2,
+        16
+      ],
+      "calls": 136,
+      "triangles": 211184,
+      "room": "out"
+    },
+    {
+      "name": "14-boslust-cut",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 10.2,
+        "yaw": 0,
+        "pitch": 0.019
+      },
+      "lookAt": [
+        63,
+        1.8,
+        18.2
+      ],
+      "calls": 139,
+      "triangles": 215536,
+      "room": "out"
+    },
+    {
+      "name": "15-boslust-door-near",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 15.4,
+        "yaw": 0,
+        "pitch": -0.089
+      },
+      "lookAt": [
+        63,
+        1.4,
+        18.2
+      ],
+      "calls": 154,
+      "triangles": 222462,
+      "room": "out"
+    }
+  ]
+}

@@ -1,5 +1,10 @@
 # Art direction (iteration 3)
 
+> **Historical record.** This describes what iteration 3 *intended*. The current visual target, the baseline
+> assessment of how far the game is from it, and the review gate are in
+> [`art-refresh/STYLE_TARGET.md`](art-refresh/STYLE_TARGET.md) and
+> [`art-refresh/REVIEW_CHECKLIST.md`](art-refresh/REVIEW_CHECKLIST.md).
+
 ## Reference traits
 Five reference images were supplied for iteration 3 as **direction only** (they are not included in the
 repository and nothing was traced or copied from them):
