@@ -35,7 +35,7 @@ Developer flags, all opt-in: `?ext=sample` (build the new approach), `&light=sam
 ## 2. Scope
 
 The zone is plan X 38–88, Z 0.6–48 (`src/world/boslustZone.ts`): the fork, the side path, the cut, the entrance and
-enough woodland on all sides that the boundary falls 15–35 m from the route. Inside it:
+enough woodland around them that the boundary is 16 m west, 25 m east and 30 m north of the route (south is the estate wall). Inside it:
 
 | Area | Original | Sample |
 |---|---|---|
@@ -326,4 +326,44 @@ approach by a person, and the high-quality (shadow-map) path beyond the absence 
 
 ## 10. Build and URLs
 
-<!--BUILD-->
+Sample code: commit `eea6ab8`; the documents and evidence were added in `4fee5ec`, the commit CI built and
+deployed. The build id on the review start card and in Pauze is the short commit hash of the deployed build, so
+it shows `4fee5ec` or a later docs-only commit on this branch.
+
+### CI and deployment
+
+**CI:** GitHub Actions "Build and deploy to GitHub Pages", run #14
+([37379068072](https://github.com/Algolon/Feh-Lu-We/actions/runs/37379068072)), for commit `4fee5ec`.
+- **Build job:** typecheck, unit tests, production build and artifact upload all succeeded.
+- **Deploy job:** succeeded.
+
+The commit that records this result is docs-only. It redeploys the same game code under its own build id.
+
+**Live delivery is not verified from here.** The authoring environment's proxy refuses `algolon.github.io`
+(`CONNECT tunnel failed, response 403`), so the live page was not loaded. To confirm on your phone:
+1. Open the review URL.
+2. Check that the build id on the review start card starts with `4fee5ec` or a later commit of this branch.
+
+| | |
+|---|---|
+| Review (exterior) | `https://algolon.github.io/Feh-Lu-We/?review=boslust` |
+| Review with FPS overlay | `https://algolon.github.io/Feh-Lu-We/?review=boslust&debug=1` |
+| Review (interior, unchanged) | `https://algolon.github.io/Feh-Lu-We/?review=living` |
+| Normal game (unchanged) | `https://algolon.github.io/Feh-Lu-We/` |
+
+### Limitations
+
+- Real-device performance and colour are unmeasured, and so is touch walking of the whole route by a person.
+- Triangles are above the 250 k guide in the busiest views (~300 k); levers are listed in §7.
+- Weak spots, carried from §6:
+  - Close-up root junctions.
+  - Canopy undersides from directly below.
+  - The headwall's rectangular silhouette in clay.
+  - The path's hard edge.
+  - The original plank door.
+  - Visible style change beyond ~30 m west and north.
+- Two oak models for 48 oaks: repetition is visible in rows.
+- High quality (shadow maps): the shadow proxies render without errors, but no capture set was reviewed at that
+  quality.
+- **Nothing here is propagated beyond the zone, and nothing is approved.** Estate-wide rollout waits for the
+  owner's review.
