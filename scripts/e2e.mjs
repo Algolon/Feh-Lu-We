@@ -826,8 +826,8 @@ async function artSample() {
     const smpAims = await E(page, aimAll, aims);
     const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
     log('art sample: living-room collision identical to the original room', same(base.cols, smp.cols), `${smp.cols.length} colliders${same(base.cols, smp.cols) ? '' : ' DIFF ' + JSON.stringify({ base: base.cols.filter((c) => !smp.cols.includes(c)), sample: smp.cols.filter((c) => !base.cols.includes(c)) })}`);
-    log('art sample: same interactables and light sources (ids, positions, intensities)', same(base.items, smp.items) && same(base.lamps, smp.lamps), JSON.stringify({ items: smp.items, lamps: smp.lamps.length }));
-    log('art sample: reticle targets the same objects from the same poses', same(baseAims, smpAims) && smpAims.every(Boolean), JSON.stringify({ base: baseAims, sample: smpAims }));
+    log('art sample: same interactables and light sources (ids, positions, intensities)', same(base.items, smp.items) && same(base.lamps, smp.lamps), same(base.items, smp.items) && same(base.lamps, smp.lamps) ? `${smp.items.length} interactables, ${smp.lamps.length} lights` : JSON.stringify({ items: [base.items.filter((i) => !smp.items.includes(i)), smp.items.filter((i) => !base.items.includes(i))], lamps: [base.lamps.filter((i) => !smp.lamps.includes(i)), smp.lamps.filter((i) => !base.lamps.includes(i))] }));
+    log('art sample: reticle targets the same objects from the same poses', same(baseAims, smpAims) && smpAims.slice(0, 4).every(Boolean), JSON.stringify({ base: baseAims, sample: smpAims })); // the last pose aims at bare wall in both
     // mantel evidence → hall drawer with the canonical answer, through real movement and the dial panel
     await start(SAMPLE, { player: { estate: { x: 86.5, y: 0.15, z: 88.5, yaw: -Math.PI / 2, pitch: 0 } } });
     const prog = await E(page, () => {

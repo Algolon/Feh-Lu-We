@@ -558,7 +558,7 @@ export function floorLampV2(w: World, x: number, y0: number, z: number) {
   obj.add(bulb);
   obj.position.copy(v3(x, y0, z));
   w.scene.add(obj);
-  return { obj, glow: [bulbMat], light: v3(x, y0 + 1.45, z), shadeMat };
+  return { obj, glow: [bulbMat], light: v3(x, y0 + 1.6, z), shadeMat }; // same light position as the original lamp
 }
 
 // ------------------------------------------------------------------------------------------------ the room
