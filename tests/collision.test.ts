@@ -79,3 +79,23 @@ describe('collision world', () => {
     expect(p.z).toBeGreaterThanOrEqual(0.6);
   });
 });
+
+describe('iteration 2: recovery (F11) and occluders', () => {
+  it('pushes a body out of a circle even when the centres coincide exactly', () => {
+    const w = new CollisionWorld();
+    w.addCircle(50, 50, 0.4);
+    const p = { x: 50, y: 0, z: 50 };
+    w.resolve(p, R, H, STEP);
+    expect(Math.hypot(p.x - 50, p.z - 50)).toBeGreaterThanOrEqual(0.7 - 1e-9);
+    expect(w.overlaps(p.x, p.z, p.y, R, H, STEP)).toBe(false);
+  });
+  it('occluder-only slabs block line of sight between storeys but never movement', () => {
+    const w = new CollisionWorld();
+    w.addOccluder(0, 10, 0, 10, 3.15, 3.35);
+    expect(w.segmentBlocked(5, 1.8, 5, 5.5, 3.9, 5)).toBe(true); // looking up through the ceiling
+    expect(w.segmentBlocked(5, 1.8, 5, 6, 1.0, 5)).toBe(false);
+    const p = { x: 5, y: 2.5, z: 5 }; // even standing mid-height (e.g. on stairs) nothing pushes the player
+    w.move(p, 1, 0, R, H, STEP);
+    expect(p.x).toBeCloseTo(6, 5);
+  });
+});

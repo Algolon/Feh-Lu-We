@@ -11,6 +11,7 @@ import { mulberry32 } from '../core/rng';
 import { plaqueTexture } from './textures';
 import { useOnFirePit, lightPostLantern, readFirePlate, useOnWell } from '../puzzles/rules';
 import { has } from '../core/state';
+import { ITEMS } from '../content/items';
 
 export const SITES = {
   shed: { x: 28, z: 26 },
@@ -211,6 +212,13 @@ function buildFireClearing(w: World, g: GameApi, c: Ctx) {
     label: () => (g.state.lit['fire.clearing'] ? 'Vuur doven' : 'Vuurkuil'),
     run: () => g.act(useOnFirePit(g.state, null)),
     useItem: (item) => g.act(useOnFirePit(g.state, item)),
+    itemLabel: (item) => {
+      const f = g.state.flags, lit = !!g.state.lit['fire.clearing'];
+      if (lit) return null; // a burning fire: the default action (douse) applies
+      if (item === 'kindling' && !f.firewood) return 'Aanmaakhout erin leggen';
+      if (item === 'matches') return f.firewood ? 'Aansteken' : 'Gebruik: Lucifers';
+      return `Gebruik: ${ITEMS[item]?.name ?? item}`;
+    },
   });
   // mounted lantern on a post + engraved copper plate
   const PX = 16.8, PZ = 13.6;
@@ -304,6 +312,7 @@ function buildWell(w: World, g: GameApi, c: Ctx) {
     },
     run: () => g.act(useOnWell(g.state, null)),
     useItem: (item) => g.act(useOnWell(g.state, item)),
+    itemLabel: (item) => (g.state.flags.crankInstalled ? null : item === 'crank' ? 'Zwengel plaatsen' : `Gebruik: ${ITEMS[item]?.name ?? item}`),
   });
 }
 

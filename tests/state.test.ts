@@ -36,3 +36,38 @@ describe('save parsing', () => {
     expect(parseSettings('nope', false).muted).toBe(false);
   });
 });
+
+describe('iteration 2: save validation (F12) and v3 migration', () => {
+  it('drops unknown item, clue, slot and symbol ids instead of keeping them', () => {
+    const s = migrate({
+      version: 3, scene: 'estate',
+      inventory: ['torch', 'ghostItem'], used: ['crank', '???'], clues: ['c.mantel', 'c.nope'],
+      slots: { left: 'token', right: 'bogus', middle: 'crest' }, seq: { gardenLanterns: ['maan', 'xx'] },
+      hints: { 'p1.drawer': 9, 'p2.study': -2 }, wrong: { drawerLock: 2.7 },
+    })!;
+    expect(s.inventory).toEqual(['torch']);
+    expect(s.used).toEqual(['crank']);
+    expect(s.clues).toEqual(['c.mantel']);
+    expect(s.slots).toEqual({ left: 'token', right: null });
+    expect(s.seq.gardenLanterns).toEqual(['maan']);
+    expect(s.hints).toEqual({ 'p1.drawer': 3, 'p2.study': 0 });
+    expect(s.wrong.drawerLock).toBe(2);
+  });
+  it('migrates a v2 save: progress kept, playMs becomes activeMs', () => {
+    const v2 = { version: 2, scene: 'estate', inventory: ['torch', 'crest'], flags: { drawerLockSolved: true }, open: { 'door.front': true }, stats: { playMs: 123456, startedAt: 5, finishedAt: null } };
+    const s = migrate(v2)!;
+    expect(s.version).toBe(STATE_VERSION);
+    expect(s.flags.drawerLockSolved).toBe(true);
+    expect(s.open['door.front']).toBe(true);
+    expect(s.inventory).toEqual(['torch', 'crest']);
+    expect(s.stats.activeMs).toBe(123456);
+    expect(s.stats.finishedActiveMs).toBeNull();
+    expect(s.events).toEqual([]);
+  });
+  it('rejects out-of-bounds saved poses and non-finite stats', () => {
+    const s = migrate({ version: 3, player: { estate: { x: 1e9, y: 0, z: 3, yaw: 0, pitch: 0 } }, stats: { activeMs: -5, finishedAt: 'x' } })!;
+    expect(s.player.estate).toBeNull();
+    expect(s.stats.activeMs).toBe(0);
+    expect(s.stats.finishedAt).toBeNull();
+  });
+});

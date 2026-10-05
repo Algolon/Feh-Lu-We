@@ -7,7 +7,8 @@ export interface InputSettings { lookSensitivity: number; moveSensitivity: numbe
 export class Input {
   moveX = 0; // strafe -1..1 (right +)
   moveY = 0; // forward -1..1
-  run = false;
+  /** 0 = walk speed, 1 = full run; continuous so speed never jumps. */
+  runAmt = 0;
   lookDX = 0; // accumulated radians since last frame
   lookDY = 0;
   enabled = true;
@@ -20,6 +21,7 @@ export class Input {
   private stickId: number | null = null;
   private stickOrigin = { x: 0, y: 0 };
   private stickVec = { x: 0, y: 0 };
+  private stickStart = { t: 0, moved: 0 };
   private lookId: number | null = null;
   private lookLast = { x: 0, y: 0 };
   private lookStart = { x: 0, y: 0, t: 0, moved: 0 };
@@ -106,6 +108,7 @@ export class Input {
     try { this.moveZone.setPointerCapture(e.pointerId); } catch { /* ignore */ }
     this.stickOrigin = { x: e.clientX, y: e.clientY };
     this.stickVec = { x: 0, y: 0 };
+    this.stickStart = { t: performance.now(), moved: 0 };
     this.stickBase.style.left = `${e.clientX}px`;
     this.stickBase.style.top = `${e.clientY}px`;
     this.stickBase.classList.add('active');
@@ -115,6 +118,7 @@ export class Input {
     e.preventDefault();
     let dx = e.clientX - this.stickOrigin.x, dy = e.clientY - this.stickOrigin.y;
     const d = Math.hypot(dx, dy);
+    this.stickStart.moved = Math.max(this.stickStart.moved, d);
     if (d > this.stickRadius) {
       dx = (dx / d) * this.stickRadius;
       dy = (dy / d) * this.stickRadius;
@@ -125,6 +129,9 @@ export class Input {
   private stickUp(e: PointerEvent) {
     if (e.pointerId !== this.stickId) return;
     this.stickId = null;
+    // a short stationary tap on the left side is an object tap, like on the right side
+    const tap = e.type === 'pointerup' && this.enabled && this.stickStart.moved < 12 && performance.now() - this.stickStart.t < 350;
+    if (tap) this.onTap?.(e.clientX, e.clientY);
     this.stickVec = { x: 0, y: 0 };
     this.stickBase.classList.remove('active');
     this.stickKnob.style.transform = 'translate(-50%, -50%)';
@@ -186,16 +193,18 @@ export class Input {
       if (this.keys.has('KeyA') || this.keys.has('ArrowLeft')) x -= 1;
       const kl = Math.hypot(x, y);
       if (kl > 1) { x /= kl; y /= kl; }
-      this.run = this.keys.has('ShiftLeft') || this.keys.has('ShiftRight');
+      this.runAmt = this.keys.has('ShiftLeft') || this.keys.has('ShiftRight') ? 1 : 0;
       if (this.stickId !== null) {
         const sx = this.stickVec.x, sy = -this.stickVec.y;
         const m = Math.hypot(sx, sy);
         const dead = 0.14;
         if (m > dead) {
+          // continuous curve: 0..80% of the throw ramps up to walking speed, the last 20% blends into a jog
           const mm = Math.min(1, ((m - dead) / (1 - dead)) * this.settings.moveSensitivity);
-          x = (sx / m) * mm;
-          y = (sy / m) * mm;
-          this.run = mm > 0.97; // push to the rim to jog
+          const walk = Math.min(1, mm / 0.8);
+          x = (sx / m) * walk;
+          y = (sy / m) * walk;
+          this.runAmt = Math.max(0, (mm - 0.8) / 0.2);
         }
       }
     }
@@ -210,9 +219,9 @@ export class Input {
   }
 
   /** For automated tests: inject a move vector (same path as joystick/keyboard). */
-  injectMove(x: number, y: number, run = false) {
+  injectMove(x: number, y: number, run = 0) {
     this.moveX = x;
     this.moveY = y;
-    this.run = run;
+    this.runAmt = run;
   }
 }

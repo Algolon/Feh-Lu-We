@@ -8,6 +8,7 @@ export interface Box {
   minX: number; maxX: number; minZ: number; maxZ: number; minY: number; maxY: number;
   enabled: boolean;
   occludes: boolean; // blocks interaction line-of-sight (walls, doors)
+  solid: boolean; // blocks movement (false = interaction occluder only, e.g. a ceiling slab)
   tag?: string;
 }
 export interface Circle {
@@ -15,6 +16,7 @@ export interface Circle {
   x: number; z: number; r: number; minY: number; maxY: number;
   enabled: boolean;
   occludes: boolean;
+  solid: boolean;
   tag?: string;
 }
 export type Collider = Box | Circle;
@@ -44,7 +46,7 @@ export class CollisionWorld {
     return (ix + 512) * 4096 + (iz + 512);
   }
 
-  addBox(minX: number, maxX: number, minZ: number, maxZ: number, minY: number, maxY: number, opts: Partial<Pick<Box, 'occludes' | 'tag' | 'enabled'>> = {}): Box {
+  addBox(minX: number, maxX: number, minZ: number, maxZ: number, minY: number, maxY: number, opts: Partial<Pick<Box, 'occludes' | 'tag' | 'enabled' | 'solid'>> = {}): Box {
     const b: Box = {
       kind: 'box',
       minX: Math.min(minX, maxX), maxX: Math.max(minX, maxX),
@@ -52,6 +54,7 @@ export class CollisionWorld {
       minY, maxY,
       enabled: opts.enabled ?? true,
       occludes: opts.occludes ?? false,
+      solid: opts.solid ?? true,
       tag: opts.tag,
     };
     this.insert(b, b.minX, b.maxX, b.minZ, b.maxZ);
@@ -59,14 +62,19 @@ export class CollisionWorld {
   }
 
   /** Box given by centre/size (plan coords). */
-  addBoxC(cx: number, cz: number, sx: number, sz: number, minY: number, maxY: number, opts: Partial<Pick<Box, 'occludes' | 'tag' | 'enabled'>> = {}): Box {
+  addBoxC(cx: number, cz: number, sx: number, sz: number, minY: number, maxY: number, opts: Partial<Pick<Box, 'occludes' | 'tag' | 'enabled' | 'solid'>> = {}): Box {
     return this.addBox(cx - sx / 2, cx + sx / 2, cz - sz / 2, cz + sz / 2, minY, maxY, opts);
   }
 
   addCircle(x: number, z: number, r: number, minY = 0, maxY = 10, opts: Partial<Pick<Circle, 'occludes' | 'tag' | 'enabled'>> = {}): Circle {
-    const c: Circle = { kind: 'circle', x, z, r, minY, maxY, enabled: opts.enabled ?? true, occludes: opts.occludes ?? false, tag: opts.tag };
+    const c: Circle = { kind: 'circle', x, z, r, minY, maxY, enabled: opts.enabled ?? true, occludes: opts.occludes ?? false, solid: true, tag: opts.tag };
     this.insert(c, x - r, x + r, z - r, z + r);
     return c;
+  }
+
+  /** Interaction-only occluder: blocks line of sight, never movement (ceilings/floors between storeys). */
+  addOccluder(minX: number, maxX: number, minZ: number, maxZ: number, minY: number, maxY: number): Box {
+    return this.addBox(minX, maxX, minZ, maxZ, minY, maxY, { occludes: true, solid: false });
   }
 
   addFloor(minX: number, maxX: number, minZ: number, maxZ: number, y: number) {
@@ -123,7 +131,7 @@ export class CollisionWorld {
   }
 
   private verticalHit(c: Collider, y: number, height: number, stepUp: number) {
-    return c.enabled && c.minY < y + height && c.maxY > y + stepUp;
+    return c.enabled && c.solid && c.minY < y + height && c.maxY > y + stepUp;
   }
 
   /** Push a circle body out of all overlapping colliders. Returns true if anything was hit. */
@@ -158,9 +166,14 @@ export class CollisionWorld {
           const rr = r + c.r;
           const d2 = dx * dx + dz * dz;
           if (d2 >= rr * rr) return;
-          const d = Math.sqrt(d2) || 1e-6;
-          p.x += (dx / d) * (rr - d);
-          p.z += (dz / d) * (rr - d);
+          if (d2 < 1e-12) {
+            // exactly concentric: no direction to push along; use a deterministic safe direction (+x)
+            p.x = c.x + rr;
+          } else {
+            const d = Math.sqrt(d2);
+            p.x += (dx / d) * (rr - d);
+            p.z += (dz / d) * (rr - d);
+          }
           moved = hit = true;
         }
       });

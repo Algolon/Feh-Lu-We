@@ -5,7 +5,7 @@ import { World, type GameApi } from '../interactions/world';
 import { makeCtx, wall, floor, ceiling } from './arch';
 import { box, cyl, compound, v3 } from './kit';
 import { table as _t, roundTable, chair, bookshelf, armchair, rug, plant, painting, tableLamp, floorLamp, flame, part } from './furniture';
-import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place } from '../interactions/props';
+import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place, lightableItemLabel } from '../interactions/props';
 import type { SceneExtras } from '../core/game';
 import { has } from '../core/state';
 import { tutorialMissing } from '../puzzles/rules';
@@ -141,6 +141,7 @@ export function buildHome(g: GameApi): { world: World; extras: SceneExtras } {
       if (g.state.lit['home.candle']) { g.state.lit['home.candle'] = false; g.changed(); return; }
       g.toast(has(g.state, 'matches') ? 'Kies de lucifers in je tas (🎒 → In de hand nemen) en gebruik ze hier.' : 'Een kaars. Met lucifers kun je hem aansteken.');
     },
+    itemLabel: lightableItemLabel(() => !!g.state.lit['home.candle']),
     useItem: (item) => {
       if (item !== 'matches') { g.act({ ok: false, msg: 'Daarmee steek je geen kaars aan.', sfx: 'fail' }, { save: false }); return; }
       g.state.lit['home.candle'] = true;

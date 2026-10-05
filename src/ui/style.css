@@ -143,3 +143,7 @@ textarea { width: 100%; min-height: 90px; font: inherit; font-size: 15px; border
 #debug button { font: 11px monospace; margin: 2px; min-height: 28px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 body.reduced-motion * { transition: none !important; animation: none !important; }
+
+.seq.shake { animation: shake .35s; }
+@keyframes shake { 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-5px); } 80% { transform: translateX(5px); } }
+.btn.loading { opacity: .6; pointer-events: none; }

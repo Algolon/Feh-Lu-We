@@ -58,7 +58,7 @@ async function walkthrough() {
     await step('take torch', () => T.act('pk.torch', 'Zaklamp'));
     await step('take matches', () => T.act('pk.matches', 'Lucifers'));
     await step('take notebook', () => T.act('pk.notebook', 'Notitieboek'));
-    await step('use matches on candle', () => { T.select('matches'); T.act('home.candle', 'Gebruik: Lucifers'); T.select(null); if (!T.G().state.lit['home.candle']) throw new Error('candle not lit'); });
+    await step('use matches on candle', () => { T.select('matches'); T.act('home.candle', 'Aansteken'); T.select(null); if (!T.G().state.lit['home.candle']) throw new Error('candle not lit'); });
     await step('door refuses while key missing', () => { T.walk([[6.6, 3.0]]); T.act('home.door'); if (T.G().state.scene !== 'home') throw new Error('left without key'); });
     await step('table lamp on', () => { T.walk([[5.2, 4.9], [2.6, 4.6], [1.3, 3.8]]); T.act('home.tablelamp', 'Aandoen'); if (!T.G().state.lit['home.tablelamp']) throw new Error('lamp'); });
     await step('open dressoir drawer', () => { T.walk([[1.3, 3.2]]); T.act('home.drawer', 'Openen'); T.wait(1); });
@@ -110,7 +110,7 @@ async function walkthrough() {
     await step('walk to the fire clearing', () => T.walk([[29.6, 26.2], [31.4, 26.2], [32.8, 25.6], [32.8, 23.0], [26.5, 23.4], [21, 17.5], [17.2, 15.6], [15.6, 14.0]], true));
     await step('matches before kindling fail', () => { T.select('matches'); T.act('firepit', 'Gebruik'); if (T.G().state.lit['fire.clearing']) throw new Error('lit without wood'); });
     await step('lantern refuses without fire', () => { T.select(null); T.act('lantern.firepost.act'); if (T.G().state.lit['lantern.firepost']) throw new Error('lantern lit early'); });
-    await step('kindling + matches → fire', () => { T.select('kindling'); T.act('firepit', 'Aanmaakhout'); T.select('matches'); T.act('firepit', 'Lucifers'); T.select(null); if (!T.G().state.lit['fire.clearing']) throw new Error('no fire'); });
+    await step('kindling + matches → fire', () => { T.select('kindling'); T.act('firepit', 'Aanmaakhout'); T.select('matches'); T.act('firepit', 'Aansteken'); T.select(null); if (!T.G().state.lit['fire.clearing']) throw new Error('no fire'); });
     await step('light post lantern, read plate', () => { T.act('lantern.firepost.act', 'Lantaarn'); T.act('plate.fire', 'plaat'); if (!T.modalOpen()) throw new Error('plate not shown'); T.closeModal(); });
     await shot(page, '10-fire');
     // --- beat 5: garden lanterns
@@ -460,8 +460,79 @@ async function metrics() {
   await ctx.close();
 }
 
+// ------------------------------------------------------------------------------------------------
+// Iteration-2 regression checks for the independent review findings (F01–F05). Written to FAIL on the
+// reviewed commit and pass after the fixes. Uses real UI input (CDP touch/mouse, DOM clicks) where it matters.
+async function regressions() {
+  const { ctx, page } = await newPage();
+  const r = {};
+  try {
+    // F01 — a saved-open door must LOOK open after reload (hinge angle), not only be passable.
+    await startEstate(page, { open: { 'door.front': true, 'door.corridor': true }, player: { estate: { x: 60, y: 0.15, z: 66, yaw: 0, pitch: 0 } } });
+    r.f01 = await E(page, () => {
+      T.tick(2);
+      const it = T.G().world.byId.get('door.corridor');
+      const front = T.G().world.byId.get('door.front');
+      return { corridor: +it.obj.rotation.y.toFixed(2), front: +front.obj.rotation.y.toFixed(2) };
+    });
+    log('F01 saved-open doors are visually open after reload', Math.abs(r.f01.corridor - 1.6) < 0.05 && Math.abs(r.f01.front - 1.6) < 0.05, JSON.stringify(r.f01));
+    // F02 — upstairs study compartment must not be targetable from the living room below.
+    await startEstate(page, { player: { estate: { x: 49.75, y: 0.15, z: 67.2, yaw: -Math.PI / 2, pitch: 1.2 } } });
+    r.f02 = await E(page, () => {
+      const hits = [];
+      for (const id of ['study.compartment', 'inspect.studyNote', 'pk.shedKey']) { T.lookAtId(id); hits.push(T.G().metrics().target); }
+      return hits;
+    });
+    log('F02 upstairs desk/note not reachable through the ceiling', r.f02.every((t) => t === null || !/study|shedKey/.test(t)), JSON.stringify(r.f02));
+    // F03 — with the matching key selected, an already-unlocked door opens/closes normally.
+    await startEstate(page, { inventory: [...ESSENTIALS, 'studyKey'], unlocked: ['lock.door.front', 'lock.door.study'], player: { estate: { x: 57.6, y: 3.35, z: 67.6, yaw: 0, pitch: 0 } } });
+    r.f03 = await E(page, () => {
+      T.select('studyKey');
+      const before = !!T.G().state.open['door.study'];
+      const label = T.act('door.study');
+      return { before, after: !!T.G().state.open['door.study'], label };
+    });
+    log('F03 selected key does not block opening an unlocked door', r.f03.after !== r.f03.before && !/Gebruik/.test(r.f03.label ?? ''), JSON.stringify(r.f03));
+    // F04 — a completed button-lock entry must not act after the panel was replaced by another modal.
+    await startEstate(page, { player: { estate: { x: 60, y: 0.15, z: 58, yaw: 0, pitch: 0 } } });
+    await E(page, () => T.G().openPanel('studyLock'));
+    for (const k of ['put', 'schuur', 'vuur']) await page.click(`[data-k="${k}"]`);
+    await page.click('#b-bag', { force: true }).catch(() => {});
+    await E(page, () => T.G().openBag());
+    await page.waitForTimeout(500);
+    r.f04 = await E(page, () => ({ wrong: T.G().state.wrong.studyLock ?? 0, modal: document.querySelector('.modal h2')?.textContent }));
+    log('F04 no stale delayed submission closes a newer modal', r.f04.modal === 'Tas', JSON.stringify(r.f04));
+  } catch (e) {
+    log('regressions', false, e.message.split('\n')[0]);
+  }
+  await ctx.close();
+  // F05 — a stationary tap on an object in the LEFT part of the screen interacts (touch).
+  const t = await newPage({ viewport: { width: 844, height: 390 }, hasTouch: true, isMobile: true, deviceScaleFactor: 2 });
+  try {
+    await startGame(t.page);
+    const cdp = await t.ctx.newCDPSession(t.page);
+    const pt = await t.page.evaluate(() => {
+      T.walk([[3.2, 2.5]]);
+      T.lookAt(4.3, 0.8, 3.05);
+      const p = __game.player; p.yaw += 0.55; T.tick(2);
+      const c = T.hitCenter('pk.torch');
+      const v = new (__game.camera.position.constructor)(c.x, c.y, -c.z).project(__game.camera);
+      return { x: (v.x + 1) / 2 * innerWidth, y: (1 - v.y) / 2 * innerHeight };
+    });
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: pt.x, y: pt.y, id: 9 }] });
+    await t.page.waitForTimeout(80);
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    await t.page.waitForTimeout(300);
+    const taken = await t.page.evaluate(() => __game.state.taken.includes('pk.torch'));
+    log('F05 stationary tap on the left side of the screen interacts', taken && pt.x < 844 * 0.42, `tap at ${pt.x.toFixed(0)},${pt.y.toFixed(0)}`);
+  } catch (e) {
+    log('F05', false, e.message.split('\n')[0]);
+  }
+  await t.ctx.close();
+}
+
 const only = process.env.E2E_ONLY?.split(',');
-const suites = { walkthrough, collisionChecks, saveChecks, touchChecks, webglFailure, metrics };
+const suites = { regressions, walkthrough, collisionChecks, saveChecks, touchChecks, webglFailure, metrics };
 for (const [name, fn] of Object.entries(suites)) if (!only || only.includes(name)) await fn();
 
 const failed = results.filter((r) => !r.ok);

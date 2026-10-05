@@ -76,12 +76,9 @@ export function makeDoor(w: World, g: GameApi, o: DoorOpts) {
   const isOpen = () => g.state.open[o.id] === true;
 
   const setOpen = (open: boolean) => {
-    if (!open) {
-      const p = g.playerXZ();
-      if (p.y < o.y0 + o.height && p.y + 1.7 > o.y0 && CollisionWorld.circleHitsBox(p.x, p.z, g.playerRadius + 0.05, collider)) {
-        g.toast('Je staat in de deuropening. Doe een stapje opzij.');
-        return;
-      }
+    if (!open && playerInLeafPath()) {
+      g.toast('Je staat waar de deur dichtzwaait. Doe een stapje opzij.');
+      return;
     }
     g.state.open[o.id] = open;
     g.sfx('door');
@@ -111,26 +108,49 @@ export function makeDoor(w: World, g: GameApi, o: DoorOpts) {
       return isOpen() ? 'Sluiten' : 'Openen';
     },
     run: () => (isLocked() ? tryUnlock(null) : setOpen(!isOpen())),
-    useItem: (item) => (isLocked() ? tryUnlock(item) : g.act({ ok: false, msg: 'De deur is al van het slot.', sfx: 'none' }, { save: false })),
+    // A held item only matters while the door is locked; once unlocked the door simply opens/closes.
+    itemLabel: (item) => (isLocked() ? (item === o.key ? 'Ontgrendelen' : `Gebruik: ${ITEMS[item]?.name ?? item}`) : null),
+    useItem: (item) => (isLocked() ? tryUnlock(item) : setOpen(!isOpen())),
   });
 
+  // Visual angle and collision are both derived from the persisted open state. The closed-leaf collider
+  // stays solid while the leaf is mostly closed (< ~25°), so collision agrees with what the player sees.
+  const OPEN = o.swing * 1.6, SOLID_BELOW = 0.45;
+  // Sweep area of the leaf: the square spanned by the closed leaf and the open leaf (swing side).
+  const playerInLeafPath = () => {
+    const p = g.playerXZ();
+    if (!(p.y < o.y0 + o.height && p.y + 1.7 > o.y0)) return false;
+    return CollisionWorld.circleHitsBox(p.x, p.z, g.playerRadius + 0.05, sweepBox);
+  };
+  const [nx, nz] = [-dz * o.swing, dx * o.swing]; // plan normal on the swing side
+  const sweepBox: Box = {
+    kind: 'box', enabled: true, occludes: false, solid: false,
+    minX: Math.min(o.x, o.x + dx * o.width, o.x + nx * o.width) - 0.05, maxX: Math.max(o.x, o.x + dx * o.width, o.x + nx * o.width) + 0.05,
+    minZ: Math.min(o.z, o.z + dz * o.width, o.z + nz * o.width) - 0.05, maxZ: Math.max(o.z, o.z + dz * o.width, o.z + nz * o.width) + 0.05,
+    minY: o.y0, maxY: o.y0 + o.height,
+  };
+  const applyCollision = () => { collider.enabled = Math.abs(angle) < SOLID_BELOW; };
   w.onSync(() => {
-    target = isOpen() ? o.swing * 1.6 : 0;
-    collider.enabled = !isOpen();
+    target = isOpen() ? OPEN : 0;
     if (first) {
       angle = target;
+      pivot.rotation.y = base + angle; // restored doors start at their real angle
       first = false;
     }
+    applyCollision();
   });
   w.onUpdate((dt) => {
     if (angle !== target) {
+      // a closing leaf waits instead of sweeping through the player
+      if (target === 0 && playerInLeafPath()) return;
       const step = dt * 2.6;
       angle = Math.abs(target - angle) < step ? target : angle + Math.sign(target - angle) * step;
       pivot.rotation.y = base + angle;
+      applyCollision();
     }
   });
   pivot.rotation.y = base;
-  return { pivot, collider };
+  return { pivot, collider, angle: () => angle };
 }
 
 export interface DrawerOpts {
@@ -326,14 +346,14 @@ export function makeInspect(w: World, g: GameApi, o: InspectOpts) {
 }
 
 /** Generic interactable from a placed object. */
-export function makeAction(w: World, o: { id: string; obj: THREE.Object3D; hit: [number, number, number]; hitOffset?: [number, number, number]; reach?: number; label: () => string | null; run: () => void; useItem?: (item: string) => void }) {
+export function makeAction(w: World, o: { id: string; obj: THREE.Object3D; hit: [number, number, number]; hitOffset?: [number, number, number]; reach?: number; label: () => string | null; run: () => void; useItem?: (item: string) => void; itemLabel?: (item: string) => string | null }) {
   const off = o.hitOffset ?? [0, o.hit[1] / 2, 0];
   const hb = hitbox(o.obj, o.hit[0], o.hit[1], o.hit[2], off[0], off[1], off[2]);
   const focus = new THREE.Vector3();
   o.obj.updateWorldMatrix(true, false);
   hb.updateWorldMatrix(true, false);
   hb.getWorldPosition(focus);
-  w.add({ id: o.id, obj: o.obj, hit: [hb], focus, reach: o.reach ?? 2.6, label: o.label, run: o.run, acceptsItems: !!o.useItem, useItem: o.useItem });
+  w.add({ id: o.id, obj: o.obj, hit: [hb], focus, reach: o.reach ?? 2.6, label: o.label, run: o.run, acceptsItems: !!o.useItem, useItem: o.useItem, itemLabel: o.itemLabel });
 }
 
 /** Place an object at plan coords facing plan yaw. */
@@ -341,4 +361,9 @@ export function place(obj: THREE.Object3D, x: number, y: number, z: number, yaw 
   obj.position.copy(v3(x, y, z));
   obj.rotation.y = -yaw;
   return obj;
+}
+
+/** Standard resolver for "light it with matches" targets: matches light it; once lit, held items are ignored. */
+export function lightableItemLabel(isLit: () => boolean) {
+  return (item: string) => (isLit() ? null : item === 'matches' ? 'Aansteken' : `Gebruik: ${ITEMS[item]?.name ?? item}`);
 }

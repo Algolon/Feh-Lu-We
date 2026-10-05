@@ -1,7 +1,7 @@
 // Game orchestrator: renderer + loop, input → player, interaction picking, save/restore, scenes, UI glue.
 import * as THREE from 'three';
 import {
-  type GameState, type Settings, type SceneId, type PlayerPose, SAVE_KEY, SETTINGS_KEY, defaultState, parseSave, parseSettings, storage, addClue, has,
+  type GameState, type Settings, type SceneId, type PlayerPose, SAVE_KEY, SETTINGS_KEY, defaultState, parseSave, parseSettings, storage, addClue, has, logEvent,
 } from './state';
 import { Input } from '../player/input';
 import { Player, PLAYER } from '../player/player';
@@ -51,10 +51,12 @@ export class Game implements GameApi {
   private poseTimer = 0;
   private cullTimer = 0;
   private switching = false;
-  private fpsAcc = { n: 0, t: 0, fps: 0 };
+  private fpsAcc = { t: 0, fps: 0 };
   private debugEl: HTMLDivElement | null = null;
   private dusk = 0;
   autopilot: { x: number; z: number; run: boolean } | null = null;
+  contextLost = false;
+  private started = false;
 
   constructor(private canvas: HTMLCanvasElement) {
     const coarse = matchMedia('(pointer: coarse)').matches;
@@ -64,9 +66,17 @@ export class Game implements GameApi {
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.15;
     this.renderer.shadowMap.type = THREE.PCFShadowMap;
+    // Context loss: pause rendering + input, save, offer recovery; resume automatically if the context returns.
     this.canvas.addEventListener('webglcontextlost', (e) => {
       e.preventDefault();
-      this.ui.toast('Het beeld is even weggevallen. Herlaad de pagina als het niet terugkomt; je voortgang is bewaard.', 8000);
+      this.contextLost = true;
+      this.saveNow();
+      this.ui.contextLost(() => location.reload());
+    });
+    this.canvas.addEventListener('webglcontextrestored', () => {
+      this.contextLost = false;
+      this.ui.closeModal();
+      this.ui.toast('Het beeld is terug.');
     });
     this.camera.rotation.order = 'YXZ';
     this.torch.position.set(0.25, -0.2, 0);
@@ -77,9 +87,13 @@ export class Game implements GameApi {
     window.visualViewport?.addEventListener('resize', () => this.resize());
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
+        this.hiddenAt = performance.now();
         this.audio.suspend();
         this.saveNow();
       } else if (this.running) {
+        // off-tab time is recorded as paused, never as active play
+        if (this.hiddenAt) this.state.stats.pausedMs += Math.min(performance.now() - this.hiddenAt, 6 * 3600e3);
+        this.hiddenAt = 0;
         this.audio.resume();
         this.last = performance.now();
       }
@@ -94,6 +108,8 @@ export class Game implements GameApi {
   }
 
   async start(fresh: boolean) {
+    if (this.started) return; // one input subscription set, one RAF loop
+    this.started = true;
     await this.audio.unlock();
     this.audio.setMuted(this.settings.muted);
     if (fresh) {
@@ -214,10 +230,12 @@ export class Game implements GameApi {
     if (!this.state.finished) {
       this.state.finished = true;
       this.state.stats.finishedAt = Date.now();
+      this.state.stats.finishedActiveMs = Math.round(this.state.stats.activeMs);
+      logEvent(this.state, 'finished');
       this.saveNow();
     }
     this.sfx('chime');
-    const minutes = Math.round(this.state.stats.playMs / 60000);
+    const minutes = Math.round((this.state.stats.finishedActiveMs ?? this.state.stats.activeMs) / 60000);
     const hints = Object.values(this.state.hints).reduce((a, b) => a + b, 0);
     const wrong = Object.values(this.state.wrong).reduce((a, b) => a + b, 0);
     this.ui.ending({
@@ -320,7 +338,7 @@ export class Game implements GameApi {
     const canLock = matchMedia('(pointer: fine)').matches && 'requestPointerLock' in HTMLElement.prototype;
     const canFs = !!document.documentElement.requestFullscreen && !document.fullscreenElement;
     this.ui.pause(this.settings, {
-      playMinutes: Math.round(this.state.stats.playMs / 60000),
+      playMinutes: Math.round(this.state.stats.activeMs / 60000),
       onChange: (s) => {
         const qualityChanged = s.quality !== this.settings.quality;
         Object.assign(this.settings, s);
@@ -363,7 +381,7 @@ export class Game implements GameApi {
     const hits: THREE.Object3D[] = [];
     for (const it of w.items) {
       if (it.focus.distanceTo(eye) > it.reach + 6) continue;
-      if (!visible(it.obj)) continue;
+      if (!visible(it.obj) || w.isCulled(it.obj)) continue; // render culling also removes input eligibility
       it.obj.updateWorldMatrix(true, true); // animated doors/drawers: never pick against a stale pose
       hits.push(...it.hit);
     }
@@ -395,16 +413,22 @@ export class Game implements GameApi {
     if (this.target) this.perform(this.target);
   }
 
+  /** Held-item action label for this target, or null when the default action applies. */
+  private itemAction(it: Interactable): string | null {
+    const sel = this.selected;
+    if (!sel || !it.acceptsItems || !it.useItem || !ITEMS[sel]) return null;
+    return it.itemLabel ? it.itemLabel(sel) : `Gebruik: ${ITEMS[sel].name}`;
+  }
+
   private perform(it: Interactable) {
-    if (this.selected && it.acceptsItems && it.useItem) it.useItem(this.selected);
+    if (this.itemAction(it) !== null) it.useItem!(this.selected!);
     else it.run();
   }
 
   private actionLabel(it: Interactable): string | null {
     const l = it.label();
     if (l === null) return null;
-    if (this.selected && it.acceptsItems) return `Gebruik: ${ITEMS[this.selected].name}`;
-    return l;
+    return this.itemAction(it) ?? l;
   }
 
   // ------------------------------------------------------------------ frame loop
@@ -412,13 +436,36 @@ export class Game implements GameApi {
     if (!this.running) return;
     requestAnimationFrame(this.frame);
     if (document.hidden) return;
-    const dt = Math.min(0.1, Math.max(0, (now - this.last) / 1000));
+    const realMs = Math.max(0, now - this.last); // uncapped wall time: FPS + playtest timing
+    const dt = Math.min(0.1, realMs / 1000); // capped simulation step
     this.last = now;
-    if (!this.world) return;
+    if (!this.world || this.contextLost) return;
+    this.account(Math.min(realMs, 1000));
     this.tick(dt);
     this.renderer.render(this.world.scene, this.camera);
+    this.frameMs[this.frameIdx++ % this.frameMs.length] = realMs;
     this.debugFrame(dt);
   };
+
+  /** Playtest timing from real elapsed time: reading panels counts as active, the pause menu as paused. */
+  private account(ms: number) {
+    const st = this.state.stats;
+    if (this.ui.modalKind === 'pause') st.pausedMs += ms;
+    else st.activeMs += ms;
+    if (this.movedLastTick) st.moveMs += ms;
+  }
+  private frameMs = new Float32Array(240);
+  private frameIdx = 0;
+  private movedLastTick = false;
+  private hiddenAt = 0;
+  /** Median FPS and 95th-percentile frame time over the last ~240 real frames. */
+  frameStats() {
+    const n = Math.min(this.frameIdx, this.frameMs.length);
+    if (!n) return { fps: 0, medianMs: 0, p95Ms: 0, frames: 0 };
+    const a = Array.from(this.frameMs.subarray(0, n)).sort((x, y) => x - y);
+    const med = a[Math.floor(n / 2)], p95 = a[Math.min(n - 1, Math.floor(n * 0.95))];
+    return { fps: med > 0 ? Math.round(1000 / med) : 0, medianMs: +med.toFixed(1), p95Ms: +p95.toFixed(1), frames: n };
+  }
 
   /** One simulation step (input → player → world → picking). Also used by automated tests at a fixed dt. */
   tick(dt: number) {
@@ -426,10 +473,10 @@ export class Game implements GameApi {
     const w = this.world;
     if (!w) return;
     const paused = this.ui.modalOpen || this.switching;
+    this.movedLastTick = false;
     if (!paused) {
-      this.state.stats.playMs += dt * 1000;
       this.input.sample();
-      let mx = this.input.moveX, my = this.input.moveY, run = this.input.run;
+      let mx = this.input.moveX, my = this.input.moveY, run = this.input.runAmt;
       if (this.autopilot) {
         const ap = this.autopilot;
         const dx = ap.x - this.player.x, dz = ap.z - this.player.z;
@@ -443,12 +490,14 @@ export class Game implements GameApi {
           const k = Math.min(1, d / 0.8);
           mx = Math.sin(rel) * k;
           my = Math.cos(rel) * k;
-          run = ap.run;
+          run = ap.run ? 1 : 0;
         }
       }
       const [lx, ly] = this.input.consumeLook();
       this.player.look(lx, ly);
+      const px = this.player.x, pz = this.player.z;
       this.player.update(dt, mx, my, run, w.col);
+      this.movedLastTick = Math.abs(this.player.x - px) + Math.abs(this.player.z - pz) > 1e-4;
     }
     this.player.applyCamera(this.camera);
     this.cullTimer -= dt;
@@ -611,16 +660,15 @@ export class Game implements GameApi {
     });
   }
   private debugFrame(dt: number) {
-    this.fpsAcc.n++;
     this.fpsAcc.t += dt;
     if (this.fpsAcc.t >= 0.5) {
-      this.fpsAcc.fps = Math.round(this.fpsAcc.n / this.fpsAcc.t);
-      this.fpsAcc.n = 0;
+      const fs = this.frameStats();
+      this.fpsAcc.fps = fs.fps;
       this.fpsAcc.t = 0;
       if (this.debugEl) {
         const info = this.renderer.info.render;
         const f = Object.keys(this.state.flags).filter((k) => this.state.flags[k]).join(', ');
-        this.debugEl.innerHTML = `FPS ${this.fpsAcc.fps} · calls ${info.calls} · tris ${info.triangles}<br>` +
+        this.debugEl.innerHTML = `FPS ${fs.fps} (median) · p95 ${fs.p95Ms} ms · calls ${info.calls} · tris ${info.triangles}<br>` +
           `pos ${this.player.x.toFixed(1)}, ${this.player.y.toFixed(2)}, ${this.player.z.toFixed(1)} yaw ${(this.player.yaw * 57.3).toFixed(0)}°<br>` +
           `target ${this.target?.id ?? '—'}<br>flags: ${f || '—'}<br>` +
           (this.world?.checkpoints.map((c) => `<button data-cp="${c.name}">${c.name}</button>`).join('') ?? '') +
@@ -634,6 +682,7 @@ export class Game implements GameApi {
     const info = this.renderer.info;
     return {
       fps: this.fpsAcc.fps,
+      frame: this.frameStats(),
       calls: info.render.calls,
       triangles: info.render.triangles,
       geometries: info.memory.geometries,

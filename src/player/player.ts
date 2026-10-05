@@ -36,8 +36,8 @@ export class Player {
     this.pitch = Math.max(-PLAYER.pitchLimit, Math.min(PLAYER.pitchLimit, this.pitch - dPitch));
   }
 
-  update(dt: number, moveX: number, moveY: number, run: boolean, col: CollisionWorld) {
-    const speed = run ? PLAYER.run : PLAYER.walk;
+  update(dt: number, moveX: number, moveY: number, runAmt: number, col: CollisionWorld) {
+    const speed = PLAYER.walk + (PLAYER.run - PLAYER.walk) * Math.min(1, Math.max(0, runAmt));
     const fx = Math.sin(this.yaw), fz = Math.cos(this.yaw); // forward (plan)
     const rx = Math.cos(this.yaw), rz = -Math.sin(this.yaw); // right (plan)
     const tx = (fx * moveY + rx * moveX) * speed;

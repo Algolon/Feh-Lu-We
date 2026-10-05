@@ -15,6 +15,12 @@ export interface Interactable {
   run: () => void;
   acceptsItems?: boolean;
   useItem?: (item: string) => void;
+  /**
+   * Contextual resolver for a held item. Return the label of the item action when using this item here is
+   * meaningful (including a deliberate "wrong item" response), or null to fall back to the default action.
+   * Without a resolver, accepting targets always route held items to useItem.
+   */
+  itemLabel?: (item: string) => string | null;
   ignore?: Set<Collider>; // the target's own colliders (doors) are ignored by the LOS test
 }
 
@@ -62,7 +68,7 @@ export class World {
   /** Named sound emitters (fire crackle, water, heater) — audio reads these each frame. */
   readonly emitters: { kind: 'fire' | 'water' | 'steam'; pos: THREE.Vector3; on: () => boolean }[] = [];
   /** Small objects hidden beyond a size-dependent distance; whole interior chunks hidden by zone. */
-  private cullables: { meshes: THREE.Object3D[]; pos: THREE.Vector3; dist2: number; on: boolean; zone: { on: boolean } | null }[] = [];
+  private cullables: { root: THREE.Object3D; meshes: THREE.Object3D[]; pos: THREE.Vector3; dist2: number; on: boolean; zone: { on: boolean } | null }[] = [];
   private zones: { meshes: THREE.Object3D[]; near: (x: number, z: number) => boolean; inside: (x: number, z: number) => boolean; on: boolean }[] = [];
   constructor(public readonly id: SceneId) {}
 
@@ -81,13 +87,20 @@ export class World {
       box.getBoundingSphere(sph);
       const d = Math.max(o.userData.cullDist ?? 0, 16 + 25 * sph.radius);
       const zone = this.zones.find((zz) => zz.inside(sph.center.x, -sph.center.z)) ?? null;
-      this.cullables.push({ meshes, pos: sph.center.clone(), dist2: d * d, on: true, zone });
+      this.cullables.push({ root: o, meshes, pos: sph.center.clone(), dist2: d * d, on: true, zone });
     }
   }
   /** Hide the meshes of a batched chunk unless `near(planX, planZ)` holds. */
   cullZone(chunk: string, near: (x: number, z: number) => boolean, inside: (x: number, z: number) => boolean) {
     const meshes = this.scene.children.filter((o) => o.userData.chunk === chunk);
     this.zones.push({ meshes, near, inside, on: true });
+  }
+  /** Top-level objects whose render meshes are currently culled: never pickable (explicit invariant). */
+  readonly culledRoots = new Set<THREE.Object3D>();
+  isCulled(o: THREE.Object3D) {
+    let p: THREE.Object3D = o;
+    while (p.parent && p.parent !== this.scene) p = p.parent;
+    return this.culledRoots.has(p);
   }
   updateCulling(eye: THREE.Vector3) {
     for (const z of this.zones) {
@@ -96,7 +109,11 @@ export class World {
     }
     for (const c of this.cullables) {
       const on = (!c.zone || c.zone.on) && c.pos.distanceToSquared(eye) < c.dist2;
-      if (on !== c.on) { c.on = on; for (const m of c.meshes) m.visible = on; }
+      if (on !== c.on) {
+        c.on = on;
+        for (const m of c.meshes) m.visible = on;
+        if (on) this.culledRoots.delete(c.root); else this.culledRoots.add(c.root);
+      }
     }
   }
 

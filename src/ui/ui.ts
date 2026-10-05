@@ -119,8 +119,11 @@ export class UI {
   }
 
   // ---------------------------------------------------------------- modal plumbing
-  modal(title: string, bodyHtml: string, onClose?: () => void): HTMLElement {
+  /** Kind of the open modal ('pause' counts as paused time for playtest timing). */
+  modalKind: string | null = null;
+  modal(title: string, bodyHtml: string, onClose?: () => void, kind = 'panel'): HTMLElement {
     this.closeModal(true);
+    this.modalKind = kind;
     this.overlay.innerHTML = `<div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}">
       <header><h2>${esc(title)}</h2><button class="btn close" data-close aria-label="Sluiten">✕</button></header>
       <div class="body">${bodyHtml}</div></div>`;
@@ -135,6 +138,7 @@ export class UI {
     if (this.overlay.hidden) return;
     this.overlay.hidden = true;
     this.overlay.innerHTML = '';
+    this.modalKind = null;
     const cb = this.modalClose;
     this.modalClose = null;
     cb?.();
@@ -266,10 +270,12 @@ export class UI {
       seq.push(b.dataset.k!);
       render();
       if (seq.length === length) {
-        setTimeout(() => {
-          if (onTry(seq)) this.closeModal();
-          else { seq = []; render(); }
-        }, 250);
+        // Submit immediately with an immutable copy: no timer that could outlive this panel.
+        const attempt = [...seq];
+        seq = [];
+        if (onTry(attempt)) { this.closeModal(); return; }
+        slots.classList.add('shake');
+        render();
       }
     }));
     $('[data-clear]', body).addEventListener('click', () => { seq = []; render(); });
@@ -314,7 +320,7 @@ export class UI {
       <label class="set">Geluid uit <input type="checkbox" ${s.muted ? 'checked' : ''} data-k="muted"></label>
       <p class="muted">Speeltijd tot nu toe: ${h.playMinutes} min. Voortgang wordt automatisch bewaard op dit apparaat.</p>
       <p class="muted">Bediening — telefoon: linkerduim loopt, rechts slepen kijkt, tik op iets of gebruik de grote knop. Computer: WASD/pijltjes, Shift rennen, slepen of muis vastzetten om te kijken, E = actie, I = tas, N = notities, H = hint, F = zaklamp, Esc = pauze.</p>
-      <div class="row" style="margin-top:8px"><button class="btn danger" data-restart>Opnieuw beginnen…</button></div>`);
+      <div class="row" style="margin-top:8px"><button class="btn danger" data-restart>Opnieuw beginnen…</button></div>`, undefined, 'pause');
     const cur = { ...s };
     body.querySelectorAll<HTMLInputElement>('input[data-k]').forEach((inp) => inp.addEventListener('input', () => {
       const k = inp.dataset.k as keyof Settings;
@@ -328,6 +334,11 @@ export class UI {
     body.querySelector('[data-map]')?.addEventListener('click', () => h.onMap?.());
     body.querySelector('[data-pl]')?.addEventListener('click', () => { this.closeModal(); h.onPointerLock?.(); });
     $('[data-restart]', body).addEventListener('click', () => this.confirm('Opnieuw beginnen?', 'Al je voortgang op dit apparaat wordt gewist.', 'Ja, wis alles', h.onRestart));
+  }
+
+  contextLost(onReload: () => void) {
+    const body = this.modal('Beeld onderbroken', `<p>Het 3D-beeld is weggevallen (dat kan gebeuren als de telefoon geheugen vrijmaakt). Je voortgang is bewaard.</p><p class="muted">Het beeld komt vaak vanzelf terug. Lukt dat niet, herlaad dan.</p><div class="row center"><button class="btn primary" data-reload>Herladen</button></div>`);
+    body.querySelector('[data-reload]')!.addEventListener('click', onReload);
   }
 
   confirm(title: string, text: string, yes: string, onYes: () => void) {

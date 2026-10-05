@@ -6,7 +6,7 @@ import type { World, GameApi } from '../interactions/world';
 import { type Ctx, wall, floor, ceiling, stairsZ, railing, hipRoof, windowAt } from './arch';
 import { box, boxMM, cyl, blob, compound, v3, hitbox } from './kit';
 import { table, chair, sofa, armchair, bookshelf, bed, counter, rug, plant, painting, crate, tableLamp, floorLamp, chandelier, wallSconce, flame, part, staticLantern, staticSconce } from './furniture';
-import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place } from '../interactions/props';
+import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place, lightableItemLabel } from '../interactions/props';
 import { plaqueTexture, forestMapTexture } from './textures';
 import { drawSymbol } from '../content/symbols';
 import { addClue, has } from '../core/state';
@@ -65,6 +65,7 @@ export function buildManor(w: World, g: GameApi, c: Ctx) {
   const slab = (x0: number, x1: number, z0: number, z1: number, walk: boolean) => {
     boxMM(c.b, k.M.wood, '#8a5a34', x0, x1, CEIL, UF, z0, z1, { uv: 2.2, chunk: c.chunk });
     if (walk) w.col.addFloor(x0, x1, z0, z1, UF);
+    w.col.addOccluder(x0, x1, z0, z1, CEIL, UF); // floors between storeys block interaction, not movement
   };
   slab(48.4, 56, 52.4, 63, false);
   slab(48.4, 56, 63, 74, true); // study
@@ -233,6 +234,7 @@ export function buildManor(w: World, g: GameApi, c: Ctx) {
       if (g.state.lit['fire.living']) { g.state.lit['fire.living'] = false; g.act({ ok: true, msg: 'Je dooft het vuur.', sfx: 'click' }); return; }
       g.toast(has(g.state, 'matches') ? 'Er ligt hout klaar. Neem de lucifers in de hand om het aan te steken.' : 'Er ligt hout klaar, maar je hebt niets om het aan te steken.');
     },
+    itemLabel: lightableItemLabel(() => !!g.state.lit['fire.living']),
     useItem: (item) => {
       if (item !== 'matches') { g.act({ ok: false, msg: 'Daarmee krijg je de haard niet aan.', sfx: 'fail' }, { save: false }); return; }
       if (g.state.lit['fire.living']) { g.toast('Het vuur brandt al.'); return; }

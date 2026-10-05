@@ -6,7 +6,8 @@ function webglAvailable(): boolean {
   if (new URLSearchParams(location.search).has('nowebgl')) return false; // test hook for the failure path
   try {
     const c = document.createElement('canvas');
-    return !!(c.getContext('webgl2') || c.getContext('webgl'));
+    // three.js r163+ WebGLRenderer requires WebGL 2
+    return !!c.getContext('webgl2');
   } catch {
     return false;
   }
@@ -36,12 +37,19 @@ function boot() {
     return;
   }
   if (TEST_HOOKS) (window as unknown as { __game: Game }).__game = game;
+  let starting = false;
   const begin = async (fresh: boolean) => {
+    if (starting) return; // Start/Continue are idempotent while loading
+    starting = true;
+    document.querySelectorAll<HTMLButtonElement>('#start .btn').forEach((b) => { b.disabled = true; b.classList.add('loading'); });
+    const first = document.querySelector<HTMLButtonElement>('#start .btn.primary');
+    if (first) first.textContent = 'Laden…';
+    await new Promise((r) => setTimeout(r, 30)); // let the loading state paint before the synchronous build
     try {
       await game.start(fresh);
     } catch (e) {
       console.error(e);
-      fail('Er ging iets mis bij het laden van de wereld.');
+      fail('Er ging iets mis bij het laden van de wereld. Herlaad de pagina; je bewaarde voortgang blijft staan.');
     }
   };
   game.ui.showStart({ hasSave: game.hasSave(), onContinue: () => begin(false), onNew: () => begin(true) });

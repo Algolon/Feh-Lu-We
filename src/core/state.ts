@@ -1,9 +1,12 @@
 // Authoritative, versioned game state. Everything that must survive a reload lives here.
 // World visuals are derived from this state (see World.syncAll), never the other way round.
+import { ITEMS } from '../content/items';
+import { CLUES } from '../content/clues';
+import { SYMBOLS } from '../content/symbols';
 
 export const SAVE_KEY = 'fehluwe.save';
 export const SETTINGS_KEY = 'fehluwe.settings';
-export const STATE_VERSION = 2;
+export const STATE_VERSION = 3;
 
 export type SceneId = 'home' | 'estate';
 
@@ -32,8 +35,25 @@ export interface GameState {
   hints: Record<string, number>; // highest hint level viewed per puzzle
   wrong: Record<string, number>; // wrong attempts per puzzle (playtest metric)
   player: Record<string, PlayerPose | null>; // last safe pose per scene
-  stats: { playMs: number; startedAt: number; finishedAt: number | null };
+  stats: Stats;
+  events: PlayEvent[]; // local-only playtest log (never sent anywhere)
 }
+
+/**
+ * Playtest timing. activeMs: visible tab, game running, INCLUDING reading/puzzle panels/notebook/hints.
+ * moveMs: subset of active time spent moving. pausedMs: pause menu open or tab hidden while a session runs.
+ * finishedActiveMs is frozen at the ending so later wandering does not change the reported duration.
+ */
+export interface Stats {
+  activeMs: number;
+  moveMs: number;
+  pausedMs: number;
+  startedAt: number;
+  finishedAt: number | null;
+  finishedActiveMs: number | null;
+}
+export interface PlayEvent { t: number; e: string; id?: string }
+export const MAX_EVENTS = 400;
 
 export interface Settings {
   lookSensitivity: number; // 0.3 .. 2.5
@@ -62,7 +82,8 @@ export function defaultState(now = Date.now()): GameState {
     hints: {},
     wrong: {},
     player: { home: null, estate: null },
-    stats: { playMs: 0, startedAt: now, finishedAt: null },
+    stats: { activeMs: 0, moveMs: 0, pausedMs: 0, startedAt: now, finishedAt: null, finishedActiveMs: null },
+    events: [],
   };
 }
 
@@ -98,10 +119,15 @@ function pose(v: unknown): PlayerPose | null {
     y: finite(v.y, 0),
     z: finite(v.z, NaN),
     yaw: finite(v.yaw, 0),
-    pitch: finite(v.pitch, 0),
+    pitch: Math.max(-1.4, Math.min(1.4, finite(v.pitch, 0))),
   };
-  return Number.isFinite(p.x) && Number.isFinite(p.z) ? p : null;
+  // outside any scene's bounds → no pose (the game then uses spawn/checkpoints)
+  if (!(p.x > -5 && p.x < 125 && p.z > -5 && p.z < 105 && p.y > -1 && p.y < 10)) return null;
+  return p;
 }
+const known = (reg: Record<string, unknown>) => (ids: string[]) => ids.filter((id) => Object.prototype.hasOwnProperty.call(reg, id));
+const knownItems = known(ITEMS), knownClues = known(CLUES), knownSymbols = known(SYMBOLS);
+const count = (n: unknown, max: number) => Math.min(max, Math.max(0, Math.floor(finite(n, 0))));
 
 /** Migrate older save shapes forward. Unknown/garbage input yields null (caller falls back to a new game). */
 export function migrate(raw: unknown): GameState | null {
@@ -115,11 +141,26 @@ export function migrate(raw: unknown): GameState | null {
     data.player = { [scene]: data.player ?? null };
     v = 2;
   }
+  if (v === 2) {
+    // v3 splits playtime into active/move/paused and adds a local event log.
+    const st = isObj(data.stats) ? data.stats : {};
+    data.stats = { ...st, activeMs: st.playMs, moveMs: 0, pausedMs: 0, finishedActiveMs: typeof st.finishedAt === 'number' ? st.playMs : null };
+    data.events = [];
+    v = 3;
+  }
   const d = defaultState();
+  // Registry validation: unknown item/clue/symbol ids are dropped instead of crashing UI later.
   const slots: Record<string, string | null> = {};
-  if (isObj(data.slots)) for (const [k, s] of Object.entries(data.slots)) slots[k] = typeof s === 'string' ? s : null;
+  if (isObj(data.slots)) for (const k of ['left', 'right']) { if (!(k in data.slots)) continue; const v2 = data.slots[k]; slots[k] = typeof v2 === 'string' && ITEMS[v2] ? v2 : null; }
   const seq: Record<string, string[]> = {};
-  if (isObj(data.seq)) for (const [k, s] of Object.entries(data.seq)) seq[k] = strArr(s);
+  if (isObj(data.seq)) for (const [k, s] of Object.entries(data.seq)) seq[k] = knownSymbols(strArr(s)).slice(0, 8);
+  const hints: Record<string, number> = {};
+  for (const [k, n] of Object.entries(numRec(data.hints))) hints[k] = count(n, 3);
+  const wrong: Record<string, number> = {};
+  for (const [k, n] of Object.entries(numRec(data.wrong))) wrong[k] = count(n, 100000);
+  const events: PlayEvent[] = Array.isArray(data.events)
+    ? data.events.filter((e): e is PlayEvent => isObj(e) && typeof e.e === 'string' && Number.isFinite(e.t)).slice(-MAX_EVENTS).map((e) => ({ t: e.t, e: e.e, ...(typeof e.id === 'string' ? { id: e.id } : {}) }))
+    : [];
   const players: Record<string, PlayerPose | null> = { home: null, estate: null };
   if (isObj(data.player)) for (const [k, p] of Object.entries(data.player)) players[k] = pose(p);
   const stats = isObj(data.stats) ? data.stats : {};
@@ -127,24 +168,28 @@ export function migrate(raw: unknown): GameState | null {
     version: STATE_VERSION,
     scene: data.scene === 'estate' ? 'estate' : 'home',
     finished: data.finished === true,
-    inventory: [...new Set(strArr(data.inventory))],
-    used: [...new Set(strArr(data.used))],
+    inventory: knownItems([...new Set(strArr(data.inventory))]),
+    used: knownItems([...new Set(strArr(data.used))]),
     taken: [...new Set(strArr(data.taken))],
     open: boolRec(data.open),
     unlocked: [...new Set(strArr(data.unlocked))],
     lit: boolRec(data.lit),
     flags: boolRec(data.flags),
-    clues: [...new Set(strArr(data.clues))],
+    clues: knownClues([...new Set(strArr(data.clues))]),
     seq,
     slots,
-    hints: numRec(data.hints),
-    wrong: numRec(data.wrong),
+    hints,
+    wrong,
     player: players,
     stats: {
-      playMs: finite(stats.playMs, 0),
+      activeMs: count(stats.activeMs, 1e10),
+      moveMs: count(stats.moveMs, 1e10),
+      pausedMs: count(stats.pausedMs, 1e10),
       startedAt: finite(stats.startedAt, d.stats.startedAt),
-      finishedAt: typeof stats.finishedAt === 'number' ? stats.finishedAt : null,
+      finishedAt: typeof stats.finishedAt === 'number' && Number.isFinite(stats.finishedAt) ? stats.finishedAt : null,
+      finishedActiveMs: typeof stats.finishedActiveMs === 'number' && Number.isFinite(stats.finishedActiveMs) ? Math.max(0, stats.finishedActiveMs) : null,
     },
+    events,
   };
 }
 
@@ -217,4 +262,10 @@ export function addClue(s: GameState, id: string): boolean {
   if (s.clues.includes(id)) return false;
   s.clues.push(id);
   return true;
+}
+
+/** Append a local playtest event (bounded). */
+export function logEvent(s: GameState, e: string, id?: string) {
+  s.events.push(id ? { t: Math.round(s.stats.activeMs), e, id } : { t: Math.round(s.stats.activeMs), e });
+  if (s.events.length > MAX_EVENTS) s.events.splice(0, s.events.length - MAX_EVENTS);
 }
