@@ -999,12 +999,13 @@ async function boslustSample() {
       for (const [name, x, z, tx, ty, tz] of [['fork', 51, 7.2, 63, 2, 16], ['cutMouth', 63, 10.2, 63, 1.8, 18.2], ['door', 63, 15.4, 63, 1.4, 18.2], ['reverse', 63, 16.4, 55, 1.4, 6]]) {
         g.player.x = x; g.player.z = z; g.player.y = g.world.col.ground(x, z); T.lookAt(tx, ty, tz); T.tick(8);
         g.renderer.render(g.world.scene, g.camera);
-        let near = 0, far = 0, under = 0; g.world.scene.traverse((o) => { if (!o.isInstancedMesh || !(o.layers.mask & 1) || !o.visible) return; if (o.userData.lod === 'near') near += o.count; else if (o.userData.lod === 'far') far += o.count; else if (o.userData.understory) under += o.count; });
-        out[name] = { lanterns: g.pool.assigned().filter((a) => a?.startsWith('fixed.boslust')).length, near, far, under };
+        // batched meshes: the number of instances three.js actually drew this frame (after its per-instance culling)
+        let wood = 0, foliage = 0, under = 0; g.world.scene.traverse((o) => { if (!o.isBatchedMesh || !o.visible) return; const n = o._multiDrawCount; if (o.userData.part === 'wood') wood += n; else if (o.userData.part === 'foliage') foliage += n; else if (o.userData.understory) under += n; });
+        out[name] = { lanterns: g.pool.assigned().filter((a) => a?.startsWith('fixed.boslust')).length, wood, foliage, under };
       }
       return out;
     });
-    log('boslust sample: entrance lanterns lit from the cut mouth and the door; trees and understory drawn at every pose', lc.cutMouth.lanterns === 2 && lc.door.lanterns === 2 && Object.values(lc).every((v) => v.near + v.far > 0) && lc.fork.under > 0, JSON.stringify(lc));
+    log('boslust sample: entrance lanterns lit from the cut mouth and the door; trees and understory drawn at every pose', lc.cutMouth.lanterns === 2 && lc.door.lanterns === 2 && Object.values(lc).every((v) => v.foliage > 0) && lc.door.wood > 0 && lc.fork.under > 0, JSON.stringify(lc));
     // reduced motion: fixed lanterns stay on at constant intensity, no errors
     const rm = await E(page, () => { const g = T.G(); g.settings.reducedMotion = true; g.applyQuality(); g.player.x = 63; g.player.z = 15.4; T.tick(4); const a = g.pool.assigned().filter((x) => x?.startsWith('fixed.boslust')); const l = g.world.lamps.filter((x) => x.id.startsWith('fixed.boslust')); return { a: a.length, on: l.every((x) => x.on()), flicker: l.map((x) => x.flicker ?? 0) }; });
     log('boslust sample: reduced motion keeps the entrance lanterns steady and lit', rm.a === 2 && rm.on && rm.flicker.every((f) => f === 0), JSON.stringify(rm));

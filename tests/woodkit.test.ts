@@ -3,7 +3,7 @@
 // drop filter must leave every other tree and plant of the original forest exactly as it was.
 import { describe, it, expect } from 'vitest';
 import * as THREE from 'three';
-import { oakModel, pineModel, rockModel, fernModel, grassModel, twoSided, taperTube } from '../src/world/woodkit';
+import { oakModel, pineModel, rockModel, fernModel, grassModel, twoSided, taperTube, treeModel, bushModel, plantModel, PLANT_VARIANTS, type TreeSpecies, type PlantKind } from '../src/world/woodkit';
 import { Vegetation } from '../src/world/nature';
 import { zoneWeight, inZone } from '../src/world/boslustZone';
 
@@ -44,6 +44,62 @@ describe('oak and pine', () => {
       expect([...(g.attributes.position.array as Float32Array)].every(Number.isFinite)).toBe(true);
       expect([...(g.attributes.normal.array as Float32Array)].every(Number.isFinite)).toBe(true);
     }
+  });
+});
+
+describe('species and variants', () => {
+  const species: TreeSpecies[] = ['oak', 'beech', 'birch', 'pine'];
+  it('every tree species × variant stays within budget (near ≤ 6k, far ≤ 1.8k) and keeps roots below ground', () => {
+    for (const sp of species) for (let v = 0; v < 3; v++) {
+      const n = treeModel(sp, v, 'near'), f = treeModel(sp, v, 'far');
+      expect(tris(n.wood) + tris(n.leaves), `${sp}.${v} near`).toBeLessThan(6000);
+      expect(tris(f.wood) + tris(f.leaves), `${sp}.${v} far`).toBeLessThan(1800);
+      expect(box(f.wood).min.y).toBeLessThan(-0.2);
+    }
+  });
+  it('the three variants of each species are different silhouettes (crown size differs by > 5 % on some axis)', () => {
+    for (const sp of species) {
+      const sizes = [0, 1, 2].map((v) => box(treeModel(sp, v, 'far').leaves).getSize(new THREE.Vector3()));
+      for (const [a, b] of [[0, 1], [0, 2], [1, 2]]) {
+        const d = Math.max(...(['x', 'y', 'z'] as const).map((k) => Math.abs(sizes[a][k] - sizes[b][k]) / sizes[a][k]));
+        expect(d, `${sp} ${a}/${b}`).toBeGreaterThan(0.05);
+      }
+    }
+  });
+  it('species are told apart by shape: birch narrow and light, beech taller than oak, pine crown highest', () => {
+    const size = (sp: TreeSpecies) => box(treeModel(sp, 0, 'near').leaves).getSize(new THREE.Vector3());
+    const crown = (sp: TreeSpecies) => box(treeModel(sp, 0, 'near').leaves);
+    expect(size('birch').x).toBeLessThan(size('oak').x * 0.8);
+    expect(crown('beech').max.y).toBeGreaterThan(crown('oak').max.y);
+    expect(crown('pine').min.y).toBeGreaterThan(crown('beech').min.y + 1.5);
+  });
+  it('bark is mapped into its atlas column (u inside one third, away from the edges)', () => {
+    for (const [sp, col] of [['oak', 0], ['beech', 1], ['birch', 2], ['pine', 0]] as const) {
+      const uv = treeModel(sp, 1, 'near').wood.attributes.uv as THREE.BufferAttribute;
+      for (let i = 0; i < uv.count; i += 7) { expect(uv.getX(i)).toBeGreaterThan(col / 3); expect(uv.getX(i)).toBeLessThan((col + 1) / 3); }
+    }
+  });
+  it('bushes: hazel and holly, three variants each, under 3 m, foliage down to below knee-to-hip height', () => {
+    for (const sp of ['hazel', 'holly'] as const) for (let v = 0; v < 3; v++) {
+      const m = bushModel(sp, v, 'near'), b = box(m.leaves);
+      expect(b.max.y).toBeLessThan(3);
+      expect(b.min.y).toBeLessThan(0.9);
+      expect(tris(m.wood) + tris(m.leaves)).toBeLessThan(3500);
+    }
+  });
+  it('plants: every kind has its variants, all batch-compatible (non-indexed; position, normal, color)', () => {
+    let n = 0;
+    for (const kind of Object.keys(PLANT_VARIANTS) as PlantKind[]) {
+      expect(PLANT_VARIANTS[kind]).toBeGreaterThanOrEqual(3);
+      for (let v = 0; v < PLANT_VARIANTS[kind]; v++) {
+        const g = plantModel(kind, v);
+        expect(g.index, `${kind}.${v}`).toBeNull();
+        expect(Object.keys(g.attributes).sort()).toEqual(['color', 'normal', 'position']);
+        expect(tris(g)).toBeLessThan(1200);
+        n++;
+      }
+    }
+    expect(n).toBeGreaterThanOrEqual(19);
   });
 });
 

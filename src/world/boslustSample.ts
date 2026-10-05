@@ -9,7 +9,7 @@ import type { World, GameApi } from '../interactions/world';
 import type { Ctx } from './arch';
 import { Batcher, compound, getKit, v3 } from './kit';
 import { Asm, artMats, softBox, projectUV, bake, baseAO, ContactShadows } from './artkit';
-import { lump as lumpGeo, oakModel, pineModel, rockModel, fernModel, groundPlantModel, grassModel, litterLeafModel, flowerModel, woodMats, taperTube, type Model } from './woodkit';
+import { lump as lumpGeo, treeModel, bushModel, plantModel, rockModel, litterLeafModel, woodMats, taperTube, PLANT_VARIANTS, type Model, type TreeSpecies, type BushSpecies, type PlantKind } from './woodkit';
 import { mulberry32 } from '../core/rng';
 import { FOREST_PATHS, terrainHeight, gridHeight, hillHeight } from './terrain';
 import { HILL_CUT, SITES } from './layout';
@@ -27,6 +27,9 @@ export const WOOD = {
   rock: '#867d6d', fern: '#6b8a3c', plant: '#5a7a38', grass: '#7f9a48', flower: '#f4f1e6',
   litter: ['#8a5a2e', '#a26e36', '#6e4a2a', '#9a7a3a'],
 };
+/** Per-species tints (instance colours): bark on the bark atlas, foliage on the leaf-dab texture. */
+const BARK_TINT: Record<TreeSpecies | BushSpecies, string> = { oak: '#7a6652', beech: '#9c978c', birch: '#ece8de', pine: '#a3896f', hazel: '#8c735c', holly: '#6e604e' };
+const LEAF_TINT: Record<TreeSpecies | BushSpecies, string> = { oak: '#6f8a3a', beech: '#86a043', birch: '#97a94c', pine: '#4e6c48', hazel: '#7b9645', holly: '#3d5a33' };
 
 // ------------------------------------------------------------------------------------------------ ground and path
 // The terrain material multiplies a strongly green grass texture; to reach a target albedo the vertex colour is
@@ -99,11 +102,10 @@ export function finishZone(w: World) {
   contact = null;
 }
 
-// ------------------------------------------------------------------------------------------------ instancing with LOD
+// ------------------------------------------------------------------------------------------------ batching with LOD
 /**
  * Per-frame hooks with the rendering camera: run from scene.onBeforeRender, i.e. after the camera matrices are
- * updated and BEFORE three.js projects the scene, so instance buffers written here are used in this very frame
- * (no lag, no popping when the view turns quickly).
+ * updated and BEFORE three.js projects the scene, so what is written here is used in this very frame.
  */
 type FrameHook = (camera: THREE.Camera) => void;
 function onFrame(w: World, fn: FrameHook) {
@@ -118,93 +120,89 @@ function onFrame(w: World, fn: FrameHook) {
   }
   sc.userData.frameHooks!.push(fn);
 }
-const frustum = new THREE.Frustum(), projM = new THREE.Matrix4(), sphere = new THREE.Sphere();
 const camPos = new THREE.Vector3();
-function frustumOf(camera: THREE.Camera) {
-  projM.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse);
-  frustum.setFromProjectionMatrix(projM);
-  camPos.setFromMatrixPosition(camera.matrixWorld);
-  return frustum;
+
+/**
+ * A BatchedMesh: many DIFFERENT geometries (species × variants × LODs) drawn in one draw call through
+ * WEBGL_multi_draw (iOS 15+/Safari, Chrome; ≈97–100 % of phones). three.js culls every instance against the view
+ * (and the shadow camera) itself. Without the extension three.js falls back to one call per visible instance.
+ */
+function makeBatch(w: World, geos: THREE.BufferGeometry[], instances: number, material: THREE.Material, tag: Record<string, unknown>) {
+  let verts = 0, idx = 0;
+  for (const g of geos) { verts += g.attributes.position.count; idx += g.index ? g.index.count : 0; }
+  const mesh = new THREE.BatchedMesh(instances, verts, Math.max(idx, 1), material);
+  const ids = geos.map((g) => mesh.addGeometry(g));
+  mesh.frustumCulled = false; // per-instance culling inside
+  mesh.receiveShadow = true;
+  Object.assign(mesh.userData, { region: 'outdoor', ...tag });
+  w.scene.add(mesh);
+  return { mesh, ids };
 }
 
-interface Item { v: number; m: THREE.Matrix4; p: THREE.Vector3; c: THREE.Vector3; rad: number; cw: THREE.Color; cl: THREE.Color; near: boolean }
+type Spec = { kind: 'tree'; species: TreeSpecies; v: number } | { kind: 'bush'; species: BushSpecies; v: number };
+interface Plant3 { key: string; near: Model; far: Model; ratio: THREE.Color }
+interface TreeItem { key: string; m: THREE.Matrix4; p: THREE.Vector3; cw: THREE.Color; cl: THREE.Color; near: boolean; w: number; f: number; vis: boolean }
 /**
- * Instanced models with a near/far LOD per instance. Every frame the instances inside the camera frustum are
- * sorted into the near or far InstancedMesh of their variant by distance (with hysteresis), so the whole sample
- * forest costs (variants × 2 LODs × 2 materials) draw calls and only what is in view is drawn. Shadows (high
- * quality only) come from separate far-LOD proxies on layer 1, which only the sun's shadow camera renders, so
- * trees behind the viewer still cast their shadows into view.
+ * Trees and bushes of every species and variant in two batched meshes (bark atlas; foliage), so the whole zone
+ * costs two draw calls. Near (< 18 m, 3 m hysteresis): bark + fine foliage; far (to 115 m): one merged coarse
+ * geometry on the foliage batch (wood colours pre-multiplied by bark ÷ leaf colour). Both LODs keep the same
+ * layout, so the switch does not change the silhouette.
  */
-export class LodInstances {
-  private items: Item[] = [];
-  private meshes: { v: number; near: boolean; part: 'wood' | 'leaves' | 'all'; im: THREE.InstancedMesh }[] = [];
-  /** `ratio`: bark colour ÷ leaf colour, baked into the far LOD's wood so it can share the leaf material. */
-  constructor(private variants: { near: Model; far: Model; ratio: THREE.Color }[], private nearDist = 18, private farDist = 115) {}
-  add(v: number, m: THREE.Matrix4, cw: THREE.ColorRepresentation, cl: THREE.ColorRepresentation) {
-    const p = new THREE.Vector3().setFromMatrixPosition(m);
-    const s = new THREE.Vector3().setFromMatrixScale(m).y;
-    // culling sphere around the crown (generous: a whole tree, roots to crown tips)
-    const vm = this.variants[v].far, bs = vm.leaves.boundingSphere!;
-    const c = new THREE.Vector3(0, bs.center.y * s * 0.6, 0).add(p);
-    this.items.push({ v, m: m.clone(), p, c, rad: (bs.radius + bs.center.y * 0.4 + 0.5) * s, cw: new THREE.Color(cw), cl: new THREE.Color(cl), near: false });
+export class TreeBatches {
+  private models = new Map<string, Plant3>();
+  private items: TreeItem[] = [];
+  private wood: ReturnType<typeof makeBatch> | null = null;
+  private foliage: ReturnType<typeof makeBatch> | null = null;
+  private geo = new Map<string, { wood: number; leaves: number; far: number }>();
+  private last = new THREE.Vector3(Infinity, 0, 0);
+  constructor(private nearDist = 18, private farDist = 115) {}
+  private model(s: Spec) {
+    const key = `${s.species}.${s.v}`;
+    if (!this.models.has(key)) {
+      const near = s.kind === 'tree' ? treeModel(s.species, s.v, 'near') : bushModel(s.species, s.v, 'near');
+      const far = s.kind === 'tree' ? treeModel(s.species, s.v, 'far') : bushModel(s.species, s.v, 'far');
+      const b = new THREE.Color(BARK_TINT[s.species]), l = new THREE.Color(LEAF_TINT[s.species]);
+      this.models.set(key, { key, near, far, ratio: new THREE.Color(b.r / l.r, b.g / l.g, b.b / l.b) });
+    }
+    return key;
+  }
+  add(s: Spec, m: THREE.Matrix4, cw: THREE.ColorRepresentation, cl: THREE.ColorRepresentation) {
+    const key = this.model(s);
+    this.items.push({ key, m: m.clone(), p: new THREE.Vector3().setFromMatrixPosition(m), cw: new THREE.Color(cw), cl: new THREE.Color(cl), near: false, w: -1, f: -1, vis: true });
   }
   get size() { return this.items.length; }
-  build(w: World, castShadow: boolean) {
+  build(w: World) {
     const M = woodMats();
-    this.variants.forEach((vm, v) => {
-      const mine = this.items.filter((it) => it.v === v);
-      if (!mine.length) return;
-      // near: bark + leaves (two materials); far: one merged geometry on the leaf material (one draw call)
-      const farAll = mergeFar(vm.far, vm.ratio);
-      for (const [near, part] of [[true, 'wood'], [true, 'leaves'], [false, 'all']] as const) {
-        const im = new THREE.InstancedMesh(part === 'all' ? farAll : vm.near[part], part === 'wood' ? M.bark : M.leaves, mine.length);
-        im.count = 0;
-        im.castShadow = false; im.receiveShadow = true;
-        im.frustumCulled = false; // instances are culled individually below
-        im.userData.region = 'outdoor';
-        im.userData.artTrees = true;
-        im.userData.lod = near ? 'near' : 'far';
-        im.setColorAt(0, new THREE.Color(1, 1, 1));
-        w.scene.add(im);
-        this.meshes.push({ v, near, part, im });
-      }
-      if (castShadow) for (const part of ['wood', 'leaves'] as const) {
-        const sh = new THREE.InstancedMesh(vm.far[part], M.flat, mine.length);
-        mine.forEach((it, i) => sh.setMatrixAt(i, it.m));
-        sh.castShadow = true; sh.receiveShadow = false;
-        sh.layers.set(1);
-        sh.userData.region = 'outdoor';
-        sh.userData.artTrees = 'shadow';
-        sh.computeBoundingSphere();
-        w.scene.add(sh);
-      }
-    });
-    // the sun's shadow camera also renders layer 1 (the proxies); shadows are switched on later by quality
-    if (castShadow) w.scene.traverse((o) => { const l = o as THREE.DirectionalLight; if (l.isDirectionalLight) l.shadow.camera.layers.enable(1); });
+    const woodGeos: THREE.BufferGeometry[] = [], leafGeos: THREE.BufferGeometry[] = [], keys = [...this.models.values()];
+    for (const m of keys) { woodGeos.push(m.near.wood); leafGeos.push(m.near.leaves, mergeFar(m.far, m.ratio)); }
+    this.wood = makeBatch(w, woodGeos, this.items.length, M.bark, { artTrees: true, part: 'wood' });
+    this.foliage = makeBatch(w, leafGeos, this.items.length, M.leaves, { artTrees: true, part: 'foliage' });
+    this.wood.mesh.castShadow = this.foliage.mesh.castShadow = true;
+    keys.forEach((m, i) => this.geo.set(m.key, { wood: this.wood!.ids[i], leaves: this.foliage!.ids[i * 2], far: this.foliage!.ids[i * 2 + 1] }));
+    for (const it of this.items) {
+      const g = this.geo.get(it.key)!;
+      it.w = this.wood.mesh.addInstance(g.wood); this.wood.mesh.setMatrixAt(it.w, it.m); this.wood.mesh.setColorAt(it.w, it.cw);
+      it.f = this.foliage.mesh.addInstance(g.far); this.foliage.mesh.setMatrixAt(it.f, it.m); this.foliage.mesh.setColorAt(it.f, it.cl);
+      this.wood.mesh.setVisibleAt(it.w, false);
+    }
     onFrame(w, (cam) => this.update(cam));
   }
-  private last = new THREE.Matrix4();
+  /** LOD and range by distance; only when the camera has moved (turning is handled by three.js culling). */
   update(camera: THREE.Camera) {
-    if (this.last.equals(camera.matrixWorld)) return; // camera unchanged: buffers still valid
-    this.last.copy(camera.matrixWorld);
-    const f = frustumOf(camera);
-    for (const mm of this.meshes) mm.im.count = 0;
-    const slot = this.meshes;
+    camPos.setFromMatrixPosition(camera.matrixWorld);
+    if (camPos.distanceTo(this.last) < 0.3) return;
+    this.last.copy(camPos);
+    const wm = this.wood!.mesh, fm = this.foliage!.mesh;
     for (const it of this.items) {
-      const d = it.p.distanceTo(camPos);
-      it.near = it.near ? d < this.nearDist + 3 : d < this.nearDist - 3;
-      if (d > this.farDist || !f.intersectsSphere(sphere.set(it.c, it.rad))) continue;
-      for (const mm of slot) {
-        if (mm.v !== it.v || mm.near !== it.near) continue;
-        const n = mm.im.count++;
-        mm.im.setMatrixAt(n, it.m);
-        mm.im.setColorAt(n, mm.part === 'wood' ? it.cw : it.cl);
+      const d = it.p.distanceTo(camPos), vis = d < this.farDist;
+      const near = it.near ? d < this.nearDist + 3 : d < this.nearDist - 3;
+      if (near !== it.near || vis !== it.vis) {
+        const g = this.geo.get(it.key)!;
+        fm.setGeometryIdAt(it.f, near ? g.leaves : g.far);
+        fm.setVisibleAt(it.f, vis);
+        wm.setVisibleAt(it.w, vis && near);
+        it.near = near; it.vis = vis;
       }
-    }
-    for (const mm of slot) {
-      mm.im.instanceMatrix.needsUpdate = true;
-      if (mm.im.instanceColor) mm.im.instanceColor.needsUpdate = true;
-      mm.im.layers.set(mm.im.count ? 0 : 2); // an empty instanced mesh would still cost a draw call
     }
   }
 }
@@ -219,48 +217,47 @@ function mergeFar(m: Model, ratio: THREE.Color) {
   return g;
 }
 
+interface PlantItem { geo: number; m: THREE.Matrix4; p: THREE.Vector3; c: THREE.Color; show: number; id: number; k: number }
 /**
- * Small repeated things (understory): one InstancedMesh each, shown within `show` metres and inside the view.
- * Instances shrink to nothing over the last `fade` metres instead of popping at the radius.
+ * Every understory plant (all kinds and variants) in one batched mesh: one draw call. Shown within a per-kind
+ * range; instances shrink to nothing over the last `fade` metres instead of popping.
  */
-export class NearInstances {
-  private items: { m: THREE.Matrix4; p: THREE.Vector3; c: THREE.Color }[] = [];
-  private im: THREE.InstancedMesh | null = null;
-  private last = new THREE.Matrix4();
-  private rad: number;
-  constructor(private geo: THREE.BufferGeometry, private mat: THREE.Material, private show = 28, private fade = 6) {
-    geo.computeBoundingSphere();
-    this.rad = geo.boundingSphere!.radius * 1.6 + 0.1;
+export class PlantBatch {
+  private kinds = new Map<string, number>();
+  private geos: THREE.BufferGeometry[] = [];
+  private items: PlantItem[] = [];
+  private batch: ReturnType<typeof makeBatch> | null = null;
+  private last = new THREE.Vector3(Infinity, 0, 0);
+  private count = new Map<PlantKind, number>();
+  constructor(private fade = 5) {}
+  add(kind: PlantKind, v: number, m: THREE.Matrix4, c: THREE.ColorRepresentation, show = 22) {
+    const key = `${kind}.${v % PLANT_VARIANTS[kind]}`;
+    if (!this.kinds.has(key)) { this.kinds.set(key, this.geos.length); this.geos.push(plantModel(kind, v)); }
+    this.items.push({ geo: this.kinds.get(key)!, m: m.clone(), p: new THREE.Vector3().setFromMatrixPosition(m), c: new THREE.Color(c), show, id: -1, k: -1 });
+    this.count.set(kind, (this.count.get(kind) ?? 0) + 1);
   }
-  add(m: THREE.Matrix4, c: THREE.ColorRepresentation) { this.items.push({ m: m.clone(), p: new THREE.Vector3().setFromMatrixPosition(m), c: new THREE.Color(c) }); }
-  get size() { return this.items.length; }
+  counts() { return Object.fromEntries(this.count); }
   build(w: World) {
     if (!this.items.length) return;
-    const im = new THREE.InstancedMesh(this.geo, this.mat, this.items.length);
-    im.count = 0; im.receiveShadow = true; im.castShadow = false;
-    im.frustumCulled = false;
-    im.userData.region = 'outdoor';
-    im.userData.understory = true;
-    im.setColorAt(0, new THREE.Color(1, 1, 1));
-    w.scene.add(im);
-    this.im = im;
+    this.batch = makeBatch(w, this.geos, this.items.length, woodMats().flat, { understory: true });
+    this.batch.mesh.sortObjects = false;
+    for (const it of this.items) { it.id = this.batch.mesh.addInstance(this.batch.ids[it.geo]); this.batch.mesh.setColorAt(it.id, it.c); this.batch.mesh.setMatrixAt(it.id, it.m); this.batch.mesh.setVisibleAt(it.id, false); }
     onFrame(w, (cam) => this.update(cam));
   }
   update(camera: THREE.Camera) {
-    if (this.last.equals(camera.matrixWorld)) return;
-    this.last.copy(camera.matrixWorld);
-    const f = frustumOf(camera), im = this.im!;
-    let n = 0;
+    camPos.setFromMatrixPosition(camera.matrixWorld);
+    if (camPos.distanceTo(this.last) < 0.25) return;
+    this.last.copy(camPos);
+    const bm = this.batch!.mesh;
     for (const it of this.items) {
       const d = it.p.distanceTo(camPos);
-      if (d > this.show || !f.intersectsSphere(sphere.set(it.p, this.rad))) continue;
-      const k = Math.min(1, (this.show - d) / this.fade);
-      im.setMatrixAt(n, k < 1 ? tmpM.copy(it.m).multiply(tmpS2.makeScale(k, k, k)) : it.m); im.setColorAt(n, it.c); n++;
+      const k = d > it.show ? 0 : Math.min(1, (it.show - d) / this.fade);
+      const kq = Math.round(k * 12) / 12; // quantised: rewrite a matrix only when its scale step changes
+      if (kq === it.k) continue;
+      if ((kq > 0) !== (it.k > 0)) bm.setVisibleAt(it.id, kq > 0);
+      if (kq > 0) bm.setMatrixAt(it.id, kq < 1 ? tmpM.copy(it.m).multiply(tmpS2.makeScale(kq, kq, kq)) : it.m);
+      it.k = kq;
     }
-    im.count = n;
-    im.instanceMatrix.needsUpdate = true;
-    if (im.instanceColor) im.instanceColor.needsUpdate = true;
-    im.layers.set(n ? 0 : 2);
   }
 }
 
@@ -283,58 +280,80 @@ export interface ZoneTree { x: number; z: number; y: number; h: number; r: numbe
  */
 export function buildWoodland(w: World, c: Ctx, trees: ZoneTree[]) {
   const r = mulberry32(2026);
-  const ratio = (bark: string, leaf: string) => { const b = new THREE.Color(bark), l = new THREE.Color(leaf); return new THREE.Color(b.r / l.r, b.g / l.g, b.b / l.b); };
-  const oakA = { near: oakModel(0, 'near'), far: oakModel(0, 'far'), ratio: ratio(WOOD.oakBark, WOOD.oakLeaves) };
-  const oakB = { near: oakModel(1, 'near'), far: oakModel(1, 'far'), ratio: ratio(WOOD.oakBark, WOOD.oakLeaves2) };
-  const pine = { near: pineModel('near'), far: pineModel('far'), ratio: ratio(WOOD.pineBark, WOOD.pineLeaves) };
-  const lod = new LodInstances([oakA, oakB, pine]);
+  const hash = (x: number, z: number, k: number) => { const v = Math.sin(x * 12.9898 + z * 78.233 + k * 37.719) * 43758.5453; return v - Math.floor(v); };
+  // ---- trees: the original kinds become species (birch stays birch, a third of the oaks become beech), each
+  // position gets a variant by hash, so neighbours rarely repeat
+  const tb = new TreeBatches();
   const leafTint = new THREE.Color(), barkTint = new THREE.Color();
+  const species: { t: ZoneTree; sp: TreeSpecies }[] = [];
   for (const t of trees) {
-    const isPine = t.kind === 'pine';
-    const hero = Math.hypot(t.x - 55.83, t.z - 11.65) < 0.3 || Math.hypot(t.x - 69.23, t.z - 16.07) < 0.3;
-    const total = isPine ? t.h * 1.35 : t.h + t.r * 1.2;
-    const s = hero ? 1 : THREE.MathUtils.clamp(total / (isPine ? 13.4 : 8.6), isPine ? 0.68 : 0.62, isPine ? 0.95 : 1.02);
-    const v = isPine ? 2 : (t.kind === 'birch' || t.hue > 0.15 ? 1 : 0);
-    const yaw = hero ? (isPine ? 0.4 : 2.2) : r() * Math.PI * 2;
-    leafTint.set(isPine ? WOOD.pineLeaves : v === 1 ? WOOD.oakLeaves2 : WOOD.oakLeaves).offsetHSL(t.hue * 0.025, (r() - 0.5) * 0.05, (r() - 0.5) * 0.06);
-    barkTint.set(isPine ? WOOD.pineBark : WOOD.oakBark).multiplyScalar(0.92 + r() * 0.16);
-    lod.add(v, mat(t.x, t.y - 0.05, t.z, yaw, s), barkTint, leafTint);
-    ground(t.x, t.z, (isPine ? 2.2 : 3.6) * s, isPine ? 0.45 : 0.55, yaw);
+    const sp: TreeSpecies = t.kind === 'pine' ? 'pine' : t.kind === 'birch' ? 'birch' : hash(t.x, t.z, 1) < 0.35 ? 'beech' : 'oak';
+    const heroOak = Math.hypot(t.x - 55.83, t.z - 11.65) < 0.3, heroPine = Math.hypot(t.x - 69.23, t.z - 16.07) < 0.3;
+    const s0 = heroOak ? 'oak' : heroPine ? 'pine' : sp;
+    const v = heroOak || heroPine ? 0 : Math.floor(hash(t.x, t.z, 2) * 3);
+    const total = s0 === 'pine' ? t.h * 1.35 : t.h + t.r * 1.2;
+    const base = { oak: 8.6, beech: 9.6, birch: 9.4, pine: 13.4 }[s0];
+    const s = heroOak || heroPine ? 1 : THREE.MathUtils.clamp(total / base, s0 === 'pine' ? 0.68 : 0.66, s0 === 'oak' ? 1.02 : 0.98);
+    const yaw = heroOak ? 2.2 : heroPine ? 0.4 : r() * Math.PI * 2;
+    const sy = s * (0.94 + hash(t.x, t.z, 3) * 0.12); // a little height variation per tree
+    leafTint.set(LEAF_TINT[s0]).offsetHSL(t.hue * 0.025, (r() - 0.5) * 0.05, (r() - 0.5) * 0.06);
+    barkTint.set(BARK_TINT[s0]).multiplyScalar(0.92 + r() * 0.16);
+    tb.add({ kind: 'tree', species: s0, v }, mat(t.x, t.y - 0.05, t.z, yaw, [s, sy, s]), barkTint, leafTint);
+    ground(t.x, t.z, ({ oak: 3.6, beech: 3.2, birch: 1.8, pine: 2.2 })[s0] * s, s0 === 'birch' ? 0.4 : 0.5, yaw);
+    species.push({ t, sp: s0 });
   }
-  lod.build(w, true);
+  const broadleaves = species.filter((q) => q.sp === 'oak' || q.sp === 'beech').map((q) => q.t);
+  const pines = species.filter((q) => q.sp === 'pine').map((q) => q.t);
 
-  // ---- understory: clustered, with negative space; never in the walking corridor, the cut or in front of clues
-  const M = woodMats();
-  const ferns = new NearInstances(fernModel(), M.flat);
-  const plants = new NearInstances(groundPlantModel(), M.flat);
-  const grass = new NearInstances(grassModel(), M.flat, 24, 6);
-  // litter, flowers and verge stones are static: batched into the forest chunk (they share the flat and rock
-  // materials with the cut, so they add no draw calls)
-  const batch = (m: THREE.Material, g: THREE.BufferGeometry, shadow: boolean) => ({ n: 0, add(mm: THREE.Matrix4, col: THREE.ColorRepresentation) { c.b.add(m, g, mm, col, c.chunk, shadow, 0); this.n++; }, get size() { return this.n; }, build() {} });
-  const litter = batch(M.flat, litterLeafModel(), false);
-  const flowerG = flowerModel(); flowerG.userData.keepColor = true;
-  const flowers = batch(M.flat, flowerG, false);
-  const stoneG = rockModel(7); stoneG.userData.keepColor = true;
-  const stones = batch(M.rock, stoneG, true); // same group as the cut rocks
   const free = (x: number, z: number, corridor = 1.35) => inZone(x, z) && !inCutArea(x, z) && pathDist(x, z) > corridor && Math.hypot(x - SITES.fork.x + 1.3, z - SITES.fork.z + 0.9) > 1.2;
   const treeNear = (x: number, z: number, d: number) => trees.some((t) => Math.hypot(t.x - x, t.z - z) < d);
-  // fern clusters at tree feet and in hollows
-  for (const [cx, cz] of scatter(r, ZONE.x0, ZONE.x1, 2, ZONE.z1 - 2, 6.5, 900, (x, z) => free(x, z, 2.0))) {
-    const n = 2 + Math.floor(r() * 4);
+  const nearOf = (list: ZoneTree[], x: number, z: number, d: number) => list.some((t) => Math.hypot(t.x - x, t.z - z) < d);
+
+  // ---- bushes: hazel in loose groups at the edge of broadleaf crowns (set back from the path, never in the
+  // corridor), the odd holly in their shade. No collision (as in the original undergrowth).
+  let bushes = 0;
+  for (const t of broadleaves) {
+    if (hash(t.x, t.z, 4) > 0.42) continue;
+    const a0 = r() * Math.PI * 2, n = 1 + Math.floor(r() * 3);
     for (let i = 0; i < n; i++) {
-      const x = cx + (r() - 0.5) * 2.2, z = cz + (r() - 0.5) * 2.2;
-      if (!free(x, z, 1.5) || treeNear(x, z, 0.5)) continue;
-      ferns.add(mat(x, terrainHeight(x, z) - 0.02, z, r() * 6.3, 0.9 + r() * 0.5), new THREE.Color(WOOD.fern).offsetHSL((r() - 0.5) * 0.03, 0, (r() - 0.5) * 0.08));
+      const a = a0 + i * 0.9 + r() * 0.4, d = 2.4 + r() * 1.6, x = t.x + Math.cos(a) * d, z = t.z + Math.sin(a) * d;
+      if (!free(x, z, 2.6) || treeNear(x, z, 1.3)) continue;
+      const holly = r() < 0.25, sp: BushSpecies = holly ? 'holly' : 'hazel', sc = 0.8 + r() * 0.4, yaw = r() * 6.3;
+      tb.add({ kind: 'bush', species: sp, v: Math.floor(r() * 3) }, mat(x, terrainHeight(x, z) - 0.05, z, yaw, sc), new THREE.Color(BARK_TINT[sp]).multiplyScalar(0.9 + r() * 0.2), new THREE.Color(LEAF_TINT[sp]).offsetHSL((r() - 0.5) * 0.02, 0, (r() - 0.5) * 0.06));
+      ground(x, z, (holly ? 1.6 : 2.0) * sc, 0.4, yaw);
+      bushes++;
     }
   }
-  // broadleaf ground plants at tree bases (one side), sparse
-  for (const t of trees) {
-    if (r() > 0.45) continue;
-    const a = r() * Math.PI * 2, d = 0.9 + r() * 0.8, x = t.x + Math.cos(a) * d, z = t.z + Math.sin(a) * d;
-    if (!free(x, z, 1.6)) continue;
-    plants.add(mat(x, terrainHeight(x, z) - 0.02, z, r() * 6.3, 0.9 + r() * 0.6), new THREE.Color(WOOD.plant).offsetHSL(0, 0, (r() - 0.5) * 0.08));
-  }
-  // grass: the path verge (clumps with gaps), and loose clumps in the lighter openings
+  tb.build(w);
+
+  // ---- understory (one batch): clustered, with negative space; never in the walking corridor, the cut or in
+  // front of clues. Each cluster mostly keeps one variant, as plants spread in patches.
+  const M = woodMats();
+  const pb = new PlantBatch();
+  const tint = (k = 0.08) => new THREE.Color(1, 1, 1).offsetHSL((r() - 0.5) * 0.02, 0, (r() - 0.5) * k);
+  const put = (kind: PlantKind, v: number, x: number, z: number, sc: number, show?: number) => pb.add(kind, v, mat(x, terrainHeight(x, z) - 0.02, z, r() * 6.3, sc), tint(), show);
+  const patch = (kind: PlantKind, cx: number, cz: number, n: number, spread: number, sc: [number, number], corridor: number, show?: number, avoidTree = 0.5) => {
+    const v0 = Math.floor(r() * PLANT_VARIANTS[kind]);
+    for (let i = 0; i < n; i++) {
+      const x = cx + (r() - 0.5) * spread, z = cz + (r() - 0.5) * spread;
+      if (!free(x, z, corridor) || treeNear(x, z, avoidTree)) continue;
+      put(kind, r() < 0.75 ? v0 : Math.floor(r() * PLANT_VARIANTS[kind]), x, z, sc[0] + r() * sc[1], show);
+    }
+  };
+  // ferns in hollows and at tree feet
+  for (const [cx, cz] of scatter(r, ZONE.x0, ZONE.x1, 2, ZONE.z1 - 2, 6.5, 900, (x, z) => free(x, z, 2.0))) patch('fern', cx, cz, 2 + Math.floor(r() * 4), 2.2, [0.9, 0.5], 1.5);
+  // bilberry carpets under the pines and up the hill
+  for (const t of pines) if (r() < 0.8) patch('bilberry', t.x + (r() - 0.5) * 3, t.z + (r() - 0.5) * 3, 6 + Math.floor(r() * 7), 3.4, [0.9, 0.6], 1.6);
+  // lily of the valley in small patches under oaks and beeches
+  for (const t of broadleaves) if (r() < 0.4) { const a = r() * 6.3, d = 1.0 + r() * 1.2; patch('lily', t.x + Math.cos(a) * d, t.z + Math.sin(a) * d, 4 + Math.floor(r() * 5), 1.1, [0.9, 0.5], 1.6); }
+  // foxgloves: a few groups in the lighter openings set back from the path (the colour accent of the approach)
+  for (const [cx, cz] of scatter(r, ZONE.x0 + 3, ZONE.x1 - 3, 3, 34, 8.5, 400, (x, z) => free(x, z, 2.3) && pathDist(x, z) < 6 && !treeNear(x, z, 2.2))) patch('foxglove', cx, cz, 2 + Math.floor(r() * 4), 1.4, [0.85, 0.35], 2.0, 28, 1.2);
+  // wood anemones in drifts under the broadleaves and in openings
+  for (const [cx, cz] of scatter(r, ZONE.x0 + 4, ZONE.x1 - 4, 3, 30, 7, 300, (x, z) => free(x, z, 1.8) && nearOf(broadleaves, x, z, 5))) patch('anemone', cx, cz, 5 + Math.floor(r() * 5), 1.6, [0.9, 0.4], 1.4, 20);
+  // grass: the path verge (clumps with gaps; wispy and seed-head grasses where it is light), sedge at tree feet,
+  // loose tufts in the openings; verge stones
+  const stoneG = rockModel(7); stoneG.userData.keepColor = true;
+  let stones = 0;
   for (const p of FOREST_PATHS) for (let i = 1; i < p.length; i++) {
     const [ax, az] = p[i - 1], [bx, bz] = p[i];
     const seg = Math.hypot(bx - ax, bz - az), nx = -(bz - az) / seg, nz = (bx - ax) / seg;
@@ -345,30 +364,29 @@ export function buildWoodland(w: World, c: Ctx, trees: ZoneTree[]) {
         if (Math.sin((x0 + z0) * 0.9 + side * 1.7) + Math.sin((x0 - z0) * 0.37) < -0.35) continue; // gaps along the verge
         const off = 1.05 + r() * 0.9, x = x0 + nx * off * side, z = z0 + nz * off * side;
         if (inCutArea(x, z) || pathDist(x, z) < 0.95) continue;
-        grass.add(mat(x, terrainHeight(x, z) - 0.01, z, r() * 6.3, 0.75 + r() * 0.55), new THREE.Color(WOOD.grass).offsetHSL((r() - 0.5) * 0.04, 0, (r() - 0.5) * 0.1));
-        if (r() < 0.18) stones.add(mat(x + nx * side * 0.2, terrainHeight(x, z) - 0.06, z + nz * side * 0.2, r() * 6.3, [0.14 + r() * 0.1, 0.1 + r() * 0.06, 0.12 + r() * 0.1]), new THREE.Color(WOOD.rock).multiplyScalar(0.92 + r() * 0.12));
-        if (r() < 0.07) for (let f = 0; f < 3; f++) flowers.add(mat(x + (r() - 0.5) * 0.4, terrainHeight(x, z), z + (r() - 0.5) * 0.4, r() * 6.3, 0.9 + r() * 0.4), WOOD.flower);
+        const v = treeNear(x, z, 3) ? (r() < 0.7 ? 0 : 3) : [0, 1, 1, 2][Math.floor(r() * 4)];
+        put('grass', v, x, z, 0.75 + r() * 0.55, 20);
+        if (r() < 0.18) { c.b.add(M.rock, stoneG, mat(x + nx * side * 0.2, terrainHeight(x, z) - 0.06, z + nz * side * 0.2, r() * 6.3, [0.14 + r() * 0.1, 0.1 + r() * 0.06, 0.12 + r() * 0.1]), new THREE.Color(WOOD.rock).multiplyScalar(0.92 + r() * 0.12), c.chunk, true, 0); stones++; }
       }
     }
   }
   for (const [x, z] of scatter(r, ZONE.x0, ZONE.x1, 2, ZONE.z1 - 2, 2.6, 2500, (x, z) => free(x, z, 2.2) && !treeNear(x, z, 1.4))) {
-    if (r() < 0.55) grass.add(mat(x, terrainHeight(x, z) - 0.01, z, r() * 6.3, 0.7 + r() * 0.5), new THREE.Color(WOOD.grass).offsetHSL(0, -0.05, (r() - 0.5) * 0.1));
+    if (r() < 0.55) put('grass', nearOf(trees, x, z, 3) ? 3 : [0, 0, 1, 2][Math.floor(r() * 4)], x, z, 0.7 + r() * 0.5, 20);
   }
-  // leaf litter under the oaks and drifting onto the path edges
+  // leaf litter under the broadleaves, drifting onto the path edges: static, batched into the forest chunk
+  const litterG = litterLeafModel();
+  let litter = 0;
   for (const t of trees) {
     if (t.kind === 'pine') continue;
     for (let i = 0; i < 22; i++) {
       const a = r() * Math.PI * 2, d = 0.5 + Math.sqrt(r()) * 3.2, x = t.x + Math.cos(a) * d, z = t.z + Math.sin(a) * d;
       if (!inZone(x, z) || inCutArea(x, z) || pathDist(x, z) < 0.55) continue;
-      litter.add(mat(x, terrainHeight(x, z) + 0.012, z, r() * 6.3, 0.8 + r() * 0.7), WOOD.litter[Math.floor(r() * 4)]);
+      c.b.add(M.flat, litterG, mat(x, terrainHeight(x, z) + 0.012, z, r() * 6.3, 0.8 + r() * 0.7), WOOD.litter[Math.floor(r() * 4)], c.chunk, false, 0);
+      litter++;
     }
   }
-  // a few flower drifts in sunny openings
-  for (const [x, z] of scatter(r, ZONE.x0 + 4, ZONE.x1 - 4, 3, 30, 9, 300, (x, z) => free(x, z, 1.8) && !treeNear(x, z, 2.5))) {
-    for (let i = 0; i < 7; i++) { const fx = x + (r() - 0.5) * 1.4, fz = z + (r() - 0.5) * 1.4; flowers.add(mat(fx, terrainHeight(fx, fz), fz, r() * 6.3, 0.8 + r() * 0.5), WOOD.flower); }
-  }
-  for (const s of [ferns, plants, grass]) s.build(w);
-  return { lod, counts: { ferns: ferns.size, plants: plants.size, grass: grass.size, litter: litter.size, flowers: flowers.size, stones: stones.size } };
+  pb.build(w);
+  return { trees: tb.size - bushes, bushes, counts: { ...pb.counts(), litter, stones } };
 }
 
 // ------------------------------------------------------------------------------------------------ stumps
