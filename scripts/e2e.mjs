@@ -854,11 +854,11 @@ async function artSample() {
       const fires = []; g.world.scene.traverse((o) => { if (o.userData.fire) fires.push(o); });
       const hearth = fires.find((f) => Math.abs(-f.position.z - 86.7) < 0.3 && f.position.x < 73);
       const lamp = g.world.byId.get('lamp.livingFloor');
-      let shadeEm = null; lamp.obj.traverse((o) => { if (o.isMesh && o.material?.emissive) shadeEm = o.material.emissive.getHexString(); });
+      let shadeEm = null; lamp.obj.traverse((o) => { if (o.userData.lampShade) shadeEm = o.material.emissive.getHexString(); });
       const before = { fire: !!hearth?.visible, shadeEm };
-      g.select('matches'); T.lookAtId('fire.living'); g.doAction(); T.tick(3); g.select(null);
+      g.player.x = 75.4; g.player.z = 86.0; T.tick(2); g.select('matches'); T.act('fire.living'); T.tick(3); g.select(null);
       g.player.x = 82.6; g.player.z = 85.0; T.act('lamp.livingFloor', 'Aandoen'); T.tick(3);
-      let shadeOn = null; lamp.obj.traverse((o) => { if (o.isMesh && o.material?.emissive) shadeOn = o.material.emissive.getHexString(); });
+      let shadeOn = null; lamp.obj.traverse((o) => { if (o.userData.lampShade) shadeOn = o.material.emissive.getHexString(); });
       return { before, fireLitAgain: !!g.state.lit['fire.living'] && hearth.visible, shadeOn };
     });
     log('art sample: doused fire and switched-off lamp persist through reload; relighting restores flame and shade glow', t1.firstOff && t1.lamp === false && !t2.before.fire && t2.before.shadeEm === '000000' && t2.fireLitAgain && t2.shadeOn !== '000000', JSON.stringify({ t1, t2 }));

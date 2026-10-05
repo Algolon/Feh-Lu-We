@@ -548,6 +548,7 @@ export function floorLampV2(w: World, x: number, y0: number, z: number) {
   const shadeGeo = lathe([[0.25, 0], [0.22, 0.12], [0.17, 0.27], [0.16, 0.3]], 24);
   const shade = new THREE.Mesh(shadeGeo, shadeMat);
   shade.position.y = 1.34;
+  shade.userData.lampShade = true;
   obj.add(shade);
   const trim = new THREE.Mesh(new THREE.TorusGeometry(0.25, 0.007, 4, 32).rotateX(Math.PI / 2), w.material(new THREE.MeshLambertMaterial({ color: '#8a6a3a' })));
   trim.position.y = 1.34;
