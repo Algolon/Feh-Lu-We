@@ -3,7 +3,7 @@
 // drop filter must leave every other tree and plant of the original forest exactly as it was.
 import { describe, it, expect } from 'vitest';
 import * as THREE from 'three';
-import { oakModel, pineModel, rockModel, fernModel, grassModel, twoSided, taperTube, treeModel, bushModel, plantModel, PLANT_VARIANTS, type TreeSpecies, type PlantKind } from '../src/world/woodkit';
+import { oakModel, pineModel, rockModel, fernModel, grassModel, twoSided, taperTube, treeModel, bushModel, plantModel, PLANT_VARIANTS, type TreeSpecies, type PlantKind, ATLAS_COLS, LEAF_U } from '../src/world/woodkit';
 import { Vegetation } from '../src/world/nature';
 import { zoneWeight, inZone } from '../src/world/boslustZone';
 
@@ -73,10 +73,13 @@ describe('species and variants', () => {
     expect(crown('beech').max.y).toBeGreaterThan(crown('oak').max.y);
     expect(crown('pine').min.y).toBeGreaterThan(crown('beech').min.y + 1.5);
   });
-  it('bark is mapped into its atlas column (u inside one third, away from the edges)', () => {
+  it('bark is mapped into its atlas column, foliage into the leaf column (one material for the whole tree)', () => {
     for (const [sp, col] of [['oak', 0], ['beech', 1], ['birch', 2], ['pine', 0]] as const) {
-      const uv = treeModel(sp, 1, 'near').wood.attributes.uv as THREE.BufferAttribute;
-      for (let i = 0; i < uv.count; i += 7) { expect(uv.getX(i)).toBeGreaterThan(col / 3); expect(uv.getX(i)).toBeLessThan((col + 1) / 3); }
+      const m = treeModel(sp, 1, 'near');
+      const uv = m.wood.attributes.uv as THREE.BufferAttribute;
+      for (let i = 0; i < uv.count; i += 7) { expect(uv.getX(i)).toBeGreaterThan(col / ATLAS_COLS); expect(uv.getX(i)).toBeLessThan((col + 1) / ATLAS_COLS); }
+      const lu = m.leaves.attributes.uv as THREE.BufferAttribute; // foliage u carries the LEAF_U marker (the shader wraps it into column 3)
+      for (let i = 0; i < lu.count; i += 7) expect(lu.getX(i)).toBeGreaterThan(LEAF_U / 2);
     }
   });
   it('bushes: hazel and holly, three variants each, under 3 m, foliage down to below knee-to-hip height', () => {

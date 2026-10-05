@@ -1,6 +1,7 @@
 // Game orchestrator: renderer + loop, input → player, interaction picking, save/restore, scenes, UI glue.
 import * as THREE from 'three';
 import { ART } from './artflags';
+import { CAPS, FORCE_NO_MULTIDRAW, hideMultiDraw, detectCaps, vegPathLabel } from './caps';
 import {
   type GameState, type Settings, type SceneId, type PlayerPose, SAVE_KEY, SETTINGS_KEY, BACKUP_KEY, defaultState, parseSave, parseSettings, storage, addClue, has, flag, logEvent,
 } from './state';
@@ -76,7 +77,9 @@ export class Game implements GameApi {
     const coarse = matchMedia('(pointer: coarse)').matches;
     this.settings = parseSettings(storage.get(SETTINGS_KEY), coarse);
     this.state = parseSave(storage.get(SAVE_KEY)) ?? defaultState();
+    if (FORCE_NO_MULTIDRAW) hideMultiDraw(); // diagnostic (?multidraw=0): must precede the renderer's context
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: this.settings.quality === 'high', powerPreference: 'high-performance' });
+    detectCaps(this.renderer);
     this.renderer.toneMapping = ART.tm === 'neutral' ? THREE.NeutralToneMapping : THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.15;
     this.renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -860,7 +863,7 @@ export class Game implements GameApi {
       if (this.debugEl) {
         const info = this.renderer.info.render;
         const f = Object.keys(this.state.flags).filter((k) => this.state.flags[k]).join(', ');
-        this.debugEl.innerHTML = `FPS ${fs.fps} (median) · p95 ${fs.p95Ms} ms · calls ${info.calls} · tris ${info.triangles}<br>` +
+        this.debugEl.innerHTML = `FPS ${fs.fps} (median) · p95 ${fs.p95Ms} ms · calls ${info.calls} · tris ${info.triangles} · veg ${vegPathLabel()}<br>` +
           `pos ${this.player.x.toFixed(1)}, ${this.player.y.toFixed(2)}, ${this.player.z.toFixed(1)} yaw ${(this.player.yaw * 57.3).toFixed(0)}°<br>` +
           `target ${this.target?.id ?? '—'} · room ${this.pool?.here ?? '—'} · lights ${this.pool?.assigned().map((a) => a ?? '·').join(' ') ?? ''}<br>flags: ${f || '—'}<br>` +
           (this.world?.checkpoints.map((c) => `<button data-cp="${c.name}">${c.name}</button>`).join('') ?? '') +
@@ -882,6 +885,7 @@ export class Game implements GameApi {
       triangles: info.render.triangles,
       geometries: info.memory.geometries,
       textures: info.memory.textures,
+      multiDraw: CAPS.multiDraw,
       pos: this.player.pose(),
       target: this.target?.id ?? null,
       label: this.target ? this.actionLabel(this.target) : null,

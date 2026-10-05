@@ -10,6 +10,7 @@ import * as THREE from 'three';
 import { ART, REVIEW } from '../core/artflags';
 import { defaultState, type GameState } from '../core/state';
 import { BUILD, type Game } from '../core/game';
+import { vegPathLabel } from '../core/caps';
 import { terrainHeight } from '../world/terrain';
 
 export function reviewState(): GameState {
@@ -69,7 +70,7 @@ export function mountReviewBar(game: Game) {
       ? `<button data-k="art">${isNew() ? 'Toon oud' : 'Toon nieuw'}</button>
          <button data-k="light">Licht: ${ART.light === 'sample' ? 'nieuw' : 'oud'}</button>
          <button data-k="tm">Tonemap: ${ART.tm === 'aces' ? 'ACES' : 'Neutral'}</button>
-         <button data-k="close" aria-label="Inklappen">×</button>`
+         <button data-k="close" aria-label="Inklappen">×</button>${ext ? `<span class="info">tekenen: ${vegPathLabel()} · ${BUILD}</span>` : ''}`
       : `<button data-k="open">Review: ${label()}</button>`;
   };
   bar.addEventListener('click', async (e) => {

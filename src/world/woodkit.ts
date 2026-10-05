@@ -141,16 +141,17 @@ function mergeParts(parts: THREE.BufferGeometry[]) {
   m.computeBoundingSphere();
   return m;
 }
-/** Spherical-ish UVs for foliage masses (a leaf-dab texture wraps without stretching badly). */
+/** Spherical-ish UVs for foliage masses (a leaf-dab texture wraps without stretching badly); u offset by LEAF_U. */
 function foliageUV(g: THREE.BufferGeometry, scale: number) {
   const p = g.attributes.position as THREE.BufferAttribute, uv = new Float32Array(p.count * 2);
-  for (let i = 0; i < p.count; i++) { uv[i * 2] = (p.getX(i) + p.getZ(i) * 0.7) / scale; uv[i * 2 + 1] = (p.getY(i) + p.getZ(i) * 0.4) / scale; }
+  for (let i = 0; i < p.count; i++) { uv[i * 2] = LEAF_U + (p.getX(i) + p.getZ(i) * 0.7) / scale; uv[i * 2 + 1] = (p.getY(i) + p.getZ(i) * 0.4) / scale; }
   g.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
   return g;
 }
 
 export interface Model { wood: THREE.BufferGeometry; leaves: THREE.BufferGeometry }
-export type Lod = 'near' | 'far';
+/** near < 16 m (inspected), mid 16–28 m, far beyond (in the haze). All three share one skeleton and layout. */
+export type Lod = 'near' | 'mid' | 'far';
 export type TreeSpecies = 'oak' | 'beech' | 'birch' | 'pine';
 export type BushSpecies = 'hazel' | 'holly';
 /** Variants per species (each a distinct, authored or seeded silhouette). */
@@ -158,184 +159,332 @@ export const VARIANTS = 3;
 
 // ------------------------------------------------------------------------------------------------ bark atlas
 /**
- * One bark texture holds three barks side by side (so all species share one material and one draw call):
- * 0 fissured (oak, pine), 1 smooth with faint lenticels (beech, hazel), 2 birch (white with black dashes).
- * u (around the trunk, 0–1) is remapped into the column with a gutter against filtering bleed.
+ * One texture (the tree atlas, see woodMats) holds three barks and the leaf dabs side by side, so trunks and
+ * crowns of every species share ONE material and each tree LOD is ONE geometry:
+ * columns 0 fissured (oak, pine), 1 smooth with faint lenticels (beech, hazel, holly), 2 birch (white with black
+ * dashes), 3 leaf dabs. Bark u (around the trunk, 0–1) is remapped into its column with a gutter against filtering
+ * bleed; foliage u is stored as LEAF_U + u and wrapped into column 3 by the material (it repeats freely).
  */
 export const BARK = { fissured: 0, smooth: 1, birch: 2 } as const;
+export const ATLAS_COLS = 4;
+/** Foliage UVs carry this offset in u: the tree material recognises them and repeats them inside the leaf column. */
+export const LEAF_U = 64;
 const GUT = 0.07;
 function barkCol(g: THREE.BufferGeometry, col: number) {
   const uv = g.attributes.uv as THREE.BufferAttribute;
-  for (let i = 0; i < uv.count; i++) uv.setX(i, (col + GUT + Math.min(1, Math.max(0, uv.getX(i))) * (1 - 2 * GUT)) / 3);
+  for (let i = 0; i < uv.count; i++) uv.setX(i, (col + GUT + Math.min(1, Math.max(0, uv.getX(i))) * (1 - 2 * GUT)) / ATLAS_COLS);
+  return g;
+}
+
+// ------------------------------------------------------------------------------------------------ tree building blocks
+type P3 = [number, number, number];
+const vec = (p: P3) => new THREE.Vector3(p[0], p[1], p[2]);
+
+/**
+ * A foliage cluster: a displaced, slightly flattened sphere. Near: icosphere (80 triangles); far: octasphere (32)
+ * (small clusters one step coarser) — same centre, size and noise, so the LOD switch keeps the outline.
+ * Normals are blended toward the crown centre (one soft volume) and biased up (undersides read as shaded green,
+ * not black); vertex colour bakes occlusion (darker inside and underneath, lighter and warmer on outer tops) and a
+ * small per-cluster value step so overlapping clusters separate.
+ */
+interface Cluster { c: THREE.Vector3; r: P3; seed: number; amp: number; flat: number; val: number; spiky?: boolean; /** a small filler clump: near LOD only */ sat?: boolean }
+function clusterGeo(k: Cluster, lod: Lod, crownC: THREE.Vector3, crownR: number, bend = 0.5, nearSmall = 0.5) {
+  // small clusters one step coarser: near icosphere (80) / octasphere (32); far octasphere (32) / icosahedron (20)
+  // far: icosahedron (20) for every cluster
+  const small = Math.max(...k.r) < (lod === 'near' ? nearSmall : 0.9);
+  const g0 = lod === 'near' ? (small ? new THREE.OctahedronGeometry(1, 1) : new THREE.IcosahedronGeometry(1, 1)) : small || lod === 'far' ? new THREE.IcosahedronGeometry(1, 0) : new THREE.OctahedronGeometry(1, 1);
+  g0.deleteAttribute('normal'); g0.deleteAttribute('uv');
+  const g = mergeVertices(g0, 1e-5);
+  g0.dispose();
+  const p = g.attributes.position as THREE.BufferAttribute, v = new THREE.Vector3();
+  for (let i = 0; i < p.count; i++) {
+    v.fromBufferAttribute(p, i);
+    let d = 1 + k.amp * n3(v.x * 1.7, v.y * 1.7, v.z * 1.7, k.seed) + k.amp * 0.45 * n3(v.x * 3.9, v.y * 3.9, v.z * 3.9, k.seed + 7.7);
+    if (k.spiky) d += 0.22 * Math.max(0, n3(v.x * 6.3, v.y * 6.3, v.z * 6.3, k.seed + 3.1));
+    v.multiplyScalar(d);
+    if (v.y < 0) v.y *= k.flat;
+    p.setXYZ(i, k.c.x + v.x * k.r[0], k.c.y + v.y * k.r[1], k.c.z + v.z * k.r[2]);
+  }
+  g.computeVertexNormals();
+  const nn = g.attributes.normal as THREE.BufferAttribute, w = new THREE.Vector3(), col = new Float32Array(p.count * 3);
+  for (let i = 0; i < p.count; i++) {
+    v.fromBufferAttribute(p, i);
+    w.copy(v).sub(crownC);
+    const dist = w.length() / crownR;
+    w.normalize();
+    const n = new THREE.Vector3().fromBufferAttribute(nn, i).lerp(w, bend).normalize().lerp(UP, 0.3).normalize();
+    nn.setXYZ(i, n.x, n.y, n.z);
+    const up = THREE.MathUtils.smoothstep(n.y, -0.7, 0.9);
+    const kk = (0.78 + 0.22 * up) * (0.72 + 0.28 * THREE.MathUtils.smoothstep(dist, 0.3, 1.0)) * 1.12 * k.val;
+    col[i * 3] = kk * (0.98 + 0.08 * up); col[i * 3 + 1] = kk * (1.0 + 0.04 * up); col[i * 3 + 2] = kk * (1.0 - 0.14 * up);
+  }
+  g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  return g;
+}
+/**
+ * Drop cluster triangles buried inside a neighbouring cluster (centroid well inside its ellipsoid): they are never
+ * seen, only drawn. Keeps every triangle on the outside of the crown.
+ */
+function cullBuried(geos: THREE.BufferGeometry[], ks: Cluster[], margin = 0.82) {
+  const a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3();
+  geos.forEach((g, gi) => {
+    const p = g.attributes.position as THREE.BufferAttribute, idx = g.index!.array, keep: number[] = [];
+    for (let t = 0; t < idx.length; t += 3) {
+      a.fromBufferAttribute(p, idx[t]); b.fromBufferAttribute(p, idx[t + 1]); c.fromBufferAttribute(p, idx[t + 2]);
+      a.add(b).add(c).divideScalar(3);
+      const hidden = ks.some((k, ki) => ki !== gi && ((a.x - k.c.x) / k.r[0]) ** 2 + ((a.y - k.c.y) / k.r[1]) ** 2 + ((a.z - k.c.z) / k.r[2]) ** 2 < margin * margin);
+      if (!hidden) keep.push(idx[t], idx[t + 1], idx[t + 2]);
+    }
+    g.setIndex(keep);
+  });
+  return geos;
+}
+
+/**
+ * Trunk with integrated roots: horizontal rings round a smooth (slightly leaning) axis. Toward the ground the ring
+ * swells into buttress lobes at irregular bearings and strengths, widest at ground level and narrowing again below
+ * it, so each lobe is a root ridge that rises out of the soil and runs up into the trunk — no separate root tubes,
+ * no joints, no visible root tips — and on a slope the downhill side shows the ridges diving into the soil.
+ */
+function flaredTrunk(path: P3[], radius: (t: number) => number, lobes: { a: number; w: number }[], flare: number, flareH: number, radial: number, rows: number, vScale: number) {
+  const curve = new THREE.CatmullRomCurve3(path.map(vec), false, 'centripetal');
+  const len = curve.getLength();
+  const pos: number[] = [], uv: number[] = [], idx: number[] = [];
+  const P = new THREE.Vector3();
+  // ring heights: dense through the flare (where the buttresses change fastest), then even up the trunk
+  const y0 = path[0][1], y1 = path[path.length - 1][1], base = [y0, -0.2, 0, 0.14, 0.3, 0.48, 0.7, 0.95, flareH + 0.25].filter((y) => y > y0 && y < y1 - 0.5);
+  const fine = rows < 6 ? base.filter((_, i) => i % 3 === 0) : base; // coarse LODs: every third flare ring
+  const top = fine[fine.length - 1] ?? y0, ys = [y0, ...fine.filter((y) => y > y0)];
+  const rest = Math.max(1, rows - ys.length + 1);
+  for (let i = 1; i <= rest; i++) ys.push(top + ((y1 - top) * i) / rest);
+  rows = ys.length - 1;
+  for (let i = 0; i <= rows; i++) {
+    const t = (ys[i] - y0) / (y1 - y0); // height fraction ≈ curve parameter (the axis is near vertical)
+    curve.getPointAt(t, P);
+    // buttresses widest at ground level; above it they run up into the trunk, below it they dive and narrow (on a
+    // slope the downhill side shows them going into the soil, not a skirt)
+    const R = radius(t), F = flare * (P.y >= 0 ? Math.pow(1 - THREE.MathUtils.smoothstep(P.y, 0, flareH), 3.2) : 0.5 + 0.5 * THREE.MathUtils.smoothstep(P.y, -0.45, 0));
+    const curl = 0.18 * (1 - THREE.MathUtils.smoothstep(P.y, -0.45, flareH)); // ridges twist a little as they descend
+    const sharp = 4 + 12 * (1 - THREE.MathUtils.smoothstep(P.y, -0.1, flareH * 0.7)); // broad buttress up the trunk, slim root at the ground
+    for (let j = 0; j <= radial; j++) {
+      const a = (j / radial) * Math.PI * 2;
+      let k = 1;
+      for (const l of lobes) { const d = Math.cos(a - l.a - curl * l.w); if (d > 0) k += F * l.w * d ** sharp; }
+      k += F * 0.08 * (1 + Math.sin(a * 3 + 1.3)) * 0.5; // a little general swell between the ridges
+      pos.push(P.x + Math.cos(a) * R * k, P.y, P.z + Math.sin(a) * R * k);
+      uv.push(j / radial, (t * len) / vScale);
+    }
+  }
+  for (let i = 0; i < rows; i++) for (let j = 0; j < radial; j++) {
+    const a = i * (radial + 1) + j, b = a + radial + 1;
+    idx.push(a, b, a + 1, a + 1, b, b + 1);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  g.setIndex(idx);
+  g.computeVertexNormals();
   return g;
 }
 
 // ------------------------------------------------------------------------------------------------ broadleaf trees
-interface Broadleaf {
-  seed: number; H: number; lean: [number, number]; trunk: [number, number, number, number];
-  majors: [number, number, number, number][]; subs: number; detail: number; crownR: number;
-  bark: number; roots: number; rootR: number; rootSpin: number; limbR: number; leader: number; fork: number;
-  /** noise offsets for the mass and clump displacement */ nm: number; ns: number;
-}
 /**
- * Generic broadleaf: a leaning, tapering trunk; roots growing out of the trunk axis and diving into the soil;
- * limbs from the trunk top into each MAJOR foliage mass (they enter the foliage, never end in air); each major mass
- * carries smaller clumps on its outer side, so the outline is scalloped rather than a pillow. Both LODs keep the
- * same masses, clumps, limbs and roots (coarser far away), so the switch does not change the silhouette.
+ * Generic broadleaf, grown as a skeleton first (trunk → limbs → side branches → foliage clusters at the branch ends),
+ * then emitted per LOD from the same skeleton, so near and far keep one layout.
+ * - Decurrent (oak): the trunk divides into a few heavy, wide-spreading limbs at `H`.
+ * - Tiered (beech, birch): a leader continues to the top; limbs leave it at several heights, shorter upward.
+ * Foliage sits on the outer ends of the branches, so the crown has gaps and you see limbs through it.
  */
-function broadleaf(sp: Broadleaf, lod: Lod): Model {
-  const r = mulberry32(sp.seed);
-  const near = lod === 'near';
-  const { H, lean } = sp;
-  const trunkTop: [number, number, number] = [lean[0], H + 0.4, lean[1]];
-  const wood: THREE.BufferGeometry[] = [];
-  wood.push(taperTube([[0, -0.3, 0], [lean[0] * 0.2, H * 0.35, lean[1] * 0.2], [lean[0] * 0.7, H * 0.75, lean[1] * 0.7], trunkTop], [...sp.trunk], { radial: near ? 12 : 6, rows: near ? 10 : 4, vScale: 1.4 }));
-  const crownC = new THREE.Vector3(lean[0] * 1.2, H + 2.4, lean[1] * 1.2);
-  const leaves: THREE.BufferGeometry[] = [];
-  sp.majors.forEach(([mx, my, mz, ms], i) => {
-    const cx = crownC.x + mx, cy = H + my, cz = crownC.z + mz;
-    leaves.push(lump(cx, cy, cz, ms * 1.05, ms * 0.78, ms * 0.98, i * 1.7 + sp.nm, near ? sp.detail : 1, crownC, sp.crownR));
-    const out = new THREE.Vector3(mx, 0, mz).normalize();
-    for (let k = 0; k < sp.subs; k++) {
-      const a = Math.atan2(out.z, out.x) + (r() - 0.5) * 2.6, el = 0.15 + r() * 0.75;
-      const d = ms * (0.72 + r() * 0.18), cs = ms * (0.38 + r() * 0.2);
-      leaves.push(lump(cx + Math.cos(a) * Math.cos(el) * d, cy + Math.sin(el) * d * 0.75, cz + Math.sin(a) * Math.cos(el) * d, cs * 1.05, cs * 0.8, cs, i * 7.3 + k * 2.9 + sp.ns, near ? 1 : 0, crownC, sp.crownR));
-    }
-  });
-  const rad = near ? 1 : 0.6;
-  sp.majors.slice(1).forEach(([mx, my, mz], i) => {
-    const s: [number, number, number] = [trunkTop[0] * 0.85, H - 0.15 + i * 0.12, trunkTop[2] * 0.85];
-    const e: [number, number, number] = [crownC.x + mx * 0.75, H + my * 0.7, crownC.z + mz * 0.75];
-    const m: [number, number, number] = [(s[0] + e[0]) / 2 + (r() - 0.5) * 0.4, (s[1] + e[1]) / 2 + 0.3, (s[2] + e[2]) / 2 + (r() - 0.5) * 0.4];
-    wood.push(taperTube([s, m, e], [sp.limbR, sp.limbR * 0.64, sp.limbR * 0.32], { radial: Math.round(7 * rad), rows: near ? 6 : 3, vScale: 1.2 }));
-    const f: [number, number, number] = [m[0] + (e[0] - s[0]) * 0.25 + (r() - 0.5) * 0.8, m[1] + 0.9, m[2] + (e[2] - s[2]) * 0.25 + (r() - 0.5) * 0.8];
-    if (i % sp.fork === 0 && near) wood.push(taperTube([m, [(m[0] + f[0]) / 2, (m[1] + f[1]) / 2 + 0.1, (m[2] + f[2]) / 2], f], [sp.limbR * 0.4, sp.limbR * 0.3, sp.limbR * 0.16], { radial: 5, rows: 4, vScale: 1.2 }));
-  });
-  wood.push(taperTube([trunkTop, [trunkTop[0] * 1.1, H + sp.leader * 0.64, trunkTop[2]], [crownC.x, H + sp.leader, crownC.z]], [sp.limbR * 0.9, sp.limbR * 0.6, sp.limbR * 0.27], { radial: Math.round(7 * rad), rows: near ? 5 : 2, vScale: 1.2 }));
-  for (let i = 0; i < sp.roots; i++) {
-    const a = (i / sp.roots) * Math.PI * 2 + sp.rootSpin + (r() - 0.5) * 0.35, L = (0.5 + r() * 0.4) * sp.rootR / 0.3;
-    const c = Math.cos(a), s = Math.sin(a), R = sp.rootR;
-    wood.push(taperTube([[c * 0.04, 1.05 * R / 0.3, s * 0.04], [c * 0.42 * R / 0.3, 0.38, s * 0.42 * R / 0.3], [c * (0.62 + L * 0.5), -0.02, s * (0.62 + L * 0.5)], [c * (0.66 + L), -0.75, s * (0.66 + L)]], [R, R * 0.8, R * 0.4, R * 0.13], { radial: near ? 7 : 4, rows: near ? 7 : 3, vScale: 1.2 }));
-  }
-  const woodG = mergeParts(wood.map((g) => barkCol(paint(g, (p) => { const k = 0.74 + 0.26 * THREE.MathUtils.smoothstep(p.y, -0.2, 1.4); return [k, k, k]; }), sp.bark)));
-  return { wood: woodG, leaves: mergeParts(leaves.map((g) => foliageUV(g, 1.6))) };
+interface Broadleaf {
+  seed: number; H: number; leader: number; lean: [number, number]; trunk: [number, number]; flare: number; buttress: number;
+  limbs: number; tiered: boolean; limbEl: [number, number]; limbLen: [number, number]; limbR: number; limbArch: number;
+  subs: [number, number]; subLen: [number, number]; subEl: number;
+  cl: [number, number]; clFlat: number; clSquash: number; clAmp: number; droop: number; topClusters: number; midP: number;
+  bark: number; barkK: (y: number) => [number, number, number]; vScale: number;
 }
+interface Branch { pts: P3[]; r: number[]; level: 1 | 2 }
+interface Skeleton { trunk: { path: P3[]; radius: (t: number) => number; lobes: { a: number; w: number }[] }; branches: Branch[]; clusters: Cluster[] }
+
+function growBroadleaf(sp: Broadleaf): Skeleton {
+  const r = mulberry32(sp.seed);
+  const rnd = (a: number, b: number) => a + r() * (b - a);
+  const top = sp.H + sp.leader;
+  const axis = (y: number): P3 => { const t = Math.max(0, y) / top; return [sp.lean[0] * t * t * 1.0 + sp.lean[0] * t * 0.3, y, sp.lean[1] * t * t + sp.lean[1] * t * 0.3]; };
+  const trunkPath: P3[] = [[0, -0.45, 0], axis(top * 0.3), axis(top * 0.65), axis(top)];
+  const r0 = sp.trunk[0], r1 = sp.trunk[1];
+  const trunkR = (y: number) => { const t = (y + 0.45) / (top + 0.45); return y <= sp.H ? THREE.MathUtils.lerp(r0, r1, Math.min(1, (y + 0.45) / (sp.H + 0.45))) : THREE.MathUtils.lerp(r1, r1 * 0.25, (y - sp.H) / Math.max(0.01, sp.leader)) * (t > 0 ? 1 : 1); };
+  const radius = (t: number) => trunkR(-0.45 + t * (top + 0.45));
+  // buttresses at irregular bearings and strengths
+  const lobes: { a: number; w: number }[] = [];
+  let a = r() * Math.PI * 2;
+  for (let i = 0; i < sp.buttress; i++) { lobes.push({ a, w: rnd(0.55, 1.0) }); a += (Math.PI * 2 / sp.buttress) * rnd(0.6, 1.4); }
+  const branches: Branch[] = [], clusters: Cluster[] = [];
+  const addCluster = (c: THREE.Vector3, s: number, seed: number, sat = false) => clusters.push({ c, r: [s * rnd(0.95, 1.15), s * sp.clSquash * rnd(0.9, 1.1), s * rnd(0.95, 1.15)], seed, amp: sp.clAmp, flat: sp.clFlat, val: rnd(0.93, 1.07), sat });
+  // limbs
+  const a0 = r() * Math.PI * 2;
+  for (let i = 0; i < sp.limbs; i++) {
+    const f = sp.limbs > 1 ? i / (sp.limbs - 1) : 0;
+    const y = sp.tiered ? sp.H + f * sp.leader * 0.82 + rnd(-0.2, 0.2) : sp.H - rnd(0, 0.7);
+    const az = a0 + i * 2.39996 + rnd(-0.45, 0.45);
+    const el = THREE.MathUtils.lerp(sp.limbEl[0], sp.limbEl[1], sp.tiered ? f * 0.6 + r() * 0.4 : r());
+    const L = rnd(sp.limbLen[0], sp.limbLen[1]) * (sp.tiered ? 1 - 0.55 * f : 1);
+    const d = new THREE.Vector3(Math.cos(el) * Math.cos(az), Math.sin(el), Math.cos(el) * Math.sin(az));
+    const S = vec(axis(y));
+    const P1 = S.clone().addScaledVector(d, L * 0.34).add(new THREE.Vector3(0, L * sp.limbArch * 0.5, 0));
+    const P2 = S.clone().addScaledVector(d, L * 0.7).add(new THREE.Vector3(0, L * sp.limbArch * 0.6 - sp.droop * L * 0.15, 0));
+    const E = S.clone().addScaledVector(d, L).add(new THREE.Vector3(0, L * sp.limbArch * 0.35 - sp.droop * L * 0.5, 0));
+    const rl = trunkR(y) * sp.limbR * rnd(0.8, 1.1);
+    const limb: P3[] = [S, P1, P2, E].map((v) => [v.x, v.y, v.z]);
+    branches.push({ pts: limb, r: [rl, rl * 0.72, rl * 0.45, rl * 0.18], level: 1 });
+    const curve = new THREE.CatmullRomCurve3(limb.map(vec), false, 'centripetal');
+    const ns = Math.round(rnd(sp.subs[0], sp.subs[1]));
+    for (let k = 0; k < ns; k++) {
+      const ft = rnd(0.42, 0.82), Sb = curve.getPointAt(ft);
+      const saz = az + (k % 2 ? 1 : -1) * rnd(0.45, 1.05), sel = el + rnd(0.05, sp.subEl);
+      const Ls = L * rnd(sp.subLen[0], sp.subLen[1]);
+      const ds = new THREE.Vector3(Math.cos(sel) * Math.cos(saz), Math.sin(sel), Math.cos(sel) * Math.sin(saz));
+      const Mb = Sb.clone().addScaledVector(ds, Ls * 0.55).add(new THREE.Vector3(0, Ls * 0.1, 0));
+      const Eb = Sb.clone().addScaledVector(ds, Ls).add(new THREE.Vector3(0, -sp.droop * Ls * 0.45, 0));
+      const rs = rl * (1 - ft * 0.6) * 0.55;
+      branches.push({ pts: [Sb, Mb, Eb].map((v) => [v.x, v.y, v.z]), r: [rs, rs * 0.55, rs * 0.2], level: 2 });
+      const s = rnd(sp.cl[0], sp.cl[1]);
+      addCluster(Eb.clone().add(new THREE.Vector3(0, s * 0.3 - sp.droop * s * 0.5, 0)), s, sp.seed * 0.01 + i * 7.3 + k * 2.9);
+      if (r() < sp.midP) { const m = Sb.clone().lerp(Eb, 0.5); addCluster(m.add(new THREE.Vector3(0, s * 0.35, 0)), s * rnd(0.6, 0.75), sp.seed * 0.01 + i * 3.1 + k * 5.3 + 1, true); }
+    }
+    const s = rnd(sp.cl[0], sp.cl[1]) * 1.1;
+    addCluster(E.clone().add(new THREE.Vector3(0, s * 0.3 - sp.droop * s * 0.5, 0)), s, sp.seed * 0.01 + i * 4.7 + 0.5);
+  }
+  // crown top: over the end of the leader (tiered) or over the fork (decurrent), so the crown is closed above
+  for (let i = 0; i < sp.topClusters; i++) {
+    const t = vec(axis(top));
+    const s = rnd(sp.cl[0], sp.cl[1]) * (i ? 0.85 : 1.05);
+    addCluster(t.add(new THREE.Vector3(rnd(-0.9, 0.9) * (i ? 1 : 0.3), s * 0.45 + (sp.tiered ? 0 : 1.4) + i * 0.4, rnd(-0.9, 0.9) * (i ? 1 : 0.3))), s, sp.seed * 0.01 + 50 + i);
+  }
+  return { trunk: { path: trunkPath, radius, lobes }, branches, clusters };
+}
+
+function emitBroadleaf(sp: Broadleaf, sk: Skeleton, lod: Lod): Model {
+  const near = lod === 'near', far = lod === 'far';
+  const girth = THREE.MathUtils.clamp(sp.trunk[0] / 0.45, 0.6, 1); // slim trunks need fewer sides
+  const wood: THREE.BufferGeometry[] = [flaredTrunk(sk.trunk.path, sk.trunk.radius, sk.trunk.lobes, sp.flare, 1.25, Math.round((near ? 20 : far ? 6 : 9) * girth), near ? 11 : far ? 3 : 4, sp.vScale)];
+  for (const b of sk.branches) {
+    if (!near && b.level === 2) continue; // mid/far: limbs only; side branches are hidden in the foliage at that distance
+    wood.push(taperTube(b.pts, b.r, { radial: near ? (b.level === 1 ? 6 : 3) : far ? 3 : 4, rows: near ? (b.level === 1 ? 4 : 3) : far ? 1 : 2, vScale: 1.2 }));
+  }
+  const crownC = sk.clusters.reduce((s, k) => s.add(k.c), new THREE.Vector3()).divideScalar(sk.clusters.length);
+  const crownR = Math.max(...sk.clusters.map((k) => k.c.distanceTo(crownC) + Math.max(...k.r)));
+  let ks = near ? sk.clusters : sk.clusters.filter((k) => !k.sat); // mid/far: the small filler clumps are dropped
+  if (far && ks.length > 14) { // far: the 14 largest clusters, a little larger, keep the crown's mass and outline
+    const f = Math.cbrt(ks.length / 14);
+    ks = [...ks].sort((a, b) => b.r[0] * b.r[1] * b.r[2] - a.r[0] * a.r[1] * a.r[2]).slice(0, 14).map((k) => ({ ...k, r: k.r.map((x) => x * f) as P3 }));
+  }
+  const leaves = cullBuried(ks.map((k) => clusterGeo(k, lod, crownC, crownR)), ks);
+  const woodG = mergeParts(wood.map((g) => barkCol(paint(g, (p) => sp.barkK(p.y)), sp.bark)));
+  return { wood: woodG, leaves: mergeParts(leaves.map((g) => foliageUV(g, 1.4))) };
+}
+const broadleaf = (sp: Broadleaf, lod: Lod) => emitBroadleaf(sp, growBroadleaf(sp), lod);
+const barkGrad = (lo: number, hi = 1, y1 = 1.4): ((y: number) => [number, number, number]) => (y) => { const k = lo + (hi - lo) * THREE.MathUtils.smoothstep(y, -0.2, y1); return [k, k, k]; };
 
 // ------------------------------------------------------------------------------------------------ oak
 /**
- * Pedunculate oak: low, broad, lopsided crown on a stout leaning trunk, five roots. Three authored layouts:
- * 0 the hero (broad, six masses), 1 a smaller, rounder tree, 2 an old spreading oak with a long low limb.
+ * Pedunculate oak: a stout, flared trunk that divides low into a few heavy limbs spreading wide and nearly level;
+ * a broad, irregular crown of clumps at the limb ends with gaps between. Three layouts: 0 the hero (broad, five
+ * limbs), 1 a smaller, rounder tree, 2 an old spreading oak with long low limbs.
  */
+const OAK_BASE = { leader: 1.0, flare: 2.2, buttress: 5, tiered: false, limbR: 0.62, subEl: 0.45, clFlat: 0.82, clSquash: 0.88, clAmp: 0.26, droop: 0.15, topClusters: 1, midP: 0.3, bark: BARK.fissured, barkK: barkGrad(0.72), vScale: 1.4 };
 const OAKS: Broadleaf[] = [
-  { seed: 517, H: 3.1, lean: [0.3, -0.1], trunk: [0.5, 0.4, 0.34, 0.29], subs: 5, detail: 2, crownR: 4.2, bark: BARK.fissured, roots: 5, rootR: 0.3, rootSpin: 0.15, limbR: 0.22, leader: 2.5, fork: 2, nm: 0, ns: 0,
-    majors: [[0, 2.9, 0.1, 1.6], [-2.5, 1.9, 0.5, 1.35], [2.4, 2.2, -0.6, 1.45], [0.7, 1.5, 2.4, 1.25], [-1.0, 1.7, -2.4, 1.25], [2.6, 1.1, 1.8, 0.95]] },
-  { seed: 911, H: 2.7, lean: [-0.25, 0.15], trunk: [0.5, 0.4, 0.34, 0.29], subs: 5, detail: 2, crownR: 4.2, bark: BARK.fissured, roots: 5, rootR: 0.3, rootSpin: 0.5, limbR: 0.22, leader: 2.5, fork: 2, nm: 9, ns: 5,
-    majors: [[0.2, 2.6, 0.1, 1.55], [-2.0, 1.7, 0.9, 1.25], [1.8, 2.0, -1.0, 1.35], [0.3, 1.3, 2.1, 1.1], [-0.9, 1.6, -2.0, 1.15]] },
-  { seed: 1303, H: 2.4, lean: [0.15, 0.25], trunk: [0.56, 0.45, 0.37, 0.31], subs: 4, detail: 2, crownR: 4.6, bark: BARK.fissured, roots: 6, rootR: 0.32, rootSpin: 0.9, limbR: 0.24, leader: 2.2, fork: 1, nm: 21, ns: 11,
-    majors: [[0.4, 2.4, 0.3, 1.45], [-3.1, 1.2, 0.8, 1.2], [2.7, 1.8, -0.3, 1.3], [0.2, 1.2, 2.6, 1.15], [-0.6, 1.5, -2.7, 1.2], [-2.0, 2.7, -1.5, 1.0], [2.0, 2.8, 1.7, 0.95]] },
+  { ...OAK_BASE, seed: 517, H: 3.0, lean: [0.35, -0.12], trunk: [0.5, 0.36], limbs: 5, limbEl: [0.28, 0.75], limbLen: [3.3, 4.5], limbArch: 0.32, subs: [2, 3], subLen: [0.45, 0.65], cl: [0.8, 1.15] },
+  { ...OAK_BASE, seed: 911, H: 2.7, lean: [-0.25, 0.18], trunk: [0.46, 0.34], limbs: 5, limbEl: [0.45, 0.9], limbLen: [2.7, 3.5], limbArch: 0.38, subs: [1, 3], subLen: [0.45, 0.6], cl: [0.8, 1.1] },
+  { ...OAK_BASE, seed: 1303, H: 2.3, lean: [0.18, 0.28], trunk: [0.56, 0.4], limbs: 6, limbEl: [0.12, 0.6], limbLen: [3.6, 5.0], limbArch: 0.26, subs: [2, 3], subLen: [0.4, 0.6], cl: [0.8, 1.15], buttress: 6, flare: 2.5 },
 ];
 export function oakModel(variant: number, lod: Lod): Model { return broadleaf(OAKS[variant % 3], lod); }
 
 // ------------------------------------------------------------------------------------------------ beech
 /**
- * European beech: a straighter, slimmer, smooth grey trunk; a taller, domed crown built in layers (masses rise
- * toward the centre), limbs sweeping upward. Seeded layouts, three variants (narrow-tall to broad).
+ * European beech: a straight, smooth grey trunk (little flare) carrying a leader high into the crown; limbs leave
+ * it at several heights, steeply rising and shorter toward the top, each ending in flatter, spreading sprays — a
+ * tall, domed crown with visible layers and gaps. Three layouts from narrow-tall to broad.
  */
-function beechSpec(v: number): Broadleaf {
-  const r = mulberry32(4401 + v * 77);
-  const n = 7 + v, wide = [0.85, 1.0, 1.15][v % 3];
-  const majors: [number, number, number, number][] = [[0, 4.4 + v * 0.2, 0, 1.15]];
-  for (let i = 0; i < n; i++) {
-    const layer = i / (n - 1), a = i * 2.4 + r() * 0.6;
-    const d = (2.1 - layer * 1.0) * (0.8 + r() * 0.35) * wide, y = 1.1 + layer * 3.0 + r() * 0.4;
-    majors.push([Math.cos(a) * d, y, Math.sin(a) * d, (1.12 - layer * 0.25 + r() * 0.15) * (0.9 + 0.1 * wide)]);
-  }
-  return { seed: 4401 + v * 77, H: [3.9, 3.5, 3.2][v % 3], lean: [[0.1, 0.05], [-0.15, 0.1], [0.05, -0.2]][v % 3] as [number, number], trunk: [0.42, 0.33, 0.29, 0.25], subs: 3, detail: 1, crownR: 4.0, bark: BARK.smooth, roots: 4, rootR: 0.24, rootSpin: v, limbR: 0.18, leader: 3.6, fork: 2, nm: 30 + v * 7, ns: 40 + v * 3, majors };
-}
-export function beechModel(variant: number, lod: Lod): Model { return broadleaf(beechSpec(variant % 3), lod); }
+const BEECHES: Broadleaf[] = [0, 1, 2].map((v) => ({
+  seed: 4401 + v * 77, H: [2.8, 2.6, 2.4][v], leader: [5.8, 5.2, 4.8][v], lean: [[0.12, 0.05], [-0.18, 0.1], [0.05, -0.22]][v] as [number, number],
+  trunk: [0.4, 0.3] as [number, number], flare: 1.3, buttress: 5, tiered: true, limbs: [8, 9, 9][v], limbEl: [0.42, 0.95] as [number, number],
+  limbLen: ([[2.7, 3.4], [3.0, 3.8], [3.4, 4.3]] as [number, number][])[v], limbR: 0.55, limbArch: 0.18, subs: [1, 2] as [number, number], subLen: [0.45, 0.65] as [number, number], subEl: 0.25,
+  cl: [0.72, 1.0] as [number, number], clFlat: 0.78, clSquash: 0.8, clAmp: 0.24, droop: 0.05, topClusters: 2, midP: 0.2,
+  bark: BARK.smooth, barkK: barkGrad(0.8, 1, 0.8), vScale: 1.6,
+}));
+export function beechModel(variant: number, lod: Lod): Model { return broadleaf(BEECHES[variant % 3], lod); }
 
 // ------------------------------------------------------------------------------------------------ birch
 /**
- * Silver birch: a slender, slightly wavering white trunk (dark and rough at the base), five or six thin branches
- * that rise and then droop at the tips, light clumps hanging along them — an airy, narrow crown you can see
- * through. Three seeded variants (height, branch count, lean).
+ * Silver birch: a slender, slightly wavering white trunk (dark and rough at the foot) with a leader to the top; many
+ * thin branches rising and then drooping at the tips, small clumps hanging from them — a narrow, airy crown you can
+ * see through. Three layouts (height, branch count, lean).
  */
-export function birchModel(variant: number, lod: Lod): Model {
-  const v = variant % 3, r = mulberry32(6203 + v * 131);
-  const near = lod === 'near';
-  const T = [10.2, 9.0, 11.2][v], sway = [[0.25, -0.1], [-0.3, 0.2], [0.15, 0.3]][v];
-  const trunkPts: [number, number, number][] = [[0, -0.3, 0], [sway[0] * 0.3, T * 0.3, sway[1] * 0.2], [sway[0] * 0.2, T * 0.6, sway[1] * 0.7], [sway[0], T, sway[1]]];
-  const wood: THREE.BufferGeometry[] = [taperTube(trunkPts, [0.24, 0.17, 0.11, 0.04], { radial: near ? 9 : 5, rows: near ? 10 : 4, vScale: 1.6 })];
-  const trunkAt = (y: number): [number, number] => { const t = y / T; return [sway[0] * (t < 0.6 ? t * 0.4 : t), sway[1] * t]; };
-  const leaves: THREE.BufferGeometry[] = [];
-  const centre = new THREE.Vector3(sway[0] * 0.7, T * 0.72, sway[1] * 0.7);
-  const nb = 5 + (v === 2 ? 1 : 0);
-  for (let i = 0; i < nb; i++) {
-    const y = T * (0.42 + (i / nb) * 0.42) + r() * 0.3, a = i * 2.4 + r() * 0.7, L = (2.2 - (i / nb) * 1.0) * (0.85 + r() * 0.3);
-    const [tx, tz] = trunkAt(y), c = Math.cos(a), s = Math.sin(a);
-    const pts: [number, number, number][] = [[tx, y, tz], [tx + c * L * 0.4, y + 0.9, tz + s * L * 0.4], [tx + c * L * 0.8, y + 1.15, tz + s * L * 0.8], [tx + c * L, y + 0.6, tz + s * L]];
-    wood.push(taperTube(pts, [0.07, 0.05, 0.03, 0.012], { radial: near ? 5 : 3, rows: near ? 6 : 3, vScale: 1.2 }));
-    for (let k = 0; k < 3; k++) { // clumps hang along the outer branch
-      const t = 0.45 + k * 0.27, p = new THREE.Vector3(tx + c * L * t, y + 0.9 + Math.sin(t * Math.PI) * 0.3 - k * 0.15, tz + s * L * t);
-      const cs = 0.5 + r() * 0.22;
-      leaves.push(lump(p.x, p.y - cs * 0.25, p.z, cs * 1.1, cs * 0.75, cs, i * 5.1 + k * 1.3 + v, near ? 1 : 0, centre, 3.0, 0.45));
-    }
-  }
-  leaves.push(lump(sway[0], T + 0.1, sway[1], 0.8, 0.7, 0.75, 77 + v, near ? 1 : 0, centre, 3.0, 0.45));
-  for (let i = 0; i < 3; i++) {
-    const a = (i / 3) * Math.PI * 2 + r(), c = Math.cos(a), s = Math.sin(a);
-    wood.push(taperTube([[c * 0.03, 0.55, s * 0.03], [c * 0.3, 0.12, s * 0.3], [c * 0.6, -0.5, s * 0.6]], [0.15, 0.1, 0.03], { radial: near ? 6 : 4, rows: 4, vScale: 1.2 }));
-  }
-  // birch bark is dark and rugged at the foot, white above
-  const woodG = mergeParts(wood.map((g) => barkCol(paint(g, (p) => { const k = 0.35 + 0.65 * THREE.MathUtils.smoothstep(p.y, 0.2, 1.3); return [k, k, k * 0.98]; }), BARK.birch)));
-  return { wood: woodG, leaves: mergeParts(leaves.map((g) => foliageUV(g, 1.0))) };
-}
+const BIRCHES: Broadleaf[] = [0, 1, 2].map((v) => ({
+  seed: 6203 + v * 131, H: [3.8, 3.4, 4.2][v], leader: [6.2, 5.4, 6.8][v], lean: [[0.3, -0.1], [-0.35, 0.22], [0.18, 0.35]][v] as [number, number],
+  trunk: [0.22, 0.15] as [number, number], flare: 0.9, buttress: 4, tiered: true, limbs: [9, 8, 10][v], limbEl: [0.45, 0.95] as [number, number],
+  limbLen: [2.3, 3.1] as [number, number], limbR: 0.4, limbArch: 0.3, subs: [1, 2] as [number, number], subLen: [0.45, 0.7] as [number, number], subEl: 0.15,
+  cl: [0.3, 0.42] as [number, number], clFlat: 0.85, clSquash: 0.92, clAmp: 0.3, droop: 1.1, topClusters: 1, midP: 0.55,
+  bark: BARK.birch, barkK: (y: number) => { const k = 0.35 + 0.65 * THREE.MathUtils.smoothstep(y, 0.2, 1.3); return [k, k, k * 0.98]; }, vScale: 1.6,
+}));
+export function birchModel(variant: number, lod: Lod): Model { return broadleaf(BIRCHES[variant % 3], lod); }
 
 // ------------------------------------------------------------------------------------------------ Scots pine
 /**
- * Scots pine (the Veluwe tree): a tall, slightly leaning trunk, grey-brown and furrowed low, warm orange high up,
- * a few dead stubs, and an uneven crown of clumped, drooping foliage on near-horizontal branches in the top third.
- * Variant 0 is authored; 1 (shorter, fuller) and 2 (tall, sparse, leaning) are seeded.
+ * Scots pine (the Veluwe tree): a tall trunk with a gentle bend, bare for more than half its height, grey-brown and
+ * furrowed low, warm orange above; a few dead stubs; an open, uneven crown in the top third: branches in irregular
+ * whorls (some missing), longer on the light side, nearly level and slightly upturned, each ending in two or three
+ * ragged, tilted needle clumps; the top rounds off rather than tapering to a spire. Three layouts.
  */
 export function pineModel(lod: Lod, variant = 0): Model {
-  const v = variant % 3, r = mulberry32(733 + v * 211);
-  const near = lod === 'near';
-  const T = [12.2, 11.0, 13.4][v];
-  const off = [[0.35, -0.2], [-0.2, 0.15], [0.6, 0.35]][v];
-  const top: [number, number, number] = [off[0], T, off[1]];
-  const wood: THREE.BufferGeometry[] = [taperTube([[0, -0.3, 0], [top[0] * 0.15, T * 0.33, top[2] * 0.1], [top[0] * 0.55, T * 0.7, top[2] * 0.5], top], [0.36, 0.27, 0.18, 0.07], { radial: near ? 10 : 5, rows: near ? 12 : 4, lobes: near ? 4 : 0, flare: 0.35, vScale: 1.6 })];
-  const pads: [number, number, number, number][] = []; // x, y, z, size
-  const tiers: number[][] = v === 0
-    ? [[6.6, 0.3, 2.3], [7.2, 2.5, 2.0], [7.9, 4.4, 2.1], [8.5, 1.3, 1.9], [9.1, 3.5, 1.7], [9.6, 5.6, 1.5], [10.2, 0.7, 1.4], [10.7, 2.8, 1.2], [11.2, 4.8, 1.0]]
-    : Array.from({ length: v === 1 ? 10 : 8 }, (_, i) => { const t = i / (v === 1 ? 9 : 7); return [T * (0.5 + t * 0.42) + r() * 0.3, i * 2.39 + r() * 0.8, (v === 1 ? 2.4 : 2.0) - 1.2 * t + r() * 0.3]; });
-  for (const [y, a, L] of tiers) {
-    const t = y / T, cx = top[0] * t, cz = top[2] * t;
-    const ex = cx + Math.cos(a) * L, ez = cz + Math.sin(a) * L;
-    wood.push(taperTube([[cx, y - 0.15, cz], [cx + Math.cos(a) * L * 0.5, y + 0.1, cz + Math.sin(a) * L * 0.5], [ex, y + 0.05, ez]], [0.1, 0.06, 0.03], { radial: near ? 5 : 3, rows: near ? 4 : 2, vScale: 1.2 }));
-    pads.push([ex, y + 0.15, ez, 0.55 + L * 0.22]);
+  const v = variant % 3, r = mulberry32(733 + v * 211), near = lod === 'near', far = lod === 'far';
+  const rnd = (a: number, b: number) => a + r() * (b - a);
+  const T = [12.2, 11.0, 13.4][v], bend = [[0.45, -0.25], [-0.3, 0.2], [0.75, 0.4]][v], light = [0.6, 2.4, 4.1][v];
+  const axis = (y: number): P3 => { const t = Math.max(0, y) / T; return [bend[0] * (t * t * 0.8 + 0.25 * Math.sin(t * 3.1)), y, bend[1] * (t * t * 0.8 + 0.2 * Math.sin(t * 2.6))]; };
+  const lobes = [0, 1, 2, 3].map((i) => ({ a: i * 1.57 + rnd(-0.4, 0.4), w: rnd(0.5, 1) }));
+  const wood: THREE.BufferGeometry[] = [flaredTrunk([[0, -0.45, 0], axis(T * 0.3), axis(T * 0.65), axis(T)], (t) => THREE.MathUtils.lerp(0.36, 0.06, Math.pow(t, 0.9)), lobes, 1.1, 0.9, near ? 14 : far ? 5 : 7, near ? 12 : far ? 3 : 4, 1.6)];
+  const clusters: Cluster[] = [];
+  const crownBase = T * [0.56, 0.5, 0.62][v];
+  // irregular whorls: 4–5 levels, 2–4 branches each, some skipped
+  let y = crownBase, a = rnd(0, 6.3), i = 0;
+  while (y < T - 0.6) {
+    const f = (y - crownBase) / (T - crownBase), n = 2 + Math.floor(r() * 3);
+    for (let k = 0; k < n; k++) {
+      a += 2.39996 + rnd(-0.6, 0.6);
+      if (r() < 0.22) continue; // a missing branch: gaps in the crown
+      const lightSide = 1 + 0.45 * Math.cos(a - light);
+      const L = (2.3 - 0.9 * f * f) * lightSide * rnd(0.75, 1.15) * (v === 1 ? 1.1 : 1);
+      const el = THREE.MathUtils.lerp(-0.12, 0.35, f) + rnd(-0.1, 0.12);
+      const S = vec(axis(y + rnd(-0.25, 0.25)));
+      const d = new THREE.Vector3(Math.cos(el) * Math.cos(a), Math.sin(el), Math.cos(el) * Math.sin(a));
+      const E = S.clone().addScaledVector(d, L), M = S.clone().lerp(E, 0.5).add(new THREE.Vector3(0, -0.12 + f * 0.2, 0));
+      wood.push(taperTube([[S.x, S.y, S.z], [M.x, M.y, M.z], [E.x, E.y, E.z]], [0.1 - f * 0.03, 0.06, 0.025], { radial: near ? 5 : 3, rows: near ? 4 : far ? 1 : 2, vScale: 1.2 }));
+      // two or three ragged clumps along the end of the branch, tilted with it, at different heights
+      const m = 2 + Math.floor(r() * 2.5);
+      for (let q = 0; q < m; q++) {
+        const t = 1 - q * rnd(0.18, 0.26), c = S.clone().lerp(E, t).add(new THREE.Vector3(rnd(-0.25, 0.25), rnd(-0.1, 0.3) + q * 0.08, rnd(-0.25, 0.25)));
+        const s = (0.48 + L * 0.13) * (q ? rnd(0.7, 0.9) : 1);
+        clusters.push({ c, r: [s * rnd(0.95, 1.2), s * rnd(0.58, 0.74), s * rnd(0.9, 1.15)], seed: v * 17 + i * 3.1 + q, amp: 0.34, flat: 0.8, val: rnd(0.9, 1.1), sat: q >= 2 });
+      }
+      i++;
+    }
+    y += rnd(0.75, 1.25);
   }
-  pads.push([top[0], T - 0.1, top[2], 0.95]);
-  if (near) for (let i = 0; i < 4; i++) { // dead stubs low on the trunk
-    const y = 2.4 + i * 0.95, a = i * 2.1 + r();
-    wood.push(taperTube([[0, y, 0], [Math.cos(a) * 0.45, y - 0.12, Math.sin(a) * 0.45]], [0.05, 0.02], { radial: 4, rows: 2 }));
+  // rounded top: a few clumps round the leader's end
+  const tp = vec(axis(T));
+  for (let q = 0; q < 4; q++) clusters.push({ c: tp.clone().add(new THREE.Vector3(Math.cos(q * 1.9 + v) * (q ? 0.8 : 0.1), -0.3 * q + 0.15, Math.sin(q * 1.9 + v) * (q ? 0.8 : 0.1))), r: [0.85, 0.6, 0.8].map((s) => s * rnd(0.85, 1.1)) as P3, seed: v * 17 + 90 + q, amp: 0.34, flat: 0.8, val: rnd(0.95, 1.08) });
+  if (near) for (let k = 0; k < 4; k++) { // dead stubs on the bare trunk
+    const yy = 2.2 + k * rnd(0.8, 1.3), aa = k * 2.1 + r(), S = vec(axis(yy));
+    wood.push(taperTube([[S.x, yy, S.z], [S.x + Math.cos(aa) * 0.45, yy - 0.12, S.z + Math.sin(aa) * 0.45]], [0.05, 0.02], { radial: 4, rows: 2 }));
   }
-  // bark: grey-brown low, warm orange above ~5 m (the Scots pine's signature)
   const woodG = mergeParts(wood.map((g) => barkCol(paint(g, (p) => {
     const t = THREE.MathUtils.smoothstep(p.y, T * 0.29, T * 0.6);
     return [0.62 + 0.55 * t, 0.56 + 0.2 * t, 0.5 + 0.02 * t];
   }), BARK.fissured)));
-  const centre = new THREE.Vector3(top[0] * 0.75, T * 0.77, top[2] * 0.75);
-  const leaves: THREE.BufferGeometry[] = [];
-  pads.forEach(([x, y, z, s], i) => {
-    const n = 4; // same clumps in both LODs, coarser far away
-    const dx = x - top[0] * (y / T), dz = z - top[2] * (y / T), dl = Math.hypot(dx, dz) || 1;
-    for (let k = 0; k < n; k++) {
-      const back = (k / n) * 0.9, side = (r() - 0.5) * s * 0.9;
-      const px = x - (dx / dl) * back + (-dz / dl) * side, pz = z - (dz / dl) * back + (dx / dl) * side;
-      const cs = s * (k ? 0.62 + r() * 0.2 : 0.85);
-      leaves.push(lump(px, y + back * 0.12 - (k ? 0 : 0.08) + r() * 0.12, pz, cs * 1.1, cs * 0.55, cs, i * 3.1 + k + v * 17, near ? 1 : 0, centre, 3.2, 0.4));
-    }
-  });
+  const centre = clusters.reduce((s, k) => s.add(k.c), new THREE.Vector3()).divideScalar(clusters.length);
+  const cr = Math.max(...clusters.map((k) => k.c.distanceTo(centre) + k.r[0]));
+  const ks = near ? clusters : clusters.filter((k) => !k.sat);
+  const leaves = cullBuried(ks.map((k) => clusterGeo(k, lod, centre, cr, 0.4, 0.75)), ks); // high crown, seen from 6 m+ below
   return { wood: woodG, leaves: mergeParts(leaves.map((g) => foliageUV(g, 1.2))) };
 }
 
@@ -345,46 +494,85 @@ export function treeModel(species: TreeSpecies, variant: number, lod: Lod): Mode
 
 // ------------------------------------------------------------------------------------------------ bushes
 /**
- * Hazel: six to eight thin, smooth stems fanning up from one stool, leaf clumps along their upper half — the
- * multi-stemmed understory shrub of oak woods. Three seeded variants (stem count, height, spread).
+ * Hazel: a multi-stemmed shrub — seven to nine thin, smooth stems of different lengths rising from one stool in a
+ * loose vase and arching over at the tips, some with a side shoot; small, rounded leaf clumps alternate along each
+ * stem from knee height, with gaps between the stems. Three layouts.
  */
 export function hazelModel(variant: number, lod: Lod): Model {
-  const v = variant % 3, r = mulberry32(8101 + v * 59), near = lod === 'near';
-  const n = 6 + v, Hh = [1.8, 2.2, 1.5][v], spread = [0.55, 0.45, 0.65][v];
-  const wood: THREE.BufferGeometry[] = [], leaves: THREE.BufferGeometry[] = [];
-  const centre = new THREE.Vector3(0, Hh * 0.7, 0);
-  for (let i = 0; i < n; i++) {
-    const a = (i / n) * Math.PI * 2 + r() * 0.6, h = Hh * (0.75 + r() * 0.35), d = h * spread * (0.7 + r() * 0.5);
-    const c = Math.cos(a), s = Math.sin(a);
-    const pts: [number, number, number][] = [[c * 0.05, -0.1, s * 0.05], [c * 0.15, h * 0.4, s * 0.15], [c * d * 0.6, h * 0.75, s * d * 0.6], [c * d, h, s * d]];
-    wood.push(taperTube(pts, [0.045, 0.035, 0.022, 0.01], { radial: near ? 5 : 3, rows: near ? 5 : 2, vScale: 1.0 }));
-    // leafy from knee height to the arching tips, clumps pushed out from the stem (an open, irregular fan,
-    // not a ball on sticks); smaller clumps toward the tips
-    for (const t of [0.3, 0.55, 0.8, 1.0]) {
-      if (t === 0.3 && r() < 0.4) continue;
-      const cs = (0.36 + r() * 0.14) * (1.15 - t * 0.35), out = 0.18 + r() * 0.12;
-      leaves.push(lump(c * (d * t + out), h * (0.25 + t * 0.7), s * (d * t + out), cs * 1.15, cs * 0.75, cs, i * 3.7 + t * 5 + v, near ? 1 : 0, centre, 1.6, 0.4));
+  const v = variant % 3, r = mulberry32(8101 + v * 59), near = lod === 'near', far = lod === 'far';
+  const rnd = (a: number, b: number) => a + r() * (b - a);
+  const n = [8, 9, 7][v], Hh = [2.0, 2.4, 1.7][v];
+  const wood: THREE.BufferGeometry[] = [], clusters: Cluster[] = [];
+  const stem = (S: THREE.Vector3, a: number, lean: number, h: number, rad: number, leafy: number, from: number, seed: number) => {
+    const d = new THREE.Vector3(Math.cos(a) * Math.sin(lean), Math.cos(lean), Math.sin(a) * Math.sin(lean));
+    const out = new THREE.Vector3(Math.cos(a), 0, Math.sin(a));
+    const P1 = S.clone().addScaledVector(d, h * 0.45), P2 = S.clone().addScaledVector(d, h * 0.85).addScaledVector(out, h * 0.08);
+    const E = S.clone().addScaledVector(d, h).addScaledVector(out, h * 0.22).add(new THREE.Vector3(0, -h * 0.08, 0)); // arching over
+    const pts: P3[] = [S, P1, P2, E].map((p) => [p.x, p.y, p.z]);
+    wood.push(taperTube(pts, [rad, rad * 0.8, rad * 0.5, rad * 0.2], { radial: near ? 5 : 3, rows: near ? 4 : far ? 1 : 2, vScale: 1.0 }));
+    const curve = new THREE.CatmullRomCurve3(pts.map(vec), false, 'centripetal');
+    const side = new THREE.Vector3(-out.z, 0, out.x);
+    const m = Math.round(leafy);
+    for (let k = 0; k < m; k++) {
+      const t = from + (k / Math.max(1, m - 1)) * (1 - from) * rnd(0.85, 1.0), c = curve.getPointAt(Math.min(1, t));
+      const s = rnd(0.24, 0.33) * (1.15 - t * 0.35);
+      c.addScaledVector(side, (k % 2 ? 1 : -1) * s * 0.6).addScaledVector(out, s * 0.35).add(new THREE.Vector3(0, s * 0.15, 0));
+      clusters.push({ c, r: [s * rnd(1.0, 1.2), s * rnd(0.78, 0.95), s * rnd(0.9, 1.1)], seed: seed + k * 1.7, amp: 0.3, flat: 0.85, val: rnd(0.9, 1.1) });
     }
+    return curve;
+  };
+  for (let i = 0; i < n; i++) {
+    const a = (i / n) * Math.PI * 2 + rnd(-0.35, 0.35), h = Hh * rnd(0.55, 1.05), lean = rnd(0.12, 0.5);
+    const S = new THREE.Vector3(Math.cos(a) * 0.08, -0.1, Math.sin(a) * 0.08);
+    // leafy from knee height on the long stems; short stems carry leaves along most of their length
+    const curve = stem(S, a, lean, h, rnd(0.032, 0.048), h > Hh * 0.75 ? 3 : 2, h > Hh * 0.75 ? 0.3 : 0.45, v * 31 + i * 3.7);
+    if (h > Hh * 0.8 && r() < 0.5) stem(curve.getPointAt(0.4), a + rnd(-0.9, 0.9), lean + 0.4, h * 0.45, 0.02, 1, 0.9, v * 31 + i * 3.7 + 20); // side shoot
   }
-  const woodG = mergeParts(wood.map((g) => barkCol(paint(g, 0.85), BARK.smooth)));
-  return { wood: woodG, leaves: mergeParts(leaves.map((g) => foliageUV(g, 0.9))) };
+  const centre = new THREE.Vector3(0, Hh * 0.55, 0);
+  const leaves = cullBuried(clusters.map((k) => clusterGeo(k, lod, centre, Hh, 0.4)), clusters);
+  return { wood: mergeParts(wood.map((g) => barkCol(paint(g, 0.85), BARK.smooth))), leaves: mergeParts(leaves.map((g) => foliageUV(g, 0.9))) };
 }
 /**
- * Holly: a compact, dense evergreen — a short stem under an irregular cone of spiky (strongly displaced) dark
- * clumps. Three seeded variants (height, fullness).
+ * Holly: a compact evergreen — a short stem and side branches under an irregular, upward-tapering mass of spiky,
+ * glossy clumps (lighter, warmer tops, so it reads as leaves catching light rather than a dark blob), with a few
+ * berry clusters. Three layouts (height, fullness).
  */
 export function hollyModel(variant: number, lod: Lod): Model {
   const v = variant % 3, r = mulberry32(9203 + v * 71), near = lod === 'near';
-  const Hh = [1.5, 1.9, 1.25][v], n = 9 + v * 2;
-  const wood = [barkCol(paint(taperTube([[0, -0.1, 0], [0.02, 0.35, 0.01], [0.03, 0.7, 0]], [0.08, 0.06, 0.04], { radial: near ? 6 : 4, rows: 3 }), 0.8), BARK.smooth)];
-  const leaves: THREE.BufferGeometry[] = [];
-  const centre = new THREE.Vector3(0, Hh * 0.5, 0);
+  const rnd = (a: number, b: number) => a + r() * (b - a);
+  const Hh = [1.6, 2.0, 1.3][v], n = 10 + v * 2;
+  const wood: THREE.BufferGeometry[] = [taperTube([[0, -0.1, 0], [0.03, Hh * 0.4, 0.02], [0.02, Hh * 0.8, -0.02]], [0.07, 0.05, 0.03], { radial: near ? 6 : 4, rows: 3 })];
+  const clusters: Cluster[] = [];
   for (let i = 0; i < n; i++) {
-    const t = i / (n - 1), y = 0.35 + t * Hh * 0.85, rad = (1 - t) * 0.55 + 0.12, a = i * 2.3 + r() * 0.8;
-    const cs = 0.26 + (1 - t) * 0.2 + r() * 0.06;
-    leaves.push(lump(Math.cos(a) * rad, y, Math.sin(a) * rad, cs * 1.1, cs * 0.9, cs, i * 4.3 + v * 7, near ? 1 : 0, centre, Hh * 0.6, 0.45, 0.34));
+    const t = i / (n - 1), y = 0.3 + t * Hh * 0.85, rad = (1 - t) * 0.5 + 0.08, a = i * 2.39996 + rnd(-0.5, 0.5);
+    const c = new THREE.Vector3(Math.cos(a) * rad * rnd(0.7, 1.2), y, Math.sin(a) * rad * rnd(0.7, 1.2));
+    if (near && t < 0.7) wood.push(taperTube([[0, y - 0.15, 0], [c.x * 0.6, y - 0.05, c.z * 0.6], [c.x, y, c.z]], [0.025, 0.018, 0.01], { radial: 3, rows: 2 }));
+    const s = (0.24 + (1 - t) * 0.18) * rnd(0.85, 1.15);
+    clusters.push({ c, r: [s * 1.05, s * rnd(0.85, 1.0), s], seed: v * 7 + i * 4.3, amp: 0.26, flat: 0.85, val: rnd(0.95, 1.15), spiky: true });
   }
-  return { wood: mergeParts(wood), leaves: mergeParts(leaves.map((g) => foliageUV(g, 0.7))) };
+  const centre = new THREE.Vector3(0, Hh * 0.5, 0);
+  const leafGeos = cullBuried(clusters.map((k) => clusterGeo(k, lod, centre, Hh * 0.6, 0.35)), clusters);
+  // glossy holly: tops markedly lighter than the shaded sides (vertex colour), so the form reads in value
+  for (const g of leafGeos) {
+    const c = g.attributes.color as THREE.BufferAttribute, nn = g.attributes.normal as THREE.BufferAttribute;
+    for (let i = 0; i < c.count; i++) { const k = 1 + 0.35 * THREE.MathUtils.smoothstep(nn.getY(i), 0.3, 0.95); c.setXYZ(i, c.getX(i) * k, c.getY(i) * k, c.getZ(i) * k * 0.95); }
+  }
+  // berries (near only): small red clusters on the outside. Vertex colour = red ÷ the holly leaf tint, so the
+  // instance colour (the leaf tint) brings them back to red.
+  if (near) {
+    const tint = new THREE.Color('#46663a'), red = new THREE.Color('#b0201c');
+    for (let i = 0; i < 6; i++) {
+      const k = clusters[1 + Math.floor(r() * (clusters.length - 3))], a = r() * Math.PI * 2;
+      const p = k.c.clone().add(new THREE.Vector3(Math.cos(a) * k.r[0] * 0.95, rnd(-0.1, 0.2) * k.r[1], Math.sin(a) * k.r[2] * 0.95));
+      for (let b = 0; b < 3; b++) {
+        const g0 = new THREE.IcosahedronGeometry(0.03, 0).translate(p.x + (b - 1) * 0.035, p.y - (b % 2) * 0.03, p.z + (b % 2) * 0.03);
+        g0.deleteAttribute('uv');
+        leafGeos.push(paint(mergeVertices(g0), () => [red.r / tint.r, red.g / tint.g, red.b / tint.b])); // indexed, like the clusters
+        g0.dispose();
+      }
+    }
+  }
+  return { wood: mergeParts(wood.map((g) => barkCol(paint(g, 0.8), BARK.smooth))), leaves: mergeParts(leafGeos.map((g) => foliageUV(g, 0.7))) };
 }
 export function bushModel(species: BushSpecies, variant: number, lod: Lod): Model {
   return species === 'hazel' ? hazelModel(variant, lod) : hollyModel(variant, lod);
@@ -500,7 +688,7 @@ export function fernModel(variant = 0): THREE.BufferGeometry {
   for (let f = 0; f < F; f++) {
     const a = (f / F) * Math.PI * 2 + r() * 0.4, L = Lb + r() * 0.3, rise = 0.32 + r() * 0.15;
     const dir = V(Math.cos(a), 0, Math.sin(a)), side = V(-Math.sin(a), 0, Math.cos(a));
-    const S = 7;
+    const S = 5;
     const spine = (u: number) => dir.clone().multiplyScalar(u * L).add(V(0, Math.sin(u * Math.PI * 0.85) * rise - u * u * 0.12, 0));
     for (let i = 0; i < S; i++) {
       const t0 = i / S, t1 = (i + 1) / S, p0 = spine(t0), p1 = spine(t1);
@@ -641,14 +829,17 @@ function canvasTex(w: number, h: number, draw: (x: CanvasRenderingContext2D, r: 
   return t;
 }
 const grey = (v: number, a = 1) => `rgba(${Math.round(v * 255)},${Math.round(v * 255)},${Math.round(v * 255)},${a})`;
-export interface WoodMats { bark: THREE.MeshLambertMaterial; leaves: THREE.MeshLambertMaterial; rock: THREE.MeshLambertMaterial; flat: THREE.MeshLambertMaterial }
+export interface WoodMats { tree: THREE.MeshLambertMaterial; rock: THREE.MeshLambertMaterial; flat: THREE.MeshLambertMaterial }
 let wm: WoodMats | null = null;
-/** Bark atlas (u = around the trunk); foliage gets soft leaf dabs; rock gets faint strata; flat for plants. */
+const C_PX = 128;
+/**
+ * tree: the tree atlas (3 barks + leaf dabs, see BARK / LEAF_U) — trunks and crowns of every species in one
+ * material; rock gets faint strata; flat (vertex colour only) for plants, turf and litter.
+ */
 export function woodMats(): WoodMats {
   if (wm) return wm;
-  // bark atlas (see barkCol): three 128 px columns — fissured, smooth, birch. u is clamped (each column is one
-  // trip round the trunk), v repeats along it
-  const bark = canvasTex(384, 256, (x, r) => {
+  // tree atlas: four 128 px columns. u is clamped (each bark column is one trip round the trunk), v repeats along it
+  const atlas = canvasTex(C_PX * ATLAS_COLS, 256, (x, r) => {
     // 0: fissured (oak, pine) — wavy furrows along the trunk
     x.fillStyle = grey(0.86); x.fillRect(0, 0, 128, 256);
     for (let i = 0; i < 26; i++) {
@@ -667,27 +858,42 @@ export function woodMats(): WoodMats {
     for (let i = 0; i < 90; i++) { x.fillStyle = grey(0.12 + r() * 0.2, 0.85); x.fillRect(256 + r() * 120, r() * 256, 4 + r() * 16, 1 + r() * 2.5); }
     for (let i = 0; i < 10; i++) { x.fillStyle = grey(0.2 + r() * 0.15, 0.7); x.beginPath(); x.ellipse(256 + r() * 128, r() * 256, 6 + r() * 10, 3 + r() * 5, 0, 0, Math.PI * 2); x.fill(); }
     for (let i = 0; i < 40; i++) { x.fillStyle = grey(0.85 + r() * 0.1, 0.5); x.fillRect(256 + r() * 128, r() * 256, 10 + r() * 20, 2); }
-  }, 81);
-  bark.wrapS = THREE.ClampToEdgeWrapping;
-  const leaf = canvasTex(128, 128, (x, r) => {
-    x.fillStyle = grey(0.86); x.fillRect(0, 0, 128, 128);
-    for (let i = 0; i < 260; i++) {
-      const px = r() * 128, py = r() * 128, s = 3 + r() * 5;
+    // 3: leaf dabs, tileable in the 128 × 256 column (drawn with wrap-around copies; clipped to the column)
+    x.save(); x.beginPath(); x.rect(384, 0, 128, 256); x.clip();
+    x.fillStyle = grey(0.86); x.fillRect(384, 0, 128, 256);
+    for (let i = 0; i < 520; i++) {
+      const px = r() * 128, py = r() * 256, s = 3 + r() * 5;
       x.fillStyle = grey(0.74 + r() * 0.3, 0.75);
-      for (const ox of [-128, 0, 128]) for (const oy of [-128, 0, 128]) { x.beginPath(); x.ellipse(px + ox, py + oy, s, s * 0.55, r() * Math.PI, 0, Math.PI * 2); x.fill(); }
+      for (const ox of [-128, 0, 128]) for (const oy of [-256, 0, 256]) { x.beginPath(); x.ellipse(384 + px + ox, py + oy, s, s * 0.55, r() * Math.PI, 0, Math.PI * 2); x.fill(); }
     }
-  }, 82);
+    x.restore();
+  }, 81);
+  atlas.wrapS = THREE.ClampToEdgeWrapping;
   const strata = canvasTex(128, 128, (x, r) => {
     x.fillStyle = grey(0.9); x.fillRect(0, 0, 128, 128);
     for (let i = 0; i < 14; i++) { x.fillStyle = grey(0.82 + r() * 0.14, 0.6); x.fillRect(0, r() * 128, 128, 2 + r() * 6); }
     for (let i = 0; i < 60; i++) { x.fillStyle = grey(0.7 + r() * 0.3, 0.3); x.fillRect(r() * 128, r() * 128, 2 + r() * 5, 2 + r() * 5); }
   }, 83);
   const lam = (o: THREE.MeshLambertMaterialParameters) => new THREE.MeshLambertMaterial({ vertexColors: true, ...o });
-  wm = {
-    bark: lam({ map: bark }),
-    leaves: lam({ map: leaf }),
-    rock: lam({ map: strata }),
-    flat: lam({}),
+  const tree = lam({ map: atlas });
+  // foliage UVs (u ≥ LEAF_U) repeat inside the leaf column; gradients from the unwrapped UV keep mip selection
+  // continuous across the wrap (no seams); bark UVs are sampled as usual
+  tree.onBeforeCompile = (sh) => {
+    sh.fragmentShader = sh.fragmentShader.replace('#include <map_fragment>', `#ifdef USE_MAP
+  vec2 tUv = vMapUv;
+  vec4 sampledDiffuseColor;
+  if (tUv.x > ${(LEAF_U / 2).toFixed(1)}) {
+    vec2 lUv = vec2(fract(tUv.x), tUv.y * 0.5);
+    vec2 aUv = vec2((3.0 + ${GUT.toFixed(2)} + lUv.x * ${(1 - 2 * GUT).toFixed(2)}) * 0.25, lUv.y);
+    vec2 k = vec2(${((1 - 2 * GUT) / ATLAS_COLS).toFixed(4)}, 0.5);
+    sampledDiffuseColor = textureGrad(map, aUv, dFdx(tUv) * k, dFdy(tUv) * k);
+  } else {
+    sampledDiffuseColor = texture2D(map, tUv);
+  }
+  diffuseColor *= sampledDiffuseColor;
+#endif`);
   };
+  tree.customProgramCacheKey = () => 'woodkit-tree-atlas';
+  wm = { tree, rock: lam({ map: strata }), flat: lam({}) };
   return wm;
 }

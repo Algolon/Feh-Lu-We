@@ -999,16 +999,95 @@ async function boslustSample() {
       for (const [name, x, z, tx, ty, tz] of [['fork', 51, 7.2, 63, 2, 16], ['cutMouth', 63, 10.2, 63, 1.8, 18.2], ['door', 63, 15.4, 63, 1.4, 18.2], ['reverse', 63, 16.4, 55, 1.4, 6]]) {
         g.player.x = x; g.player.z = z; g.player.y = g.world.col.ground(x, z); T.lookAt(tx, ty, tz); T.tick(8);
         g.renderer.render(g.world.scene, g.camera);
-        // batched meshes: the number of instances three.js actually drew this frame (after its per-instance culling)
-        let wood = 0, foliage = 0, under = 0; g.world.scene.traverse((o) => { if (!o.isBatchedMesh || !o.visible) return; const n = o._multiDrawCount; if (o.userData.part === 'wood') wood += n; else if (o.userData.part === 'foliage') foliage += n; else if (o.userData.understory) under += n; });
-        out[name] = { lanterns: g.pool.assigned().filter((a) => a?.startsWith('fixed.boslust')).length, wood, foliage, under };
+        // the number of tree/bush and plant instances actually drawn this frame, after per-instance culling
+        // (multi-draw: three.js's draw list; fallback: the packed instance count of each InstancedMesh)
+        let trees = 0, under = 0; g.world.scene.traverse((o) => { if (!o.visible || !o.userData.vegPart) return; const n = o.isBatchedMesh ? o._multiDrawCount : o.count; if (o.userData.vegPart === 'trees') trees += n; else under += n; });
+        out[name] = { lanterns: g.pool.assigned().filter((a) => a?.startsWith('fixed.boslust')).length, trees, near: g.world.scene.userData.vegStats().trees.nearInView, under };
       }
       return out;
     });
-    log('boslust sample: entrance lanterns lit from the cut mouth and the door; trees and understory drawn at every pose', lc.cutMouth.lanterns === 2 && lc.door.lanterns === 2 && Object.values(lc).every((v) => v.foliage > 0) && lc.door.wood > 0 && lc.fork.under > 0, JSON.stringify(lc));
+    log('boslust sample: entrance lanterns lit from the cut mouth and the door; trees and understory drawn at every pose', lc.cutMouth.lanterns === 2 && lc.door.lanterns === 2 && Object.values(lc).every((v) => v.trees > 0) && lc.door.near > 0 && lc.fork.under > 0, JSON.stringify(lc));
     // reduced motion: fixed lanterns stay on at constant intensity, no errors
     const rm = await E(page, () => { const g = T.G(); g.settings.reducedMotion = true; g.applyQuality(); g.player.x = 63; g.player.z = 15.4; T.tick(4); const a = g.pool.assigned().filter((x) => x?.startsWith('fixed.boslust')); const l = g.world.lamps.filter((x) => x.id.startsWith('fixed.boslust')); return { a: a.length, on: l.every((x) => x.on()), flicker: l.map((x) => x.flicker ?? 0) }; });
     log('boslust sample: reduced motion keeps the entrance lanterns steady and lit', rm.a === 2 && rm.on && rm.flicker.every((f) => f === 0), JSON.stringify(rm));
+    // ---- rendering paths: multi-draw (BatchedMesh) and the forced instanced fallback (?multidraw=0) must draw the
+    // same vegetation: same instances in view and the same triangles at the same poses
+    const POSES = [['fork', 51, 7.2, 63, 2, 16], ['cutMouth', 63, 10.2, 63, 1.8, 18.2], ['door', 63, 15.4, 63, 1.4, 18.2], ['reverse', 63, 16.4, 55, 1.4, 6], ['busy', 47.5, 5.2, 60, 3.5, 22]];
+    const probe = ([poses, quality]) => {
+      const g = T.G(), out = {};
+      g.settings.quality = quality; g.applyQuality(); // low: the phone default (no shadow maps); high: shadow maps
+      const drawn = () => {
+        let trees = 0, plants = 0, tris = 0, calls = 0;
+        g.world.scene.traverse((o) => {
+          const k = o.userData.vegPart; if (!k || !o.visible) return;
+          let n = 0, t = 0;
+          if (o.isBatchedMesh) { n = o._multiDrawCount; for (let i = 0; i < n; i++) t += o._multiDrawCounts[i] / 3; } else if (o.isInstancedMesh) { n = o.count; t = (n * (o.geometry.index ? o.geometry.index.count : o.geometry.attributes.position.count)) / 3; }
+          if (n) calls++;
+          if (k === 'trees') trees += n; else plants += n;
+          tris += t;
+        });
+        return { trees, plants, tris: Math.round(tris), calls };
+      };
+      for (const [name, x, z, tx, ty, tz] of poses) {
+        g.player.x = x; g.player.z = z; g.player.y = g.world.col.ground(x, z); T.lookAt(tx, ty, tz); T.tick(4);
+        g.renderer.render(g.world.scene, g.camera); g.renderer.render(g.world.scene, g.camera);
+        out[name] = drawn();
+      }
+      let batched = 0, instanced = 0; g.world.scene.traverse((o) => { if (!o.userData.vegPart) return; if (o.isBatchedMesh) batched++; else if (o.isInstancedMesh) instanced++; });
+      return { path: g.world.scene.userData.vegPath, multiDraw: g.metrics().multiDraw, batched, instanced, poses: out };
+    };
+    await start(SAMPLE);
+    const pm = await E(page, probe, [POSES, 'low']), pmH = await E(page, probe, [POSES, 'high']);
+    await start(SAMPLE + '&multidraw=0');
+    const pf = await E(page, probe, [POSES, 'low']), pfH = await E(page, probe, [POSES, 'high']);
+    const sameDrawn = POSES.every(([n]) => pm.poses[n].trees === pf.poses[n].trees && pm.poses[n].plants === pf.poses[n].plants && pm.poses[n].tris === pf.poses[n].tris);
+    log('boslust sample: multi-draw path draws all vegetation in 2 calls (one BatchedMesh for trees+bushes, one for plants)', pm.path === 'multi-draw' && pm.multiDraw && pm.batched === 2 && pm.instanced === 0 && POSES.every(([n]) => pm.poses[n].calls <= 2 && pm.poses[n].trees > 0), JSON.stringify(pm));
+    log('boslust sample: ?multidraw=0 really takes the instanced fallback (extension hidden, InstancedMesh groups, no BatchedMesh)', pf.path === 'instanced' && pf.multiDraw === false && pf.batched === 0 && pf.instanced > 20, JSON.stringify({ path: pf.path, multiDraw: pf.multiDraw, batched: pf.batched, instanced: pf.instanced }));
+    log('boslust sample: fallback draws the same trees, bushes, plants and triangles as multi-draw at 5 poses (phone quality)', sameDrawn, JSON.stringify(Object.fromEntries(POSES.map(([n]) => [n, { md: pm.poses[n], fb: pf.poses[n] }]))));
+    // with shadow maps the fallback keeps one list for both passes: everything multi-draw draws in view, plus trees
+    // whose shadow can reach the view — still culled (fewer than all 100 trees and bushes at every pose)
+    const shadowOk = POSES.every(([n]) => pfH.poses[n].trees >= pmH.poses[n].trees && pfH.poses[n].trees < 100 && pfH.poses[n].plants === pmH.poses[n].plants);
+    log('boslust sample: with shadow maps the fallback still culls (superset of the multi-draw view set, < all trees)', shadowOk, JSON.stringify(Object.fromEntries(POSES.map(([n]) => [n, { md: pmH.poses[n].trees, fb: pfH.poses[n].trees }]))));
+    // ---- LOD transitions by walking (fallback path, then the same in multi-draw): approaching the hero oak along
+    // the path it goes far → mid → near once each; walking back 2 m past a boundary keeps the nearer LOD (hysteresis)
+    const lodWalk = () => {
+      const g = T.G(), lodAt = g.world.scene.userData.vegLodAt, hx = 55.83, hz = 11.65, seq = [];
+      g.settings.quality = 'low'; g.applyQuality();
+      // run the scene's per-frame hooks (LOD selection, fallback culling) as a frame would, without queueing a
+      // software-rendered frame for every sample (hundreds of those stall the page's unload)
+      const frame = () => { g.camera.updateMatrixWorld(); g.world.scene.onBeforeRender(g.renderer, g.world.scene, g.camera); };
+      const sample = () => { frame(); const d = Math.hypot(g.player.x - hx, g.player.z - hz); const l = lodAt(hx, hz); if (!seq.length || seq[seq.length - 1].lod !== l) seq.push({ lod: l, d: +d.toFixed(1) }); };
+      const walk = (x, z) => { g.autopilot = { x, z, run: false }; for (let i = 0; i < 900 && Math.hypot(g.player.x - x, g.player.z - z) > 0.3; i++) { g.tick(1 / 30); if (i % 3 === 0) sample(); } g.autopilot = null; sample(); };
+      g.player.x = 22; g.player.z = 9.0; g.player.y = g.world.col.ground(22, 9.0); T.tick(3); sample();
+      for (const [x, z] of [[30, 9.2], [40, 9.3], [46, 8.4], [50.5, 7.6], [53.2, 6.8], [55.6, 7.9], [57.5, 8.0]]) walk(x, z);
+      const atNear = seq[seq.length - 1];
+      // back out along the path: to ~17.5 m (inside the 3 m hysteresis band past 16 m) — must stay near; then to
+      // ~21 m — mid
+      for (const [x, z] of [[53.2, 6.8], [50.5, 7.6], [46, 8.4], [40, 9.3], [38.5, 9.3]]) walk(x, z);
+      const held = lodAt(hx, hz), dHeld = Math.hypot(g.player.x - hx, g.player.z - hz);
+      walk(35, 9.2); const back = lodAt(hx, hz), dBack = Math.hypot(g.player.x - hx, g.player.z - hz);
+      return { seq, atNear, held, dHeld: +dHeld.toFixed(1), back, dBack: +dBack.toFixed(1) };
+    };
+    const lodOk = (r) => JSON.stringify(r.seq.map((s) => s.lod)) === '[2,1,0,1]' && r.seq[3].d >= 19 && r.seq[1].d < 28 && r.seq[1].d > 21 && r.seq[2].d < 16 && r.seq[2].d > 9 && r.held === 0 && r.dHeld > 16 && r.dHeld < 19 && r.back === 1 && r.dBack > 19;
+    const lf = await E(page, lodWalk);
+    await start(SAMPLE);
+    const lm = await E(page, lodWalk);
+    log('boslust sample: LOD transitions by walking: far → mid → near once each, near held to 19 m on the way back (3 m hysteresis), both paths', lodOk(lf) && lodOk(lm), JSON.stringify({ fallback: lf, multiDraw: lm }));
+    // ---- culling when turning, and no buffer uploads while the camera is still (both paths)
+    const turnIdle = () => {
+      const g = T.G(), versions = () => { const v = []; g.world.scene.traverse((o) => { if (!o.userData.vegPart) return; if (o.isInstancedMesh) v.push(o.instanceMatrix.version, o.instanceColor?.version ?? 0); if (o.isBatchedMesh) v.push(o._matricesTexture.version, o._colorsTexture?.version ?? 0); }); return v.join(','); };
+      g.settings.quality = 'low'; g.applyQuality();
+      const count = () => { g.renderer.render(g.world.scene, g.camera); let n = 0; g.world.scene.traverse((o) => { if (o.visible && o.userData.vegPart === 'trees') n += o.isBatchedMesh ? o._multiDrawCount : o.count; }); return n; };
+      g.player.x = 51; g.player.z = 7.2; g.player.y = g.world.col.ground(51, 7.2);
+      T.lookAt(63, 2, 16); T.tick(3); const toward = count(); count();
+      const v0 = versions(); for (let i = 0; i < 6; i++) count(); const v1 = versions();
+      T.lookAt(40, 1.6, -2); T.tick(3); const away = count();
+      return { toward, away, idleUploads: v0 !== v1 };
+    };
+    const tm = await E(page, turnIdle);
+    await start(SAMPLE + '&multidraw=0');
+    const tf = await E(page, turnIdle);
+    log('boslust sample: per-instance culling follows turning, and an idle camera uploads no instance buffers (both paths)', tm.toward > tm.away && tf.toward === tm.toward && tf.away === tm.away && !tm.idleUploads && !tf.idleUploads, JSON.stringify({ multiDraw: tm, fallback: tf }));
     if (page.problems.length) log('boslust sample: no console errors', false, page.problems.slice(0, 3).join(' | '));
     else log('boslust sample: no console errors', true);
   } catch (e) {
