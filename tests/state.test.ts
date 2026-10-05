@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { defaultState, parseSave, migrate, parseSettings, STATE_VERSION } from '../src/core/state';
+import { openPuzzles, PUZZLES } from '../src/puzzles/rules';
 
 describe('save parsing', () => {
   it('round-trips a state', () => {
@@ -24,10 +25,16 @@ describe('save parsing', () => {
     expect(s.player.estate).toBeNull();
     expect(s.scene).toBe('home');
   });
-  it('migrates v1 single player pose to per-scene poses', () => {
+  it('migrates a v1 save; the rebuilt estate drops old poses (the game uses a named safe spawn)', () => {
     const s = migrate({ version: 1, scene: 'estate', player: { x: 1, y: 0, z: 2, yaw: 0, pitch: 0 } })!;
     expect(s.version).toBe(STATE_VERSION);
-    expect(s.player.estate).toEqual({ x: 1, y: 0, z: 2, yaw: 0, pitch: 0 });
+    expect(s.player.estate).toBeNull();
+    expect(s.scene).toBe('estate');
+  });
+  it('keeps v4 poses anywhere on the larger estate, including underground', () => {
+    const s = defaultState(1);
+    s.player.estate = { x: 63, y: -3.4, z: 50, yaw: 0, pitch: 0 };
+    expect(parseSave(JSON.stringify(s))!.player.estate).toEqual({ x: 63, y: -3.4, z: 50, yaw: 0, pitch: 0 });
   });
   it('settings clamp and default', () => {
     expect(parseSettings(null, true).quality).toBe('low');
@@ -46,9 +53,9 @@ describe('iteration 2: save validation (F12) and v3 migration', () => {
       hints: { 'p1.drawer': 9, 'p2.study': -2 }, wrong: { drawerLock: 2.7 },
     })!;
     expect(s.inventory).toEqual(['torch']);
-    expect(s.used).toEqual(['crank']);
+    expect(s.used).toEqual([]); // the old crank no longer exists
     expect(s.clues).toEqual(['c.mantel']);
-    expect(s.slots).toEqual({ left: 'token', right: null });
+    expect(s.slots).toEqual({}); // the old cottage niches are gone
     expect(s.seq.gardenLanterns).toEqual(['maan']);
     expect(s.hints).toEqual({ 'p1.drawer': 3, 'p2.study': 0 });
     expect(s.wrong.drawerLock).toBe(2);
@@ -59,7 +66,7 @@ describe('iteration 2: save validation (F12) and v3 migration', () => {
     expect(s.version).toBe(STATE_VERSION);
     expect(s.flags.drawerLockSolved).toBe(true);
     expect(s.open['door.front']).toBe(true);
-    expect(s.inventory).toEqual(['torch', 'crest']);
+    expect(s.inventory).toEqual(['torch']); // the old crest belonged to the removed cottage route
     expect(s.stats.activeMs).toBe(123456);
     expect(s.stats.finishedActiveMs).toBeNull();
     expect(s.events).toEqual([]);
@@ -69,5 +76,54 @@ describe('iteration 2: save validation (F12) and v3 migration', () => {
     expect(s.player.estate).toBeNull();
     expect(s.stats.activeMs).toBe(0);
     expect(s.stats.finishedAt).toBeNull();
+  });
+});
+
+describe('iteration 3: v4 migration (the house that remembers)', () => {
+  const v3 = (extra: Record<string, unknown> = {}) => ({
+    version: 3, scene: 'estate',
+    inventory: ['invitation', 'torch', 'matches', 'notebook', 'frontKey', 'shedKey', 'studyKey', 'token', 'crank', 'cottageKey'],
+    flags: { leftHome: true, drawerLockSolved: true, studyLockSolved: true, lanternsSolved: true, firePlateRead: true, cabinetPanelSolved: true, cottageSolved: true, crankInstalled: true },
+    unlocked: ['lock.door.front', 'lock.hallDrawer'], open: { 'door.front': true }, slots: { left: 'token', right: 'crest' },
+    lit: { torch: true, 'fire.clearing': true, 'sauna.heater': true },
+    player: { home: null, estate: { x: 25, y: 0.3, z: 93, yaw: 0, pitch: 0 } },
+    stats: { activeMs: 3_000_000, startedAt: 1, finishedAt: 99, finishedActiveMs: 2_400_000, moveMs: 1, pausedMs: 0 },
+    finished: true, ...extra,
+  });
+  it('keeps tools and solved retained puzzles, opening the containers that hold the new rewards', () => {
+    const s = migrate(v3())!;
+    expect(s.version).toBe(4);
+    for (const i of ['invitation', 'torch', 'matches', 'notebook', 'frontKey', 'shedKey', 'studyKey']) expect(s.inventory).toContain(i);
+    for (const i of ['token', 'crank', 'cottageKey']) expect(s.inventory).not.toContain(i);
+    expect(s.open['hall.drawer']).toBe(true);
+    expect(s.open['study.compartment']).toBe(true);
+    expect(s.open['cab.upper']).toBe(true);
+    expect(s.open['lantern.stone']).toBe(true);
+    expect(s.unlocked).toContain('lock.door.consWest');
+    expect(s.flags.cottageSolved).toBeUndefined();
+    expect(s.lit['sauna.heater']).toBeUndefined();
+    expect(s.lit['fire.clearing']).toBe(true);
+  });
+  it('archives an old completion and offers the new chapter instead of resetting', () => {
+    const s = migrate(v3())!;
+    expect(s.finished).toBe(false);
+    expect(s.archive).toEqual({ chapter1Finished: true, finishedAt: 99, minutes: 40 });
+    expect(s.notice).toMatch(/uitgespeeld/);
+    expect(s.player.estate).toBeNull();
+    expect(s.stats.activeMs).toBe(3_000_000);
+  });
+  it('a migrated save can continue: the retained solves count and new puzzles are open', () => {
+    const s = migrate(v3())!;
+    const solved = PUZZLES.filter((p) => p.solved(s)).map((p) => p.id);
+    expect(solved).toEqual(expect.arrayContaining(['p1.drawer', 'b.study', 'c.lanterns', 'a.cabinet', 'c.fire']));
+    expect(openPuzzles(s).length).toBeGreaterThan(0);
+  });
+  it('validates the new placement slots and plate dials', () => {
+    const s = migrate({ version: 4, slots: { 'svc.tafel': 'warm', 'svc.serre': 'banana', 'cat.rond': 'ster', 'con.water': 'tableSeal', 'con.muren': 'token', left: 'token' }, dials: { 'plate.tafel': 3, 'plate.boek': 9, x: 1 }, track: 'B' })!;
+    expect(s.slots).toEqual({ 'svc.tafel': 'warm', 'svc.serre': null, 'cat.rond': 'ster', 'con.water': 'tableSeal', 'con.muren': null });
+    expect(s.dials['plate.tafel']).toBe(3);
+    expect(s.dials['plate.boek']).toBe(3);
+    expect(s.dials.x).toBeUndefined();
+    expect(s.track).toBe('B');
   });
 });

@@ -56,10 +56,18 @@ export function armchair(c: Ctx, x: number, z: number, y0: number, yaw: number, 
   sofa(c, x, z, y0, yaw, 1.0, color);
 }
 
-export function bookshelf(c: Ctx, x: number, z: number, y0: number, yaw: number, w = 1.6, h = 2.2) {
+const BOOK_PALETTES: Record<string, string[]> = {
+  leather: ['#7a2f2a', '#8a4a2a', '#5a3a28', '#9a6a3a', '#6b2a2a'],
+  navy: ['#2f3f5f', '#3f5070', '#26344a', '#5a6a80', '#7a6a4a'],
+  olive: ['#4f5f32', '#6a6a3a', '#3f4a2a', '#8a7a4a', '#5a4a2a'],
+  linen: ['#cbb98f', '#a88f62', '#d8c8a0', '#8a7a5a', '#b8a070'],
+};
+export function bookshelf(c: Ctx, x: number, z: number, y0: number, yaw: number, w = 1.6, h = 2.2, palette = 'leather', depth = 0.35) {
   const k = c.k;
+  const pal = BOOK_PALETTES[palette] ?? BOOK_PALETTES.leather;
   P(c, k.M.wood, '#5a3a22', x, z, yaw, 0, y0, -0.15, w, h, 0.05, 1);
-  for (const s of [-1, 1]) P(c, k.M.wood, '#5a3a22', x, z, yaw, s * (w / 2 - 0.03), y0, 0, 0.05, h, 0.35, 1);
+  for (const s of [-1, 1]) P(c, k.M.wood, '#5a3a22', x, z, yaw, s * (w / 2 - 0.03), y0, 0, 0.05, h, depth, 1);
+  P(c, k.M.wood, '#4a2f1a', x, z, yaw, 0, y0 + h - 0.02, 0.02, w + 0.06, 0.08, depth + 0.06, 1); // cornice
   const shelves = Math.floor(h / 0.42);
   let seed = Math.floor(x * 7 + z * 13);
   const r = () => ((seed = (seed * 9301 + 49297) % 233280) / 233280);
@@ -70,12 +78,12 @@ export function bookshelf(c: Ctx, x: number, z: number, y0: number, yaw: number,
       let bx = -w / 2 + 0.1;
       while (bx < w / 2 - 0.15) {
         const bw = 0.04 + r() * 0.06, bh = 0.24 + r() * 0.1;
-        P(c, k.M.paint, ['#8a2f2f', '#2f4f7a', '#3f6a3a', '#c9a44c', '#6b4a8a', '#a0522d'][Math.floor(r() * 6)], x, z, yaw, bx + bw / 2, yy + 0.04, 0, bw, bh, 0.24);
+        P(c, k.M.paint, pal[Math.floor(r() * pal.length)], x, z, yaw, bx + bw / 2, yy + 0.04, 0, bw, bh, 0.24);
         bx += bw + 0.01;
       }
     }
   }
-  collide(c, x, z, yaw, w, 0.4, h, y0);
+  collide(c, x, z, yaw, w, depth + 0.05, h, y0);
 }
 
 export function bed(c: Ctx, x: number, z: number, y0: number, yaw: number) {
@@ -271,4 +279,101 @@ export function staticSconce(c: Ctx, w: World, x: number, y: number, z: number, 
   const [fx, fz] = [Math.sin(yaw), Math.cos(yaw)];
   cyl(c.b, k.M.glow, '#ffe2a8', x + fx * 0.18, y, z + fz * 0.18, 0.07, 0.11, 0.16, 10, { chunk: c.chunk, shadow: false, jitter: 0 });
   w.lamps.push({ id: `fixed.${x.toFixed(2)}.${z.toFixed(2)}`, pos: v3(x + fx * 0.4, y + 0.1, z + fz * 0.4), color: 0xffc77a, intensity, distance, on: () => true });
+}
+
+
+// ---------------------------------------------------------------- iteration 3 decor kit (rounded, chunky timber, warm textiles)
+/** Bed with headboard, mattress, duvet in a given colour and two pillows. Faces plan heading yaw (foot end). */
+export function bed2(c: Ctx, x: number, z: number, y0: number, yaw: number, duvet = '#7a3a3a', wood = '#6b4426', width = 1.6) {
+  const k = c.k;
+  P(c, k.M.wood, wood, x, z, yaw, 0, y0, 0, width, 0.38, 2.1, 1);
+  P(c, k.M.paint, '#efe6d6', x, z, yaw, 0, y0 + 0.38, 0, width - 0.08, 0.18, 2.0);
+  P(c, k.M.paint, duvet, x, z, yaw, 0, y0 + 0.56, 0.22, width - 0.02, 0.09, 1.45);
+  P(c, k.M.paint, new THREE.Color(duvet).multiplyScalar(0.85), x, z, yaw, 0, y0 + 0.4, 0.95, width + 0.02, 0.26, 0.05);
+  for (const s of [-1, 1]) P(c, k.M.paint, '#fbf6ea', x, z, yaw, s * width * 0.24, y0 + 0.56, -0.72, width * 0.42, 0.14, 0.38);
+  P(c, k.M.wood, wood, x, z, yaw, 0, y0, -1.06, width + 0.1, 1.15, 0.1, 1);
+  P(c, k.M.wood, new THREE.Color(wood).multiplyScalar(0.8), x, z, yaw, 0, y0 + 1.15, -1.06, width + 0.16, 0.08, 0.14, 1);
+  collide(c, x, z, yaw, width, 2.15, 0.8, y0);
+}
+export function bedside(c: Ctx, x: number, z: number, y0: number, yaw: number, wood = '#6b4426') {
+  const k = c.k;
+  P(c, k.M.wood, wood, x, z, yaw, 0, y0, 0, 0.45, 0.55, 0.4, 0.5);
+  P(c, k.M.wood, new THREE.Color(wood).multiplyScalar(1.1), x, z, yaw, 0, y0 + 0.55, 0, 0.5, 0.04, 0.44, 0.5);
+  P(c, k.M.paint, '#c9a44c', x, z, yaw, 0, y0 + 0.36, 0.205, 0.08, 0.03, 0.02);
+  collide(c, x, z, yaw, 0.5, 0.45, 0.6, y0);
+}
+export function wardrobe(c: Ctx, x: number, z: number, y0: number, yaw: number, w = 1.4, wood = '#6b4426') {
+  const k = c.k;
+  P(c, k.M.wood, wood, x, z, yaw, 0, y0, 0, w, 2.0, 0.6, 1);
+  P(c, k.M.wood, new THREE.Color(wood).multiplyScalar(0.8), x, z, yaw, 0, y0 + 2.0, 0, w + 0.08, 0.1, 0.66, 1);
+  for (const s of [-1, 1]) P(c, k.M.wood, new THREE.Color(wood).multiplyScalar(1.08), x, z, yaw, s * w * 0.25, y0 + 0.2, 0.305, w * 0.46, 1.6, 0.02, 0.6);
+  for (const s of [-1, 1]) P(c, k.M.paint, '#c9a44c', x, z, yaw, s * 0.06, y0 + 1.0, 0.32, 0.03, 0.14, 0.03);
+  collide(c, x, z, yaw, w, 0.6, 2.1, y0);
+}
+/** Drapes either side of a window (on a wall facing heading yaw), with a rod. */
+export function curtains(c: Ctx, x: number, z: number, y0: number, yaw: number, w = 1.3, h = 1.9, color = '#3f6f78') {
+  const k = c.k;
+  for (const s of [-1, 1]) for (let i = 0; i < 3; i++) P(c, k.M.paint, new THREE.Color(color).multiplyScalar(0.9 + i * 0.06), x, z, yaw, s * (w / 2 + 0.05 + i * 0.07), y0, 0.06 + (i % 2) * 0.03, 0.09, h, 0.05);
+  P(c, k.M.paint, '#8a6a3a', x, z, yaw, 0, y0 + h + 0.02, 0.05, w + 0.7, 0.04, 0.04);
+}
+export function desk(c: Ctx, x: number, z: number, y0: number, yaw: number, w = 1.5, d = 0.75, wood = '#6b4426') {
+  const k = c.k;
+  P(c, k.M.wood, wood, x, z, yaw, 0, y0 + 0.72, 0, w, 0.06, d, 1);
+  for (const s of [-1, 1]) P(c, k.M.wood, new THREE.Color(wood).multiplyScalar(0.85), x, z, yaw, s * (w / 2 - 0.22), y0, 0, 0.42, 0.72, d - 0.06, 1);
+  collide(c, x, z, yaw, w, d, 0.8, y0);
+}
+/** Slanted reading lectern; returns the plan point and height of the book rest. */
+export function lectern(c: Ctx, x: number, z: number, y0: number, yaw: number, wood = '#5a3a22') {
+  const k = c.k;
+  P(c, k.M.wood, wood, x, z, yaw, 0, y0, 0, 0.5, 0.05, 0.4, 1);
+  P(c, k.M.wood, wood, x, z, yaw, 0, y0, 0, 0.12, 1.0, 0.12, 1);
+  box(c.b, k.M.wood, new THREE.Color(wood).multiplyScalar(1.15), x, y0 + 1.0, z, 0.62, 0.05, 0.46, { yaw, rx: -0.45, chunk: c.chunk, uv: 0.6 });
+  c.col.addCircle(x, z, 0.3, y0, y0 + 1.2);
+  return { x, z, y: y0 + 1.06 };
+}
+export function bathtub(c: Ctx, x: number, z: number, y0: number, yaw: number) {
+  const k = c.k;
+  P(c, k.M.paint, '#f4f1ea', x, z, yaw, 0, y0 + 0.08, 0, 0.8, 0.5, 1.7);
+  P(c, k.M.paint, '#bfe0e6', x, z, yaw, 0, y0 + 0.5, 0, 0.62, 0.02, 1.5);
+  for (const sx of [-1, 1]) for (const sz of [-1, 1]) P(c, k.M.paint, '#c9a44c', x, z, yaw, sx * 0.3, y0, sz * 0.7, 0.08, 0.1, 0.08);
+  collide(c, x, z, yaw, 0.8, 1.7, 0.6, y0);
+}
+export function ladder(c: Ctx, x: number, z: number, y0: number, yaw: number, h = 3.0, wood = '#8a5a33') {
+  const k = c.k;
+  for (const s of [-1, 1]) P(c, k.M.wood, wood, x, z, yaw, s * 0.22, y0, 0, 0.05, h, 0.05, 0.5);
+  for (let y = 0.3; y < h; y += 0.3) P(c, k.M.wood, wood, x, z, yaw, 0, y0 + y, 0, 0.44, 0.04, 0.05, 0.5);
+}
+/** Small telescope on a tripod pointing out of a window. */
+export function telescope(c: Ctx, x: number, z: number, y0: number, yaw: number) {
+  const k = c.k;
+  for (let i = 0; i < 3; i++) { const a = (i / 3) * Math.PI * 2; cyl(c.b, k.M.wood, '#5a3a22', x + Math.cos(a) * 0.2, y0, z + Math.sin(a) * 0.2, 0.015, 0.02, 1.25, 5, { chunk: c.chunk, rz: Math.cos(a) * 0.16, rx: -Math.sin(a) * 0.16 }); }
+  cyl(c.b, k.M.paint, '#b8892f', x, y0 + 1.25, z, 0.05, 0.06, 0.8, 10, { chunk: c.chunk, rx: Math.PI / 2 - 0.35, yaw });
+  c.col.addCircle(x, z, 0.3, y0, y0 + 1.5);
+}
+/** A flat framed panel with its own canvas texture (signs, boards, drawn diagrams). Faces plan heading yaw. */
+export function canvasPanel(w: World, x: number, y: number, z: number, yaw: number, width: number, height: number, draw: (x: CanvasRenderingContext2D, W: number, H: number) => void, px = 512, frame: string | null = '#6b4426', emissive = false) {
+  const cv = document.createElement('canvas');
+  cv.width = px; cv.height = Math.round((px * height) / width);
+  const g = cv.getContext('2d')!;
+  draw(g, cv.width, cv.height);
+  const tex = w.texture(new THREE.CanvasTexture(cv));
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 4;
+  const mat = w.material(emissive ? new THREE.MeshBasicMaterial({ map: tex }) : new THREE.MeshLambertMaterial({ map: tex }));
+  const grp = new THREE.Group();
+  const plane = new THREE.Mesh(new THREE.PlaneGeometry(width, height), mat);
+  plane.position.z = 0.03;
+  grp.add(plane);
+  if (frame) {
+    const k = getKit();
+    grp.add(compound((b) => box(b, k.M.wood, frame, 0, -height / 2 - 0.05, -0.0, width + 0.1, height + 0.1, 0.04)));
+  }
+  grp.position.copy(v3(x, y, z));
+  grp.rotation.y = Math.PI - yaw; // plane normal (+Z local) points along plan heading yaw
+  // a wall-mounted panel belongs to the room it faces (sampling around it would leak through the wall)
+  grp.updateMatrixWorld(true);
+  const fwd = new THREE.Vector3(Math.sin(yaw) * 0.4, 0, Math.cos(yaw) * 0.4);
+  grp.userData.roomProbe = { x: x + fwd.x, y, z: z + fwd.z };
+  w.scene.add(grp);
+  return { grp, mat, tex, canvas: cv };
 }

@@ -19,7 +19,8 @@ export interface DoorOpts {
   swing: 1 | -1; // +1 = counter-clockwise seen from above
   color?: THREE.ColorRepresentation;
   style?: 'panel' | 'plank' | 'glass' | 'gate';
-  key?: string; // key item that unlocks (lock id = lock.<id>)
+  key?: string; // key item that unlocks (lock id = lock.<id>, or lockId when doors share one lock)
+  lockId?: string;
   unlock?: string; // OR a lock id set by a puzzle (no key)
   lockedMsg?: string;
   name?: string;
@@ -70,7 +71,7 @@ export function makeDoor(w: World, g: GameApi, o: DoorOpts) {
   const cx = o.x + (dx * o.width) / 2, cz = o.z + (dz * o.width) / 2;
   const sx = dx ? o.width : th + 0.08, sz = dz ? o.width : th + 0.08;
   const collider: Box = w.col.addBoxC(cx, cz, sx, sz, o.y0, o.y0 + o.height, { occludes: true, tag: o.id });
-  const lockId = o.key ? `lock.${o.id}` : o.unlock;
+  const lockId = o.key ? o.lockId ?? `lock.${o.id}` : o.unlock;
   let angle = 0, target = 0, first = true;
   const isLocked = () => !!lockId && !g.state.unlocked.includes(lockId);
   const isOpen = () => g.state.open[o.id] === true;
@@ -183,7 +184,8 @@ export function makeDrawer(w: World, g: GameApi, o: DrawerOpts) {
     box(b, k.M.paint, '#d4b25a', 0, -0.03, o.d / 2 + 0.02, 0.12, 0.05, 0.04); // knob
   }, false);
   slider.add(model);
-  const hb = hitbox(slider, o.w, o.h + 0.04, 0.2, 0, 0, -o.d / 2);
+  // a thin front plate: once open, the things lying inside stay pickable from above
+  const hb = hitbox(slider, o.w, o.h + 0.04, 0.1, 0, 0, -o.d / 2);
   w.scene.add(outer);
   const travel = o.travel ?? o.d * 0.75;
   let pos = 0, first = true;

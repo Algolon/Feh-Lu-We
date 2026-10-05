@@ -117,6 +117,48 @@ const ICONS: Record<string, P[]> = {
     ['M14 8 H50 V30 C50 46 40 54 32 58 C24 54 14 46 14 30 Z', '#c0504d', INK, 2.5],
     ['M32 14 V50 M20 28 H44', 'none', '#f2e6c8', 4],
   ],
+  // estate register: dark red ledger with three blind seal impressions on the cover
+  ledger: [
+    ['M12 6 H52 V58 H12 Z', '#6a2a22', INK, 2.5],
+    ['M16 6 V58', 'none', '#3a160f', 3],
+    [circ(32, 20, 6), '#8a4a3a', INK, 1.5],
+    ['M26 30 H38 V42 H26 Z', '#8a4a3a', INK, 1.5],
+    ['M32 46 C38 49 37 54 32 56 C27 54 26 49 32 46 Z', '#8a4a3a', INK, 1.5],
+  ],
+  // forest-walk journal: thin green notebook with a little hill sketched on it
+  journal: [
+    ['M12 8 H50 C52 8 53 9 53 11 V56 H12 Z', '#4f6a3a', INK, 2.5],
+    ['M18 14 H47 V50 H18 Z', '#efe6d0', INK, 1.5],
+    ['M20 44 C26 26 40 26 45 44 Z', '#a9c47a', INK, 1.5],
+    ['M30 44 V37 C30 34 35 34 35 37 V44', '#5a3a22', INK, 1.2],
+  ],
+  // conservatory key with a green glass drop
+  consKey: key('#d9b14a', 'ring', [['M10 38 L8 46', 'none', INK, 1.5], ['M8 46 C14 50 14 58 8 60 C2 58 2 50 8 46 Z', '#5fbf8f', INK, 2]]),
+  // the three seals: round terracotta (table), square blue (book), green leaf (tree)
+  tableSeal: [
+    [circ(32, 32, 24), '#c4553d', INK, 2.5],
+    [circ(32, 32, 18), 'none', '#f2e6c8', 1.5],
+    ['M20 38 H44 M24 38 V44 M40 38 V44', 'none', '#f2e6c8', 3],
+    ['M32 20 C36 25 35 30 32 32 C29 30 28 25 32 20 Z', '#ffd27a', INK, 1.2],
+  ],
+  archiveSeal: [
+    ['M10 10 H54 V54 H10 Z', '#3f6fa8', INK, 2.5],
+    ['M16 16 H48 V48 H16 Z', 'none', '#e8eef8', 1.5],
+    ['M32 24 C26 21 21 21 18 23 V42 C21 40 26 40 32 43 C38 40 43 40 46 42 V23 C43 21 38 21 32 24 Z', '#e8eef8', INK, 1.8],
+    ['M32 24 V43', 'none', INK, 1.5],
+  ],
+  trailSeal: [
+    ['M32 4 C54 16 54 44 32 60 C10 44 10 16 32 4 Z', '#4f8a3a', INK, 2.5],
+    ['M32 18 L22 40 H42 Z', '#2f5a2a', INK, 1.5],
+    ['M32 40 V48', 'none', '#6b4a32', 3],
+  ],
+  // cardboard strip with two alphabets
+  cipherStrip: [
+    ['M4 20 H60 V44 H4 Z', '#efe2c2', INK, 2.5],
+    ['M4 32 H60', 'none', INK, 1.5],
+    ['M9 27 H13 M17 27 H21 M25 27 H29 M33 27 H37 M41 27 H45 M49 27 H53', 'none', '#3a2a1a', 2.5],
+    ['M13 39 H17 M21 39 H25 M29 39 H33 M37 39 H41 M45 39 H49 M53 39 H57', 'none', '#8a2f1a', 2.5],
+  ],
   fragment: [
     ['M10 8 H44 L52 18 L46 26 L54 34 L46 42 L52 52 L46 58 H10 Z', '#f6eed8', INK, 2.5],
     ['M16 18 H40 M16 26 H38 M16 34 H42 M16 42 H34', 'none', '#7a6a50', 2],

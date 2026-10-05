@@ -52,7 +52,11 @@ function boot() {
       fail('Er ging iets mis bij het laden van de wereld. Herlaad de pagina; je bewaarde voortgang blijft staan.');
     }
   };
-  game.ui.showStart({ hasSave: game.hasSave(), onContinue: () => begin(false), onNew: () => begin(true) });
+  game.ui.showStart({
+    hasSave: game.hasSave(), hasBackup: game.hasBackup(),
+    onContinue: () => begin(false), onNew: () => begin(true),
+    onRestore: () => { if (game.restoreBackup()) begin(false); },
+  });
 }
 
 boot();

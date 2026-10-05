@@ -40,6 +40,8 @@ export class CollisionWorld {
   private grid = new Map<number, Collider[]>();
   private stamp = new Map<Collider, number>();
   private query = 0;
+  /** Natural ground height (terrain); walkable wherever it is reachable from the feet. */
+  ground: (x: number, z: number) => number = () => 0;
   constructor(public bounds = { minX: 0.6, maxX: 119.4, minZ: 0.6, maxZ: 99.4 }) {}
 
   private key(ix: number, iz: number) {
@@ -115,8 +117,10 @@ export class CollisionWorld {
 
   /** Highest walkable surface under (x,z) that is reachable from feet height y (not above y + stepUp). */
   supportHeight(x: number, z: number, y: number, stepUp: number): number {
-    let best = 0;
     const lim = y + stepUp + 1e-4;
+    const g = this.ground(x, z);
+    // terrain counts like any floor: only when reachable (underground rooms lie far below it)
+    let best = g <= lim ? g : -Infinity;
     for (const f of this.floors) {
       if (x >= f.minX && x <= f.maxX && z >= f.minZ && z <= f.maxZ && f.y <= lim && f.y > best) best = f.y;
     }
@@ -127,7 +131,7 @@ export class CollisionWorld {
       const h = r.ya + (r.yb - r.ya) * t;
       if (h <= lim && h > best) best = h;
     }
-    return best;
+    return best === -Infinity ? y : best; // no surface below at all: stay put rather than fall forever
   }
 
   private verticalHit(c: Collider, y: number, height: number, stepUp: number) {

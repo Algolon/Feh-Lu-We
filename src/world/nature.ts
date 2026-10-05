@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { getKit } from './kit';
 import { mulberry32, type Rng } from '../core/rng';
 
-export interface TreeSpec { x: number; z: number; h: number; r: number; kind: 'oak' | 'birch' | 'cypress' | 'pine'; hue: number }
+export interface TreeSpec { x: number; z: number; h: number; r: number; kind: 'oak' | 'birch' | 'cypress' | 'pine'; hue: number; /** ground height at the trunk */ y?: number }
 
 const crownColors = ['#4d7a33', '#5c8a3a', '#6b9942', '#41692e', '#76a248', '#839c3e', '#56823a'];
 
@@ -44,24 +44,25 @@ export class Vegetation {
 
   tree(t: TreeSpec, chunk: string) {
     const r = this.r;
+    const y0 = (t.y ?? 0) - 0.15; // sink the trunk a little so it never floats on a slope
     if (t.kind === 'cypress') {
       const c = new THREE.Color('#2f5a2e').offsetHSL(t.hue * 0.03, 0, (r() - 0.5) * 0.06);
-      this.trunks.push({ m: this.mat(t.x, 0, t.z, 0.18, 1.2, 0.18), c: new THREE.Color('#5a4030'), chunk });
-      this.cones.push({ m: this.mat(t.x, 0.6, t.z, t.r, t.h, t.r, r() * 6), c, chunk });
+      this.trunks.push({ m: this.mat(t.x, y0, t.z, 0.18, 1.2, 0.18), c: new THREE.Color('#5a4030'), chunk });
+      this.cones.push({ m: this.mat(t.x, y0 + 0.6, t.z, t.r, t.h, t.r, r() * 6), c, chunk });
       return;
     }
     if (t.kind === 'pine') {
       const c = new THREE.Color('#33603a').offsetHSL(t.hue * 0.02, 0, (r() - 0.5) * 0.08);
-      this.trunks.push({ m: this.mat(t.x, 0, t.z, t.r * 0.25, t.h * 0.5, t.r * 0.25), c: new THREE.Color('#6a4a32'), chunk });
-      for (let i = 0; i < 3; i++) this.cones.push({ m: this.mat(t.x, t.h * (0.25 + i * 0.2), t.z, t.r * (1 - i * 0.25), t.h * 0.45, t.r * (1 - i * 0.25), r() * 6), c, chunk });
+      this.trunks.push({ m: this.mat(t.x, y0, t.z, t.r * 0.25, t.h * 0.5, t.r * 0.25), c: new THREE.Color('#6a4a32'), chunk });
+      for (let i = 0; i < 3; i++) this.cones.push({ m: this.mat(t.x, y0 + t.h * (0.25 + i * 0.2), t.z, t.r * (1 - i * 0.25), t.h * 0.45, t.r * (1 - i * 0.25), r() * 6), c, chunk });
       return;
     }
     const trunkCol = t.kind === 'birch' ? new THREE.Color('#e8e2d4') : new THREE.Color('#6b4a32').offsetHSL(0, 0, (r() - 0.5) * 0.08);
     const tr = t.kind === 'birch' ? t.r * 0.18 : t.r * 0.22;
-    this.trunks.push({ m: this.mat(t.x, 0, t.z, tr, t.h, tr), c: trunkCol, chunk });
+    this.trunks.push({ m: this.mat(t.x, y0, t.z, tr, t.h, tr), c: trunkCol, chunk });
     const base = new THREE.Color(crownColors[Math.floor(r() * crownColors.length)]).offsetHSL(t.hue * 0.02, 0, (r() - 0.5) * 0.05);
     const blobs = 3 + Math.floor(r() * 3);
-    const cy = t.h + t.r * 0.35;
+    const cy = y0 + t.h + t.r * 0.35;
     for (let i = 0; i < blobs; i++) {
       const a = (i / blobs) * Math.PI * 2 + r();
       const d = i === 0 ? 0 : t.r * (0.45 + r() * 0.3);
@@ -88,21 +89,27 @@ export class Vegetation {
     const rockGeo = shadeVertically(withColor(new THREE.DodecahedronGeometry(1, 0)), 0.75, 1.05);
     for (const g of [trunkGeo, crownGeo, coneGeo, blobGeo, rockGeo]) g.userData.shared = false;
     const rockMat = k.M.paint;
-    const groups = new Map<string, { geo: THREE.BufferGeometry; mat: THREE.Material; items: { m: THREE.Matrix4; c: THREE.Color }[]; shadow: boolean }>();
-    const push = (key: string, geo: THREE.BufferGeometry, mat: THREE.Material, it: { m: THREE.Matrix4; c: THREE.Color }, shadow: boolean) => {
+    // lod: 'near' meshes show close up, 'far' ones beyond VEG_LOD; 'small' undergrowth only close by (see World)
+    const groups = new Map<string, { geo: THREE.BufferGeometry; mat: THREE.Material; items: { m: THREE.Matrix4; c: THREE.Color }[]; shadow: boolean; lod: 'all' | 'near' | 'far' | 'small' }>();
+    const push = (key: string, geo: THREE.BufferGeometry, mat: THREE.Material, it: { m: THREE.Matrix4; c: THREE.Color }, shadow: boolean, lod: 'all' | 'near' | 'far' | 'small' = 'all') => {
       let g = groups.get(key);
-      if (!g) groups.set(key, (g = { geo, mat, items: [], shadow }));
+      if (!g) groups.set(key, (g = { geo, mat, items: [], shadow, lod }));
       g.items.push(it);
     };
     for (const t of this.trunks) push(`trunk|${t.chunk}`, trunkGeo, k.M.bark, t, !t.chunk.startsWith('outer'));
     const lowCrown = shadeVertically(withColor(new THREE.IcosahedronGeometry(1, 0)));
-    for (const t of this.crowns) push(`crown|${t.chunk}`, t.chunk.startsWith('outer') ? lowCrown : crownGeo, k.M.foliage, t, !t.chunk.startsWith('outer'));
+    for (const t of this.crowns) {
+      if (t.chunk.startsWith('outer')) { push(`crown|${t.chunk}`, lowCrown, k.M.foliage, t, false); continue; }
+      push(`crown|${t.chunk}`, crownGeo, k.M.foliage, t, true, 'near');
+      push(`crownLow|${t.chunk}`, lowCrown, k.M.foliage, t, true, 'far');
+    }
     for (const t of this.cones) push(`cone|${t.chunk}`, coneGeo, k.M.foliage, t, true);
     const softGeo = shadeVertically(withColor(new THREE.IcosahedronGeometry(1, 1)), 0.6, 1.1);
-    for (const t of this.small) push(`${t.kind}|${t.chunk}`, t.kind === 'rock' ? rockGeo : t.kind === 'flower' ? blobGeo : softGeo, t.kind === 'rock' ? rockMat : k.M.foliage, t, false);
+    for (const t of this.small) push(`${t.kind}|${t.chunk}`, t.kind === 'rock' ? rockGeo : t.kind === 'flower' ? blobGeo : softGeo, t.kind === 'rock' ? rockMat : k.M.foliage, t, false, t.chunk === 'garden' ? 'all' : 'small');
     const meshes: THREE.InstancedMesh[] = [];
     for (const g of groups.values()) {
       const im = new THREE.InstancedMesh(g.geo, g.mat, g.items.length);
+      im.userData.veg = g.lod;
       g.items.forEach((it, i) => {
         im.setMatrixAt(i, it.m);
         im.setColorAt(i, it.c);

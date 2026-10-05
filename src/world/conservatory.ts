@@ -1,19 +1,16 @@
-// Glazed pool conservatory X 72–84, Z 64–82 (attached to the kitchen side of the manor).
-// The swimming pool is INSIDE, with a dry walkable perimeter. The barrel sauna stands outside,
-// immediately east (X 85–89, Z 69–73), enterable, with a controllable heater.
+// Glazed pool conservatory X 116–130, Z 94–112, joined to the service wing (door from the service
+// corridor). The swimming pool is INSIDE, with a dry walkable perimeter; there is no outdoor pool.
+// The barrel sauna stands outside, immediately to the right (east), enterable, with a heater.
 import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, floor } from './arch';
 import { Batcher, box, boxMM, cyl, blob, compound, v3, getKit } from './kit';
-import { chair as _c, plant, part, staticLantern } from './furniture';
+import { plant, part, staticLantern } from './furniture';
 import { makeDoor, makePickup, makeInspect, makeAction, place } from '../interactions/props';
 import { drawSymbol } from '../content/symbols';
 import { addClue } from '../core/state';
 import { turnWheel, wheels, WHEEL_SYMBOLS } from '../puzzles/rules';
-import { GF } from './manor';
-void _c;
-
-const POOL = { x0: 74.5, x1: 81.5, z0: 67, z1: 79 };
+import { GF, CONS, POOL, SITES } from './layout';
 const poolDepth = (z: number) => -1.0 - ((z - POOL.z0) / (POOL.z1 - POOL.z0)) * 1.0; // shallow south → deep north
 
 function mosaicTexture(sym: string) {
@@ -69,14 +66,14 @@ function saunaBoardTexture() {
 
 export function buildConservatory(w: World, g: GameApi, c: Ctx) {
   const k = c.k;
-  const X0 = 72, X1 = 84, Z0 = 64, Z1 = 82, H = 3.4;
+  const { x0: X0, x1: X1, z0: Z0, z1: Z1 } = CONS;
+  const H = 3.4, PX = (POOL.x0 + POOL.x1) / 2, PZ = (POOL.z0 + POOL.z1) / 2, PW = POOL.x1 - POOL.x0;
   // floor around the pool (tiles), walkable everywhere; the pool itself is a solid boundary
   for (const [a, b2, cc, d] of [[X0, X1, Z0, POOL.z0], [X0, X1, POOL.z1, Z1], [X0, POOL.x0, POOL.z0, POOL.z1], [POOL.x1, X1, POOL.z0, POOL.z1]] as const) {
     floor(c, a, b2, cc, d, GF, k.M.tile, '#efe0c4', 0.6, false, 1.2);
   }
   w.col.addFloor(X0, X1, Z0, Z1, GF);
   w.col.addBox(POOL.x0, POOL.x1, POOL.z0, POOL.z1, -3, 2.5, { tag: 'pool' });
-  // coping stones
   for (const [a, b2, cc, d] of [[POOL.x0 - 0.3, POOL.x1 + 0.3, POOL.z0 - 0.3, POOL.z0], [POOL.x0 - 0.3, POOL.x1 + 0.3, POOL.z1, POOL.z1 + 0.3], [POOL.x0 - 0.3, POOL.x0, POOL.z0, POOL.z1], [POOL.x1, POOL.x1 + 0.3, POOL.z0, POOL.z1]] as const) {
     boxMM(c.b, k.M.stone, '#f3ead6', a, b2, GF - 0.02, GF + 0.04, cc, d, { chunk: c.chunk, uv: 1 });
   }
@@ -88,19 +85,18 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
   boxMM(c.b, k.M.poolTile, '#ffffff', POOL.x0 - 0.2, POOL.x1 + 0.2, yb, GF - 0.02, POOL.z1, POOL.z1 + 0.2, { chunk: c.chunk, uv: 1 });
   const len = POOL.z1 - POOL.z0;
   const tilt = Math.atan(1 / len);
-  box(c.b, k.M.poolTile, '#dff4f6', 78, -1.55, 73, 7, 0.1, Math.hypot(len, 1), { chunk: c.chunk, uv: 1, rx: -tilt });
+  box(c.b, k.M.poolTile, '#dff4f6', PX, -1.55, PZ, PW, 0.1, Math.hypot(len, 1), { chunk: c.chunk, uv: 1, rx: -tilt });
   // steps at the shallow (south) end
-  for (let i = 0; i < 3; i++) boxMM(c.b, k.M.stone, '#f3ead6', 76.6, 79.4, -1.0, GF - 0.25 - i * 0.3, POOL.z0, POOL.z0 + 0.45 + i * 0.4, { chunk: c.chunk });
-  for (const x of [76.5, 79.5]) cyl(c.b, k.M.paint, '#d8dde2', x, GF, POOL.z0 - 0.15, 0.03, 0.03, 1.0, 6, { chunk: c.chunk });
+  for (let i = 0; i < 3; i++) boxMM(c.b, k.M.stone, '#f3ead6', PX - 1.4, PX + 1.4, -1.0, GF - 0.25 - i * 0.3, POOL.z0, POOL.z0 + 0.45 + i * 0.4, { chunk: c.chunk });
+  for (const x of [PX - 1.5, PX + 1.5]) cyl(c.b, k.M.paint, '#d8dde2', x, GF, POOL.z0 - 0.15, 0.03, 0.03, 1.0, 6, { chunk: c.chunk });
   // mosaic symbols on the pool floor (south → north): cirkel, driehoek, golf, ruit
-  const order = ['cirkel', 'driehoek', 'golf', 'ruit'];
-  order.forEach((s, i) => {
-    const z = 69 + i * 3;
+  ['cirkel', 'driehoek', 'golf', 'ruit'].forEach((s, i) => {
+    const z = POOL.z0 + 2 + i * 3;
     const mat = w.material(new THREE.MeshLambertMaterial({ map: w.texture(mosaicTexture(s)) }));
     const m = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.7), mat);
     m.rotation.order = 'YXZ';
     m.rotation.x = -Math.PI / 2 - tilt;
-    m.position.copy(v3(78, poolDepth(z) + 0.075, z)); // floor box top is 0.05 above poolDepth
+    m.position.copy(v3(PX, poolDepth(z) + 0.075, z));
     w.scene.add(m);
   });
   // water
@@ -109,33 +105,30 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
   waterTex.repeat.set(2, 3);
   w.texture(waterTex);
   const waterMat = w.material(new THREE.MeshLambertMaterial({ color: '#4fd0dc', map: waterTex, transparent: true, opacity: 0.42, depthWrite: false, emissive: new THREE.Color('#0a3a44') }));
-  const water = new THREE.Mesh(new THREE.PlaneGeometry(POOL.x1 - POOL.x0, POOL.z1 - POOL.z0), waterMat);
+  const water = new THREE.Mesh(new THREE.PlaneGeometry(PW, len), waterMat);
   water.rotation.x = -Math.PI / 2;
-  water.position.copy(v3(78, -0.06, 73));
+  water.position.copy(v3(PX, -0.06, PZ));
   water.renderOrder = 2;
   w.scene.add(water);
   w.onUpdate((_dt, t) => { if (!w.reducedMotion) waterTex.offset.set(Math.sin(t * 0.2) * 0.05, t * 0.02); });
-  w.emitters.push({ kind: 'water', pos: v3(78, 0, 73), on: () => true });
-  // depth signs on the coping
-  for (const [z, txt, rotY] of [[66.45, 'ONDIEP · 1,0 m', 0], [79.55, 'DIEP · 2,0 m', Math.PI]] as const) {
+  w.emitters.push({ kind: 'water', pos: v3(PX, 0, PZ), on: () => true });
+  for (const [z, txt, rotY] of [[POOL.z0 - 0.55, 'ONDIEP · 1,0 m', 0], [POOL.z1 + 0.55, 'DIEP · 2,0 m', Math.PI]] as const) {
     const m = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 0.5), w.material(new THREE.MeshLambertMaterial({ map: w.texture(textTexture([txt])) })));
     m.rotation.order = 'YXZ';
     m.rotation.set(-Math.PI / 2, rotY, 0);
-    m.position.copy(v3(78, GF + 0.012, z));
+    m.position.copy(v3(PX, GF + 0.012, z));
     w.scene.add(m);
   }
-  // inspect: the pool (records the mosaic order)
   const poolHit = new THREE.Group();
-  place(poolHit, 78, -0.1, 73);
+  place(poolHit, PX, -0.1, PZ);
   w.scene.add(poolHit);
-  makeInspect(w, g, { id: 'inspect.pool', obj: poolHit, clue: 'c.poolTiles', hit: [7, 0.15, 12], hitOffset: [0, 0, 0], label: 'Bekijken: zwembad', reach: 3.2 });
+  makeInspect(w, g, { id: 'inspect.pool', obj: poolHit, clue: 'c.poolTiles', hit: [PW, 0.15, len], hitOffset: [0, 0, 0], label: 'Bekijken: zwembad', reach: 3.2 });
 
-  // ---------------------------------------------------------------- glass shell
+  // ---------------------------------------------------------------- glass shell (the wing wall closes most of the west side)
   const glass = new Batcher();
   const fr = '#2f4a3c';
   const gw = (axis: 'x' | 'z', f: number, a0: number, a1: number, gaps: [number, number][] = []) => {
-    // frame posts every ~2 m, glazing between, colliders with door gaps
-    const n = Math.round((a1 - a0) / 2);
+    const n = Math.max(1, Math.round((a1 - a0) / 2));
     for (let i = 0; i <= n; i++) {
       const a = a0 + ((a1 - a0) * i) / n;
       if (axis === 'x') box(c.b, k.M.paint, fr, a, 0, f, 0.1, H, 0.1, { chunk: c.chunk });
@@ -152,39 +145,41 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
     for (const [s, e] of segs) {
       if (e - s < 0.01) continue;
       if (axis === 'x') {
-        boxMM(glass, k.M.glass, '#ffffff', s, e, 0.08, H - 0.08, f - 0.015, f + 0.015);
+        boxMM(glass, k.M.glass, '#ffffff', s, e, 0.08, H - 0.08, f - 0.015, f + 0.015, { chunk: 'glass' });
         w.col.addBox(s, e, f - 0.08, f + 0.08, 0, H, { occludes: true });
       } else {
-        boxMM(glass, k.M.glass, '#ffffff', f - 0.015, f + 0.015, 0.08, H - 0.08, s, e);
+        boxMM(glass, k.M.glass, '#ffffff', f - 0.015, f + 0.015, 0.08, H - 0.08, s, e, { chunk: 'glass' });
         w.col.addBox(f - 0.08, f + 0.08, s, e, 0, H, { occludes: true });
       }
     }
   };
+  const ED = 100.85; // east door hinge (opening ED … ED + 1.3)
   gw('x', Z0, X0, X1);
   gw('x', Z1, X0, X1);
-  gw('z', X1, Z0, Z1, [[74.85, 76.15]]);
-  gw('z', X0, 80, Z1);
-  // gabled glass roof, ridge along z
-  const ridge = 5.6, half = (X1 - X0) / 2, slope = Math.atan((ridge - H) / half), rl = Math.hypot(half, ridge - H);
+  gw('z', X1, Z0, Z1, [[ED, ED + 1.3]]);
+  gw('z', X0, 109.6, Z1);
+  // the wing roof meets the conservatory: a glazed lean-to strip above the wing wall
+  const ridge = 5.8, half = (X1 - X0) / 2, slope = Math.atan((ridge - H) / half), rl = Math.hypot(half, ridge - H), RX = (X0 + X1) / 2;
   for (const s of [-1, 1]) {
-    box(glass, k.M.glass, '#ffffff', 78 + (s * half) / 2, H + (ridge - H) / 2 - 0.02, 73, rl, 0.03, Z1 - Z0, { rz: s * slope });
-    for (let z = Z0; z <= Z1 + 0.01; z += 2) box(c.b, k.M.paint, fr, 78 + (s * half) / 2, H + (ridge - H) / 2 - 0.08, z, rl, 0.08, 0.08, { rz: s * slope, chunk: c.chunk });
+    box(glass, k.M.glass, '#ffffff', RX + (s * half) / 2, H + (ridge - H) / 2 - 0.02, (Z0 + Z1) / 2, rl, 0.03, Z1 - Z0, { rz: s * slope, chunk: 'glass' });
+    for (let z = Z0; z <= Z1 + 0.01; z += 2) box(c.b, k.M.paint, fr, RX + (s * half) / 2, H + (ridge - H) / 2 - 0.08, z, rl, 0.08, 0.08, { rz: s * slope, chunk: c.chunk });
   }
-  // gable-end glass triangles
   for (const z of [Z0, Z1]) {
     const tri = new THREE.Shape();
     tri.moveTo(-half, 0); tri.lineTo(half, 0); tri.lineTo(0, ridge - H); tri.closePath();
     const tg = new THREE.ShapeGeometry(tri);
-    glass.add(k.M.glass, tg, new THREE.Matrix4().makeTranslation(78, H, -z), '#ffffff', 'glass', false, 0);
+    glass.add(k.M.glass, tg, new THREE.Matrix4().makeTranslation(RX, H, -z), '#ffffff', 'glass', false, 0);
     tg.dispose();
   }
   boxMM(c.b, k.M.paint, fr, X0, X1, H - 0.05, H + 0.05, Z0 - 0.05, Z0 + 0.05, { chunk: c.chunk });
-  box(c.b, k.M.paint, fr, 78, ridge - 0.06, 73, 0.14, 0.14, Z1 - Z0, { chunk: c.chunk });
+  box(c.b, k.M.paint, fr, RX, ridge - 0.06, (Z0 + Z1) / 2, 0.14, 0.14, Z1 - Z0, { chunk: c.chunk });
   const glassMeshes = glass.build(w.scene, false);
   for (const m of glassMeshes) { m.renderOrder = 3; m.castShadow = false; }
 
-  makeDoor(w, g, { id: 'door.conservatoryEast', x: X1, z: 74.85, dir: 'z+', width: 1.3, height: 2.35, y0: GF, swing: 1, style: 'glass' });
-  floor(c, 84, 85.4, 74.6, 76.4, 0.08, k.M.stone, '#d9ccb0', 0.2, true);
+  // doors: from the service corridor (west) and to the garden (east); the conservatory key opens both
+  makeDoor(w, g, { id: 'door.consWest', x: 115.8, z: 101.85, dir: 'z+', width: 1.3, height: 2.3, y0: GF, swing: 1, style: 'glass', key: 'consKey' });
+  makeDoor(w, g, { id: 'door.consEast', x: X1, z: ED, dir: 'z+', width: 1.3, height: 2.35, y0: GF, swing: 1, style: 'glass', key: 'consKey', lockId: 'lock.door.consWest' });
+  floor(c, X1, X1 + 1.4, ED - 0.2, ED + 1.5, 0.08, k.M.stone, '#d9ccb0', 0.2, true);
 
   // ---------------------------------------------------------------- furnishings
   const lounger = (x: number, z: number, yaw: number, towel: string) => {
@@ -194,29 +189,43 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
     part(c, k.M.paint, towel, x, z, yaw, 0, GF + 0.38, 0.3, 0.5, 0.04, 0.5);
     w.col.addBoxC(x, z, 0.75, 1.95, 0, 0.6);
   };
-  lounger(73.1, 70, 0, '#6fae9a');
-  lounger(73.1, 76.5, 0, '#e0a060');
-  lounger(82.9, 70.5, Math.PI, '#9aa8d8');
-  for (const [x, z, s] of [[72.7, 79.3, 1.6], [83.3, 80.9, 1.8], [83.3, 64.8, 1.5], [75.5, 81.2, 1.3], [80.5, 81.2, 1.4], [73.6, 64.9, 1.4]] as const) plant(c, x, z, GF, s, '#c9774a');
-  // small table with folded towels
-  cyl(c.b, k.M.wood, '#a8743f', 83.0, GF, 73.0, 0.35, 0.35, 0.5, 12, { chunk: c.chunk });
-  for (let i = 0; i < 3; i++) box(c.b, k.M.paint, ['#6fae9a', '#f2ead8', '#9aa8d8'][i], 83.0, GF + 0.5 + i * 0.07, 73.0, 0.4, 0.07, 0.3, { chunk: c.chunk });
-  w.col.addCircle(83, 73, 0.4, 0, 0.8);
-  for (const [x, z] of [[75, 66], [81, 66], [75, 80], [81, 80]] as const) {
+  lounger(117.4, 104.5, 0, '#6fae9a');
+  lounger(117.4, 107.6, 0, '#e0a060');
+  lounger(128.7, 104.5, Math.PI, '#9aa8d8');
+  for (const [x, z, s] of [[116.8, 111.2, 1.6], [129.2, 111.2, 1.8], [129.2, 94.8, 1.5], [121, 111.3, 1.3], [125, 111.3, 1.4]] as const) plant(c, x, z, GF, s, '#c9774a');
+  cyl(c.b, k.M.wood, '#a8743f', 129.0, GF, 107.6, 0.35, 0.35, 0.5, 12, { chunk: c.chunk });
+  for (let i = 0; i < 3; i++) box(c.b, k.M.paint, ['#6fae9a', '#f2ead8', '#9aa8d8'][i], 129.0, GF + 0.5 + i * 0.07, 107.6, 0.4, 0.07, 0.3, { chunk: c.chunk });
+  w.col.addCircle(129, 107.6, 0.4, 0, 0.8);
+  for (const [x, z] of [[119, 96], [127, 96], [119, 110], [127, 110]] as const) {
     staticLantern(c, w, x, 2.6, z, 1.0, 0, 3.5, 7);
     box(c.b, k.M.paint, '#2b2622', x, 3.0, z, 0.02, 0.4, 0.02, { chunk: c.chunk });
   }
+  // the forgotten third serving trolley (thread A)
+  const trolley = compound((b) => {
+    for (const y of [0.25, 0.8]) box(b, k.M.paint, '#c9a44c', 0, y, 0, 0.6, 0.04, 1.0);
+    for (const [x, z] of [[-0.28, -0.46], [0.28, -0.46], [-0.28, 0.46], [0.28, 0.46]]) { box(b, k.M.paint, '#8a6a2a', x, 0.05, z, 0.03, 0.8, 0.03); cyl(b, k.M.paint, '#2b2b2b', x, 0, z, 0.05, 0.05, 0.03, 8, { rz: Math.PI / 2 }); }
+    for (let i = 0; i < 3; i++) box(b, k.M.paint, ['#6fae9a', '#f2ead8', '#9aa8d8'][i], 0, 0.29 + i * 0.07, -0.15, 0.45, 0.07, 0.35);
+    for (const z of [0.15, 0.32]) cyl(b, k.M.paint, '#f5f0e6', 0.05, 0.84, z, 0.05, 0.04, 0.07, 10);
+    box(b, k.M.paint, '#f5eedc', -0.12, 0.84, 0.3, 0.12, 0.004, 0.09, { yaw: 0.3 });
+  });
+  place(trolley, 128.6, GF, 99.8, 0.15);
+  w.scene.add(trolley);
+  w.col.addBoxC(128.6, 99.8, 0.75, 1.15, 0, 1);
+  makeInspect(w, g, { id: 'inspect.trolley', obj: trolley, clue: 'c.trolley', hit: [0.8, 1.0, 1.2], hitOffset: [0, 0.4, 0], label: 'Bekijken: serveerwagen' });
 
-  // ---------------------------------------------------------------- the cabinet (beats 5 + 6)
-  const cbz = 66.2;
-  boxMM(c.b, k.M.wood, '#5f3f26', 72.2, 72.75, GF, GF + 0.05, cbz - 0.62, cbz + 0.62, { chunk: c.chunk });
-  boxMM(c.b, k.M.wood, '#5f3f26', 72.2, 72.75, GF + 2.05, GF + 2.47, cbz - 0.65, cbz + 0.65, { chunk: c.chunk });
-  for (const s of [-1, 1]) boxMM(c.b, k.M.wood, '#5f3f26', 72.2, 72.75, GF, GF + 2.05, cbz + s * 0.6 - 0.04, cbz + s * 0.6 + 0.04, { chunk: c.chunk });
-  boxMM(c.b, k.M.wood, '#5f3f26', 72.2, 72.75, GF + 0.9, GF + 0.96, cbz - 0.6, cbz + 0.6, { chunk: c.chunk });
-  boxMM(c.b, k.M.wood, '#4a2f1a', 72.2, 72.25, GF, GF + 2.05, cbz - 0.6, cbz + 0.6, { chunk: c.chunk });
-  boxMM(c.b, k.M.wood, '#5f3f26', 72.2, 72.7, GF + 1.45, GF + 1.48, cbz - 0.56, cbz + 0.56, { chunk: c.chunk });
-  w.col.addBox(72.2, 72.8, cbz - 0.66, cbz + 0.66, 0, 2.6);
-  // Beat 6: four numbered, turnable symbol wheels in the crown board (left→right = 1→4 when facing the cabinet).
+  // ---------------------------------------------------------------- the cabinet against the wing wall (thread A)
+  const cx0 = 116.05, cx1 = 116.6, cbz = 96.4;
+  boxMM(c.b, k.M.wood, '#5f3f26', cx0, cx1, GF, GF + 0.05, cbz - 0.62, cbz + 0.62, { chunk: c.chunk });
+  boxMM(c.b, k.M.wood, '#5f3f26', cx0, cx1, GF + 2.05, GF + 2.47, cbz - 0.65, cbz + 0.65, { chunk: c.chunk });
+  for (const s of [-1, 1]) boxMM(c.b, k.M.wood, '#5f3f26', cx0, cx1, GF, GF + 2.05, cbz + s * 0.6 - 0.04, cbz + s * 0.6 + 0.04, { chunk: c.chunk });
+  boxMM(c.b, k.M.wood, '#5f3f26', cx0, cx1, GF + 0.9, GF + 0.96, cbz - 0.6, cbz + 0.6, { chunk: c.chunk });
+  boxMM(c.b, k.M.wood, '#4a2f1a', cx0, cx0 + 0.05, GF, GF + 2.05, cbz - 0.6, cbz + 0.6, { chunk: c.chunk });
+  boxMM(c.b, k.M.wood, '#5f3f26', cx0, cx1 - 0.05, GF + 1.45, GF + 1.48, cbz - 0.56, cbz + 0.56, { chunk: c.chunk });
+  // closed lower doors (towels)
+  boxMM(c.b, k.M.wood, '#7a5232', cx1 - 0.04, cx1, GF + 0.08, GF + 0.88, cbz - 0.56, cbz - 0.01, { chunk: c.chunk });
+  boxMM(c.b, k.M.wood, '#7a5232', cx1 - 0.04, cx1, GF + 0.08, GF + 0.88, cbz + 0.01, cbz + 0.56, { chunk: c.chunk });
+  w.col.addBox(cx0, cx1 + 0.05, cbz - 0.66, cbz + 0.66, 0, 2.6);
+  // four numbered, turnable symbol wheels in the crown board (left→right = 1→4 when facing the cabinet)
   const symMat: Record<string, THREE.MeshLambertMaterial> = {};
   for (const sname of WHEEL_SYMBOLS) {
     const cv = document.createElement('canvas'); cv.width = cv.height = 96;
@@ -231,15 +240,16 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
   { const x = numCv.getContext('2d')!; x.fillStyle = '#5f3f26'; x.fillRect(0, 0, 256, 32); x.fillStyle = '#f3dca0'; x.font = 'bold 24px Georgia'; x.textAlign = 'center'; ['1', '2', '3', '4'].forEach((n, i) => x.fillText(n, 32 + i * 64, 25)); }
   const numTex = w.texture(new THREE.CanvasTexture(numCv)); numTex.colorSpace = THREE.SRGBColorSpace;
   const nums = new THREE.Mesh(new THREE.PlaneGeometry(1.04, 0.13), w.material(new THREE.MeshLambertMaterial({ map: numTex })));
-  nums.position.copy(v3(72.765, GF + 2.385, cbz));
+  nums.position.copy(v3(cx1 + 0.015, GF + 2.385, cbz));
   nums.rotation.y = Math.PI / 2;
   w.scene.add(nums);
   const wheelMeshes: THREE.Mesh[] = [];
   const spin = [0, 0, 0, 0];
   for (let i = 0; i < 4; i++) {
+    // facing the cabinet (looking west) left is south: wheel 1 sits at the south end
     const zc = cbz - 0.39 + i * 0.26;
     const grp = new THREE.Group();
-    grp.position.copy(v3(72.78, GF + 2.2, zc));
+    grp.position.copy(v3(cx1 + 0.03, GF + 2.2, zc));
     const mesh = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.22, 0.22), [symMat.driehoek, woodSide, woodSide, woodSide, woodSide, woodSide]);
     grp.add(mesh);
     w.scene.add(grp);
@@ -266,59 +276,34 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
       wheelMeshes[i].rotation.x = -spin[i];
     }
   });
-  const lower = makeDoor(w, g, { id: 'cab.lower', x: 72.78, z: cbz - 0.56, dir: 'z+', width: 1.12, height: 0.84, y0: GF + 0.05, swing: -1, color: '#7a5232', unlock: 'lock.cabinetLower', thickness: 0.04 });
-  const upper = makeDoor(w, g, { id: 'cab.upper', x: 72.78, z: cbz - 0.56, dir: 'z+', width: 1.12, height: 1.08, y0: GF + 0.96, swing: -1, style: 'glass', unlock: 'lock.cabinetUpper', thickness: 0.04 });
-  void lower; void upper;
-  const lowIt = w.byId.get('cab.lower')!, upIt = w.byId.get('cab.upper')!;
-  const lowRun = lowIt.run, upRun = upIt.run;
-  lowIt.label = () => (g.state.unlocked.includes('lock.cabinetLower') ? (g.state.open['cab.lower'] ? 'Sluiten' : 'Openen') : 'Onderkast');
-  lowIt.run = () => {
-    if (g.state.unlocked.includes('lock.cabinetLower')) return lowRun();
-    addClue(g.state, 'c.cabinet');
-    g.act({ ok: false, msg: 'De onderkast zit dicht en heeft geen sleutelgat. Een dun draadje loopt van de kast door de vloer naar buiten, de tuin in.', sfx: 'locked' });
-  };
+  makeDoor(w, g, { id: 'cab.upper', x: cx1 + 0.03, z: cbz - 0.56, dir: 'z+', width: 1.12, height: 1.08, y0: GF + 0.96, swing: -1, style: 'glass', unlock: 'lock.cabinetUpper', thickness: 0.04 });
+  const upIt = w.byId.get('cab.upper')!;
+  const upRun = upIt.run;
   upIt.label = () => (g.state.unlocked.includes('lock.cabinetUpper') ? (g.state.open['cab.upper'] ? 'Sluiten' : 'Openen') : 'Glazen deur');
   upIt.run = () => {
     if (g.state.unlocked.includes('lock.cabinetUpper')) return upRun();
     addClue(g.state, 'c.cabinet');
-    g.act({ ok: false, msg: 'De glazen deur zit vast. Erboven zitten vier draaibare tegels, genummerd 1 tot 4.', sfx: 'locked' });
+    g.act({ ok: false, msg: 'De glazen deur zit vast. Erboven zitten vier draaibare tegels, genummerd 1 tot 4. Achter het glas ligt een rond terracotta zegel.', sfx: 'locked' });
   };
-  // crank inside the lower compartment
-  const crank = compound((b) => {
-    box(b, k.M.paint, '#3b3b3b', 0, 0, 0, 0.04, 0.04, 0.5);
-    box(b, k.M.paint, '#3b3b3b', 0, 0, 0.25, 0.04, 0.3, 0.04);
-    cyl(b, k.M.wood, '#8a5a33', 0.0, 0.3, 0.25, 0.03, 0.03, 0.16, 6, { rz: Math.PI / 2 });
+  // the table seal behind the glass
+  const seal = compound((b) => {
+    cyl(b, k.M.paint, '#c4553d', 0, 0, 0, 0.1, 0.1, 0.03, 16, { rz: Math.PI / 2 });
+    box(b, k.M.paint, '#f2e6c8', 0.016, -0.03, 0, 0.005, 0.02, 0.1);
+    blob(b, k.M.paint, '#ffd27a', 0.016, 0.04, 0, 0.005, 0.03, 0.015);
   });
-  place(crank, 72.5, GF + 0.1, cbz, 0.2);
-  w.scene.add(crank);
-  makePickup(w, g, { id: 'pk.crank', item: 'crank', obj: crank, available: () => !!g.state.open['cab.lower'], hit: [0.4, 0.4, 0.6] });
-  // crest + well note in the upper display
-  const crest = compound((b) => {
-    box(b, k.M.paint, '#c0504d', 0, 0, 0, 0.03, 0.26, 0.2);
-    box(b, k.M.paint, '#f2e6c8', 0.016, 0.06, 0, 0.005, 0.16, 0.03);
-    box(b, k.M.paint, '#f2e6c8', 0.016, 0.12, 0, 0.005, 0.03, 0.14);
-  });
-  place(crest, 72.5, GF + 1.5, cbz - 0.2, 0);
-  w.scene.add(crest);
-  makePickup(w, g, { id: 'pk.crest', item: 'crest', obj: crest, available: () => !!g.state.open['cab.upper'], hit: [0.3, 0.35, 0.35] });
-  const wellNote = compound((b) => box(b, k.M.paint, '#f5eedc', 0, 0, 0, 0.2, 0.005, 0.26));
-  place(wellNote, 72.5, GF + 1.0, cbz + 0.25, 0.3);
-  w.scene.add(wellNote);
-  makeAction(w, {
-    id: 'inspect.wellNote', obj: wellNote, hit: [0.35, 0.15, 0.4],
-    label: () => (g.state.open['cab.upper'] ? 'Lezen: aanwijzing' : null),
-    run: () => g.inspect('c.wellNote'),
-  });
+  place(seal, cx0 + 0.3, GF + 1.6, cbz, 0);
+  w.scene.add(seal);
+  makePickup(w, g, { id: 'pk.tableSeal', item: 'tableSeal', obj: seal, available: () => !!g.state.open['cab.upper'], hit: [0.3, 0.3, 0.3] });
 
-  // ---------------------------------------------------------------- barrel sauna (outside, east)
+  // ---------------------------------------------------------------- barrel sauna (outside, to the right)
   buildSauna(w, g, c);
 
-  w.checkpoints.push({ name: 'conservatory', pose: { x: 76, y: GF, z: 65.5, yaw: Math.PI / 2, pitch: -0.2 } });
+  w.checkpoints.push({ name: 'conservatory', pose: { x: 118, y: GF, z: 99.5, yaw: Math.PI / 2, pitch: -0.2 } });
 }
 
 function buildSauna(w: World, g: GameApi, c: Ctx) {
   const k = getKit();
-  const SX = 87, R = 1.9, Z0 = 69, Z1 = 73, AY = 0.25 + R; // barrel axis height
+  const SX = SITES.sauna.x, R = 1.9, Z0 = SITES.sauna.z - 2, Z1 = SITES.sauna.z + 2, AY = 0.25 + R; // barrel axis height
   const FY = 0.8; // raised floor so the curved walls leave a comfortable width
   const woodMat = w.material(new THREE.MeshLambertMaterial({ map: k.T.wood, color: '#c48a52', side: THREE.DoubleSide }));
   const shell = new THREE.Mesh(new THREE.CylinderGeometry(R, R, Z1 - Z0, 22, 1, true), woodMat);

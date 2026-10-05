@@ -56,7 +56,7 @@ export function addEnvironment(w: World): Env {
   sun.shadow.normalBias = 0.04;
   w.scene.add(sun);
   w.scene.add(sun.target);
-  w.scene.fog = new THREE.Fog(A.fog.clone(), 35, 170);
+  w.scene.fog = new THREE.Fog(A.fog.clone(), 30, 125); // vegetation chunks are culled beyond ~105 m (World.VEG_FAR)
 
   const tmp = new THREE.Vector3();
   return {

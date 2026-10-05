@@ -17,7 +17,7 @@ export interface RoomDef {
  * 'window' portals are one-way for lighting: from inside you see outdoor lamps; from outside, lit
  * windows read warm through their emissive glass instead of real lights (no lamp leaks outward).
  */
-export interface PortalDef { a: string; b: string; kind: 'door' | 'arch' | 'window' | 'stair'; door?: string }
+export interface PortalDef { a: string; b: string; kind: 'door' | 'arch' | 'window' | 'stair' | 'glass'; door?: string }
 
 export class RoomGraph {
   private byId = new Map<string, RoomDef>();
@@ -32,19 +32,38 @@ export class RoomGraph {
     return 'out';
   }
 
-  /** The viewer's room plus every room visible through an OPEN portal (one step). */
+  /** The viewer's room plus every room whose LIGHT reaches it through an OPEN portal (one step). */
   relevant(here: string, isOpen: (door: string) => boolean): Set<string> {
     const out = new Set<string>([here]);
     for (const p of this.portals) {
       if (p.door && !isOpen(p.door)) continue;
       if (p.a === here) {
-        // window: room a → outdoors b; from a we see b. Doors/arches/stairs: both ways.
+        // window/glass: room a → outdoors b; from a we see b's lamps. Doors/arches/stairs: both ways.
         out.add(p.b);
-      } else if (p.b === here && p.kind !== 'window') {
+      } else if (p.b === here && p.kind !== 'window' && p.kind !== 'glass') {
         out.add(p.a);
       }
     }
     return out;
+  }
+
+  /**
+   * Rooms whose CONTENTS can be seen from `here`, up to `depth` portal steps. Windows are glowing panes
+   * (opaque); glass walls, open doors, arches and stairs are see-through. Used to hide whole rooms.
+   */
+  visible(here: string, isOpen: (door: string) => boolean, depth = 2): Set<string> {
+    const seen = new Set<string>([here]);
+    let frontier = [here];
+    for (let d = 0; d < depth; d++) {
+      const next: string[] = [];
+      for (const r of frontier) for (const p of this.portals) {
+        if (p.kind === 'window' || (p.door && !isOpen(p.door))) continue;
+        const o = p.a === r ? p.b : p.b === r ? p.a : null;
+        if (o && !seen.has(o)) { seen.add(o); next.push(o); }
+      }
+      frontier = next;
+    }
+    return seen;
   }
 }
 

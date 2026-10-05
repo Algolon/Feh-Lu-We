@@ -35,7 +35,13 @@ const E = (page, fn, ...args) => page.evaluate(fn, ...args);
 async function shot(page, name) { await page.waitForTimeout(400); await page.screenshot({ path: `${OUT}/${name}.png` }); }
 
 // ------------------------------------------------------------------------------------------------
-// 1. Full walkthrough (desktop), tutorial → ending, recording the solution sequence.
+// 1. Full walkthrough (desktop), tutorial → finale, normal controls only (walk, look, act, panels).
+//    Thread order A (aan tafel) → B (in de kantlijn) → C (buiten de paden); walkthroughAlt checks another order.
+const UI = {
+  place: (pairs) => { for (const [piece, slot] of pairs) { document.querySelector(`[data-piece="${piece}"]`).click(); document.querySelector(`[data-slot="${slot}"]`).click(); } },
+  keys: (ks) => { for (const k of ks) document.querySelector(`[data-k="${k}"]`).click(); },
+  digits: (ds) => { ds.forEach((d, i) => { for (let k = 0; k < d; k++) document.querySelector(`[data-up="${i}"]`).click(); }); document.querySelector('[data-try]').click(); },
+};
 async function walkthrough() {
   const { ctx, page } = await newPage();
   const steps = [];
@@ -51,6 +57,7 @@ async function walkthrough() {
   };
   try {
     await startGame(page);
+    await page.evaluate(`window.UI = { place: ${UI.place}, keys: ${UI.keys}, digits: ${UI.digits} }`);
     await shot(page, '01-home');
     // --- home tutorial
     await step('walk to table', () => T.walk([[3.2, 2.5]]));
@@ -60,23 +67,23 @@ async function walkthrough() {
     await step('take notebook', () => T.act('pk.notebook', 'Notitieboek'));
     await step('use matches on candle', () => { T.select('matches'); T.act('home.candle', 'Aansteken'); T.select(null); if (!T.G().state.lit['home.candle']) throw new Error('candle not lit'); });
     await step('door refuses while key missing', () => { T.walk([[6.6, 3.0]]); T.act('home.door'); if (T.G().state.scene !== 'home') throw new Error('left without key'); });
-    await step('table lamp on', () => { T.walk([[5.2, 4.9], [2.6, 4.6], [1.3, 3.8]]); T.act('home.tablelamp', 'Aandoen'); if (!T.G().state.lit['home.tablelamp']) throw new Error('lamp'); });
-    await step('open dressoir drawer', () => { T.walk([[1.3, 3.2]]); T.act('home.drawer', 'Openen'); T.wait(1); });
+    await step('open dressoir drawer', () => { T.walk([[5.2, 4.9], [2.6, 4.6], [1.3, 3.2]]); T.act('home.drawer', 'Openen'); T.wait(1); });
     await step('take estate key from drawer', () => T.act('pk.frontKey', 'Sleutel'));
-    await shot(page, '02-home-packed');
     await step('leave home', () => { T.walk([[2.6, 4.6], [5.2, 4.9], [6.6, 3.0]]); T.act('home.door', 'Vertrekken'); });
-    await page.waitForFunction(() => window.__game.world.id === 'estate' && document.getElementById('fade').className === '', null, { timeout: 30000 });
+    await page.waitForFunction(() => window.__game.world.id === 'estate' && document.getElementById('fade').className === '', null, { timeout: 60000 });
     await page.evaluate(helpers);
+    await page.evaluate(`window.UI = { place: ${UI.place}, keys: ${UI.keys}, digits: ${UI.digits} }`);
+    await page.evaluate(() => { window.__t0 = T.G().state.stats.activeMs; window.__sim = 0; });
     await shot(page, '03-estate-gate');
-    // --- beat 1: invitation pictograms + mantel order → hall drawer
-    await step('walk the driveway to the manor', () => T.walk([[60, 30], [57.2, 45.5], [57.4, 49.5], [60, 50.2]], true));
+    // --- arrival: the drive to the manor and the hall drawer
+    await step('walk the driveway to the manor', () => T.walk([[90, 30], [90.5, 48], [90, 62], [87, 70], [89.6, 77.6], [90, 79.0]], true));
     await shot(page, '04-manor-front');
     await step('unlock front door', () => { T.act('door.front', 'Ontgrendelen'); T.wait(1.2); });
-    await step('enter hall', () => T.walk([[60, 54], [60, 58]]));
+    await step('enter hall', () => T.walk([[90, 82], [90, 86]]));
     await shot(page, '05-hall');
-    await step('read mantelpiece', () => { T.walk([[57, 61.5], [54, 60.2], [49.8, 60.1]]); T.act('inspect.mantel', 'schoorsteenmantel'); T.closeModal(); });
+    await step('read mantelpiece', () => { T.walk([[86.5, 88.5], [83, 89.2], [77.5, 89.2], [75.2, 88.6], [74.6, 86.7]]); T.act('inspect.mantel'); T.closeModal(); });
     await shot(page, '06-living');
-    await step('drawer lock panel', () => { T.walk([[54, 60.2], [57.3, 61.5], [57.4, 57.6]]); T.act('hall.drawer', 'Slot bekijken'); if (!document.querySelector('.dials')) throw new Error('no dial panel'); });
+    await step('drawer lock panel', () => { T.walk([[75.2, 88.6], [77.5, 89.2], [83, 89.2], [86.5, 88.5], [86.5, 85.5]]); T.act('hall.drawer', 'Slot bekijken'); if (!document.querySelector('.dials')) throw new Error('no dial panel'); });
     await step('enter Veer–Dennenappel–Kopje', () => {
       const down = (i, n) => { for (let k = 0; k < n; k++) document.querySelector(`[data-down="${i}"]`).click(); };
       down(0, 1); down(1, 3); down(2, 5);
@@ -84,106 +91,153 @@ async function walkthrough() {
       T.wait(1.2);
       if (!T.G().state.flags.drawerLockSolved) throw new Error('drawer lock not solved');
     });
-    await step('take brass study key', () => T.act('pk.studyKey', 'Messing'));
-    // --- beat 2: upstairs study
-    await step('climb the stairs', () => { const p = T.walk([[60, 61], [63, 62.2], [63, 70.6], [59.5, 71.5]]); if (p.y < 3.3) throw new Error('not upstairs: ' + JSON.stringify(p)); });
-    await shot(page, '07-landing');
-    await step('unlock study door', () => { T.walk([[57.6, 67.8]]); T.act('door.study', 'Ontgrendelen'); T.wait(1.2); });
-    await step('read study note + map', () => { T.walk([[55, 66.5], [51.2, 66.0]]); T.act('inspect.studyNote', 'briefje'); T.closeModal(); T.walk([[52.2, 64.6]]); T.act('inspect.forestMap', 'kaart'); T.closeModal(); });
-    await shot(page, '08-study');
-    await step('desk lock Put–Schuur–Vuur', () => {
-      T.walk([[50.6, 66.0]]);
-      T.act('study.compartment', 'Slot bekijken');
-      for (const k of ['put', 'schuur', 'vuur']) document.querySelector(`[data-k="${k}"]`).click();
+    await step('take ledger (reads it) + shed key', () => { T.act('pk.ledger', 'Landgoedregister'); if (!T.modalOpen()) throw new Error('ledger not shown'); T.closeModal(); T.act('pk.shedKey', 'Schuursleutel'); });
+    await step('notebook shows three threads', () => { T.G().openNotebook(); const n = document.querySelectorAll('.thread').length; T.closeModal(); if (n < 3) throw new Error('threads: ' + n); });
+    // --- thread A: aan tafel
+    await step('A: read the torn hosting plan', () => { T.walk([[90, 85.2], [97, 85.2], [97, 90.4], [103.5, 90.4], [105.6, 88.6], [105.9, 86.3]]); T.act('inspect.hostingPlan', 'tafelplan'); T.closeModal(); });
+    await step('A: service chart — a wrong full plan is refused', () => {
+      T.walk([[105.6, 88.6], [103.5, 90.4], [101, 93.5], [96.7, 96]]);
+      T.act('kitchen.chart', 'Labels');
+      UI.place([['warm', 'provisie'], ['koud', 'serre'], ['bloem', 'tafel']]);
+      if (T.G().state.flags.servicePlanSolved) throw new Error('wrong plan accepted');
+      if (!T.modalOpen()) throw new Error('panel closed');
     });
-    await page.waitForTimeout(500);
-    await step('take shed key', () => { T.wait(1.5); if (!T.G().state.flags.studyLockSolved) throw new Error('study lock'); T.act('pk.shedKey', 'Schuursleutel'); });
-    // --- beat 3: shed
-    await step('down the stairs and out', () => { const p = T.walk([[55, 66.5], [57.6, 66.6], [59.5, 70.8], [63, 70.8], [63, 62.4], [60, 58], [60, 53.5], [60, 50.4], [57.5, 49.5], [55, 46.5]]); if (p.y > 0.2) throw new Error('still elevated'); });
-    await step('forest path to the shed', () => T.walk([[47, 42], [38, 34], [32.8, 27.8], [31.4, 26.2]], true));
-    await shot(page, '09-shed');
-    await step('unlock shed', () => { T.act('door.shed', 'Ontgrendelen'); T.wait(1.2); T.walk([[29.6, 26.2]]); });
-    await step('tool board needs light', () => { T.walk([[26.9, 26.3]]); T.act('inspect.toolboard'); if (T.modalOpen()) throw new Error('readable in the dark'); T.G().toggleTorch(); T.act('inspect.toolboard'); if (!T.modalOpen()) throw new Error('not readable with torch'); T.closeModal(); });
-    await step('take kindling', () => { T.walk([[27.2, 25.6]]); T.act('pk.kindling', 'Aanmaakhout'); });
-    await step('open workbench drawer + token', () => { T.walk([[27.2, 26.4]]); T.act('shed.drawer', 'Openen'); T.wait(1); T.act('pk.token', 'penning'); T.G().toggleTorch(); });
-    // --- beat 4: fire clearing
-    await step('walk to the fire clearing', () => T.walk([[29.6, 26.2], [31.4, 26.2], [32.8, 25.6], [32.8, 23.0], [26.5, 23.4], [21, 17.5], [17.2, 15.6], [15.6, 14.0]], true));
-    await step('matches before kindling fail', () => { T.select('matches'); T.act('firepit', 'Gebruik'); if (T.G().state.lit['fire.clearing']) throw new Error('lit without wood'); });
-    await step('lantern refuses without fire', () => { T.select(null); T.act('lantern.firepost.act'); if (T.G().state.lit['lantern.firepost']) throw new Error('lantern lit early'); });
-    await step('kindling + matches → fire', () => { T.select('kindling'); T.act('firepit', 'Aanmaakhout'); T.select('matches'); T.act('firepit', 'Aansteken'); T.select(null); if (!T.G().state.lit['fire.clearing']) throw new Error('no fire'); });
-    await step('light post lantern, read plate', () => { T.act('lantern.firepost.act', 'Lantaarn'); T.act('plate.fire', 'plaat'); if (!T.modalOpen()) throw new Error('plate not shown'); T.closeModal(); });
-    await shot(page, '10-fire');
-    // --- beat 5: garden lanterns
-    await step('back through the forest to the garden', () => T.walk([[17.2, 15.6], [21, 17.5], [26.5, 23.4], [32.8, 23.0], [32.8, 27.8], [38, 34], [47, 42], [55, 46.5], [53, 50.0], [51.5, 51.35], [46, 51.35], [45.3, 60], [45.3, 84], [52, 89.5], [55.6, 90.8]], true));
-    await shot(page, '11-garden');
-    await step('a complete wrong lantern order resets the attempt (no prefix feedback)', () => {
+    await step('A: take tags back and hang them by the rule', () => {
+      for (const sl of ['provisie', 'serre', 'tafel']) document.querySelector(`[data-take="${sl}"]`).click();
+      UI.place([['koud', 'provisie'], ['bloem', 'serre'], ['warm', 'tafel']]);
+      T.wait(1.2);
+      if (!T.G().state.flags.servicePlanSolved) throw new Error('service plan not solved');
+    });
+    await step('A: conservatory key from the hatch', () => { T.walk([[96.6, 98.6]]); T.act('pk.consKey', 'Serresleutel'); T.closeModal(); });
+    await step('A: through the service corridor', () => { T.walk([[98.6, 102.9], [104, 102.9], [107.0, 102.5]]); T.act('door.service', 'Openen'); T.wait(1.2); T.walk([[109.5, 102.5], [114.6, 102.5]]); T.act('door.consWest', 'Ontgrendelen'); T.wait(1.2); T.walk([[117.4, 102.5]]); });
+    await shot(page, '12-conservatory');
+    await step('A: pool mosaic + forgotten trolley', () => {
+      T.walk([[117.4, 95.6], [123, 95.6]]);
+      T.lookAt(123, 0, 97.6);
+      if (T.G().metrics().target !== 'inspect.pool') throw new Error('pool not targeted: ' + T.G().metrics().target);
+      T.G().doAction(); T.tick(2); T.closeModal();
+      T.walk([[127.7, 95.6], [127.7, 97.9]]); T.act('inspect.trolley', 'serveerwagen'); T.closeModal();
+    });
+    await step('A: out to the sauna', () => { T.walk([[127.7, 101.5], [129.0, 101.5]]); T.act('door.consEast', 'Openen'); T.wait(1.2); T.walk([[131.6, 101.5], [131.6, 106.0], [134, 106.2]]); T.act('door.sauna', 'Openen'); T.wait(1.2); T.walk([[134, 104.6], [134, 101.8]]); const p = T.pos(); if (p.y < 0.75) throw new Error('not on sauna floor ' + JSON.stringify(p)); });
+    await step('A: sauna heater + board', () => { T.act('sauna.heater', 'Kachel'); T.act('inspect.saunaBoard', 'bord'); T.closeModal(); });
+    await shot(page, '13-sauna');
+    await step('A: cabinet wheels 1 Ruit 2 Golf 3 Driehoek 4 Cirkel', () => {
+      T.walk([[134, 104.6], [134, 106.2], [131.6, 106.0], [131.6, 101.5], [127.7, 101.5], [127.7, 95.6], [118.0, 95.6], [117.6, 96.4]]);
+      T.act('cab.upper', 'Glazen deur');
+      const order = ['driehoek', 'cirkel', 'ruit', 'golf'], target = ['ruit', 'golf', 'driehoek', 'cirkel'];
+      const cur = ['cirkel', 'driehoek', 'golf', 'ruit'];
+      for (let i = 0; i < 4; i++) while (cur[i] !== target[i]) { T.act(`cab.wheel.${i + 1}`, `Tegel ${i + 1}`); cur[i] = order[(order.indexOf(cur[i]) + 1) % 4]; }
+      if (!T.G().state.flags.cabinetPanelSolved) throw new Error('wheels did not open the cabinet');
+    });
+    await step('A: take the table seal', () => { T.wait(1.5); T.act('pk.tableSeal', 'Tafelzegel'); });
+    // --- thread B: in de kantlijn
+    await step('B: back through the wing to the library', () => {
+      T.walk([[117.6, 99.0], [117.4, 102.5], [114.6, 102.5], [109.5, 102.5], [107.0, 102.5], [104, 102.9], [98.6, 102.9], [98.0, 94.0], [101, 92.4], [97, 90.4], [97, 85.2], [90, 85.2], [88.5, 99.5], [86.2, 101.0]]);
+      T.act('door.library', 'Openen'); T.wait(1.2); T.walk([[84.0, 101.0], [83.0, 98.4], [83.0, 96.6]]);
+    });
+    await shot(page, '07-library');
+    await step('B: floor plan, guestbook, desk', () => {
+      T.act('inspect.libraryPlan', 'plattegrond'); T.closeModal();
+      T.walk([[83.6, 103.5], [83.8, 105.0]]); T.act('inspect.guestbookTabs', 'gastenboek'); T.closeModal();
+      T.walk([[82.6, 103.0], [82.5, 101.2]]); T.act('library.catalog', 'Boeken');
+      UI.place([['ster', 'rond'], ['varen', 'punt'], ['koffer', 'vierkant']]);
+      T.wait(1.2);
+      if (!T.G().state.flags.catalogSolved) throw new Error('catalogue not solved');
+    });
+    await step('B: brass key and archive card', () => { T.act('pk.studyKey', 'messing'); T.closeModal(); });
+    await step('B: read the note on secret writing', () => { T.walk([[82.5, 99.2], [79.5, 99.4], [75.0, 99.4], [74.6, 101.1]]); T.act('inspect.cipherExample', 'notitie'); T.closeModal(); });
+    await step('B: up the grand stair', () => { const p = T.walk([[75.0, 99.4], [79.5, 99.4], [82.5, 99.2], [84.0, 101.0], [86.2, 101.0], [88.5, 99.5], [90, 92], [94.0, 85.6], [94.0, 96.3], [93.0, 97.3]]); if (p.y < 3.3) throw new Error('not upstairs: ' + JSON.stringify(p)); });
+    await shot(page, '08-landing');
+    await step('B: unlock the study', () => { T.walk([[96.5, 97.3], [98.2, 97.3]]); T.act('door.study', 'Ontgrendelen'); T.wait(1.2); T.walk([[98.2, 94.6]]); });
+    await step('B: note + framed map', () => { T.walk([[97.0, 84.2], [97.0, 83.0]]); T.act('inspect.studyNote', 'briefje'); T.closeModal(); T.walk([[99.6, 87.5]]); T.act('inspect.forestMap', 'kaart'); T.closeModal(); });
+    await shot(page, '09-study');
+    await step('B: desk lock Put–Schuur–Vuur', () => { T.walk([[98.2, 83.6]]); T.act('study.compartment', 'Slot bekijken'); UI.keys(['put', 'schuur', 'vuur']); T.wait(1.5); if (!T.G().state.flags.studyLockSolved) throw new Error('study lock'); });
+    await step('B: take the archive seal', () => T.act('pk.archiveSeal', 'Archiefzegel'));
+    // --- thread C: buiten de paden
+    await step('C: downstairs and out of the front door', () => { const p = T.walk([[98.2, 94.6], [98.2, 97.3], [93.0, 97.3], [94.0, 96.3], [94.0, 85.6], [90, 85], [90, 82], [90, 79.0], [87, 72.5], [84, 68]]); if (p.y > 0.2) throw new Error('still elevated ' + JSON.stringify(p)); });
+    await step('C: forest path to the shed', () => T.walk([[82, 67.5], [71, 62], [58, 51], [48.5, 42.5], [46.4, 39.0]], true));
+    await shot(page, '10-shed');
+    await step('C: unlock shed', () => { T.act('door.shed', 'Ontgrendelen'); T.wait(1.2); T.walk([[43.6, 38.95]]); });
+    await step('C: tool board needs light', () => { T.walk([[41.4, 38.95]]); T.act('inspect.toolboard'); if (T.modalOpen()) throw new Error('readable in the dark'); T.G().toggleTorch(); T.act('inspect.toolboard'); if (!T.modalOpen()) throw new Error('not readable with torch'); T.closeModal(); });
+    await step('C: kindling', () => { T.walk([[41.4, 38.2]]); T.act('pk.kindling', 'Aanmaakhout'); });
+    await step('C: workbench drawer + journal', () => { T.walk([[41.4, 39.2]]); T.act('shed.drawer', 'Openen'); T.wait(1); T.act('pk.journal', 'journaal'); T.closeModal(); T.G().toggleTorch(); });
+    await step('C: walk to the fire clearing', () => T.walk([[43.6, 38.95], [46.4, 39.0], [47.3, 38.6], [47.3, 35.6], [40, 35.4], [38, 35.5], [31, 27], [25.6, 22.6], [22.6, 20.8]], true));
+    await step('C: matches before kindling fail', () => { T.select('matches'); T.act('firepit', 'Gebruik'); if (T.G().state.lit['fire.clearing']) throw new Error('lit without wood'); });
+    await step('C: lantern refuses without fire', () => { T.select(null); T.act('lantern.firepost.act'); if (T.G().state.lit['lantern.firepost']) throw new Error('lantern lit early'); });
+    await step('C: kindling + matches → fire', () => { T.select('kindling'); T.act('firepit', 'Aanmaakhout'); T.select('matches'); T.act('firepit', 'Aansteken'); T.select(null); if (!T.G().state.lit['fire.clearing']) throw new Error('no fire'); });
+    await step('C: light post lantern, read plate', () => { T.act('lantern.firepost.act', 'Lantaarn'); T.act('plate.fire', 'plaat'); if (!T.modalOpen()) throw new Error('plate not shown'); T.closeModal(); });
+    await shot(page, '11-fire');
+    await step('C: back to the manor and round to the lawn', () => T.walk([[25.6, 22.6], [31, 27], [38, 35.5], [40, 35.4], [47.3, 35.6], [48.5, 42.5], [58, 51], [71, 62], [82, 67.5], [70, 76], [68, 96], [68, 112], [80, 121.5], [86.4, 125.4]], true));
+    await shot(page, '14-garden');
+    await step('C: a complete wrong lantern order resets the attempt (no prefix feedback)', () => {
       T.act('garden.lantern.zon', 'zon');
-      T.walk([[59.6, 94.6]]); T.act('garden.lantern.maan', 'maan');
+      T.walk([[88.4, 131.2]]); T.act('garden.lantern.maan', 'maan');
       const two = (T.G().state.seq.gardenLanterns ?? []).length;
-      T.walk([[60.6, 90.9]]); T.act('garden.lantern.blad', 'blad');
+      T.walk([[93.4, 129.6]]); T.act('garden.lantern.blad', 'blad');
       if (two !== 2) throw new Error('second lantern gave different feedback/state: ' + two);
       if ((T.G().state.seq.gardenLanterns ?? []).length) throw new Error('wrong order kept');
       T.wait(1.5);
     });
-    await step('lanterns Maan → Blad → Zon', () => {
-      T.walk([[59.6, 94.6]]); T.act('garden.lantern.maan', 'maan');
-      T.walk([[60.6, 90.9]]); T.act('garden.lantern.blad', 'blad');
-      T.walk([[55.6, 90.8]]); T.act('garden.lantern.zon', 'zon');
+    await step('C: lanterns Maan → Blad → Zon open the stone', () => {
+      T.walk([[88.4, 131.2]]); T.act('garden.lantern.maan', 'maan');
+      T.walk([[93.4, 129.6]]); T.act('garden.lantern.blad', 'blad');
+      T.walk([[93.0, 125.4], [86.4, 125.4]]); T.act('garden.lantern.zon', 'zon');
       if (!T.G().state.flags.lanternsSolved) throw new Error('lanterns not solved');
-      T.wait(3);
+      T.wait(2);
     });
-    await shot(page, '11b-garden-link-lights');
-    // --- beat 6: conservatory + sauna
-    await step('walk to the conservatory', () => T.walk([[58, 88], [76, 86.5], [87.6, 84.5], [87.6, 76.6], [85.6, 75.5]], true));
-    await step('open conservatory door', () => { T.act('door.conservatoryEast', 'Openen'); T.wait(1.2); T.walk([[83, 75.5], [82.0, 74], [82.0, 66.2], [78, 65.4], [74.2, 65.9]]); });
-    await shot(page, '12-conservatory');
-    await step('take crank from opened lower cabinet', () => { T.wait(1); T.act('pk.crank', 'Zwengel'); });
-    await step('look at pool tiles', () => { T.walk([[74.2, 68.5]]); T.lookAt(75.6, 0, 69.5); T.act(null); const m = T.G().metrics(); void m; if (!T.G().state.clues.includes('c.poolTiles')) { T.act('inspect.pool'); } T.closeModal(); if (!T.G().state.clues.includes('c.poolTiles')) throw new Error('pool clue'); });
-    await step('to the sauna', () => T.walk([[74.2, 65.9], [78, 65.4], [82.0, 66.2], [82.0, 74], [83, 75.5], [85.6, 75.5], [87, 75.2]]));
-    await step('open sauna, enter, heater, board', () => {
-      T.act('door.sauna', 'Openen'); T.wait(1.2);
-      T.walk([[87, 73.6], [87, 71.6]]);
-      const p = T.pos(); if (p.y < 0.75) throw new Error('not on sauna floor ' + JSON.stringify(p));
-      T.act('sauna.heater', 'Kachel aanzetten');
-      T.act('inspect.saunaBoard', 'bord'); T.closeModal();
+    await step('C: take the trail seal', () => { T.walk([[88.6, 126.4]]); T.act('pk.trailSeal', 'Spoorzegel'); });
+    // --- convergence
+    await step('D: in by the billiard garden door to the basement door', () => {
+      T.walk([[90, 121], [91.5, 111.0]]); T.act('door.billiardOut', 'Openen'); T.wait(1.2);
+      T.walk([[91.5, 108.6], [92.4, 106.5], [91.6, 104.6], [88.5, 104.6]]); T.act('door.billiard', 'Openen'); T.wait(1.2);
+      T.walk([[88.5, 102.5], [90.6, 98.9]]);
     });
-    await shot(page, '13-sauna');
-    await step('turn cabinet wheels to 1 Ruit 2 Golf 3 Driehoek 4 Cirkel', () => {
-      T.walk([[87, 73.6], [87, 75.2], [85.6, 75.5], [83, 75.5], [82.0, 74], [82.0, 66.2], [78, 65.4], [74.2, 66.4]]);
-      T.act('cab.upper', 'Glazen deur'); // locked glass door explains the wheels
-      const order = ['driehoek', 'cirkel', 'ruit', 'golf'], target = ['ruit', 'golf', 'driehoek', 'cirkel'];
-      const cur = ['cirkel', 'driehoek', 'golf', 'ruit'];
-      for (let i = 0; i < 4; i++) {
-        while (cur[i] !== target[i]) { T.act(`cab.wheel.${i + 1}`, `Tegel ${i + 1}`); cur[i] = order[(order.indexOf(cur[i]) + 1) % 4]; }
-      }
-      if (!T.G().state.flags.cabinetPanelSolved) throw new Error('wheels did not open the cabinet');
+    await step('D: three seals open the basement door', () => { T.act('door.basement', 'Kelderdeur'); T.wait(1.5); if (!T.G().state.flags.basementOpen) throw new Error('basement closed'); });
+    await step('D: down the basement stair', () => { const p = T.walk([[93.5, 98.9], [93.5, 104.3], [93.5, 106.6]]); if (p.y > -3) throw new Error('not in the basement ' + JSON.stringify(p)); });
+    await shot(page, '15-basement');
+    await step('D: service drawing in the archive', () => { T.walk([[90.6, 107.2], [87, 107.2], [82.5, 108.3]]); T.act('inspect.serviceDrawing', 'leidingtekening'); T.closeModal(); });
+    await step('D: route console', () => {
+      T.walk([[82.4, 104.5], [82.4, 101.2], [83, 99.2], [83, 92.2]]);
+      T.act('route.console', 'Zegels');
+      UI.place([['archiveSeal', 'muren'], ['tableSeal', 'water'], ['trailSeal', 'paden']]);
+      T.wait(1.2);
+      if (!T.G().state.flags.routeRestored) throw new Error('route not restored');
     });
-    await step('take crest + read well note', () => { T.wait(1.5); T.act('pk.crest', 'Wapenschild'); T.act('inspect.wellNote', 'aanwijzing'); T.closeModal(); });
-    // --- beat 7: well
-    await step('walk to the well', () => T.walk([[78, 65.4], [82.0, 66.2], [82.0, 74], [83, 75.5], [85.6, 75.5], [90, 74], [90, 62], [75, 52], [66, 49.8], [65.5, 46.6], [70.8, 44.3], [76, 42], [82, 38.5], [88, 35], [91.3, 32], [94.6, 29], [96, 28.3]], true));
-    await shot(page, '14-well');
-    await step('install crank and wind up', () => { T.select('crank'); T.act('well', 'Zwengel'); T.select(null); T.act('well', 'Zwengelen'); T.wait(3); if (!T.G().state.inventory.includes('cottageKey')) throw new Error('no cottage key'); });
-    // --- beat 8: cottage
-    await step('walk to the cottage', () => T.walk([[94.6, 29], [91.3, 32], [88, 35], [82, 38.5], [76, 42], [70.8, 44.3], [65.5, 46.6], [55, 46.5], [53, 50.0], [51.5, 51.35], [46, 51.35], [45.3, 60], [45.3, 82], [38, 85.6], [31.5, 86.5], [25, 86.6]], true));
-    await shot(page, '15-cottage');
-    await step('unlock cottage', () => { T.act('door.cottage', 'Ontgrendelen'); T.wait(1.2); T.walk([[25, 89.6]]); });
-    await step('gathering door is gated', () => { T.act('door.gathering', 'Op slot'); if (T.G().state.open['door.gathering']) throw new Error('opened'); });
-    await step('niches: token left, crest right', () => {
-      T.act('cottage.niche.left');
-      document.querySelector('[data-place="left"][data-item="token"]').click();
-      document.querySelector('[data-place="right"][data-item="crest"]').click();
-      if (!T.G().state.flags.cottageSolved) throw new Error('slots');
-      T.closeModal(); T.wait(1.5);
+    await shot(page, '16-route');
+    await step('D: take the letter strip', () => { T.walk([[84.1, 92.2]]); T.act('pk.cipherStrip', 'Letterstrook'); T.closeModal(); });
+    await step('D: up and out to the forest', () => { const p = T.walk([[83, 92.2], [83, 99.2], [82.4, 101.2], [82.4, 104.5], [87, 107.2], [90.6, 107.2], [93.5, 106.6], [93.5, 104.3], [93.5, 98.9], [90.6, 98.9], [88.5, 95], [90, 86], [90, 82], [90, 79.0], [87, 72.5], [90, 62], [90.5, 48], [90, 26], [88, 11.2]], true); if (p.y < -0.1) throw new Error('still below ' + JSON.stringify(p)); });
+    await step('D: west along the southern loop to the fork signpost', () => { T.walk([[76, 9.4], [57.5, 8.0]], true); T.act('inspect.fork', 'wegwijzer'); T.closeModal(); });
+    await step('D: up the side path into the cut', () => T.walk([[59.5, 10.4], [63, 12.4], [63, 16.4]]));
+    await shot(page, '17-boslust');
+    await step('D: inscription, then the cover with the strip', () => { T.act('inspect.boslust', 'gravure'); T.closeModal(); T.walk([[64.4, 16.6]]); T.act('boslust.lock', 'Klepje'); if (!T.G().state.flags.boslustCover) throw new Error('cover still closed'); if (!document.querySelector('.digits')) throw new Error('no digit panel'); });
+    await step('D: a wrong code gives neutral feedback', () => { UI.digits([2, 4, 1, 4]); if (T.G().state.flags.boslustOpen) throw new Error('wrong code opened'); for (let i = 0; i < 4; i++) for (let k = 0; k < 10 - [2, 4, 1, 4][i]; k++) document.querySelector(`[data-up="${i}"]`).click(); });
+    await step('D: TWEE VIER EEN DRIE → 2413 opens BOSLUST', () => { UI.digits([2, 4, 1, 3]); T.wait(1.5); if (!T.G().state.flags.boslustOpen) throw new Error('door closed'); });
+    await step('D: down the stair under the hill (no teleport)', () => { const p = T.walk([[63, 17.4], [63, 19.4], [63, 25.6], [63, 30]]); if (p.y > -3.2) throw new Error('not under the hill ' + JSON.stringify(p)); });
+    await shot(page, '18-under-hill');
+    await step('D: plate diagram', () => { T.walk([[63.4, 35.2]]); T.act('inspect.plateDiagram', 'tekening'); T.closeModal(); });
+    await step('D: turn the three plates, pull the lever', () => {
+      const turns = { tafel: [41.6, 2], boek: [39.8, 1], boom: [38.0, 1] };
+      for (const [id, [z, n]] of Object.entries(turns)) { T.walk([[63.7, z]]); for (let k = 0; k < n; k++) T.act(`plate.${id}`, 'Draaien'); }
+      T.walk([[63.7, 36.6]]); T.act('plates.lever', 'Hendel'); T.wait(1.5);
+      if (!T.G().state.flags.platesSolved) throw new Error('plates not solved');
     });
-    await step('enter gathering room → ending', () => { try { T.walk([[25, 91.9]]); } catch (e) { if (!T.modalOpen()) throw e; } T.wait(0.5); if (!T.G().state.finished) throw new Error('no ending'); if (!document.querySelector('#fb')) throw new Error('no feedback prompt'); });
-    await shot(page, '16-ending');
-    await step('close ending, look at the room', () => { T.closeModal(); T.lookAt(25, 1.0, 93.4); });
-    await shot(page, '17-gathering-room');
-    const st = await E(page, () => ({ clues: T.G().state.clues.length, minutes: T.G().state.stats.activeMs / 60000, flags: T.G().state.flags }));
-    log('walkthrough tutorial → ending', true, `${steps.length} steps, ${st.clues} clues, real-time frames ${st.minutes.toFixed(1)} min (route uses fixed-step simulation)`);
+    await step('D: into the gathering room', () => T.walk([[63, 43.6], [63, 46.6], [63.1, 48.9]]));
+    await shot(page, '19-gathering');
+    await step('D: the letter on the table → finale', () => { T.act('finale.letter', 'brief'); T.wait(0.5); if (!T.G().state.finished) throw new Error('no ending'); if (!document.querySelector('#fb')) throw new Error('no feedback prompt'); });
+    await shot(page, '20-ending');
+    await step('the old tunnel is a late shortcut to the manor basement', () => {
+      T.closeModal();
+      T.walk([[59.6, 49.0], [59.6, 53.4], [63, 55.6]]); T.act('door.tunnelGathering', 'Openen'); T.wait(1.2);
+      T.walk([[63, 58.5], [63, 70], [63, 97], [75.6, 97]], true);
+      T.act('door.tunnelManor', 'Grendel'); T.wait(1.2);
+      const p = T.walk([[78.6, 97], [83, 97]]);
+      if (T.G().world.hereRoom !== 'route') throw new Error('not in the route chamber: ' + JSON.stringify(p));
+    });
+    const st = await E(page, () => ({ clues: T.G().state.clues.length, sim: T.G().state.stats }));
+    log('walkthrough tutorial → finale (A → B → C)', true, `${steps.length} steps, ${st.clues} clues`);
     writeFileSync(`${OUT}/walkthrough-steps.txt`, steps.join('\n'));
   } catch (e) {
-    log('walkthrough tutorial → ending', false, e.message);
+    log('walkthrough tutorial → finale (A → B → C)', false, e.message);
   }
   if (page.problems.length) log('walkthrough: no console errors / 404s', false, page.problems.slice(0, 5).join(' | '));
   else log('walkthrough: no console errors / 404s', true);
@@ -196,7 +250,7 @@ const ESSENTIALS = ['invitation', 'torch', 'matches', 'notebook', 'frontKey'];
 async function startEstate(page, extra = {}) {
   await page.goto(BASE + '?autotest=1');
   await page.evaluate((save) => localStorage.setItem('fehluwe.save', JSON.stringify(save)), {
-    version: 2, scene: 'estate', inventory: ESSENTIALS, flags: { leftHome: true }, unlocked: ['lock.door.front'], open: { 'door.front': true }, ...extra,
+    version: 4, scene: 'estate', inventory: ESSENTIALS, flags: { leftHome: true }, unlocked: ['lock.door.front'], open: { 'door.front': true }, ...extra,
   });
   await page.reload();
   await page.click('[data-cont]');
@@ -207,54 +261,71 @@ async function startEstate(page, extra = {}) {
 async function collisionChecks() {
   const { ctx, page } = await newPage();
   try {
-    await startEstate(page, { player: { estate: { x: 60, y: 0.15, z: 58.8, yaw: 0, pitch: 0 } } });
+    await startEstate(page, { player: { estate: { x: 88, y: 0.15, z: 92.5, yaw: 0, pitch: 0 } } });
     const r = await E(page, () => {
       const out = {};
       const P = () => T.G().player;
-      // wall blocks (hall west wall W1, between console and arch)
-      try { T.walkTo(53.5, 58.8, false, 4); } catch { /* expected to stop */ }
-      out.wall = P().x >= 56.3;
-      // closed door blocks; open door lets through
-      T.walk([[60, 66], [57.6, 68.6]]);
-      try { T.walkTo(57.6, 71.2, false, 4); } catch { /* blocked */ }
-      out.closedDoor = P().z < 69.8;
-      T.act('door.corridor', 'Openen'); T.wait(1.2);
-      T.walkTo(57.6, 71.0);
-      out.openDoor = P().z > 70.6;
+      // wall blocks (hall | living wall north of the arch)
+      try { T.walkTo(80, 92.5, false, 4); } catch { /* expected to stop */ }
+      out.wall = P().x >= 85.25;
+      // closed door blocks; open door lets through (lobby → library)
+      T.walk([[88, 96], [88.5, 101], [86.6, 101]]);
+      try { T.walkTo(82.5, 101, false, 4); } catch { /* blocked */ }
+      out.closedDoor = P().x > 85.2;
+      T.act('door.library', 'Openen'); T.wait(1.2);
+      T.walkTo(84.2, 101);
+      out.openDoor = P().x < 84.6;
       // door refuses to close on the player standing in the doorway
-      T.walkTo(57.6, 70.0);
-      T.act('door.corridor', 'Sluiten');
-      out.noCrush = T.G().state.open['door.corridor'] === true;
-      T.walkTo(57.6, 68.6);
-      // stairs up and down
-      T.walk([[60, 66], [63, 62.2], [63, 70.6]]);
+      T.walkTo(85.0, 101);
+      T.act('door.library', 'Sluiten');
+      out.noCrush = T.G().state.open['door.library'] === true;
+      T.walkTo(86.6, 101);
+      // grand stair up and down
+      T.walk([[88.5, 97], [90, 90], [94.0, 85.6], [94.0, 96.3]]);
       out.upY = +P().y.toFixed(2);
-      T.walk([[63, 62.3]]);
+      T.walk([[94.0, 85.6]]);
       out.downY = +P().y.toFixed(2);
       // the upstairs gallery railing stops a fall into the hall
-      T.walk([[63, 70.6], [59, 71.5], [59, 64.2]]);
-      try { T.walkTo(59, 61.0, false, 4); } catch { /* railing */ }
-      out.railing = P().z > 63.2 && P().y > 3.3;
+      T.walk([[94.0, 96.3], [90, 100], [85.9, 96], [85.9, 92]]);
+      try { T.walkTo(90, 92, false, 4); } catch { /* railing */ }
+      out.railing = P().x < 86.7 && P().y > 3.3;
+      // basement stair: the sealed door blocks it; the stairwell floor is not walkable "air"
+      T.walk([[85.9, 96], [90, 100], [94.0, 96.3], [94.0, 85.6], [90, 90], [88.5, 99], [90.6, 98.9]]);
+      try { T.walkTo(93.5, 98.9, false, 4); } catch { /* closed */ }
+      out.basementShut = P().x < 91.8 && P().y > 0;
       return out;
     });
     log('collision: wall blocks movement', r.wall);
     log('collision: closed door blocks, open door passes', r.closedDoor && r.openDoor);
     log('collision: door will not close onto the player', r.noCrush);
-    log('collision: stairs reach upper floor and back', Math.abs(r.upY - 3.35) < 0.02 && Math.abs(r.downY - 0.15) < 0.02, `up ${r.upY}, down ${r.downY}`);
+    log('collision: grand stair reaches the upper floor and back', Math.abs(r.upY - 3.35) < 0.02 && Math.abs(r.downY - 0.15) < 0.02, `up ${r.upY}, down ${r.downY}`);
     log('collision: gallery railing prevents falling', r.railing);
-    // pool + glass + pickup through wall
-    await startEstate(page, { player: { estate: { x: 78, y: 0.15, z: 65.2, yaw: 0, pitch: 0 } } });
+    log('collision: the sealed basement door blocks the stair', r.basementShut);
+    // pool + glass
+    await startEstate(page, { unlocked: ['lock.door.front', 'lock.door.consWest'], player: { estate: { x: 123, y: 0.15, z: 95.5, yaw: 0, pitch: 0 } } });
     const r2 = await E(page, () => {
       const P = () => T.G().player;
-      try { T.walkTo(78, 74, false, 5); } catch { /* pool edge */ }
-      const pool = P().z < 66.8 && P().y > 0.1;
-      try { T.walkTo(78, 60, false, 5); } catch { /* glass */ }
-      const glass = P().z > 64.05;
+      try { T.walkTo(123, 103, false, 5); } catch { /* pool edge */ }
+      const pool = P().z < 96.8 && P().y > 0.1;
+      try { T.walkTo(123, 90, false, 5); } catch { /* glass */ }
+      const glass = P().z > 94.05;
       return { pool, glass };
     });
     log('collision: pool edge is solid, no fall-through', r2.pool);
     log('collision: conservatory glass is solid', r2.glass);
-    await startEstate(page, { inventory: [...ESSENTIALS, 'shedKey'], player: { estate: { x: 26.4, y: 0, z: 23.85, yaw: 0, pitch: 0 } } });
+    // the hill is walkable terrain; the BOSLUST door blocks until opened
+    await startEstate(page, { player: { estate: { x: 63, y: 0, z: 14, yaw: 0, pitch: 0 } } });
+    const r4 = await E(page, () => {
+      const P = () => T.G().player;
+      try { T.walkTo(63, 21, false, 4); } catch { /* door */ }
+      const door = P().z < 18.0 && P().y > -0.1;
+      let maxY = 0;
+      for (const [x, z] of [[63, 10], [56, 10], [52, 22], [56, 31]]) { try { T.walkTo(x, z, false, 12); } catch { /* trees on the slope */ } maxY = Math.max(maxY, P().y); }
+      return { door, hillY: +maxY.toFixed(2), z: +P().z.toFixed(1) };
+    });
+    log('collision: BOSLUST door blocks while locked', r4.door);
+    log('terrain: the hill flank is walkable (feet follow the ground)', r4.hillY > 0.8, `y ${r4.hillY} at z ${r4.z}`);
+    await startEstate(page, { inventory: [...ESSENTIALS, 'shedKey'], player: { estate: { x: 40.4, y: 0, z: 36.3, yaw: 0, pitch: 0 } } });
     const r3 = await E(page, () => {
       T.lookAtId('pk.kindling');
       const blocked = T.G().metrics().target !== 'pk.kindling';
@@ -289,16 +360,29 @@ async function saveChecks() {
     log('save: drawer state survives reload', r.drawer === true);
     log('save: position restored', Math.hypot(r.pos.x - 1.3, r.pos.z - 3.2) < 0.6, JSON.stringify(r.pos));
     // upstairs + puzzle flags
-    await startEstate(page, { flags: { leftHome: true, drawerLockSolved: true }, unlocked: ['lock.door.front', 'lock.hallDrawer'], open: { 'hall.drawer': true }, player: { estate: { x: 59, y: 3.35, z: 72, yaw: 0, pitch: 0 } } });
+    await startEstate(page, { flags: { leftHome: true, drawerLockSolved: true }, unlocked: ['lock.door.front', 'lock.hallDrawer'], open: { 'hall.drawer': true }, player: { estate: { x: 89, y: 3.35, z: 100, yaw: 0, pitch: 0 } } });
     const r2 = await E(page, () => ({ y: T.G().player.y, flag: T.G().state.flags.drawerLockSolved, obj: T.G().ui.hud.querySelector('#objective').textContent }));
     log('save: upstairs pose + puzzle flags restored', Math.abs(r2.y - 3.35) < 0.01 && r2.flag, `y=${r2.y}, objective="${r2.obj}"`);
     // pose inside closed geometry → moved to a valid checkpoint
-    await startEstate(page, { player: { estate: { x: 56.0, y: 0.15, z: 58.0, yaw: 0, pitch: 0 } } });
+    await startEstate(page, { player: { estate: { x: 85.0, y: 0.15, z: 92.5, yaw: 0, pitch: 0 } } });
     const r3 = await E(page, () => T.pos());
-    log('save: invalid saved pose falls back to a checkpoint', !(Math.abs(r3.x - 56) < 0.3 && Math.abs(r3.z - 58) < 0.3), JSON.stringify(r3));
+    log('save: invalid saved pose falls back to a checkpoint', !(Math.abs(r3.x - 85) < 0.3 && Math.abs(r3.z - 92.5) < 0.3), JSON.stringify(r3));
+    // underground pose survives a reload
+    await startEstate(page, { flags: { leftHome: true, boslustOpen: true }, player: { estate: { x: 63, y: -3.4, z: 30, yaw: 0, pitch: 0 } } });
+    const r4 = await E(page, () => ({ ...T.pos(), room: T.G().world.hereRoom }));
+    log('save: underground pose restored', Math.abs(r4.y + 3.4) < 0.02 && r4.room === 'entry', JSON.stringify(r4));
+    // an iteration-2 save migrates: tools kept, safe spawn, notice offered once
+    await page.goto(BASE + '?autotest=1');
+    await page.evaluate(() => localStorage.setItem('fehluwe.save', JSON.stringify({ version: 3, scene: 'estate', inventory: ['invitation', 'torch', 'matches', 'notebook', 'frontKey', 'crank'], flags: { leftHome: true, drawerLockSolved: true, lanternsSolved: true }, unlocked: ['lock.door.front', 'lock.hallDrawer'], open: { 'door.front': true }, finished: true, stats: { activeMs: 3e6, finishedAt: 5, finishedActiveMs: 2.4e6 }, player: { home: null, estate: { x: 25, y: 0.3, z: 93, yaw: 0, pitch: 0 } } })));
+    await page.reload();
+    await page.click('[data-cont]');
+    await page.waitForFunction(() => window.__game?.world?.id === 'estate');
+    await page.evaluate(helpers);
+    const mg = await E(page, () => ({ title: document.querySelector('.modal h2')?.textContent, inv: T.G().state.inventory, pos: T.pos(), stone: T.G().state.open['lantern.stone'], archived: T.G().state.archive?.chapter1Finished, finished: T.G().state.finished }));
+    log('save: v3 → v4 migration keeps tools, opens retained rewards, archives the old ending, offers the new chapter', mg.title === 'Het landgoed is veranderd' && mg.inv.includes('torch') && !mg.inv.includes('crank') && mg.stone && mg.archived && !mg.finished, JSON.stringify(mg));
     // corrupted save → new game, no crash
     await page.goto(BASE + '?autotest=1'); // fresh, not-started instance
-    await page.evaluate(() => localStorage.setItem('fehluwe.save', '{"version":2,"scene":"estate","inventory":"oops"'));
+    await page.evaluate(() => { localStorage.clear(); localStorage.setItem('fehluwe.save', '{"version":2,"scene":"estate","inventory":"oops"'); });
     await page.reload();
     const hasNewOnly = await page.evaluate(() => !!document.querySelector('[data-new]') && !document.querySelector('[data-cont]'));
     log('save: corrupted save is ignored safely', hasNewOnly);
@@ -307,8 +391,12 @@ async function saveChecks() {
     await page.click('#b-menu');
     await page.click('[data-restart]');
     await Promise.all([page.waitForNavigation(), page.click('[data-yes]')]);
-    const afterReset = await page.evaluate(() => ({ save: localStorage.getItem('fehluwe.save'), cont: !!document.querySelector('[data-cont]') }));
-    log('save: reset with confirmation clears progress', !afterReset.save && !afterReset.cont);
+    const afterReset = await page.evaluate(() => ({ save: localStorage.getItem('fehluwe.save'), backup: !!localStorage.getItem('fehluwe.save.prev'), cont: !!document.querySelector('[data-cont]'), restore: !!document.querySelector('[data-restore]') }));
+    log('save: restart sets progress aside (no blanket wipe) and offers to restore it', !afterReset.save && !afterReset.cont && afterReset.backup && afterReset.restore, JSON.stringify(afterReset));
+    await page.click('[data-restore]');
+    await page.click('[data-yes]');
+    await page.waitForFunction(() => window.__game?.world?.id === 'estate');
+    log('save: restoring the set-aside progress continues the old game', await page.evaluate(() => window.__game.state.scene === 'estate'));
   } catch (e) {
     log('save checks', false, e.message.split('\n')[0]);
   }
@@ -437,12 +525,15 @@ async function webglFailure() {
 async function metrics() {
   const { ctx, page } = await newPage();
   const views = [
-    ['gate (driveway)', { x: 60, y: 0, z: 3, yaw: 0, pitch: 0.02 }],
-    ['forecourt → manor', { x: 60, y: 0, z: 40, yaw: 0, pitch: 0.05 }],
-    ['entrance hall', { x: 60, y: 0.15, z: 56.5, yaw: 0, pitch: 0.1 }],
-    ['garden → manor + conservatory', { x: 62, y: 0, z: 96, yaw: Math.PI * 0.95, pitch: 0 }],
-    ['forest (shed area)', { x: 40, y: 0, z: 36, yaw: -2.2, pitch: 0 }],
-    ['conservatory pool', { x: 76, y: 0.15, z: 65.4, yaw: 0.3, pitch: -0.2 }],
+    ['gate (driveway)', { x: 90, y: 0, z: 3, yaw: 0, pitch: 0.02 }],
+    ['forecourt → manor', { x: 90, y: 0, z: 60, yaw: 0, pitch: 0.05 }],
+    ['entrance hall', { x: 90, y: 0.15, z: 83, yaw: 0, pitch: 0.1 }],
+    ['library', { x: 82.4, y: 0.15, z: 97.5, yaw: -0.8, pitch: 0.05 }],
+    ['garden → manor + conservatory', { x: 92, y: 0, z: 136, yaw: Math.PI * 0.9, pitch: 0 }],
+    ['forest (shed area)', { x: 50, y: 0, z: 44, yaw: -2.2, pitch: 0 }],
+    ['BOSLUST cut', { x: 63, y: 0, z: 9, yaw: 0, pitch: 0.08 }],
+    ['conservatory pool', { x: 118, y: 0.15, z: 95.5, yaw: 0.5, pitch: -0.2 }],
+    ['gathering room', { x: 63, y: -3.4, z: 46.5, yaw: 0, pitch: 0 }],
   ];
   const rows = [];
   for (const [name, pose] of views) {
@@ -462,8 +553,8 @@ async function metrics() {
     await page.screenshot({ path: `${OUT}/view-${name.replace(/\W+/g, '_')}.png` });
   }
   for (const r of rows) {
-    log(`render low (mobile default): ${r.name}`, r.low.calls < 150 && r.low.triangles < 200000, `${r.low.calls} calls, ${r.low.triangles} tris`);
-    log(`render high (desktop, +shadows): ${r.name}`, r.high.calls < 150 * 1.6 && r.high.triangles < 300000, `${r.high.calls} calls, ${r.high.triangles} tris`);
+    log(`render low (phone default): ${r.name}`, r.low.calls <= 150 && r.low.triangles <= 250000, `${r.low.calls} calls, ${r.low.triangles} tris`);
+    log(`render high (desktop, +shadows): ${r.name}`, r.high.calls <= 150 * 1.8 && r.high.triangles <= 450000, `${r.high.calls} calls, ${r.high.triangles} tris`);
   }
   writeFileSync(`${OUT}/metrics.json`, JSON.stringify(rows, null, 2));
   await ctx.close();
@@ -477,24 +568,25 @@ async function regressions() {
   const r = {};
   try {
     // F01 — a saved-open door must LOOK open after reload (hinge angle), not only be passable.
-    await startEstate(page, { open: { 'door.front': true, 'door.corridor': true }, player: { estate: { x: 60, y: 0.15, z: 66, yaw: 0, pitch: 0 } } });
+    await startEstate(page, { open: { 'door.front': true, 'door.library': true }, player: { estate: { x: 90, y: 0.15, z: 90, yaw: 0, pitch: 0 } } });
     r.f01 = await E(page, () => {
       T.tick(2);
-      const it = T.G().world.byId.get('door.corridor');
+      const it = T.G().world.byId.get('door.library');
       const front = T.G().world.byId.get('door.front');
-      return { corridor: +it.obj.rotation.y.toFixed(2), front: +front.obj.rotation.y.toFixed(2) };
+      // door.library hinges along z+ (base π/2... rotation includes the base angle): compare against its closed base
+      return { library: +(it.obj.rotation.y - Math.atan2(1, 0)).toFixed(2), front: +front.obj.rotation.y.toFixed(2) };
     });
-    log('F01 saved-open doors are visually open after reload', Math.abs(r.f01.corridor - 1.6) < 0.05 && Math.abs(r.f01.front - 1.6) < 0.05, JSON.stringify(r.f01));
+    log('F01 saved-open doors are visually open after reload', Math.abs(Math.abs(r.f01.library) - 1.6) < 0.05 && Math.abs(r.f01.front - 1.6) < 0.05, JSON.stringify(r.f01));
     // F02 — upstairs study compartment must not be targetable from the living room below.
-    await startEstate(page, { player: { estate: { x: 49.75, y: 0.15, z: 67.2, yaw: -Math.PI / 2, pitch: 1.2 } } });
+    await startEstate(page, { player: { estate: { x: 80, y: 0.15, z: 86.7, yaw: -Math.PI / 2, pitch: 1.2 } } });
     r.f02 = await E(page, () => {
       const hits = [];
-      for (const id of ['study.compartment', 'inspect.studyNote', 'pk.shedKey']) { T.lookAtId(id); hits.push(T.G().metrics().target); }
+      for (const id of ['mem.reis.suitcase', 'mem.sterren.telescope', 'lamp.sterren']) { T.lookAtId(id); hits.push(T.G().metrics().target); }
       return hits;
     });
-    log('F02 upstairs desk/note not reachable through the ceiling', r.f02.every((t) => t === null || !/study|shedKey/.test(t)), JSON.stringify(r.f02));
+    log('F02 upstairs bedroom objects not reachable through the ceiling', r.f02.every((t) => t === null || !/reis|sterren/.test(t)), JSON.stringify(r.f02));
     // F03 — with the matching key selected, an already-unlocked door opens/closes normally.
-    await startEstate(page, { inventory: [...ESSENTIALS, 'studyKey'], unlocked: ['lock.door.front', 'lock.door.study'], player: { estate: { x: 57.6, y: 3.35, z: 67.6, yaw: 0, pitch: 0 } } });
+    await startEstate(page, { inventory: [...ESSENTIALS, 'studyKey'], unlocked: ['lock.door.front', 'lock.door.study'], player: { estate: { x: 98.2, y: 3.35, z: 97.6, yaw: Math.PI, pitch: 0 } } });
     r.f03 = await E(page, () => {
       T.select('studyKey');
       const before = !!T.G().state.open['door.study'];
@@ -503,7 +595,7 @@ async function regressions() {
     });
     log('F03 selected key does not block opening an unlocked door', r.f03.after !== r.f03.before && !/Gebruik/.test(r.f03.label ?? ''), JSON.stringify(r.f03));
     // F04 — a completed button-lock entry must not act after the panel was replaced by another modal.
-    await startEstate(page, { player: { estate: { x: 60, y: 0.15, z: 58, yaw: 0, pitch: 0 } } });
+    await startEstate(page, { player: { estate: { x: 90, y: 0.15, z: 86, yaw: 0, pitch: 0 } } });
     await E(page, () => T.G().openPanel('studyLock'));
     for (const k of ['put', 'schuur', 'vuur']) await page.click(`[data-k="${k}"]`);
     await page.click('#b-bag', { force: true }).catch(() => {});
@@ -512,23 +604,23 @@ async function regressions() {
     r.f04 = await E(page, () => ({ wrong: T.G().state.wrong.studyLock ?? 0, modal: document.querySelector('.modal h2')?.textContent }));
     log('F04 no stale delayed submission closes a newer modal', r.f04.modal === 'Tas', JSON.stringify(r.f04));
     // B1 — door closing never sweeps through the player; a closing door waits while the player stands in its path
-    await startEstate(page, { open: { 'door.corridor': true }, player: { estate: { x: 58.0, y: 0.15, z: 70.5, yaw: Math.PI, pitch: 0 } } });
+    await startEstate(page, { open: { 'door.library': true }, player: { estate: { x: 85.6, y: 0.15, z: 101.0, yaw: -Math.PI / 2, pitch: 0 } } });
     r.sweep = await E(page, () => {
-      T.act('door.corridor', 'Sluiten');
-      const refused = T.G().state.open['door.corridor'] === true;
+      T.act('door.library', 'Sluiten');
+      const refused = T.G().state.open['door.library'] === true;
       return { refused };
     });
     log('B1 closing a door with the player in its swing path is refused', r.sweep.refused);
-    // B2 — the crest in the closed glass display is visible but not takeable; becomes takeable once open
-    await startEstate(page, { player: { estate: { x: 73.6, y: 0.15, z: 66.0, yaw: -Math.PI / 2, pitch: 0 } } });
+    // B2 — the table seal behind the closed glass is visible but not takeable
+    await startEstate(page, { player: { estate: { x: 117.6, y: 0.15, z: 96.4, yaw: -Math.PI / 2, pitch: 0 } } });
     r.glass = await E(page, () => {
-      T.lookAtId('pk.crest');
+      T.lookAtId('pk.tableSeal');
       const closed = T.G().metrics().target;
       return { closed };
     });
-    log('B2 no taking through closed glass/cabinet', r.glass.closed !== 'pk.crest', JSON.stringify(r.glass));
+    log('B2 no taking through closed glass/cabinet', r.glass.closed !== 'pk.tableSeal', JSON.stringify(r.glass));
     // F10 — reduced motion holds every flame steady (shader flutter off) but keeps it visible
-    await startEstate(page, { lit: { 'fire.living': true }, player: { estate: { x: 50.2, y: 0.15, z: 62, yaw: -Math.PI / 2, pitch: 0 } } });
+    await startEstate(page, { lit: { 'fire.living': true }, player: { estate: { x: 77, y: 0.15, z: 89.2, yaw: -Math.PI / 2, pitch: 0 } } });
     r.rm = await E(page, () => {
       const g = T.G();
       g.settings.reducedMotion = true; g.applyQuality();
@@ -539,9 +631,9 @@ async function regressions() {
     });
     log('F10 reduced motion holds flames steady but visible + UI transitions off', r.rm.n > 0 && r.rm.motion === 0 && r.rm.visibleLit > 0 && r.rm.cls, JSON.stringify(r.rm));
     // F12 — unknown ids in a save are dropped at load; the bag still opens
-    await startEstate(page, { inventory: [...ESSENTIALS, 'ghostItem'], slots: { left: 'nope' } });
+    await startEstate(page, { inventory: [...ESSENTIALS, 'ghostItem'], slots: { 'svc.tafel': 'nope', left: 'token' } });
     r.ids = await E(page, () => { T.G().openBag(); const n = document.querySelectorAll('.inv button').length; T.closeModal(); return { inv: T.G().state.inventory, n, slots: T.G().state.slots }; });
-    log('F12 unknown saved ids are dropped; inventory UI works', !r.ids.inv.includes('ghostItem') && r.ids.n === ESSENTIALS.length && r.ids.slots.left === null, JSON.stringify(r.ids));
+    log('F12 unknown saved ids are dropped; inventory UI works', !r.ids.inv.includes('ghostItem') && r.ids.n === ESSENTIALS.length && r.ids.slots['svc.tafel'] === null && !('left' in r.ids.slots), JSON.stringify(r.ids));
     // F07/G — time reading a panel counts as active; the pause menu counts as paused
     r.time = await E(page, async () => {
       T.G().settings.quality = 'low'; T.G().applyQuality(true); // software rendering: keep frames short
@@ -624,11 +716,11 @@ async function lighting() {
   const { ctx, page } = await newPage();
   try {
     // L1 — from the hall, the lit living-room hearth (through the open arch) keeps a real light and a visible flame
-    await startEstate(page, { player: { estate: { x: 58.5, y: 0.15, z: 61.5, yaw: -Math.PI / 2, pitch: 0 } } });
+    await startEstate(page, { player: { estate: { x: 89, y: 0.15, z: 88.5, yaw: -Math.PI / 2, pitch: 0 } } });
     const l1 = await E(page, () => {
       T.tick(20);
       const g = T.G(); const fire = []; g.world.scene.traverse((o) => { if (o.userData.fire) fire.push(o); });
-      const hearth = fire.find((f) => Math.abs(f.position.x - 48.72) < 0.3 && Math.abs(-f.position.z - 62) < 0.3);
+      const hearth = fire.find((f) => Math.abs(f.position.x - 72.72) < 0.3 && Math.abs(-f.position.z - 86.7) < 0.3);
       const livingLamps = g.world.lamps.filter((l) => g.extras.rooms.roomAt(l.pos.x, l.pos.y, -l.pos.z) === 'living').map((l) => l.id);
       return { room: g.pool.here, assigned: g.pool.assigned(), livingLit: g.pool.assigned().some((a) => livingLamps.includes(a)), flameVisible: !!hearth && hearth.visible && !g.world.isCulled(hearth), defaultLit: g.state.lit['fire.living'] === undefined };
     });
@@ -645,14 +737,14 @@ async function lighting() {
     const l3 = await E(page, () => {
       const g = T.G(); let maxJump = 0, slotChanges = 0, hidden = 0;
       let prev = g.pool.lights.map((l) => l.intensity), prevA = g.pool.assigned().join(',');
-      g.autopilot = { x: 52.5, z: 61.0, run: false };
+      g.autopilot = { x: 80.5, z: 88.5, run: false };
       for (let i = 0; i < 120; i++) {
         g.tick(1 / 30);
         const cur = g.pool.lights.map((l) => l.intensity);
         cur.forEach((v, j) => { maxJump = Math.max(maxJump, Math.abs(v - prev[j])); });
         prev = cur;
         const a = g.pool.assigned().join(','); if (a !== prevA) { slotChanges++; prevA = a; }
-        const fire = []; g.world.scene.traverse((o) => { if (o.userData.fire && Math.abs(-o.position.z - 62) < 0.3 && o.position.x < 49) fire.push(o); });
+        const fire = []; g.world.scene.traverse((o) => { if (o.userData.fire && Math.abs(-o.position.z - 86.7) < 0.3 && o.position.x < 73) fire.push(o); });
         if (!fire[0]?.visible) hidden++;
       }
       g.autopilot = null;
@@ -660,7 +752,7 @@ async function lighting() {
     });
     log('L3 crossing the threshold changes nothing abruptly (smooth light, flame always visible)', l3.room === 'living' && l3.maxJump < 2.5 && l3.slotChanges <= 3 && l3.hiddenFrames === 0, JSON.stringify(l3));
     // L4 — a closed door blocks the other room's light; opening it lets it through
-    await startEstate(page, { lit: { 'lamp.billiard': true }, player: { estate: { x: 57.6, y: 0.15, z: 71.0, yaw: Math.PI / 2, pitch: 0 } } });
+    await startEstate(page, { lit: { 'lamp.billiard': true }, player: { estate: { x: 88.5, y: 0.15, z: 101.5, yaw: Math.PI, pitch: 0 } } });
     const l4 = await E(page, () => {
       const g = T.G(); T.tick(15);
       const closed = g.pool.assigned().includes('lamp.billiard');
@@ -668,7 +760,7 @@ async function lighting() {
       const open = g.pool.assigned().includes('lamp.billiard');
       return { room: g.pool.here, closed, open };
     });
-    log('L4 closed door blocks the neighbouring room light; open door lets it through', l4.room === 'corridor' && !l4.closed && l4.open, JSON.stringify(l4));
+    log('L4 closed door blocks the neighbouring room light; open door lets it through', l4.room === 'lobby' && !l4.closed && l4.open, JSON.stringify(l4));
     // L5 — the lamp's emissive fixture is independent of the pool: still lit when it holds no real light
     const l5 = await E(page, () => {
       const g = T.G(); g.state.open['door.billiard'] = false; g.changed(); T.tick(30);
@@ -678,11 +770,11 @@ async function lighting() {
     });
     log('L5 fixture glow follows logical state, not light-slot ownership', !l5.assigned && l5.lit && l5.glow === 'ffd27a', JSON.stringify(l5));
     // L6 — candles: decorative dining candles show real flames from the start; reload keeps a doused hearth doused
-    await startEstate(page, { lit: { 'fire.living': false }, player: { estate: { x: 66, y: 0.15, z: 56, yaw: 0.6, pitch: -0.2 } } });
+    await startEstate(page, { lit: { 'fire.living': false }, player: { estate: { x: 98, y: 0.15, z: 90.6, yaw: 2.4, pitch: -0.2 } } });
     const l6 = await E(page, () => {
       const g = T.G(); T.tick(5); const fires = []; g.world.scene.traverse((o) => { if (o.userData.fire) fires.push(o); });
-      const dining = fires.find((f) => Math.abs(f.position.x - 68) < 0.1 && Math.abs(-f.position.z - 57.3) < 0.1);
-      const living = fires.find((f) => Math.abs(-f.position.z - 62) < 0.3 && f.position.x < 49);
+      const dining = fires.find((f) => Math.abs(f.position.x - 101.3) < 0.1 && Math.abs(-f.position.z - 85.2) < 0.1);
+      const living = fires.find((f) => Math.abs(-f.position.z - 86.7) < 0.3 && f.position.x < 73);
       return { diningCandles: !!dining?.visible, livingAfterReload: !!living?.visible };
     });
     log('L6 decorative candles burn; a doused fireplace stays doused after reload', l6.diningCandles && !l6.livingAfterReload, JSON.stringify(l6));

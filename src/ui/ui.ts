@@ -1,7 +1,7 @@
 // HTML user interface: HUD, toasts, modal overlays and puzzle panels. No hover-only actions;
 // every control is a ≥48px button. Overlays block world input while open.
 import { ITEMS } from '../content/items';
-import { CLUES, CLUE_GROUP, type ClueDef } from '../content/clues';
+import { CLUES, CLUE_GROUP, THREADS, type ClueDef } from '../content/clues';
 import { symbolSvg, SYMBOLS } from '../content/symbols';
 import { DIAGRAMS } from './diagrams';
 import { icon, itemIcon } from './icons';
@@ -180,15 +180,7 @@ export class UI {
   clueHtml(c: ClueDef) {
     let syms = '';
     if (c.symbols?.length) {
-      if (c.symbolsLayout === 'ring') {
-        const n = c.symbols.length;
-        syms = `<div class="syms ring">${c.symbols.map((s, i) => {
-          const a = (i / n) * Math.PI * 2 - Math.PI / 2;
-          return `<div class="s" style="left:${62 + Math.cos(a) * 58}px;top:${50 + Math.sin(a) * 48}px">${symbolSvg(s, 42)}<span>${SYMBOLS[s].name}</span></div>`;
-        }).join('')}</div>`;
-      } else {
-        syms = `<div class="syms">${c.symbols.map((s, i) => `<div class="s">${symbolSvg(s, 44)}<span>${SYMBOLS[s].name}</span></div>${c.symbolsLayout === 'arrow' && i < c.symbols!.length - 1 ? '<span class="arrow">→</span>' : ''}`).join('')}</div>`;
-      }
+      syms = `<div class="syms">${c.symbols.map((s, i) => `<div class="s">${symbolSvg(s, 44)}<span>${SYMBOLS[s].name}</span></div>${c.symbolsLayout === 'arrow' && i < c.symbols!.length - 1 ? '<span class="arrow">→</span>' : ''}`).join('')}</div>`;
     }
     const diag = c.diagram ? DIAGRAMS[c.diagram]() : '';
     return `${syms}${diag}<p>${esc(c.text)}</p>`;
@@ -237,52 +229,79 @@ export class UI {
     render();
   }
 
-  notebook(o: { clues: string[]; solved: Set<string>; onMap?: () => void }) {
+  notebook(o: { clues: string[]; solved: Set<string>; threads: { id: string; title: string; sub: string; done: boolean; next: string; tracked: boolean; started: boolean }[]; onTrack: (id: string) => void; onMap?: () => void; tab?: string }) {
     const clues = o.clues.map((id) => CLUES[id]).filter(Boolean);
     const main = clues.filter((c) => !c.memory);
     const mem = clues.filter((c) => c.memory);
-    const body = this.modal('Notitieboek', `<div class="tabs" role="tablist"><button class="btn on" data-t="a">Aanwijzingen (${main.length})</button><button class="btn" data-t="b">Herinneringen (${mem.length})</button>${o.onMap ? '<button class="btn" data-t="m">Kaart</button>' : ''}</div><div id="nb"></div>`);
+    const body = this.modal('Notitieboek', `<div class="tabs" role="tablist"><button class="btn" data-t="d">Draden</button><button class="btn" data-t="a">Aanwijzingen (${main.length})</button><button class="btn" data-t="b">Herinneringen (${mem.length})</button>${o.onMap ? '<button class="btn" data-t="m">Kaart</button>' : ''}</div><div id="nb"></div>`);
     const nb = $('#nb', body);
     const card = (c: ClueDef, open: boolean) => {
       const pz = CLUE_GROUP[c.id]?.puzzle;
       const done = pz && o.solved.has(pz) ? '<span class="badge">✓ opgelost</span>' : '';
       return `<details class="clue" ${open ? 'open' : ''}><summary><h3>${esc(c.title)}</h3>${done}</summary>${this.clueHtml(c)}</details>`;
     };
+    const showThreads = () => {
+      nb.innerHTML = `<p class="muted">Het huis bewaart drie delen van de route. Je kunt ze in elke volgorde volgen. Kies er een om te volgen: de doelregel bovenin en de hints gaan dan over die draad.</p>` +
+        o.threads.map((t) => `<div class="thread ${t.done ? 'done' : ''} ${t.tracked ? 'tracked' : ''}"><div class="th-head"><b>${esc(t.title)}</b><span class="muted"> · ${esc(t.sub)}</span>${t.done ? '<span class="badge">✓ afgerond</span>' : ''}</div>` +
+          `<div class="th-next">${t.done ? 'Klaar.' : t.started ? esc(t.next) : '<span class="muted">Nog niet begonnen.</span> ' + esc(t.next)}</div>` +
+          (t.done ? '' : `<button class="btn ${t.tracked ? 'primary' : ''}" data-track="${t.id}" aria-pressed="${t.tracked}">${t.tracked ? '✓ Je volgt deze draad' : 'Volg deze draad'}</button>`) + `</div>`).join('') +
+        `<div class="row" style="margin-top:6px"><button class="btn" data-track="auto">Automatisch kiezen</button></div>`;
+      nb.querySelectorAll<HTMLButtonElement>('[data-track]').forEach((b) => b.addEventListener('click', () => o.onTrack(b.dataset.track!)));
+    };
     const showMain = () => {
       if (!main.length) { nb.innerHTML = '<p class="muted">Nog niets genoteerd. Bekijk dingen in de wereld om ze te bewaren.</p>'; return; }
       const recent = main.slice(-2).reverse();
       const groups = new Map<string, ClueDef[]>();
       for (const c of main) {
-        const g = CLUE_GROUP[c.id]?.area ?? 'Overig';
+        const tid = CLUE_GROUP[c.id]?.thread ?? 'start';
+        const g = THREADS.find((t) => t.id === tid)?.title ?? 'Overig';
         if (!groups.has(g)) groups.set(g, []);
         groups.get(g)!.push(c);
       }
+      const order = THREADS.map((t) => t.title);
       nb.innerHTML = `<h4 class="grp">Nieuwste</h4>${recent.map((c) => card(c, true)).join('')}` +
-        [...groups].map(([g, list]) => `<h4 class="grp">${esc(g)}</h4>${list.map((c) => card(c, false)).join('')}`).join('');
+        [...groups].sort((p, q) => order.indexOf(p[0]) - order.indexOf(q[0])).map(([g, list]) => `<h4 class="grp">${esc(g)}</h4>${list.map((c) => card(c, false)).join('')}`).join('');
     };
     const showMem = () => {
       nb.innerHTML = mem.length ? [...mem].reverse().map((c) => card(c, true)).join('') : '<p class="muted">Nog geen herinneringen gevonden.</p>';
     };
-    showMain();
-    body.querySelectorAll<HTMLButtonElement>('.tabs .btn').forEach((b) => b.addEventListener('click', () => {
+    const tabs = body.querySelectorAll<HTMLButtonElement>('.tabs .btn');
+    const show = (t: string) => {
+      tabs.forEach((x) => x.classList.toggle('on', x.dataset.t === t));
+      if (t === 'd') showThreads(); else if (t === 'a') showMain(); else showMem();
+    };
+    show(o.tab ?? 'd');
+    tabs.forEach((b) => b.addEventListener('click', () => {
       if (b.dataset.t === 'm') { o.onMap?.(); return; }
-      body.querySelectorAll('.tabs .btn').forEach((x) => x.classList.toggle('on', x === b));
-      if (b.dataset.t === 'a') showMain(); else showMem();
+      show(b.dataset.t!);
     }));
   }
 
-  map(svg: string, onBack?: () => void) {
-    const body = this.modal('Kaart van het landgoed', svg + (onBack ? '<div class="row center" style="margin-top:8px"><button class="btn" data-back>Terug</button></div>' : ''));
+  map(views: { id: string; label: string; svg: string }[], initial: string, onBack?: () => void, note = '') {
+    const body = this.modal('Kaart', `${views.length > 1 ? `<div class="tabs" role="tablist">${views.map((v) => `<button class="btn" data-v="${v.id}">${esc(v.label)}</button>`).join('')}</div>` : ''}<div id="mapv"></div>` +
+      (note ? `<p class="muted" style="text-align:center">${esc(note)}</p>` : '') +
+      (onBack ? '<div class="row center" style="margin-top:8px"><button class="btn" data-back>Terug</button></div>' : ''));
+    const host = $('#mapv', body);
+    const show = (id: string) => {
+      const v = views.find((q) => q.id === id) ?? views[0];
+      host.innerHTML = v.svg;
+      body.querySelectorAll<HTMLButtonElement>('[data-v]').forEach((b) => { b.classList.toggle('on', b.dataset.v === v.id); b.setAttribute('aria-selected', String(b.dataset.v === v.id)); });
+    };
+    body.querySelectorAll<HTMLButtonElement>('[data-v]').forEach((b) => b.addEventListener('click', () => show(b.dataset.v!)));
+    show(initial);
     body.querySelector('[data-back]')?.addEventListener('click', () => onBack?.());
   }
 
-  hints(o: { title: string; hints: string[]; shown: number; choices: { id: string; title: string }[]; current: string; onPick: (id: string) => void; onMore: () => void }) {
+  hints(o: { title: string; hints: string[]; shown: number; choices: { id: string; title: string }[]; current: string; onPick: (id: string) => void; onMore: () => void; thread?: string; last?: string | null; next?: string | null }) {
     const body = this.modal(`Hint · ${o.title}`, '');
     const render = (n: number) => {
       const picker = o.choices.length > 1
         ? `<div class="tabs" role="tablist" aria-label="Kies een raadsel">${o.choices.map((c) => `<button class="btn ${c.id === o.current ? 'on' : ''}" role="tab" aria-selected="${c.id === o.current}" data-pick="${c.id}">${esc(c.title)}</button>`).join('')}</div>`
         : '';
-      body.innerHTML = picker + `<p class="muted">Hints zijn optioneel en worden alleen op dit apparaat bijgehouden voor de testronde.</p>` +
+      const ctx = (o.thread ? `<p class="muted">Draad: <b>${esc(o.thread)}</b></p>` : '') +
+        (o.last ? `<div class="hint obs"><b>Laatst gezien:</b> ${esc(o.last)}</div>` : '') +
+        (o.next ? `<div class="hint nextstep"><b>Volgende stap:</b> ${esc(o.next)}</div>` : '');
+      body.innerHTML = picker + ctx + `<p class="muted">Hints zijn optioneel en worden alleen op dit apparaat bijgehouden voor de testronde.</p>` +
         o.hints.slice(0, n).map((h, i) => `<div class="hint"><b>${['Waar kijken', 'Hoe denken', 'Oplossing'][i]}:</b> ${esc(h)}</div>`).join('') +
         `<div class="row center">${n < 3 ? `<button class="btn primary" data-more>${n === 0 ? 'Toon een hint' : n === 2 ? 'Toon de oplossing' : 'Nog een hint'}</button>` : ''}<button class="btn" data-ok>Terug</button></div>`;
       body.querySelector('[data-more]')?.addEventListener('click', () => { o.onMore(); render(n + 1); });
@@ -335,19 +354,39 @@ export class UI {
     $('[data-clear]', body).addEventListener('click', () => { seq = []; render(); });
   }
 
-  slots(opts: { left: string | null; right: string | null; candidates: string[]; onPlace: (slot: 'left' | 'right', item: string) => void; onTake: (slot: 'left' | 'right') => void; hint: string }) {
-    const body = this.modal('Twee nissen naast de deur', '');
+  /**
+   * Placement board (service tags, catalogue books, route seals): tap a loose piece, then a slot.
+   * Pieces can always be taken back. Feedback comes only once every slot is filled.
+   */
+  place(o: { title: string; intro: string; slots: { id: string; label: string; icon: string; piece: string | null }[]; pieces: string[]; pieceHtml: (id: string) => string; pieceName: (id: string) => string; onPlace: (slot: string, piece: string) => void; onTake: (slot: string) => void; done?: boolean; empty?: string }) {
+    const body = this.modal(o.title, '');
+    let sel: string | null = o.pieces[0] ?? null;
     const render = () => {
-      const n = (side: 'left' | 'right') => {
-        const it = side === 'left' ? opts.left : opts.right;
-        return `<div class="niche"><b>${side === 'left' ? 'Linkernis' : 'Rechternis'}</b>${it ? `<span class="e">${itemIcon(it, 46)}</span>${esc(ITEMS[it].name)}<button class="btn" data-take="${side}">Terugpakken</button>` : '<span class="muted">leeg</span>'}</div>`;
-      };
-      body.innerHTML = `<p>${esc(opts.hint)}</p><div class="niches">${n('left')}${n('right')}</div>` +
-        (opts.candidates.length ? `<p class="muted">Kies wat je in een nis legt:</p>${opts.candidates.map((c) => `<div class="row" style="margin-bottom:8px"><span style="min-width:150px;display:inline-flex;gap:6px;align-items:center">${itemIcon(c, 30)} ${esc(ITEMS[c]?.name ?? c)}</span><button class="btn" data-place="left" data-item="${c}">← links</button><button class="btn" data-place="right" data-item="${c}">rechts →</button></div>`).join('')}` : '<p class="muted">Je hebt niets bij je wat in een nis past.</p>');
-      body.querySelectorAll<HTMLButtonElement>('[data-take]').forEach((b) => b.addEventListener('click', () => opts.onTake(b.dataset.take as 'left' | 'right')));
-      body.querySelectorAll<HTMLButtonElement>('[data-place]').forEach((b) => b.addEventListener('click', () => opts.onPlace(b.dataset.place as 'left' | 'right', b.dataset.item!)));
+      body.innerHTML = `<p>${esc(o.intro)}</p><div class="place-slots">${o.slots.map((sl) => `<div class="pslot"><div class="pslot-label">${sl.icon}<span>${esc(sl.label)}</span></div>` +
+        (sl.piece ? `<button class="btn piece" data-take="${sl.id}" aria-label="${esc(o.pieceName(sl.piece))} terugpakken">${o.pieceHtml(sl.piece)}<span class="muted">terugpakken</span></button>` :
+          `<button class="btn slot-empty" data-slot="${sl.id}" ${sel ? '' : 'disabled'} aria-label="Leg in: ${esc(sl.label)}">${sel ? 'Hier leggen' : 'leeg'}</button>`) + `</div>`).join('')}</div>` +
+        (o.done ? '' : o.pieces.length ? `<p class="muted">Kies wat je wilt neerleggen:</p><div class="place-pieces">${o.pieces.map((p) => `<button class="btn piece ${p === sel ? 'sel' : ''}" data-piece="${p}" aria-pressed="${p === sel}" aria-label="${esc(o.pieceName(p))}">${o.pieceHtml(p)}</button>`).join('')}</div>` : `<p class="muted">${esc(o.empty ?? 'Alles ligt op zijn plek.')}</p>`) +
+        `<div class="row center" style="margin-top:10px"><button class="btn" data-ok>Klaar</button></div>`;
+      body.querySelectorAll<HTMLButtonElement>('[data-piece]').forEach((b) => b.addEventListener('click', () => { sel = b.dataset.piece!; render(); }));
+      body.querySelectorAll<HTMLButtonElement>('[data-slot]').forEach((b) => b.addEventListener('click', () => { if (sel) o.onPlace(b.dataset.slot!, sel); }));
+      body.querySelectorAll<HTMLButtonElement>('[data-take]').forEach((b) => b.addEventListener('click', () => o.onTake(b.dataset.take!)));
+      $('[data-ok]', body).addEventListener('click', () => this.closeModal());
     };
     render();
+  }
+
+  /** Number wheels (0–9) with neutral feedback; returns true from onTry when it opened. */
+  digitLock(title: string, intro: string, count: number, onTry: (digits: number[]) => boolean) {
+    const body = this.modal(title, `<p>${esc(intro)}</p><div class="dials digits"></div><div class="row center"><button class="btn primary" data-try>Proberen</button></div>`);
+    const vals = new Array(count).fill(0);
+    const dials = $('.dials', body);
+    const render = () => {
+      dials.innerHTML = vals.map((v, i) => `<div class="dial"><button class="btn" data-up="${i}" aria-label="Wieltje ${i + 1} omhoog">▲</button><div class="face num" aria-live="polite">${v}</div><button class="btn" data-down="${i}" aria-label="Wieltje ${i + 1} omlaag">▼</button></div>`).join('');
+      dials.querySelectorAll<HTMLButtonElement>('[data-up]').forEach((b) => b.addEventListener('click', () => { const i = +b.dataset.up!; vals[i] = (vals[i] + 1) % 10; render(); }));
+      dials.querySelectorAll<HTMLButtonElement>('[data-down]').forEach((b) => b.addEventListener('click', () => { const i = +b.dataset.down!; vals[i] = (vals[i] + 9) % 10; render(); }));
+    };
+    render();
+    $('[data-try]', body).addEventListener('click', () => { if (onTry([...vals])) this.closeModal(); });
   }
 
   billiard(onTry: (cells: number[]) => boolean) {
@@ -387,7 +426,7 @@ export class UI {
     body.querySelector('[data-fs]')?.addEventListener('click', () => h.onFullscreen?.());
     body.querySelector('[data-map]')?.addEventListener('click', () => h.onMap?.());
     body.querySelector('[data-pl]')?.addEventListener('click', () => { this.closeModal(); h.onPointerLock?.(); });
-    $('[data-restart]', body).addEventListener('click', () => this.confirm('Opnieuw beginnen?', 'Al je voortgang op dit apparaat wordt gewist.', 'Ja, wis alles', h.onRestart));
+    $('[data-restart]', body).addEventListener('click', () => this.confirm('Opnieuw beginnen?', 'Je huidige voortgang wordt opzijgezet. Op het startscherm kun je hem terugzetten met “Vorige voortgang terugzetten”.', 'Opnieuw beginnen', h.onRestart));
   }
 
   contextLost(onReload: () => void) {
@@ -401,8 +440,9 @@ export class UI {
     $('[data-no]', body).addEventListener('click', () => this.closeModal());
   }
 
-  ending(opts: { title: string; text: string; minutes: number; hints: number; wrong: number; onFeedback: (text: string) => void; onContinue: () => void }) {
-    const body = this.modal(opts.title, `<p>${esc(opts.text)}</p>
+  ending(opts: { title: string; text: string; minutes: number; hints: number; wrong: number; memories?: string[]; onFeedback: (text: string) => void; onContinue: () => void }) {
+    const body = this.modal(opts.title, `<p class="letter">${esc(opts.text)}</p>
+      ${opts.memories?.length ? `<p class="muted">Wat je onderweg vond (${opts.memories.length}): ${opts.memories.map(esc).join(' · ')}</p>` : ''}
       <p class="muted">Speeltijd: ${opts.minutes} min · hints bekeken: ${opts.hints} · foute pogingen: ${opts.wrong}</p>
       <p><b>Testronde:</b> waar liep je vast, wat was te makkelijk of te moeilijk, hoe voelde de besturing?</p>
       <textarea id="fb" placeholder="Jouw feedback…"></textarea>
@@ -412,20 +452,24 @@ export class UI {
   }
 
   // ---------------------------------------------------------------- start screen
-  showStart(o: { hasSave: boolean; onContinue: () => void; onNew: () => void; error?: string }) {
+  showStart(o: { hasSave: boolean; onContinue: () => void; onNew: () => void; error?: string; hasBackup?: boolean; onRestore?: () => void }) {
     this.start.hidden = false;
     this.start.innerHTML = `<div class="card">
       <h1>Feh Lu We</h1>
       <p class="sub">Een weekend op de Veluwe. Iemand heeft alles al klaargezet…</p>
       ${o.error ? `<div class="err">${o.error}</div>` : `<div class="row">
         ${o.hasSave ? '<button class="btn primary" data-cont>Verder spelen</button><button class="btn" data-new>Nieuw spel</button>' : '<button class="btn primary" data-new>Start</button>'}
+        ${o.hasBackup ? '<button class="btn" data-restore>Vorige voortgang terugzetten</button>' : ''}
       </div>
       <p class="note">Speel liefst liggend (landschap). Linkerduim: lopen · rechts slepen: rondkijken · tik op dingen of gebruik de grote knop rechtsonder.<br>Geluid gaat aan na Start. Voortgang wordt bewaard op dit apparaat.</p>`}
     </div>`;
     this.start.querySelector('[data-cont]')?.addEventListener('click', o.onContinue);
     this.start.querySelector('[data-new]')?.addEventListener('click', () => {
-      if (o.hasSave) this.confirm('Nieuw spel?', 'Je bestaande voortgang wordt gewist.', 'Nieuw spel', o.onNew);
+      if (o.hasSave) this.confirm('Nieuw spel?', 'Je huidige voortgang wordt opzijgezet (niet gewist): je kunt hem hier later terugzetten met “Vorige voortgang terugzetten”.', 'Nieuw spel', o.onNew);
       else o.onNew();
+    });
+    this.start.querySelector('[data-restore]')?.addEventListener('click', () => {
+      this.confirm('Vorige voortgang terugzetten?', o.hasSave ? 'Je huidige voortgang en de opzijgezette wisselen van plaats. Er gaat niets verloren.' : 'De opzijgezette voortgang wordt weer je spel.', 'Terugzetten', () => o.onRestore?.());
     });
   }
   hideStart() {

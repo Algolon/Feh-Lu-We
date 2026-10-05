@@ -1,7 +1,7 @@
 // Game orchestrator: renderer + loop, input → player, interaction picking, save/restore, scenes, UI glue.
 import * as THREE from 'three';
 import {
-  type GameState, type Settings, type SceneId, type PlayerPose, SAVE_KEY, SETTINGS_KEY, defaultState, parseSave, parseSettings, storage, addClue, has, logEvent,
+  type GameState, type Settings, type SceneId, type PlayerPose, SAVE_KEY, SETTINGS_KEY, BACKUP_KEY, defaultState, parseSave, parseSettings, storage, addClue, has, flag, logEvent,
 } from './state';
 import { Input } from '../player/input';
 import { Player, PLAYER } from '../player/player';
@@ -9,13 +9,17 @@ import { World, LightPool, type GameApi, type Interactable } from '../interactio
 import { UI } from '../ui/ui';
 import { Audio } from '../audio/audio';
 import {
-  type Outcome, type Sfx, PUZZLES, currentPuzzle, openPuzzles, viewHint, tutorialMissing, leaveHome as leaveHomeRule, submitCode, LOCK_OPTIONS,
-  placeInSlot, takeFromSlot, submitBilliard, solvedCount,
+  type Outcome, type Sfx, type PlaceKind, type PuzzleDef, PUZZLES, currentPuzzle, openPuzzles, viewHint, tutorialMissing, leaveHome as leaveHomeRule, submitCode, LOCK_OPTIONS,
+  placePiece, takePiece, slotContents, loosePieces, placeSolved, submitDigits, submitBilliard, solvedCount, REQUIRED_COUNT, activeThread, threadNext, threadDone, owns,
 } from '../puzzles/rules';
-import { ITEMS, ESSENTIALS } from '../content/items';
-import { MEMORIES } from '../content/memories';
+import { ITEMS, ESSENTIALS, SEALS } from '../content/items';
+import { CLUES, CLUE_GROUP, THREADS, type ThreadId } from '../content/clues';
+import { SERVICE, CATALOG, CONSOLE_SOCKETS } from '../content/canon';
+import { SYMBOLS, symbolSvg } from '../content/symbols';
+import { itemIcon } from '../ui/icons';
 import { buildHome } from '../world/home';
-import { buildEstate, estateMapSvg, MAP_SITES } from '../world/estate';
+import { buildEstate, MAP_SITES } from '../world/estate';
+import { estateMapSvg, floorPlanSvg, MAP_LEVELS, levelAt, type MapLevel } from '../ui/map';
 import type { Env } from '../world/env';
 import type { RoomGraph } from '../world/rooms';
 import { tickFires, FIRE_UNIFORMS } from '../world/fire';
@@ -121,7 +125,7 @@ export class Game implements GameApi {
     await this.audio.unlock();
     this.audio.setMuted(this.settings.muted);
     if (fresh) {
-      storage.remove(SAVE_KEY);
+      this.stashSave();
       this.state = defaultState();
     }
     this.input = new Input(
@@ -150,7 +154,34 @@ export class Game implements GameApi {
     this.running = true;
     this.last = performance.now();
     requestAnimationFrame(this.frame);
-    if (this.state.finished) this.ui.toast('Je hebt het weekend al gevonden. Kijk gerust nog rond.');
+    if (this.state.finished) this.ui.toast('Je hebt de verzamelzaal al gevonden. Kijk gerust nog rond.');
+    if (this.state.notice) {
+      const n = this.state.notice;
+      this.state.notice = null;
+      this.saveSoon();
+      this.ui.showText('Het landgoed is veranderd', `${n}\n\nJe speelt verder met je bewaarde spel. Liever helemaal opnieuw beginnen zonder dit spel kwijt te raken? Kies in Pauze “Opnieuw beginnen”: je huidige voortgang wordt opzijgezet en is op het startscherm terug te zetten.`);
+    }
+  }
+
+  /** Move the current save aside (never deleted): restorable from the start screen. */
+  private stashSave() {
+    const cur = storage.get(SAVE_KEY);
+    if (cur && parseSave(cur)) storage.set(BACKUP_KEY, cur);
+    storage.remove(SAVE_KEY);
+  }
+  hasBackup() {
+    return !!parseSave(storage.get(BACKUP_KEY));
+  }
+  /** Swap the stashed save with the current one (nothing is lost). */
+  restoreBackup() {
+    const b = storage.get(BACKUP_KEY);
+    const parsed = parseSave(b);
+    if (!b || !parsed) return false;
+    const cur = storage.get(SAVE_KEY);
+    storage.set(SAVE_KEY, b);
+    if (cur && parseSave(cur)) storage.set(BACKUP_KEY, cur); else storage.remove(BACKUP_KEY);
+    this.state = parsed;
+    return true;
   }
 
   async loadScene(id: SceneId) {
@@ -170,6 +201,8 @@ export class Game implements GameApi {
     this.trackSolved(false);
     world.patches.build(world);
     world.syncAll();
+    world.rooms = extras.rooms ?? null;
+    world.isOpen = (d) => this.state.open[d] === true;
     world.setupCulling();
     this.cullTimer = 0;
     this.restorePose(world, this.state.player[id]);
@@ -254,13 +287,15 @@ export class Game implements GameApi {
       this.saveNow();
     }
     this.sfx('chime');
+    this.updateHud();
     const minutes = Math.round((this.state.stats.finishedActiveMs ?? this.state.stats.activeMs) / 60000);
     const hints = Object.values(this.state.hints).reduce((a, b) => a + b, 0);
     const wrong = Object.values(this.state.wrong).reduce((a, b) => a + b, 0);
+    const memories = this.state.clues.filter((id) => CLUES[id]?.memory).map((id) => CLUES[id].title);
     this.ui.ending({
-      title: 'Iedereen is er',
-      text: `${MEMORIES['mem.cottage.ending'].text}\n\nDe tafel is gedekt, de kaarsen branden en buiten hoor je stemmen dichterbij komen. Weer een Veluwe Weekend.`,
-      minutes, hints, wrong,
+      title: 'De verzamelzaal',
+      text: `${CLUES['c.finalLetter'].text}\n\nDe kaarsen branden, het vuur knettert, en door de oude gang hoor je stemmen dichterbij komen.`,
+      minutes, hints, wrong, memories,
       onFeedback: (text) => this.copyFeedback(text, minutes),
       onContinue: () => {},
     });
@@ -269,11 +304,9 @@ export class Game implements GameApi {
   openPanel(kind: string) {
     const s = this.state;
     logEvent(s, 'panel', kind);
-    const opens: Record<string, string> = { drawerLock: 'hall.drawer', studyLock: 'study.compartment', cabinetPanel: 'cab.upper' };
-    const tryCode = (p: 'drawerLock' | 'studyLock' | 'cabinetPanel') => (seq: string[]) => {
+    const tryCode = (p: 'drawerLock' | 'studyLock') => (seq: string[]) => {
       const r = submitCode(s, p, seq);
       logEvent(s, r.ok ? 'code-ok' : 'code-wrong', p);
-      if (r.ok) s.open[opens[p]] = true; // the solved lock springs open by itself
       this.act(r);
       return r.ok;
     };
@@ -281,26 +314,15 @@ export class Game implements GameApi {
       this.ui.dialLock('Slot op de lade', 'Drie draaiwieltjes met tekeningetjes. Zet ze in de goede volgorde.', LOCK_OPTIONS.drawerLock, 3, tryCode('drawerLock'));
     } else if (kind === 'studyLock') {
       this.ui.buttonLock('Slot op het bureau', 'Drie koperen knoppen: put, schuur en vuur. Druk ze in de goede volgorde.', LOCK_OPTIONS.studyLock, 3, tryCode('studyLock'));
-    } else if (kind === 'cabinetPanel') {
-      this.ui.buttonLock('Paneel op de bovenkast', 'Vier tegelknoppen. Druk een reeks van vier.', LOCK_OPTIONS.cabinetPanel, 4, tryCode('cabinetPanel'));
-    } else if (kind === 'slots') {
-      const open = () => this.ui.slots({
-        left: s.slots.left ?? null, right: s.slots.right ?? null,
-        candidates: s.inventory.filter((i) => !ESSENTIALS.includes(i) && !['fragment'].includes(i)),
-        hint: (s.clues.includes('c.fragment') ? 'Je denkt aan de snipper: links wat uit het bos komt, rechts wat uit het huis komt.' : 'Twee lege nissen in de muur, elk met een ondiepe uitsparing.') +
-          // recovery: name where a missing piece is, without solving the placement
-          (!has(s, 'token') && !Object.values(s.slots).includes('token') ? ' Iets uit het bos heb je nog niet bij je — lag er in de schuur niet nog iets in de lade van de werkbank?' : '') +
-          (!has(s, 'crest') && !Object.values(s.slots).includes('crest') ? ' Iets uit het huis ontbreekt nog — in de serre stond een kast met een glazen bovenkast.' : ''),
-        onPlace: (slot, item) => {
-          const r = placeInSlot(s, slot, item);
-          if (s.flags.cottageSolved) s.open['door.gathering'] = true;
-          this.act(r);
-          if (s.flags.cottageSolved) this.ui.closeModal();
-          else open();
-        },
-        onTake: (slot) => { this.act(takeFromSlot(s, slot)); open(); },
+    } else if (kind === 'service' || kind === 'catalog' || kind === 'console') {
+      this.placePanel(kind === 'service' ? 'svc' : kind === 'catalog' ? 'cat' : 'con');
+    } else if (kind === 'boslust') {
+      this.ui.digitLock('Cijferslot van BOSLUST', 'Vier cijferwieltjes van 0 tot 9. Je ziet pas of het klopt als je het probeert.', 4, (digits) => {
+        const r = submitDigits(s, digits);
+        logEvent(s, r.ok ? 'code-ok' : 'code-wrong', 'boslust');
+        this.act(r);
+        return r.ok;
       });
-      open();
     } else if (kind === 'billiard') {
       this.ui.billiard((cells) => {
         const r = submitBilliard(s, cells);
@@ -309,6 +331,32 @@ export class Game implements GameApi {
         return r.ok;
       });
     }
+  }
+
+  private placePanel(k: PlaceKind) {
+    const s = this.state;
+    const tagName: Record<string, string> = { warm: 'Label: dampende terrine', bloem: 'Label: gieter met een tulp', koud: 'Label: melkbus met kaas' };
+    const lineName: Record<string, string> = { muren: 'doorgetrokken lijn', water: 'gestreepte lijn', paden: 'gestippelde lijn' };
+    const lineIcon = (id: string) => `<svg width="56" height="20" viewBox="0 0 56 20" aria-hidden="true"><line x1="4" y1="10" x2="52" y2="10" stroke="#2b2118" stroke-width="4" stroke-linecap="round" ${id === 'water' ? 'stroke-dasharray="10 6"' : id === 'paden' ? 'stroke-dasharray="1 7"' : ''}/></svg>`;
+    const cur = slotContents(s, k);
+    const conf = k === 'svc'
+      ? { title: 'Dienstrooster', intro: `“${SERVICE.rule}” Hang elk label in het vak waar die wagen heen moet.`, slots: SERVICE.slots.map((x) => ({ id: x.id, label: x.name, icon: symbolSvg(x.sym, 40) })), html: (id: string) => symbolSvg(SERVICE.tags.find((t) => t.id === id)!.sym, 46), name: (id: string) => tagName[id] ?? id }
+      : k === 'cat'
+        ? { title: 'Leestafel', intro: 'Elk boek terug in het vak van zijn kamer. De vakken zijn gemarkeerd met de vorm van een tabblad.', slots: CATALOG.sockets.map((x) => ({ id: x.id, label: SYMBOLS[x.tab].name, icon: symbolSvg(x.tab, 40) })), html: (id: string) => `<span class="book">${symbolSvg(CATALOG.books.find((b) => b.id === id)!.sym, 44)}</span>`, name: (id: string) => CATALOG.books.find((b) => b.id === id)!.cover }
+        : { title: 'Routekast', intro: 'Drie zegelvakken, elk gemarkeerd met een lijnsoort van de kaart.', slots: CONSOLE_SOCKETS.map((x) => ({ id: x, label: lineName[x], icon: lineIcon(x) })), html: (id: string) => itemIcon(id, 44), name: (id: string) => ITEMS[id].name };
+    this.ui.place({
+      title: conf.title, intro: conf.intro,
+      slots: conf.slots.map((x) => ({ ...x, piece: cur[x.id] })),
+      pieces: loosePieces(s, k), pieceHtml: conf.html, pieceName: conf.name, done: placeSolved(s, k),
+      empty: k === 'con' ? 'Je hebt geen zegels meer bij je.' : 'Alles hangt of ligt op een plek. Klopt het niet, pak dan iets terug.',
+      onPlace: (slot, piece) => {
+        const r = placePiece(s, k, slot, piece);
+        logEvent(s, r.ok ? 'place' : 'place-wrong', `${k}.${slot}`);
+        this.act(r);
+        if (placeSolved(s, k)) this.ui.closeModal(); else this.placePanel(k);
+      },
+      onTake: (slot) => { this.act(takePiece(s, k, slot)); this.placePanel(k); },
+    });
   }
 
   // ------------------------------------------------------------------ player-facing menus
@@ -340,30 +388,70 @@ export class Game implements GameApi {
     this.sfx('switch');
     this.changed();
   }
-  openNotebook() {
+  openNotebook(tab?: string) {
     if (!has(this.state, 'notebook')) {
       this.ui.toast('Je hebt je notitieboek nog niet. Het ligt op de tafel.');
       return;
     }
-    this.ui.notebook({ clues: this.state.clues, solved: new Set(PUZZLES.filter((p) => p.solved(this.state)).map((p) => p.id)), onMap: this.state.scene === 'estate' ? () => this.ui.map(this.mapSvg(), () => this.openNotebook()) : undefined });
+    const s = this.state;
+    const tracked = s.track && s.track !== 'auto' ? s.track : null;
+    const threads = THREADS.filter((t) => t.id !== 'start' || !threadDone(s, 'start')).filter((t) => t.id !== 'D' || flag(s, 'basementOpen') || SEALS.every((x) => owns(s, x)) || SEALS.some((x) => owns(s, x)))
+      .map((t) => ({
+        id: t.id, title: t.title, sub: t.sub, done: threadDone(s, t.id), next: threadNext(s, t.id).text, tracked: tracked === t.id,
+        started: PUZZLES.some((p) => p.thread === t.id && p.discovered(s)),
+      }));
+    this.ui.notebook({
+      clues: s.clues, solved: new Set(PUZZLES.filter((p) => p.solved(s)).map((p) => p.id)), threads, tab,
+      onTrack: (id) => { s.track = id; logEvent(s, 'track', id); this.changed(); this.openNotebook('d'); },
+      onMap: s.scene === 'estate' ? () => this.openMap(() => this.openNotebook()) : undefined,
+    });
+  }
+  /** What blocks a puzzle right now (missing tools or earlier steps), phrased as the next step. */
+  private prerequisite(p: PuzzleDef): string | null {
+    if (p.available(this.state)) return null;
+    const s = this.state;
+    const need: Record<string, () => string> = {
+      'a.service': () => 'Open eerst de lade in de hal.',
+      'b.catalog': () => 'Open eerst de lade in de hal.',
+      'a.cabinet': () => 'De serre zit op slot. De serresleutel krijg je van het dienstrooster in de keuken.',
+      'b.study': () => 'Het bureau zit achter de deur van de studeerkamer. De messing sleutel ligt in de lade van de leestafel in de bibliotheek.',
+      'c.shed': () => 'De schuur zit op slot. De schuursleutel ligt in de lade in de hal.',
+      'c.fire': () => 'Zonder droog aanmaakhout brandt er niets. Dat ligt in de schuur.',
+      'd.basement': () => `Je mist nog: ${SEALS.filter((x) => !owns(s, x)).map((x) => ITEMS[x].name.toLowerCase()).join(', ')}.`,
+      'd.console': () => 'Eerst moet de kelderdeur open.',
+      'd.cipher': () => 'Eerst moet de route in de kelder hersteld zijn.',
+      'd.plates': () => 'Eerst moet de deur van BOSLUST open.',
+      'd.finale': () => 'Eerst moeten de platen in de wortelgang goed staan.',
+    };
+    return need[p.id]?.() ?? null;
   }
   openHint(puzzleId?: string) {
-    const open = openPuzzles(this.state);
+    const s = this.state;
+    const open = openPuzzles(s);
     if (!open.length) {
-      this.ui.showText('Hint', 'Je hebt alles gevonden. Kijk gerust nog rond.');
+      this.ui.showText('Hint', s.finished ? 'Je hebt alles gevonden. Kijk gerust nog rond.' : 'Er is nu niets open om een hint over te geven. Volg de doelregel bovenin.');
       return;
     }
-    const p = open.find((q) => q.id === puzzleId) ?? currentPuzzle(this.state) ?? open[0];
+    const t = activeThread(s);
+    const tn = threadNext(s, t);
+    const preferred = tn.puzzle && open.includes(tn.puzzle) ? tn.puzzle : null;
+    const p = open.find((q) => q.id === puzzleId) ?? preferred ?? currentPuzzle(s) ?? open[0];
+    const pt = THREADS.find((x) => x.id === p.thread);
+    const lastId = [...s.clues].reverse().find((id) => !CLUES[id]?.memory && CLUE_GROUP[id]?.thread === p.thread);
+    const pre = this.prerequisite(p);
     this.ui.hints({
       title: p.title,
       hints: p.hints,
-      shown: this.state.hints[p.id] ?? 0,
+      shown: s.hints[p.id] ?? 0,
       choices: open.map((q) => ({ id: q.id, title: q.title })),
       current: p.id,
+      thread: pt?.title,
+      last: lastId ? `${CLUES[lastId].title}` : null,
+      next: pre ?? threadNext(s, p.thread as ThreadId).text ?? p.objective,
       onPick: (id) => this.openHint(id),
       onMore: () => {
-        const lvl = viewHint(this.state, p.id);
-        logEvent(this.state, `hint${lvl}`, p.id);
+        const lvl = viewHint(s, p.id);
+        logEvent(s, `hint${lvl}`, p.id);
         this.saveSoon();
       },
     });
@@ -384,7 +472,7 @@ export class Game implements GameApi {
       onRestart: () => this.wipeAndReload(),
       onPointerLock: canLock ? () => this.input.requestPointerLock() : undefined,
       onFullscreen: canFs ? () => document.documentElement.requestFullscreen?.().catch(() => {}) : undefined,
-      onMap: this.state.scene === 'estate' ? () => this.ui.map(this.mapSvg(), () => this.openPause()) : undefined,
+      onMap: this.state.scene === 'estate' ? () => this.openMap(() => this.openPause()) : undefined,
     });
   }
   private key(code: string) {
@@ -550,7 +638,7 @@ export class Game implements GameApi {
     w.update(dt, this.time);
     this.pool?.update(dt, this.time, w.lamps, this.camera.position, this.extras.rooms, (d) => this.state.open[d] === true);
     tickFires(this.time, this.settings.reducedMotion);
-    const targetDusk = Math.min(1, (solvedCount(this.state) / 8) * 0.85 + (this.state.finished ? 0.15 : 0));
+    const targetDusk = Math.min(1, (solvedCount(this.state) / REQUIRED_COUNT) * 0.85 + (this.state.finished ? 0.15 : 0));
     this.dusk += (targetDusk - this.dusk) * Math.min(1, dt * 0.3);
     this.extras.env?.update(this.dusk, this.camera.position);
     this.audio.dusk = this.dusk;
@@ -603,8 +691,13 @@ export class Game implements GameApi {
       this.ui.setObjective(this.coachLine());
     } else {
       this.ui.setChecklist(null);
-      const p = currentPuzzle(s);
-      this.ui.setObjective(s.finished ? 'Iedereen komt samen in het huisje.' : p ? p.objective : 'Ga naar het huisje bij de vijver.');
+      if (s.finished) this.ui.setObjective('Je hebt de verzamelzaal gevonden. Kijk gerust nog rond.');
+      else {
+        const t = activeThread(s);
+        const n = threadNext(s, t);
+        const title = THREADS.find((x) => x.id === t)?.title;
+        this.ui.setObjective(t === 'start' ? n.text : `${title}: ${n.text}`);
+      }
     }
   }
 
@@ -612,12 +705,26 @@ export class Game implements GameApi {
   wipeAndReload() {
     this.running = false;
     clearTimeout(this.saveTimer);
-    storage.remove(SAVE_KEY);
+    storage.set(SAVE_KEY, JSON.stringify(this.state));
+    this.stashSave();
     location.reload();
   }
 
+  private mapView() {
+    return { pose: this.player.pose(), visited: (id: string) => !!this.state.flags[`visited.${id}`], sites: MAP_SITES };
+  }
   mapSvg() {
-    return estateMapSvg({ pose: this.player.pose(), visited: (id) => !!this.state.flags[`visited.${id}`] });
+    return estateMapSvg(this.mapView());
+  }
+  /** Map with level tabs; the basement and the hill appear once discovered. */
+  openMap(onBack?: () => void) {
+    const v = this.mapView();
+    const s = this.state;
+    const levels = MAP_LEVELS.filter((l) => l.id !== 'b' || flag(s, 'basementOpen')).filter((l) => l.id !== 'ug' || flag(s, 'boslustOpen'));
+    const views = levels.map((l) => ({ id: l.id, label: l.label, svg: l.id === 'estate' ? estateMapSvg(v) : floorPlanSvg(l.id, v) }));
+    const room = this.extras.rooms?.roomAt(this.player.x, this.player.y + 0.8, this.player.z) ?? 'out';
+    const lv: MapLevel = levelAt(room);
+    this.ui.map(views, views.some((x) => x.id === lv) ? lv : 'estate', onBack, 'Blauwe pijl: jij. Vraagtekens: plekken die je nog niet hebt bezocht.');
   }
   /** Mark map landmarks as visited when the player comes near (checked a few times per second). */
   private markVisited() {

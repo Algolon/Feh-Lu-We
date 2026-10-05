@@ -1,223 +1,325 @@
-// The estate: 120 × 100 units (1 unit ≈ 1 m). X east, Z north, Y up. Front gate on the south edge.
-// Southern half (Z 0–50): forest. Northern half: manor, conservatory, sauna, cottage and an open garden.
+// The estate: 180 × 150 m (X east, Z north, Y up). Front gate on the south edge at X 90.
+// South (Z 0–72): woodland on gently rolling ground with the BOSLUST hill. North: the manor (main block,
+// service wing, glass pool conservatory, sauna outside to its right), an open lawn with the lantern
+// circle, and the old cottage by the pond. Layout constants live in layout.ts; ground in terrain.ts.
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { World, type GameApi } from '../interactions/world';
 import type { SceneExtras } from '../core/game';
-import { makeCtx, floor } from './arch';
-import { Batcher, box, boxMM, cyl, blob, getKit, v3 } from './kit';
-import { table, chair, lantern, part, plant, staticLantern } from './furniture';
-import { Vegetation, scatter, distToPolyline, ribbon, smooth } from './nature';
+import { makeCtx, floor, type Ctx } from './arch';
+import { Batcher, box, boxMM, cyl, blob, compound, getKit, v3 } from './kit';
+import { table, chair, lantern, plant, staticLantern } from './furniture';
+import { Vegetation, scatter, distToPolyline, smooth } from './nature';
 import { buildManor } from './manor';
 import { buildConservatory } from './conservatory';
 import { buildCottage } from './cottage';
-import { buildForest, FOREST_PATHS, DRIVEWAY, SITES } from './forest';
+import { buildForest } from './forest';
+import { buildBoslust } from './boslust';
 import { addEnvironment } from './env';
-import { makeLamp, makeAction, makeDoor } from '../interactions/props';
+import { makeLamp, makeAction, makeDoor, makePickup, makeInspect, place } from '../interactions/props';
 import { pressLantern } from '../puzzles/rules';
 import { addClue } from '../core/state';
 import { drawSymbol, SYMBOLS } from '../content/symbols';
 import { mulberry32 } from '../core/rng';
-import { RoomGraph, type RoomDef, type PortalDef } from './rooms';
+import { estateRooms } from './roomdefs';
+import { ESTATE, SITES, DRIVEWAY, GARDEN_PATH, TERRACE, GF, HILL } from './layout';
+import { FOREST_PATHS, TCELL, TERRAIN_DIMS, gridAt, gridHeight, inHole, terrainHeight, walkHeight, entranceMound } from './terrain';
 
-export const GARDEN_PATH: [number, number][] = smooth([[51.2, 82.6], [45, 84.4], [38, 85.6], [31.5, 86.6], [26, 85.3]]);
-// A compact lantern circle on the open lawn (a wrong attempt never means crossing the whole garden).
-export const LANTERN_CIRCLE = { x: 58, z: 92.4 };
+/** The lantern circle on the lawn behind the manor (a wrong attempt never means crossing the garden). */
+export const LANTERN_CIRCLE = SITES.lanterns;
 export const LANTERNS = [
-  { sym: 'zon', x: 54.6, z: 92.0 },
-  { sym: 'maan', x: 58.0, z: 95.2 },
-  { sym: 'blad', x: 61.4, z: 92.0 },
+  { sym: 'zon', x: LANTERN_CIRCLE.x - 3.4, z: LANTERN_CIRCLE.z - 0.6 },
+  { sym: 'maan', x: LANTERN_CIRCLE.x, z: LANTERN_CIRCLE.z + 3.4 },
+  { sym: 'blad', x: LANTERN_CIRCLE.x + 3.4, z: LANTERN_CIRCLE.z - 0.6 },
 ];
-/** Ground lights that run from the lantern circle to the conservatory once the lanterns are solved. */
-const LINK_PATH: [number, number][] = [[61.8, 90.6], [66, 88.4], [70.5, 86.2], [75, 84.4], [78.5, 82.6]];
 
 const inRect = (x: number, z: number, x0: number, x1: number, z0: number, z1: number) => x >= x0 && x <= x1 && z >= z0 && z <= z1;
 
 export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   const w = new World('estate');
   w.ambience = 'estate';
+  w.col.bounds = { minX: 0.6, maxX: ESTATE.w - 0.6, minZ: 0.6, maxZ: ESTATE.d - 0.6 };
+  w.col.ground = walkHeight;
   const env = addEnvironment(w);
   const veg = new Vegetation(7);
   const ground = makeCtx(w.col, 'ground');
   const manorC = makeCtx(w.col, 'manor');
+  const manorIn = makeCtx(w.col, 'mIn');
+  const manorB = makeCtx(w.col, 'mB');
   const consC = makeCtx(w.col, 'cons');
   const cotC = makeCtx(w.col, 'cottage');
   const forestC = makeCtx(w.col, 'forest');
   const gardenC = makeCtx(w.col, 'garden');
+  const ugC = makeCtx(w.col, 'ug');
 
   buildGround(w);
   buildPaths(w, ground);
   buildBoundary(w, g, ground, veg);
-  buildManor(w, g, manorC);
+  buildManor(w, g, manorC, manorIn, manorB);
   buildConservatory(w, g, consC);
   buildCottage(w, g, cotC);
   buildForest(w, g, forestC, veg);
+  buildBoslust(w, g, forestC, ugC, veg);
   buildGarden(w, g, gardenC, veg);
 
-  for (const c of [ground, manorC, consC, cotC, forestC, gardenC]) c.b.build(w.scene);
-  veg.build(w.scene, true);
-  const nearRect = (x0: number, x1: number, z0: number, z1: number, m: number) => (x: number, z: number) => x > x0 - m && x < x1 + m && z > z0 - m && z < z1 + m;
-  // interiors (and the props inside them) are hidden when the player is outside and away
-  w.cullZone('manorIn', nearRect(48, 72, 52, 80, 12), nearRect(48.3, 71.7, 52.3, 79.7, 0));
-  w.cullZone('cottageIn', nearRect(20, 30, 88, 96, 10), nearRect(20.2, 29.8, 88.2, 95.8, 0));
+  for (const c of [ground, manorC, manorIn, manorB, consC, cotC, forestC, gardenC, ugC]) c.b.build(w.scene);
+  for (const m of veg.build(w.scene, true)) m.userData.region = 'outdoor';
 
-  w.spawn = { x: 60, y: 0, z: 3, yaw: 0, pitch: 0.02 };
-  w.checkpoints.push({ name: 'garden', pose: { x: 58, y: 0.08, z: 87, yaw: Math.PI, pitch: 0 } });
+  // whole-room culling: chunks are shown only while one of their rooms can be seen from the player's room
+  const R = estateRooms();
+  const manorRooms = R.rooms.filter((r) => r.floor === 'g' || r.floor === 'u').filter((r) => r.x0 >= 72 && r.x1 <= 116 && r.id !== 'cons').map((r) => r.id);
+  const basementRooms = ['bstair', 'bLobby', 'archive', 'boiler', 'route', 'tunnel2', 'tunnel'];
+  const ugRooms = ['hut', 'descent', 'entry', 'passage', 'gathering', 'tunnel', 'tunnel2'];
+  // furnishings per area: listed rooms are the ones from which that area can actually be seen (seen from
+  // outside through the front door, only the vestibule and hall furnishings are drawn)
+  w.roomRegion(['manor'], [...manorRooms, 'out', 'cons'], 130);
+  w.roomRegion(['mIn'], manorRooms);
+  w.roomRegion(['mHall'], ['vestibule', 'hall', 'living', 'lobby', 'billiard', 'frontGallery', 'walkway', 'landing']);
+  w.roomRegion(['mLib'], ['library', 'libGallery', 'living', 'lobby']);
+  w.roomRegion(['mWing'], ['dining', 'kitchen', 'corridor', 'workshop', 'pantry']);
+  w.roomRegion(['mUp'], ['frontGallery', 'walkway', 'landing', 'libGallery', 'reis', 'sterren', 'bath', 'ucorr', 'study', 'botanic', 'storage', 'library']);
+  w.roomRegion(['mB'], basementRooms);
+  w.roomRegion(['ug'], ugRooms);
+  w.roomRegion(['cons', 'glass'], ['cons', 'out', 'corridor'], 95);
+  w.roomRegion(['cottageIn'], ['cottageEntry', 'cottageRoom']);
+  w.roomRegion(['cottage'], ['out', 'cottageEntry', 'cottageRoom'], 75);
+  w.roomRegion(['ground', 'paths', 'wall', 'fence', 'garden', 'forest', 'outdoor', 'hills'], ['out', 'cons', 'sauna', 'shed', 'cottageEntry', 'cottageRoom']);
 
-  const isIndoor = (x: number, z: number) =>
-    inRect(x, z, 48, 72, 52, 80) || inRect(x, z, 72, 84, 64, 82) || inRect(x, z, 20, 30, 88, 96) || inRect(x, z, 25.5, 30.5, 24.5, 28) || inRect(x, z, 85, 89, 69, 73);
-  const surfaceAt = (x: number, z: number): 'grass' | 'wood' | 'stone' => {
-    if (inRect(x, z, 56, 64, 52, 72) || inRect(x, z, 64, 84, 64, 82) || inRect(x, z, 51.5, 67.5, 80, 85.5)) return 'stone';
-    if (isIndoor(x, z)) return 'wood';
-    if (Math.abs(x - 60) < 2.2 && z < 46) return 'stone';
-    if (Math.hypot(x - 60, z - 47) < 7.5) return 'stone';
+  w.spawn = { x: SITES.gate.x, y: 0, z: 3, yaw: 0, pitch: 0.02 };
+  w.checkpoints.push(
+    { name: 'gate', pose: { x: SITES.gate.x, y: 0, z: 3, yaw: 0, pitch: 0 } },
+    { name: 'forecourt', pose: { x: 90, y: 0, z: 72, yaw: 0, pitch: 0 } },
+    { name: 'garden', pose: { x: 90, y: 0, z: 122, yaw: 0, pitch: 0 } },
+  );
+
+  const isIndoor = (x: number, z: number, y = 0) => R.roomAt(x, y + 0.8, z) !== 'out';
+  const surfaceAt = (x: number, z: number, y = 0): 'grass' | 'wood' | 'stone' => {
+    const room = R.roomAt(x, y + 0.8, z);
+    if (room !== 'out') return R.get(room)?.floor === 'b' || room === 'cons' || room === 'hall' || room === 'vestibule' || room === 'kitchen' ? 'stone' : 'wood';
+    if (inRect(x, z, TERRACE.x0, TERRACE.x1, TERRACE.z0, TERRACE.z1) || inRect(x, z, 60, 66, 8, 18.2)) return 'stone';
+    if (distToPolyline(x, z, DRIVEWAY) < 2.4 || Math.hypot(x - SITES.forecourt.x, z - SITES.forecourt.z) < 8) return 'stone';
     return 'grass';
   };
-  const rooms = estateRooms();
-  return { world: w, extras: { env, isIndoor, surfaceAt, rooms } };
+  return { world: w, extras: { env, isIndoor, surfaceAt, rooms: R } };
 }
 
 // ---------------------------------------------------------------------------------------------
+// Ground: one indexed heightfield (same 2 m grid + triangle split as collision), holes under buildings.
 function buildGround(w: World) {
   const k = getKit();
   const r = mulberry32(3);
-  const CW = 2, NX = 60, NZ = 50;
-  const pos: number[] = [], uv: number[] = [], col: number[] = [];
-  const forest = new THREE.Color('#6f8c43'), garden = new THREE.Color('#9cc05e'), moss = new THREE.Color('#5d7a38'), dirt = new THREE.Color('#9a8456');
-  const noise = new Float32Array((NX + 1) * (NZ + 1)).map(() => r());
-  const colorAt = (x: number, z: number, i: number) => {
-    const t = THREE.MathUtils.smoothstep(z, 46, 54);
-    const c = moss.clone().lerp(forest, noise[i]).lerp(garden, t);
+  const { NX, NZ } = TERRAIN_DIMS;
+  const n = (NX + 1) * (NZ + 1);
+  const pos = new Float32Array(n * 3), uv = new Float32Array(n * 2), col = new Float32Array(n * 3);
+  const forest = new THREE.Color('#6f8c43'), lawn = new THREE.Color('#9cc05e'), moss = new THREE.Color('#5d7a38'), dirt = new THREE.Color('#9a8456'), hillC = new THREE.Color('#7f9a4a');
+  const c = new THREE.Color();
+  for (let j = 0; j <= NZ; j++) for (let i = 0; i <= NX; i++) {
+    const vi = j * (NX + 1) + i, x = i * TCELL, z = j * TCELL, h = gridAt(i, j);
+    pos.set([x, h, -z], vi * 3);
+    uv.set([x / 5, z / 5], vi * 2);
+    const t = THREE.MathUtils.smoothstep(z, ESTATE.forestEdge - 8, ESTATE.forestEdge + 2);
+    c.copy(moss).lerp(forest, r()).lerp(lawn, t);
+    const hr = Math.hypot(x - HILL.x, z - HILL.z);
+    if (hr < HILL.r + 2) c.lerp(hillC, 0.5 * (1 - hr / (HILL.r + 2)));
     let dp = Infinity;
     for (const p of FOREST_PATHS) dp = Math.min(dp, distToPolyline(x, z, p));
     if (dp < 3) c.lerp(dirt, (1 - dp / 3) * 0.35);
-    return c;
-  };
-  const vcol: THREE.Color[] = [];
-  for (let j = 0; j <= NZ; j++) for (let i = 0; i <= NX; i++) vcol.push(colorAt(i * CW, j * CW, j * (NX + 1) + i));
+    col.set([c.r, c.g, c.b], vi * 3);
+  }
+  const idx: number[] = [];
   for (let j = 0; j < NZ; j++) for (let i = 0; i < NX; i++) {
-    const x0 = i * CW, z0 = j * CW, x1 = x0 + CW, z1 = z0 + CW;
-    if (x0 >= 72 && x1 <= 84 && z0 >= 64 && z1 <= 82) continue; // conservatory pool basin cut-out
-    const quad: [number, number, number][] = [[x0, z0, j * (NX + 1) + i], [x1, z0, j * (NX + 1) + i + 1], [x1, z1, (j + 1) * (NX + 1) + i + 1], [x0, z1, (j + 1) * (NX + 1) + i]];
-    for (const idx of [0, 1, 2, 0, 2, 3]) {
-      const [x, z, vi] = quad[idx];
-      pos.push(x, 0, -z);
-      uv.push(x / 5, z / 5);
-      const c = vcol[vi];
-      col.push(c.r, c.g, c.b);
-    }
+    if (inHole(i * TCELL + 1, j * TCELL + 1)) continue;
+    const a = j * (NX + 1) + i, b = a + 1, cc = a + NX + 2, d = a + NX + 1;
+    idx.push(a, b, cc, a, cc, d); // split 00-10-11 / 00-11-01 (matches gridHeight)
   }
   const geo = new THREE.BufferGeometry();
-  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-  geo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
-  geo.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  geo.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+  geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  geo.setIndex(idx);
   geo.computeVertexNormals();
-  const n = geo.attributes.normal;
-  for (let i = 0; i < n.count; i++) n.setXYZ(i, 0, 1, 0);
+  geo.computeBoundingSphere();
   const mesh = new THREE.Mesh(geo, k.M.grass);
   mesh.receiveShadow = true;
   mesh.userData.noCull = true;
+  mesh.userData.region = 'outdoor';
   w.scene.add(mesh);
-  // the land beyond the estate + distant hills
-  // the land beyond the estate: a frame AROUND the estate (not under it, where it would hide the pool basin)
+  // earth mound over the BOSLUST entrance hut (finer grid; its rim matches the 2 m grid exactly)
+  {
+    const S = 0.5, x0 = 60, z0 = 18, N = 12;
+    const mp: number[] = [], mc: number[] = [], mu: number[] = [], mi: number[] = [];
+    for (let j = 0; j <= N; j++) for (let i = 0; i <= N; i++) {
+      const x = x0 + i * S, z = z0 + j * S, h = entranceMound(x, z);
+      mp.push(x, h, -z); mu.push(x / 5, z / 5);
+      c.copy(hillC).lerp(moss, 0.35 + 0.3 * Math.sin(i * 1.7 + j)); mc.push(c.r, c.g, c.b);
+    }
+    for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) { const a = j * (N + 1) + i; mi.push(a, a + 1, a + N + 2, a, a + N + 2, a + N + 1); }
+    const mg = new THREE.BufferGeometry();
+    mg.setAttribute('position', new THREE.Float32BufferAttribute(mp, 3));
+    mg.setAttribute('uv', new THREE.Float32BufferAttribute(mu, 2));
+    mg.setAttribute('color', new THREE.Float32BufferAttribute(mc, 3));
+    mg.setIndex(mi);
+    mg.computeVertexNormals();
+    const mm = new THREE.Mesh(mg, k.M.grass);
+    mm.receiveShadow = true;
+    mm.userData.noCull = true;
+    mm.userData.region = 'outdoor';
+    w.scene.add(mm);
+  }
+  // the land beyond the estate: a frame AROUND it (one draw call)
   const outerMat = w.material(new THREE.MeshLambertMaterial({ color: '#5f7d3a' }));
-  const parts = ([[-300, 420, -300, 0], [-300, 420, 100, 400], [-300, 0, 0, 100], [120, 420, 0, 100]] as const).map(([x0, x1, z0, z1]) => {
+  const W = ESTATE.w, D = ESTATE.d;
+  const parts = ([[-300, W + 300, -300, 0], [-300, W + 300, D, D + 300], [-300, 0, 0, D], [W, W + 300, 0, D]] as const).map(([x0, x1, z0, z1]) => {
     const pg = new THREE.PlaneGeometry(x1 - x0, z1 - z0);
     pg.rotateX(-Math.PI / 2);
     pg.translate((x0 + x1) / 2, -0.04, -(z0 + z1) / 2);
     return pg;
   });
-  const outer = new THREE.Mesh(mergeGeometries(parts)!, outerMat); // one draw call
+  const outer = new THREE.Mesh(mergeGeometries(parts)!, outerMat);
   parts.forEach((pg) => pg.dispose());
   outer.userData.noCull = true;
+  outer.userData.region = 'outdoor';
   w.scene.add(outer);
   const hills = new Batcher();
-  for (let i = 0; i < 18; i++) {
-    const a = (i / 18) * Math.PI * 2 + r() * 0.2;
-    const d = 200 + r() * 40;
-    blob(hills, k.M.paint, i % 2 ? '#5f7f58' : '#6f8a5c', 60 + Math.cos(a) * d, -8, 50 + Math.sin(a) * d, 50 + r() * 30, 22 + r() * 18, 40, { shadow: false, chunk: 'hills' });
+  for (let i = 0; i < 20; i++) {
+    const a = (i / 20) * Math.PI * 2 + r() * 0.2;
+    const d = 230 + r() * 40;
+    blob(hills, k.M.paint, i % 2 ? '#5f7f58' : '#6f8a5c', W / 2 + Math.cos(a) * d, -8, D / 2 + Math.sin(a) * d, 55 + r() * 30, 22 + r() * 18, 40, { shadow: false, chunk: 'hills' });
   }
   hills.build(w.scene, false);
 }
 
-function buildPaths(w: World, c: ReturnType<typeof makeCtx>) {
+/** Path ribbon draped on the terrain (densified along the line, three vertices across). */
+function drape(pts: readonly (readonly [number, number])[], width: number, lift = 0.035): THREE.BufferGeometry {
+  const dense: [number, number][] = [];
+  for (let i = 0; i < pts.length - 1; i++) {
+    const [ax, az] = pts[i], [bx, bz] = pts[i + 1];
+    const n = Math.max(1, Math.ceil(Math.hypot(bx - ax, bz - az) / 1.0));
+    for (let s = 0; s < n; s++) dense.push([ax + ((bx - ax) * s) / n, az + ((bz - az) * s) / n]);
+  }
+  dense.push([pts[pts.length - 1][0], pts[pts.length - 1][1]]);
+  const pos: number[] = [], uv: number[] = [], col: number[] = [], idx: number[] = [];
+  let dist = 0;
+  for (let i = 0; i < dense.length; i++) {
+    const p = dense[i], a = dense[Math.max(0, i - 1)], b = dense[Math.min(dense.length - 1, i + 1)];
+    let dx = b[0] - a[0], dz = b[1] - a[1];
+    const len = Math.hypot(dx, dz) || 1;
+    dx /= len; dz /= len;
+    if (i > 0) dist += Math.hypot(p[0] - dense[i - 1][0], p[1] - dense[i - 1][1]);
+    for (let s = -1; s <= 1; s++) {
+      const x = p[0] - dz * s * width / 2, z = p[1] + dx * s * width / 2;
+      pos.push(x, terrainHeight(x, z) + lift, -z);
+      uv.push(((s + 1) / 2) * width / 3, dist / 3);
+      col.push(1, 1, 1);
+    }
+    if (i > 0) {
+      const o = (i - 1) * 3;
+      for (const [q0, q1] of [[0, 1], [1, 2]]) idx.push(o + q0, o + q0 + 3, o + q1 + 3, o + q0, o + q1 + 3, o + q1);
+    }
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+  g.setIndex(idx);
+  const ng = g.toNonIndexed();
+  g.dispose();
+  ng.computeVertexNormals();
+  const nn = ng.attributes.normal;
+  for (let i = 0; i < nn.count; i++) if (nn.getY(i) < 0) nn.setXYZ(i, -nn.getX(i), -nn.getY(i), -nn.getZ(i));
+  return ng;
+}
+
+function buildPaths(w: World, c: Ctx) {
   const k = c.k;
   const add = (pts: readonly (readonly [number, number])[], width: number, color: string) => {
-    const g = ribbon(pts, width, 0.025);
-    c.b.add(k.M.dirt, g, new THREE.Matrix4(), color, 'paths', false, 0);
-    g.dispose();
+    const gg = drape(pts, width);
+    c.b.add(k.M.dirt, gg, new THREE.Matrix4(), color, 'paths', false, 0);
+    gg.dispose();
   };
   add(smooth(DRIVEWAY, 2), 4.2, '#d8c3a0');
   for (const p of FOREST_PATHS) add(p, 1.9, '#c8ad80');
-  add(GARDEN_PATH, 1.5, '#e2d2b0');
-  const disc = new THREE.CircleGeometry(7.6, 32);
+  add(smooth(GARDEN_PATH, 2), 1.5, '#e2d2b0');
+  add(smooth([[90, 117], [90, 124.2]], 1), 1.6, '#e2d2b0'); // terrace → lantern circle
+  add(smooth([[102, 113.5], [114, 113.5], [126, 113.8], [133, 108], [134, 104.5]], 2), 1.5, '#e2d2b0'); // terrace → cons + sauna
+  // forecourt: gravel disc in front of the manor + central planter
+  const disc = new THREE.CircleGeometry(9.5, 36);
   disc.rotateX(-Math.PI / 2);
-  c.b.add(k.M.dirt, disc, new THREE.Matrix4().makeTranslation(60, 0.03, -47.5), '#d8c3a0', 'paths', false, 0);
+  c.b.add(k.M.dirt, disc, new THREE.Matrix4().makeTranslation(SITES.forecourt.x, 0.03, -SITES.forecourt.z), '#d8c3a0', 'paths', false, 0);
   disc.dispose();
-  // central planter on the forecourt
-  cyl(c.b, k.M.stone, '#d8ccb0', 60, 0, 47.5, 1.8, 1.9, 0.45, 18, { chunk: 'ground', uv: 1 });
-  cyl(c.b, k.M.paint, '#6a5040', 60, 0.45, 47.5, 1.6, 1.6, 0.02, 18, { chunk: 'ground' });
-  w.col.addCircle(60, 47.5, 1.9, 0, 0.8);
+  const ap = new THREE.PlaneGeometry(9, 8);
+  ap.rotateX(-Math.PI / 2);
+  c.b.add(k.M.dirt, ap, new THREE.Matrix4().makeTranslation(90, 0.031, -76), '#d8c3a0', 'paths', false, 0);
+  ap.dispose();
+  cyl(c.b, k.M.stone, '#d8ccb0', SITES.forecourt.x, 0, SITES.forecourt.z, 1.8, 1.9, 0.45, 18, { chunk: 'ground', uv: 1 });
+  cyl(c.b, k.M.paint, '#6a5040', SITES.forecourt.x, 0.45, SITES.forecourt.z, 1.6, 1.6, 0.02, 18, { chunk: 'ground' });
+  w.col.addCircle(SITES.forecourt.x, SITES.forecourt.z, 1.9, 0, 0.8);
 }
 
-function buildBoundary(w: World, g: GameApi, c: ReturnType<typeof makeCtx>, veg: Vegetation) {
+function buildBoundary(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
   const k = c.k;
+  const GX = SITES.gate.x, W = ESTATE.w, D = ESTATE.d;
   // south: stone wall with the front gate
-  for (const [a, b2] of [[0, 57.6], [62.4, 120]] as const) {
+  for (const [a, b2] of [[0, GX - 2.4], [GX + 2.4, W]] as const) {
     boxMM(c.b, k.M.stone, '#cbbf9f', a, b2, 0, 1.3, 0.05, 0.55, { chunk: 'wall', uv: 2 });
     boxMM(c.b, k.M.stone, '#b8ac8c', a, b2, 1.3, 1.42, -0.02, 0.62, { chunk: 'wall', uv: 2 });
     w.col.addBox(a, b2, 0, 0.6, 0, 2);
   }
-  for (const x of [57.3, 62.7]) {
+  for (const x of [GX - 2.7, GX + 2.7]) {
     box(c.b, k.M.stone, '#d8ccb0', x, 0, 0.3, 0.7, 2.6, 0.7, { chunk: 'wall', uv: 1 });
     box(c.b, k.M.stone, '#c8bca0', x, 2.6, 0.3, 0.85, 0.15, 0.85, { chunk: 'wall' });
     staticLantern(c, w, x, 2.75, 0.3, 0.8, 0, 3, 7);
   }
-  // front gate leaves stand closed behind you (the way in, not the way on)
-  makeDoor(w, g, { id: 'gate.front', x: 57.65, z: 0.3, dir: 'x+', width: 2.35, height: 1.9, y0: 0, swing: -1, style: 'gate', unlock: 'never', lockedMsg: 'Het hek is achter je dichtgevallen. Het weekend ligt de andere kant op.' });
-  makeDoor(w, g, { id: 'gate.front2', x: 62.35, z: 0.3, dir: 'x-', width: 2.35, height: 1.9, y0: 0, swing: 1, style: 'gate', unlock: 'never', lockedMsg: 'Het hek is achter je dichtgevallen. Het weekend ligt de andere kant op.' });
-  // fence on the other three sides (the estate bounds also clamp movement)
+  const msg = 'Het hek is achter je dichtgevallen. Het weekend ligt de andere kant op.';
+  makeDoor(w, g, { id: 'gate.front', x: GX - 2.35, z: 0.3, dir: 'x+', width: 2.35, height: 1.9, y0: 0, swing: -1, style: 'gate', unlock: 'never', lockedMsg: msg });
+  makeDoor(w, g, { id: 'gate.front2', x: GX + 2.35, z: 0.3, dir: 'x-', width: 2.35, height: 1.9, y0: 0, swing: 1, style: 'gate', unlock: 'never', lockedMsg: msg });
+  // fence on the other three sides (the estate bounds also clamp movement); posts follow the terrain
   const fence = (x0: number, z0: number, x1: number, z1: number) => {
     const len = Math.hypot(x1 - x0, z1 - z0), n = Math.ceil(len / 2.5);
     for (let i = 0; i <= n; i++) {
-      const x = x0 + ((x1 - x0) * i) / n, z = z0 + ((z1 - z0) * i) / n;
-      box(c.b, k.M.wood, '#6b4a2a', x, 0, z, 0.14, 1.2, 0.14, { chunk: 'fence' });
-    }
-    for (const y of [0.45, 0.95]) {
-      if (x0 === x1) boxMM(c.b, k.M.wood, '#7a5a3a', x0 - 0.04, x0 + 0.04, y, y + 0.1, Math.min(z0, z1), Math.max(z0, z1), { chunk: 'fence' });
-      else boxMM(c.b, k.M.wood, '#7a5a3a', Math.min(x0, x1), Math.max(x0, x1), y, y + 0.1, z0 - 0.04, z0 + 0.04, { chunk: 'fence' });
+      const x = x0 + ((x1 - x0) * i) / n, z = z0 + ((z1 - z0) * i) / n, y = terrainHeight(x, z);
+      box(c.b, k.M.wood, '#6b4a2a', x, y - 0.1, z, 0.14, 1.3, 0.14, { chunk: 'fence' });
+      if (i < n) {
+        const xb = x0 + ((x1 - x0) * (i + 1)) / n, zb = z0 + ((z1 - z0) * (i + 1)) / n, yb = terrainHeight(xb, zb);
+        const seg = Math.hypot(xb - x, zb - z), yaw = Math.atan2(xb - x, zb - z), rise = Math.atan2(yb - y, seg);
+        for (const hy of [0.45, 0.95]) box(c.b, k.M.wood, '#7a5a3a', (x + xb) / 2, (y + yb) / 2 + hy, (z + zb) / 2, 0.08, 0.1, seg, { chunk: 'fence', yaw, rx: -rise });
+      }
     }
   };
-  fence(0.2, 0.6, 0.2, 99.8);
-  fence(119.8, 0.6, 119.8, 99.8);
-  fence(0.2, 99.8, 119.8, 99.8);
+  fence(0.2, 0.6, 0.2, D - 0.2);
+  fence(W - 0.2, 0.6, W - 0.2, D - 0.2);
+  fence(0.2, D - 0.2, W - 0.2, D - 0.2);
   // woodland continues beyond the fence (visual only): low-poly crowns
   const r = mulberry32(77);
-  const outside = scatter(r, -16, 136, -16, 116, 5.2, 5000, (x, z) => x < -0.8 || x > 120.8 || z < -1.5 || z > 100.8);
+  const outside = scatter(r, -18, W + 18, -18, D + 18, 5.6, 6000, (x, z) => x < -0.8 || x > W + 0.8 || z < -1.5 || z > D + 0.8);
   for (const [x, z] of outside) {
-    const kind = r() < 0.2 ? 'pine' : 'oak';
-    veg.tree({ x, z, h: kind === 'pine' ? 6 + r() * 3 : 3.5 + r() * 2.5, r: 1.8 + r() * 1.0, kind, hue: r() - 0.5 }, `outer${x < 0 ? 'W' : x > 120 ? 'E' : z < 0 ? 'S' : 'N'}`);
+    const kind = r() < 0.25 ? 'pine' : 'oak';
+    veg.tree({ x, z, h: kind === 'pine' ? 6 + r() * 3 : 3.5 + r() * 2.5, r: 1.8 + r() * 1.0, kind, hue: r() - 0.5 }, `outer${x < 0 ? 'W' : x > W ? 'E' : z < 0 ? 'S' : 'N'}`);
   }
 }
 
-function buildGarden(w: World, g: GameApi, c: ReturnType<typeof makeCtx>, veg: Vegetation) {
+// ---------------------------------------------------------------------------------------------
+// Garden: dining terrace, open lawn with the lantern circle (thread C), scattered trees and flowers.
+function buildGarden(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
   const k = c.k;
   const r = mulberry32(19);
-  // dining terrace behind the manor
-  floor(c, 51.5, 67.5, 80, 85.5, 0.08, k.M.stone, '#e2d6bc', 0.3, true, 1.5);
-  table(c, 58, 83, 0.08, 6.0, 1.1, 0, '#8a6a4a');
-  for (let i = 0; i < 6; i++) {
-    chair(c, 55.5 + i, 82.0, 0.08, 0, '#8a6a4a');
-    chair(c, 55.5 + i, 84.0, 0.08, Math.PI, '#8a6a4a');
+  // dining terrace along the garden façade (level with the ground floor)
+  floor(c, TERRACE.x0, TERRACE.x1, TERRACE.z0, TERRACE.z1, GF, k.M.stone, '#e2d6bc', 0.4, true, 1.5);
+  boxMM(c.b, k.M.stone, '#d0c4a8', TERRACE.x0, TERRACE.x1, 0, GF, TERRACE.z1 - 0.05, TERRACE.z1 + 0.15, { chunk: c.chunk, uv: 1 });
+  table(c, 84, 114, GF, 5.0, 1.1, 0, '#8a6a4a');
+  for (let i = 0; i < 5; i++) {
+    chair(c, 82 + i, 113.0, GF, 0, '#8a6a4a');
+    chair(c, 82 + i, 115.0, GF, Math.PI, '#8a6a4a');
   }
-  for (const x of [56, 60]) {
-    const l = lantern(w, x, 0.84, 83, 0.5);
+  for (const x of [82.4, 85.6]) {
+    const l = lantern(w, x, GF + 0.76, 114, 0.5);
     makeLamp(w, g, { id: `lamp.terrace.${x}`, ...l, name: 'tafellantaarn', defaultOn: true, intensity: 3, distance: 6, hit: [0.3, 0.4, 0.3] });
   }
-  for (const [x, z] of [[52, 80.6], [64, 80.6], [52.2, 85], [66.8, 85]] as const) plant(c, x, z, 0.08, 1.2, '#c9774a');
-  staticLantern(c, w, 67.6, 2.2, 80.25, 0.7, 0, 3, 7);
+  for (const [x, z] of [[78.6, 110.6], [101.4, 110.6], [78.6, 116.4], [101.4, 116.4], [96, 116.4]] as const) plant(c, x, z, GF, 1.2, '#c9774a');
+  staticLantern(c, w, 95, 2.4, 110.25, 0.7, 0, 3, 7);
 
-  // three lantern posts in a circle on the open lawn — beat 5
+  // three lantern posts in a circle on the open lawn around a flat stone (thread C)
+  const LC = LANTERN_CIRCLE;
   let flashAll = 0;
   w.onUpdate((dt) => {
     if (flashAll > 0) { flashAll -= dt; if (flashAll <= 0) { flashAll = 0; g.changed(); } }
@@ -227,21 +329,17 @@ function buildGarden(w: World, g: GameApi, c: ReturnType<typeof makeCtx>, veg: V
     box(c.b, k.M.stone, '#d0c4a8', L.x, 1.15, L.z, 0.65, 0.08, 0.65, { chunk: c.chunk });
     w.col.addBox(L.x - 0.3, L.x + 0.3, L.z - 0.3, L.z + 0.3, 0, 1.3);
     const lm = lantern(w, L.x, 1.23, L.z, 1.25, 0);
-    // symbol cut-outs on all four sides (shape + colour)
     const cv = document.createElement('canvas'); cv.width = cv.height = 64;
     const x = cv.getContext('2d')!;
     x.fillStyle = '#2b2622'; x.fillRect(0, 0, 64, 64);
-    x.lineWidth = 2; drawSymbol(x, L.sym, 6, 6, 52, { color: '#fff3c8', ink: '#fff3c8' }); // light silhouette: rays and veins stay visible
+    x.lineWidth = 2; drawSymbol(x, L.sym, 6, 6, 52, { color: '#fff3c8', ink: '#fff3c8' });
     const t = w.texture(new THREE.CanvasTexture(cv));
     t.colorSpace = THREE.SRGBColorSpace;
     const symMat = w.material(new THREE.MeshBasicMaterial({ map: t, color: '#6a6050' }));
-    for (let s = 0; s < 4; s++) {
-      const p = new THREE.Mesh(new THREE.PlaneGeometry(0.26, 0.26), symMat);
-      const a = (s * Math.PI) / 2;
-      p.position.set(Math.sin(a) * 0.165, 0.29, Math.cos(a) * 0.165);
-      p.rotation.y = a;
-      lm.obj.add(p);
-    }
+    // the four cut-out faces in one geometry (one draw call per lantern)
+    const faces = [0, 1, 2, 3].map((s) => { const a = (s * Math.PI) / 2; return new THREE.PlaneGeometry(0.26, 0.26).rotateY(a).translate(Math.sin(a) * 0.165, 0.29, Math.cos(a) * 0.165); });
+    lm.obj.add(new THREE.Mesh(mergeGeometries(faces)!, symMat));
+    faces.forEach((f) => f.dispose());
     const isLit = () => flashAll > 0 || !!g.state.flags.lanternsSolved || (g.state.seq.gardenLanterns ?? []).includes(L.sym);
     w.lamps.push({ id: `garden.${L.sym}`, pos: lm.light, color: '#ffcf7a', intensity: 6, distance: 9, on: isLit });
     w.onSync(() => {
@@ -255,65 +353,69 @@ function buildGarden(w: World, g: GameApi, c: ReturnType<typeof makeCtx>, veg: V
       run: () => {
         addClue(g.state, 'c.lanterns');
         const { result, outcome } = pressLantern(g.state, L.sym);
-        if (result === 'solved') g.state.open['cab.lower'] = true;
-        if (result === 'wrong') {
-          // show all three burning for a moment before they go out, so the attempt reads as complete
-          flashAll = 1.1;
-        }
+        if (result === 'wrong') flashAll = 1.1; // all three burn for a moment: the attempt reads as complete
         g.act(outcome);
       },
     });
   }
-
-  // centre stone of the lantern circle (a landmark with a bench-height plinth) + the link lights
-  cyl(c.b, k.M.stone, '#d8ccb0', LANTERN_CIRCLE.x, 0, LANTERN_CIRCLE.z + 0.9, 0.55, 0.65, 0.42, 12, { chunk: c.chunk, uv: 1 });
-  w.col.addCircle(LANTERN_CIRCLE.x, LANTERN_CIRCLE.z + 0.9, 0.65, 0, 0.5);
-  // one instanced mesh for all link lights (one draw call); colour per instance
-  const studGeo = new THREE.CylinderGeometry(0.09, 0.12, 0.08, 8);
-  const studPos: THREE.Vector3[] = [];
-  for (let i = 0; i < LINK_PATH.length - 1; i++) {
-    const [ax, az] = LINK_PATH[i], [bx, bz] = LINK_PATH[i + 1];
-    for (let t = 0; t < 1; t += 0.34) studPos.push(v3(ax + (bx - ax) * t, 0.04, az + (bz - az) * t));
-  }
-  const studMesh = new THREE.InstancedMesh(studGeo, w.material(new THREE.MeshBasicMaterial({ color: '#ffffff' })), studPos.length);
-  const mtx = new THREE.Matrix4();
-  studPos.forEach((p, i) => { studMesh.setMatrixAt(i, mtx.makeTranslation(p.x, p.y, p.z)); });
-  studMesh.computeBoundingSphere();
-  w.scene.add(studMesh);
-  const studs = studPos;
-  const cOn = new THREE.Color('#ffd27a'), cOff = new THREE.Color('#4a443c');
-  let linkT = -1; // animation clock for the lighting run (-1 = idle)
-  const studsOn = (n: number) => {
-    for (let i = 0; i < studs.length; i++) studMesh.setColorAt(i, i < n ? cOn : cOff);
-    if (studMesh.instanceColor) studMesh.instanceColor.needsUpdate = true;
-  };
-  let firstSync = true;
+  // the flat centre stone: its lid slides aside when the circle is lit → the trail seal
+  cyl(c.b, k.M.stone, '#cfc3a6', LC.x, 0, LC.z, 0.95, 1.05, 0.32, 16, { chunk: c.chunk, uv: 1 });
+  cyl(c.b, k.M.paint, '#3a3228', LC.x, 0.32, LC.z, 0.55, 0.55, 0.01, 16, { chunk: c.chunk });
+  w.col.addCircle(LC.x, LC.z, 1.05, 0, 0.45);
+  const lid = compound((b) => {
+    cyl(b, k.M.stone, '#e2d6bc', 0, 0, 0, 0.7, 0.7, 0.1, 16);
+    for (let i = 0; i < 3; i++) blob(b, k.M.paint, '#a89c80', Math.cos(i * 2.1) * 0.35, 0.1, Math.sin(i * 2.1) * 0.35, 0.08, 0.02, 0.08);
+  });
+  const lidPivot = new THREE.Group();
+  lidPivot.add(lid);
+  place(lidPivot, LC.x, 0.32, LC.z, 0);
+  w.scene.add(lidPivot);
+  let lidT = -1;
   w.onSync(() => {
-    if (!g.state.flags.lanternsSolved) { studsOn(0); linkT = -1; }
-    else if (linkT < 0) {
-      // solved in an earlier session: lit at once; solved just now: lights run towards the conservatory
-      if (firstSync || g.reducedMotion) { studsOn(studs.length); linkT = 99; } else linkT = 0;
-    }
-    firstSync = false;
+    const open = !!g.state.open['lantern.stone'];
+    if (!open) { lid.position.set(0, 0, 0); lidT = -1; } else if (lidT < 0) lidT = g.reducedMotion ? 1 : 0;
   });
   w.onUpdate((dt) => {
-    if (linkT < 0 || linkT > 3) return;
-    linkT += dt;
-    studsOn(g.reducedMotion ? studs.length : Math.floor((linkT / 2.5) * studs.length));
+    if (lidT < 0) return;
+    lidT = Math.min(1, lidT + dt * 0.7);
+    lid.position.set(lidT * 1.15, 0, -lidT * 0.3);
   });
-  w.lamps.push({ id: 'garden.link', pos: v3(78.5, 0.5, 82.6), color: '#ffcf7a', intensity: 3, distance: 6, on: () => !!g.state.flags.lanternsSolved });
+  const seal = compound((b) => { blob(b, k.M.paint, '#4f8a3a', 0, 0.03, 0, 0.13, 0.03, 0.1); box(b, k.M.paint, '#2f5a2a', 0, 0.06, 0, 0.02, 0.01, 0.12); });
+  place(seal, LC.x, 0.3, LC.z, 0.4);
+  w.scene.add(seal);
+  makePickup(w, g, { id: 'pk.trailSeal', item: 'trailSeal', obj: seal, available: () => !!g.state.open['lantern.stone'], hit: [0.5, 0.25, 0.5] });
+  const stoneHit = new THREE.Group();
+  place(stoneHit, LC.x, 0, LC.z, 0);
+  w.scene.add(stoneHit);
+  makeAction(w, {
+    id: 'lantern.stoneInspect', obj: stoneHit, hit: [1.9, 0.5, 1.9], hitOffset: [0, 0.2, 0], reach: 2.6,
+    label: () => (g.state.open['lantern.stone'] ? null : 'Bekijken: platte steen'),
+    run: () => { addClue(g.state, 'c.lanterns'); g.act({ ok: false, msg: 'Een platte ronde steen met een naad rondom. Hij zit muurvast. De drie lantaarns staan er in een kring omheen.', sfx: 'none' }); },
+  });
 
-  // a few scattered trees + cypresses (the lawn stays open)
-  const oaks: [number, number][] = [[40, 66], [36, 79], [12, 70], [8, 88], [100, 61], [110, 78], [97, 92], [84, 96], [48, 97.5], [14, 56], [92, 54], [106, 96], [4, 60], [116, 58]];
+  // trees: a few oaks, cypresses and birches; the lawn stays open
+  const oaks: [number, number][] = [[64, 84], [58, 100], [44, 92], [40, 110], [120, 82], [140, 92], [150, 120], [112, 132], [72, 140], [100, 142], [140, 140], [160, 100], [20, 96], [16, 130], [166, 76], [26, 78]];
   for (const [x, z] of oaks) {
-    veg.tree({ x, z, h: 4 + r() * 1.5, r: 2.4 + r() * 0.8, kind: 'oak', hue: r() - 0.5 }, 'garden');
+    veg.tree({ x, z, h: 4 + r() * 1.5, r: 2.4 + r() * 0.8, kind: 'oak', hue: r() - 0.5, y: terrainHeight(x, z) }, 'garden');
     w.col.addCircle(x, z, 0.4, 0, 6);
   }
-  for (const [x, z] of [[46.6, 53.8], [46.6, 57.6], [46.6, 75.5], [46.6, 79.4], [86.4, 63], [86.4, 82.5], [18.6, 88.6], [31.4, 96.6], [70, 50.5], [50, 50.5]] as const) {
+  // the old oak east of the pond with its nest box (optional memory)
+  const OX = SITES.pond.x + 6.5, OZ = SITES.pond.z + 0.5;
+  veg.tree({ x: OX, z: OZ, h: 5.2, r: 3.2, kind: 'oak', hue: -0.3 }, 'garden');
+  w.col.addCircle(OX, OZ, 0.55, 0, 6);
+  const nb = compound((b) => {
+    box(b, k.M.wood, '#8a5a33', 0, 0, 0, 0.3, 0.38, 0.28);
+    box(b, k.M.wood, '#5a3a22', 0, 0.38, 0, 0.36, 0.05, 0.34, { rx: 0.2 });
+    cyl(b, k.M.paint, '#2a1f16', 0, 0.22, 0.142, 0.05, 0.05, 0.01, 10, { rx: Math.PI / 2 });
+  });
+  place(nb, OX - 0.45, 1.7, OZ - 0.2, -Math.PI / 2 - 0.3);
+  w.scene.add(nb);
+  makeInspect(w, g, { id: 'mem.garden.nestbox', obj: nb, clue: 'mem.garden.nestbox', hit: [0.5, 0.6, 0.5], label: 'Bekijken: nestkastje' });
+  for (const [x, z] of [[71, 80.5], [71, 86], [109, 80.5], [69, 112], [111, 112], [124, 116], [82, 76], [98, 76]] as const) {
     veg.tree({ x, z, h: 5.5 + r() * 1.5, r: 0.75, kind: 'cypress', hue: r() - 0.5 }, 'garden');
     w.col.addCircle(x, z, 0.35, 0, 6);
   }
-  for (const [x, z] of [[8, 96], [116, 88], [104, 70]] as const) {
+  for (const [x, z] of [[30, 120], [160, 130], [150, 82]] as const) {
     veg.tree({ x, z, h: 5, r: 1.6, kind: 'birch', hue: 0 }, 'garden');
     w.col.addCircle(x, z, 0.25, 0, 6);
   }
@@ -325,26 +427,25 @@ function buildGarden(w: World, g: GameApi, c: ReturnType<typeof makeCtx>, veg: V
     }
   };
   const purple = ['#b89ad8', '#9a7ac8', '#f2f0e6', '#e8a8c8'];
-  for (let z = 54; z < 79; z += 3) patch(47, z, 0.9, 6, purple);
   for (const L of LANTERNS) patch(L.x, L.z, 1.4, 10, purple);
-  patch(36, 88, 1.2, 10, purple);
-  patch(18.6, 92, 1.4, 10, ['#f2c6d8', '#f2f0e6', '#e8c547']);
-  patch(70, 86, 1.5, 12, purple);
-  patch(50, 86.5, 1.5, 12, purple);
-  const clearOf = (x: number, z: number) => !inRect(x, z, 45, 90, 49, 86) && !inRect(x, z, 17, 41, 83, 98) && !LANTERNS.some((l) => Math.hypot(x - l.x, z - l.z) < 2) && distToPolyline(x, z, GARDEN_PATH) > 1.4;
-  for (const [x, z] of scatter(r, 2, 118, 51, 99, 4.5, 900, clearOf)) {
-    if (r() < 0.6) veg.smallThing('flower', x, z, 0.14, purple[Math.floor(r() * 4)], 'garden');
+  patch(76, 120, 2.2, 18, purple);
+  patch(104, 120, 2.2, 18, ['#f2c6d8', '#f2f0e6', '#e8c547']);
+  patch(46, 124, 1.6, 12, ['#f2c6d8', '#f2f0e6', '#e8c547']);
+  patch(66, 76, 1.6, 12, purple);
+  patch(114, 76, 1.6, 12, purple);
+  const clearOf = (x: number, z: number) =>
+    z > ESTATE.forestEdge + 1 && !inRect(x, z, 70, 132, 78, 119) && !inRect(x, z, 29, 45, 124, 139) && Math.hypot(x - SITES.pond.x, z - SITES.pond.z) > 5 &&
+    Math.hypot(x - LC.x, z - LC.z) > 5.5 && distToPolyline(x, z, GARDEN_PATH) > 1.4 && distToPolyline(x, z, DRIVEWAY) > 3 && Math.hypot(x - SITES.forecourt.x, z - SITES.forecourt.z) > 10.5;
+  for (const [x, z] of scatter(r, 2, ESTATE.w - 2, ESTATE.forestEdge, ESTATE.d - 2, 5.0, 1600, clearOf)) {
+    if (r() < 0.55) veg.smallThing('flower', x, z, 0.14, purple[Math.floor(r() * 4)], 'garden');
     else veg.smallThing('shrub', x, z, 0.4 + r() * 0.3, '#5a8a3e', 'garden');
   }
-  // forecourt planter: low shrubs and flowers
-  // (no tree here: the approach must frame the front door)
   for (let i = 0; i < 18; i++) {
     const a = (i / 18) * Math.PI * 2, d = 0.9 + (i % 3) * 0.2;
-    veg.smallThing(i % 4 === 0 ? 'shrub' : 'flower', 60 + Math.cos(a) * d, 47.5 + Math.sin(a) * d, i % 4 === 0 ? 0.35 : 0.14, i % 4 === 0 ? '#4f7f38' : purple[i % 4], 'garden', 0.46);
+    veg.smallThing(i % 4 === 0 ? 'shrub' : 'flower', SITES.forecourt.x + Math.cos(a) * d, SITES.forecourt.z + Math.sin(a) * d, i % 4 === 0 ? 0.35 : 0.14, i % 4 === 0 ? '#4f7f38' : purple[i % 4], 'garden', 0.46);
   }
-  // hedges along the manor front
-  for (let x = 48.5; x < 71.5; x += 1.1) if (Math.abs(x - 60) > 2.6) veg.smallThing('shrub', x, 51.2, 0.55, '#4a7a36', 'garden');
-  void part; void cyl;
+  // hedges along the manor front, leaving the approach to the porch open
+  for (let x = 72.5; x < 107.6; x += 1.1) if (Math.abs(x - 90) > 5) veg.smallThing('shrub', x, 79.0, 0.55, '#4a7a36', 'garden');
 }
 
 /** Landmarks whose name appears on the map only once visited (no puzzle answers are ever shown). */
@@ -352,85 +453,12 @@ export const MAP_SITES = [
   { id: 'shed', x: SITES.shed.x, z: SITES.shed.z - 4, label: 'schuur' },
   { id: 'fire', x: SITES.fire.x, z: SITES.fire.z, label: 'vuurplaats' },
   { id: 'well', x: SITES.well.x, z: SITES.well.z, label: 'put' },
-  { id: 'gate', x: SITES.gate.x, z: SITES.gate.z, label: 'oud hek' },
+  { id: 'gate', x: SITES.sideGate.x, z: SITES.sideGate.z, label: 'oud hek' },
   { id: 'lanterns', x: LANTERN_CIRCLE.x, z: LANTERN_CIRCLE.z, label: 'lantaarnkring' },
-  { id: 'sauna', x: 87, z: 71, label: 'sauna' },
-  { id: 'cottage', x: 25, z: 92, label: 'huisje' },
+  { id: 'sauna', x: SITES.sauna.x, z: SITES.sauna.z, label: 'sauna' },
+  { id: 'cottage', x: SITES.cottage.x, z: SITES.cottage.z, label: 'huisje' },
+  { id: 'fork', x: SITES.fork.x, z: SITES.fork.z, label: 'wegwijzer' },
+  { id: 'hill', x: SITES.hill.x, z: SITES.hill.z, label: 'heuvel' },
 ];
 
-export interface MapView { pose?: { x: number; y: number; z: number; yaw: number }; visited?: (id: string) => boolean }
-
-/** Overview map (plan view, north up) with "you are here" and discovered landmarks. */
-export function estateMapSvg(v: MapView = {}): string {
-  const S = 3.2; // px per unit; plan x → svg x, plan z (north) → svg y = (100 - z)
-  const X = (x: number) => (x * S).toFixed(1), Z = (z: number) => ((100 - z) * S).toFixed(1);
-  const known = (id: string) => v.visited?.(id) ?? true;
-  const line = (pts: readonly (readonly [number, number])[], wdt: number, col: string) => `<polyline points="${pts.map(([x, z]) => `${X(x)},${Z(z)}`).join(' ')}" fill="none" stroke="${col}" stroke-width="${wdt}" stroke-linecap="round" stroke-linejoin="round"/>`;
-  const rect = (x0: number, z0: number, x1: number, z1: number, fill: string, label = '') =>
-    `<rect x="${X(x0)}" y="${Z(z1)}" width="${((x1 - x0) * S).toFixed(1)}" height="${((z1 - z0) * S).toFixed(1)}" fill="${fill}" stroke="#3a2a1a" stroke-width="1.5"/>` +
-    (label ? `<text x="${X((x0 + x1) / 2)}" y="${Z((z0 + z1) / 2)}" font-size="11" text-anchor="middle" dominant-baseline="middle">${label}</text>` : '');
-  const site = (s: (typeof MAP_SITES)[number]) => known(s.id)
-    ? `<circle cx="${X(s.x)}" cy="${Z(s.z)}" r="5" fill="#c4553d" stroke="#2b2118"/><text x="${X(s.x)}" y="${(+Z(s.z) - 8).toFixed(1)}" font-size="11" text-anchor="middle">${s.label}</text>`
-    : `<circle cx="${X(s.x)}" cy="${Z(s.z)}" r="6" fill="#efe6d2" stroke="#7a6a5a" stroke-dasharray="2 2"/><text x="${X(s.x)}" y="${(+Z(s.z) + 4).toFixed(1)}" font-size="10" text-anchor="middle" fill="#5a4a3a">?</text>`;
-  let me = '';
-  if (v.pose) {
-    const deg = (v.pose.yaw * 180) / Math.PI; // yaw 0 = north = up on the map
-    me = `<g transform="translate(${X(v.pose.x)},${Z(v.pose.z)}) rotate(${deg.toFixed(1)})"><circle r="9" fill="rgba(255,255,255,.55)"/><path d="M0 -10 L6 6 L0 2 L-6 6 Z" fill="#1f5fbf" stroke="#fff" stroke-width="1.5"/></g>`;
-  }
-  const upstairs = v.pose && v.pose.y > 2 && v.pose.x > 48 && v.pose.x < 72 && v.pose.z > 52 && v.pose.z < 80;
-  const inset = upstairs
-    ? `<g transform="translate(8,8)"><rect width="150" height="96" rx="6" fill="#fff8e8" stroke="#3a2a1a"/><text x="75" y="15" font-size="11" text-anchor="middle" font-weight="bold">Landhuis · boven</text>
-      <rect x="10" y="24" width="45" height="62" fill="#efe2c4" stroke="#3a2a1a"/><text x="32" y="58" font-size="9" text-anchor="middle">studeer-</text><text x="32" y="69" font-size="9" text-anchor="middle">kamer</text>
-      <rect x="55" y="24" width="48" height="62" fill="#f6efdf" stroke="#3a2a1a"/><text x="79" y="58" font-size="9" text-anchor="middle">overloop</text>
-      <rect x="103" y="24" width="37" height="34" fill="#efe2c4" stroke="#3a2a1a"/><text x="121" y="45" font-size="9" text-anchor="middle">opslag</text>
-      <rect x="91" y="58" width="12" height="28" fill="#c9a46a"/><text x="121" y="76" font-size="8" text-anchor="middle">trap</text></g>`
-    : '';
-  return `<svg class="diagram" viewBox="0 0 ${120 * S} ${100 * S}" width="${120 * S}" role="img" aria-label="Plattegrond van het landgoed${v.pose ? ' met jouw positie' : ''}">
-  <rect width="${120 * S}" height="${100 * S}" fill="#a9c47a"/>
-  <rect y="${Z(50)}" width="${120 * S}" height="${50 * S}" fill="#6f8c4a"/>
-  <text x="${X(8)}" y="${Z(46)}" font-size="12" fill="#fff">bos</text><text x="${X(8)}" y="${Z(97)}" font-size="12">tuin</text>
-  ${line(smooth(DRIVEWAY, 2), 9, '#e2d2b0')}${FOREST_PATHS.map((p) => line(p, 4, '#d9c49a')).join('')}${line(GARDEN_PATH, 4, '#efe4cc')}
-  ${rect(48, 52, 72, 80, '#efe2c4', 'landhuis')}${rect(72, 64, 84, 82, '#cfe8e4', 'serre')}${rect(85, 69, 89, 73, '#c48a52', '')}
-  ${rect(20, 88, 30, 96, '#fbf6ec', '')}<ellipse cx="${X(36)}" cy="${Z(92)}" rx="${3.2 * S}" ry="${2.6 * S}" fill="#2f6f78"/>
-  ${rect(25.5, 24.5, 30.5, 28, '#8a5a33', '')}
-  ${MAP_SITES.map(site).join('')}
-  <text x="${X(60)}" y="${Z(2.5)}" font-size="11" text-anchor="middle">hek</text>
-  ${me}${inset}
-  <g transform="translate(${120 * S - 26},26)" font-size="11" font-weight="bold" text-anchor="middle"><line x1="0" y1="-14" x2="0" y2="14" stroke="#2b2118" stroke-width="2"/><path d="M-5 -8 L0 -16 L5 -8 Z"/><text y="-19">N</text></g>
-</svg>${v.pose ? `<p class="muted" style="text-align:center">Blauwe pijl: jij${upstairs ? ' (boven in het landhuis)' : ''}. Vraagtekens: plekken die je nog niet hebt bezocht.</p>` : ''}`;
-}
-
-void v3;
-
-/** Rooms and light portals of the estate buildings (most specific rooms first). */
-export function estateRooms(): RoomGraph {
-  const R = (id: string, name: string, floor: RoomDef['floor'], x0: number, x1: number, z0: number, z1: number, y0: number, y1: number): RoomDef => ({ id, name, floor, x0, x1, z0, z1, y0, y1 });
-  const rooms: RoomDef[] = [
-    R('study', 'Studeerkamer', 'u', 48.4, 56, 63, 74, 3.0, 6.3),
-    R('storage', 'Opslag', 'u', 64, 70, 68, 74, 3.0, 6.3),
-    R('landing', 'Overloop', 'u', 56, 64, 63, 74, 3.0, 6.3),
-    R('hall', 'Hal', 'g', 56, 64, 52.4, 70, -0.5, 6.3),
-    R('corridor', 'Gang', 'g', 56, 64, 70, 72, -0.5, 3.2),
-    R('living', 'Woonkamer', 'g', 48.4, 56, 52.4, 72, -0.5, 3.2),
-    R('billiard', 'Biljartkamer', 'g', 48.4, 64, 72, 79.6, -0.5, 3.2),
-    R('dining', 'Eetkamer', 'g', 64, 71.6, 52.4, 64, -0.5, 3.2),
-    R('kitchen', 'Keuken', 'g', 64, 71.6, 64, 79.6, -0.5, 3.2),
-    R('cons', 'Serre', 'g', 72, 84, 64, 82, -3, 6),
-    R('sauna', 'Sauna', 'x', 85, 89, 69, 73, -0.5, 4.2),
-    R('cottageEntry', 'Huisje', 'x', 20.3, 29.7, 88.3, 91, -0.5, 3.1),
-    R('cottageRoom', 'Zaal', 'x', 20.3, 29.7, 91, 95.7, -0.5, 3.1),
-    R('shed', 'Schuur', 'x', 25.5, 30.5, 24.5, 28, -0.5, 2.6),
-  ];
-  const P = (a: string, b: string, kind: PortalDef['kind'], door?: string): PortalDef => ({ a, b, kind, door });
-  const portals: PortalDef[] = [
-    P('living', 'hall', 'arch'), P('hall', 'dining', 'arch'), P('hall', 'landing', 'stair'),
-    P('hall', 'corridor', 'door', 'door.corridor'), P('corridor', 'billiard', 'door', 'door.billiard'), P('corridor', 'kitchen', 'arch'),
-    P('kitchen', 'dining', 'arch'), P('hall', 'out', 'door', 'door.front'), P('kitchen', 'out', 'door', 'door.kitchenBack'),
-    P('kitchen', 'cons', 'door', 'door.conservatory'), P('cons', 'out', 'door', 'door.conservatoryEast'), P('cons', 'out', 'window'),
-    P('landing', 'study', 'door', 'door.study'), P('landing', 'storage', 'door', 'door.storage'),
-    P('sauna', 'out', 'door', 'door.sauna'), P('cottageEntry', 'out', 'door', 'door.cottage'), P('cottageEntry', 'cottageRoom', 'door', 'door.gathering'),
-    P('shed', 'out', 'door', 'door.shed'),
-    ...['living', 'dining', 'kitchen', 'billiard', 'study', 'landing', 'hall', 'cottageEntry', 'cottageRoom'].map((r) => P(r, 'out', 'window')),
-  ];
-  return new RoomGraph(rooms, portals);
-}
+void gridHeight; void v3;

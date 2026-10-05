@@ -74,13 +74,25 @@ export class World {
   /** Named sound emitters (fire crackle, water, heater) — audio reads these each frame. */
   readonly emitters: { kind: 'fire' | 'water' | 'steam'; pos: THREE.Vector3; on: () => boolean }[] = [];
   /** Small objects hidden beyond a size-dependent distance; whole interior chunks hidden by zone. */
-  private cullables: { root: THREE.Object3D; meshes: THREE.Object3D[]; pos: THREE.Vector3; dist2: number; on: boolean; zone: { on: boolean } | null }[] = [];
+  private cullables: { root: THREE.Object3D; meshes: THREE.Object3D[]; pos: THREE.Vector3; dist2: number; on: boolean; zone: { on: boolean } | null; rooms: string[] | null }[] = [];
   private zones: { meshes: THREE.Object3D[]; near: (x: number, z: number) => boolean; inside: (x: number, z: number) => boolean; on: boolean }[] = [];
+  /** Room-based visibility (estate): regions are static chunks that belong to a set of rooms ('out' = outdoors). */
+  rooms: RoomGraph | null = null;
+  isOpen: (door: string) => boolean = () => false;
+  private regions: { meshes: THREE.Object3D[]; rooms: Set<string>; on: boolean; far: number; sph: THREE.Sphere }[] = [];
+  visibleRooms = new Set<string>(['out']);
+  hereRoom = 'out';
   constructor(public readonly id: SceneId) {}
 
-  /** Register every non-static top-level object for distance culling. Call once after building. */
+  /** Register every non-static top-level object for distance (and room) culling. Call once after building. */
   setupCulling() {
     const box = new THREE.Box3(), sph = new THREE.Sphere();
+    for (const o of this.scene.children) {
+      const im = o as THREE.InstancedMesh;
+      if (!im.isInstancedMesh || !o.userData.veg) continue;
+      if (!im.boundingSphere) im.computeBoundingSphere();
+      this.veg.push({ m: im, c: im.boundingSphere!.center.clone(), r: im.boundingSphere!.radius, lod: o.userData.veg });
+    }
     for (const o of this.scene.children) {
       if (o.userData.static || o.userData.noCull || (o as THREE.InstancedMesh).isInstancedMesh || (o as THREE.Light).isLight || !o.visible && !o.children.length) continue;
       if ((o as THREE.Mesh).isMesh && (o as THREE.Mesh).frustumCulled === false) continue;
@@ -93,13 +105,41 @@ export class World {
       box.getBoundingSphere(sph);
       const d = Math.max(o.userData.cullDist ?? 0, 16 + 25 * sph.radius);
       const zone = this.zones.find((zz) => zz.inside(sph.center.x, -sph.center.z)) ?? null;
-      this.cullables.push({ root: o, meshes, pos: sph.center.clone(), dist2: d * d, on: true, zone });
+      let rooms: string[] | null = null;
+      const probe = o.userData.roomProbe as { x: number; y: number; z: number } | undefined;
+      if (this.rooms && o.userData.room) rooms = [o.userData.room]; // authored room
+      else if (this.rooms && probe) rooms = [this.rooms.roomAt(probe.x, probe.y, probe.z)]; // wall-mounted: the room it faces
+      else if (this.rooms) {
+        // sample around the centre so objects in doorways belong to both rooms
+        const set = new Set<string>();
+        const r = Math.min(0.6, sph.radius);
+        for (const [dx, dz] of [[0, 0], [r, 0], [-r, 0], [0, r], [0, -r]]) set.add(this.rooms.roomAt(sph.center.x + dx, sph.center.y, -sph.center.z + dz));
+        // a sample poking through a wall reads as 'out'; underground and upstairs that is never true
+        const centre = this.rooms.roomAt(sph.center.x, sph.center.y, -sph.center.z);
+        if (centre !== 'out' && (sph.center.y < -0.6 || sph.center.y > 3.3)) set.delete('out');
+        rooms = [...set];
+      }
+      this.cullables.push({ root: o, meshes, pos: sph.center.clone(), dist2: d * d, on: true, zone, rooms });
     }
   }
+  /** Instanced vegetation chunks: distance culling + crown level of detail (see Vegetation.build). */
+  private veg: { m: THREE.InstancedMesh; c: THREE.Vector3; r: number; lod: string }[] = [];
+  static readonly VEG_FAR = 105;
+  static readonly VEG_LOD = 26;
+  static readonly VEG_SMALL = 42;
   /** Hide the meshes of a batched chunk unless `near(planX, planZ)` holds. */
   cullZone(chunk: string, near: (x: number, z: number) => boolean, inside: (x: number, z: number) => boolean) {
     const meshes = this.scene.children.filter((o) => o.userData.chunk === chunk);
     this.zones.push({ meshes, near, inside, on: true });
+  }
+  /** Static chunks (or objects tagged userData.region) shown only while one of `rooms` is visible. */
+  roomRegion(chunks: string[], rooms: string[], far = Infinity) {
+    const meshes = this.scene.children.filter((o) => chunks.includes(o.userData.chunk) || chunks.includes(o.userData.region));
+    // bounding sphere of the whole region (for the optional distance limit)
+    const box = new THREE.Box3();
+    for (const m of meshes) box.expandByObject(m);
+    const sph = box.isEmpty() ? new THREE.Sphere() : box.getBoundingSphere(new THREE.Sphere());
+    this.regions.push({ meshes, rooms: new Set(rooms), on: true, far, sph });
   }
   /** Top-level objects whose render meshes are currently culled: never pickable (explicit invariant). */
   readonly culledRoots = new Set<THREE.Object3D>();
@@ -109,12 +149,33 @@ export class World {
     return this.culledRoots.has(p);
   }
   updateCulling(eye: THREE.Vector3) {
+    if (this.rooms) {
+      this.hereRoom = this.rooms.roomAt(eye.x, eye.y - 0.8, -eye.z);
+      // outdoors, an open door shows only the first rooms behind it (windows are opaque panes)
+      this.visibleRooms = this.rooms.visible(this.hereRoom, this.isOpen, this.hereRoom === 'out' ? 2 : 3);
+      for (const r of this.regions) {
+        let on = false;
+        for (const id of r.rooms) if (this.visibleRooms.has(id)) { on = true; break; }
+        if (on && r.far < Infinity) on = r.sph.center.distanceTo(eye) - r.sph.radius < r.far;
+        if (on !== r.on) { r.on = on; for (const m of r.meshes) { m.visible = on; m.userData.regionOff = !on; } }
+      }
+    }
+    for (const v of this.veg) {
+      const d = Math.max(0, v.c.distanceTo(eye) - v.r);
+      let on = !v.m.userData.regionOff && d < World.VEG_FAR;
+      if (on && v.lod === 'small') on = d < World.VEG_SMALL;
+      // crown LOD by the chunk's nearest point: chunks the player stands in keep the detailed crowns
+      else if (on && v.lod === 'near') on = d < World.VEG_LOD;
+      else if (on && v.lod === 'far') on = d >= World.VEG_LOD;
+      v.m.visible = on;
+    }
     for (const z of this.zones) {
       const on = z.near(eye.x, -eye.z);
       if (on !== z.on) { z.on = on; for (const m of z.meshes) m.visible = on; }
     }
     for (const c of this.cullables) {
-      const on = (!c.zone || c.zone.on) && c.pos.distanceToSquared(eye) < c.dist2;
+      let on = (!c.zone || c.zone.on) && c.pos.distanceToSquared(eye) < c.dist2;
+      if (on && c.rooms) on = c.rooms.some((r) => this.visibleRooms.has(r));
       if (on !== c.on) {
         c.on = on;
         for (const m of c.meshes) m.visible = on;

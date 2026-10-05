@@ -289,22 +289,24 @@ export function forestMapTexture(): THREE.CanvasTexture {
   const [c, x] = canvas(256, 200);
   x.fillStyle = '#efe2c2'; x.fillRect(0, 0, 256, 200);
   x.strokeStyle = '#5a4630'; x.lineWidth = 3; x.strokeRect(6, 6, 244, 188);
-  const mx = (px: number) => 14 + (px / 120) * 228;
-  const mz = (pz: number) => 186 - (pz / 50) * 150;
+  // the woodland (estate X 0–180, Z 0–72); the manor above the top edge
+  const mx = (px: number) => 14 + (px / 180) * 228;
+  const mz = (pz: number) => 186 - (pz / 72) * 150;
   x.fillStyle = '#9db57e';
   const r = mulberry32(9);
-  for (let i = 0; i < 90; i++) { x.beginPath(); x.arc(mx(r() * 120), mz(r() * 48), 3 + r() * 3, 0, Math.PI * 2); x.fill(); }
-  x.fillStyle = '#c9b48a'; x.fillRect(mx(58), mz(50), 8, 150);
-  x.fillStyle = '#b8a07a'; x.fillRect(mx(54), 14, mx(66) - mx(54), 18);
+  for (let i = 0; i < 110; i++) { x.beginPath(); x.arc(mx(r() * 180), mz(r() * 70), 3 + r() * 3, 0, Math.PI * 2); x.fill(); }
+  x.fillStyle = '#8aa56a'; x.beginPath(); x.ellipse(mx(63), mz(31), (16 / 180) * 228, (16 / 72) * 150 * 0.5, 0, 0, Math.PI * 2); x.fill();
+  x.fillStyle = '#c9b48a'; x.fillRect(mx(89), mz(72), 6, mz(0) - mz(72));
+  x.fillStyle = '#b8a07a'; x.fillRect(mx(72), 12, mx(108) - mx(72), 18);
   x.fillStyle = '#3a2a1a'; x.font = '11px Georgia'; x.textAlign = 'center';
-  x.fillText('landhuis', mx(60), 27);
+  x.fillText('landhuis', mx(90), 25);
   // the organiser's dashed "ochtendwandeling" route with arrowheads: put → schuur → vuur
-  const route: [number, number][] = [[96, 26], [78, 33], [52, 30], [28, 26], [20, 18], [14, 12]];
+  const route: [number, number][] = [[144, 39], [120, 51], [92, 56], [62, 50], [42, 39], [31, 28], [21, 18]];
   x.save();
   x.strokeStyle = '#8a2f1a'; x.lineWidth = 2.5; x.setLineDash([6, 5]);
   x.beginPath(); route.forEach(([px, pz], i) => (i ? x.lineTo(mx(px), mz(pz)) : x.moveTo(mx(px), mz(pz)))); x.stroke();
   x.setLineDash([]); x.fillStyle = '#8a2f1a';
-  for (const [i, t] of [[1, 0.5], [2, 0.5], [4, 0.6]] as const) {
+  for (const [i, t] of [[0, 0.55], [2, 0.5], [3, 0.6], [5, 0.6]] as const) {
     const [ax, az] = route[i], [bx, bz] = route[i + 1];
     const px = mx(ax + (bx - ax) * t), pz = mz(az + (bz - az) * t);
     const ang = Math.atan2(mz(bz) - mz(az), mx(bx) - mx(ax));
@@ -312,14 +314,13 @@ export function forestMapTexture(): THREE.CanvasTexture {
     x.beginPath(); x.moveTo(7, 0); x.lineTo(-5, -5); x.lineTo(-5, 5); x.closePath(); x.fill(); x.restore();
   }
   x.font = 'italic 11px Georgia'; x.textAlign = 'center';
-  x.fillText('ochtendwandeling', mx(64), mz(38));
-  x.fillText('start', mx(96), mz(26) + 26);
+  x.fillText('ochtendwandeling', mx(96), mz(63));
+  x.fillText('start', mx(144), mz(39) + 26);
   x.restore();
-  drawSymbol(x, 'put', mx(96) - 13, mz(26) - 13, 26);
-  drawSymbol(x, 'schuur', mx(28) - 13, mz(26) - 13, 26);
-  drawSymbol(x, 'vuur', mx(14) - 13, mz(12) - 13, 26);
-  // compass
-  x.save(); x.translate(222, 46);
+  drawSymbol(x, 'put', mx(144) - 13, mz(39) - 13, 26);
+  drawSymbol(x, 'schuur', mx(42) - 13, mz(39) - 13, 26);
+  drawSymbol(x, 'vuur', mx(21) - 13, mz(18) - 13, 26);
+  x.save(); x.translate(222, 52);
   x.strokeStyle = '#3a2a1a'; x.lineWidth = 2;
   x.beginPath(); x.moveTo(0, -18); x.lineTo(0, 18); x.moveTo(-18, 0); x.lineTo(18, 0); x.stroke();
   x.font = 'bold 11px Georgia';

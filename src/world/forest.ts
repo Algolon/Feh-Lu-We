@@ -1,5 +1,6 @@
-// Forest: X 0–120, Z 0–50 (≈ half the estate). Walkable woodland with a looping path network and
-// clearings: timber shed (28,26), fire clearing (14,12), stone well (96,26), old side gate (108,12).
+// Woodland: X 0–180, Z 0–72 (about half the estate) on gently rolling ground. A looping path network
+// joins the clearings: timber shed (west), fire clearing (south-west), stone well (east), the old side
+// gate (south-east) and a side path from the fork signpost to the BOSLUST hill (built in boslust.ts).
 import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, floor, gableRoof } from './arch';
@@ -7,89 +8,88 @@ import { box, boxMM, cyl, blob, compound, v3 } from './kit';
 import { lantern, crate, part, staticLantern } from './furniture';
 import { makeFire } from './fire';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeAction, makeInspect, place } from '../interactions/props';
-import { Vegetation, scatter, distToPolyline, smooth } from './nature';
+import { Vegetation, scatter, distToPolyline } from './nature';
 import { mulberry32 } from '../core/rng';
 import { plaqueTexture } from './textures';
-import { useOnFirePit, lightPostLantern, readFirePlate, useOnWell } from '../puzzles/rules';
+import { useOnFirePit, lightPostLantern, readFirePlate } from '../puzzles/rules';
 import { has } from '../core/state';
 import { ITEMS } from '../content/items';
-
-export const SITES = {
-  shed: { x: 28, z: 26 },
-  fire: { x: 14, z: 12 },
-  well: { x: 96, z: 26 },
-  gate: { x: 108, z: 12 },
-  forecourt: { x: 60, z: 47 },
-};
-
-export const DRIVEWAY: [number, number][] = [[60, 0.3], [60, 20], [60.4, 34], [60, 44]];
-export const FOREST_PATHS: [number, number][][] = [
-  smooth([[55, 46.5], [47, 42], [38, 34], [31.5, 27.5]]),
-  smooth([[26.5, 23.6], [21, 17.5], [16, 13.5]]),
-  smooth([[15.5, 9.8], [24, 6], [40, 5], [52, 6], [58, 7]]),
-  smooth([[62, 8], [76, 8.6], [92, 10.6], [106.2, 12]]),
-  smooth([[101, 11.4], [99.5, 17], [97.5, 22.8]]),
-  smooth([[94.6, 29], [88, 35], [76, 42], [65.5, 46.6]]),
-];
-export const CLEARINGS = [
-  { x: 28, z: 26, r: 7 }, { x: 14, z: 12, r: 6.5 }, { x: 96, z: 26, r: 6.5 }, { x: 108, z: 12, r: 5.5 }, { x: 60, z: 47, r: 9 }, { x: 60, z: 2, r: 4 },
-];
+import { ESTATE, SITES, DRIVEWAY, CLEARINGS, SHED, HILL } from './layout';
+import { FOREST_PATHS, terrainHeight } from './terrain';
 
 export function forestTreeOk(x: number, z: number) {
-  if (z > 49.2) return false;
-  if (Math.abs(x - 60) < 4.6 && z < 47) return false; // driveway corridor
+  if (z > ESTATE.forestEdge - 0.8 || z < 1.8) return false;
+  if (distToPolyline(x, z, DRIVEWAY) < 4.6) return false;
   for (const p of FOREST_PATHS) if (distToPolyline(x, z, p) < 2.7) return false;
   for (const c of CLEARINGS) if (Math.hypot(x - c.x, z - c.z) < c.r) return false;
-  if (z < 1.6) return false; // keep the boundary wall clear
+  if (x > 57 && x < 69 && z > 5 && z < 25) return false; // the cut, door and mound in front of BOSLUST
+  if (Math.abs(x - SITES.sideGate.x) < 1.6 && z < 34) return false; // old boundary wall
   return true;
 }
 
 export function buildForest(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
   const k = c.k;
   const r = mulberry32(42);
-  // trees: Poisson-disc spacing ≥ 3.4 m keeps ≥ 2 m gaps between trunks — never a sealed wall
-  const pts = scatter(r, 1.2, 118.8, 1.2, 49.5, 3.4, 9000, forestTreeOk);
+  // trees: Poisson-disc spacing ≥ 4.0 m keeps ≥ 2 m gaps between trunks — never a sealed wall
+  const pts = scatter(r, 1.2, ESTATE.w - 1.2, 1.2, ESTATE.forestEdge, 4.0, 14000, forestTreeOk);
   for (const [x, z] of pts) {
     const roll = r();
-    const kind = roll < 0.14 ? 'pine' : roll < 0.28 ? 'birch' : 'oak';
+    const onHill = Math.hypot(x - HILL.x, z - HILL.z) < HILL.r;
+    const kind = roll < (onHill ? 0.35 : 0.16) ? 'pine' : roll < 0.3 ? 'birch' : 'oak';
     const h = kind === 'pine' ? 6 + r() * 3 : 3.2 + r() * 2.6;
     const rad = kind === 'pine' ? 1.5 + r() * 0.6 : 1.7 + r() * 1.1;
-    veg.tree({ x, z, h, r: rad, kind, hue: r() - 0.5 }, `f${Math.floor(x / 40)}`);
-    w.col.addCircle(x, z, kind === 'birch' ? 0.22 : 0.34, 0, 6);
+    const y = terrainHeight(x, z);
+    veg.tree({ x, z, h, r: rad, kind, hue: r() - 0.5, y }, `f${Math.floor(x / 45)}_${Math.floor(z / 36)}`);
+    w.col.addCircle(x, z, kind === 'birch' ? 0.22 : 0.34, y - 0.5, y + 6);
   }
-  // undergrowth (no collision): ferns, shrubs, rocks
-  for (const [x, z] of scatter(r, 1, 119, 1, 49.5, 3.3, 4000, (x, z) => z < 49.5 && !(Math.abs(x - 60) < 2.6) && !FOREST_PATHS.some((p) => distToPolyline(x, z, p) < 1.3))) {
+  // undergrowth (no collision): ferns, shrubs, rocks, flowers
+  const undergrowthOk = (x: number, z: number) => z < ESTATE.forestEdge - 0.5 && distToPolyline(x, z, DRIVEWAY) > 2.6 && !FOREST_PATHS.some((p) => distToPolyline(x, z, p) < 1.3) && !(x > 59 && x < 67 && z > 7 && z < 25);
+  for (const [x, z] of scatter(r, 1, ESTATE.w - 1, 1, ESTATE.forestEdge, 3.4, 7000, undergrowthOk)) {
     const roll = r();
-    const chunk = `f${Math.floor(x / 40)}`;
-    if (roll < 0.45) veg.smallThing('fern', x, z, 0.35 + r() * 0.3, r() < 0.5 ? '#6a9a3e' : '#557f34', chunk);
-    else if (roll < 0.7) veg.smallThing('shrub', x, z, 0.45 + r() * 0.4, r() < 0.5 ? '#4f7f38' : '#5f8f40', chunk);
-    else if (roll < 0.8) veg.smallThing('rock', x, z, 0.25 + r() * 0.3, '#9a968a', chunk);
-    else veg.smallThing('flower', x, z, 0.14, r() < 0.5 ? '#b89ad8' : '#f2f0e6', chunk);
+    const chunk = `f${Math.floor(x / 45)}_${Math.floor(z / 36)}`;
+    const y = terrainHeight(x, z);
+    if (roll < 0.45) veg.smallThing('fern', x, z, 0.35 + r() * 0.3, r() < 0.5 ? '#6a9a3e' : '#557f34', chunk, y);
+    else if (roll < 0.7) veg.smallThing('shrub', x, z, 0.45 + r() * 0.4, r() < 0.5 ? '#4f7f38' : '#5f8f40', chunk, y);
+    else if (roll < 0.8) veg.smallThing('rock', x, z, 0.25 + r() * 0.3, '#9a968a', chunk, y);
+    else veg.smallThing('flower', x, z, 0.14, r() < 0.5 ? '#b89ad8' : '#f2f0e6', chunk, y);
   }
 
   buildShed(w, g, c);
   buildFireClearing(w, g, c);
   buildWell(w, g, c);
   buildSideGate(w, g, c);
+  buildFork(w, g, c);
 
-  // a few forest lanterns along the loop for orientation at dusk
-  for (const [x, z] of [[47, 43.6], [33.5, 29.8], [19.5, 16], [40, 7], [78, 10.2], [99.8, 15], [86, 37.6], [62.6, 20], [57.6, 34]] as const) {
-    cyl(c.b, k.M.wood, '#5a3a22', x, 0, z, 0.06, 0.07, 1.4, 6, { chunk: c.chunk });
-    staticLantern(c, w, x, 1.4, z, 0.6, 0, 2.2, 6);
-    w.col.addCircle(x, z, 0.12, 0, 2);
+  // forest lanterns along the paths for orientation at dusk (every ~30 m, just off the path)
+  let li = 0;
+  for (const p of FOREST_PATHS) {
+    let acc = 12;
+    for (let i = 1; i < p.length; i++) {
+      const [ax, az] = p[i - 1], [bx, bz] = p[i];
+      const seg = Math.hypot(bx - ax, bz - az);
+      acc += seg;
+      if (acc < 30) continue;
+      acc = 0;
+      const nx = -(bz - az) / seg, nz = (bx - ax) / seg, side = li++ % 2 ? 1 : -1;
+      const x = bx + nx * 1.7 * side, z = bz + nz * 1.7 * side, y = terrainHeight(x, z);
+      cyl(c.b, k.M.wood, '#5a3a22', x, y - 0.1, z, 0.06, 0.07, 1.5, 6, { chunk: c.chunk });
+      staticLantern(c, w, x, y + 1.4, z, 0.6, 0, 2.2, 6);
+      w.col.addCircle(x, z, 0.12, y, y + 2);
+    }
   }
   w.checkpoints.push(
-    { name: 'gate', pose: { x: 60, y: 0, z: 3, yaw: 0, pitch: 0 } },
-    { name: 'forecourt', pose: { x: 60, y: 0, z: 45, yaw: 0, pitch: 0 } },
-    { name: 'shed', pose: { x: 32, y: 0, z: 27.5, yaw: -Math.PI / 2, pitch: 0 } },
-    { name: 'fire', pose: { x: 17.5, y: 0, z: 9.5, yaw: -0.9, pitch: 0 } },
-    { name: 'well', pose: { x: 96, y: 0, z: 22, yaw: 0, pitch: 0 } },
+    { name: 'shed', pose: { x: SHED.x1 + 3.5, y: 0, z: 39, yaw: -Math.PI / 2, pitch: 0 } },
+    { name: 'fire', pose: { x: SITES.fire.x + 3.5, y: 0, z: SITES.fire.z - 2.5, yaw: -0.9, pitch: 0 } },
+    { name: 'well', pose: { x: SITES.well.x, y: 0, z: SITES.well.z - 4, yaw: 0, pitch: 0 } },
+    { name: 'fork', pose: { x: SITES.fork.x - 1.5, y: 0, z: SITES.fork.z - 1.2, yaw: 0.6, pitch: 0 } },
   );
 }
 
+// ---------------------------------------------------------------------------------------------
 function buildShed(w: World, g: GameApi, c: Ctx) {
   const k = c.k;
-  const X0 = 25.5, X1 = 30.5, Z0 = 24.5, Z1 = 28, H = 2.6;
+  const { x0: X0, x1: X1, z0: Z0, z1: Z1 } = SHED;
+  const H = 2.6, DZ = (Z0 + Z1) / 2 - 0.05; // door centre (east wall)
   const plank = { mat: k.M.wood, color: '#8a5a33' };
   const wallBox = (x0: number, x1: number, z0: number, z1: number) => {
     boxMM(c.b, plank.mat, plank.color, x0, x1, 0, H, z0, z1, { chunk: c.chunk, uv: 1.4 });
@@ -98,17 +98,16 @@ function buildShed(w: World, g: GameApi, c: Ctx) {
   wallBox(X0, X1, Z0, Z0 + 0.12);
   wallBox(X0, X1, Z1 - 0.12, Z1);
   wallBox(X0, X0 + 0.12, Z0, Z1);
-  wallBox(X1 - 0.12, X1, Z0, 25.7);
-  wallBox(X1 - 0.12, X1, 26.7, Z1);
-  boxMM(c.b, plank.mat, plank.color, X1 - 0.12, X1, 2.25, H, 25.7, 26.7, { chunk: c.chunk, uv: 1.4 });
+  wallBox(X1 - 0.12, X1, Z0, DZ - 0.5);
+  wallBox(X1 - 0.12, X1, DZ + 0.5, Z1);
+  boxMM(c.b, plank.mat, plank.color, X1 - 0.12, X1, 2.25, H, DZ - 0.5, DZ + 0.5, { chunk: c.chunk, uv: 1.4 });
   // darker interior lining (the shed reads as dim inside)
   boxMM(c.b, k.M.wood, '#3e2a1a', X0 + 0.12, X1 - 0.12, 0, H, Z1 - 0.14, Z1 - 0.12, { chunk: c.chunk, uv: 1.4, shadow: false });
   boxMM(c.b, k.M.wood, '#3e2a1a', X0 + 0.12, X0 + 0.14, 0, H, Z0 + 0.12, Z1 - 0.12, { chunk: c.chunk, uv: 1.4, shadow: false });
   boxMM(c.b, k.M.wood, '#3e2a1a', X0 + 0.12, X1 - 0.12, 0, H, Z0 + 0.12, Z0 + 0.14, { chunk: c.chunk, uv: 1.4, shadow: false });
   floor(c, X0 + 0.12, X1 - 0.12, Z0 + 0.12, Z1 - 0.12, 0.1, k.M.wood, '#4a3020', 0.1, true, 1.4);
   boxMM(c.b, k.M.wood, '#3e2a1a', X0, X1, H - 0.02, H, Z0, Z1, { chunk: c.chunk, uv: 1.4, shadow: false });
-  // gable gable ends + roof
-  gableRoof(c, 28, 26.25, X1 - X0 + 0.6, Z1 - Z0 + 0.7, H, 1.3, true, k.M.slate, '#7a7a6a');
+  gableRoof(c, (X0 + X1) / 2, (Z0 + Z1) / 2, X1 - X0 + 0.6, Z1 - Z0 + 0.7, H, 1.3, true, k.M.slate, '#7a7a6a');
   for (const x of [X0, X1]) {
     const tri = new THREE.Shape();
     tri.moveTo(-(Z1 - Z0) / 2, 0); tri.lineTo((Z1 - Z0) / 2, 0); tri.lineTo(0, 1.3); tri.closePath();
@@ -120,34 +119,35 @@ function buildShed(w: World, g: GameApi, c: Ctx) {
     c.b.add(k.M.wood, tg2, new THREE.Matrix4().makeTranslation(x, H, -(Z0 + Z1) / 2), '#7a4f2c', c.chunk);
     tg.dispose(); tg2.dispose();
   }
-  makeDoor(w, g, { id: 'door.shed', x: X1, z: 25.7, dir: 'z+', width: 1.0, height: 2.2, y0: 0.1, swing: -1, color: '#6b4a2a', style: 'plank', key: 'shedKey' });
-  staticLantern(c, w, X1 + 0.15, 2.0, 27.2, 0.6, 0, 2.5, 6);
+  makeDoor(w, g, { id: 'door.shed', x: X1, z: DZ - 0.5, dir: 'z+', width: 1.0, height: 2.2, y0: 0.1, swing: -1, color: '#6b4a2a', style: 'plank', key: 'shedKey' });
+  staticLantern(c, w, X1 + 0.15, 2.0, DZ + 1.2, 0.6, 0, 2.5, 6);
   // log pile + chopping stump outside
-  for (let i = 0; i < 9; i++) cyl(c.b, k.M.bark, '#8a6a4a', X1 + 0.6, 0.15 + Math.floor(i / 3) * 0.28, 24.8 - (i % 3) * 0.3 - (Math.floor(i / 3) % 2) * 0.15, 0.14, 0.14, 1.0, 7, { chunk: c.chunk, rz: Math.PI / 2, yaw: Math.PI / 2 });
-  w.col.addBox(X1 + 0.05, X1 + 1.15, 23.9, 25.0, 0, 1);
-  cyl(c.b, k.M.bark, '#7a5a3a', 32, 0, 24.6, 0.35, 0.4, 0.5, 9, { chunk: c.chunk });
-  w.col.addCircle(32, 24.6, 0.4, 0, 0.6);
-  // workbench along the north wall with the token drawer
-  boxMM(c.b, k.M.wood, '#6b4a2a', 26, 29.6, 0.9, 0.97, 27.2, 27.85, { chunk: c.chunk, uv: 1 });
-  for (const x of [26.1, 29.5]) boxMM(c.b, k.M.wood, '#5a3a22', x - 0.05, x + 0.05, 0.1, 0.9, 27.25, 27.8, { chunk: c.chunk });
-  w.col.addBox(26, 29.6, 27.15, 27.88, 0, 1.0);
-  const wd = makeDrawer(w, g, { id: 'shed.drawer', x: 27.2, y: 0.8, z: 27.5, yaw: Math.PI, w: 0.8, h: 0.16, d: 0.55, color: '#7a5a3a' });
-  const token = compound((b) => {
-    cyl(b, k.M.wood, '#b98a4e', 0, 0, 0, 0.06, 0.06, 0.02, 14);
-    box(b, k.M.paint, '#5a3a1a', 0, 0.02, 0, 0.01, 0.003, 0.08);
+  for (let i = 0; i < 9; i++) cyl(c.b, k.M.bark, '#8a6a4a', X1 + 0.6, 0.15 + Math.floor(i / 3) * 0.28, Z0 + 0.3 - (i % 3) * 0.3 - (Math.floor(i / 3) % 2) * 0.15, 0.14, 0.14, 1.0, 7, { chunk: c.chunk, rz: Math.PI / 2, yaw: Math.PI / 2 });
+  w.col.addBox(X1 + 0.05, X1 + 1.15, Z0 - 0.6, Z0 + 0.5, 0, 1);
+  cyl(c.b, k.M.bark, '#7a5a3a', X1 + 1.5, 0, Z0 + 0.1, 0.35, 0.4, 0.5, 9, { chunk: c.chunk });
+  w.col.addCircle(X1 + 1.5, Z0 + 0.1, 0.4, 0, 0.6);
+  // workbench along the north wall; its drawer holds the forest-walk journal
+  boxMM(c.b, k.M.wood, '#6b4a2a', X0 + 0.5, X1 - 0.9, 0.9, 0.97, Z1 - 0.8, Z1 - 0.15, { chunk: c.chunk, uv: 1 });
+  for (const x of [X0 + 0.6, X1 - 1.0]) boxMM(c.b, k.M.wood, '#5a3a22', x - 0.05, x + 0.05, 0.1, 0.9, Z1 - 0.75, Z1 - 0.2, { chunk: c.chunk });
+  w.col.addBox(X0 + 0.5, X1 - 0.9, Z1 - 0.85, Z1 - 0.12, 0, 1.0);
+  const wd = makeDrawer(w, g, { id: 'shed.drawer', x: X0 + 1.7, y: 0.8, z: Z1 - 0.5, yaw: Math.PI, w: 0.8, h: 0.16, d: 0.55, color: '#7a5a3a' });
+  const journal = compound((b) => {
+    box(b, k.M.paint, '#4f6a3a', 0, 0, 0, 0.18, 0.025, 0.24);
+    box(b, k.M.paint, '#efe2c2', 0.008, 0.004, 0, 0.16, 0.02, 0.22);
+    box(b, k.M.paint, '#c9a44c', -0.06, 0.026, 0, 0.02, 0.003, 0.2);
   });
-  token.position.set(0.12, -0.05, 0);
-  wd.slider.add(token);
-  makePickup(w, g, { id: 'pk.token', item: 'token', obj: token, available: wd.isOpen, hit: [0.3, 0.12, 0.3] });
+  journal.position.set(0.1, -0.05, 0);
+  wd.slider.add(journal);
+  makePickup(w, g, { id: 'pk.journal', item: 'journal', obj: journal, available: wd.isOpen, hit: [0.3, 0.12, 0.3], after: () => g.inspect('c.journal') });
   // kindling bundle on the floor
   const kind = compound((b) => {
     for (let i = 0; i < 7; i++) cyl(b, k.M.bark, '#c8a070', (i % 3) * 0.08 - 0.08, 0.05 + Math.floor(i / 3) * 0.07, 0, 0.035, 0.035, 0.6, 5, { rz: Math.PI / 2 });
     box(b, k.M.paint, '#c4553d', 0, 0.02, 0, 0.04, 0.22, 0.05);
   });
-  place(kind, 26.4, 0.1, 25.1, 0.2);
+  place(kind, X0 + 0.9, 0.1, Z0 + 0.6, 0.2);
   w.scene.add(kind);
   makePickup(w, g, { id: 'pk.kindling', item: 'kindling', obj: kind, hit: [0.7, 0.35, 0.4] });
-  crate(c, 29.6, 24.95, 0.1, 0.6, 0.2);
+  crate(c, X1 - 0.9, Z0 + 0.45, 0.1, 0.6, 0.2);
   // tool board on the west wall (needs light to read)
   const boardMat = w.material(new THREE.MeshLambertMaterial({
     map: w.texture(plaqueTexture({ w: 256, h: 192, bg: '#4a3a2a', ink: '#efe6d0', title: 'Gereedschap', lines: ['Eerst het vuur.', 'Dan de lantaarn bij het vuur.', 'Pas in dat licht: de plaat.'] })),
@@ -156,13 +156,12 @@ function buildShed(w: World, g: GameApi, c: Ctx) {
   const bgp = new THREE.Group();
   bgp.add(board);
   board.rotation.y = Math.PI;
-  place(bgp, X0 + 0.17, 1.55, 26.3, Math.PI / 2);
+  place(bgp, X0 + 0.17, 1.55, (Z0 + Z1) / 2, Math.PI / 2);
   w.scene.add(bgp);
-  // painted tool outlines
-  for (let i = 0; i < 4; i++) box(c.b, k.M.paint, '#2a1f16', X0 + 0.18, 1.0, 25.4 + i * 0.55, 0.02, 0.35, 0.05, { chunk: c.chunk, shadow: false });
+  for (let i = 0; i < 4; i++) box(c.b, k.M.paint, '#2a1f16', X0 + 0.18, 1.0, Z0 + 0.9 + i * 0.55, 0.02, 0.35, 0.05, { chunk: c.chunk, shadow: false });
   w.onUpdate(() => {
     const p = g.playerXZ();
-    const near = Math.hypot(p.x - 27, p.z - 26.3) < 4;
+    const near = Math.hypot(p.x - (X0 + X1) / 2, p.z - (Z0 + Z1) / 2) < 4;
     boardMat.color.set(g.state.lit.torch && near ? '#ffffff' : '#3a3632');
   });
   makeInspect(w, g, {
@@ -192,7 +191,6 @@ function buildFireClearing(w: World, g: GameApi, c: Ctx) {
     cyl(c.b, k.M.bark, '#7a5a3a', FX + Math.cos(a) * 3.2, 0, FZ + Math.sin(a) * 3.2, 0.32, 0.36, 0.45, 9, { chunk: c.chunk });
     w.col.addCircle(FX + Math.cos(a) * 3.2, FZ + Math.sin(a) * 3.2, 0.35, 0, 0.5);
   }
-  // logs appear once kindling is placed
   const logs = compound((b) => {
     for (let i = 0; i < 4; i++) cyl(b, k.M.bark, '#8a6a4a', 0, 0.12, 0, 0.07, 0.07, 0.9, 6, { rz: Math.PI / 2, yaw: i * 0.8 });
   });
@@ -215,14 +213,14 @@ function buildFireClearing(w: World, g: GameApi, c: Ctx) {
     useItem: (item) => g.act(useOnFirePit(g.state, item)),
     itemLabel: (item) => {
       const f = g.state.flags, lit = !!g.state.lit['fire.clearing'];
-      if (lit) return null; // a burning fire: the default action (douse) applies
+      if (lit) return null;
       if (item === 'kindling' && !f.firewood) return 'Aanmaakhout erin leggen';
       if (item === 'matches') return f.firewood ? 'Aansteken' : 'Gebruik: Lucifers';
       return `Gebruik: ${ITEMS[item]?.name ?? item}`;
     },
   });
   // mounted lantern on a post + engraved copper plate
-  const PX = 16.8, PZ = 13.6;
+  const PX = FX + 2.8, PZ = FZ + 1.6;
   const yaw = Math.atan2(FX - PX, FZ - PZ);
   cyl(c.b, k.M.wood, '#5a3a22', PX, 0, PZ, 0.09, 0.11, 2.3, 7, { chunk: c.chunk });
   part(c, k.M.wood, '#5a3a22', PX, PZ, yaw, 0, 2.1, 0.3, 0.08, 0.08, 0.6);
@@ -256,6 +254,7 @@ function buildFireClearing(w: World, g: GameApi, c: Ctx) {
   });
 }
 
+/** The old stone well (the start of the morning walk on the study map): scenery with a little life. */
 function buildWell(w: World, g: GameApi, c: Ctx) {
   const k = c.k;
   const { x: WX, z: WZ } = SITES.well;
@@ -266,75 +265,35 @@ function buildWell(w: World, g: GameApi, c: Ctx) {
   for (const s of [-1, 1]) box(c.b, k.M.wood, '#6b4a2a', WX + s * 1.0, 0.9, WZ, 0.14, 1.6, 0.14, { chunk: c.chunk });
   gableRoof(c, WX, WZ, 2.6, 1.6, 2.5, 0.8, true, k.M.slate, '#7a8070');
   cyl(c.b, k.M.wood, '#7a5a3a', WX, 1.75, WZ, 0.08, 0.08, 2.0, 8, { chunk: c.chunk, rz: Math.PI / 2 });
-  // crank (visible once installed) and bucket on a rope
-  const crank = compound((b) => {
-    box(b, k.M.paint, '#3b3b3b', 0, -0.02, 0, 0.04, 0.3, 0.04);
-    cyl(b, k.M.wood, '#8a5a33', 0.08, 0.24, 0, 0.03, 0.03, 0.16, 6, { rz: Math.PI / 2 });
-  });
-  const crankPivot = new THREE.Group();
-  crankPivot.position.copy(v3(WX + 1.12, 1.79, WZ));
-  crankPivot.add(crank);
-  w.scene.add(crankPivot);
-  const bucket = compound((b) => {
-    cyl(b, k.M.wood, '#7a5a3a', 0, 0, 0, 0.22, 0.18, 0.3, 10);
-    box(b, k.M.paint, '#555555', 0, 0.3, 0, 0.18, 0.12, 0.14);
-    box(b, k.M.paint, '#2b2b2b', 0, 0, 0, 0.012, 0.9, 0.012);
-  });
-  const rope = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 1, 4), w.material(new THREE.MeshLambertMaterial({ color: '#c8b080' })));
-  w.scene.add(bucket, rope);
-  let bucketY = -0.6, spin = 0;
-  w.onSync(() => {
-    crankPivot.visible = !!g.state.flags.crankInstalled;
-  });
-  w.onUpdate((dt) => {
-    const target = g.state.flags.wellRaised ? 0.95 : -0.6;
-    if (Math.abs(bucketY - target) > 0.001) {
-      const step = dt * 0.6;
-      bucketY = Math.abs(target - bucketY) < step ? target : bucketY + Math.sign(target - bucketY) * step;
-      spin += dt * 4;
-      crankPivot.rotation.x = spin;
-    }
-    bucket.position.copy(v3(WX, bucketY, WZ));
-    const top = 1.7;
-    rope.scale.y = Math.max(0.05, top - (bucketY + 0.4));
-    rope.position.copy(v3(WX, (top + bucketY + 0.4) / 2, WZ));
-  });
+  box(c.b, k.M.paint, '#3b3b3b', WX + 1.12, 1.55, WZ, 0.04, 0.3, 0.04, { chunk: c.chunk });
+  cyl(c.b, k.M.wood, '#7a5a3a', WX + 0.3, 0.9, WZ + 0.55, 0.2, 0.17, 0.3, 10, { chunk: c.chunk });
   const hit = new THREE.Group();
   place(hit, WX, 0, WZ);
   w.scene.add(hit);
   makeAction(w, {
     id: 'well', obj: hit, hit: [2.4, 2.0, 2.4], hitOffset: [0, 1.0, 0], reach: 3.0,
-    label: () => {
-      const f = g.state.flags;
-      if (!f.crankInstalled) return 'Put';
-      if (!f.wellRaised) return 'Zwengelen';
-      if (!f.wellOpened) return 'Kistje openen';
-      return 'Put';
-    },
-    run: () => g.act(useOnWell(g.state, null)),
-    useItem: (item) => g.act(useOnWell(g.state, item)),
-    itemLabel: (item) => (g.state.flags.crankInstalled ? null : item === 'crank' ? 'Zwengel plaatsen' : `Gebruik: ${ITEMS[item]?.name ?? item}`),
+    label: () => 'Put',
+    run: () => g.act({ ok: true, msg: 'Een oude put. Ver beneden glinstert water, en het touw is nieuw. Hier begon iemand elke ochtend een wandeling.', sfx: 'none' }, { save: false }),
   });
 }
 
 function buildSideGate(w: World, g: GameApi, c: Ctx) {
   const k = c.k;
-  const { x: GX, z: GZ } = SITES.gate;
-  // an old north–south boundary wall with a gate; the forest path from the west ends at it
+  const { x: GX, z: GZ } = SITES.sideGate;
   for (const s of [-1, 1]) {
     box(c.b, k.M.stone, '#b8ae98', GX, 0, GZ + s * 0.85, 0.5, 1.9, 0.5, { chunk: c.chunk, uv: 1 });
     blob(c.b, k.M.paint, '#6a8a40', GX, 1.95, GZ + s * 0.85, 0.3, 0.12, 0.3, { chunk: c.chunk });
     w.col.addBox(GX - 0.25, GX + 0.25, GZ + s * 0.85 - 0.25, GZ + s * 0.85 + 0.25, 0, 2);
   }
-  for (const [a, b2] of [[3, GZ - 1.1], [GZ + 1.1, 21]] as const) {
+  for (const [a, b2] of [[2, GZ - 1.1], [GZ + 1.1, 32]] as const) {
     for (let z = a; z < b2; z += 1.2) {
       const h = 0.5 + Math.abs(Math.sin(z * 1.7)) * 0.6;
-      box(c.b, k.M.stone, '#a89e88', GX, 0, z + 0.6, 0.45, h, 1.18, { chunk: c.chunk, uv: 1, yaw: Math.sin(z) * 0.05 });
+      const y = terrainHeight(GX, z + 0.6);
+      box(c.b, k.M.stone, '#a89e88', GX, y - 0.1, z + 0.6, 0.45, h + 0.1, 1.18, { chunk: c.chunk, uv: 1, yaw: Math.sin(z) * 0.05 });
     }
-    w.col.addBox(GX - 0.25, GX + 0.25, a, b2, 0, 1.2);
+    w.col.addBox(GX - 0.25, GX + 0.25, a, b2, 0, 1.6);
   }
   makeDoor(w, g, { id: 'gate.side', x: GX, z: GZ - 0.6, dir: 'z+', width: 1.2, height: 1.6, y0: 0, swing: -1, style: 'gate' });
-  // postbox with an optional memory
   cyl(c.b, k.M.wood, '#5a3a22', GX - 1.6, 0, GZ + 1.7, 0.05, 0.05, 1.1, 6, { chunk: c.chunk });
   const pb = compound((b) => {
     box(b, k.M.paint, '#2f5a3a', 0, 0, 0, 0.3, 0.35, 0.4);
@@ -345,4 +304,25 @@ function buildSideGate(w: World, g: GameApi, c: Ctx) {
   w.col.addCircle(GX - 1.6, GZ + 1.7, 0.25, 0, 1.5);
   makeInspect(w, g, { id: 'mem.sidegate.postbox', obj: pb, clue: 'mem.sidegate.postbox', hit: [0.45, 0.45, 0.5], label: 'Brievenbus openen' });
   w.checkpoints.push({ name: 'sidegate', pose: { x: GX - 3, y: 0, z: GZ, yaw: Math.PI / 2, pitch: 0 } });
+}
+
+/** Signpost where the side path leaves the southern loop for the hill: one arm forked like a branch. */
+function buildFork(w: World, g: GameApi, c: Ctx) {
+  const k = c.k;
+  const { x: SX, z: SZ } = SITES.fork;
+  const PX = SX - 1.3, PZ = SZ - 0.9;
+  cyl(c.b, k.M.wood, '#6b4a2a', PX, 0, PZ, 0.08, 0.1, 2.3, 7, { chunk: c.chunk });
+  w.col.addCircle(PX, PZ, 0.14, 0, 2.5);
+  const sign = compound((b) => {
+    // arm along the path (east) and the forked arm (north, towards the hill)
+    box(b, k.M.wood, '#a8743f', 0.55, 1.95, 0, 1.0, 0.18, 0.05);
+    box(b, k.M.wood, '#a8743f', 1.1, 1.95, 0, 0.12, 0.12, 0.05, { yaw: 0.785 });
+    box(b, k.M.wood, '#8a5a33', 0, 1.6, 0.45, 0.05, 0.16, 0.8);
+    box(b, k.M.wood, '#8a5a33', 0.1, 1.6, 0.92, 0.05, 0.1, 0.3, { yaw: 0.5 });
+    box(b, k.M.wood, '#8a5a33', -0.1, 1.6, 0.92, 0.05, 0.1, 0.3, { yaw: -0.5 });
+    blob(b, k.M.paint, '#4f8a3a', 0.04, 1.68, 0.5, 0.06, 0.02, 0.09);
+  });
+  place(sign, PX, 0, PZ, 0);
+  w.scene.add(sign);
+  makeInspect(w, g, { id: 'inspect.fork', obj: sign, clue: 'c.fork', hit: [1.4, 0.7, 1.4], hitOffset: [0.4, 1.7, 0.4], label: 'Bekijken: wegwijzer' });
 }
