@@ -5,7 +5,7 @@ window.T = (() => {
   const G = () => window.__game;
   const DT = 1 / 30;
   const v = (x, y, z) => ({ x, y, z });
-  function tick(n = 1) { for (let i = 0; i < n; i++) G().tick(DT); }
+  function tick(n = 1) { for (let i = 0; i < n; i++) G().tick(DT); window.__simTicks = (window.__simTicks ?? 0) + n; }
   function pos() { const p = G().player; return { x: +p.x.toFixed(2), y: +p.y.toFixed(2), z: +p.z.toFixed(2) }; }
   function walkTo(x, z, run = false, maxSec = 90) {
     const g = G();
@@ -13,6 +13,7 @@ window.T = (() => {
     let last = { x: g.player.x, z: g.player.z }, still = 0;
     for (let i = 0; i < maxSec / DT; i++) {
       g.tick(DT);
+      window.__simTicks = (window.__simTicks ?? 0) + 1;
       const d = Math.hypot(g.player.x - x, g.player.z - z);
       if (d < 0.3) { g.autopilot = null; tick(3); return pos(); }
       const m = Math.hypot(g.player.x - last.x, g.player.z - last.z);

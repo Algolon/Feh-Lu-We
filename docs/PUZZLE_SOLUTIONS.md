@@ -1,110 +1,124 @@
-# Feh Lu We — puzzle solutions (spoilers)
+# Feh Lu We — puzzle solutions (spoilers), iteration 3 "Het huis dat zich herinnert"
 
-Developer/playtest-host reference. These answers are never shown in ordinary player UI except as the
-optional third hint ("Oplossing"). Client-side code cannot hide them from someone reading the source.
+Developer / playtest-host reference. Answers never appear in ordinary player UI except as the optional third
+hint ("Oplossing"). Client-side code cannot hide them from someone reading the source.
 
-Coordinates are plan coordinates: X east, Z north, 1 unit ≈ 1 m. The solution logic lives in
-`src/puzzles/rules.ts` (`SOLUTIONS`, `submitCode`, `pressLantern`, `useOnFirePit`, `useOnWell`, `placeInSlot`)
-and is covered by `tests/rules.test.ts`, including a full-route progression test.
+Plan coordinates: X east, Z north, 1 unit ≈ 1 m; the estate is 180 × 150 with the front gate at (90, 0).
+All answers are derived in `src/content/canon.ts` (one source for props, clue texts, hints and tests) and the
+rules live in `src/puzzles/rules.ts`. `tests/rules.test.ts` solves the whole route in three different thread
+orders; `node scripts/e2e.mjs` plays it through the real controls (see the recorded walkthrough below).
 
-## Recorded walkthrough (automated, desktop, no debug cheats)
+## Route overview
 
-`node scripts/e2e.mjs` drives this exact sequence through the real movement/collision and action button
-(53 steps). The step list is written to `scripts/out/walkthrough-steps.txt`.
+```
+home ─▶ hall drawer ─┬─▶ A  Aan tafel        : service plan → conservatory key → cabinet wheels → TAFELZEGEL
+ (start)             ├─▶ B  In de kantlijn   : library catalogue → study key → desk buttons     → ARCHIEFZEGEL
+                     └─▶ C  Buiten de paden  : shed → fire + plate → garden lanterns            → SPOORZEGEL
+                                   (any order; the notebook lets the player follow one thread)
+three seals ─▶ basement door ─▶ route console ─▶ letter strip ─▶ BOSLUST cipher ─▶ stair into the hill
+            ─▶ route plates + lever ─▶ gathering room ─▶ final letter (finale) ─▶ tunnel shortcut back
+```
 
-| # | Beat | Exact solution |
+| # | Puzzle | Exact solution |
 |---|---|---|
-| 0 | Home | Take invitation, torch, matches, notebook from the round table; open the sideboard drawer, take the estate key; leave by the front door |
-| 1 | Hall drawer | Dials **Veer – Dennenappel – Kopje** |
-| 2 | Study desk | Buttons **Put – Schuur – Vuur** |
-| 3 | Shed | Shed key; torch on; read tool board; take kindling; open workbench drawer, take token |
-| 4 | Fire clearing | Kindling on pit → matches on pit → light post lantern → read plate: **Maan → Blad → Zon** |
-| 5 | Garden lanterns (circle on the lawn) | Light **Maan, then Blad, then Zon** — evaluated only when the third burns |
-| 6 | Conservatory cabinet wheels | Turn wheels to **1 Ruit · 2 Golf · 3 Driehoek · 4 Cirkel** |
-| 7 | Well | Crank on well → wind → crest opens the box |
-| 8 | Cottage niches | **Token left, crest right** |
+| 0 | Home | Invitation, torch, matches, notebook from the round table; sideboard drawer → estate key; front door |
+| 1 | Hall drawer (ladekast) | Dials **Veer – Dennenappel – Kopje** (the three objects on brass stands, left → right facing the fireplace) |
+| A1 | Service plan (kitchen) | **Melkbus + kaas → provisiekamer · gieter met tulp → serre · dampende terrine → eettafel** |
+| A2 | Cabinet wheels (conservatory) | **1 Ruit · 2 Golf · 3 Driehoek · 4 Cirkel** |
+| B1 | Library catalogue | **Ster-boek → ronde tab · varen-boek → puntige tab · koffer-boek → vierkante tab** |
+| B2 | Study desk | Buttons **Put – Schuur – Vuur** |
+| C1 | Fire clearing | Kindling on the pit → matches → light the post lantern from the fire → read plate **Maan → Blad → Zon** |
+| C2 | Garden lanterns | Light **Maan, Blad, Zon** (judged only when the third burns) → centre stone opens |
+| D1 | Basement door | Carry all three seals; use the door |
+| D2 | Route console | **Archiefzegel → doorgetrokken lijn · tafelzegel → gestreepte lijn · spoorzegel → gestippelde lijn** |
+| D3 | BOSLUST lock | Strip unlatches the cover; **WZHH YLHU HHQ GULH** three letters back = TWEE VIER EEN DRIE → **2 4 1 3** |
+| D4 | Route plates | Notch **tafelplaat boven · boekplaat rechts · boomplaat onder** (from the start: 2, 1, 1 turns) → pull the lever |
+| D5 | Finale | Read the letter on the table in the gathering room |
 
 ---
 
-## Beat 0 — Packing at home (tutorial)
-- **Prerequisites:** none.
-- **Clues:** the "Inpakken" checklist (top-left) lists the five essentials; the objective line; the door's refusal message names what is missing and where the key is.
-- **Solution:** pick up *uitnodiging* (opens the invitation), *zaklamp*, *lucifers*, *notitieboek* from the round table; open the sideboard (dressoir) drawer on the west wall and take *sleutel van het landhuis*; use the front door ("Vertrekken").
-- **Optional lessons:** light the candle by selecting the matches in the bag (🎒 → "In de hand nemen") and using them on the candle; switch the table lamp.
-- **Output:** `scene = estate`, player at the front gate.
-- **Recovery:** the door refuses to let you leave until all essentials are packed — no hidden soft lock. Spare matches also exist in the manor kitchen island drawer.
+## 0 · Packing at home (tutorial)
+Unchanged from iteration 2: the door refuses until all five essentials are packed and names what is missing.
 
-## Beat 1 — Hall console drawer (manor, entrance hall)
-- **Prerequisites:** estate front-door key (unlocks the front door at (60, 52)).
-- **Clues:**
-  - Invitation (`c.invitation`): three pictograms drawn **in a ring** (so no order): kopje, veer, dennenappel; text says they stand on the mantelpiece in the living room and to read them **left to right**.
-  - Mantelpiece (`c.mantel`, living room west wall, fireplace at (48.8, 62)): physical objects left→right when facing it: kaars, **veer**, klok, **dennenappel**, vaas, **kopje**. The inspect text lists them too.
-  - Drawer lock (`c.drawerLock`): three dials, each with kaars, veer, klok, dennenappel, ster, kopje.
-- **Reasoning:** keep only the invitation's three pictograms, in mantel order.
-- **Answer:** `veer, dennenappel, kopje`.
-- **Output:** flag `drawerLockSolved`, lock `lock.hallDrawer`; the drawer springs open; *messing sleutel* (study key) inside.
-- **Recovery:** wrong attempts only increment a counter; unlimited retries.
+## 1 · The hall drawer (start thread)
+- **Where:** console (ladekast) on the west wall of the hall, just inside the vestibule.
+- **Evidence:** the invitation: *"Op de schoorsteenmantel staan drie voorwerpen op kleine messing voetjes. Alleen
+  die drie horen bij de lade. Lees ze van links naar rechts, terwijl je voor de haard staat."* The living-room
+  mantel shows, left → right when facing the hearth: candle on a tin saucer, **feather on a brass stand**, clock on
+  a wooden plinth, **pinecone on a brass stand**, vase on a lace doily, **cup on a brass stand**. The notebook shows
+  the same row with its bases. Each dial offers all six objects.
+- **Solution:** Veer – Dennenappel – Kopje. Wrong entries only count an attempt.
+- **Reward:** the drawer opens: *landgoedregister* (explains the three seals and the basement door) and the shed key.
+- **Hints:** 1 where to look · 2 only the brass-stand objects, read facing the hearth · 3 the answer.
 
-## Beat 2 — Study desk (upstairs, west room)
-- **Prerequisites:** brass study key (unlocks `door.study` on the landing).
-- **Clues:**
-  - Desk note (`c.studyNote`): press the three forest places of the organiser's *ochtendwandeling* in the order of the dashed route on the wall map.
-  - Framed map (`c.forestMap`) on the study's south wall: a dashed route with arrowheads and "start" at the **put** (96, 26) → **schuur** (28, 26) → **vuurplaats** (14, 12). The notebook stores the same diagram.
-- **Answer:** `put, schuur, vuur`. (Iteration 1 used a "morning sun reaches east first" rule; replaced by an explicit route because the game does not simulate sunrise.)
-- **Output:** flag `studyLockSolved`, compartment opens; *schuursleutel* inside.
-- **Recovery:** unlimited retries.
+## Thread A · Aan tafel
+**A1 Service plan.** Torn hosting plan on the dining sideboard (three trolleys, the rules are on the kitchen
+chart; the third trolley stayed in the conservatory). Kitchen chart (west wall): *"Wat koud moet blijven, vertrekt
+uit de provisiekamer. Bloemen gaan naar de serre. De wagen die overblijft, bedient de tafel."* Three wordless tags.
+Hang them in the panel (tap a tag, then a slot; tags can always be taken back). The arrangement is judged only
+when all three hang. → The serving hatch opens: **serresleutel** + note.
 
-## Beat 3 — Timber shed (forest, ≈ (28, 26))
-- **Prerequisites:** shed key. Reach it via the forest path that leaves the forecourt to the west.
-- **Clues:** tool board (`c.toolboard`) on the shed's west wall: *"Eerst het vuur. Steek dan de lantaarn aan bij het vuur. Pas in dat licht lees je de plaat."* It is **only readable with the torch on** (bag → Zaklamp aan, or F); otherwise a toast explains why.
-- **Pickups:** *aanmaakhout* (floor, SW corner); *houten penning* in the workbench drawer (north wall).
-- **Output:** kindling + token in inventory.
-- **Recovery:** the torch cannot be missed (required to leave home). Pickups stay until taken.
+**A2 Cabinet wheels.** The conservatory key opens both conservatory doors (one shared lock: from the service
+corridor and from the garden). Evidence: the pool mosaic (shallow south → deep north: cirkel, driehoek, golf,
+ruit), the forgotten trolley ("Het bord daar telt van diep naar ondiep"), and the burned board in the sauna
+outside to the right (boxes 1–4 numbered from the deep end). The four numbered wheels above the glass door start
+on the untransformed shallow→deep reading. **Answer: 1 Ruit · 2 Golf · 3 Driehoek · 4 Cirkel** → glass door
+opens → **tafelzegel**.
 
-## Beat 4 — Fire clearing (forest, ≈ (14, 12))
-- **Prerequisites:** kindling, matches.
-- **Steps:** select *aanmaakhout* → use on the fire pit (placed, consumed); select *lucifers* → use on the pit (fire lit). Then use the lantern on the post: it can only be lit **from the fire** ("De lantaarnkap is diep en de lucifers zijn te kort…"). Then inspect the copper plate.
-- **Answer revealed:** plate (`c.firePlate`): **Maan → Blad → Zon** ("Zo ontsteek je de tuin.").
-- **Wrong combinations:** matches before kindling → explained failure; other items → "Dat helpt niet om vuur te maken."
-- **Recovery:** the fire can be put out and relit (wood stays in the pit; matches are reusable). Once read, the plate stays recorded in the notebook.
+## Thread B · In de kantlijn
+**B1 Library catalogue.** Evidence: the framed floor plan in the library (each room's emblem, also on the enamel
+plaques beside the doors), the guestbook on the lectern (each room's page tab shape) and the reading table (three
+books with emblems; three sockets marked with tab shapes: puntig, rond, vierkant). Chain: emblem → room → tab.
+- ster → Sterrenkamer → ronde tab · varen → Botanische kamer → puntige tab · koffer → Reiskamer → vierkante tab.
+Judged only when all three sockets are filled. → The table drawer opens: **messing sleutel** + archive card.
 
-## Beat 5 — Garden lanterns (lantern circle on the open lawn)
-- **Positions:** a compact circle around a low stone near (58, 92.4): Zon (54.6, 92.0), Maan (58.0, 95.2), Blad (61.4, 92.0). Each shows its symbol as a light cut-out on four sides (shape + colour).
-- **Answer:** light `maan`, then `blad`, then `zon`.
-- **Feedback design:** the first and second lantern always give the same acknowledgement ("De lantaarn gaat zacht branden"), right or wrong. Only when the third burns is the order evaluated. Wrong: all three burn for a moment, then go out (`seq.gardenLanterns = []`, attempt counter +1); no world progress is lost.
-- **Output:** flag `lanternsSolved`, lock `lock.cabinetLower`; a row of ground lights runs from the circle to the conservatory (visible cause → effect), and the conservatory cabinet's lower compartment opens: take the *zwengel* (crank).
-- **Recovery:** unlimited retries; the circle is small, so an attempt never requires crossing the garden.
+**B2 Study desk.** The key opens the study upstairs (grand stair → landing → east corridor). The note: press the
+three places of the morning walk in the order of the dotted route on the framed map. Map: route starts at the
+well (east), passes the shed (west), ends at the fire (south-west). **Put – Schuur – Vuur** → **archiefzegel**.
 
-## Beat 6 — Conservatory cabinet wheels (+ barrel sauna)
-- **Evidence:**
-  - Pool mosaic (`c.poolTiles`), visible on the pool floor from the shallow end with the steps (south) to the deep end (north): **cirkel, driehoek, golf, ruit**. "ONDIEP" / "DIEP" signs on the coping.
-  - Sauna board (`c.saunaDiagram`) inside the barrel sauna (outside, east of the conservatory): the pool from above, an arrow from **deep to shallow**, four boxes numbered **1 (deep) … 4 (shallow)**, "Zoals de stoom opstijgt: van diep naar ondiep."
-  - Cabinet (`c.cabinet`): four turnable symbol wheels numbered **1–4** (left → right) above the glass door. They start on the mosaic's untransformed reading (cirkel, driehoek, golf, ruit).
-- **Reasoning:** box 1 is the deep end, so wheel 1 = the deepest mosaic symbol.
-- **Answer:** wheels `1 ruit, 2 golf, 3 driehoek, 4 cirkel`. Each tap turns one wheel through driehoek → cirkel → ruit → golf. The glass door opens as soon as all four match.
-- **Output:** flag `cabinetPanelSolved`, upper glass display opens: *wapenschild* (crest) + well instructions note (`c.wellNote`).
-- **Optional:** sauna heater on/off (glowing stones, steam, sound). Never a timer or gate.
-- **Compatibility:** saves solved with iteration 1's 4-button panel show the wheels solved.
+## Thread C · Buiten de paden
+**C1 Shed and fire.** Shed key (hall drawer). The shed is west of the forecourt along the forest path. Dark
+inside: the tool board needs the torch. Take the kindling; the workbench drawer holds the **boswandeljournaal**
+(sketch of the hill with roots over a door; "follow the southern path; at the signpost with the forked arm go
+north into the hill"). Fire clearing (south-west): kindling on the pit, then matches; light the post lantern from
+the fire; the copper plate reads **Maan → Blad → Zon**.
 
-## Beat 7 — Well (forest east, ≈ (96, 26))
-- **Prerequisites:** crank (beat 5). Crest (beat 6) to open the box.
-- **Steps:** select *zwengel* → use on the well (installed, consumed); use again ("Zwengelen") — bucket rises with an iron box. With the crest in the bag, the box opens.
-- **Missing prerequisite:** without the crest the bucket still rises and the game explains: the box has a shield-shaped lock; you need the *wapenschild* from the conservatory's upper cabinet. Coming back later with the crest opens it.
-- **Output:** *sleutel van het huisje* + *snipper van de uitnodiging* (`c.fragment`: "Links hoort wat uit het bos komt, rechts wat uit het huis komt.").
-- **Recovery:** crest is not consumed here. Crank stays installed on the well.
+**C2 Garden lanterns.** Lawn behind the manor: three lanterns (zon, maan, blad) around a flat stone. Light Maan,
+Blad, Zon. A wrong third lantern makes all three flare and go out (the attempt resets; no prefix feedback).
+→ The stone's lid slides aside: **spoorzegel**.
 
-## Beat 8 — Portuguese cottage (≈ (25, 92))
-- **Prerequisites:** cottage key (front door), token + crest.
-- **Steps:** open the front door; inside, the gathering-room door has **no keyhole**, gold trim and two niches. Use a niche (opens the niches panel).
-- **Answer:** `token` in the **left** niche (from the forest/shed), `crest` in the **right** niche (from the house).
-- **Wrong placement:** both filled but wrong → door stays shut with a hint; items can be taken back or swapped any time.
-- **Output:** flag `cottageSolved`, gathering door opens, table lamps/candles/bunting light up; stepping in triggers the ending, stats and the playtest feedback prompt (copy to clipboard).
+## Convergence · Samenkomst
+**D1 Basement door** (back hall, behind the grand stair). Three seal impressions; the door names any missing
+seal by shape. With all three seals it opens; a stair descends to the Kelderportaal.
 
-## Optional — Billiard panel (manor billiard room, east wall)
-- **Taught by examples:** two framed sketches (`c.billiardExamples`): a lamp lights where a **coloured** ball lies; the white ball does not count; the window is at the top.
-- **Evidence:** the actual table: red top-left, yellow middle-right, blue bottom-right, white bottom-middle.
-- **Answer:** cells 0, 5, 8 (row-major, window row first).
-- **Reward:** memory note `mem.billiard.scoreboard`. Not required for the ending.
+**D2 Route console.** Archive (west): the pipe drawing — solid line from the library (walls), dashed from the
+conservatory pool (water), dotted from the fire (paths), joining in the route chamber and running on to a hill.
+Route chamber (north-west): three sockets labelled only with line styles (left → right: solid, dashed, dotted).
+Archiefzegel → solid, tafelzegel → dashed, spoorzegel → dotted. Seals can be moved between sockets or taken
+back; judged when all three are in. → Map lights up towards BOSLUST, the **letterstrook** slides out.
 
-## Optional memories
-Guestbook (hall), photo (living), shopping list (kitchen), storage box (upstairs), pond bench note, side-gate postbox, home calendar, cottage table card. See `src/content/memories.ts`.
+**D3 BOSLUST.** Southern loop → signpost with the forked arm at (55.5, 8.6) → side path north into the stone-walled
+cut → door in the hill, sign **"BOSLUST"**. Engraved tablet: **WZHH YLHU HHQ GULH**. The library note on secret
+writing teaches the shift ("ABC wordt DEF. Om een geschreven bericht terug te lezen, ga je drie letters terug.").
+The lock's cover is sealed until the route is restored and the strip is carried. Three back: TWEE VIER EEN
+DRIE → **2413**. Wrong codes all give the same neutral message.
+
+**D4 Route plates.** A real stair descends inside the hill to the entry cellar and the rooted passage. Wall
+drawing: tafelplaat notch up, boekplaat notch right, boomplaat notch down (left → right as you face the wall).
+Each tap turns a plate a quarter clockwise; plates start at down / up / right. Pull the lever; the result is
+judged on all three. → **door to the gathering room** opens.
+
+**D5 Finale.** Gathering room: laid table, lit hearth and candles, keepsakes shelf (fictional objects, empty
+labels). Reading the letter ends the chapter: *"Een plek onthoudt weinig uit zichzelf. Wij geven haar iets om
+te bewaren."* Afterwards the old tunnel north of the room leads to the manor basement; the bolt is on the tunnel
+side, so it only becomes a shortcut after the finale and never bypasses the basement door or the cipher.
+
+## Optional content
+Billiard panel (balls → lamps: cells 0, 5, 8), memory notes (photo, guestbook, kitchen list, suitcase, telescope
+logbook, storage box, nest box in the old oak east of the pond, pond bench, side-gate postbox, cottage card,
+keepsakes), the botanical room's herbarium, the old cottage with the Kwartiermaker's note.
+
+## Recorded walkthrough (automated, desktop, no debug cheats)
+`node scripts/e2e.mjs` (suite `walkthrough`) plays 70 steps through the real movement, collision, action button
+and panels, including deliberate wrong attempts (wrong service plan, wrong lantern order, wrong cipher digits).
+Step list with simulated timestamps: [`iteration-3/metrics-after/walkthrough-steps.txt`](iteration-3/metrics-after/walkthrough-steps.txt).

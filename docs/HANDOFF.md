@@ -1,6 +1,25 @@
 # Feh Lu We — status, verification record and handoff
 
-Last updated: 2026-10-04. Branch: `ccr-75ef4113-kfkimm` (the repository was empty before this work).
+Last updated: 2026-10-05. Branch: `ccr-75ef4113-kfkimm` (the repository was empty before this work).
+
+## Iteration 3 (5 Oct 2026) — "Het huis dat zich herinnert"
+
+Driven by the iteration-3 implementation prompt and five art-direction images. Design: [`ITERATION_3_DESIGN.md`](ITERATION_3_DESIGN.md);
+art: [`ART_DIRECTION.md`](ART_DIRECTION.md); evidence: [`ITERATION_3_VALIDATION.md`](ITERATION_3_VALIDATION.md); spoilers:
+[`PUZZLE_SOLUTIONS.md`](PUZZLE_SOLUTIONS.md). Delivered in checkpoints:
+
+1. **CP1** (`5e84349`): pictorial colour icons restored; mantel drawer rule made fair (brass stands, read facing the
+   hearth, no answer plaque); room/portal-based persistent lighting with hysteresis; visible flames in front of the
+   hearth recess; reduced motion holds flames steady.
+2. **CP2 + CP3** (`1997ea8`): 180 × 150 estate on a terrain heightfield; manor rebuilt with 26 named rooms, service
+   wing, basement; conservatory + sauna moved; BOSLUST hill, cut, real stair, chambers and tunnel; floor-tab map;
+   three threads with seals, convergence, cipher, plates and finale; thread-aware notebook and hints; save v4 with
+   migration and set-aside restarts; draw-call/triangle budgets met.
+3. **CP4/CP5** (this commit): storybook woodland details (toadstools, stumps, grass tufts), meadow grass; docs,
+   evidence screenshots and metrics; deployment check below.
+
+Still pending: real-phone checks (frame rate, touch feel, iOS Safari), a human playtest of the new route, audio
+listening, replacing placeholder memories with authentic ones.
 
 ## Iteration 2 (5 Oct 2026) — independent review fixes
 
@@ -85,6 +104,10 @@ low mode (default on touch devices) stays inside it. Initial transfer: ~213 KB g
 
 ## Deployment status
 
+- **Iteration 3:** see the dated entry added at the end of this section for the run that deployed the iteration-3
+  build. As before, the live page cannot be loaded from the authoring session; a successful workflow is reported as
+  "workflow-verified", not as verified live.
+
 - **Iteration 2 deployed (workflow-verified only).** Run
   [37292481735](https://github.com/Algolon/Feh-Lu-We/actions/runs/37292481735) for commit `f8ba812`: build job
   (npm ci, typecheck, 40 unit tests, build, Pages artifact 220 kB uploaded) and deploy job (`configure-pages` +
@@ -112,13 +135,14 @@ node scripts/shot.mjs "http://localhost:4173/Feh-Lu-We/?debug=1" out.png "window
 
 ## Suggested next steps
 
-1. Enable Pages (above) and open the link on real phones; record FPS with `?debug=1` at the six viewpoints above.
-2. Run the playtest in `docs/PLAYTEST.md` with 2–3 friends; tune hint wording and puzzle difficulty from results.
+1. Open the link on real phones; record FPS with `?debug=1` in the garden, the hall, the BOSLUST cut and the forest
+   (the views closest to the draw-call budget). Check that the pause menu's build id matches the latest commit.
+2. Run the playtest in `docs/PLAYTEST.md` with 2–3 friends; time the real route (estimate 45–90 min); tune hints.
 3. Replace placeholder memories (`src/content/memories.ts`) and the organiser voice with authentic content;
    consider photos as framed textures (keep files small; credit them in `ASSET_CREDITS.md`).
-4. Content depth toward ~60 minutes: more optional memory hunts, a second layered clue per area, an upstairs
-   bedroom wing; keep the one-path garden and open lawn.
-5. Art: dormers, softer foliage cards, more house-specific props from the real holiday homes.
+4. If a phone struggles in the garden/hall: lower `World.VEG_FAR`, merge more loose props into area batches, or
+   split the woodland prop chunk per site.
+5. Art: contact shadows under furniture, more house-specific props, a richer under-the-hill passage.
 
 ## Implementation log (short)
 
@@ -129,3 +153,5 @@ node scripts/shot.mjs "http://localhost:4173/Feh-Lu-We/?debug=1" out.png "window
 5. Playwright walkthrough iterated until tutorial → ending passed; added collision/save/touch/WebGL/metrics suites.
 6. Performance pass: size-based distance culling, interior zones, baked decorative lamps, thinner undergrowth.
 7. Docs, Pages workflow, push.
+8. Iteration 2: review fixes (see above).
+9. Iteration 3: checkpoints CP1–CP5 (see the top of this file).

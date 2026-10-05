@@ -1,0 +1,12 @@
+[
+  {
+    "name": "walkthrough tutorial → finale (A → B → C)",
+    "ok": true,
+    "detail": "70 steps, 31 clues, 6.1 min of simulated walking/acting in the estate (no reading time)"
+  },
+  {
+    "name": "walkthrough: no console errors / 404s",
+    "ok": true,
+    "detail": ""
+  }
+]

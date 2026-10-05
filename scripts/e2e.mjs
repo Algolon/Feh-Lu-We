@@ -48,7 +48,7 @@ async function walkthrough() {
   const step = async (label, fn, arg) => {
     try {
       const r = await page.evaluate(fn, arg);
-      steps.push(label);
+      steps.push(`${label} @ ${(await page.evaluate(() => (window.__simTicks ?? 0) / 30)).toFixed(0)} s`);
       return r;
     } catch (e) {
       await shot(page, 'FAIL-' + label.replace(/\W+/g, '_'));
@@ -73,7 +73,7 @@ async function walkthrough() {
     await page.waitForFunction(() => window.__game.world.id === 'estate' && document.getElementById('fade').className === '', null, { timeout: 60000 });
     await page.evaluate(helpers);
     await page.evaluate(`window.UI = { place: ${UI.place}, keys: ${UI.keys}, digits: ${UI.digits} }`);
-    await page.evaluate(() => { window.__t0 = T.G().state.stats.activeMs; window.__sim = 0; });
+    await page.evaluate(() => { window.__simTicks = 0; });
     await shot(page, '03-estate-gate');
     // --- arrival: the drive to the manor and the hall drawer
     await step('walk the driveway to the manor', () => T.walk([[90, 30], [90.5, 48], [90, 62], [87, 70], [89.6, 77.6], [90, 79.0]], true));
@@ -233,8 +233,8 @@ async function walkthrough() {
       const p = T.walk([[78.6, 97], [83, 97]]);
       if (T.G().world.hereRoom !== 'route') throw new Error('not in the route chamber: ' + JSON.stringify(p));
     });
-    const st = await E(page, () => ({ clues: T.G().state.clues.length, sim: T.G().state.stats }));
-    log('walkthrough tutorial → finale (A → B → C)', true, `${steps.length} steps, ${st.clues} clues`);
+    const st = await E(page, () => ({ clues: T.G().state.clues.length, simMin: (window.__simTicks ?? 0) / 30 / 60 }));
+    log('walkthrough tutorial → finale (A → B → C)', true, `${steps.length} steps, ${st.clues} clues, ${st.simMin.toFixed(1)} min of simulated walking/acting in the estate (no reading time)`);
     writeFileSync(`${OUT}/walkthrough-steps.txt`, steps.join('\n'));
   } catch (e) {
     log('walkthrough tutorial → finale (A → B → C)', false, e.message);

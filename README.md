@@ -1,9 +1,10 @@
 # Feh Lu We
 
 A mobile-first, first-person, stylised 3D puzzle-exploration game celebrating a friends group's Veluwe
-Weekends. You pack at home, arrive early at a fictional estate and follow a trail of connected clues through
-the manor, the glazed pool conservatory, the barrel sauna, the open garden, the forest and finally the small
-Portuguese cottage where everyone gathers. Player-facing text is Dutch.
+Weekends. You pack at home, arrive early at a fictional estate and follow three threads of clues — at the table,
+in the margins, off the paths — through a two-storey manor, a glass pool conservatory and sauna, a lawn with
+lanterns and a large woodland. Three seals open the basement; a restored route and a taught cipher open
+**BOSLUST**, a door in a wooded hill, where a stair leads down to the gathering room. Player-facing text is Dutch.
 
 **Status:** playable prototype, end-to-end solvable. Prototype content (notes, memories) is placeholder text
 by a fictional organiser ("de Kwartiermaker") and is meant to be replaced — see [Memory content](#memory-content).
@@ -11,6 +12,7 @@ by a fictional organiser ("de Kwartiermaker") and is meant to be replaced — se
 - Published at https://algolon.github.io/Feh-Lu-We/ (GitHub Pages; see [Deploy](#deploy))
 - Build brief and concept art: [`docs/BUILD_BRIEF.md`](docs/BUILD_BRIEF.md), [`docs/concept-art/`](docs/concept-art/)
 - Spoilers: [`docs/PUZZLE_SOLUTIONS.md`](docs/PUZZLE_SOLUTIONS.md) · Playtest guide: [`docs/PLAYTEST.md`](docs/PLAYTEST.md) · Status/next steps: [`docs/HANDOFF.md`](docs/HANDOFF.md)
+- Iteration 3 ("Het huis dat zich herinnert"): [`docs/ITERATION_3_DESIGN.md`](docs/ITERATION_3_DESIGN.md) · [`docs/ITERATION_3_VALIDATION.md`](docs/ITERATION_3_VALIDATION.md) · [`docs/ART_DIRECTION.md`](docs/ART_DIRECTION.md)
 - Iteration 2 (review fixes): [`docs/ITERATION_2_REVIEW.md`](docs/ITERATION_2_REVIEW.md) · [`docs/ITERATION_2_VALIDATION.md`](docs/ITERATION_2_VALIDATION.md)
 
 ## Run locally
@@ -29,8 +31,9 @@ npm run e2e          # browser checks against the preview server (see below)
 
 `npm run e2e` expects `npm run preview` running in another shell and a Chromium binary
 (defaults to `/opt/pw-browsers/chromium-1194/chrome-linux/chrome`; override with `CHROME=/path/to/chrome`).
-It runs a complete tutorial→ending walkthrough plus collision, save/reload/reset, multi-touch, WebGL-failure
-and render-budget checks, writing screenshots to `scripts/out/`.
+It runs a complete home→finale walkthrough through the real controls plus collision, save/migration/restore,
+lighting, multi-touch, WebGL-failure and render-budget checks, writing screenshots to `scripts/out/`
+(`E2E_ONLY=walkthrough,metrics` runs a subset). `node scripts/smoke3.mjs` loads named poses and prints render stats.
 
 URL flags: `?debug=1` shows median FPS and 95th-percentile frame time (from real, uncapped frame times), draw calls,
 triangles, position, reticle target, puzzle flags, safe checkpoint buttons and a reset button. `?autotest=1` exposes `window.__game` for automated tests. Neither changes saves.
@@ -47,17 +50,21 @@ triangles, position, reticle target, puzzle flags, safe checkpoint buttons and a
 | Pause & settings | Pauze button (top left) | `Esc` |
 
 Using an item: open the bag, pick an item, *In de hand nemen*; the action button then names what the item will do
-on targets where it matters (*Aansteken*, *Zwengel plaatsen*, or *Gebruik: …* with an explanation for wrong items).
+on targets where it matters (*Aansteken*, *Aanmaakhout erin leggen*, or *Gebruik: …* with an explanation for wrong items).
 Where a held item doesn't matter (an unlocked door, a burning fire) the normal action applies. Tap the held-item
 chip to put it away. Keys are used automatically on their locks.
 
-Notebook: clues grouped by area with the newest on top and a ✓ for solved puzzles; *Kaart* shows where you are
-(blue arrow), unvisited places as "?", and an upstairs sketch inside the manor. Hints (Hint button) can be chosen for any
-discovered, unsolved puzzle.
+Notebook: *Draden* lists the three story threads (plus arrival and convergence) with their next step and a
+*Volg deze draad* button that steers the objective line and hints; *Aanwijzingen* groups clues per thread with a ✓
+for solved puzzles; *Kaart* has tabs for the estate and each floor (basement and "onder de heuvel" appear once
+discovered), with a blue arrow for you and "?" for unvisited places. Hints show the last observation and the next
+step separately, with three levels per puzzle.
 
 Settings (pause menu): look and joystick sensitivity, low/high quality (high = shadows, sharper, 1.5× pixel
 ratio cap; low = 1× cap, no shadows; phones default to low), reduced motion, invert look, mute, optional
 fullscreen, restart with confirmation. Progress saves automatically to `localStorage` on this device.
+Restarting never deletes progress: the previous save is set aside and the start screen offers *Vorige voortgang
+terugzetten*. Saves from iteration 2 are migrated (tools and solved puzzles kept, a finished game archived).
 
 ## Architecture
 
@@ -68,11 +75,13 @@ src/core/        game.ts (loop, picking, scenes, save/restore, debug), state.ts 
 src/player/      input.ts (pointer-id touch joystick/look, keyboard, pointer lock), player.ts (movement), collision.ts (2.5D grid)
 src/world/       kit.ts (materials, batcher), textures.ts (seeded canvas textures), arch.ts (walls/doors/stairs/roofs),
                  furniture.ts, nature.ts (instanced vegetation), env.ts (sky, sun, dusk), home.ts, estate.ts, manor.ts,
-                 conservatory.ts (pool + sauna), cottage.ts, forest.ts
+                 conservatory.ts (pool + sauna), cottage.ts, forest.ts, boslust.ts (hill, stair, chambers, tunnel),
+                 layout.ts (authored layout), terrain.ts (heightfield), roomdefs.ts (rooms + portals), rooms.ts,
+                 fire.ts, hearth.ts
 src/interactions/ world.ts (World container, Interactable API, light pool, culling), props.ts (doors, drawers, pickups, lamps, inspectables)
 src/puzzles/     rules.ts (pure puzzle/progression rules, hints)
-src/content/     items.ts, clues.ts, symbols.ts, memories.ts (editable placeholder memories)
-src/ui/          ui.ts (HUD, overlays, puzzle panels), diagrams.ts (SVG clues), style.css
+src/content/     canon.ts (all answers + derived wording), items.ts, clues.ts, symbols.ts, memories.ts (editable placeholders)
+src/ui/          ui.ts (HUD, overlays, puzzle panels), diagrams.ts (SVG clues), map.ts (estate + floor plans), icons.ts, style.css
 src/audio/       audio.ts (WebAudio-synthesised sound, no files)
 tests/           vitest unit tests
 scripts/         e2e.mjs + e2e-helpers.js (Playwright suites), views.mjs (fixed-viewpoint screenshots),
@@ -87,23 +96,23 @@ Key design points:
   colliders, so nothing can be used through a wall.
 - **Collision** is a 2.5D grid of boxes/cylinders with Y ranges, flat floors and linear ramps (stairs use a hidden
   smooth ramp). Doors toggle their colliders and refuse to close on the player.
-- **Performance:** static geometry merged per material+chunk with vertex colours; vegetation instanced; small props
-  distance-culled by size; building interiors hidden from outside; a fixed pool of 3–4 point lights is assigned to
-  the nearest lit lamps (no shader recompiles when lamps toggle).
+- **Performance:** static geometry merged per material+area with vertex colours; areas drawn only when one of their
+  rooms is visible through open doors/arches (authored room/portal graph); vegetation instanced per tile with
+  distance culling and crown LOD; a fixed pool of 3–4 point lights assigned by room relevance with hysteresis
+  (no shader recompiles when lamps toggle).
 
 ## World layout (plan, 1 unit ≈ 1 m, X east, Z north)
 
 | Region | Footprint |
 |---|---|
-| Forest (south half) | X 0–120, Z 0–50 — shed (28,26), fire clearing (14,12), well (96,26), old side gate (108,12), looping paths |
-| Manor | X 48–72, Z 52–80 (entrance faces south; upstairs study + storage) |
-| Glazed pool conservatory | X 72–84, Z 64–82 (pool inside) |
-| Barrel sauna | X 85–89, Z 69–73 (outside, east of the conservatory) |
-| Portuguese cottage | X 20–30, Z 88–96, pond ≈ (36, 92) |
-| Garden | the rest of the northern half: open lawn, dining terrace, three lantern posts, one path manor → cottage |
+| Estate | 180 × 150, front gate (90, 0); terrain heightfield with rolling woodland and a hill |
+| Woodland (south) | Z 0–72 — shed (42, 39), fire clearing (21, 18), well (144, 39), old side gate (162, 18), fork signpost (55.5, 8.6) |
+| BOSLUST | door in the hill at (63, 18.2) behind a stone-walled cut; stair down to chambers at Y −3.4; tunnel north to the basement |
+| Manor | X 72–108, Z 80–110, two storeys + basement; service wing X 108–116, Z 92–110 |
+| Pool conservatory | X 116–130, Z 94–112 (pool inside); barrel sauna outside to its right at (134, 102) |
+| Garden | lawn north of the manor: terrace, lantern circle (90, 128), cottage X 32–42 Z 128–136, pond (48, 132) |
 
-Paths and the pond count as part of their landscape region. Roofs stay on in play; the pause/notebook
-*Kaart* shows a plan view.
+Full room list and design notes: [`docs/ITERATION_3_DESIGN.md`](docs/ITERATION_3_DESIGN.md).
 
 ## Deploy
 
@@ -121,9 +130,11 @@ works under that sub-path. No server-side routing is used.
 
 Placeholder memories live in [`src/content/memories.ts`](src/content/memories.ts) with stable IDs:
 `mem.home.calendar`, `mem.hall.guestbook`, `mem.kitchen.list`, `mem.living.photo`, `mem.billiard.scoreboard`,
-`mem.storage.box`, `mem.pond.bench`, `mem.sidegate.postbox`, `mem.cottage.ending`.
+`mem.storage.box`, `mem.reis.suitcase`, `mem.sterren.telescope`, `mem.garden.nestbox`, `mem.pond.bench`,
+`mem.sidegate.postbox`, `mem.cottage.table`, `mem.gathering.keepsakes`.
 Edit only `title`/`text`; keep IDs stable (saves and world objects refer to them). Puzzle clue texts are in
-`src/content/clues.ts` — changing those requires checking `docs/PUZZLE_SOLUTIONS.md` and `npm test`.
+`src/content/clues.ts`; answers come from `src/content/canon.ts` — changing those requires checking
+`docs/PUZZLE_SOLUTIONS.md` and `npm test`.
 
 ## Credits
 

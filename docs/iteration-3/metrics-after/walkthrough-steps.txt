@@ -1,0 +1,70 @@
+walk to table @ 1 s
+take invitation (opens it) @ 1 s
+take torch @ 1 s
+take matches @ 1 s
+take notebook @ 1 s
+use matches on candle @ 1 s
+door refuses while key missing @ 3 s
+open dressoir drawer @ 7 s
+take estate key from drawer @ 7 s
+leave home @ 9 s
+walk the driveway to the manor @ 16 s
+unlock front door @ 18 s
+enter hall @ 20 s
+read mantelpiece @ 27 s
+drawer lock panel @ 32 s
+enter Veer–Dennenappel–Kopje @ 34 s
+take ledger (reads it) + shed key @ 34 s
+notebook shows three threads @ 34 s
+A: read the torn hosting plan @ 44 s
+A: service chart — a wrong full plan is refused @ 49 s
+A: take tags back and hang them by the rule @ 50 s
+A: conservatory key from the hatch @ 51 s
+A: through the service corridor @ 62 s
+A: pool mosaic + forgotten trolley @ 69 s
+A: out to the sauna @ 78 s
+A: sauna heater + board @ 79 s
+A: cabinet wheels 1 Ruit 2 Golf 3 Driehoek 4 Cirkel @ 91 s
+A: take the table seal @ 92 s
+B: back through the wing to the library @ 121 s
+B: floor plan, guestbook, desk @ 127 s
+B: brass key and archive card @ 127 s
+B: read the note on secret writing @ 131 s
+B: up the grand stair @ 146 s
+B: unlock the study @ 150 s
+B: note + framed map @ 156 s
+B: desk lock Put–Schuur–Vuur @ 159 s
+B: take the archive seal @ 159 s
+C: downstairs and out of the front door @ 177 s
+C: forest path to the shed @ 188 s
+C: unlock shed @ 190 s
+C: tool board needs light @ 191 s
+C: kindling @ 192 s
+C: workbench drawer + journal @ 193 s
+C: walk to the fire clearing @ 203 s
+C: matches before kindling fail @ 203 s
+C: lantern refuses without fire @ 203 s
+C: kindling + matches → fire @ 203 s
+C: light post lantern, read plate @ 204 s
+C: back to the manor and round to the lawn @ 236 s
+C: a complete wrong lantern order resets the attempt (no prefix feedback) @ 242 s
+C: lanterns Maan → Blad → Zon open the stone @ 252 s
+C: take the trail seal @ 253 s
+D: in by the billiard garden door to the basement door @ 266 s
+D: three seals open the basement door @ 268 s
+D: down the basement stair @ 272 s
+D: service drawing in the archive @ 276 s
+D: route console @ 283 s
+D: take the letter strip @ 284 s
+D: up and out to the forest @ 313 s
+D: west along the southern loop to the fork signpost @ 319 s
+D: up the side path into the cut @ 323 s
+D: inscription, then the cover with the strip @ 324 s
+D: a wrong code gives neutral feedback @ 324 s
+D: TWEE VIER EEN DRIE → 2413 opens BOSLUST @ 326 s
+D: down the stair under the hill (no teleport) @ 330 s
+D: plate diagram @ 332 s
+D: turn the three plates, pull the lever @ 339 s
+D: into the gathering room @ 343 s
+D: the letter on the table → finale @ 344 s
+the old tunnel is a late shortcut to the manor basement @ 364 s

@@ -54,6 +54,29 @@ export function buildForest(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
     else veg.smallThing('flower', x, z, 0.14, r() < 0.5 ? '#b89ad8' : '#f2f0e6', chunk, y);
   }
 
+  // storybook details: toadstool clusters at tree feet, old stumps, grass tufts along the paths
+  pts.forEach(([x, z], i) => {
+    if (i % 6 !== 0) return;
+    const a = r() * Math.PI * 2, mx = x + Math.cos(a) * 0.75, mz = z + Math.sin(a) * 0.75;
+    if (!forestTreeOk(mx, mz) && FOREST_PATHS.some((p) => distToPolyline(mx, mz, p) < 1.3)) return;
+    veg.mushrooms(mx, mz, terrainHeight(mx, mz), `f${Math.floor(x / 45)}_${Math.floor(z / 36)}`, 2 + (i % 3));
+  });
+  for (const [x, z] of scatter(r, 3, ESTATE.w - 3, 3, ESTATE.forestEdge - 2, 11, 1200, forestTreeOk)) {
+    const y = terrainHeight(x, z), sc = 0.25 + r() * 0.2;
+    veg.smallThing('stump', x, z, sc, '#8a6a4a', `f${Math.floor(x / 45)}_${Math.floor(z / 36)}`, y);
+    w.col.addCircle(x, z, sc, y - 0.2, y + sc * 0.9);
+    if (r() < 0.5) veg.mushrooms(x + sc + 0.15, z, y, `f${Math.floor(x / 45)}_${Math.floor(z / 36)}`, 2);
+  }
+  for (const p of FOREST_PATHS) for (let i = 1; i < p.length; i++) {
+    const [ax, az] = p[i - 1], [bx, bz] = p[i];
+    const seg = Math.hypot(bx - ax, bz - az), nx = -(bz - az) / seg, nz = (bx - ax) / seg;
+    for (let t = 0; t < seg; t += 1.6) {
+      const side = r() < 0.5 ? -1 : 1, off = 1.25 + r() * 0.8;
+      const x = ax + ((bx - ax) * t) / seg + nx * off * side, z = az + ((bz - az) * t) / seg + nz * off * side;
+      veg.smallThing('grass', x, z, 0.28 + r() * 0.18, r() < 0.5 ? '#6f9a3e' : '#86a84a', `gr${Math.floor(x / 30)}_${Math.floor(z / 30)}`, terrainHeight(x, z));
+    }
+  }
+
   buildShed(w, g, c);
   buildFireClearing(w, g, c);
   buildWell(w, g, c);

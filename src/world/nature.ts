@@ -1,6 +1,7 @@
 // Instanced vegetation: broadleaf trees (trunk + clustered crown blobs), cypresses, shrubs, ferns,
 // flowers, rocks. Instances are chunked by area so frustum culling still works.
 import * as THREE from 'three';
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { getKit } from './kit';
 import { mulberry32, type Rng } from '../core/rng';
 
@@ -30,7 +31,7 @@ export class Vegetation {
   private trunks: { m: THREE.Matrix4; c: THREE.Color; chunk: string }[] = [];
   private crowns: { m: THREE.Matrix4; c: THREE.Color; chunk: string }[] = [];
   private cones: { m: THREE.Matrix4; c: THREE.Color; chunk: string }[] = [];
-  private small: { m: THREE.Matrix4; c: THREE.Color; chunk: string; kind: 'fern' | 'shrub' | 'flower' | 'rock' }[] = [];
+  private small: { m: THREE.Matrix4; c: THREE.Color; chunk: string; kind: 'fern' | 'shrub' | 'flower' | 'rock' | 'cap' | 'stem' | 'stump' | 'grass' }[] = [];
   private r: Rng;
   constructor(seed = 5) {
     this.r = mulberry32(seed);
@@ -72,10 +73,28 @@ export class Vegetation {
     }
   }
 
-  smallThing(kind: 'fern' | 'shrub' | 'flower' | 'rock', x: number, z: number, s: number, color: THREE.ColorRepresentation, chunk: string, yOff = 0) {
+  smallThing(kind: 'fern' | 'shrub' | 'flower' | 'rock' | 'cap' | 'stem' | 'stump' | 'grass', x: number, z: number, s: number, color: THREE.ColorRepresentation, chunk: string, yOff = 0) {
     const r = this.r;
+    if (kind === 'cap' || kind === 'stem' || kind === 'stump' || kind === 'grass') {
+      // these geometries stand on their own base (y = 0 at the ground)
+      const sy = kind === 'stem' ? s * 2.2 : kind === 'cap' ? s * 0.7 : kind === 'stump' ? s * 0.9 : s;
+      const y = kind === 'cap' ? yOff + s * 2.0 : yOff - (kind === 'stump' ? 0.05 : 0);
+      this.small.push({ m: this.mat(x, y, z, s, sy, s, r() * 6), c: new THREE.Color(color), chunk, kind });
+      return;
+    }
     const sy = kind === 'fern' ? s * 0.38 : kind === 'flower' ? s * 0.85 : kind === 'rock' ? s * 0.55 : s * 0.7;
     this.small.push({ m: this.mat(x, yOff + (kind === 'rock' ? s * 0.1 : sy * 0.6), z, s, sy, s * (0.8 + r() * 0.4), r() * 6), c: new THREE.Color(color), chunk, kind });
+  }
+
+  /** A small cluster of toadstools (red caps with white dots read from the instance colour). */
+  mushrooms(x: number, z: number, y: number, chunk: string, n = 3) {
+    const r = this.r;
+    for (let i = 0; i < n; i++) {
+      const a = r() * Math.PI * 2, d = r() * 0.35, s = 0.05 + r() * 0.05;
+      const px = x + Math.cos(a) * d, pz = z + Math.sin(a) * d;
+      this.smallThing('stem', px, pz, s, '#f4ecd8', chunk, y);
+      this.smallThing('cap', px, pz, s * 1.9, r() < 0.75 ? '#c8382a' : '#c98a4e', chunk, y - s * 1.9 * 2.0 + s * 2.2);
+    }
   }
 
   build(scene: THREE.Scene, castShadow: boolean) {
@@ -105,7 +124,16 @@ export class Vegetation {
     }
     for (const t of this.cones) push(`cone|${t.chunk}`, coneGeo, k.M.foliage, t, true);
     const softGeo = shadeVertically(withColor(new THREE.IcosahedronGeometry(1, 1)), 0.6, 1.1);
-    for (const t of this.small) push(`${t.kind}|${t.chunk}`, t.kind === 'rock' ? rockGeo : t.kind === 'flower' ? blobGeo : softGeo, t.kind === 'rock' ? rockMat : k.M.foliage, t, false, t.chunk === 'garden' ? 'all' : 'small');
+    const capGeo = shadeVertically(withColor(new THREE.SphereGeometry(1, 9, 4, 0, Math.PI * 2, 0, Math.PI / 2)), 0.75, 1.15);
+    const stemGeo = withColor(new THREE.CylinderGeometry(0.7, 0.9, 1, 6)).translate(0, 0.5, 0);
+    const stumpGeo = shadeVertically(withColor(new THREE.CylinderGeometry(0.85, 1.05, 1, 9)), 0.7, 1.05).translate(0, 0.5, 0);
+    // a grass tuft: five thin blades leaning outwards
+    const blades = [0, 1, 2, 3, 4].map((i) => new THREE.ConeGeometry(0.09, 1, 3).translate(0, 0.5, 0).rotateZ(((i % 2) - 0.5) * 0.5).rotateY(i * 1.26).translate(Math.cos(i * 1.26) * 0.08, 0, Math.sin(i * 1.26) * 0.08));
+    const grassGeo = shadeVertically(withColor(mergeGeometries(blades)!), 0.55, 1.15);
+    blades.forEach((b) => b.dispose());
+    const geoOf = (kind: string) => kind === 'rock' ? rockGeo : kind === 'flower' ? blobGeo : kind === 'cap' ? capGeo : kind === 'stem' ? stemGeo : kind === 'stump' ? stumpGeo : kind === 'grass' ? grassGeo : softGeo;
+    const matOf = (kind: string) => kind === 'rock' || kind === 'cap' || kind === 'stem' ? rockMat : kind === 'stump' ? k.M.bark : k.M.foliage;
+    for (const t of this.small) push(`${t.kind}|${t.chunk}`, geoOf(t.kind), matOf(t.kind), t, false, t.chunk === 'garden' && t.kind !== 'grass' ? 'all' : 'small');
     const meshes: THREE.InstancedMesh[] = [];
     for (const g of groups.values()) {
       const im = new THREE.InstancedMesh(g.geo, g.mat, g.items.length);

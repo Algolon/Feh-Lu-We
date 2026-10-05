@@ -440,6 +440,10 @@ function buildGarden(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
     if (r() < 0.55) veg.smallThing('flower', x, z, 0.14, purple[Math.floor(r() * 4)], 'garden');
     else veg.smallThing('shrub', x, z, 0.4 + r() * 0.3, '#5a8a3e', 'garden');
   }
+  // soft meadow: grass tufts across the lawn (instanced, tiled so only nearby tiles draw)
+  for (const [x, z] of scatter(r, 2, ESTATE.w - 2, ESTATE.forestEdge - 4, ESTATE.d - 2, 2.2, 9000, (x, z) => clearOf(x, z) || (z > 118 && Math.hypot(x - LC.x, z - LC.z) > 4.5 && !inRect(x, z, 29, 45, 124, 139) && Math.hypot(x - SITES.pond.x, z - SITES.pond.z) > 4.2))) {
+    veg.smallThing('grass', x, z, 0.25 + r() * 0.2, r() < 0.5 ? '#7fae4a' : '#94bc58', `gr${Math.floor(x / 30)}_${Math.floor(z / 30)}`, terrainHeight(x, z));
+  }
   for (let i = 0; i < 18; i++) {
     const a = (i / 18) * Math.PI * 2, d = 0.9 + (i % 3) * 0.2;
     veg.smallThing(i % 4 === 0 ? 'shrub' : 'flower', SITES.forecourt.x + Math.cos(a) * d, SITES.forecourt.z + Math.sin(a) * d, i % 4 === 0 ? 0.35 : 0.14, i % 4 === 0 ? '#4f7f38' : purple[i % 4], 'garden', 0.46);
