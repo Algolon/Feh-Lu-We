@@ -134,6 +134,10 @@ Poses:
 - 22/23 fire and lamp **off**.
 - 24/25 floor lamp on/off, 26 window near, 27 table near, 28 sofa front.
 
+**Note on lamp height.** `after/` was re-captured on the final build. `existing-render/` and `neutral-tm/` were
+captured before the floor lamp's light was restored to its original height: it was 15 cm lower, which affects only
+light near the lamp. Draw calls and triangles are identical between the two builds.
+
 The walkthrough video is `interior-sample/walkthrough.webm`: 844 × 390, real-time frames on a software renderer,
 so it is choppy.
 
@@ -349,4 +353,28 @@ emissive. |
 
 ## 10. Build and URLs
 
-DEPLOY_STATUS
+### CI and deployment
+
+**CI:** GitHub Actions "Build and deploy to GitHub Pages", run #12
+([37369378431](https://github.com/Algolon/Feh-Lu-We/actions/runs/37369378431)), for commit `68ee716`.
+- **Build job:** typecheck, unit tests, production build and artifact upload all succeeded.
+- **Deploy job:** succeeded.
+
+A later docs-only commit on this branch redeploys the same game code with its own build id.
+
+**Live delivery is not verified from here.** The authoring environment's proxy refuses `algolon.github.io`
+(`CONNECT tunnel failed, response 403`), so the live page was not loaded.
+
+To confirm on your phone:
+1. Open the review URL.
+2. Check that the build id on the review start card (and in Pauze) starts with `68ee716` or a later commit of this
+   branch.
+
+URLs:
+
+| | |
+|---|---|
+| Review | `https://algolon.github.io/Feh-Lu-We/?review=living` |
+| Review with FPS overlay | `https://algolon.github.io/Feh-Lu-We/?review=living&debug=1` |
+| Normal game (unchanged) | `https://algolon.github.io/Feh-Lu-We/` |
+
