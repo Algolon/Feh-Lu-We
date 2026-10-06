@@ -1,0 +1,297 @@
+{
+  "query": "ext=sample&light=sample",
+  "viewport": {
+    "width": 844,
+    "height": 390
+  },
+  "deviceScaleFactor": 1,
+  "quality": "low",
+  "fovDeg": 68,
+  "exposure": 1.15,
+  "renderer": "Chromium 141 + SwiftShader (software WebGL2)",
+  "hud": "hidden",
+  "neutral": "fog off, hemisphere #ffffff/#8a8a8a ×2.0, sun #ffffff ×1.6, exposure 1.0; fixtures unchanged",
+  "clay": "white sky/sun only; all lit surfaces matte #c9c3b8; no textures, vertex/instance colours, glows, flames, light pools, contact decals or point lights",
+  "shots": [
+    {
+      "name": "11-southern-loop",
+      "pose": {
+        "x": 40,
+        "y": 0,
+        "z": 9.3,
+        "yaw": 1.616,
+        "pitch": -0.016,
+        "eye": 1.65
+      },
+      "lookAt": [
+        55.5,
+        1.4,
+        8.6
+      ],
+      "calls": 98,
+      "callsMin": 98,
+      "triangles": 212014,
+      "room": "out"
+    },
+    {
+      "name": "13-boslust-fork",
+      "pose": {
+        "x": 51,
+        "y": 0.11,
+        "z": 7.2,
+        "yaw": 0.938,
+        "pitch": 0.016,
+        "eye": 1.65
+      },
+      "lookAt": [
+        63,
+        2,
+        16
+      ],
+      "calls": 120,
+      "callsMin": 120,
+      "triangles": 238465,
+      "room": "out"
+    },
+    {
+      "name": "14-boslust-cut",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 10.2,
+        "yaw": 0,
+        "pitch": 0.019,
+        "eye": 1.65
+      },
+      "lookAt": [
+        63,
+        1.8,
+        18.2
+      ],
+      "calls": 130,
+      "callsMin": 130,
+      "triangles": 245098,
+      "room": "out"
+    },
+    {
+      "name": "15-boslust-door-near",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 15.4,
+        "yaw": 0,
+        "pitch": -0.089,
+        "eye": 1.65
+      },
+      "lookAt": [
+        63,
+        1.4,
+        18.2
+      ],
+      "calls": 142,
+      "callsMin": 142,
+      "triangles": 247901,
+      "room": "out"
+    },
+    {
+      "name": "30-approach-mid",
+      "pose": {
+        "x": 58.6,
+        "y": 0,
+        "z": 9.6,
+        "yaw": 0.501,
+        "pitch": 0.016,
+        "eye": 1.65
+      },
+      "lookAt": [
+        63.2,
+        1.8,
+        18
+      ],
+      "calls": 126,
+      "callsMin": 126,
+      "triangles": 221468,
+      "room": "out"
+    },
+    {
+      "name": "31-reverse-from-door",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 16.4,
+        "yaw": -2.486,
+        "pitch": -0.019,
+        "eye": 1.65
+      },
+      "lookAt": [
+        55,
+        1.4,
+        6
+      ],
+      "calls": 47,
+      "callsMin": 47,
+      "triangles": 121996,
+      "room": "out"
+    },
+    {
+      "name": "32-side-busy",
+      "pose": {
+        "x": 70.5,
+        "y": 0,
+        "z": 8.6,
+        "yaw": -0.85,
+        "pitch": -0.004,
+        "eye": 1.65
+      },
+      "lookAt": [
+        61.5,
+        1.6,
+        16.5
+      ],
+      "calls": 109,
+      "callsMin": 109,
+      "triangles": 194044,
+      "room": "out"
+    },
+    {
+      "name": "33-oak-roots-near",
+      "pose": {
+        "x": 57,
+        "y": 0,
+        "z": 10,
+        "yaw": -0.617,
+        "pitch": -0.517,
+        "eye": 1.65
+      },
+      "lookAt": [
+        55.83,
+        0.5,
+        11.65
+      ],
+      "calls": 104,
+      "callsMin": 104,
+      "triangles": 195790,
+      "room": "out"
+    },
+    {
+      "name": "35-oak-side",
+      "pose": {
+        "x": 50.5,
+        "y": 0.05,
+        "z": 7.6,
+        "yaw": 0.918,
+        "pitch": 0.221,
+        "eye": 1.65
+      },
+      "lookAt": [
+        55.8,
+        3.2,
+        11.65
+      ],
+      "calls": 119,
+      "callsMin": 119,
+      "triangles": 237673,
+      "room": "out"
+    },
+    {
+      "name": "36-pine-silhouette",
+      "pose": {
+        "x": 60.5,
+        "y": 0,
+        "z": 9,
+        "yaw": 0.886,
+        "pitch": 0.33,
+        "eye": 1.65
+      },
+      "lookAt": [
+        69.2,
+        5.5,
+        16.1
+      ],
+      "calls": 115,
+      "callsMin": 115,
+      "triangles": 211191,
+      "room": "out"
+    },
+    {
+      "name": "38-fern-verge-near",
+      "pose": {
+        "x": 57.4,
+        "y": 0,
+        "z": 8.8,
+        "yaw": -0.507,
+        "pitch": -0.63,
+        "eye": 1.65
+      },
+      "lookAt": [
+        56.4,
+        0.15,
+        10.6
+      ],
+      "calls": 102,
+      "callsMin": 102,
+      "triangles": 191660,
+      "room": "out"
+    },
+    {
+      "name": "39-door-oblique",
+      "pose": {
+        "x": 61,
+        "y": 0,
+        "z": 15.6,
+        "yaw": 0.785,
+        "pitch": -0.014,
+        "eye": 1.65
+      },
+      "lookAt": [
+        63.6,
+        1.6,
+        18.2
+      ],
+      "calls": 135,
+      "callsMin": 135,
+      "triangles": 229185,
+      "room": "out"
+    },
+    {
+      "name": "41-species-mix",
+      "pose": {
+        "x": 47.5,
+        "y": 0.34,
+        "z": 5.2,
+        "yaw": 0.64,
+        "pitch": 0.072,
+        "eye": 1.65
+      },
+      "lookAt": [
+        60,
+        3.5,
+        22
+      ],
+      "calls": 124,
+      "callsMin": 124,
+      "triangles": 248673,
+      "room": "out"
+    },
+    {
+      "name": "43-hazel-holly",
+      "pose": {
+        "x": 75.4,
+        "y": 0.04,
+        "z": 7.8,
+        "yaw": -2.678,
+        "pitch": -0.165,
+        "eye": 1.65
+      },
+      "lookAt": [
+        73,
+        0.8,
+        3
+      ],
+      "calls": 35,
+      "callsMin": 35,
+      "triangles": 100102,
+      "room": "out"
+    }
+  ]
+}

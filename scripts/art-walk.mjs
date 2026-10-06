@@ -55,7 +55,7 @@ const walkRoute = (route, look) => page.evaluate(([route, look]) => new Promise(
   const step = () => {
     const p = g.player;
     const [x, z, tag] = route[i];
-    const tgt = tag ? look[tag] : [x, 1.4, z];
+    const tgt = tag ? look[tag] : [x, p.y + 1.55, z]; // untagged: look level along the way (also below ground)
     const want = Math.atan2(tgt[0] - p.x, tgt[2] - p.z);
     let d = want - p.yaw; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI;
     p.yaw += d * 0.12;

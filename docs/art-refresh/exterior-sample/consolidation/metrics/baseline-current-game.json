@@ -1,0 +1,110 @@
+{
+  "query": "",
+  "rows": [
+    {
+      "pose": "fork",
+      "calls": 133,
+      "callsMin": 133,
+      "triangles": 210412,
+      "parts": {},
+      "stats": null,
+      "caps": {
+        "path": "n/a",
+        "multiDraw": true,
+        "webgl2": true,
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "memory": {
+        "geometries": 82,
+        "textures": 17,
+        "sceneGeoMB": 16.28,
+        "vegGeoMB": 0,
+        "sceneTexMPx": 4.249
+      }
+    },
+    {
+      "pose": "approach",
+      "calls": 136,
+      "callsMin": 136,
+      "triangles": 201842,
+      "parts": {},
+      "stats": null,
+      "caps": {
+        "path": "n/a",
+        "multiDraw": true,
+        "webgl2": true,
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "memory": {
+        "geometries": 76,
+        "textures": 17,
+        "sceneGeoMB": 16.28,
+        "vegGeoMB": 0,
+        "sceneTexMPx": 4.249
+      }
+    },
+    {
+      "pose": "door",
+      "calls": 154,
+      "callsMin": 154,
+      "triangles": 222462,
+      "parts": {},
+      "stats": null,
+      "caps": {
+        "path": "n/a",
+        "multiDraw": true,
+        "webgl2": true,
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "memory": {
+        "geometries": 87,
+        "textures": 18,
+        "sceneGeoMB": 16.28,
+        "vegGeoMB": 0,
+        "sceneTexMPx": 4.249
+      }
+    },
+    {
+      "pose": "reverse",
+      "calls": 51,
+      "callsMin": 51,
+      "triangles": 97452,
+      "parts": {},
+      "stats": null,
+      "caps": {
+        "path": "n/a",
+        "multiDraw": true,
+        "webgl2": true,
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "memory": {
+        "geometries": 89,
+        "textures": 18,
+        "sceneGeoMB": 16.28,
+        "vegGeoMB": 0,
+        "sceneTexMPx": 4.249
+      }
+    },
+    {
+      "pose": "busy",
+      "calls": 137,
+      "callsMin": 137,
+      "triangles": 213562,
+      "parts": {},
+      "stats": null,
+      "caps": {
+        "path": "n/a",
+        "multiDraw": true,
+        "webgl2": true,
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "memory": {
+        "geometries": 78,
+        "textures": 17,
+        "sceneGeoMB": 16.28,
+        "vegGeoMB": 0,
+        "sceneTexMPx": 4.249
+      }
+    }
+  ]
+}

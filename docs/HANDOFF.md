@@ -32,6 +32,8 @@ verge.
   - Trees grown from branch skeletons with integrated buttress roots, three LODs from one layout; looser Scots
     pine; multi-stem hazel; readable holly; soft path verge; headwall stepping into the hill; backdrop row beyond
     the fence.
+  - Verified here: unit 94/94; browser regression 102/102 (one stale test constant corrected and rerun); normal
+    game pixel-identical at five poses; multi-draw and forced fallback pixel-identical at three poses.
   - Phone check guide: EXTERIOR_SAMPLE §1.1. **No device results yet.**
   - Tools: `scripts/ext-measure.mjs` (five-view measurements, both paths), `WALK=boslust-full node
     scripts/art-walk.mjs` (walkthrough incl. the door and stair).

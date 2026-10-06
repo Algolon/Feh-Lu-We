@@ -1,0 +1,205 @@
+{
+  "query": "ext=sample&light=sample",
+  "rows": [
+    {
+      "pose": "fork",
+      "calls": 120,
+      "callsMin": 120,
+      "triangles": 333146,
+      "parts": {
+        "wood": {
+          "calls": 1,
+          "instances": 14,
+          "triangles": 13868,
+          "objects": 1
+        },
+        "foliage": {
+          "calls": 1,
+          "instances": 88,
+          "triangles": 109946,
+          "objects": 1
+        },
+        "plants": {
+          "calls": 1,
+          "instances": 146,
+          "triangles": 33030,
+          "objects": 1
+        }
+      },
+      "stats": null,
+      "caps": {
+        "path": "n/a",
+        "multiDraw": true,
+        "webgl2": true,
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "memory": {
+        "geometries": 89,
+        "textures": 32,
+        "sceneGeoMB": 21,
+        "vegGeoMB": 2.69,
+        "sceneTexMPx": 4.417
+      }
+    },
+    {
+      "pose": "approach",
+      "calls": 126,
+      "callsMin": 126,
+      "triangles": 294724,
+      "parts": {
+        "wood": {
+          "calls": 1,
+          "instances": 5,
+          "triangles": 4712,
+          "objects": 1
+        },
+        "foliage": {
+          "calls": 1,
+          "instances": 69,
+          "triangles": 79698,
+          "objects": 1
+        },
+        "plants": {
+          "calls": 1,
+          "instances": 134,
+          "triangles": 34950,
+          "objects": 1
+        }
+      },
+      "stats": null,
+      "caps": {
+        "path": "n/a",
+        "multiDraw": true,
+        "webgl2": true,
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "memory": {
+        "geometries": 82,
+        "textures": 32,
+        "sceneGeoMB": 21,
+        "vegGeoMB": 2.69,
+        "sceneTexMPx": 4.417
+      }
+    },
+    {
+      "pose": "door",
+      "calls": 142,
+      "callsMin": 142,
+      "triangles": 314146,
+      "parts": {
+        "wood": {
+          "calls": 1,
+          "instances": 9,
+          "triangles": 6996,
+          "objects": 1
+        },
+        "foliage": {
+          "calls": 1,
+          "instances": 56,
+          "triangles": 65510,
+          "objects": 1
+        },
+        "plants": {
+          "calls": 1,
+          "instances": 147,
+          "triangles": 39576,
+          "objects": 1
+        }
+      },
+      "stats": null,
+      "caps": {
+        "path": "n/a",
+        "multiDraw": true,
+        "webgl2": true,
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "memory": {
+        "geometries": 92,
+        "textures": 33,
+        "sceneGeoMB": 21,
+        "vegGeoMB": 2.69,
+        "sceneTexMPx": 4.417
+      }
+    },
+    {
+      "pose": "reverse",
+      "calls": 47,
+      "callsMin": 47,
+      "triangles": 159446,
+      "parts": {
+        "wood": {
+          "calls": 1,
+          "instances": 12,
+          "triangles": 11222,
+          "objects": 1
+        },
+        "foliage": {
+          "calls": 1,
+          "instances": 20,
+          "triangles": 37292,
+          "objects": 1
+        },
+        "plants": {
+          "calls": 1,
+          "instances": 130,
+          "triangles": 22196,
+          "objects": 1
+        }
+      },
+      "stats": null,
+      "caps": {
+        "path": "n/a",
+        "multiDraw": true,
+        "webgl2": true,
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "memory": {
+        "geometries": 95,
+        "textures": 33,
+        "sceneGeoMB": 21,
+        "vegGeoMB": 2.69,
+        "sceneTexMPx": 4.417
+      }
+    },
+    {
+      "pose": "busy",
+      "calls": 124,
+      "callsMin": 124,
+      "triangles": 350174,
+      "parts": {
+        "wood": {
+          "calls": 1,
+          "instances": 13,
+          "triangles": 12522,
+          "objects": 1
+        },
+        "foliage": {
+          "calls": 1,
+          "instances": 96,
+          "triangles": 120316,
+          "objects": 1
+        },
+        "plants": {
+          "calls": 1,
+          "instances": 161,
+          "triangles": 30746,
+          "objects": 1
+        }
+      },
+      "stats": null,
+      "caps": {
+        "path": "n/a",
+        "multiDraw": true,
+        "webgl2": true,
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "memory": {
+        "geometries": 85,
+        "textures": 32,
+        "sceneGeoMB": 21,
+        "vegGeoMB": 2.69,
+        "sceneTexMPx": 4.417
+      }
+    }
+  ]
+}

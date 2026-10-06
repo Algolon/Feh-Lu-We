@@ -193,7 +193,7 @@ no downloaded assets. Current state after the consolidation pass; what changed f
     maps on, an instance is also kept if its shadow can reach the view (its bounding sphere swept down the sun
     direction), so it draws a superset of the multi-draw path's set (tested: still culls).
   - Without this fallback, three.js's own `BatchedMesh` path issues one draw call per visible instance:
-    measured 195–373 calls at the five views (§7).
+    measured 141–280 calls at the five views on the final build (§7).
   - **Capability detection** (`src/core/caps.ts`): `renderer.extensions.has('WEBGL_multi_draw')` on the live
     context, never the browser name. `?multidraw=0` wraps `HTMLCanvasElement.getContext` before the renderer is
     created so the context reports the extension as missing; the whole renderer then really runs without it.
@@ -381,17 +381,18 @@ Detected capabilities in this environment: WebGL2, `WEBGL_multi_draw` present (r
 
 **Calls / triangles at the five measured views:**
 
-| View (pose) | Baseline: current game | Revision 1 | **Revision 2, multi-draw** | **Revision 2, forced fallback** | three.js's own per-instance fallback* |
+| View (pose) | Baseline: current game | Revision 1 | **Revision 2, multi-draw** | **Revision 2, forced fallback** | three.js's own per-instance fallback* (calls) |
 |---|---|---|---|---|---|
-| fork (13) | 133 / 210 412 | 120 / 333 146 | **120 / 238 465** | **161** / 238 465 | 349 |
-| approach (30) | 136 / 201 842 | 126 / 294 724 | **126 / 221 468** | **160** / 221 468 | 327 |
-| doorway (15) | 154 / 222 462 | 142 / 314 146 | **142 / 247 901** | **175** / 247 901 | 347 |
-| reverse (31) | 51 / 97 452 | 47 / 159 446 | **47 / 121 996** | **76** / 121 996 | 195 |
-| busy woodland (41) | 137 / 213 562 | 124 / 350 174 | **124 / 248 673** | **166** / 248 673 | 373 |
+| fork (13) | 133 / 210 412 | 120 / 333 146 | **120 / 238 465** | **161** / 238 465 | 280 |
+| approach (30) | 136 / 201 842 | 126 / 294 724 | **126 / 221 468** | **160** / 221 468 | 250 |
+| doorway (15) | 154 / 222 462 | 142 / 314 146 | **142 / 247 901** | **175** / 247 901 | 246 |
+| reverse (31) | 51 / 97 452 | 47 / 159 446 | **47 / 121 996** | **76** / 121 996 | 141 |
+| busy woodland (41) | 137 / 213 562 | 124 / 350 174 | **124 / 248 673** | **166** / 248 673 | 279 |
 
-\* Calls only, measured at an intermediate step of this pass (same instance set, earlier shapes) by forcing the
-`BatchedMesh` path with the extension hidden. It shows what the device would have done without a fallback of our
-own; it is not a shipping path.
+\* Diagnostic only, not a shipping path: the final build with the `BatchedMesh` path forced while the extension is
+hidden (a temporary local patch, reverted), i.e. what a device without `WEBGL_multi_draw` would have done without
+a fallback of our own. Same triangles. (At an earlier step of this pass, before the far-LOD caps, it was 195–373.)
+Raw output of every column: [`consolidation/metrics/`](exterior-sample/consolidation/metrics/).
 
 - **Multi-draw path: within both guides at all five views** (≤ 142 calls, ≤ 248.7 k triangles). The busiest view
   fell from 350 k to 249 k; the doorway from 314 k to 248 k. Margins at the doorway and busy views are small
@@ -521,6 +522,25 @@ every pass three.js renders in a frame; at phone quality there is no shadow pass
 
 ## 8. Verification
 
+### Consolidation pass (revision 2)
+
+Code under test: commit `c853918` (game code identical to `3b6de0d`; the later commits change documents,
+evidence and the walkthrough script only). Each kind of evidence is labelled for what it is.
+
+| Kind | Result |
+|---|---|
+| Typecheck, production build | clean / OK |
+| Unit tests (source) | **94 / 94.** New: the instanced fallback packs exactly the in-view instances, uploads nothing when idle, moves an instance between geometries on a LOD change and grows its buffers (`tests/vegbatch.test.ts`, real code with a scene and camera, no GL); every species × variant within near < 3.2 k / mid < 0.9 k / far < 0.6 k triangles with the crown extent within 15 % across LODs; buttress roots reach out at ground level and narrow below it; every plant kind has a show range; bark and foliage map into their atlas columns. |
+| Browser regression suite (`node scripts/e2e.mjs`, headless Chromium + SwiftShader) | **102 / 102** on this build: 101 in the full run; the 102nd (shadow-map culling) failed there on a stale constant in the test (it compared against 100 trees; the backdrop row raised the total), was corrected to compare with the live count and passes in a rerun of the BOSLUST suite (19 / 19). |
+| — BOSLUST suite (19 checks) | Unchanged contract: 155 colliders, 15 interactables, original lights + 2 lanterns, the forest outside the zone **and the outer ring beyond the backdrop row** identical (6 528 instances), same reticle targets. Entrance by walking (fork clue → inscription → cover → 2413 → door → stair), save/restore above ground and underground, lanterns and culling at four poses, reduced motion, no console errors. New: multi-draw draws all vegetation in 2 calls; `?multidraw=0` really runs the instanced path (extension hidden, 73 InstancedMeshes, no BatchedMesh); **both paths draw the same trees, bushes, plants and triangles at 5 poses**; with shadow maps the fallback draws a superset and still culls (fork 105 of 109 — it culls little there); LOD walk by the movement code: far → mid → near at 24.9 m and 12.9 m, near held to 17.2 m and released at 19.2 m on the way back, identical in both paths; culling follows turning (83 → 4 trees drawn) and an idle camera uploads no instance buffers (both paths). |
+| — Review mode | `?review=boslust` starts at the fork with the sample, toggles old/new at the same pose, temporary progress opens the cover; the player's own save, backup and settings are byte-identical afterwards; normal entry unchanged. Inputs: taps on the start card and bar; walking by the test helpers. `?review=living` checks pass (art-sample suite). |
+| Normal game unchanged | Base mode (no flags) at poses 13, 14, 15, 31, 41: identical calls and triangles to the stored baseline and **pixel difference 0** (mean absolute 0, no pixel over 24) against the stored baseline captures. |
+| Multi-draw vs forced fallback, pixels | Poses 13, 15, 41: **pixel difference 0** (same captures, same settings; `consolidation/fallback/`). |
+| Measurements | §7, five views, both paths, raw output in `consolidation/metrics/`. |
+| Clay passes | Checked by eye in every clay capture: textures, vertex colours, batch instance colours, glows, light pools, contact decals and point lights are gone (the verge band renders as plain grey ground). |
+| Walkthrough | [`consolidation/walkthrough.webm`](exterior-sample/consolidation/walkthrough.webm), 113 s at 844 × 390: scripted steering through the real movement code (the joystick's move vector), the cover opened with the game's action while the reticle was on the lock, the code entered by clicking the panel's buttons, then the stair. Reviewed as a contact sheet every 8 s: signpost, path, turning round, door, lock, panel, open door, stair passage; no tree missing in a sampled frame. It is **not** touch input and **not** a human playtest, and at a few software-rendered frames per second it **cannot establish the absence of LOD popping**; the LOD and culling behaviour is covered by the e2e checks instead. |
+| Real device | **Not done.** No phone was available. Pending the owner's check (§1.1). |
+
 ### Revision 1
 
 Code under test: commit `0159007`.
@@ -615,7 +635,7 @@ approach by a person, and the high-quality (shadow-map) path beyond the absence 
 ### Consolidation pass (revision 2)
 
 16. **The fallback was unmeasured.** Measured first: three.js's own per-instance fallback would cost 195–373 calls
-    at the five views. Replaced by an instanced fallback of our own (§4); forced by `?multidraw=0`.
+    at the five views (141–280 on the final geometry). Replaced by an instanced fallback of our own (§4); forced by `?multidraw=0`.
 17. **One tree = two geometries** (bark and foliage on two materials) would have doubled the fallback's calls. A
     single atlas material makes each tree LOD one geometry; the multi-draw path dropped from 3 calls to 2.
 18. **Roots read as blades.** Root tubes lying on the ground showed as thin wedges, and a later smooth flare read as
@@ -645,48 +665,41 @@ approach by a person, and the high-quality (shadow-map) path beyond the absence 
 
 ## 10. Build and URLs
 
-Sample code: commit `eea6ab8`; the documents and evidence were added in `4fee5ec`, the commit CI built and
-deployed. The build id on the review start card and in Pauze is the short commit hash of the deployed build, so
-it shows `4fee5ec` or a later docs-only commit on this branch.
+**This version:** game code `3b6de0d` (consolidation), pushed and deployed with `c853918`; the evidence and these
+documents follow in a docs-only commit, which redeploys the same game code under its own build id. The build id on
+the review start card, in Pauze and (new) in the expanded review bar is the deployed commit's short hash: it should
+read `c853918` or a later commit of this branch.
+
+History: first version `eea6ab8` / docs `4fee5ec` (run #14); revision 1 `0159007` / docs `6bb5275` (run #16:
+build and deploy succeeded).
 
 ### CI and deployment
 
-**CI:** GitHub Actions "Build and deploy to GitHub Pages", run #14
-([37379068072](https://github.com/Algolon/Feh-Lu-We/actions/runs/37379068072)), for commit `4fee5ec`.
-- **Build job:** typecheck, unit tests, production build and artifact upload all succeeded.
-- **Deploy job:** succeeded.
-
-The commit that records this result is docs-only. It redeploys the same game code under its own build id.
-
-**Live delivery is not verified from here.** The authoring environment's proxy refuses `algolon.github.io`
-(`CONNECT tunnel failed, response 403`), so the live page was not loaded. To confirm on your phone:
-1. Open the review URL.
-2. Check that the build id on the review start card starts with `4fee5ec` or a later commit of this branch.
+Recorded separately in the final report and HANDOFF (the workflow result for this push is checked after the
+push; the live page cannot be loaded from the authoring environment — its proxy refuses `algolon.github.io`).
 
 | | |
 |---|---|
 | Review (exterior) | `https://algolon.github.io/Feh-Lu-We/?review=boslust` |
 | Review with FPS overlay | `https://algolon.github.io/Feh-Lu-We/?review=boslust&debug=1` |
+| Review, forced fallback, FPS overlay | `https://algolon.github.io/Feh-Lu-We/?review=boslust&multidraw=0&debug=1` |
 | Review (interior, unchanged) | `https://algolon.github.io/Feh-Lu-We/?review=living` |
 | Normal game (unchanged) | `https://algolon.github.io/Feh-Lu-We/` |
 
 ### Limitations
 
-- Real-device performance and colour are unmeasured, and so is touch walking of the whole route by a person.
-- Triangles are above the 250 k guide in the busiest views (~300 k); levers are listed in §7.
-- Weak spots, carried from §6:
-  - Close-up root junctions.
-  - Canopy undersides from directly below.
-  - The headwall's rectangular silhouette in clay.
-  - The path's hard edge.
-  - The original plank door.
-  - Visible style change beyond ~30 m west and north.
-- Repetition is reduced (four species, three variants each, ±6 % height), but variants are still recognisable
-  when two of the same stand side by side; three per species is a floor, not a ceiling.
-- High quality (shadow maps): the batched meshes cast without errors, but no capture set was reviewed at that
-  quality.
-- Batched rendering relies on `WEBGL_multi_draw` for its low call count; without it (Firefox, some Android) it is
-  correct but issues one call per visible instance.
-- Hazel at mid distance can still read as a stacked cluster ("pom-pom"); holly is a dark blob from afar.
-- **Nothing here is propagated beyond the zone, and nothing is approved.** Estate-wide rollout waits for the
-  owner's review.
+- **Device behaviour is unverified:** frame rate, thermal throttling, colour on a phone screen, touch walking of the
+  route by a person, and whether LOD changes are visible in motion. All numbers here are software-rendered
+  workload counts.
+- **Fallback calls are over the guide:** 160–175 at four of five views (guide 150; reverse 76). Cause and remedy
+  in §7.
+- **Thin budget margins** on the multi-draw path (doorway and busy views ~2 k triangles under 250 k): anything
+  added to the zone needs a matching saving.
+- **Shadow maps (high quality):** the fallback culls only modestly there (it keeps trees whose shadow may reach
+  the view); no capture set was reviewed at high quality.
+- **Re-rolled placement:** the backdrop trees joined the placement loop's random sequence, so bushes, plants,
+  litter and verge stones are placed differently from revision 1 (same rules; tree positions unchanged).
+- Weak spots (§6): polyhedral near clusters, bark lattice at 1 m, the nearest hazel still layered, the
+  headwall's straight centre top, one stump inside a root flare, the original style west and north beyond ~30 m.
+- **Nothing here is propagated beyond the zone and its backdrop row, and nothing is approved.** Estate-wide
+  rollout waits for the owner's review.

@@ -1,0 +1,265 @@
+{
+  "query": "ext=sample&light=sample&multidraw=0",
+  "rows": [
+    {
+      "pose": "fork",
+      "calls": 280,
+      "callsMin": 280,
+      "triangles": 238465,
+      "parts": {
+        "trees": {
+          "calls": 1,
+          "instances": 90,
+          "triangles": 47807,
+          "objects": 1
+        },
+        "plants": {
+          "calls": 1,
+          "instances": 72,
+          "triangles": 15448,
+          "objects": 1
+        }
+      },
+      "stats": {
+        "trees": {
+          "near": 12,
+          "mid": 18,
+          "far": 46,
+          "nearInView": 8,
+          "midInView": 10,
+          "farInView": 45
+        },
+        "bushes": {
+          "near": 4,
+          "mid": 6,
+          "far": 22,
+          "nearInView": 2,
+          "midInView": 4,
+          "farInView": 21
+        },
+        "plantsShown": 156
+      },
+      "caps": {
+        "path": "instanced",
+        "multiDraw": false,
+        "webgl2": true,
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "memory": {
+        "geometries": 89,
+        "textures": 28,
+        "sceneGeoMB": 20.46,
+        "vegGeoMB": 2.21,
+        "sceneTexMPx": 4.434
+      }
+    },
+    {
+      "pose": "approach",
+      "calls": 250,
+      "callsMin": 250,
+      "triangles": 221468,
+      "parts": {
+        "trees": {
+          "calls": 1,
+          "instances": 71,
+          "triangles": 34412,
+          "objects": 1
+        },
+        "plants": {
+          "calls": 1,
+          "instances": 55,
+          "triangles": 12784,
+          "objects": 1
+        }
+      },
+      "stats": {
+        "trees": {
+          "near": 10,
+          "mid": 25,
+          "far": 41,
+          "nearInView": 4,
+          "midInView": 12,
+          "farInView": 35
+        },
+        "bushes": {
+          "near": 6,
+          "mid": 7,
+          "far": 20,
+          "nearInView": 0,
+          "midInView": 3,
+          "farInView": 17
+        },
+        "plantsShown": 180
+      },
+      "caps": {
+        "path": "instanced",
+        "multiDraw": false,
+        "webgl2": true,
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "memory": {
+        "geometries": 82,
+        "textures": 28,
+        "sceneGeoMB": 20.46,
+        "vegGeoMB": 2.21,
+        "sceneTexMPx": 4.434
+      }
+    },
+    {
+      "pose": "door",
+      "calls": 246,
+      "callsMin": 246,
+      "triangles": 247901,
+      "parts": {
+        "trees": {
+          "calls": 1,
+          "instances": 64,
+          "triangles": 36661,
+          "objects": 1
+        },
+        "plants": {
+          "calls": 1,
+          "instances": 42,
+          "triangles": 10268,
+          "objects": 1
+        }
+      },
+      "stats": {
+        "trees": {
+          "near": 10,
+          "mid": 38,
+          "far": 28,
+          "nearInView": 5,
+          "midInView": 20,
+          "farInView": 20
+        },
+        "bushes": {
+          "near": 4,
+          "mid": 13,
+          "far": 16,
+          "nearInView": 1,
+          "midInView": 3,
+          "farInView": 15
+        },
+        "plantsShown": 184
+      },
+      "caps": {
+        "path": "instanced",
+        "multiDraw": false,
+        "webgl2": true,
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "memory": {
+        "geometries": 92,
+        "textures": 29,
+        "sceneGeoMB": 20.46,
+        "vegGeoMB": 2.21,
+        "sceneTexMPx": 4.434
+      }
+    },
+    {
+      "pose": "reverse",
+      "calls": 141,
+      "callsMin": 141,
+      "triangles": 121996,
+      "parts": {
+        "trees": {
+          "calls": 1,
+          "instances": 26,
+          "triangles": 19306,
+          "objects": 1
+        },
+        "plants": {
+          "calls": 1,
+          "instances": 70,
+          "triangles": 15046,
+          "objects": 1
+        }
+      },
+      "stats": {
+        "trees": {
+          "near": 10,
+          "mid": 39,
+          "far": 27,
+          "nearInView": 4,
+          "midInView": 11,
+          "farInView": 5
+        },
+        "bushes": {
+          "near": 3,
+          "mid": 14,
+          "far": 16,
+          "nearInView": 2,
+          "midInView": 4,
+          "farInView": 0
+        },
+        "plantsShown": 187
+      },
+      "caps": {
+        "path": "instanced",
+        "multiDraw": false,
+        "webgl2": true,
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "memory": {
+        "geometries": 95,
+        "textures": 29,
+        "sceneGeoMB": 20.46,
+        "vegGeoMB": 2.21,
+        "sceneTexMPx": 4.434
+      }
+    },
+    {
+      "pose": "busy",
+      "calls": 279,
+      "callsMin": 279,
+      "triangles": 248673,
+      "parts": {
+        "trees": {
+          "calls": 1,
+          "instances": 93,
+          "triangles": 51093,
+          "objects": 1
+        },
+        "plants": {
+          "calls": 1,
+          "instances": 64,
+          "triangles": 12082,
+          "objects": 1
+        }
+      },
+      "stats": {
+        "trees": {
+          "near": 10,
+          "mid": 14,
+          "far": 52,
+          "nearInView": 8,
+          "midInView": 11,
+          "farInView": 50
+        },
+        "bushes": {
+          "near": 4,
+          "mid": 3,
+          "far": 20,
+          "nearInView": 3,
+          "midInView": 2,
+          "farInView": 20
+        },
+        "plantsShown": 122
+      },
+      "caps": {
+        "path": "instanced",
+        "multiDraw": false,
+        "webgl2": true,
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "memory": {
+        "geometries": 85,
+        "textures": 28,
+        "sceneGeoMB": 20.46,
+        "vegGeoMB": 2.21,
+        "sceneTexMPx": 4.434
+      }
+    }
+  ]
+}
