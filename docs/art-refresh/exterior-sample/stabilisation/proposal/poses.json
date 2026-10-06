@@ -1,0 +1,197 @@
+{
+  "query": "ext=sample&light=sample",
+  "viewport": {
+    "width": 844,
+    "height": 390
+  },
+  "deviceScaleFactor": 1,
+  "quality": "low",
+  "fovDeg": 68,
+  "exposure": 1.15,
+  "renderer": "Chromium 141 + SwiftShader (software WebGL2)",
+  "hud": "hidden",
+  "neutral": "fog off, hemisphere #ffffff/#8a8a8a ×2.0, sun #ffffff ×1.6, exposure 1.0; fixtures unchanged",
+  "clay": "white sky/sun only; all lit surfaces matte #c9c3b8; no textures, vertex/instance colours, glows, flames, light pools, contact decals or point lights",
+  "shots": [
+    {
+      "name": "13-boslust-fork",
+      "pose": {
+        "x": 51,
+        "y": 0.11,
+        "z": 7.2,
+        "yaw": 0.938,
+        "pitch": 0.016,
+        "eye": 1.65
+      },
+      "lookAt": [
+        63,
+        2,
+        16
+      ],
+      "calls": 120,
+      "callsMin": 120,
+      "triangles": 237497,
+      "room": "out"
+    },
+    {
+      "name": "31-reverse-from-door",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 16.4,
+        "yaw": -2.486,
+        "pitch": -0.019,
+        "eye": 1.65
+      },
+      "lookAt": [
+        55,
+        1.4,
+        6
+      ],
+      "calls": 47,
+      "callsMin": 47,
+      "triangles": 119842,
+      "room": "out"
+    },
+    {
+      "name": "38-fern-verge-near",
+      "pose": {
+        "x": 57.4,
+        "y": 0,
+        "z": 8.8,
+        "yaw": -0.507,
+        "pitch": -0.63,
+        "eye": 1.65
+      },
+      "lookAt": [
+        56.4,
+        0.15,
+        10.6
+      ],
+      "calls": 102,
+      "callsMin": 102,
+      "triangles": 190053,
+      "room": "out"
+    },
+    {
+      "name": "41-species-mix",
+      "pose": {
+        "x": 47.5,
+        "y": 0.34,
+        "z": 5.2,
+        "yaw": 0.64,
+        "pitch": 0.072,
+        "eye": 1.65
+      },
+      "lookAt": [
+        60,
+        3.5,
+        22
+      ],
+      "calls": 124,
+      "callsMin": 124,
+      "triangles": 250909,
+      "room": "out"
+    },
+    {
+      "name": "43-hazel-holly",
+      "pose": {
+        "x": 75.4,
+        "y": 0.04,
+        "z": 7.8,
+        "yaw": -2.678,
+        "pitch": -0.165,
+        "eye": 1.65
+      },
+      "lookAt": [
+        73,
+        0.8,
+        3
+      ],
+      "calls": 35,
+      "callsMin": 35,
+      "triangles": 96588,
+      "room": "out"
+    },
+    {
+      "name": "44-stump-beech-near",
+      "pose": {
+        "x": 74.1,
+        "y": 0.14,
+        "z": 7.3,
+        "yaw": -2.356,
+        "pitch": -0.698,
+        "eye": 1.65
+      },
+      "lookAt": [
+        72.8,
+        0.25,
+        6
+      ],
+      "calls": 45,
+      "callsMin": 45,
+      "triangles": 114156,
+      "room": "out"
+    },
+    {
+      "name": "45-stump-beech-eye",
+      "pose": {
+        "x": 75.6,
+        "y": 0,
+        "z": 8.5,
+        "yaw": -2.318,
+        "pitch": -0.201,
+        "eye": 1.65
+      },
+      "lookAt": [
+        72.9,
+        0.9,
+        6
+      ],
+      "calls": 43,
+      "callsMin": 43,
+      "triangles": 109034,
+      "room": "out"
+    },
+    {
+      "name": "46-stump-birch-near",
+      "pose": {
+        "x": 82.5,
+        "y": 0.2,
+        "z": 32.3,
+        "yaw": -2.393,
+        "pitch": -0.697,
+        "eye": 1.65
+      },
+      "lookAt": [
+        81.2,
+        0.25,
+        30.9
+      ],
+      "calls": 54,
+      "callsMin": 54,
+      "triangles": 164838,
+      "room": "out"
+    },
+    {
+      "name": "47-stump-birch-eye",
+      "pose": {
+        "x": 83.4,
+        "y": 0.2,
+        "z": 33.9,
+        "yaw": -2.509,
+        "pitch": -0.25,
+        "eye": 1.65
+      },
+      "lookAt": [
+        81.2,
+        0.9,
+        30.9
+      ],
+      "calls": 68,
+      "callsMin": 68,
+      "triangles": 192296,
+      "room": "out"
+    }
+  ]
+}

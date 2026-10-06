@@ -43,8 +43,9 @@ verge.
   - Owner's phone review of revision 2 (qualitative, one device): works well, feels improved, no jittery
     overlapping pixels or models noticed. Unrecorded: device/browser, measured FPS, forced-fallback use.
   - Placement is deterministic per object (`src/world/woodlandPlan.ts`): adding a backdrop tree or changing a
-    species' variants no longer rearranges bushes or ground cover (unit-tested). One-time re-roll of bushes,
-    plants, litter and stones; trees unchanged.
+    species' variants no longer rearranges bushes or ground cover (unit-tested). One-time re-roll: bushes,
+    plants, litter and stones moved; trees kept position, species, variant and size but got new headings and
+    colour jitter.
   - The two original stumps standing inside a tree's base are drawn as moss-capped nurse stumps covering their
     unchanged colliders (e2e-checked).
   - Reusable kit interfaces and what is still layout-bound: EXTERIOR_SAMPLE §11.

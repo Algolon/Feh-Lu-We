@@ -9,8 +9,9 @@ propagated to the rest of the estate. Passing automated checks is not owner appr
 handoff; no new assets, species or scope:
 - **Deterministic placement** (§3, §9 item 25): every bush, plant, litter leaf and verge stone now draws from its
   own random stream (site seed + stable ID), so adding a backdrop tree or changing a species' variants no longer
-  rearranges anything else. This needed a **one-time re-roll** of those categories (tree positions, species and
-  variants unchanged); before/after views in [`exterior-sample/stabilisation/`](exterior-sample/stabilisation/).
+  rearranges anything else. This needed a **one-time re-roll**: bushes, plants, litter and stones were placed afresh, and trees kept
+  their positions, species, variants and sizes but got new headings and a new small colour jitter (both came from
+  the old shared sequence). Before/after views in [`exterior-sample/stabilisation/`](exterior-sample/stabilisation/).
 - **Stumps inside a tree's base** (§3, §9 item 26): the two original stumps whose colliders overlap a tree's are
   now drawn as old moss-capped stumps the tree grows out of, covering their unchanged colliders.
 - **Reusable kit** (§11): the interfaces a redesigned estate would use, and what is still tied to today's layout.
@@ -273,6 +274,16 @@ decals or point lights).
 | [`exterior-sample/baseline/`](exterior-sample/baseline/), [`proposal/`](exterior-sample/proposal/) | all passes |
 | [`exterior-sample/walkthrough.webm`](exterior-sample/walkthrough.webm) | 80 s moving walkthrough (software rendering: a few fps; evidence of composition and popping, not frame rate) |
 
+**Stabilisation pass (revision 3):** [`exterior-sample/stabilisation/`](exterior-sample/stabilisation/), from the
+final tested source, same script and settings:
+
+| Folder | Content |
+|---|---|
+| `stumps/`, `stumps-clay/` | before (revision 2) over after: beech stump close-up 44 and player height 45, birch stump close-up 46 and player height 47 (new poses) |
+| `placement/` | revision 2 over revision 3 for fork 13, reverse 31, verge 38, busy woodland 41 and hazel/holly 43: the one-time re-roll of bushes, plants, litter and stones, and new tree headings |
+| `fallback/` | multi-draw over forced fallback at fork 13 and busy woodland 41 (pixel difference 0) |
+| `proposal/` | all passes of those poses |
+
 **Consolidation pass (revision 2):** [`exterior-sample/consolidation/`](exterior-sample/consolidation/), all
 captured from the final tested source with the same script, poses and settings as revision 1:
 
@@ -412,15 +423,15 @@ Same method and views as below (`scripts/ext-measure.mjs`, phone quality, settle
 | reverse (31) | 47 / 121 996 | **47 / 119 842** | 76 | **71** / 119 842 |
 | busy woodland (41) | 124 / 248 673 | **124 / 250 909** | 166 | **166** / 250 909 |
 
-- **All changes come from the one-time placement re-roll** (the stump treatments add a few hundred triangles at
-  most, only where a stump is in view). In the busy view a hazel group now stands nearer the camera (near bushes
+- **All changes come from the one-time placement re-roll** (bushes and ground cover moved; tree headings changed;
+  the stump treatments add a few hundred triangles at most, only where a stump is in view). In the busy view a hazel group now stands nearer the camera (near bushes
   3 → 4) and slightly more ground cover is in range (plants 12.1 k → 13.2 k).
 - **The busy view is now 909 triangles (0.4 %) over the 250 k guide.** No budget or threshold was changed. Next
   practical remedy if a device shows strain there: a shorter near distance for bushes than for trees (bushes are
   1.5–2.4 m tall; near detail is not visible on a phone beyond ~12 m), or one fewer hazel per group.
 - Fallback: identical triangles to multi-draw at every view; calls 71–174 (over the 150-call guide at four views,
   as before; no further fallback optimisation was made in this pass, by instruction).
-- Transfer: JS bundle 301.3 → 302.8 kB gzip (+1.5 kB: the planner and the stump treatments).
+- Transfer: JS bundle 301.3 → 302.9 kB gzip (+1.6 kB: the planner and the stump treatments).
 
 ### Consolidation pass (revision 2)
 
@@ -576,6 +587,20 @@ every pass three.js renders in a frame; at phone quality there is no shadow pass
 
 ## 8. Verification
 
+### Stabilisation pass (revision 3)
+
+Code under test: commit `63da089` (later commits change documents and evidence only).
+
+| Kind | Result |
+|---|---|
+| Typecheck, production build | clean / OK |
+| Unit tests | **102 / 102.** New (`tests/woodlandPlan.test.ts`, synthetic site with no BOSLUST coordinates): every category is placed; adding a backdrop tree moves no bush, plant, litter leaf, stone or zone tree; changing one species' variants moves nothing else; reversed input gives the same plan; removing a tree leaves other bush groups and distant ground cover unchanged; a stump inside an oak's base is absorbed with a root reaching across its collider; a stump wider than a birch becomes a nurse stump whose drawing holds the collider and the birch base without inflating; a near stump keeps a gap between buttresses. |
+| Browser regression suite (`node scripts/e2e.mjs`) | **103 / 103** on this build, including the new check: every stump whose collider overlaps a tree's (2 in the zone: beech.1 and birch.1) is treated and its drawing covers its unchanged collider. Collision identical (155 colliders), interactables, lights, the forest outside the zone (6 528 instances), entrance by walking, saves above and below ground, reduced motion, both rendering paths (same instances and triangles at 5 poses), LOD walk, culling, idle uploads, review isolation for `?review=boslust` and `?review=living`, normal entry. |
+| Normal game unchanged | base mode at poses 13, 15, 41: identical calls/triangles and pixel difference 0 against the stored baseline. |
+| Multi-draw vs forced fallback | poses 13 and 41: pixel difference 0. |
+| Stump views | checked from player height (45, 47) and close up (44, 46) in game and clay. |
+| Owner phone review | qualitative, one device, of revision 2: works well, feels improved, no jittery overlapping pixels or models noticed. Device, browser, FPS and fallback use unrecorded. Revision 3 has not been seen on a phone. |
+
 ### Consolidation pass (revision 2)
 
 Code under test: commit `c853918` (game code identical to `3b6de0d`; the later commits change documents,
@@ -724,7 +749,9 @@ approach by a person, and the high-quality (shadow-map) path beyond the absence 
     stream per object or anchor (`woodlandPlan.ts`). Unit tests show that adding a backdrop tree, changing one
     species' variants or reversing the input order leaves every bush, plant, litter leaf and stone where it was,
     and that removing a tree changes only what grew under it. Making the streams independent required a one-time
-    re-roll; trees did not move.
+    re-roll: bushes, plants, litter and stones moved; trees kept position, species, variant and size but turned
+    (new heading) and got a new small colour jitter. It was not practical to keep the old values without keeping
+    the old coupling.
 26. **Two original stumps stood inside a tree's base** (beech at 73.0/6.0: stump 0.30 m from the trunk centre;
     birch at 81.3/30.8: 0.26 m). Neither tree's buttresses reach the far side of the stump's collider, so both are
     drawn as moss-capped nurse stumps the tree grows out of. The first attempt kept the fresh saw cut, which read
@@ -733,13 +760,12 @@ approach by a person, and the high-quality (shadow-map) path beyond the absence 
 
 ## 10. Build and URLs
 
-**This version:** game code `3b6de0d` (consolidation), pushed and deployed with `c853918`; the evidence and these
-documents follow in a docs-only commit, which redeploys the same game code under its own build id. The build id on
-the review start card, in Pauze and (new) in the expanded review bar is the deployed commit's short hash: it should
-read `c853918` or a later commit of this branch.
+**This version (revision 3):** game code `63da089` (stabilisation), deployed with the evidence-and-documents commit
+that follows it; the build id on the review start card, in Pauze and in the expanded review bar is the deployed
+commit's short hash. CI results are recorded below once known.
 
-History: first version `eea6ab8` / docs `4fee5ec` (run #14); revision 1 `0159007` / docs `6bb5275` (run #16:
-build and deploy succeeded).
+History: first version `eea6ab8` / docs `4fee5ec` (run #14); revision 1 `0159007` / docs `6bb5275` (run #16);
+revision 2 game code `3b6de0d`, deployed `c853918` (run #17) and `214db1e` (run #18) — build and deploy succeeded.
 
 ### CI and deployment
 
@@ -774,7 +800,8 @@ starts with `214db1e` or a later commit of this branch.
 - **Shadow maps (high quality):** the fallback culls only modestly there (it keeps trees whose shadow may reach
   the view); no capture set was reviewed at high quality.
 - **Placement** is now deterministic per object (revision 3); the switch re-rolled bushes, plants, litter and
-  verge stones once more (trees unchanged). Future additions do not move existing objects.
+  verge stones once more and gave trees new headings and colour jitter (positions, species, variants and sizes
+  unchanged). Future additions do not move existing objects.
 - Weak spots (§6): polyhedral near clusters, bark lattice at 1 m, the nearest hazel still layered, the
   headwall's straight centre top, the original style west and north beyond ~30 m. The two stumps inside tree
   bases are resolved as nurse stumps (revision 3); their moss caps are a stylised read, judged from captures only.
