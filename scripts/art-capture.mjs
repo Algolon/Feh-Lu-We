@@ -61,6 +61,12 @@ const SETS = {
     ['41-species-mix', { x: 47.5, z: 5.2 }, [60.0, 3.5, 22.0]],
     ['42-understory-near', { x: 59.0, z: 13.2 }, [56.8, 0.2, 15.6]],
     ['43-hazel-holly', { x: 75.4, z: 7.8 }, [73.0, 0.8, 3.0]],
+    // stabilisation pass: the two original stumps that stand inside a tree's root flare (beech 73.0/5.95, birch
+    // 81.3/30.8): close-up and player height
+    ['44-stump-beech-near', { x: 74.1, z: 7.3 }, [72.8, 0.25, 6.0]],
+    ['45-stump-beech-eye', { x: 75.6, z: 8.5 }, [72.9, 0.9, 6.0]],
+    ['46-stump-birch-near', { x: 82.5, z: 32.3 }, [81.2, 0.25, 30.9]],
+    ['47-stump-birch-eye', { x: 83.4, z: 33.9 }, [81.2, 0.9, 30.9]],
   ],
   quick: [
     ['01-hearth-wide', { x: 80.6, z: 84.4 }, [72.6, 1.2, 86.9]],

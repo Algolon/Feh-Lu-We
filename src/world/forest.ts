@@ -17,7 +17,7 @@ import { ITEMS } from '../content/items';
 import { ESTATE, SITES, DRIVEWAY, CLEARINGS, SHED, HILL } from './layout';
 import { FOREST_PATHS, terrainHeight } from './terrain';
 import { ART } from '../core/artflags';
-import { inZone, buildWoodland, signpostV2, stumpsV2, type ZoneTree } from './boslustSample';
+import { inZone, buildWoodland, signpostV2, type ZoneTree } from './boslustSample';
 
 export function forestTreeOk(x: number, z: number) {
   if (z > ESTATE.forestEdge - 0.8 || z < 1.8) return false;
@@ -95,8 +95,7 @@ export function buildForest(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
   buildWell(w, g, c);
   buildSideGate(w, g, c);
   if (ART.ext === 'sample') {
-    buildWoodland(w, c, zoneTrees);
-    stumpsV2(c, zoneStumps);
+    buildWoodland(w, c, zoneTrees, zoneStumps); // also draws the zone's stumps (same colliders as above)
     signpostV2(w, g, c);
   } else buildFork(w, g, c);
 

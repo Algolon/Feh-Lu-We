@@ -154,6 +154,12 @@ export interface Model { wood: THREE.BufferGeometry; leaves: THREE.BufferGeometr
 export type Lod = 'near' | 'mid' | 'far';
 export type TreeSpecies = 'oak' | 'beech' | 'birch' | 'pine';
 export type BushSpecies = 'hazel' | 'holly';
+/**
+ * Species palette (sRGB hex): the instance colour of a tree or bush is its LEAF tint (with a small per-object
+ * jitter); bark vertex colours are pre-multiplied by BARK ÷ LEAF, so one instance colour tints both.
+ */
+export const BARK_TINT: Record<TreeSpecies | BushSpecies, string> = { oak: '#7a6652', beech: '#9c978c', birch: '#ece8de', pine: '#a3896f', hazel: '#8c735c', holly: '#6e604e' };
+export const LEAF_TINT: Record<TreeSpecies | BushSpecies, string> = { oak: '#6f8a3a', beech: '#86a043', birch: '#97a94c', pine: '#4e6c48', hazel: '#7b9645', holly: '#46663a' };
 /** Variants per species (each a distinct, authored or seeded silhouette). */
 export const VARIANTS = 3;
 
@@ -261,6 +267,20 @@ function cullBuried(geos: THREE.BufferGeometry[], ks: Cluster[], margin = 0.82) 
  * it, so each lobe is a root ridge that rises out of the soil and runs up into the trunk — no separate root tubes,
  * no joints, no visible root tips — and on a slope the downhill side shows the ridges diving into the soil.
  */
+/**
+ * The trunk's radius multiplier at bearing `a` (model space) and height `y`: buttresses widest at ground level;
+ * above it they run up into the trunk, below it they dive and narrow (on a slope the downhill side shows them going
+ * into the soil, not a skirt). Shared by the mesh and by `trunkFootprint` (placement), so both agree.
+ */
+function flareK(a: number, y: number, lobes: { a: number; w: number }[], flare: number, flareH: number) {
+  const F = flare * (y >= 0 ? Math.pow(1 - THREE.MathUtils.smoothstep(y, 0, flareH), 3.2) : 0.5 + 0.5 * THREE.MathUtils.smoothstep(y, -0.45, 0));
+  const curl = 0.18 * (1 - THREE.MathUtils.smoothstep(y, -0.45, flareH)); // ridges twist a little as they descend
+  const sharp = 4 + 12 * (1 - THREE.MathUtils.smoothstep(y, -0.1, flareH * 0.7)); // broad buttress up the trunk, slim root at the ground
+  let k = 1;
+  for (const l of lobes) { const d = Math.cos(a - l.a - curl * l.w); if (d > 0) k += F * l.w * d ** sharp; }
+  return k + F * 0.08 * (1 + Math.sin(a * 3 + 1.3)) * 0.5; // a little general swell between the ridges
+}
+
 function flaredTrunk(path: P3[], radius: (t: number) => number, lobes: { a: number; w: number }[], flare: number, flareH: number, radial: number, rows: number, vScale: number) {
   const curve = new THREE.CatmullRomCurve3(path.map(vec), false, 'centripetal');
   const len = curve.getLength();
@@ -276,16 +296,10 @@ function flaredTrunk(path: P3[], radius: (t: number) => number, lobes: { a: numb
   for (let i = 0; i <= rows; i++) {
     const t = (ys[i] - y0) / (y1 - y0); // height fraction ≈ curve parameter (the axis is near vertical)
     curve.getPointAt(t, P);
-    // buttresses widest at ground level; above it they run up into the trunk, below it they dive and narrow (on a
-    // slope the downhill side shows them going into the soil, not a skirt)
-    const R = radius(t), F = flare * (P.y >= 0 ? Math.pow(1 - THREE.MathUtils.smoothstep(P.y, 0, flareH), 3.2) : 0.5 + 0.5 * THREE.MathUtils.smoothstep(P.y, -0.45, 0));
-    const curl = 0.18 * (1 - THREE.MathUtils.smoothstep(P.y, -0.45, flareH)); // ridges twist a little as they descend
-    const sharp = 4 + 12 * (1 - THREE.MathUtils.smoothstep(P.y, -0.1, flareH * 0.7)); // broad buttress up the trunk, slim root at the ground
+    const R = radius(t);
     for (let j = 0; j <= radial; j++) {
       const a = (j / radial) * Math.PI * 2;
-      let k = 1;
-      for (const l of lobes) { const d = Math.cos(a - l.a - curl * l.w); if (d > 0) k += F * l.w * d ** sharp; }
-      k += F * 0.08 * (1 + Math.sin(a * 3 + 1.3)) * 0.5; // a little general swell between the ridges
+      const k = flareK(a, P.y, lobes, flare, flareH);
       pos.push(P.x + Math.cos(a) * R * k, P.y, P.z + Math.sin(a) * R * k);
       uv.push(j / radial, (t * len) / vScale);
     }
@@ -448,12 +462,13 @@ export function birchModel(variant: number, lod: Lod): Model { return broadleaf(
  * whorls (some missing), longer on the light side, nearly level and slightly upturned, each ending in two or three
  * ragged, tilted needle clumps; the top rounds off rather than tapering to a spire. Three layouts.
  */
+const pineLobes = (rnd: (a: number, b: number) => number) => [0, 1, 2, 3].map((i) => ({ a: i * 1.57 + rnd(-0.4, 0.4), w: rnd(0.5, 1) }));
 export function pineModel(lod: Lod, variant = 0): Model {
   const v = variant % 3, r = mulberry32(733 + v * 211), near = lod === 'near', far = lod === 'far';
   const rnd = (a: number, b: number) => a + r() * (b - a);
   const T = [12.2, 11.0, 13.4][v], bend = [[0.45, -0.25], [-0.3, 0.2], [0.75, 0.4]][v], light = [0.6, 2.4, 4.1][v];
   const axis = (y: number): P3 => { const t = Math.max(0, y) / T; return [bend[0] * (t * t * 0.8 + 0.25 * Math.sin(t * 3.1)), y, bend[1] * (t * t * 0.8 + 0.2 * Math.sin(t * 2.6))]; };
-  const lobes = [0, 1, 2, 3].map((i) => ({ a: i * 1.57 + rnd(-0.4, 0.4), w: rnd(0.5, 1) }));
+  const lobes = pineLobes(rnd);
   const wood: THREE.BufferGeometry[] = [flaredTrunk([[0, -0.45, 0], axis(T * 0.3), axis(T * 0.65), axis(T)], (t) => THREE.MathUtils.lerp(0.36, 0.06, Math.pow(t, 0.9)), lobes, 1.1, 0.9, near ? 14 : far ? 5 : 7, near ? 12 : far ? 3 : 4, 1.6)];
   const clusters: Cluster[] = [];
   const crownBase = T * [0.56, 0.5, 0.62][v];
@@ -502,6 +517,22 @@ export function pineModel(lod: Lod, variant = 0): Model {
 
 export function treeModel(species: TreeSpecies, variant: number, lod: Lod): Model {
   return species === 'oak' ? oakModel(variant, lod) : species === 'beech' ? beechModel(variant, lod) : species === 'birch' ? birchModel(variant, lod) : pineModel(lod, variant);
+}
+
+/**
+ * A tree's footprint at ground level (model space, before instance scale): the trunk-with-buttress radius at a
+ * bearing (radians, in the model's xz plane: x = cos a, z = sin a). The same formula as the mesh. Used by placement
+ * to keep roots clear of, or deliberately over, other objects (e.g. stumps and their colliders).
+ */
+export function trunkFootprint(species: TreeSpecies, variant: number): (bearing: number) => number {
+  if (species === 'pine') {
+    const v = variant % 3, r = mulberry32(733 + v * 211), rnd = (a: number, b: number) => a + r() * (b - a);
+    const T = [12.2, 11.0, 13.4][v], lobes = pineLobes(rnd), R = THREE.MathUtils.lerp(0.36, 0.06, Math.pow(0.45 / (T + 0.45), 0.9));
+    return (a) => R * flareK(a, 0, lobes, 1.1, 0.9);
+  }
+  const sp = species === 'oak' ? OAKS[variant % 3] : species === 'beech' ? BEECHES[variant % 3] : BIRCHES[variant % 3];
+  const sk = growBroadleaf(sp), top = sp.H + sp.leader, R = sk.trunk.radius(0.45 / (top + 0.45));
+  return (a) => R * flareK(a, 0, sk.trunk.lobes, sp.flare, 1.25);
 }
 
 // ------------------------------------------------------------------------------------------------ bushes

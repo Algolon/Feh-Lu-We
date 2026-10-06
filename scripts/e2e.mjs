@@ -1011,6 +1011,22 @@ async function boslustSample() {
     // reduced motion: fixed lanterns stay on at constant intensity, no errors
     const rm = await E(page, () => { const g = T.G(); g.settings.reducedMotion = true; g.applyQuality(); g.player.x = 63; g.player.z = 15.4; T.tick(4); const a = g.pool.assigned().filter((x) => x?.startsWith('fixed.boslust')); const l = g.world.lamps.filter((x) => x.id.startsWith('fixed.boslust')); return { a: a.length, on: l.every((x) => x.on()), flicker: l.map((x) => x.flicker ?? 0) }; });
     log('boslust sample: reduced motion keeps the entrance lanterns steady and lit', rm.a === 2 && rm.on && rm.flicker.every((f) => f === 0), JSON.stringify(rm));
+    // ---- stumps standing inside a tree's base (original layout): every one is treated, and what is drawn covers
+    // its unchanged collision circle (nurse: the drawn stump holds it; absorbed: a buttress root reaches across it)
+    const stumpCheck = await E(page, () => {
+      const g = T.G(), plan = g.world.scene.userData.vegPlan;
+      const cols = g.world.col.colliders.filter((c) => c.kind === 'circle');
+      const out = [];
+      for (const st of plan.stumps) {
+        const col = cols.find((c) => Math.abs(c.x - st.x) < 1e-6 && Math.abs(c.z - st.z) < 1e-6 && Math.abs(c.r - st.s) < 1e-6);
+        const tree = plan.trees.find((t) => !t.backdrop && Math.hypot(t.x - st.x, t.z - st.z) < (t.species === 'birch' ? 0.22 : 0.34) + st.s);
+        if (!tree && st.treatment === 'plain') continue;
+        const covered = st.treatment === 'nurse' ? Math.hypot(st.vx - st.x, st.vz - st.z) + st.s <= st.vr + 1e-6 : st.treatment === 'absorbed';
+        out.push({ at: [+st.x.toFixed(2), +st.z.toFixed(2)], tree: tree ? `${tree.species}.${tree.v}` : null, treatment: st.treatment, collider: !!col, covered });
+      }
+      return out;
+    });
+    log('boslust sample: stumps inside a tree\'s base are treated (nurse/absorbed) and the drawing covers their unchanged collider', stumpCheck.length >= 2 && stumpCheck.every((x) => x.tree && x.treatment !== 'plain' && x.collider && x.covered), JSON.stringify(stumpCheck));
     // ---- rendering paths: multi-draw (BatchedMesh) and the forced instanced fallback (?multidraw=0) must draw the
     // same vegetation: same instances in view and the same triangles at the same poses
     const POSES = [['fork', 51, 7.2, 63, 2, 16], ['cutMouth', 63, 10.2, 63, 1.8, 18.2], ['door', 63, 15.4, 63, 1.4, 18.2], ['reverse', 63, 16.4, 55, 1.4, 6], ['busy', 47.5, 5.2, 60, 3.5, 22]];

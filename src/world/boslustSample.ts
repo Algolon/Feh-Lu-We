@@ -11,11 +11,12 @@ import type { World, GameApi } from '../interactions/world';
 import type { Ctx } from './arch';
 import { Batcher, compound, getKit, v3 } from './kit';
 import { Asm, artMats, softBox, projectUV, bake, baseAO, ContactShadows } from './artkit';
-import { lump as lumpGeo, treeModel, bushModel, plantModel, rockModel, litterLeafModel, woodMats, taperTube, PLANT_VARIANTS, type Model, type Lod, type TreeSpecies, type BushSpecies, type PlantKind } from './woodkit';
+import { lump as lumpGeo, treeModel, bushModel, plantModel, rockModel, litterLeafModel, woodMats, taperTube, PLANT_VARIANTS, BARK_TINT, LEAF_TINT, type Model, type Lod, type TreeSpecies, type BushSpecies, type PlantKind } from './woodkit';
+import { planWoodland, type WoodlandSite, type PlacedStump } from './woodlandPlan';
 import { mulberry32 } from '../core/rng';
 import { FOREST_PATHS, terrainHeight, gridHeight, hillHeight } from './terrain';
 import { HILL_CUT, SITES } from './layout';
-import { distToPolyline, scatter } from './nature';
+import { distToPolyline } from './nature';
 import { makeInspect, place } from '../interactions/props';
 
 export { ZONE, inZone, zoneWeight } from './boslustZone';
@@ -29,9 +30,6 @@ export const WOOD = {
   rock: '#867d6d', fern: '#6b8a3c', plant: '#5a7a38', grass: '#7f9a48', flower: '#f4f1e6',
   litter: ['#8a5a2e', '#a26e36', '#6e4a2a', '#9a7a3a'],
 };
-/** Per-species tints (instance colours): bark on the bark atlas, foliage on the leaf-dab texture. */
-const BARK_TINT: Record<TreeSpecies | BushSpecies, string> = { oak: '#7a6652', beech: '#9c978c', birch: '#ece8de', pine: '#a3896f', hazel: '#8c735c', holly: '#6e604e' };
-const LEAF_TINT: Record<TreeSpecies | BushSpecies, string> = { oak: '#6f8a3a', beech: '#86a043', birch: '#97a94c', pine: '#4e6c48', hazel: '#7b9645', holly: '#46663a' };
 
 // ------------------------------------------------------------------------------------------------ ground and path
 // The terrain material multiplies a strongly green grass texture; to reach a target albedo the vertex colour is
@@ -370,135 +368,61 @@ export const inBackdrop = (x: number, z: number) => x > ZONE.x0 && x < ZONE.x1 &
 const backdrop: ZoneTree[] = [];
 export const addBackdrop = (t: ZoneTree) => { backdrop.push(t); };
 
+/** The BOSLUST site for the woodland kit: today's coordinates live here only (woodlandPlan.ts is layout-free). */
+export const BOSLUST_SITE: WoodlandSite = {
+  seed: 2026,
+  bounds: { x0: ZONE.x0, x1: ZONE.x1, z0: ZONE.z0, z1: ZONE.z1 },
+  inArea: inZone,
+  keepClear: (x, z) => inCutArea(x, z) || Math.hypot(x - SITES.fork.x + 1.3, z - SITES.fork.z + 0.9) <= 1.2, // the cut; the signpost
+  paths: FOREST_PATHS,
+  ground: terrainHeight,
+  heroes: [{ x: 55.83, z: 11.65, species: 'oak', v: 0, yaw: 2.2 }, { x: 69.23, z: 16.07, species: 'pine', v: 0, yaw: 0.4 }],
+};
+const DECAL: Record<TreeSpecies, number> = { oak: 3.6, beech: 3.2, birch: 1.8, pine: 2.2 };
+
 /**
- * Trees (on the original positions), understory, litter, flowers and verge stones for the sample zone.
- * `trees` are the original scatter points inside the zone; their collision has already been added.
+ * Trees (on the original positions), bushes, understory, litter, verge stones and the zone's stumps. Placement is
+ * planned by woodlandPlan.ts (deterministic per object, see there); this function only renders the plan.
+ * `trees` / `stumps` are the original scatter points inside the zone; their collision has already been added.
  */
-export function buildWoodland(w: World, c: Ctx, trees: ZoneTree[]) {
-  const r = mulberry32(2026);
-  const hash = (x: number, z: number, k: number) => { const v = Math.sin(x * 12.9898 + z * 78.233 + k * 37.719) * 43758.5453; return v - Math.floor(v); };
-  // ---- trees: the original kinds become species (birch stays birch, a third of the oaks become beech), each
-  // position gets a variant by hash, so neighbours rarely repeat
+export function buildWoodland(w: World, c: Ctx, trees: ZoneTree[], stumps: { x: number; z: number; y: number; s: number }[] = []) {
+  const plan = planWoodland(BOSLUST_SITE, trees, backdrop.splice(0), stumps);
   const tb = new TreeBatches();
-  const leafTint = new THREE.Color();
-  const species: { t: ZoneTree; sp: TreeSpecies }[] = [];
-  const back = backdrop.splice(0); // consumed once per build
-  for (const t of [...trees, ...back]) {
-    const sp: TreeSpecies = t.kind === 'pine' ? 'pine' : t.kind === 'birch' ? 'birch' : hash(t.x, t.z, 1) < 0.35 ? 'beech' : 'oak';
-    const heroOak = Math.hypot(t.x - 55.83, t.z - 11.65) < 0.3, heroPine = Math.hypot(t.x - 69.23, t.z - 16.07) < 0.3;
-    const s0 = heroOak ? 'oak' : heroPine ? 'pine' : sp;
-    const v = heroOak || heroPine ? 0 : Math.floor(hash(t.x, t.z, 2) * 3);
-    const total = s0 === 'pine' ? t.h * 1.35 : t.h + t.r * 1.2;
-    const base = { oak: 8.6, beech: 9.6, birch: 9.4, pine: 13.4 }[s0];
-    const s = heroOak || heroPine ? 1 : THREE.MathUtils.clamp(total / base, s0 === 'pine' ? 0.68 : 0.66, s0 === 'oak' ? 1.02 : 0.98);
-    const yaw = heroOak ? 2.2 : heroPine ? 0.4 : r() * Math.PI * 2;
-    const sy = s * (0.94 + hash(t.x, t.z, 3) * 0.12); // a little height variation per tree
-    leafTint.set(LEAF_TINT[s0]).offsetHSL(t.hue * 0.025, (r() - 0.5) * 0.05, (r() - 0.5) * 0.06);
-    r(); // (was a separate bark tint jitter: one instance colour now tints bark and leaves; the draw keeps the sequence)
-    tb.add({ kind: 'tree', species: s0, v }, mat(t.x, t.y - 0.05, t.z, yaw, [s, sy, s]), leafTint);
-    if (t.z > 0) { ground(t.x, t.z, ({ oak: 3.6, beech: 3.2, birch: 1.8, pine: 2.2 })[s0] * s, s0 === 'birch' ? 0.4 : 0.5, yaw); species.push({ t, sp: s0 }); } // backdrop: no decals, no undergrowth
+  for (const t of plan.trees) {
+    tb.add({ kind: 'tree', species: t.species, v: t.v }, mat(t.x, t.y, t.z, t.yaw, t.scale), t.tint);
+    if (!t.backdrop) ground(t.x, t.z, DECAL[t.species] * t.scale[0], t.species === 'birch' ? 0.4 : 0.5, t.yaw); // backdrop: no decals
   }
-  const broadleaves = species.filter((q) => q.sp === 'oak' || q.sp === 'beech').map((q) => q.t);
-  const pines = species.filter((q) => q.sp === 'pine').map((q) => q.t);
-
-  const free = (x: number, z: number, corridor = 1.35) => inZone(x, z) && !inCutArea(x, z) && pathDist(x, z) > corridor && Math.hypot(x - SITES.fork.x + 1.3, z - SITES.fork.z + 0.9) > 1.2;
-  const treeNear = (x: number, z: number, d: number) => trees.some((t) => Math.hypot(t.x - x, t.z - z) < d);
-  const nearOf = (list: ZoneTree[], x: number, z: number, d: number) => list.some((t) => Math.hypot(t.x - x, t.z - z) < d);
-
-  // ---- bushes: hazel in loose groups at the edge of broadleaf crowns (set back from the path, never in the
-  // corridor), the odd holly in their shade. No collision (as in the original undergrowth).
-  let bushes = 0;
-  for (const t of broadleaves) {
-    if (hash(t.x, t.z, 4) > 0.42) continue;
-    const a0 = r() * Math.PI * 2, n = 1 + Math.floor(r() * 3);
-    for (let i = 0; i < n; i++) {
-      const a = a0 + i * 0.9 + r() * 0.4, d = 2.4 + r() * 1.6, x = t.x + Math.cos(a) * d, z = t.z + Math.sin(a) * d;
-      if (!free(x, z, 2.6) || treeNear(x, z, 1.3)) continue;
-      const holly = r() < 0.25, sp: BushSpecies = holly ? 'holly' : 'hazel', sc = 0.8 + r() * 0.4, yaw = r() * 6.3;
-      const bv = Math.floor(r() * 3);
-      r(); // (was a separate bark tint jitter; the draw is kept so the random sequence and placement stay the same)
-      tb.add({ kind: 'bush', species: sp, v: bv }, mat(x, terrainHeight(x, z) - 0.05, z, yaw, sc), new THREE.Color(LEAF_TINT[sp]).offsetHSL((r() - 0.5) * 0.02, 0, (r() - 0.5) * 0.06));
-      ground(x, z, (holly ? 1.6 : 2.0) * sc, 0.4, yaw);
-      bushes++;
-    }
+  for (const b of plan.bushes) {
+    tb.add({ kind: 'bush', species: b.species, v: b.v }, mat(b.x, b.y, b.z, b.yaw, b.scale), b.tint);
+    ground(b.x, b.z, (b.species === 'holly' ? 1.6 : 2.0) * b.scale, 0.4, b.yaw);
   }
   tb.build(w);
-
-  // ---- understory (one batch): clustered, with negative space; never in the walking corridor, the cut or in
-  // front of clues. Each cluster mostly keeps one variant, as plants spread in patches.
   const M = woodMats();
   const pb = new PlantBatch();
-  const tint = (k = 0.08) => new THREE.Color(1, 1, 1).offsetHSL((r() - 0.5) * 0.02, 0, (r() - 0.5) * k);
-  const put = (kind: PlantKind, v: number, x: number, z: number, sc: number, show?: number) => pb.add(kind, v, mat(x, terrainHeight(x, z) - 0.02, z, r() * 6.3, sc), tint(), show);
-  const patch = (kind: PlantKind, cx: number, cz: number, n: number, spread: number, sc: [number, number], corridor: number, show?: number, avoidTree = 0.5) => {
-    const v0 = Math.floor(r() * PLANT_VARIANTS[kind]);
-    for (let i = 0; i < n; i++) {
-      const x = cx + (r() - 0.5) * spread, z = cz + (r() - 0.5) * spread;
-      if (!free(x, z, corridor) || treeNear(x, z, avoidTree)) continue;
-      put(kind, r() < 0.75 ? v0 : Math.floor(r() * PLANT_VARIANTS[kind]), x, z, sc[0] + r() * sc[1], show);
-    }
-  };
-  // ferns in hollows and at tree feet
-  for (const [cx, cz] of scatter(r, ZONE.x0, ZONE.x1, 2, ZONE.z1 - 2, 6.5, 900, (x, z) => free(x, z, 2.0))) patch('fern', cx, cz, 2 + Math.floor(r() * 4), 2.2, [0.9, 0.5], 1.5);
-  // bilberry carpets under the pines and up the hill
-  for (const t of pines) if (r() < 0.8) patch('bilberry', t.x + (r() - 0.5) * 3, t.z + (r() - 0.5) * 3, 6 + Math.floor(r() * 7), 3.4, [0.9, 0.6], 1.6);
-  // lily of the valley in small patches under oaks and beeches
-  for (const t of broadleaves) if (r() < 0.4) { const a = r() * 6.3, d = 1.0 + r() * 1.2; patch('lily', t.x + Math.cos(a) * d, t.z + Math.sin(a) * d, 4 + Math.floor(r() * 5), 1.1, [0.9, 0.5], 1.6); }
-  // foxgloves: a few groups in the lighter openings set back from the path (the colour accent of the approach)
-  for (const [cx, cz] of scatter(r, ZONE.x0 + 3, ZONE.x1 - 3, 3, 34, 8.5, 400, (x, z) => free(x, z, 2.3) && pathDist(x, z) < 6 && !treeNear(x, z, 2.2))) patch('foxglove', cx, cz, 2 + Math.floor(r() * 4), 1.4, [0.85, 0.35], 2.0, undefined, 1.2);
-  // wood anemones in drifts under the broadleaves and in openings
-  for (const [cx, cz] of scatter(r, ZONE.x0 + 4, ZONE.x1 - 4, 3, 30, 7, 300, (x, z) => free(x, z, 1.8) && nearOf(broadleaves, x, z, 5))) patch('anemone', cx, cz, 5 + Math.floor(r() * 5), 1.6, [0.9, 0.4], 1.4);
-  // grass: the path verge (clumps with gaps; wispy and seed-head grasses where it is light), sedge at tree feet,
-  // loose tufts in the openings; verge stones
+  for (const p of plan.plants) pb.add(p.kind, p.v, mat(p.x, p.y, p.z, p.yaw, p.scale), p.tint);
   const stoneG = rockModel(7); stoneG.userData.keepColor = true;
-  let stones = 0;
-  for (const p of FOREST_PATHS) for (let i = 1; i < p.length; i++) {
-    const [ax, az] = p[i - 1], [bx, bz] = p[i];
-    const seg = Math.hypot(bx - ax, bz - az), nx = -(bz - az) / seg, nz = (bx - ax) / seg;
-    for (let t = 0; t < seg; t += 0.4 + r() * 0.55) { // irregular spacing: no rhythm along the edge
-      const x0 = ax + ((bx - ax) * t) / seg, z0 = az + ((bz - az) * t) / seg;
-      if (!inZone(x0, z0)) continue;
-      for (const side of [-1, 1]) {
-        if (Math.sin((x0 + z0) * 0.9 + side * 1.7) + Math.sin((x0 - z0) * 0.37) < -0.35) continue; // gaps along the verge
-        const off = 1.05 + r() * 0.9, x = x0 + nx * off * side, z = z0 + nz * off * side;
-        if (inCutArea(x, z) || pathDist(x, z) < 0.95) continue;
-        const v = treeNear(x, z, 3) ? (r() < 0.7 ? 0 : 3) : [0, 1, 1, 2][Math.floor(r() * 4)];
-        put('grass', v, x, z, 0.75 + r() * 0.55);
-        if (r() < 0.18) { c.b.add(M.rock, stoneG, mat(x + nx * side * 0.2, terrainHeight(x, z) - 0.06, z + nz * side * 0.2, r() * 6.3, [0.14 + r() * 0.1, 0.1 + r() * 0.06, 0.12 + r() * 0.1]), new THREE.Color(WOOD.rock).multiplyScalar(0.92 + r() * 0.12), c.chunk, true, 0); stones++; }
-      }
-    }
-  }
-  for (const [x, z] of scatter(r, ZONE.x0, ZONE.x1, 2, ZONE.z1 - 2, 2.6, 2500, (x, z) => free(x, z, 2.2) && !treeNear(x, z, 1.4))) {
-    if (r() < 0.55) put('grass', nearOf(trees, x, z, 3) ? 3 : [0, 0, 1, 2][Math.floor(r() * 4)], x, z, 0.7 + r() * 0.5);
-  }
-  // leaf litter under the broadleaves, drifting onto the path edges: static, batched into the forest chunk
-  const litterG = litterLeafModel();
-  let litter = 0;
-  for (const t of trees) {
-    if (t.kind === 'pine') continue;
-    for (let i = 0; i < 22; i++) {
-      const a = r() * Math.PI * 2, d = 0.5 + Math.sqrt(r()) * 3.2, x = t.x + Math.cos(a) * d, z = t.z + Math.sin(a) * d;
-      if (!inZone(x, z) || inCutArea(x, z) || pathDist(x, z) < 0.4) continue; // a few drift onto the path edge
-      c.b.add(M.flat, litterG, mat(x, terrainHeight(x, z) + 0.012, z, r() * 6.3, 0.8 + r() * 0.7), WOOD.litter[Math.floor(r() * 4)], c.chunk, false, 0);
-      litter++;
-    }
-  }
+  for (const st of plan.stones) c.b.add(M.rock, stoneG, mat(st.x, st.y, st.z, st.yaw, st.scale), new THREE.Color(WOOD.rock).multiplyScalar(st.k), c.chunk, true, 0);
+  const litterG = litterLeafModel(); // static, batched into the forest chunk
+  for (const l of plan.litter) c.b.add(M.flat, litterG, mat(l.x, l.y, l.z, l.yaw, l.scale), WOOD.litter[l.color], c.chunk, false, 0);
   pb.build(w);
+  stumpsV2(c, plan.stumps);
   // diagnostics for the measurement script, tests and the debug overlay (no effect on rendering)
   w.scene.userData.vegPath = CAPS.multiDraw ? 'multi-draw' : 'instanced';
   w.scene.userData.vegStats = () => ({ ...tb.stats(), plantsShown: pb.shown });
   w.scene.userData.vegLodAt = (x: number, z: number) => tb.lodAt(x, z);
   w.scene.userData.vegList = () => tb.list();
-  return { trees: tb.size - bushes, bushes, counts: { ...pb.counts(), litter, stones } };
+  w.scene.userData.vegPlan = plan;
+  return { trees: plan.trees.length, bushes: plan.bushes.length, counts: { ...pb.counts(), litter: plan.litter.length, stones: plan.stones.length } };
 }
 
 // ------------------------------------------------------------------------------------------------ stumps
 /**
  * Old stumps in the zone (same positions and collision circles as before, radius `s`): a short flared stump
- * with a sawn top showing rings, batched (timber material) into the forest chunk.
+ * with a sawn top showing rings, batched (timber material) into the forest chunk. Treatments where a stump stands
+ * inside a tree's base are decided by the plan (woodlandPlan.ts, PlacedStump).
  */
-export function stumpsV2(c: Ctx, list: { x: number; z: number; y: number; s: number }[]) {
-  const A = artMats();
+export function stumpsV2(c: Ctx, list: PlacedStump[]) {
+  const A = artMats(), M = woodMats();
   const r = mulberry32(77);
   const body = taperTube([[0, -0.25, 0], [0, 0.35, 0], [0.02, 0.9, 0.01]], [1.18, 0.98, 0.94], { radial: 10, rows: 5, lobes: 4, flare: 0.35, vScale: 1.0 });
   bake(body, (p) => 0.7 + 0.3 * THREE.MathUtils.smoothstep(p.y, -0.1, 0.6));
@@ -506,10 +430,21 @@ export function stumpsV2(c: Ctx, list: { x: number; z: number; y: number; s: num
   const uv = top.attributes.uv as THREE.BufferAttribute;
   for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i) * 0.25 + 0.2, uv.getY(i) * 0.25 + 0.2);
   for (const t of list) {
-    const yaw = r() * 6.3;
-    c.b.add(A.timber, body, mat(t.x, t.y - 0.05, t.z, yaw, t.s), new THREE.Color('#6e5440').multiplyScalar(0.9 + r() * 0.2), c.chunk, true, 0);
-    c.b.add(A.timber, top, mat(t.x, t.y - 0.05, t.z, yaw, t.s), '#b08a62', c.chunk, true, 0);
-    ground(t.x, t.z, t.s * 3.2, 0.5, yaw);
+    const yaw = r() * 6.3, k = 0.9 + r() * 0.2;
+    if (t.treatment === 'absorbed') continue; // a buttress root of the tree covers its collision circle
+    // plain: at the collider, fresh saw cut. nurse: widened to hold the tree's base, an old decayed stump the tree
+    // grows out of — darker wood, its top rounded over by a moss cap (no saw cut round the trunk); same height
+    const sc: [number, number, number] = [t.vr, t.s, t.vr];
+    if (t.treatment === 'nurse') {
+      c.b.add(A.timber, body, mat(t.vx, t.y - 0.05, t.vz, yaw, [t.vr, t.s * 0.82, t.vr]), new THREE.Color('#4f3e30').multiplyScalar(k), c.chunk, true, 0);
+      const cap = lumpGeo(t.vx, t.y - 0.05 + t.s * 0.74, -t.vz, t.vr * 1.02, t.s * 0.28, t.vr * 1.02, Math.round(t.vx * 7), 1, new THREE.Vector3(t.vx, t.y - 0.3, -t.vz), t.vr * 2, 0.3, 0.22);
+      c.b.add(M.flat, cap, new THREE.Matrix4(), new THREE.Color('#5d6f34').multiplyScalar(0.9 * k), c.chunk, false, 0); // same group as the litter and turf
+      cap.dispose();
+    } else {
+      c.b.add(A.timber, body, mat(t.vx, t.y - 0.05, t.vz, yaw, sc), new THREE.Color('#6e5440').multiplyScalar(k), c.chunk, true, 0);
+      c.b.add(A.timber, top, mat(t.vx, t.y - 0.05, t.vz, yaw, sc), '#b08a62', c.chunk, true, 0);
+    }
+    ground(t.vx, t.vz, t.vr * 3.2, 0.5, yaw);
   }
   body.dispose(); top.dispose();
 }
