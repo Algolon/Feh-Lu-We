@@ -762,7 +762,13 @@ approach by a person, and the high-quality (shadow-map) path beyond the absence 
 
 **This version (revision 3):** game code `63da089` (stabilisation), deployed with the evidence-and-documents commit
 that follows it; the build id on the review start card, in Pauze and in the expanded review bar is the deployed
-commit's short hash. CI results are recorded below once known.
+commit's short hash.
+
+**CI (revision 3):** run #20 ([37429063712](https://github.com/Algolon/Feh-Lu-We/actions/runs/37429063712)) for
+`d7fd926` (code `63da089` + evidence and documents): build job (npm ci, typecheck, unit tests, build, artifact) and
+deploy job succeeded. The commit recording this is docs-only and redeploys the same game code under its own build
+id, so the start card should read `d7fd926` or a later commit of this branch. **Live page not verified from here**
+(github.io is unreachable from the authoring environment).
 
 History: first version `eea6ab8` / docs `4fee5ec` (run #14); revision 1 `0159007` / docs `6bb5275` (run #16);
 revision 2 game code `3b6de0d`, deployed `c853918` (run #17) and `214db1e` (run #18) — build and deploy succeeded.

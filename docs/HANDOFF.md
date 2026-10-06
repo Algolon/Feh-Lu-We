@@ -51,6 +51,7 @@ verge.
   - Reusable kit interfaces and what is still layout-bound: EXTERIOR_SAMPLE §11.
   - Measured (multi-draw): 47–142 calls, 120–251 k triangles; the busy view is 0.4 % over 250 k after the re-roll
     (documented, not re-tuned). Fallback: same triangles, 71–174 calls.
+  - CI run #20 (`d7fd926`): build and deploy succeeded. Live page not loaded from the authoring environment.
   - **Broader rollout waits for the settled level design** of the house and estate (being developed separately).
 - **Not started:** estate-wide propagation. It waits for the owner's review of both samples and the new layout.
 
