@@ -150,7 +150,7 @@ function foliageUV(g: THREE.BufferGeometry, scale: number) {
 }
 
 export interface Model { wood: THREE.BufferGeometry; leaves: THREE.BufferGeometry }
-/** near < 16 m (inspected), mid 16–28 m, far beyond (in the haze). All three share one skeleton and layout. */
+/** near < 16 m (inspected), mid 16–26 m, far beyond (in the haze). All three share one skeleton and layout. */
 export type Lod = 'near' | 'mid' | 'far';
 export type TreeSpecies = 'oak' | 'beech' | 'birch' | 'pine';
 export type BushSpecies = 'hazel' | 'holly';
@@ -220,6 +220,12 @@ function clusterGeo(k: Cluster, lod: Lod, crownC: THREE.Vector3, crownR: number,
   }
   g.setAttribute('color', new THREE.BufferAttribute(col, 3));
   return g;
+}
+/** Far LOD: the n largest clusters, a little larger, so the crown keeps its mass and outline with fewer parts. */
+function largest(ks: Cluster[], n: number) {
+  if (ks.length <= n) return ks;
+  const f = Math.cbrt(ks.length / n);
+  return [...ks].sort((a, b) => b.r[0] * b.r[1] * b.r[2] - a.r[0] * a.r[1] * a.r[2]).slice(0, n).map((k) => ({ ...k, r: k.r.map((x) => x * f) as P3 }));
 }
 /**
  * Drop cluster triangles buried inside a neighbouring cluster (centroid well inside its ellipsoid): they are never
@@ -374,10 +380,7 @@ function emitBroadleaf(sp: Broadleaf, sk: Skeleton, lod: Lod): Model {
   const crownC = sk.clusters.reduce((s, k) => s.add(k.c), new THREE.Vector3()).divideScalar(sk.clusters.length);
   const crownR = Math.max(...sk.clusters.map((k) => k.c.distanceTo(crownC) + Math.max(...k.r)));
   let ks = near ? sk.clusters : sk.clusters.filter((k) => !k.sat); // mid/far: the small filler clumps are dropped
-  if (far && ks.length > 14) { // far: the 14 largest clusters, a little larger, keep the crown's mass and outline
-    const f = Math.cbrt(ks.length / 14);
-    ks = [...ks].sort((a, b) => b.r[0] * b.r[1] * b.r[2] - a.r[0] * a.r[1] * a.r[2]).slice(0, 14).map((k) => ({ ...k, r: k.r.map((x) => x * f) as P3 }));
-  }
+  if (far) ks = largest(ks, 14);
   const leaves = cullBuried(ks.map((k) => clusterGeo(k, lod, crownC, crownR)), ks);
   const woodG = mergeParts(wood.map((g) => barkCol(paint(g, (p) => sp.barkK(p.y)), sp.bark)));
   return { wood: woodG, leaves: mergeParts(leaves.map((g) => foliageUV(g, 1.4))) };
@@ -529,7 +532,8 @@ export function hazelModel(variant: number, lod: Lod): Model {
     if (h > Hh * 0.8 && r() < 0.5) stem(curve.getPointAt(0.4), a + rnd(-0.9, 0.9), lean + 0.4, h * 0.45, 0.02, 1, 0.9, v * 31 + i * 3.7 + 20); // side shoot
   }
   const centre = new THREE.Vector3(0, Hh * 0.55, 0);
-  const leaves = cullBuried(clusters.map((k) => clusterGeo(k, lod, centre, Hh, 0.4)), clusters);
+  const ks = far ? largest(clusters, 10) : clusters;
+  const leaves = cullBuried(ks.map((k) => clusterGeo(k, lod, centre, Hh, 0.4)), ks);
   return { wood: mergeParts(wood.map((g) => barkCol(paint(g, 0.85), BARK.smooth))), leaves: mergeParts(leaves.map((g) => foliageUV(g, 0.9))) };
 }
 /**
@@ -551,7 +555,8 @@ export function hollyModel(variant: number, lod: Lod): Model {
     clusters.push({ c, r: [s * 1.05, s * rnd(0.85, 1.0), s], seed: v * 7 + i * 4.3, amp: 0.26, flat: 0.85, val: rnd(0.95, 1.15), spiky: true });
   }
   const centre = new THREE.Vector3(0, Hh * 0.5, 0);
-  const leafGeos = cullBuried(clusters.map((k) => clusterGeo(k, lod, centre, Hh * 0.6, 0.35)), clusters);
+  const ks = lod === 'far' ? largest(clusters, 8) : clusters;
+  const leafGeos = cullBuried(ks.map((k) => clusterGeo(k, lod, centre, Hh * 0.6, 0.35)), ks);
   // glossy holly: tops markedly lighter than the shaded sides (vertex colour), so the form reads in value
   for (const g of leafGeos) {
     const c = g.attributes.color as THREE.BufferAttribute, nn = g.attributes.normal as THREE.BufferAttribute;

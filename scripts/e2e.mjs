@@ -947,7 +947,8 @@ async function boslustSample() {
     const lamps = w.lamps.filter((l) => inZ(l.pos.x, -l.pos.z)).map((l) => `${l.id} ${r(l.pos.x)} ${r(l.pos.y)} ${r(-l.pos.z)} ${l.intensity} ${l.distance}`).sort();
     // the old forest OUTSIDE the zone (3 m margin: crowns of zone trees overhang its edge): every vegetation
     // instance position and colour must be untouched by the sample
-    const out3 = (x, z) => x < 35 || x > 91 || z > 51;
+    // (and the outer woodland beyond the south fence, except the sample's backdrop strip z −9…−1.5 behind the zone)
+    const out3 = (x, z) => x < 35 || x > 91 || z > 51 || z < -12;
     const veg = []; const m = new w.scene.matrix.constructor(), v = new w.scene.position.constructor();
     w.scene.traverse((o) => { if (o.isInstancedMesh && o.userData.veg) for (let i = 0; i < o.count; i++) { o.getMatrixAt(i, m); v.setFromMatrixPosition(m); if (out3(v.x, -v.z)) { const ca = o.instanceColor?.array; veg.push(`${o.userData.veg}:${r(v.x)},${r(v.y)},${r(-v.z)} ${ca ? r(ca[i * 3]) + ',' + r(ca[i * 3 + 1]) : ''}`); } } });
     return { cols, items, lamps, veg: veg.sort() };

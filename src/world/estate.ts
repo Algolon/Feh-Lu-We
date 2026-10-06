@@ -17,7 +17,7 @@ import { buildForest, forestTreePoints } from './forest';
 import { buildBoslust } from './boslust';
 import { addEnvironment } from './env';
 import { ART } from '../core/artflags';
-import { inZone, zoneGround, zonePathWidth, zonePathTint, finishZone } from './boslustSample';
+import { inZone, inBackdrop, addBackdrop, zoneGround, zonePathWidth, zonePathTint, pathVerge, finishZone } from './boslustSample';
 import { makeLamp, makeAction, makeDoor, makePickup, makeInspect, place } from '../interactions/props';
 import { pressLantern } from '../puzzles/rules';
 import { addClue } from '../core/state';
@@ -248,7 +248,10 @@ function buildPaths(w: World, c: Ctx) {
     gg.dispose();
   };
   add(smooth(DRIVEWAY, 2), 4.2, '#d8c3a0');
-  if (ART.ext === 'sample') for (const p of FOREST_PATHS) { const gg = zonePathTint(drape(p, 1.9, 0.035, zonePathWidth)); c.b.add(k.M.dirt, gg, new THREE.Matrix4(), '#c8ad80', 'paths', false, 0); gg.dispose(); }
+  if (ART.ext === 'sample') {
+    for (const p of FOREST_PATHS) { const gg = zonePathTint(drape(p, 1.9, 0.035, zonePathWidth)); c.b.add(k.M.dirt, gg, new THREE.Matrix4(), '#c8ad80', 'paths', false, 0); gg.dispose(); }
+    pathVerge(w, FOREST_PATHS, (k.M.dirt as THREE.MeshLambertMaterial).map!);
+  }
   else for (const p of FOREST_PATHS) add(p, 1.9, '#c8ad80');
   add(smooth(GARDEN_PATH, 2), 1.5, '#e2d2b0');
   add(smooth([[90, 117], [90, 124.2]], 1), 1.6, '#e2d2b0'); // terrace → lantern circle
@@ -303,10 +306,16 @@ function buildBoundary(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
   // woodland continues beyond the fence (visual only): low-poly crowns
   const r = mulberry32(77);
   const outside = scatter(r, -18, W + 18, -18, D + 18, 5.6, 6000, (x, z) => x < -0.8 || x > W + 0.8 || z < -1.5 || z > D + 0.8);
+  // art sample: the nearest row beyond the fence behind the BOSLUST zone is its backdrop; those trees get the
+  // sample's models (generated-then-discarded here, so the random sequence and every other tree are unchanged)
+  if (ART.ext === 'sample') veg.drop = (x, z) => inBackdrop(x, z);
   for (const [x, z] of outside) {
     const kind = r() < 0.25 ? 'pine' : 'oak';
-    veg.tree({ x, z, h: kind === 'pine' ? 6 + r() * 3 : 3.5 + r() * 2.5, r: 1.8 + r() * 1.0, kind, hue: r() - 0.5 }, `outer${x < 0 ? 'W' : x > W ? 'E' : z < 0 ? 'S' : 'N'}`);
+    const spec = { x, z, h: kind === 'pine' ? 6 + r() * 3 : 3.5 + r() * 2.5, r: 1.8 + r() * 1.0, kind, hue: r() - 0.5 } as const;
+    veg.tree(spec, `outer${x < 0 ? 'W' : x > W ? 'E' : z < 0 ? 'S' : 'N'}`);
+    if (ART.ext === 'sample' && inBackdrop(x, z)) addBackdrop({ ...spec, y: terrainHeight(x, z) });
   }
+  veg.drop = null;
 }
 
 // ---------------------------------------------------------------------------------------------

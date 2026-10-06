@@ -38,7 +38,7 @@ const LEAF_TINT: Record<TreeSpecies | BushSpecies, string> = { oak: '#6f8a3a', b
 // the target divided by the texture's mean (both linear). Targets are the rendered forest-floor colours.
 const TEX_MEAN = new THREE.Color('#8fb35a');
 const fin = (hex: string) => { const c = new THREE.Color(hex); return new THREE.Color(c.r / TEX_MEAN.r, c.g / TEX_MEAN.g, c.b / TEX_MEAN.b); };
-const GROUND = { floor: fin('#535e2d'), sun: fin('#76833a'), moss: fin('#3f5226'), litter: fin('#5c4528'), soil: fin('#665238'), rockSoil: fin('#625a48'), hill: fin('#62723a') };
+const GROUND = { floor: fin('#535e2d'), sun: fin('#76833a'), moss: fin('#3f5226'), litter: fin('#5c4528'), soil: fin('#7a6040'), rockSoil: fin('#625a48'), hill: fin('#62723a') };
 const nz2 = (x: number, z: number) => Math.sin(x * 0.31 + Math.sin(z * 0.17) * 2.1) * Math.cos(z * 0.27 - x * 0.05);
 /** Ground fade: wider than the object fade so the forest floor changes gradually across the zone boundary. */
 const groundWeight = (x: number, z: number) => {
@@ -62,15 +62,15 @@ export function zoneGround(x: number, z: number, c: THREE.Color, trees: [number,
   for (const [tx, tz] of trees) { const d = Math.hypot(tx - x, tz - z); if (d < 4.2) crown = Math.max(crown, 1 - d / 4.2); }
   c.lerp(GROUND.litter, crown * 0.7);
   const dp = pathDist(x, z);
-  if (dp < 3.6) c.lerp(GROUND.soil, (1 - dp / 3.6) ** 1.5 * 0.7);
+  if (dp < 3.8) c.lerp(GROUND.soil, (1 - dp / 3.8) ** 1.3 * 0.75); // worn soil grading out from the path into the floor
   if (x > HILL_CUT.x0 - 3 && x < HILL_CUT.x1 + 3 && z > HILL_CUT.z0 + 3 && z < 21) c.lerp(GROUND.rockSoil, 0.5);
   c.lerp(base, 1 - zw);
 }
 
-/** Per-side path width for the drape: wanders 1.5–3.0 m inside the zone, the original 1.9 m outside it. */
+/** Per-side path width for the drape: wanders slowly (1.4–2.6 m) inside the zone, the original 1.9 m outside it. */
 export const zonePathWidth = (x: number, z: number, d: number) => {
   const zw = zoneWeight(x, z);
-  return 1.9 + zw * (0.45 * Math.sin(d * 0.71) + 0.3 * Math.sin(d * 1.93 + 1.3) + 0.25);
+  return 1.9 + zw * (0.45 * Math.sin(d * 0.71) + 0.12 * Math.sin(d * 1.31 + 1.3) + 0.1); // slow wander: no zigzag at the 1 m sampling
 };
 const PATH_T = (() => { const a = new THREE.Color('#c8ad80'), b = new THREE.Color('#948670'); return [b.r / a.r, b.g / a.g, b.b / a.b]; })();
 /** Path vertex tint: the original colour outside the zone, a less orange, earthier soil inside (keepColor). */
@@ -82,6 +82,94 @@ export function zonePathTint(g: THREE.BufferGeometry) {
   }
   g.userData.keepColor = true;
   return g;
+}
+
+/**
+ * Soft path verge (sample zone only): on both sides of each forest path a band that continues the path's own
+ * surface (same dirt texture, same tint, UVs continuing across the edge) and fades out over an irregular 0.55–1.25 m,
+ * plus soft-edged earth patches beside the path, all in one transparent mesh (one draw call). The opaque path stays
+ * exactly as it is, so the route reads as clearly as before; only its hard edge dissolves into the forest floor.
+ * The band's inner edge must coincide with the drape's edge: the sampling below mirrors `drape` in estate.ts
+ * (1 m steps, same distance accumulation, same per-side width function).
+ */
+export function pathVerge(w: World, paths: readonly (readonly (readonly [number, number])[])[], dirt: THREE.Texture) {
+  const pos: number[] = [], col: number[] = [], uv: number[] = [], idx: number[] = [];
+  const base = new THREE.Color('#c8ad80');
+  const r = mulberry32(404);
+  const vert = (x: number, z: number, u: number, v: number, a: number, k = 1) => {
+    const zw = groundWeight(x, z), t = 0.92 + 0.08 * Math.sin(x * 1.3 + z * 0.9);
+    pos.push(x, terrainHeight(x, z) + 0.033, -z); uv.push(u, v);
+    col.push(base.r * THREE.MathUtils.lerp(1, PATH_T[0] * t, zw) * k, base.g * THREE.MathUtils.lerp(1, PATH_T[1] * t, zw) * k, base.b * THREE.MathUtils.lerp(1, PATH_T[2] * t, zw) * k, a);
+    return pos.length / 3 - 1;
+  };
+  for (const pts of paths) {
+    const dense: [number, number][] = [];
+    for (let i = 0; i < pts.length - 1; i++) {
+      const [ax, az] = pts[i], [bx, bz] = pts[i + 1];
+      const n = Math.max(1, Math.ceil(Math.hypot(bx - ax, bz - az) / 1.0));
+      for (let q = 0; q < n; q++) dense.push([ax + ((bx - ax) * q) / n, az + ((bz - az) * q) / n]);
+    }
+    dense.push([pts[pts.length - 1][0], pts[pts.length - 1][1]]);
+    let dist = 0;
+    const rows: { a: number[]; b: number[]; zw: number }[] = [];
+    for (let i = 0; i < dense.length; i++) {
+      const p = dense[i], a = dense[Math.max(0, i - 1)], b = dense[Math.min(dense.length - 1, i + 1)];
+      let dx = b[0] - a[0], dz = b[1] - a[1];
+      const len = Math.hypot(dx, dz) || 1;
+      dx /= len; dz /= len;
+      if (i > 0) dist += Math.hypot(p[0] - dense[i - 1][0], p[1] - dense[i - 1][1]);
+      const zw = zoneWeight(p[0], p[1]);
+      const row: { a: number[]; b: number[]; zw: number } = { a: [], b: [], zw };
+      for (const sd of [-1, 1]) {
+        const wd = zonePathWidth(p[0], p[1], dist + sd * 7.3) / 2; // the drape's edge on this side
+        const nz = 0.5 + 0.5 * Math.sin(dist * 0.83 + sd * 2.1) * Math.sin(dist * 0.29 + sd);
+        const bw = zw * (0.55 + 0.7 * nz), mid = 0.4 + 0.15 * Math.sin(dist * 1.7 + sd * 3);
+        const off = (d: number): [number, number] => [p[0] - dz * sd * d, p[1] + dx * sd * d];
+        const u0 = sd < 0 ? 0 : 1.9 / 3, du = (d: number) => (sd < 0 ? -d : d) / 3;
+        const ids = [vert(...off(wd), u0, dist / 3, zw), vert(...off(wd + bw * mid), u0 + du(bw * mid), dist / 3, zw * (0.6 + 0.25 * nz), 0.96), vert(...off(wd + bw), u0 + du(bw), dist / 3, 0, 0.9)];
+        (sd < 0 ? row.a : row.b).push(...ids);
+      }
+      rows.push(row);
+    }
+    for (let i = 1; i < rows.length; i++) {
+      if (rows[i].zw <= 0 && rows[i - 1].zw <= 0) continue; // outside the zone the path keeps its original edge
+      for (const side of ['a', 'b'] as const) {
+        const p0 = rows[i - 1][side], p1 = rows[i][side];
+        for (let k = 0; k < 2; k++) idx.push(p0[k], p1[k], p1[k + 1], p0[k], p1[k + 1], p0[k + 1]);
+      }
+    }
+    // earth patches: soft, irregular, a little away from the path, here and there
+    for (let i = 2; i < dense.length - 2; i += 3 + Math.floor(r() * 4)) {
+      const p = dense[i], q = dense[i + 1];
+      if (zoneWeight(p[0], p[1]) < 0.5 || inCutArea(p[0], p[1])) continue;
+      if (r() < 0.4) continue;
+      let dx = q[0] - p[0], dz = q[1] - p[1]; const len = Math.hypot(dx, dz) || 1; dx /= len; dz /= len;
+      const sd = r() < 0.5 ? -1 : 1, d = 1.0 + r() * 1.1, R = 0.45 + r() * 0.6;
+      const cx = p[0] - dz * sd * d, cz = p[1] + dx * sd * d, ph = r() * 6.3;
+      const c0 = vert(cx, cz, cx / 3, cz / 3, 0.5 + r() * 0.25, 0.9);
+      const rim: number[] = [];
+      for (let k = 0; k < 10; k++) {
+        const a = (k / 10) * Math.PI * 2, rr = R * (0.75 + 0.35 * Math.sin(a * 3 + ph) * Math.sin(a * 2 - ph));
+        const x = cx + Math.cos(a) * rr * 1.3, z = cz + Math.sin(a) * rr;
+        rim.push(vert(x, z, x / 3, z / 3, 0, 0.9));
+      }
+      for (let k = 0; k < 10; k++) idx.push(c0, rim[(k + 1) % 10], rim[k]);
+    }
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  g.setAttribute('color', new THREE.Float32BufferAttribute(col, 4)); // rgba: vertex alpha fades the band out
+  g.setIndex(idx);
+  g.computeVertexNormals();
+  const nn = g.attributes.normal as THREE.BufferAttribute;
+  for (let i = 0; i < nn.count; i++) if (nn.getY(i) < 0) nn.setXYZ(i, -nn.getX(i), -nn.getY(i), -nn.getZ(i));
+  const m = new THREE.Mesh(g, new THREE.MeshLambertMaterial({ map: dirt, vertexColors: true, transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }));
+  m.receiveShadow = true;
+  m.renderOrder = 1; // after the opaque path and terrain
+  Object.assign(m.userData, { region: 'outdoor', pathVerge: true });
+  w.scene.add(m);
+  return m;
 }
 
 // ------------------------------------------------------------------------------------------------ contact grounding
@@ -116,7 +204,7 @@ const LODS: Lod[] = ['near', 'mid', 'far'];
  * Trees and bushes of every species and variant in ONE batch (one draw call with multi-draw). Each species ×
  * variant has a near, mid and far geometry, each bark + foliage merged on the tree-atlas material, the bark's
  * vertex colours pre-multiplied by bark ÷ leaf tint so that one instance colour (the leaf tint) serves both.
- * Near < 16 m, mid < 28 m (3 m hysteresis each way); trees drawn to 115 m, bushes to 50 m. All LODs are emitted
+ * Near < 16 m, mid < 26 m (3 m hysteresis each way); trees drawn to 115 m, bushes to 50 m. All LODs are emitted
  * from one skeleton with the same cluster layout, so a switch coarsens the surface but keeps the silhouette.
  */
 export class TreeBatches {
@@ -126,13 +214,17 @@ export class TreeBatches {
   private batch: VegBatch | null = null;
   private last = new THREE.Vector3(Infinity, 0, 0);
   private cam: THREE.Camera | null = null;
-  constructor(private lodDist = [16, 28], private farDist = 115, private bushFar = 50) {}
+  constructor(private lodDist = [16, 26], private farDist = 115, private bushFar = 50) {}
   private model(s: Spec) {
     const key = `${s.species}.${s.v}`;
     if (!this.keys.has(key)) {
       const b = new THREE.Color(BARK_TINT[s.species]), l = new THREE.Color(LEAF_TINT[s.species]);
       const ratio = new THREE.Color(b.r / l.r, b.g / l.g, b.b / l.b);
-      this.keys.set(key, LODS.map((lod) => this.geos.push(mergeModel(s.kind === 'tree' ? treeModel(s.species, s.v, lod) : bushModel(s.species, s.v, lod), ratio)) - 1));
+      if (s.kind === 'tree') this.keys.set(key, LODS.map((lod) => this.geos.push(mergeModel(treeModel(s.species, s.v, lod), ratio)) - 1));
+      else { // bushes: near and far only (one geometry serves mid and far: fewer groups in the instanced fallback)
+        const near = this.geos.push(mergeModel(bushModel(s.species, s.v, 'near'), ratio)) - 1, far = this.geos.push(mergeModel(bushModel(s.species, s.v, 'far'), ratio)) - 1;
+        this.keys.set(key, [near, far, far]);
+      }
     }
     return key;
   }
@@ -173,6 +265,8 @@ export class TreeBatches {
     for (const it of this.items) { const d = Math.hypot(it.p.x - x, -it.p.z - z); if (d < bd) { bd = d; best = it; } }
     return best && best.vis ? best.lod : -1;
   }
+  /** Diagnostics: every tree and bush (species.variant, plan position). */
+  list() { return this.items.map((it) => ({ key: it.key, bush: it.bush, x: +it.p.x.toFixed(2), z: +(-it.p.z).toFixed(2) })); }
   /** Diagnostics: per kind × LOD, how many are in range, and how many of those intersect the view. */
   stats() {
     const z = () => ({ near: 0, mid: 0, far: 0, nearInView: 0, midInView: 0, farInView: 0 });
@@ -207,7 +301,7 @@ interface PlantItem { geo: number; m: THREE.Matrix4; p: THREE.Vector3; c: THREE.
  * How far each kind is shown (m). Small ground plants stop where they are a few pixels tall on a phone; foxgloves,
  * the colour accent of the approach, and ferns, which carry the verge's shape, are kept further.
  */
-export const PLANT_SHOW: Record<PlantKind, number> = { fern: 17, grass: 14, bilberry: 14, foxglove: 24, lily: 12, anemone: 13 };
+export const PLANT_SHOW: Record<PlantKind, number> = { fern: 16, grass: 13, bilberry: 13, foxglove: 24, lily: 11, anemone: 12 };
 /**
  * Every understory plant (all kinds and variants) in one batch: one draw call with multi-draw, one per plant
  * geometry in view without. Shown within a per-kind range (PLANT_SHOW); instances shrink to nothing over the last
@@ -267,6 +361,14 @@ function mat(x: number, y: number, z: number, yaw: number, s: number | [number, 
 
 // ------------------------------------------------------------------------------------------------ the woodland
 export interface ZoneTree { x: number; z: number; y: number; h: number; r: number; kind: 'oak' | 'birch' | 'cypress' | 'pine'; hue: number }
+/**
+ * The zone's backdrop: the visual-only woodland just beyond the south fence along the zone (seen over the fence
+ * from the approach and the door). Without it the reverse views show the old cone pines right behind the new
+ * trees. Only this strip; the rest of the outer ring is unchanged.
+ */
+export const inBackdrop = (x: number, z: number) => x > ZONE.x0 && x < ZONE.x1 && z > -9 && z < -1.5;
+const backdrop: ZoneTree[] = [];
+export const addBackdrop = (t: ZoneTree) => { backdrop.push(t); };
 
 /**
  * Trees (on the original positions), understory, litter, flowers and verge stones for the sample zone.
@@ -280,7 +382,8 @@ export function buildWoodland(w: World, c: Ctx, trees: ZoneTree[]) {
   const tb = new TreeBatches();
   const leafTint = new THREE.Color();
   const species: { t: ZoneTree; sp: TreeSpecies }[] = [];
-  for (const t of trees) {
+  const back = backdrop.splice(0); // consumed once per build
+  for (const t of [...trees, ...back]) {
     const sp: TreeSpecies = t.kind === 'pine' ? 'pine' : t.kind === 'birch' ? 'birch' : hash(t.x, t.z, 1) < 0.35 ? 'beech' : 'oak';
     const heroOak = Math.hypot(t.x - 55.83, t.z - 11.65) < 0.3, heroPine = Math.hypot(t.x - 69.23, t.z - 16.07) < 0.3;
     const s0 = heroOak ? 'oak' : heroPine ? 'pine' : sp;
@@ -293,8 +396,7 @@ export function buildWoodland(w: World, c: Ctx, trees: ZoneTree[]) {
     leafTint.set(LEAF_TINT[s0]).offsetHSL(t.hue * 0.025, (r() - 0.5) * 0.05, (r() - 0.5) * 0.06);
     r(); // (was a separate bark tint jitter: one instance colour now tints bark and leaves; the draw keeps the sequence)
     tb.add({ kind: 'tree', species: s0, v }, mat(t.x, t.y - 0.05, t.z, yaw, [s, sy, s]), leafTint);
-    ground(t.x, t.z, ({ oak: 3.6, beech: 3.2, birch: 1.8, pine: 2.2 })[s0] * s, s0 === 'birch' ? 0.4 : 0.5, yaw);
-    species.push({ t, sp: s0 });
+    if (t.z > 0) { ground(t.x, t.z, ({ oak: 3.6, beech: 3.2, birch: 1.8, pine: 2.2 })[s0] * s, s0 === 'birch' ? 0.4 : 0.5, yaw); species.push({ t, sp: s0 }); } // backdrop: no decals, no undergrowth
   }
   const broadleaves = species.filter((q) => q.sp === 'oak' || q.sp === 'beech').map((q) => q.t);
   const pines = species.filter((q) => q.sp === 'pine').map((q) => q.t);
@@ -353,7 +455,7 @@ export function buildWoodland(w: World, c: Ctx, trees: ZoneTree[]) {
   for (const p of FOREST_PATHS) for (let i = 1; i < p.length; i++) {
     const [ax, az] = p[i - 1], [bx, bz] = p[i];
     const seg = Math.hypot(bx - ax, bz - az), nx = -(bz - az) / seg, nz = (bx - ax) / seg;
-    for (let t = 0; t < seg; t += 0.55) {
+    for (let t = 0; t < seg; t += 0.4 + r() * 0.55) { // irregular spacing: no rhythm along the edge
       const x0 = ax + ((bx - ax) * t) / seg, z0 = az + ((bz - az) * t) / seg;
       if (!inZone(x0, z0)) continue;
       for (const side of [-1, 1]) {
@@ -376,7 +478,7 @@ export function buildWoodland(w: World, c: Ctx, trees: ZoneTree[]) {
     if (t.kind === 'pine') continue;
     for (let i = 0; i < 22; i++) {
       const a = r() * Math.PI * 2, d = 0.5 + Math.sqrt(r()) * 3.2, x = t.x + Math.cos(a) * d, z = t.z + Math.sin(a) * d;
-      if (!inZone(x, z) || inCutArea(x, z) || pathDist(x, z) < 0.55) continue;
+      if (!inZone(x, z) || inCutArea(x, z) || pathDist(x, z) < 0.4) continue; // a few drift onto the path edge
       c.b.add(M.flat, litterG, mat(x, terrainHeight(x, z) + 0.012, z, r() * 6.3, 0.8 + r() * 0.7), WOOD.litter[Math.floor(r() * 4)], c.chunk, false, 0);
       litter++;
     }
@@ -386,6 +488,7 @@ export function buildWoodland(w: World, c: Ctx, trees: ZoneTree[]) {
   w.scene.userData.vegPath = CAPS.multiDraw ? 'multi-draw' : 'instanced';
   w.scene.userData.vegStats = () => ({ ...tb.stats(), plantsShown: pb.shown });
   w.scene.userData.vegLodAt = (x: number, z: number) => tb.lodAt(x, z);
+  w.scene.userData.vegList = () => tb.list();
   return { trees: tb.size - bushes, bushes, counts: { ...pb.counts(), litter, stones } };
 }
 
@@ -472,8 +575,9 @@ export function cutRocks(c: Ctx) {
 
 // ------------------------------------------------------------------------------------------------ the entrance
 /**
- * Headwall and portal, embedded: a rubble wall of chunky dressed stones on a dark mortar backing, set between
- * two rock masses that come out of the hill, with irregular capping stones and turf over the top; a heavy oak
+ * Headwall and portal, embedded: a rubble wall of chunky dressed stones on a dark mortar backing whose top steps
+ * down toward both ends, where earth and turf from the hill come over it and rock masses step up into the slope;
+ * irregular capping stones and turf over the top; a heavy oak
  * door frame (posts on stone pads, a lintel with projecting ends) right around the opening, a stone threshold,
  * roots coming over the top and two lanterns on wall brackets. The original sign, inscription tablet, lock and
  * door are kept exactly where they were (built by boslust.ts); nothing here covers them.
@@ -485,15 +589,20 @@ export function entranceV2(w: World, c: Ctx) {
   // clear zones (plan x0, x1, y0, y1) for the door opening, tablet, lock and sign
   const keep: [number, number, number, number][] = [[62.38, 63.62, -1, 2.32], [60.12, 61.38, 1.17, 1.93], [64.55, 65.15, 0.92, 1.48], [62.0, 64.0, 2.85, 3.46]];
   const blocked = (x0: number, x1: number, y0: number, y1: number) => keep.some(([a, b, c0, d]) => x1 > a && x0 < b && y1 > c0 && y0 < d);
-  // dark mortar backing (also what shows in the joints)
-  for (const [x0, x1, y0, y1] of [[59.4, 62.38, 0, TOP], [63.62, 66.6, 0, TOP], [62.38, 63.62, 2.32, TOP]] as const) {
+  // the wall top steps down toward both ends (it sinks into the hill there): full height over the door, sign and
+  // tablet (x 61.05–64.95), one step lower, then lower again at the ends
+  const STEPS = { l1: 61.05, l2: 60.3, r1: 64.95, r2: 65.75 };
+  const topX = (x: number) => (x < STEPS.l2 ? TOP - 0.95 : x < STEPS.l1 ? TOP - 0.42 : x > STEPS.r2 ? TOP - 1.0 : x > STEPS.r1 ? TOP - 0.45 : TOP);
+  const topAt = (x0: number, x1: number) => Math.min(topX(x0 + 0.01), topX(x1 - 0.01));
+  // dark mortar backing (also what shows in the joints), stepped like the wall
+  for (const [x0, x1, y0, y1] of [[59.4, STEPS.l2, 0, TOP - 0.95], [STEPS.l2, STEPS.l1, 0, TOP - 0.42], [STEPS.l1, 62.38, 0, TOP], [63.62, STEPS.r1, 0, TOP], [STEPS.r1, STEPS.r2, 0, TOP - 0.45], [STEPS.r2, 66.6, 0, TOP - 1.0], [62.38, 63.62, 2.32, TOP]] as const) {
     const g = projectUV(softBox(x1 - x0, y1 - y0, 0.3, 0.01, 1), 0.8);
     c.b.add(M.rock, g, mat((x0 + x1) / 2, y0 + (y1 - y0) / 2, DZ + 0.08, 0, 1), '#5a5347', c.chunk, true, 0); // face 7 cm behind the stones
     g.dispose();
   }
   // coursed rubble: rows of irregular stones, every joint broken, bigger stones low
   const stone = (x0: number, x1: number, y0: number, y1: number, proud = 0) => {
-    const g = bake(projectUV(softBox(x1 - x0 - 0.035, y1 - y0 - 0.035, 0.3 + r() * 0.08, 0.035 + r() * 0.025, 1), 0.7), baseAO(-(y1 - y0) / 2, 0.12, 0.82));
+    const g = dropBack(bake(projectUV(softBox(x1 - x0 - 0.035, y1 - y0 - 0.035, 0.3 + r() * 0.08, 0.035 + r() * 0.025, 1), 0.7), baseAO(-(y1 - y0) / 2, 0.12, 0.82)));
     const t = new THREE.Color('#8c8270').offsetHSL((r() - 0.5) * 0.05, (r() - 0.5) * 0.1, (r() - 0.5) * 0.14).multiplyScalar(0.78 + 0.22 * Math.min(1, (y0 + 0.2) / 1.2)); // darker, earthier low
     c.b.add(M.rock, g, mat((x0 + x1) / 2, (y0 + y1) / 2, DZ - 0.02 - proud + r() * 0.04, (r() - 0.5) * 0.06, 1, (r() - 0.5) * 0.05, (r() - 0.5) * 0.06), t, c.chunk, true, 0);
     g.dispose();
@@ -513,31 +622,53 @@ export function entranceV2(w: World, c: Ctx) {
       const next = tallNow.find((q) => q[0] > x);
       let wdt = Math.min(66.6 - x, (y < 1 ? 0.5 : 0.36) + r() * 0.42, next ? next[0] - x : 99);
       if (66.6 - x - wdt < 0.2) wdt = 66.6 - x;
-      const tall = r() < 0.16 && y + h * 2 < TOP && wdt < 0.6;
-      const sh = tall ? h * 1.9 : h * (0.86 + r() * 0.14);
-      if (!blocked(x, x + wdt, y, y + sh)) { stone(x, x + wdt, y, y + sh); if (tall) taken.push([x, x + wdt, y + sh]); }
+      const top = topAt(x, x + wdt);
+      const tall = r() < 0.16 && y + h * 2 < top && wdt < 0.6;
+      let sh = tall ? h * 1.9 : h * (0.86 + r() * 0.14);
+      if (y + sh > top) sh = top - y; // the last course under a lower step is cut to it
+      if (sh > 0.12 && !blocked(x, x + wdt, y, y + sh)) { stone(x, x + wdt, y, y + sh); if (tall) taken.push([x, x + wdt, y + sh]); }
       x += wdt;
     }
     y += h;
   }
-  // capping stones along the top, irregular, then turf lumps rolling over from the mound behind
+  // capping stones along the stepped top (each step's cap ends in the next), then turf rolling over from the mound
   for (let x = 59.3; x < 66.7;) {
-    const wd = 0.45 + r() * 0.35;
+    let wd = 0.45 + r() * 0.35;
+    for (const b of [STEPS.l2, STEPS.l1, STEPS.r1, STEPS.r2]) if (x < b - 0.05 && x + wd > b) wd = b - x + 0.04; // no cap across a step
     const g = bake(projectUV(softBox(wd, 0.16 + r() * 0.08, 0.6, 0.05, 1), 0.7), () => 0.95);
-    c.b.add(M.rock, g, mat(x + wd / 2, TOP + 0.06, DZ + 0.02, (r() - 0.5) * 0.15, 1, 0, (r() - 0.5) * 0.08), new THREE.Color('#9d917a').multiplyScalar(0.9 + r() * 0.15), c.chunk, true, 0);
+    c.b.add(M.rock, g, mat(x + wd / 2, topX(x + wd / 2) + 0.06, DZ + 0.02, (r() - 0.5) * 0.15, 1, 0, (r() - 0.5) * 0.08), new THREE.Color('#9d917a').multiplyScalar(0.9 + r() * 0.15), c.chunk, true, 0);
     g.dispose();
     x += wd - 0.02;
   }
   for (let i = 0; i < 9; i++) {
     const x = 59.6 + i * 0.86 + (r() - 0.5) * 0.3;
-    const g = lumpTurf(x, TOP + 0.12, DZ + 0.12, 0.55 + r() * 0.2, i);
+    const g = lumpTurf(x, topX(x) + 0.12, DZ + 0.12, 0.55 + r() * 0.2, i);
     c.b.add(M.flat, g, new THREE.Matrix4(), new THREE.Color(WOOD.grass).multiplyScalar(0.82 + r() * 0.12), c.chunk, false, 0); // same group as the litter
     g.dispose();
   }
-  // two rock masses that hold the headwall: out of the hill, overlapping the wall ends
-  for (const [x, yaw, i] of [[58.75, 0.35, 0], [67.25, 2.9, 2]] as const) {
+  // where the wall steps down, the hill comes over it: larger earth-and-turf mounds on the lower steps, running
+  // back into the slope behind (the hill is ~3.0–3.4 m high just behind the wall)
+  for (const [x, y, z, sz, earth] of [[59.75, TOP - 0.82, DZ + 0.35, 0.95, 0.35], [60.6, TOP - 0.3, DZ + 0.4, 0.75, 0.15], [66.25, TOP - 0.86, DZ + 0.35, 1.0, 0.35], [65.35, TOP - 0.33, DZ + 0.4, 0.75, 0.15], [59.2, TOP - 1.05, DZ + 1.1, 1.1, 0.5], [66.85, TOP - 1.1, DZ + 1.1, 1.1, 0.5]] as const) {
+    const g = lumpTurf(x, y, z, sz, Math.round(x * 10));
+    c.b.add(M.flat, g, new THREE.Matrix4(), new THREE.Color(WOOD.grass).lerp(new THREE.Color('#6a5236'), earth).multiplyScalar(0.8 + r() * 0.12), c.chunk, false, 0);
+    g.dispose();
+  }
+  // rock masses that hold the headwall: out of the hill, overlapping the stepped wall ends, and a second, smaller
+  // rock above and behind each, so the ends step up into the slope instead of stopping at a vertical edge
+  for (const [x, z, y0, yaw, i, s] of [
+    [58.75, DZ - 0.1, -0.3, 0.35, 0, [1.05, 2.0, 0.95]], [67.25, DZ - 0.1, -0.3, 2.9, 2, [1.05, 2.0, 0.95]],
+    [58.45, DZ + 0.9, 1.25, 1.1, 1, [0.95, 1.2, 0.9]], [67.6, DZ + 0.95, 1.2, 2.2, 3, [0.9, 1.15, 0.95]],
+    [59.55, DZ + 0.75, 2.05, 0.4, 2, [0.7, 0.75, 0.7]], [66.45, DZ + 0.8, 2.0, 1.9, 0, [0.75, 0.7, 0.7]],
+  ] as const) {
     const bb = ROCKS[i].boundingBox!;
-    c.b.add(M.rock, ROCKS[i], mat(x, -0.3 - bb.min.y * 2.4, DZ - 0.1, yaw, [1.05, 2.4, 0.95]), new THREE.Color(WOOD.rock).multiplyScalar(0.95), c.chunk, true, 0);
+    c.b.add(M.rock, ROCKS[i], mat(x, y0 - bb.min.y * s[1], z, yaw, [...s]), new THREE.Color(WOOD.rock).multiplyScalar(0.9 + r() * 0.1), c.chunk, true, 0);
+  }
+  // corner rocks where the headwall meets the cut walls: on top of the cut-wall courses, their inner faces flush
+  // with the cut's collision faces (x 60 / 66), overlapping the stepped wall ends so no vertical wall edge shows
+  for (const [side, i, zc, y0, s] of [[-1, 1, DZ - 0.2, 1.95, [1.25, 1.05, 0.9]], [1, 3, DZ - 0.2, 1.9, [1.25, 1.1, 0.95]]] as const) {
+    const bb = ROCKS[i].boundingBox!, face = side < 0 ? HILL_CUT.x0 : HILL_CUT.x1;
+    const cx = side < 0 ? face - bb.max.x * s[0] - 0.03 : face - bb.min.x * s[0] + 0.03;
+    c.b.add(M.rock, ROCKS[i], mat(cx, y0 - bb.min.y * s[1], zc - (bb.max.z + bb.min.z) / 2 * s[2], 0, [...s]), new THREE.Color(WOOD.rock).multiplyScalar(0.92), c.chunk, true, 0);
   }
   // oak door frame on stone pads, right around the opening; lintel with projecting ends
   const post = projectUV(softBox(0.28, 2.3, 0.3, 0.03, 1), 1, 'y');
@@ -576,6 +707,18 @@ export function entranceV2(w: World, c: Ctx) {
   // two lanterns on iron brackets either side of the frame: always lit, soft pool on the threshold
   for (const x of [61.62, 64.38]) lanternV2(w, c, x, 2.0, DZ - 0.42);
   w.patches.add(DX, 0.06, DZ - 1.2, 2.2, '#ffb35a', () => true, 0.1, { soft: true, aspect: 1.4 });
+}
+
+/** Drop the faces of a wall stone that point into the wall (never seen: the mortar backing is behind them). */
+function dropBack(g: THREE.BufferGeometry) {
+  const p = g.attributes.position as THREE.BufferAttribute, idx = g.index!.array, keep: number[] = [];
+  const a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3();
+  for (let t = 0; t < idx.length; t += 3) {
+    a.fromBufferAttribute(p, idx[t]); b.fromBufferAttribute(p, idx[t + 1]); c.fromBufferAttribute(p, idx[t + 2]);
+    if (b.sub(a).cross(c.sub(a)).normalize().z > -0.5) keep.push(idx[t], idx[t + 1], idx[t + 2]); // three.js −z = into the hill
+  }
+  g.setIndex(keep);
+  return g;
 }
 
 /** A low, lumpy turf mass (foliage material) for the top of the headwall. */
