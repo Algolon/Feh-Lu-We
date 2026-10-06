@@ -130,6 +130,8 @@ Each line is **Pass / Fail / n.a.** An optional 1–5 score per section can be n
 - [ ] Typecheck clean, unit tests pass, e2e suites pass (walkthrough, L1–L6 lighting, collision, saves, touch).
 - [ ] No console errors or failed requests in the walkthrough.
 - [ ] Saves from before the sample load without migration issues.
+- [ ] Placement is deterministic per object: adding, removing or re-varying one object does not move unrelated
+  ones (a regression test shows it), and every collider is explained by something visible.
 
 ## 4. Outcomes and the propagation rule
 

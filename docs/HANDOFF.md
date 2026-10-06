@@ -39,7 +39,19 @@ verge.
   - Phone check guide: EXTERIOR_SAMPLE §1.1. **No device results yet.**
   - Tools: `scripts/ext-measure.mjs` (five-view measurements, both paths), `WALK=boslust-full node
     scripts/art-walk.mjs` (walkthrough incl. the door and stair).
-- **Not started:** estate-wide propagation. It waits for the owner's review of both samples.
+- **Stabilisation pass (revision 3, 6 Oct 2026; proposed, not approved):**
+  - Owner's phone review of revision 2 (qualitative, one device): works well, feels improved, no jittery
+    overlapping pixels or models noticed. Unrecorded: device/browser, measured FPS, forced-fallback use.
+  - Placement is deterministic per object (`src/world/woodlandPlan.ts`): adding a backdrop tree or changing a
+    species' variants no longer rearranges bushes or ground cover (unit-tested). One-time re-roll of bushes,
+    plants, litter and stones; trees unchanged.
+  - The two original stumps standing inside a tree's base are drawn as moss-capped nurse stumps covering their
+    unchanged colliders (e2e-checked).
+  - Reusable kit interfaces and what is still layout-bound: EXTERIOR_SAMPLE §11.
+  - Measured (multi-draw): 47–142 calls, 120–251 k triangles; the busy view is 0.4 % over 250 k after the re-roll
+    (documented, not re-tuned). Fallback: same triangles, 71–174 calls.
+  - **Broader rollout waits for the settled level design** of the house and estate (being developed separately).
+- **Not started:** estate-wide propagation. It waits for the owner's review of both samples and the new layout.
 
 ## Art refresh, step 2 (5 Oct 2026) — interior sample (proposed, not approved)
 

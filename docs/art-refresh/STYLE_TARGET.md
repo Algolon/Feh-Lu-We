@@ -87,8 +87,14 @@ Evidence labels used below:
    plus a worn-soil band no darker than the path, removes the outline; a wandering width alone still draws a
    hard line.
 10. **Budget by measurement, per view.** Five fixed views, two rendering paths, settled LOD, renderer counters. The
-    phone guide (150 calls / 250 k triangles) is met on the multi-draw path; the fallback's calls are the open
+    phone guide (150 calls / 250 k triangles) is met on the multi-draw path (the busy view is 0.4 % over
+    after the stabilisation pass's placement re-roll); the fallback's calls are the open
     item (EXTERIOR_SAMPLE §7).
+11. **Placement must not depend on order** (stabilisation pass). Each object draws from its own stream (site seed +
+    stable ID: category and position, or the tree it grows under); adding one object must not move another.
+12. **What you bump into must be visible.** When layout colliders overlap (a stump inside a tree's base), change
+    the drawing — a root over the collider, or an old stump the tree grows from — never the collider.
+
 
 ## 0. Recommendation in brief
 
