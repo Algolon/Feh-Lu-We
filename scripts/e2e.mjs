@@ -1035,7 +1035,7 @@ async function boslustSample() {
         out[name] = drawn();
       }
       let batched = 0, instanced = 0; g.world.scene.traverse((o) => { if (!o.userData.vegPart) return; if (o.isBatchedMesh) batched++; else if (o.isInstancedMesh) instanced++; });
-      return { path: g.world.scene.userData.vegPath, multiDraw: g.metrics().multiDraw, batched, instanced, poses: out };
+      return { path: g.world.scene.userData.vegPath, multiDraw: g.metrics().multiDraw, batched, instanced, total: g.world.scene.userData.vegList().length, poses: out };
     };
     await start(SAMPLE);
     const pm = await E(page, probe, [POSES, 'low']), pmH = await E(page, probe, [POSES, 'high']);
@@ -1046,9 +1046,9 @@ async function boslustSample() {
     log('boslust sample: ?multidraw=0 really takes the instanced fallback (extension hidden, InstancedMesh groups, no BatchedMesh)', pf.path === 'instanced' && pf.multiDraw === false && pf.batched === 0 && pf.instanced > 20, JSON.stringify({ path: pf.path, multiDraw: pf.multiDraw, batched: pf.batched, instanced: pf.instanced }));
     log('boslust sample: fallback draws the same trees, bushes, plants and triangles as multi-draw at 5 poses (phone quality)', sameDrawn, JSON.stringify(Object.fromEntries(POSES.map(([n]) => [n, { md: pm.poses[n], fb: pf.poses[n] }]))));
     // with shadow maps the fallback keeps one list for both passes: everything multi-draw draws in view, plus trees
-    // whose shadow can reach the view — still culled (fewer than all 100 trees and bushes at every pose)
-    const shadowOk = POSES.every(([n]) => pfH.poses[n].trees >= pmH.poses[n].trees && pfH.poses[n].trees < 100 && pfH.poses[n].plants === pmH.poses[n].plants);
-    log('boslust sample: with shadow maps the fallback still culls (superset of the multi-draw view set, < all trees)', shadowOk, JSON.stringify(Object.fromEntries(POSES.map(([n]) => [n, { md: pmH.poses[n].trees, fb: pfH.poses[n].trees }]))));
+    // whose shadow can reach the view — still culled (fewer than all trees and bushes, backdrop row included)
+    const shadowOk = POSES.every(([n]) => pfH.poses[n].trees >= pmH.poses[n].trees && pfH.poses[n].trees < pfH.total && pfH.poses[n].plants === pmH.poses[n].plants);
+    log('boslust sample: with shadow maps the fallback still culls (superset of the multi-draw view set, < all trees)', shadowOk, JSON.stringify({ total: pfH.total, ...Object.fromEntries(POSES.map(([n]) => [n, { md: pmH.poses[n].trees, fb: pfH.poses[n].trees }])) }));
     // ---- LOD transitions by walking (fallback path, then the same in multi-draw): approaching the hero oak along
     // the path it goes far → mid → near once each; walking back 2 m past a boundary keeps the nearer LOD (hysteresis)
     const lodWalk = () => {
