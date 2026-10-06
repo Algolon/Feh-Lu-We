@@ -221,11 +221,20 @@ function clusterGeo(k: Cluster, lod: Lod, crownC: THREE.Vector3, crownR: number,
   g.setAttribute('color', new THREE.BufferAttribute(col, 3));
   return g;
 }
-/** Far LOD: the n largest clusters, a little larger, so the crown keeps its mass and outline with fewer parts. */
+/** The clusters that define the crown's outline: top-, bottom-, and outermost in ±x and ±z. Kept at every LOD. */
+function extremes(ks: Cluster[]) {
+  const pick = (f: (k: Cluster) => number) => ks.reduce((a, b) => (f(b) > f(a) ? b : a));
+  return new Set([pick((k) => k.c.y + k.r[1]), pick((k) => -(k.c.y - k.r[1])), pick((k) => k.c.x + k.r[0]), pick((k) => -(k.c.x - k.r[0])), pick((k) => k.c.z + k.r[2]), pick((k) => -(k.c.z - k.r[2]))]);
+}
+/** Mid/far: drop the small filler clumps, but never one that defines the outline (so a LOD switch does not pop). */
+function dropFillers(ks: Cluster[]) { const keep = extremes(ks); return ks.filter((k) => !k.sat || keep.has(k)); }
+/** Far LOD: the outline clusters plus the largest others, n in all; the inner ones a little larger, so the crown
+ * keeps its mass and outline with fewer parts. */
 function largest(ks: Cluster[], n: number) {
   if (ks.length <= n) return ks;
-  const f = Math.cbrt(ks.length / n);
-  return [...ks].sort((a, b) => b.r[0] * b.r[1] * b.r[2] - a.r[0] * a.r[1] * a.r[2]).slice(0, n).map((k) => ({ ...k, r: k.r.map((x) => x * f) as P3 }));
+  const keep = extremes(ks), f = Math.cbrt(ks.length / n);
+  const rest = ks.filter((k) => !keep.has(k)).sort((a, b) => b.r[0] * b.r[1] * b.r[2] - a.r[0] * a.r[1] * a.r[2]).slice(0, Math.max(0, n - keep.size));
+  return [...keep, ...rest.map((k) => ({ ...k, r: k.r.map((x) => x * f) as P3 }))];
 }
 /**
  * Drop cluster triangles buried inside a neighbouring cluster (centroid well inside its ellipsoid): they are never
@@ -379,7 +388,7 @@ function emitBroadleaf(sp: Broadleaf, sk: Skeleton, lod: Lod): Model {
   }
   const crownC = sk.clusters.reduce((s, k) => s.add(k.c), new THREE.Vector3()).divideScalar(sk.clusters.length);
   const crownR = Math.max(...sk.clusters.map((k) => k.c.distanceTo(crownC) + Math.max(...k.r)));
-  let ks = near ? sk.clusters : sk.clusters.filter((k) => !k.sat); // mid/far: the small filler clumps are dropped
+  let ks = near ? sk.clusters : dropFillers(sk.clusters); // mid/far: the small filler clumps are dropped
   if (far) ks = largest(ks, 14);
   const leaves = cullBuried(ks.map((k) => clusterGeo(k, lod, crownC, crownR)), ks);
   const woodG = mergeParts(wood.map((g) => barkCol(paint(g, (p) => sp.barkK(p.y)), sp.bark)));
@@ -486,7 +495,7 @@ export function pineModel(lod: Lod, variant = 0): Model {
   }), BARK.fissured)));
   const centre = clusters.reduce((s, k) => s.add(k.c), new THREE.Vector3()).divideScalar(clusters.length);
   const cr = Math.max(...clusters.map((k) => k.c.distanceTo(centre) + k.r[0]));
-  const ks = near ? clusters : clusters.filter((k) => !k.sat);
+  const ks = near ? clusters : dropFillers(clusters);
   const leaves = cullBuried(ks.map((k) => clusterGeo(k, lod, centre, cr, 0.4, 0.75)), ks); // high crown, seen from 6 m+ below
   return { wood: woodG, leaves: mergeParts(leaves.map((g) => foliageUV(g, 1.2))) };
 }

@@ -73,8 +73,22 @@ Evidence labels used below:
 4. **Silhouette over tessellation for trees.** Several major masses, each with smaller clumps on its outer side,
    read as broadleaf; one mass per crown reads as a ball or a pillow. Keep both LODs on the same layout so the
    switch does not pop.
-5. **Instancing must cull per instance.** An InstancedMesh is drawn whole if any part is in view; the sample culls
-   tree and understory instances against the camera every frame.
+5. **Instancing must cull per instance.** An InstancedMesh is drawn whole if any part is in view. Since revision
+   1 the sample batches vegetation in `BatchedMesh` (three.js culls per instance); since the consolidation pass the
+   path without `WEBGL_multi_draw` packs the visible instances of each geometry itself (`vegbatch.ts`).
+6. **Grow trees, don't stack them** (consolidation pass). A skeleton — trunk, limbs, side branches — with foliage
+   clusters at the branch ends gives gaps, visible limbs and species-specific structure; masses placed round a
+   centre read as pads or cushions whatever their noise.
+7. **Roots belong to the trunk.** Buttress ridges in the trunk's own rings (widest at ground level, narrowing below
+   it) read as roots from every angle; separate root tubes read as fins or sticks and show seams.
+8. **LODs from one skeleton, keep the outline clusters.** Cheaper LODs may drop inner fillers and coarsen the
+   clusters, but the top-, bottom- and outermost clusters stay, so a switch does not change the silhouette.
+9. **A path edge needs a transition, not just a wander.** A semi-transparent band continuing the path surface,
+   plus a worn-soil band no darker than the path, removes the outline; a wandering width alone still draws a
+   hard line.
+10. **Budget by measurement, per view.** Five fixed views, two rendering paths, settled LOD, renderer counters. The
+    phone guide (150 calls / 250 k triangles) is met on the multi-draw path; the fallback's calls are the open
+    item (EXTERIOR_SAMPLE §7).
 
 ## 0. Recommendation in brief
 

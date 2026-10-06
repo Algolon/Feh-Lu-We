@@ -120,6 +120,9 @@ Each line is **Pass / Fail / n.a.** An optional 1–5 score per section can be n
 - [ ] Triangles are within the sample budget and ≤ 250 k.
 - [ ] JS gzip growth is within the sample budget. Any model or texture downloads are listed with sizes.
 - [ ] No new per-frame CPU work proportional to object count (e.g. per-object decal updates).
+- [ ] Where a sample relies on an optional GPU capability (e.g. `WEBGL_multi_draw` for batched vegetation), the
+  path without it is measured at the same poses and works; a diagnostic URL forces it (e.g. `?multidraw=0`), and
+  any budget it misses is stated with its cause.
 - [ ] The owner's phone FPS is reported (E8) and is not noticeably worse than the baseline on the same phone. If the
   phone check is not done, the review records **"performance on device: unverified"**.
 
@@ -158,7 +161,7 @@ D Grounding ......... Pass/Fail   _
 E Palette ........... Pass/Fail   _
 F Composition ....... Pass/Fail   _
 G Puzzle readability  Pass/Fail   _
-H Performance ....... Pass/Fail   calls: _/_  tris: _/_  device FPS: _ (or "unverified")
+H Performance ....... Pass/Fail   calls: _/_  tris: _/_  fallback calls: _  device FPS: _ (or "unverified")
 I Regression ........ Pass/Fail   unit _/_  e2e _/_
 Owner verdict: Pass / Pass with fixes / Fail
 What feels right:

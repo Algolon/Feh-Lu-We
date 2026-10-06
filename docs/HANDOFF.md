@@ -1,6 +1,6 @@
 # Feh Lu We — status, verification record and handoff
 
-Last updated: 2026-10-05. Branch: `ccr-75ef4113-kfkimm` (the repository was empty before this work).
+Last updated: 2026-10-06. Branch: `ccr-75ef4113-kfkimm` (the repository was empty before this work).
 
 ## Art refresh, step 3 (5 Oct 2026) — BOSLUST exterior sample (proposed, not approved)
 
@@ -23,6 +23,18 @@ verge.
   - Six plant kinds with three or four variants each, placed by ecology.
   - Everything renders in three batched meshes. The door view drops to 142 draw calls (baseline 154), and
     triangles peak at ~350 k.
+- **Consolidation pass (revision 2, 6 Oct 2026; proposed, not approved):**
+  - Rendering works with and without `WEBGL_multi_draw`: two batched calls for all vegetation, or an instanced
+    fallback (forced with `?multidraw=0`, works with `?debug=1` and review mode). Same triangles in both paths.
+  - Measured at fork, approach, doorway, reverse and busy views (phone quality): multi-draw 47–142 calls,
+    122–249 k triangles (within the 150 / 250 k guide; was up to 350 k). Fallback 76–175 calls — over the
+    call guide by up to 25 at four views (cause and next remedy in EXTERIOR_SAMPLE §7).
+  - Trees grown from branch skeletons with integrated buttress roots, three LODs from one layout; looser Scots
+    pine; multi-stem hazel; readable holly; soft path verge; headwall stepping into the hill; backdrop row beyond
+    the fence.
+  - Phone check guide: EXTERIOR_SAMPLE §1.1. **No device results yet.**
+  - Tools: `scripts/ext-measure.mjs` (five-view measurements, both paths), `WALK=boslust-full node
+    scripts/art-walk.mjs` (walkthrough incl. the door and stair).
 - **Not started:** estate-wide propagation. It waits for the owner's review of both samples.
 
 ## Art refresh, step 2 (5 Oct 2026) — interior sample (proposed, not approved)

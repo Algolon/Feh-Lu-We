@@ -6,6 +6,7 @@ import * as THREE from 'three';
 import { oakModel, pineModel, rockModel, fernModel, grassModel, twoSided, taperTube, treeModel, bushModel, plantModel, PLANT_VARIANTS, type TreeSpecies, type PlantKind, ATLAS_COLS, LEAF_U } from '../src/world/woodkit';
 import { Vegetation } from '../src/world/nature';
 import { zoneWeight, inZone } from '../src/world/boslustZone';
+import { PLANT_SHOW } from '../src/world/boslustSample';
 
 const tris = (g: THREE.BufferGeometry) => (g.index ? g.index.count : g.attributes.position.count) / 3;
 const box = (g: THREE.BufferGeometry) => { g.computeBoundingBox(); return g.boundingBox!; };
@@ -82,6 +83,30 @@ describe('species and variants', () => {
       for (let i = 0; i < lu.count; i += 7) expect(lu.getX(i)).toBeGreaterThan(LEAF_U / 2);
     }
   });
+  it('three LODs per species × variant: near ≤ 3.2k, mid ≤ 0.9k, far ≤ 0.6k triangles; crown outline kept within 15 %', () => {
+    for (const sp of species) for (let v = 0; v < 3; v++) {
+      const [n, m, f] = (['near', 'mid', 'far'] as const).map((l) => treeModel(sp, v, l));
+      expect(tris(n.wood) + tris(n.leaves), `${sp}.${v} near`).toBeLessThan(3200);
+      expect(tris(m.wood) + tris(m.leaves), `${sp}.${v} mid`).toBeLessThan(900);
+      expect(tris(f.wood) + tris(f.leaves), `${sp}.${v} far`).toBeLessThan(600);
+      const sn = box(n.leaves).getSize(new THREE.Vector3());
+      for (const g of [m.leaves, f.leaves]) { const s = box(g).getSize(new THREE.Vector3()); for (const k of ['x', 'y', 'z'] as const) expect(Math.abs(s[k] - sn[k]) / sn[k], `${sp}.${v} ${k}`).toBeLessThan(0.15); }
+    }
+  });
+  it('broadleaf roots are part of the trunk: buttresses reach out at ground level and narrow again below it', () => {
+    for (const sp of ['oak', 'beech'] as const) {
+      const p = treeModel(sp, 0, 'near').wood.attributes.position as THREE.BufferAttribute;
+      let atGround = 0, deep = 0, at1m = 0;
+      for (let i = 0; i < p.count; i++) {
+        const r = Math.hypot(p.getX(i), p.getZ(i)), y = p.getY(i);
+        if (Math.abs(y) < 0.02) atGround = Math.max(atGround, r);
+        if (y < -0.4) deep = Math.max(deep, r);
+        if (Math.abs(y - 0.95) < 0.02) at1m = Math.max(at1m, r);
+      }
+      expect(atGround, sp).toBeGreaterThan(at1m * 1.6); // a real flare, not a cylinder
+      expect(deep, sp).toBeLessThan(atGround); // the ridges dive: no skirt shows on a downhill slope
+    }
+  });
   it('bushes: hazel and holly, three variants each, under 3 m, foliage down to below knee-to-hip height', () => {
     for (const sp of ['hazel', 'holly'] as const) for (let v = 0; v < 3; v++) {
       const m = bushModel(sp, v, 'near'), b = box(m.leaves);
@@ -99,6 +124,7 @@ describe('species and variants', () => {
         expect(g.index, `${kind}.${v}`).toBeNull();
         expect(Object.keys(g.attributes).sort()).toEqual(['color', 'normal', 'position']);
         expect(tris(g)).toBeLessThan(1200);
+        expect(PLANT_SHOW[kind], `${kind} range`).toBeGreaterThan(8); // every kind has a show distance
         n++;
       }
     }
