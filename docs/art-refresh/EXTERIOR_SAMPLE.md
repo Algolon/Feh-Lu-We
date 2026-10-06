@@ -675,8 +675,16 @@ build and deploy succeeded).
 
 ### CI and deployment
 
-Recorded separately in the final report and HANDOFF (the workflow result for this push is checked after the
-push; the live page cannot be loaded from the authoring environment — its proxy refuses `algolon.github.io`).
+**CI (GitHub Actions "Build and deploy to GitHub Pages"):**
+- Run #17 ([37393383463](https://github.com/Algolon/Feh-Lu-We/actions/runs/37393383463)) for `c853918` (game code):
+  build job (npm ci, typecheck, unit tests, build, artifact) and deploy job succeeded.
+- Run #18 ([37394625224](https://github.com/Algolon/Feh-Lu-We/actions/runs/37394625224)) for `214db1e`
+  (evidence and documents, same game code): build and deploy jobs succeeded.
+- The commit recording this is docs-only and redeploys the same game code under its own build id.
+
+**Live delivery is not verified from here:** the authoring environment cannot reach `algolon.github.io` (the
+connection fails at its proxy). On your phone, open the review URL and check that the build id on the start card
+starts with `214db1e` or a later commit of this branch.
 
 | | |
 |---|---|

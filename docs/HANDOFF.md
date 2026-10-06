@@ -34,6 +34,8 @@ verge.
     the fence.
   - Verified here: unit 94/94; browser regression 102/102 (one stale test constant corrected and rerun); normal
     game pixel-identical at five poses; multi-draw and forced fallback pixel-identical at three poses.
+  - CI: runs #17 (`c853918`) and #18 (`214db1e`) — build and deploy succeeded. Live page not loaded from the
+    authoring environment (github.io unreachable there); confirm the build id on a phone.
   - Phone check guide: EXTERIOR_SAMPLE §1.1. **No device results yet.**
   - Tools: `scripts/ext-measure.mjs` (five-view measurements, both paths), `WALK=boslust-full node
     scripts/art-walk.mjs` (walkthrough incl. the door and stair).
