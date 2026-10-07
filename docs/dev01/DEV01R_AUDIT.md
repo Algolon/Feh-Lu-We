@@ -105,3 +105,77 @@ The review-only sauna vegetation fix stays review-only.
 Checks after the reconciliation: typecheck ✅ · unit 137/137 ✅ · existing e2e 103/103 ✅ · e2e:dev01 32/32 ✅ ·
 normal game vs `ef6b7c3`: draw calls and triangles identical at 13 views, pixel deltas within run-to-run noise ✅.
 The review-only sauna vegetation fix stays review-only (separate follow-up).
+
+## 7. Final canon verification against the real v0.2 package (written before any edit)
+
+Sources: `docs/design/v0.2/` at `e8217a6` — PUZZLE_DESIGN (v0.2, 7 Oct), UX_GAME_FEEL (v0.2), LEVEL_PLAN, LEVEL_LAYOUT.json,
+ADJACENCY_GRAPH, DELTA_LEVEL_V0_1_TO_V0_2, INTEGRATION_OPEN (v0.2), ENVIRONMENT_STORY, ART_BIBLE, ART_TOKENS (internally v0.1;
+treated as the current discipline inputs of the package). All ten were read in full. Scope: only the items §0–§6 left
+NIET TOETSBAAR, provisional or derived, plus the checks the DEV-01R-final brief lists. ART_BIBLE/ART_TOKENS are future
+production direction and not reconciled here (no art pass); UI colours already equal the "existing UI" tokens.
+
+Citations: PD = PUZZLE_DESIGN, UX = UX_GAME_FEEL, LP = LEVEL_PLAN, LL = LEVEL_LAYOUT.json, ES = ENVIRONMENT_STORY.
+
+### 7.1 Level, room aliases, poses
+
+| # | Item | Current implementation | Design source | Status | Action |
+|---|---|---|---|---|---|
+| F1 | Room aliases G01–G04, U04, U05, U10 | vestibule, hall, living, library, reis, sterren, botanic (assumed) | ES §5 (G01 vestibule, G02 hal, G03 zitkamer, G04 bibliotheek, U04 gastensuite/pakhoek, U05 sterrenhoek, U10 botanische kamer); LP §12 runtime ids `reis` "gastensuite met pakhoek", `sterren`, `botanic`; LL rooms | MATCH | ids.ts comment: verified, no longer an assumption |
+| F2 | Room bounds, door ids on the route | as-built (`door.library`, `door.livLib`, `door.reis`, `door.sterren`, `door.botanic`) | LL `source.rooms` (bounds identical), ADJACENCY physical edges | MATCH | — |
+| F3 | B01 clusters reachable before the study key | yes (e2e walks them before the key) | LL check "B01 reachable before studyKey"; PD L01 | MATCH | — |
+| F4 | B01 inspection poses | reis (78.6, 85.3) facing N; sterren (79.0, 92.35) facing N; botanic (102.9, 84.0) facing W | LL `evidence_reservations` / LP §7: reis (81.5, 83) W/N, sterren (76.5, 90) W, botanic (104.5, 88) E, 1.2 m clear, status "preferred candidate, not approved replacement" | MINOR | **Not moved.** The reserved spots are occupied by as-built furniture (sterren: bed x 73.9–76.1 directly west of the pose; botanic: the existing 1.2 × 2.4 m table covers (104.5, 88)). Conforming means restaging three rooms = the later blockout (LP §11/§14, "design only; not implemented"). DEV-01 keeps the contract that applies to as-built rooms: right room, pre-key, approach by real controls, ≥ 1.2 m clear around each pose except the target surface (measured: nearest other furniture ≥ 2.3 m). Listed as follow-up. |
+| F5 | Gingerbread maquette position | table (85.5, 95.9) against the west wall | LL `ES.gingerbread` centre (88, 96), "secondary scene; no brass base/no code"; ES PB01 flank, off the console axis | MINOR | Move the table to (88, 96) (passes `validatePlacement`: route, stair, openings, poses); pose and route re-derived |
+| F6 | DS01 rooms A/B/C | G02 hall / G04 library / U04 reis | PD §5.2, §6.2 | MATCH | — |
+| F7 | Save-relevant room ids | unchanged | LP §10 "alle 39 source-room-IDs behouden" | MATCH | — |
+
+### 7.2 B01
+
+| # | Item | Current implementation | Design source | Status | Action |
+|---|---|---|---|---|---|
+| B20 | Folio ids, concept | `EB.folio.stars/plants/travel`, loose drawing sheets | PD §4.2 | MATCH | — |
+| B21 | Detail transcripts | paraphrased ("drie gaten langs de rug", "varenblad met … schuin eroverheen") | PD §4.2 table ("gesloten schrift met drie gaten naast elkaar", "geperste varen onder glas met één brede diagonale reparatiestrook", "koffer met twee parallelle riemen en vierkante middenpatch", "label met afgesneden rechterbovenhoek") | MINOR | literal transcripts in sheet, cluster and notebook |
+| B22 | Clip and inspection cluster | clip on a separate empty index card beside the objects, its own inspect target (`b01.clip.*`) | PD §4.2 "ronde clip aan schrift", "puntige clip aan glasplaat", "vierkante clip door labelgat"; PD UX-contract "één inspectiecluster per paar"; PD U01; ES §8 "de clip zit aan het schrift … één inspectiecluster" | CONFLICT | clip drawn on/through the object; one inspect per cluster; cluster source ids = LL evidence ids `EB.stars` / `EB.plants` / `EB.travel` |
+| B23 | Table instruction | provisional ("Ieder tekenblad hoorde ooit met een clip …") | PD §4.2 literal instruction | CONFLICT | literal text |
+| B24 | Local practice card | absent | PD §4.2 "Lokale oefenkaart: sleutel met drie tanden + gestreepte koordlus; beide originelen ernaast met golftab; getekend oefenvak golftab, niet een vierde slot"; PD §6.7 slice contents | CONFLICT | add: card + both originals with a wave tab on the table, one inspectable source; no fourth slot, no input |
+| B25 | Judging | judged automatically when the third slot is filled | PD §4.2 "beoordeel volledige set met 'Controleer'" | CONFLICT | placing never judges; **Controleer** judges (incomplete = no attempt, complete wrong = neutral, correct = drawer) |
+| B26 | Mapping | rond=stars, punt=plants, vierkant=travel | PD §4.2 | MATCH | — |
+| B27 | Hint levels | provisional wording | PD §4.2 hints 1–3 | CONFLICT | literal |
+| B28 | Reward + follow-up card | study key; card names the study, no B02 answer | PD §4.2 | MATCH | — |
+| B29 | Competing old evidence | plaques, emblem plan, guestbook tabs, catalogue, emblem prints, captions all off; tripod telescope, open suitcase, herbarium remain | PD §4.2 "Decoratieve sterren/planten/koffers mogen bestaan, maar nooit het volledige unieke detailpaar dupliceren" | MATCH | near-misses B16/B17 (and the herbarium) are explicitly allowed |
+
+### 7.3 DS01
+
+| # | Item | Current implementation | Design source | Status | Action |
+|---|---|---|---|---|---|
+| D10 | Source ids | `s.ds01.note`, `s.ds01.album`, `s.ds01.letter`, `s.ds01.photo` (+faces) | PD §6.2 `OA.ds01`, `OB.ds01`, `OC.ds01.front/back` | CONFLICT | rename; schema 3 migrates review saves |
+| D11 | B as one reading cluster | album and letter are two targets/sources | PD §6.2 "pagina/brief één leescluster; bron OB.ds01" | CONFLICT | one target, one source |
+| D12 | A text | provisional | PD §6.2 literal A-tekst (G.M.) | CONFLICT | literal |
+| D13 | B page + letter | "Het huisje aan het water", tea, signed "J." | PD §6.2 page 'Gingerbread house — het eerste huisje', empty corners + faded rectangle; literal B-brief (water, G.M.) | CONFLICT | literal text and page art |
+| D14 | C front/back/raw text, image | house by the water with bicycles; provisional texts | PD §6.2 literal C-ruwe inspectie and back; front = stylised image of the game maquette + caption | CONFLICT | literal; front art = gingerbread house + caption |
+| D15 | C context "raam + koffers + droogrek" | rack at the window; ordinary suitcases 3.6 m away (the open suitcase bench) | PD §6.2 unique combination; "andere kofferprops mogen bestaan" without the unique pair | MINOR | two plain suitcases (no straps/patch/label) beside the rack |
+| D16 | First-front notice | generic "Bewaard bij Waarnemingen" | PD §6.4 "eenmaal 'Afbeelding bewaard in notities'" | MINOR | literal |
+| D17 | Archive entry | title "Het huisje aan het water", no image, label "Herinnering" | PD §6.1/§6.4 image with title, player title only after photo inspection; UX §4.1 label "Bekeken", never "Opgelost" | MINOR | title "De foto die moest drogen", photo image, label "Bekeken" |
+| D18 | DS01 hints | none | PD §6.6 three literal hints, only after a DS01 source was met; C-first question "Waar hoort deze afbeelding bij?" | CONFLICT | add hint context (encounter-based title, no title before a source was seen) |
+| D19 | State contract | photoFound monotone on front, back only after turning, no pickup/return/gate, no storyUnderstood, 6 orders | PD §6.4 | MATCH | — |
+| D20 | Maquette inspection | decorative, not inspectable | PD OV01 "inspectie optioneel"; ES §7 inspect only if the interaction language is reliable | MATCH | — |
+
+### 7.4 Register and UX
+
+| # | Item | Current implementation | Design source | Status | Action |
+|---|---|---|---|---|---|
+| U10 | Register topics + reveal | three topics with the register's own lines, only after reading | UX §3, WF-02 (Aan tafel · In de kantlijn · Buiten de paden) | MATCH | — |
+| U11 | Observation label | "Waarneming" | UX §2.1 label "Waargenomen" | MINOR | wording |
+| U12 | Pin label | 📌 only | UX §2.1 marker **and** "Door jou vastgezet" | MINOR | add text |
+| U13 | Own idea label | "Eigen vraag" | UX §2.1 "Mijn idee", dashed border | MINOR | wording |
+| U14 | Archiving wording | "Naar archief" / "Terugzetten" / "Zelf gearchiveerd" | UX §4 "Opbergen", "Heropenen", "Opgeborgen · door jou" | MINOR | wording |
+| U15 | Empty observations | own sentence | UX §2 "Hier blijven de dingen die je bekijkt." | MINOR | literal |
+| U16 | Hint levels | Aandacht / Verband / Oplossing; level 0 = riddle line only | UX §5 / WF-07 "1 Aandacht 2 Relatie 3 Oplossing"; level 0 explains the three levels | MINOR | rename; level-0 explanation |
+| U17 | HUD attention label | shown automatically once an attention is chosen | UX §3 / WF-09 "optioneel HUD-label staat standaard uit en toont bij aanzetten alleen onderwerp" | CONFLICT | separate opt-in toggle (default off) |
+| U18 | Releasing attention | button "Geen" | UX §3 / WF-03 "Aandacht loslaten" | MINOR | wording |
+| U19 | Result label | "Resultaat" | UX §4.1 / ART_TOKENS solved = check + label | MINOR | "✓ Resultaat bevestigd" |
+| U20 | One overlay, return context, no click-through, ≥ 48 px, hints apart from evidence | as built (tested) | UX §5, §7 | MATCH | — |
+
+### 7.5 Not changed
+
+ART_BIBLE / ART_TOKENS direction (future production; no art pass). F4 reserved B01 poses (blockout follow-up). Sauna
+vegetation fix stays review-only (LP §10 names VD-02 as a separate audit class).
