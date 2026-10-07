@@ -182,24 +182,27 @@ body.reduced-motion * { transition: none !important; animation: none !important;
   background: linear-gradient(180deg, transparent 30%, rgba(12, 9, 5, .08) 42%, rgba(12, 9, 5, .52) 68%, transparent 94%);
 }
 #start .start-home {
-  width: min(66vw, 480px); max-width: none; margin: 34dvh auto 0;
-  padding-bottom: max(16dvh, calc(24px + var(--safe-b)));
+  position: absolute; left: 50%; bottom: max(23%, calc(28px + var(--safe-b)));
+  transform: translateX(-50%); width: min(72vw, 440px); max-width: none; margin: 0; padding: 0;
 }
-#start .start-brand { margin: 0; font-size: inherit; line-height: 0; letter-spacing: normal; }
-.start-logo { display: block; width: 100%; height: auto; mix-blend-mode: screen; margin: -8% 0 -10%; }
+#start .start-brand {
+  position: fixed; top: calc(14px + var(--safe-t)); left: calc(14px + var(--safe-l));
+  width: clamp(90px, 25vw, 140px); margin: 0; font-size: inherit; line-height: 0; letter-spacing: normal;
+}
+.start-logo { display: block; width: 100%; height: auto; mix-blend-mode: screen; margin: -8% 0; }
 #start .start-home .sub {
-  color: #fff0cc; font-size: clamp(15px, 3.5vw, 25px); line-height: 1.22;
-  margin: 0 0 18px; opacity: 1; text-shadow: 0 2px 5px #000, 0 0 16px #000;
+  color: #fff0cc; font-size: clamp(14px, 3.4vw, 21px); line-height: 1.22;
+  margin: 0 0 12px; opacity: 1; text-shadow: 0 2px 5px #000, 0 0 16px #000;
 }
-.start-actions { display: flex; flex-direction: column; gap: 9px; }
+.start-actions { display: flex; flex-direction: column; gap: 8px; }
 #start .start-actions .btn {
-  position: relative; width: 100%; min-height: 50px; padding: 9px 12px;
-  border: 1.5px solid #eac879; border-radius: 11px; font-size: clamp(18px, 3.7vw, 28px);
+  position: relative; width: 100%; min-height: 48px; padding: 8px 12px;
+  border: 1.5px solid #eac879; border-radius: 11px; font-size: clamp(18px, 4.3vw, 25px);
   box-shadow: 0 3px 15px #0005, inset 0 1px 0 #fff8;
 }
 #start .start-actions .primary { color: #241707; background: linear-gradient(115deg, #eeb94b, #f8cc69 45%, #dda130); }
 #start .start-actions .start-new { background: linear-gradient(110deg, #f0dfb9, #fff0cf 50%, #e5cfa5); font-weight: bold; border-color: #f9e6bf; }
-#start .start-actions .start-restore { background: #251a10c9; color: #f6e3bc; font-size: clamp(14px, 3vw, 20px); }
+#start .start-actions .start-restore { background: #251a10c9; color: #f6e3bc; font-size: clamp(13px, 3.3vw, 18px); }
 .start-arrow { position: absolute; right: 16px; top: 50%; transform: translateY(-54%); font-size: 1.5em; font-weight: normal; }
 #start .start-settings {
   position: fixed; top: calc(16px + var(--safe-t)); right: calc(16px + var(--safe-r));
@@ -211,15 +214,22 @@ body.reduced-motion * { transition: none !important; animation: none !important;
 @media (orientation: landscape) {
   #start:has(.start-home) { display: flex; align-items: center; }
   #start:has(.start-home)::before { background: linear-gradient(90deg, #100d08bb, #100d0870 30%, transparent 60%); }
-  #start .start-home { width: min(31vw, 390px); margin: auto 0 auto max(7vw, var(--safe-l)); padding: max(12px, var(--safe-t)) 0 max(12px, var(--safe-b)); }
-  #start .start-brand { width: min(100%, 43dvh); margin: 0 auto; }
+  #start .start-home { left: max(7vw, calc(16px + var(--safe-l))); bottom: max(22%, calc(16px + var(--safe-b))); transform: none; width: min(31vw, 390px); }
+  #start .start-brand { width: clamp(90px, 15vw, 160px); }
   #start .start-home .sub { font-size: clamp(14px, 2.6dvh, 22px); margin-bottom: 12px; }
   #start .start-actions { gap: 7px; }
   #start .start-actions .btn { font-size: clamp(17px, 3.2dvh, 25px); min-height: 48px; }
   #start .start-actions .start-restore { font-size: clamp(13px, 2.5dvh, 18px); }
 }
 @media (orientation: portrait) and (max-height: 680px) {
-  #start .start-home { margin-top: 27dvh; width: min(72vw, 350px); }
-  #start .start-brand { width: min(100%, 33dvh); margin: 0 auto; }
+  #start .start-home { bottom: max(20%, calc(16px + var(--safe-b))); width: min(76vw, 350px); }
+  #start .start-brand { width: clamp(80px, 23vw, 110px); }
   #start .start-home .sub { margin-bottom: 12px; }
+}
+
+@media (orientation: landscape) and (max-height: 420px) {
+  #start .start-home { bottom: max(13%, calc(10px + var(--safe-b))); }
+  #start .start-home .sub { font-size: 13px; margin-bottom: 8px; }
+  #start .start-actions { gap: 6px; }
+  #start .start-brand { width: 90px; }
 }

@@ -462,9 +462,9 @@ export class UI {
         <source media="(orientation: landscape)" srcset="${landscapeArt}">
         <img src="${portraitArt}" alt="" fetchpriority="high">
       </picture>
-      ${o.onSettings && !o.error ? `<button class="btn start-settings" data-settings aria-label="Instellingen en bediening"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m9 3-1 3-3 1-2 3 2 2-1 3 3 2 3-1 2 3 3-1 1-3 3-1 2-3-2-2 1-3-3-2-3 1-2-3Z"/><circle cx="12" cy="12" r="3"/></svg></button>` : ''}
-      <div class="card start-home">
+      ${o.onSettings && !o.error ? `<button class="btn start-settings" data-settings aria-label="Instellingen en bediening"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M18.761 10.188 L20.693 9.671 L20.693 14.329 L18.761 13.812 L18.062 15.500 L19.794 16.500 L16.500 19.794 L15.500 18.062 L13.812 18.761 L14.329 20.693 L9.671 20.693 L10.188 18.761 L8.500 18.062 L7.500 19.794 L4.206 16.500 L5.938 15.500 L5.239 13.812 L3.307 14.329 L3.307 9.671 L5.239 10.188 L5.938 8.500 L4.206 7.500 L7.500 4.206 L8.500 5.938 L10.188 5.239 L9.671 3.307 L14.329 3.307 L13.812 5.239 L15.500 5.938 L16.500 4.206 L19.794 7.500 L18.062 8.500 Z M15 12 A3 3 0 1 0 9 12 A3 3 0 1 0 15 12 Z"/></svg></button>` : ''}
         <h1 class="start-brand"><img class="start-logo" src="${manorLogo}" alt="Feh Lu We" width="1536" height="1536"></h1>
+      <div class="card start-home">
         <p class="sub">Een weekend op de Veluwe.<br>Iemand heeft alles al klaargezet…</p>
         ${o.error ? `<div class="err" role="alert">${o.error}</div>` : `<div class="start-actions">
           ${o.hasSave ? '<button class="btn primary" data-cont>Verder spelen<span class="start-arrow" aria-hidden="true">›</span></button><button class="btn start-new" data-new>Nieuw spel</button>' : '<button class="btn primary" data-new>Nieuw spel<span class="start-arrow" aria-hidden="true">›</span></button>'}
