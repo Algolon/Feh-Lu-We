@@ -20,10 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-        with:
-          # TEMPORARY DEV-02 estate review: a manual run of claude/wizardly-curie-y9xumd builds exactly commit e87e56b
-          # (game code and build label); every other run checks out its own ref as before.
-          ref: ${{ (github.event_name == 'workflow_dispatch' && github.ref_name == 'claude/wizardly-curie-y9xumd') && 'e87e56b350a43759e26f4d1f8985dec497e6e090' || '' }}
       - uses: actions/setup-node@v7
         with:
           node-version: 22
@@ -32,19 +28,12 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
-      # TEMPORARY DEV-02 estate review: prove the deployed root is the normal game (no review=dev01 entry guard)
-      - if: github.event_name == 'workflow_dispatch' && github.ref_name == 'claude/wizardly-curie-y9xumd'
-        run: |
-          git rev-parse HEAD
-          if grep -E "review=dev01|playtest entry guard" dist/index.html; then echo "entry guard found"; exit 1; fi
-          sha256sum dist/index.html dist/assets/*
       - uses: actions/upload-pages-artifact@v5
         with:
           path: dist
 
   deploy:
-    # TEMPORARY DEV-02 estate review: also deploy a manual (workflow_dispatch) run of claude/wizardly-curie-y9xumd; pushes to it never deploy
-    if: github.ref_name == github.event.repository.default_branch || (github.event_name == 'workflow_dispatch' && github.ref_name == 'claude/wizardly-curie-y9xumd')
+    if: github.ref_name == github.event.repository.default_branch
     needs: build
     runs-on: ubuntu-latest
     permissions:
