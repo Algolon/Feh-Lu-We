@@ -28,12 +28,16 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      # TEMPORARY DEV-01 playtest: on a manual run of this branch only, force ?review=dev01 in the built index.html
+      - if: github.event_name == 'workflow_dispatch' && github.ref_name == 'ccr-928d1d45-tudz6y'
+        run: node scripts/pages-dev01-guard.mjs
       - uses: actions/upload-pages-artifact@v5
         with:
           path: dist
 
   deploy:
-    if: github.ref_name == github.event.repository.default_branch
+    # TEMPORARY DEV-01 playtest: also deploy a manual (workflow_dispatch) run of ccr-928d1d45-tudz6y; pushes to it never deploy
+    if: github.ref_name == github.event.repository.default_branch || (github.event_name == 'workflow_dispatch' && github.ref_name == 'ccr-928d1d45-tudz6y')
     needs: build
     runs-on: ubuntu-latest
     permissions:
