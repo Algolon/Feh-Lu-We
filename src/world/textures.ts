@@ -67,10 +67,11 @@ export function makeTextures() {
   { // dirt path
     const [c, x] = canvas(256);
     const r = mulberry32(12);
-    x.fillStyle = '#c7a476';
+    // DEV-03: earthier, greyer soil/gravel (was orange clay); grit in two values
+    x.fillStyle = '#b9a586';
     x.fillRect(0, 0, 256, 256);
-    blotches(x, r, 256, 256, 160, ['#b8925f', '#d4b285', '#a98656', '#dcc095'], 4, 18, 0.45);
-    blotches(x, r, 256, 256, 120, ['#8c7350', '#e9d6b0'], 1, 3, 0.6);
+    blotches(x, r, 256, 256, 160, ['#ab9676', '#c6b496', '#9e8a6c', '#cbbc9e'], 4, 18, 0.4);
+    blotches(x, r, 256, 256, 260, ['#857258', '#e2d6bc', '#9a8f80'], 1, 2.6, 0.55);
     T.dirt = tex(c);
   }
   { // cream stone blocks (exterior walls)
@@ -90,7 +91,7 @@ export function makeTextures() {
       }
     }
     blotches(x, r, 512, 512, 160, ['#cbb994', '#efe4c9', '#d6c29c'], 4, 20, 0.25);
-    x.strokeStyle = 'rgba(120,100,70,0.35)';
+    x.strokeStyle = 'rgba(120,100,70,0.22)';
     x.lineWidth = 3;
     for (let i = 0; i <= rows; i++) { x.beginPath(); x.moveTo(0, i * rh); x.lineTo(512, i * rh); x.stroke(); }
     T.stone = tex(c);
@@ -100,7 +101,7 @@ export function makeTextures() {
     const r = mulberry32(14);
     x.fillStyle = '#efe6d2';
     x.fillRect(0, 0, 256, 256);
-    blotches(x, r, 256, 256, 140, ['#e6dbc3', '#f6efdf', '#e9dcc0'], 8, 30, 0.35);
+    blotches(x, r, 256, 256, 140, ['#e8dec8', '#f4ede0', '#ebe0c8'], 8, 30, 0.18); // DEV-03: calm lime plaster (no clouds)
     T.plaster = tex(c);
   }
   { // wood planks
@@ -108,13 +109,13 @@ export function makeTextures() {
     const r = mulberry32(15);
     const n = 8, pw = 512 / n;
     for (let i = 0; i < n; i++) {
-      const l = 0.88 + r() * 0.12;
-      x.fillStyle = `rgb(${Math.floor(255 * l)},${Math.floor(240 * l)},${Math.floor(222 * l)})`;
+      const l = 0.86 + r() * 0.14; // DEV-03: near-neutral boards (colour comes from the part tint), quieter seams
+      x.fillStyle = `rgb(${Math.floor(250 * l)},${Math.floor(244 * l)},${Math.floor(234 * l)})`;
       x.fillRect(i * pw, 0, pw, 512);
       x.save(); x.translate(i * pw, 0);
-      strokes(x, r, pw, 512, 34, ['#c8b49a', '#e8dccb', '#b8a288'], 110, 1.4, 0.4, Math.PI / 2);
+      strokes(x, r, pw, 512, 30, ['#d4c8b8', '#ece4d8', '#c4b6a2'], 110, 1.2, 0.35, Math.PI / 2);
       x.restore();
-      x.fillStyle = 'rgba(70,50,30,0.45)';
+      x.fillStyle = 'rgba(70,50,30,0.32)';
       x.fillRect(i * pw, 0, 2, 512);
       x.fillRect(i * pw, Math.floor(r() * 512), pw, 2);
     }
@@ -150,14 +151,15 @@ export function makeTextures() {
   { // roof slate
     const [c, x] = canvas(256);
     const r = mulberry32(18);
-    x.fillStyle = '#5d6577';
+    // DEV-03: Welsh-slate grey with a little warmth per slate (was blue-black); courses stay readable
+    x.fillStyle = '#6e6f72';
     x.fillRect(0, 0, 256, 256);
     for (let row = 0; row < 8; row++) for (let col = 0; col < 8; col++) {
-      const l = 80 + Math.floor(r() * 25);
-      x.fillStyle = `rgb(${l},${l + 6},${l + 22})`;
+      const l = 108 + Math.floor(r() * 26), w = Math.floor(r() * 8) - 3;
+      x.fillStyle = `rgb(${l + w},${l + 2},${l + 8 - w})`;
       x.fillRect(col * 32 + (row % 2) * 16 + 1, row * 32 + 1, 30, 30);
     }
-    x.fillStyle = 'rgba(30,30,40,0.5)';
+    x.fillStyle = 'rgba(40,38,40,0.45)';
     for (let row = 0; row < 8; row++) x.fillRect(0, row * 32 + 28, 256, 4);
     T.slate = tex(c);
   }
@@ -193,23 +195,29 @@ export function makeTextures() {
     strokes(x, r, 128, 128, 180, ['#b9a690', '#e8ddd0', '#8f7a64'], 30, 3, 0.6, Math.PI / 2);
     T.bark = tex(c);
   }
-  { // rug: patterned carpet (concept-art hall rugs)
+  { // rug (DEV-03): a calm woven carpet — madder field, a linen guard, an indigo border with a small repeating
+    // motif, a restrained medallion; low contrast so it supports a room instead of dominating it. Tinted per room.
     const [c, x] = canvas(512, 256);
     const r = mulberry32(22);
-    x.fillStyle = '#7a2730';
-    x.fillRect(0, 0, 512, 256);
-    x.strokeStyle = '#d9a441'; x.lineWidth = 10; x.strokeRect(14, 14, 484, 228);
-    x.strokeStyle = '#2e3d6b'; x.lineWidth = 8; x.strokeRect(32, 32, 448, 192);
-    for (let i = 0; i < 70; i++) {
-      const px = 50 + r() * 412, py = 50 + r() * 156;
-      x.fillStyle = ['#d9a441', '#2e3d6b', '#c4553d', '#e8d6a8'][i % 4];
-      x.save(); x.translate(px, py); x.rotate(Math.PI / 4);
-      x.fillRect(-6, -6, 12, 12); x.restore();
+    x.fillStyle = '#8a4a3c'; x.fillRect(0, 0, 512, 256);
+    x.fillStyle = '#d8c8a4'; x.fillRect(0, 0, 512, 12); x.fillRect(0, 244, 512, 12); x.fillRect(0, 0, 12, 256); x.fillRect(500, 0, 12, 256);
+    x.fillStyle = '#3e4a5c'; x.fillRect(12, 12, 488, 30); x.fillRect(12, 214, 488, 30); x.fillRect(12, 12, 30, 232); x.fillRect(470, 12, 30, 232);
+    x.fillStyle = 'rgba(208,178,120,0.75)';
+    for (let i = 0; i < 24; i++) { const px = 24 + i * 20; for (const py of [27, 229]) { x.beginPath(); x.moveTo(px, py - 6); x.lineTo(px + 6, py); x.lineTo(px, py + 6); x.lineTo(px - 6, py); x.fill(); } }
+    for (let j = 0; j < 10; j++) { const py = 40 + j * 19; for (const px of [27, 485]) { x.beginPath(); x.moveTo(px, py - 6); x.lineTo(px + 6, py); x.lineTo(px, py + 6); x.lineTo(px - 6, py); x.fill(); } }
+    x.strokeStyle = 'rgba(208,178,120,0.6)'; x.lineWidth = 2; x.strokeRect(50, 50, 412, 156);
+    x.save(); x.translate(256, 128);
+    x.fillStyle = '#3e4a5c'; x.beginPath(); x.ellipse(0, 0, 66, 42, 0, 0, Math.PI * 2); x.fill();
+    x.fillStyle = '#a0683e'; x.beginPath(); x.ellipse(0, 0, 44, 27, 0, 0, Math.PI * 2); x.fill();
+    x.fillStyle = '#8a4a3c'; x.beginPath(); x.ellipse(0, 0, 24, 14, 0, 0, Math.PI * 2); x.fill();
+    x.restore();
+    x.fillStyle = 'rgba(216,200,164,0.22)';
+    for (let j = 0; j < 4; j++) for (let i = 0; i < 9; i++) {
+      const px = 76 + i * 45, py = 72 + j * 37;
+      if (Math.hypot((px - 256) / 80, (py - 128) / 52) < 1) continue;
+      x.beginPath(); x.moveTo(px, py - 5); x.lineTo(px + 4, py); x.lineTo(px, py + 5); x.lineTo(px - 4, py); x.fill();
     }
-    x.fillStyle = '#d9a441';
-    x.beginPath(); x.ellipse(256, 128, 70, 46, 0, 0, Math.PI * 2); x.fill();
-    x.fillStyle = '#2e3d6b';
-    x.beginPath(); x.ellipse(256, 128, 46, 28, 0, 0, Math.PI * 2); x.fill();
+    for (let i = 0; i < 2600; i++) { x.fillStyle = `rgba(0,0,0,${0.02 + r() * 0.05})`; x.fillRect(r() * 512, r() * 256, 2, 1); }
     T.rug = tex(c, false);
   }
   { // water ripples (greyscale, tinted by material colour)

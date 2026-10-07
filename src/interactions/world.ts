@@ -79,7 +79,7 @@ export class World {
   /** Room-based visibility (estate): regions are static chunks that belong to a set of rooms ('out' = outdoors). */
   rooms: RoomGraph | null = null;
   isOpen: (door: string) => boolean = () => false;
-  private regions: { meshes: THREE.Object3D[]; rooms: Set<string>; on: boolean; far: number; sph: THREE.Sphere }[] = [];
+  private regions: { meshes: THREE.Object3D[]; rooms: Set<string>; on: boolean; far: number; outFar: number; sph: THREE.Sphere }[] = [];
   visibleRooms = new Set<string>(['out']);
   hereRoom = 'out';
   constructor(public readonly id: SceneId) {}
@@ -134,13 +134,17 @@ export class World {
     this.zones.push({ meshes, near, inside, on: true });
   }
   /** Static chunks (or objects tagged userData.region) shown only while one of `rooms` is visible. */
-  roomRegion(chunks: string[], rooms: string[], far = Infinity) {
+  /**
+   * `outFar` (DEV-03): while the player is OUTSIDE, the region is drawn only within this distance (an interior seen
+   * through an open door is a few pixels from 40 m but cost ~100 k triangles from the forest).
+   */
+  roomRegion(chunks: string[], rooms: string[], far = Infinity, outFar = Infinity) {
     const meshes = this.scene.children.filter((o) => chunks.includes(o.userData.chunk) || chunks.includes(o.userData.region));
     // bounding sphere of the whole region (for the optional distance limit)
     const box = new THREE.Box3();
     for (const m of meshes) box.expandByObject(m);
     const sph = box.isEmpty() ? new THREE.Sphere() : box.getBoundingSphere(new THREE.Sphere());
-    this.regions.push({ meshes, rooms: new Set(rooms), on: true, far, sph });
+    this.regions.push({ meshes, rooms: new Set(rooms), on: true, far, outFar, sph });
   }
   /** Top-level objects whose render meshes are currently culled: never pickable (explicit invariant). */
   readonly culledRoots = new Set<THREE.Object3D>();
@@ -158,6 +162,7 @@ export class World {
         let on = false;
         for (const id of r.rooms) if (this.visibleRooms.has(id)) { on = true; break; }
         if (on && r.far < Infinity) on = r.sph.center.distanceTo(eye) - r.sph.radius < r.far;
+        if (on && r.outFar < Infinity && this.hereRoom === 'out') on = r.sph.center.distanceTo(eye) - r.sph.radius < r.outFar;
         if (on !== r.on) { r.on = on; for (const m of r.meshes) { m.visible = on; m.userData.regionOff = !on; } }
       }
     }

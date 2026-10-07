@@ -12,7 +12,8 @@
 // boiler room, route chamber (tunnel door).
 import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
-import { type Ctx, wall, floor, ceiling, stairsZ, railing, stairRail, hipRoof, gableRoof, windowAt } from './arch';
+import { type Ctx, wall, floor, ceiling, stairsZ, railing, stairRail, hipRoof, gableRoof, windowAt, balustrade, newel, segBox, TRIM } from './arch';
+import { lathe } from './artkit';
 import { box, boxMM, cyl, blob, compound, v3, hipRoofGeo, geo } from './kit';
 import {
   table, chair, sofa, armchair, bookshelf, counter, rug, plant, painting, crate, tableLamp, floorLamp, chandelier, wallSconce,
@@ -60,8 +61,8 @@ function shell(w: World, c: Ctx) {
   const stone = { mat: k.M.stone, color: '#f2e6cc' };
   const skin = { mat: k.M.plaster, color: '#f1e6cf' };
   const ext = (axis: 'x' | 'z', f: number, a0: number, a1: number, exterior: 1 | -1, gfOpen: { at: number; w: number; h?: number }[], gfWin: number[], ufWin: number[]) => {
-    wall(c, axis, f, a0, a1, 0, UF, { ...stone, t: 0.4, exterior, skin, uv: 2.4, openings: gfOpen, windows: gfWin.map((at) => ({ at, sill: 1.05, h: 1.6, w: 1.1 })) });
-    wall(c, axis, f, a0, a1, UF, TOP, { ...stone, t: 0.4, exterior, skin, uv: 2.4, windows: ufWin.map((at) => ({ at, sill: 0.8, h: 1.5, w: 1.0 })) });
+    wall(c, axis, f, a0, a1, 0, UF, { ...stone, t: 0.4, exterior, skin, uv: 2.4, winStyle: 'manor', openings: gfOpen, windows: gfWin.map((at) => ({ at, sill: 1.05, h: 1.6, w: 1.1 })) });
+    wall(c, axis, f, a0, a1, UF, TOP, { ...stone, t: 0.4, exterior, skin, uv: 2.4, winStyle: 'manor', windows: ufWin.map((at) => ({ at, sill: 0.8, h: 1.5, w: 1.0 })) });
   };
   // south (front)
   ext('x', 80.2, 72, 108, -1, [{ at: 90, w: 1.7, h: 2.7 }], [75.5, 79, 82.5, 98, 101.5, 105], [75.5, 79, 82.5, 87.5, 92.5, 98, 101.5, 105]);
@@ -71,25 +72,50 @@ function shell(w: World, c: Ctx) {
   ext('z', 72.2, 80.4, 109.6, -1, [], [83, 90.5, 97, 101, 105], [82.5, 90, 97, 101, 105]);
   // east: dining windows; the service wing joins at z 92–110 (door to the service corridor)
   ext('z', 107.8, 80.4, 109.6, 1, [{ at: 102.5, w: 1.0, h: 2.3 }], [83, 86.8, 90.4], [83, 87, 91]);
-  // plinth + string course
-  for (const [x0, x1, z0, z1] of [[71.85, 108.15, 79.85, 80.0], [71.85, 108.15, 110.0, 110.15], [71.85, 72.0, 79.85, 110.15], [108.0, 108.15, 79.85, 92]] as const) boxMM(c.b, k.M.stone, '#d8c8a8', x0, x1, 0, 0.5, z0, z1, { chunk: c.chunk, uv: 2 });
-  boxMM(c.b, k.M.paint, '#e8dcc0', 71.9, 108.1, 3.3, 3.45, 79.9, 80.0, { chunk: c.chunk });
-  boxMM(c.b, k.M.paint, '#e8dcc0', 71.9, 108.1, 3.3, 3.45, 110.0, 110.1, { chunk: c.chunk });
-  // roof (≈30°) with dormers, chimneys
-  hipRoof(c, 90, 95, 36, 30, TOP, 8.2, k.M.slate, '#8a93a8', 0.7);
+  // DEV-03 facade grammar: a proud sandstone plinth with a weathered top, rusticated quoins at the corners, a string
+  // course at the first floor and a moulded cornice under the eaves on all four sides (one family with the wing).
+  const sand = '#cdbb98', dressed = TRIM.dressed;
+  const ring = (y0: number, y1: number, proud: number, col: string, x0 = 72, x1 = 108, z0 = 80, z1 = 110, mat: THREE.Material = k.M.stone) => {
+    boxMM(c.b, mat, col, x0 - proud, x1 + proud, y0, y1, z0 - proud, z0, { chunk: c.chunk, uv: 2, jitter: 0 });
+    boxMM(c.b, mat, col, x0 - proud, x1 + proud, y0, y1, z1, z1 + proud, { chunk: c.chunk, uv: 2, jitter: 0 });
+    boxMM(c.b, mat, col, x0 - proud, x0, y0, y1, z0, z1, { chunk: c.chunk, uv: 2, jitter: 0 });
+    boxMM(c.b, mat, col, x1, x1 + proud, y0, y1, z0, z1, { chunk: c.chunk, uv: 2, jitter: 0 });
+  };
+  ring(-0.1, 0.62, 0.1, sand); // plinth
+  ring(0.62, 0.7, 0.06, '#d9c9a6', 72, 108, 80, 110, k.M.paint); // weathered plinth top
+  ring(UF - 0.12, UF + 0.08, 0.07, dressed, 72, 108, 80, 110, k.M.paint); // string course
+  ring(TOP - 0.42, TOP - 0.26, 0.06, dressed, 72, 108, 80, 110, k.M.paint); // cornice: frieze band
+  ring(TOP - 0.26, TOP - 0.12, 0.13, '#e9dcc0', 72, 108, 80, 110, k.M.paint); // corona
+  ring(TOP - 0.12, TOP - 0.02, 0.2, '#f0e5cd', 72, 108, 80, 110, k.M.paint); // cymatium under the soffit
+  // quoins: alternating long and short dressed blocks at the four corners, 4 cm proud
+  for (const [qx, qz, sx2, sz2] of [[72, 80, -1, -1], [108, 80, 1, -1], [72, 110, -1, 1], [108, 110, 1, 1]] as const) {
+    for (let i = 0, y = 0.7; y < TOP - 0.5; i++, y += 0.42) {
+      const long = i % 2 === 0, la = long ? 0.62 : 0.34;
+      boxMM(c.b, k.M.stone, dressed, qx + (sx2 < 0 ? -0.04 : -la), qx + (sx2 < 0 ? la : 0.04), y, y + 0.36, sz2 < 0 ? qz - 0.04 : qz - 0.02, sz2 < 0 ? qz + 0.02 : qz + 0.04, { chunk: c.chunk, uv: 1.2, jitter: 0.02 });
+      boxMM(c.b, k.M.stone, dressed, sx2 < 0 ? qx - 0.04 : qx - 0.02, sx2 < 0 ? qx + 0.02 : qx + 0.04, y, y + 0.36, qz + (sz2 < 0 ? -0.04 : -(long ? 0.34 : 0.62)), qz + (sz2 < 0 ? (long ? 0.34 : 0.62) : 0.04), { chunk: c.chunk, uv: 1.2, jitter: 0.02 });
+    }
+  }
+  // roof (≈30°) with a real eave (fascia, soffit, gutter, caps) and downpipes at the corners and either side of the bay
+  hipRoof(c, 90, 95, 36, 30, TOP, 8.2, k.M.slate, '#a39f9a', 0.7, { downpipes: [[71.86, 80.5], [108.14, 80.5], [71.86, 109.5], [108.14, 109.5], [85.85, 79.88], [94.15, 79.88]] });
+  // chimneys: stack with a projecting band and a cap, two pots each
   for (const [x, z] of [[72.9, 86.7], [100, 101], [86, 106]] as const) {
-    box(c.b, k.M.stone, '#e6d6b6', x, 8, z, 1.2, 8.4, 1.2, { chunk: c.chunk, uv: 2 });
-    box(c.b, k.M.paint, '#8a4a32', x, 16.4, z, 0.55, 0.5, 0.55, { chunk: c.chunk });
+    box(c.b, k.M.stone, '#d9c8a6', x, 8, z, 1.2, 8.4, 1.2, { chunk: c.chunk, uv: 2 });
+    box(c.b, k.M.paint, dressed, x, 15.6, z, 1.36, 0.14, 1.36, { chunk: c.chunk });
+    box(c.b, k.M.paint, '#e2d4b8', x, 16.25, z, 1.32, 0.15, 1.32, { chunk: c.chunk });
+    for (const d of [-0.28, 0.28]) cyl(c.b, k.M.paint, '#a5583c', x + d, 16.4, z, 0.13, 0.16, 0.5, 8, { chunk: c.chunk });
   }
   const dormer = (x: number, z: number, face: 'S' | 'N' | 'E' | 'W') => {
     const alongX = face === 'E' || face === 'W';
     const [fx, fz] = face === 'S' ? [0, -1] : face === 'N' ? [0, 1] : face === 'E' ? [1, 0] : [-1, 0];
     const top = TOP + 1.5;
     const sx = alongX ? 2.4 : 1.8, sz = alongX ? 1.8 : 2.4;
-    box(c.b, k.M.stone, '#efe2c4', x - fx * 1.0, TOP - 0.2, z - fz * 1.0, sx, top - TOP + 0.2, sz, { chunk: c.chunk, uv: 1.5 });
-    gableRoof(c, x - fx * 1.0, z - fz * 1.0, 2.6, 2.1, top, 0.8, alongX, k.M.slate, '#7d879c');
-    const wx = x - fx * 1.0 + fx * (alongX ? 1.21 : 0), wz = z - fz * 1.0 + fz * (alongX ? 0 : 1.21);
-    box(c.b, k.M.glow, '#ffc96e', wx, TOP + 0.25, wz, alongX ? 0.04 : 0.8, 1.0, alongX ? 0.8 : 0.04, { chunk: c.chunk, shadow: false, jitter: 0 });
+    const dx = x - fx * 1.0, dz = z - fz * 1.0;
+    box(c.b, k.M.stone, '#efe2c4', dx, TOP - 0.2, dz, sx, top - TOP + 0.2, sz, { chunk: c.chunk, uv: 1.5 });
+    gableRoof(c, dx, dz, 2.6, 2.1, top, 0.8, alongX, k.M.slate, '#9e9a94');
+    // the dormer window: framed glass in a dressed surround (same grammar as the facade)
+    const wx = dx + fx * (alongX ? 0.9 : 0), wz = dz + fz * (alongX ? 0 : 0.9);
+    if (alongX) windowAt(c, 'z', wx + fx * 0.3, fx as 1 | -1, wz, TOP + 0.12, 0.8, 1.05, true, { kind: 'plain' });
+    else windowAt(c, 'x', wz + fz * 0.3, fz as 1 | -1, wx, TOP + 0.12, 0.8, 1.05, true, { kind: 'plain' });
   };
   for (const x of [78, 102]) { dormer(x, 79.6, 'S'); dormer(x, 110.4, 'N'); }
   for (const z of [88, 98]) { dormer(71.6, z, 'W'); dormer(108.4, z, 'E'); }
@@ -101,20 +127,40 @@ function shell(w: World, c: Ctx) {
   bay(86.4, 89.05, 0.5, TOP);
   bay(90.95, 93.6, 0.5, TOP);
   bay(89.05, 90.95, 3.0, TOP);
+  for (const x of [86.4, 93.6]) for (let i = 0, y = 0.7; y < TOP - 0.5; i++, y += 0.42) { // quoins on the bay
+    const la = i % 2 ? 0.3 : 0.55;
+    boxMM(c.b, k.M.stone, dressed, x < 90 ? x - 0.04 : x - la, x < 90 ? x + la : x + 0.04, y, y + 0.36, 79.5, 79.56, { chunk: c.chunk, uv: 1.2, jitter: 0.02 });
+  }
   boxMM(c.b, k.M.stone, '#e2d2b2', 86.2, 93.8, TOP, TOP + 0.25, 79.45, 80.05, { chunk: c.chunk });
-  gableRoof(c, 90, 79.8, 0.6, 7.8, TOP + 0.25, 2.6, false, k.M.stone, '#f6ead0');
-  cyl(c.b, k.M.glow, '#ffc96e', 90, TOP + 1.0, 79.48, 0.5, 0.5, 0.05, 16, { chunk: c.chunk, rx: Math.PI / 2, shadow: false, jitter: 0 });
-  windowAt(c, 'x', 79.55, -1, 90, 4.0, 1.2, 1.6, true);
+  gableRoof(c, 90, 79.8, 0.6, 7.8, TOP + 0.25, 2.6, false, k.M.stone, '#f6ead0', false);
+  for (const s2 of [-1, 1]) segBox(c, k.M.paint, '#ecdfc4', [90 + s2 * 3.95, TOP + 0.2, 79.42], [90, TOP + 2.9, 79.42], 0.12, 0.26); // raking cornice
+  cyl(c.b, k.M.paint, dressed, 90, TOP + 1.0, 79.46, 0.62, 0.62, 0.06, 20, { chunk: c.chunk, rx: Math.PI / 2 }); // oculus ring
+  cyl(c.b, k.M.glow, '#5f6f78', 90, TOP + 1.0, 79.44, 0.5, 0.5, 0.05, 16, { chunk: c.chunk, rx: Math.PI / 2, shadow: false, jitter: 0 });
+  windowAt(c, 'x', 79.55, -1, 90, 4.0, 1.2, 1.6, true, { kind: 'manor' });
+  // porch: two steps up to a stone landing, Tuscan columns (base, shaft, capital) carrying an entablature and a
+  // shallow lead-covered roof with a fascia; lanterns either side of the door
   floor(c, 87.8, 92.2, 78.6, 80.0, GF, k.M.stone, '#d9ccb0', 0.4, true);
-  for (const x of [88.1, 91.9]) { cyl(c.b, k.M.stone, '#efe4ca', x, GF, 78.85, 0.17, 0.19, 2.95, 12, { chunk: c.chunk }); c.col.addCircle(x, 78.85, 0.2, 0, 3); }
-  boxMM(c.b, k.M.slate, '#7d879c', 87.5, 92.5, 3.1, 3.35, 78.3, 80.1, { chunk: c.chunk });
+  boxMM(c.b, k.M.stone, '#cfc0a2', 87.5, 92.5, -0.1, 0.075, 78.25, 80.0, { chunk: c.chunk, uv: 1 });
+  const colG = lathe([[0, 0], [0.24, 0], [0.24, 0.08], [0.2, 0.12], [0.19, 0.2], [0.165, 2.5], [0.2, 2.58], [0.23, 2.64], [0.23, 2.7], [0, 2.7]], 12);
+  for (const x of [88.1, 91.9]) {
+    c.b.add(k.M.stone, colG, new THREE.Matrix4().makeTranslation(x, GF, -78.85), '#efe4ca', c.chunk, true, 0);
+    box(c.b, k.M.paint, dressed, x, GF + 2.7, 78.85, 0.5, 0.06, 0.5, { chunk: c.chunk }); // abacus
+    c.col.addCircle(x, 78.85, 0.2, 0, 3);
+  }
+  colG.dispose();
+  boxMM(c.b, k.M.paint, dressed, 87.7, 92.3, GF + 2.76, GF + 3.05, 78.6, 79.1, { chunk: c.chunk }); // architrave beam
+  boxMM(c.b, k.M.paint, '#e8dcc2', 87.6, 92.4, GF + 3.05, GF + 3.15, 78.5, 80.0, { chunk: c.chunk }); // cornice
+  boxMM(c.b, k.M.slate, '#7f8486', 87.55, 92.45, GF + 3.15, GF + 3.27, 78.45, 80.0, { chunk: c.chunk, uv: 1 }); // leaded flat roof
+  boxMM(c.b, k.M.paint, '#6e6f6a', 87.55, 92.45, GF + 3.27, GF + 3.31, 78.45, 78.52, { chunk: c.chunk });
   for (const x of [88.8, 91.2]) staticLantern(c, w, x, 2.25, 79.7, 0.8, 0, 4, 7);
   // ---------------------------------------------------------------- service wing (single storey, own roof)
   const WH = 3.9;
-  wall(c, 'x', 92.2, 107.6, 116, 0, WH, { ...stone, t: 0.4, exterior: -1, skin, uv: 2.4, openings: [{ at: 112, w: 1.1, h: 2.3 }], windows: [{ at: 110, sill: 1.1, h: 1.3, w: 1.0 }, { at: 114.4, sill: 1.1, h: 1.3, w: 0.8 }] });
-  wall(c, 'x', 109.8, 107.6, 116, 0, WH, { ...stone, t: 0.4, exterior: 1, skin, uv: 2.4, windows: [{ at: 112, sill: 1.2, h: 1.1, w: 1.0 }] });
+  wall(c, 'x', 92.2, 107.6, 116, 0, WH, { ...stone, t: 0.4, exterior: -1, skin, uv: 2.4, winStyle: 'manor', openings: [{ at: 112, w: 1.1, h: 2.3 }], windows: [{ at: 110, sill: 1.1, h: 1.3, w: 1.0 }, { at: 114.4, sill: 1.1, h: 1.3, w: 0.8 }] });
+  wall(c, 'x', 109.8, 107.6, 116, 0, WH, { ...stone, t: 0.4, exterior: 1, skin, uv: 2.4, winStyle: 'manor', windows: [{ at: 112, sill: 1.2, h: 1.1, w: 1.0 }] });
   wall(c, 'z', 115.8, 92.4, 109.6, 0, WH, { ...stone, t: 0.4, exterior: 1, skin, uv: 2.4, openings: [{ at: 102.5, w: 1.3, h: 2.35 }] });
-  hipRoof(c, 112, 101, 8, 18, WH, 2.6, k.M.slate, '#848da0', 0.5);
+  ring(-0.1, 0.62, 0.1, sand, 108, 116, 92.2, 109.8);
+  ring(WH - 0.3, WH - 0.14, 0.08, dressed, 108, 116, 92.2, 109.8, k.M.paint);
+  hipRoof(c, 112, 101, 8, 18, WH, 2.6, k.M.slate, '#a39f9a', 0.5, { downpipes: [[116.14, 92.6]] });
 }
 
 // =====================================================================================================
@@ -203,18 +249,13 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   railing(c, 'x', 107.8, 72.4, 83.2, UF, '#4a2f1a');
   // grand stair along the hall's east wall, with a sloped handrail on its open side
   stairsZ(c, 93.05, 94.92, 86.5, 95.5, GF, UF);
-  for (let i = 0; i <= 9; i++) {
-    const z = 86.6 + i * 0.98, y = GF + ((z - 86.5) / 9) * (UF - GF);
-    cyl(c.b, k.M.wood, '#5e3b1f', 93.12, y, z, 0.025, 0.025, 0.95, 6, { chunk: c.chunk });
-  }
-  const len = Math.hypot(9, UF - GF), ang = Math.atan2(UF - GF, 9);
-  box(c.b, k.M.wood, '#5e3b1f', 93.12, GF + 0.95 + (UF - GF) / 2 - 0.03, 91, 0.07, 0.06, len, { rx: ang, chunk: c.chunk });
-  cyl(c.b, k.M.wood, '#4a2f1a', 93.12, GF, 86.5, 0.1, 0.1, 1.25, 8, { chunk: c.chunk });
+  balustrade(c, 'z', 93.12, 86.6, 95.5, GF + 0.02, UF, '#5e3b1f', 0.95, 0.24); // turned balusters, rounded handrail
+  newel(c, 93.12, GF, 86.35, '#4a2f1a', 1.3); // a heavier newel at the foot
   // DEV-02: the open side of the flight has a real railing collider over its full height (DEV-01 review: you could
   // step off the stair into the hall). Outside the flight's width, so walking ON the stair is never touched.
   c.col.addBox(92.97, 93.12, 86.5, 95.5, GF, UF + 1.1, { tag: 'railing.S01' });
   // basement stair (descends north from the sealed door)
-  stairsZ(c, 92.08, 94.92, 104.8, 99.6, BF, GF, '#6b4a2a');
+  stairsZ(c, 92.08, 94.92, 104.8, 99.6, BF, GF, '#6b4a2a', undefined, { mass: '#cbbd9f', runner: false });
 
   // ---------------------------------------------------------------- doors
   makeDoor(w, g, { id: 'door.front', x: 89.15, z: 80.2, dir: 'x+', width: 1.7, height: 2.62, y0: GF, swing: 1, color: '#6b3f22', key: 'frontKey', thickness: 0.09 });
@@ -1097,11 +1138,11 @@ function attic(w: World, g: GameApi, c: Ctx) {
   const MID = S03.mid.y, wood = '#8a6a4a';
   // ---------------------------------------------------------------- S03: flight 1, middle landing, flight 2 (real steps)
   const f1 = S03.flight1, f2 = S03.flight2, m = S03.mid;
-  stairsZ(c, f1.x0, f1.x1, f1.z0, f1.z1, UF, MID, wood, 10);
+  stairsZ(c, f1.x0, f1.x1, f1.z0, f1.z1, UF, MID, wood, 10, { runner: false, mass: '#d4c6a8' });
   boxMM(c.b, k.M.wood, wood, m.x0, m.x1, UF, MID, m.z0, m.z1, { chunk: c.chunk, uv: 1.2 });
   w.col.addFloor(m.x0, m.x1, m.z0, m.z1, MID);
   w.col.addBox(m.x0, m.x1, m.z0, m.z1, UF, MID, { occludes: true }); // solid under the landing (too low to walk under)
-  stairsZ(c, f2.x0, f2.x1, f2.z1, f2.z0, MID, AF, wood, 10);
+  stairsZ(c, f2.x0, f2.x1, f2.z1, f2.z0, MID, AF, wood, 10, { runner: false, mass: '#d4c6a8' });
   boxMM(c.b, k.M.wood, '#7a5a3a', f2.x0, f2.x1, UF, MID, f2.z0, f2.z1, { chunk: c.chunk, uv: 1.2 });
   w.col.addBox(f2.x0, f2.x1, f2.z0, f2.z1, UF, MID, { occludes: true }); // closed under flight 2
   // railings: flight 1 | lane, between the flights (full height), middle landing edges, upper landing over the well

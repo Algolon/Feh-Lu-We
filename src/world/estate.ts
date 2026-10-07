@@ -90,16 +90,19 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   // furnishings per area: listed rooms are the ones from which that area can actually be seen (seen from
   // outside through the front door, only the vestibule and hall furnishings are drawn)
   w.roomRegion(['manor'], [...manorRooms, 'out', 'cons'], 130);
-  w.roomRegion(['mIn'], manorRooms);
-  w.roomRegion(['mHall'], ['vestibule', 'hall', 'living', 'lobby', 'billiard', 'frontGallery', 'walkway', 'landing']);
-  w.roomRegion(['mLib'], ['library', 'libGallery', 'living', 'lobby']);
-  w.roomRegion(['mWing'], ['dining', 'kitchen', 'corridor', 'workshop', 'pantry', 'utility', 'guestWC', 'lobby']);
-  w.roomRegion(['mUp'], ['frontGallery', 'walkway', 'landing', 'libGallery', 'reis', 'sterren', 'bath', 'ucorr', 'study', 'botanic', 'storage', 'library', 'linen', 'rearNook', 'rearNookEast', 'atticStair']);
-  w.roomRegion(['mAttic'], [...atticRooms, 'atticStair']); // seen through the open stair doors (atticStair is then visible)
+  // DEV-03: interiors seen from OUTSIDE (through an open door) only within ~30 m of the house: beyond that the opening
+  // is a few pixels, but drawing the hall's furnishings from the forest cost ~100 k triangles (render budget)
+  const IN_FAR = 30;
+  w.roomRegion(['mIn'], manorRooms, Infinity, IN_FAR);
+  w.roomRegion(['mHall'], ['vestibule', 'hall', 'living', 'lobby', 'billiard', 'frontGallery', 'walkway', 'landing'], Infinity, IN_FAR);
+  w.roomRegion(['mLib'], ['library', 'libGallery', 'living', 'lobby'], Infinity, IN_FAR);
+  w.roomRegion(['mWing'], ['dining', 'kitchen', 'corridor', 'workshop', 'pantry', 'utility', 'guestWC', 'lobby'], Infinity, IN_FAR);
+  w.roomRegion(['mUp'], ['frontGallery', 'walkway', 'landing', 'libGallery', 'reis', 'sterren', 'bath', 'ucorr', 'study', 'botanic', 'storage', 'library', 'linen', 'rearNook', 'rearNookEast', 'atticStair'], Infinity, IN_FAR);
+  w.roomRegion(['mAttic'], [...atticRooms, 'atticStair'], Infinity, IN_FAR); // seen through the open stair doors (atticStair is then visible)
   w.roomRegion(['mB'], basementRooms);
   w.roomRegion(['ug'], ugRooms);
   w.roomRegion(['cons', 'glass'], ['cons', 'out', 'corridor'], 95);
-  w.roomRegion(['cottageIn'], ['cottageEntry', 'cottageRoom']);
+  w.roomRegion(['cottageIn'], ['cottageEntry', 'cottageRoom'], Infinity, 25);
   w.roomRegion(['cottage'], ['out', 'cottageEntry', 'cottageRoom'], 75); // a landmark across the lake: visible from the terrace and the lawn
   w.roomRegion(['ground', 'paths', 'wall', 'fence', 'garden', 'grounds', 'forest', 'outdoor', 'hills'], ['out', 'cons', 'sauna', 'shed', 'cottageEntry', 'cottageRoom']);
 
@@ -267,14 +270,14 @@ function buildPaths(w: World, c: Ctx) {
     c.b.add(k.M.dirt, gg, new THREE.Matrix4(), color, 'paths', false, 0);
     gg.dispose();
   };
-  add(smooth(DRIVEWAY, 2), 4.2, '#d8c3a0');
+  add(smooth(DRIVEWAY, 2), 4.2, '#d4cfc2'); // DEV-03: near-neutral tint on the gravel texture (texture × warm tint read as orange clay)
   if (ART.ext === 'sample') {
     for (const p of FOREST_PATHS) { const gg = zonePathTint(drape(p, 1.9, 0.035, zonePathWidth)); c.b.add(k.M.dirt, gg, new THREE.Matrix4(), '#c8ad80', 'paths', false, 0); gg.dispose(); }
     pathVerge(w, FOREST_PATHS, (k.M.dirt as THREE.MeshLambertMaterial).map!);
   }
   else for (const p of FOREST_PATHS) add(p, 1.9, '#c8ad80');
   // DEV-02 routes: cottage out/back, terrace → lanterns → lake view, east glade loop, wellness, BBQ, wickerman, golf
-  for (const r of ROUTE_LINES) add(r.pts, r.width, r.id === 'wickermanLoop' || r.id === 'golfSpur' ? '#c8ad80' : '#e2d2b0');
+  for (const r of ROUTE_LINES) add(r.pts, r.width, r.id === 'wickermanLoop' || r.id === 'golfSpur' ? '#c8ad80' : '#d9d2c2');
   // forecourt: the gravel court itself is one surface built with the arrival (grounds.ts); the central planter stays
   cyl(c.b, k.M.stone, '#d8ccb0', SITES.forecourt.x, 0, SITES.forecourt.z, 1.8, 1.9, 0.45, 18, { chunk: 'ground', uv: 1 });
   cyl(c.b, k.M.paint, '#6a5040', SITES.forecourt.x, 0.45, SITES.forecourt.z, 1.6, 1.6, 0.02, 18, { chunk: 'ground' });

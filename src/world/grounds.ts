@@ -37,7 +37,7 @@ function arrival(w: World, c: Ctx) {
     { x0: 86, x1: 94, z0: 78, z1: 78.6 }, // porch approach
   ];
   const geos = parts.map((r) => new THREE.PlaneGeometry(r.x1 - r.x0, r.z1 - r.z0).rotateX(-Math.PI / 2).translate((r.x0 + r.x1) / 2, 0.03, -(r.z0 + r.z1) / 2));
-  for (const g0 of geos) { c.b.add(k.M.dirt, g0, new THREE.Matrix4(), '#d8c3a0', 'paths', false, 0); g0.dispose(); }
+  for (const g0 of geos) { c.b.add(k.M.dirt, g0, new THREE.Matrix4(), '#d4cfc2', 'paths', false, 0); g0.dispose(); }
   // bay lines (raised a little, never coplanar)
   for (const x of [69.5, 72.3, 75.1, 77.9, 101, 103.8, 106.6]) boxMM(c.b, k.M.paint, '#f2ead8', x - 0.04, x + 0.04, 0.03, 0.045, 72.2, 77.4, { chunk: 'paths', shadow: false });
   // cars: stable positions, nose to the house; the fifth bay stays free
