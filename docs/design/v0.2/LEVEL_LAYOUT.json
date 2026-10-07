@@ -1,0 +1,6361 @@
+{
+  "version": "0.2",
+  "source": {
+    "rooms": [
+      {
+        "id": "frontGallery",
+        "name": "Galerij",
+        "floor": "u",
+        "bounds": {
+          "x0": 85.0,
+          "x1": 95.0,
+          "z0": 80.4,
+          "z1": 84.0,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "walkway",
+        "name": "Galerij",
+        "floor": "u",
+        "bounds": {
+          "x0": 85.0,
+          "x1": 86.8,
+          "z0": 84.0,
+          "z1": 95.5,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "landing",
+        "name": "Overloop",
+        "floor": "u",
+        "bounds": {
+          "x0": 85.0,
+          "x1": 95.0,
+          "z0": 95.5,
+          "z1": 104.0,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "libGallery",
+        "name": "Bibliotheekgalerij",
+        "floor": "u",
+        "bounds": {
+          "x0": 72.4,
+          "x1": 85.0,
+          "z0": 94.0,
+          "z1": 109.6,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "reis",
+        "name": "Reiskamer",
+        "floor": "u",
+        "bounds": {
+          "x0": 72.4,
+          "x1": 85.0,
+          "z0": 80.4,
+          "z1": 86.8,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "sterren",
+        "name": "Sterrenkamer",
+        "floor": "u",
+        "bounds": {
+          "x0": 72.4,
+          "x1": 85.0,
+          "z0": 86.8,
+          "z1": 94.0,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "bath",
+        "name": "Badkamer",
+        "floor": "u",
+        "bounds": {
+          "x0": 85.0,
+          "x1": 90.0,
+          "z0": 104.0,
+          "z1": 109.6,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "ucorr",
+        "name": "Gang boven",
+        "floor": "u",
+        "bounds": {
+          "x0": 95.0,
+          "x1": 107.6,
+          "z0": 96.0,
+          "z1": 98.6,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "study",
+        "name": "Studeerkamer",
+        "floor": "u",
+        "bounds": {
+          "x0": 95.0,
+          "x1": 101.3,
+          "z0": 80.4,
+          "z1": 96.0,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "botanic",
+        "name": "Botanische kamer",
+        "floor": "u",
+        "bounds": {
+          "x0": 101.3,
+          "x1": 107.6,
+          "z0": 80.4,
+          "z1": 96.0,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "storage",
+        "name": "Zolderopslag",
+        "floor": "u",
+        "bounds": {
+          "x0": 95.0,
+          "x1": 107.6,
+          "z0": 98.6,
+          "z1": 109.6,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "vestibule",
+        "name": "Vestibule",
+        "floor": "g",
+        "bounds": {
+          "x0": 85.0,
+          "x1": 95.0,
+          "z0": 80.4,
+          "z1": 84.0,
+          "y0": -0.5,
+          "y1": 3.2
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "bstair",
+        "name": "Keldertrap",
+        "floor": "g",
+        "bounds": {
+          "x0": 92.0,
+          "x1": 95.0,
+          "z0": 98.0,
+          "z1": 104.8,
+          "y0": -3.7,
+          "y1": 3.2
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "hall",
+        "name": "Hal",
+        "floor": "g",
+        "bounds": {
+          "x0": 85.0,
+          "x1": 95.0,
+          "z0": 84.0,
+          "z1": 98.0,
+          "y0": -0.5,
+          "y1": 6.4
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "lobby",
+        "name": "Achterhal",
+        "floor": "g",
+        "bounds": {
+          "x0": 85.0,
+          "x1": 92.0,
+          "z0": 98.0,
+          "z1": 104.0,
+          "y0": -0.5,
+          "y1": 3.2
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "billiard",
+        "name": "Biljartkamer",
+        "floor": "g",
+        "bounds": {
+          "x0": 85.0,
+          "x1": 95.0,
+          "z0": 104.0,
+          "z1": 109.6,
+          "y0": -0.5,
+          "y1": 3.2
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "living",
+        "name": "Woonkamer",
+        "floor": "g",
+        "bounds": {
+          "x0": 72.4,
+          "x1": 85.0,
+          "z0": 80.4,
+          "z1": 94.0,
+          "y0": -0.5,
+          "y1": 3.2
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "library",
+        "name": "Bibliotheek",
+        "floor": "g",
+        "bounds": {
+          "x0": 72.4,
+          "x1": 85.0,
+          "z0": 94.0,
+          "z1": 109.6,
+          "y0": -0.5,
+          "y1": 6.4
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "dining",
+        "name": "Eetkamer",
+        "floor": "g",
+        "bounds": {
+          "x0": 95.0,
+          "x1": 107.6,
+          "z0": 80.4,
+          "z1": 92.0,
+          "y0": -0.5,
+          "y1": 3.2
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "kitchen",
+        "name": "Keuken",
+        "floor": "g",
+        "bounds": {
+          "x0": 95.0,
+          "x1": 107.6,
+          "z0": 92.0,
+          "z1": 109.6,
+          "y0": -0.5,
+          "y1": 3.2
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "corridor",
+        "name": "Dienstgang",
+        "floor": "g",
+        "bounds": {
+          "x0": 108.4,
+          "x1": 115.6,
+          "z0": 101.0,
+          "z1": 104.0,
+          "y0": -0.5,
+          "y1": 3.2
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "workshop",
+        "name": "Werkplaats",
+        "floor": "g",
+        "bounds": {
+          "x0": 108.4,
+          "x1": 115.6,
+          "z0": 92.4,
+          "z1": 101.0,
+          "y0": -0.5,
+          "y1": 3.2
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "pantry",
+        "name": "Provisiekamer",
+        "floor": "g",
+        "bounds": {
+          "x0": 108.4,
+          "x1": 115.6,
+          "z0": 104.0,
+          "z1": 109.6,
+          "y0": -0.5,
+          "y1": 3.2
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "cons",
+        "name": "Serre",
+        "floor": "g",
+        "bounds": {
+          "x0": 116.0,
+          "x1": 130.0,
+          "z0": 94.0,
+          "z1": 112.0,
+          "y0": -3.0,
+          "y1": 6.5
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "bLobby",
+        "name": "Kelderportaal",
+        "floor": "b",
+        "bounds": {
+          "x0": 89.0,
+          "x1": 97.0,
+          "z0": 104.8,
+          "z1": 109.6,
+          "y0": -3.7,
+          "y1": -0.2
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "archive",
+        "name": "Archiefkelder",
+        "floor": "b",
+        "bounds": {
+          "x0": 76.0,
+          "x1": 89.0,
+          "z0": 100.0,
+          "z1": 109.6,
+          "y0": -3.7,
+          "y1": -0.2
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "boiler",
+        "name": "Ketelkamer",
+        "floor": "b",
+        "bounds": {
+          "x0": 97.0,
+          "x1": 107.6,
+          "z0": 100.0,
+          "z1": 109.6,
+          "y0": -3.7,
+          "y1": -0.2
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "route",
+        "name": "Routekamer",
+        "floor": "b",
+        "bounds": {
+          "x0": 77.0,
+          "x1": 89.0,
+          "z0": 90.0,
+          "z1": 100.0,
+          "y0": -3.7,
+          "y1": -0.2
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "tunnel2",
+        "name": "Oude gang",
+        "floor": "b",
+        "bounds": {
+          "x0": 62.0,
+          "x1": 77.0,
+          "z0": 95.9,
+          "z1": 98.1,
+          "y0": -3.9,
+          "y1": -0.2
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "tunnel",
+        "name": "Oude gang",
+        "floor": "b",
+        "bounds": {
+          "x0": 61.9,
+          "x1": 64.1,
+          "z0": 57.0,
+          "z1": 98.0,
+          "y0": -3.9,
+          "y1": -0.2
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "hut",
+        "name": "BOSLUST",
+        "floor": "x",
+        "bounds": {
+          "x0": 60.4,
+          "x1": 65.6,
+          "z0": 18.2,
+          "z1": 20.0,
+          "y0": -0.5,
+          "y1": 3.2
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "descent",
+        "name": "Trap onder de heuvel",
+        "floor": "b",
+        "bounds": {
+          "x0": 61.7,
+          "x1": 64.3,
+          "z0": 20.0,
+          "z1": 26.0,
+          "y0": -3.9,
+          "y1": 3.2
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "entry",
+        "name": "Ontvangstkelder",
+        "floor": "b",
+        "bounds": {
+          "x0": 58.0,
+          "x1": 68.0,
+          "z0": 26.0,
+          "z1": 33.0,
+          "y0": -3.9,
+          "y1": -0.2
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "passage",
+        "name": "Wortelgang",
+        "floor": "b",
+        "bounds": {
+          "x0": 61.0,
+          "x1": 65.0,
+          "z0": 33.0,
+          "z1": 45.0,
+          "y0": -3.9,
+          "y1": -0.2
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "gathering",
+        "name": "Verzamelzaal",
+        "floor": "b",
+        "bounds": {
+          "x0": 55.0,
+          "x1": 71.0,
+          "z0": 45.0,
+          "z1": 57.0,
+          "y0": -3.9,
+          "y1": -0.2
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "sauna",
+        "name": "Sauna",
+        "floor": "x",
+        "bounds": {
+          "x0": 132.0,
+          "x1": 136.0,
+          "z0": 100.0,
+          "z1": 104.0,
+          "y0": -0.5,
+          "y1": 4.2
+        },
+        "evidence": "B: roomdefs registration volume"
+      },
+      {
+        "id": "shed",
+        "name": "Schuur",
+        "floor": "x",
+        "bounds": {
+          "x0": 39.5,
+          "x1": 44.5,
+          "z0": 37.2,
+          "z1": 40.8,
+          "y0": -0.5,
+          "y1": 3
+        },
+        "evidence": "B: roomdefs with imported footprint constants evaluated"
+      },
+      {
+        "id": "cottageEntry",
+        "name": "Huisje",
+        "floor": "x",
+        "bounds": {
+          "x0": 32.3,
+          "x1": 41.7,
+          "z0": 128.3,
+          "z1": 131,
+          "y0": -0.5,
+          "y1": 3.1
+        },
+        "evidence": "B: roomdefs with imported footprint constants evaluated"
+      },
+      {
+        "id": "cottageRoom",
+        "name": "Huisje / zaal",
+        "floor": "x",
+        "bounds": {
+          "x0": 32.3,
+          "x1": 41.7,
+          "z0": 131,
+          "z1": 135.7,
+          "y0": -0.5,
+          "y1": 3.1
+        },
+        "evidence": "B: roomdefs with imported footprint constants evaluated"
+      }
+    ],
+    "portals": [
+      {
+        "a": "vestibule",
+        "b": "out",
+        "kind": "door",
+        "door": "door.front"
+      },
+      {
+        "a": "vestibule",
+        "b": "hall",
+        "kind": "arch",
+        "door": null
+      },
+      {
+        "a": "hall",
+        "b": "living",
+        "kind": "arch",
+        "door": null
+      },
+      {
+        "a": "hall",
+        "b": "dining",
+        "kind": "arch",
+        "door": null
+      },
+      {
+        "a": "hall",
+        "b": "lobby",
+        "kind": "arch",
+        "door": null
+      },
+      {
+        "a": "hall",
+        "b": "landing",
+        "kind": "stair",
+        "door": null
+      },
+      {
+        "a": "hall",
+        "b": "frontGallery",
+        "kind": "arch",
+        "door": null
+      },
+      {
+        "a": "hall",
+        "b": "walkway",
+        "kind": "arch",
+        "door": null
+      },
+      {
+        "a": "lobby",
+        "b": "library",
+        "kind": "door",
+        "door": "door.library"
+      },
+      {
+        "a": "lobby",
+        "b": "billiard",
+        "kind": "door",
+        "door": "door.billiard"
+      },
+      {
+        "a": "lobby",
+        "b": "bstair",
+        "kind": "door",
+        "door": "door.basement"
+      },
+      {
+        "a": "bstair",
+        "b": "bLobby",
+        "kind": "arch",
+        "door": null
+      },
+      {
+        "a": "living",
+        "b": "library",
+        "kind": "door",
+        "door": "door.livLib"
+      },
+      {
+        "a": "dining",
+        "b": "kitchen",
+        "kind": "arch",
+        "door": null
+      },
+      {
+        "a": "kitchen",
+        "b": "corridor",
+        "kind": "door",
+        "door": "door.service"
+      },
+      {
+        "a": "corridor",
+        "b": "workshop",
+        "kind": "door",
+        "door": "door.workshop"
+      },
+      {
+        "a": "corridor",
+        "b": "pantry",
+        "kind": "door",
+        "door": "door.pantry"
+      },
+      {
+        "a": "corridor",
+        "b": "cons",
+        "kind": "door",
+        "door": "door.consWest"
+      },
+      {
+        "a": "workshop",
+        "b": "out",
+        "kind": "door",
+        "door": "door.workshopOut"
+      },
+      {
+        "a": "billiard",
+        "b": "out",
+        "kind": "door",
+        "door": "door.billiardOut"
+      },
+      {
+        "a": "kitchen",
+        "b": "out",
+        "kind": "door",
+        "door": "door.kitchenBack"
+      },
+      {
+        "a": "cons",
+        "b": "out",
+        "kind": "door",
+        "door": "door.consEast"
+      },
+      {
+        "a": "cons",
+        "b": "out",
+        "kind": "glass",
+        "door": null
+      },
+      {
+        "a": "frontGallery",
+        "b": "walkway",
+        "kind": "arch",
+        "door": null
+      },
+      {
+        "a": "walkway",
+        "b": "landing",
+        "kind": "arch",
+        "door": null
+      },
+      {
+        "a": "frontGallery",
+        "b": "reis",
+        "kind": "door",
+        "door": "door.reis"
+      },
+      {
+        "a": "walkway",
+        "b": "sterren",
+        "kind": "door",
+        "door": "door.sterren"
+      },
+      {
+        "a": "landing",
+        "b": "libGallery",
+        "kind": "door",
+        "door": "door.libGallery"
+      },
+      {
+        "a": "libGallery",
+        "b": "library",
+        "kind": "arch",
+        "door": null
+      },
+      {
+        "a": "landing",
+        "b": "bath",
+        "kind": "door",
+        "door": "door.bath"
+      },
+      {
+        "a": "landing",
+        "b": "ucorr",
+        "kind": "arch",
+        "door": null
+      },
+      {
+        "a": "ucorr",
+        "b": "study",
+        "kind": "door",
+        "door": "door.study"
+      },
+      {
+        "a": "ucorr",
+        "b": "botanic",
+        "kind": "door",
+        "door": "door.botanic"
+      },
+      {
+        "a": "ucorr",
+        "b": "storage",
+        "kind": "door",
+        "door": "door.storage"
+      },
+      {
+        "a": "bLobby",
+        "b": "archive",
+        "kind": "arch",
+        "door": null
+      },
+      {
+        "a": "bLobby",
+        "b": "boiler",
+        "kind": "arch",
+        "door": null
+      },
+      {
+        "a": "archive",
+        "b": "route",
+        "kind": "arch",
+        "door": null
+      },
+      {
+        "a": "route",
+        "b": "tunnel2",
+        "kind": "door",
+        "door": "door.tunnelManor"
+      },
+      {
+        "a": "tunnel2",
+        "b": "tunnel",
+        "kind": "arch",
+        "door": null
+      },
+      {
+        "a": "tunnel",
+        "b": "gathering",
+        "kind": "door",
+        "door": "door.tunnelGathering"
+      },
+      {
+        "a": "gathering",
+        "b": "passage",
+        "kind": "door",
+        "door": "door.gathering"
+      },
+      {
+        "a": "passage",
+        "b": "entry",
+        "kind": "arch",
+        "door": null
+      },
+      {
+        "a": "entry",
+        "b": "descent",
+        "kind": "arch",
+        "door": null
+      },
+      {
+        "a": "descent",
+        "b": "hut",
+        "kind": "arch",
+        "door": null
+      },
+      {
+        "a": "hut",
+        "b": "out",
+        "kind": "door",
+        "door": "door.boslust"
+      },
+      {
+        "a": "sauna",
+        "b": "out",
+        "kind": "door",
+        "door": "door.sauna"
+      },
+      {
+        "a": "shed",
+        "b": "out",
+        "kind": "door",
+        "door": "door.shed"
+      },
+      {
+        "a": "cottageEntry",
+        "b": "out",
+        "kind": "door",
+        "door": "door.cottage"
+      },
+      {
+        "a": "cottageEntry",
+        "b": "cottageRoom",
+        "kind": "arch",
+        "door": null
+      },
+      {
+        "a": "living",
+        "b": "out",
+        "kind": "window",
+        "door": null
+      },
+      {
+        "a": "dining",
+        "b": "out",
+        "kind": "window",
+        "door": null
+      },
+      {
+        "a": "kitchen",
+        "b": "out",
+        "kind": "window",
+        "door": null
+      },
+      {
+        "a": "billiard",
+        "b": "out",
+        "kind": "window",
+        "door": null
+      },
+      {
+        "a": "library",
+        "b": "out",
+        "kind": "window",
+        "door": null
+      },
+      {
+        "a": "workshop",
+        "b": "out",
+        "kind": "window",
+        "door": null
+      },
+      {
+        "a": "pantry",
+        "b": "out",
+        "kind": "window",
+        "door": null
+      },
+      {
+        "a": "vestibule",
+        "b": "out",
+        "kind": "window",
+        "door": null
+      },
+      {
+        "a": "reis",
+        "b": "out",
+        "kind": "window",
+        "door": null
+      },
+      {
+        "a": "sterren",
+        "b": "out",
+        "kind": "window",
+        "door": null
+      },
+      {
+        "a": "study",
+        "b": "out",
+        "kind": "window",
+        "door": null
+      },
+      {
+        "a": "botanic",
+        "b": "out",
+        "kind": "window",
+        "door": null
+      },
+      {
+        "a": "bath",
+        "b": "out",
+        "kind": "window",
+        "door": null
+      },
+      {
+        "a": "storage",
+        "b": "out",
+        "kind": "window",
+        "door": null
+      },
+      {
+        "a": "landing",
+        "b": "out",
+        "kind": "window",
+        "door": null
+      },
+      {
+        "a": "frontGallery",
+        "b": "out",
+        "kind": "window",
+        "door": null
+      },
+      {
+        "a": "libGallery",
+        "b": "out",
+        "kind": "window",
+        "door": null
+      },
+      {
+        "a": "cottageEntry",
+        "b": "out",
+        "kind": "window",
+        "door": null
+      },
+      {
+        "a": "cottageRoom",
+        "b": "out",
+        "kind": "window",
+        "door": null
+      }
+    ],
+    "sites": {
+      "gate": [
+        90,
+        0.3
+      ],
+      "forecourt": [
+        90,
+        70
+      ],
+      "shed": [
+        42,
+        39
+      ],
+      "fire": [
+        21,
+        18
+      ],
+      "well": [
+        144,
+        39
+      ],
+      "sideGate": [
+        162,
+        18
+      ],
+      "hill": [
+        63,
+        31
+      ],
+      "boslust": [
+        63,
+        18.2
+      ],
+      "fork": [
+        55.5,
+        8.6
+      ],
+      "lanterns": [
+        90,
+        128
+      ],
+      "cottage": [
+        37,
+        132
+      ],
+      "pond": [
+        48,
+        132
+      ],
+      "sauna": [
+        134,
+        102
+      ]
+    },
+    "warning": "room boxes are registration volumes; window portals are sight-only; no physical doorway claimed by graph alone",
+    "historical_v0_1_manifest": {
+      "inspection_date": "2026-10-06",
+      "branch": "ccr-75ef4113-kfkimm",
+      "head": "338e65617e51385bae557f573ba092af5a10f89d",
+      "files": [
+        {
+          "path": "src/world/layout.ts",
+          "blob_sha": "b77c8754288b3b33c2e7fad526e4837f2836fb37",
+          "url": "https://github.com/Algolon/Feh-Lu-We/blob/ccr-75ef4113-kfkimm/src/world/layout.ts"
+        },
+        {
+          "path": "src/world/roomdefs.ts",
+          "blob_sha": "a076824438fde2a0bc164e8c4fd78cde47ab55eb",
+          "url": "https://github.com/Algolon/Feh-Lu-We/blob/ccr-75ef4113-kfkimm/src/world/roomdefs.ts"
+        },
+        {
+          "path": "src/world/manor.ts",
+          "blob_sha": "4efc019e2d77913ef525a7f6c0f1e68fd2a24e4b",
+          "url": "https://github.com/Algolon/Feh-Lu-We/blob/ccr-75ef4113-kfkimm/src/world/manor.ts"
+        },
+        {
+          "path": "src/world/estate.ts",
+          "blob_sha": "e8249b535aa8329d561e2db7bf38e763368537de",
+          "url": "https://github.com/Algolon/Feh-Lu-We/blob/ccr-75ef4113-kfkimm/src/world/estate.ts"
+        },
+        {
+          "path": "src/world/terrain.ts",
+          "blob_sha": "792b4a41328e9add725a530d41949accb4dc62bc",
+          "url": "https://github.com/Algolon/Feh-Lu-We/blob/ccr-75ef4113-kfkimm/src/world/terrain.ts"
+        },
+        {
+          "path": "src/world/arch.ts",
+          "blob_sha": "20ae1bdd9b10f85e015d8062de3fe9dc82275eea",
+          "url": "https://github.com/Algolon/Feh-Lu-We/blob/338e65617e51385bae557f573ba092af5a10f89d/src/world/arch.ts"
+        },
+        {
+          "path": "src/world/boslust.ts",
+          "blob_sha": "5f772265bc0b5a57c26f985f6cd86b18df4b6d2c",
+          "url": "https://github.com/Algolon/Feh-Lu-We/blob/338e65617e51385bae557f573ba092af5a10f89d/src/world/boslust.ts"
+        },
+        {
+          "path": "src/content/canon.ts",
+          "blob_sha": "bf98958cf2c1806a33ec2a1915ad8bcbb9d422d3",
+          "url": "https://github.com/Algolon/Feh-Lu-We/blob/ccr-75ef4113-kfkimm/src/content/canon.ts"
+        },
+        {
+          "path": "docs/PUZZLE_SOLUTIONS.md",
+          "blob_sha": "eeb61b7e7104a0d7b314862f144c5af8f2f70a21",
+          "url": "https://github.com/Algolon/Feh-Lu-We/blob/ccr-75ef4113-kfkimm/docs/PUZZLE_SOLUTIONS.md"
+        },
+        {
+          "path": "docs/ITERATION_3_DESIGN.md",
+          "blob_sha": "607f3780e9e2d232419707f9e3e22a3e8b57402d",
+          "url": "https://github.com/Algolon/Feh-Lu-We/blob/ccr-75ef4113-kfkimm/docs/ITERATION_3_DESIGN.md"
+        }
+      ]
+    },
+    "manifest": {
+      "commit": "ef6b7c3bd9b1bfe56c600b2e76044cf42d919a3a",
+      "files": [
+        {
+          "path": "src/world/layout.ts",
+          "blob_sha": "b77c8754288b3b33c2e7fad526e4837f2836fb37"
+        },
+        {
+          "path": "src/world/roomdefs.ts",
+          "blob_sha": "a076824438fde2a0bc164e8c4fd78cde47ab55eb"
+        },
+        {
+          "path": "src/core/state.ts",
+          "blob_sha": "1153745b40b51425a358a7e12e33bfcba85bafb2"
+        },
+        {
+          "path": "src/world/rooms.ts",
+          "blob_sha": "5d872eb83bcd6febbc4476cafa68d1827c01a2e5"
+        },
+        {
+          "path": "src/world/conservatory.ts",
+          "blob_sha": "eccf17b0ce04307def2ac07443107f14a9fa504c"
+        },
+        {
+          "path": "src/world/cottage.ts",
+          "blob_sha": "5839bc5bbce3ce84513d18bb2fbee13f3f9aa675"
+        }
+      ]
+    },
+    "scope_note": "Audit reference only. Target extent fixed at 200 x 180; no estate-size alternative. Classification boxes are not physical footprint/floor polygons.",
+    "portal_counts_verified": {
+      "explicit": 49,
+      "window_generated": 19,
+      "total": 68,
+      "audit_discrepancy": "Audit section 3.2 says 51 explicit; pinned roomdefs.ts contains 49 literal P calls. Source count governs; audit not edited."
+    }
+  },
+  "proposal": {
+    "variant": "A",
+    "estate": [
+      200,
+      180
+    ],
+    "rooms": [
+      {
+        "id": "frontGallery",
+        "name": "Galerij",
+        "floor": "u",
+        "bounds": {
+          "x0": 85.0,
+          "x1": 95.0,
+          "z0": 80.4,
+          "z1": 84.0,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 3.35,
+        "daily_function": "Voorste circulatie",
+        "player_function": "Aankomstzicht; toegang reis"
+      },
+      {
+        "id": "walkway",
+        "name": "Galerij",
+        "floor": "u",
+        "bounds": {
+          "x0": 85.0,
+          "x1": 86.8,
+          "z0": 84.0,
+          "z1": 95.5,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 3.35,
+        "daily_function": "Galerij langs halvide",
+        "player_function": "Zicht op hal; bereik sterren"
+      },
+      {
+        "id": "landing",
+        "name": "Overloop",
+        "floor": "u",
+        "bounds": {
+          "x0": 85.0,
+          "x1": 95.0,
+          "z0": 95.5,
+          "z1": 104.0,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 3.35,
+        "daily_function": "Bovenverdieping verdelen",
+        "player_function": "Hoofdtrap terug; west/east/zolder keuze"
+      },
+      {
+        "id": "libGallery",
+        "name": "Bibliotheekgalerij",
+        "floor": "u",
+        "bounds": {
+          "x0": 72.4,
+          "x1": 85.0,
+          "z0": 94.0,
+          "z1": 109.6,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "walkable_polygons": [
+          [
+            [
+              72.4,
+              94
+            ],
+            [
+              74.2,
+              94
+            ],
+            [
+              74.2,
+              107.8
+            ],
+            [
+              85,
+              107.8
+            ],
+            [
+              85,
+              109.6
+            ],
+            [
+              72.4,
+              109.6
+            ]
+          ],
+          [
+            [
+              83.2,
+              94
+            ],
+            [
+              85,
+              94
+            ],
+            [
+              85,
+              109.6
+            ],
+            [
+              83.2,
+              109.6
+            ]
+          ]
+        ],
+        "warning": "registration box; central void, not full slab",
+        "floor_y": 3.35,
+        "daily_function": "Langs boeken en hoge leeszaal",
+        "player_function": "Optioneel lezen; vide niet dichtleggen"
+      },
+      {
+        "id": "reis",
+        "name": "Reiskamer",
+        "floor": "u",
+        "bounds": {
+          "x0": 72.4,
+          "x1": 85.0,
+          "z0": 80.4,
+          "z1": 86.8,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 3.35,
+        "daily_function": "Gastensuite met pakhoek",
+        "player_function": "B01 travel cluster before studyKey"
+      },
+      {
+        "id": "sterren",
+        "name": "Sterrenkamer",
+        "floor": "u",
+        "bounds": {
+          "x0": 72.4,
+          "x1": 85.0,
+          "z0": 86.8,
+          "z1": 94.0,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 3.35,
+        "daily_function": "Gastensuite met sterrenhobby",
+        "player_function": "B01 stars; geen volwaardig observatorium claimen"
+      },
+      {
+        "id": "bath",
+        "name": "Badkamer",
+        "floor": "u",
+        "bounds": {
+          "x0": 85.0,
+          "x1": 90.0,
+          "z0": 104.0,
+          "z1": 109.6,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 3.35,
+        "daily_function": "Gedeeld bad",
+        "player_function": "Herkenbaar sanitair; natte stack boven WC"
+      },
+      {
+        "id": "ucorr",
+        "name": "Gang boven",
+        "floor": "u",
+        "bounds": {
+          "x0": 95.0,
+          "x1": 107.6,
+          "z0": 96.0,
+          "z1": 98.6,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 3.35,
+        "daily_function": "Privé-/dienstcirculatie",
+        "player_function": "B01 planten en studiegate; toegang zolder"
+      },
+      {
+        "id": "study",
+        "name": "Studeerkamer",
+        "floor": "u",
+        "bounds": {
+          "x0": 95.0,
+          "x1": 101.3,
+          "z0": 80.4,
+          "z1": 96.0,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 3.35,
+        "daily_function": "Werk en administratie",
+        "player_function": "B02-kaart; bestaande gate"
+      },
+      {
+        "id": "botanic",
+        "name": "Botanische kamer",
+        "floor": "u",
+        "bounds": {
+          "x0": 101.3,
+          "x1": 107.6,
+          "z0": 80.4,
+          "z1": 96.0,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 3.35,
+        "daily_function": "Planten verzorgen/persen",
+        "player_function": "B01 exact plants cluster, bewijsversie open"
+      },
+      {
+        "id": "vestibule",
+        "name": "Vestibule",
+        "floor": "g",
+        "bounds": {
+          "x0": 85.0,
+          "x1": 95.0,
+          "z0": 80.4,
+          "z1": 84.0,
+          "y0": -0.5,
+          "y1": 3.2
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 0.15,
+        "daily_function": "Jassen en natte schoenen",
+        "player_function": "Aankomst/oriëntatie; vrije doorzichtas"
+      },
+      {
+        "id": "bstair",
+        "name": "Keldertrap",
+        "floor": "g",
+        "bounds": {
+          "x0": 92.0,
+          "x1": 95.0,
+          "z0": 98.0,
+          "z1": 104.8,
+          "y0": -3.7,
+          "y1": 3.2
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": null,
+        "vertical_profile": [
+          {
+            "z": 99.6,
+            "y": 0.15
+          },
+          {
+            "z": 104.8,
+            "y": -3.2
+          }
+        ],
+        "daily_function": "Keldertoegang",
+        "player_function": "3 seals; fysieke afdaling"
+      },
+      {
+        "id": "hall",
+        "name": "Hal",
+        "floor": "g",
+        "bounds": {
+          "x0": 85.0,
+          "x1": 95.0,
+          "z0": 84.0,
+          "z1": 98.0,
+          "y0": -0.5,
+          "y1": 6.4
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 0.15,
+        "daily_function": "Ontvangst en verdelen boodschappen",
+        "player_function": "Startconsole; trap en westelijke haardroute"
+      },
+      {
+        "id": "lobby",
+        "name": "Achterhal",
+        "floor": "g",
+        "bounds": {
+          "x0": 85.0,
+          "x1": 92.0,
+          "z0": 98.0,
+          "z1": 104.0,
+          "y0": -0.5,
+          "y1": 3.2
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 0.15,
+        "daily_function": "Distributie",
+        "player_function": "Driezegelkeldergate en terugkeer"
+      },
+      {
+        "id": "billiard",
+        "name": "Biljartkamer",
+        "floor": "g",
+        "bounds": {
+          "x0": 85.0,
+          "x1": 95.0,
+          "z0": 104.0,
+          "z1": 109.6,
+          "y0": -0.5,
+          "y1": 3.2
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "subtracted_bounds": [
+          [
+            85,
+            88,
+            104,
+            107
+          ]
+        ],
+        "floor_y": 0.15,
+        "daily_function": "Biljart en tuinzitkamer",
+        "player_function": "Optioneel biljart; tuindeur vrij"
+      },
+      {
+        "id": "living",
+        "name": "Woonkamer",
+        "floor": "g",
+        "bounds": {
+          "x0": 72.4,
+          "x1": 85.0,
+          "z0": 80.4,
+          "z1": 94.0,
+          "y0": -0.5,
+          "y1": 3.2
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 0.15,
+        "daily_function": "Samen zitten",
+        "player_function": "Mantelbewijs; Nerf/kunst buiten evidencezone"
+      },
+      {
+        "id": "library",
+        "name": "Bibliotheek",
+        "floor": "g",
+        "bounds": {
+          "x0": 72.4,
+          "x1": 85.0,
+          "z0": 94.0,
+          "z1": 109.6,
+          "y0": -0.5,
+          "y1": 6.4
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 0.15,
+        "daily_function": "Lezen/documenteren",
+        "player_function": "B01-leestafel en cipherles; proof model pending"
+      },
+      {
+        "id": "dining",
+        "name": "Eetkamer",
+        "floor": "g",
+        "bounds": {
+          "x0": 95.0,
+          "x1": 107.6,
+          "z0": 80.4,
+          "z1": 92.0,
+          "y0": -0.5,
+          "y1": 3.2
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 0.15,
+        "daily_function": "Eten en zelfgemaakt bordspel",
+        "player_function": "Bordspel/P-scène; A01-dressoir apart"
+      },
+      {
+        "id": "kitchen",
+        "name": "Keuken",
+        "floor": "g",
+        "bounds": {
+          "x0": 95.0,
+          "x1": 107.6,
+          "z0": 92.0,
+          "z1": 109.6,
+          "y0": -0.5,
+          "y1": 3.2
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 0.15,
+        "daily_function": "Groepskoken en afwas",
+        "player_function": "A01; 8 rode kratten en bierkratten apart"
+      },
+      {
+        "id": "corridor",
+        "name": "Dienstgang",
+        "floor": "g",
+        "bounds": {
+          "x0": 108.4,
+          "x1": 115.6,
+          "z0": 101.0,
+          "z1": 104.0,
+          "y0": -0.5,
+          "y1": 3.2
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 0.15,
+        "daily_function": "Serveren/huishouden",
+        "player_function": "Copacabana-naam binnen; pantry/was bereikbaar"
+      },
+      {
+        "id": "workshop",
+        "name": "Werkplaats",
+        "floor": "g",
+        "bounds": {
+          "x0": 108.4,
+          "x1": 115.6,
+          "z0": 92.4,
+          "z1": 101.0,
+          "y0": -0.5,
+          "y1": 3.2
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 0.15,
+        "daily_function": "Repareren en materialen",
+        "player_function": "Optionele bouwsporen; schuuritems blijven buiten"
+      },
+      {
+        "id": "pantry",
+        "name": "Provisiekamer",
+        "floor": "g",
+        "bounds": {
+          "x0": 108.4,
+          "x1": 113.3,
+          "z0": 104.0,
+          "z1": 109.6,
+          "y0": -0.5,
+          "y1": 3.2
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 0.15,
+        "daily_function": "Koele voorraad",
+        "player_function": "A01-bestemming; pantrydeur blijft"
+      },
+      {
+        "id": "cons",
+        "name": "Serre",
+        "floor": "g",
+        "bounds": {
+          "x0": 116.0,
+          "x1": 130.0,
+          "z0": 94.0,
+          "z1": 112.0,
+          "y0": -3.0,
+          "y1": 6.5
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 0.15,
+        "daily_function": "Binnenbad / Francois' Copacabana Room",
+        "player_function": "A02 pool/trolley; bar en twee persoonlijke naamborden"
+      },
+      {
+        "id": "bLobby",
+        "name": "Kelderportaal",
+        "floor": "b",
+        "bounds": {
+          "x0": 89.0,
+          "x1": 97.0,
+          "z0": 104.8,
+          "z1": 109.6,
+          "y0": -3.7,
+          "y1": -0.2
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": -3.2,
+        "daily_function": "Kelderdistributie",
+        "player_function": "Trap terug en D-toegang"
+      },
+      {
+        "id": "archive",
+        "name": "Archiefkelder",
+        "floor": "b",
+        "bounds": {
+          "x0": 76.0,
+          "x1": 89.0,
+          "z0": 100.0,
+          "z1": 109.6,
+          "y0": -3.7,
+          "y1": -0.2
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": -3.2,
+        "daily_function": "Droog archief",
+        "player_function": "D-bewijs, niet nieuwe lore verzinnen"
+      },
+      {
+        "id": "boiler",
+        "name": "Ketelkamer",
+        "floor": "b",
+        "bounds": {
+          "x0": 97.0,
+          "x1": 107.6,
+          "z0": 100.0,
+          "z1": 109.6,
+          "y0": -3.7,
+          "y1": -0.2
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": -3.2,
+        "daily_function": "Verwarming/badtechniek",
+        "player_function": "Dagelijkse infrastructuur; geen extra lijncode"
+      },
+      {
+        "id": "route",
+        "name": "Routekamer",
+        "floor": "b",
+        "bounds": {
+          "x0": 77.0,
+          "x1": 89.0,
+          "z0": 90.0,
+          "z1": 100.0,
+          "y0": -3.7,
+          "y1": -0.2
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": -3.2,
+        "daily_function": "Oude beheer-/routekamer",
+        "player_function": "D-synthese/strip"
+      },
+      {
+        "id": "tunnel2",
+        "name": "Oude gang",
+        "floor": "b",
+        "bounds": {
+          "x0": 62.0,
+          "x1": 77.0,
+          "z0": 95.9,
+          "z1": 98.1,
+          "y0": -3.9,
+          "y1": -0.2
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": -3.2,
+        "daily_function": "Dienstverbinding",
+        "player_function": "Late shortcut"
+      },
+      {
+        "id": "tunnel",
+        "name": "Oude gang",
+        "floor": "b",
+        "bounds": {
+          "x0": 61.9,
+          "x1": 64.1,
+          "z0": 57.0,
+          "z1": 98.0,
+          "y0": -3.9,
+          "y1": -0.2
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": null,
+        "vertical_profile": [
+          {
+            "z": 57.2,
+            "y": -3.4
+          },
+          {
+            "z": 62.2,
+            "y": -3.2
+          },
+          {
+            "z": 98,
+            "y": -3.2
+          }
+        ],
+        "daily_function": "Dienstverbinding",
+        "player_function": "Late shortcut; geen beloningenpad"
+      },
+      {
+        "id": "hut",
+        "name": "BOSLUST",
+        "floor": "x",
+        "bounds": {
+          "x0": 60.4,
+          "x1": 65.6,
+          "z0": 18.2,
+          "z1": 20.0,
+          "y0": -0.5,
+          "y1": 3.2
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 0,
+        "daily_function": "BOSLUST portaal",
+        "player_function": "Cipher gate; blijft andere plek dan cottage"
+      },
+      {
+        "id": "descent",
+        "name": "Trap onder de heuvel",
+        "floor": "b",
+        "bounds": {
+          "x0": 61.7,
+          "x1": 64.3,
+          "z0": 20.0,
+          "z1": 26.0,
+          "y0": -3.9,
+          "y1": 3.2
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": null,
+        "vertical_profile": [
+          {
+            "z": 20,
+            "y": 0
+          },
+          {
+            "z": 26,
+            "y": -3.4
+          }
+        ],
+        "daily_function": "Ondergrond bereiken",
+        "player_function": "Fysieke BOSLUST-trap"
+      },
+      {
+        "id": "entry",
+        "name": "Ontvangstkelder",
+        "floor": "b",
+        "bounds": {
+          "x0": 58.0,
+          "x1": 68.0,
+          "z0": 26.0,
+          "z1": 33.0,
+          "y0": -3.9,
+          "y1": -0.2
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": -3.4,
+        "daily_function": "Ontvangst onder heuvel",
+        "player_function": "Oriënteren"
+      },
+      {
+        "id": "passage",
+        "name": "Wortelgang",
+        "floor": "b",
+        "bounds": {
+          "x0": 61.0,
+          "x1": 65.0,
+          "z0": 33.0,
+          "z1": 45.0,
+          "y0": -3.9,
+          "y1": -0.2
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": -3.4,
+        "daily_function": "Ondergrondse verbinding",
+        "player_function": "Routeplaten; kandidaat finale anders nog open"
+      },
+      {
+        "id": "gathering",
+        "name": "Verzamelzaal",
+        "floor": "b",
+        "bounds": {
+          "x0": 55.0,
+          "x1": 71.0,
+          "z0": 45.0,
+          "z1": 57.0,
+          "y0": -3.9,
+          "y1": -0.2
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": -3.4,
+        "daily_function": "Samenkomstruimte",
+        "player_function": "Brief en terugkeer; grotere onthulling open"
+      },
+      {
+        "id": "sauna",
+        "name": "Sauna",
+        "floor": "x",
+        "bounds": {
+          "x0": 132.0,
+          "x1": 136.0,
+          "z0": 100.0,
+          "z1": 104.0,
+          "y0": -0.5,
+          "y1": 4.2
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 0.8,
+        "runtime_id_policy": "source sauna floor FY0.8 retained, not manor GF",
+        "daily_function": "Wellness",
+        "player_function": "A02 bord; cullinghuid en hogere vloer"
+      },
+      {
+        "id": "shed",
+        "name": "Schuur",
+        "floor": "x",
+        "bounds": {
+          "x0": 39.5,
+          "x1": 44.5,
+          "z0": 37.2,
+          "z1": 40.8,
+          "y0": -0.5,
+          "y1": 3
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 0.1,
+        "daily_function": "Buitenonderhoud",
+        "player_function": "C-items/bewijs volgens gekozen regels"
+      },
+      {
+        "id": "cottageEntry",
+        "name": "Huisje",
+        "floor": "x",
+        "bounds": {
+          "x0": 20.3,
+          "x1": 29.7,
+          "z0": 157.3,
+          "z1": 160,
+          "y0": 3.95,
+          "y1": 7.25
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 4.15,
+        "daily_function": "Portugal-huisje entree",
+        "player_function": "Optioneel; aansluiten overkapte terras"
+      },
+      {
+        "id": "cottageRoom",
+        "name": "Huisje / zaal",
+        "floor": "x",
+        "bounds": {
+          "x0": 20.3,
+          "x1": 29.7,
+          "z0": 160,
+          "z1": 164.7,
+          "y0": 3.95,
+          "y1": 7.25
+        },
+        "evidence": "V: proposed; retained source geometry unless modified below",
+        "floor_y": 4.15,
+        "daily_function": "Spelen en lezen",
+        "player_function": "Persoonlijke spellen/boeken/eten, geen hoofdgate"
+      },
+      {
+        "id": "guestWC",
+        "name": "WC / wasbak",
+        "floor": "g",
+        "bounds": {
+          "x0": 85,
+          "x1": 88,
+          "z0": 104,
+          "z1": 107,
+          "y0": -0.5,
+          "y1": 3.2
+        },
+        "floor_y": 0.15,
+        "evidence": "V: new proposal",
+        "daily_function": "Toilet en handen wassen",
+        "player_function": "Dagelijkse geloofwaardigheid, geen hoofdclue"
+      },
+      {
+        "id": "storage",
+        "name": "Noordgastenkamer",
+        "floor": "u",
+        "bounds": {
+          "x0": 99,
+          "x1": 107.6,
+          "z0": 98.6,
+          "z1": 106.6,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "floor_y": 3.35,
+        "evidence": "V: new proposal",
+        "design_alias": "U11/northGuest in v0.1",
+        "runtime_id_policy": "retain source room ID storage; new player-facing function, no overlap with its old full box",
+        "daily_function": "Derde gastenkamer",
+        "player_function": "Gewone slaapkamer; bron-ID storage behouden"
+      },
+      {
+        "id": "linen",
+        "name": "Linnenkast",
+        "floor": "u",
+        "bounds": {
+          "x0": 99,
+          "x1": 107.6,
+          "z0": 106.6,
+          "z1": 109.6,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "floor_y": 3.35,
+        "evidence": "V: new proposal",
+        "daily_function": "Gedeeld linnengoed",
+        "player_function": "Centraal via achteroverloop, niet alleen gastenkamer"
+      },
+      {
+        "id": "atticStair",
+        "name": "Zoldertrap",
+        "floor": "u",
+        "bounds": {
+          "x0": 95,
+          "x1": 99,
+          "z0": 98.6,
+          "z1": 105.6,
+          "y0": 3.2,
+          "y1": 6.7
+        },
+        "floor_y": null,
+        "evidence": "V: new proposal",
+        "daily_function": "Dakverdieping bereiken",
+        "player_function": "Echte U-trap; geen teleport"
+      },
+      {
+        "id": "rearNook",
+        "name": "Achteroverloop",
+        "floor": "u",
+        "bounds": {
+          "x0": 90,
+          "x1": 95,
+          "z0": 104,
+          "z1": 109.6,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "floor_y": 3.35,
+        "evidence": "V: new proposal",
+        "daily_function": "Overloop en rust",
+        "player_function": "Boven-zijlus/tuinlicht"
+      },
+      {
+        "id": "rearNookEast",
+        "name": "Zitnis",
+        "floor": "u",
+        "bounds": {
+          "x0": 95,
+          "x1": 99,
+          "z0": 105.6,
+          "z1": 109.6,
+          "y0": 3.2,
+          "y1": 6.4
+        },
+        "floor_y": 3.35,
+        "evidence": "V: new proposal",
+        "daily_function": "Achteroverloop",
+        "player_function": "Centrale toegang linnen/zoldertrap"
+      },
+      {
+        "id": "atticLanding",
+        "name": "Zolderoverloop",
+        "floor": "a",
+        "bounds": {
+          "x0": 95,
+          "x1": 99,
+          "z0": 98.6,
+          "z1": 105.6,
+          "y0": 6.55,
+          "y1": 9.8
+        },
+        "floor_y": 6.65,
+        "evidence": "V: new proposal",
+        "daily_function": "Trapkop",
+        "player_function": "Veilige terugkeer bij bordes"
+      },
+      {
+        "id": "atticCommon",
+        "name": "Droog-/weekendzolder",
+        "floor": "a",
+        "bounds": {
+          "x0": 80,
+          "x1": 95,
+          "z0": 92,
+          "z1": 104,
+          "y0": 6.55,
+          "y1": 9.8
+        },
+        "floor_y": 6.65,
+        "evidence": "V: new proposal",
+        "daily_function": "Grote opslag-/droogzolder",
+        "player_function": "Weekendspullen, optionele ontdekking"
+      },
+      {
+        "id": "atticStore",
+        "name": "Seizoensopslag",
+        "floor": "a",
+        "bounds": {
+          "x0": 80,
+          "x1": 95,
+          "z0": 86,
+          "z1": 92,
+          "y0": 6.55,
+          "y1": 9.8
+        },
+        "floor_y": 6.65,
+        "evidence": "V: new proposal",
+        "daily_function": "Seizoensopslag",
+        "player_function": "Optioneel; oude storageBox-memory kan hierheen met ID behouden"
+      },
+      {
+        "id": "atticLookout",
+        "name": "Kijkhoek",
+        "floor": "a",
+        "bounds": {
+          "x0": 95,
+          "x1": 101,
+          "z0": 92,
+          "z1": 98.6,
+          "y0": 6.55,
+          "y1": 9.8
+        },
+        "floor_y": 6.65,
+        "evidence": "V: new proposal",
+        "daily_function": "Rust/kijkhoek; observatiekamer-reservering",
+        "player_function": "Open I03: echte dakopening vóór claim van observatorium"
+      },
+      {
+        "id": "utility",
+        "name": "Was-/bijkeuken",
+        "floor": "g",
+        "floor_y": 0.15,
+        "bounds": {
+          "x0": 113.3,
+          "x1": 115.6,
+          "z0": 104,
+          "z1": 109.6,
+          "y0": -0.5,
+          "y1": 3.7
+        },
+        "evidence": "V v0.2 new room in service wing",
+        "runtime_id_policy": "additive room utility; new door.utility; pantry ID retained",
+        "daily_function": "Wassen/drogen, poetsen, handdoeken",
+        "player_function": "Centrale dienstfunctie; geen puzzelgate"
+      }
+    ],
+    "adjacency": [
+      {
+        "a": "vestibule",
+        "b": "out",
+        "kind": "door",
+        "door": "door.front",
+        "condition": "frontKey; preserve source lock rule",
+        "traversable": true
+      },
+      {
+        "a": "vestibule",
+        "b": "hall",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "hall",
+        "b": "living",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "hall",
+        "b": "dining",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "hall",
+        "b": "lobby",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "hall",
+        "b": "landing",
+        "kind": "stair",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "hall",
+        "b": "frontGallery",
+        "kind": "arch",
+        "door": null,
+        "condition": "sight across void; no physical stair connection",
+        "traversable": false
+      },
+      {
+        "a": "hall",
+        "b": "walkway",
+        "kind": "arch",
+        "door": null,
+        "condition": "sight across void; no physical stair connection",
+        "traversable": false
+      },
+      {
+        "a": "lobby",
+        "b": "library",
+        "kind": "door",
+        "door": "door.library",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "lobby",
+        "b": "billiard",
+        "kind": "door",
+        "door": "door.billiard",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "lobby",
+        "b": "bstair",
+        "kind": "door",
+        "door": "door.basement",
+        "condition": "all three seals",
+        "traversable": true
+      },
+      {
+        "a": "bstair",
+        "b": "bLobby",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "living",
+        "b": "library",
+        "kind": "door",
+        "door": "door.livLib",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "dining",
+        "b": "kitchen",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "kitchen",
+        "b": "corridor",
+        "kind": "door",
+        "door": "door.service",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "corridor",
+        "b": "workshop",
+        "kind": "door",
+        "door": "door.workshop",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "corridor",
+        "b": "pantry",
+        "kind": "door",
+        "door": "door.pantry",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "corridor",
+        "b": "cons",
+        "kind": "door",
+        "door": "door.consWest",
+        "condition": "consKey",
+        "traversable": true
+      },
+      {
+        "a": "workshop",
+        "b": "out",
+        "kind": "door",
+        "door": "door.workshopOut",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "billiard",
+        "b": "out",
+        "kind": "door",
+        "door": "door.billiardOut",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "kitchen",
+        "b": "out",
+        "kind": "door",
+        "door": "door.kitchenBack",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "cons",
+        "b": "out",
+        "kind": "door",
+        "door": "door.consEast",
+        "condition": "consKey",
+        "traversable": true
+      },
+      {
+        "a": "cons",
+        "b": "out",
+        "kind": "glass",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "frontGallery",
+        "b": "walkway",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "walkway",
+        "b": "landing",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "frontGallery",
+        "b": "reis",
+        "kind": "door",
+        "door": "door.reis",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "walkway",
+        "b": "sterren",
+        "kind": "door",
+        "door": "door.sterren",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "landing",
+        "b": "libGallery",
+        "kind": "door",
+        "door": "door.libGallery",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "libGallery",
+        "b": "library",
+        "kind": "arch",
+        "door": null,
+        "condition": "sight across void; no physical stair connection",
+        "traversable": false
+      },
+      {
+        "a": "landing",
+        "b": "bath",
+        "kind": "door",
+        "door": "door.bath",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "landing",
+        "b": "ucorr",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "ucorr",
+        "b": "study",
+        "kind": "door",
+        "door": "door.study",
+        "condition": "studyKey",
+        "traversable": true
+      },
+      {
+        "a": "ucorr",
+        "b": "botanic",
+        "kind": "door",
+        "door": "door.botanic",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "bLobby",
+        "b": "archive",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "bLobby",
+        "b": "boiler",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "archive",
+        "b": "route",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "route",
+        "b": "tunnel2",
+        "kind": "door",
+        "door": "door.tunnelManor",
+        "condition": "lock.tunnelBolt, from tunnel side x<76.85; becomes reachable after plates gate, not finished flag",
+        "traversable": true
+      },
+      {
+        "a": "tunnel2",
+        "b": "tunnel",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "tunnel",
+        "b": "gathering",
+        "kind": "door",
+        "door": "door.tunnelGathering",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "gathering",
+        "b": "passage",
+        "kind": "door",
+        "door": "door.gathering",
+        "condition": "route plates solved",
+        "traversable": true
+      },
+      {
+        "a": "passage",
+        "b": "entry",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "entry",
+        "b": "descent",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "descent",
+        "b": "hut",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "hut",
+        "b": "out",
+        "kind": "door",
+        "door": "door.boslust",
+        "condition": "route restored + cipherStrip + cipher solved",
+        "traversable": true
+      },
+      {
+        "a": "sauna",
+        "b": "out",
+        "kind": "door",
+        "door": "door.sauna",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "shed",
+        "b": "out",
+        "kind": "door",
+        "door": "door.shed",
+        "condition": "shedKey",
+        "traversable": true
+      },
+      {
+        "a": "cottageEntry",
+        "b": "out",
+        "kind": "door",
+        "door": "door.cottage",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "cottageEntry",
+        "b": "cottageRoom",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "living",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "dining",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "kitchen",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "billiard",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "library",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "workshop",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "pantry",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "vestibule",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "reis",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "sterren",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "study",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "botanic",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "bath",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "landing",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "frontGallery",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "libGallery",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "cottageEntry",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "cottageRoom",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "lobby",
+        "b": "guestWC",
+        "kind": "door",
+        "door": "door.guestWC",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "ucorr",
+        "b": "storage",
+        "kind": "door",
+        "door": "door.storage",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "rearNookEast",
+        "b": "linen",
+        "kind": "door",
+        "door": "door.linen",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "ucorr",
+        "b": "atticStair",
+        "kind": "door",
+        "door": "door.atticStair",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "landing",
+        "b": "rearNook",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "rearNook",
+        "b": "rearNookEast",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "rearNookEast",
+        "b": "atticStair",
+        "kind": "door",
+        "door": "door.atticRear",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "atticStair",
+        "b": "atticLanding",
+        "kind": "stair",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "atticLanding",
+        "b": "atticCommon",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "atticCommon",
+        "b": "atticStore",
+        "kind": "door",
+        "door": "door.atticStore",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "atticCommon",
+        "b": "atticLookout",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "atticLookout",
+        "b": "atticLanding",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "corridor",
+        "b": "utility",
+        "kind": "door",
+        "door": "door.utility",
+        "condition": "free household room",
+        "traversable": true
+      },
+      {
+        "a": "linen",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "storage",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "retain source light/culling relation; no actual window aperture claim",
+        "traversable": false
+      }
+    ],
+    "doors": [
+      {
+        "id": "front",
+        "center_xz": [
+          90,
+          80.2
+        ],
+        "width_m": 1.7,
+        "wall_axis": "x",
+        "floor": "g",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "front",
+        "canonical_runtime_id": "door.front",
+        "descriptor_role": "logical door opening"
+      },
+      {
+        "id": "vestHall",
+        "center_xz": [
+          90,
+          84
+        ],
+        "width_m": 1.9,
+        "wall_axis": "x",
+        "floor": "g",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "vestHall",
+        "canonical_runtime_id": null,
+        "descriptor_role": "arch/circulation opening, not saved door state"
+      },
+      {
+        "id": "hallLiving",
+        "center_xz": [
+          85,
+          86
+        ],
+        "width_m": 1.9,
+        "wall_axis": "z",
+        "floor": "g",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "hallLiving",
+        "canonical_runtime_id": null,
+        "descriptor_role": "arch/circulation opening, not saved door state"
+      },
+      {
+        "id": "livingLibrary",
+        "center_xz": [
+          81,
+          94
+        ],
+        "width_m": 1.2,
+        "wall_axis": "x",
+        "floor": "g",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "livingLibrary",
+        "canonical_runtime_id": "door.livLib",
+        "descriptor_role": "logical door opening"
+      },
+      {
+        "id": "hallDining",
+        "center_xz": [
+          95,
+          85.2
+        ],
+        "width_m": 1.9,
+        "wall_axis": "z",
+        "floor": "g",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "hallDining",
+        "canonical_runtime_id": null,
+        "descriptor_role": "arch/circulation opening, not saved door state"
+      },
+      {
+        "id": "diningKitchen",
+        "center_xz": [
+          101,
+          92
+        ],
+        "width_m": 1.8,
+        "wall_axis": "x",
+        "floor": "g",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "diningKitchen",
+        "canonical_runtime_id": null,
+        "descriptor_role": "arch/circulation opening, not saved door state"
+      },
+      {
+        "id": "hallLobby",
+        "center_xz": [
+          89,
+          98
+        ],
+        "width_m": 1.6,
+        "wall_axis": "x",
+        "floor": "g",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "hallLobby",
+        "canonical_runtime_id": null,
+        "descriptor_role": "arch/circulation opening, not saved door state"
+      },
+      {
+        "id": "lobbyLibrary",
+        "center_xz": [
+          85,
+          100.5
+        ],
+        "width_m": 1.2,
+        "wall_axis": "z",
+        "floor": "g",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "lobbyLibrary",
+        "canonical_runtime_id": "door.library",
+        "descriptor_role": "logical door opening"
+      },
+      {
+        "id": "lobbyBilliard",
+        "center_xz": [
+          90,
+          104
+        ],
+        "width_m": 1.2,
+        "wall_axis": "x",
+        "floor": "g",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "lobbyBilliard",
+        "canonical_runtime_id": "door.billiard",
+        "descriptor_role": "logical door opening"
+      },
+      {
+        "id": "lobbyWC",
+        "center_xz": [
+          86.5,
+          104
+        ],
+        "width_m": 1.1,
+        "wall_axis": "x",
+        "floor": "g",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "lobbyWC",
+        "canonical_runtime_id": "door.guestWC",
+        "descriptor_role": "logical door opening"
+      },
+      {
+        "id": "billiardGarden",
+        "center_xz": [
+          91.5,
+          109.8
+        ],
+        "width_m": 1.2,
+        "wall_axis": "x",
+        "floor": "g",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "billiardGarden",
+        "canonical_runtime_id": "door.billiardOut",
+        "descriptor_role": "logical door opening"
+      },
+      {
+        "id": "kitchenGarden",
+        "center_xz": [
+          101,
+          109.8
+        ],
+        "width_m": 1.1,
+        "wall_axis": "x",
+        "floor": "g",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "kitchenGarden",
+        "canonical_runtime_id": "door.kitchenBack",
+        "descriptor_role": "logical door opening"
+      },
+      {
+        "id": "kitchenService",
+        "center_xz": [
+          107.8,
+          102.5
+        ],
+        "width_m": 1.1,
+        "wall_axis": "z",
+        "floor": "g",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "kitchenService",
+        "canonical_runtime_id": "door.service",
+        "descriptor_role": "logical door opening"
+      },
+      {
+        "id": "consWest",
+        "center_xz": [
+          115.8,
+          102.5
+        ],
+        "width_m": 1.3,
+        "wall_axis": "z",
+        "floor": "g",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "consWest",
+        "canonical_runtime_id": "door.consWest",
+        "descriptor_role": "logical door opening"
+      },
+      {
+        "id": "consEast",
+        "center_xz": [
+          130,
+          106
+        ],
+        "width_m": 2.4,
+        "wall_axis": "z",
+        "floor": "g",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "canonical_runtime_id": "door.consEast",
+        "leaf_count": 2,
+        "leaf_width_m": 1.2,
+        "height_m": 2.35,
+        "swing": "outward east",
+        "floor_y": 0.15,
+        "shared_lock": "lock.door.consWest",
+        "state_policy": "one logical saved open/lock state, both visual leaf colliders; no new saved leaf ID",
+        "descriptor_id": "consEast",
+        "descriptor_role": "logical door opening"
+      },
+      {
+        "id": "basement",
+        "center_xz": [
+          92,
+          98.8
+        ],
+        "width_m": 1.2,
+        "wall_axis": "z",
+        "floor": "g",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "basement",
+        "canonical_runtime_id": "door.basement",
+        "descriptor_role": "logical door opening"
+      },
+      {
+        "id": "reis",
+        "center_xz": [
+          85,
+          82.2
+        ],
+        "width_m": 1.1,
+        "wall_axis": "z",
+        "floor": "u",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "reis",
+        "canonical_runtime_id": "door.reis",
+        "descriptor_role": "logical door opening"
+      },
+      {
+        "id": "sterren",
+        "center_xz": [
+          85,
+          90.2
+        ],
+        "width_m": 1.1,
+        "wall_axis": "z",
+        "floor": "u",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "sterren",
+        "canonical_runtime_id": "door.sterren",
+        "descriptor_role": "logical door opening"
+      },
+      {
+        "id": "libGallery",
+        "center_xz": [
+          85,
+          100
+        ],
+        "width_m": 1.1,
+        "wall_axis": "z",
+        "floor": "u",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "libGallery",
+        "canonical_runtime_id": "door.libGallery",
+        "descriptor_role": "logical door opening"
+      },
+      {
+        "id": "bath",
+        "center_xz": [
+          87.5,
+          104
+        ],
+        "width_m": 1.1,
+        "wall_axis": "x",
+        "floor": "u",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "bath",
+        "canonical_runtime_id": "door.bath",
+        "descriptor_role": "logical door opening"
+      },
+      {
+        "id": "study",
+        "center_xz": [
+          98.2,
+          96
+        ],
+        "width_m": 1.1,
+        "wall_axis": "x",
+        "floor": "u",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "study",
+        "canonical_runtime_id": "door.study",
+        "descriptor_role": "logical door opening"
+      },
+      {
+        "id": "botanic",
+        "center_xz": [
+          104.5,
+          96
+        ],
+        "width_m": 1.1,
+        "wall_axis": "x",
+        "floor": "u",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "botanic",
+        "canonical_runtime_id": "door.botanic",
+        "descriptor_role": "logical door opening"
+      },
+      {
+        "id": "storage",
+        "center_xz": [
+          100.995,
+          98.6
+        ],
+        "width_m": 0.95,
+        "wall_axis": "x",
+        "floor": "u",
+        "status": "retain audit opening",
+        "warning": "Source hinge retained; center is hinge + half-width, not a new save ID.",
+        "canonical_runtime_id": "door.storage",
+        "source_hinge_xz": [
+          100.52,
+          98.6
+        ],
+        "descriptor_id": "storage",
+        "descriptor_role": "logical door opening"
+      },
+      {
+        "id": "atticStair",
+        "center_xz": [
+          97,
+          98.6
+        ],
+        "width_m": 1.2,
+        "wall_axis": "x",
+        "floor": "u",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "atticStair",
+        "canonical_runtime_id": "door.atticStair",
+        "descriptor_role": "logical door opening"
+      },
+      {
+        "id": "linen",
+        "center_xz": [
+          99,
+          108
+        ],
+        "width_m": 1.1,
+        "wall_axis": "z",
+        "floor": "u",
+        "status": "V v0.2 central hall access",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "canonical_runtime_id": "door.linen",
+        "descriptor_id": "linen",
+        "descriptor_role": "logical door opening"
+      },
+      {
+        "id": "rearNook",
+        "center_xz": [
+          92,
+          104
+        ],
+        "width_m": 1.2,
+        "wall_axis": "x",
+        "floor": "u",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "rearNook",
+        "canonical_runtime_id": null,
+        "descriptor_role": "arch/circulation opening, not saved door state"
+      },
+      {
+        "id": "atticRear",
+        "center_xz": [
+          97,
+          105.6
+        ],
+        "width_m": 1.2,
+        "wall_axis": "x",
+        "floor": "u",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "atticRear",
+        "canonical_runtime_id": "door.atticRear",
+        "descriptor_role": "logical door opening"
+      },
+      {
+        "id": "atticCommon",
+        "center_xz": [
+          95,
+          99.2
+        ],
+        "width_m": 1.2,
+        "wall_axis": "z",
+        "floor": "a",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "atticCommon",
+        "canonical_runtime_id": null,
+        "descriptor_role": "arch/circulation opening, not saved door state"
+      },
+      {
+        "id": "atticStore",
+        "center_xz": [
+          86,
+          92
+        ],
+        "width_m": 1.1,
+        "wall_axis": "x",
+        "floor": "a",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "atticStore",
+        "canonical_runtime_id": "door.atticStore",
+        "descriptor_role": "logical door opening"
+      },
+      {
+        "id": "atticLookout",
+        "center_xz": [
+          95,
+          95
+        ],
+        "width_m": 1.3,
+        "wall_axis": "z",
+        "floor": "a",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "atticLookout",
+        "canonical_runtime_id": null,
+        "descriptor_role": "arch/circulation opening, not saved door state"
+      },
+      {
+        "id": "lookoutLanding",
+        "center_xz": [
+          97,
+          98.6
+        ],
+        "width_m": 1.2,
+        "wall_axis": "x",
+        "floor": "a",
+        "status": "V",
+        "warning": "center differs from source hinge coordinate; build one wall opening and one door from this record",
+        "descriptor_id": "lookoutLanding",
+        "canonical_runtime_id": null,
+        "descriptor_role": "arch/circulation opening, not saved door state"
+      },
+      {
+        "id": "utility",
+        "canonical_runtime_id": "door.utility",
+        "center_xz": [
+          114.45,
+          104
+        ],
+        "width_m": 1.1,
+        "wall_axis": "x",
+        "floor": "g",
+        "status": "V v0.2 additive",
+        "descriptor_id": "utility",
+        "descriptor_role": "logical door opening"
+      }
+    ],
+    "sites": {
+      "gate": [
+        90,
+        0.3
+      ],
+      "forecourt": [
+        90,
+        70
+      ],
+      "shed": [
+        42,
+        39
+      ],
+      "fire": [
+        21,
+        18
+      ],
+      "well": [
+        144,
+        39
+      ],
+      "sideGate": [
+        162,
+        18
+      ],
+      "hill": [
+        63,
+        31
+      ],
+      "boslust": [
+        63,
+        18.2
+      ],
+      "fork": [
+        55.5,
+        8.6
+      ],
+      "lanterns": [
+        90,
+        128
+      ],
+      "cottage": [
+        25,
+        161
+      ],
+      "sauna": [
+        134,
+        102
+      ],
+      "lake": [
+        54,
+        146
+      ],
+      "jacuzzi": [
+        140.8,
+        102.8
+      ],
+      "bbq": [
+        107.5,
+        117
+      ],
+      "musicBong": [
+        82,
+        120.5
+      ],
+      "golf": [
+        63,
+        52
+      ],
+      "wickerman": [
+        167,
+        54
+      ],
+      "eastGlade": [
+        164,
+        130
+      ],
+      "eastPathReturn": [
+        113,
+        62.5
+      ]
+    },
+    "routes": [
+      {
+        "id": "arrival",
+        "points_xz": [
+          [
+            90,
+            0.3
+          ],
+          [
+            90,
+            26
+          ],
+          [
+            90.6,
+            48
+          ],
+          [
+            90,
+            62
+          ],
+          [
+            90,
+            70
+          ],
+          [
+            90,
+            80.2
+          ],
+          [
+            90,
+            86
+          ]
+        ],
+        "length_m": 85.72,
+        "status": "V v0.2 path polyline; runtime smoothed length pending",
+        "mandatory": true,
+        "nominal_seconds_walk_3_2": 26.8,
+        "effective_seconds_2_2": 39.0
+      },
+      {
+        "id": "shedRoute",
+        "points_xz": [
+          [
+            82,
+            67.5
+          ],
+          [
+            71,
+            62
+          ],
+          [
+            58,
+            51
+          ],
+          [
+            48,
+            42
+          ],
+          [
+            42,
+            39
+          ]
+        ],
+        "length_m": 49.49,
+        "status": "V v0.2 path polyline; runtime smoothed length pending",
+        "mandatory": true,
+        "nominal_seconds_walk_3_2": 15.5,
+        "effective_seconds_2_2": 22.5
+      },
+      {
+        "id": "shedFire",
+        "points_xz": [
+          [
+            42,
+            39
+          ],
+          [
+            38,
+            35.5
+          ],
+          [
+            31,
+            27
+          ],
+          [
+            24.5,
+            21
+          ],
+          [
+            21,
+            18
+          ]
+        ],
+        "length_m": 29.78,
+        "status": "V v0.2 path polyline; runtime smoothed length pending",
+        "mandatory": true,
+        "nominal_seconds_walk_3_2": 9.3,
+        "effective_seconds_2_2": 13.5
+      },
+      {
+        "id": "southLoop",
+        "points_xz": [
+          [
+            21,
+            18
+          ],
+          [
+            23.5,
+            14.5
+          ],
+          [
+            36,
+            9
+          ],
+          [
+            55.5,
+            8.4
+          ],
+          [
+            76,
+            9.4
+          ],
+          [
+            87.5,
+            10.5
+          ]
+        ],
+        "length_m": 69.54,
+        "status": "V v0.2 path polyline; runtime smoothed length pending",
+        "mandatory": true,
+        "nominal_seconds_walk_3_2": 21.7,
+        "effective_seconds_2_2": 31.6
+      },
+      {
+        "id": "eastLoop",
+        "points_xz": [
+          [
+            92.5,
+            11.5
+          ],
+          [
+            114,
+            13
+          ],
+          [
+            138,
+            16
+          ],
+          [
+            158.5,
+            18
+          ],
+          [
+            151,
+            17
+          ],
+          [
+            149,
+            26
+          ],
+          [
+            146.5,
+            34
+          ],
+          [
+            144,
+            39
+          ],
+          [
+            141.5,
+            43.5
+          ],
+          [
+            131,
+            52.5
+          ],
+          [
+            113,
+            62.5
+          ],
+          [
+            98.5,
+            68
+          ]
+        ],
+        "length_m": 152.17,
+        "status": "V v0.2 path polyline; runtime smoothed length pending",
+        "mandatory": false,
+        "nominal_seconds_walk_3_2": 47.6,
+        "effective_seconds_2_2": 69.2
+      },
+      {
+        "id": "boslustApproach",
+        "points_xz": [
+          [
+            90,
+            70
+          ],
+          [
+            90.6,
+            48
+          ],
+          [
+            90,
+            26
+          ],
+          [
+            87.5,
+            10.5
+          ],
+          [
+            76,
+            9.4
+          ],
+          [
+            55.5,
+            8.4
+          ],
+          [
+            59.5,
+            10.4
+          ],
+          [
+            63,
+            12.4
+          ],
+          [
+            63,
+            17.6
+          ],
+          [
+            63,
+            18.2
+          ]
+        ],
+        "length_m": 106.1,
+        "status": "V v0.2 path polyline; runtime smoothed length pending",
+        "mandatory": true,
+        "nominal_seconds_walk_3_2": 33.2,
+        "effective_seconds_2_2": 48.2
+      },
+      {
+        "id": "fireReturn",
+        "points_xz": [
+          [
+            21,
+            18
+          ],
+          [
+            38,
+            35
+          ],
+          [
+            48,
+            59
+          ],
+          [
+            61,
+            83
+          ],
+          [
+            68,
+            111
+          ],
+          [
+            80,
+            113.5
+          ]
+        ],
+        "length_m": 118.46,
+        "status": "V v0.2 path polyline; runtime smoothed length pending",
+        "mandatory": true,
+        "nominal_seconds_walk_3_2": 37.0,
+        "effective_seconds_2_2": 53.8
+      },
+      {
+        "id": "cottageOut",
+        "points_xz": [
+          [
+            80,
+            113.5
+          ],
+          [
+            62,
+            122
+          ],
+          [
+            40,
+            130
+          ],
+          [
+            18,
+            143
+          ],
+          [
+            18,
+            152
+          ],
+          [
+            25,
+            152
+          ]
+        ],
+        "length_m": 84.87,
+        "status": "V v0.2 path polyline; runtime smoothed length pending",
+        "mandatory": false,
+        "nominal_seconds_walk_3_2": 26.5,
+        "effective_seconds_2_2": 38.6
+      },
+      {
+        "id": "cottageReturn",
+        "points_xz": [
+          [
+            25,
+            152
+          ],
+          [
+            18,
+            152
+          ],
+          [
+            18,
+            168
+          ],
+          [
+            48,
+            168
+          ],
+          [
+            79,
+            160
+          ],
+          [
+            90,
+            139
+          ],
+          [
+            90,
+            128
+          ]
+        ],
+        "length_m": 119.72,
+        "status": "V v0.2 path polyline; runtime smoothed length pending",
+        "mandatory": false,
+        "nominal_seconds_walk_3_2": 37.4,
+        "effective_seconds_2_2": 54.4
+      },
+      {
+        "id": "terraceLanterns",
+        "points_xz": [
+          [
+            90,
+            113.5
+          ],
+          [
+            90,
+            128
+          ]
+        ],
+        "length_m": 14.5,
+        "status": "V v0.2 path polyline; runtime smoothed length pending",
+        "mandatory": true,
+        "nominal_seconds_walk_3_2": 4.5,
+        "effective_seconds_2_2": 6.6
+      },
+      {
+        "id": "lateTunnel",
+        "points_xz": [
+          [
+            63,
+            51
+          ],
+          [
+            63,
+            57.2
+          ],
+          [
+            63,
+            62.2
+          ],
+          [
+            63,
+            97
+          ],
+          [
+            76.85,
+            97
+          ],
+          [
+            83,
+            97
+          ]
+        ],
+        "length_m": 66.0,
+        "status": "V v0.2 path polyline; runtime smoothed length pending",
+        "mandatory": false,
+        "nominal_seconds_walk_3_2": 20.6,
+        "effective_seconds_2_2": 30.0
+      },
+      {
+        "id": "cottageThreshold",
+        "points_xz": [
+          [
+            25,
+            152
+          ],
+          [
+            25,
+            157.15
+          ]
+        ],
+        "length_m": 5.15,
+        "status": "V v0.2 path polyline; runtime smoothed length pending",
+        "mandatory": false,
+        "nominal_seconds_walk_3_2": 1.6,
+        "effective_seconds_2_2": 2.3
+      },
+      {
+        "id": "wellness",
+        "points_xz": [
+          [
+            130,
+            106
+          ],
+          [
+            132,
+            113.4
+          ],
+          [
+            134,
+            113.4
+          ],
+          [
+            134,
+            104.02
+          ]
+        ],
+        "length_m": 19.05,
+        "status": "V v0.2 path polyline; runtime smoothed length pending",
+        "mandatory": true,
+        "nominal_seconds_walk_3_2": 6.0,
+        "effective_seconds_2_2": 8.7
+      },
+      {
+        "id": "jacuzziApproach",
+        "points_xz": [
+          [
+            130,
+            106
+          ],
+          [
+            132,
+            108.5
+          ],
+          [
+            140,
+            108.5
+          ],
+          [
+            140,
+            106
+          ]
+        ],
+        "length_m": 13.7,
+        "status": "V v0.2 path polyline; runtime smoothed length pending",
+        "mandatory": false,
+        "nominal_seconds_walk_3_2": 4.3,
+        "effective_seconds_2_2": 6.2
+      },
+      {
+        "id": "bbqApproach",
+        "points_xz": [
+          [
+            101,
+            109.8
+          ],
+          [
+            101,
+            113
+          ],
+          [
+            103,
+            113
+          ],
+          [
+            103,
+            117
+          ],
+          [
+            104,
+            117
+          ]
+        ],
+        "length_m": 10.2,
+        "status": "V v0.2 path polyline; runtime smoothed length pending",
+        "mandatory": false,
+        "nominal_seconds_walk_3_2": 3.2,
+        "effective_seconds_2_2": 4.6
+      },
+      {
+        "id": "golfLoop",
+        "points_xz": [
+          [
+            42,
+            39
+          ],
+          [
+            48,
+            48
+          ],
+          [
+            59,
+            53
+          ],
+          [
+            63,
+            53
+          ],
+          [
+            70,
+            62
+          ],
+          [
+            82,
+            67.5
+          ]
+        ],
+        "length_m": 51.5,
+        "status": "V v0.2 path polyline; runtime smoothed length pending",
+        "mandatory": false,
+        "nominal_seconds_walk_3_2": 16.1,
+        "effective_seconds_2_2": 23.4
+      },
+      {
+        "id": "wickermanLoop",
+        "points_xz": [
+          [
+            144,
+            39
+          ],
+          [
+            154,
+            45
+          ],
+          [
+            163,
+            49
+          ],
+          [
+            167,
+            54
+          ],
+          [
+            169,
+            62
+          ],
+          [
+            162,
+            72
+          ],
+          [
+            151,
+            75
+          ],
+          [
+            131,
+            69
+          ],
+          [
+            113,
+            62.5
+          ]
+        ],
+        "length_m": 99.79,
+        "status": "V v0.2 path polyline; runtime smoothed length pending",
+        "mandatory": false,
+        "nominal_seconds_walk_3_2": 31.2,
+        "effective_seconds_2_2": 45.4
+      },
+      {
+        "id": "eastGardenLoop",
+        "points_xz": [
+          [
+            94,
+            127
+          ],
+          [
+            124,
+            132
+          ],
+          [
+            149,
+            145
+          ],
+          [
+            174,
+            139
+          ],
+          [
+            174,
+            109
+          ],
+          [
+            150,
+            104
+          ],
+          [
+            145,
+            108
+          ]
+        ],
+        "length_m": 145.22,
+        "status": "V v0.2 path polyline; runtime smoothed length pending",
+        "mandatory": false,
+        "nominal_seconds_walk_3_2": 45.4,
+        "effective_seconds_2_2": 66.0
+      },
+      {
+        "id": "lakeViewRoute",
+        "points_xz": [
+          [
+            90,
+            128
+          ],
+          [
+            84,
+            134
+          ],
+          [
+            76,
+            139
+          ]
+        ],
+        "length_m": 17.92,
+        "status": "V v0.2 path polyline; runtime smoothed length pending",
+        "mandatory": false,
+        "nominal_seconds_walk_3_2": 5.6,
+        "effective_seconds_2_2": 8.1
+      }
+    ],
+    "heights": {
+      "g": 0.15,
+      "u": 3.35,
+      "a": 6.65,
+      "b": -3.2,
+      "underground": -3.4,
+      "cottageFloor": 4.15,
+      "lakeWater": -0.35,
+      "roofEave": 6.4,
+      "roofRidge": 14.6,
+      "sauna_floor": 0.8,
+      "cottage_canopy_underside": 6.85,
+      "wellness": 0.15,
+      "wickerman": 1.2
+    },
+    "terrain_constraints": [
+      "flat main building pads",
+      "cottage plateau +4",
+      "lake bottom -1.8",
+      "same mesh/collision triangulation",
+      "route max grade 8 percent"
+    ],
+    "warning": "Not drop-in roomdefs. Physical, culling, save-ID and proposal IDs are distinct. No implementation authorized.",
+    "outdoor_adjacency": [
+      {
+        "a": "gate",
+        "b": "arrivalCourt",
+        "route": "arrival",
+        "condition": "free intended arrival",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "arrivalCourt",
+        "b": "vestibule",
+        "route": "arrival",
+        "condition": "door.front/frontKey",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "arrivalCourt",
+        "b": "parkingWest",
+        "route": "shared maneuver apron",
+        "condition": "free",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "arrivalCourt",
+        "b": "parkingEast",
+        "route": "shared maneuver apron",
+        "condition": "free",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "arrivalCourt",
+        "b": "shed",
+        "route": "shedRoute",
+        "condition": "door.shed key only at building",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "shed",
+        "b": "fire",
+        "route": "shedFire",
+        "condition": "free; intended C evidence",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "fire",
+        "b": "mainTerrace",
+        "route": "fireReturn",
+        "condition": "free",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "fire",
+        "b": "fork",
+        "route": "southLoop",
+        "condition": "free",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "fork",
+        "b": "hut",
+        "route": "boslustApproach",
+        "condition": "door.boslust/cipher at hut",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "well",
+        "b": "arrivalCourt",
+        "route": "eastLoop",
+        "condition": "free",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "well",
+        "b": "wickerman",
+        "route": "wickermanLoop",
+        "condition": "optional",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "wickerman",
+        "b": "eastPathReturn",
+        "route": "wickermanLoop",
+        "condition": "optional return at source eastLoop (113,62.5)",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "shed",
+        "b": "golfTee",
+        "route": "golfLoop",
+        "condition": "optional",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "golfTee",
+        "b": "arrivalCourt",
+        "route": "golfLoop",
+        "condition": "optional, north side of hill",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "billiard",
+        "b": "mainTerrace",
+        "route": "door.billiardOut",
+        "condition": "free",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "kitchen",
+        "b": "mainTerrace",
+        "route": "door.kitchenBack",
+        "condition": "free",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "mainTerrace",
+        "b": "bbq",
+        "route": "bbqApproach",
+        "condition": "free",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "mainTerrace",
+        "b": "outdoorDining",
+        "route": "social deck",
+        "condition": "free",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "mainTerrace",
+        "b": "musicBong",
+        "route": "social deck",
+        "condition": "free",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "mainTerrace",
+        "b": "lanternLawn",
+        "route": "terraceLanterns",
+        "condition": "free",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "mainTerrace",
+        "b": "cottageTerrace",
+        "route": "cottageOut",
+        "condition": "optional",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "cottageTerrace",
+        "b": "cottageEntry",
+        "route": "cottageThreshold",
+        "condition": "door.cottage, free",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "cottageTerrace",
+        "b": "lanternLawn",
+        "route": "cottageReturn",
+        "condition": "optional",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "lanternLawn",
+        "b": "lakeView",
+        "route": "lakeViewRoute",
+        "condition": "optional",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "lanternLawn",
+        "b": "eastGlade",
+        "route": "eastGardenLoop",
+        "condition": "optional",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "eastGlade",
+        "b": "wellness",
+        "route": "eastGardenLoop",
+        "condition": "optional",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "cons",
+        "b": "wellness",
+        "route": "door.consEast",
+        "condition": "consKey/shared lock, double leaf",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "wellness",
+        "b": "sauna",
+        "route": "wellness",
+        "condition": "ramp to FY.8; board access",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "wellness",
+        "b": "jacuzziPad",
+        "route": "jacuzziApproach",
+        "condition": "optional, no evidence",
+        "route_scope": "subsegment of named polyline or local connector; do not sum full loop once per edge"
+      },
+      {
+        "a": "eastPathReturn",
+        "b": "arrivalCourt",
+        "route": "eastLoop",
+        "condition": "free via existing northeast forecourt branch",
+        "route_scope": "subsegment"
+      },
+      {
+        "a": "sideGate",
+        "b": "well",
+        "route": "eastLoop",
+        "condition": "local side gate landmark, no new game gate",
+        "route_scope": "subsegment"
+      },
+      {
+        "a": "arrivalCourt",
+        "b": "arrivalService",
+        "route": "shared maneuver apron",
+        "condition": "free loading route",
+        "route_scope": "local"
+      },
+      {
+        "a": "musicBong",
+        "b": "balloonNook",
+        "route": "social deck",
+        "condition": "separate prop nook",
+        "route_scope": "local"
+      }
+    ],
+    "roof_clearance_test": "conservative minimum of four hip planes; eave6.4 rise8.2 overhang0.7; subtract roof thickness0.2 and floor6.65",
+    "status": "required baseline, metric choices proposed",
+    "schema_version": "2.0-design",
+    "canonical_footprints": {
+      "MANOR": {
+        "x0": 72,
+        "x1": 108,
+        "z0": 80,
+        "z1": 110,
+        "floor_y": 0.15,
+        "status": "retained audit canonical"
+      },
+      "WING": {
+        "x0": 108,
+        "x1": 116,
+        "z0": 92,
+        "z1": 110,
+        "floor_y": 0.15,
+        "status": "retained audit canonical"
+      },
+      "CONS": {
+        "x0": 116,
+        "x1": 130,
+        "z0": 94,
+        "z1": 112,
+        "floor_y": 0.15,
+        "status": "retained audit canonical"
+      },
+      "POOL": {
+        "x0": 119,
+        "x1": 127,
+        "z0": 97,
+        "z1": 109,
+        "status": "retained audit; shallow south, deep north"
+      },
+      "TERRACE": {
+        "x0": 78,
+        "x1": 102,
+        "z0": 110,
+        "z1": 117,
+        "floor_y": 0.15,
+        "status": "retained anchor, social extensions separate"
+      },
+      "COTTAGE": {
+        "x0": 20,
+        "x1": 30,
+        "z0": 157,
+        "z1": 165,
+        "floor_y": 4.15,
+        "status": "V v0.2 same 10 x 8 canonical geometry; moved X-6 vs v0.1"
+      },
+      "COTTAGE_TERRACE": {
+        "x0": 20,
+        "x1": 30,
+        "z0": 152,
+        "z1": 157,
+        "floor_y": 4.15,
+        "roof_underside_y": 6.85,
+        "status": "V; 10 x 5 roof, supported plateau"
+      },
+      "COTTAGE_PAD": {
+        "x0": 18,
+        "x1": 32,
+        "z0": 150,
+        "z1": 167,
+        "terrain_y": 4,
+        "status": "V; dry plateau, path-exit profiles not instant edge drop"
+      },
+      "SHED": {
+        "x0": 39.5,
+        "x1": 44.5,
+        "z0": 37.2,
+        "z1": 40.8,
+        "floor_y": 0.1,
+        "status": "retained audit canonical"
+      },
+      "SAUNA": {
+        "x0": 132,
+        "x1": 136,
+        "z0": 100,
+        "z1": 104,
+        "floor_y": 0.8,
+        "status": "retained audit literal; proposal lifts into single footprint descriptor"
+      },
+      "BOSLUST_HUT": {
+        "x0": 60.4,
+        "x1": 65.6,
+        "z0": 18.2,
+        "z1": 22.6,
+        "roof_y": 2.95,
+        "status": "retained HUT physical box, distinct from hut culling box ending z20"
+      },
+      "BOSLUST_CUT": {
+        "x0": 60,
+        "x1": 66,
+        "z0": 8,
+        "z1": 18,
+        "status": "retained terrain cut"
+      },
+      "JACUZZI": {
+        "x0": 139,
+        "x1": 142.6,
+        "z0": 101,
+        "z1": 104.6,
+        "floor_y": 0.15,
+        "status": "V reservation only"
+      },
+      "COTTAGE_TERRACE_RAMP": {
+        "x0": 18,
+        "x1": 20,
+        "z0": 151.4,
+        "z1": 152.6,
+        "status": "V entry ramp over2m, terrain+4 to deck+4.15"
+      }
+    },
+    "outdoor_zones": [
+      {
+        "id": "arrivalCourt",
+        "name": "Aankomstplein",
+        "bounds": {
+          "x0": 80,
+          "x1": 100,
+          "z0": 61,
+          "z1": 78
+        },
+        "surface_y": 0,
+        "daily_function": "Aankomen/lossen",
+        "player_function": "Entree-as; één gravelvlak, geen coplanar disk",
+        "status": "V metric proposal"
+      },
+      {
+        "id": "parkingWest",
+        "name": "Parkeren drie autos",
+        "bounds": {
+          "x0": 69.5,
+          "x1": 77.9,
+          "z0": 72,
+          "z1": 77.5
+        },
+        "surface_y": 0,
+        "daily_function": "3 stilstaande voertuigen",
+        "player_function": "Context; oorspronkelijke bospadtak blijft vrij",
+        "status": "V metric proposal"
+      },
+      {
+        "id": "parkingEast",
+        "name": "Parkeren twee autos",
+        "bounds": {
+          "x0": 101,
+          "x1": 106.6,
+          "z0": 72,
+          "z1": 77.5
+        },
+        "surface_y": 0,
+        "daily_function": "2 voertuigen; vijfde optioneel",
+        "player_function": "Geen auto in entree-as of oostbospad",
+        "status": "V metric proposal"
+      },
+      {
+        "id": "arrivalService",
+        "name": "Manoeuvreer-/bagagestrook",
+        "bounds": {
+          "x0": 69.5,
+          "x1": 108,
+          "z0": 66,
+          "z1": 72
+        },
+        "surface_y": 0,
+        "daily_function": "Parkeren en uitladen",
+        "player_function": "Gedeeld voetpad; geen verkeerssimulatie",
+        "status": "V metric proposal"
+      },
+      {
+        "id": "mainTerrace",
+        "name": "Huis-/tuinverbinding",
+        "bounds": {
+          "x0": 78,
+          "x1": 102,
+          "z0": 110,
+          "z1": 117
+        },
+        "surface_y": 0.15,
+        "daily_function": "Zitten en tuin bereiken",
+        "player_function": "Vrije routes keuken/biljart/meer",
+        "status": "V metric proposal"
+      },
+      {
+        "id": "bbq",
+        "name": "BBQ werkplek",
+        "bounds": {
+          "x0": 104,
+          "x1": 111,
+          "z0": 115,
+          "z1": 119
+        },
+        "surface_y": 0.15,
+        "daily_function": "Buiten koken",
+        "player_function": "Bereikbaar vanuit keuken; geen hoofdclue",
+        "status": "V metric proposal"
+      },
+      {
+        "id": "outdoorDining",
+        "name": "Buiteneettafel",
+        "bounds": {
+          "x0": 94,
+          "x1": 102,
+          "z0": 117,
+          "z1": 123
+        },
+        "surface_y": 0.15,
+        "daily_function": "Groepseten",
+        "player_function": "Persoonlijke rustige activiteit; central lawn path remains free",
+        "status": "V metric proposal"
+      },
+      {
+        "id": "musicBong",
+        "name": "Gravity bong en handpan",
+        "bounds": {
+          "x0": 79,
+          "x1": 85,
+          "z0": 118,
+          "z1": 123
+        },
+        "surface_y": 0.15,
+        "daily_function": "Buitenzitten/muziek",
+        "player_function": "Apart laag tafeltje/instrument; geen mechaniek of puzzelcode",
+        "status": "V metric proposal"
+      },
+      {
+        "id": "balloonNook",
+        "name": "Tank/ballonnen-zitnis",
+        "bounds": {
+          "x0": 84,
+          "x1": 87,
+          "z0": 118,
+          "z1": 122
+        },
+        "surface_y": 0.15,
+        "daily_function": "Persoonlijke propgroep",
+        "player_function": "Niet BBQ-werkvlak; geen nieuwe interactie",
+        "status": "V metric proposal"
+      },
+      {
+        "id": "wellness",
+        "name": "Wellness droogdek",
+        "bounds": {
+          "x0": 130,
+          "x1": 148,
+          "z0": 96,
+          "z1": 115
+        },
+        "surface_y": 0.15,
+        "daily_function": "Sauna/jacuzzi/liggen",
+        "player_function": "2,4m serredubbeldeur, sauna-bord blijft vrij",
+        "status": "V metric proposal"
+      },
+      {
+        "id": "jacuzziPad",
+        "name": "Jacuzzi uitstap-/onderhoudszone",
+        "bounds": {
+          "x0": 137.5,
+          "x1": 145.5,
+          "z0": 99.5,
+          "z1": 108
+        },
+        "surface_y": 0.15,
+        "daily_function": "Bad en onderhoud",
+        "player_function": "Vrije uitstap 1,2m rondom waar bereikbaar; geen indexclue",
+        "status": "V metric proposal"
+      },
+      {
+        "id": "saunaRamp",
+        "name": "Saunatoegang",
+        "bounds": {
+          "x0": 133.4,
+          "x1": 134.6,
+          "z0": 104,
+          "z1": 113.4
+        },
+        "surface_y": null,
+        "daily_function": "Droge wellnessroute",
+        "player_function": "Ramp .15->.8, vrije breedte1.2",
+        "status": "V metric proposal",
+        "profile": [
+          {
+            "z": 113.4,
+            "y": 0.15
+          },
+          {
+            "z": 105.2,
+            "y": 0.8
+          },
+          {
+            "z": 104,
+            "y": 0.8
+          }
+        ],
+        "max_grade": 0.08,
+        "top_landing_m": 1.2
+      },
+      {
+        "id": "lanternLawn",
+        "name": "Lantaarn-/samenkomstweide",
+        "bounds": {
+          "x0": 84,
+          "x1": 96,
+          "z0": 122,
+          "z1": 134
+        },
+        "surface_y": 0,
+        "daily_function": "Buiten samen zitten",
+        "player_function": "Huidig C2 of kandidaat lichtpad, mechaniek open",
+        "status": "V metric proposal"
+      },
+      {
+        "id": "lake",
+        "name": "Meertje",
+        "bounds": {
+          "x0": 32,
+          "x1": 76,
+          "z0": 134,
+          "z1": 158
+        },
+        "surface_y": -0.35,
+        "daily_function": "Waterlandschap/rust",
+        "player_function": "44x24 ellips; geen watershortcut",
+        "status": "V metric proposal",
+        "shape": "ellipse",
+        "center": [
+          54,
+          146
+        ],
+        "radii": [
+          22,
+          12
+        ],
+        "bottom_y": -1.8
+      },
+      {
+        "id": "lakeView",
+        "name": "Droge kijkplek",
+        "bounds": {
+          "x0": 73,
+          "x1": 79,
+          "z0": 137,
+          "z1": 142
+        },
+        "surface_y": 0,
+        "daily_function": "Bank/oeverbezoek",
+        "player_function": "Water-/huisjezicht; optionele vondst",
+        "status": "V metric proposal"
+      },
+      {
+        "id": "cottageTerrace",
+        "name": "Portugal overkapte terras",
+        "bounds": {
+          "x0": 20,
+          "x1": 30,
+          "z0": 152,
+          "z1": 157
+        },
+        "surface_y": 4.15,
+        "daily_function": "MTG1v1, 30 Seconds, boeken/eten",
+        "player_function": "Optioneel persoonlijk tafelbeeld; canopy supported",
+        "status": "V metric proposal",
+        "roof_underside_y": 6.85
+      },
+      {
+        "id": "golfTee",
+        "name": "Golfafslag achter BOSLUST",
+        "bounds": {
+          "x0": 60,
+          "x1": 66,
+          "z0": 49,
+          "z1": 55
+        },
+        "surface_y": 0,
+        "daily_function": "Geimproviseerde golfretour",
+        "player_function": "Optioneel; nooit toegang tot cipher",
+        "status": "V metric proposal"
+      },
+      {
+        "id": "golfChute",
+        "name": "Kartonnen retourkoker",
+        "bounds": {
+          "x0": 62,
+          "x1": 64,
+          "z0": 38,
+          "z1": 49
+        },
+        "surface_y": null,
+        "daily_function": "Kartonnen baan heuvelop",
+        "player_function": "Niet-beloopbaar; geen ballenfysica",
+        "status": "V metric proposal",
+        "elevation_source": "retained HILL heightfield",
+        "wooden_edges": true
+      },
+      {
+        "id": "wickerman",
+        "name": "Afzonderlijke stroman-clearing",
+        "bounds": {
+          "x0": 159.5,
+          "x1": 174.5,
+          "z0": 46.5,
+          "z1": 61.5
+        },
+        "surface_y": 1.2,
+        "daily_function": "FI geplaatste strofiguur/kaarsen",
+        "player_function": "Optionele ontdekking; burn/leave open, no clue",
+        "status": "V metric proposal",
+        "shape": "circle",
+        "center": [
+          167,
+          54
+        ],
+        "radius": 7.5,
+        "figure_h": 2.8
+      },
+      {
+        "id": "eastGlade",
+        "name": "Bosweide/oostelijke route",
+        "bounds": {
+          "x0": 149,
+          "x1": 179,
+          "z0": 106,
+          "z1": 145
+        },
+        "surface_y": null,
+        "daily_function": "Landschappelijke boswandeling",
+        "player_function": "Korte zichtwisselingen, geen nieuwe verplichte puzzle",
+        "status": "V metric proposal",
+        "height_range": [
+          0.4,
+          2.5
+        ]
+      },
+      {
+        "id": "eastForest",
+        "name": "Oostelijke bosmassa",
+        "bounds": {
+          "x0": 170,
+          "x1": 200,
+          "z0": 60,
+          "z1": 180
+        },
+        "surface_y": null,
+        "daily_function": "Beboste helling/grens",
+        "player_function": "Omhulling en afstand; geen lege marge",
+        "status": "V metric proposal",
+        "height_range": [
+          1,
+          5
+        ]
+      },
+      {
+        "id": "northForest",
+        "name": "Noordelijke bosrug",
+        "bounds": {
+          "x0": 70,
+          "x1": 170,
+          "z0": 150,
+          "z1": 180
+        },
+        "surface_y": null,
+        "daily_function": "Gelaagde bosrand",
+        "player_function": "Kroonmassa achter water/weide, gerichte huisjezichtlijn",
+        "status": "V metric proposal",
+        "height_range": [
+          1,
+          4.5
+        ]
+      },
+      {
+        "id": "westForest",
+        "name": "Westelijke beboste oever/helling",
+        "bounds": {
+          "x0": 0,
+          "x1": 20,
+          "z0": 72,
+          "z1": 180
+        },
+        "surface_y": null,
+        "daily_function": "Bosrand/onderhoud",
+        "player_function": "Plateau uitsluiten van scatter; geen droge padblokkade",
+        "status": "V metric proposal",
+        "height_range": [
+          0.8,
+          5
+        ]
+      },
+      {
+        "id": "southForest",
+        "name": "Aankomstbos",
+        "bounds": {
+          "x0": 0,
+          "x1": 200,
+          "z0": 0,
+          "z1": 72
+        },
+        "surface_y": null,
+        "daily_function": "Oprit, wandelen, schuur/vuur",
+        "player_function": "Behoud kernlandmarks; golf/wicker aparte pockets",
+        "status": "V metric proposal",
+        "height_range": [
+          0,
+          1.2
+        ]
+      }
+    ],
+    "parking_bays": [
+      {
+        "id": "car.1",
+        "bounds": {
+          "x0": 69.5,
+          "x1": 72.3,
+          "z0": 72,
+          "z1": 77.5
+        },
+        "vehicle_h": 1.6,
+        "status": "reserve"
+      },
+      {
+        "id": "car.2",
+        "bounds": {
+          "x0": 72.3,
+          "x1": 75.1,
+          "z0": 72,
+          "z1": 77.5
+        },
+        "vehicle_h": 1.6,
+        "status": "reserve"
+      },
+      {
+        "id": "car.3",
+        "bounds": {
+          "x0": 75.1,
+          "x1": 77.9,
+          "z0": 72,
+          "z1": 77.5
+        },
+        "vehicle_h": 1.6,
+        "status": "reserve"
+      },
+      {
+        "id": "car.4",
+        "bounds": {
+          "x0": 101.0,
+          "x1": 103.8,
+          "z0": 72,
+          "z1": 77.5
+        },
+        "vehicle_h": 1.6,
+        "status": "reserve"
+      },
+      {
+        "id": "car.5",
+        "bounds": {
+          "x0": 103.8,
+          "x1": 106.6,
+          "z0": 72,
+          "z1": 77.5
+        },
+        "vehicle_h": 1.6,
+        "status": "fifth optional"
+      }
+    ],
+    "arrival_constraints": {
+      "clear_drive_x": [
+        88,
+        92
+      ],
+      "final_entrance_clear_x": [
+        87.5,
+        92.5
+      ],
+      "final_entrance_z": [
+        72,
+        80.2
+      ],
+      "pedestrian_clearance_m": 1.5,
+      "reversing_aisle_depth_m": 6,
+      "turning_envelope": "12m conceptual diameter in clear court; swept-path validation pending",
+      "cars_required": [
+        4,
+        5
+      ],
+      "pedestrian_strip_bounds": {
+        "x0": 69.5,
+        "x1": 108,
+        "z0": 77.5,
+        "z1": 79
+      },
+      "door_side_clearance": "model-dependent; not claimed as 1.5m between each adjacent vehicle"
+    },
+    "terrain_profiles": {
+      "cottageOut": {
+        "control_distance_m": [
+          0,
+          2,
+          20,
+          43.32,
+          68.87,
+          75.87,
+          84.87
+        ],
+        "height_m": [
+          0.15,
+          0,
+          0,
+          1.67,
+          3.5,
+          4,
+          4
+        ],
+        "max_grade": 0.08,
+        "plateau_entry_at_distance_m": 75.87
+      },
+      "cottageReturn": {
+        "control_distance_m": [
+          0,
+          22,
+          72,
+          119.72
+        ],
+        "height_m": [
+          4,
+          4,
+          0,
+          0
+        ],
+        "max_grade": 0.08
+      },
+      "eastGardenLoop": {
+        "height_range": [
+          0,
+          2.5
+        ],
+        "max_grade": 0.08,
+        "control_distance_m": [
+          0,
+          30.414,
+          58.592,
+          84.302,
+          114.302,
+          138.817,
+          145.22
+        ],
+        "height_m": [
+          0,
+          1,
+          2.2,
+          2.5,
+          1.7,
+          0.4,
+          0.15
+        ],
+        "status": "authored piecewise linear profile; terrain mesh not yet generated"
+      },
+      "wickermanLoop": {
+        "plateau_y": 1.2,
+        "max_grade": 0.08,
+        "control_distance_m": [
+          0,
+          11.662,
+          21.511,
+          27.914,
+          36.16,
+          48.367,
+          59.768,
+          80.649,
+          99.787
+        ],
+        "height_m": [
+          0,
+          0.5,
+          1.2,
+          1.2,
+          1.2,
+          0.8,
+          0.5,
+          0.2,
+          0
+        ],
+        "status": "authored piecewise linear profile; terrain mesh not yet generated"
+      },
+      "saunaRamp": {
+        "control_distance_m": [
+          0,
+          8.2,
+          9.4
+        ],
+        "height_m": [
+          0.15,
+          0.8,
+          0.8
+        ],
+        "max_grade": 0.08,
+        "top_landing_m": 1.2
+      },
+      "terraceLanterns": {
+        "control_distance_m": [
+          0,
+          2,
+          14.5
+        ],
+        "height_m": [
+          0.15,
+          0,
+          0
+        ],
+        "max_grade": 0.08
+      }
+    },
+    "terrain_composition": {
+      "ridge_fields": [
+        {
+          "id": "northRidge",
+          "center": [
+            124,
+            163
+          ],
+          "radii": [
+            65,
+            22
+          ],
+          "peak_y": 4.5
+        },
+        {
+          "id": "eastRidge",
+          "center": [
+            176,
+            116
+          ],
+          "radii": [
+            20,
+            60
+          ],
+          "peak_y": 5
+        }
+      ],
+      "recipe": "Use retained HILL; authored north/east fields; flat pad masks, lake basin, route-grade profiles override fields. Same triangulated mesh and collision. Contours not as-built. Footprint exclusions precede scatter."
+    },
+    "physical_adjacency": [
+      {
+        "a": "vestibule",
+        "b": "out",
+        "kind": "door",
+        "door": "door.front",
+        "condition": "frontKey; preserve source lock rule",
+        "traversable": true
+      },
+      {
+        "a": "vestibule",
+        "b": "hall",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "hall",
+        "b": "living",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "hall",
+        "b": "dining",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "hall",
+        "b": "lobby",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "hall",
+        "b": "landing",
+        "kind": "stair",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "lobby",
+        "b": "library",
+        "kind": "door",
+        "door": "door.library",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "lobby",
+        "b": "billiard",
+        "kind": "door",
+        "door": "door.billiard",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "lobby",
+        "b": "bstair",
+        "kind": "door",
+        "door": "door.basement",
+        "condition": "all three seals",
+        "traversable": true
+      },
+      {
+        "a": "bstair",
+        "b": "bLobby",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "living",
+        "b": "library",
+        "kind": "door",
+        "door": "door.livLib",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "dining",
+        "b": "kitchen",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "kitchen",
+        "b": "corridor",
+        "kind": "door",
+        "door": "door.service",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "corridor",
+        "b": "workshop",
+        "kind": "door",
+        "door": "door.workshop",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "corridor",
+        "b": "pantry",
+        "kind": "door",
+        "door": "door.pantry",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "corridor",
+        "b": "cons",
+        "kind": "door",
+        "door": "door.consWest",
+        "condition": "consKey",
+        "traversable": true
+      },
+      {
+        "a": "workshop",
+        "b": "out",
+        "kind": "door",
+        "door": "door.workshopOut",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "billiard",
+        "b": "out",
+        "kind": "door",
+        "door": "door.billiardOut",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "kitchen",
+        "b": "out",
+        "kind": "door",
+        "door": "door.kitchenBack",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "cons",
+        "b": "out",
+        "kind": "door",
+        "door": "door.consEast",
+        "condition": "consKey",
+        "traversable": true
+      },
+      {
+        "a": "frontGallery",
+        "b": "walkway",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "walkway",
+        "b": "landing",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "frontGallery",
+        "b": "reis",
+        "kind": "door",
+        "door": "door.reis",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "walkway",
+        "b": "sterren",
+        "kind": "door",
+        "door": "door.sterren",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "landing",
+        "b": "libGallery",
+        "kind": "door",
+        "door": "door.libGallery",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "landing",
+        "b": "bath",
+        "kind": "door",
+        "door": "door.bath",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "landing",
+        "b": "ucorr",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "ucorr",
+        "b": "study",
+        "kind": "door",
+        "door": "door.study",
+        "condition": "studyKey",
+        "traversable": true
+      },
+      {
+        "a": "ucorr",
+        "b": "botanic",
+        "kind": "door",
+        "door": "door.botanic",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "bLobby",
+        "b": "archive",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "bLobby",
+        "b": "boiler",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "archive",
+        "b": "route",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "route",
+        "b": "tunnel2",
+        "kind": "door",
+        "door": "door.tunnelManor",
+        "condition": "lock.tunnelBolt, from tunnel side x<76.85; becomes reachable after plates gate, not finished flag",
+        "traversable": true
+      },
+      {
+        "a": "tunnel2",
+        "b": "tunnel",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "tunnel",
+        "b": "gathering",
+        "kind": "door",
+        "door": "door.tunnelGathering",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "gathering",
+        "b": "passage",
+        "kind": "door",
+        "door": "door.gathering",
+        "condition": "route plates solved",
+        "traversable": true
+      },
+      {
+        "a": "passage",
+        "b": "entry",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "entry",
+        "b": "descent",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "descent",
+        "b": "hut",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "hut",
+        "b": "out",
+        "kind": "door",
+        "door": "door.boslust",
+        "condition": "route restored + cipherStrip + cipher solved",
+        "traversable": true
+      },
+      {
+        "a": "sauna",
+        "b": "out",
+        "kind": "door",
+        "door": "door.sauna",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "shed",
+        "b": "out",
+        "kind": "door",
+        "door": "door.shed",
+        "condition": "shedKey",
+        "traversable": true
+      },
+      {
+        "a": "cottageEntry",
+        "b": "out",
+        "kind": "door",
+        "door": "door.cottage",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "cottageEntry",
+        "b": "cottageRoom",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "lobby",
+        "b": "guestWC",
+        "kind": "door",
+        "door": "door.guestWC",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "ucorr",
+        "b": "storage",
+        "kind": "door",
+        "door": "door.storage",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "rearNookEast",
+        "b": "linen",
+        "kind": "door",
+        "door": "door.linen",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "ucorr",
+        "b": "atticStair",
+        "kind": "door",
+        "door": "door.atticStair",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "landing",
+        "b": "rearNook",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "rearNook",
+        "b": "rearNookEast",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "rearNookEast",
+        "b": "atticStair",
+        "kind": "door",
+        "door": "door.atticRear",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "atticStair",
+        "b": "atticLanding",
+        "kind": "stair",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "atticLanding",
+        "b": "atticCommon",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "atticCommon",
+        "b": "atticStore",
+        "kind": "door",
+        "door": "door.atticStore",
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "atticCommon",
+        "b": "atticLookout",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "atticLookout",
+        "b": "atticLanding",
+        "kind": "arch",
+        "door": null,
+        "condition": "preserve existing rule / free if no gate",
+        "traversable": true
+      },
+      {
+        "a": "corridor",
+        "b": "utility",
+        "kind": "door",
+        "door": "door.utility",
+        "condition": "free household room",
+        "traversable": true
+      }
+    ],
+    "visibility_adjacency": [
+      {
+        "a": "hall",
+        "b": "frontGallery",
+        "kind": "arch",
+        "door": null,
+        "condition": "sight across void; no physical stair connection",
+        "traversable": false
+      },
+      {
+        "a": "hall",
+        "b": "walkway",
+        "kind": "arch",
+        "door": null,
+        "condition": "sight across void; no physical stair connection",
+        "traversable": false
+      },
+      {
+        "a": "cons",
+        "b": "out",
+        "kind": "glass",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "libGallery",
+        "b": "library",
+        "kind": "arch",
+        "door": null,
+        "condition": "sight across void; no physical stair connection",
+        "traversable": false
+      },
+      {
+        "a": "living",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "dining",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "kitchen",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "billiard",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "library",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "workshop",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "pantry",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "vestibule",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "reis",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "sterren",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "study",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "botanic",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "bath",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "landing",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "frontGallery",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "libGallery",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "cottageEntry",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "cottageRoom",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "linen",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "visibility/light relationship only; source window may be opaque physical wall",
+        "traversable": false
+      },
+      {
+        "a": "storage",
+        "b": "out",
+        "kind": "window",
+        "door": null,
+        "condition": "retain source light/culling relation; no actual window aperture claim",
+        "traversable": false
+      }
+    ],
+    "door_group_policy": {
+      "id": "door.consEast",
+      "clear_opening_xz": {
+        "x": 130,
+        "z0": 104.8,
+        "z1": 107.2
+      },
+      "outward_leaf_sweep_clearance": {
+        "x0": 130,
+        "x1": 131.4,
+        "z0": 104.5,
+        "z1": 107.5
+      },
+      "open_both_or_closed_both": true,
+      "lock": "lock.door.consWest",
+      "normal_gate_policy": "retain consKey, no half-door bypass"
+    },
+    "wellness_connections": {
+      "sauna_door_source_id": "door.sauna",
+      "sauna_entry_z": 104.02,
+      "ramp_profile": "saunaRamp",
+      "jacuzzi_is_puzzle_evidence": false
+    },
+    "environment_reservations": [
+      {
+        "id": "ES.gameTable",
+        "room_id": "dining",
+        "bounds": {
+          "x0": 98,
+          "x1": 103,
+          "z0": 84,
+          "z1": 88.5
+        },
+        "classes": [
+          "F",
+          "P"
+        ],
+        "minimum_clearance_m": 1.5,
+        "rule": "A01 sideboard separate"
+      },
+      {
+        "id": "ES.hallCrates",
+        "room_id": "hall",
+        "center": [
+          87,
+          92
+        ],
+        "count": 4,
+        "classes": [
+          "F",
+          "P"
+        ],
+        "rule": "off console/fireplace/trap sightline; placement validation before finalizing"
+      },
+      {
+        "id": "ES.kitchenCrates",
+        "room_id": "kitchen",
+        "center": [
+          105,
+          95
+        ],
+        "count": 8,
+        "classes": [
+          "F",
+          "P"
+        ],
+        "rule": "beer crates separate, no route obstruction"
+      },
+      {
+        "id": "ES.gingerbread",
+        "room_id": "hall",
+        "center": [
+          88,
+          96
+        ],
+        "classes": [
+          "P"
+        ],
+        "rule": "secondary scene; no brass base/no code"
+      },
+      {
+        "id": "ES.copacabanaBar",
+        "room_id": "cons",
+        "bounds": {
+          "x0": 127.5,
+          "x1": 129.5,
+          "z0": 109.2,
+          "z1": 111.4
+        },
+        "classes": [
+          "F",
+          "P"
+        ],
+        "rule": "pool tiles/trolley/sign preserved; walkthrough clearance pending"
+      },
+      {
+        "id": "ES.copacabanaNameInside",
+        "room_id": "corridor",
+        "name": "Francois' Copacabana Room",
+        "classes": [
+          "P"
+        ],
+        "rule": "frame adjacent to approach, never overlap opening"
+      },
+      {
+        "id": "ES.copacabanaNameOutside",
+        "room_id": "out",
+        "center": [
+          130.8,
+          108.6
+        ],
+        "name": "Francois' Copacabana Room",
+        "classes": [
+          "P"
+        ],
+        "rule": "side post/sign, outside leaf sweep"
+      }
+    ],
+    "evidence_reservations": [
+      {
+        "id": "EB.travel",
+        "room_id": "reis",
+        "approach_pose_xzy": [
+          81.5,
+          83,
+          3.35
+        ],
+        "camera_heading_description": "west/north toward packing cluster",
+        "clear_inspection_radius_m": 1.2,
+        "candidate": "B01 object pair -> physical clip -> folio socket",
+        "status": "preferred candidate, not approved replacement",
+        "details": "two case straps, square patch; tag cut upper-right; square clip"
+      },
+      {
+        "id": "EB.stars",
+        "room_id": "sterren",
+        "approach_pose_xzy": [
+          76.5,
+          90,
+          3.35
+        ],
+        "camera_heading_description": "west toward real telescope/book cluster",
+        "clear_inspection_radius_m": 1.2,
+        "candidate": "B01 object pair -> physical clip -> folio socket",
+        "status": "preferred candidate, not approved replacement",
+        "details": "fork base, two round screws; notebook three holes; round clip"
+      },
+      {
+        "id": "EB.plants",
+        "room_id": "botanic",
+        "approach_pose_xzy": [
+          104.5,
+          88,
+          3.35
+        ],
+        "camera_heading_description": "east toward plant workbench",
+        "clear_inspection_radius_m": 1.2,
+        "candidate": "B01 object pair -> physical clip -> folio socket",
+        "status": "preferred candidate, not approved replacement",
+        "details": "diagonal herbarium repair strip; scissors angular/round handles; pointed clip"
+      }
+    ],
+    "observatory_reservation": {
+      "primary_room": "atticLookout",
+      "bounds": {
+        "x0": 95,
+        "x1": 101,
+        "z0": 92,
+        "z1": 98.6,
+        "y0": 6.55,
+        "y1": 9.8
+      },
+      "status": "reserve only; I03 open",
+      "recommendation": "A04 dedicated observing hobby room with physical roof opening, keep EB.stars in sterren",
+      "not_claimed": [
+        "scientifically functional observatory",
+        "new dome/tower",
+        "telescope controls",
+        "mandatory new puzzle"
+      ],
+      "fallback": "retain attic lookout and U05 guest stars corner"
+    },
+    "runtime_contracts": {
+      "all_39_source_room_ids_retained": true,
+      "v0_1_design_aliases": {
+        "northGuest": "storage"
+      },
+      "classification_order": "attic landing/caps; stair regions before broad u rooms; utility/guestWC before broader parents; source upper-before-ground ordering retained",
+      "floor_enum_extension_required": "a; not currently supported by source Floor union",
+      "window_contract": "decorative/emissive source; no true sightline until actual aperture/transparent portal authored",
+      "save": {
+        "source_state_version": 4,
+        "no_version_bump_in_design": true,
+        "keep_keys": [
+          "fehluwe.save",
+          "fehluwe.save.prev",
+          "fehluwe.settings"
+        ],
+        "extent_validation_required": [
+          200,
+          180
+        ],
+        "preserve_ids": "items, clues, memories, door/container open, locks, lit, seq, pk.*, slots, dials",
+        "pose_validation": "per-scene bounds derived from canonical extent, e.g. estate margin5 => X[-5,205], Z[-5,185]; validate floor/region, no global guessed Y change",
+        "safe_relocation": "old/new cottage, stairs, new partitions; named safe spawns; preserve progress",
+        "review": "existing in-memory review sandbox; no real-save migration in trial"
+      },
+      "placement_validation": [
+        "canonical physical footprints incl roofs/overhang and all pads",
+        "opening and door sweep keepouts",
+        "critical evidence approach/view volumes",
+        "vegetation visible/collider envelopes",
+        "no patch/render-vs-collision disagreement",
+        "deterministic object streams policy pending general rollout"
+      ],
+      "culling": "exterior shell explicitly out + building region; interior contents remain gated; 5-point sampling is not sufficient for outdoor shell",
+      "puzzle_gates": "source intended route vs hard gates retained separately; no hardening via knowledge flags in level design"
+    },
+    "source_gate_corrections": {
+      "drawer_shed_fire": "intended knowledge route, not all hard required; C lanterns can be guessed in source",
+      "tunnel": "after plates opens physical route; reading end letter/finished is not required for bolt",
+      "plaque_redundancy": "source plan also maps emblems; removing plaque alone need not break solvability, but evidence/hints/navigational contract must migrate together"
+    },
+    "performance_status": "Audit baseline includes prior budget overruns; no new measurements in this document. Sample not approved for estate rollout.",
+    "coordinate_contract": {
+      "unit": "m",
+      "origin": "estate southwest corner X0/Z0; datum Y0 main lawn",
+      "east": "+X",
+      "north": "+Z",
+      "up": "+Y",
+      "data_order": "bounds x0,x1,z0,z1; poses named explicitly; no geographic bearing claimed",
+      "drawing_scale": "interactive metric diagrams; estate20m grid, house5m grid; use scale bar, not screen pixels"
+    },
+    "vertical_connections": [
+      {
+        "id": "S01",
+        "kind": "source main stair",
+        "bounds_xz": [
+          93.05,
+          94.92,
+          86.5,
+          95.5
+        ],
+        "levels_y": [
+          0.15,
+          3.35
+        ],
+        "status": "source retained; capsule/headroom check required"
+      },
+      {
+        "id": "S02",
+        "kind": "source basement stair",
+        "bounds_xz": [
+          92.08,
+          94.92,
+          99.6,
+          104.8
+        ],
+        "levels_y": [
+          0.15,
+          -3.2
+        ],
+        "status": "source retained, gated three seals"
+      },
+      {
+        "id": "S03",
+        "kind": "proposed U attic stair",
+        "bounds_xz": [
+          95,
+          99,
+          98.6,
+          105.6
+        ],
+        "levels_y": [
+          3.35,
+          5,
+          6.65
+        ],
+        "flight_bounds_xz": [
+          [
+            95.2,
+            96.4,
+            99.8,
+            102.32
+          ],
+          [
+            96.6,
+            97.8,
+            99.8,
+            102.32
+          ]
+        ],
+        "steps_per_flight": 10,
+        "tread_count_per_flight": 9,
+        "riser_m": 0.165,
+        "tread_m": 0.28,
+        "width_m": 1.2,
+        "middle_landing_z": [
+          102.32,
+          103.52
+        ],
+        "lower_upper_landing_z": [
+          98.6,
+          99.8
+        ],
+        "lower_return_lane_x": [
+          97.8,
+          99
+        ],
+        "status": "new; slab cut per actual flight; no floor across hole"
+      },
+      {
+        "id": "S04",
+        "kind": "source BOSLUST descent",
+        "bounds_xz": [
+          61.7,
+          64.3,
+          20,
+          26
+        ],
+        "levels_y": [
+          0,
+          -3.4
+        ],
+        "status": "source retained; not garden golf ramp"
+      }
+    ]
+  },
+  "status": "design only; not implemented",
+  "date": "2026-10-06",
+  "project_context": "Thunder Muffin / Veluwe Weekends (VW/TM)",
+  "design_validation": {
+    "status": "passed data consistency, not gameplay",
+    "date": "2026-10-06",
+    "checks": [
+      {
+        "check": "unique room IDs",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 49
+      },
+      {
+        "check": "all source room IDs",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "all 39 retained"
+      },
+      {
+        "check": "all room graph endpoints",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "physical and visibility edges"
+      },
+      {
+        "check": "outdoor graph endpoints",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "named estate nodes"
+      },
+      {
+        "check": "retain footprint MANOR",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": [
+          72,
+          108,
+          80,
+          110
+        ]
+      },
+      {
+        "check": "retain footprint WING",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": [
+          108,
+          116,
+          92,
+          110
+        ]
+      },
+      {
+        "check": "retain footprint CONS",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": [
+          116,
+          130,
+          94,
+          112
+        ]
+      },
+      {
+        "check": "retain footprint POOL",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": [
+          119,
+          127,
+          97,
+          109
+        ]
+      },
+      {
+        "check": "retain footprint TERRACE",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": [
+          78,
+          102,
+          110,
+          117
+        ]
+      },
+      {
+        "check": "B01 reachable before studyKey",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "window/vide edges excluded, study blocked"
+      },
+      {
+        "check": "service access without bedroom",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "direct circulation edge"
+      },
+      {
+        "check": "route length arrival",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 85.721
+      },
+      {
+        "check": "route extent arrival",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "200x180 bounds"
+      },
+      {
+        "check": "route length shedRoute",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 49.49
+      },
+      {
+        "check": "route extent shedRoute",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "200x180 bounds"
+      },
+      {
+        "check": "route length shedFire",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 29.782
+      },
+      {
+        "check": "route extent shedFire",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "200x180 bounds"
+      },
+      {
+        "check": "route length southLoop",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 69.544
+      },
+      {
+        "check": "route extent southLoop",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "200x180 bounds"
+      },
+      {
+        "check": "route length eastLoop",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 152.17
+      },
+      {
+        "check": "route extent eastLoop",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "200x180 bounds"
+      },
+      {
+        "check": "route length boslustApproach",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 106.097
+      },
+      {
+        "check": "route extent boslustApproach",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "200x180 bounds"
+      },
+      {
+        "check": "route length fireReturn",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 118.456
+      },
+      {
+        "check": "route extent fireReturn",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "200x180 bounds"
+      },
+      {
+        "check": "route length cottageOut",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 84.869
+      },
+      {
+        "check": "route extent cottageOut",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "200x180 bounds"
+      },
+      {
+        "check": "route length cottageReturn",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 119.722
+      },
+      {
+        "check": "route extent cottageReturn",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "200x180 bounds"
+      },
+      {
+        "check": "route length terraceLanterns",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 14.5
+      },
+      {
+        "check": "route extent terraceLanterns",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "200x180 bounds"
+      },
+      {
+        "check": "route length lateTunnel",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 66.0
+      },
+      {
+        "check": "route extent lateTunnel",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "200x180 bounds"
+      },
+      {
+        "check": "route length cottageThreshold",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 5.15
+      },
+      {
+        "check": "route extent cottageThreshold",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "200x180 bounds"
+      },
+      {
+        "check": "route length wellness",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 19.046
+      },
+      {
+        "check": "route extent wellness",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "200x180 bounds"
+      },
+      {
+        "check": "route length jacuzziApproach",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 13.702
+      },
+      {
+        "check": "route extent jacuzziApproach",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "200x180 bounds"
+      },
+      {
+        "check": "route length bbqApproach",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 10.2
+      },
+      {
+        "check": "route extent bbqApproach",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "200x180 bounds"
+      },
+      {
+        "check": "route length golfLoop",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 51.502
+      },
+      {
+        "check": "route extent golfLoop",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "200x180 bounds"
+      },
+      {
+        "check": "route length wickermanLoop",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 99.787
+      },
+      {
+        "check": "route extent wickermanLoop",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "200x180 bounds"
+      },
+      {
+        "check": "route length eastGardenLoop",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 145.22
+      },
+      {
+        "check": "route extent eastGardenLoop",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "200x180 bounds"
+      },
+      {
+        "check": "route length lakeViewRoute",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 17.919
+      },
+      {
+        "check": "route extent lakeViewRoute",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "200x180 bounds"
+      },
+      {
+        "check": "grade cottageOut",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": {
+          "max": 0.075,
+          "limit": 0.08
+        }
+      },
+      {
+        "check": "grade cottageReturn",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": {
+          "max": 0.08,
+          "limit": 0.08
+        }
+      },
+      {
+        "check": "grade eastGardenLoop",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": {
+          "max": 0.05303,
+          "limit": 0.08
+        }
+      },
+      {
+        "check": "grade wickermanLoop",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": {
+          "max": 0.07107,
+          "limit": 0.08
+        }
+      },
+      {
+        "check": "grade saunaRamp",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": {
+          "max": 0.07927,
+          "limit": 0.08
+        }
+      },
+      {
+        "check": "grade terraceLanterns",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": {
+          "max": 0.075,
+          "limit": 0.08
+        }
+      },
+      {
+        "check": "dry full cottage pad",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": {
+          "min_ellipse_ratio": 1.1111,
+          "sample_grid": "101x101; full rectangular dry pad"
+        }
+      },
+      {
+        "check": "dry route cottageOut",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 1.8823
+      },
+      {
+        "check": "dry route cottageReturn",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 1.9876
+      },
+      {
+        "check": "dry route lakeViewRoute",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": 1.3403
+      },
+      {
+        "check": "conservative attic headroom atticLanding",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": {
+          "min_m": 2.214,
+          "limitation": "four-plane roof estimate; actual roof mesh/capsule not tested"
+        }
+      },
+      {
+        "check": "conservative attic headroom atticCommon",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": {
+          "min_m": 3.049,
+          "limitation": "four-plane roof estimate; actual roof mesh/capsule not tested"
+        }
+      },
+      {
+        "check": "conservative attic headroom atticStore",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": {
+          "min_m": 3.049,
+          "limitation": "four-plane roof estimate; actual roof mesh/capsule not tested"
+        }
+      },
+      {
+        "check": "conservative attic headroom atticLookout",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": {
+          "min_m": 3.572,
+          "limitation": "four-plane roof estimate; actual roof mesh/capsule not tested"
+        }
+      },
+      {
+        "check": "sauna top landing",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "1.2m level landing"
+      },
+      {
+        "check": "two leaves one logical gate",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "save ID and shared consKey gate retained"
+      },
+      {
+        "check": "all 68 source portal relations retained",
+        "result": "pass",
+        "scope": "design data only",
+        "detail": "49 explicit + 19 generated windows; traversal-vs-visibility annotated separately"
+      }
+    ],
+    "not_tested": [
+      "terrain mesh/collision",
+      "portal visibility",
+      "vehicle swept path",
+      "door swing vs capsule",
+      "actual roof/stair headroom",
+      "playtime",
+      "blind puzzle solving",
+      "performance",
+      "save load/migration"
+    ]
+  }
+}
