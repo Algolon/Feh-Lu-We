@@ -12,6 +12,7 @@ by a fictional organiser ("de Kwartiermaker") and is meant to be replaced — se
 - Published at https://algolon.github.io/Feh-Lu-We/ (GitHub Pages; see [Deploy](#deploy))
 - Build brief and concept art: [`docs/BUILD_BRIEF.md`](docs/BUILD_BRIEF.md), [`docs/concept-art/`](docs/concept-art/)
 - Spoilers: [`docs/PUZZLE_SOLUTIONS.md`](docs/PUZZLE_SOLUTIONS.md) · Playtest guide: [`docs/PLAYTEST.md`](docs/PLAYTEST.md) · Status/next steps: [`docs/HANDOFF.md`](docs/HANDOFF.md)
+- **DEV-02 estate structural blockout** (200 × 180, v0.2 variant A — the current world on this branch): [`docs/dev02/DEV02_BLOCKOUT.md`](docs/dev02/DEV02_BLOCKOUT.md)
 - DEV-01 slice review (`?review=dev01`, not merged): [`docs/dev01/DEV01_SLICE.md`](docs/dev01/DEV01_SLICE.md) · [`docs/dev01/REVIEW_SCRIPT.md`](docs/dev01/REVIEW_SCRIPT.md)
 - Iteration 3 ("Het huis dat zich herinnert"): [`docs/ITERATION_3_DESIGN.md`](docs/ITERATION_3_DESIGN.md) · [`docs/ITERATION_3_VALIDATION.md`](docs/ITERATION_3_VALIDATION.md) · [`docs/ART_DIRECTION.md`](docs/ART_DIRECTION.md)
 - Iteration 2 (review fixes): [`docs/ITERATION_2_REVIEW.md`](docs/ITERATION_2_REVIEW.md) · [`docs/ITERATION_2_VALIDATION.md`](docs/ITERATION_2_VALIDATION.md)
@@ -28,6 +29,8 @@ npm test             # unit tests (puzzle rules, progression, saves, collision)
 npm run build        # static site in dist/ (base path /Feh-Lu-We/)
 npm run preview      # serves dist at http://localhost:4173/Feh-Lu-We/
 npm run e2e          # browser checks against the preview server (see below)
+npm run e2e:dev02    # DEV-02 routes, stairs/railings, doors, culling, placement, saves
+npm run views:dev02  # DEV-02 screenshot set + draw calls per view (docs/dev02/shots)
 ```
 
 `npm run e2e` expects `npm run preview` running in another shell and a Chromium binary
@@ -106,14 +109,15 @@ Key design points:
 
 | Region | Footprint |
 |---|---|
-| Estate | 180 × 150, front gate (90, 0); terrain heightfield with rolling woodland and a hill |
-| Woodland (south) | Z 0–72 — shed (42, 39), fire clearing (21, 18), well (144, 39), old side gate (162, 18), fork signpost (55.5, 8.6) |
+| Estate | 200 × 180 (DEV-02, v0.2), front gate (90, 0); terrain with rolling woodland, the BOSLUST hill, north/east ridges, a +4 m plateau |
+| Woodland (south) | Z 0–72 — shed (42, 39), fire clearing (21, 18), well (144, 39), old side gate (162, 18), fork signpost (55.5, 8.6); golf tee north of the hill, wickerman clearing (167, 54) |
 | BOSLUST | door in the hill at (63, 18.2) behind a stone-walled cut; stair down to chambers at Y −3.4; tunnel north to the basement |
-| Manor | X 72–108, Z 80–110, two storeys + basement; service wing X 108–116, Z 92–110 |
-| Pool conservatory | X 116–130, Z 94–112 (pool inside); barrel sauna outside to its right at (134, 102) |
-| Garden | lawn north of the manor: terrace, lantern circle (90, 128), cottage X 32–42 Z 128–136, pond (48, 132) |
+| Arrival | gravel court X 80–100 / Z 61–78, five parking bays (four cars) |
+| Manor | X 72–108, Z 80–110, two storeys + attic (+6.65, stair S03) + basement; service wing X 108–116, Z 92–110 (utility) |
+| Copacabana Room | X 116–130, Z 94–112 (pool inside, double door east); wellness deck X 130–148 with barrel sauna (134, 102) and jacuzzi |
+| Garden | terrace + BBQ / outdoor dining / bong & handpan / balloon nook; lantern circle (90, 128); lake (54, 146, 44 × 24); Portugal cottage X 20–30 Z 157–165 on a +4 plateau; east glade loop |
 
-Full room list and design notes: [`docs/ITERATION_3_DESIGN.md`](docs/ITERATION_3_DESIGN.md).
+Full room list and design notes: [`docs/dev02/DEV02_BLOCKOUT.md`](docs/dev02/DEV02_BLOCKOUT.md), [`docs/design/v0.2/LEVEL_PLAN.md`](docs/design/v0.2/LEVEL_PLAN.md) (earlier: [`docs/ITERATION_3_DESIGN.md`](docs/ITERATION_3_DESIGN.md)).
 
 ## Deploy
 

@@ -1,0 +1,645 @@
+{
+  "rows": [
+    {
+      "name": "01-gate-drive",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 3,
+        "yaw": 0,
+        "pitch": 0.02
+      },
+      "low": {
+        "calls": 135,
+        "triangles": 226174
+      },
+      "high": {
+        "calls": 157,
+        "triangles": 310274
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "02-arrival-court",
+      "pose": {
+        "x": 88,
+        "y": 0,
+        "z": 62,
+        "yaw": 0.06981317007977318,
+        "pitch": 0.06
+      },
+      "low": {
+        "calls": 129,
+        "triangles": 205527
+      },
+      "high": {
+        "calls": 173,
+        "triangles": 325983
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "03-parking-west",
+      "pose": {
+        "x": 84,
+        "y": 0,
+        "z": 68,
+        "yaw": -1.0471975511965976,
+        "pitch": -0.05
+      },
+      "low": {
+        "calls": 83,
+        "triangles": 178026
+      },
+      "high": {
+        "calls": 128,
+        "triangles": 284018
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "04-hall-maquette",
+      "pose": {
+        "x": 88.6,
+        "y": 0.15,
+        "z": 92.2,
+        "yaw": -1.2217304763960306,
+        "pitch": -0.25
+      },
+      "low": {
+        "calls": 100,
+        "triangles": 215348
+      },
+      "high": {
+        "calls": 156,
+        "triangles": 352251
+      },
+      "room": "hall",
+      "feetY": 0.15
+    },
+    {
+      "name": "05-hall-stair",
+      "pose": {
+        "x": 89.5,
+        "y": 0.15,
+        "z": 86,
+        "yaw": 0.5235987755982988,
+        "pitch": 0.15
+      },
+      "low": {
+        "calls": 187,
+        "triangles": 217473
+      },
+      "high": {
+        "calls": 245,
+        "triangles": 357256
+      },
+      "room": "hall",
+      "feetY": 0.15
+    },
+    {
+      "name": "06-stair-railing",
+      "pose": {
+        "x": 94,
+        "y": 1.6,
+        "z": 90.4,
+        "yaw": 0,
+        "pitch": -0.25
+      },
+      "low": {
+        "calls": 147,
+        "triangles": 209242
+      },
+      "high": {
+        "calls": 206,
+        "triangles": 351525
+      },
+      "room": "hall",
+      "feetY": 1.54
+    },
+    {
+      "name": "07-upper-corridor-attic-door",
+      "pose": {
+        "x": 99.5,
+        "y": 3.35,
+        "z": 97.3,
+        "yaw": -1.5707963267948966,
+        "pitch": 0
+      },
+      "low": {
+        "calls": 85,
+        "triangles": 74334
+      },
+      "high": {
+        "calls": 101,
+        "triangles": 121870
+      },
+      "room": "ucorr",
+      "feetY": 3.35
+    },
+    {
+      "name": "08-attic-stair",
+      "pose": {
+        "x": 97.2,
+        "y": 3.35,
+        "z": 99.2,
+        "yaw": 0,
+        "pitch": 0.35
+      },
+      "low": {
+        "calls": 33,
+        "triangles": 28716
+      },
+      "high": {
+        "calls": 44,
+        "triangles": 42088
+      },
+      "room": "atticStair",
+      "feetY": 3.35
+    },
+    {
+      "name": "09-attic-common",
+      "pose": {
+        "x": 93.5,
+        "y": 6.65,
+        "z": 99.2,
+        "yaw": -1.7453292519943295,
+        "pitch": 0.05
+      },
+      "low": {
+        "calls": 35,
+        "triangles": 28392
+      },
+      "high": {
+        "calls": 43,
+        "triangles": 37372
+      },
+      "room": "atticCommon",
+      "feetY": 6.65
+    },
+    {
+      "name": "10-attic-lookout",
+      "pose": {
+        "x": 96.2,
+        "y": 6.65,
+        "z": 97.2,
+        "yaw": 2.6179938779914944,
+        "pitch": 0.05
+      },
+      "low": {
+        "calls": 26,
+        "triangles": 25248
+      },
+      "high": {
+        "calls": 34,
+        "triangles": 34228
+      },
+      "room": "atticLookout",
+      "feetY": 6.65
+    },
+    {
+      "name": "11-north-guest-room",
+      "pose": {
+        "x": 100.2,
+        "y": 3.35,
+        "z": 99.6,
+        "yaw": 1.0471975511965976,
+        "pitch": -0.1
+      },
+      "low": {
+        "calls": 28,
+        "triangles": 27796
+      },
+      "high": {
+        "calls": 39,
+        "triangles": 41168
+      },
+      "room": "storage",
+      "feetY": 3.35
+    },
+    {
+      "name": "12-guest-wc-lobby",
+      "pose": {
+        "x": 89.5,
+        "y": 0.15,
+        "z": 100.5,
+        "yaw": -2.6179938779914944,
+        "pitch": -0.1
+      },
+      "low": {
+        "calls": 138,
+        "triangles": 239212
+      },
+      "high": {
+        "calls": 195,
+        "triangles": 370159
+      },
+      "room": "lobby",
+      "feetY": 0.15
+    },
+    {
+      "name": "13-utility",
+      "pose": {
+        "x": 114.4,
+        "y": 0.15,
+        "z": 102.4,
+        "yaw": 0,
+        "pitch": -0.15
+      },
+      "low": {
+        "calls": 35,
+        "triangles": 23020
+      },
+      "high": {
+        "calls": 50,
+        "triangles": 36880
+      },
+      "room": "corridor",
+      "feetY": 0.15
+    },
+    {
+      "name": "14-dining-game",
+      "pose": {
+        "x": 97.4,
+        "y": 0.15,
+        "z": 83,
+        "yaw": 1.0471975511965976,
+        "pitch": -0.2
+      },
+      "low": {
+        "calls": 132,
+        "triangles": 200335
+      },
+      "high": {
+        "calls": 190,
+        "triangles": 344262
+      },
+      "room": "dining",
+      "feetY": 0.15
+    },
+    {
+      "name": "15-copacabana-inside",
+      "pose": {
+        "x": 120.5,
+        "y": 0.15,
+        "z": 99.5,
+        "yaw": 1.0471975511965976,
+        "pitch": -0.05
+      },
+      "low": {
+        "calls": 83,
+        "triangles": 131401
+      },
+      "high": {
+        "calls": 130,
+        "triangles": 220084
+      },
+      "room": "cons",
+      "feetY": 0.15
+    },
+    {
+      "name": "16-copacabana-double-door",
+      "pose": {
+        "x": 137,
+        "y": 0.15,
+        "z": 106,
+        "yaw": -1.5707963267948966,
+        "pitch": 0
+      },
+      "low": {
+        "calls": 151,
+        "triangles": 190463
+      },
+      "high": {
+        "calls": 195,
+        "triangles": 272442
+      },
+      "room": "out",
+      "feetY": 0.15
+    },
+    {
+      "name": "17-wellness-deck",
+      "pose": {
+        "x": 132,
+        "y": 0.15,
+        "z": 114,
+        "yaw": 2.2689280275926285,
+        "pitch": -0.05
+      },
+      "low": {
+        "calls": 81,
+        "triangles": 163867
+      },
+      "high": {
+        "calls": 123,
+        "triangles": 242326
+      },
+      "room": "out",
+      "feetY": 0.15
+    },
+    {
+      "name": "18-social-garden",
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 113.6,
+        "yaw": 0,
+        "pitch": -0.02
+      },
+      "low": {
+        "calls": 72,
+        "triangles": 138446
+      },
+      "high": {
+        "calls": 117,
+        "triangles": 216653
+      },
+      "room": "out",
+      "feetY": 0.15
+    },
+    {
+      "name": "19-terrace-to-lake",
+      "pose": {
+        "x": 82,
+        "y": 0.15,
+        "z": 116.5,
+        "yaw": -0.8726646259971648,
+        "pitch": 0.02
+      },
+      "low": {
+        "calls": 59,
+        "triangles": 135128
+      },
+      "high": {
+        "calls": 101,
+        "triangles": 202916
+      },
+      "room": "out",
+      "feetY": 0.15
+    },
+    {
+      "name": "20-lake-view",
+      "pose": {
+        "x": 77,
+        "y": 0,
+        "z": 138.5,
+        "yaw": -1.2217304763960306,
+        "pitch": 0.02
+      },
+      "low": {
+        "calls": 39,
+        "triangles": 122986
+      },
+      "high": {
+        "calls": 69,
+        "triangles": 182898
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "21-cottage-approach",
+      "pose": {
+        "x": 18.5,
+        "y": 3,
+        "z": 139.5,
+        "yaw": 0.17453292519943295,
+        "pitch": 0.02
+      },
+      "low": {
+        "calls": 37,
+        "triangles": 117622
+      },
+      "high": {
+        "calls": 59,
+        "triangles": 162448
+      },
+      "room": "out",
+      "feetY": 3.35
+    },
+    {
+      "name": "22-cottage-terrace",
+      "pose": {
+        "x": 25,
+        "y": 4.15,
+        "z": 152.8,
+        "yaw": 0.3490658503988659,
+        "pitch": -0.05
+      },
+      "low": {
+        "calls": 38,
+        "triangles": 118622
+      },
+      "high": {
+        "calls": 57,
+        "triangles": 162212
+      },
+      "room": "out",
+      "feetY": 4.15
+    },
+    {
+      "name": "23-from-cottage-terrace",
+      "pose": {
+        "x": 26.5,
+        "y": 4.15,
+        "z": 153,
+        "yaw": 2.0943951023931953,
+        "pitch": -0.08
+      },
+      "low": {
+        "calls": 101,
+        "triangles": 178780
+      },
+      "high": {
+        "calls": 120,
+        "triangles": 222370
+      },
+      "room": "out",
+      "feetY": 4.15
+    },
+    {
+      "name": "24-cottage-return",
+      "pose": {
+        "x": 60,
+        "y": 1,
+        "z": 166.5,
+        "yaw": 1.9198621771937625,
+        "pitch": -0.02
+      },
+      "low": {
+        "calls": 96,
+        "triangles": 176215
+      },
+      "high": {
+        "calls": 117,
+        "triangles": 223025
+      },
+      "room": "out",
+      "feetY": 1.21
+    },
+    {
+      "name": "25-east-glade",
+      "pose": {
+        "x": 150,
+        "y": 2,
+        "z": 144,
+        "yaw": 1.2217304763960306,
+        "pitch": 0
+      },
+      "low": {
+        "calls": 24,
+        "triangles": 118460
+      },
+      "high": {
+        "calls": 61,
+        "triangles": 198392
+      },
+      "room": "out",
+      "feetY": 2.22
+    },
+    {
+      "name": "26-east-ridge-path",
+      "pose": {
+        "x": 174,
+        "y": 2.4,
+        "z": 132,
+        "yaw": 3.141592653589793,
+        "pitch": 0
+      },
+      "low": {
+        "calls": 79,
+        "triangles": 176707
+      },
+      "high": {
+        "calls": 112,
+        "triangles": 249946
+      },
+      "room": "out",
+      "feetY": 2.31
+    },
+    {
+      "name": "27-golf-tee",
+      "pose": {
+        "x": 66,
+        "y": 0,
+        "z": 57,
+        "yaw": -2.6179938779914944,
+        "pitch": 0.05
+      },
+      "low": {
+        "calls": 74,
+        "triangles": 178094
+      },
+      "high": {
+        "calls": 117,
+        "triangles": 296702
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "28-wickerman",
+      "pose": {
+        "x": 158,
+        "y": 1,
+        "z": 50,
+        "yaw": 1.0471975511965976,
+        "pitch": 0.08
+      },
+      "low": {
+        "calls": 50,
+        "triangles": 160002
+      },
+      "high": {
+        "calls": 79,
+        "triangles": 286690
+      },
+      "room": "out",
+      "feetY": 0.91
+    },
+    {
+      "name": "29-shed-forest",
+      "pose": {
+        "x": 50,
+        "y": 0,
+        "z": 44,
+        "yaw": -2.2,
+        "pitch": 0
+      },
+      "low": {
+        "calls": 58,
+        "triangles": 183122
+      },
+      "high": {
+        "calls": 95,
+        "triangles": 297590
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "30-boslust-cut",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 9,
+        "yaw": 0,
+        "pitch": 0.08
+      },
+      "low": {
+        "calls": 133,
+        "triangles": 246540
+      },
+      "high": {
+        "calls": 158,
+        "triangles": 352444
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "31-garden-to-manor",
+      "pose": {
+        "x": 92,
+        "y": 0,
+        "z": 136,
+        "yaw": 2.827433388230814,
+        "pitch": 0
+      },
+      "low": {
+        "calls": 145,
+        "triangles": 195635
+      },
+      "high": {
+        "calls": 179,
+        "triangles": 264079
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "32-estate-north-edge",
+      "pose": {
+        "x": 110,
+        "y": 2,
+        "z": 166,
+        "yaw": 3.490658503988659,
+        "pitch": -0.02
+      },
+      "low": {
+        "calls": 116,
+        "triangles": 189823
+      },
+      "high": {
+        "calls": 139,
+        "triangles": 244135
+      },
+      "room": "out",
+      "feetY": 2.05
+    }
+  ],
+  "problems": []
+}

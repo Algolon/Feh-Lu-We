@@ -1,0 +1,256 @@
+{
+  "results": [
+    {
+      "name": "arrival: gate → front door → hall walked through the court between the parked cars",
+      "ok": true,
+      "detail": "{\"maxDy\":0.15,\"minY\":0,\"maxY\":0.15,\"sec\":17.1,\"dist\":83.7,\"pos\":{\"x\":90,\"y\":0.15,\"z\":85.84},\"room\":\"hall\"}"
+    },
+    {
+      "name": "hall maquette: against the west wall, inspectable as an object (memory recorded), a miniature of this house",
+      "ok": true,
+      "detail": "{\"r\":{\"maxDy\":0,\"minY\":0.15,\"maxY\":0.15,\"sec\":2.9,\"dist\":8.9,\"pos\":{\"x\":86.82,\"y\":0.15,\"z\":94.21},\"room\":\"hall\"},\"title\":\"Maquette van het huis\",\"body\":\"Een maquette van dit huis, keurig op schaal: het hoofdgebouw met zijn grote schilddak, de dienstvleugel en de glazen ser\",\"clue\":true}"
+    },
+    {
+      "name": "S01 grand stair: a full-height railing on the open side — no stepping off mid-flight into the hall",
+      "ok": true,
+      "detail": "{\"x\":93.42,\"y\":1.49,\"z\":90.27,\"y0\":1.49,\"minY\":1.49}"
+    },
+    {
+      "name": "S01 grand stair: continuous feet height up to the upper floor (+3.35), no jump > 0.45 m per step",
+      "ok": true,
+      "detail": "{\"up\":0.038,\"top\":{\"x\":93.13,\"y\":3.35,\"z\":97.15}}"
+    },
+    {
+      "name": "S03 attic stair: walked from the upper corridor to the attic (+3.35 → +5.00 → +6.65), no jump > 0.45 m",
+      "ok": true,
+      "detail": "{\"mid\":{\"x\":97.24,\"y\":5,\"z\":102.71},\"attic\":{\"x\":90.24,\"y\":6.65,\"z\":99.2},\"room\":\"atticCommon\",\"maxDy\":0.07}"
+    },
+    {
+      "name": "S03 railings: flight 1 | lane, middle landing edge, between the flights, upper landing over the well — all hold",
+      "ok": true,
+      "detail": "{\"lane\":{\"x\":97.56,\"y\":3.99,\"z\":100.78,\"y0\":3.99,\"minY\":3.99},\"midN\":{\"x\":97.24,\"y\":5,\"z\":103.2,\"y0\":5,\"minY\":5},\"mid\":{\"x\":96.06,\"y\":5.74,\"z\":101.19,\"y0\":5.74,\"minY\":5.74},\"top\":{\"x\":97.39,\"y\":6.65,\"z\":99.42,\"y0\":6.65,\"minY\":6.65}}"
+    },
+    {
+      "name": "attic: weekend attic, seasonal store (the old games box memory, same id) and the lookout are walkable rooms",
+      "ok": true,
+      "detail": "{\"store\":\"atticStore\",\"mem\":true,\"look\":\"atticLookout\",\"y\":6.65}"
+    },
+    {
+      "name": "upper side loop: attic stair rear door → rear nook east (linen reached centrally) → rear nook → landing",
+      "ok": true,
+      "detail": "{\"down\":{\"x\":97.2,\"y\":3.35,\"z\":99.41},\"downDy\":0.117,\"nookE\":\"rearNookEast\",\"linen\":true,\"nook\":\"rearNook\",\"landing\":\"landing\"}"
+    },
+    {
+      "name": "ground floor: guest WC off the back lobby and the utility off the service corridor are real rooms with doors",
+      "ok": true,
+      "detail": "{\"down\":{\"x\":90.21,\"y\":0.15,\"z\":85.51},\"wc\":\"guestWC\",\"ut\":\"utility\"}"
+    },
+    {
+      "name": "Copacabana double door: both leaves solid while closed, ONE saved state opens both (both colliders follow)",
+      "ok": true,
+      "detail": "{\"a\":129.63,\"b\":129.63,\"before\":[true,true],\"open\":{\"state\":true,\"colliders\":[false,false]},\"closed\":[true,true],\"back\":130.38}"
+    },
+    {
+      "name": "sauna: reached by the ramp onto a flat landing (+0.80) and in on its real floor; no stepping onto the ramp sideways",
+      "ok": true,
+      "detail": "{\"ramp\":0.008,\"top\":{\"x\":133.99,\"y\":0.8,\"z\":105.1},\"inside\":{\"x\":134,\"y\":0.8,\"z\":102.03},\"side\":{\"x\":133.69,\"y\":0.45,\"z\":109.62,\"y0\":0.45,\"minY\":0.45}}"
+    },
+    {
+      "name": "house: no console errors / 404s",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Copacabana double door keeps the consKey gate: locked, neither leaf lets you through (no half-door bypass)",
+      "ok": true,
+      "detail": "{\"label\":\"Op slot\",\"a\":129.63,\"b\":129.63,\"open\":false}"
+    },
+    {
+      "name": "gate: no console errors / 404s",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "garden: wellness deck → terrace → lantern lawn → dry lake viewpoint (bench memory, same id)",
+      "ok": true,
+      "detail": "{\"a\":{\"x\":90,\"y\":0,\"z\":124.38},\"b\":{\"x\":79.35,\"y\":0,\"z\":138.87}}"
+    },
+    {
+      "name": "lake: the water stops the player at a dry shore (no wading, no fall)",
+      "ok": true,
+      "detail": "{\"x\":76.22,\"y\":0,\"z\":141.08,\"y0\":0,\"minY\":0}"
+    },
+    {
+      "name": "Portugal cottage: walked out from the terrace (+0 → +4) onto the covered terrace (+4.15) and inside (cottageRoom), grade-smooth",
+      "ok": true,
+      "detail": "{\"out\":{\"sec\":26.7,\"dist\":84.2,\"maxDy\":0.06},\"terrace\":{\"x\":25,\"y\":4.15,\"z\":155.79}}"
+    },
+    {
+      "name": "cottage plateau: dry, the steep lake side is walled (no fall towards the water)",
+      "ok": true,
+      "detail": "{\"x\":31.5,\"y\":4,\"z\":152.26,\"y0\":4,\"minY\":4}"
+    },
+    {
+      "name": "cottage return: a different route back to the lantern lawn, no jump",
+      "ok": true,
+      "detail": "{\"sec\":40.8,\"dist\":128,\"maxDy\":0.15}"
+    },
+    {
+      "name": "east garden loop: lantern side → east glade → ridge path (≤ +2.5) → wellness deck, walkable end to end",
+      "ok": true,
+      "detail": "{\"sec\":46.3,\"dist\":146.5,\"maxY\":2.57,\"maxDy\":0.024}"
+    },
+    {
+      "name": "outdoors: no console errors / 404s",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "golf: the tee behind (north of) the BOSLUST hill on the forecourt → shed path; the cardboard chute is not walkable",
+      "ok": true,
+      "detail": "{\"tee\":{\"x\":63.08,\"y\":0,\"z\":51.52},\"chute\":{\"x\":63.08,\"y\":0.04,\"z\":49.3,\"y0\":0,\"minY\":0}}"
+    },
+    {
+      "name": "wickerman: a separate clearing at +1.2 reached by its own loop from the well path, and back to the east path",
+      "ok": true,
+      "detail": "{\"clearing\":{\"x\":164.49,\"y\":1.2,\"z\":52},\"loop\":{\"sec\":32.9,\"dist\":101.69999999999999}}"
+    },
+    {
+      "name": "forest: no console errors / 404s",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "culling: the sauna shell stays drawn from all four sides with its door closed, and from inside (VD-03)",
+      "ok": true,
+      "detail": "{\"south\":{\"n\":2,\"on\":2},\"west\":{\"n\":2,\"on\":2},\"east\":{\"n\":2,\"on\":2},\"north\":{\"n\":2,\"on\":2},\"inside\":{\"n\":2,\"on\":2},\"room\":\"sauna\"}"
+    },
+    {
+      "name": "culling: the manor shell and the cottage (landmark across the lake) are drawn from the garden; the attic contents are not",
+      "ok": true,
+      "detail": "{\"atDeck\":{\"cottage\":{\"n\":8,\"on\":0},\"manor\":{\"n\":6,\"on\":6}},\"atTerrace\":{\"cottage\":{\"n\":8,\"on\":8},\"attic\":{\"n\":5,\"on\":0}}}"
+    },
+    {
+      "name": "placement: no vegetation instance in a building, on a platform/parking bay/reservation, or in the lake",
+      "ok": true,
+      "detail": "{\"n\":8904,\"count\":0,\"bad\":[]}"
+    },
+    {
+      "name": "culling: no console errors / 404s",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "save/load: an attic pose and an open new door survive a reload (STATE_VERSION 4, no migration)",
+      "ok": true,
+      "detail": "{\"a\":{\"p\":{\"x\":90,\"y\":6.65,\"z\":99.2},\"room\":\"atticCommon\"},\"b\":{\"p\":{\"x\":90,\"y\":6.65,\"z\":99.2},\"room\":\"atticCommon\",\"open\":true,\"inv\":5}}"
+    },
+    {
+      "name": "save/load: a pose on the new cottage terrace (+4.15, Z 154) is valid on load",
+      "ok": true,
+      "detail": "{\"p\":{\"x\":25,\"y\":4.15,\"z\":154.5},\"room\":\"out\"}"
+    },
+    {
+      "name": "save/load: legacy pose (old cottage room) → named safe relocation \"cottage\", progress kept",
+      "ok": true,
+      "detail": "{\"p\":{\"x\":25,\"y\":4.15,\"z\":153.6},\"cp\":{\"x\":25,\"y\":4.15,\"z\":153.6,\"yaw\":0,\"pitch\":0},\"ev\":[\"old cottage position → cottage\"],\"inv\":6,\"flag\":true}"
+    },
+    {
+      "name": "save/load: legacy pose (old pond bench) → named safe relocation \"lake\", progress kept",
+      "ok": true,
+      "detail": "{\"p\":{\"x\":80,\"y\":0,\"z\":136.4},\"cp\":{\"x\":80,\"y\":0,\"z\":136.4,\"yaw\":-1.2,\"pitch\":0},\"ev\":[\"old pond position → lake\"],\"inv\":6,\"flag\":true}"
+    },
+    {
+      "name": "save/load: legacy pose (old storage room (now the attic stair)) → named safe relocation \"ucorr\", progress kept",
+      "ok": true,
+      "detail": "{\"p\":{\"x\":100,\"y\":3.35,\"z\":97.3},\"cp\":{\"x\":100,\"y\":3.35,\"z\":97.3,\"yaw\":1.5707963267948966,\"pitch\":0},\"ev\":[\"old storage room, now the attic stair → ucorr\"],\"inv\":6,\"flag\":true}"
+    },
+    {
+      "name": "saves: no console errors / 404s",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "timings": {
+    "arrival": {
+      "maxDy": 0.15,
+      "minY": 0,
+      "maxY": 0.15,
+      "sec": 17.1,
+      "dist": 83.7,
+      "pos": {
+        "x": 90,
+        "y": 0.15,
+        "z": 85.84
+      },
+      "room": "hall"
+    },
+    "cottageOut": {
+      "maxDy": 0.06,
+      "minY": 0,
+      "maxY": 4.15,
+      "sec": 26.7,
+      "dist": 84.2,
+      "pos": {
+        "x": 24.79,
+        "y": 4,
+        "z": 151.98
+      },
+      "room": "out"
+    },
+    "cottageReturn": {
+      "maxDy": 0.15,
+      "minY": 0,
+      "maxY": 4.15,
+      "sec": 40.8,
+      "dist": 128,
+      "pos": {
+        "x": 91.99,
+        "y": 0,
+        "z": 126.23
+      },
+      "room": "out"
+    },
+    "eastGardenLoop": {
+      "maxDy": 0.024,
+      "minY": 0,
+      "maxY": 2.57,
+      "sec": 46.3,
+      "dist": 146.5,
+      "pos": {
+        "x": 145.19,
+        "y": 0.15,
+        "z": 107.86
+      },
+      "room": "out"
+    },
+    "wickermanLoop": {
+      "a": {
+        "maxDy": 0.008,
+        "minY": 0,
+        "maxY": 1.2,
+        "sec": 8.4,
+        "dist": 25.9,
+        "pos": {
+          "x": 164.49,
+          "y": 1.2,
+          "z": 52
+        },
+        "room": "out"
+      },
+      "b": {
+        "maxDy": 0.004,
+        "minY": 0.01,
+        "maxY": 1.2,
+        "sec": 24.5,
+        "dist": 75.8,
+        "pos": {
+          "x": 113.18,
+          "y": 0.01,
+          "z": 62.57
+        },
+        "room": "out"
+      }
+    }
+  }
+}
