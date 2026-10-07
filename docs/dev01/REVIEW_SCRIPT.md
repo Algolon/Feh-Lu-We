@@ -14,7 +14,7 @@ have **not** seen the solutions. One host observes and notes; the tester thinks 
   every moment of confusion (quote it), and the `?debug=1` FPS in the hall, library and U04 if available.
 
 Say only: *"Je komt aan bij een landhuis. Kijk rond, lees wat je vindt en praat hardop. Er is geen haast."*
-Do not mention the photo, the album, the drawing sheets or the clips.
+Do not mention the photo/image, the album, the drawing sheets, the practice card or the clips.
 
 ## Phase 1 — arrival → drawer → register (G01–G03)
 
@@ -25,11 +25,14 @@ Ask after the register: *"Wat staat er nu in je notitieboek? Wat is het verschil
 
 - [ ] Before reading the register the notebook shows no topics, no "next step".
 - [ ] After reading, the tester can say where the three topics came from (the register, verbatim).
-- [ ] *Mijn aandacht*: does the tester expect it to change the house? (It must not.) Note what they expect.
+- [ ] *Mijn aandacht*: does the tester expect it to change the house? (It must not.) Note what they expect, and
+  whether they want it in the HUD (*Mijn aandacht in beeld tonen*, off by default).
 
 ## Phase 2 — B01 (library → upstairs → library)
 
 Observe without hinting:
+- [ ] Does the tester read the practice card (*Oefenkaart bekijken*) and does it teach the relation before the three
+  matches? Does anyone think the wave is a fourth slot?
 - [ ] Does the tester understand **object pair → clip → slot**? At which step do they get it?
 - [ ] Do they look for rooms by **content** (what lies on the table) rather than by labels? (There are no plaques
   and no room names on the map in this build.) Quote how they describe where they are going.
@@ -37,18 +40,22 @@ Observe without hinting:
 - [ ] Do they think DS01 objects (maquette note, album, letter, photo) belong to B01? Note any attempt to use them.
 - [ ] Can they compare a sheet sketch with the upstairs objects on the phone? (Tekenblad *Bekijken* → *Vergroten*;
   Waarnemingen keeps the sketches.) Note squinting / zooming / walking closer.
+- [ ] Do they find **Controleer** on their own, and is "Leg eerst in elk vak een tekenblad" understood as no attempt?
 - [ ] Wrong full set: is the neutral line understood as "not yet" (not as a hint about a specific slot)?
 - [ ] Do they use **Notities** from the table and come back? Is their selection still there?
 - [ ] Hints: which level did they open, and was level 0 (riddle name only) useful or annoying?
 
-Ask after solving: *"Hoe wist je welke map in welk vak moest?"* — a good answer names the clip shape.
+Ask after solving: *"Hoe wist je welk tekenblad in welk vak moest?"* — a good answer names both details and the clip
+attached to the group.
 
 ## Phase 3 — DS01 (optional discovery; never steer)
 
-- [ ] Does the tester follow a reference spontaneously (note → album; letter → "kamer met de koffers")?
+- [ ] Does the tester follow a reference spontaneously (note → album on the *leesplank*; letter → "boven bij het raam,
+  naast de koffers en het kleine droogrek")?
 - [ ] If they found the photo first (C-first), does the album later make sense to them?
-- [ ] Do they turn the photo over (*Omdraaien*) on their own?
-- [ ] Ask: *"Waarom hangt die foto daar?"* — can they explain it (tea spilled, put to dry)?
+- [ ] Do they turn the image over (*Omkeren*) on their own?
+- [ ] Ask: *"Waarom hangt die foto daar?"* — can they explain it (water on the photo, hung up to dry)?
+- [ ] Ask: *"Leek de foto nodig voor de lade van de leestafel?"* (PD v0.2 §6.7: nobody should think so).
 - [ ] Ask: *"Voelde dat als een opdracht of als iets wat je ontdekte?"*
 
 ## Phase 4 — notebook as memory aid

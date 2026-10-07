@@ -189,6 +189,7 @@ body.reduced-motion * { transition: none !important; animation: none !important;
 .reg-topic p { margin: 2px 0 8px; font-style: italic; }
 .attention .btn.on, .tabs .btn.on { background: var(--amber); }
 .own { background: #fff8e8; border-radius: 12px; padding: 8px 12px; margin: 8px 0; }
+.own:not(.mem) { border: 2px dashed #c9a46a; } /* UX v0.2 §2.1: own idea = dashed border + "Mijn idee" */
 .result { margin: 4px 0; }
 .riddle { background: #efe2c2; border-radius: 12px; padding: 8px 12px; margin: 6px 0 10px; }
 .slice-hint { border-left-style: dashed; background: #fffbea; }

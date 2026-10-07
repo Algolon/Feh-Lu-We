@@ -17,14 +17,14 @@ import * as D from './drawings';
 const COLS = 6, ROWS = 4, CELL = 256;
 const CELLS = {
   slot_punt: 0, slot_rond: 1, slot_vierkant: 2, folio_stars: 3, folio_plants: 4, folio_travel: 5,
-  clip_rond: 6, clip_punt: 7, clip_vierkant: 8, notebook: 9, fern: 10, scissors: 11,
+  practice: 6, notebook: 9, fern: 10, scissors: 11,
   label: 12, note: 13, album: 14, letter: 15, photo: 16, maquette: 17,
 } as const;
 type CellId = keyof typeof CELLS;
 const ART: Record<CellId, () => string> = {
   slot_punt: () => D.slotMark('punt'), slot_rond: () => D.slotMark('rond'), slot_vierkant: () => D.slotMark('vierkant'),
   folio_stars: () => D.folioPage('stars'), folio_plants: () => D.folioPage('plants'), folio_travel: () => D.folioPage('travel'),
-  clip_rond: () => D.clipCard('rond'), clip_punt: () => D.clipCard('punt'), clip_vierkant: () => D.clipCard('vierkant'),
+  practice: D.practiceCard,
   notebook: D.objectArt.notebook, fern: D.objectArt.fern, scissors: D.objectArt.scissors, label: D.objectArt.label,
   note: D.noteCard, album: D.albumSpread, letter: D.letterSheet, photo: D.photoFront, maquette: D.maquetteView,
 };
@@ -168,6 +168,10 @@ export function sliceLibraryTable(w: World, g: GameApi, c: Ctx, deskDrawer: { sl
   // re-anchor the hitbox on the table (the folio group sits at the origin)
   w.byId.get(SLICE_IDS.table)!.hit[0].position.copy(v3(tx, y + 0.1, tz));
   w.byId.get(SLICE_IDS.table)!.focus.copy(v3(tx, y + 0.1, tz));
+  // the local practice card (PD v0.2 §4.2) at the south end (the reading lamp stands at the north end): drawn key +
+  // cord loop + wave box, the originals beside it on a wave clip. Read through the table panel (one inspection for
+  // the table); it is not a slot and takes no input.
+  flat(c, a, 'practice', tx - 0.22, y + 0.003, tz - 0.9, 0.3, 0.19, -Math.PI / 2);
   // drawer contents: the brass key (reward) and a separate card (an ordinary source, never read automatically)
   const key = compound((b) => { box(b, k.M.paint, '#c9a44c', 0, 0, 0, 0.05, 0.015, 0.16); box(b, k.M.paint, '#f5eedc', 0.04, 0.012, 0.09, 0.06, 0.004, 0.05); });
   key.position.set(0.05, -0.04, -0.12);
@@ -194,13 +198,12 @@ function sliceLibraryDs01(w: World, g: GameApi, c: Ctx, a: Atlas) {
   box(c.b, k.M.wood, '#6b4426', p.x, p.y + p.h - 0.04, p.z, p.w, 0.04, p.d, { chunk: c.chunk, uv: 1 });
   box(c.b, k.M.wood, '#4a2f1a', p.x - p.w / 2 + 0.02, p.y + p.h, p.z, 0.03, 0.04, p.d, { chunk: c.chunk }); // back rim
   c.col.addBox(p.x - p.w / 2, p.x + p.w / 2, p.z - p.d / 2, p.z + p.d / 2, p.y, p.y + p.h);
-  const al = p.parts!.find((q) => q.id === SLICE_IDS.dsAlbum)!, le = p.parts!.find((q) => q.id === SLICE_IDS.dsLetter)!;
-  // open album (dark card pages) with one empty photo corner; the letter lies folded beside it
-  box(c.b, k.M.paint, '#4a3426', p.x + al.dx, top(p), p.z + al.dz, 0.36, 0.03, 0.5, { chunk: c.chunk });
-  flat(c, a, 'album', p.x + al.dx, top(p) + 0.032, p.z + al.dz, 0.48, 0.3, -Math.PI / 2);
-  flat(c, a, 'letter', p.x + le.dx, top(p) + 0.006, p.z + le.dz, 0.17, 0.2, -Math.PI / 2 + 0.25);
-  inspectAt(w, g, p, SLICE_IDS.dsAlbum, SRC.dsAlbum, 'Bekijken: album', [0.42, 0.18, 0.4]);
-  inspectAt(w, g, p, SLICE_IDS.dsLetter, SRC.dsLetter, 'Lezen: briefje', [0.26, 0.14, 0.24]);
+  const al = p.parts!.find((q) => q.id === SLICE_IDS.dsAlbum)!;
+  // open album (dark card pages) on the page of the first house, with the loose letter lying in it: one reading cluster
+  box(c.b, k.M.paint, '#4a3426', p.x + al.dx, top(p), p.z + al.dz - 0.1, 0.36, 0.03, 0.5, { chunk: c.chunk });
+  flat(c, a, 'album', p.x + al.dx, top(p) + 0.032, p.z + al.dz - 0.1, 0.48, 0.3, -Math.PI / 2);
+  flat(c, a, 'letter', p.x + al.dx + 0.03, top(p) + 0.036, p.z + al.dz + 0.2, 0.14, 0.17, -Math.PI / 2 + 0.25);
+  inspectAt(w, g, p, SLICE_IDS.dsAlbum, SRC.dsAlbum, 'Bekijken: album', [0.46, 0.18, 0.8]);
 }
 
 // ------------------------------------------------------------------------------------------------ upstairs: B01 clusters + DS01 C
@@ -209,14 +212,13 @@ const PAIRS: { sub: Subject; prop: string; room: string; topYaw: number }[] = [
   { sub: 'reizen', prop: 'b01.reisDesk', room: 'reis', topYaw: 0 },
   { sub: 'planten', prop: 'b01.botanicTable', room: 'botanic', topYaw: -Math.PI / 2 },
 ];
-const CLIP_OF: Record<Subject, SlotId> = { sterren: 'rond', planten: 'punt', reizen: 'vierkant' };
 
 export function sliceUpstairs(w: World, g: GameApi, c: Ctx) {
   const k = c.k, a = atlasFor(w);
   for (const q of PAIRS) {
     const p = prop(q.prop), y = top(p);
     table(c, p.x, p.z, p.y, p.w, p.d, 0, '#6b4426', p.h);
-    const pair = p.parts!.find((x) => x.id === SLICE_IDS.pair(q.sub))!, clip = p.parts!.find((x) => x.id === SLICE_IDS.clip(q.sub))!;
+    const pair = p.parts!.find((x) => x.id === SLICE_IDS.pair(q.sub))!;
     const px = p.x + pair.dx, pz = p.z + pair.dz;
     if (q.sub === 'sterren') {
       // EB.folio.stars: small telescope on a FORK mount, two ROUND screw heads on the pivots + notebook with three holes
@@ -227,7 +229,7 @@ export function sliceUpstairs(w: World, g: GameApi, c: Ctx) {
       for (const sx of [-1, 1]) box(c.b, k.M.paint, '#3a2412', tx + sx * 0.068, y + 0.08, pz, 0.014, 0.1, 0.03, { chunk: c.chunk });
       cyl(c.b, k.M.paint, '#b8892f', tx, y + 0.17 - 0.15, pz, 0.028, 0.028, 0.3, 14, { chunk: c.chunk, rx: Math.PI / 2 - 0.42 }); // centre on the fork pivots (cyl takes its base height)
       for (const sx of [-1, 1]) cyl(c.b, k.M.paint, '#d9b860', tx + sx * 0.08, y + 0.167, pz, 0.017, 0.017, 0.012, 14, { chunk: c.chunk, rz: Math.PI / 2 });
-      flat(c, a, 'notebook', px + 0.17, y + 0.004, pz, 0.16, 0.19, q.topYaw + 0.08);
+      flat(c, a, 'notebook', px + 0.2, y + 0.004, pz, 0.16, 0.2, q.topYaw + 0.08); // closed notebook, round clip on it
     } else if (q.sub === 'reizen') {
       // EB.folio.travel: suitcase with two parallel straps + a square middle patch (facing the reader) + label with cut corner
       const sx0 = px - 0.12;
@@ -235,16 +237,15 @@ export function sliceUpstairs(w: World, g: GameApi, c: Ctx) {
       for (const sx of [-1, 1]) box(c.b, k.M.paint, '#4a2f1a', sx0 + sx * 0.09, y - 0.002, pz, 0.026, 0.265, 0.126, { chunk: c.chunk });
       box(c.b, k.M.paint, '#c9a46a', sx0, y + 0.1, pz - 0.063, 0.075, 0.075, 0.006, { chunk: c.chunk });
       box(c.b, k.M.paint, '#4a2f1a', sx0, y + 0.26, pz, 0.1, 0.03, 0.025, { chunk: c.chunk }); // handle
-      flat(c, a, 'label', px + 0.2, y + 0.004, pz + 0.02, 0.2, 0.1, q.topYaw - 0.12);
+      flat(c, a, 'label', px + 0.28, y + 0.004, pz + 0.02, 0.22, 0.12, q.topYaw - 0.12); // square clip through the label hole
     } else {
       // EB.folio.plants: pressed fern under glass with a broad diagonal repair strip + scissors (angular and round grip)
-      flat(c, a, 'fern', px, y + 0.004, pz - 0.1, 0.2, 0.24, q.topYaw);
-      box(c.b, k.M.glass, '#ffffff', px, y + 0.004, pz - 0.1, 0.22, 0.01, 0.26, { chunk: c.chunk });
-      flat(c, a, 'scissors', px, y + 0.004, pz + 0.17, 0.12, 0.16, q.topYaw + 0.2);
+      flat(c, a, 'fern', px, y + 0.004, pz - 0.14, 0.2, 0.26, q.topYaw); // glass plate with the pointed clip on it
+      box(c.b, k.M.glass, '#ffffff', px, y + 0.004, pz - 0.14, 0.22, 0.01, 0.28, { chunk: c.chunk });
+      flat(c, a, 'scissors', px, y + 0.004, pz + 0.22, 0.12, 0.16, q.topYaw + 0.2);
     }
-    flat(c, a, `clip_${CLIP_OF[q.sub]}` as CellId, p.x + clip.dx, y + 0.004, p.z + clip.dz, 0.24, 0.21, q.topYaw);
-    inspectAt(w, g, p, SLICE_IDS.pair(q.sub), SRC.pair(q.sub), 'Bekijken: voorwerpen op het tafeltje', q.topYaw === 0 ? [0.44, 0.2, 0.36] : [0.36, 0.2, 0.44]);
-    inspectAt(w, g, p, SLICE_IDS.clip(q.sub), SRC.clip(q.sub), 'Bekijken: archiefclip', [0.24, 0.16, 0.24]);
+    // one inspection cluster per pair: both objects and the clip attached to them (PD v0.2 §4.2, UX U01)
+    inspectAt(w, g, p, SLICE_IDS.pair(q.sub), SRC.pair(q.sub), 'Bekijken: objectgroep', q.topYaw === 0 ? [0.9, 0.22, 0.44] : [0.44, 0.22, 0.9]);
   }
   // DS01 C: a small wooden drying rack in front of the window; the photo hangs from two pegs, face to the room
   const r = prop('ds01.rack');
@@ -255,11 +256,18 @@ export function sliceUpstairs(w: World, g: GameApi, c: Ctx) {
   upright(c, a, 'photo', r.x, r.y + r.h - 0.26, r.z + 0.015, 0.24, 0.18, 0);
   for (const s of [-1, 1]) box(c.b, k.M.wood, '#d8c8a0', r.x + s * 0.08, r.y + r.h - 0.07, r.z + 0.02, 0.015, 0.05, 0.012, { chunk: c.chunk });
   c.col.addBox(r.x - r.w / 2, r.x + r.w / 2, r.z - r.d / 2, r.z + r.d / 2, r.y, r.y + r.h);
+  // two plain suitcases beside the rack (no straps, patch or label): "naast de koffers en het kleine droogrek"
+  const cs = prop('ds01.cases');
+  box(c.b, k.M.paint, '#3f5a4a', cs.x, cs.y, cs.z, 0.66, 0.2, 0.38, { chunk: c.chunk });
+  box(c.b, k.M.paint, '#2f4436', cs.x, cs.y + 0.2, cs.z - 0.19, 0.12, 0.03, 0.02, { chunk: c.chunk });
+  box(c.b, k.M.paint, '#5a5f6a', cs.x - 0.04, cs.y + 0.2, cs.z + 0.01, 0.5, 0.17, 0.3, { chunk: c.chunk });
+  box(c.b, k.M.paint, '#3f434c', cs.x - 0.04, cs.y + 0.37, cs.z + 0.01, 0.12, 0.03, 0.02, { chunk: c.chunk });
+  c.col.addBox(cs.x - cs.w / 2, cs.x + cs.w / 2, cs.z - cs.d / 2, cs.z + cs.d / 2, cs.y, cs.y + cs.h);
   const ph = new THREE.Group();
   place(ph, r.x, r.y + r.h - 0.17, r.z + 0.03, 0);
   ph.userData.room = r.room;
   w.scene.add(ph);
-  makeAction(w, { id: SLICE_IDS.dsPhoto, obj: ph, hit: [0.34, 0.28, 0.12], hitOffset: [0, 0, 0], label: () => 'Bekijken: foto', run: () => g.inspect(SRC.dsPhoto) });
+  makeAction(w, { id: SLICE_IDS.dsPhoto, obj: ph, hit: [0.34, 0.28, 0.12], hitOffset: [0, 0, 0], label: () => 'Bekijken: afbeelding', run: () => g.inspect(SRC.dsPhoto) });
 }
 
 /** Debug helper: ids the slice registered (used by the debug overlay and e2e). */

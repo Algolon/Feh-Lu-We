@@ -104,14 +104,19 @@ async function mainRoute() {
     const r2 = await step(page, 'register read', () => { T.G().openNotebook(); S.click('[data-t="o"]'); return { topics: [...document.querySelectorAll('.reg-topic b')].map((b) => b.textContent), actions: document.getElementById('nb').innerText }; });
     await shot(page, '03-notebook-after-register');
     log('register read: exactly the three topics it names, no actions (no "plaats boeken", "ga naar kamer")', r2.topics.join('|') === 'Aan tafel|In de kantlijn|Buiten de paden' && !/ga naar|plaats|leg de|volgende stap/i.test(r2.actions), JSON.stringify(r2.topics));
-    const att = await step(page, 'attention switch', () => { const before = JSON.stringify(S.world()); S.click('[data-att="kantlijn"]'); const mid = JSON.stringify(S.world()); S.click('[data-att=""]'); S.click('[data-att="paden"]'); const after = JSON.stringify(S.world()); T.closeModal(); return { same: before === mid && mid === after, att: S.sl().attention, obj: S.text('#objective') }; });
-    log('attention switch changes no world state; objective shows only the chosen focus', att.same && att.att === 'paden' && att.obj === 'Mijn aandacht: Buiten de paden', JSON.stringify(att));
+    const att = await step(page, 'attention switch + opt-in HUD label', () => {
+      const before = JSON.stringify(S.world()); S.click('[data-att="kantlijn"]'); const mid = JSON.stringify(S.world()); S.click('[data-att=""]'); S.click('[data-att="paden"]'); const after = JSON.stringify(S.world());
+      T.closeModal(); T.tick(2); const objOff = S.text('#objective');
+      T.G().openNotebook(); S.click('[data-t="o"]'); S.click('[data-hud]'); const hudWorld = JSON.stringify(S.world()); T.closeModal(); T.tick(2);
+      return { same: before === mid && mid === after && after === hudWorld, att: S.sl().attention, objOff, obj: S.text('#objective') };
+    });
+    log('attention switch changes no world state; the HUD label is off by default and shows only the chosen topic after opt-in', att.same && att.att === 'paden' && !att.objOff && att.obj === 'Mijn aandacht: Buiten de paden', JSON.stringify(att));
     // --- DS01 A (maquette)
     await step(page, 'DS01 A: maquette note', () => { S.walkLeg('toMaquette'); T.act('ds01.note', 'Lezen: notitie'); if (!/Weekendhuizen/.test(document.querySelector('#overlay .body').innerText)) throw new Error('note text'); });
     await shot(page, '04-ds01-A-maquette-note');
     await step(page, 'close', () => T.closeModal());
     await measure('hall-maquette');
-    await page.evaluate(() => T.lookAt(85.5, 0.9, 95.9)); await shot(page, '04b-hall-maquette-view');
+    await page.evaluate(() => T.lookAt(88.0, 0.9, 96.0)); await shot(page, '04b-hall-maquette-view');
     // --- G04 library: B01 table
     await step(page, 'to the library', () => { S.walkLeg('toLibrary'); T.act('door.library', 'Openen: deur'); T.wait(1.2); S.walkLeg('intoLibrary'); });
     await step(page, 'B01 table panel', () => { T.act('b01.table', 'Bekijken: tekenbladen en vakken'); if (!document.querySelector('.b01-slots')) throw new Error('no panel'); });
@@ -130,10 +135,17 @@ async function mainRoute() {
       return { folio, recorded, wrong0, sel: document.querySelector('.folio-card.sel [data-pick]')?.dataset.pick, slots: S.sl().b01.slots, scroll: document.querySelector('#overlay .body').scrollTop };
     });
     log('B01 panel: folio inspect records an observation; incomplete set is no attempt; draft selection survives notebook round-trip', b1.recorded && b1.wrong0 === 0 && b1.sel === 'plants' && b1.slots.vierkant === 'travel', JSON.stringify(b1));
+    const pc = await step(page, 'B01: literal instruction, practice card, Controleer on an incomplete set', () => {
+      const instr = document.querySelector('#overlay .body').innerText;
+      S.click('[data-check]'); const inc = { msg: S.text('.feedback'), wrong: S.sl().b01.wrong };
+      S.click('[data-practice]'); const title = S.modalTitle(); const rec = !!S.sl().obs['s.b01.practice']; S.click('[data-back]');
+      return { instr: /Een losse overeenkomst is niet genoeg/.test(instr), inc, title, rec, slots: document.querySelectorAll('.b01-slots .pslot').length };
+    });
+    log('B01: literal v0.2 instruction; practice card readable from the table (no fourth slot); Controleer on an incomplete set is no attempt', pc.instr && /elk vak/.test(pc.inc.msg) && pc.inc.wrong === 0 && /Oefenkaart/.test(pc.title) && pc.rec && pc.slots === 3, JSON.stringify(pc));
     await step(page, 'close B01', () => T.closeModal());
     await page.evaluate(() => T.lookAt(80.6, 0.9, 101.2)); await shot(page, '05b-b01-table-world');
-    // --- DS01 B (album + letter)
-    await step(page, 'DS01 B: album and drying letter', () => { S.walkLeg('toAlbum'); T.act('ds01.album', 'Bekijken: album'); T.closeModal(); T.act('ds01.letter', 'Lezen: briefje'); });
+    // --- DS01 B (album page + letter: one reading cluster)
+    await step(page, 'DS01 B: album page and drying letter (one cluster)', () => { S.walkLeg('toAlbum'); T.act('ds01.album', 'Bekijken: album'); const t = document.querySelector('#overlay .body').innerText; if (!/Gingerbread house — het eerste huisje/.test(t) || !/Er kwam water op de foto/.test(t)) throw new Error('album text'); });
     await shot(page, '06-ds01-B-letter');
     await step(page, 'close', () => T.closeModal());
     await page.evaluate(() => T.lookAt(74.55, 0.75, 106.6)); await shot(page, '06b-ds01-B-album-world');
@@ -142,7 +154,7 @@ async function mainRoute() {
     const up = await step(page, 'upstairs', () => { S.walkLeg('albumBack'); S.walkLeg('libraryOut'); const p = S.walkLeg('upstairs'); return p; });
     log('grand stair: route reaches the upper floor by walking', Math.abs(up.y - 3.35) < 0.03, JSON.stringify(up));
     // --- U05 sterren
-    await step(page, 'U05: open the door, read the pair and the clip', () => { S.walkLeg('toSterren'); T.act('door.sterren', 'Openen: deur'); T.wait(1.2); S.walkLeg('intoSterren'); T.act('b01.pair.sterren', 'Bekijken: voorwerpen'); T.closeModal(); T.act('b01.clip.sterren', 'Bekijken: archiefclip'); });
+    await step(page, 'U05: open the door, read the cluster (objects + clip)', () => { S.walkLeg('toSterren'); T.act('door.sterren', 'Openen: deur'); T.wait(1.2); S.walkLeg('intoSterren'); T.act('b01.pair.sterren', 'Bekijken: objectgroep'); if (!/Aan het schrift zit een koperen archiefclip\. De clip is rond/.test(document.querySelector('#overlay .body').innerText)) throw new Error('cluster text'); if (T.G().world.byId.get('b01.clip.sterren')) throw new Error('separate clip target'); });
     await shot(page, '07-U05-clip-overlay');
     await step(page, 'close', () => T.closeModal());
     await page.evaluate(() => T.lookAt(79.0, 4.2, 93.45)); await shot(page, '07b-U05-cluster');
@@ -150,24 +162,24 @@ async function mainRoute() {
     // --- U04 reis (B01 travel cluster, then DS01 C on the rack)
     await step(page, 'U04: pair, clip, then the photo (front, turned over)', () => {
       S.walkLeg('sterrenOut'); S.walkLeg('toReis'); T.act('door.reis', 'Openen: deur'); T.wait(1.2); S.walkLeg('intoReis');
-      T.act('b01.pair.reizen', 'Bekijken: voorwerpen'); T.closeModal(); T.act('b01.clip.reizen', 'Bekijken: archiefclip'); T.closeModal();
+      T.act('b01.pair.reizen', 'Bekijken: objectgroep'); T.closeModal();
     });
     await page.evaluate(() => T.lookAt(78.6, 4.2, 86.4)); await shot(page, '08-U04-cluster');
     await measure('U04-desk');
     const ph = await step(page, 'DS01 C: photo front then back', () => {
-      S.walkLeg('toRack'); T.act('ds01.photo', 'Bekijken: foto');
-      const front = { found: S.sl().ds01.photoFound, back: S.sl().ds01.photoBackSeen, faces: S.sl().obs['s.ds01.photo'].faces.join() };
+      S.walkLeg('toRack'); T.act('ds01.photo', 'Bekijken: afbeelding');
+      const front = { found: S.sl().ds01.photoFound, back: S.sl().ds01.photoBackSeen, faces: S.sl().obs['OC.ds01'].faces.join(), notice: S.text('[data-found]') };
       return front;
     });
     await shot(page, '09-ds01-C-photo-front');
-    const ph2 = await step(page, 'turn over', () => { S.click('[data-flip]'); return { back: S.sl().ds01.photoBackSeen, faces: S.sl().obs['s.ds01.photo'].faces.join(), inv: T.G().state.inventory.includes('photo') }; });
+    const ph2 = await step(page, 'turn over', () => { S.click('[data-flip]'); return { back: S.sl().ds01.photoBackSeen, faces: S.sl().obs['OC.ds01'].faces.join(), inv: T.G().state.inventory.includes('photo'), text: document.querySelector('#overlay .body').innerText }; });
     await shot(page, '09b-ds01-C-photo-back');
-    log('DS01 C: front sets photoFound (back not yet); back recorded only after turning; photo never enters the bag', ph.found && !ph.back && ph.faces === 'front' && ph2.back && ph2.faces === 'front,back' && !ph2.inv, JSON.stringify({ ph, ph2 }));
+    log('DS01 C: front sets photoFound with the one notice "Afbeelding bewaard in notities" (back not yet); back recorded only after Omkeren, literal back text; never enters the bag', ph.found && !ph.back && ph.faces === 'front' && /Afbeelding bewaard in notities/.test(ph.notice ?? '') && ph2.back && ph2.faces === 'front,back' && !ph2.inv && /De afbeelding hoort bij de maquette in de hal\./.test(ph2.text), JSON.stringify({ ph, ph2: { ...ph2, text: undefined } }));
     await step(page, 'close', () => T.closeModal());
     await page.evaluate(() => T.lookAt(82.2, 4.0, 81.2)); await shot(page, '09c-U04-rack-world');
     await measure('U04-rack');
     // --- U10 botanic
-    await step(page, 'U10: door, pair, clip', () => { S.walkLeg('reisOut'); S.walkLeg('toBotanic'); T.act('door.botanic', 'Openen: deur'); T.wait(1.2); S.walkLeg('intoBotanic'); T.act('b01.pair.planten', 'Bekijken: voorwerpen'); T.closeModal(); T.act('b01.clip.planten', 'Bekijken: archiefclip'); T.closeModal(); });
+    await step(page, 'U10: door, cluster', () => { S.walkLeg('reisOut'); S.walkLeg('toBotanic'); T.act('door.botanic', 'Openen: deur'); T.wait(1.2); S.walkLeg('intoBotanic'); T.act('b01.pair.planten', 'Bekijken: objectgroep'); T.closeModal(); });
     await page.evaluate(() => T.lookAt(101.75, 4.2, 84.0)); await shot(page, '10-U10-cluster');
     await measure('U10-botanic');
     // --- back to the library, solve B01
@@ -177,9 +189,12 @@ async function mainRoute() {
       T.act('b01.table');
       // current: vierkant=II. wrong: punt=I, rond=III
       S.click('[data-pick="stars"]'); S.click('[data-slot="punt"]'); S.click('[data-pick="plants"]'); S.click('[data-slot="rond"]');
-      const wrongMsg = S.text('.feedback'), wrong = S.sl().b01.wrong, open1 = !!T.G().state.open['library.desk'];
+      const unjudged = S.sl().b01.wrong; // a full set is judged only by "Controleer"
+      S.click('[data-check]');
+      const wrongMsg = S.text('.feedback'), wrong = S.sl().b01.wrong - unjudged, open1 = !!T.G().state.open['library.desk'];
       S.click('[data-take="punt"]'); S.click('[data-take="rond"]');
       S.click('[data-pick="plants"]'); S.click('[data-slot="punt"]'); S.click('[data-pick="stars"]'); S.click('[data-slot="rond"]');
+      S.click('[data-check]');
       T.wait(1.2);
       return { wrongMsg, wrong, open1, solved: S.sl().b01.solved, open2: !!T.G().state.open['library.desk'], modal: T.modalOpen(), rewardBefore: S.sl().results.includes('b01.studyKey') };
     });
@@ -193,7 +208,7 @@ async function mainRoute() {
     // --- notebook: provenance, results, archive memory
     const nbf = await step(page, 'final notebook', () => { T.G().openNotebook(); S.click('[data-t="w"]'); const w = document.getElementById('nb').innerText; S.click('[data-t="o"]'); const o = document.getElementById('nb').innerText; S.click('[data-t="a"]'); const a = document.getElementById('nb').innerText; return { w, o, a }; });
     await shot(page, '12-notebook-archive');
-    log('notebook: observations carry provenance; results and memories are typed separately; no solution summary', /waarneming \d+/.test(nbf.w) && /Resultaat/i.test(nbf.o) && /Herinnering/i.test(nbf.a) && /huisje aan het water/.test(nbf.a) && !/→/.test(nbf.w), '');
+    log('notebook: observations carry provenance ("Waargenomen"); results ("✓ Resultaat bevestigd") and the DS01 memory ("Bekeken", never "Opgelost") are typed separately; no solution summary', /waarneming \d+/.test(nbf.w) && /Waargenomen/i.test(nbf.w) && /Resultaat bevestigd/i.test(nbf.o) && /Herinnering · Bekeken/i.test(nbf.a) && /De foto die moest drogen/.test(nbf.a) && !/Opgelost/i.test(nbf.a) && !/→/.test(nbf.w), '');
     await step(page, 'close', () => T.closeModal());
     // --- save + reload (continue)
     const before = await page.evaluate(() => { T.G().saveNow(); return { s: JSON.stringify(T.G().state.slice), main: localStorage.getItem('fehluwe.save'), keys: Object.keys(localStorage).sort() }; });
@@ -222,12 +237,14 @@ async function cFirst() {
       S.walkLeg('arrive'); T.act('door.front'); T.wait(1.2);
       T.walk([[90, 82], [90, 86], [90, 92], [94.0, 85.6], [94.0, 96.3]]);
       S.walkLeg('toSterren'); S.walkLeg('toReis'); T.act('door.reis'); T.wait(1.2); S.walkLeg('intoReis'); S.walkLeg('toRack');
-      T.act('ds01.photo', 'Bekijken: foto'); T.closeModal();
+      T.act('ds01.photo', 'Bekijken: afbeelding'); T.closeModal();
       const c = { found: S.sl().ds01.photoFound, q: S.sl().questions.length, results: [...S.sl().results] };
       T.act('ds01.photo'); T.closeModal(); // look again: no second reward
       return { c, mem: S.sl().results.filter((x) => x === 'ds01.memory').length, reg: S.sl().registerObserved };
     });
     log('DS01 C-first: works before A/B and before the register; memory granted once; no question or quest created', r.c.found && r.c.q === 0 && r.mem === 1 && !r.reg, JSON.stringify(r));
+    const hc = await step(page, 'DS01 hint after C first', () => { T.G().openHint(); const t = document.querySelector('#overlay .body').innerText; S.click('[data-more]'); const l1 = document.querySelector('.slice-hint p')?.textContent; T.closeModal(); return { t, l1 }; });
+    log('DS01 hints: offered after C first under "Waar hoort deze afbeelding bij?"; level 1 is the literal v0.2 text', /Waar hoort deze afbeelding bij\?/.test(hc.t) && hc.l1 === 'Kijk naar de titel en herkomst van de afbeelding. Het album en de maquette vertellen iets over hetzelfde huisje.', JSON.stringify(hc));
     const ab = await step(page, 'then A and B still read normally', () => {
       S.walkLeg('reisOut'); T.walk([[85.95, 90.2], [85.95, 96.6], [94.0, 96.3], [94.0, 85.6], [90, 85.5], [90, 92]]);
       S.walkLeg('toMaquette'); T.act('ds01.note'); const a = document.querySelector('#overlay .body').innerText; T.closeModal();
@@ -237,10 +254,10 @@ async function cFirst() {
     // own question with a pinned source (voluntary)
     const q = await step(page, 'own question', () => {
       T.G().openNotebook(); S.click('[data-t="w"]');
-      S.click('[data-pin="s.ds01.photo"]');
+      S.click('[data-pin="OC.ds01"]');
       S.click('[data-t="o"]');
       const ta = document.querySelector('[data-qtext]'); ta.value = 'Waarom hangt de foto boven?'; ta.dispatchEvent(new Event('input'));
-      document.querySelector('[data-qpin="s.ds01.photo"]').click();
+      document.querySelector('[data-qpin="OC.ds01"]').click();
       S.click('[data-qsave]');
       const own = document.querySelector('.own')?.innerText ?? '';
       S.click('[data-qarch]');
@@ -248,7 +265,7 @@ async function cFirst() {
       T.closeModal();
       return { own, n: S.sl().questions.length, archived: S.sl().questions[0]?.archived, solvedAfter };
     });
-    log('notebook: player-made question with a pinned photo; archiving it solves nothing', /Waarom hangt/.test(q.own) && q.n === 1 && q.archived && !q.solvedAfter, JSON.stringify(q));
+    log('notebook: player-made question ("Mijn idee") with a pinned image ("Door jou vastgezet"); opbergen solves nothing', /Waarom hangt/.test(q.own) && /Mijn idee/i.test(q.own) && /Door jou vastgezet/i.test(q.own) && q.n === 1 && q.archived && !q.solvedAfter, JSON.stringify(q));
     if (page.problems.length) log('C-first: no console errors', false, page.problems.slice(0, 3).join(' | '));
   } catch (e) { log('DS01 C-first', false, e.message); }
   await ctx.close();
@@ -361,10 +378,10 @@ async function mobile() {
       const ct = await page.evaluate(() => ({ open: T.modalOpen() }));
       log(`mobile ${name}: closing an overlay never clicks through to the world`, !ct.open, JSON.stringify(ct));
       if (name === 'landscape') {
-        await step(page, 'photo on the phone', () => { S.walkLeg('libraryOut'); S.walkLeg('upstairs'); S.walkLeg('toSterren'); T.act('door.sterren'); T.wait(1.2); S.walkLeg('intoSterren'); T.act('b01.clip.sterren'); });
-        await shot(page, '23-landscape-clip-rond');
-        await step(page, 'pair', () => { T.closeModal(); T.act('b01.pair.sterren'); });
+        await step(page, 'cluster on the phone', () => { S.walkLeg('libraryOut'); S.walkLeg('upstairs'); S.walkLeg('toSterren'); T.act('door.sterren'); T.wait(1.2); S.walkLeg('intoSterren'); T.act('b01.pair.sterren'); });
         await shot(page, '24-landscape-pair-sterren');
+        await page.evaluate(() => S.click('[data-zoombtn]'));
+        await shot(page, '23-landscape-cluster-zoomed');
         await step(page, 'rack', () => { T.closeModal(); S.walkLeg('sterrenOut'); S.walkLeg('toReis'); T.act('door.reis'); T.wait(1.2); S.walkLeg('intoReis'); S.walkLeg('toRack'); T.act('ds01.photo'); });
         await shot(page, '25-landscape-photo-front');
         await page.evaluate(() => S.click('[data-flip]'));
@@ -399,8 +416,8 @@ async function hints() {
       return { none, l0, lv, more, obs };
     });
     await shot(page, '13-hints');
-    log('hints: none before a riddle is met; level 0 names the riddle without a next step', /nog geen raadsel/.test(r.none) && /raadsel/i.test(r.l0) && !/Hint 1 ·/i.test(r.l0) && !/rond vak|clip/.test(r.l0), r.l0.slice(0, 160));
-    log('hints: levels 1 attention · 2 relation · 3 solution, labelled as Hint, never stored as observations', r.lv[2] === 'Hint 1 · Aandacht|Hint 2 · Verband|Hint 3 · Oplossing' && !r.more && !r.obs.some((o) => /hint/i.test(o)), JSON.stringify(r.lv));
+    log('hints: none before a riddle is met; level 0 names the riddle and explains the three levels, without a next step', /nog geen raadsel/.test(r.none) && /Hulp bij/i.test(r.l0) && /1 Aandacht · 2 Relatie · 3 Oplossing/.test(r.l0) && !/Hint 1 ·/i.test(r.l0) && !/rond vak|clip|objectgroep/.test(r.l0), r.l0.slice(0, 200));
+    log('hints: levels 1 attention · 2 relation · 3 solution, labelled as Hint, never stored as observations', r.lv[2] === 'Hint 1 · Aandacht|Hint 2 · Relatie|Hint 3 · Oplossing' && !r.more && !r.obs.some((o) => /hint/i.test(o)), JSON.stringify(r.lv));
   } catch (e) { log('hints', false, e.message); }
   await ctx.close();
 }

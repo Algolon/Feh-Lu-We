@@ -102,7 +102,7 @@ The review-only sauna vegetation fix stays review-only.
 | B16, B17 | Kept as near-misses; listed for the human review. |
 | L1, L2, D4, U3 | Unchanged — not verifiable without the v0.2 files. |
 
-Checks after the reconciliation: typecheck ✅ · unit 137/137 ✅ · existing e2e 103/103 ✅ · e2e:dev01 32/32 ✅ ·
+Checks after the DEV-01R reconciliation: typecheck ✅ · unit 137/137 ✅ · existing e2e 103/103 ✅ · e2e:dev01 32/32 ✅ ·
 normal game vs `ef6b7c3`: draw calls and triangles identical at 13 views, pixel deltas within run-to-run noise ✅.
 The review-only sauna vegetation fix stays review-only (separate follow-up).
 
@@ -179,3 +179,40 @@ Citations: PD = PUZZLE_DESIGN, UX = UX_GAME_FEEL, LP = LEVEL_PLAN, LL = LEVEL_LA
 
 ART_BIBLE / ART_TOKENS direction (future production; no art pass). F4 reserved B01 poses (blockout follow-up). Sauna
 vegetation fix stays review-only (LP §10 names VD-02 as a separate audit class).
+
+## 8. Outcome of the final verification (after the reconciliation commit)
+
+Two further deviations were found while implementing and are fixed in the same commit (listed so the table in §7
+stays as written before the edits):
+
+| # | Item | Current implementation | Design source | Status | Action |
+|---|---|---|---|---|---|
+| U21 | Invitation before the register | slice variant without the sentence naming the three parts of the route | UX §3 "Als de uitnodiging al drie thema's noemt, die tekst niet censureren: wel citeren, nog geen queststructuur ervan maken" | CONFLICT | full invitation text; topics as structure still only after reading the register |
+| D21 | Turn action on the photo | button "Omdraaien" | PD §6.4 "Acties zijn Bekijken en Omkeren" | MINOR | "Omkeren" |
+
+| # | Resolution |
+|---|---|
+| F1 | Aliases verified (ES §5, LP §12, LL rooms); ids.ts comment updated. No id changed. |
+| F4 | Not moved (as-built furniture occupies the reserved spots); contract parts that apply are kept; follow-up for the blockout (DEV01_SLICE §9). |
+| F5 | Maquette table at `ES.gingerbread` (88, 96); note pose (88.0, 94.6); route re-derived; `validatePlacement` clean. |
+| B21, B22 | Literal transcripts; one cluster per pair (`EB.stars/plants/travel`) with the clip drawn on the notebook / glass plate / through the label hole; separate clip cards and targets removed. |
+| B23, B27 | Literal instruction and hints. |
+| B24 | Practice card on the table (south end), read via *Oefenkaart bekijken* in the table panel; not a slot, no input, no gate (unit + e2e). |
+| B25 | Placing never judges; *Controleer* judges; incomplete = no attempt (unit + e2e). |
+| D10, D11 | `OA.ds01`, `OB.ds01` (album page + letter, one target), `OC.ds01` with faces logged as `OC.ds01.front/back`; schema 3 migrates review saves. |
+| D12–D14 | Literal A, B (page title + letter), C raw text and back; front image = stylised gingerbread maquette + caption. |
+| D15 | Two plain suitcases beside the rack (`ds01.cases`, validated). |
+| D16, D17 | Notice "Afbeelding bewaard in notities" once; archive "De foto die moest drogen" with image, label *Herinnering · Bekeken*. |
+| D18 | DS01 hint context with encounter-based titles; literal levels; C first → "Waar hoort deze afbeelding bij?". |
+| U11–U19 | *Waargenomen*, *Door jou vastgezet*, *Mijn idee* (dashed), *Opbergen / Heropenen / Opgeborgen · door jou*, empty state literal, *Aandacht · Relatie · Oplossing* with a level-0 explanation, opt-in HUD label (default off), *Aandacht loslaten*, *✓ Resultaat bevestigd*. |
+| U21, D21 | Full invitation; *Omkeren*. |
+
+Content status: every B01/DS01 source is `canon` (unit-tested); nothing provisional remains. Remaining deviations:
+F4 (poses, blockout follow-up), maquette size/art (out of scope), the allowed near-misses, and the optional UX
+"Laatst bekeken" view / maquette inspection that the slice contract does not require.
+The review-only sauna vegetation fix stays review-only (separate follow-up, LP §10 VD-02).
+
+Checks after the final reconciliation: typecheck ✅ · unit 142/142 ✅ (incl. all 6 B01 permutations via *Controleer*,
+all 6 DS01 encounter orders, old-save import, schema ≤ 2 → 3, notebook before/after the register) · existing e2e
+103/103 ✅ · e2e:dev01 34/34 ✅ (incl. mobile portrait + landscape) · normal game vs `ef6b7c3`: draw calls and
+triangles identical at 13 views, pixel deltas at run-to-run noise ✅.

@@ -6,10 +6,13 @@
 //   block is additive, an older build simply drops it, and the normal game never writes it.
 // - The review build (?review=dev01) saves under its own keys (fehluwe.dev01.save / .prev / .settings). The
 //   player's own save (fehluwe.save) is only ever READ, to offer "start from a copy of my save".
-import { LEGACY_FOLIO, type FolioId, type SlotId, type TopicId } from './ids';
+import { LEGACY_FOLIO, LEGACY_SOURCE, type FolioId, type SlotId, type TopicId } from './ids';
 
-/** 2 (DEV-01R): canon folio ids (stars/plants/travel, sources EB.folio.*). 1 (DEV-01): folio ids I/II/III. */
-export const SLICE_SCHEMA = 2;
+/**
+ * 3 (DEV-01R final): canon source ids EB.stars/plants/travel (cluster incl. clip), OA/OB/OC.ds01; HUD attention opt-in.
+ * 2 (DEV-01R): canon folio ids (stars/plants/travel, sources EB.folio.*). 1 (DEV-01): folio ids I/II/III.
+ */
+export const SLICE_SCHEMA = 3;
 
 /** The six semantic events of DEV-01 §7, plus notebook bookkeeping (kept apart from them). */
 export type SliceEventType =
@@ -30,6 +33,7 @@ export interface SliceState {
   encountered: string[]; // riddle contexts met (hint eligibility)
   registerObserved: boolean;
   attention: TopicId | null; // "Mijn aandacht" — never changes eligibility or world state
+  hudAttention: boolean; // show "Mijn aandacht" in the HUD: off by default, the player's own opt-in (UX v0.2 §3)
   pins: string[]; // pinned observation ids
   questions: Question[];
   archivedObs: string[];
@@ -45,7 +49,7 @@ export const MAX_SLICE_LOG = 300;
 
 export function defaultSlice(): SliceState {
   return {
-    schema: SLICE_SCHEMA, seq: 0, obs: {}, encountered: [], registerObserved: false, attention: null, pins: [], questions: [],
+    schema: SLICE_SCHEMA, seq: 0, obs: {}, encountered: [], registerObserved: false, attention: null, hudAttention: false, pins: [], questions: [],
     archivedObs: [], acquired: [], results: [],
     b01: { slots: { punt: null, rond: null, vierkant: null }, solved: false, legacy: null, wrong: 0 },
     ds01: { photoFound: false, photoBackSeen: false },
@@ -69,14 +73,17 @@ export function parseSlice(raw: unknown): SliceState | null {
   if (schema < 1 || schema > SLICE_SCHEMA) return null;
   const d = defaultSlice();
   const v1 = schema === 1;
-  const mapId = (id: string) => (v1 ? srcV1(id) : id);
+  // schema 1 → 2 (folio ids), then ≤ 2 → 3 (cluster and DS01 source ids); several old ids may merge into one
+  const mapId = (id: string) => { const a = v1 ? srcV1(id) : id; return schema < 3 ? LEGACY_SOURCE[a] ?? a : a; };
   const strsM = (v: unknown, max = 500) => [...new Set(strs(v, max).map(mapId))];
   const obs: Record<string, Observation> = {};
   if (isObj(raw.obs)) for (const [k0, o] of Object.entries(raw.obs)) {
     if (!isObj(o)) continue;
     const k = mapId(k0);
     const faces = strs(o.faces).filter((f): f is Face => f === 'front' || f === 'back');
-    obs[k] = { id: k, seq: int(o.seq, 0, 1e9), room: typeof o.room === 'string' ? o.room.slice(0, 40) : 'out', faces: faces.length ? faces : ['front'] };
+    const rec: Observation = { id: k, seq: int(o.seq, 0, 1e9), room: typeof o.room === 'string' ? o.room.slice(0, 40) : 'out', faces: faces.length ? faces : ['front'] };
+    const prev = obs[k];
+    obs[k] = prev ? { ...(prev.seq <= rec.seq ? prev : rec), faces: [...new Set([...prev.faces, ...rec.faces])] } : rec;
   }
   const b = isObj(raw.b01) ? raw.b01 : {};
   const slots = { ...d.b01.slots };
@@ -101,6 +108,7 @@ export function parseSlice(raw: unknown): SliceState | null {
     encountered: strs(raw.encountered),
     registerObserved: raw.registerObserved === true,
     attention: typeof raw.attention === 'string' && TOPIC_IDS.includes(raw.attention) ? (raw.attention as TopicId) : null,
+    hudAttention: raw.hudAttention === true,
     pins: strsM(raw.pins),
     questions,
     archivedObs: strsM(raw.archivedObs),

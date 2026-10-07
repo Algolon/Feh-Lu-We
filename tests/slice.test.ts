@@ -4,20 +4,22 @@ import { defaultState, parseSave, migrate, type GameState } from '../src/core/st
 import { pickup } from '../src/puzzles/rules';
 import { SLICE } from '../src/core/artflags';
 import {
-  b01Place, b01Take, b01Solved, b01Loose, freshSliceState, recordObservation, observeRegister, registerTopics, setAttention,
+  b01Place, b01Take, b01Check, b01Solved, b01Loose, freshSliceState, setHudAttention, recordObservation, observeRegister, registerTopics, setAttention,
   syncDerived, ds01Front, ds01Back, encounter, hintContexts, revealHint, saveQuestion, setArchived, togglePin, notebookView, importMainSave, observed,
 } from '../src/slice/model';
 import { parseSlice, defaultSlice, SEMANTIC_EVENTS } from '../src/slice/schema';
-import { B01_SLOTS, B01_FOLIOS, B01_ANSWER, B01_CHAIN, SRC, type SlotId, type FolioId } from '../src/slice/ids';
-import { REGISTER_TOPICS, REGISTER_TEXT, SLICE_HINTS, SOURCES, FOLIO_DETAILS, CONTENT_STATUS, INVITATION_SLICE, TABLE_TEXT } from '../src/slice/content';
-import { folioPage, clipCard, pairView } from '../src/slice/drawings';
+import { B01_SLOTS, B01_FOLIOS, B01_ANSWER, B01_CHAIN, SRC, type FolioId } from '../src/slice/ids';
+import { REGISTER_TOPICS, REGISTER_TEXT, SLICE_HINTS, SOURCES, FOLIO_DETAILS, CONTENT_STATUS, TABLE_TEXT, B01_INSTRUCTION, PRACTICE_TEXT, DS01_MEMORY, DS01_FOUND_NOTICE, HINT_LEVEL_NAMES } from '../src/slice/content';
+import { folioPage, pairView, practiceCard, photoFront } from '../src/slice/drawings';
+import { CLUES } from '../src/content/clues';
 
 const perms = <T,>(a: T[]): T[][] => (a.length <= 1 ? [a] : a.flatMap((x, i) => perms([...a.slice(0, i), ...a.slice(i + 1)]).map((p) => [x, ...p])));
 const reload = (s: GameState) => parseSave(JSON.stringify(s))!;
 const events = (s: GameState, type: string) => (s.slice?.log ?? []).filter((e) => e.type === type);
 /** Everything except the slice block: used to prove "no world-state change". */
 const world = (s: GameState) => { const { slice: _s, ...rest } = JSON.parse(JSON.stringify(s)); return rest; };
-const fillB01 = (s: GameState, order: FolioId[]) => B01_SLOTS.map((slot, i) => b01Place(s, slot, order[i]));
+/** Lay the three sheets in slot order, then press "Controleer" (PD v0.2 §4.2). Returns the check outcome. */
+const fillB01 = (s: GameState, order: FolioId[]) => { B01_SLOTS.forEach((slot, i) => b01Place(s, slot, order[i])); return b01Check(s); };
 
 describe('DEV-01 B01: folio → details → upstairs pair → archive clip → slot', () => {
   it('the chain maps sterren→rond, planten→punt, reizen→vierkant; answer derived from it', () => {
@@ -31,8 +33,8 @@ describe('DEV-01 B01: folio → details → upstairs pair → archive clip → s
     for (const p of perms(B01_FOLIOS)) {
       const s = freshSliceState(1);
       const r = fillB01(s, p);
-      if (b01Solved(s)) { correct++; expect(r[2].ok).toBe(true); expect(s.unlocked).toContain('lock.libraryDesk'); expect(s.open['library.desk']).toBe(true); }
-      else { expect(r[2].ok).toBe(false); expect(s.slice!.b01.wrong).toBe(1); expect(s.open['library.desk']).toBeUndefined(); }
+      if (b01Solved(s)) { correct++; expect(r.ok).toBe(true); expect(s.unlocked).toContain('lock.libraryDesk'); expect(s.open['library.desk']).toBe(true); }
+      else { expect(r.ok).toBe(false); expect(s.slice!.b01.wrong).toBe(1); expect(s.open['library.desk']).toBeUndefined(); }
     }
     expect(correct).toBe(1);
   });
@@ -42,24 +44,31 @@ describe('DEV-01 B01: folio → details → upstairs pair → archive clip → s
     expect(b01Solved(s)).toBe(true);
     expect(Object.keys(s.slice!.obs)).toEqual([]);
   });
-  it('incomplete set is no attempt; swap and take-back keep every folio recoverable; complete wrong set is neutral', () => {
+  it('placing never judges; "Controleer" on an incomplete set is no attempt; swap/take-back keep every sheet recoverable; complete wrong set is neutral', () => {
     const s = freshSliceState(1);
     expect(b01Place(s, 'rond', 'stars').ok).toBe(true);
     expect(b01Place(s, 'punt', 'travel').msg).toMatch(/ligt in het vak/);
+    const inc = b01Check(s);
+    expect(inc.ok).toBe(false); expect(inc.msg).toMatch(/elk vak/);
     expect(s.slice!.b01.wrong).toBe(0);
     b01Place(s, 'punt', 'stars'); // move stars from rond → punt
     expect(s.slice!.b01.slots).toEqual({ punt: 'stars', rond: null, vierkant: null });
     expect(b01Loose(s).sort()).toEqual(['plants', 'travel']);
-    b01Place(s, 'rond', 'travel'); const wrong = b01Place(s, 'vierkant', 'plants');
+    b01Place(s, 'rond', 'travel');
+    expect(b01Place(s, 'vierkant', 'plants').ok).toBe(true); // a full but wrong set is not judged by placing
+    expect(s.slice!.b01.wrong).toBe(0);
+    const wrong = b01Check(s);
     expect(wrong.ok).toBe(false);
     expect(wrong.msg).not.toMatch(/punt|rond|vierkant|map I|sterren|planten|reizen/i); // no prefix / per-slot oracle
     expect(s.slice!.b01.wrong).toBe(1);
     expect(b01Take(s, 'punt').ok).toBe(true);
     expect(b01Take(s, 'punt').ok).toBe(false);
     expect(b01Loose(s)).toEqual(['stars']);
-    b01Place(s, 'punt', 'plants'); b01Place(s, 'rond', 'stars'); const right = b01Place(s, 'vierkant', 'travel');
-    expect(right.ok).toBe(true);
+    b01Place(s, 'punt', 'plants'); b01Place(s, 'rond', 'stars'); b01Place(s, 'vierkant', 'travel');
+    expect(b01Solved(s)).toBe(false);
+    expect(b01Check(s).ok).toBe(true);
     expect(b01Place(s, 'rond', 'travel').ok).toBe(false); // fixed once solved
+    expect(b01Check(s).ok).toBe(false);
   });
   it('solved ≠ reward claimed: the key is claimed only when taken from the drawer', () => {
     const s = freshSliceState(1);
@@ -83,7 +92,7 @@ describe('DEV-01 save/reload of mechanical and observation state', () => {
     expect(r.slice!.b01.slots).toEqual({ punt: 'travel', rond: 'stars', vierkant: null });
     expect(observed(r, SRC.folio('stars'))).toBe(true);
     expect(r.slice!.encountered).toEqual(['b01']);
-    b01Place(r, 'punt', 'plants'); b01Place(r, 'vierkant', 'travel'); syncDerived(r);
+    b01Place(r, 'punt', 'plants'); b01Place(r, 'vierkant', 'travel'); b01Check(r); syncDerived(r);
     r = reload(r); // solved, reward not claimed
     expect(b01Solved(r)).toBe(true);
     expect(r.open['library.desk']).toBe(true);
@@ -121,7 +130,7 @@ describe('DEV-01 save/reload of mechanical and observation state', () => {
 describe('DEV-01 DS01 "De foto die moest drogen" (optional)', () => {
   const visit: Record<'A' | 'B' | 'C', (s: GameState) => void> = {
     A: (s) => recordObservation(s, SRC.dsNote, 'hall'),
-    B: (s) => { recordObservation(s, SRC.dsAlbum, 'library'); recordObservation(s, SRC.dsLetter, 'library'); },
+    B: (s) => { recordObservation(s, SRC.dsAlbum, 'library'); }, // album page + letter: one reading cluster
     C: (s) => { ds01Front(s, 'reis'); },
   };
   it('all 6 visiting orders end in the same state; C first works; A and B stay meaningful after C', () => {
@@ -132,7 +141,7 @@ describe('DEV-01 DS01 "De foto die moest drogen" (optional)', () => {
       const nb = notebookView(s);
       expect(s.slice!.ds01.photoFound).toBe(true);
       expect(s.slice!.results.filter((r) => r === 'ds01.memory')).toHaveLength(1);
-      for (const id of [SRC.dsNote, SRC.dsAlbum, SRC.dsLetter, SRC.dsPhoto]) expect(nb.observations.some((o) => o.id === id)).toBe(true);
+      for (const id of [SRC.dsNote, SRC.dsAlbum, SRC.dsPhoto]) expect(nb.observations.some((o) => o.id === id)).toBe(true);
       expect(nb.research.questions).toEqual([]); // no automatic quest / checklist
       expect(nb.research.topics).toBeNull(); // DS01 never reveals or creates topics
       expect(world(s).flags).toEqual(b4.flags); // no story/quest flags, no main-route effect
@@ -161,8 +170,10 @@ describe('DEV-01 DS01 "De foto die moest drogen" (optional)', () => {
     ds01Back(s, 'reis');
     expect(s.slice!.ds01.photoBackSeen).toBe(true);
     const o = notebookView(s).observations.find((x) => x.id === SRC.dsPhoto)!;
-    expect(o.back?.text).toMatch(/achterkant/);
+    expect(o.back?.text).toBe('Weekendhuizen · blad: het eerste huisje. Album op de leesplank in de bibliotheek. De afbeelding hoort bij de maquette in de hal.');
     expect(o.provenance).toMatch(/voor- en achterkant/);
+    // the two faces are logged under their canon ids
+    expect(events(s, 'ObservationRecorded').map((e) => e.id).filter((id) => id.startsWith('OC.'))).toEqual(['OC.ds01.front', 'OC.ds01.back']);
   });
   it('B01 and the study lock need no optional (DS01) state; DS01 never touches B01', () => {
     const s = freshSliceState(1);
@@ -182,9 +193,11 @@ describe('DEV-01 register, notebook and attention', () => {
     const s = freshSliceState(1);
     const nb = notebookView(s);
     expect(nb.observations.map((o) => o.id)).toEqual(['c.invitation']);
-    expect(nb.observations[0].text).toBe(INVITATION_SLICE);
-    expect(INVITATION_SLICE).not.toMatch(/aan tafel|kantlijn|buiten de paden|drie delen/i);
+    // UX v0.2 §3: the invitation is quoted in full, not censored — but it creates no topic structure
+    expect(nb.observations[0].text).toBe(CLUES['c.invitation'].text);
     expect(nb.research.topics).toBeNull();
+    expect(nb.research.attention).toBeNull();
+    expect(nb.research.questions).toEqual([]);
   });
   it('pickup ≠ read: owning the register (drawer open, in the bag) reveals nothing', () => {
     const s = freshSliceState(1);
@@ -220,6 +233,16 @@ describe('DEV-01 register, notebook and attention', () => {
     }
     expect(setAttention(s, 'nope' as never)).toBe(false);
   });
+  it('the HUD attention label is the player\'s own opt-in, off by default, and changes nothing else', () => {
+    const s = freshSliceState(1);
+    pickup(s, 'pk.ledger', 'ledger'); observeRegister(s, 'hall'); setAttention(s, 'tafel');
+    expect(s.slice!.hudAttention).toBe(false);
+    expect(notebookView(s).research.hud).toBe(false);
+    const before = world(s);
+    expect(setHudAttention(s, true)).toBe(true);
+    expect(world(s)).toEqual(before);
+    expect(reload(s).slice!.hudAttention).toBe(true);
+  });
   it('own questions are only made by the player; archiving never solves or understands anything', () => {
     const s = freshSliceState(1);
     recordObservation(s, SRC.dsNote, 'hall');
@@ -243,10 +266,10 @@ describe('DEV-01 register, notebook and attention', () => {
   it('observations keep raw text and provenance, no relevance score or solution summary', () => {
     const s = freshSliceState(1);
     recordObservation(s, SRC.folio('travel'), 'library');
-    recordObservation(s, SRC.clip('reizen'), 'reis');
+    recordObservation(s, SRC.pair('reizen'), 'reis');
     const nb = notebookView(s);
-    const clip = nb.observations[0];
-    expect(clip.provenance).toBe('Boven · waarneming 3');
+    const cluster = nb.observations[0];
+    expect(cluster.provenance).toBe('Boven · waarneming 3');
     expect(nb.observations[1].provenance).toBe('Begane grond · waarneming 2');
     expect(nb.observations[1].text).toContain(FOLIO_DETAILS.travel);
     for (const o of nb.observations) expect(Object.keys(o).sort()).toEqual(['archived', 'art', 'back', 'diagram', 'id', 'pinned', 'provenance', 'seq', 'text', 'title']);
@@ -263,9 +286,13 @@ describe('DEV-01 hints: encountered riddles only, levels 0–3', () => {
     const h = hintContexts(s).find((x) => x.id === 'b01')!;
     expect(h.shown).toBe(0);
     expect(h.context).not.toMatch(/rond|punt|vierkant|kamer|boven|clip/i);
-    expect(SLICE_HINTS.b01.levels[0]).not.toMatch(/rond vak|vierkant vak|puntig vak/);
-    expect(SLICE_HINTS.b01.levels[1]).toMatch(/clip/);
-    expect(SLICE_HINTS.b01.levels[2]).toMatch(/Telescoop op vorkvoet.*rond vak.*schaar.*puntig vak.*koffer.*vierkant vak/);
+    // PD v0.2 §4.2, literal
+    expect(SLICE_HINTS.b01.levels).toEqual([
+      'Zoek boven de objectgroepen uit de tekeningen.',
+      'Vergelijk beide details; de clip aan de juiste groep bepaalt het vak.',
+      'Telescoopfolio rond, varenfolio puntig, kofferfolio vierkant.',
+    ]);
+    expect(HINT_LEVEL_NAMES).toEqual(['Aandacht', 'Relatie', 'Oplossing']);
     expect([revealHint(s, 'b01'), revealHint(s, 'b01'), revealHint(s, 'b01'), revealHint(s, 'b01')]).toEqual([1, 2, 3, 3]);
     expect(reload(s).slice!.hints.b01).toBe(3);
     fillB01(s, B01_SLOTS.map((k) => B01_ANSWER[k]));
@@ -277,6 +304,23 @@ describe('DEV-01 hints: encountered riddles only, levels 0–3', () => {
     expect(hintContexts(s).some((h) => h.id === 'drawer')).toBe(false);
     encounter(s, 'drawer');
     expect(hintContexts(s).some((h) => h.id === 'drawer')).toBe(true);
+  });
+  it('DS01 hints: only after one of its sources was seen, titled by what was seen; literal PD §6.6 levels; stay available', () => {
+    const s = freshSliceState(1);
+    expect(hintContexts(s).some((h) => h.id === 'ds01')).toBe(false);
+    recordObservation(s, SRC.dsNote, 'hall');
+    expect(hintContexts(s).find((h) => h.id === 'ds01')!.title).toBe('De afbeelding van het eerste huisje');
+    recordObservation(s, SRC.dsAlbum, 'library');
+    expect(hintContexts(s).find((h) => h.id === 'ds01')!.title).toBe('De lege fotohoek in het album');
+    const c = freshSliceState(1);
+    ds01Front(c, 'reis'); // C first
+    const h = hintContexts(c).find((x) => x.id === 'ds01')!;
+    expect(h.title).toBe('Waar hoort deze afbeelding bij?');
+    expect(h.levels[0]).toBe('Kijk naar de titel en herkomst van de afbeelding. Het album en de maquette vertellen iets over hetzelfde huisje.');
+    expect(h.levels[2]).toMatch(/^De afbeelding hangt aan het droogrek bij het raam in de kamer met koffers\./);
+    expect([revealHint(c, 'ds01'), revealHint(c, 'ds01'), revealHint(c, 'ds01')]).toEqual([1, 2, 3]);
+    expect(hintContexts(c).some((x) => x.id === 'ds01')).toBe(true);
+    expect(c.slice!.results.filter((r) => r === 'ds01.memory')).toHaveLength(1); // hints give no reward
   });
   it('hints are never stored as observations', () => {
     const s = freshSliceState(1);
@@ -319,7 +363,7 @@ describe('DEV-01 old-save compatibility (catalogSolved → B01 alias)', () => {
   it('an iteration-2 (v3) save migrates through the normal chain first', () => {
     const s = importMainSave(JSON.stringify({ version: 3, scene: 'estate', inventory: ['torch'], flags: { drawerLockSolved: true } }))!;
     expect(s.version).toBe(4);
-    expect(s.slice!.schema).toBe(2);
+    expect(s.slice!.schema).toBe(3);
     expect(importMainSave('{nope')).toBeNull();
   });
 });
@@ -329,15 +373,31 @@ describe('DEV-01R canon: B01 chain and folio concept', () => {
     expect(B01_FOLIOS.map((f) => SRC.folio(f))).toEqual(['EB.folio.stars', 'EB.folio.plants', 'EB.folio.travel']);
     expect(B01_ANSWER).toEqual({ rond: 'stars', punt: 'plants', vierkant: 'travel' });
   });
-  it('the sheets and the rooms describe the canonical detail pairs', () => {
-    const t = (f: FolioId) => SOURCES[SRC.folio(f)].text;
-    expect(t('stars')).toMatch(/telescoop op een vorkvoet/); expect(t('stars')).toMatch(/twee ronde schroefkoppen/); expect(t('stars')).toMatch(/schrift met drie gaten/);
-    expect(t('plants')).toMatch(/varenblad met een brede reparatiestrook schuin/); expect(t('plants')).toMatch(/schaar met één hoekige en één ronde greep/);
-    expect(t('travel')).toMatch(/koffer met twee evenwijdige riemen en een vierkante lap in het midden/); expect(t('travel')).toMatch(/label waarvan de rechterbovenhoek is afgeknipt/);
-    expect(SOURCES[SRC.pair('sterren')].text).toMatch(/vorkvoet.*twee ronde schroefkoppen.*schrift met drie gaten/s);
-    expect(SOURCES[SRC.pair('planten')].text).toMatch(/reparatiestrook.*schaar met één hoekige en één ronde greep/s);
-    expect(SOURCES[SRC.pair('reizen')].text).toMatch(/twee evenwijdige riemen.*vierkante lap.*rechterbovenhoek/s);
+  it('sheets and clusters transcribe the PD v0.2 §4.2 details literally; each cluster carries its attached clip', () => {
+    expect(FOLIO_DETAILS).toEqual({
+      stars: 'telescoop op vorkvoet met twee ronde schroefkoppen; gesloten schrift met drie gaten naast elkaar',
+      plants: 'geperste varen onder glas met één brede diagonale reparatiestrook; schaar met één hoekige en één ronde greep',
+      travel: 'koffer met twee parallelle riemen en vierkante middenpatch; label met afgesneden rechterbovenhoek',
+    });
+    for (const f of B01_FOLIOS) expect(SOURCES[SRC.folio(f)].text).toContain(FOLIO_DETAILS[f]);
+    expect(SOURCES[SRC.pair('sterren')].text).toMatch(/telescoop op vorkvoet met twee ronde schroefkoppen.*gesloten schrift met drie gaten naast elkaar.*Aan het schrift zit .*clip.*rond/s);
+    expect(SOURCES[SRC.pair('planten')].text).toMatch(/geperste varen onder glas met één brede diagonale reparatiestrook.*schaar met één hoekige en één ronde greep.*Aan de glasplaat zit .*clip.*puntig/s);
+    expect(SOURCES[SRC.pair('reizen')].text).toMatch(/koffer met twee parallelle riemen en een vierkante middenpatch.*label met afgesneden rechterbovenhoek.*Door het gat van het label zit .*clip.*vierkant/s);
+    expect([SRC.pair('sterren'), SRC.pair('planten'), SRC.pair('reizen')]).toEqual(['EB.stars', 'EB.plants', 'EB.travel']); // LEVEL_LAYOUT evidence ids
     for (const s of ['sterren', 'planten', 'reizen'] as const) expect(pairView(s)).toContain('<svg');
+    for (const s of ['sterren', 'planten', 'reizen'] as const) expect(SOURCES[SRC.pair(s)].text).not.toMatch(/tekenblad|folio|→|dus /i); // raw, no "so this sheet goes there"
+  });
+  it('literal table instruction; a local practice card that is not a fourth slot', () => {
+    expect(B01_INSTRUCTION).toBe('Deze losse tekenbladen horen bij drie objectgroepen boven. Vergelijk beide getekende details met hun originelen. De archiefclip aan de passende groep heeft de vorm van het juiste vak. Een losse overeenkomst is niet genoeg.');
+    expect(TABLE_TEXT).toContain(`“${B01_INSTRUCTION}”`);
+    expect(PRACTICE_TEXT).toMatch(/sleutel met drie tanden/); expect(PRACTICE_TEXT).toMatch(/gestreepte koordlus/); expect(PRACTICE_TEXT).toMatch(/golf/);
+    expect(SOURCES[SRC.practice].art!()).toContain('<svg');
+    expect(practiceCard()).toContain('<svg');
+    expect(B01_SLOTS).toEqual(['punt', 'rond', 'vierkant']); // no wave slot
+    const s = freshSliceState(1);
+    recordObservation(s, SRC.practice, 'library');
+    fillB01(s, B01_SLOTS.map((k) => B01_ANSWER[k]));
+    expect(b01Solved(s)).toBe(true); // the practice card neither gates nor counts
   });
   it('a folio is a loose drawing sheet: no folder ("map") wording anywhere the player reads B01', () => {
     const b01 = [TABLE_TEXT, ...B01_FOLIOS.map((f) => SOURCES[SRC.folio(f)].title + SOURCES[SRC.folio(f)].text), ...SLICE_HINTS.b01.levels, SLICE_HINTS.b01.context].join(' ');
@@ -346,7 +406,7 @@ describe('DEV-01R canon: B01 chain and folio concept', () => {
   });
   it('DEV-01 review saves (schema 1, folio ids I/II/III) migrate to the canon ids', () => {
     const p = parseSlice({ schema: 1, b01: { slots: { punt: 'III', rond: 'I', vierkant: null } }, obs: { 's.b01.folio.II': { seq: 3, room: 'library', faces: ['front'] } }, pins: ['s.b01.folio.II'], archivedObs: ['s.b01.folio.I'], questions: [{ id: 'q9', text: 'x', pins: ['s.b01.folio.III'] }] })!;
-    expect(p.schema).toBe(2);
+    expect(p.schema).toBe(3); // schema 1 → 2 → 3 in one parse
     expect(p.b01.slots).toEqual({ punt: 'plants', rond: 'stars', vierkant: null });
     expect(Object.keys(p.obs)).toEqual(['EB.folio.travel']);
     expect(p.obs['EB.folio.travel'].id).toBe('EB.folio.travel');
@@ -355,17 +415,46 @@ describe('DEV-01R canon: B01 chain and folio concept', () => {
     expect(p.questions[0].pins).toEqual(['EB.folio.plants']);
     expect(parseSlice({ schema: 2, b01: { slots: { punt: 'I' } } })!.b01.slots.punt).toBeNull(); // no legacy ids in schema 2
   });
+  it('schema ≤ 2 source ids migrate to the canon ids (cluster incl. clip, OA/OB/OC.ds01); merged records keep the earliest seq and all faces', () => {
+    const p = parseSlice({
+      schema: 2,
+      obs: {
+        's.b01.pair.sterren': { seq: 5, room: 'sterren', faces: ['front'] }, 's.b01.clip.sterren': { seq: 4, room: 'sterren', faces: ['front'] },
+        's.ds01.album': { seq: 7, room: 'library', faces: ['front'] }, 's.ds01.letter': { seq: 8, room: 'library', faces: ['front'] },
+        's.ds01.note': { seq: 2, room: 'hall', faces: ['front'] }, 's.ds01.photo': { seq: 9, room: 'reis', faces: ['front', 'back'] },
+      },
+      pins: ['s.ds01.letter', 's.ds01.album'], ds01: { photoFound: true, photoBackSeen: true },
+    })!;
+    expect(p.schema).toBe(3);
+    expect(Object.keys(p.obs).sort()).toEqual(['EB.stars', 'OA.ds01', 'OB.ds01', 'OC.ds01']);
+    expect(p.obs['EB.stars'].seq).toBe(4);
+    expect(p.obs['OC.ds01'].faces).toEqual(['front', 'back']);
+    expect(p.pins).toEqual(['OB.ds01']);
+    expect(p.hudAttention).toBe(false);
+    expect(parseSlice({ schema: 3, obs: { 's.ds01.note': { seq: 1 } } })!.obs['s.ds01.note']).toBeDefined(); // no re-mapping in schema 3
+  });
+  it('DS01 texts are the literal PD v0.2 §6.2 texts', () => {
+    expect(SOURCES[SRC.dsNote].text).toBe('“De afbeelding van het eerste huisje zit in het album Weekendhuizen, op de leesplank beneden. De maquette staat alvast hier. — G.M.”');
+    expect(SOURCES[SRC.dsAlbum].text).toContain('“Gingerbread house — het eerste huisje”');
+    expect(SOURCES[SRC.dsAlbum].text).toContain('“Er kwam water op de foto. Om hem te laten drogen hangt hij nu boven bij het raam, naast de koffers en het kleine droogrek. Het album laat ik hier. — G.M.”');
+    expect(SOURCES[SRC.dsPhoto].text).toBe('Een licht gegolfde afbeelding hangt met twee houten wasknijpers aan een klein rek bij het raam. Onderaan staat: Gingerbread house — het eerste huisje.');
+    expect(DS01_FOUND_NOTICE).toBe('Afbeelding bewaard in notities');
+    expect(DS01_MEMORY.title).toBe('De foto die moest drogen');
+    expect(photoFront()).toContain('Gingerbread house — het eerste huisje');
+    const all = [SRC.dsNote, SRC.dsAlbum, SRC.dsPhoto].map((id) => SOURCES[id].text + (SOURCES[id].back?.text ?? '')).join(' ');
+    expect(all).not.toMatch(/\bthee\b|— J\.|huisje aan het water|\bclip\b|\bvak\b/i); // nothing left of the provisional DEV-01 texts, no B01 language
+  });
 });
 
 describe('DEV-01 content and events', () => {
-  it('provisional content is labelled; folio art carries no subject word, emblem or room name', () => {
-    expect(CONTENT_STATUS).toMatch(/canon/); expect(CONTENT_STATUS).toMatch(/provisional/);
+  it('content is canon; folio art carries no subject word, emblem or room name', () => {
+    expect(CONTENT_STATUS).toMatch(/canon/); expect(CONTENT_STATUS).not.toMatch(/provisional/);
+    expect(Object.values(SOURCES).every((d) => d.status === 'canon')).toBe(true);
     for (const f of B01_FOLIOS) {
       // the drawings carry only a numeral and colour notes; the description names what is drawn, never a room
       expect(folioPage(f)).not.toMatch(/<text|ster|plant|reis|kamer|botan|telescoop|koffer/i); // sketches only, no words
       expect(SOURCES[SRC.folio(f)].text).not.toMatch(/kamer|botan|\bboven\b|sterren|reizen|planten/i); // drawn objects only, never a room or subject
     }
-    for (const sh of ['rond', 'punt', 'vierkant'] as SlotId[]) expect(clipCard(sh)).toContain('<svg');
   });
   it('the six semantic event types are distinct and emitted by the matching actions only', () => {
     expect(new Set(SEMANTIC_EVENTS).size).toBe(6);

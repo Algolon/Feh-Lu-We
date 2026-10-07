@@ -2,9 +2,11 @@
 // One record set: world.ts places the slice props FROM these records, and validatePlacement() checks them against
 // keepouts (unit-tested). Plan metres: X east, Z north; y is the floor height of the storey.
 //
-// Source of the numbers: the CURRENT builders (src/world/manor.ts walls/doors, roomdefs.ts rooms), not LEVEL_LAYOUT
-// v0.2 (not in this repository). Openings below mirror the wall() calls that create both the rendered gap and the
-// collider gap (arch.ts builds both from the same `openings` list, so render and collision cannot disagree).
+// Source of the numbers: the CURRENT builders (src/world/manor.ts walls/doors, roomdefs.ts rooms); their room bounds
+// equal LEVEL_LAYOUT v0.2 `source.rooms`. Openings below mirror the wall() calls that create both the rendered gap and
+// the collider gap (arch.ts builds both from the same `openings` list, so render and collision cannot disagree).
+// LEVEL_LAYOUT reservations used here: ES.gingerbread centre (88, 96). The B01 evidence_reservations poses are NOT
+// used: their spots are occupied by as-built furniture (see docs/dev01/DEV01R_AUDIT.md §7 F4).
 import { ROOMS } from '../world/roomdefs';
 import { GF, UF } from '../world/layout';
 
@@ -59,8 +61,8 @@ export const ROUTE = {
   arrive: [[89.6, 75.5], [89.6, 77.6], [90, 79.0]] as [number, number][], // forecourt → front door (unlock)
   toMantel: [[90, 82], [90, 86], [86.5, 88.5], [83, 89.2], [77.5, 89.2], [75.2, 88.6], [74.6, 86.7]] as [number, number][],
   toConsole: [[75.2, 88.6], [77.5, 89.2], [83, 89.2], [86.5, 88.5], [86.5, 85.5]] as [number, number][],
-  toMaquette: [[87.2, 90], [86.75, 95.9]] as [number, number][],
-  toLibrary: [[88.5, 97.0], [88.5, 100.2], [86.4, 101]] as [number, number][], // then open door.library
+  toMaquette: [[87.2, 90], [88.0, 94.6]] as [number, number][],
+  toLibrary: [[89.3, 95.3], [88.7, 97.4], [88.5, 100.2], [86.4, 101]] as [number, number][], // then open door.library
   intoLibrary: [[84.0, 101], [81.85, 101.2]] as [number, number][],
   toAlbum: [[82.2, 102.9], [79.4, 102.9], [78.9, 105.6], [75.75, 106.6]] as [number, number][],
   albumBack: [[78.9, 105.6], [79.4, 102.9], [82.2, 102.9], [81.85, 101.2]] as [number, number][],
@@ -82,22 +84,26 @@ export const ROUTE = {
 
 // ------------------------------------------------------------------------------------------------ slice props (footprints)
 export const PROPS: PropRec[] = [
-  // G02 hall — DS01 A: maquette on a low table against the west wall, north of the living-room arch (away from
-  // the console at z 85.5 and the mantel route through the arch at z 87–90)
-  { id: 'ds01.maquetteTable', room: 'hall', x: 85.5, z: 95.9, y: GF, w: 0.62, d: 1.1, h: 0.74, kind: 'staging', parts: [{ id: 'ds01.note', dx: 0.06, dz: -0.38 }] },
+  // G02 hall — DS01 A: gingerbread maquette on a table at the LEVEL_LAYOUT reservation ES.gingerbread (88, 96):
+  // the hall's west flank in front of the lobby arch, away from the console (z 85.5), the mantel arch and the stair
+  { id: 'ds01.maquetteTable', room: 'hall', x: 88.0, z: 96.0, y: GF, w: 0.62, d: 1.1, h: 0.74, kind: 'staging', parts: [{ id: 'ds01.note', dx: 0.06, dz: -0.38 }] },
   // G04 library — B01 table (the iteration-3 reading table, chairs moved to its west side)
   { id: 'b01.tableTop', room: 'library', x: 80.6, z: 101.2, y: GF, w: 1.1, d: 2.2, h: 0.81, kind: 'evidence-surface', parts: [{ id: 'b01.table', dx: 0, dz: 0 }] },
-  // G04 library — DS01 B: reading plank in the reading corner, ~7 m from the B01 table
-  // (DEV-01R canon: a quiet reading plank — a ledge on two trestles; same footprint as the DEV-01 side table)
-  { id: 'ds01.sideTable', room: 'library', x: 74.55, z: 106.6, y: GF, w: 0.7, d: 0.9, h: 0.95, kind: 'evidence-surface', parts: [{ id: 'ds01.album', dx: -0.02, dz: -0.2 }, { id: 'ds01.letter', dx: 0.04, dz: 0.27 }] },
-  // U05 — B01 star cluster: table against the north wall under the (plain) wall star chart
-  { id: 'b01.sterrenTable', room: 'sterren', x: 79.0, z: 93.45, y: UF, w: 1.0, d: 0.5, h: 0.74, kind: 'evidence-surface', parts: [{ id: 'b01.pair.sterren', dx: -0.18, dz: 0 }, { id: 'b01.clip.sterren', dx: 0.37, dz: 0 }] },
-  // U04 — B01 travel cluster: writing desk against the north wall
-  { id: 'b01.reisDesk', room: 'reis', x: 78.6, z: 86.4, y: UF, w: 1.1, d: 0.5, h: 0.74, kind: 'evidence-surface', parts: [{ id: 'b01.pair.reizen', dx: -0.2, dz: 0 }, { id: 'b01.clip.reizen', dx: 0.38, dz: 0 }] },
-  // U04 — DS01 C: small drying rack in front of the south-east window, near the suitcase bench; ≈5 m from the desk
+  // G04 library — DS01 B: quiet reading plank in the reading corner, ~7 m from the B01 table; album page + loose
+  // letter are one reading cluster (PD v0.2 §6.2, source OB.ds01)
+  { id: 'ds01.sideTable', room: 'library', x: 74.55, z: 106.6, y: GF, w: 0.7, d: 0.9, h: 0.95, kind: 'evidence-surface', parts: [{ id: 'ds01.album', dx: 0, dz: 0 }] },
+  // U05 — B01 star cluster (EB.stars): table against the north wall; telescope, notebook and the round clip ON the
+  // notebook form one inspection cluster
+  { id: 'b01.sterrenTable', room: 'sterren', x: 79.0, z: 93.45, y: UF, w: 1.0, d: 0.5, h: 0.74, kind: 'evidence-surface', parts: [{ id: 'b01.pair.sterren', dx: 0, dz: 0 }] },
+  // U04 — B01 travel cluster (EB.travel): writing desk against the north wall; square clip through the label hole
+  { id: 'b01.reisDesk', room: 'reis', x: 78.6, z: 86.4, y: UF, w: 1.1, d: 0.5, h: 0.74, kind: 'evidence-surface', parts: [{ id: 'b01.pair.reizen', dx: 0, dz: 0 }] },
+  // U04 — DS01 C: small drying rack in front of the south-east window; ≈5 m from the B01 desk
   { id: 'ds01.rack', room: 'reis', x: 82.2, z: 81.2, y: UF, w: 0.55, d: 0.3, h: 1.0, kind: 'staging', parts: [{ id: 'ds01.photo', dx: 0, dz: 0 }] },
-  // U10 — B01 plant cluster: table against the west wall (no windows on that wall)
-  { id: 'b01.botanicTable', room: 'botanic', x: 101.75, z: 84.0, y: UF, w: 0.5, d: 1.0, h: 0.74, kind: 'evidence-surface', parts: [{ id: 'b01.pair.planten', dx: 0, dz: -0.18 }, { id: 'b01.clip.planten', dx: 0, dz: 0.37 }] },
+  // U04 — two plain suitcases beside the rack ("bij het raam, naast de koffers en het kleine droogrek", PD §6.2);
+  // no straps, patch or label: they never duplicate the B01 travel pair
+  { id: 'ds01.cases', room: 'reis', x: 81.35, z: 81.05, y: UF, w: 0.7, d: 0.4, h: 0.55, kind: 'staging' },
+  // U10 — B01 plant cluster (EB.plants): table against the west wall; pointed clip on the glass plate
+  { id: 'b01.botanicTable', room: 'botanic', x: 101.75, z: 84.0, y: UF, w: 0.5, d: 1.0, h: 0.74, kind: 'evidence-surface', parts: [{ id: 'b01.pair.planten', dx: 0, dz: 0 }] },
 ];
 export const prop = (id: string) => PROPS.find((p) => p.id === id)!;
 
@@ -105,17 +111,13 @@ export const prop = (id: string) => PROPS.find((p) => p.id === id)!;
 export const POSES: PoseRec[] = [
   { id: 'pose.mantel', target: 'inspect.mantel', room: 'living', x: 74.6, z: 86.7, y: GF },
   { id: 'pose.console', target: 'hall.drawer', room: 'hall', x: 86.5, z: 85.5, y: GF },
-  { id: 'pose.maquette', target: 'ds01.note', room: 'hall', x: 86.75, z: 95.9, y: GF },
+  { id: 'pose.maquette', target: 'ds01.note', room: 'hall', x: 88.0, z: 94.6, y: GF },
   { id: 'pose.table', target: 'b01.table', room: 'library', x: 81.85, z: 101.2, y: GF },
   { id: 'pose.album', target: 'ds01.album', room: 'library', x: 75.75, z: 106.6, y: GF },
-  { id: 'pose.letter', target: 'ds01.letter', room: 'library', x: 75.75, z: 106.6, y: GF },
   { id: 'pose.sterren.pair', target: 'b01.pair.sterren', room: 'sterren', x: 79.0, z: 92.35, y: UF },
-  { id: 'pose.sterren.clip', target: 'b01.clip.sterren', room: 'sterren', x: 79.0, z: 92.35, y: UF },
   { id: 'pose.reis.pair', target: 'b01.pair.reizen', room: 'reis', x: 78.6, z: 85.3, y: UF },
-  { id: 'pose.reis.clip', target: 'b01.clip.reizen', room: 'reis', x: 78.6, z: 85.3, y: UF },
   { id: 'pose.rack', target: 'ds01.photo', room: 'reis', x: 82.2, z: 82.45, y: UF },
   { id: 'pose.botanic.pair', target: 'b01.pair.planten', room: 'botanic', x: 102.9, z: 84.0, y: UF },
-  { id: 'pose.botanic.clip', target: 'b01.clip.planten', room: 'botanic', x: 102.9, z: 84.0, y: UF },
 ];
 
 // ------------------------------------------------------------------------------------------------ keepouts + validation

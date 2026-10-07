@@ -21,7 +21,7 @@ import {
   B01_SLOTS, B01_FOLIOS, B01_ANSWER, B01_LOCK, B01_DRAWER, B01_KEY_PICKUP, SRC, REMOVED_SOURCES, TRACK_TO_TOPIC,
   type SlotId, type FolioId, type TopicId,
 } from './ids';
-import { SOURCES, INVITATION_SLICE, REGISTER_TOPICS, SLICE_HINTS, RESULT_TEXT, DS01_MEMORY, type SourceDef } from './content';
+import { SOURCES, REGISTER_TOPICS, SLICE_HINTS, RESULT_TEXT, DS01_MEMORY, type SourceDef } from './content';
 
 const ok = (msg: string, sfx: Outcome['sfx'] = 'success'): Outcome => ({ ok: true, msg, sfx });
 const no = (msg: string, sfx: Outcome['sfx'] = 'fail'): Outcome => ({ ok: false, msg, sfx });
@@ -41,12 +41,16 @@ const pushOnce = (arr: string[], id: string) => (arr.includes(id) ? false : (arr
 const ownsItem = (s: GameState, i: string) => s.inventory.includes(i) || s.used.includes(i);
 
 // ------------------------------------------------------------------------------------------------ sources
-/** Source text as the slice shows it (slice sources, else the game's clue with the slice invitation). */
+/**
+ * Source text as the slice shows it (slice sources, else the game's clue verbatim). The invitation is quoted in full,
+ * including its sentence about the three parts of the route: UX v0.2 §3 "niet censureren: wel citeren, nog geen
+ * queststructuur ervan maken" — topics as structure appear only after the register was read.
+ */
 export function sourceDef(id: string): SourceDef | null {
   if (SOURCES[id]) return SOURCES[id];
   const c = CLUES[id];
   if (!c) return null;
-  return { id, title: c.title, text: id === 'c.invitation' ? INVITATION_SLICE : c.text, status: 'canon' };
+  return { id, title: c.title, text: c.text, status: 'canon' };
 }
 /** Memory notes are kept in the Archief (herinneringen), not among the observations. */
 export const isMemory = (id: string) => CLUES[id]?.memory === true;
@@ -65,7 +69,8 @@ export function recordObservation(s: GameState, id: string, room: string, face: 
   } else {
     x.obs[id] = { id, seq: x.seq + 1, room, faces: [face] };
   }
-  emit(s, 'ObservationRecorded', face === 'front' ? id : `${id}#${face}`);
+  // a two-faced source logs each face under its canon id (DS01: OC.ds01.front / OC.ds01.back)
+  emit(s, 'ObservationRecorded', sourceDef(id)!.back ? `${id}.${face}` : face === 'front' ? id : `${id}#${face}`);
   if (CLUES[id] && !s.clues.includes(id)) s.clues.push(id); // keeps the shared (non-slice) puzzles' discovery working
   return true;
 }
@@ -91,6 +96,15 @@ export function observeRegister(s: GameState, room: string): boolean {
 }
 /** Topics shown in "Mijn onderzoek": exactly the three the register names, and only after it was read. */
 export const registerTopics = (s: GameState) => (s.slice?.registerObserved ? REGISTER_TOPICS : null);
+
+/** Show "Mijn aandacht" in the HUD: the player's own opt-in, off by default (UX v0.2 §3). Changes nothing else. */
+export function setHudAttention(s: GameState, on: boolean): boolean {
+  const x = sl(s);
+  if (x.hudAttention === on) return false;
+  x.hudAttention = on;
+  emit(s, 'AttentionChanged', on ? 'hud:on' : 'hud:off');
+  return true;
+}
 
 /** "Mijn aandacht": a personal focus. Changes nothing in the world, in eligibility or in hints. */
 export function setAttention(s: GameState, topic: TopicId | null): boolean {
@@ -128,8 +142,7 @@ export function b01Loose(s: GameState): FolioId[] {
 }
 /**
  * Lay a folio in a slot. A folio leaves any other slot; whatever lay in the target slot goes back beside the table.
- * Judged only when all three slots are filled: incomplete = no attempt; complete & wrong = neutral local feedback
- * (one attempt counted); correct = the drawer opens. Correctness depends on the slots only, never on observations.
+ * Placing never judges: the player judges the full set with "Controleer" (b01Check, PD v0.2 §4.2).
  */
 export function b01Place(s: GameState, slot: SlotId, folio: FolioId): Outcome {
   const b = sl(s).b01;
@@ -137,7 +150,7 @@ export function b01Place(s: GameState, slot: SlotId, folio: FolioId): Outcome {
   if (!B01_SLOTS.includes(slot) || !B01_FOLIOS.includes(folio)) return no('Dat past hier niet.', 'fail');
   for (const k of B01_SLOTS) if (b.slots[k] === folio) b.slots[k] = null;
   b.slots[slot] = folio;
-  return b01Evaluate(s);
+  return ok('Het tekenblad ligt in het vak.', 'click');
 }
 export function b01Take(s: GameState, slot: SlotId): Outcome {
   const b = sl(s).b01;
@@ -146,9 +159,15 @@ export function b01Take(s: GameState, slot: SlotId): Outcome {
   b.slots[slot] = null;
   return ok('Je pakt het tekenblad terug.', 'pickup');
 }
-function b01Evaluate(s: GameState): Outcome {
+/**
+ * "Controleer": judge the full set. Incomplete = no attempt (nothing counted); complete & wrong = neutral local
+ * feedback (one attempt counted); correct = the drawer opens. Correctness depends on the slots only, never on
+ * observations, pins, attention or hints.
+ */
+export function b01Check(s: GameState): Outcome {
   const b = sl(s).b01;
-  if (B01_SLOTS.some((k) => !b.slots[k])) return ok('Het tekenblad ligt in het vak.', 'click');
+  if (b.solved) return no('De tekenbladen liggen nu vast.', 'none');
+  if (B01_SLOTS.some((k) => !b.slots[k])) return no('Leg eerst in elk vak een tekenblad.', 'none');
   if (!B01_SLOTS.every((k) => b.slots[k] === B01_ANSWER[k])) {
     b.wrong++;
     s.wrong.b01 = (s.wrong.b01 ?? 0) + 1;
@@ -227,12 +246,25 @@ export function setArchived(s: GameState, id: string, archived: boolean): boolea
 
 // ------------------------------------------------------------------------------------------------ hints
 export interface HintContext { id: string; title: string; context: string; levels: [string, string, string]; shown: number }
-/** Riddles the player has met and not solved. Level 0 (opening the hint) names the riddle only. */
+/**
+ * DS01's hint topic, titled only with what the player has actually seen (UX v0.2 §5: no authored title before its
+ * meaning is revealed; PD §6.6: C first → "Waar hoort deze afbeelding bij?"). null while no DS01 source was seen.
+ */
+function ds01HintTitle(s: GameState): string | null {
+  if (s.slice?.ds01.photoFound) return 'Waar hoort deze afbeelding bij?';
+  if (observed(s, SRC.dsAlbum)) return 'De lege fotohoek in het album';
+  if (observed(s, SRC.dsNote)) return 'De afbeelding van het eerste huisje';
+  return null;
+}
+/** Riddles the player has met (and not solved). Level 0 (opening the hint) names the riddle only. */
 export function hintContexts(s: GameState): HintContext[] {
   const x = sl(s);
   const out: HintContext[] = [];
   if (x.encountered.includes('drawer') && !s.flags.drawerLockSolved) out.push({ id: 'drawer', title: 'De lade in de hal', ...SLICE_HINTS.drawer, shown: x.hints.drawer ?? 0 });
   if (x.encountered.includes('b01') && !x.b01.solved) out.push({ id: 'b01', title: 'De leestafel', ...SLICE_HINTS.b01, shown: x.hints.b01 ?? 0 });
+  // DS01 has no validator: its optional hints stay available once one of its sources was seen
+  const ds = ds01HintTitle(s);
+  if (ds) out.push({ id: 'ds01', title: ds, context: `${ds}`, levels: SLICE_HINTS.ds01.levels, shown: x.hints.ds01 ?? 0 });
   for (const p of PUZZLES) {
     if (SLICE_PUZZLES.has(p.id) || p.solved(s) || !p.discovered(s)) continue;
     out.push({ id: p.id, title: p.title, context: `${p.title}.`, levels: p.hints, shown: x.hints[p.id] ?? 0 });
@@ -268,11 +300,12 @@ export interface NotebookView {
   research: {
     topics: { id: TopicId; title: string; line: string }[] | null; // null until the register was READ
     attention: TopicId | null;
+    hud: boolean; // the player's own opt-in to show the attention in the HUD
     questions: Question[]; // own questions/ideas, not archived
     pinned: NbSource[];
     results: { id: string; text: string }[];
   };
-  archive: { memories: { id: string; title: string; text: string }[]; questions: Question[]; observations: NbSource[] };
+  archive: { memories: { id: string; title: string; text: string; art?: () => string }[]; questions: Question[]; observations: NbSource[] };
 }
 export function notebookView(s: GameState): NotebookView {
   const x = sl(s);
@@ -290,7 +323,7 @@ export function notebookView(s: GameState): NotebookView {
     };
   };
   const all = order.map((o) => nb(o.id)).filter((v): v is NbSource => !!v);
-  const memories = s.clues.filter(isMemory).map((id) => ({ id, title: CLUES[id].title, text: CLUES[id].text }));
+  const memories: NotebookView['archive']['memories'] = s.clues.filter(isMemory).map((id) => ({ id, title: CLUES[id].title, text: CLUES[id].text }));
   if (x.results.includes(DS01_MEMORY.id)) memories.push({ ...DS01_MEMORY });
   const title = (id: string) => PUZZLES.find((p) => p.id === id.slice(7))?.title ?? id;
   return {
@@ -298,6 +331,7 @@ export function notebookView(s: GameState): NotebookView {
     research: {
       topics: registerTopics(s),
       attention: x.registerObserved ? x.attention : null,
+      hud: x.hudAttention,
       questions: x.questions.filter((q) => !q.archived),
       pinned: all.filter((o) => o.pinned),
       results: x.results.filter((r) => r !== DS01_MEMORY.id).map((r) => ({ id: r, text: RESULT_TEXT[r] ?? (r.startsWith('legacy.') ? `Opgelost: ${title(r)}.` : r) })),

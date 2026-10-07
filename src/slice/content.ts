@@ -1,16 +1,16 @@
 // DEV-01 player-facing content.
 //
-// CONTENT STATUS: PROVISIONAL. Puzzle Design v0.2 (exact B01 detail pairs, DS01 texts) and UX_GAME_FEEL v0.2 were
-// not available in this repository or its connected workspace when the slice was built. Every string below that
-// the brief says must come from those documents is written to the DEV-01 contract and marked `provisional`;
-// replace the text here (ids stay stable) once the canon is in hand. Texts taken from the integrated canon of the
-// running game (register, mantel, drawer) are reused verbatim and marked `canon`.
+// CONTENT STATUS (DEV-01R final): every B01/DS01 text that PUZZLE_DESIGN v0.2 gives literally (table instruction,
+// hint levels, DS01 A text, B page title and letter, C raw inspection, C back, DS01 hints) is copied verbatim from
+// docs/design/v0.2/PUZZLE_DESIGN.md and marked `canon`. Source titles and the practice-card / cluster transcripts are
+// our wording of canonical details (PD §4.2 / §6.2 give the details, not the sentences). Texts of the running game
+// (register, mantel, drawer, study card) are reused verbatim.
 import { CLUES } from '../content/clues';
 import { MANTEL_HINTS } from '../content/canon';
 import { SRC, type FolioId, type Subject, type TopicId, type SlotId } from './ids';
 import * as D from './drawings';
 
-export const CONTENT_STATUS = 'B01 folio ids + detail pairs: canon (DEV-01R). Instruction, hints, DS01 texts: provisional (v0.2 files not available) — see docs/dev01/DEV01_SLICE.md §5';
+export const CONTENT_STATUS = 'B01 + DS01: canon from docs/design/v0.2/PUZZLE_DESIGN.md (DEV-01R final) — see docs/dev01/DEV01_SLICE.md §5';
 
 export interface SourceDef {
   id: string;
@@ -23,89 +23,91 @@ export interface SourceDef {
 }
 
 // ------------------------------------------------------------------------------------------------ B01
-/**
- * The two physical details each folio (a loose drawing sheet) sketches. CANON (DEV-01R brief, Puzzle Design v0.2):
- * stars = telescope on a fork mount + two round screw heads; notebook with three holes.
- * plants = fern with a broad diagonal repair strip; scissors with an angular and a round grip.
- * travel = suitcase with two parallel straps + square middle patch; label with the top-right corner cut off.
- * The player-facing wording below is ours (the literal v0.2 wording was not available): provisional phrasing,
- * canonical details.
- */
+/** The two physical details each folio (a loose drawing sheet) sketches — literal from PUZZLE_DESIGN v0.2 §4.2. */
 export const FOLIO_DETAILS: Record<FolioId, string> = {
-  stars: 'een kleine telescoop op een vorkvoet, met twee ronde schroefkoppen waar de kijker in de vork draait, en een schrift met drie gaten langs de rug',
-  plants: 'een varenblad met een brede reparatiestrook schuin eroverheen, en een schaar met één hoekige en één ronde greep',
-  travel: 'een koffer met twee evenwijdige riemen en een vierkante lap in het midden, en een label waarvan de rechterbovenhoek is afgeknipt',
+  stars: 'telescoop op vorkvoet met twee ronde schroefkoppen; gesloten schrift met drie gaten naast elkaar',
+  plants: 'geperste varen onder glas met één brede diagonale reparatiestrook; schaar met één hoekige en één ronde greep',
+  travel: 'koffer met twee parallelle riemen en vierkante middenpatch; label met afgesneden rechterbovenhoek',
 };
 /** Short neutral titles (what is drawn), used in the panel and the notebook. Not subject or room words. */
 export const FOLIO_TITLE: Record<FolioId, string> = { stars: 'telescoop en schrift', plants: 'varen en schaar', travel: 'koffer en label' };
-const PAIR_TEXT: Record<Subject, string> = {
-  sterren: 'Op een tafeltje tegen de muur staat een kleine telescoop op een vorkvoet; waar de kijker in de vork draait, zitten twee ronde schroefkoppen. Ernaast ligt een schrift met drie gaten langs de rug.',
-  reizen: 'Op het schrijftafeltje staat een kleine koffer met twee evenwijdige riemen en een vierkante lap in het midden. Ernaast ligt een bagagelabel; de rechterbovenhoek is eraf geknipt.',
-  planten: 'Op een tafeltje tegen de muur ligt onder glas een geperst varenblad, met een brede reparatiestrook schuin eroverheen. Ernaast ligt een schaar met één hoekige en één ronde greep.',
-};
 const CLIP_SHAPE_TEXT: Record<SlotId, string> = { rond: 'rond', punt: 'puntig, als een spitsboog', vierkant: 'vierkant' };
 const SUBJECT_CLIP: Record<Subject, SlotId> = { sterren: 'rond', planten: 'punt', reizen: 'vierkant' };
 const SUBJECT_FOLIO: Record<Subject, FolioId> = { sterren: 'stars', reizen: 'travel', planten: 'plants' };
+/**
+ * One inspection cluster per pair (PD §4.2 UX-contract, UX U01): both originals plus the archive clip that is
+ * physically attached to them — round clip on the notebook, pointed clip on the glass plate, square clip through
+ * the label's hole. Raw transcript only: never "so this sheet goes in that slot".
+ */
+const CLUSTER: Record<Subject, { title: string; text: string }> = {
+  sterren: {
+    title: 'Tafeltje met telescoop en schrift',
+    text: `Op een tafeltje tegen de muur: een telescoop op vorkvoet met twee ronde schroefkoppen, en een gesloten schrift met drie gaten naast elkaar. Aan het schrift zit een koperen archiefclip. De clip is ${CLIP_SHAPE_TEXT.rond}.`,
+  },
+  planten: {
+    title: 'Tafeltje met varen en schaar',
+    text: `Op een tafeltje tegen de muur: een geperste varen onder glas met één brede diagonale reparatiestrook, en een schaar met één hoekige en één ronde greep. Aan de glasplaat zit een koperen archiefclip. De clip is ${CLIP_SHAPE_TEXT.punt}.`,
+  },
+  reizen: {
+    title: 'Schrijftafeltje met koffer en label',
+    text: `Op het schrijftafeltje: een koffer met twee parallelle riemen en een vierkante middenpatch, en een label met afgesneden rechterbovenhoek. Door het gat van het label zit een koperen archiefclip. De clip is ${CLIP_SHAPE_TEXT.vierkant}.`,
+  },
+};
 
-/** provisional wording (Puzzle v0.2's literal instruction was not available); concept per canon: loose sheets. */
+/** PD §4.2 "Letterlijke instructie" (canon), on a card in the table top. The description before it is ours. */
+export const B01_INSTRUCTION =
+  'Deze losse tekenbladen horen bij drie objectgroepen boven. Vergelijk beide getekende details met hun originelen. ' +
+  'De archiefclip aan de passende groep heeft de vorm van het juiste vak. Een losse overeenkomst is niet genoeg.';
 export const TABLE_TEXT =
   'Een lange leestafel. In het blad zitten drie lege vakken met een koperen rand: een puntig vak, een rond vak en een vierkant vak. ' +
-  'Ernaast liggen drie losse tekenbladen, elk met twee schetsjes in potlood. Onder het blad zit een lade zonder sleutelgat.\n\n' +
-  'Op een kaartje in het blad: “Ieder tekenblad hoorde ooit met een clip in het archief. Leg het terug in het vak van die clip.”';
+  'Ernaast liggen drie losse tekenbladen, elk met twee schetsjes in potlood, en een oefenkaart. Onder het blad zit een lade zonder sleutelgat.\n\n' +
+  `Op een kaartje in het blad: “${B01_INSTRUCTION}”`;
+/** PD §4.2 "Lokale oefenkaart" (canon elements; transcript wording ours). Teaches the relation; not a fourth slot. */
+export const PRACTICE_TEXT =
+  'Op de kaart staan in potlood een sleutel met drie tanden en een gestreepte koordlus, en daarnaast een getekend vak in de vorm van een golf. ' +
+  'Naast de kaart liggen de echte sleutel met drie tanden en de gestreepte koordlus, samen aan een koperen clip in de vorm van een golf.';
 
 // ------------------------------------------------------------------------------------------------ sources
 const S = (d: SourceDef) => d;
 export const SOURCES: Record<string, SourceDef> = {
-  [SRC.table]: S({ id: SRC.table, title: 'Leestafel met drie vakken', text: TABLE_TEXT, status: 'provisional' }),
+  [SRC.table]: S({ id: SRC.table, title: 'Leestafel met drie vakken', text: TABLE_TEXT, status: 'canon' }),
+  [SRC.practice]: S({ id: SRC.practice, title: 'Oefenkaart op de leestafel', text: PRACTICE_TEXT, art: D.practiceCard, status: 'canon' }),
   ...Object.fromEntries((['stars', 'plants', 'travel'] as FolioId[]).map((f) => [SRC.folio(f), S({
-    id: SRC.folio(f), title: `Tekenblad: ${FOLIO_TITLE[f]}`, text: `Een los tekenblad met alleen twee schetsjes in potlood, zonder uitleg: ${FOLIO_DETAILS[f]}.`,
+    id: SRC.folio(f), title: `Tekenblad: ${FOLIO_TITLE[f]}`, text: `Een los tekenblad met alleen twee schetsjes in potlood, zonder uitleg. Getekend: ${FOLIO_DETAILS[f]}.`,
     art: () => D.folioPage(f), status: 'canon',
   })])),
   ...Object.fromEntries((['sterren', 'planten', 'reizen'] as Subject[]).map((s) => [SRC.pair(s), S({
-    id: SRC.pair(s), title: s === 'reizen' ? 'Schrijftafeltje' : 'Tafeltje tegen de muur', text: PAIR_TEXT[s], art: () => D.pairView(s), status: 'canon',
-  })])),
-  ...Object.fromEntries((['sterren', 'planten', 'reizen'] as Subject[]).map((s) => [SRC.clip(s), S({
-    id: SRC.clip(s), title: 'Archiefclip', text: `Naast de voorwerpen ligt een leeg archiefkaartje, vastgezet met een koperen clip. De clip is ${CLIP_SHAPE_TEXT[SUBJECT_CLIP[s]]}.`,
-    art: () => D.clipCard(SUBJECT_CLIP[s]), status: 'provisional',
+    id: SRC.pair(s), title: CLUSTER[s].title, text: CLUSTER[s].text, art: () => D.pairView(s), status: 'canon',
   })])),
   [SRC.archiveCard]: S({ id: SRC.archiveCard, title: 'Kaartje in de lade', text: '“De studeerkamer bewaart wat werd opgeschreven. Het bureau gaat open voor wie de ochtendwandeling kent.”', status: 'canon' }),
-  // ---------------------------------------------------------------------------------------------- DS01 (provisional)
+  // ---------------------------------------------------------------------------------------------- DS01 (PD §6.2, literal)
   [SRC.dsNote]: S({
-    id: SRC.dsNote, title: 'Notitie bij de maquette',
-    text: '“Wie de oude weekendhuizen wil zien: ze zitten in het album Weekendhuizen, in de bibliotheek, op het lage tafeltje bij de leunstoel. Graag terugleggen na het kijken.”',
-    art: D.noteCard, status: 'provisional',
+    id: SRC.dsNote, title: 'Gevouwen notitie bij de maquette',
+    text: '“De afbeelding van het eerste huisje zit in het album Weekendhuizen, op de leesplank beneden. De maquette staat alvast hier. — G.M.”',
+    art: D.noteCard, status: 'canon',
   }),
   [SRC.dsAlbum]: S({
     id: SRC.dsAlbum, title: 'Album “Weekendhuizen”',
-    text: 'Een album met foto’s van huisjes en huizen, elk met een jaartal in potlood. Op de laatste beschreven bladzijde is één plek leeg: vier zwarte fotohoekjes zonder foto. Eronder in potlood: “Het huisje aan het water — het eerste weekend.”',
-    art: D.albumSpread, status: 'provisional',
-  }),
-  [SRC.dsLetter]: S({
-    id: SRC.dsLetter, title: 'Briefje in het album',
-    text: '“Sorry! Er ging thee over de foto van het huisje aan het water. Ik heb hem boven laten drogen, op het rekje bij het raam in de kamer met de koffers. Niet terugplakken voor hij weer helemaal plat is. — J.”',
-    art: D.letterSheet, status: 'provisional',
+    text: 'Het album ligt open op de bladzijde “Gingerbread house — het eerste huisje”. Op die bladzijde: lege fotohoekjes en een rechthoekig verbleekt vlak. ' +
+      'In het album ligt een los briefje:\n\n“Er kwam water op de foto. Om hem te laten drogen hangt hij nu boven bij het raam, naast de koffers en het kleine droogrek. Het album laat ik hier. — G.M.”',
+    art: D.albumSpread, status: 'canon',
   }),
   [SRC.dsPhoto]: S({
-    id: SRC.dsPhoto, title: 'Foto op het droogrekje',
-    text: 'Een kleine zwart-witfoto, nog licht gegolfd: een laag huisje aan het water, met vier fietsen tegen de gevel. In een hoek een vage bruine kring.',
+    id: SRC.dsPhoto, title: 'Afbeelding aan het droogrek',
+    text: 'Een licht gegolfde afbeelding hangt met twee houten wasknijpers aan een klein rek bij het raam. Onderaan staat: Gingerbread house — het eerste huisje.',
     art: D.photoFront,
-    back: { title: 'Achterkant van de foto', text: 'Op de achterkant, in potlood: “Het eerste weekend. Iedereen te laat, niemand erg.” De bruine kring loopt door tot op de achterkant.', art: D.photoBack },
-    status: 'provisional',
+    back: { title: 'Achterzijde van de afbeelding', text: 'Weekendhuizen · blad: het eerste huisje. Album op de leesplank in de bibliotheek. De afbeelding hoort bij de maquette in de hal.', art: D.photoBack },
+    status: 'canon',
   }),
 };
 
-/** DS01 memory in the Archief (given once, on the first look at the photo's front). Neutral: never "understood". */
-export const DS01_MEMORY = { id: 'ds01.memory', title: 'Het huisje aan het water', text: 'Bekeken: de foto van het huisje aan het water, op het droogrekje boven.' };
-
-// ------------------------------------------------------------------------------------------------ invitation (slice variant)
+/** PD §6.4: the one-time notice on the first look at the front. */
+export const DS01_FOUND_NOTICE = 'Afbeelding bewaard in notities';
 /**
- * Iteration-3 invitation minus the paragraph that names the three parts of the route: before the register is read,
- * nothing in the notebook may show the three main topics (DEV-01 §6). provisional.
+ * DS01 entry in the Archief, given once on the first look at the front (PD §6.4). The player title appears only now
+ * (PD §6.1); label "Bekeken", never "Opgelost" (UX §4.1). Image + caption, no claim of understanding.
  */
-export const INVITATION_SLICE =
-  '“We hebben alles klaargezet. Zoek uit waar we samenkomen.”\n\nDit jaar niet op de gewone plek.\n\n' +
-  'Begin in de hal: daar staat een ladekast met een slot. Op de schoorsteenmantel staan drie voorwerpen op kleine messing voetjes. ' +
-  'Alleen die drie horen bij de lade. Lees ze van links naar rechts, terwijl je voor de haard staat.\n\n— de Kwartiermaker';
+export const DS01_MEMORY = { id: 'ds01.memory', title: 'De foto die moest drogen', text: 'Gingerbread house — het eerste huisje.', art: D.photoFront };
 
 // ------------------------------------------------------------------------------------------------ register topics (canon)
 /** The three topics the register names, with the register's own line for each (verbatim from c.ledger). */
@@ -118,20 +120,29 @@ export const REGISTER_TEXT = CLUES['c.ledger'].text;
 
 // ------------------------------------------------------------------------------------------------ hints
 export interface HintSet { context: string; levels: [string, string, string] }
-/** Level 0 names the riddle only; 1 = attention, 2 = relation, 3 = explicit solution. */
-export const SLICE_HINTS: Record<'drawer' | 'b01', HintSet> = {
+/** Level 0 names the riddle and explains the levels; 1 = attention, 2 = relation, 3 = explicit solution (UX §5). */
+export const SLICE_HINTS: Record<'drawer' | 'b01' | 'ds01', HintSet> = {
   drawer: { context: 'Het slot op de ladekast in de hal.', levels: MANTEL_HINTS },
   b01: {
     context: 'De leestafel met drie vakken en drie tekenbladen.',
-    // provisional wording: the literal Puzzle v0.2 hint levels were not available; level semantics per UX canon
+    // PD §4.2, literal
     levels: [
-      'Kijk goed naar wat er op elk tekenblad getekend staat. Het zijn geen versieringen: het zijn twee echte voorwerpen, met elk een eigen detail.',
-      'Elk tekenblad tekent twee voorwerpen die samen op één tafeltje in een kamer boven liggen. Daar ligt ook een archiefclip; de vorm van die clip is het vak voor dat tekenblad.',
-      'Telescoop op vorkvoet + schrift met drie gaten → rond vak · varen met reparatiestrook + schaar → puntig vak · koffer met twee riemen + label met afgeknipte hoek → vierkant vak.',
+      'Zoek boven de objectgroepen uit de tekeningen.',
+      'Vergelijk beide details; de clip aan de juiste groep bepaalt het vak.',
+      'Telescoopfolio rond, varenfolio puntig, kofferfolio vierkant.',
+    ],
+  },
+  ds01: {
+    // context line is chosen from what the player has seen (model.hintContexts); PD §6.6 levels, literal
+    context: 'Waar is de foto uit het album gebleven?',
+    levels: [
+      'Kijk naar de titel en herkomst van de afbeelding. Het album en de maquette vertellen iets over hetzelfde huisje.',
+      'De lege fotohoek laat zien waar de afbeelding hoorde. Het losse briefje vertelt waarom hij naar een droogplek boven verhuisde.',
+      'De afbeelding hangt aan het droogrek bij het raam in de kamer met koffers. Het album ligt op de leesplank in de bibliotheek; de maquette staat in de hal.',
     ],
   },
 };
-export const HINT_LEVEL_NAMES = ['Aandacht', 'Verband', 'Oplossing'] as const;
+export const HINT_LEVEL_NAMES = ['Aandacht', 'Relatie', 'Oplossing'] as const;
 
 // ------------------------------------------------------------------------------------------------ results (outcome log)
 export const RESULT_TEXT: Record<string, string> = {

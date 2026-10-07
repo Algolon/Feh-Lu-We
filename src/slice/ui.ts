@@ -8,11 +8,11 @@ import { SYMBOLS, symbolSvg } from '../content/symbols';
 import { LOCK_OPTIONS, submitCode, type Outcome } from '../puzzles/rules';
 import { DIAGRAMS } from '../ui/diagrams';
 import {
-  sl, sourceDef, isMemory, recordObservation, observed, encounter, observeRegister, setAttention, b01Place, b01Take, b01Loose, b01Slots, b01Solved,
+  sl, sourceDef, isMemory, recordObservation, observed, encounter, observeRegister, setAttention, setHudAttention, b01Place, b01Take, b01Check, b01Loose, b01Slots, b01Solved,
   ds01Front, ds01Back, togglePin, saveQuestion, setArchived, hintContexts, revealHint, notebookView, type NbSource,
 } from './model';
 import { ALIAS_OF, B01_SLOTS, SRC, type FolioId, type SlotId, type TopicId } from './ids';
-import { REGISTER_TOPICS, HINT_LEVEL_NAMES, TABLE_TEXT, FOLIO_TITLE } from './content';
+import { REGISTER_TOPICS, HINT_LEVEL_NAMES, TABLE_TEXT, FOLIO_TITLE, DS01_FOUND_NOTICE } from './content';
 import * as D from './drawings';
 
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
@@ -20,7 +20,7 @@ const $ = <T extends HTMLElement>(sel: string, root: ParentNode) => root.querySe
 
 /** Where the notebook returns to: the parent panel with its draft, scroll position and focused control. */
 export interface ReturnCtx { panel: 'b01' | 'drawer'; title: string; draft: unknown; scroll: number; focus: string | null }
-interface B01Draft { sel: FolioId | null; view: FolioId | null; msg: string }
+interface B01Draft { sel: FolioId | null; view: FolioId | 'practice' | null; msg: string }
 interface DrawerDraft { vals: number[] }
 interface NbDraft { tab: 'w' | 'o' | 'a'; text: string; pins: string[]; scroll: number }
 
@@ -66,7 +66,7 @@ export class SliceUI {
   }
   private sourceOverlay(id: string, isNew: boolean) {
     const d = sourceDef(id)!;
-    const body = this.ui.modal(d.title, `<p class="kind kind-obs">Waarneming</p>${this.artHtml(id, d.art)}<p>${esc(d.text)}</p>` +
+    const body = this.ui.modal(d.title, `<p class="kind kind-obs">Waargenomen</p>${this.artHtml(id, d.art)}<p>${esc(d.text)}</p>` +
       (isNew ? '<p class="muted">✎ Bewaard bij Waarnemingen in je notitieboek.</p>' : '') +
       '<div class="row center"><button class="btn primary" data-ok>Verder</button></div>');
     this.wireZoom(body);
@@ -76,19 +76,20 @@ export class SliceUI {
   photo(face: 'front' | 'back') {
     const room = this.room();
     const d = sourceDef(SRC.dsPhoto)!;
-    let changed = false;
+    let changed = false, first = false;
     if (face === 'front') {
       const before = observed(this.s, SRC.dsPhoto);
-      ds01Front(this.s, room);
+      first = ds01Front(this.s, room).first;
       changed = !before;
     } else {
       changed = !observed(this.s, SRC.dsPhoto, 'back');
       ds01Back(this.s, room);
     }
     const shown = face === 'front' ? { title: d.title, text: d.text, art: d.art } : d.back!;
-    const body = this.ui.modal(shown.title, `<p class="kind kind-obs">Waarneming</p>${this.artHtml(SRC.dsPhoto, shown.art)}<p>${esc(shown.text)}</p>` +
-      (changed ? '<p class="muted">✎ Bewaard bij Waarnemingen in je notitieboek.</p>' : '') +
-      `<p class="muted">De foto blijft op het rekje hangen.</p><div class="row center"><button class="btn" data-flip data-fk="flip">${face === 'front' ? 'Omdraaien' : 'Voorkant bekijken'}</button><button class="btn primary" data-ok>Verder</button></div>`);
+    const body = this.ui.modal(shown.title, `<p class="kind kind-obs">Waargenomen</p>${this.artHtml(SRC.dsPhoto, shown.art)}<p>${esc(shown.text)}</p>` +
+      // PD v0.2 §6.4: the first look at the front gives one quiet notice; no chime, no "all connected" pop-up
+      (first ? `<p class="muted" data-found>✎ ${esc(DS01_FOUND_NOTICE)}</p>` : changed ? '<p class="muted">✎ Bewaard bij Waarnemingen in je notitieboek.</p>' : '') +
+      `<p class="muted">De afbeelding blijft aan het rek hangen.</p><div class="row center"><button class="btn" data-flip data-fk="flip">${face === 'front' ? 'Omkeren' : 'Voorzijde bekijken'}</button><button class="btn primary" data-ok>Verder</button></div>`);
     this.wireZoom(body);
     $('[data-flip]', body).addEventListener('click', () => this.photo(face === 'front' ? 'back' : 'front'));
     $('[data-ok]', body).addEventListener('click', () => this.ui.closeModal());
@@ -125,6 +126,7 @@ export class SliceUI {
     const s = this.s;
     encounter(s, 'b01');
     if (recordObservation(s, SRC.table, this.room())) this.commit();
+    if (draft.view === 'practice') return this.practiceView(draft);
     if (draft.view) return this.folioView(draft);
     const solved = b01Solved(s);
     const slots = b01Slots(s), loose = b01Loose(s);
@@ -133,15 +135,16 @@ export class SliceUI {
     const cover = (f: FolioId, w = 96) => `<span class="folio-thumb">${D.folioPage(f).replace('width="320"', `width="${w}"`)}</span>`;
     const name = (f: FolioId) => `tekenblad met ${FOLIO_TITLE[f]}`;
     const body = this.ui.modal('Leestafel', `
-      <p class="kind kind-obs">Waarneming</p><p class="muted">${esc(TABLE_TEXT.split('\n\n')[1] ?? '')}</p>
+      <p class="kind kind-obs">Waargenomen</p><p class="muted">${esc(TABLE_TEXT.split('\n\n')[1] ?? '')}</p>
       <div class="b01-slots">${B01_SLOTS.map((k) => `<div class="pslot"><div class="pslot-label">${D.slotMark(k).replace('width="160"', 'width="56"')}<span>${esc(D.SHAPE_NAME[k])} vak</span></div>` +
         (slots[k] ? `<button class="btn piece" data-take="${k}" data-fk="take-${k}" ${solved ? 'disabled' : ''} aria-label="${esc(name(slots[k]!))} terugpakken uit het ${D.SHAPE_NAME[k]}e vak">${cover(slots[k]!, 72)}<span class="muted">${solved ? 'ligt vast' : 'terugpakken'}</span></button>`
           : `<button class="btn slot-empty" data-slot="${k}" data-fk="slot-${k}" ${draft.sel && !solved ? '' : 'disabled'} aria-label="Leg ${esc(draft.sel ? name(draft.sel) : 'een tekenblad')} in het ${D.SHAPE_NAME[k]}e vak">${draft.sel ? 'Tekenblad hier leggen' : 'leeg'}</button>`) + '</div>').join('')}</div>
       ${solved ? '<p><b>De lade van de leestafel staat open.</b></p>' : loose.length ? `<p class="muted">Kies een tekenblad, of bekijk het van dichtbij:</p><div class="b01-folios">${loose.map((f) => `<div class="folio-card ${draft.sel === f ? 'sel' : ''}">
           <button class="btn piece ${draft.sel === f ? 'sel' : ''}" data-pick="${f}" data-fk="pick-${f}" aria-pressed="${draft.sel === f}" aria-label="${esc(name(f))}">${cover(f)}</button>
           <button class="btn small" data-view="${f}" data-fk="view-${f}">Bekijken</button></div>`).join('')}</div>` : '<p class="muted">Alle tekenbladen liggen in een vak. Klopt het niet, pak er dan een terug.</p>'}
+      <div class="row center"><button class="btn small" data-practice data-fk="practice">Oefenkaart bekijken</button></div>
       <p class="feedback" aria-live="polite">${esc(draft.msg)}</p>
-      <div class="row center"><button class="btn" data-notes data-fk="notes">Notities</button><button class="btn primary" data-ok>Klaar</button></div>`);
+      <div class="row center">${solved ? '' : `<button class="btn primary" data-check data-fk="check">Controleer</button>`}<button class="btn" data-notes data-fk="notes">Notities</button><button class="btn" data-ok>Klaar</button></div>`);
     body.querySelectorAll<HTMLButtonElement>('[data-pick]').forEach((b) => b.addEventListener('click', () => { draft.sel = b.dataset.pick as FolioId; draft.msg = ''; this.b01Panel(draft); this.refocus(`pick-${draft.sel}`); }));
     body.querySelectorAll<HTMLButtonElement>('[data-view]').forEach((b) => b.addEventListener('click', () => { draft.view = b.dataset.view as FolioId; this.b01Panel(draft); }));
     body.querySelectorAll<HTMLButtonElement>('[data-slot]').forEach((b) => b.addEventListener('click', () => {
@@ -149,10 +152,20 @@ export class SliceUI {
       const r = b01Place(s, b.dataset.slot as SlotId, draft.sel);
       this.outcome(r);
       draft.sel = null;
-      draft.msg = r.ok && !b01Solved(s) ? '' : r.msg;
-      if (b01Solved(s)) { this.ui.closeModal(); this.ui.toast(r.msg); return; }
+      draft.msg = r.ok ? '' : r.msg;
       this.b01Panel(draft);
+      this.refocus('check');
     }));
+    // "Controleer" judges the complete set (PD v0.2 §4.2); incomplete is no attempt
+    body.querySelector('[data-check]')?.addEventListener('click', () => {
+      const r = b01Check(s);
+      this.outcome(r);
+      if (b01Solved(s)) { this.ui.closeModal(); this.ui.toast(r.msg); return; }
+      draft.msg = r.msg;
+      this.b01Panel(draft);
+      this.refocus('check');
+    });
+    $('[data-practice]', body).addEventListener('click', () => { draft.view = 'practice'; this.b01Panel(draft); });
     body.querySelectorAll<HTMLButtonElement>('[data-take]').forEach((b) => b.addEventListener('click', () => {
       const r = b01Take(s, b.dataset.take as SlotId);
       this.outcome(r);
@@ -163,12 +176,23 @@ export class SliceUI {
     $('[data-notes]', body).addEventListener('click', () => this.notebook(this.capture('b01', 'de leestafel', { ...draft })));
     $('[data-ok]', body).addEventListener('click', () => this.ui.closeModal());
   }
+  /** The local practice card (PD v0.2 §4.2): read as part of the table, never a slot or an input. */
+  private practiceView(draft: B01Draft) {
+    const isNew = recordObservation(this.s, SRC.practice, this.room());
+    const d = sourceDef(SRC.practice)!;
+    const body = this.ui.modal(`Leestafel · ${d.title}`, `<p class="kind kind-obs">Waargenomen</p>${this.artHtml(SRC.practice, d.art)}<p>${esc(d.text)}</p>` +
+      (isNew ? '<p class="muted">✎ Bewaard bij Waarnemingen in je notitieboek.</p>' : '') +
+      `<div class="row center"><button class="btn primary" data-back data-fk="back">Terug naar de tafel</button></div>`);
+    this.wireZoom(body);
+    $('[data-back]', body).addEventListener('click', () => { draft.view = null; this.b01Panel(draft); this.refocus('practice'); });
+    if (isNew) this.commit();
+  }
   private folioView(draft: B01Draft) {
-    const f = draft.view!;
+    const f = draft.view as FolioId;
     const id = SRC.folio(f);
     const isNew = recordObservation(this.s, id, this.room());
     const d = sourceDef(id)!;
-    const body = this.ui.modal(`Leestafel · ${d.title}`, `<p class="kind kind-obs">Waarneming</p>${this.artHtml(id, d.art)}<p>${esc(d.text)}</p>` +
+    const body = this.ui.modal(`Leestafel · ${d.title}`, `<p class="kind kind-obs">Waargenomen</p>${this.artHtml(id, d.art)}<p>${esc(d.text)}</p>` +
       (isNew ? '<p class="muted">✎ Bewaard bij Waarnemingen in je notitieboek.</p>' : '') +
       `<div class="row center"><button class="btn primary" data-back data-fk="back">Terug naar de tafel</button></div>`);
     this.wireZoom(body);
@@ -235,32 +259,35 @@ export class SliceUI {
   private card(o: NbSource, open = false, actions = true) {
     const art = o.art ? `<div class="zoombox" data-zoom><div class="zoomin">${o.art()}</div></div>` : o.diagram ? DIAGRAMS[o.diagram as keyof typeof DIAGRAMS]() : '';
     const back = o.back ? `<div class="face-back"><b>${esc(o.back.title)}</b>${o.back.art ? o.back.art() : ''}<p>${esc(o.back.text)}</p></div>` : '';
-    return `<details class="clue nb-obs" data-obs="${o.id}" ${open ? 'open' : ''}><summary><h3>${esc(o.title)}</h3><span class="prov">${esc(o.provenance)}</span>${o.pinned ? '<span class="badge pin">📌</span>' : ''}</summary>
-      <p class="kind kind-obs">Waarneming</p>${art}<p>${esc(o.text)}</p>${back}
-      ${actions ? `<div class="row"><button class="btn small" data-pin="${o.id}" data-fk="pin-${o.id}" aria-pressed="${o.pinned}">${o.pinned ? 'Losmaken' : 'Vastpinnen'}</button><button class="btn small" data-arch="${o.id}" data-fk="arch-${o.id}">${o.archived ? 'Terugzetten' : 'Naar archief'}</button></div>` : ''}</details>`;
+    return `<details class="clue nb-obs" data-obs="${o.id}" ${open ? 'open' : ''}><summary><h3>${esc(o.title)}</h3><span class="prov">${esc(o.provenance)}</span>${o.pinned ? '<span class="badge pin">📌 Door jou vastgezet</span>' : ''}</summary>
+      <p class="kind kind-obs">Waargenomen</p>${art}<p>${esc(o.text)}</p>${back}
+      ${actions ? `<div class="row"><button class="btn small" data-pin="${o.id}" data-fk="pin-${o.id}" aria-pressed="${o.pinned}">${o.pinned ? 'Losmaken' : 'Vastzetten'}</button><button class="btn small" data-arch="${o.id}" data-fk="arch-${o.id}">${o.archived ? 'Heropenen' : 'Opbergen'}</button></div>` : ''}</details>`;
   }
   private obsTab(list: NbSource[]) {
-    if (!list.length) return '<p class="muted">Nog niets bekeken. Wat je in de wereld bekijkt, wordt hier letterlijk bewaard, met waar en wanneer.</p>';
-    return `<p class="muted">Letterlijk bewaard, nieuwste bovenaan. Pin vast wat je bij een eigen vraag wilt houden.</p>${list.map((o, i) => this.card(o, i === 0)).join('')}`;
+    if (!list.length) return '<p class="muted">Hier blijven de dingen die je bekijkt.</p>'; // UX v0.2 §2, literal
+    return `<p class="muted">Letterlijk bewaard, nieuwste bovenaan. Zet vast wat je bij een eigen vraag wilt houden.</p>${list.map((o, i) => this.card(o, i === 0)).join('')}`;
   }
   private researchTab(v: ReturnType<typeof notebookView>) {
     const r = v.research, d = this.nbDraft;
     const topics = r.topics ? `<h4 class="grp">Uit het register</h4><div class="register">${r.topics.map((t) => `<div class="reg-topic"><b>${esc(t.title)}</b><p>“${esc(t.line)}”</p></div>`).join('')}</div>
       <p class="muted">Mijn aandacht (alleen voor jezelf; het verandert niets in het huis):</p>
-      <div class="row attention">${[{ id: null, title: 'Geen' }, ...REGISTER_TOPICS].map((t) => `<button class="btn small ${r.attention === t.id ? 'on' : ''}" data-att="${t.id ?? ''}" data-fk="att-${t.id ?? 'none'}" aria-pressed="${r.attention === t.id}">${esc(t.title)}</button>`).join('')}</div>` : '';
-    const pinsPick = r.pinned.length ? `<p class="muted">Vastgepinde waarnemingen bij deze vraag:</p><div class="pinpick">${r.pinned.map((o) => `<label class="set"><span>${esc(o.title)} <span class="prov">${esc(o.provenance)}</span></span><input type="checkbox" data-qpin="${o.id}" ${d.pins.includes(o.id) ? 'checked' : ''}></label>`).join('')}</div>` : '';
-    const qs = r.questions.length ? r.questions.map((q) => `<div class="own"><p class="kind kind-own">Eigen vraag</p><p>${esc(q.text || '(zonder tekst)')}</p>${q.pins.length ? `<p class="muted">Bij: ${q.pins.map((id) => esc(sourceDef(id)?.title ?? id)).join(' · ')}</p>` : ''}<button class="btn small" data-qarch="${q.id}" data-fk="qarch-${q.id}">Naar archief</button></div>`).join('') : '';
-    const results = r.results.length ? `<h4 class="grp">Resultaten</h4>${r.results.map((x) => `<div class="result"><span class="kind kind-res">Resultaat</span> ${esc(x.text)}</div>`).join('')}` : '';
+      <div class="row attention">${REGISTER_TOPICS.map((t) => `<button class="btn small ${r.attention === t.id ? 'on' : ''}" data-att="${t.id}" data-fk="att-${t.id}" aria-pressed="${r.attention === t.id}">${esc(t.title)}</button>`).join('')}
+        ${r.attention ? '<button class="btn small" data-att="" data-fk="att-none">Aandacht loslaten</button>' : ''}</div>
+      ${r.attention ? `<div class="row"><button class="btn small ${r.hud ? 'on' : ''}" data-hud data-fk="hud" aria-pressed="${r.hud}">${r.hud ? 'Niet meer in beeld tonen' : 'Mijn aandacht in beeld tonen'}</button></div>` : ''}` : '';
+    const pinsPick = r.pinned.length ? `<p class="muted">Door jou vastgezette waarnemingen bij deze vraag:</p><div class="pinpick">${r.pinned.map((o) => `<label class="set"><span>${esc(o.title)} <span class="prov">${esc(o.provenance)}</span></span><input type="checkbox" data-qpin="${o.id}" ${d.pins.includes(o.id) ? 'checked' : ''}></label>`).join('')}</div>` : '';
+    const qs = r.questions.length ? r.questions.map((q) => `<div class="own"><p class="kind kind-own">Mijn idee</p><p>${esc(q.text || '(zonder tekst)')}</p>${q.pins.length ? `<p class="muted">Door jou vastgezet: ${q.pins.map((id) => esc(sourceDef(id)?.title ?? id)).join(' · ')}</p>` : ''}<button class="btn small" data-qarch="${q.id}" data-fk="qarch-${q.id}">Opbergen</button></div>`).join('') : '';
+    const results = r.results.length ? `<h4 class="grp">Resultaten</h4>${r.results.map((x) => `<div class="result"><span class="kind kind-res">✓ Resultaat bevestigd</span> ${esc(x.text)}</div>`).join('')}` : '';
     return `${topics}<h4 class="grp">Eigen vragen en ideeën</h4>
       <textarea data-qtext data-fk="qtext" placeholder="Wat wil je uitzoeken? (alleen voor jezelf)">${esc(d.text)}</textarea>${pinsPick}
       <div class="row"><button class="btn" data-qsave data-fk="qsave">Bewaren</button></div>${qs}${results}`;
   }
   private archiveTab(v: ReturnType<typeof notebookView>) {
     const a = v.archive;
-    const mem = a.memories.length ? a.memories.map((m) => `<div class="own mem"><p class="kind kind-mem">Herinnering</p><b>${esc(m.title)}</b><p>${esc(m.text)}</p></div>`).join('') : '<p class="muted">Nog geen herinneringen.</p>';
-    const qs = a.questions.map((q) => `<div class="own"><p class="kind kind-own">Eigen vraag</p><p>${esc(q.text)}</p><button class="btn small" data-qunarch="${q.id}" data-fk="qun-${q.id}">Terugzetten</button></div>`).join('');
+    // UX v0.2 §4.1: a viewed memory is labelled "Bekeken", never "Opgelost"
+    const mem = a.memories.length ? a.memories.map((m) => `<div class="own mem"><p class="kind kind-mem">Herinnering · Bekeken</p><b>${esc(m.title)}</b>${m.art ? `<div class="zoombox" data-zoom><div class="zoomin">${m.art()}</div></div>` : ''}<p>${esc(m.text)}</p></div>`).join('') : '<p class="muted">Nog geen herinneringen.</p>';
+    const qs = a.questions.map((q) => `<div class="own"><p class="kind kind-own">Mijn idee · Opgeborgen · door jou</p><p>${esc(q.text)}</p><button class="btn small" data-qunarch="${q.id}" data-fk="qun-${q.id}">Heropenen</button></div>`).join('');
     const obs = a.observations.map((o) => this.card(o)).join('');
-    return `<h4 class="grp">Herinneringen</h4>${mem}${qs || obs ? `<h4 class="grp">Zelf gearchiveerd</h4>${qs}${obs}` : ''}`;
+    return `<h4 class="grp">Herinneringen</h4>${mem}${qs || obs ? `<h4 class="grp">Opgeborgen · door jou</h4>${qs}${obs}` : ''}`;
   }
   private wireNotebook(nb: HTMLElement, from: ReturnCtx | null) {
     const d = this.nbDraft;
@@ -269,6 +296,7 @@ export class SliceUI {
     nb.querySelectorAll<HTMLButtonElement>('[data-pin]').forEach((b) => b.addEventListener('click', () => { togglePin(this.s, b.dataset.pin!); d.pins = d.pins.filter((p) => sl(this.s).pins.includes(p)); this.commit(); again(`pin-${b.dataset.pin}`); }));
     nb.querySelectorAll<HTMLButtonElement>('[data-arch]').forEach((b) => b.addEventListener('click', () => { const id = b.dataset.arch!; setArchived(this.s, id, !sl(this.s).archivedObs.includes(id)); this.commit(); again(); }));
     nb.querySelectorAll<HTMLButtonElement>('[data-att]').forEach((b) => b.addEventListener('click', () => { setAttention(this.s, (b.dataset.att || null) as TopicId | null); this.commit(); again(`att-${b.dataset.att || 'none'}`); }));
+    nb.querySelector('[data-hud]')?.addEventListener('click', () => { setHudAttention(this.s, !sl(this.s).hudAttention); this.commit(); again('hud'); });
     const ta = nb.querySelector<HTMLTextAreaElement>('[data-qtext]');
     ta?.addEventListener('input', () => { d.text = ta.value; });
     nb.querySelectorAll<HTMLInputElement>('[data-qpin]').forEach((c) => c.addEventListener('change', () => { d.pins = c.checked ? [...new Set([...d.pins, c.dataset.qpin!])] : d.pins.filter((p) => p !== c.dataset.qpin); }));
@@ -291,7 +319,8 @@ export class SliceUI {
     const render = () => {
       const cur = hintContexts(this.s).find((x) => x.id === h.id) ?? h;
       body.innerHTML = (list.length > 1 ? `<div class="tabs" role="tablist" aria-label="Kies een raadsel">${list.map((c) => `<button class="btn ${c.id === h.id ? 'on' : ''}" role="tab" aria-selected="${c.id === h.id}" data-pick="${c.id}">${esc(c.title)}</button>`).join('')}</div>` : '') +
-        `<div class="riddle"><span class="kind">Raadsel</span> ${esc(cur.context)}</div>` +
+        `<div class="riddle"><span class="kind">Hulp bij</span> ${esc(cur.context)}</div>` +
+        `<p class="muted">Drie niveaus, elk alleen als je erom vraagt: 1 ${HINT_LEVEL_NAMES[0]} · 2 ${HINT_LEVEL_NAMES[1]} · 3 ${HINT_LEVEL_NAMES[2]}.</p>` +
         cur.levels.slice(0, cur.shown).map((t, i) => `<div class="hint slice-hint"><span class="kind kind-hint">Hint ${i + 1} · ${HINT_LEVEL_NAMES[i]}</span><p>${esc(t)}</p></div>`).join('') +
         `<p class="muted">Hints zijn geen bewijs uit het huis en komen niet in je notitieboek.</p>` +
         `<div class="row center">${cur.shown < 3 ? `<button class="btn primary" data-more data-fk="more">Toon hint ${cur.shown + 1} (${HINT_LEVEL_NAMES[cur.shown].toLowerCase()})</button>` : ''}<button class="btn" data-ok>Terug</button></div>`;
@@ -303,10 +332,10 @@ export class SliceUI {
   }
 
   // ---------------------------------------------------------------------------------------------- HUD + debug
-  /** Objective line: only the player's own attention (never a next step). Empty otherwise. */
+  /** HUD line: only the player's own attention, and only when they switched it on (UX v0.2 §3). Never a next step. */
   objectiveLine(): string {
-    const a = this.s.slice?.attention;
-    return a ? `Mijn aandacht: ${REGISTER_TOPICS.find((t) => t.id === a)!.title}` : '';
+    const x = this.s.slice;
+    return x?.attention && x.hudAttention ? `Mijn aandacht: ${REGISTER_TOPICS.find((t) => t.id === x.attention)!.title}` : '';
   }
   debugInfo(target: string | null): string {
     const x = sl(this.s);

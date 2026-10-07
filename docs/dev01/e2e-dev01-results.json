@@ -17,7 +17,7 @@
   {
     "name": "register owned but not read: no topics in the notebook (RewardClaimed recorded, RegisterObserved not)",
     "ok": true,
-    "detail": "{\"reg\":false,\"t\":\"EIGEN VRAGEN EN IDEEËN\\nBewaren\\nRESULTATEN\\nRESULTAAT De lade van de ladekast in de hal ging open.\\nRESULTAAT Je nam het landgoedregister uit de lade in de hal.\",\"results\":[\"drawer.solved\",\"drawer.register\"]}"
+    "detail": "{\"reg\":false,\"t\":\"EIGEN VRAGEN EN IDEEËN\\nBewaren\\nRESULTATEN\\n✓ RESULTAAT BEVESTIGD De lade van de ladekast in de hal ging open.\\n✓ RESULTAAT BEVESTIGD Je nam het landgoedregister uit de lade in de hal.\",\"results\":[\"drawer.solved\",\"drawer.register\"]}"
   },
   {
     "name": "register read: exactly the three topics it names, no actions (no \"plaats boeken\", \"ga naar kamer\")",
@@ -25,14 +25,19 @@
     "detail": "[\"Aan tafel\",\"In de kantlijn\",\"Buiten de paden\"]"
   },
   {
-    "name": "attention switch changes no world state; objective shows only the chosen focus",
+    "name": "attention switch changes no world state; the HUD label is off by default and shows only the chosen topic after opt-in",
     "ok": true,
-    "detail": "{\"same\":true,\"att\":\"paden\",\"obj\":\"Mijn aandacht: Buiten de paden\"}"
+    "detail": "{\"same\":true,\"att\":\"paden\",\"objOff\":\"\",\"obj\":\"Mijn aandacht: Buiten de paden\"}"
   },
   {
     "name": "B01 panel: folio inspect records an observation; incomplete set is no attempt; draft selection survives notebook round-trip",
     "ok": true,
-    "detail": "{\"folio\":\"Leestafel · Tekenblad: telescoop en schrift\",\"recorded\":true,\"wrong0\":0,\"sel\":\"plants\",\"slots\":{\"punt\":null,\"rond\":null,\"vierkant\":\"travel\"},\"scroll\":0}"
+    "detail": "{\"folio\":\"Leestafel · Tekenblad: telescoop en schrift\",\"recorded\":true,\"wrong0\":0,\"sel\":\"plants\",\"slots\":{\"punt\":null,\"rond\":null,\"vierkant\":\"travel\"},\"scroll\":40}"
+  },
+  {
+    "name": "B01: literal v0.2 instruction; practice card readable from the table (no fourth slot); Controleer on an incomplete set is no attempt",
+    "ok": true,
+    "detail": "{\"instr\":true,\"inc\":{\"msg\":\"Leg eerst in elk vak een tekenblad.\",\"wrong\":0},\"title\":\"Leestafel · Oefenkaart op de leestafel\",\"rec\":true,\"slots\":3}"
   },
   {
     "name": "grand stair: route reaches the upper floor by walking",
@@ -40,9 +45,9 @@
     "detail": "{\"x\":94,\"y\":3.35,\"z\":96.09}"
   },
   {
-    "name": "DS01 C: front sets photoFound (back not yet); back recorded only after turning; photo never enters the bag",
+    "name": "DS01 C: front sets photoFound with the one notice \"Afbeelding bewaard in notities\" (back not yet); back recorded only after Omkeren, literal back text; never enters the bag",
     "ok": true,
-    "detail": "{\"ph\":{\"found\":true,\"back\":false,\"faces\":\"front\"},\"ph2\":{\"back\":true,\"faces\":\"front,back\",\"inv\":false}}"
+    "detail": "{\"ph\":{\"found\":true,\"back\":false,\"faces\":\"front\",\"notice\":\"✎ Afbeelding bewaard in notities\"},\"ph2\":{\"back\":true,\"faces\":\"front,back\",\"inv\":false}}"
   },
   {
     "name": "grand stair: back down by walking",
@@ -62,17 +67,17 @@
   {
     "name": "hints: solved riddles leave the hint menu",
     "ok": true,
-    "detail": "Het bureau in de studeerkamer\nDe kelderdeur\nRAADSEL Het bureau in de studeerkamer.\n\nHints zijn geen bewijs uit het huis "
+    "detail": "Waar hoort deze afbeelding bij?\nHet bureau in de studeerkamer\nDe kelderdeur\nHULP BIJ Waar hoort deze afbeelding bij?\n\nDr"
   },
   {
-    "name": "notebook: observations carry provenance; results and memories are typed separately; no solution summary",
+    "name": "notebook: observations carry provenance (\"Waargenomen\"); results (\"✓ Resultaat bevestigd\") and the DS01 memory (\"Bekeken\", never \"Opgelost\") are typed separately; no solution summary",
     "ok": true,
     "detail": ""
   },
   {
     "name": "save/reload: mechanical and observation state restored exactly; only the dev01 keys were written",
     "ok": true,
-    "detail": "{\"keys\":[\"fehluwe.dev01.save\"],\"pose\":{\"x\":82.04635914153808,\"y\":0.15,\"z\":101.18275989194629,\"yaw\":-1.6341554130600875,\"pitch\":-1.0720862713744301}}"
+    "detail": "{\"keys\":[\"fehluwe.dev01.save\"],\"pose\":{\"x\":82.04635914153891,\"y\":0.15,\"z\":101.18275989194622,\"yaw\":-1.634155413059848,\"pitch\":-1.0720862713737545}}"
   },
   {
     "name": "main route: no console errors or failed requests",
@@ -85,14 +90,19 @@
     "detail": "{\"c\":{\"found\":true,\"q\":0,\"results\":[\"ds01.memory\"]},\"mem\":1,\"reg\":false}"
   },
   {
+    "name": "DS01 hints: offered after C first under \"Waar hoort deze afbeelding bij?\"; level 1 is the literal v0.2 text",
+    "ok": true,
+    "detail": "{\"t\":\"HULP BIJ Waar hoort deze afbeelding bij?\\n\\nDrie niveaus, elk alleen als je erom vraagt: 1 Aandacht · 2 Relatie · 3 Oplossing.\\n\\nHints zijn geen bewijs uit het huis en komen niet in je notitieboek.\\n\\nToon hint 1 (aandacht)\\nTerug\",\"l1\":\"Kijk naar de titel en herkomst van de afbeelding. Het album en de maquette vertellen iets over hetzelfde huisje.\"}"
+  },
+  {
     "name": "DS01: A stays meaningful after C (ordinary note, no change in reward)",
     "ok": true,
     "detail": "{\"a\":true,\"mem\":1}"
   },
   {
-    "name": "notebook: player-made question with a pinned photo; archiving it solves nothing",
+    "name": "notebook: player-made question (\"Mijn idee\") with a pinned image (\"Door jou vastgezet\"); opbergen solves nothing",
     "ok": true,
-    "detail": "{\"own\":\"EIGEN VRAAG\\n\\nWaarom hangt de foto boven?\\n\\nBij: Foto op het droogrekje\\n\\nNaar archief\",\"n\":1,\"archived\":true,\"solvedAfter\":false}"
+    "detail": "{\"own\":\"MIJN IDEE\\n\\nWaarom hangt de foto boven?\\n\\nDoor jou vastgezet: Afbeelding aan het droogrek\\n\\nOpbergen\",\"n\":1,\"archived\":true,\"solvedAfter\":false}"
   },
   {
     "name": "old save (catalogue solved): imported as B01 alias, study key still opens the study, no replay",
@@ -150,13 +160,13 @@
     "detail": "{\"open\":false}"
   },
   {
-    "name": "hints: none before a riddle is met; level 0 names the riddle without a next step",
+    "name": "hints: none before a riddle is met; level 0 names the riddle and explains the three levels, without a next step",
     "ok": true,
-    "detail": "RAADSEL De leestafel met drie vakken en drie tekenbladen.\n\nHints zijn geen bewijs uit het huis en komen niet in je notitieboek.\n\nToon hint 1 (aandacht)\nTerug"
+    "detail": "HULP BIJ De leestafel met drie vakken en drie tekenbladen.\n\nDrie niveaus, elk alleen als je erom vraagt: 1 Aandacht · 2 Relatie · 3 Oplossing.\n\nHints zijn geen bewijs uit het huis en komen niet in je "
   },
   {
     "name": "hints: levels 1 attention · 2 relation · 3 solution, labelled as Hint, never stored as observations",
     "ok": true,
-    "detail": "[\"Hint 1 · Aandacht\",\"Hint 1 · Aandacht|Hint 2 · Verband\",\"Hint 1 · Aandacht|Hint 2 · Verband|Hint 3 · Oplossing\"]"
+    "detail": "[\"Hint 1 · Aandacht\",\"Hint 1 · Aandacht|Hint 2 · Relatie\",\"Hint 1 · Aandacht|Hint 2 · Relatie|Hint 3 · Oplossing\"]"
   }
 ]

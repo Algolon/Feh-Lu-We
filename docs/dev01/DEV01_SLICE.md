@@ -2,12 +2,14 @@
 
 Status: **review build, not merged, not deployed.** Opt-in with `?review=dev01`. The normal game is unchanged.
 Branch `ccr-928d1d45-tudz6y`. Base commit **`ef6b7c3`**. DEV-01: `6894a89`. DEV-01R (canon reconciliation):
-audit `cfb183b`, then the reconciliation commit (see `git log`).
+audit `cfb183b`, reconciliation `b250b11`. Design package `docs/design/v0.2/`: `e8217a6`. DEV-01R final (verification
+against the real package): audit table `260ae10`, then the final reconciliation commit (see `git log`).
 
-> **DEV-01R update.** The reconciliation was done against the canon written into the DEV-01R brief. The seven v0.2
-> documents it names were again **not present in the session** (repo, mounts, disk, Notion all checked) — see
-> [`DEV01R_AUDIT.md`](DEV01R_AUDIT.md) for the item-by-item MATCH / MINOR / CONFLICT audit written before any edit,
-> and §5 below for what is now canon and what is still provisional.
+> **DEV-01R final.** The ten design files are now in the repository (`docs/design/v0.2/`, byte-identical to the
+> supplied package) and were read in full. Every item the earlier rounds left NIET TOETSBAAR, provisional or derived
+> was compared against them — [`DEV01R_AUDIT.md`](DEV01R_AUDIT.md) §7 (table written before any edit) and §8
+> (outcome). **All B01 and DS01 player texts are now canon** (§5). One deliberate deviation remains: the three B01
+> inspection poses reserved in LEVEL_LAYOUT are not adopted, because as-built furniture occupies them (§9).
 
 Human review script: [`REVIEW_SCRIPT.md`](REVIEW_SCRIPT.md). Screenshots: [`shots/`](shots/). Normal-vs-base and
 cost comparison: [`compare/`](compare/).
@@ -16,20 +18,18 @@ cost comparison: [`compare/`](compare/).
 
 ## 1. Inputs and authority — what was actually available
 
-| Input named in the brief | Found? | Consequence |
+| Input named in the brief | DEV-01 / DEV-01R | DEV-01R final |
 |---|---|---|
-| Repository HEAD, branch, working tree | ✅ `ef6b7c3`, clean | Basis for everything below |
-| `AGENTS.md` | ❌ not in repo (any branch/commit) | Followed the repo's own conventions (README, HANDOFF, code comments) |
-| `Feh-Lu-We_AS_IS_AUDIT.md` | ❌ | Did my own as-is reading of state/save, interaction, collision, culling, puzzle and UI code |
-| LEVEL_PLAN v0.2 · LEVEL_LAYOUT.json v0.2 · ADJACENCY_GRAPH v0.2 | ❌ | Geometry reconciled against the **current builders**; v0.2 room ids mapped as aliases (§6) |
-| Puzzle Design v0.2 | ❌ | B01/DS01 built to the DEV-01 contract; **exact detail pairs and DS01 texts are provisional** (§5) |
-| UX_GAME_FEEL v0.2 | ❌ | Notebook/hints/interaction built to DEV-01 §6/§9 |
-| ENVIRONMENT_STORY v0.1 · ART_BIBLE v0.1 | ❌ | Neutral blockout + existing kit only |
+| Repository HEAD, branch, working tree | ✅ `ef6b7c3`, clean | ✅ |
+| `AGENTS.md` | ❌ not in repo | ❌ (repo conventions followed) |
+| `Feh-Lu-We_AS_IS_AUDIT.md` | ❌ | ❌ (own as-is reading of the code) |
+| LEVEL_PLAN · LEVEL_LAYOUT.json · ADJACENCY_GRAPH · DELTA · INTEGRATION_OPEN (v0.2) | ❌ | ✅ `docs/design/v0.2/` — room aliases verified, maquette reservation adopted, B01 pose reservations compared (§6, §9) |
+| PUZZLE_DESIGN v0.2 | ❌ (canon only as quoted in the DEV-01R brief) | ✅ — literal B01 instruction, hints, practice card, Controleer; DS01 ids, texts, hints (§5) |
+| UX_GAME_FEEL v0.2 | ❌ | ✅ — labels, hint level 0, HUD opt-in, uncensored invitation (§3) |
+| ENVIRONMENT_STORY · ART_BIBLE · ART_TOKENS (internally v0.1) | ❌ | ✅ read; aliases and staging rules used; art direction = future production, not reconciled (no art pass) |
 
-Searched: all git refs and history, the working tree, and the connected Notion workspace (no results).
-`docs/HANDOFF.md` confirms the settled level design "is being developed separately". **This is the main risk of
-this delivery**: every place where the brief says "exact … from v0.2" is isolated in one file
-(`src/slice/content.ts`, ids stable) so the canon can be dropped in without touching logic, tests or world code.
+Everything player-facing still lives in one file (`src/slice/content.ts`, ids in `ids.ts`), so later canon
+changes stay content edits.
 
 ## 2. What was built
 
@@ -38,34 +38,43 @@ register) → library (G04) → grand stair → U05 → U04 → U10 → stair �
 (e2e walks it through real collision).
 
 - **B01 v0.2**: `folio → two physical details → upstairs object pair → physical archive clip → slot shape`.
-  Library table: three slots (puntig / rond / vierkant, left → right for a reader facing west) and three folios —
+  Library table: three slots (puntig / rond / vierkant, left → right for a reader facing west), three folios —
   **loose drawing sheets** (*los tekenblad*), each only two pencil sketches: no numeral, no word, no emblem, no room
-  name (DEV-01R; DEV-01 had folders "Map I/II/III", which read as the excluded *werkmap*). Upstairs each room has one
-  small table with the object pair and an index card held by a brass clip of one shape. Canon chain (DEV-01R):
-  `EB.folio.stars` telescope on a fork mount + two round screw heads; notebook with three holes → round clip → round
-  slot (U05) · `EB.folio.plants` fern with a broad diagonal repair strip; scissors with an angular + a round grip →
-  pointed clip → pointed slot (U10) · `EB.folio.travel` suitcase with two parallel straps + square middle patch;
-  label with the top-right corner cut off → square clip → square slot (U04). Folios swap and come back freely; incomplete = no attempt; complete wrong = one neutral line
-  ("…de lade blijft dicht"), counted; correct = the table drawer opens (PuzzleSolved). The studiesleutel is a
-  separate pickup (RewardClaimed). Correctness reads the slots only — never observation flags.
+  name — the literal PD v0.2 instruction on a card, and the **local practice card** (drawn key with three teeth +
+  striped cord loop + a drawn wave box; the originals beside it on a wave clip; read from the table panel, never a
+  slot or input). Upstairs each room has one small table with **one inspection cluster** (`EB.stars`, `EB.plants`,
+  `EB.travel`): both originals and the brass clip **attached** to them — round clip on the closed notebook, pointed
+  clip on the glass plate, square clip through the label hole. Canon chain (PD v0.2 §4.2): `EB.folio.stars`
+  telescope on vorkvoet with two round screw heads; closed notebook with three holes side by side → round (U05) ·
+  `EB.folio.plants` pressed fern under glass with one broad diagonal repair strip; scissors with one angular and one
+  round grip → pointed (U10) · `EB.folio.travel` suitcase with two parallel straps and a square middle patch; label
+  with the top-right corner cut off → square (U04). Sheets swap and come back freely; placing never judges;
+  **Controleer** judges the full set: incomplete = no attempt; complete wrong = one neutral line ("…de lade blijft
+  dicht"), counted; correct = the table drawer opens (PuzzleSolved). The studiesleutel is a separate pickup
+  (RewardClaimed). Correctness reads the slots only — never observation flags.
 - **Removed in the review build** (B01 contract): door plaques with emblems, the library floor plan with emblems
   (emblem dictionary), the guestbook room→tab relation, the old catalogue books/sockets, the botanical room's
   emblem prints, room names on the map's floor plans, and (DEV-01R) the captions "onderweg" / "sterrenkaart" on the
   paintings in U04 / U05.
-- **DS01 "De foto die moest drogen"**: A — note by the **gingerbread maquette** in the hall (G02); B — album
-  *Weekendhuizen* with an empty photo corner + drying letter on a **quiet reading plank** in the library's reading
-  corner (G04, ~7 m from the B01 table; DEV-01R: was a side table, same footprint); C — photo
-  on a small drying rack in front of U04's window, near the suitcase bench (~5 m from the B01 desk). Photo is not
-  pickable, no put-back, no quest state, no checklist, no main-route reward; `photoFound` is set (monotone) when
-  the front is looked at, the back only when the player presses *Omdraaien*. One-time reward: a neutral memory in
-  the Archief. DS01 uses paper/photo language only (no brass, no clips, no numerals).
+- **DS01 "De foto die moest drogen"** (PD v0.2 §6, texts literal): A `OA.ds01` — a folded note by the
+  **gingerbread maquette**, which now stands at the LEVEL_LAYOUT reservation `ES.gingerbread` (88, 96) in the hall
+  (G02); B `OB.ds01` — album *Weekendhuizen* open on the page "Gingerbread house — het eerste huisje" (empty photo
+  corners, faded rectangle) with the loose G.M. letter in it: **one reading cluster** on the quiet reading plank in
+  the library (G04, ~7 m from the B01 table); C `OC.ds01.front/back` — the image hangs with two wooden pegs on a
+  small drying rack by U04's window, **next to two plain suitcases** (~5 m from the B01 desk). The front is a
+  stylised picture of the game's gingerbread maquette with its caption (an illustrative proof, never presented as
+  an authentic photo). Not pickable, no put-back, no quest state, no checklist, no main-route reward; `photoFound`
+  is set (monotone) on the front with the one notice "Afbeelding bewaard in notities", the back only after
+  *Omkeren*. Archief: "De foto die moest drogen" with the image, labelled *Bekeken*. Three optional hints (PD §6.6)
+  once a DS01 source was seen, titled by what was seen ("Waar hoort deze afbeelding bij?" after C first). DS01 uses
+  paper/photo language only (no brass, no clips, no numerals).
 - **Start drawer / register**: the iteration-3 mantel drawer is kept. Picking the register up no longer opens it;
   it is read from the bag (*Lezen*). Only then do the three topics appear.
 - **Notebook v0.2**: *Waarnemingen · Mijn onderzoek · Archief* (§3).
-- **Hints**: only encountered riddles; level 0 names the riddle, 1 attention, 2 relation, 3 solution; shown as
-  "Hint n · …", never stored in the notebook.
+- **Hints**: only encountered riddles; level 0 names the riddle ("Hulp bij …") and explains the three levels;
+  1 Aandacht, 2 Relatie, 3 Oplossing; shown as "Hint n · …", never stored in the notebook.
 - **Interaction**: every action label names verb + object ("Openen: deur", "Slot bekijken: lade",
-  "Bekijken: archiefclip"); one overlay at a time; return context between panels and the notebook; no
+  "Bekijken: objectgroep"); one overlay at a time; return context between panels and the notebook; no
   click-through after closing an overlay.
 - **Debug**: `?review=dev01&debug=1` adds room id + v0.2 alias, target id and the slice state to the overlay.
 
@@ -73,21 +82,27 @@ register) → library (G04) → grand stair → U05 → U04 → U10 → stair �
 
 | Section | Before the register | After reading the register |
 |---|---|---|
-| Waarnemingen | only sources actually shown (invitation, read at home) — raw text, picture, provenance ("Boven · waarneming 7 · voor- en achterkant bekeken"), pin, archive | same |
-| Mijn onderzoek | own questions/ideas (player-written, with optional pinned sources) · Resultaten (factual outcomes) | + **Uit het register**: exactly the three topics with the register's own line, and *Mijn aandacht* (Geen / one topic) |
-| Archief | herinneringen (memories, incl. DS01's) · what the player archived | same |
+| Waarnemingen | only sources actually shown (invitation, read at home) — raw text, picture, provenance ("Boven · waarneming 7 · voor- en achterkant bekeken"), *Vastzetten*, *Opbergen*; empty state "Hier blijven de dingen die je bekijkt." | same |
+| Mijn onderzoek | own ideas/questions (*Mijn idee*, dashed card, player-written, with sources *door jou vastgezet*) · Resultaten (*✓ Resultaat bevestigd*) | + **Uit het register**: exactly the three topics with the register's own line, *Mijn aandacht* (one topic, *Aandacht loslaten*) and the opt-in *Mijn aandacht in beeld tonen* |
+| Archief | herinneringen (*Herinnering · Bekeken*, DS01 with its image) · what the player put away (*Opgeborgen · door jou*, *Heropenen*) | same |
 
-No relevance score, no "✓ opgelost" badge, no grouping by hidden clue relations, no next steps, no "Volg deze
-draad". The HUD objective line shows only the player's chosen attention ("Mijn aandacht: …") or nothing.
-Type labels keep the four kinds apart: **Waarneming** (blue), **Eigen vraag** (ochre), **Resultaat** (green),
-**Hint** (only in the hint dialog, dashed). The invitation's slice variant drops the sentence that named the three
-parts of the route, so nothing shows the topics before the register is read (provisional text, §5).
+No relevance score, no "opgelost" badge on sources, no grouping by hidden clue relations, no next steps, no "Volg
+deze draad". The HUD shows the chosen attention only after the player switches it on (UX v0.2 §3, default off).
+Type labels (UX v0.2 §2.1): **Waargenomen**, **Mijn idee** (dashed), **✓ Resultaat bevestigd**, **Herinnering ·
+Bekeken**, **Hint** (only in the hint dialog). The invitation is quoted **in full**, including its sentence about
+the three parts of the route — UX v0.2 §3: "niet censureren: wel citeren, nog geen queststructuur ervan maken"
+(DEV-01 had dropped that sentence); topics as structure still appear only after the register is read.
 
 ## 4. Save / schema contract (chosen)
 
-- `GameState` stays **version 4**. The slice adds one **optional** block `slice` (schema **`dev01/2`** since
-  DEV-01R, `src/slice/schema.ts`), parsed with a sanitiser (garbage → fresh slice; future schema → fresh slice;
-  duplicate folios dropped; "back seen" without "front seen" dropped). Older builds simply drop the block.
+- `GameState` stays **version 4**. The slice adds one **optional** block `slice` (schema **3** since DEV-01R final,
+  `src/slice/schema.ts`), parsed with a sanitiser (garbage → fresh slice; future schema → fresh slice; duplicate
+  folios dropped; "back seen" without "front seen" dropped). Older builds simply drop the block.
+- **Schema ≤ 2 → 3 (DEV-01R final)**: source ids → canon ids in observations, pins, question pins and the archive:
+  `s.b01.pair.*` and `s.b01.clip.*` → `EB.stars` / `EB.plants` / `EB.travel` (the clip is part of its cluster now);
+  `s.ds01.note` → `OA.ds01`; `s.ds01.album` and `s.ds01.letter` → `OB.ds01` (one reading cluster); `s.ds01.photo` →
+  `OC.ds01` (faces kept; the two faces are logged as `OC.ds01.front` / `OC.ds01.back`). Merged records keep the
+  earliest sequence number and all faces. New field `hudAttention` (default false). Unit-tested.
 - **Schema 1 → 2 (DEV-01R)**: review saves made with DEV-01 are migrated on load — folio ids `I/II/III` →
   `stars/travel/plants` in the slots, and source ids `s.b01.folio.I…` → `EB.folio.stars…` in observations, pins,
   question pins and the archive (unit-tested). Only the review namespace is affected; the player's save never held
@@ -112,52 +127,52 @@ parts of the route, so nothing shows the topics before the register is read (pro
   - `c.ledger` read in iteration 3 (it opened on pickup) → `RegisterObserved`; followed thread A/B/C → attention
     `tafel/kantlijn/paden` only if the register was read; drawer hints carried over.
 
-## 5. Canon vs provisional content (after DEV-01R)
+## 5. Canon status of the content (after DEV-01R final)
 
-All in `src/slice/content.ts` (+ pictures in `src/slice/drawings.ts`).
+All in `src/slice/content.ts` (+ pictures in `src/slice/drawings.ts`). Source: `docs/design/v0.2/PUZZLE_DESIGN.md`
+(PD) and `UX_GAME_FEEL.html` (UX). **Nothing is provisional any more** (`CONTENT_STATUS`, unit-tested: every source
+has status `canon`).
 
-**Replaced by canon in DEV-01R** (source: the DEV-01R brief):
-
-| Item | DEV-01 (provisional) | Now (canon) |
+| Item | Status | Source |
 |---|---|---|
-| Folio concept | folders "Map I/II/III" with coloured covers | loose drawing sheets (*los tekenblad*), two pencil sketches, no words |
-| Folio ids | `I`, `II`, `III` / `s.b01.folio.*` | `stars`, `plants`, `travel` / `EB.folio.stars`, `EB.folio.plants`, `EB.folio.travel` |
-| stars pair (U05) | lens cap on green cord + circled star chart | telescope on a fork mount with two round screw heads (3D) + notebook with three holes |
-| plants pair (U10) | fern with torn tip + pot with blue band | pressed fern with a broad diagonal repair strip + scissors with an angular and a round grip |
-| travel pair (U04) | compass with cracked glass + punched ticket | suitcase with two parallel straps and a square middle patch (3D) + label with the top-right corner cut off |
-| DS01 A staging | green board maquette | gingerbread maquette (brown, white icing) |
-| DS01 B staging | low side table | quiet reading plank (ledge on two trestles), same footprint, apart from B01 |
+| Folio ids, concept (loose drawing sheets), detail pairs, mapping rond=stars / punt=plants / vierkant=travel | canon, literal transcripts | PD §4.2 |
+| Table instruction "Deze losse tekenbladen horen bij drie objectgroepen boven. …" | canon, literal | PD §4.2 |
+| Practice card (key with three teeth + striped cord loop, wave tab, drawn wave box) | canon elements; transcript wording ours | PD §4.2 |
+| Cluster = both originals + attached clip; ids `EB.stars/plants/travel` | canon | PD §4.2, UX U01, LEVEL_LAYOUT evidence ids |
+| Input: select, place, take back/swap, **Controleer** | canon | PD §4.2 |
+| B01 hints 1–3 | canon, literal | PD §4.2 |
+| Study card in the drawer (refers to the study, no B02 answer) | canon (running game) | PD §4.2 |
+| DS01 ids `OA.ds01`, `OB.ds01`, `OC.ds01.front/back` | canon | PD §6.2 |
+| DS01 A text, B page title + letter, C raw inspection, C back | canon, literal | PD §6.2 |
+| DS01 first-front notice "Afbeelding bewaard in notities"; archive title "De foto die moest drogen" | canon | PD §6.1, §6.4 |
+| DS01 hints 1–3 | canon, literal | PD §6.6 |
+| Register text and its three topic lines; mantel/drawer rule and hints; invitation | canon (running game), verbatim | UX §3 (invitation not censored) |
+| Source titles ("Tafeltje met telescoop en schrift", "Afbeelding aan het droogrek", …), hint context titles | our wording, literal descriptions of what is seen | PD gives no titles; UX §5 "titel die de speler kent" |
 
-**Still provisional** (needs Puzzle Design v0.2 / UX v0.2 text, not available in this session):
-
-| Item | Current text |
-|---|---|
-| B01 table instruction | "Ieder tekenblad hoorde ooit met een clip in het archief. Leg het terug in het vak van die clip." (wording re-pointed to sheets) |
-| B01 hint levels 1–3 | re-pointed to the canonical details; level semantics per UX canon (0 riddle only, 1 attention, 2 relation, 3 solution) |
-| Player-facing phrasing of the canon details | our Dutch sentences (`FOLIO_DETAILS`, `PAIR_TEXT`); the details themselves are canon |
-| DS01 A/B/C texts, back text, memory text | fictional placeholder texts (no real people, quotes or events) |
-| Invitation (slice variant) | iteration-3 text minus the "drie delen van de route" paragraph |
-
-Canon reused verbatim: register text and its three topic lines, mantel/drawer rule and hints.
+DEV-01 → DEV-01R → final, for the record: folders "Map I/II/III" → loose sheets (DEV-01R); provisional detail
+pairs → canon pairs (DEV-01R); provisional instruction/hints/DS01 texts (tea, "J.", "huisje aan het water") →
+literal PD v0.2 texts (final); separate clip cards → clips attached to the clusters (final).
 
 ## 6. As-built slice layout and ids
 
-Room ids are the **existing** ones; v0.2 ids are aliases (`src/slice/ids.ts`): G01 `vestibule`, G02 `hall`,
-G03 `living`, G04 `library`, U04 `reis`, U05 `sterren`, U10 `botanic`. Assumed from the brief (U04 = reiskamer)
-and the B01 subjects — **verify against LEVEL_LAYOUT v0.2**. No geometry was moved: the current manor already
-contains every slice room, the grand stair and the upper loop; the slice adds furniture and evidence only.
+Room ids are the **existing** ones; the G/U labels are aliases (`src/slice/ids.ts`): G01 `vestibule`, G02 `hall`,
+G03 `living`, G04 `library`, U04 `reis`, U05 `sterren`, U10 `botanic` — **verified** against ENVIRONMENT_STORY §5
+(discipline aliases), LEVEL_PLAN §12 and LEVEL_LAYOUT `rooms`/`source.rooms` (same ids, same bounds). No geometry was
+moved: the current manor already contains every slice room, the grand stair and the upper loop; the slice adds
+furniture and evidence only.
 
 One record set (`src/slice/placement.ts`) drives both the props and the validator:
 
 | Prop (plan m, X east / Z north) | Room | Footprint | Interactables (reading pose) |
 |---|---|---|---|
-| `ds01.maquetteTable` (85.5, 95.9) | hall (G02), west wall north of the living arch | 0.62 × 1.1 | `ds01.note` (86.75, 95.9) |
-| `b01.tableTop` (80.6, 101.2) — the iteration-3 reading table, chairs moved to its west side | library (G04) | 1.1 × 2.2 | `b01.table` (81.85, 101.2); drawer `library.desk` → `pk.studyKey`, `b01.card` |
-| `ds01.sideTable` (74.55, 106.6) | library reading corner | 0.7 × 0.9 | `ds01.album`, `ds01.letter` (75.75, 106.6) |
-| `b01.sterrenTable` (79.0, 93.45) under the wall star chart | U05 | 1.0 × 0.5 | `b01.pair.sterren`, `b01.clip.sterren` (79.0, 92.35) |
-| `b01.reisDesk` (78.6, 86.4) north wall | U04 | 1.1 × 0.5 | `b01.pair.reizen`, `b01.clip.reizen` (78.6, 85.3) |
-| `ds01.rack` (82.2, 81.2) in front of the SE window | U04 | 0.55 × 0.3 × 1.0 h (collider) | `ds01.photo` (82.2, 82.45) |
-| `b01.botanicTable` (101.75, 84.0) west wall (no windows) | U10 | 0.5 × 1.0 | `b01.pair.planten`, `b01.clip.planten` (102.9, 84.0) |
+| `ds01.maquetteTable` (88.0, 96.0) = LEVEL_LAYOUT `ES.gingerbread` | hall (G02), west flank in front of the lobby arch | 0.62 × 1.1 | `ds01.note` (88.0, 94.6) |
+| `b01.tableTop` (80.6, 101.2) — the iteration-3 reading table, chairs moved to its west side; practice card at its south end | library (G04) | 1.1 × 2.2 | `b01.table` (81.85, 101.2); drawer `library.desk` → `pk.studyKey`, `b01.card` |
+| `ds01.sideTable` (74.55, 106.6) — reading plank | library reading corner | 0.7 × 0.9 | `ds01.album` (album page + letter) (75.75, 106.6) |
+| `b01.sterrenTable` (79.0, 93.45) under the wall star chart | U05 | 1.0 × 0.5 | `b01.pair.sterren` → `EB.stars` (79.0, 92.35) |
+| `b01.reisDesk` (78.6, 86.4) north wall | U04 | 1.1 × 0.5 | `b01.pair.reizen` → `EB.travel` (78.6, 85.3) |
+| `ds01.rack` (82.2, 81.2) in front of the SE window | U04 | 0.55 × 0.3 × 1.0 h (collider) | `ds01.photo` → `OC.ds01` (82.2, 82.45) |
+| `ds01.cases` (81.35, 81.05) two plain suitcases beside the rack | U04 | 0.7 × 0.4 × 0.55 h (collider) | — |
+| `b01.botanicTable` (101.75, 84.0) west wall (no windows) | U10 | 0.5 × 1.0 | `b01.pair.planten` → `EB.plants` (102.9, 84.0) |
 
 Keepouts checked by `validatePlacement()` (unit-tested, incl. negative cases): inside the room clear of wall slabs
 (so never through a door or window), clear of every route opening (± 0.6–0.9 m) and door-leaf swing, window slabs,
@@ -165,9 +180,11 @@ the grand stair (flight, foot, head), a 0.8 m corridor along every route leg, an
 Openings are mirrored from the `wall()` calls, which build the rendered gap and the collider gap from the same
 list. Vegetation: e2e checks every instance against building footprints (§8 finding).
 
-New ids: interactables above; sources `s.b01.table`, `EB.folio.{stars,plants,travel}` (canon; were `s.b01.folio.{I,II,III}`), `s.b01.pair.{sterren,reizen,planten}`,
-`s.b01.clip.*`, `s.b01.card`, `s.ds01.{note,album,letter,photo}`; flags `b01Solved`; results `drawer.solved`,
-`drawer.register`, `b01.solved`, `b01.studyKey`, `ds01.memory`, `legacy.<puzzleId>`; hint contexts `drawer`, `b01`.
+New ids: interactables above; sources `s.b01.table`, `s.b01.practice`, `EB.folio.{stars,plants,travel}`,
+`EB.{stars,plants,travel}`, `s.b01.card`, `OA.ds01`, `OB.ds01`, `OC.ds01` (faces `OC.ds01.front/back`); flags
+`b01Solved`; results `drawer.solved`, `drawer.register`, `b01.solved`, `b01.studyKey`, `ds01.memory`,
+`legacy.<puzzleId>`; hint contexts `drawer`, `b01`, `ds01`. Retired (migrated): `s.b01.pair.*`, `s.b01.clip.*`,
+`s.ds01.{note,album,letter,photo}`, interactables `b01.clip.*`, `ds01.letter`.
 Changed ids: none (reused `library.desk`, `lock.libraryDesk`, `pk.studyKey`, `pk.ledger`, `hall.drawer`).
 
 ## 7. Tests and results
@@ -175,10 +192,10 @@ Changed ids: none (reused `library.desk`, `lock.libraryDesk`, `pk.studyKey`, `pk
 | Check | Result |
 |---|---|
 | `npm run typecheck` | ✅ |
-| `npm test` | ✅ 137/137 after DEV-01R (102 existing + 35 in `tests/slice.test.ts`; DEV-01: 133/133) |
+| `npm test` | ✅ 142/142 after DEV-01R final (102 existing + 40 in `tests/slice.test.ts`; DEV-01R: 137/137) |
 | `npm run build` | ✅ |
-| `npm run e2e` (existing regression, new build) | ✅ 103/103 after DEV-01R (DEV-01: 103/103; baseline before any change: 103/103) — `e2e-regression-results.json` |
-| `npm run e2e:dev01` (new) | ✅ 32/32 after DEV-01R (incl. a check that no catalogue / emblem-plan / guestbook-tab interactable exists in the review build) — `e2e-dev01-results.json` |
+| `npm run e2e` (existing regression, new build) | ✅ 103/103 after DEV-01R final (DEV-01R and DEV-01: 103/103; baseline: 103/103) — `e2e-regression-results.json` |
+| `npm run e2e:dev01` (new) | ✅ 34/34 after DEV-01R final (DEV-01R: 32/32) — `e2e-dev01-results.json` |
 | `scripts/dev01-compare.mjs` normal game vs base commit | ✅ draw calls and triangles identical at 13 views; pixel deltas within the run-to-run noise floor (§7.2) |
 
 New unit tests cover: B01 all 6 permutations (exactly 1 correct); solve without any observation; remove / swap /
@@ -191,8 +208,19 @@ keepouts (+ negative cases); normal game has no slice block.
 DEV-01R adds: canon ids `EB.folio.*` → round/pointed/square; sheet and room texts carry the canonical detail pairs;
 no folder/"map"/werkmap wording anywhere the player reads B01; sheet art has no words; schema 1 → 2 migration of
 review saves (slots, observations, pins, question pins, archive).
+DEV-01R final adds/changes: the 6 permutations go through *Controleer*; placing never judges, incomplete
+*Controleer* = no attempt; literal PD instruction, hints and detail transcripts; clusters carry their attached clip
+(`EB.stars/plants/travel`); practice card neither gates nor counts; literal DS01 texts (nothing left of the
+provisional ones) and face event ids `OC.ds01.front/back`; DS01 hints (none before a source, encounter titles, C
+first, no reward); full invitation before the register without topics; HUD attention opt-in (default off, no world
+change); schema ≤ 2 → 3 migration (merge rules); every source `canon`.
 
-New browser checks (`scripts/e2e-dev01.mjs`): full route by walking, reticle-verified at all 13 reading poses
+DEV-01R final browser checks add: literal instruction + practice card + *Controleer* on an incomplete set; cluster
+overlay text with the attached clip and no separate clip target; album page + letter as one cluster; the one
+"Afbeelding bewaard in notities" notice and the literal back after *Omkeren*; DS01 hint after C first; HUD label
+off until opt-in; *Waargenomen* / *Mijn idee* / *Door jou vastgezet* / *✓ Resultaat bevestigd* / *Herinnering ·
+Bekeken*; hint level 0 explains *Aandacht · Relatie · Oplossing*.
+New browser checks (`scripts/e2e-dev01.mjs`): full route by walking, reticle-verified at all reading poses
 (collision + line of sight), stair up/down, return context (dial draft + focus; B01 draft + scroll), register
 owned-vs-read, attention, DS01 C front/back, B01 wrong/right/reward, hint menu after solving, save/reload (only
 dev01 keys written), C-first + own question + archive, old-save import (study door opens with the imported key; own
@@ -202,28 +230,30 @@ open, ≥ 44 px buttons, no horizontal overflow, panel fits, no click-through), 
 
 ### 7.1 Existing regression suite
 
-`node scripts/e2e.mjs` against the new build: **103/103** (full home → finale walkthrough, collision, saves,
-touch, WebGL failure, metrics, lighting, art samples). Baseline at `ef6b7c3` before any change: 103/103.
+`node scripts/e2e.mjs` against the DEV-01R final build: **103/103** (full home → finale walkthrough, collision,
+saves, touch, WebGL failure, metrics, lighting, art samples). Baseline at `ef6b7c3` before any change: 103/103.
 
 ### 7.2 Normal game = base commit, and the cost of the slice (phone quality "low", 844 × 390, SwiftShader)
 
 | View | calls base / normal / dev01 | triangles base / normal / dev01 | normal vs base pixels |
 |---|---|---|---|
-| forecourt | 139 / 139 / 139 | 141 039 / 141 039 / 141 143 | max Δ 10 |
-| hall-wide | 181 / 181 / 178 | 161 554 / 161 554 / 162 228 | identical |
-| hall-console | 109 / 109 / 109 | 175 998 / 175 998 / 176 846 | identical |
-| hall-maquette | 114 / 114 / 111 | 147 972 / 147 972 / 148 706 | max Δ 2 |
-| living-mantel | 95 / 95 / 95 | 156 906 / 156 906 / 157 706 | max Δ 3 |
-| library-wide | 47 / 47 / 45 | 56 614 / 56 614 / 57 358 | max Δ 1 |
-| library-table | 42 / 42 / 39 | 53 794 / 53 794 / 54 522 | max Δ 1 |
-| library-album | 22 / 22 / 23 | 51 874 / 51 874 / 52 732 | max Δ 1 |
-| U05-sterren | 35 / 35 / 36 | 54 870 / 54 870 / 55 728 | identical |
-| U04-desk | 46 / 46 / 47 | 60 114 / 60 114 / 60 972 | max Δ 1 |
-| U04-rack | 29 / 29 / 29 | 25 628 / 25 628 / 26 428 | max Δ 1 |
-| U10-botanic | 49 / 49 / 51 | 31 796 / 31 796 / 32 620 | max Δ 1 |
+| forecourt | 139 / 139 / 139 | 141 039 / 141 039 / 141 143 | max Δ 11 |
+| hall-wide | 181 / 181 / 178 | 161 554 / 161 554 / 162 272 | max Δ 1 |
+| hall-console | 109 / 109 / 109 | 175 998 / 175 998 / 176 888 | max Δ 1 |
+| hall-maquette (pose moved to the new maquette spot) | 130 / 130 / 127 | 153 968 / 153 968 / 154 686 | max Δ 1 |
+| living-mantel | 95 / 95 / 95 | 156 906 / 156 906 / 157 754 | identical |
+| library-wide | 47 / 47 / 45 | 56 614 / 56 614 / 57 402 | max Δ 1 |
+| library-table | 42 / 42 / 39 | 53 794 / 53 794 / 54 572 | max Δ 1 |
+| library-album | 22 / 22 / 23 | 51 874 / 51 874 / 52 782 | max Δ 1 |
+| U05-sterren | 35 / 35 / 36 | 54 870 / 54 870 / 55 772 | identical |
+| U04-desk | 46 / 46 / 47 | 60 114 / 60 114 / 61 016 | identical |
+| U04-rack | 29 / 29 / 29 | 25 628 / 25 628 / 26 470 | max Δ 1 |
+| U10-botanic | 49 / 49 / 51 | 31 796 / 31 796 / 32 662 | max Δ 1 |
 | sauna-lawn | 73 / 73 / 73 | 90 333 / 90 333 / 90 273 | identical |
 
-(Measured after DEV-01R on an idle machine. A run made while the regression suite was running in parallel showed
+(Measured after DEV-01R final on an idle machine; DEV-01R final changes no normal-game code — only `src/slice/*`
+and one CSS rule on a slice-only class. The forecourt's max Δ 11 is foliage/flame animation timing (base vs base:
+max Δ 8 there). A run made while the regression suite was running in parallel showed
 count swings in the *base* build too, e.g. hall-console 109 → 176 calls: measure these numbers without load.)
 
 Noise floor: the base build compared with itself at the same poses differs by the same order (max Δ 8 at the
@@ -245,9 +275,9 @@ the base game too).
 | start / notebook before register | `01-arrival`, `02-notebook-before-register` |
 | notebook after register | `03-notebook-after-register` |
 | B01 library panel | `05-b01-library-panel`, `05b-b01-table-world`, `11-b01-drawer-open` |
-| each upper cluster | `07b-U05-cluster` (+ `07-U05-clip-overlay`), `08-U04-cluster`, `10-U10-cluster` |
+| each upper cluster | `07b-U05-cluster` (+ `07-U05-clip-overlay`: the cluster overlay with its attached clip), `08-U04-cluster`, `10-U10-cluster` |
 | DS01 A / B / C | `04-ds01-A-maquette-note`, `04b-hall-maquette-view` · `06-ds01-B-letter`, `06b-ds01-B-album-world` · `09-ds01-C-photo-front`, `09b-ds01-C-photo-back`, `09c-U04-rack-world` |
-| mobile evidence comparison | `20-…-b01-panel`, `21/22-…-folio-stars(-zoomed)` (landscape + portrait), `23-landscape-clip-rond`, `24-landscape-pair-sterren`, `25/26-landscape-photo-front/back`, `27-landscape-notebook` |
+| mobile evidence comparison | `20-…-b01-panel`, `21/22-…-folio-stars(-zoomed)` (landscape + portrait), `24-landscape-pair-sterren`, `23-landscape-cluster-zoomed`, `25/26-landscape-photo-front/back`, `27-landscape-notebook` |
 | hints / archive | `13-hints`, `12-notebook-archive` |
 | normal game vs base, dev01 views | `compare/<view>-base.jpg`, `compare/<view>-dev01.jpg`, `compare/compare.json` |
 
@@ -264,24 +294,30 @@ No video: the walkthrough is reproducible with `npm run e2e:dev01` (the previous
   RNG-neutral, needs its own approval).
 - The hall's wide view exceeds the 150-call phone guide in the base build (181 calls at low quality).
 
-## 9. Deviations from LEVEL_PLAN / Puzzle / UX (known)
+## 9. Deviations from LEVEL_PLAN / Puzzle / UX (known, after DEV-01R final)
 
-**After DEV-01R, remaining:** (1) room aliases G01–U10 and the evidence poses are still the as-built assumption —
-LEVEL_LAYOUT.json v0.2 was not available to check them; (2) the literal B01 instruction, hint wording, DS01 texts and
-the v0.2 register wording are still provisional; (3) two near-misses stay for the human review: the U04 open suitcase
-with luggage labels (`mem.reis.suitcase`, near the drying rack — no straps, no patch, no cut corner) and the U05
-tripod telescope (no fork, no screw heads). Everything else from the audit is resolved (`DEV01R_AUDIT.md`).
+1. **B01 inspection poses (MINOR, deliberately not moved).** LEVEL_LAYOUT `evidence_reservations` reserve reis
+   (81.5, 83) facing W/N, sterren (76.5, 90) facing W, botanic (104.5, 88) facing E, 1.2 m clear. In the as-built
+   rooms those spots are occupied (sterren: the bed spans x 73.9–76.1 directly west of the pose; botanic: the
+   existing 1.2 × 2.4 m table covers (104.5, 88)). Adopting them means restaging three rooms, which LEVEL_PLAN §11/§14
+   assigns to the later, separately authorised blockout ("design only; not implemented"). The slice keeps the parts
+   of the contract that apply to as-built rooms: right room, reachable before the study key, approached by real
+   controls, ≥ 1.2 m clear around each pose except the target surface (nearest other furniture ≥ 2.3 m), and the
+   reservation status "preferred candidate" is respected. Follow-up: restage U04/U05/U10 to the reserved poses with
+   the blockout.
+2. **Maquette size/art (not reconciled).** ENVIRONMENT_STORY PB01 proposes a 0.7–0.9 m wide gingerbread maquette with
+   sugar seams; the blockout model is ≈ 0.46 × 0.66 m with icing strips. Art direction is out of DEV-01R scope.
+3. **Near-misses kept on purpose** (PD §4.2 allows decorative stars/plants/suitcases that never duplicate the full
+   pair): U04 open suitcase with luggage labels (`mem.reis.suitcase`), U05 tripod telescope, U10 herbarium.
+4. **Not built (not in the slice contract):** UX's optional "Laatst bekeken" resume view; a maquette inspection
+   (PD OV01 / ES §7: optional).
 
-
-Because the v0.2 documents were not available, everything that depends on them is a **reconciliation risk**:
-room aliases (§6), exact B01 detail pairs and DS01 texts (§5), the upper-loop metrics (the slice uses the current
-manor as-built: grand stair, gallery walkway, landing → corridor), and any v0.2 IA details beyond DEV-01 §6
-(e.g. how provenance is phrased — the slice uses floor + sequence number and deliberately no room names).
 Other deliberate choices to confirm:
 - The hint menu also lists *non-slice* riddles of the running game once discovered (e.g. the study desk after the
   key is owned, the basement door after the register is read) with their existing three hints behind level 0.
 - Room names are hidden on the floor plans in the review build only (no room labels anywhere).
 - U05's lamp defaults to on in the review build (evidence readable on arrival).
+- Provenance uses floor + sequence number ("Boven · waarneming 7"), never a room name the player may not know.
 
 ## 10. Not implemented (by design)
 
@@ -293,7 +329,8 @@ outside the slice's scope. No phone measurements, no human playtest yet (see REV
 ## 11. Files
 
 New: `src/slice/{ids,schema,content,drawings,model,placement,world,ui,start}.ts`, `tests/slice.test.ts`,
-`scripts/e2e-dev01.mjs`, `scripts/dev01-compare.mjs`, `docs/dev01/*`.
+`scripts/e2e-dev01.mjs`, `scripts/dev01-compare.mjs`, `docs/dev01/*`; design sources `docs/design/v0.2/*` (unchanged
+copies, `e8217a6`).
 Changed (each change gated on `SLICE`/`REVIEW === 'dev01'` or additive): `src/core/artflags.ts` (flag),
 `src/core/state.ts` (optional `slice` block, dev01 key namespace, read-only main save), `src/core/game.ts`
 (one-line hooks), `src/main.ts` (start card, test hook for the route), `src/world/manor.ts` (slice builders, DEV-01R painting captions gated,

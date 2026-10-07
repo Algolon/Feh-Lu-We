@@ -2,8 +2,8 @@
   {
     "view": "forecourt",
     "normalVsBase": {
-      "diffPixels": 10948,
-      "maxDelta": 10,
+      "diffPixels": 11128,
+      "maxDelta": 11,
       "total": 329160
     },
     "base": {
@@ -29,8 +29,8 @@
   {
     "view": "hall-wide",
     "normalVsBase": {
-      "diffPixels": 0,
-      "maxDelta": 0,
+      "diffPixels": 25989,
+      "maxDelta": 1,
       "total": 329160
     },
     "base": {
@@ -43,7 +43,7 @@
     },
     "dev01": {
       "calls": 178,
-      "tris": 162228
+      "tris": 162272
     },
     "standing": {
       "x": 90,
@@ -56,8 +56,8 @@
   {
     "view": "hall-console",
     "normalVsBase": {
-      "diffPixels": 0,
-      "maxDelta": 0,
+      "diffPixels": 51311,
+      "maxDelta": 1,
       "total": 329160
     },
     "base": {
@@ -70,7 +70,7 @@
     },
     "dev01": {
       "calls": 109,
-      "tris": 176846
+      "tris": 176888
     },
     "standing": {
       "x": 87.5,
@@ -83,35 +83,35 @@
   {
     "view": "hall-maquette",
     "normalVsBase": {
-      "diffPixels": 140232,
-      "maxDelta": 2,
+      "diffPixels": 157,
+      "maxDelta": 1,
       "total": 329160
     },
     "base": {
-      "calls": 114,
-      "tris": 147972
+      "calls": 130,
+      "tris": 153968
     },
     "normal": {
-      "calls": 114,
-      "tris": 147972
+      "calls": 130,
+      "tris": 153968
     },
     "dev01": {
-      "calls": 111,
-      "tris": 148706
+      "calls": 127,
+      "tris": 154686
     },
     "standing": {
-      "x": 87.5,
+      "x": 88,
       "y": 0.15,
-      "z": 93.5,
-      "yaw": -0.694738276196702,
-      "pitch": -0.2804882109136265
+      "z": 93.4,
+      "yaw": 0,
+      "pitch": -0.3332443011116733
     }
   },
   {
     "view": "living-mantel",
     "normalVsBase": {
-      "diffPixels": 234309,
-      "maxDelta": 3,
+      "diffPixels": 0,
+      "maxDelta": 0,
       "total": 329160
     },
     "base": {
@@ -124,7 +124,7 @@
     },
     "dev01": {
       "calls": 95,
-      "tris": 157706
+      "tris": 157754
     },
     "standing": {
       "x": 75.4,
@@ -137,7 +137,7 @@
   {
     "view": "library-wide",
     "normalVsBase": {
-      "diffPixels": 6838,
+      "diffPixels": 24,
       "maxDelta": 1,
       "total": 329160
     },
@@ -151,7 +151,7 @@
     },
     "dev01": {
       "calls": 45,
-      "tris": 57358
+      "tris": 57402
     },
     "standing": {
       "x": 82.4,
@@ -164,7 +164,7 @@
   {
     "view": "library-table",
     "normalVsBase": {
-      "diffPixels": 5756,
+      "diffPixels": 2097,
       "maxDelta": 1,
       "total": 329160
     },
@@ -178,7 +178,7 @@
     },
     "dev01": {
       "calls": 39,
-      "tris": 54522
+      "tris": 54572
     },
     "standing": {
       "x": 82.4,
@@ -191,7 +191,7 @@
   {
     "view": "library-album",
     "normalVsBase": {
-      "diffPixels": 962,
+      "diffPixels": 828,
       "maxDelta": 1,
       "total": 329160
     },
@@ -205,7 +205,7 @@
     },
     "dev01": {
       "calls": 23,
-      "tris": 52732
+      "tris": 52782
     },
     "standing": {
       "x": 79,
@@ -232,7 +232,7 @@
     },
     "dev01": {
       "calls": 36,
-      "tris": 55728
+      "tris": 55772
     },
     "standing": {
       "x": 80.5,
@@ -245,8 +245,8 @@
   {
     "view": "U04-desk",
     "normalVsBase": {
-      "diffPixels": 571,
-      "maxDelta": 1,
+      "diffPixels": 0,
+      "maxDelta": 0,
       "total": 329160
     },
     "base": {
@@ -259,7 +259,7 @@
     },
     "dev01": {
       "calls": 47,
-      "tris": 60972
+      "tris": 61016
     },
     "standing": {
       "x": 80.6,
@@ -272,7 +272,7 @@
   {
     "view": "U04-rack",
     "normalVsBase": {
-      "diffPixels": 6,
+      "diffPixels": 1393,
       "maxDelta": 1,
       "total": 329160
     },
@@ -286,7 +286,7 @@
     },
     "dev01": {
       "calls": 29,
-      "tris": 26428
+      "tris": 26470
     },
     "standing": {
       "x": 83.3,
@@ -299,7 +299,7 @@
   {
     "view": "U10-botanic",
     "normalVsBase": {
-      "diffPixels": 7742,
+      "diffPixels": 38203,
       "maxDelta": 1,
       "total": 329160
     },
@@ -313,7 +313,7 @@
     },
     "dev01": {
       "calls": 51,
-      "tris": 32620
+      "tris": 32662
     },
     "standing": {
       "x": 103.2,
