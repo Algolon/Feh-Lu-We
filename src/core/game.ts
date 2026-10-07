@@ -714,7 +714,7 @@ export class Game implements GameApi {
     }
     const indoor = this.extras.isIndoor?.(this.player.x, this.player.z, this.player.y) ?? true;
     this.audio.update(dt, { indoor, fire, water, steam });
-    this.player.onStep = () => this.audio.sfx('step', this.extras.surfaceAt?.(this.player.x, this.player.z, this.player.y) ?? 'wood');
+    this.player.onStep = (e) => this.audio.step(this.extras.surfaceAt?.(this.player.x, this.player.z, this.player.y) ?? 'wood', e.gain, e.foot);
   }
 
   // ------------------------------------------------------------------ HUD + persistence

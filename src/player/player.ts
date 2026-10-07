@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 import type { CollisionWorld } from './collision';
 import type { PlayerPose } from '../core/state';
+import { Gait, type StepEvent } from './gait';
 
 export const PLAYER = {
   radius: 0.3,
@@ -20,12 +21,13 @@ export class Player {
   private eyeY = 0;
   private velX = 0; private velZ = 0;
   distance = 0; // accumulated walking distance (footsteps)
-  onStep: (() => void) | null = null;
-  private stepAcc = 0;
+  onStep: ((e: StepEvent) => void) | null = null;
+  private gait = new Gait();
 
   setPose(p: PlayerPose) {
     this.x = p.x; this.y = p.y; this.z = p.z; this.yaw = p.yaw; this.pitch = p.pitch;
     this.vy = 0; this.eyeY = p.y; this.velX = this.velZ = 0;
+    this.gait.reset();
   }
   pose(): PlayerPose {
     return { x: this.x, y: this.y, z: this.z, yaw: this.yaw, pitch: this.pitch };
@@ -61,11 +63,8 @@ export class Player {
     }
     const moved = Math.hypot(this.x - ox, this.z - oz);
     this.distance += moved;
-    this.stepAcc += moved;
-    if (this.stepAcc > 0.62) {
-      this.stepAcc = 0;
-      this.onStep?.();
-    }
+    const step = this.gait.update(dt, moved); // cadence from real speed (gait.ts), not a fixed short distance
+    if (step) this.onStep?.(step);
     // smooth the eye over steps/ramps
     this.eyeY += (this.y - this.eyeY) * Math.min(1, dt * 14);
     if (Math.abs(this.eyeY - this.y) > 0.6) this.eyeY = this.y;
