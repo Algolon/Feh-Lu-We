@@ -1,6 +1,16 @@
 # Feh Lu We — status, verification record and handoff
 
-Last updated: 2026-10-06. Branch: `ccr-75ef4113-kfkimm` (the repository was empty before this work).
+Last updated: 2026-10-07. Branch: `ccr-75ef4113-kfkimm` (the repository was empty before this work).
+
+## DEV-01 structural & systems slice (7 Oct 2026) — review build, not merged
+
+One reviewable route (arrival → hall → mantel → start drawer/register → library → U05/U04/U10 → library) with
+B01 v0.2, DS01 "De foto die moest drogen" and the v0.2 notebook (Waarnemingen · Mijn onderzoek · Archief).
+- **Opt-in only:** `?review=dev01` (own save keys `fehluwe.dev01.*`; the player's save is only read for "kopie").
+- **Normal game unchanged:** same draw calls/triangles as `ef6b7c3` at 13 views, pixel deltas within noise.
+- **Inputs missing:** LEVEL_PLAN/LAYOUT/ADJACENCY v0.2, Puzzle Design v0.2, UX v0.2, AGENTS.md and the as-is audit
+  were not in the repository; B01 detail pairs and DS01 texts are **provisional** (`src/slice/content.ts`).
+- Report: [`dev01/DEV01_SLICE.md`](dev01/DEV01_SLICE.md) · human test: [`dev01/REVIEW_SCRIPT.md`](dev01/REVIEW_SCRIPT.md).
 
 ## Art refresh, step 3 (5 Oct 2026) — BOSLUST exterior sample (proposed, not approved)
 

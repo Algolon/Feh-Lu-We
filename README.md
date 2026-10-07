@@ -12,6 +12,7 @@ by a fictional organiser ("de Kwartiermaker") and is meant to be replaced — se
 - Published at https://algolon.github.io/Feh-Lu-We/ (GitHub Pages; see [Deploy](#deploy))
 - Build brief and concept art: [`docs/BUILD_BRIEF.md`](docs/BUILD_BRIEF.md), [`docs/concept-art/`](docs/concept-art/)
 - Spoilers: [`docs/PUZZLE_SOLUTIONS.md`](docs/PUZZLE_SOLUTIONS.md) · Playtest guide: [`docs/PLAYTEST.md`](docs/PLAYTEST.md) · Status/next steps: [`docs/HANDOFF.md`](docs/HANDOFF.md)
+- DEV-01 slice review (`?review=dev01`, not merged): [`docs/dev01/DEV01_SLICE.md`](docs/dev01/DEV01_SLICE.md) · [`docs/dev01/REVIEW_SCRIPT.md`](docs/dev01/REVIEW_SCRIPT.md)
 - Iteration 3 ("Het huis dat zich herinnert"): [`docs/ITERATION_3_DESIGN.md`](docs/ITERATION_3_DESIGN.md) · [`docs/ITERATION_3_VALIDATION.md`](docs/ITERATION_3_VALIDATION.md) · [`docs/ART_DIRECTION.md`](docs/ART_DIRECTION.md)
 - Iteration 2 (review fixes): [`docs/ITERATION_2_REVIEW.md`](docs/ITERATION_2_REVIEW.md) · [`docs/ITERATION_2_VALIDATION.md`](docs/ITERATION_2_VALIDATION.md)
 

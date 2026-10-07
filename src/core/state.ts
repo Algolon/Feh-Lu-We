@@ -2,6 +2,7 @@
 // World visuals are derived from this state (see World.syncAll), never the other way round.
 import { ITEMS, LEGACY_ITEMS, SEALS } from '../content/items';
 import { REVIEW } from './artflags';
+import { parseSlice, type SliceState } from '../slice/schema';
 import { CLUES } from '../content/clues';
 import { SYMBOLS } from '../content/symbols';
 import { SERVICE, CATALOG, CONSOLE_SOCKETS } from '../content/canon';
@@ -45,6 +46,8 @@ export interface GameState {
   /** Completion record of the previous chapter (iteration 2 ending), kept when an old save is migrated. */
   archive: { chapter1Finished: boolean; finishedAt: number | null; minutes: number | null } | null;
   notice: string | null; // one-time message shown after loading (e.g. migration summary)
+  /** DEV-01 slice block (review build only; additive, never written by the normal game). See src/slice/schema.ts. */
+  slice?: SliceState;
 }
 
 /**
@@ -187,6 +190,7 @@ export function migrate(raw: unknown): GameState | null {
   if (isObj(data.player)) for (const k of ['home', 'estate']) players[k] = pose(data.player[k]);
   const arc = isObj(data.archive) ? data.archive : null;
   const stats = isObj(data.stats) ? data.stats : {};
+  const slice = isObj(data.slice) ? parseSlice(data.slice) : null;
   return {
     version: STATE_VERSION,
     scene: data.scene === 'estate' ? 'estate' : 'home',
@@ -221,6 +225,7 @@ export function migrate(raw: unknown): GameState | null {
       minutes: typeof arc.minutes === 'number' && Number.isFinite(arc.minutes) ? Math.max(0, arc.minutes) : null,
     } : null,
     notice: typeof data.notice === 'string' ? data.notice.slice(0, 600) : null,
+    ...(slice ? { slice } : {}),
   };
 }
 
@@ -295,10 +300,21 @@ export function parseSettings(text: string | null, coarse: boolean): Settings {
   }
 }
 
-/** In art-review mode (?review=…) nothing is written to or read from the real save slots: the review runs on an
- * in-memory sandbox, so opening a review link can never overwrite, reset or migrate the player's own game.
- * Settings are the one key read through from localStorage (read-only) so quality/sensitivity match the device. */
-const sandbox: Map<string, string> | null = REVIEW ? new Map() : null;
+/** In art-review mode (?review=living|boslust) nothing is written to or read from the real save slots: the review runs on
+ * an in-memory sandbox, so opening a review link can never overwrite, reset or migrate the player's own game.
+ * Settings are the one key read through from localStorage (read-only) so quality/sensitivity match the device.
+ * The DEV-01 slice review (?review=dev01) must survive reloads, so it gets its OWN persistent keys instead
+ * (fehluwe.dev01.*); the player's own keys are never written by it (see readMainSave for the read-only import). */
+const sandbox: Map<string, string> | null = REVIEW && REVIEW !== 'dev01' ? new Map() : null;
+export const DEV01_KEYS: Record<string, string> = { [SAVE_KEY]: 'fehluwe.dev01.save', [BACKUP_KEY]: 'fehluwe.dev01.save.prev', [SETTINGS_KEY]: 'fehluwe.dev01.settings' };
+const remap = (key: string) => (REVIEW === 'dev01' ? DEV01_KEYS[key] ?? `fehluwe.dev01.${key}` : key);
+const rawGet = (key: string): string | null => {
+  try {
+    return globalThis.localStorage?.getItem(key) ?? null;
+  } catch {
+    return null;
+  }
+};
 
 /** localStorage wrapper that never throws (private mode, quota, disabled storage). */
 export const storage = {
@@ -307,16 +323,15 @@ export const storage = {
       if (sandbox.has(key)) return sandbox.get(key)!;
       if (key !== SETTINGS_KEY) return null;
     }
-    try {
-      return globalThis.localStorage?.getItem(key) ?? null;
-    } catch {
-      return null;
-    }
+    const v = rawGet(remap(key));
+    // dev01 settings fall back to the device's normal settings (read-only) until changed in the review
+    if (v === null && REVIEW === 'dev01' && key === SETTINGS_KEY) return rawGet(SETTINGS_KEY);
+    return v;
   },
   set(key: string, value: string): boolean {
     if (sandbox) { sandbox.set(key, value); return true; }
     try {
-      globalThis.localStorage?.setItem(key, value);
+      globalThis.localStorage?.setItem(remap(key), value);
       return true;
     } catch {
       return false;
@@ -325,12 +340,14 @@ export const storage = {
   remove(key: string) {
     if (sandbox) { sandbox.delete(key); return; }
     try {
-      globalThis.localStorage?.removeItem(key);
+      globalThis.localStorage?.removeItem(remap(key));
     } catch {
       /* ignore */
     }
   },
 };
+/** The player's own save, read-only (DEV-01 "start from a copy of my save"). Nothing in the slice writes this key. */
+export const readMainSave = () => rawGet(SAVE_KEY);
 
 // Small helpers used by rules and world code.
 export const has = (s: GameState, item: string) => s.inventory.includes(item);

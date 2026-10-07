@@ -1,0 +1,353 @@
+[
+  {
+    "view": "forecourt",
+    "normalVsBase": {
+      "diffPixels": 11675,
+      "maxDelta": 12,
+      "total": 329160
+    },
+    "base": {
+      "calls": 139,
+      "tris": 141039
+    },
+    "normal": {
+      "calls": 139,
+      "tris": 141039
+    },
+    "dev01": {
+      "calls": 140,
+      "tris": 141063
+    },
+    "standing": {
+      "x": 90,
+      "y": 0,
+      "z": 66,
+      "yaw": 0,
+      "pitch": 0.20082725536973503
+    }
+  },
+  {
+    "view": "hall-wide",
+    "normalVsBase": {
+      "diffPixels": 26268,
+      "maxDelta": 1,
+      "total": 329160
+    },
+    "base": {
+      "calls": 181,
+      "tris": 161554
+    },
+    "normal": {
+      "calls": 181,
+      "tris": 161554
+    },
+    "dev01": {
+      "calls": 179,
+      "tris": 162148
+    },
+    "standing": {
+      "x": 90,
+      "y": 0.15,
+      "z": 84.5,
+      "yaw": 0,
+      "pitch": -0.019045315982016434
+    }
+  },
+  {
+    "view": "hall-console",
+    "normalVsBase": {
+      "diffPixels": 198582,
+      "maxDelta": 2,
+      "total": 329160
+    },
+    "base": {
+      "calls": 109,
+      "tris": 175998
+    },
+    "normal": {
+      "calls": 109,
+      "tris": 175998
+    },
+    "dev01": {
+      "calls": 109,
+      "tris": 176754
+    },
+    "standing": {
+      "x": 87.5,
+      "y": 0.15,
+      "z": 86.5,
+      "yaw": -1.9974238199217724,
+      "pitch": -0.35650916320569404
+    }
+  },
+  {
+    "view": "hall-maquette",
+    "normalVsBase": {
+      "diffPixels": 33678,
+      "maxDelta": 1,
+      "total": 329160
+    },
+    "base": {
+      "calls": 114,
+      "tris": 147972
+    },
+    "normal": {
+      "calls": 114,
+      "tris": 147972
+    },
+    "dev01": {
+      "calls": 112,
+      "tris": 148626
+    },
+    "standing": {
+      "x": 87.5,
+      "y": 0.15,
+      "z": 93.5,
+      "yaw": -0.694738276196702,
+      "pitch": -0.2804882109136265
+    }
+  },
+  {
+    "view": "living-mantel",
+    "normalVsBase": {
+      "diffPixels": 1008,
+      "maxDelta": 1,
+      "total": 329160
+    },
+    "base": {
+      "calls": 95,
+      "tris": 156906
+    },
+    "normal": {
+      "calls": 95,
+      "tris": 156906
+    },
+    "dev01": {
+      "calls": 95,
+      "tris": 157626
+    },
+    "standing": {
+      "x": 75.4,
+      "y": 0.15,
+      "z": 86.7,
+      "yaw": -1.5707963267948966,
+      "pitch": -0.15935164090391615
+    }
+  },
+  {
+    "view": "library-wide",
+    "normalVsBase": {
+      "diffPixels": 4400,
+      "maxDelta": 1,
+      "total": 329160
+    },
+    "base": {
+      "calls": 47,
+      "tris": 56614
+    },
+    "normal": {
+      "calls": 47,
+      "tris": 56614
+    },
+    "dev01": {
+      "calls": 45,
+      "tris": 57266
+    },
+    "standing": {
+      "x": 82.4,
+      "y": 0.15,
+      "z": 97.5,
+      "yaw": -0.8608847083313722,
+      "pitch": -0.023696172648885537
+    }
+  },
+  {
+    "view": "library-table",
+    "normalVsBase": {
+      "diffPixels": 1366,
+      "maxDelta": 1,
+      "total": 329160
+    },
+    "base": {
+      "calls": 42,
+      "tris": 53794
+    },
+    "normal": {
+      "calls": 42,
+      "tris": 53794
+    },
+    "dev01": {
+      "calls": 39,
+      "tris": 54430
+    },
+    "standing": {
+      "x": 82.4,
+      "y": 0.15,
+      "z": 99.4,
+      "yaw": -0.7853981633974523,
+      "pitch": -0.39121759480758955
+    }
+  },
+  {
+    "view": "library-album",
+    "normalVsBase": {
+      "diffPixels": 1136,
+      "maxDelta": 1,
+      "total": 329160
+    },
+    "base": {
+      "calls": 22,
+      "tris": 51874
+    },
+    "normal": {
+      "calls": 22,
+      "tris": 51874
+    },
+    "dev01": {
+      "calls": 23,
+      "tris": 52640
+    },
+    "standing": {
+      "x": 79,
+      "y": 0.15,
+      "z": 105.6,
+      "yaw": -1.349749264119878,
+      "pitch": -0.23665707175933223
+    }
+  },
+  {
+    "view": "U05-sterren",
+    "normalVsBase": {
+      "diffPixels": 0,
+      "maxDelta": 0,
+      "total": 329160
+    },
+    "base": {
+      "calls": 35,
+      "tris": 54870
+    },
+    "normal": {
+      "calls": 35,
+      "tris": 54870
+    },
+    "dev01": {
+      "calls": 36,
+      "tris": 55636
+    },
+    "standing": {
+      "x": 80.5,
+      "y": 3.35,
+      "z": 91.9,
+      "yaw": -0.769006189089444,
+      "pitch": -0.3952904911008508
+    }
+  },
+  {
+    "view": "U04-desk",
+    "normalVsBase": {
+      "diffPixels": 4897,
+      "maxDelta": 1,
+      "total": 329160
+    },
+    "base": {
+      "calls": 46,
+      "tris": 60114
+    },
+    "normal": {
+      "calls": 46,
+      "tris": 60114
+    },
+    "dev01": {
+      "calls": 47,
+      "tris": 60880
+    },
+    "standing": {
+      "x": 80.6,
+      "y": 3.35,
+      "z": 84.6,
+      "yaw": -0.8379812250083869,
+      "pitch": -0.32278432690690073
+    }
+  },
+  {
+    "view": "U04-rack",
+    "normalVsBase": {
+      "diffPixels": 3444,
+      "maxDelta": 1,
+      "total": 329160
+    },
+    "base": {
+      "calls": 29,
+      "tris": 25628
+    },
+    "normal": {
+      "calls": 29,
+      "tris": 25628
+    },
+    "dev01": {
+      "calls": 29,
+      "tris": 26348
+    },
+    "standing": {
+      "x": 83.3,
+      "y": 3.35,
+      "z": 83,
+      "yaw": -2.5930432511392665,
+      "pitch": -0.442669231949158
+    }
+  },
+  {
+    "view": "U10-botanic",
+    "normalVsBase": {
+      "diffPixels": 9659,
+      "maxDelta": 1,
+      "total": 329160
+    },
+    "base": {
+      "calls": 49,
+      "tris": 31796
+    },
+    "normal": {
+      "calls": 49,
+      "tris": 31796
+    },
+    "dev01": {
+      "calls": 51,
+      "tris": 32540
+    },
+    "standing": {
+      "x": 103.2,
+      "y": 3.35,
+      "z": 85,
+      "yaw": -2.174545660192332,
+      "pitch": -0.47237684668758784
+    }
+  },
+  {
+    "view": "sauna-lawn",
+    "normalVsBase": {
+      "diffPixels": 0,
+      "maxDelta": 0,
+      "total": 329160
+    },
+    "base": {
+      "calls": 73,
+      "tris": 90333
+    },
+    "normal": {
+      "calls": 73,
+      "tris": 90333
+    },
+    "dev01": {
+      "calls": 73,
+      "tris": 90273
+    },
+    "standing": {
+      "x": 134,
+      "y": 0,
+      "z": 95.5,
+      "yaw": 0,
+      "pitch": -0.09966865249116202
+    }
+  }
+]
