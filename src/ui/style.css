@@ -182,14 +182,15 @@ body.reduced-motion * { transition: none !important; animation: none !important;
   background: linear-gradient(180deg, transparent 30%, rgba(12, 9, 5, .08) 42%, rgba(12, 9, 5, .52) 68%, transparent 94%);
 }
 #start .start-home {
-  position: absolute; left: 50%; bottom: max(23%, calc(28px + var(--safe-b)));
+  position: absolute; left: 50%; bottom: max(28%, calc(28px + var(--safe-b)));
   transform: translateX(-50%); width: min(72vw, 440px); max-width: none; margin: 0; padding: 0;
 }
 #start .start-brand {
   position: fixed; top: calc(14px + var(--safe-t)); left: calc(14px + var(--safe-l));
   width: clamp(90px, 25vw, 140px); margin: 0; font-size: inherit; line-height: 0; letter-spacing: normal;
+  mix-blend-mode: screen;
 }
-.start-logo { display: block; width: 100%; height: auto; mix-blend-mode: screen; margin: -8% 0; }
+.start-logo { display: block; width: 100%; height: auto; margin: -8% 0; }
 #start .start-home .sub {
   color: #fff0cc; font-size: clamp(14px, 3.4vw, 21px); line-height: 1.22;
   margin: 0 0 12px; opacity: 1; text-shadow: 0 2px 5px #000, 0 0 16px #000;
@@ -222,7 +223,7 @@ body.reduced-motion * { transition: none !important; animation: none !important;
   #start .start-actions .start-restore { font-size: clamp(13px, 2.5dvh, 18px); }
 }
 @media (orientation: portrait) and (max-height: 680px) {
-  #start .start-home { bottom: max(20%, calc(16px + var(--safe-b))); width: min(76vw, 350px); }
+  #start .start-home { bottom: max(25%, calc(16px + var(--safe-b))); width: min(76vw, 350px); }
   #start .start-brand { width: clamp(80px, 23vw, 110px); }
   #start .start-home .sub { margin-bottom: 12px; }
 }
