@@ -20,6 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          # TEMPORARY DEV-01 playtest: a manual run of ccr-928d1d45-tudz6y builds exactly commit 858a06f
+          # (game code and build label); every other run checks out its own ref as before.
+          ref: ${{ (github.event_name == 'workflow_dispatch' && github.ref_name == 'ccr-928d1d45-tudz6y') && '858a06f74d0132b70a997533cfb62faea1ddcc6c' || '' }}
       - uses: actions/setup-node@v7
         with:
           node-version: 22
@@ -28,9 +32,25 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
-      # TEMPORARY DEV-01 playtest: on a manual run of this branch only, force ?review=dev01 in the built index.html
+      # TEMPORARY DEV-01 playtest (deployment only, game code unchanged): on a manual run of this branch, inject an
+      # entry guard into the built index.html: every page load must run with review=dev01; if it is missing or has
+      # another value, loading stops and the page redirects to the same URL with review=dev01. The review build saves
+      # only under fehluwe.dev01.*, so the normal game (fehluwe.save) never starts on this deployment.
       - if: github.event_name == 'workflow_dispatch' && github.ref_name == 'ccr-928d1d45-tudz6y'
-        run: node scripts/pages-dev01-guard.mjs
+        run: |
+          git rev-parse HEAD
+          node --input-type=module <<'EOF'
+          import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
+          import { createHash } from 'node:crypto';
+          const file = 'dist/index.html', html = readFileSync(file, 'utf8'), anchor = '<script type="module"';
+          if (html.includes('DEV-01 playtest entry guard')) throw new Error('guard already present');
+          if (html.split(anchor).length !== 2) throw new Error('expected exactly one module script');
+          const guard = "<script>/* DEV-01 playtest entry guard (deployment only) */(function(){var u=new URL(location.href);" +
+            "if(u.searchParams.get('review')!=='dev01'){u.searchParams.set('review','dev01');if(window.stop)window.stop();location.replace(u.href);}})();</script>\n    ";
+          writeFileSync(file, html.replace(anchor, guard + anchor));
+          const sha = (f) => createHash('sha256').update(readFileSync(f)).digest('hex');
+          for (const f of ['index.html', ...readdirSync('dist/assets').map((a) => `assets/${a}`)]) console.log(`${sha(`dist/${f}`)}  ${f}`);
+          EOF
       - uses: actions/upload-pages-artifact@v5
         with:
           path: dist
