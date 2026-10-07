@@ -139,8 +139,8 @@ export function ceiling(c: Ctx, x0: number, x1: number, z0: number, z1: number, 
 }
 
 /** Straight stairs rising along +z (dir 1) or -z (dir -1) between z0 and z1 (z0 = bottom when dir 1). */
-export function stairsZ(c: Ctx, x0: number, x1: number, zBottom: number, zTop: number, yBottom: number, yTop: number, color: THREE.ColorRepresentation = '#7a4f2c') {
-  const n = Math.max(4, Math.round((yTop - yBottom) / 0.18));
+export function stairsZ(c: Ctx, x0: number, x1: number, zBottom: number, zTop: number, yBottom: number, yTop: number, color: THREE.ColorRepresentation = '#7a4f2c', risers?: number) {
+  const n = risers ?? Math.max(4, Math.round((yTop - yBottom) / 0.18));
   const run = (zTop - zBottom) / n, rise = (yTop - yBottom) / n;
   for (let i = 0; i < n; i++) {
     const za = zBottom + run * i;
@@ -166,6 +166,24 @@ export function railing(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: numb
     for (let a = a0; a <= a1 + 1e-6; a += 0.3) boxMM(c.b, c.k.M.paint, color, f - 0.025, f + 0.025, y0, y0 + h, a - 0.025, a + 0.025, { chunk: c.chunk, shadow: false });
     c.col.addBox(f - 0.08, f + 0.08, a0, a1, y0, y0 + 1.6);
   }
+}
+
+/**
+ * Railing along the side of a stair flight (axis 'z': at x = f, the flight rising from (a0, y0) to (a1, y1) along z).
+ * Visual: sloped handrail + balusters. Collision: one box from the lower floor to above the upper handrail, entirely
+ * OUTSIDE the flight (on the side `side`: −1 = towards −x, +1 = towards +x), so walking on the flight is never touched
+ * and stepping off its side is impossible at every height.
+ */
+export function stairRail(c: Ctx, f: number, a0: number, a1: number, y0: number, y1: number, side: 1 | -1, color = '#5e3b1f', yFloor = Math.min(y0, y1)) {
+  const h = 0.95, len = Math.hypot(a1 - a0, y1 - y0), ang = Math.atan2(y1 - y0, a1 - a0);
+  box(c.b, c.k.M.wood, color, f, (y0 + y1) / 2 + h - 0.03, (a0 + a1) / 2, 0.07, 0.06, len, { rx: ang, chunk: c.chunk });
+  const n = Math.max(2, Math.round(Math.abs(a1 - a0) / 0.35));
+  for (let i = 0; i <= n; i++) {
+    const a = a0 + ((a1 - a0) * i) / n, y = y0 + ((y1 - y0) * i) / n;
+    box(c.b, c.k.M.paint, color, f, y, a, 0.04, h, 0.04, { chunk: c.chunk, shadow: false });
+  }
+  const t = 0.14;
+  c.col.addBox(side < 0 ? f - t : f, side < 0 ? f : f + t, Math.min(a0, a1), Math.max(a0, a1), yFloor, Math.max(y0, y1) + 1.1, { tag: 'railing' });
 }
 
 export function hipRoof(c: Ctx, cx: number, cz: number, sx: number, sz: number, y: number, h: number, mat: THREE.Material, color: THREE.ColorRepresentation, overhang = 0.6) {

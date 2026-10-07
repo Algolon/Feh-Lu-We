@@ -190,8 +190,9 @@ export function letterSheet(): string {
   return svg(200, 240, `<rect x="8" y="8" width="184" height="224" fill="#f8f2e2" stroke="#c9b48a" stroke-width="2"/><line x1="8" y1="88" x2="192" y2="88" stroke="#e0d6c0" stroke-width="1.5"/>${scribble(22, 30, 150, 9, 20)}`, 'Brief');
 }
 /**
- * DS01 C front: a stylised illustration of the game's gingerbread maquette (PD v0.2 §6.1: an illustrative proof, never
- * presented as an authentic group photo) with its caption; slightly wavy from drying.
+ * DS01 C front: a stylised illustration of the first little house — a one-storey gingerbread house (PD v0.2 §6.1: an
+ * illustrative proof, never presented as an authentic group photo) with its caption; slightly wavy from drying. DEV-02:
+ * the hall maquette is now a miniature of the game's manor, so photo and maquette are no longer the same object.
  */
 export function photoFront(): string {
   return svg(240, 200, `<path d="M4 6 Q120 0 236 6 L236 194 Q120 200 4 194 Z" fill="#f2ede0" stroke="#d8cfba" stroke-width="1.5"/>

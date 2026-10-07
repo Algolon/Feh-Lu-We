@@ -1,16 +1,19 @@
-// Glazed pool conservatory X 116–130, Z 94–112, joined to the service wing (door from the service
-// corridor). The swimming pool is INSIDE, with a dry walkable perimeter; there is no outdoor pool.
-// The barrel sauna stands outside, immediately to the right (east), enterable, with a heater.
+// Glazed pool conservatory X 116–130, Z 94–112 — "Francois' Copacabana Room" — joined to the service wing (door
+// from the service corridor). The swimming pool is INSIDE, with a dry walkable perimeter; there is no outdoor pool.
+// DEV-02: a 2.4 m double door (one saved state `door.consEast`) opens east onto the wellness deck; a small bar in the
+// north-east corner; personal name boards inside (corridor) and outside. The barrel sauna stands on the deck, its
+// raised floor (+0.80) reached by a ramp and landing from the north (no steps up from a flat path).
 import * as THREE from 'three';
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, floor } from './arch';
 import { Batcher, box, boxMM, cyl, blob, compound, v3, getKit } from './kit';
-import { plant, part, staticLantern } from './furniture';
+import { plant, part, staticLantern, nameBoard } from './furniture';
 import { makeDoor, makePickup, makeInspect, makeAction, place } from '../interactions/props';
 import { drawSymbol } from '../content/symbols';
 import { addClue } from '../core/state';
 import { turnWheel, wheels, WHEEL_SYMBOLS } from '../puzzles/rules';
-import { GF, CONS, POOL, SITES } from './layout';
+import { GF, CONS, POOL, SITES, CONS_EAST_DOOR, SAUNA_RAMP, SAUNA_FLOOR } from './layout';
 const poolDepth = (z: number) => -1.0 - ((z - POOL.z0) / (POOL.z1 - POOL.z0)) * 1.0; // shallow south → deep north
 
 function mosaicTexture(sym: string) {
@@ -153,10 +156,12 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
       }
     }
   };
-  const ED = 100.85; // east door hinge (opening ED … ED + 1.3)
+  const DD = CONS_EAST_DOOR; // double door opening Z 104.8–107.2 (2.4 m clear)
   gw('x', Z0, X0, X1);
   gw('x', Z1, X0, X1);
-  gw('z', X1, Z0, Z1, [[ED, ED + 1.3]]);
+  gw('z', X1, Z0, Z1, [[DD.z0, DD.z1]]);
+  boxMM(c.b, k.M.paint, fr, X1 - 0.06, X1 + 0.06, DD.h, DD.h + 0.12, DD.z0, DD.z1, { chunk: c.chunk });
+  w.col.addBox(X1 - 0.08, X1 + 0.08, DD.z0, DD.z1, DD.h, H, { occludes: true }); // glass above the doors
   gw('z', X0, 109.6, Z1);
   // the wing roof meets the conservatory: a glazed lean-to strip above the wing wall
   const ridge = 5.8, half = (X1 - X0) / 2, slope = Math.atan((ridge - H) / half), rl = Math.hypot(half, ridge - H), RX = (X0 + X1) / 2;
@@ -178,8 +183,15 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
 
   // doors: from the service corridor (west) and to the garden (east); the conservatory key opens both
   makeDoor(w, g, { id: 'door.consWest', x: 115.8, z: 101.85, dir: 'z+', width: 1.3, height: 2.3, y0: GF, swing: 1, style: 'glass', key: 'consKey' });
-  makeDoor(w, g, { id: 'door.consEast', x: X1, z: ED, dir: 'z+', width: 1.3, height: 2.35, y0: GF, swing: 1, style: 'glass', key: 'consKey', lockId: 'lock.door.consWest' });
-  floor(c, X1, X1 + 1.4, ED - 0.2, ED + 1.5, 0.08, k.M.stone, '#d9ccb0', 0.2, true);
+  // two 1.2 m leaves opening outward (east), ONE saved state and the shared conservatory lock (no half-door bypass)
+  makeDoor(w, g, {
+    id: 'door.consEast', x: X1, z: DD.z0, dir: 'z+', width: (DD.z1 - DD.z0) / 2, height: DD.h, y0: GF, swing: -1, style: 'glass', key: 'consKey', lockId: 'lock.door.consWest',
+    pair: { x: X1, z: DD.z1, dir: 'z-', swing: 1 },
+  });
+  // name board outside, on its own post beside the doors (outside the leaf sweep X 130–131.4 / Z 104.5–107.5)
+  box(c.b, k.M.wood, '#4a3a2a', 130.75, 0.15, 108.7, 0.1, 1.75, 0.1, { chunk: c.chunk });
+  w.col.addCircle(130.75, 108.7, 0.1, 0, 2);
+  nameBoard(w, 130.82, 1.95, 108.7, Math.PI / 2);
 
   // ---------------------------------------------------------------- furnishings
   const lounger = (x: number, z: number, yaw: number, towel: string) => {
@@ -191,11 +203,19 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
   };
   lounger(117.4, 104.5, 0, '#6fae9a');
   lounger(117.4, 107.6, 0, '#e0a060');
-  lounger(128.7, 104.5, Math.PI, '#9aa8d8');
-  for (const [x, z, s] of [[116.8, 111.2, 1.6], [129.2, 111.2, 1.8], [129.2, 94.8, 1.5], [121, 111.3, 1.3], [125, 111.3, 1.4]] as const) plant(c, x, z, GF, s, '#c9774a');
-  cyl(c.b, k.M.wood, '#a8743f', 129.0, GF, 107.6, 0.35, 0.35, 0.5, 12, { chunk: c.chunk });
-  for (let i = 0; i < 3; i++) box(c.b, k.M.paint, ['#6fae9a', '#f2ead8', '#9aa8d8'][i], 129.0, GF + 0.5 + i * 0.07, 107.6, 0.4, 0.07, 0.3, { chunk: c.chunk });
-  w.col.addCircle(129, 107.6, 0.4, 0, 0.8);
+  // DEV-02: the east lounger moved out to the deck: the lane from the double door to the pool path stays free
+  for (const [x, z, s] of [[116.8, 111.2, 1.6], [129.2, 94.8, 1.5], [121, 111.3, 1.3], [124.2, 111.3, 1.4]] as const) plant(c, x, z, GF, s, '#c9774a');
+  cyl(c.b, k.M.wood, '#a8743f', 129.1, GF, 103.6, 0.35, 0.35, 0.5, 12, { chunk: c.chunk });
+  for (let i = 0; i < 3; i++) box(c.b, k.M.paint, ['#6fae9a', '#f2ead8', '#9aa8d8'][i], 129.1, GF + 0.5 + i * 0.07, 103.6, 0.4, 0.07, 0.3, { chunk: c.chunk });
+  w.col.addCircle(129.1, 103.6, 0.4, 0, 0.8);
+  // ES.copacabanaBar (X 127.5–129.5 / Z 109.2–111.4): a small straw-and-wood cocktail corner, outside the pool line
+  boxMM(c.b, k.M.wood, '#8a5a33', 127.6, 129.6, GF, GF + 1.05, 109.4, 110.0, { chunk: c.chunk, uv: 1 });
+  boxMM(c.b, k.M.paint, '#d8b86a', 127.5, 129.7, GF + 1.05, GF + 1.1, 109.3, 110.1, { chunk: c.chunk });
+  boxMM(c.b, k.M.paint, '#c8a050', 127.6, 129.6, GF + 0.1, GF + 1.0, 109.35, 109.4, { chunk: c.chunk }); // straw skirt
+  boxMM(c.b, k.M.wood, '#6b4426', 127.6, 129.9, GF + 1.5, GF + 1.53, 111.2, 111.6, { chunk: c.chunk }); // bottle shelf
+  for (let i = 0; i < 6; i++) cyl(c.b, k.M.paint, ['#2f6a3a', '#c8a050', '#7a2a2a', '#e8e0c8', '#3f6fa8', '#c4553d'][i], 127.8 + i * 0.32, GF + 1.53, 111.4, 0.04, 0.04, 0.28, 6, { chunk: c.chunk });
+  w.col.addBox(127.5, 129.7, 109.3, 110.1, 0, GF + 1.1);
+  for (const x of [128.0, 129.0]) { cyl(c.b, k.M.wood, '#4a2f1a', x, GF, 108.8, 0.18, 0.18, 0.75, 10, { chunk: c.chunk }); w.col.addCircle(x, 108.8, 0.2, 0, 0.8); }
   for (const [x, z] of [[119, 96], [127, 96], [119, 110], [127, 110]] as const) {
     staticLantern(c, w, x, 2.6, z, 1.0, 0, 3.5, 7);
     box(c.b, k.M.paint, '#2b2622', x, 3.0, z, 0.02, 0.4, 0.02, { chunk: c.chunk });
@@ -306,34 +326,44 @@ function buildSauna(w: World, g: GameApi, c: Ctx) {
   const SX = SITES.sauna.x, R = 1.9, Z0 = SITES.sauna.z - 2, Z1 = SITES.sauna.z + 2, AY = 0.25 + R; // barrel axis height
   const FY = 0.8; // raised floor so the curved walls leave a comfortable width
   const woodMat = w.material(new THREE.MeshLambertMaterial({ map: k.T.wood, color: '#c48a52', side: THREE.DoubleSide }));
-  const shell = new THREE.Mesh(new THREE.CylinderGeometry(R, R, Z1 - Z0, 22, 1, true), woodMat);
-  shell.rotation.x = Math.PI / 2;
-  shell.position.copy(v3(SX, AY, (Z0 + Z1) / 2));
-  shell.castShadow = shell.receiveShadow = true;
-  w.scene.add(shell);
-  const capS = new THREE.Mesh(new THREE.CircleGeometry(R, 22), woodMat);
-  capS.position.copy(v3(SX, AY, Z0));
-  w.scene.add(capS);
+  // shell, both end caps and the two iron bands as two merged meshes (one per material): the sauna is in many views
+  const cylG = new THREE.CylinderGeometry(R, R, Z1 - Z0, 22, 1, true).rotateX(Math.PI / 2).translate(SX, AY, -(Z0 + Z1) / 2);
+  const capSG = new THREE.CircleGeometry(R, 22).translate(SX, AY, -Z0);
   const cap = new THREE.Shape();
   cap.absarc(0, 0, R, 0, Math.PI * 2, false);
   const hole = new THREE.Path();
   const dh0 = FY - AY, dh1 = FY + 1.8 - AY;
   hole.moveTo(-0.38, dh0); hole.lineTo(0.38, dh0); hole.lineTo(0.38, dh1); hole.lineTo(-0.38, dh1); hole.closePath();
   cap.holes.push(hole);
-  const capN = new THREE.Mesh(new THREE.ShapeGeometry(cap, 22), woodMat);
-  capN.position.copy(v3(SX, AY, Z1));
-  w.scene.add(capN);
-  for (const z of [Z0 + 0.5, Z1 - 0.5]) {
-    const band = new THREE.Mesh(new THREE.TorusGeometry(R + 0.02, 0.035, 6, 28), w.material(new THREE.MeshLambertMaterial({ color: '#3b3b3b' })));
-    band.position.copy(v3(SX, AY, z));
-    w.scene.add(band);
-  }
+  const capNG = new THREE.ShapeGeometry(cap, 22).translate(SX, AY, -Z1);
+  const shell = new THREE.Mesh(mergeGeometries([cylG.toNonIndexed(), capSG.toNonIndexed(), capNG.toNonIndexed()])!, woodMat);
+  [cylG, capSG, capNG].forEach((q) => q.dispose());
+  shell.castShadow = shell.receiveShadow = true;
+  w.scene.add(shell);
+  const bands = [Z0 + 0.5, Z1 - 0.5].map((z) => new THREE.TorusGeometry(R + 0.02, 0.035, 6, 28).translate(SX, AY, -z));
+  const band = new THREE.Mesh(mergeGeometries(bands)!, w.material(new THREE.MeshLambertMaterial({ color: '#3b3b3b' })));
+  bands.forEach((q) => q.dispose());
+  band.userData.rooms = ['out', 'sauna'];
+  w.scene.add(band);
   // cradle supports + floor
   for (const z of [Z0 + 0.6, Z1 - 0.6]) box(c.b, k.M.wood, '#7a5232', SX, 0, z, 3.2, 0.35, 0.3, { chunk: c.chunk });
   boxMM(c.b, k.M.wood, '#b07e4e', SX - 1.32, SX + 1.32, FY - 0.1, FY, Z0 + 0.05, Z1 - 0.05, { chunk: c.chunk, uv: 1 });
   w.col.addFloor(SX - 1.3, SX + 1.3, Z0 + 0.1, Z1 - 0.05, FY);
-  floor(c, SX - 0.6, SX + 0.6, Z1, Z1 + 0.45, 0.53, k.M.wood, '#8a5a33', 0.53, true);
-  floor(c, SX - 0.6, SX + 0.6, Z1 + 0.45, Z1 + 0.9, 0.27, k.M.wood, '#8a5a33', 0.27, true);
+  // DEV-02 (v0.2 §3): flat landing (+0.80) in front of the door, then a 1.2 m ramp down to the deck (+0.15) at < 8 %
+  const RP = SAUNA_RAMP;
+  floor(c, RP.x0, RP.x1, RP.zDoor, RP.zTop, SAUNA_FLOOR, k.M.wood, '#8a5a33', SAUNA_FLOOR, true);
+  w.col.addBox(RP.x0, RP.x1, RP.zDoor, RP.zTop, 0, SAUNA_FLOOR - 0.01); // solid under the landing
+  const rl = RP.zFoot - RP.zTop, slope = Math.atan2(RP.yTop - RP.yFoot, rl);
+  box(c.b, k.M.wood, '#9a6a3e', (RP.x0 + RP.x1) / 2, (RP.yTop + RP.yFoot) / 2 - 0.06, (RP.zTop + RP.zFoot) / 2, RP.x1 - RP.x0, 0.1, Math.hypot(rl, RP.yTop - RP.yFoot), { chunk: c.chunk, rx: -slope, uv: 1 });
+  w.col.addRamp({ minX: RP.x0, maxX: RP.x1, minZ: RP.zTop, maxZ: RP.zFoot, axis: 'z', a: RP.zTop, ya: RP.yTop, b: RP.zFoot, yb: RP.yFoot });
+  // handrails on both sides of ramp and landing (outside the 1.2 m width): no stepping on or off sideways
+  for (const [x, side] of [[RP.x0, -1], [RP.x1, 1]] as const) {
+    const f = x + side * 0.05;
+    boxMM(c.b, k.M.wood, '#6b4426', f - 0.04, f + 0.04, SAUNA_FLOOR + 0.9, SAUNA_FLOOR + 0.96, RP.zDoor, RP.zTop, { chunk: c.chunk });
+    box(c.b, k.M.wood, '#6b4426', f, (RP.yTop + RP.yFoot) / 2 + 0.9, (RP.zTop + RP.zFoot) / 2, 0.06, 0.06, Math.hypot(rl, RP.yTop - RP.yFoot), { chunk: c.chunk, rx: -slope });
+    for (let z = RP.zDoor + 0.1; z <= RP.zFoot; z += 1.0) { const y = z < RP.zTop ? SAUNA_FLOOR : RP.yTop + ((RP.yFoot - RP.yTop) * (z - RP.zTop)) / rl; box(c.b, k.M.wood, '#6b4426', f, y - 0.6, z, 0.06, 1.5, 0.06, { chunk: c.chunk }); }
+    w.col.addBox(side < 0 ? f - 0.1 : f - 0.04, side < 0 ? f + 0.04 : f + 0.1, RP.zDoor, RP.zFoot - 0.05, 0, SAUNA_FLOOR + 1.1, { tag: 'railing.saunaRamp' });
+  }
   // colliders: curved walls approximated by boxes
   w.col.addBox(SX - R - 0.1, SX - 1.3, Z0, Z1, 0, 4.2, { occludes: true });
   w.col.addBox(SX + 1.3, SX + R + 0.1, Z0, Z1, 0, 4.2, { occludes: true });
@@ -413,7 +443,9 @@ function buildSauna(w: World, g: GameApi, c: Ctx) {
   // sauna door (glass), opens outward to the north
   makeDoor(w, g, { id: 'door.sauna', x: SX - 0.38, z: Z1 + 0.02, dir: 'x+', width: 0.76, height: 1.78, y0: FY, swing: 1, style: 'glass' });
   // a little bucket + ladle outside
-  cyl(c.b, k.M.wood, '#a8743f', SX + 1.0, 0, Z1 + 0.6, 0.18, 0.15, 0.3, 10, { chunk: c.chunk });
-  blob(c.b, k.M.paint, '#6a6560', SX - 1.3, 0.1, Z1 + 0.7, 0.25, 0.15, 0.2, { chunk: c.chunk });
-  w.checkpoints.push({ name: 'sauna', pose: { x: SX, y: 0, z: Z1 + 1.8, yaw: Math.PI, pitch: 0 } });
+  cyl(c.b, k.M.wood, '#a8743f', SX + 1.0, 0.15, Z1 + 0.6, 0.18, 0.15, 0.3, 10, { chunk: c.chunk });
+  blob(c.b, k.M.paint, '#6a6560', SX - 1.3, 0.25, Z1 + 0.7, 0.25, 0.15, 0.2, { chunk: c.chunk });
+  w.checkpoints.push({ name: 'sauna', pose: { x: SX - 1.8, y: 0.15, z: 112.4, yaw: Math.PI, pitch: 0 } });
+  // the sauna shell is exterior skin: visible from outside AND inside whatever the door does (audit VD-03)
+  shell.userData.rooms = ['out', 'sauna'];
 }

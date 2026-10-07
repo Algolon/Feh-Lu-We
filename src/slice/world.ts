@@ -4,7 +4,7 @@
 // textured draw call per area plus the three movable folios.
 import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
-import { type Ctx, gableRoof } from '../world/arch';
+import { type Ctx } from '../world/arch';
 import { box, cyl, compound, planMatrix, mesh, v3, getKit } from '../world/kit';
 import { table, chair } from '../world/furniture';
 import { makeAction, makePickup, place } from '../interactions/props';
@@ -101,20 +101,12 @@ const atlasFor = (w: World) => {
 };
 
 // ------------------------------------------------------------------------------------------------ G02 hall: DS01 A (maquette)
+/**
+ * DEV-02: the maquette itself (a miniature of the game's house, against the hall's west wall) is world staging built for
+ * every mode by src/world/maquette.ts; the review build adds only the ordinary folded note at the south end of its table.
+ */
 export function sliceHall(w: World, g: GameApi, c: Ctx) {
-  const k = c.k, a = atlasFor(w), p = prop('ds01.maquetteTable');
-  table(c, p.x, p.z, p.y, p.w, p.d, 0, '#6b4426', p.h);
-  // gingerbread maquette (DEV-01R canon): the house in gingerbread with white icing, on a board with the grounds
-  const mx = p.x - 0.04, mz = p.z + 0.12, my = top(p) + 0.032;
-  box(c.b, k.M.wood, '#4a2f1a', mx, top(p), mz, 0.46, 0.03, 0.66, { chunk: c.chunk });
-  flat(c, a, 'maquette', mx, my, mz, 0.62, 0.42, -Math.PI / 2);
-  box(c.b, k.M.paint, '#a0622d', mx, my, mz + 0.02, 0.15, 0.09, 0.22, { chunk: c.chunk }); // gingerbread walls
-  gableRoof(c, mx, mz + 0.02, 0.26, 0.19, my + 0.09, 0.075, false, k.M.paint, '#8a5226'); // gingerbread roof (ridge along z)
-  for (const sgn of [-1, 1]) box(c.b, k.M.paint, '#fbf6ea', mx + sgn * 0.092, my + 0.084, mz + 0.02, 0.014, 0.014, 0.27, { chunk: c.chunk }); // icing along the eaves
-  for (const dz of [-0.13, 0.13]) box(c.b, k.M.paint, '#fbf6ea', mx, my + 0.084, mz + 0.02 + dz, 0.19, 0.012, 0.012, { chunk: c.chunk }); // icing on the gable ends
-  for (const dz of [-0.06, 0.06]) box(c.b, k.M.paint, '#fbf6ea', mx + 0.076, my + 0.035, mz + 0.02 + dz, 0.004, 0.03, 0.03, { chunk: c.chunk }); // iced windows (east face)
-  box(c.b, k.M.paint, '#6a3a1a', mx + 0.076, my, mz + 0.02, 0.004, 0.05, 0.03, { chunk: c.chunk }); // door
-  // the ordinary note, propped at the south end of the table (paper, no brass, no numerals)
+  const a = atlasFor(w), p = prop('ds01.maquetteTable');
   const n = p.parts![0];
   flat(c, a, 'note', p.x + n.dx, top(p) + 0.004, p.z + n.dz, 0.2, 0.14, -Math.PI / 2);
   inspectAt(w, g, p, SLICE_IDS.dsNote, SRC.dsNote, 'Lezen: notitie', [0.3, 0.16, 0.26]);

@@ -25,6 +25,11 @@ export interface DoorOpts {
   lockedMsg?: string;
   name?: string;
   thickness?: number;
+  /**
+   * Second leaf of a double door (DEV-02 Copacabana door): same size/style, its own hinge, direction and swing. Both
+   * leaves share ONE saved state (state.open[id]) and one lock, move together and are both solid while closed.
+   */
+  pair?: { x: number; z: number; dir: Dir; swing: 1 | -1 };
 }
 
 export function makeDoor(w: World, g: GameApi, o: DoorOpts) {
@@ -36,7 +41,7 @@ export function makeDoor(w: World, g: GameApi, o: DoorOpts) {
   pivot.rotation.y = base;
   const th = o.thickness ?? 0.07;
   const col = o.color ?? '#7a4f2c';
-  const leaf = compound((b: Batcher) => {
+  const buildLeaf = () => compound((b: Batcher) => {
     // local leaf frame: built at plan origin, spanning +X; local plan z ≡ thickness
     if (o.style === 'glass') {
       box(b, k.M.paint, '#2f4a3c', o.width / 2, 0, 0, o.width, 0.1, th);
@@ -49,28 +54,56 @@ export function makeDoor(w: World, g: GameApi, o: DoorOpts) {
       box(b, k.M.paint, '#2b2b2b', o.width / 2, 0.2, 0, o.width, 0.08, 0.06);
       box(b, k.M.paint, '#2b2b2b', o.width / 2, o.height - 0.25, 0, o.width, 0.08, 0.06);
     } else {
+      // DEV-02: one material per leaf (panels, iron bands and handles tinted on the wood material) — one draw call per
+      // door instead of two; the estate shows many doors at once from the hall
       box(b, k.M.wood, col, o.width / 2, 0, 0, o.width - 0.02, o.height, th, { uv: 1.2 });
       if (o.style !== 'plank') {
         for (const yy of [0.25, o.height * 0.55]) {
-          box(b, k.M.paint, new THREE.Color(col).multiplyScalar(0.8), o.width / 2, yy, 0, o.width * 0.7, o.height * 0.33, th + 0.03);
+          box(b, k.M.wood, new THREE.Color(col).multiplyScalar(0.8), o.width / 2, yy, 0, o.width * 0.7, o.height * 0.33, th + 0.03, { uv: 1.2 });
         }
       } else {
-        box(b, k.M.paint, '#3b3b3b', o.width / 2, o.height * 0.2, 0, o.width * 0.9, 0.08, th + 0.03);
-        box(b, k.M.paint, '#3b3b3b', o.width / 2, o.height * 0.75, 0, o.width * 0.9, 0.08, th + 0.03);
+        box(b, k.M.wood, '#2b2b2b', o.width / 2, o.height * 0.2, 0, o.width * 0.9, 0.08, th + 0.03);
+        box(b, k.M.wood, '#2b2b2b', o.width / 2, o.height * 0.75, 0, o.width * 0.9, 0.08, th + 0.03);
       }
       // handles both sides
-      box(b, k.M.paint, '#c9a44c', o.width - 0.12, 1.0, 0, 0.05, 0.05, th + 0.12);
-      box(b, k.M.paint, '#c9a44c', o.width - 0.18, 1.0, 0, 0.14, 0.04, th + 0.14);
+      box(b, k.M.wood, '#e8c040', o.width - 0.12, 1.0, 0, 0.05, 0.05, th + 0.12);
+      box(b, k.M.wood, '#e8c040', o.width - 0.18, 1.0, 0, 0.14, 0.04, th + 0.14);
     }
   });
+  const leaf = buildLeaf();
   // compound() builds in plan space: plan (x, z) → three (x, -z). Leaf spans +X locally, which is what we want.
   pivot.add(leaf);
   const hb = hitbox(leaf, o.width, o.height, Math.max(0.2, th + 0.1), o.width / 2, o.height / 2, 0);
   w.scene.add(pivot);
 
-  const cx = o.x + (dx * o.width) / 2, cz = o.z + (dz * o.width) / 2;
-  const sx = dx ? o.width : th + 0.08, sz = dz ? o.width : th + 0.08;
-  const collider: Box = w.col.addBoxC(cx, cz, sx, sz, o.y0, o.y0 + o.height, { occludes: true, tag: o.id });
+  const leafCollider = (hx: number, hz: number, ddx: number, ddz: number) => {
+    const sx = ddx ? o.width : th + 0.08, sz = ddz ? o.width : th + 0.08;
+    return w.col.addBoxC(hx + (ddx * o.width) / 2, hz + (ddz * o.width) / 2, sx, sz, o.y0, o.y0 + o.height, { occludes: true, tag: o.id });
+  };
+  let cx = o.x + (dx * o.width) / 2, cz = o.z + (dz * o.width) / 2;
+  const collider: Box = leafCollider(o.x, o.z, dx, dz);
+  // optional second leaf (double door): its own pivot, hitbox and collider, driven by the same state
+  const pair = o.pair ? (() => {
+    const [pdx, pdz] = DIRS[o.pair.dir];
+    const pv = new THREE.Group();
+    pv.position.copy(v3(o.pair.x, o.y0, o.pair.z));
+    const pbase = Math.atan2(pdz, pdx);
+    pv.rotation.y = pbase;
+    const pl = buildLeaf();
+    pv.add(pl);
+    const phb = hitbox(pl, o.width, o.height, Math.max(0.2, th + 0.1), o.width / 2, o.height / 2, 0);
+    w.scene.add(pv);
+    const pcol = leafCollider(o.pair.x, o.pair.z, pdx, pdz);
+    const [pnx, pnz] = [-pdz * o.pair.swing, pdx * o.pair.swing];
+    const sweep: Box = {
+      kind: 'box', enabled: true, occludes: false, solid: false,
+      minX: Math.min(o.pair.x, o.pair.x + pdx * o.width, o.pair.x + pnx * o.width) - 0.05, maxX: Math.max(o.pair.x, o.pair.x + pdx * o.width, o.pair.x + pnx * o.width) + 0.05,
+      minZ: Math.min(o.pair.z, o.pair.z + pdz * o.width, o.pair.z + pnz * o.width) - 0.05, maxZ: Math.max(o.pair.z, o.pair.z + pdz * o.width, o.pair.z + pnz * o.width) + 0.05,
+      minY: o.y0, maxY: o.y0 + o.height,
+    };
+    return { pv, pbase, phb, pcol, sweep, k: o.pair.swing / o.swing };
+  })() : null;
+  if (pair) { cx = (cx + o.pair!.x + (DIRS[o.pair!.dir][0] * o.width) / 2) / 2; cz = (cz + o.pair!.z + (DIRS[o.pair!.dir][1] * o.width) / 2) / 2; }
   const lockId = o.key ? o.lockId ?? `lock.${o.id}` : o.unlock;
   let angle = 0, target = 0, first = true;
   const isLocked = () => !!lockId && !g.state.unlocked.includes(lockId);
@@ -99,10 +132,10 @@ export function makeDoor(w: World, g: GameApi, o: DoorOpts) {
   w.add({
     id: o.id,
     obj: pivot,
-    hit: [hb],
+    hit: pair ? [hb, pair.phb] : [hb],
     focus: v3(cx, o.y0 + 1.2, cz),
     reach: 2.6,
-    ignore: new Set([collider]),
+    ignore: new Set(pair ? [collider, pair.pcol] : [collider]),
     acceptsItems: !!o.key,
     label: () => {
       if (isLocked()) return o.key && has(g.state, o.key) ? 'Ontgrendelen' : 'Op slot';
@@ -121,7 +154,7 @@ export function makeDoor(w: World, g: GameApi, o: DoorOpts) {
   const playerInLeafPath = () => {
     const p = g.playerXZ();
     if (!(p.y < o.y0 + o.height && p.y + 1.7 > o.y0)) return false;
-    return CollisionWorld.circleHitsBox(p.x, p.z, g.playerRadius + 0.05, sweepBox);
+    return CollisionWorld.circleHitsBox(p.x, p.z, g.playerRadius + 0.05, sweepBox) || (!!pair && CollisionWorld.circleHitsBox(p.x, p.z, g.playerRadius + 0.05, pair.sweep));
   };
   const [nx, nz] = [-dz * o.swing, dx * o.swing]; // plan normal on the swing side
   const sweepBox: Box = {
@@ -130,12 +163,13 @@ export function makeDoor(w: World, g: GameApi, o: DoorOpts) {
     minZ: Math.min(o.z, o.z + dz * o.width, o.z + nz * o.width) - 0.05, maxZ: Math.max(o.z, o.z + dz * o.width, o.z + nz * o.width) + 0.05,
     minY: o.y0, maxY: o.y0 + o.height,
   };
-  const applyCollision = () => { collider.enabled = Math.abs(angle) < SOLID_BELOW; };
+  const applyCollision = () => { collider.enabled = Math.abs(angle) < SOLID_BELOW; if (pair) pair.pcol.enabled = collider.enabled; };
+  const pose = () => { pivot.rotation.y = base + angle; if (pair) pair.pv.rotation.y = pair.pbase + angle * pair.k; };
   w.onSync(() => {
     target = isOpen() ? OPEN : 0;
     if (first) {
       angle = target;
-      pivot.rotation.y = base + angle; // restored doors start at their real angle
+      pose(); // restored doors start at their real angle
       first = false;
     }
     applyCollision();
@@ -146,12 +180,12 @@ export function makeDoor(w: World, g: GameApi, o: DoorOpts) {
       if (target === 0 && playerInLeafPath()) return;
       const step = dt * 2.6;
       angle = Math.abs(target - angle) < step ? target : angle + Math.sign(target - angle) * step;
-      pivot.rotation.y = base + angle;
+      pose();
       applyCollision();
     }
   });
   pivot.rotation.y = base;
-  return { pivot, collider, angle: () => angle };
+  return { pivot, collider, angle: () => angle, pairCollider: pair?.pcol ?? null };
 }
 
 export interface DrawerOpts {

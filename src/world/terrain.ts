@@ -1,39 +1,19 @@
-// Terrain heightfield: gentle undulation in the forest, the rounded BOSLUST hill with a stone-walled cut in
-// front of its door, everything else flat (garden lawn, paths, clearings, building pads).
-// One 2 m grid drives BOTH the rendered ground mesh and collision (same triangle split), so the
-// player's feet always match what is drawn. A small hand-made mound over the BOSLUST entrance replaces
-// the grid there (see `entranceMound`).
-import { ESTATE, HILL, HILL_CUT, FOREST_PATH_KEYS, DRIVEWAY, CLEARINGS } from './layout';
+// Terrain heightfield (DEV-02, LEVEL_PLAN v0.2 §2): authoring height fields — the woodland undulation in the south,
+// the BOSLUST hill, the north and east ridges and a west shoulder under the cottage plateau — overridden in ONE explicit
+// priority order: fields → flat pads (house, lawns, arrival, plateau, clearing) → lake basin → route profiles → the
+// hill cut. One 2 m grid drives BOTH the rendered ground mesh and collision (same triangle split), so the player's feet
+// always match what is drawn. The grid extends TMARGIN beyond the fence so ridges continue visually outside the estate.
+// A small hand-made mound over the BOSLUST entrance replaces the grid there (see `entranceMound`).
+import { ESTATE, HILL, HILL_CUT, FOREST_PATH_KEYS, DRIVEWAY, CLEARINGS, RIDGES, PADS, LAKE, lakeQ, ROUTES, WICKERMAN, WICKERMAN_LOOP, WICKERMAN_HEIGHTS, type Route } from './layout';
+import { chaikin, distToPolyline, project, polylineLength, pointAt, interp, sstep, rectDist, inRect, type P2 } from './geom2d';
 
 export const TCELL = 2;
-const NX = ESTATE.w / TCELL, NZ = ESTATE.d / TCELL;
+/** The ground grid reaches this far beyond the estate edge (render + height lookups; movement stays inside the fence). */
+export const TMARGIN = 24;
+const GX0 = -TMARGIN, GZ0 = -TMARGIN;
+const NX = (ESTATE.w + 2 * TMARGIN) / TCELL, NZ = (ESTATE.d + 2 * TMARGIN) / TCELL;
 
-function chaikin(pts: [number, number][], iters = 2): [number, number][] {
-  let p = pts;
-  for (let k = 0; k < iters; k++) {
-    const out: [number, number][] = [p[0]];
-    for (let i = 0; i < p.length - 1; i++) {
-      const [ax, az] = p[i], [bx, bz] = p[i + 1];
-      out.push([ax * 0.75 + bx * 0.25, az * 0.75 + bz * 0.25], [ax * 0.25 + bx * 0.75, az * 0.25 + bz * 0.75]);
-    }
-    out.push(p[p.length - 1]);
-    p = out;
-  }
-  return p;
-}
 export const FOREST_PATHS = FOREST_PATH_KEYS.map((p) => chaikin(p));
-
-function distToPolyline(x: number, z: number, pts: readonly (readonly [number, number])[]) {
-  let best = Infinity;
-  for (let i = 0; i < pts.length - 1; i++) {
-    const [ax, az] = pts[i], [bx, bz] = pts[i + 1];
-    const dx = bx - ax, dz = bz - az;
-    const t = Math.max(0, Math.min(1, ((x - ax) * dx + (z - az) * dz) / (dx * dx + dz * dz)));
-    best = Math.min(best, Math.hypot(x - (ax + dx * t), z - (az + dz * t)));
-  }
-  return best;
-}
-const sstep = (x: number, a: number, b: number) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
 
 /** Hill height (no cut). */
 export function hillHeight(x: number, z: number) {
@@ -43,38 +23,104 @@ export function hillHeight(x: number, z: number) {
 }
 const inCut = (x: number, z: number) => x >= HILL_CUT.x0 && x <= HILL_CUT.x1 && z >= HILL_CUT.z0 && z <= HILL_CUT.z1;
 
-/** Analytic terrain (used to fill the grid). */
+/** Elliptic ridge field: peak at the centre, zero at the ellipse rim, smooth shoulders. */
+export function ridgeHeight(x: number, z: number) {
+  let h = 0;
+  for (const r of RIDGES) {
+    const q = ((x - r.x) / r.rx) ** 2 + ((z - r.z) / r.rz) ** 2;
+    if (q < 1) h = Math.max(h, r.peak * Math.pow(1 - q, 1.5));
+  }
+  return h;
+}
+
+/**
+ * Profiled routes. The authored profile is given along the authored (raw) polyline; the walked line is the smoothed one,
+ * which is shorter at every corner. So the profile is re-sampled along the smoothed line (each sample mapped to its raw
+ * arc length) and replaced by its upper envelope with slope MAX_GRADE, which keeps the walked grade ≤ MAX_GRADE.
+ */
+export const MAX_GRADE = 0.07; // design limit 8 %; the 2 m grid interpolation needs the margin
+interface ProfiledRoute { id: string; pts: [number, number][]; d: number[]; h: number[]; hw: number }
+const profiled = (id: string, raw: [number, number][], pd: number[], ph: number[], width: number): ProfiledRoute => {
+  const pts = chaikin(raw, 2);
+  const step = 0.5, L = polylineLength(pts);
+  const d: number[] = [], h: number[] = [];
+  for (let s = 0; s <= L + 1e-6; s += step) {
+    const [x, z] = pointAt(pts, s);
+    d.push(s);
+    h.push(interp(pd, ph, project(x, z, raw).s));
+  }
+  // upper envelope: never lower the authored height (a climb starts earlier, a descent ends later), so the walked
+  // line reaches a raised platform at its edge instead of meeting it with a step
+  for (let i = 1; i < h.length; i++) h[i] = Math.max(h[i], h[i - 1] - MAX_GRADE * step);
+  for (let i = h.length - 2; i >= 0; i--) h[i] = Math.max(h[i], h[i + 1] - MAX_GRADE * step);
+  return { id, pts, d, h, hw: width / 2 + 2.0 }; // full weight over every grid cell the walked line crosses
+};
+const vertexDistances = (pts: readonly P2[]) => { const out = [0]; for (let i = 1; i < pts.length; i++) out.push(out[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1])); return out; };
+export const PROFILED_ROUTES: ProfiledRoute[] = [
+  ...ROUTES.filter((r): r is Route & { profile: NonNullable<Route['profile']> } => !!r.profile).map((r) => profiled(r.id, r.pts, r.profile.d, r.profile.h, r.width)),
+  profiled('wickermanLoop', WICKERMAN_LOOP, vertexDistances(WICKERMAN_LOOP), WICKERMAN_HEIGHTS, 1.5),
+];
+/** Walking height of a profiled route at arc length `s` of its smoothed line. */
+export const profileAt = (r: ProfiledRoute, s: number) => interp(r.d, r.h, s);
+const ROUTE_FALLOFF = 9;
+
+/** Woodland undulation in the south (unchanged recipe), flattened along paths, clearings, the driveway and walls. */
+function southUndulation(x: number, z: number) {
+  const forest = 1 - sstep(z, ESTATE.forestEdge - 10, ESTATE.forestEdge - 2);
+  if (forest <= 0) return 0;
+  const n = Math.sin(x * 0.11 + 1.3) * Math.sin(z * 0.13 + 0.4) + 0.5 * Math.sin(x * 0.23 + z * 0.17 + 2.1) + 0.3 * Math.sin(x * 0.05 - z * 0.07);
+  let u = 0.42 * (1 + n / 1.8) * forest;
+  let flat = 1;
+  for (const p of FOREST_PATHS) flat = Math.min(flat, sstep(distToPolyline(x, z, p), 1.4, 4.2));
+  for (const c of CLEARINGS) flat = Math.min(flat, sstep(Math.hypot(x - c.x, z - c.z) - c.r, -1, 2.5));
+  flat = Math.min(flat, sstep(distToPolyline(x, z, DRIVEWAY), 3, 6.5));
+  flat = Math.min(flat, sstep(z, 2, 5), sstep(x, 1.5, 4), sstep(ESTATE.w - x, 1.5, 4));
+  flat = Math.min(flat, sstep(Math.abs(x - 162), 1, 3.5)); // old side-gate wall line
+  return u * flat;
+}
+
+/** Analytic terrain (used to fill the grid). Priority: fields → pads → lake → routes → cut. */
 export function rawHeight(x: number, z: number): number {
   if (inCut(x, z)) return 0;
-  // forest undulation, flattened along paths, clearings, the driveway and the walls
-  let u = 0;
-  const forest = 1 - sstep(z, ESTATE.forestEdge - 10, ESTATE.forestEdge - 2);
-  if (forest > 0) {
-    const n = Math.sin(x * 0.11 + 1.3) * Math.sin(z * 0.13 + 0.4) + 0.5 * Math.sin(x * 0.23 + z * 0.17 + 2.1) + 0.3 * Math.sin(x * 0.05 - z * 0.07);
-    u = 0.42 * (1 + n / 1.8) * forest;
-    let flat = 1;
-    for (const p of FOREST_PATHS) flat = Math.min(flat, sstep(distToPolyline(x, z, p), 1.4, 4.2));
-    for (const c of CLEARINGS) flat = Math.min(flat, sstep(Math.hypot(x - c.x, z - c.z) - c.r, -1, 2.5));
-    flat = Math.min(flat, sstep(distToPolyline(x, z, DRIVEWAY), 3, 6.5));
-    flat = Math.min(flat, sstep(z, 2, 5), sstep(x, 1.5, 4), sstep(ESTATE.w - x, 1.5, 4));
-    flat = Math.min(flat, sstep(Math.abs(x - 162), 1, 3.5)); // old side-gate wall line
-    u *= flat;
+  // 1. authoring fields (faded out towards the outer edge of the rendered margin)
+  const outside = Math.hypot(Math.max(0, -x, x - ESTATE.w), Math.max(0, -z, z - ESTATE.d));
+  let h = (southUndulation(x, z) + hillHeight(x, z) + ridgeHeight(x, z)) * (1 - sstep(outside, 3, TMARGIN - 3));
+  // 2. flat pads (level platforms with a soft margin) and the wickerman clearing
+  for (const p of PADS) { const w = 1 - sstep(rectDist(x, z, p), 0, p.m); if (w > 0) h += (p.y - h) * w; }
+  { const w = 1 - sstep(Math.hypot(x - WICKERMAN.x, z - WICKERMAN.z) - WICKERMAN.r, 0, 6); if (w > 0) h += (WICKERMAN.y - h) * w; }
+  // 3. lake basin: below the water inside the ellipse, a shore band blends back to the land (never inside the plateau)
+  const q = lakeQ(x, z);
+  // the waterline sits on the rim (where the collider stops the player), the bed falls away steeply inside it
+  const edge = LAKE.water - 0.06;
+  if (q < 1) h = edge + (LAKE.bottom - edge) * sstep(1 - q, 0, 0.3);
+  else if (q < 1.3 && !PADS.some((p) => inRect(x, z, p))) h = edge + (h - edge) * sstep(q, 1, 1.3);
+  // 4. route profiles: the authored walking height wins in a corridor around each profiled route
+  // the nearest (strongest) route wins, so two routes meeting at the plateau never pull each other; raised pads keep
+  // their level and the water keeps its bed (no route enters the lake, unit-tested)
+  if (PADS.some((p) => p.y !== 0 && inRect(x, z, p))) return h;
+  const nearWater = sstep(q, 1.05, 1.35);
+  let bestW = 0, bestH = 0;
+  for (const r of PROFILED_ROUTES) {
+    const pr = project(x, z, r.pts);
+    if (pr.d > r.hw + ROUTE_FALLOFF) continue;
+    const w = (1 - sstep(pr.d, r.hw, r.hw + ROUTE_FALLOFF)) * nearWater;
+    if (w > bestW) { bestW = w; bestH = profileAt(r, pr.s); }
   }
-  return u + hillHeight(x, z);
+  return h + (bestH - h) * bestW;
 }
 
 let GRID: Float32Array | null = null;
 function grid() {
   if (GRID) return GRID;
   GRID = new Float32Array((NX + 1) * (NZ + 1));
-  for (let j = 0; j <= NZ; j++) for (let i = 0; i <= NX; i++) GRID[j * (NX + 1) + i] = rawHeight(i * TCELL, j * TCELL);
+  for (let j = 0; j <= NZ; j++) for (let i = 0; i <= NX; i++) GRID[j * (NX + 1) + i] = rawHeight(GX0 + i * TCELL, GZ0 + j * TCELL);
   return GRID;
 }
 export const gridAt = (i: number, j: number) => grid()[Math.min(NZ, Math.max(0, j)) * (NX + 1) + Math.min(NX, Math.max(0, i))];
 
 /** Height of the rendered grid surface (triangle split 00-10-11 / 00-11-01, like the ground mesh). */
 export function gridHeight(x: number, z: number): number {
-  const gx = Math.min(NX - 1e-6, Math.max(0, x / TCELL)), gz = Math.min(NZ - 1e-6, Math.max(0, z / TCELL));
+  const gx = Math.min(NX - 1e-6, Math.max(0, (x - GX0) / TCELL)), gz = Math.min(NZ - 1e-6, Math.max(0, (z - GZ0) / TCELL));
   const i = Math.floor(gx), j = Math.floor(gz), u = gx - i, v = gz - j;
   const h00 = gridAt(i, j), h10 = gridAt(i + 1, j), h01 = gridAt(i, j + 1), h11 = gridAt(i + 1, j + 1);
   return u >= v ? h00 + u * (h10 - h00) + v * (h11 - h10) : h00 + v * (h01 - h00) + u * (h11 - h01);
@@ -112,4 +158,5 @@ export function walkHeight(x: number, z: number): number {
   return terrainHeight(x, z);
 }
 
-export const TERRAIN_DIMS = { NX, NZ };
+/** Grid size and origin: vertex (i, j) lies at plan (X0 + i·TCELL, Z0 + j·TCELL). */
+export const TERRAIN_DIMS = { NX, NZ, X0: GX0, Z0: GZ0 };

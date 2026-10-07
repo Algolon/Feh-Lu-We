@@ -1,6 +1,7 @@
 // Game orchestrator: renderer + loop, input → player, interaction picking, save/restore, scenes, UI glue.
 import * as THREE from 'three';
 import { ART, SLICE } from './artflags';
+import { legacyRelocation } from './relocate';
 import { SliceUI } from '../slice/ui';
 import { syncDerived } from '../slice/model';
 import { CAPS, FORCE_NO_MULTIDRAW, hideMultiDraw, detectCaps, vegPathLabel } from './caps';
@@ -231,6 +232,10 @@ export class Game implements GameApi {
   /** Put the player at the saved pose if it is valid, otherwise at the nearest checkpoint / spawn. */
   private restorePose(w: World, p: PlayerPose | null | undefined) {
     let pose = p ?? w.spawn;
+    // DEV-02: poses in places the v0.2 layout rebuilt get a named safe relocation (src/core/relocate.ts)
+    const moved = legacyRelocation(w.id, p);
+    const named = moved ? w.checkpoints.find((c) => c.name === moved.checkpoint) : undefined;
+    if (named) { logEvent(this.state, 'relocated', `${moved!.reason} → ${moved!.checkpoint}`); pose = named.pose; }
     const valid = (q: PlayerPose) => {
       const s = w.col.supportHeight(q.x, q.z, q.y + 0.05, PLAYER.stepUp);
       return Math.abs(s - q.y) < 0.3 && !w.col.overlaps(q.x, q.z, s, PLAYER.radius, PLAYER.height, PLAYER.stepUp);

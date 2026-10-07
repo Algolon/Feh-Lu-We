@@ -377,3 +377,14 @@ export function canvasPanel(w: World, x: number, y: number, z: number, yaw: numb
   w.scene.add(grp);
   return { grp, mat, tex, canvas: cv };
 }
+
+/** "Francois' Copacabana Room": the personal name board (LEVEL_PLAN v0.2 §3 — a P exception, never an emblem/tab). */
+export function nameBoard(w: World, x: number, y: number, z: number, yaw: number) {
+  return canvasPanel(w, x, y, z, yaw, 0.9, 0.34, (cx, W, H) => {
+    const gr = cx.createLinearGradient(0, 0, W, H); gr.addColorStop(0, '#f6c35a'); gr.addColorStop(1, '#e8743a');
+    cx.fillStyle = gr; cx.fillRect(0, 0, W, H);
+    cx.fillStyle = '#2a5a4a'; cx.textAlign = 'center';
+    cx.font = 'italic 30px Georgia'; cx.fillText('Francois’', W / 2, H * 0.38);
+    cx.font = 'bold 40px Georgia'; cx.fillText('Copacabana Room', W / 2, H * 0.8);
+  }, 512, '#2f4a3c');
+}

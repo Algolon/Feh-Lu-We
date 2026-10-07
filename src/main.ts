@@ -5,6 +5,8 @@ import { REVIEW } from './core/artflags';
 import { reviewState, showReviewStart, mountReviewBar } from './ui/review';
 import { showSliceStart } from './slice/start';
 import { ROUTE as SLICE_ROUTE } from './slice/placement';
+import { FOOTPRINTS, ROUTE_LINES } from './world/footprints';
+import { LAKE, S03, MAQUETTE } from './world/layout';
 
 function webglAvailable(): boolean {
   if (new URLSearchParams(location.search).has('nowebgl')) return false; // test hook for the failure path
@@ -42,6 +44,7 @@ function boot() {
   }
   if (TEST_HOOKS) (window as unknown as { __game: Game }).__game = game;
   if (TEST_HOOKS && REVIEW === 'dev01') (window as unknown as { __dev01Route: unknown }).__dev01Route = SLICE_ROUTE; // e2e walks the as-built route
+  if (TEST_HOOKS) (window as unknown as { __dev02: unknown }).__dev02 = { FOOTPRINTS, ROUTE_LINES, LAKE, S03, MAQUETTE }; // e2e-dev02: the records the world is built from
   let starting = false;
   const begin = async (fresh: boolean) => {
     if (starting) return; // Start/Continue are idempotent while loading

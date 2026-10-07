@@ -1,4 +1,6 @@
-// Woodland: X 0–180, Z 0–72 (about half the estate) on gently rolling ground. A looping path network
+// Woodland: X 0–200, Z 0–72 (the southern band of the estate) on gently rolling ground. DEV-02: the same recipe over
+// the wider estate, respecting the shared placement keepouts (golf, wickerman, routes), plus the woodland masses that
+// enclose the north half (west bank, north ridge, east ridge, the glades) — see buildWoodlandMasses. A looping path network
 // joins the clearings: timber shed (west), fire clearing (south-west), stone well (east), the old side
 // gate (south-east) and a side path from the fork signpost to the BOSLUST hill (built in boslust.ts).
 import * as THREE from 'three';
@@ -14,7 +16,8 @@ import { plaqueTexture } from './textures';
 import { useOnFirePit, lightPostLantern, readFirePlate } from '../puzzles/rules';
 import { has } from '../core/state';
 import { ITEMS } from '../content/items';
-import { ESTATE, SITES, DRIVEWAY, CLEARINGS, SHED, HILL } from './layout';
+import { ESTATE, SITES, DRIVEWAY, CLEARINGS, SHED, HILL, WOODS } from './layout';
+import { vegetationClear } from './footprints';
 import { FOREST_PATHS, terrainHeight } from './terrain';
 import { ART } from '../core/artflags';
 import { inZone, buildWoodland, signpostV2, type ZoneTree } from './boslustSample';
@@ -26,19 +29,19 @@ export function forestTreeOk(x: number, z: number) {
   for (const c of CLEARINGS) if (Math.hypot(x - c.x, z - c.z) < c.r) return false;
   if (x > 57 && x < 69 && z > 5 && z < 25) return false; // the cut, door and mound in front of BOSLUST
   if (Math.abs(x - SITES.sideGate.x) < 1.6 && z < 34) return false; // old boundary wall
-  return true;
+  return vegetationClear(x, z, 'tree'); // DEV-02 keepouts: golf tee/chute, wickerman clearing + loop, arrival, routes
 }
 
 /** The tree positions (the forest scatter is the first consumer of its random stream, so this repeats it exactly). */
 export function forestTreePoints() {
-  return scatter(mulberry32(42), 1.2, ESTATE.w - 1.2, 1.2, ESTATE.forestEdge, 4.0, 14000, forestTreeOk);
+  return scatter(mulberry32(42), 1.2, ESTATE.w - 1.2, 1.2, ESTATE.forestEdge, 4.0, 15600, forestTreeOk);
 }
 
 export function buildForest(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
   const k = c.k;
   const r = mulberry32(42);
   // trees: Poisson-disc spacing ≥ 4.0 m keeps ≥ 2 m gaps between trunks — never a sealed wall
-  const pts = scatter(r, 1.2, ESTATE.w - 1.2, 1.2, ESTATE.forestEdge, 4.0, 14000, forestTreeOk);
+  const pts = scatter(r, 1.2, ESTATE.w - 1.2, 1.2, ESTATE.forestEdge, 4.0, 15600, forestTreeOk);
   // art sample: trees in the BOSLUST zone keep their position and collision but get the new models (the
   // Vegetation drop filter set by estate.ts discards their old visuals without changing the random sequence)
   const zoneTrees: ZoneTree[] = [], zoneStumps: { x: number; z: number; y: number; s: number }[] = [];
@@ -50,12 +53,12 @@ export function buildForest(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
     const rad = kind === 'pine' ? 1.5 + r() * 0.6 : 1.7 + r() * 1.1;
     const y = terrainHeight(x, z);
     const spec = { x, z, h, r: rad, kind, hue: r() - 0.5, y } as const;
-    veg.tree(spec, `f${Math.floor(x / 45)}_${Math.floor(z / 36)}`);
+    veg.tree(spec, `f${Math.floor(x / 45)}_${Math.floor(z / 36)}`, `T${Math.floor(x / 100)}_${Math.floor(z / 90)}`); // DEV-02: trunks/cones on a coarse grid
     if (ART.ext === 'sample' && inZone(x, z)) zoneTrees.push(spec);
     w.col.addCircle(x, z, kind === 'birch' ? 0.22 : 0.34, y - 0.5, y + 6);
   }
   // undergrowth (no collision): ferns, shrubs, rocks, flowers
-  const undergrowthOk = (x: number, z: number) => z < ESTATE.forestEdge - 0.5 && distToPolyline(x, z, DRIVEWAY) > 2.6 && !FOREST_PATHS.some((p) => distToPolyline(x, z, p) < 1.3) && !(x > 59 && x < 67 && z > 7 && z < 25);
+  const undergrowthOk = (x: number, z: number) => z < ESTATE.forestEdge - 0.5 && distToPolyline(x, z, DRIVEWAY) > 2.6 && !FOREST_PATHS.some((p) => distToPolyline(x, z, p) < 1.3) && !(x > 59 && x < 67 && z > 7 && z < 25) && vegetationClear(x, z, 'small');
   for (const [x, z] of scatter(r, 1, ESTATE.w - 1, 1, ESTATE.forestEdge, 3.4, 7000, undergrowthOk)) {
     const roll = r();
     const chunk = `f${Math.floor(x / 45)}_${Math.floor(z / 36)}`;
@@ -70,7 +73,7 @@ export function buildForest(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
   pts.forEach(([x, z], i) => {
     if (i % 6 !== 0) return;
     const a = r() * Math.PI * 2, mx = x + Math.cos(a) * 0.75, mz = z + Math.sin(a) * 0.75;
-    if (!forestTreeOk(mx, mz) && FOREST_PATHS.some((p) => distToPolyline(mx, mz, p) < 1.3)) return;
+    if ((!forestTreeOk(mx, mz) && FOREST_PATHS.some((p) => distToPolyline(mx, mz, p) < 1.3)) || !vegetationClear(mx, mz, 'small')) return;
     veg.mushrooms(mx, mz, terrainHeight(mx, mz), `f${Math.floor(x / 45)}_${Math.floor(z / 36)}`, 2 + (i % 3));
   });
   for (const [x, z] of scatter(r, 3, ESTATE.w - 3, 3, ESTATE.forestEdge - 2, 11, 1200, forestTreeOk)) {
@@ -86,7 +89,8 @@ export function buildForest(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
     for (let t = 0; t < seg; t += 1.6) {
       const side = r() < 0.5 ? -1 : 1, off = 1.25 + r() * 0.8;
       const x = ax + ((bx - ax) * t) / seg + nx * off * side, z = az + ((bz - az) * t) / seg + nz * off * side;
-      veg.smallThing('grass', x, z, 0.28 + r() * 0.18, r() < 0.5 ? '#6f9a3e' : '#86a84a', `gr${Math.floor(x / 30)}_${Math.floor(z / 30)}`, terrainHeight(x, z));
+      if (!vegetationClear(x, z, 'small')) continue; // DEV-02: not on the arrival court / manoeuvring strip
+      veg.smallThing('grass', x, z, 0.28 + r() * 0.18, r() < 0.5 ? '#6f9a3e' : '#86a84a', `gr${Math.floor(x / 40)}_${Math.floor(z / 40)}`, terrainHeight(x, z));
     }
   }
 
@@ -364,4 +368,26 @@ function buildFork(w: World, g: GameApi, c: Ctx) {
   place(sign, PX, 0, PZ, 0);
   w.scene.add(sign);
   makeInspect(w, g, { id: 'inspect.fork', obj: sign, clue: 'c.fork', hit: [1.4, 0.7, 1.4], hitOffset: [0.4, 1.7, 0.4], label: 'Bekijken: wegwijzer' });
+}
+
+/**
+ * DEV-02 woodland masses enclosing the north half (layout.ts WOODS): uneven density (dense masses, open glades),
+ * mixed crown heights, trunks on the terrain, collision trunks. Every point passes the shared keepouts first.
+ */
+export function buildWoodlandMasses(w: World, veg: Vegetation) {
+  const r = mulberry32(911);
+  for (const zone of WOODS) {
+    const pts = scatter(r, zone.x0 + 1, zone.x1 - 1, zone.z0 + 1, zone.z1 - 1, zone.gap, Math.round(((zone.x1 - zone.x0) * (zone.z1 - zone.z0)) / (zone.gap * zone.gap) * 3), (x, z) => vegetationClear(x, z, 'tree'));
+    for (const [x, z] of pts) {
+      const roll = r();
+      const kind = roll < zone.pine ? 'pine' : roll < zone.pine + 0.15 ? 'birch' : 'oak';
+      const tall = zone.gap > 8 ? 0.85 : 1 + r() * 0.35; // glade trees lower, mass trees taller and uneven
+      const h = (kind === 'pine' ? 6.5 + r() * 3 : 3.6 + r() * 2.6) * tall;
+      const rad = kind === 'pine' ? 1.5 + r() * 0.6 : 1.9 + r() * 1.1;
+      const y = terrainHeight(x, z);
+      veg.tree({ x, z, h, r: rad, kind, hue: r() - 0.5, y }, `w${Math.floor(x / 50)}_${Math.floor(z / 45)}`, `T${Math.floor(x / 100)}_${Math.floor(z / 90)}`);
+      w.col.addCircle(x, z, kind === 'birch' ? 0.22 : 0.34, y - 0.5, y + 6);
+      if (zone.gap <= 6 && r() < 0.35) veg.smallThing(r() < 0.5 ? 'fern' : 'shrub', x + 1.2, z + 0.6, 0.4 + r() * 0.3, r() < 0.5 ? '#557f34' : '#4f7f38', `w${Math.floor(x / 50)}_${Math.floor(z / 45)}`, terrainHeight(x + 1.2, z + 0.6));
+    }
+  }
 }

@@ -107,7 +107,8 @@ export class World {
       const zone = this.zones.find((zz) => zz.inside(sph.center.x, -sph.center.z)) ?? null;
       let rooms: string[] | null = null;
       const probe = o.userData.roomProbe as { x: number; y: number; z: number } | undefined;
-      if (this.rooms && o.userData.room) rooms = [o.userData.room]; // authored room
+      if (this.rooms && Array.isArray(o.userData.rooms)) rooms = o.userData.rooms as string[]; // authored set (exterior skins: 'out' + the room)
+      else if (this.rooms && o.userData.room) rooms = [o.userData.room]; // authored room
       else if (this.rooms && probe) rooms = [this.rooms.roomAt(probe.x, probe.y, probe.z)]; // wall-mounted: the room it faces
       else if (this.rooms) {
         // sample around the centre so objects in doorways belong to both rooms

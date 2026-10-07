@@ -5,15 +5,18 @@
 // mantel), dining right → kitchen behind it → service corridor → pantry / workshop / conservatory;
 // back lobby (basement door) → billiard room; library (double height, upper gallery) behind the living room.
 // Upstairs: gallery around the hall void, Reiskamer + Sterrenkamer (guest bedrooms), library gallery,
-// bathroom, corridor → study, botanical/map room, attic storage. Basement: stair → Kelderportaal →
-// archive, boiler room, route chamber (tunnel door).
+// bathroom, corridor → study, botanical/map room, north guest room (source id `storage`), shared linen.
+// DEV-02 (v0.2 variant A, same footprint): guest WC off the back lobby, utility room in the service wing, rear
+// landing loop (rearNook → rearNookEast → linen), a real attic reached by the U-shaped stair S03, with the store,
+// the large weekend attic and the lookout (observatory reservation). Basement: stair → Kelderportaal → archive,
+// boiler room, route chamber (tunnel door).
 import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
-import { type Ctx, wall, floor, ceiling, stairsZ, railing, hipRoof, gableRoof, windowAt } from './arch';
-import { box, boxMM, cyl, blob, compound, v3 } from './kit';
+import { type Ctx, wall, floor, ceiling, stairsZ, railing, stairRail, hipRoof, gableRoof, windowAt } from './arch';
+import { box, boxMM, cyl, blob, compound, v3, hipRoofGeo, geo } from './kit';
 import {
   table, chair, sofa, armchair, bookshelf, counter, rug, plant, painting, crate, tableLamp, floorLamp, chandelier, wallSconce,
-  part, staticLantern, staticSconce, bed2, bedside, wardrobe, curtains, desk, lectern, bathtub, ladder, telescope, canvasPanel,
+  part, staticLantern, staticSconce, bed2, bedside, wardrobe, curtains, desk, lectern, bathtub, ladder, telescope, canvasPanel, nameBoard,
 } from './furniture';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place } from '../interactions/props';
 import { forestMapTexture } from './textures';
@@ -26,7 +29,8 @@ import { makeFire } from './fire';
 import { drawSymbol } from '../content/symbols';
 import { EMBLEMS, SERVICE, CATALOG, CONSOLE_SOCKETS, ROUTE_LINES } from '../content/canon';
 import { addClue, has } from '../core/state';
-import { GF, CEIL, UF, UCEIL, TOP, BF, BCEIL } from './layout';
+import { GF, CEIL, UF, UCEIL, TOP, BF, BCEIL, AF, S03, roofUnderside } from './layout';
+import { buildMaquette } from './maquette';
 import { placeSolved, slotContents, openBasement } from '../puzzles/rules';
 
 export { GF, CEIL, UF, UCEIL, TOP };
@@ -38,11 +42,14 @@ export function buildManor(w: World, g: GameApi, c: Ctx, cIn: Ctx, cB: Ctx) {
   groundRooms(w, g, cIn);
   upperRooms(w, g, cIn);
   basement(w, g, cB);
+  attic(w, g, cIn);
   w.checkpoints.push(
     { name: 'hall', pose: { x: 90, y: GF, z: 86, yaw: 0, pitch: 0 } },
     { name: 'landing', pose: { x: 89, y: UF, z: 100, yaw: Math.PI / 2, pitch: 0 } },
     { name: 'kitchen', pose: { x: 98.5, y: GF, z: 96, yaw: Math.PI / 2, pitch: 0 } },
     { name: 'library', pose: { x: 82.4, y: GF, z: 97.5, yaw: 0, pitch: 0 } },
+    { name: 'ucorr', pose: { x: 100, y: UF, z: 97.3, yaw: Math.PI / 2, pitch: 0 } },
+    { name: 'attic', pose: { x: 92, y: AF, z: 99.2, yaw: -Math.PI / 2, pitch: 0 } },
   );
 }
 
@@ -59,7 +66,7 @@ function shell(w: World, c: Ctx) {
   // south (front)
   ext('x', 80.2, 72, 108, -1, [{ at: 90, w: 1.7, h: 2.7 }], [75.5, 79, 82.5, 98, 101.5, 105], [75.5, 79, 82.5, 87.5, 92.5, 98, 101.5, 105]);
   // north (garden): billiard + kitchen garden doors, tall library windows
-  ext('x', 109.8, 72, 108, 1, [{ at: 91.5, w: 1.2, h: 2.45 }, { at: 101, w: 1.0, h: 2.35 }], [75, 78.5, 82, 88, 97.5, 105], [75, 78.5, 82, 87.5, 98, 104]);
+  ext('x', 109.8, 72, 108, 1, [{ at: 91.5, w: 1.2, h: 2.45 }, { at: 101, w: 1.0, h: 2.35 }], [75, 78.5, 82, 88, 97.5, 105], [75, 78.5, 82, 87.5, 92.5, 98, 104]);
   // west
   ext('z', 72.2, 80.4, 109.6, -1, [], [83, 90.5, 97, 101, 105], [82.5, 90, 97, 101, 105]);
   // east: dining windows; the service wing joins at z 92–110 (door to the service corridor)
@@ -146,7 +153,8 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
     if (x < 85 && ART.set !== 'sample') boxMM(c.b, k.M.wood, '#6b4426', x - 0.1, x + 0.1, CEIL - 0.22, CEIL, 80.4, 94, { chunk: c.chunk, uv: 1.5 }); // sample: livingSample beams
     if (x > 95) boxMM(c.b, k.M.wood, '#6b4426', x - 0.1, x + 0.1, CEIL - 0.22, CEIL, 80.4, 109.6, { chunk: c.chunk, uv: 1.5 });
   }
-  ceiling(c, 72.4, 107.6, 80.4, 109.6, UCEIL, '#efe4cc');
+  // upper ceiling with the S03 stairwell left open (X 95–99 / Z 99.8–105.6; the upper landing covers Z 98.6–99.8)
+  for (const [x0, x1, z0, z1] of [[72.4, 107.6, 80.4, 99.8], [72.4, 95, 99.8, 109.6], [99, 107.6, 99.8, 109.6], [95, 99, 105.6, 109.6]] as const) ceiling(c, x0, x1, z0, z1, UCEIL, '#efe4cc');
   ceiling(c, 108.4, 115.6, 92.4, 109.6, CEIL + 0.4, '#efe4cc');
 
   // ---------------------------------------------------------------- ground-floor partitions
@@ -157,7 +165,9 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   wall(c, 'x', 98, 85, 92, GF, CEIL, { ...P, openings: [{ at: 88.5, w: 4.2, h: 2.7 }] }); // hall | lobby
   wall(c, 'z', 85, 94, 109.6, GF, CEIL, { ...P, openings: [{ at: 101, w: 1.0, h: 2.3 }] }); // library | lobby/billiard
   wall(c, 'x', 94, 72.4, 85, GF, CEIL, { ...P, openings: [{ at: 79, w: 1.6, h: 2.4 }] }); // living | library
-  wall(c, 'x', 104, 85, 92, GF, CEIL, { ...P, openings: [{ at: 88.5, w: 1.0, h: 2.3 }] }); // lobby | billiard
+  wall(c, 'x', 104, 85, 92, GF, CEIL, { ...P, openings: [{ at: 86.5, w: 0.9, h: 2.25 }, { at: 90, w: 1.0, h: 2.3 }] }); // lobby | guest WC, billiard
+  wall(c, 'z', 88, 104, 107, GF, CEIL, P); // guest WC | billiard (v0.2 guestWC X 85–88 / Z 104–107)
+  wall(c, 'x', 107, 85, 88, GF, CEIL, P);
   wall(c, 'z', 95, 92, 109.6, BF, CEIL, P); // kitchen | stairwell/billiard (down to the basement floor)
   wall(c, 'x', 92, 95, 107.6, GF, CEIL, { ...P, openings: [{ at: 101, w: 2.0, h: 2.5 }] }); // dining | kitchen
   // basement stairwell enclosure (west side has the sealed door; walls run down to the basement floor)
@@ -167,7 +177,8 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   wall(c, 'x', 104.8, 92, 95, GF, CEIL, P);
   // service wing partitions
   wall(c, 'x', 101, 108.4, 115.6, GF, CEIL + 0.4, { ...P, openings: [{ at: 112, w: 1.0, h: 2.3 }] }); // workshop | corridor
-  wall(c, 'x', 104, 108.4, 115.6, GF, CEIL + 0.4, { ...P, openings: [{ at: 112, w: 1.0, h: 2.3 }] }); // corridor | pantry
+  wall(c, 'x', 104, 108.4, 115.6, GF, CEIL + 0.4, { ...P, openings: [{ at: 112, w: 1.0, h: 2.3 }, { at: 114.45, w: 1.1, h: 2.3 }] }); // corridor | pantry, utility
+  wall(c, 'z', 113.3, 104, 109.6, GF, CEIL + 0.4, P); // pantry | utility (v0.2: pantry X 108.4–113.3, utility 113.3–115.6)
   // wainscot in the hall
   for (const [f, a0, a1] of [[85.09, 84.2, 86.9], [94.91, 86.3, 89.0]] as const) box(c.b, k.M.wood, '#6b4426', f, GF, (a0 + a1) / 2, 0.04, 1.0, a1 - a0, { chunk: c.chunk, uv: 1 });
 
@@ -176,12 +187,15 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   wall(c, 'z', 85, 80.4, 109.6, CEIL, UCEIL, { ...U, openings: [{ at: 82.2, w: 0.95, h: 2.3 }, { at: 90.2, w: 0.95, h: 2.3 }, { at: 100, w: 1.0, h: 2.3 }] });
   wall(c, 'x', 86.8, 72.4, 85, CEIL, UCEIL, U); // reis | sterren
   wall(c, 'x', 94, 72.4, 85, CEIL, UCEIL, U); // sterren | library volume
-  wall(c, 'z', 95, 80.4, 109.6, CEIL, UCEIL, { ...U, openings: [{ at: 97.3, w: 2.0, h: 2.5 }] }); // hall/landing | east
+  wall(c, 'z', 95, 80.4, 109.6, CEIL, UCEIL, { ...U, openings: [{ at: 97.3, w: 2.0, h: 2.5 }, { at: 107.6, w: 1.2, h: 2.4 }] }); // hall/landing | east; rearNook | rearNookEast
   wall(c, 'x', 96, 95, 107.6, CEIL, UCEIL, { ...U, openings: [{ at: 98.2, w: 0.95, h: 2.3 }, { at: 104.5, w: 0.95, h: 2.3 }] });
   wall(c, 'z', 101.3, 80.4, 96, CEIL, UCEIL, U); // study | botanic
-  wall(c, 'x', 98.6, 95, 107.6, CEIL, UCEIL, { ...U, openings: [{ at: 101, w: 0.95, h: 2.3 }] });
-  wall(c, 'x', 104, 85, 95, CEIL, UCEIL, { ...U, openings: [{ at: 87.5, w: 0.9, h: 2.3 }] });
-  wall(c, 'z', 90, 104, 109.6, CEIL, UCEIL, U); // bath | linen
+  wall(c, 'x', 98.6, 95, 107.6, CEIL, UCEIL, { ...U, openings: [{ at: 97, w: 1.2, h: 2.3 }, { at: 101, w: 0.95, h: 2.3 }] }); // ucorr | attic stair, north guest room
+  wall(c, 'x', 104, 85, 95, CEIL, UCEIL, { ...U, openings: [{ at: 87.5, w: 0.9, h: 2.3 }, { at: 92, w: 1.2, h: 2.4 }] }); // landing | bath, rear nook
+  wall(c, 'z', 90, 104, 109.6, CEIL, UCEIL, U); // bath | rear nook
+  wall(c, 'z', 99, 98.6, 109.6, CEIL, UCEIL, { ...U, openings: [{ at: 108, w: 1.0, h: 2.2 }] }); // attic stair + rear nook east | guest room, linen
+  wall(c, 'x', 106.6, 99, 107.6, CEIL, UCEIL, U); // north guest room | linen
+  wall(c, 'x', 105.6, 95, 99, CEIL, UCEIL, { ...U, openings: [{ at: 97, w: 1.0, h: 2.2 }] }); // attic stair | rear nook east
   railing(c, 'z', 86.8, 84, 95.5, UF);
   railing(c, 'x', 84, 86.8, 95, UF);
   railing(c, 'x', 95.5, 86.8, 93, UF);
@@ -196,13 +210,18 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   const len = Math.hypot(9, UF - GF), ang = Math.atan2(UF - GF, 9);
   box(c.b, k.M.wood, '#5e3b1f', 93.12, GF + 0.95 + (UF - GF) / 2 - 0.03, 91, 0.07, 0.06, len, { rx: ang, chunk: c.chunk });
   cyl(c.b, k.M.wood, '#4a2f1a', 93.12, GF, 86.5, 0.1, 0.1, 1.25, 8, { chunk: c.chunk });
+  // DEV-02: the open side of the flight has a real railing collider over its full height (DEV-01 review: you could
+  // step off the stair into the hall). Outside the flight's width, so walking ON the stair is never touched.
+  c.col.addBox(92.97, 93.12, 86.5, 95.5, GF, UF + 1.1, { tag: 'railing.S01' });
   // basement stair (descends north from the sealed door)
   stairsZ(c, 92.08, 94.92, 104.8, 99.6, BF, GF, '#6b4a2a');
 
   // ---------------------------------------------------------------- doors
   makeDoor(w, g, { id: 'door.front', x: 89.15, z: 80.2, dir: 'x+', width: 1.7, height: 2.62, y0: GF, swing: 1, color: '#6b3f22', key: 'frontKey', thickness: 0.09 });
   makeDoor(w, g, { id: 'door.library', x: 85, z: 100.5, dir: 'z+', width: 1.0, height: 2.25, y0: GF, swing: -1, color: '#5a3520' });
-  makeDoor(w, g, { id: 'door.billiard', x: 88, z: 104, dir: 'x+', width: 1.0, height: 2.25, y0: GF, swing: 1 });
+  makeDoor(w, g, { id: 'door.billiard', x: 89.5, z: 104, dir: 'x+', width: 1.0, height: 2.25, y0: GF, swing: 1 }); // v0.2: moved east for the WC (same id/state)
+  makeDoor(w, g, { id: 'door.guestWC', x: 86.05, z: 104, dir: 'x+', width: 0.9, height: 2.2, y0: GF, swing: 1, color: '#efe6d6' });
+  makeDoor(w, g, { id: 'door.utility', x: 113.9, z: 104, dir: 'x+', width: 1.1, height: 2.25, y0: GF, swing: 1, style: 'plank', color: '#7a5a3a' });
   makeDoor(w, g, { id: 'door.livLib', x: 78.2, z: 94, dir: 'x+', width: 1.6, height: 2.35, y0: GF, swing: 1, color: '#5a3520' });
   makeDoor(w, g, { id: 'door.service', x: 107.8, z: 102, dir: 'z+', width: 1.0, height: 2.25, y0: GF, swing: 1 });
   makeDoor(w, g, { id: 'door.workshop', x: 111.5, z: 101, dir: 'x+', width: 1.0, height: 2.25, y0: GF, swing: -1, style: 'plank', color: '#7a5a3a' });
@@ -216,7 +235,10 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   makeDoor(w, g, { id: 'door.bath', x: 87.05, z: 104, dir: 'x+', width: 0.9, height: 2.2, y0: UF, swing: 1, color: '#efe6d6' });
   makeDoor(w, g, { id: 'door.study', x: 97.72, z: 96, dir: 'x+', width: 0.95, height: 2.2, y0: UF, swing: -1, key: 'studyKey', color: '#5a3520' });
   makeDoor(w, g, { id: 'door.botanic', x: 104.02, z: 96, dir: 'x+', width: 0.95, height: 2.2, y0: UF, swing: -1 });
-  makeDoor(w, g, { id: 'door.storage', x: 100.52, z: 98.6, dir: 'x+', width: 0.95, height: 2.2, y0: UF, swing: 1, style: 'plank', color: '#7a5a3a' });
+  makeDoor(w, g, { id: 'door.storage', x: 100.52, z: 98.6, dir: 'x+', width: 0.95, height: 2.2, y0: UF, swing: 1, color: '#7a5a3a' });
+  makeDoor(w, g, { id: 'door.atticStair', x: 96.4, z: 98.6, dir: 'x+', width: 1.2, height: 2.2, y0: UF, swing: 1, style: 'plank', color: '#8a6a4a' });
+  makeDoor(w, g, { id: 'door.atticRear', x: 96.5, z: 105.6, dir: 'x+', width: 1.0, height: 2.2, y0: UF, swing: -1, style: 'plank', color: '#8a6a4a' });
+  makeDoor(w, g, { id: 'door.linen', x: 99, z: 107.5, dir: 'z+', width: 1.0, height: 2.1, y0: UF, swing: -1, color: '#efe6d6' });
   // the sealed basement door: three seal impressions; holding all three seals opens it
   makeDoor(w, g, { id: 'door.basement', x: 92, z: 98.4, dir: 'z+', width: 1.0, height: 2.25, y0: GF, swing: 1, color: '#4a2f1a', unlock: 'lock.basement', lockedMsg: '' });
   const bd = w.byId.get('door.basement')!;
@@ -331,7 +353,12 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   makeInspect(w, g, { id: 'mem.hall.guestbook', obj: gb, clue: 'mem.hall.guestbook', hit: [0.4, 0.2, 0.35] });
   const tl = tableLamp(w, cx, GF + 0.89, cz + 0.45);
   makeLamp(w, g, { id: 'lamp.hallConsole', ...tl, name: 'lamp', defaultOn: false, hit: [0.4, 0.7, 0.4], intensity: 4, distance: 6 });
-  if (SLICE) sliceHall(w, g, c); // DEV-01 DS01 A: maquette + note against the hall's west wall
+  // DEV-02: the maquette (a miniature of this house) on a presentation table against the west wall, inspectable
+  buildMaquette(w, g, c);
+  if (SLICE) sliceHall(w, g, c); // DEV-01 DS01 A: the folded note at the south end of the maquette table
+  // four red shopping crates (ES.hallCrates): stacked against the west wall, off console, mantel arch and stair
+  for (const [z, y] of [[96.25, 0], [96.95, 0], [96.25, 0.3], [96.95, 0.3]] as const) redCrate(c, 85.55, z, GF + y, Math.PI / 2);
+  c.col.addBox(85.15, 85.95, 95.9, 97.3, 0, GF + 0.62);
 
   // ---------------------------------------------------------------- living room (west, front)
   if (ART.set === 'sample') {
@@ -386,6 +413,16 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
     cyl(c.b, k.M.paint, '#efe6c8', 101.3, GF + 0.78, 85.2 + i, 0.03, 0.03, 0.22, 8, { chunk: c.chunk });
   }
   makeFire(w, { kind: 'candles', x: 101.3, y: GF + 1.01, z: 85.2, wicks: [[0, 0, 0], [0, 0, 1], [0, 0, 2]] });
+  // ES.gameTable: the home-made duo board game, cards, dice and beer at the south end of the table (eat/game room)
+  boxMM(c.b, k.M.paint, '#e8d8b0', 100.95, 101.65, GF + 0.76, GF + 0.775, 84.0, 84.7, { chunk: c.chunk });
+  for (let i = 0; i < 4; i++) box(c.b, k.M.paint, ['#c4553d', '#3f6fa8', '#4f8a3a', '#e8c547'][i], 101.05 + (i % 2) * 0.5, GF + 0.775, 84.1 + Math.floor(i / 2) * 0.5, 0.05, 0.05, 0.05, { chunk: c.chunk });
+  for (let i = 0; i < 2; i++) box(c.b, k.M.paint, '#f5f0e6', 100.85 + i * 0.85, GF + 0.76, 85.0, 0.06, 0.06, 0.06, { chunk: c.chunk, yaw: i });
+  box(c.b, k.M.paint, '#f2ead8', 101.75, GF + 0.76, 87.95, 0.12, 0.03, 0.18, { chunk: c.chunk, yaw: 0.3 });
+  for (const [x, z] of [[100.8, 84.2], [101.85, 84.75], [100.8, 88.2]] as const) cyl(c.b, k.M.paint, '#6a4a1a', x, GF + 0.76, z, 0.03, 0.035, 0.22, 6, { chunk: c.chunk });
+  // separate marshmallow / chubby-bunny / shots group on its own small table (not on the A01 sideboard)
+  table(c, 96.2, 90.6, GF, 0.6, 0.6, 0, '#6b4426', 0.7);
+  blob(c.b, k.M.paint, '#f4f0e8', 96.1, GF + 0.78, 90.5, 0.12, 0.08, 0.1, { chunk: c.chunk });
+  for (let i = 0; i < 4; i++) cyl(c.b, k.M.glass, '#ffffff', 96.0 + (i % 2) * 0.18, GF + 0.7, 90.75 + Math.floor(i / 2) * 0.12, 0.025, 0.02, 0.06, 6, { chunk: c.chunk });
   w.lamps.push({ id: 'candles.dining', pos: v3(101.3, GF + 1.3, 86.2), color: '#ffb35a', intensity: 2.5, distance: 5, on: () => true, flicker: 0.2 });
   w.patches.add(101.3, GF + 0.8, 86.2, 1.3, '#ffb35a', () => true, 0.35);
   box(c.b, k.M.wood, '#5a3a22', 107.15, GF, 86.2, 0.5, 0.9, 2.4, { chunk: c.chunk, uv: 1 });
@@ -406,8 +443,25 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
 
   // ---------------------------------------------------------------- service wing: corridor, pantry, workshop
   staticSconce(c, w, 110.2, 2.2, 101.12, 0, 2.5, 5);
-  for (let i = 0; i < 4; i++) cyl(c.b, k.M.paint, '#6b4426', 113.6 + i * 0.4, GF + 1.6, 103.85, 0.02, 0.02, 0.12, 5, { chunk: c.chunk, rx: Math.PI / 2 });
-  for (const x of [109.0, 115.0]) {
+  for (let i = 0; i < 4; i++) cyl(c.b, k.M.paint, '#6b4426', 109.6 + i * 0.4, GF + 1.6, 103.85, 0.02, 0.02, 0.12, 5, { chunk: c.chunk, rx: Math.PI / 2 });
+  // Francois' Copacabana Room — personal name board at the inner approach (P exception: no emblem/tab function)
+  nameBoard(w, 114.5, GF + 1.75, 101.1, 0);
+  // utility (v0.2): two machines side by side on the east wall, a sink and towel rails; daily household, no puzzle
+  for (const z of [107.4, 108.1]) { box(c.b, k.M.paint, '#f2f0ea', 115.2, GF, z, 0.6, 0.85, 0.62, { chunk: c.chunk }); cyl(c.b, k.M.glass, '#ffffff', 114.89, GF + 0.42, z, 0.18, 0.18, 0.02, 14, { chunk: c.chunk, rz: Math.PI / 2 }); }
+  c.col.addBox(114.9, 115.55, 107.05, 108.45, 0, GF + 0.9);
+  box(c.b, k.M.paint, '#d8d4c8', 115.25, GF, 106.2, 0.6, 0.9, 0.9, { chunk: c.chunk });
+  box(c.b, k.M.paint, '#bfc8cc', 115.2, GF + 0.9, 106.2, 0.45, 0.04, 0.6, { chunk: c.chunk });
+  c.col.addBox(114.9, 115.55, 105.75, 106.65, 0, GF + 0.95);
+  for (let i = 0; i < 3; i++) box(c.b, k.M.paint, ['#6fae9a', '#f2ead8', '#9aa8d8'][i], 113.42, GF + 1.0 + i * 0.35, 106.6 + i * 0.6, 0.04, 0.5, 0.45, { chunk: c.chunk });
+  staticLantern(c, w, 114.45, CEIL - 0.1, 107.6, 0.45, 0, 2, 4);
+  // guest WC (v0.2): toilet and hand basin; daily credibility, no clue
+  box(c.b, k.M.paint, '#f4f1ea', 85.55, GF, 106.2, 0.45, 0.42, 0.65, { chunk: c.chunk });
+  box(c.b, k.M.paint, '#f4f1ea', 85.32, GF + 0.42, 106.45, 0.2, 0.45, 0.4, { chunk: c.chunk });
+  c.col.addBox(85.1, 85.85, 105.85, 106.75, 0, GF + 0.85);
+  box(c.b, k.M.paint, '#f4f1ea', 87.65, GF + 0.75, 105.3, 0.4, 0.15, 0.5, { chunk: c.chunk });
+  box(c.b, k.M.glow, '#cfe0e6', 87.9, GF + 1.2, 105.3, 0.02, 0.6, 0.45, { chunk: c.chunk, shadow: false });
+  staticSconce(c, w, 87.88, 2.2, 104.5, -Math.PI / 2, 1.5, 3);
+  for (const x of [109.0]) {
     box(c.b, k.M.wood, '#7a5232', x, GF, 106.9, 0.6, 2.2, 4.6, { chunk: c.chunk, uv: 1 });
     c.col.addBox(x - 0.3, x + 0.3, 104.6, 109.2, 0, 2.3);
     for (let s = 0; s < 4; s++) for (let j = 0; j < 7; j++) {
@@ -611,7 +665,7 @@ function billiard(w: World, g: GameApi, c: Ctx) {
   place(ex, 94.88, 1.4, 105.6, -Math.PI / 2);
   w.scene.add(ex);
   makeInspect(w, g, { id: 'inspect.billiardExamples', obj: ex, clue: 'c.billiardExamples', hit: [1.1, 0.5, 0.3], hitOffset: [0, 0.2, 0] });
-  const bl = floorLamp(w, 86.0, GF, 105.4);
+  const bl = floorLamp(w, 88.6, GF, 108.9); // v0.2: moved out of the new guest WC (same lamp id)
   makeLamp(w, g, { id: 'lamp.billiard', ...bl, name: 'staande lamp', defaultOn: false, hit: [0.5, 1.9, 0.5], intensity: 5, distance: 8, patch: { y: GF + 0.03, r: 1.5 } });
 }
 
@@ -682,6 +736,18 @@ function kitchen(w: World, g: GameApi, c: Ctx) {
   place(key, 95.2, GF + 1.05, hz, 0.3);
   w.scene.add(key);
   makePickup(w, g, { id: 'pk.consKey', item: 'consKey', obj: key, available: () => !!g.state.open['kitchen.hatch'], hit: [0.3, 0.2, 0.3], after: () => g.inspect('c.consNote') });
+  // ES.kitchenCrates: eight red shopping crates (two stacks of four, against the counter's west face); beer crates apart
+  for (let i = 0; i < 8; i++) redCrate(c, 106.6, 94.0 + (i % 4) * 0.45, GF + Math.floor(i / 4) * 0.3, 0);
+  c.col.addBox(106.28, 106.92, 93.78, 95.57, 0, GF + 0.62);
+  for (const [x, z] of [[105.6, 92.55], [106.1, 92.55]] as const) { box(c.b, k.M.paint, '#e8b030', x, GF, z, 0.42, 0.3, 0.3, { chunk: c.chunk }); box(c.b, k.M.paint, '#2f5a2a', x, GF + 0.3, z, 0.42, 0.28, 0.3, { chunk: c.chunk }); }
+  c.col.addBox(105.35, 106.35, 92.35, 92.75, 0, GF + 0.6);
+}
+
+/** Red plastic shopping crate (0.6 × 0.4 × 0.3), long side along `yaw`. Visual only; callers add one collider per stack. */
+function redCrate(c: Ctx, x: number, z: number, y0: number, yaw: number) {
+  const k = c.k;
+  box(c.b, k.M.paint, '#c8322a', x, y0, z, 0.6, 0.3, 0.4, { chunk: c.chunk, yaw });
+  box(c.b, k.M.paint, '#8a1f1a', x, y0 + 0.29, z, 0.56, 0.012, 0.36, { chunk: c.chunk, yaw, shadow: false });
 }
 
 function drawServiceChart(x: CanvasRenderingContext2D, W: number, H: number) {
@@ -784,15 +850,27 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   for (const [x, z] of [[106.9, 81.0], [102.0, 81.0], [106.9, 95.2]] as const) plant(c, x, z, R0, 1.0, '#c9774a');
   const bl = tableLamp(w, 103.9, R0 + 0.76, 89.4);
   makeLamp(w, g, { id: 'lamp.botanic', ...bl, name: 'lamp', defaultOn: true, hit: [0.4, 0.7, 0.4], intensity: 4, distance: 7, patch: { y: R0 + 0.03, r: 1.2 } });
-  // ---------------------------------------------------------------- attic storage (optional memory)
-  for (const [x, z, s] of [[96.4, 108.6, 0.7], [97.2, 108.7, 0.55], [106.6, 108.4, 0.8], [106.6, 100.0, 0.6], [105.6, 108.7, 0.5]] as const) crate(c, x, z, R0, s, 0.3);
-  for (const [x, z] of [[100.5, 105.5], [103.5, 104.2]] as const) { blob(c.b, k.M.paint, '#efe8d8', x, R0 + 0.55, z, 0.8, 0.55, 0.55, { chunk: c.chunk }); c.col.addCircle(x, z, 0.7, R0, R0 + 1.1); }
-  const memBox = compound((b) => { box(b, k.M.paint, '#c8a070', 0, 0, 0, 0.6, 0.4, 0.45); box(b, k.M.paint, '#a07a50', 0, 0.4, 0, 0.62, 0.03, 0.47); });
-  place(memBox, 98.5, R0, 102.5, 0.2);
-  w.scene.add(memBox);
-  c.col.addCircle(98.5, 102.5, 0.4, R0, R0 + 0.5);
-  makeInspect(w, g, { id: 'mem.storage.box', obj: memBox, clue: 'mem.storage.box', hit: [0.7, 0.5, 0.6] });
-  staticLantern(c, w, 101.3, UCEIL - 0.6, 104, 0.5, 0, 2.5, 6);
+  // ---------------------------------------------------------------- north guest room (source id `storage`), linen, rear nooks
+  bed2(c, 105.4, 102.6, R0, -Math.PI / 2, '#6f8a7a', '#7a5a3a');
+  bedside(c, 107.15, 100.6, R0, -Math.PI / 2, '#7a5a3a');
+  wardrobe(c, 101.6, 106.25, R0, Math.PI, 1.4, '#7a5a3a');
+  rug(c, 103.4, 102.6, R0 + 0.01, 2.6, 3.0, 0, '#b8a888');
+  staticLantern(c, w, 103.3, UCEIL - 0.6, 101.0, 0.5, 0, 2.5, 6);
+  // shared linen: shelves along the north wall, reached centrally from the rear nook (not through a bedroom)
+  for (let i = 0; i < 3; i++) {
+    const x = 101.2 + i * 2.2;
+    box(c.b, k.M.wood, '#8a6a4a', x, R0, 109.25, 1.9, 2.0, 0.5, { chunk: c.chunk, uv: 1 });
+    for (let sIdx = 0; sIdx < 4; sIdx++) box(c.b, k.M.paint, ['#f2ead8', '#9aa8d8', '#6fae9a', '#e0a060'][(sIdx + i) % 4], x, R0 + 0.25 + sIdx * 0.45, 108.95, 1.6, 0.2, 0.06, { chunk: c.chunk });
+  }
+  c.col.addBox(100.2, 107.4, 109.0, 109.5, R0, R0 + 2.0);
+  staticSconce(c, w, 98.88, R0 + 1.9, 106.4, -Math.PI / 2, 2, 4); // rear nook east (the linen itself is a cupboard)
+  // rear nook (landing side loop) and its east seat by the attic stair's back door
+  armchair(c, 93.6, 108.6, R0, Math.PI, '#7a8a5a');
+  plant(c, 90.7, 109.0, R0, 1.0);
+  rug(c, 92.5, 106.8, R0 + 0.01, 2.6, 3.2, 0, '#c8b090');
+  part(c, k.M.wood, '#6b4426', 97.0, 109.1, Math.PI, 0, R0, 0, 1.4, 0.45, 0.4, 1);
+  c.col.addBox(96.3, 97.7, 108.85, 109.4, R0, R0 + 0.5);
+  staticSconce(c, w, 94.88, R0 + 1.9, 105.4, -Math.PI / 2, 2, 4); // rear nook
   if (SLICE) sliceUpstairs(w, g, c); // DEV-01 B01 clusters (U04/U05/U10) + DS01 C (drying rack in U04)
   c.chunk = base;
 }
@@ -1008,4 +1086,98 @@ function drawRouteMap(x: CanvasRenderingContext2D, W: number, H: number, lit: bo
     x.lineWidth = 8; x.beginPath(); x.moveTo(hub[0], hub[1]); x.lineTo(W * 0.35, H * 0.8); x.stroke();
     x.fillStyle = '#ffe2a0'; x.font = 'bold 26px Georgia'; x.textAlign = 'center'; x.fillText('BOSLUST', W * 0.35, H * 0.8 + 52);
   }
+}
+
+// =====================================================================================================
+// DEV-02 attic (v0.2 A01–A04): stair S03 from the upper corridor, a real attic floor (+6.65) under the existing roof.
+function attic(w: World, g: GameApi, c: Ctx) {
+  const k = c.k;
+  const base = c.chunk;
+  c.chunk = 'mAttic';
+  const MID = S03.mid.y, wood = '#8a6a4a';
+  // ---------------------------------------------------------------- S03: flight 1, middle landing, flight 2 (real steps)
+  const f1 = S03.flight1, f2 = S03.flight2, m = S03.mid;
+  stairsZ(c, f1.x0, f1.x1, f1.z0, f1.z1, UF, MID, wood, 10);
+  boxMM(c.b, k.M.wood, wood, m.x0, m.x1, UF, MID, m.z0, m.z1, { chunk: c.chunk, uv: 1.2 });
+  w.col.addFloor(m.x0, m.x1, m.z0, m.z1, MID);
+  w.col.addBox(m.x0, m.x1, m.z0, m.z1, UF, MID, { occludes: true }); // solid under the landing (too low to walk under)
+  stairsZ(c, f2.x0, f2.x1, f2.z1, f2.z0, MID, AF, wood, 10);
+  boxMM(c.b, k.M.wood, '#7a5a3a', f2.x0, f2.x1, UF, MID, f2.z0, f2.z1, { chunk: c.chunk, uv: 1.2 });
+  w.col.addBox(f2.x0, f2.x1, f2.z0, f2.z1, UF, MID, { occludes: true }); // closed under flight 2
+  // railings: flight 1 | lane, between the flights (full height), middle landing edges, upper landing over the well
+  stairRail(c, f1.x1 + 0.06, f1.z0, f1.z1, UF, MID, 1);
+  stairRail(c, 96.5, f2.z0, f2.z1, AF, MID, -1, '#5e3b1f', UF);
+  railing(c, 'z', m.x1 + 0.06, m.z0, m.z1, MID);
+  railing(c, 'x', m.z1 + 0.06, m.x0, m.x1 + 0.06, MID);
+  railing(c, 'x', S03.landing.z1, 96.4, 99, AF);
+  // ---------------------------------------------------------------- attic floor (only the attic rooms; the stairwell stays open)
+  const af = (x0: number, x1: number, z0: number, z1: number) => {
+    boxMM(c.b, k.M.wood, '#a8845a', x0, x1, AF - 0.2, AF, z0, z1, { uv: 2.2, chunk: c.chunk });
+    w.col.addFloor(x0, x1, z0, z1, AF);
+    w.col.addOccluder(x0, x1, z0, z1, AF - 0.2, AF);
+  };
+  af(80, 95, 86, 104); // atticStore + atticCommon
+  af(95, 101, 92, 98.6); // atticLookout
+  af(95, 99, 98.6, 99.8); // upper landing (atticLanding)
+  // ---------------------------------------------------------------- partitions + knee walls up to the roof (play zone 80–101 / 86–105.6)
+  const aw = (axis: 'x' | 'z', f: number, a0: number, a1: number, openings: { at: number; w: number; h?: number }[] = []) => {
+    let top = Infinity;
+    for (let a = a0; a <= a1 + 1e-6; a += 0.5) top = Math.min(top, axis === 'x' ? roofUnderside(a, f) : roofUnderside(f, a));
+    wall(c, axis, f, a0, a1, AF, top - 0.05, { t: 0.12, mat: k.M.wood, color: '#c8ad84', uv: 1.6, openings });
+  };
+  aw('z', 80, 86, 104);
+  aw('x', 86, 80, 95);
+  aw('z', 95, 86, 92);
+  aw('x', 92, 80, 95, [{ at: 86, w: 1.0, h: 2.1 }]); // atticStore door
+  aw('x', 92, 95, 101);
+  aw('z', 101, 92, 98.6);
+  aw('x', 98.6, 99, 101);
+  aw('z', 95, 92, 98.6, [{ at: 95, w: 1.3, h: 2.2 }]); // common | lookout (arch)
+  aw('x', 98.6, 95, 99, [{ at: 97, w: 1.2, h: 2.2 }]); // lookout | landing (arch)
+  aw('z', 95, 99.8, 105.6); // common | stairwell (the opening Z 98.6–99.8 is the stair exit, v0.2 "X95/Z99.2")
+  aw('x', 104, 80, 95);
+  aw('z', 99, 98.6, 105.6);
+  aw('x', 105.6, 95, 99);
+  makeDoor(w, g, { id: 'door.atticStore', x: 85.5, z: 92, dir: 'x+', width: 1.0, height: 2.05, y0: AF, swing: -1, style: 'plank', color: '#8a6a4a' });
+  // ---------------------------------------------------------------- inner roof skin (the exterior roof is single-sided)
+  const skin = hipRoofGeo(36, 30, 8.2, 0.7);
+  const pos = skin.attributes.position as THREE.BufferAttribute, uvA = skin.attributes.uv as THREE.BufferAttribute;
+  for (let i = 0; i < pos.count; i += 3) { // reverse each triangle: faces point into the attic
+    const p1 = [pos.getX(i + 1), pos.getY(i + 1), pos.getZ(i + 1)], u1 = [uvA.getX(i + 1), uvA.getY(i + 1)];
+    pos.setXYZ(i + 1, pos.getX(i + 2), pos.getY(i + 2), pos.getZ(i + 2)); uvA.setXY(i + 1, uvA.getX(i + 2), uvA.getY(i + 2));
+    pos.setXYZ(i + 2, p1[0], p1[1], p1[2]); uvA.setXY(i + 2, u1[0], u1[1]);
+  }
+  skin.computeVertexNormals();
+  geo(c.b, k.M.wood, '#b89a72', skin, 90, TOP - 0.2, 95, { chunk: c.chunk, shadow: false });
+  skin.dispose();
+  for (let x = 81; x < 101; x += 2.4) box(c.b, k.M.wood, '#6b4a2a', x, AF, 95, 0.14, roofUnderside(x, 95) - AF - 0.15, 0.14, { chunk: c.chunk }); // king posts
+  // ---------------------------------------------------------------- staging: A02 weekend attic, A03 seasonal store, A04 lookout
+  for (const [x, z, sz, col] of [[81.0, 102.9, 0.7, '#a0784a'], [81.8, 102.9, 0.55, '#b08a5a'], [81.0, 102.1, 0.6, '#8a6a4a'], [93.7, 102.9, 0.65, '#a0784a'], [92.9, 102.9, 0.5, '#c8a070'], [81.0, 96.0, 0.6, '#a0784a']] as const) crate(c, x, z, AF, sz, 0.15, col);
+  for (let i = 0; i < 3; i++) { // instrument cases leaning against the north wall
+    box(c.b, k.M.paint, ['#2b2622', '#4a2f2a', '#2f3f4a'][i], 86 + i * 0.7, AF, 103.65, 0.4, 1.1 - i * 0.15, 0.22, { chunk: c.chunk, yaw: 0.05 * i });
+  }
+  c.col.addBox(85.7, 87.9, 103.4, 103.9, AF, AF + 1.1);
+  for (const x of [84, 89]) cyl(c.b, k.M.wood, '#6b4a2a', x, AF, 97.5, 0.04, 0.04, 1.8, 6, { chunk: c.chunk }); // drying line posts
+  box(c.b, k.M.paint, '#efe8d8', 86.5, AF + 1.75, 97.5, 5.0, 0.01, 0.01, { chunk: c.chunk });
+  for (let i = 0; i < 5; i++) box(c.b, k.M.paint, ['#6fae9a', '#f2ead8', '#9aa8d8', '#e0a060', '#c4553d'][i], 84.8 + i * 0.8, AF + 1.15, 97.5, 0.55, 0.6, 0.02, { chunk: c.chunk });
+  c.col.addCircle(84, 97.5, 0.12, AF, AF + 1.8); c.col.addCircle(89, 97.5, 0.12, AF, AF + 1.8);
+  sofa(c, 82.0, 99.5, AF, Math.PI / 2, 2.0, '#8a7a5a');
+  table(c, 88.5, 101.4, AF, 1.4, 0.8, 0, '#7a5a3a', 0.72);
+  for (let i = 0; i < 3; i++) box(c.b, k.M.paint, ['#c4553d', '#3f6fa8', '#e8c547'][i], 88.0 + i * 0.45, AF + 0.72, 101.4, 0.36, 0.06, 0.28, { chunk: c.chunk });
+  // A03 seasonal store (behind its door): garden cushions, a boxed tree, the old games box (memory moved here, same id)
+  for (const [x, z, sz] of [[81.0, 86.8, 0.7], [81.8, 86.8, 0.6], [94.1, 86.8, 0.7], [94.1, 87.6, 0.55], [90.5, 86.8, 0.6]] as const) crate(c, x, z, AF, sz, 0.1, '#9a7a52');
+  box(c.b, k.M.paint, '#3f5a3a', 92.0, AF, 87.0, 1.6, 0.35, 0.35, { chunk: c.chunk });
+  c.col.addBox(91.2, 92.8, 86.8, 87.2, AF, AF + 0.4);
+  const memBox = compound((b) => { box(b, k.M.paint, '#c8a070', 0, 0, 0, 0.6, 0.4, 0.45); box(b, k.M.paint, '#a07a50', 0, 0.4, 0, 0.62, 0.03, 0.47); });
+  place(memBox, 84.4, AF, 87.0, 0.2);
+  w.scene.add(memBox);
+  c.col.addCircle(84.4, 87.0, 0.4, AF, AF + 0.5);
+  makeInspect(w, g, { id: 'mem.storage.box', obj: memBox, clue: 'mem.storage.box', hit: [0.7, 0.5, 0.6] });
+  // A04 lookout: observatory reservation only (I03 open) — a bench and the stars hobby, no roof opening claimed
+  part(c, k.M.wood, '#6b4426', 99.8, 94.6, -Math.PI / 2, 0, AF, 0, 1.6, 0.45, 0.45, 1);
+  c.col.addBox(99.5, 100.1, 93.8, 95.4, AF, AF + 0.5);
+  telescope(c, 97.4, 93.2, AF, -0.5);
+  for (const [x, z] of [[88, 98.5], [86.5, 89], [98, 95.4], [97, 102.6]] as const) staticLantern(c, w, x, AF + 1.9, z, 0.5, 0, 2.5, 7);
+  staticLantern(c, w, 98.4, UF + 2.4, 103.2, 0.5, 0, 3, 8); // stairwell light over the return lane
+  c.chunk = base;
 }

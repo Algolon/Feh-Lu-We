@@ -5,10 +5,11 @@
 // Source of the numbers: the CURRENT builders (src/world/manor.ts walls/doors, roomdefs.ts rooms); their room bounds
 // equal LEVEL_LAYOUT v0.2 `source.rooms`. Openings below mirror the wall() calls that create both the rendered gap and
 // the collider gap (arch.ts builds both from the same `openings` list, so render and collision cannot disagree).
-// LEVEL_LAYOUT reservations used here: ES.gingerbread centre (88, 96). The B01 evidence_reservations poses are NOT
+// DEV-02: the maquette table moved from ES.gingerbread (88, 96) to the hall's west wall (layout.ts MAQUETTE, DEV-01 review:
+// "not in the middle of the hall, against a wall, inspectable"). The B01 evidence_reservations poses are NOT
 // used: their spots are occupied by as-built furniture (see docs/dev01/DEV01R_AUDIT.md §7 F4).
 import { ROOMS } from '../world/roomdefs';
-import { GF, UF } from '../world/layout';
+import { GF, UF, MAQUETTE } from '../world/layout';
 
 export interface Rect { x0: number; x1: number; z0: number; z1: number }
 export interface OpeningRec {
@@ -61,8 +62,8 @@ export const ROUTE = {
   arrive: [[89.6, 75.5], [89.6, 77.6], [90, 79.0]] as [number, number][], // forecourt → front door (unlock)
   toMantel: [[90, 82], [90, 86], [86.5, 88.5], [83, 89.2], [77.5, 89.2], [75.2, 88.6], [74.6, 86.7]] as [number, number][],
   toConsole: [[75.2, 88.6], [77.5, 89.2], [83, 89.2], [86.5, 88.5], [86.5, 85.5]] as [number, number][],
-  toMaquette: [[87.2, 90], [88.0, 94.6]] as [number, number][],
-  toLibrary: [[89.3, 95.3], [88.7, 97.4], [88.5, 100.2], [86.4, 101]] as [number, number][], // then open door.library
+  toMaquette: [[87.8, 91.5], [MAQUETTE.pose.x, MAQUETTE.z + MAQUETTE.note.dz]] as [number, number][],
+  toLibrary: [[88.2, 95.4], [88.7, 97.4], [88.5, 100.2], [86.4, 101]] as [number, number][], // then open door.library
   intoLibrary: [[84.0, 101], [81.85, 101.2]] as [number, number][],
   toAlbum: [[82.2, 102.9], [79.4, 102.9], [78.9, 105.6], [75.75, 106.6]] as [number, number][],
   albumBack: [[78.9, 105.6], [79.4, 102.9], [82.2, 102.9], [81.85, 101.2]] as [number, number][],
@@ -84,9 +85,9 @@ export const ROUTE = {
 
 // ------------------------------------------------------------------------------------------------ slice props (footprints)
 export const PROPS: PropRec[] = [
-  // G02 hall — DS01 A: gingerbread maquette on a table at the LEVEL_LAYOUT reservation ES.gingerbread (88, 96):
-  // the hall's west flank in front of the lobby arch, away from the console (z 85.5), the mantel arch and the stair
-  { id: 'ds01.maquetteTable', room: 'hall', x: 88.0, z: 96.0, y: GF, w: 0.62, d: 1.1, h: 0.74, kind: 'staging', parts: [{ id: 'ds01.note', dx: 0.06, dz: -0.38 }] },
+  // G02 hall — DS01 A: the note lies at the south end of the maquette table against the hall's west wall (DEV-02),
+  // away from the console (z 85.5), the mantel arch, the lobby arch and the stair
+  { id: 'ds01.maquetteTable', room: 'hall', x: MAQUETTE.x, z: MAQUETTE.z, y: GF, w: MAQUETTE.w, d: MAQUETTE.d, h: MAQUETTE.h, kind: 'staging', parts: [{ id: 'ds01.note', dx: MAQUETTE.note.dx, dz: MAQUETTE.note.dz }] },
   // G04 library — B01 table (the iteration-3 reading table, chairs moved to its west side)
   { id: 'b01.tableTop', room: 'library', x: 80.6, z: 101.2, y: GF, w: 1.1, d: 2.2, h: 0.81, kind: 'evidence-surface', parts: [{ id: 'b01.table', dx: 0, dz: 0 }] },
   // G04 library — DS01 B: quiet reading plank in the reading corner, ~7 m from the B01 table; album page + loose
@@ -111,7 +112,7 @@ export const prop = (id: string) => PROPS.find((p) => p.id === id)!;
 export const POSES: PoseRec[] = [
   { id: 'pose.mantel', target: 'inspect.mantel', room: 'living', x: 74.6, z: 86.7, y: GF },
   { id: 'pose.console', target: 'hall.drawer', room: 'hall', x: 86.5, z: 85.5, y: GF },
-  { id: 'pose.maquette', target: 'ds01.note', room: 'hall', x: 88.0, z: 94.6, y: GF },
+  { id: 'pose.maquette', target: 'ds01.note', room: 'hall', x: MAQUETTE.pose.x, z: MAQUETTE.z + MAQUETTE.note.dz, y: GF },
   { id: 'pose.table', target: 'b01.table', room: 'library', x: 81.85, z: 101.2, y: GF },
   { id: 'pose.album', target: 'ds01.album', room: 'library', x: 75.75, z: 106.6, y: GF },
   { id: 'pose.sterren.pair', target: 'b01.pair.sterren', room: 'sterren', x: 79.0, z: 92.35, y: UF },

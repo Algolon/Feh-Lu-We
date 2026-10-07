@@ -1,7 +1,9 @@
-// The estate: 180 × 150 m (X east, Z north, Y up). Front gate on the south edge at X 90.
-// South (Z 0–72): woodland on gently rolling ground with the BOSLUST hill. North: the manor (main block,
-// service wing, glass pool conservatory, sauna outside to its right), an open lawn with the lantern
-// circle, and the old cottage by the pond. Layout constants live in layout.ts; ground in terrain.ts.
+// The estate: 200 × 180 m (X east, Z north, Y up) — DEV-02 structural blockout of LEVEL_PLAN v0.2 variant A.
+// Front gate on the south edge at X 90. South (Z 0–72): woodland on gently rolling ground with the BOSLUST hill, the
+// golf tee behind it and the wickerman clearing in the east. Middle: arrival court with the cars, the manor (main block,
+// service wing, the glass Copacabana Room, wellness deck with sauna and jacuzzi), the social garden and the lantern lawn.
+// North: the lake with the Portugal cottage on its plateau, wooded ridges along the north and east, the west bank.
+// Layout constants live in layout.ts, keepouts in footprints.ts, ground in terrain.ts.
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { World, type GameApi } from '../interactions/world';
@@ -13,19 +15,23 @@ import { Vegetation, scatter, distToPolyline, smooth } from './nature';
 import { buildManor } from './manor';
 import { buildConservatory } from './conservatory';
 import { buildCottage } from './cottage';
-import { buildForest, forestTreePoints } from './forest';
+import { buildWellness } from './wellness';
+import { buildGrounds } from './grounds';
+import { buildForest, forestTreePoints, buildWoodlandMasses } from './forest';
 import { buildBoslust } from './boslust';
 import { addEnvironment } from './env';
-import { ART, SLICE } from '../core/artflags';
+import { ART } from '../core/artflags';
 import { inZone, inBackdrop, addBackdrop, zoneGround, zonePathWidth, zonePathTint, pathVerge, finishZone } from './boslustSample';
-import { makeLamp, makeAction, makeDoor, makePickup, makeInspect, place } from '../interactions/props';
+import { makeLamp, makeAction, makeDoor, makePickup, place } from '../interactions/props';
 import { pressLantern } from '../puzzles/rules';
 import { addClue } from '../core/state';
 import { drawSymbol, SYMBOLS } from '../content/symbols';
 import { mulberry32 } from '../core/rng';
 import { estateRooms } from './roomdefs';
-import { ESTATE, SITES, DRIVEWAY, GARDEN_PATH, TERRACE, GF, HILL } from './layout';
+import { ESTATE, SITES, DRIVEWAY, TERRACE, GF, HILL, WOODS, lakeQ, COTTAGE_PAD, WELLNESS } from './layout';
 import { FOREST_PATHS, TCELL, TERRAIN_DIMS, gridAt, gridHeight, inHole, terrainHeight, walkHeight, entranceMound } from './terrain';
+import { ROUTE_LINES, FOOTPRINTS, vegetationClear } from './footprints';
+import { inRect as inR } from './geom2d';
 
 /** The lantern circle on the lawn behind the manor (a wrong attempt never means crossing the garden). */
 export const LANTERN_CIRCLE = SITES.lanterns;
@@ -52,6 +58,7 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   const cotC = makeCtx(w.col, 'cottage');
   const forestC = makeCtx(w.col, 'forest');
   const gardenC = makeCtx(w.col, 'garden');
+  const groundsC = makeCtx(w.col, 'grounds');
   const ugC = makeCtx(w.col, 'ug');
 
   buildGround(w);
@@ -59,6 +66,7 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   buildBoundary(w, g, ground, veg);
   buildManor(w, g, manorC, manorIn, manorB);
   buildConservatory(w, g, consC);
+  buildWellness(w, gardenC);
   buildCottage(w, g, cotC);
   // art sample (?ext=sample): old visuals in the BOSLUST zone are generated but discarded
   if (ART.ext === 'sample') veg.drop = (x, z) => inZone(x, z); // zone stumps are rebuilt by stumpsV2 (same colliders)
@@ -66,14 +74,17 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   buildBoslust(w, g, forestC, ugC, veg);
   veg.drop = null;
   if (ART.ext === 'sample') finishZone(w);
+  buildWoodlandMasses(w, veg);
+  buildGrounds(w, g, groundsC, veg);
   buildGarden(w, g, gardenC, veg);
 
-  for (const c of [ground, manorC, manorIn, manorB, consC, cotC, forestC, gardenC, ugC]) c.b.build(w.scene);
+  for (const c of [ground, manorC, manorIn, manorB, consC, cotC, forestC, gardenC, groundsC, ugC]) c.b.build(w.scene);
   for (const m of veg.build(w.scene, true)) m.userData.region = 'outdoor';
 
   // whole-room culling: chunks are shown only while one of their rooms can be seen from the player's room
   const R = estateRooms();
-  const manorRooms = R.rooms.filter((r) => r.floor === 'g' || r.floor === 'u').filter((r) => r.x0 >= 72 && r.x1 <= 116 && r.id !== 'cons').map((r) => r.id);
+  const manorRooms = R.rooms.filter((r) => r.floor === 'g' || r.floor === 'u' || r.floor === 'a').filter((r) => r.x0 >= 72 && r.x1 <= 116 && r.id !== 'cons').map((r) => r.id);
+  const atticRooms = ['atticLanding', 'atticCommon', 'atticStore', 'atticLookout'];
   const basementRooms = ['bstair', 'bLobby', 'archive', 'boiler', 'route', 'tunnel2', 'tunnel'];
   const ugRooms = ['hut', 'descent', 'entry', 'passage', 'gathering', 'tunnel', 'tunnel2'];
   // furnishings per area: listed rooms are the ones from which that area can actually be seen (seen from
@@ -82,14 +93,15 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   w.roomRegion(['mIn'], manorRooms);
   w.roomRegion(['mHall'], ['vestibule', 'hall', 'living', 'lobby', 'billiard', 'frontGallery', 'walkway', 'landing']);
   w.roomRegion(['mLib'], ['library', 'libGallery', 'living', 'lobby']);
-  w.roomRegion(['mWing'], ['dining', 'kitchen', 'corridor', 'workshop', 'pantry']);
-  w.roomRegion(['mUp'], ['frontGallery', 'walkway', 'landing', 'libGallery', 'reis', 'sterren', 'bath', 'ucorr', 'study', 'botanic', 'storage', 'library']);
+  w.roomRegion(['mWing'], ['dining', 'kitchen', 'corridor', 'workshop', 'pantry', 'utility', 'guestWC', 'lobby']);
+  w.roomRegion(['mUp'], ['frontGallery', 'walkway', 'landing', 'libGallery', 'reis', 'sterren', 'bath', 'ucorr', 'study', 'botanic', 'storage', 'library', 'linen', 'rearNook', 'rearNookEast', 'atticStair']);
+  w.roomRegion(['mAttic'], [...atticRooms, 'atticStair']); // seen through the open stair doors (atticStair is then visible)
   w.roomRegion(['mB'], basementRooms);
   w.roomRegion(['ug'], ugRooms);
   w.roomRegion(['cons', 'glass'], ['cons', 'out', 'corridor'], 95);
   w.roomRegion(['cottageIn'], ['cottageEntry', 'cottageRoom']);
-  w.roomRegion(['cottage'], ['out', 'cottageEntry', 'cottageRoom'], 75);
-  w.roomRegion(['ground', 'paths', 'wall', 'fence', 'garden', 'forest', 'outdoor', 'hills'], ['out', 'cons', 'sauna', 'shed', 'cottageEntry', 'cottageRoom']);
+  w.roomRegion(['cottage'], ['out', 'cottageEntry', 'cottageRoom'], 75); // a landmark across the lake: visible from the terrace and the lawn
+  w.roomRegion(['ground', 'paths', 'wall', 'fence', 'garden', 'grounds', 'forest', 'outdoor', 'hills'], ['out', 'cons', 'sauna', 'shed', 'cottageEntry', 'cottageRoom']);
 
   w.spawn = { x: SITES.gate.x, y: 0, z: 3, yaw: 0, pitch: 0.02 };
   w.checkpoints.push(
@@ -102,7 +114,9 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   const surfaceAt = (x: number, z: number, y = 0): 'grass' | 'wood' | 'stone' => {
     const room = R.roomAt(x, y + 0.8, z);
     if (room !== 'out') return R.get(room)?.floor === 'b' || room === 'cons' || room === 'hall' || room === 'vestibule' || room === 'kitchen' ? 'stone' : 'wood';
-    if (inRect(x, z, TERRACE.x0, TERRACE.x1, TERRACE.z0, TERRACE.z1) || inRect(x, z, 60, 66, 8, 18.2)) return 'stone';
+    if (inR(x, z, WELLNESS) && y > 0.1) return 'wood';
+    if (FOOTPRINTS.some((f) => f.kind === 'platform' && inR(x, z, f)) || inRect(x, z, TERRACE.x0, TERRACE.x1, TERRACE.z0, TERRACE.z1) || inRect(x, z, 60, 66, 8, 18.2)) return 'stone';
+    if (FOOTPRINTS.some((f) => f.kind === 'parking' && inR(x, z, f))) return 'stone';
     if (distToPolyline(x, z, DRIVEWAY) < 2.4 || Math.hypot(x - SITES.forecourt.x, z - SITES.forecourt.z) < 8) return 'stone';
     return 'grass';
   };
@@ -114,14 +128,14 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
 function buildGround(w: World) {
   const k = getKit();
   const r = mulberry32(3);
-  const { NX, NZ } = TERRAIN_DIMS;
+  const { NX, NZ, X0: GX0, Z0: GZ0 } = TERRAIN_DIMS;
   const n = (NX + 1) * (NZ + 1);
   const pos = new Float32Array(n * 3), uv = new Float32Array(n * 2), col = new Float32Array(n * 3);
   const zoneTreePts = ART.ext === 'sample' ? forestTreePoints().filter(([x, z]) => inZone(x, z)) : null;
   const forest = new THREE.Color('#6f8c43'), lawn = new THREE.Color('#9cc05e'), moss = new THREE.Color('#5d7a38'), dirt = new THREE.Color('#9a8456'), hillC = new THREE.Color('#7f9a4a');
   const c = new THREE.Color();
   for (let j = 0; j <= NZ; j++) for (let i = 0; i <= NX; i++) {
-    const vi = j * (NX + 1) + i, x = i * TCELL, z = j * TCELL, h = gridAt(i, j);
+    const vi = j * (NX + 1) + i, x = GX0 + i * TCELL, z = GZ0 + j * TCELL, h = gridAt(i, j);
     pos.set([x, h, -z], vi * 3);
     uv.set([x / 5, z / 5], vi * 2);
     const t = THREE.MathUtils.smoothstep(z, ESTATE.forestEdge - 8, ESTATE.forestEdge + 2);
@@ -131,12 +145,17 @@ function buildGround(w: World) {
     let dp = Infinity;
     for (const p of FOREST_PATHS) dp = Math.min(dp, distToPolyline(x, z, p));
     if (dp < 3) c.lerp(dirt, (1 - dp / 3) * 0.35);
+    // DEV-02: darker floor under the woodland masses, damp shore round the lake, worn ground on the plateau
+    if (WOODS.some((wd) => wd.gap < 8 && x > wd.x0 - 2 && x < wd.x1 + 2 && z > wd.z0 - 2 && z < wd.z1 + 2)) c.lerp(forest, 0.6);
+    const lq = lakeQ(x, z);
+    if (lq < 1.35) c.lerp(new THREE.Color('#7a7a4a'), 0.5 * (1 - Math.max(0, lq - 1) / 0.35));
+    if (inR(x, z, COTTAGE_PAD)) c.lerp(dirt, 0.15);
     if (zoneTreePts) zoneGround(x, z, c, zoneTreePts);
     col.set([c.r, c.g, c.b], vi * 3);
   }
   const idx: number[] = [];
   for (let j = 0; j < NZ; j++) for (let i = 0; i < NX; i++) {
-    if (inHole(i * TCELL + 1, j * TCELL + 1)) continue;
+    if (inHole(GX0 + i * TCELL + 1, GZ0 + j * TCELL + 1)) continue;
     const a = j * (NX + 1) + i, b = a + 1, cc = a + NX + 2, d = a + NX + 1;
     idx.push(a, b, cc, a, cc, d); // split 00-10-11 / 00-11-01 (matches gridHeight)
   }
@@ -177,7 +196,8 @@ function buildGround(w: World) {
   // the land beyond the estate: a frame AROUND it (one draw call)
   const outerMat = w.material(new THREE.MeshLambertMaterial({ color: '#5f7d3a' }));
   const W = ESTATE.w, D = ESTATE.d;
-  const parts = ([[-300, W + 300, -300, 0], [-300, W + 300, D, D + 300], [-300, 0, 0, D], [W, W + 300, 0, D]] as const).map(([x0, x1, z0, z1]) => {
+  const gx0 = GX0, gx1 = GX0 + NX * TCELL, gz0 = GZ0, gz1 = GZ0 + NZ * TCELL; // the grid itself reaches beyond the fence
+  const parts = ([[-300, W + 300, -300, gz0], [-300, W + 300, gz1, D + 300], [-300, gx0, gz0, gz1], [gx1, W + 300, gz0, gz1]] as const).map(([x0, x1, z0, z1]) => {
     const pg = new THREE.PlaneGeometry(x1 - x0, z1 - z0);
     pg.rotateX(-Math.PI / 2);
     pg.translate((x0 + x1) / 2, -0.04, -(z0 + z1) / 2);
@@ -253,18 +273,9 @@ function buildPaths(w: World, c: Ctx) {
     pathVerge(w, FOREST_PATHS, (k.M.dirt as THREE.MeshLambertMaterial).map!);
   }
   else for (const p of FOREST_PATHS) add(p, 1.9, '#c8ad80');
-  add(smooth(GARDEN_PATH, 2), 1.5, '#e2d2b0');
-  add(smooth([[90, 117], [90, 124.2]], 1), 1.6, '#e2d2b0'); // terrace → lantern circle
-  add(smooth([[102, 113.5], [114, 113.5], [126, 113.8], [133, 108], [134, 104.5]], 2), 1.5, '#e2d2b0'); // terrace → cons + sauna
-  // forecourt: gravel disc in front of the manor + central planter
-  const disc = new THREE.CircleGeometry(9.5, 36);
-  disc.rotateX(-Math.PI / 2);
-  c.b.add(k.M.dirt, disc, new THREE.Matrix4().makeTranslation(SITES.forecourt.x, 0.03, -SITES.forecourt.z), '#d8c3a0', 'paths', false, 0);
-  disc.dispose();
-  const ap = new THREE.PlaneGeometry(9, 8);
-  ap.rotateX(-Math.PI / 2);
-  c.b.add(k.M.dirt, ap, new THREE.Matrix4().makeTranslation(90, 0.031, -76), '#d8c3a0', 'paths', false, 0);
-  ap.dispose();
+  // DEV-02 routes: cottage out/back, terrace → lanterns → lake view, east glade loop, wellness, BBQ, wickerman, golf
+  for (const r of ROUTE_LINES) add(r.pts, r.width, r.id === 'wickermanLoop' || r.id === 'golfSpur' ? '#c8ad80' : '#e2d2b0');
+  // forecourt: the gravel court itself is one surface built with the arrival (grounds.ts); the central planter stays
   cyl(c.b, k.M.stone, '#d8ccb0', SITES.forecourt.x, 0, SITES.forecourt.z, 1.8, 1.9, 0.45, 18, { chunk: 'ground', uv: 1 });
   cyl(c.b, k.M.paint, '#6a5040', SITES.forecourt.x, 0.45, SITES.forecourt.z, 1.6, 1.6, 0.02, 18, { chunk: 'ground' });
   w.col.addCircle(SITES.forecourt.x, SITES.forecourt.z, 1.9, 0, 0.8);
@@ -311,8 +322,8 @@ function buildBoundary(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
   if (ART.ext === 'sample') veg.drop = (x, z) => inBackdrop(x, z);
   for (const [x, z] of outside) {
     const kind = r() < 0.25 ? 'pine' : 'oak';
-    const spec = { x, z, h: kind === 'pine' ? 6 + r() * 3 : 3.5 + r() * 2.5, r: 1.8 + r() * 1.0, kind, hue: r() - 0.5 } as const;
-    veg.tree(spec, `outer${x < 0 ? 'W' : x > W ? 'E' : z < 0 ? 'S' : 'N'}`);
+    const spec = { x, z, h: kind === 'pine' ? 6 + r() * 3 : 3.5 + r() * 2.5, r: 1.8 + r() * 1.0, kind, hue: r() - 0.5, y: terrainHeight(x, z) } as const;
+    veg.tree(spec, 'outer'); // DEV-02: one chunk for the low-poly ring beyond the fence (3 draw calls instead of 12)
     if (ART.ext === 'sample' && inBackdrop(x, z)) addBackdrop({ ...spec, y: terrainHeight(x, z) });
   }
   veg.drop = null;
@@ -413,71 +424,62 @@ function buildGarden(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
     run: () => { addClue(g.state, 'c.lanterns'); g.act({ ok: false, msg: 'Een platte ronde steen met een naad rondom. Hij zit muurvast. De drie lantaarns staan er in een kring omheen.', sfx: 'none' }); },
   });
 
-  // trees: a few oaks, cypresses and birches; the lawn stays open
-  const oaks: [number, number][] = [[64, 84], [58, 100], [44, 92], [40, 110], [120, 82], [140, 92], [150, 120], [112, 132], [72, 140], [100, 142], [140, 140], [160, 100], [20, 96], [16, 130], [166, 76], [26, 78]];
+  // trees: a few specimen oaks, cypresses and birches around the open lawns (the old nest-box oak now stands on the
+  // lake's east shore, grounds.ts); every tree passes the shared keepouts (no crown over a building, platform or path)
+  const oaks: [number, number][] = [[64, 84], [58, 100], [44, 92], [40, 110], [120, 82], [140, 88], [150, 120], [112, 132], [100, 142], [140, 140], [160, 100], [26, 96], [30, 128], [166, 76], [26, 78], [58, 120], [118, 145], [132, 126], [44, 76], [150, 160]];
   for (const [x, z] of oaks) {
-    veg.tree({ x, z, h: 4 + r() * 1.5, r: 2.4 + r() * 0.8, kind: 'oak', hue: r() - 0.5, y: terrainHeight(x, z) }, 'garden');
-    w.col.addCircle(x, z, 0.4, 0, 6);
+    const hh = 4 + r() * 1.5, rr = 2.4 + r() * 0.8, hue = r() - 0.5;
+    if (!vegetationClear(x, z, 'tree')) continue;
+    veg.tree({ x, z, h: hh, r: rr, kind: 'oak', hue, y: terrainHeight(x, z) }, 'garden');
+    w.col.addCircle(x, z, 0.4, terrainHeight(x, z), terrainHeight(x, z) + 6);
   }
-  // the old oak east of the pond with its nest box (optional memory)
-  const OX = SITES.pond.x + 6.5, OZ = SITES.pond.z + 0.5;
-  veg.tree({ x: OX, z: OZ, h: 5.2, r: 3.2, kind: 'oak', hue: -0.3 }, 'garden');
-  w.col.addCircle(OX, OZ, 0.55, 0, 6);
-  const nb = compound((b) => {
-    box(b, k.M.wood, '#8a5a33', 0, 0, 0, 0.3, 0.38, 0.28);
-    box(b, k.M.wood, '#5a3a22', 0, 0.38, 0, 0.36, 0.05, 0.34, { rx: 0.2 });
-    cyl(b, k.M.paint, '#2a1f16', 0, 0.22, 0.142, 0.05, 0.05, 0.01, 10, { rx: Math.PI / 2 });
-  });
-  place(nb, OX - 0.45, 1.7, OZ - 0.2, -Math.PI / 2 - 0.3);
-  w.scene.add(nb);
-  makeInspect(w, g, { id: 'mem.garden.nestbox', obj: nb, clue: 'mem.garden.nestbox', hit: [0.5, 0.6, 0.5], label: 'Bekijken: nestkastje' });
-  for (const [x, z] of [[71, 80.5], [71, 86], [109, 80.5], [69, 112], [111, 112], [124, 116], [82, 76], [98, 76]] as const) {
-    veg.tree({ x, z, h: 5.5 + r() * 1.5, r: 0.75, kind: 'cypress', hue: r() - 0.5 }, 'garden');
+  for (const [x, z] of [[71, 80.5], [71, 86], [109, 80.5], [69, 112], [111, 112.5], [126, 117.5], [79.2, 64], [100.8, 64]] as const) {
+    const hh = 5.5 + r() * 1.5, hue = r() - 0.5;
+    if (!vegetationClear(x, z, 'small')) continue;
+    veg.tree({ x, z, h: hh, r: 0.75, kind: 'cypress', hue }, 'garden');
     w.col.addCircle(x, z, 0.35, 0, 6);
   }
-  for (const [x, z] of [[30, 120], [160, 130], [150, 82]] as const) {
-    veg.tree({ x, z, h: 5, r: 1.6, kind: 'birch', hue: 0 }, 'garden');
+  for (const [x, z] of [[34, 122], [160, 130], [150, 82]] as const) {
+    if (!vegetationClear(x, z, 'small')) continue;
+    veg.tree({ x, z, h: 5, r: 1.6, kind: 'birch', hue: 0, y: terrainHeight(x, z) }, 'garden');
     w.col.addCircle(x, z, 0.25, 0, 6);
   }
   // flower patches and low shrubs (no collision)
   const patch = (cx: number, cz: number, rad: number, n: number, colors: string[]) => {
     for (let i = 0; i < n; i++) {
       const a = r() * Math.PI * 2, d = Math.sqrt(r()) * rad;
-      veg.smallThing('flower', cx + Math.cos(a) * d, cz + Math.sin(a) * d, 0.12 + r() * 0.08, colors[Math.floor(r() * colors.length)], 'garden');
+      const fx = cx + Math.cos(a) * d, fz = cz + Math.sin(a) * d, sz = 0.12 + r() * 0.08, col = colors[Math.floor(r() * colors.length)];
+      if (vegetationClear(fx, fz, 'small')) veg.smallThing('flower', fx, fz, sz, col, 'garden', terrainHeight(fx, fz));
     }
   };
   const purple = ['#b89ad8', '#9a7ac8', '#f2f0e6', '#e8a8c8'];
   for (const L of LANTERNS) patch(L.x, L.z, 1.4, 10, purple);
   patch(76, 120, 2.2, 18, purple);
   patch(104, 120, 2.2, 18, ['#f2c6d8', '#f2f0e6', '#e8c547']);
-  patch(46, 124, 1.6, 12, ['#f2c6d8', '#f2f0e6', '#e8c547']);
+  patch(70, 132, 1.6, 12, ['#f2c6d8', '#f2f0e6', '#e8c547']);
   patch(66, 76, 1.6, 12, purple);
   patch(114, 76, 1.6, 12, purple);
+  // DEV-02 placement contract (footprints.ts): no scatter in a building, on a platform, in the water or on a route
+  const inWood = (x: number, z: number) => WOODS.some((wd) => wd.gap < 8 && inR(x, z, wd));
   const clearOf = (x: number, z: number) =>
-    z > ESTATE.forestEdge + 1 && !inRect(x, z, 70, 132, 78, 119) && !inRect(x, z, 29, 45, 124, 139) && Math.hypot(x - SITES.pond.x, z - SITES.pond.z) > 5 &&
-    Math.hypot(x - LC.x, z - LC.z) > 5.5 && distToPolyline(x, z, GARDEN_PATH) > 1.4 && distToPolyline(x, z, DRIVEWAY) > 3 && Math.hypot(x - SITES.forecourt.x, z - SITES.forecourt.z) > 10.5;
-  // DEV-01 placement contract: no scatter inside a building footprint. The garden exclusion above stops at x 132 and
-  // misses the barrel sauna (x 132–136); the review build drops those instances without changing the random
-  // sequence (every other position stays identical). The normal game is unchanged until this fix is approved.
-  const inBuilding = (x: number, z: number) => SLICE && inRect(x, z, SITES.sauna.x - 2.2, SITES.sauna.x + 2.2, SITES.sauna.z - 2.2, SITES.sauna.z + 2.2);
-  for (const [x, z] of scatter(r, 2, ESTATE.w - 2, ESTATE.forestEdge, ESTATE.d - 2, 5.0, 1600, clearOf)) {
+    z > ESTATE.forestEdge + 1 && vegetationClear(x, z, 'small') && !inRect(x, z, 70, 132, 78, 119) && !inWood(x, z) &&
+    Math.hypot(x - LC.x, z - LC.z) > 5.5 && distToPolyline(x, z, DRIVEWAY) > 3 && Math.hypot(x - SITES.forecourt.x, z - SITES.forecourt.z) > 10.5;
+  for (const [x, z] of scatter(r, 2, ESTATE.w - 2, ESTATE.forestEdge, ESTATE.d - 2, 5.0, 2200, clearOf)) {
     const flower = r() < 0.55, v = r();
-    if (inBuilding(x, z)) continue;
-    if (flower) veg.smallThing('flower', x, z, 0.14, purple[Math.floor(v * 4)], 'garden');
-    else veg.smallThing('shrub', x, z, 0.4 + v * 0.3, '#5a8a3e', 'garden');
+    if (flower) veg.smallThing('flower', x, z, 0.14, purple[Math.floor(v * 4)], 'garden', terrainHeight(x, z));
+    else veg.smallThing('shrub', x, z, 0.4 + v * 0.3, '#5a8a3e', 'garden', terrainHeight(x, z));
   }
-  // soft meadow: grass tufts across the lawn (instanced, tiled so only nearby tiles draw)
-  for (const [x, z] of scatter(r, 2, ESTATE.w - 2, ESTATE.forestEdge - 4, ESTATE.d - 2, 2.2, 9000, (x, z) => clearOf(x, z) || (z > 118 && Math.hypot(x - LC.x, z - LC.z) > 4.5 && !inRect(x, z, 29, 45, 124, 139) && Math.hypot(x - SITES.pond.x, z - SITES.pond.z) > 4.2))) {
+  // soft meadow: grass tufts across the lawns (instanced, tiled so only nearby tiles draw)
+  for (const [x, z] of scatter(r, 2, ESTATE.w - 2, ESTATE.forestEdge - 4, ESTATE.d - 2, 2.2, 11000, (x, z) => clearOf(x, z) || (z > 118 && vegetationClear(x, z, 'small') && !inWood(x, z) && Math.hypot(x - LC.x, z - LC.z) > 4.5))) {
     const size = 0.25 + r() * 0.2, col = r() < 0.5 ? '#7fae4a' : '#94bc58';
-    if (inBuilding(x, z)) continue;
-    veg.smallThing('grass', x, z, size, col, `gr${Math.floor(x / 30)}_${Math.floor(z / 30)}`, terrainHeight(x, z));
+    veg.smallThing('grass', x, z, size, col, `gr${Math.floor(x / 40)}_${Math.floor(z / 40)}`, terrainHeight(x, z));
   }
   for (let i = 0; i < 18; i++) {
     const a = (i / 18) * Math.PI * 2, d = 0.9 + (i % 3) * 0.2;
     veg.smallThing(i % 4 === 0 ? 'shrub' : 'flower', SITES.forecourt.x + Math.cos(a) * d, SITES.forecourt.z + Math.sin(a) * d, i % 4 === 0 ? 0.35 : 0.14, i % 4 === 0 ? '#4f7f38' : purple[i % 4], 'garden', 0.46);
   }
   // hedges along the manor front, leaving the approach to the porch open
-  for (let x = 72.5; x < 107.6; x += 1.1) if (Math.abs(x - 90) > 5) veg.smallThing('shrub', x, 79.0, 0.55, '#4a7a36', 'garden');
+  for (let x = 72.5; x < 107.6; x += 1.1) if (Math.abs(x - 90) > 5) veg.smallThing('shrub', x, 79.15, 0.55, '#4a7a36', 'garden');
 }
 
 /** Landmarks whose name appears on the map only once visited (no puzzle answers are ever shown). */
@@ -489,6 +491,10 @@ export const MAP_SITES = [
   { id: 'lanterns', x: LANTERN_CIRCLE.x, z: LANTERN_CIRCLE.z, label: 'lantaarnkring' },
   { id: 'sauna', x: SITES.sauna.x, z: SITES.sauna.z, label: 'sauna' },
   { id: 'cottage', x: SITES.cottage.x, z: SITES.cottage.z, label: 'huisje' },
+  { id: 'lake', x: SITES.lakeView.x, z: SITES.lakeView.z, label: 'meer' },
+  { id: 'wellness', x: SITES.jacuzzi.x, z: SITES.jacuzzi.z, label: 'jacuzzi' },
+  { id: 'golf', x: SITES.golf.x, z: SITES.golf.z, label: 'golf' },
+  { id: 'wickerman', x: SITES.wickerman.x, z: SITES.wickerman.z, label: 'stroman' },
   { id: 'fork', x: SITES.fork.x, z: SITES.fork.z, label: 'wegwijzer' },
   { id: 'hill', x: SITES.hill.x, z: SITES.hill.z, label: 'heuvel' },
 ];

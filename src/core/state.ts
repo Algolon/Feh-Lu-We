@@ -6,6 +6,10 @@ import { parseSlice, type SliceState } from '../slice/schema';
 import { CLUES } from '../content/clues';
 import { SYMBOLS } from '../content/symbols';
 import { SERVICE, CATALOG, CONSOLE_SOCKETS } from '../content/canon';
+import { ESTATE } from '../world/layout';
+
+/** Valid saved-pose box for every scene (the home scene lies inside it): the estate extent with a 5 m margin. */
+export const POSE_BOUNDS = { x0: -5, x1: ESTATE.w + 5, z0: -5, z1: ESTATE.d + 5 };
 
 export const SAVE_KEY = 'fehluwe.save';
 export const SETTINGS_KEY = 'fehluwe.settings';
@@ -136,8 +140,9 @@ function pose(v: unknown): PlayerPose | null {
     yaw: finite(v.yaw, 0),
     pitch: Math.max(-1.4, Math.min(1.4, finite(v.pitch, 0))),
   };
-  // outside any scene's bounds → no pose (the game then uses spawn/checkpoints)
-  if (!(p.x > -5 && p.x < 185 && p.z > -5 && p.z < 155 && p.y > -5 && p.y < 12)) return null;
+  // outside any scene's bounds → no pose (the game then uses spawn/checkpoints). DEV-02: derived from the estate extent
+  // (200 × 180 + 5 m margin) instead of the old literal 180 × 150 box, so poses at the cottage plateau / east ridge survive
+  if (!(p.x > POSE_BOUNDS.x0 && p.x < POSE_BOUNDS.x1 && p.z > POSE_BOUNDS.z0 && p.z < POSE_BOUNDS.z1 && p.y > -5 && p.y < 12)) return null;
   return p;
 }
 const known = (reg: Record<string, unknown>) => (ids: string[]) => ids.filter((id) => Object.prototype.hasOwnProperty.call(reg, id));

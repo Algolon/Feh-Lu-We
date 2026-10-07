@@ -2,7 +2,7 @@
   "name": "feh-lu-we",
   "private": true,
   "version": "0.1.0",
-  "description": "Feh Lu We — mobile-first first-person puzzle exploration game (prototype)",
+  "description": "Feh Lu We \u2014 mobile-first first-person puzzle exploration game (prototype)",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,7 +11,9 @@
     "build": "vite build",
     "preview": "vite preview --port 4173 --strictPort",
     "e2e": "node scripts/e2e.mjs",
-    "e2e:dev01": "node scripts/e2e-dev01.mjs"
+    "e2e:dev01": "node scripts/e2e-dev01.mjs",
+    "e2e:dev02": "node scripts/e2e-dev02.mjs",
+    "views:dev02": "node scripts/dev02-views.mjs"
   },
   "engines": {
     "node": ">=20.19"

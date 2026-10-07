@@ -48,9 +48,14 @@ export class Vegetation {
     return m;
   }
 
-  tree(t: TreeSpec, chunk: string) {
+  /**
+   * `coarse` (DEV-02): trunks and pine cones — no level of detail, few triangles — are batched on this coarser chunk so
+   * a wide estate does not cost one draw call per small chunk; crowns keep `chunk` for their near/far LOD switch.
+   */
+  tree(t: TreeSpec, chunk: string, coarse?: string) {
     const n0 = [this.trunks.length, this.crowns.length, this.cones.length];
     this.treeParts(t, chunk);
+    if (coarse) { for (let i = n0[0]; i < this.trunks.length; i++) this.trunks[i].chunk = coarse; for (let i = n0[2]; i < this.cones.length; i++) this.cones[i].chunk = coarse; }
     if (this.drop?.(t.x, t.z, t.kind ?? 'oak')) { this.trunks.length = n0[0]; this.crowns.length = n0[1]; this.cones.length = n0[2]; }
   }
 
@@ -152,9 +157,10 @@ export class Vegetation {
     const matOf = (kind: string) => kind === 'rock' || kind === 'cap' || kind === 'stem' ? rockMat : kind === 'stump' ? k.M.bark : k.M.foliage;
     for (const t of this.small) push(`${t.kind}|${t.chunk}`, geoOf(t.kind), matOf(t.kind), t, false, t.chunk === 'garden' && t.kind !== 'grass' ? 'all' : 'small');
     const meshes: THREE.InstancedMesh[] = [];
-    for (const g of groups.values()) {
+    for (const [key, g] of groups) {
       const im = new THREE.InstancedMesh(g.geo, g.mat, g.items.length);
       im.userData.veg = g.lod;
+      im.name = key;
       g.items.forEach((it, i) => {
         im.setMatrixAt(i, it.m);
         im.setColorAt(i, it.c);

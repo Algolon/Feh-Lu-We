@@ -52,7 +52,7 @@ export const SRC = {
   folio: (f: FolioId) => `EB.folio.${f}`, // canon source ids (Puzzle v0.2)
   /** One inspection cluster per pair: both objects + the clip attached to them (Puzzle v0.2 §4.2, UX U01). */
   pair: (s: Subject) => CLUSTER_ID[s],
-  dsNote: 'OA.ds01', // A — hall, folded note by the gingerbread maquette
+  dsNote: 'OA.ds01', // A — hall, folded note at the maquette (DEV-02: a miniature of the game's house)
   dsAlbum: 'OB.ds01', // B — library reading plank: album page + loose letter, one reading cluster
   dsPhoto: 'OC.ds01', // C — U04 drying rack; faces front/back are recorded as OC.ds01.front / OC.ds01.back
   archiveCard: 's.b01.card',

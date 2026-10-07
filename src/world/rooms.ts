@@ -1,7 +1,7 @@
 // Authored rooms and portals: one source of truth for lighting relevance, the floor-aware map and
 // the "where am I" checks. Pure data + pure functions (unit-tested without a renderer).
 
-export type Floor = 'g' | 'u' | 'b' | 'x'; // ground, upstairs, basement/underground, outdoors/other building
+export type Floor = 'g' | 'u' | 'a' | 'b' | 'x'; // ground, upstairs, attic (v0.2), basement/underground, outdoors/other building
 
 export interface RoomDef {
   id: string;

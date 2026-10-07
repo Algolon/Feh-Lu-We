@@ -116,7 +116,7 @@ async function mainRoute() {
     await shot(page, '04-ds01-A-maquette-note');
     await step(page, 'close', () => T.closeModal());
     await measure('hall-maquette');
-    await page.evaluate(() => T.lookAt(88.0, 0.9, 96.0)); await shot(page, '04b-hall-maquette-view');
+    await page.evaluate(() => T.lookAt(85.5, 1.0, 94.6)); await shot(page, '04b-hall-maquette-view'); // DEV-02: maquette against the west wall
     // --- G04 library: B01 table
     await step(page, 'to the library', () => { S.walkLeg('toLibrary'); T.act('door.library', 'Openen: deur'); T.wait(1.2); S.walkLeg('intoLibrary'); });
     await step(page, 'B01 table panel', () => { T.act('b01.table', 'Bekijken: tekenbladen en vakken'); if (!document.querySelector('.b01-slots')) throw new Error('no panel'); });
@@ -329,7 +329,7 @@ async function culling() {
     log('culling: shell drawn from outside and inside; hall/library chunks shown in their rooms', r.forecourt.shell && r.hall.shell && r.hall.hallChunk && r.library.shell && r.library.lib, JSON.stringify(r));
     const veg = await page.evaluate(() => {
       // every vegetation instance (trees, bushes, plants) against the building footprints (plan metres)
-      const FP = { manor: [72, 108, 80, 110], wing: [108, 116, 92, 110], cons: [116, 130, 94, 112], cottage: [32, 42, 128, 136], shed: [39.5, 44.5, 37.2, 40.8], sauna: [132, 136, 100, 104], hut: [60.4, 65.6, 18.2, 20] };
+      const FP = { manor: [72, 108, 80, 110], wing: [108, 116, 92, 110], cons: [116, 130, 94, 112], cottage: [20, 30, 152, 165], jacuzzi: [139, 142.6, 101, 104.6], shed: [39.5, 44.5, 37.2, 40.8], sauna: [132, 136, 100, 104], hut: [60.4, 65.6, 18.2, 20] };
       const g = window.__game, m4 = new (g.camera.matrix.constructor)(), bad = [];
       let n = 0;
       g.world.scene.traverse((o) => {

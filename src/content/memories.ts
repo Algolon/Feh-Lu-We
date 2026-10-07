@@ -22,6 +22,10 @@ export const MEMORIES: Record<string, Memory> = {
     id: 'mem.hall.guestbook', where: 'Manor hall, guestbook on the console', title: 'Gastenboek in de hal',
     text: 'De laatste bladzijde is nog leeg, op één zin na: “Wie dit leest, is de eerste. Dat is nog nooit gebeurd.”',
   },
+  'mem.hall.maquette': {
+    id: 'mem.hall.maquette', where: 'Manor hall, maquette of this house on the table against the west wall (DEV-02)', title: 'Maquette van het huis',
+    text: 'Een maquette van dit huis, keurig op schaal: het hoofdgebouw met zijn grote schilddak, de dienstvleugel en de glazen serre ernaast. Langs de dakranden loopt een dun wit randje, precies zoals het glazuur op een peperkoekhuisje.',
+  },
   'mem.kitchen.list': {
     id: 'mem.kitchen.list', where: 'Manor kitchen, note on the counter', title: 'Boodschappenlijst',
     text: 'Stokbrood (veel). Kaas (meer). Iets groens, voor de vorm. Koffie voor een weeshuis. Onderaan, in een ander handschrift: “en marshmallows voor bij het vuur”.',
@@ -35,7 +39,7 @@ export const MEMORIES: Record<string, Memory> = {
     text: 'Een eindeloze reeks streepjes onder twee teamnamen die steeds zijn uitgeveegd en herschreven. Niemand weet meer wie er won.',
   },
   'mem.storage.box': {
-    id: 'mem.storage.box', where: 'Manor attic storage, cardboard box', title: 'Doos met spellen',
+    id: 'mem.storage.box', where: 'Manor attic, seasonal store (A03; moved there in DEV-02, same id)', title: 'Doos met spellen',
     text: 'Een stapel bordspellen. In elk doosje ontbreekt precies één onderdeel, en in elk doosje zit een onderdeel van een ander spel.',
   },
   'mem.reis.suitcase': {
@@ -47,11 +51,11 @@ export const MEMORIES: Record<string, Memory> = {
     text: 'Een logboek met waarnemingen. Bij bijna elke avond staat: “bewolkt”. Bij één avond: “helder — niemand keek, iedereen zat buiten bij het vuur”.',
   },
   'mem.garden.nestbox': {
-    id: 'mem.garden.nestbox', where: 'Old oak by the pond, nest box (optional botanical observation)', title: 'Briefje in het nestkastje',
+    id: 'mem.garden.nestbox', where: 'Old oak on the lake shore, nest box (optional botanical observation)', title: 'Briefje in het nestkastje',
     text: 'Geen vogels, wel een opgerold briefje: “Gevonden! Wie dit leest, heeft het herbarium echt gelezen.”',
   },
   'mem.pond.bench': {
-    id: 'mem.pond.bench', where: 'Garden pond bench near the cottage', title: 'Briefje op het bankje',
+    id: 'mem.pond.bench', where: 'Bench at the dry lake viewpoint (DEV-02: the pond became the lake; same id)', title: 'Briefje op het bankje',
     text: 'Hier zat altijd iemand met koffie te wachten tot de rest wakker werd. “Ochtenden zijn het mooiste deel,” staat er. “Zeg het niet tegen de rest.”',
   },
   'mem.sidegate.postbox': {
@@ -59,7 +63,7 @@ export const MEMORIES: Record<string, Memory> = {
     text: 'Een verbleekte kaart van de Veluwe. Op de achterkant: “Volgend jaar weer. Zelfde plek, zelfde mensen, nieuwe verhalen.”',
   },
   'mem.cottage.table': {
-    id: 'mem.cottage.table', where: 'Old cottage, card on the table', title: 'Kaart in het huisje',
+    id: 'mem.cottage.table', where: 'Portugal cottage on the plateau, card on the table', title: 'Kaart in het huisje',
     text: 'Fijn dat je er bent. Alles stond hier vroeger klaar. Dit jaar is de tafel ergens anders gedekt.',
   },
   'mem.gathering.keepsakes': {

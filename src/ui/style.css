@@ -132,7 +132,7 @@ textarea { width: 100%; min-height: 90px; font: inherit; font-size: 15px; border
 /* Start screen */
 #start { position: absolute; inset: 0; z-index: 30; display: flex; align-items: center; justify-content: center; text-align: center;
   background: radial-gradient(ellipse at 50% 30%, #6d4a2a 0%, #2b1d12 55%, #120c07 100%); padding: 20px; overflow-y: auto; }
-#start[hidden] { display: none; }
+#start[hidden], #start[hidden]:has(.start-home) { display: none; } /* the home screen rule below has equal specificity */
 #start .card { max-width: 560px; }
 #start h1 { font-size: clamp(42px, 10vw, 76px); margin: 0 0 4px; color: var(--amber-2); letter-spacing: 2px; text-shadow: 0 4px 18px rgba(0,0,0,.6); }
 #start .sub { font-size: 18px; margin: 0 0 22px; opacity: .9; }

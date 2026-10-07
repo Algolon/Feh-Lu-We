@@ -19,7 +19,16 @@ export interface Circle {
   solid: boolean;
   tag?: string;
 }
-export type Collider = Box | Circle;
+/** Vertical elliptic cylinder (the lake): solid, never an occluder; pushes out radially in the scaled frame. */
+export interface Ellipse {
+  kind: 'ellipse';
+  x: number; z: number; rx: number; rz: number; minY: number; maxY: number;
+  enabled: boolean;
+  occludes: false;
+  solid: boolean;
+  tag?: string;
+}
+export type Collider = Box | Circle | Ellipse;
 
 export interface Floor { minX: number; maxX: number; minZ: number; maxZ: number; y: number }
 export interface Ramp {
@@ -72,6 +81,12 @@ export class CollisionWorld {
     const c: Circle = { kind: 'circle', x, z, r, minY, maxY, enabled: opts.enabled ?? true, occludes: opts.occludes ?? false, solid: true, tag: opts.tag };
     this.insert(c, x - r, x + r, z - r, z + r);
     return c;
+  }
+
+  addEllipse(x: number, z: number, rx: number, rz: number, minY: number, maxY: number, tag?: string): Ellipse {
+    const e: Ellipse = { kind: 'ellipse', x, z, rx, rz, minY, maxY, enabled: true, occludes: false, solid: true, tag };
+    this.insert(e, x - rx, x + rx, z - rz, z + rz);
+    return e;
   }
 
   /** Interaction-only occluder: blocks line of sight, never movement (ceilings/floors between storeys). */
@@ -165,6 +180,13 @@ export class CollisionWorld {
             else p.z = c.maxZ + r;
           }
           moved = hit = true;
+        } else if (c.kind === 'ellipse') {
+          // inflate by the body radius, push out along the ray from the centre (scaled frame)
+          const ax = c.rx + r, az = c.rz + r, dx = p.x - c.x, dz = p.z - c.z;
+          const q = (dx / ax) ** 2 + (dz / az) ** 2;
+          if (q >= 1) return;
+          if (q < 1e-12) { p.x = c.x + ax; } else { const k = 1 / Math.sqrt(q) + 1e-4; p.x = c.x + dx * k; p.z = c.z + dz * k; }
+          moved = hit = true;
         } else {
           const dx = p.x - c.x, dz = p.z - c.z;
           const rr = r + c.r;
@@ -211,6 +233,8 @@ export class CollisionWorld {
         const cx = Math.min(Math.max(x, c.minX), c.maxX);
         const cz = Math.min(Math.max(z, c.minZ), c.maxZ);
         if ((x - cx) ** 2 + (z - cz) ** 2 < r * r - 1e-6) o = true;
+      } else if (c.kind === 'ellipse') {
+        if (((x - c.x) / (c.rx + r)) ** 2 + ((z - c.z) / (c.rz + r)) ** 2 < 1 - 1e-6) o = true;
       } else if ((x - c.x) ** 2 + (z - c.z) ** 2 < (r + c.r) ** 2 - 1e-6) o = true;
     });
     return o;
@@ -227,7 +251,7 @@ export class CollisionWorld {
   segmentBlocked(ax: number, ay: number, az: number, bx: number, by: number, bz: number, ignore?: ReadonlySet<Collider>): boolean {
     let blocked = false;
     this.forEachNear(Math.min(ax, bx), Math.max(ax, bx), Math.min(az, bz), Math.max(az, bz), (c) => {
-      if (blocked || !c.enabled || !c.occludes || ignore?.has(c)) return;
+      if (blocked || !c.enabled || !c.occludes || ignore?.has(c)) return; // water (ellipse) never occludes
       if (c.kind === 'box') {
         if (segBox(ax, ay, az, bx, by, bz, c)) blocked = true;
       } else {
