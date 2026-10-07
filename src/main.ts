@@ -64,6 +64,7 @@ function boot() {
   game.ui.showStart({
     hasSave: game.hasSave(), hasBackup: game.hasBackup(),
     onContinue: () => begin(false), onNew: () => begin(true),
+    onSettings: () => game.openPause(true),
     onRestore: () => { if (game.restoreBackup()) begin(false); },
   });
 }

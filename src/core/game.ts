@@ -463,10 +463,11 @@ export class Game implements GameApi {
       },
     });
   }
-  openPause() {
+  openPause(startScreen = false) {
     const canLock = matchMedia('(pointer: fine)').matches && 'requestPointerLock' in HTMLElement.prototype;
     const canFs = !!document.documentElement.requestFullscreen && !document.fullscreenElement;
     this.ui.pause(this.settings, {
+      startScreen,
       playMinutes: Math.round(this.state.stats.activeMs / 60000),
       build: BUILD,
       onChange: (s) => {
@@ -477,9 +478,9 @@ export class Game implements GameApi {
         this.applyQuality(qualityChanged);
       },
       onRestart: () => this.wipeAndReload(),
-      onPointerLock: canLock ? () => this.input.requestPointerLock() : undefined,
+      onPointerLock: canLock && !startScreen ? () => this.input.requestPointerLock() : undefined,
       onFullscreen: canFs ? () => document.documentElement.requestFullscreen?.().catch(() => {}) : undefined,
-      onMap: this.state.scene === 'estate' ? () => this.openMap(() => this.openPause()) : undefined,
+      onMap: !startScreen && this.state.scene === 'estate' ? () => this.openMap(() => this.openPause()) : undefined,
     });
   }
   private key(code: string) {
