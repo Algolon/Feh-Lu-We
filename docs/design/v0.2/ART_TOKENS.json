@@ -1,0 +1,114 @@
+{
+  "project": "Feh Lu We",
+  "version": "0.1",
+  "status": "proposed_sample_only",
+  "basisCommit": "338e65617e51385bae557f573ba092af5a10f89d",
+  "contract": "Design specification, not a drop-in game API. Preserve canonical SymbolDef colors and gameplay IDs.",
+  "units": {"world": "metres", "ui": "CSS px", "animation": "ms"},
+  "worldBaseColor": {
+    "plaster": {"hex": "#E4D6BA", "source": "existing_LIV.breast"},
+    "joinery": {"hex": "#E2D6BC", "source": "existing_LIV.joinery"},
+    "sandstone": {"hex": "#D2C3A2", "source": "existing_LIV.stone"},
+    "oak": {"hex": "#7E5636", "source": "existing_LIV.tableWood"},
+    "walnut": {"hex": "#4E3320", "source": "existing_LIV.frameWood"},
+    "moss": {"hex": "#62704A", "source": "existing_LIV.sofa"},
+    "ochre": {"hex": "#B3813F", "source": "existing_LIV.chair"},
+    "oxblood": {"hex": "#7A2E2A", "source": "existing_LIV.curtain"},
+    "brass": {"hex": "#C9A14E", "source": "existing_LIV.brass"},
+    "ceramicBlue": {"hex": "#6F91A6", "source": "new_proposal"},
+    "water": {"hex": "#668F89", "source": "new_proposal"}
+  },
+  "uiColor": {
+    "paper": "#F5EAD2",
+    "paperRaised": "#FFF8E8",
+    "ink": "#2B2118",
+    "focus": "#D9A441",
+    "hudSurface": "#241F1A",
+    "hudOpacityProposal": 0.90,
+    "error": "#8F3F36",
+    "success": "#456548",
+    "rule": "State must also use a distinct shape and accurate text label. Focus and selection use ink on amber; do not use light text on amber without checking contrast."
+  },
+  "type": {
+    "titleStack": "Georgia, 'Iowan Old Style', Palatino, serif",
+    "bodyStack": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+    "codeStack": "ui-monospace, SFMono-Regular, Consolas, monospace",
+    "body": 16,
+    "cluePreferred": 18,
+    "label": [14, 16],
+    "metadataMinimum": 13,
+    "title": [22, 28],
+    "lineHeight": [1.45, 1.55]
+  },
+  "uiGeometryProposal": {
+    "controlMin": [48, 48],
+    "primaryActionMinHeight": 64,
+    "rule": "Do not shrink existing 52px HUD or 72px action solely to match this proposal. Safe-area insets remain authoritative.",
+    "panelRadius": 12,
+    "controlRadius": 8,
+    "spacing": [8, 12, 16, 24],
+    "iconStandard": 32,
+    "functionalIconStrokeAt32": 2,
+    "paperGrainOpacityMax": 0.03,
+    "paperGrainBehindEvidence": 0
+  },
+  "stateAppearanceProposal": {
+    "viewed": {"shape": "circle_badge", "label": "Bekeken", "rule": "Does not mean understood or solved."},
+    "hypothesis": {"shape": "dashed_frame", "label": "Hypothese", "rule": "Requires UX approval and actual user hypothesis data; never infer solutions automatically."},
+    "selected": {"shape": "inner_border", "label": "Geselecteerd"},
+    "blocked": {"shape": "closed_lock", "label": "Existing accurate blocked-state explanation"},
+    "error": {"shape": "cross", "label": "Nog niet juist"},
+    "solved": {"shape": "check", "label": "Opgelost", "rule": "Authoritative game state only."}
+  },
+  "motionProposal": {
+    "focus": [100, 150],
+    "press": [80, 120],
+    "result": [200, 350],
+    "reducedMotion": "Immediate state changes; static informative water, foliage and fire alternatives."
+  },
+  "edgesProposal": {
+    "timberPaintLarge": [0.004, 0.012],
+    "handledEdges": [0.008, 0.020],
+    "upholstery": [0.025, 0.060],
+    "stoneProfile": [0.010, 0.030],
+    "rule": "Apply only where silhouette or light catch improves. Preserve broad firm planes and canonical evidence shapes."
+  },
+  "authoredShadingProposal": {
+    "generalLinearVertexMultiplier": [0.80, 1.00],
+    "recessMinimumStartingPoint": 0.65,
+    "contactFalloffMetres": [0.15, 0.20],
+    "rule": "No baked directional lamp glow; contact occlusion is distinct from actual lighting. Firebox soot is an explicit exception."
+  },
+  "materials": {
+    "plaster": {"model": "MeshLambertMaterial", "detail": "calm broad color"},
+    "timber": {"model": "MeshLambertMaterial", "map": "shared near-neutral grain", "rule": "grain follows member direction"},
+    "upholstery": {"model": "MeshLambertMaterial", "map": "shared near-neutral weave", "rule": "shape before weave; no geometric fibers"},
+    "stone": {"model": "MeshLambertMaterial", "rule": "coursing on built stone; broad planes on natural rock"},
+    "brass": {"model": "MeshPhongMaterial", "specular": "#D8B26A", "shininess": 38, "source": "existing_artMats"},
+    "ceramic": {"model": "MeshPhongMaterial", "specular": "#6A6A66", "shininess": 70, "source": "existing_artMats"},
+    "foliage": {"model": "preserve_current_woodkit_atlas", "rule": "preserve silhouette clusters across LODs; avoid black undersides"},
+    "paper": {"model": "CSS_SVG_Canvas_context_dependent", "rule": "canonical evidence source, no grain behind clue"}
+  },
+  "lightingBaseline": {
+    "toneMapping": "ACES",
+    "exposure": 1.15,
+    "status": "existing_sample_recommendation_not_global_approval",
+    "interiorFillGain": 0.72,
+    "interiorFixtureGain": 1.35,
+    "interiorSky": "#E4EBF2",
+    "interiorBounce": "#857160",
+    "woodlandFog": "#C4CFC0",
+    "woodlandSky": "#D0DEEB",
+    "woodlandEarth": "#6E5A3C",
+    "woodlandSun": "#FFF0C8",
+    "rule": "Keep comparisons at identical light state and dusk. No extra shadow maps, light slots or global tonemap change in first sample."
+  },
+  "acceptance": {
+    "uiBodyContrast": 4.5,
+    "uiLargeTextAndFunctionalContourContrast": 3,
+    "callsGuide": 150,
+    "trianglesGuide": 250000,
+    "phoneTargetFrameBudgetMs": 33.3,
+    "rule": "Guides are not device-performance evidence. Report pre-existing overruns and real-device measurements separately."
+  }
+}

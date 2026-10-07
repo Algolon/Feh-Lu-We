@@ -3,6 +3,8 @@ import { Game, TEST_HOOKS } from './core/game';
 import { UI } from './ui/ui';
 import { REVIEW } from './core/artflags';
 import { reviewState, showReviewStart, mountReviewBar } from './ui/review';
+import { showSliceStart } from './slice/start';
+import { ROUTE as SLICE_ROUTE } from './slice/placement';
 
 function webglAvailable(): boolean {
   if (new URLSearchParams(location.search).has('nowebgl')) return false; // test hook for the failure path
@@ -39,6 +41,7 @@ function boot() {
     return;
   }
   if (TEST_HOOKS) (window as unknown as { __game: Game }).__game = game;
+  if (TEST_HOOKS && REVIEW === 'dev01') (window as unknown as { __dev01Route: unknown }).__dev01Route = SLICE_ROUTE; // e2e walks the as-built route
   let starting = false;
   const begin = async (fresh: boolean) => {
     if (starting) return; // Start/Continue are idempotent while loading
@@ -49,12 +52,17 @@ function boot() {
     await new Promise((r) => setTimeout(r, 30)); // let the loading state paint before the synchronous build
     try {
       await game.start(fresh);
-      if (REVIEW) mountReviewBar(game);
+      if (REVIEW && REVIEW !== 'dev01') mountReviewBar(game);
     } catch (e) {
       console.error(e);
       fail('Er ging iets mis bij het laden van de wereld. Herlaad de pagina; je bewaarde voortgang blijft staan.');
     }
   };
+  if (REVIEW === 'dev01') {
+    // DEV-01 slice review: own save namespace, its own start card (no art comparison bar)
+    showSliceStart(game, () => begin(false));
+    return;
+  }
   if (REVIEW) {
     // art-review mode: sandboxed state (never the player's save), its own start card and comparison bar
     game.state = reviewState();

@@ -11,6 +11,8 @@ export interface MapView {
   pose?: { x: number; y: number; z: number; yaw: number };
   visited?: (id: string) => boolean;
   sites: MapSite[];
+  /** Room names on the floor plans (default true). The DEV-01 review hides them: no room labels anywhere. */
+  labels?: boolean;
 }
 export type MapLevel = 'estate' | 'g' | 'u' | 'b' | 'ug';
 export const MAP_LEVELS: { id: MapLevel; label: string }[] = [
@@ -81,7 +83,7 @@ export function floorPlanSvg(level: MapLevel, v: MapView): string {
     const lbl = vertical
       ? `<text transform="translate(${X((r.x0 + r.x1) / 2)},${Z((r.z0 + r.z1) / 2)}) rotate(-90)" font-size="${Math.max(8, Math.min(12, h / (r.name.length * 0.65))).toFixed(1)}" text-anchor="middle" dominant-baseline="middle">${r.name}</text>`
       : `<text x="${X((r.x0 + r.x1) / 2)}" y="${Z((r.z0 + r.z1) / 2)}" font-size="${fs.toFixed(1)}" text-anchor="middle" dominant-baseline="middle">${r.name}</text>`;
-    return `<rect x="${X(r.x0)}" y="${Z(r.z1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" fill="${r.id === 'cons' ? '#cfe8e4' : fills[level]}" stroke="#3a2a1a" stroke-width="1.5"/>${lbl}`;
+    return `<rect x="${X(r.x0)}" y="${Z(r.z1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" fill="${r.id === 'cons' ? '#cfe8e4' : fills[level]}" stroke="#3a2a1a" stroke-width="1.5"/>${v.labels === false ? '' : lbl}`;
   }).join('');
   const onLevel = v.pose && ROOMS.some((r) => roomLevel(r) === level && v.pose!.x >= r.x0 && v.pose!.x <= r.x1 && v.pose!.z >= r.z0 && v.pose!.z <= r.z1 && v.pose!.y + 0.8 >= r.y0 && v.pose!.y + 0.8 <= r.y1);
   const me = onLevel ? arrow(X(v.pose!.x), Z(v.pose!.z), v.pose!.yaw) : '';

@@ -233,3 +233,40 @@ body.reduced-motion * { transition: none !important; animation: none !important;
   #start .start-actions { gap: 6px; }
   #start .start-brand { width: 90px; }
 }
+
+/* DEV-01 slice review (?review=dev01): notebook, B01 table, source overlays. New class names only. */
+.slice-art { width: 100%; max-width: 520px; height: auto; background: transparent; }
+.zoombox { overflow: auto; -webkit-overflow-scrolling: touch; touch-action: pan-x pan-y; border-radius: 10px; max-height: 60vh; }
+.zoombox.zoomed .slice-art { width: 200%; max-width: none; }
+.btn.small { min-height: 48px; font-size: 14px; padding: 0 12px; }
+.kind { display: inline-block; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; border-radius: 8px; padding: 1px 7px; margin: 0 0 4px; background: #e8dcc0; color: #5a4630; }
+.kind-obs { background: #dfe6ee; color: #2f3f5f; }
+.kind-own { background: #f3e2c0; color: #6b4426; }
+.kind-res { background: #dfe9c8; color: #2f4a1a; }
+.kind-mem { background: #eadcf0; color: #4a2f5a; }
+.kind-hint { background: #fff0c8; color: #7a5a10; }
+.prov { font-size: 12px; opacity: .7; margin-left: auto; white-space: nowrap; }
+.nb-obs summary { gap: 6px; flex-wrap: wrap; }
+.face-back { border-top: 1px dashed #c9a46a; margin-top: 8px; padding-top: 6px; }
+.register { background: #fff8e8; border-radius: 12px; padding: 8px 12px; border-left: 5px solid #8a6a3a; }
+.reg-topic p { margin: 2px 0 8px; font-style: italic; }
+.attention .btn.on, .tabs .btn.on { background: var(--amber); }
+.own { background: #fff8e8; border-radius: 12px; padding: 8px 12px; margin: 8px 0; }
+.own:not(.mem) { border: 2px dashed #c9a46a; } /* UX v0.2 §2.1: own idea = dashed border + "Mijn idee" */
+.result { margin: 4px 0; }
+.riddle { background: #efe2c2; border-radius: 12px; padding: 8px 12px; margin: 6px 0 10px; }
+.slice-hint { border-left-style: dashed; background: #fffbea; }
+.slice-hint p { margin: 2px 0 0; }
+.feedback { min-height: 1.4em; text-align: center; font-weight: bold; }
+.b01-slots, .b01-folios { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 8px 0; }
+.b01-slots .pslot { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 120px; }
+.b01-slots .pslot-label { display: flex; flex-direction: column; align-items: center; font-size: 13px; }
+.b01-slots .slot-empty { min-height: 72px; min-width: 120px; border-style: dashed; }
+.folio-card { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.folio-card.sel .piece { box-shadow: 0 0 0 3px #e4a54a inset; background: #ffe2a8; }
+.btn.piece { display: inline-flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 10px; min-height: 72px; }
+.folio-thumb svg { display: block; height: auto; }
+.pinpick label.set { font-size: 14px; }
+@media (max-width: 520px) { .b01-slots .pslot { min-width: 96px; } .b01-slots .slot-empty { min-width: 96px; } .tabs { flex-wrap: wrap; } }
+.b01-slots .pslot-label svg { width: 56px; height: 56px; }
+.zoombox:not(.zoomed) .slice-art { max-height: 46vh; width: auto; max-width: 100%; margin: 0 auto; }

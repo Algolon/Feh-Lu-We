@@ -18,7 +18,8 @@ import {
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place } from '../interactions/props';
 import { forestMapTexture } from './textures';
 import { buildHearth } from './hearth';
-import { ART } from '../core/artflags';
+import { ART, SLICE } from '../core/artflags';
+import { sliceHall, sliceLibraryTable, sliceUpstairs } from '../slice/world';
 import { livingRoomV2 } from './livingSample';
 import { ContactShadows } from './artkit';
 import { makeFire } from './fire';
@@ -231,7 +232,8 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   place(seals, 91.88, GF + 0.95, 99.55, 0);
   w.scene.add(seals);
   makeInspect(w, g, { id: 'inspect.basementDoor', obj: seals, clue: 'c.basementDoor', hit: [0.2, 0.7, 0.4], hitOffset: [0, 0.3, 0], label: 'Bekijken: zegelafdrukken' });
-  plaques(w, c);
+  // DEV-01: no room-name plaques and no emblem evidence on the doors (B01 v0.2 is solved from the rooms' contents)
+  if (!SLICE) plaques(w, c);
 }
 
 /** Enamel room plaques: emblem + room name, drawn into one atlas (one draw call for all plaques). */
@@ -317,7 +319,8 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   const ledger = compound((b) => { box(b, k.M.paint, '#5a2a22', 0, 0, 0, 0.24, 0.05, 0.32); box(b, k.M.paint, '#efe2c2', 0.01, 0.006, 0, 0.22, 0.04, 0.3); box(b, k.M.paint, '#c9a44c', -0.1, 0.051, 0.12, 0.04, 0.003, 0.04); });
   ledger.position.set(-0.18, -0.08, 0);
   hallDrawer.slider.add(ledger);
-  makePickup(w, g, { id: 'pk.ledger', item: 'ledger', obj: ledger, available: hallDrawer.isOpen, hit: [0.3, 0.12, 0.36], after: () => g.inspect('c.ledger') });
+  // DEV-01: picking the register up does not read it (pickup ≠ observation); it is read from the bag
+  makePickup(w, g, { id: 'pk.ledger', item: 'ledger', obj: ledger, available: hallDrawer.isOpen, hit: [0.3, 0.12, 0.36], after: SLICE ? undefined : () => g.inspect('c.ledger') });
   const shedKey = compound((b) => { box(b, k.M.paint, '#8a5a3a', 0, 0, 0, 0.05, 0.015, 0.15); box(b, k.M.wood, '#a8743f', 0, 0, 0.11, 0.08, 0.02, 0.07); });
   shedKey.position.set(0.22, -0.08, 0);
   hallDrawer.slider.add(shedKey);
@@ -328,6 +331,7 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   makeInspect(w, g, { id: 'mem.hall.guestbook', obj: gb, clue: 'mem.hall.guestbook', hit: [0.4, 0.2, 0.35] });
   const tl = tableLamp(w, cx, GF + 0.89, cz + 0.45);
   makeLamp(w, g, { id: 'lamp.hallConsole', ...tl, name: 'lamp', defaultOn: false, hit: [0.4, 0.7, 0.4], intensity: 4, distance: 6 });
+  if (SLICE) sliceHall(w, g, c); // DEV-01 DS01 A: maquette + note against the hall's west wall
 
   // ---------------------------------------------------------------- living room (west, front)
   if (ART.set === 'sample') {
@@ -443,6 +447,15 @@ function library(w: World, g: GameApi, c: Ctx) {
   box(c.b, k.M.wood, '#5a3a22', tx, GF + 0.74, tz, 1.1, 0.07, 2.2, { chunk: c.chunk, uv: 1 });
   for (const sx of [-1, 1]) for (const sz of [-1, 1]) box(c.b, k.M.wood, '#4a2f1a', tx + sx * 0.45, GF, tz + sz * 0.95, 0.09, 0.74, 0.09, { chunk: c.chunk });
   c.col.addBox(tx - 0.55, tx + 0.55, tz - 1.1, tz + 1.1, 0, 0.85);
+  const deskDrawer = makeDrawer(w, g, { id: 'library.desk', x: tx + 0.36, y: GF + 0.68, z: tz, yaw: Math.PI / 2, w: 0.9, h: 0.12, d: 0.6, color: '#6b4426', unlock: 'lock.libraryDesk', lockedLabel: 'Lade (dicht)', onLocked: () => g.toast(SLICE ? 'De lade van de leestafel zit dicht. Er zit geen sleutelgat in.' : 'De lade van de leestafel zit dicht. Een kaartje op tafel: “Elk boek terug in het vak van zijn kamer.”') });
+  if (SLICE) sliceLibraryTable(w, g, c, deskDrawer); // DEV-01 B01 v0.2 table + DS01 B (album, drying letter)
+  else libraryCatalogue(w, g, c, tx, tz, deskDrawer);
+  libraryRest(w, g, c, tx, tz);
+}
+
+/** Iteration-3 catalogue (emblem → room → tab). Replaced by B01 v0.2 in the DEV-01 review build. */
+function libraryCatalogue(w: World, g: GameApi, c: Ctx, tx: number, tz: number, deskDrawer: ReturnType<typeof makeDrawer>) {
+  const k = c.k;
   chair(c, tx + 0.95, tz - 0.5, GF, -Math.PI / 2, '#3f5a6a');
   chair(c, tx + 0.95, tz + 0.5, GF, -Math.PI / 2, '#3f5a6a');
   const sockets = new THREE.Group();
@@ -497,7 +510,6 @@ function library(w: World, g: GameApi, c: Ctx) {
     label: () => (placeSolved(g.state, 'cat') ? null : 'Boeken en vakken bekijken'),
     run: () => { if (addClue(g.state, 'c.catalogDesk')) g.changed(); g.openPanel('catalog'); },
   });
-  const deskDrawer = makeDrawer(w, g, { id: 'library.desk', x: tx + 0.36, y: GF + 0.68, z: tz, yaw: Math.PI / 2, w: 0.9, h: 0.12, d: 0.6, color: '#6b4426', unlock: 'lock.libraryDesk', lockedLabel: 'Lade (dicht)', onLocked: () => g.toast('De lade van de leestafel zit dicht. Een kaartje op tafel: “Elk boek terug in het vak van zijn kamer.”') });
   const card = compound((b) => { box(b, k.M.paint, '#f5eedc', 0, 0, 0, 0.12, 0.004, 0.18); box(b, k.M.paint, '#c9a44c', 0.03, 0.006, 0.05, 0.03, 0.01, 0.1); });
   card.position.set(0.05, -0.04, 0.1);
   deskDrawer.slider.add(card);
@@ -516,6 +528,10 @@ function library(w: World, g: GameApi, c: Ctx) {
   place(gbk, lec.x, lec.y, lec.z, Math.PI / 2);
   w.scene.add(gbk);
   makeInspect(w, g, { id: 'inspect.guestbookTabs', obj: gbk, clue: 'c.guestbookTabs', hit: [0.6, 0.4, 0.5], hitOffset: [0, 0.1, 0], label: 'Lezen: gastenboek' });
+}
+
+function libraryRest(w: World, g: GameApi, c: Ctx, tx: number, tz: number) {
+  const k = c.k;
   // second lectern: notes on secret writing (the worked example — not the answer)
   const lec2 = lectern(c, 73.8, 101.1, GF, Math.PI / 2);
   const nt = compound((b) => { box(b, k.M.paint, '#3f4a3a', 0, 0, 0, 0.42, 0.03, 0.3, { rx: -0.45 }); box(b, k.M.paint, '#f2e8d2', 0, 0.025, 0, 0.4, 0.015, 0.28, { rx: -0.45 }); });
@@ -710,7 +726,7 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   wardrobe(c, 81.6, 86.35, R0, Math.PI, 1.4, '#7a4f2c');
   curtains(c, 75.5, 80.45, R0 + 0.75, 0, 1.0, 1.9, '#c8643a');
   curtains(c, 82.5, 80.45, R0 + 0.75, 0, 1.0, 1.9, '#c8643a');
-  canvasPanel(w, 78.6, R0 + 1.6, 86.7, Math.PI, 1.1, 0.75, (x, W, H) => { const gr = x.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, '#f6e2b8'); gr.addColorStop(1, '#e8d2a0'); x.fillStyle = gr; x.fillRect(0, 0, W, H); x.strokeStyle = '#7a5a3a'; x.lineWidth = 3; x.beginPath(); x.moveTo(0, H * 0.7); for (let i = 0; i <= 10; i++) x.lineTo((W * i) / 10, H * (0.55 + 0.12 * Math.sin(i * 1.3))); x.stroke(); x.beginPath(); x.arc(W * 0.75, H * 0.3, 26, 0, Math.PI * 2); x.stroke(); x.font = 'italic 22px Georgia'; x.fillStyle = '#7a5a3a'; x.fillText('onderweg', 20, H - 18); }, 256);
+  canvasPanel(w, 78.6, R0 + 1.6, 86.7, Math.PI, 1.1, 0.75, (x, W, H) => { const gr = x.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, '#f6e2b8'); gr.addColorStop(1, '#e8d2a0'); x.fillStyle = gr; x.fillRect(0, 0, W, H); x.strokeStyle = '#7a5a3a'; x.lineWidth = 3; x.beginPath(); x.moveTo(0, H * 0.7); for (let i = 0; i <= 10; i++) x.lineTo((W * i) / 10, H * (0.55 + 0.12 * Math.sin(i * 1.3))); x.stroke(); x.beginPath(); x.arc(W * 0.75, H * 0.3, 26, 0, Math.PI * 2); x.stroke(); x.font = 'italic 22px Georgia'; x.fillStyle = '#7a5a3a'; if (!SLICE) x.fillText('onderweg', 20, H - 18); /* DEV-01R: no label-like words in clue rooms */ }, 256);
   part(c, k.M.wood, '#6b4426', 83.8, 84.4, -Math.PI / 2, 0, R0, 0, 0.9, 0.5, 0.5, 1);
   const suitcase = compound((b) => {
     box(b, k.M.paint, '#a8743f', 0, 0, 0, 0.8, 0.16, 0.5);
@@ -728,7 +744,7 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   bed2(c, 75.0, 90.4, R0, Math.PI / 2, '#26344a', '#4a3a2a');
   bedside(c, 73.4, 92.4, R0, Math.PI / 2, '#4a3a2a');
   curtains(c, 72.45, 90.0, R0 + 0.75, Math.PI / 2, 1.0, 1.9, '#2f3f5f');
-  canvasPanel(w, 78.6, R0 + 1.6, 93.9, Math.PI, 1.4, 0.95, (x, W, H) => { x.fillStyle = '#1c2a44'; x.fillRect(0, 0, W, H); for (let i = 0; i < 60; i++) { x.fillStyle = i % 5 ? '#f4ecd8' : '#e8c547'; x.beginPath(); x.arc((Math.sin(i * 12.9) * 0.5 + 0.5) * W, (Math.sin(i * 7.3) * 0.5 + 0.5) * H, i % 7 ? 2 : 4, 0, Math.PI * 2); x.fill(); } x.strokeStyle = 'rgba(244,236,216,.5)'; x.lineWidth = 1.5; x.beginPath(); x.moveTo(W * 0.2, H * 0.3); x.lineTo(W * 0.32, H * 0.42); x.lineTo(W * 0.45, H * 0.36); x.lineTo(W * 0.58, H * 0.5); x.stroke(); x.font = 'italic 20px Georgia'; x.fillStyle = '#f4ecd8'; x.fillText('sterrenkaart', 16, H - 14); }, 384);
+  canvasPanel(w, 78.6, R0 + 1.6, 93.9, Math.PI, 1.4, 0.95, (x, W, H) => { x.fillStyle = '#1c2a44'; x.fillRect(0, 0, W, H); for (let i = 0; i < 60; i++) { x.fillStyle = i % 5 ? '#f4ecd8' : '#e8c547'; x.beginPath(); x.arc((Math.sin(i * 12.9) * 0.5 + 0.5) * W, (Math.sin(i * 7.3) * 0.5 + 0.5) * H, i % 7 ? 2 : 4, 0, Math.PI * 2); x.fill(); } x.strokeStyle = 'rgba(244,236,216,.5)'; x.lineWidth = 1.5; x.beginPath(); x.moveTo(W * 0.2, H * 0.3); x.lineTo(W * 0.32, H * 0.42); x.lineTo(W * 0.45, H * 0.36); x.lineTo(W * 0.58, H * 0.5); x.stroke(); x.font = 'italic 20px Georgia'; x.fillStyle = '#f4ecd8'; if (!SLICE) x.fillText('sterrenkaart', 16, H - 14); /* DEV-01R */ }, 384);
   telescope(c, 82.6, 91.4, R0, -Math.PI / 2 - 0.4);
   table(c, 83.9, 93.0, R0, 0.6, 0.5, 0, '#4a3a2a', 0.7);
   const logbook = compound((b) => { box(b, k.M.paint, '#2f3f5f', 0, 0, 0, 0.2, 0.03, 0.28); box(b, k.M.paint, '#efe2c2', 0.005, 0.005, 0, 0.18, 0.025, 0.26); });
@@ -736,7 +752,8 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   w.scene.add(logbook);
   makeInspect(w, g, { id: 'mem.sterren.telescope', obj: logbook, clue: 'mem.sterren.telescope', hit: [0.4, 0.2, 0.4], label: 'Lezen: logboek' });
   const sl = tableLamp(w, 73.4, R0 + 0.59, 92.4);
-  makeLamp(w, g, { id: 'lamp.sterren', ...sl, name: 'lamp', defaultOn: false, hit: [0.4, 0.7, 0.4], intensity: 4, distance: 6, patch: { y: R0 + 0.03, r: 1.0 } });
+  // DEV-01: on by default so the B01 evidence is readable on arrival
+  makeLamp(w, g, { id: 'lamp.sterren', ...sl, name: 'lamp', defaultOn: SLICE, hit: [0.4, 0.7, 0.4], intensity: 4, distance: 6, patch: { y: R0 + 0.03, r: 1.0 } });
   // ---------------------------------------------------------------- bathroom
   bathtub(c, 86.0, 107.6, R0, 0);
   box(c.b, k.M.paint, '#f4f1ea', 89.3, R0, 105.0, 0.5, 0.85, 0.45, { chunk: c.chunk });
@@ -759,7 +776,8 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   place(herb, 104.4, R0 + 0.76, 87.8, 0.2);
   w.scene.add(herb);
   makeInspect(w, g, { id: 'inspect.herbarium', obj: herb, clue: 'c.herbarium', hit: [0.6, 0.25, 0.5], label: 'Lezen: herbarium' });
-  for (let i = 0; i < 4; i++) {
+  // botanical prints; DEV-01 drops them (they reuse the old emblem drawings: no second emblem system)
+  if (!SLICE) for (let i = 0; i < 4; i++) {
     const z = 82.5 + i * 3.4;
     canvasPanel(w, 107.5, R0 + 1.6, z, -Math.PI / 2, 0.5, 0.65, (x, W, H) => { x.fillStyle = '#f2e8d2'; x.fillRect(0, 0, W, H); drawSymbol(x, ['blad', 'e.varen', 'blad', 'e.varen'][i], W * 0.15, H * 0.15, W * 0.7); }, 128, '#8a6a3a');
   }
@@ -775,6 +793,7 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   c.col.addCircle(98.5, 102.5, 0.4, R0, R0 + 0.5);
   makeInspect(w, g, { id: 'mem.storage.box', obj: memBox, clue: 'mem.storage.box', hit: [0.7, 0.5, 0.6] });
   staticLantern(c, w, 101.3, UCEIL - 0.6, 104, 0.5, 0, 2.5, 6);
+  if (SLICE) sliceUpstairs(w, g, c); // DEV-01 B01 clusters (U04/U05/U10) + DS01 C (drying rack in U04)
   c.chunk = base;
 }
 

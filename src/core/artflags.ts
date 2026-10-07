@@ -3,6 +3,7 @@
 //
 //   ?review=living      art-review mode: isolated in-memory save, starts in the living room, comparison bar
 //   ?review=boslust     the same for the BOSLUST exterior sample (starts at the fork signpost)
+//   ?review=dev01       DEV-01 structural & systems slice (own persistent save namespace, see src/slice/)
 //   &art=base|sample    which living-room asset set to build (living review defaults to "sample")
 //   &ext=base|sample    which BOSLUST-approach asset set to build (boslust review defaults to "sample")
 //   &light=base|sample  interior lighting treatment (review mode defaults to "sample")
@@ -19,11 +20,13 @@ const q = typeof location !== 'undefined' ? new URLSearchParams(location.search)
 const pick = <T extends string>(v: string | null, ok: readonly T[], d: T): T => (ok as readonly string[]).includes(v ?? '') ? (v as T) : d;
 
 /** Art-review mode: isolated state (see state.ts `storage`), review bar, direct start in the room under review. */
-export const REVIEW: 'living' | 'boslust' | null = pick(q.get('review'), ['living', 'boslust'] as const, '' as never) || null;
+export const REVIEW: 'living' | 'boslust' | 'dev01' | null = pick(q.get('review'), ['living', 'boslust', 'dev01'] as const, '' as never) || null;
+/** DEV-01 slice review build (?review=dev01): B01 v0.2, DS01, notebook v0.2. The normal game never sets it. */
+export const SLICE = REVIEW === 'dev01';
 
 export const ART: { set: ArtSet; ext: ArtSet; light: LightSet; tm: ToneSet } = {
   set: pick(q.get('art'), ['base', 'sample'] as const, REVIEW === 'living' ? 'sample' : 'base'),
   ext: pick(q.get('ext'), ['base', 'sample'] as const, REVIEW === 'boslust' ? 'sample' : 'base'),
-  light: pick(q.get('light'), ['base', 'sample'] as const, REVIEW ? 'sample' : 'base'),
+  light: pick(q.get('light'), ['base', 'sample'] as const, REVIEW && !SLICE ? 'sample' : 'base'),
   tm: pick(q.get('tm'), ['aces', 'neutral'] as const, 'aces'),
 };

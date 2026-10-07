@@ -27,7 +27,7 @@ export class UI {
   readonly overlay = $<HTMLDivElement>('#overlay');
   readonly start = $<HTMLDivElement>('#start');
   private toastTimer = 0;
-  private modalClose: (() => void) | null = null;
+  private modalClose: ((silent?: boolean) => void) | null = null;
   onModalChange: (open: boolean) => void = () => {};
   actionBtn!: HTMLButtonElement;
   private reticle!: HTMLDivElement;
@@ -140,7 +140,7 @@ export class UI {
     const els = this.overlay.querySelectorAll<HTMLElement>('.body button, .body input, .body textarea, [data-close]');
     (els[0] ?? null)?.focus({ preventScroll: true });
   }
-  modal(title: string, bodyHtml: string, onClose?: () => void, kind = 'panel'): HTMLElement {
+  modal(title: string, bodyHtml: string, onClose?: (silent?: boolean) => void, kind = 'panel'): HTMLElement {
     const wasOpen = !this.overlay.hidden;
     this.closeModal(true);
     if (!wasOpen) this.returnFocus = document.activeElement as HTMLElement | null;
@@ -171,7 +171,7 @@ export class UI {
     this.modalKind = null;
     const cb = this.modalClose;
     this.modalClose = null;
-    cb?.();
+    cb?.(silent); // silent = replaced by another overlay (not a player dismissal)
     if (!silent) {
       this.onModalChange(false);
       this.returnFocus?.focus?.({ preventScroll: true });

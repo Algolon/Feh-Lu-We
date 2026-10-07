@@ -16,7 +16,7 @@ import { buildCottage } from './cottage';
 import { buildForest, forestTreePoints } from './forest';
 import { buildBoslust } from './boslust';
 import { addEnvironment } from './env';
-import { ART } from '../core/artflags';
+import { ART, SLICE } from '../core/artflags';
 import { inZone, inBackdrop, addBackdrop, zoneGround, zonePathWidth, zonePathTint, pathVerge, finishZone } from './boslustSample';
 import { makeLamp, makeAction, makeDoor, makePickup, makeInspect, place } from '../interactions/props';
 import { pressLantern } from '../puzzles/rules';
@@ -456,13 +456,21 @@ function buildGarden(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
   const clearOf = (x: number, z: number) =>
     z > ESTATE.forestEdge + 1 && !inRect(x, z, 70, 132, 78, 119) && !inRect(x, z, 29, 45, 124, 139) && Math.hypot(x - SITES.pond.x, z - SITES.pond.z) > 5 &&
     Math.hypot(x - LC.x, z - LC.z) > 5.5 && distToPolyline(x, z, GARDEN_PATH) > 1.4 && distToPolyline(x, z, DRIVEWAY) > 3 && Math.hypot(x - SITES.forecourt.x, z - SITES.forecourt.z) > 10.5;
+  // DEV-01 placement contract: no scatter inside a building footprint. The garden exclusion above stops at x 132 and
+  // misses the barrel sauna (x 132–136); the review build drops those instances without changing the random
+  // sequence (every other position stays identical). The normal game is unchanged until this fix is approved.
+  const inBuilding = (x: number, z: number) => SLICE && inRect(x, z, SITES.sauna.x - 2.2, SITES.sauna.x + 2.2, SITES.sauna.z - 2.2, SITES.sauna.z + 2.2);
   for (const [x, z] of scatter(r, 2, ESTATE.w - 2, ESTATE.forestEdge, ESTATE.d - 2, 5.0, 1600, clearOf)) {
-    if (r() < 0.55) veg.smallThing('flower', x, z, 0.14, purple[Math.floor(r() * 4)], 'garden');
-    else veg.smallThing('shrub', x, z, 0.4 + r() * 0.3, '#5a8a3e', 'garden');
+    const flower = r() < 0.55, v = r();
+    if (inBuilding(x, z)) continue;
+    if (flower) veg.smallThing('flower', x, z, 0.14, purple[Math.floor(v * 4)], 'garden');
+    else veg.smallThing('shrub', x, z, 0.4 + v * 0.3, '#5a8a3e', 'garden');
   }
   // soft meadow: grass tufts across the lawn (instanced, tiled so only nearby tiles draw)
   for (const [x, z] of scatter(r, 2, ESTATE.w - 2, ESTATE.forestEdge - 4, ESTATE.d - 2, 2.2, 9000, (x, z) => clearOf(x, z) || (z > 118 && Math.hypot(x - LC.x, z - LC.z) > 4.5 && !inRect(x, z, 29, 45, 124, 139) && Math.hypot(x - SITES.pond.x, z - SITES.pond.z) > 4.2))) {
-    veg.smallThing('grass', x, z, 0.25 + r() * 0.2, r() < 0.5 ? '#7fae4a' : '#94bc58', `gr${Math.floor(x / 30)}_${Math.floor(z / 30)}`, terrainHeight(x, z));
+    const size = 0.25 + r() * 0.2, col = r() < 0.5 ? '#7fae4a' : '#94bc58';
+    if (inBuilding(x, z)) continue;
+    veg.smallThing('grass', x, z, size, col, `gr${Math.floor(x / 30)}_${Math.floor(z / 30)}`, terrainHeight(x, z));
   }
   for (let i = 0; i < 18; i++) {
     const a = (i / 18) * Math.PI * 2, d = 0.9 + (i % 3) * 0.2;

@@ -1,6 +1,8 @@
 // Game orchestrator: renderer + loop, input → player, interaction picking, save/restore, scenes, UI glue.
 import * as THREE from 'three';
-import { ART } from './artflags';
+import { ART, SLICE } from './artflags';
+import { SliceUI } from '../slice/ui';
+import { syncDerived } from '../slice/model';
 import { CAPS, FORCE_NO_MULTIDRAW, hideMultiDraw, detectCaps, vegPathLabel } from './caps';
 import {
   type GameState, type Settings, type SceneId, type PlayerPose, SAVE_KEY, SETTINGS_KEY, BACKUP_KEY, defaultState, parseSave, parseSettings, storage, addClue, has, flag, logEvent,
@@ -49,6 +51,9 @@ export class Game implements GameApi {
   readonly ui = new UI();
   readonly audio = new Audio();
   readonly player = new Player();
+  /** DEV-01 slice review (?review=dev01) only; null in the normal game. */
+  readonly slice: SliceUI | null = SLICE ? new SliceUI(this) : null;
+  private modalClosedAt = 0;
   readonly renderer: THREE.WebGLRenderer;
   readonly camera = new THREE.PerspectiveCamera(70, 1, 0.08, 450);
   readonly torch = new THREE.SpotLight(0xfff1d6, 0, 22, 0.5, 0.45, 1.2);
@@ -149,6 +154,7 @@ export class Game implements GameApi {
       deselect: () => this.select(null),
     });
     this.ui.onModalChange = (open) => {
+      if (!open) this.modalClosedAt = performance.now();
       this.input.setEnabled(!open);
       document.body.classList.toggle('playing-off', open);
       if (open) this.input.exitPointerLock();
@@ -164,7 +170,8 @@ export class Game implements GameApi {
       const n = this.state.notice;
       this.state.notice = null;
       this.saveSoon();
-      this.ui.showText('Het landgoed is veranderd', `${n}\n\nJe speelt verder met je bewaarde spel. Liever helemaal opnieuw beginnen zonder dit spel kwijt te raken? Kies in Pauze “Opnieuw beginnen”: je huidige voortgang wordt opzijgezet en is op het startscherm terug te zetten.`);
+      if (this.slice) this.ui.showText('Testversie (DEV-01)', n);
+      else this.ui.showText('Het landgoed is veranderd', `${n}\n\nJe speelt verder met je bewaarde spel. Liever helemaal opnieuw beginnen zonder dit spel kwijt te raken? Kies in Pauze “Opnieuw beginnen”: je huidige voortgang wordt opzijgezet en is op het startscherm terug te zetten.`);
     }
   }
 
@@ -258,6 +265,7 @@ export class Game implements GameApi {
     }
   }
   changed() {
+    if (this.slice) syncDerived(this.state); // DEV-01: item / solve / reward events from the shared state
     this.trackSolved(true);
     if (this.selected && !has(this.state, this.selected)) this.select(null);
     this.world?.syncAll();
@@ -265,6 +273,7 @@ export class Game implements GameApi {
     this.saveSoon();
   }
   inspect(clueId: string) {
+    if (this.slice) { this.slice.inspect(clueId); return; }
     const recorded = addClue(this.state, clueId);
     this.ui.showClue(clueId, recorded);
     if (recorded) this.changed();
@@ -311,6 +320,8 @@ export class Game implements GameApi {
   openPanel(kind: string) {
     const s = this.state;
     logEvent(s, 'panel', kind);
+    if (this.slice && kind === 'b01') { this.slice.b01Panel(); return; }
+    if (this.slice && kind === 'drawerLock') { this.slice.drawerPanel(); return; }
     const tryCode = (p: 'drawerLock' | 'studyLock') => (seq: string[]) => {
       const r = submitCode(s, p, seq);
       logEvent(s, r.ok ? 'code-ok' : 'code-wrong', p);
@@ -380,6 +391,7 @@ export class Game implements GameApi {
       onSelect: (id) => this.select(id),
       onTorch: () => this.toggleTorch(),
       onRead: (id) => {
+        if (this.slice) { this.slice.readItem(id); return; }
         const c = ITEMS[id].readClue;
         if (c) {
           addClue(this.state, c);
@@ -396,6 +408,7 @@ export class Game implements GameApi {
     this.changed();
   }
   openNotebook(tab?: string) {
+    if (this.slice) { this.slice.notebook(); return; }
     if (!has(this.state, 'notebook')) {
       this.ui.toast('Je hebt je notitieboek nog niet. Het ligt op de tafel.');
       return;
@@ -433,6 +446,7 @@ export class Game implements GameApi {
     return need[p.id]?.() ?? null;
   }
   openHint(puzzleId?: string) {
+    if (this.slice) { this.slice.hints(puzzleId); return; }
     const s = this.state;
     const open = openPuzzles(s);
     if (!open.length) {
@@ -532,6 +546,7 @@ export class Game implements GameApi {
 
   private tapAt(clientX: number, clientY: number) {
     if (this.ui.modalOpen) return;
+    if (this.slice && performance.now() - this.modalClosedAt < 400) return; // DEV-01: no click-through after closing an overlay
     const r = this.canvas.getBoundingClientRect();
     const p = this.pickAt(((clientX - r.left) / r.width) * 2 - 1, -((clientY - r.top) / r.height) * 2 + 1);
     if (!p) return;
@@ -559,7 +574,13 @@ export class Game implements GameApi {
   private actionLabel(it: Interactable): string | null {
     const l = it.label();
     if (l === null) return null;
-    return this.itemAction(it) ?? l;
+    const a = this.itemAction(it) ?? l;
+    // DEV-01: every verb names its object ("Openen: deur", "Slot bekijken: lade")
+    if (this.slice && !a.includes(':')) {
+      const noun = it.id.startsWith('door.') ? 'deur' : /drawer|desk|compartment/.test(it.id) ? 'lade' : it.id.startsWith('kitchen.hatch') ? 'luik' : null;
+      if (noun) return `${a}: ${noun}`;
+    }
+    return a;
   }
 
   // ------------------------------------------------------------------ frame loop
@@ -703,6 +724,7 @@ export class Game implements GameApi {
     } else {
       this.ui.setChecklist(null);
       if (s.finished) this.ui.setObjective('Je hebt de verzamelzaal gevonden. Kijk gerust nog rond.');
+      else if (this.slice) this.ui.setObjective(this.slice.objectiveLine());
       else {
         const t = activeThread(s);
         const n = threadNext(s, t);
@@ -722,7 +744,7 @@ export class Game implements GameApi {
   }
 
   private mapView() {
-    return { pose: this.player.pose(), visited: (id: string) => !!this.state.flags[`visited.${id}`], sites: MAP_SITES };
+    return { pose: this.player.pose(), visited: (id: string) => !!this.state.flags[`visited.${id}`], sites: MAP_SITES, labels: !this.slice };
   }
   mapSvg() {
     return estateMapSvg(this.mapView());
@@ -867,6 +889,7 @@ export class Game implements GameApi {
         this.debugEl.innerHTML = `FPS ${fs.fps} (median) · p95 ${fs.p95Ms} ms · calls ${info.calls} · tris ${info.triangles} · veg ${vegPathLabel()}<br>` +
           `pos ${this.player.x.toFixed(1)}, ${this.player.y.toFixed(2)}, ${this.player.z.toFixed(1)} yaw ${(this.player.yaw * 57.3).toFixed(0)}°<br>` +
           `target ${this.target?.id ?? '—'} · room ${this.pool?.here ?? '—'} · lights ${this.pool?.assigned().map((a) => a ?? '·').join(' ') ?? ''}<br>flags: ${f || '—'}<br>` +
+          (this.slice ? `${this.slice.debugInfo(this.target?.id ?? null)}<br>` : '') +
           (this.world?.checkpoints.map((c) => `<button data-cp="${c.name}">${c.name}</button>`).join('') ?? '') +
           `<button data-reset="1">reset</button>`;
       }
