@@ -170,3 +170,56 @@ body.reduced-motion * { transition: none !important; animation: none !important;
   background: rgba(30,22,16,.78); color: #f5ead2; font: 600 13px/1.2 Georgia, serif; cursor: pointer; }
 #review-bar.busy { opacity: .5; pointer-events: none; }
 #review-bar .info { flex-basis: 100%; text-align: center; color: #f5ead2; font: 12px/1.3 Georgia, serif; text-shadow: 0 1px 2px #000; }
+/* Woodland manor title screen. The review start card keeps its existing layout. */
+#start:has(.start-home) {
+  display: block; padding: 0; isolation: isolate; background: #17150e;
+  overflow-y: auto; touch-action: pan-y;
+}
+.start-art { position: fixed; inset: 0; z-index: -2; pointer-events: none; }
+.start-art img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+#start:has(.start-home)::before {
+  content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(180deg, transparent 30%, rgba(12, 9, 5, .08) 42%, rgba(12, 9, 5, .52) 68%, transparent 94%);
+}
+#start .start-home {
+  width: min(66vw, 480px); max-width: none; margin: 34dvh auto 0;
+  padding-bottom: max(16dvh, calc(24px + var(--safe-b)));
+}
+#start .start-brand { margin: 0; font-size: inherit; line-height: 0; letter-spacing: normal; }
+.start-logo { display: block; width: 100%; height: auto; mix-blend-mode: screen; margin: -8% 0 -10%; }
+#start .start-home .sub {
+  color: #fff0cc; font-size: clamp(15px, 3.5vw, 25px); line-height: 1.22;
+  margin: 0 0 18px; opacity: 1; text-shadow: 0 2px 5px #000, 0 0 16px #000;
+}
+.start-actions { display: flex; flex-direction: column; gap: 9px; }
+#start .start-actions .btn {
+  position: relative; width: 100%; min-height: 50px; padding: 9px 12px;
+  border: 1.5px solid #eac879; border-radius: 11px; font-size: clamp(18px, 3.7vw, 28px);
+  box-shadow: 0 3px 15px #0005, inset 0 1px 0 #fff8;
+}
+#start .start-actions .primary { color: #241707; background: linear-gradient(115deg, #eeb94b, #f8cc69 45%, #dda130); }
+#start .start-actions .start-new { background: linear-gradient(110deg, #f0dfb9, #fff0cf 50%, #e5cfa5); font-weight: bold; border-color: #f9e6bf; }
+#start .start-actions .start-restore { background: #251a10c9; color: #f6e3bc; font-size: clamp(14px, 3vw, 20px); }
+.start-arrow { position: absolute; right: 16px; top: 50%; transform: translateY(-54%); font-size: 1.5em; font-weight: normal; }
+#start .start-settings {
+  position: fixed; top: calc(16px + var(--safe-t)); right: calc(16px + var(--safe-r));
+  width: 48px; height: 48px; min-height: 48px; padding: 0; border-radius: 50%;
+  display: grid; place-items: center; color: #efd08c; border: 1.5px solid #c8a566;
+  background: #201a11db; box-shadow: 0 2px 16px #0006; z-index: 1;
+}
+#start .btn:focus-visible { outline: 3px solid #fff2c4; outline-offset: 4px; }
+@media (orientation: landscape) {
+  #start:has(.start-home) { display: flex; align-items: center; }
+  #start:has(.start-home)::before { background: linear-gradient(90deg, #100d08bb, #100d0870 30%, transparent 60%); }
+  #start .start-home { width: min(31vw, 390px); margin: auto 0 auto max(7vw, var(--safe-l)); padding: max(12px, var(--safe-t)) 0 max(12px, var(--safe-b)); }
+  #start .start-brand { width: min(100%, 43dvh); margin: 0 auto; }
+  #start .start-home .sub { font-size: clamp(14px, 2.6dvh, 22px); margin-bottom: 12px; }
+  #start .start-actions { gap: 7px; }
+  #start .start-actions .btn { font-size: clamp(17px, 3.2dvh, 25px); min-height: 48px; }
+  #start .start-actions .start-restore { font-size: clamp(13px, 2.5dvh, 18px); }
+}
+@media (orientation: portrait) and (max-height: 680px) {
+  #start .start-home { margin-top: 27dvh; width: min(72vw, 350px); }
+  #start .start-brand { width: min(100%, 33dvh); margin: 0 auto; }
+  #start .start-home .sub { margin-bottom: 12px; }
+}

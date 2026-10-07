@@ -6,6 +6,9 @@ import { symbolSvg, SYMBOLS } from '../content/symbols';
 import { DIAGRAMS } from './diagrams';
 import { icon, itemIcon } from './icons';
 import type { Settings } from '../core/state';
+import portraitArt from '../../assets/branding/concept-art-portrait.png';
+import landscapeArt from '../../assets/branding/concept-art-landscape.png';
+import manorLogo from '../../assets/branding/logo.png';
 
 const $ = <T extends HTMLElement>(sel: string, root: ParentNode = document) => root.querySelector(sel) as T;
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
@@ -77,15 +80,7 @@ export class UI {
     this.overlay.addEventListener('click', (e) => {
       if (e.target === this.overlay) this.closeModal();
     });
-    // keep Tab inside the open dialog
-    this.overlay.addEventListener('keydown', (e) => {
-      if (e.key !== 'Tab') return;
-      const els = [...this.overlay.querySelectorAll<HTMLElement>('button, input, textarea, select')].filter((x) => !x.hasAttribute('disabled'));
-      if (!els.length) return;
-      const first = els[0], last = els[els.length - 1];
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-    });
+
   }
 
   setNotebookEnabled(on: boolean) {
@@ -156,6 +151,14 @@ export class UI {
     this.overlay.hidden = false;
     this.modalClose = onClose ?? null;
     $('[data-close]', this.overlay).addEventListener('click', () => this.closeModal());
+    this.overlay.onkeydown = (e) => {
+      if (e.key === 'Escape') { e.stopPropagation(); this.closeModal(); }
+      if (e.key !== 'Tab') return;
+      const controls = [...this.overlay.querySelectorAll<HTMLElement>('button, input, textarea, select')].filter((el) => !el.hasAttribute('disabled'));
+      const first = controls[0], last = controls[controls.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
+    };
     this.onModalChange(true);
     queueMicrotask(() => this.focusFirst());
     return $('.body', this.overlay);
@@ -402,18 +405,18 @@ export class UI {
   }
 
   // ---------------------------------------------------------------- menus
-  pause(s: Settings, h: { onChange: (s: Settings) => void; onRestart: () => void; onPointerLock?: () => void; onFullscreen?: () => void; onMap?: () => void; playMinutes: number; build: string }) {
-    const body = this.modal('Pauze', `
-      <div class="row" style="margin-bottom:10px"><button class="btn primary" data-resume>Verder spelen</button>${h.onMap ? '<button class="btn" data-map>Kaart</button>' : ''}${h.onFullscreen ? '<button class="btn" data-fs>Volledig scherm</button>' : ''}${h.onPointerLock ? '<button class="btn" data-pl>Muis vastzetten</button>' : ''}</div>
+  pause(s: Settings, h: { onChange: (s: Settings) => void; onRestart: () => void; onPointerLock?: () => void; onFullscreen?: () => void; onMap?: () => void; playMinutes: number; build: string; startScreen?: boolean }) {
+    const body = this.modal(h.startScreen ? 'Instellingen' : 'Pauze', `
+      <div class="row" style="margin-bottom:10px"><button class="btn primary" data-resume>${h.startScreen ? 'Terug' : 'Verder spelen'}</button>${h.onMap ? '<button class="btn" data-map>Kaart</button>' : ''}${h.onFullscreen ? '<button class="btn" data-fs>Volledig scherm</button>' : ''}${h.onPointerLock ? '<button class="btn" data-pl>Muis vastzetten</button>' : ''}</div>
       <label class="set">Kijkgevoeligheid <input type="range" min="0.3" max="2.5" step="0.1" value="${s.lookSensitivity}" data-k="lookSensitivity"></label>
       <label class="set">Joystickgevoeligheid <input type="range" min="0.5" max="1.5" step="0.05" value="${s.moveSensitivity}" data-k="moveSensitivity"></label>
       <label class="set">Hoge kwaliteit (schaduwen, scherper beeld) <input type="checkbox" ${s.quality === 'high' ? 'checked' : ''} data-k="quality"></label>
       <label class="set">Minder beweging <input type="checkbox" ${s.reducedMotion ? 'checked' : ''} data-k="reducedMotion"></label>
       <label class="set">Kijkrichting omkeren <input type="checkbox" ${s.invertY ? 'checked' : ''} data-k="invertY"></label>
       <label class="set">Geluid uit <input type="checkbox" ${s.muted ? 'checked' : ''} data-k="muted"></label>
-      <p class="muted">Speeltijd tot nu toe: ${h.playMinutes} min. Voortgang wordt automatisch bewaard op dit apparaat. Versie: ${esc(h.build)}</p>
+      <p class="muted">${h.startScreen ? 'Speel liefst liggend (landschap). Geluid gaat aan zodra je begint.' : `Speeltijd tot nu toe: ${h.playMinutes} min.`} Voortgang wordt automatisch bewaard op dit apparaat. Versie: ${esc(h.build)}</p>
       <p class="muted">Bediening — telefoon: linkerduim loopt, rechts slepen kijkt, tik op iets of gebruik de grote knop. Computer: WASD/pijltjes, Shift rennen, slepen of muis vastzetten om te kijken, E = actie, I = tas, N = notities, H = hint, F = zaklamp, Esc = pauze.</p>
-      <div class="row" style="margin-top:8px"><button class="btn danger" data-restart>Opnieuw beginnen…</button></div>`, undefined, 'pause');
+      ${h.startScreen ? '' : '<div class="row" style="margin-top:8px"><button class="btn danger" data-restart>Opnieuw beginnen…</button></div>'}`, undefined, 'pause');
     const cur = { ...s };
     body.querySelectorAll<HTMLInputElement>('input[data-k]').forEach((inp) => inp.addEventListener('input', () => {
       const k = inp.dataset.k as keyof Settings;
@@ -426,7 +429,7 @@ export class UI {
     body.querySelector('[data-fs]')?.addEventListener('click', () => h.onFullscreen?.());
     body.querySelector('[data-map]')?.addEventListener('click', () => h.onMap?.());
     body.querySelector('[data-pl]')?.addEventListener('click', () => { this.closeModal(); h.onPointerLock?.(); });
-    $('[data-restart]', body).addEventListener('click', () => this.confirm('Opnieuw beginnen?', 'Je huidige voortgang wordt opzijgezet. Op het startscherm kun je hem terugzetten met “Vorige voortgang terugzetten”.', 'Opnieuw beginnen', h.onRestart));
+    body.querySelector('[data-restart]')?.addEventListener('click', () => this.confirm('Opnieuw beginnen?', 'Je huidige voortgang wordt opzijgezet. Op het startscherm kun je hem terugzetten met “Vorige voortgang terugzetten”.', 'Opnieuw beginnen', h.onRestart));
   }
 
   contextLost(onReload: () => void) {
@@ -452,17 +455,23 @@ export class UI {
   }
 
   // ---------------------------------------------------------------- start screen
-  showStart(o: { hasSave: boolean; onContinue: () => void; onNew: () => void; error?: string; hasBackup?: boolean; onRestore?: () => void }) {
+  showStart(o: { hasSave: boolean; onContinue: () => void; onNew: () => void; error?: string; hasBackup?: boolean; onRestore?: () => void; onSettings?: () => void }) {
     this.start.hidden = false;
-    this.start.innerHTML = `<div class="card">
-      <h1>Feh Lu We</h1>
-      <p class="sub">Een weekend op de Veluwe. Iemand heeft alles al klaargezet…</p>
-      ${o.error ? `<div class="err">${o.error}</div>` : `<div class="row">
-        ${o.hasSave ? '<button class="btn primary" data-cont>Verder spelen</button><button class="btn" data-new>Nieuw spel</button>' : '<button class="btn primary" data-new>Start</button>'}
-        ${o.hasBackup ? '<button class="btn" data-restore>Vorige voortgang terugzetten</button>' : ''}
-      </div>
-      <p class="note">Speel liefst liggend (landschap). Linkerduim: lopen · rechts slepen: rondkijken · tik op dingen of gebruik de grote knop rechtsonder.<br>Geluid gaat aan na Start. Voortgang wordt bewaard op dit apparaat.</p>`}
-    </div>`;
+    this.start.innerHTML = `
+      <picture class="start-art" aria-hidden="true">
+        <source media="(orientation: landscape)" srcset="${landscapeArt}">
+        <img src="${portraitArt}" alt="" fetchpriority="high">
+      </picture>
+      ${o.onSettings && !o.error ? `<button class="btn start-settings" data-settings aria-label="Instellingen en bediening"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m9 3-1 3-3 1-2 3 2 2-1 3 3 2 3-1 2 3 3-1 1-3 3-1 2-3-2-2 1-3-3-2-3 1-2-3Z"/><circle cx="12" cy="12" r="3"/></svg></button>` : ''}
+      <div class="card start-home">
+        <h1 class="start-brand"><img class="start-logo" src="${manorLogo}" alt="Feh Lu We" width="1536" height="1536"></h1>
+        <p class="sub">Een weekend op de Veluwe.<br>Iemand heeft alles al klaargezet…</p>
+        ${o.error ? `<div class="err" role="alert">${o.error}</div>` : `<div class="start-actions">
+          ${o.hasSave ? '<button class="btn primary" data-cont>Verder spelen<span class="start-arrow" aria-hidden="true">›</span></button><button class="btn start-new" data-new>Nieuw spel</button>' : '<button class="btn primary" data-new>Nieuw spel<span class="start-arrow" aria-hidden="true">›</span></button>'}
+          ${o.hasBackup ? '<button class="btn start-restore" data-restore>Vorige voortgang terugzetten</button>' : ''}
+        </div>`}
+      </div>`;
+    this.start.querySelector('[data-settings]')?.addEventListener('click', () => o.onSettings?.());
     this.start.querySelector('[data-cont]')?.addEventListener('click', o.onContinue);
     this.start.querySelector('[data-new]')?.addEventListener('click', () => {
       if (o.hasSave) this.confirm('Nieuw spel?', 'Je huidige voortgang wordt opzijgezet (niet gewist): je kunt hem hier later terugzetten met “Vorige voortgang terugzetten”.', 'Nieuw spel', o.onNew);
