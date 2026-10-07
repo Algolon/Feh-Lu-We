@@ -188,7 +188,6 @@ body.reduced-motion * { transition: none !important; animation: none !important;
 #start .start-brand {
   position: fixed; top: calc(14px + var(--safe-t)); left: calc(14px + var(--safe-l));
   width: clamp(90px, 25vw, 140px); margin: 0; font-size: inherit; line-height: 0; letter-spacing: normal;
-  mix-blend-mode: screen;
 }
 .start-logo { display: block; width: 100%; height: auto; margin: -8% 0; }
 #start .start-home .sub {
