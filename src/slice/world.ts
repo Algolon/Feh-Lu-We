@@ -4,7 +4,7 @@
 // textured draw call per area plus the three movable folios.
 import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
-import type { Ctx } from '../world/arch';
+import { type Ctx, gableRoof } from '../world/arch';
 import { box, cyl, compound, planMatrix, mesh, v3, getKit } from '../world/kit';
 import { table, chair } from '../world/furniture';
 import { makeAction, makePickup, place } from '../interactions/props';
@@ -16,16 +16,16 @@ import * as D from './drawings';
 // ------------------------------------------------------------------------------------------------ texture atlas
 const COLS = 6, ROWS = 4, CELL = 256;
 const CELLS = {
-  slot_punt: 0, slot_rond: 1, slot_vierkant: 2, folio_I: 3, folio_II: 4, folio_III: 5,
-  clip_rond: 6, clip_punt: 7, clip_vierkant: 8, chart: 9, fern: 10, compass: 11,
-  ticket: 12, note: 13, album: 14, letter: 15, photo: 16, maquette: 17,
+  slot_punt: 0, slot_rond: 1, slot_vierkant: 2, folio_stars: 3, folio_plants: 4, folio_travel: 5,
+  clip_rond: 6, clip_punt: 7, clip_vierkant: 8, notebook: 9, fern: 10, scissors: 11,
+  label: 12, note: 13, album: 14, letter: 15, photo: 16, maquette: 17,
 } as const;
 type CellId = keyof typeof CELLS;
 const ART: Record<CellId, () => string> = {
   slot_punt: () => D.slotMark('punt'), slot_rond: () => D.slotMark('rond'), slot_vierkant: () => D.slotMark('vierkant'),
-  folio_I: () => D.folioCover('I'), folio_II: () => D.folioCover('II'), folio_III: () => D.folioCover('III'),
+  folio_stars: () => D.folioPage('stars'), folio_plants: () => D.folioPage('plants'), folio_travel: () => D.folioPage('travel'),
   clip_rond: () => D.clipCard('rond'), clip_punt: () => D.clipCard('punt'), clip_vierkant: () => D.clipCard('vierkant'),
-  chart: D.objectArt.chart, fern: D.objectArt.fern, compass: D.objectArt.compass, ticket: D.objectArt.ticket,
+  notebook: D.objectArt.notebook, fern: D.objectArt.fern, scissors: D.objectArt.scissors, label: D.objectArt.label,
   note: D.noteCard, album: D.albumSpread, letter: D.letterSheet, photo: D.photoFront, maquette: D.maquetteView,
 };
 
@@ -104,11 +104,16 @@ const atlasFor = (w: World) => {
 export function sliceHall(w: World, g: GameApi, c: Ctx) {
   const k = c.k, a = atlasFor(w), p = prop('ds01.maquetteTable');
   table(c, p.x, p.z, p.y, p.w, p.d, 0, '#6b4426', p.h);
-  // maquette: a board with the estate in miniature, under a low glass edge
-  box(c.b, k.M.wood, '#4a2f1a', p.x - 0.04, top(p), p.z + 0.12, 0.46, 0.03, 0.66, { chunk: c.chunk });
-  flat(c, a, 'maquette', p.x - 0.04, top(p) + 0.032, p.z + 0.12, 0.62, 0.42, -Math.PI / 2);
-  box(c.b, k.M.paint, '#efe2c4', p.x - 0.04, top(p) + 0.032, p.z + 0.14, 0.12, 0.07, 0.18, { chunk: c.chunk });
-  box(c.b, k.M.slate, '#8a93a8', p.x - 0.04, top(p) + 0.102, p.z + 0.14, 0.13, 0.03, 0.19, { chunk: c.chunk });
+  // gingerbread maquette (DEV-01R canon): the house in gingerbread with white icing, on a board with the grounds
+  const mx = p.x - 0.04, mz = p.z + 0.12, my = top(p) + 0.032;
+  box(c.b, k.M.wood, '#4a2f1a', mx, top(p), mz, 0.46, 0.03, 0.66, { chunk: c.chunk });
+  flat(c, a, 'maquette', mx, my, mz, 0.62, 0.42, -Math.PI / 2);
+  box(c.b, k.M.paint, '#a0622d', mx, my, mz + 0.02, 0.15, 0.09, 0.22, { chunk: c.chunk }); // gingerbread walls
+  gableRoof(c, mx, mz + 0.02, 0.26, 0.19, my + 0.09, 0.075, false, k.M.paint, '#8a5226'); // gingerbread roof (ridge along z)
+  for (const sgn of [-1, 1]) box(c.b, k.M.paint, '#fbf6ea', mx + sgn * 0.092, my + 0.084, mz + 0.02, 0.014, 0.014, 0.27, { chunk: c.chunk }); // icing along the eaves
+  for (const dz of [-0.13, 0.13]) box(c.b, k.M.paint, '#fbf6ea', mx, my + 0.084, mz + 0.02 + dz, 0.19, 0.012, 0.012, { chunk: c.chunk }); // icing on the gable ends
+  for (const dz of [-0.06, 0.06]) box(c.b, k.M.paint, '#fbf6ea', mx + 0.076, my + 0.035, mz + 0.02 + dz, 0.004, 0.03, 0.03, { chunk: c.chunk }); // iced windows (east face)
+  box(c.b, k.M.paint, '#6a3a1a', mx + 0.076, my, mz + 0.02, 0.004, 0.05, 0.03, { chunk: c.chunk }); // door
   // the ordinary note, propped at the south end of the table (paper, no brass, no numerals)
   const n = p.parts![0];
   flat(c, a, 'note', p.x + n.dx, top(p) + 0.004, p.z + n.dz, 0.2, 0.14, -Math.PI / 2);
@@ -126,20 +131,20 @@ export function sliceLibraryTable(w: World, g: GameApi, c: Ctx, deskDrawer: { sl
   // three engraved slots on the east half; left → right for a reader facing west = south → north
   const slotZ = (i: number) => tz + (i - 1) * 0.62;
   B01_SLOTS.forEach((s, i) => flat(c, a, `slot_${s}` as CellId, tx + 0.2, y + 0.002, slotZ(i), 0.38, 0.38, -Math.PI / 2));
-  // folios: movable meshes sharing the atlas material (one draw call each)
+  // folios = loose drawing sheets (los tekenblad): thin paper meshes sharing the atlas material (one draw call each)
   const folios = new THREE.Group();
   folios.userData.room = 'library';
   w.scene.add(folios);
   const folioObj: Record<FolioId, THREE.Object3D> = {} as Record<FolioId, THREE.Object3D>;
   for (const f of B01_FOLIOS) {
     const grp = new THREE.Group();
-    grp.add(compound((b) => box(b, k.M.paint, D.FOLIO_COLOR[f], 0, 0, 0, 0.27, 0.025, 0.34)));
-    const geo = a.plane(`folio_${f}` as CellId, 0.25, 0.32);
+    grp.add(compound((b) => box(b, k.M.paint, '#e8dfca', 0, 0, 0, 0.255, 0.002, 0.335)));
+    const geo = a.plane(`folio_${f}` as CellId, 0.32, 0.24);
     geo.rotateX(-Math.PI / 2);
     const cover = mesh(geo, a.mat, '#ffffff');
     geo.dispose();
-    cover.position.y = 0.027;
-    cover.rotation.y = Math.PI / 2; // picture top toward the west (away from the reader)
+    cover.position.y = 0.003;
+    cover.rotation.y = Math.PI / 2; // picture top toward the west (away from the reader); sheet lies landscape
     cover.castShadow = false;
     grp.add(cover);
     folios.add(grp);
@@ -157,7 +162,7 @@ export function sliceLibraryTable(w: World, g: GameApi, c: Ctx, deskDrawer: { sl
   });
   makeAction(w, {
     id: SLICE_IDS.table, obj: folios, hit: [1.0, 0.3, 2.2], hitOffset: [0, 0.1, 0],
-    label: () => (g.state.slice?.b01.solved ? 'Bekijken: leestafel' : 'Bekijken: mappen en vakken'),
+    label: () => (g.state.slice?.b01.solved ? 'Bekijken: leestafel' : 'Bekijken: tekenbladen en vakken'),
     run: () => g.openPanel('b01'),
   });
   // re-anchor the hitbox on the table (the folio group sits at the origin)
@@ -180,8 +185,15 @@ export function sliceLibraryTable(w: World, g: GameApi, c: Ctx, deskDrawer: { sl
 }
 
 function sliceLibraryDs01(w: World, g: GameApi, c: Ctx, a: Atlas) {
+  // DS01 B (DEV-01R canon): a quiet reading plank — a narrow ledge on two trestles, apart from the B01 table
   const k = c.k, p = prop('ds01.sideTable');
-  table(c, p.x, p.z, p.y, p.w, p.d, 0, '#5a3a22', p.h);
+  for (const dz of [-0.36, 0.36]) {
+    box(c.b, k.M.wood, '#5a3a22', p.x, p.y, p.z + dz, 0.06, p.h - 0.04, 0.06, { chunk: c.chunk });
+    box(c.b, k.M.wood, '#5a3a22', p.x, p.y, p.z + dz, 0.5, 0.05, 0.06, { chunk: c.chunk });
+  }
+  box(c.b, k.M.wood, '#6b4426', p.x, p.y + p.h - 0.04, p.z, p.w, 0.04, p.d, { chunk: c.chunk, uv: 1 });
+  box(c.b, k.M.wood, '#4a2f1a', p.x - p.w / 2 + 0.02, p.y + p.h, p.z, 0.03, 0.04, p.d, { chunk: c.chunk }); // back rim
+  c.col.addBox(p.x - p.w / 2, p.x + p.w / 2, p.z - p.d / 2, p.z + p.d / 2, p.y, p.y + p.h);
   const al = p.parts!.find((q) => q.id === SLICE_IDS.dsAlbum)!, le = p.parts!.find((q) => q.id === SLICE_IDS.dsLetter)!;
   // open album (dark card pages) with one empty photo corner; the letter lies folded beside it
   box(c.b, k.M.paint, '#4a3426', p.x + al.dx, top(p), p.z + al.dz, 0.36, 0.03, 0.5, { chunk: c.chunk });
@@ -207,21 +219,28 @@ export function sliceUpstairs(w: World, g: GameApi, c: Ctx) {
     const pair = p.parts!.find((x) => x.id === SLICE_IDS.pair(q.sub))!, clip = p.parts!.find((x) => x.id === SLICE_IDS.clip(q.sub))!;
     const px = p.x + pair.dx, pz = p.z + pair.dz;
     if (q.sub === 'sterren') {
-      flat(c, a, 'chart', px + 0.1, y + 0.004, pz, 0.36, 0.25, q.topYaw);
-      // telescope lens cap on a green cord
-      cyl(c.b, k.M.paint, '#2b2b2b', px - 0.2, y, pz - 0.04, 0.045, 0.045, 0.03, 16, { chunk: c.chunk });
-      for (let i = 0; i < 4; i++) box(c.b, k.M.paint, '#3f8a3a', px - 0.15 + i * 0.035, y, pz - 0.01 + Math.sin(i) * 0.02, 0.04, 0.008, 0.008, { chunk: c.chunk, yaw: 0.4 * i });
+      // EB.folio.stars: small telescope on a FORK mount, two ROUND screw heads on the pivots + notebook with three holes
+      const tx = px - 0.14;
+      cyl(c.b, k.M.wood, '#5a3a22', tx, y, pz, 0.075, 0.08, 0.02, 18, { chunk: c.chunk });
+      box(c.b, k.M.wood, '#6b4426', tx, y + 0.02, pz, 0.03, 0.06, 0.03, { chunk: c.chunk });
+      box(c.b, k.M.paint, '#3a2412', tx, y + 0.08, pz, 0.15, 0.015, 0.03, { chunk: c.chunk });
+      for (const sx of [-1, 1]) box(c.b, k.M.paint, '#3a2412', tx + sx * 0.068, y + 0.08, pz, 0.014, 0.1, 0.03, { chunk: c.chunk });
+      cyl(c.b, k.M.paint, '#b8892f', tx, y + 0.17 - 0.15, pz, 0.028, 0.028, 0.3, 14, { chunk: c.chunk, rx: Math.PI / 2 - 0.42 }); // centre on the fork pivots (cyl takes its base height)
+      for (const sx of [-1, 1]) cyl(c.b, k.M.paint, '#d9b860', tx + sx * 0.08, y + 0.167, pz, 0.017, 0.017, 0.012, 14, { chunk: c.chunk, rz: Math.PI / 2 });
+      flat(c, a, 'notebook', px + 0.17, y + 0.004, pz, 0.16, 0.19, q.topYaw + 0.08);
     } else if (q.sub === 'reizen') {
-      cyl(c.b, k.M.paint, '#c9a44c', px - 0.12, y, pz, 0.075, 0.075, 0.02, 20, { chunk: c.chunk });
-      flat(c, a, 'compass', px - 0.12, y + 0.022, pz, 0.15, 0.16, q.topYaw);
-      flat(c, a, 'ticket', px + 0.14, y + 0.004, pz + 0.02, 0.17, 0.1, q.topYaw + 0.15);
+      // EB.folio.travel: suitcase with two parallel straps + a square middle patch (facing the reader) + label with cut corner
+      const sx0 = px - 0.12;
+      box(c.b, k.M.paint, '#8a5a33', sx0, y, pz, 0.36, 0.26, 0.12, { chunk: c.chunk });
+      for (const sx of [-1, 1]) box(c.b, k.M.paint, '#4a2f1a', sx0 + sx * 0.09, y - 0.002, pz, 0.026, 0.265, 0.126, { chunk: c.chunk });
+      box(c.b, k.M.paint, '#c9a46a', sx0, y + 0.1, pz - 0.063, 0.075, 0.075, 0.006, { chunk: c.chunk });
+      box(c.b, k.M.paint, '#4a2f1a', sx0, y + 0.26, pz, 0.1, 0.03, 0.025, { chunk: c.chunk }); // handle
+      flat(c, a, 'label', px + 0.2, y + 0.004, pz + 0.02, 0.2, 0.1, q.topYaw - 0.12);
     } else {
-      flat(c, a, 'fern', px, y + 0.004, pz - 0.08, 0.2, 0.25, q.topYaw);
-      box(c.b, k.M.glass, '#ffffff', px, y + 0.004, pz - 0.08, 0.22, 0.01, 0.27, { chunk: c.chunk });
-      // terracotta pot with exactly one blue band
-      cyl(c.b, k.M.paint, '#c9774a', px, y, pz + 0.16, 0.07, 0.055, 0.12, 14, { chunk: c.chunk });
-      cyl(c.b, k.M.paint, '#2f5fa8', px, y + 0.05, pz + 0.16, 0.067, 0.067, 0.025, 14, { chunk: c.chunk });
-      cyl(c.b, k.M.paint, '#5a3a22', px, y + 0.105, pz + 0.16, 0.06, 0.06, 0.012, 14, { chunk: c.chunk });
+      // EB.folio.plants: pressed fern under glass with a broad diagonal repair strip + scissors (angular and round grip)
+      flat(c, a, 'fern', px, y + 0.004, pz - 0.1, 0.2, 0.24, q.topYaw);
+      box(c.b, k.M.glass, '#ffffff', px, y + 0.004, pz - 0.1, 0.22, 0.01, 0.26, { chunk: c.chunk });
+      flat(c, a, 'scissors', px, y + 0.004, pz + 0.17, 0.12, 0.16, q.topYaw + 0.2);
     }
     flat(c, a, `clip_${CLIP_OF[q.sub]}` as CellId, p.x + clip.dx, y + 0.004, p.z + clip.dz, 0.24, 0.21, q.topYaw);
     inspectAt(w, g, p, SLICE_IDS.pair(q.sub), SRC.pair(q.sub), 'Bekijken: voorwerpen op het tafeltje', q.topYaw === 0 ? [0.44, 0.2, 0.36] : [0.36, 0.2, 0.44]);

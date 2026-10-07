@@ -19,20 +19,22 @@ export const SLICE_LINK_ROOMS = ['lobby', 'frontGallery', 'walkway', 'landing', 
 
 // ------------------------------------------------------------------------------------------------ B01
 export type SlotId = 'rond' | 'punt' | 'vierkant';
-export type FolioId = 'I' | 'II' | 'III';
+/** Puzzle Design v0.2 canon ids (EB.folio.<id>). A folio is a LOOSE DRAWING SHEET (los tekenblad), not a folder. */
+export type FolioId = 'stars' | 'plants' | 'travel';
 export type Subject = 'sterren' | 'planten' | 'reizen';
 /** Slots on the library table, left → right for a reader standing east of the table facing west. */
 export const B01_SLOTS: SlotId[] = ['punt', 'rond', 'vierkant'];
-export const B01_FOLIOS: FolioId[] = ['I', 'II', 'III'];
+export const B01_FOLIOS: FolioId[] = ['stars', 'plants', 'travel'];
 /**
  * The contract chain: folio → two physical details → upstairs object pair → physical archive clip → slot shape.
- * sterren → round clip → round slot; planten → pointed clip → pointed slot; reizen → square clip → square slot.
- * The folio carries no subject word, emblem or room name; only its two drawn details lead upstairs.
+ * EB.folio.stars → round clip → round slot; EB.folio.plants → pointed clip → pointed slot;
+ * EB.folio.travel → square clip → square slot (DEV-01R canon). The sheet carries no subject word, emblem or room
+ * name; only its two drawn details lead upstairs.
  */
 export const B01_CHAIN: { folio: FolioId; subject: Subject; room: string; clip: SlotId }[] = [
-  { folio: 'I', subject: 'sterren', room: 'sterren', clip: 'rond' },
-  { folio: 'II', subject: 'reizen', room: 'reis', clip: 'vierkant' },
-  { folio: 'III', subject: 'planten', room: 'botanic', clip: 'punt' },
+  { folio: 'stars', subject: 'sterren', room: 'sterren', clip: 'rond' },
+  { folio: 'travel', subject: 'reizen', room: 'reis', clip: 'vierkant' },
+  { folio: 'plants', subject: 'planten', room: 'botanic', clip: 'punt' },
 ];
 /** slot → folio, derived from the chain (never typed in separately). */
 export const B01_ANSWER: Record<SlotId, FolioId> = Object.fromEntries(B01_CHAIN.map((c) => [c.clip, c.folio])) as Record<SlotId, FolioId>;
@@ -44,7 +46,7 @@ export const B01_KEY_PICKUP = 'pk.studyKey';
 /** Slice-only observable sources (legacy sources keep their clue ids, e.g. c.invitation, c.mantel, c.ledger). */
 export const SRC = {
   table: 's.b01.table',
-  folio: (f: FolioId) => `s.b01.folio.${f}`,
+  folio: (f: FolioId) => `EB.folio.${f}`, // canon source ids (Puzzle v0.2)
   pair: (s: Subject) => `s.b01.pair.${s}`,
   clip: (s: Subject) => `s.b01.clip.${s}`,
   dsNote: 's.ds01.note', // A — hall, by the maquette
@@ -71,6 +73,9 @@ export const SLICE_IDS = {
   dsLetter: 'ds01.letter',
   dsPhoto: 'ds01.photo',
 } as const;
+
+/** DEV-01 (schema 1) folio ids → canon ids; used once to migrate review saves made before DEV-01R. */
+export const LEGACY_FOLIO: Record<string, FolioId> = { I: 'stars', II: 'travel', III: 'plants' };
 
 /** Clue sources of the iteration-3 catalogue that DEV-01 removes from the world (old-save import keeps them aside). */
 export const REMOVED_SOURCES = ['c.libraryPlan', 'c.guestbookTabs', 'c.catalogDesk', 'c.archiveCard'];

@@ -1,6 +1,6 @@
 [
   {
-    "name": "arrival: only the invitation (read at home) is observed; nothing encountered; no objective walkthrough",
+    "name": "arrival: only the invitation (read at home) is observed; nothing encountered; no objective walkthrough; no catalogue / emblem plan / guestbook-tab evidence",
     "ok": true,
     "detail": "{\"obs\":[\"c.invitation\"],\"enc\":[],\"reg\":false,\"objective\":\"\",\"plaques\":false}"
   },
@@ -32,7 +32,7 @@
   {
     "name": "B01 panel: folio inspect records an observation; incomplete set is no attempt; draft selection survives notebook round-trip",
     "ok": true,
-    "detail": "{\"folio\":\"Leestafel · Map I\",\"recorded\":true,\"wrong0\":0,\"sel\":\"III\",\"slots\":{\"punt\":null,\"rond\":null,\"vierkant\":\"II\"},\"scroll\":20}"
+    "detail": "{\"folio\":\"Leestafel · Tekenblad: telescoop en schrift\",\"recorded\":true,\"wrong0\":0,\"sel\":\"plants\",\"slots\":{\"punt\":null,\"rond\":null,\"vierkant\":\"travel\"},\"scroll\":0}"
   },
   {
     "name": "grand stair: route reaches the upper floor by walking",
@@ -152,7 +152,7 @@
   {
     "name": "hints: none before a riddle is met; level 0 names the riddle without a next step",
     "ok": true,
-    "detail": "RAADSEL De leestafel met drie vakken en drie mappen.\n\nHints zijn geen bewijs uit het huis en komen niet in je notitieboek.\n\nToon hint 1 (aandacht)\nTerug"
+    "detail": "RAADSEL De leestafel met drie vakken en drie tekenbladen.\n\nHints zijn geen bewijs uit het huis en komen niet in je notitieboek.\n\nToon hint 1 (aandacht)\nTerug"
   },
   {
     "name": "hints: levels 1 attention · 2 relation · 3 solution, labelled as Hint, never stored as observations",

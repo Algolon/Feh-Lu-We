@@ -9,8 +9,8 @@ import {
 } from '../src/slice/model';
 import { parseSlice, defaultSlice, SEMANTIC_EVENTS } from '../src/slice/schema';
 import { B01_SLOTS, B01_FOLIOS, B01_ANSWER, B01_CHAIN, SRC, type SlotId, type FolioId } from '../src/slice/ids';
-import { REGISTER_TOPICS, REGISTER_TEXT, SLICE_HINTS, SOURCES, FOLIO_DETAILS, CONTENT_STATUS, INVITATION_SLICE } from '../src/slice/content';
-import { folioPage, folioCover, clipCard } from '../src/slice/drawings';
+import { REGISTER_TOPICS, REGISTER_TEXT, SLICE_HINTS, SOURCES, FOLIO_DETAILS, CONTENT_STATUS, INVITATION_SLICE, TABLE_TEXT } from '../src/slice/content';
+import { folioPage, clipCard, pairView } from '../src/slice/drawings';
 
 const perms = <T,>(a: T[]): T[][] => (a.length <= 1 ? [a] : a.flatMap((x, i) => perms([...a.slice(0, i), ...a.slice(i + 1)]).map((p) => [x, ...p])));
 const reload = (s: GameState) => parseSave(JSON.stringify(s))!;
@@ -44,22 +44,22 @@ describe('DEV-01 B01: folio → details → upstairs pair → archive clip → s
   });
   it('incomplete set is no attempt; swap and take-back keep every folio recoverable; complete wrong set is neutral', () => {
     const s = freshSliceState(1);
-    expect(b01Place(s, 'rond', 'I').ok).toBe(true);
-    expect(b01Place(s, 'punt', 'II').msg).toMatch(/ligt in het vak/);
+    expect(b01Place(s, 'rond', 'stars').ok).toBe(true);
+    expect(b01Place(s, 'punt', 'travel').msg).toMatch(/ligt in het vak/);
     expect(s.slice!.b01.wrong).toBe(0);
-    b01Place(s, 'punt', 'I'); // move I from rond → punt
-    expect(s.slice!.b01.slots).toEqual({ punt: 'I', rond: null, vierkant: null });
-    expect(b01Loose(s).sort()).toEqual(['II', 'III']);
-    b01Place(s, 'rond', 'II'); const wrong = b01Place(s, 'vierkant', 'III');
+    b01Place(s, 'punt', 'stars'); // move stars from rond → punt
+    expect(s.slice!.b01.slots).toEqual({ punt: 'stars', rond: null, vierkant: null });
+    expect(b01Loose(s).sort()).toEqual(['plants', 'travel']);
+    b01Place(s, 'rond', 'travel'); const wrong = b01Place(s, 'vierkant', 'plants');
     expect(wrong.ok).toBe(false);
     expect(wrong.msg).not.toMatch(/punt|rond|vierkant|map I|sterren|planten|reizen/i); // no prefix / per-slot oracle
     expect(s.slice!.b01.wrong).toBe(1);
     expect(b01Take(s, 'punt').ok).toBe(true);
     expect(b01Take(s, 'punt').ok).toBe(false);
-    expect(b01Loose(s)).toEqual(['I']);
-    b01Place(s, 'punt', 'III'); b01Place(s, 'rond', 'I'); const right = b01Place(s, 'vierkant', 'II');
+    expect(b01Loose(s)).toEqual(['stars']);
+    b01Place(s, 'punt', 'plants'); b01Place(s, 'rond', 'stars'); const right = b01Place(s, 'vierkant', 'travel');
     expect(right.ok).toBe(true);
-    expect(b01Place(s, 'rond', 'II').ok).toBe(false); // fixed once solved
+    expect(b01Place(s, 'rond', 'travel').ok).toBe(false); // fixed once solved
   });
   it('solved ≠ reward claimed: the key is claimed only when taken from the drawer', () => {
     const s = freshSliceState(1);
@@ -77,13 +77,13 @@ describe('DEV-01 B01: folio → details → upstairs pair → archive clip → s
 describe('DEV-01 save/reload of mechanical and observation state', () => {
   it('before solve, after solve, before reward and after reward', () => {
     const s = freshSliceState(1);
-    recordObservation(s, SRC.folio('I'), 'library'); encounter(s, 'b01');
-    b01Place(s, 'rond', 'I'); b01Place(s, 'punt', 'II');
+    recordObservation(s, SRC.folio('stars'), 'library'); encounter(s, 'b01');
+    b01Place(s, 'rond', 'stars'); b01Place(s, 'punt', 'travel');
     let r = reload(s);
-    expect(r.slice!.b01.slots).toEqual({ punt: 'II', rond: 'I', vierkant: null });
-    expect(observed(r, SRC.folio('I'))).toBe(true);
+    expect(r.slice!.b01.slots).toEqual({ punt: 'travel', rond: 'stars', vierkant: null });
+    expect(observed(r, SRC.folio('stars'))).toBe(true);
     expect(r.slice!.encountered).toEqual(['b01']);
-    b01Place(r, 'punt', 'III'); b01Place(r, 'vierkant', 'II'); syncDerived(r);
+    b01Place(r, 'punt', 'plants'); b01Place(r, 'vierkant', 'travel'); syncDerived(r);
     r = reload(r); // solved, reward not claimed
     expect(b01Solved(r)).toBe(true);
     expect(r.open['library.desk']).toBe(true);
@@ -105,8 +105,8 @@ describe('DEV-01 save/reload of mechanical and observation state', () => {
   it('slice schema sanitises garbage, duplicates and impossible combinations', () => {
     expect(parseSlice(null)).toBeNull();
     expect(parseSlice({ schema: 99 })).toBeNull();
-    const p = parseSlice({ schema: 1, b01: { slots: { punt: 'I', rond: 'I', vierkant: 'X' } }, ds01: { photoFound: false, photoBackSeen: true }, attention: 'nope', log: [{ type: 'Hack', id: 'x' }] })!;
-    expect(p.b01.slots).toEqual({ punt: 'I', rond: null, vierkant: null });
+    const p = parseSlice({ schema: 2, b01: { slots: { punt: 'stars', rond: 'stars', vierkant: 'X' } }, ds01: { photoFound: false, photoBackSeen: true }, attention: 'nope', log: [{ type: 'Hack', id: 'x' }] })!;
+    expect(p.b01.slots).toEqual({ punt: 'stars', rond: null, vierkant: null });
     expect(p.ds01.photoBackSeen).toBe(false);
     expect(p.attention).toBeNull();
     expect(p.log).toEqual([]);
@@ -242,13 +242,13 @@ describe('DEV-01 register, notebook and attention', () => {
   });
   it('observations keep raw text and provenance, no relevance score or solution summary', () => {
     const s = freshSliceState(1);
-    recordObservation(s, SRC.folio('II'), 'library');
+    recordObservation(s, SRC.folio('travel'), 'library');
     recordObservation(s, SRC.clip('reizen'), 'reis');
     const nb = notebookView(s);
     const clip = nb.observations[0];
     expect(clip.provenance).toBe('Boven · waarneming 3');
     expect(nb.observations[1].provenance).toBe('Begane grond · waarneming 2');
-    expect(nb.observations[1].text).toContain(FOLIO_DETAILS.II);
+    expect(nb.observations[1].text).toContain(FOLIO_DETAILS.travel);
     for (const o of nb.observations) expect(Object.keys(o).sort()).toEqual(['archived', 'art', 'back', 'diagram', 'id', 'pinned', 'provenance', 'seq', 'text', 'title']);
     expect(nb.observations.map((o) => o.text).join(' ')).not.toMatch(/vierkant vak|→/);
   });
@@ -265,7 +265,7 @@ describe('DEV-01 hints: encountered riddles only, levels 0–3', () => {
     expect(h.context).not.toMatch(/rond|punt|vierkant|kamer|boven|clip/i);
     expect(SLICE_HINTS.b01.levels[0]).not.toMatch(/rond vak|vierkant vak|puntig vak/);
     expect(SLICE_HINTS.b01.levels[1]).toMatch(/clip/);
-    expect(SLICE_HINTS.b01.levels[2]).toMatch(/Map I .*rond vak/);
+    expect(SLICE_HINTS.b01.levels[2]).toMatch(/Telescoop op vorkvoet.*rond vak.*schaar.*puntig vak.*koffer.*vierkant vak/);
     expect([revealHint(s, 'b01'), revealHint(s, 'b01'), revealHint(s, 'b01'), revealHint(s, 'b01')]).toEqual([1, 2, 3, 3]);
     expect(reload(s).slice!.hints.b01).toBe(3);
     fillB01(s, B01_SLOTS.map((k) => B01_ANSWER[k]));
@@ -319,18 +319,51 @@ describe('DEV-01 old-save compatibility (catalogSolved → B01 alias)', () => {
   it('an iteration-2 (v3) save migrates through the normal chain first', () => {
     const s = importMainSave(JSON.stringify({ version: 3, scene: 'estate', inventory: ['torch'], flags: { drawerLockSolved: true } }))!;
     expect(s.version).toBe(4);
-    expect(s.slice!.schema).toBe(1);
+    expect(s.slice!.schema).toBe(2);
     expect(importMainSave('{nope')).toBeNull();
+  });
+});
+
+describe('DEV-01R canon: B01 chain and folio concept', () => {
+  it('canon ids EB.folio.stars/plants/travel map to round/pointed/square', () => {
+    expect(B01_FOLIOS.map((f) => SRC.folio(f))).toEqual(['EB.folio.stars', 'EB.folio.plants', 'EB.folio.travel']);
+    expect(B01_ANSWER).toEqual({ rond: 'stars', punt: 'plants', vierkant: 'travel' });
+  });
+  it('the sheets and the rooms describe the canonical detail pairs', () => {
+    const t = (f: FolioId) => SOURCES[SRC.folio(f)].text;
+    expect(t('stars')).toMatch(/telescoop op een vorkvoet/); expect(t('stars')).toMatch(/twee ronde schroefkoppen/); expect(t('stars')).toMatch(/schrift met drie gaten/);
+    expect(t('plants')).toMatch(/varenblad met een brede reparatiestrook schuin/); expect(t('plants')).toMatch(/schaar met één hoekige en één ronde greep/);
+    expect(t('travel')).toMatch(/koffer met twee evenwijdige riemen en een vierkante lap in het midden/); expect(t('travel')).toMatch(/label waarvan de rechterbovenhoek is afgeknipt/);
+    expect(SOURCES[SRC.pair('sterren')].text).toMatch(/vorkvoet.*twee ronde schroefkoppen.*schrift met drie gaten/s);
+    expect(SOURCES[SRC.pair('planten')].text).toMatch(/reparatiestrook.*schaar met één hoekige en één ronde greep/s);
+    expect(SOURCES[SRC.pair('reizen')].text).toMatch(/twee evenwijdige riemen.*vierkante lap.*rechterbovenhoek/s);
+    for (const s of ['sterren', 'planten', 'reizen'] as const) expect(pairView(s)).toContain('<svg');
+  });
+  it('a folio is a loose drawing sheet: no folder ("map") wording anywhere the player reads B01', () => {
+    const b01 = [TABLE_TEXT, ...B01_FOLIOS.map((f) => SOURCES[SRC.folio(f)].title + SOURCES[SRC.folio(f)].text), ...SLICE_HINTS.b01.levels, SLICE_HINTS.b01.context].join(' ');
+    expect(b01).not.toMatch(/\bmap(pen|je)?\b|folder|werkmap/i);
+    expect(b01).toMatch(/tekenblad/);
+  });
+  it('DEV-01 review saves (schema 1, folio ids I/II/III) migrate to the canon ids', () => {
+    const p = parseSlice({ schema: 1, b01: { slots: { punt: 'III', rond: 'I', vierkant: null } }, obs: { 's.b01.folio.II': { seq: 3, room: 'library', faces: ['front'] } }, pins: ['s.b01.folio.II'], archivedObs: ['s.b01.folio.I'], questions: [{ id: 'q9', text: 'x', pins: ['s.b01.folio.III'] }] })!;
+    expect(p.schema).toBe(2);
+    expect(p.b01.slots).toEqual({ punt: 'plants', rond: 'stars', vierkant: null });
+    expect(Object.keys(p.obs)).toEqual(['EB.folio.travel']);
+    expect(p.obs['EB.folio.travel'].id).toBe('EB.folio.travel');
+    expect(p.pins).toEqual(['EB.folio.travel']);
+    expect(p.archivedObs).toEqual(['EB.folio.stars']);
+    expect(p.questions[0].pins).toEqual(['EB.folio.plants']);
+    expect(parseSlice({ schema: 2, b01: { slots: { punt: 'I' } } })!.b01.slots.punt).toBeNull(); // no legacy ids in schema 2
   });
 });
 
 describe('DEV-01 content and events', () => {
   it('provisional content is labelled; folio art carries no subject word, emblem or room name', () => {
-    expect(CONTENT_STATUS).toMatch(/provisional/);
+    expect(CONTENT_STATUS).toMatch(/canon/); expect(CONTENT_STATUS).toMatch(/provisional/);
     for (const f of B01_FOLIOS) {
       // the drawings carry only a numeral and colour notes; the description names what is drawn, never a room
-      expect(folioPage(f) + folioCover(f)).not.toMatch(/ster|plant|reis|kamer|botan|telescoop|koffer/i);
-      expect(SOURCES[SRC.folio(f)].text).not.toMatch(/kamer|botan|telescoop|koffer|boven|reizen|planten/i);
+      expect(folioPage(f)).not.toMatch(/<text|ster|plant|reis|kamer|botan|telescoop|koffer/i); // sketches only, no words
+      expect(SOURCES[SRC.folio(f)].text).not.toMatch(/kamer|botan|\bboven\b|sterren|reizen|planten/i); // drawn objects only, never a room or subject
     }
     for (const sh of ['rond', 'punt', 'vierkant'] as SlotId[]) expect(clipCard(sh)).toContain('<svg');
   });

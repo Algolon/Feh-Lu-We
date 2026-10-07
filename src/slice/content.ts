@@ -10,7 +10,7 @@ import { MANTEL_HINTS } from '../content/canon';
 import { SRC, type FolioId, type Subject, type TopicId, type SlotId } from './ids';
 import * as D from './drawings';
 
-export const CONTENT_STATUS = 'provisional: Puzzle Design v0.2 / UX_GAME_FEEL v0.2 not in repo — see docs/dev01/DEV01_SLICE.md §5';
+export const CONTENT_STATUS = 'B01 folio ids + detail pairs: canon (DEV-01R). Instruction, hints, DS01 texts: provisional (v0.2 files not available) — see docs/dev01/DEV01_SLICE.md §5';
 
 export interface SourceDef {
   id: string;
@@ -22,37 +22,47 @@ export interface SourceDef {
   status: 'provisional' | 'canon';
 }
 
-// ------------------------------------------------------------------------------------------------ B01 (provisional)
-/** The two physical details each folio sketches (pencil, no words naming a subject or room). */
+// ------------------------------------------------------------------------------------------------ B01
+/**
+ * The two physical details each folio (a loose drawing sheet) sketches. CANON (DEV-01R brief, Puzzle Design v0.2):
+ * stars = telescope on a fork mount + two round screw heads; notebook with three holes.
+ * plants = fern with a broad diagonal repair strip; scissors with an angular and a round grip.
+ * travel = suitcase with two parallel straps + square middle patch; label with the top-right corner cut off.
+ * The player-facing wording below is ours (the literal v0.2 wording was not available): provisional phrasing,
+ * canonical details.
+ */
 export const FOLIO_DETAILS: Record<FolioId, string> = {
-  I: 'een rond dopje aan een touwtje, met “groen” erbij geschreven, en een kaartje met sterren waarvan er vijf in een W staan, omcirkeld, met “rood” erbij',
-  II: 'een kompasje met een barst dwars over het glas, en een treinkaartje met één rond gaatje erin',
-  III: 'een varenblad waarvan de punt is afgescheurd, en een bloempot met één band, met “blauw” erbij',
+  stars: 'een kleine telescoop op een vorkvoet, met twee ronde schroefkoppen waar de kijker in de vork draait, en een schrift met drie gaten langs de rug',
+  plants: 'een varenblad met een brede reparatiestrook schuin eroverheen, en een schaar met één hoekige en één ronde greep',
+  travel: 'een koffer met twee evenwijdige riemen en een vierkante lap in het midden, en een label waarvan de rechterbovenhoek is afgeknipt',
 };
+/** Short neutral titles (what is drawn), used in the panel and the notebook. Not subject or room words. */
+export const FOLIO_TITLE: Record<FolioId, string> = { stars: 'telescoop en schrift', plants: 'varen en schaar', travel: 'koffer en label' };
 const PAIR_TEXT: Record<Subject, string> = {
-  sterren: 'Op een tafeltje tegen de muur liggen de lensdop van een telescoop, aan een groen koordje, en een kleine sterrenkaart. Op die kaart is met rode inkt een groepje van vijf sterren omcirkeld, in de vorm van een W.',
-  reizen: 'Op het schrijftafeltje liggen een zakkompas, met een barst dwars over het glas, en een oud treinkaartje met één rond geknipt gaatje.',
-  planten: 'Op een tafeltje tegen de muur staat een terracotta potje met één blauwe band. Ernaast ligt onder glas een geperst varenblad; de punt is eraf gescheurd.',
+  sterren: 'Op een tafeltje tegen de muur staat een kleine telescoop op een vorkvoet; waar de kijker in de vork draait, zitten twee ronde schroefkoppen. Ernaast ligt een schrift met drie gaten langs de rug.',
+  reizen: 'Op het schrijftafeltje staat een kleine koffer met twee evenwijdige riemen en een vierkante lap in het midden. Ernaast ligt een bagagelabel; de rechterbovenhoek is eraf geknipt.',
+  planten: 'Op een tafeltje tegen de muur ligt onder glas een geperst varenblad, met een brede reparatiestrook schuin eroverheen. Ernaast ligt een schaar met één hoekige en één ronde greep.',
 };
 const CLIP_SHAPE_TEXT: Record<SlotId, string> = { rond: 'rond', punt: 'puntig, als een spitsboog', vierkant: 'vierkant' };
 const SUBJECT_CLIP: Record<Subject, SlotId> = { sterren: 'rond', planten: 'punt', reizen: 'vierkant' };
-const SUBJECT_FOLIO: Record<Subject, FolioId> = { sterren: 'I', reizen: 'II', planten: 'III' };
+const SUBJECT_FOLIO: Record<Subject, FolioId> = { sterren: 'stars', reizen: 'travel', planten: 'plants' };
 
+/** provisional wording (Puzzle v0.2's literal instruction was not available); concept per canon: loose sheets. */
 export const TABLE_TEXT =
   'Een lange leestafel. In het blad zitten drie lege vakken met een koperen rand: een puntig vak, een rond vak en een vierkant vak. ' +
-  'Ernaast liggen drie dichte mappen, genummerd I, II en III. Onder het blad zit een lade zonder sleutelgat.\n\n' +
-  'Op een kaartje in het blad: “Iedere map is ooit met een clip uit het archief gehaald. Leg hem terug in het vak van die clip.”';
+  'Ernaast liggen drie losse tekenbladen, elk met twee schetsjes in potlood. Onder het blad zit een lade zonder sleutelgat.\n\n' +
+  'Op een kaartje in het blad: “Ieder tekenblad hoorde ooit met een clip in het archief. Leg het terug in het vak van die clip.”';
 
 // ------------------------------------------------------------------------------------------------ sources
 const S = (d: SourceDef) => d;
 export const SOURCES: Record<string, SourceDef> = {
   [SRC.table]: S({ id: SRC.table, title: 'Leestafel met drie vakken', text: TABLE_TEXT, status: 'provisional' }),
-  ...Object.fromEntries((['I', 'II', 'III'] as FolioId[]).map((f) => [SRC.folio(f), S({
-    id: SRC.folio(f), title: `Map ${f}`, text: `In de map zitten alleen twee schetsjes in potlood, zonder uitleg: ${FOLIO_DETAILS[f]}.`,
-    art: () => D.folioPage(f), status: 'provisional',
+  ...Object.fromEntries((['stars', 'plants', 'travel'] as FolioId[]).map((f) => [SRC.folio(f), S({
+    id: SRC.folio(f), title: `Tekenblad: ${FOLIO_TITLE[f]}`, text: `Een los tekenblad met alleen twee schetsjes in potlood, zonder uitleg: ${FOLIO_DETAILS[f]}.`,
+    art: () => D.folioPage(f), status: 'canon',
   })])),
   ...Object.fromEntries((['sterren', 'planten', 'reizen'] as Subject[]).map((s) => [SRC.pair(s), S({
-    id: SRC.pair(s), title: s === 'reizen' ? 'Schrijftafeltje' : 'Tafeltje tegen de muur', text: PAIR_TEXT[s], art: () => D.pairView(s), status: 'provisional',
+    id: SRC.pair(s), title: s === 'reizen' ? 'Schrijftafeltje' : 'Tafeltje tegen de muur', text: PAIR_TEXT[s], art: () => D.pairView(s), status: 'canon',
   })])),
   ...Object.fromEntries((['sterren', 'planten', 'reizen'] as Subject[]).map((s) => [SRC.clip(s), S({
     id: SRC.clip(s), title: 'Archiefclip', text: `Naast de voorwerpen ligt een leeg archiefkaartje, vastgezet met een koperen clip. De clip is ${CLIP_SHAPE_TEXT[SUBJECT_CLIP[s]]}.`,
@@ -112,11 +122,12 @@ export interface HintSet { context: string; levels: [string, string, string] }
 export const SLICE_HINTS: Record<'drawer' | 'b01', HintSet> = {
   drawer: { context: 'Het slot op de ladekast in de hal.', levels: MANTEL_HINTS },
   b01: {
-    context: 'De leestafel met drie vakken en drie mappen.',
+    context: 'De leestafel met drie vakken en drie tekenbladen.',
+    // provisional wording: the literal Puzzle v0.2 hint levels were not available; level semantics per UX canon
     levels: [
-      'Kijk goed naar wat er in elke map getekend staat. Het zijn geen versieringen: het zijn twee echte voorwerpen.',
-      'Elke map tekent twee voorwerpen die samen op één tafeltje in een kamer boven liggen. Daar ligt ook een archiefclip; de vorm van die clip is het vak voor die map.',
-      `Map I (lensdop + omcirkelde sterren) → rond vak · Map II (kompas + treinkaartje) → vierkant vak · Map III (varenblad + pot met blauwe band) → puntig vak.`,
+      'Kijk goed naar wat er op elk tekenblad getekend staat. Het zijn geen versieringen: het zijn twee echte voorwerpen, met elk een eigen detail.',
+      'Elk tekenblad tekent twee voorwerpen die samen op één tafeltje in een kamer boven liggen. Daar ligt ook een archiefclip; de vorm van die clip is het vak voor dat tekenblad.',
+      'Telescoop op vorkvoet + schrift met drie gaten → rond vak · varen met reparatiestrook + schaar → puntig vak · koffer met twee riemen + label met afgeknipte hoek → vierkant vak.',
     ],
   },
 };
@@ -131,5 +142,5 @@ export const RESULT_TEXT: Record<string, string> = {
   'ds01.memory': 'Een herinnering bewaard in je archief.',
 };
 
-export const SUBJECT_OF_FOLIO: Record<FolioId, Subject> = { I: 'sterren', II: 'reizen', III: 'planten' };
+export const SUBJECT_OF_FOLIO: Record<FolioId, Subject> = { stars: 'sterren', travel: 'reizen', plants: 'planten' };
 export { SUBJECT_CLIP, SUBJECT_FOLIO };

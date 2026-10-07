@@ -10,7 +10,7 @@ import type { FolioId, SlotId, Subject } from './ids';
 
 const svg = (w: number, h: number, body: string, label: string) =>
   `<svg class="diagram slice-art" viewBox="0 0 ${w} ${h}" width="${w}" role="img" aria-label="${label}" xmlns="http://www.w3.org/2000/svg">${body}</svg>`;
-const PAPER = '#f4ead2', INK = '#3a2c1e', PENCIL = '#5b5046', BRASS = '#c9a44c', BRASS_D = '#7a5a1a';
+const PENCIL = '#5b5046', BRASS = '#c9a44c', BRASS_D = '#7a5a1a';
 
 /** Clip / slot outline centred at (cx, cy), radius r. The pointed shape is a pointed arch (not a star or leaf). */
 export function shapePath(shape: SlotId, cx: number, cy: number, r: number): string {
@@ -21,101 +21,97 @@ export function shapePath(shape: SlotId, cx: number, cy: number, r: number): str
 export const SHAPE_NAME: Record<SlotId, string> = { rond: 'rond', punt: 'puntig', vierkant: 'vierkant' };
 
 // ------------------------------------------------------------------------------------------------ B01 objects
-// Each object is drawn once and reused by the folio sketch (pencil), the room view (colour) and the world texture.
-function lensCap(x: number, y: number, s: number, pencil: boolean) {
-  const st = pencil ? PENCIL : '#2b2b2b', cord = pencil ? PENCIL : '#3f8a3a';
-  return `<g transform="translate(${x},${y}) scale(${s})" stroke-linecap="round">
-    <ellipse cx="0" cy="0" rx="34" ry="34" fill="${pencil ? 'none' : '#2f2f2f'}" stroke="${st}" stroke-width="3"/>
-    <ellipse cx="0" cy="0" rx="24" ry="24" fill="none" stroke="${pencil ? PENCIL : '#555'}" stroke-width="2"/>
-    <path d="M30 14 C60 30 52 62 86 66 C110 69 118 52 132 60" fill="none" stroke="${cord}" stroke-width="${pencil ? 2.5 : 4}"/>
-    ${pencil ? `<text x="70" y="96" font-size="15" font-family="Georgia" fill="${PENCIL}" font-style="italic">groen</text>` : ''}
+// DEV-01R canon (Puzzle Design v0.2 as quoted in the DEV-01R brief):
+//   EB.folio.stars   telescope on a fork mount with two round screw heads + a notebook with three holes
+//   EB.folio.plants  fern with a broad diagonal repair strip + scissors with one angular and one round grip
+//   EB.folio.travel  suitcase with two parallel straps and a square middle patch + a label with its top-right corner cut off
+// Each object is drawn once and reused by the sheet sketch (pencil), the room view (colour) and the world texture.
+const st = (pencil: boolean, col: string) => (pencil ? PENCIL : col);
+/** Small telescope on a fork mount; the two round screw heads sit on the fork pivots. */
+function telescopeFork(x: number, y: number, s: number, pencil: boolean) {
+  const fill = (c: string) => (pencil ? 'none' : c);
+  return `<g transform="translate(${x},${y}) scale(${s})" stroke-linejoin="round">
+    <ellipse cx="0" cy="62" rx="40" ry="9" fill="${fill('#5a3a22')}" stroke="${st(pencil, '#3a2412')}" stroke-width="3"/>
+    <rect x="-6" y="30" width="12" height="30" fill="${fill('#6b4426')}" stroke="${st(pencil, '#3a2412')}" stroke-width="3"/>
+    <path d="M-30 32 L-30 -2 M30 32 L30 -2 M-30 32 L30 32" fill="none" stroke="${st(pencil, '#3a2412')}" stroke-width="6" stroke-linecap="round"/>
+    <g transform="rotate(-24)"><rect x="-62" y="-14" width="124" height="26" rx="5" fill="${fill('#b8892f')}" stroke="${st(pencil, '#6b4a1a')}" stroke-width="3"/>
+      <rect x="54" y="-18" width="16" height="34" rx="3" fill="${fill('#8a6a2a')}" stroke="${st(pencil, '#6b4a1a')}" stroke-width="3"/></g>
+    <circle cx="-30" cy="-2" r="8" fill="${fill('#d9b860')}" stroke="${st(pencil, '#3a2412')}" stroke-width="3"/>
+    <circle cx="30" cy="-2" r="8" fill="${fill('#d9b860')}" stroke="${st(pencil, '#3a2412')}" stroke-width="3"/>
+    <path d="M-34 -2 h8 M26 -2 h8" stroke="${st(pencil, '#3a2412')}" stroke-width="2"/>
   </g>`;
 }
-/** Small star chart: the W-shaped group is circled in red ink. `circled=false` is the plain wall chart. */
-function starChart(x: number, y: number, s: number, pencil: boolean, circled = true) {
-  const W = [[-48, -10], [-24, 14], [0, -6], [24, 16], [48, -12]];
-  const other = [[-70, -40], [60, 34], [-58, 40], [10, 40], [70, -36], [-20, -40], [36, -38]];
-  const dot = (p: number[], r: number) => `<circle cx="${p[0]}" cy="${p[1]}" r="${r}" fill="${pencil ? PENCIL : '#f4ecd8'}"/>`;
+/** Notebook (schrift) with exactly three punched holes along its spine edge. */
+function notebook3(x: number, y: number, s: number, pencil: boolean) {
+  let lines = '';
+  for (let i = 0; i < 6; i++) lines += `<line x1="-22" y1="${-34 + i * 13}" x2="40" y2="${-34 + i * 13}" stroke="${pencil ? '#b8ad98' : '#9fb4c8'}" stroke-width="1.5"/>`;
   return `<g transform="translate(${x},${y}) scale(${s})">
-    <rect x="-90" y="-58" width="180" height="116" rx="4" fill="${pencil ? 'none' : '#1c2a44'}" stroke="${pencil ? PENCIL : '#c9a44c'}" stroke-width="3"/>
-    ${other.map((p) => dot(p, 2.4)).join('')}${W.map((p) => dot(p, 4)).join('')}
-    <polyline points="${W.map((p) => p.join(',')).join(' ')}" fill="none" stroke="${pencil ? PENCIL : 'rgba(244,236,216,.55)'}" stroke-width="1.5"/>
-    ${circled ? `<ellipse cx="0" cy="2" rx="62" ry="30" fill="none" stroke="#c0392b" stroke-width="${pencil ? 2.5 : 3.5}" transform="rotate(-4)"/>` : ''}
-    ${pencil && circled ? `<text x="54" y="-26" font-size="15" font-family="Georgia" fill="#c0392b" font-style="italic">rood</text>` : ''}
+    <rect x="-46" y="-56" width="96" height="116" rx="3" fill="${pencil ? 'none' : '#e9e2cc'}" stroke="${st(pencil, '#3f5a6a')}" stroke-width="3"/>
+    <rect x="-46" y="-56" width="12" height="116" fill="${pencil ? 'none' : '#3f5a6a'}" stroke="${st(pencil, '#3f5a6a')}" stroke-width="2"/>
+    ${lines}${[-32, 2, 36].map((cy) => `<circle cx="-28" cy="${cy}" r="6" fill="${pencil ? '#fff' : '#2b2118'}" stroke="${st(pencil, '#2b2118')}" stroke-width="2"/>`).join('')}
   </g>`;
 }
-/** Pressed fern frond whose tip is torn off (ragged end, missing pinnae). */
-function fern(x: number, y: number, s: number, pencil: boolean) {
-  const leaf = pencil ? 'none' : '#4f7a3a', st = pencil ? PENCIL : '#2f4a1a';
+/** Pressed fern frond, crossed by one broad diagonal repair strip. */
+function fernRepair(x: number, y: number, s: number, pencil: boolean) {
+  const leaf = pencil ? 'none' : '#4f7a3a', stc = st(pencil, '#2f4a1a');
   let pinnae = '';
-  for (let i = 0; i < 8; i++) {
-    const yy = 50 - i * 12, len = 30 - i * 2.2;
-    pinnae += `<path d="M0 ${yy} q${-len * 0.6} -8 ${-len} -2 q${len * 0.5} 6 ${len} 8 Z" fill="${leaf}" stroke="${st}" stroke-width="1.5"/>`;
-    pinnae += `<path d="M0 ${yy} q${len * 0.6} -8 ${len} -2 q${-len * 0.5} 6 ${-len} 8 Z" fill="${leaf}" stroke="${st}" stroke-width="1.5"/>`;
+  for (let i = 0; i < 9; i++) {
+    const yy = 54 - i * 12, len = 32 - i * 2.4;
+    pinnae += `<path d="M0 ${yy} q${-len * 0.6} -8 ${-len} -2 q${len * 0.5} 6 ${len} 8 Z" fill="${leaf}" stroke="${stc}" stroke-width="1.5"/>`;
+    pinnae += `<path d="M0 ${yy} q${len * 0.6} -8 ${len} -2 q${-len * 0.5} 6 ${-len} 8 Z" fill="${leaf}" stroke="${stc}" stroke-width="1.5"/>`;
   }
   return `<g transform="translate(${x},${y}) scale(${s})">
-    ${pencil ? '' : '<rect x="-56" y="-66" width="112" height="140" fill="#f2e8d2" stroke="#8a6a3a" stroke-width="4"/>'}
-    <line x1="0" y1="66" x2="0" y2="-44" stroke="${st}" stroke-width="2.5"/>${pinnae}
-    <path d="M-6 -44 l4 -7 l3 5 l4 -8 l2 9" fill="none" stroke="${st}" stroke-width="2"/>
-    ${pencil ? `<path d="M10 -52 q18 -10 26 4" fill="none" stroke="${PENCIL}" stroke-width="1.5" stroke-dasharray="3 3"/><text x="30" y="-58" font-size="14" font-family="Georgia" fill="${PENCIL}" font-style="italic">afgescheurd</text>` : ''}
+    ${pencil ? '' : '<rect x="-60" y="-74" width="120" height="152" fill="#f2e8d2" stroke="#8a6a3a" stroke-width="4"/>'}
+    <line x1="0" y1="70" x2="0" y2="-58" stroke="${stc}" stroke-width="2.5"/>${pinnae}
+    <rect x="-70" y="-13" width="140" height="26" transform="rotate(-38)" fill="${pencil ? 'none' : 'rgba(236,220,170,.85)'}" stroke="${st(pencil, '#a8905a')}" stroke-width="2.5" ${pencil ? 'stroke-dasharray="6 4"' : ''}/>
   </g>`;
 }
-/** Terracotta pot with exactly one blue band. */
-function pot(x: number, y: number, s: number, pencil: boolean) {
-  const body = pencil ? 'none' : '#c9774a', st = pencil ? PENCIL : '#7a4a2a';
-  return `<g transform="translate(${x},${y}) scale(${s})">
-    <path d="M-34 -30 L34 -30 L26 40 L-26 40 Z" fill="${body}" stroke="${st}" stroke-width="3"/>
-    <rect x="-38" y="-40" width="76" height="12" fill="${body}" stroke="${st}" stroke-width="3"/>
-    <path d="M-31.5 -6 L31.5 -6 L30.2 6 L-30.2 6 Z" fill="${pencil ? 'none' : '#2f5fa8'}" stroke="${pencil ? PENCIL : '#1f3f78'}" stroke-width="${pencil ? 2 : 1.5}" ${pencil ? 'stroke-dasharray="2 0"' : ''}/>
-    ${pencil ? `<text x="40" y="6" font-size="15" font-family="Georgia" fill="${PENCIL}" font-style="italic">blauw</text>` : ''}
+/** Scissors: one angular (squared) grip and one round grip. */
+function scissors(x: number, y: number, s: number, pencil: boolean) {
+  const metal = pencil ? 'none' : '#b8c0c8', stc = st(pencil, '#4a4f55');
+  return `<g transform="translate(${x},${y}) scale(${s}) rotate(-90)">
+    <path d="M-6 0 L60 -10 L64 -6 L2 6 Z" fill="${metal}" stroke="${stc}" stroke-width="2.5"/>
+    <path d="M-6 0 L60 10 L64 6 L2 -6 Z" fill="${metal}" stroke="${stc}" stroke-width="2.5"/>
+    <circle cx="0" cy="0" r="4" fill="${pencil ? '#fff' : '#4a4f55'}" stroke="${stc}" stroke-width="2"/>
+    <path d="M-6 -2 L-24 -10" stroke="${stc}" stroke-width="5"/><path d="M-6 2 L-24 10" stroke="${stc}" stroke-width="5"/>
+    <rect x="-58" y="-34" width="34" height="26" fill="none" stroke="${st(pencil, '#7a3a2a')}" stroke-width="7" stroke-linejoin="miter"/>
+    <circle cx="-41" cy="22" r="15" fill="none" stroke="${st(pencil, '#7a3a2a')}" stroke-width="7"/>
   </g>`;
 }
-/** Pocket compass with a cracked glass. */
-function compass(x: number, y: number, s: number, pencil: boolean) {
-  const st = pencil ? PENCIL : '#6b4a1a';
+/** Suitcase with two parallel straps and a square patch in the middle (between the straps). */
+function suitcase2(x: number, y: number, s: number, pencil: boolean) {
+  const fill = (c: string) => (pencil ? 'none' : c), stc = st(pencil, '#4a2f1a');
   return `<g transform="translate(${x},${y}) scale(${s})">
-    <circle r="46" fill="${pencil ? 'none' : '#c9a44c'}" stroke="${st}" stroke-width="3"/>
-    <circle r="38" fill="${pencil ? 'none' : '#f4ecd8'}" stroke="${st}" stroke-width="2"/>
-    <rect x="-7" y="-58" width="14" height="12" rx="3" fill="${pencil ? 'none' : '#c9a44c'}" stroke="${st}" stroke-width="2"/>
-    <path d="M0 -30 L7 0 L0 30 L-7 0 Z" fill="${pencil ? 'none' : '#c0392b'}" stroke="${st}" stroke-width="1.5"/>
-    <path d="M-30 -18 L-8 -4 L-14 10 L12 22 L28 30" fill="none" stroke="${pencil ? PENCIL : '#222'}" stroke-width="2"/>
+    <path d="M-16 -44 v-12 h32 v12" fill="none" stroke="${stc}" stroke-width="5"/>
+    <rect x="-66" y="-44" width="132" height="92" rx="8" fill="${fill('#8a5a33')}" stroke="${stc}" stroke-width="3"/>
+    <rect x="-42" y="-44" width="12" height="92" fill="${fill('#4a2f1a')}" stroke="${stc}" stroke-width="2"/>
+    <rect x="30" y="-44" width="12" height="92" fill="${fill('#4a2f1a')}" stroke="${stc}" stroke-width="2"/>
+    <rect x="-14" y="-12" width="28" height="28" fill="${fill('#c9a46a')}" stroke="${stc}" stroke-width="2.5"/>
   </g>`;
 }
-/** Train ticket with one round punched hole. */
-function ticket(x: number, y: number, s: number, pencil: boolean) {
-  const st = pencil ? PENCIL : '#7a5a3a';
+/** Luggage label whose top-right corner is cut off, with an eyelet and a string. */
+function labelCut(x: number, y: number, s: number, pencil: boolean) {
+  const stc = st(pencil, '#7a5a3a');
   return `<g transform="translate(${x},${y}) scale(${s})">
-    <rect x="-62" y="-32" width="124" height="64" rx="4" fill="${pencil ? 'none' : '#e8d9a8'}" stroke="${st}" stroke-width="3"/>
-    <line x1="-48" y1="-14" x2="20" y2="-14" stroke="${st}" stroke-width="3"/><line x1="-48" y1="0" x2="8" y2="0" stroke="${st}" stroke-width="3"/>
-    <line x1="-48" y1="14" x2="26" y2="14" stroke="${st}" stroke-width="3"/>
-    <circle cx="42" cy="0" r="9" fill="${pencil ? '#fff' : '#3a2c1e'}" stroke="${st}" stroke-width="2"/>
+    <path d="M-50 -34 L24 -34 L50 -8 L50 34 L-50 34 Z" fill="${pencil ? 'none' : '#efe2b8'}" stroke="${stc}" stroke-width="3"/>
+    <circle cx="-36" cy="-20" r="6" fill="${pencil ? '#fff' : '#8a6a3a'}" stroke="${stc}" stroke-width="2"/>
+    <path d="M-36 -20 C-60 -40 -70 -10 -84 -24" fill="none" stroke="${stc}" stroke-width="2"/>
+    <line x1="-26" y1="2" x2="30" y2="2" stroke="${stc}" stroke-width="2.5"/><line x1="-26" y1="16" x2="18" y2="16" stroke="${stc}" stroke-width="2.5"/>
   </g>`;
 }
 
 const PAIR: Record<Subject, (pencil: boolean) => string> = {
-  sterren: (p) => lensCap(86, 118, p ? 0.9 : 1, p) + starChart(236, 112, p ? 0.78 : 0.85, p),
-  planten: (p) => fern(92, 118, p ? 0.95 : 0.9, p) + pot(232, 124, p ? 1.05 : 1.1, p),
-  reizen: (p) => compass(92, 120, p ? 1 : 1.05, p) + ticket(232, 120, p ? 0.95 : 1, p),
+  sterren: (p) => telescopeFork(94, 112, p ? 1 : 1.05, p) + notebook3(240, 118, p ? 0.95 : 1, p),
+  planten: (p) => fernRepair(90, 118, p ? 0.9 : 0.85, p) + scissors(236, 116, p ? 1.15 : 1.2, p),
+  reizen: (p) => suitcase2(98, 120, p ? 0.95 : 1, p) + labelCut(242, 120, p ? 0.95 : 1, p),
 };
-const FOLIO_SUBJECT: Record<FolioId, Subject> = { I: 'sterren', II: 'reizen', III: 'planten' };
-export const FOLIO_COLOR: Record<FolioId, string> = { I: '#7a2f2a', II: '#a8803a', III: '#6b6f72' };
+const FOLIO_SUBJECT: Record<FolioId, Subject> = { stars: 'sterren', plants: 'planten', travel: 'reizen' };
 
-/** Inside of a folio: two pencil sketches on ruled paper and the numeral; no words naming a subject or room. */
+/** A loose drawing sheet (los tekenblad): two pencil sketches on plain drawing paper; no numeral, no words. */
 export function folioPage(f: FolioId): string {
-  let rules = '';
-  for (let y = 40; y < 230; y += 18) rules += `<line x1="14" y1="${y}" x2="306" y2="${y}" stroke="#d8cba8" stroke-width="1"/>`;
-  return svg(320, 240, `<rect width="320" height="240" fill="${PAPER}"/>${rules}
-    <rect x="3" y="3" width="314" height="234" fill="none" stroke="${FOLIO_COLOR[f]}" stroke-width="6"/>
-    <text x="300" y="30" font-size="22" font-family="Georgia" text-anchor="end" fill="${INK}">${f}</text>
-    ${PAIR[FOLIO_SUBJECT[f]](true)}`, `Map ${f}: twee schetsjes`);
-}
-/** Closed folio cover (world + panel thumbnails). */
-export function folioCover(f: FolioId): string {
-  return svg(200, 260, `<rect width="200" height="260" rx="6" fill="${FOLIO_COLOR[f]}"/>
-    <rect x="12" y="12" width="176" height="236" rx="4" fill="none" stroke="rgba(255,240,210,.55)" stroke-width="3"/>
-    <rect x="60" y="70" width="80" height="54" fill="${PAPER}" stroke="${INK}" stroke-width="2"/>
-    <text x="100" y="108" font-size="30" font-family="Georgia" text-anchor="middle" fill="${INK}">${f}</text>
-    <line x1="100" y1="150" x2="100" y2="250" stroke="#e8dcc0" stroke-width="3"/>`, `Map ${f}`);
+  return svg(320, 240, `<path d="M4 6 L314 2 L316 236 L6 234 Z" fill="#f7f1e2" stroke="#cbbf9f" stroke-width="2"/>
+    <path d="M300 2 L316 2 L316 18 Z" fill="#e6dcc4"/>
+    ${PAIR[FOLIO_SUBJECT[f]](true)}`, 'Los tekenblad met twee schetsjes');
 }
 /** The two objects as they actually lie upstairs (colour), for the room inspect overlay. */
 export function pairView(sub: Subject): string {
@@ -137,13 +133,12 @@ export function slotMark(shape: SlotId): string {
     <g fill="#3a2412" stroke="${BRASS}" stroke-width="5">${shapePath(shape, 80, 82, 46)}</g>`, `Vak: ${SHAPE_NAME[shape]}`);
 }
 /** Plain wall star chart (no circle) — the decorative chart that was already in the star room. */
-export const wallStarChart = () => svg(200, 140, starChart(100, 70, 1.05, false, false), 'Sterrenkaart aan de muur');
-/** The table-top pieces as world textures (colour versions of the folio sketches). */
+/** Table-top pieces as world textures (colour versions of the sketches; the telescope and suitcase are 3D). */
 export const objectArt = {
-  chart: () => svg(200, 140, starChart(100, 70, 1.05, false, true), 'Sterrenkaart'),
-  fern: () => svg(120, 150, fern(60, 76, 1, false), 'Geperst varenblad'),
-  compass: () => svg(120, 130, compass(60, 68, 1.15, false), 'Kompas'),
-  ticket: () => svg(140, 80, ticket(70, 40, 1.05, false), 'Treinkaartje'),
+  notebook: () => svg(120, 140, notebook3(62, 70, 1.05, false), 'Schrift met drie gaten'),
+  fern: () => svg(140, 170, fernRepair(70, 86, 1, false), 'Geperst varenblad met reparatiestrook'),
+  scissors: () => svg(120, 160, scissors(60, 84, 1.05, false), 'Schaar'),
+  label: () => svg(200, 100, labelCut(112, 50, 1.1, false), 'Bagagelabel'),
 };
 
 // ------------------------------------------------------------------------------------------------ DS01 (paper only)

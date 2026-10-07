@@ -2,8 +2,8 @@
   {
     "view": "forecourt",
     "normalVsBase": {
-      "diffPixels": 11675,
-      "maxDelta": 12,
+      "diffPixels": 10948,
+      "maxDelta": 10,
       "total": 329160
     },
     "base": {
@@ -15,8 +15,8 @@
       "tris": 141039
     },
     "dev01": {
-      "calls": 140,
-      "tris": 141063
+      "calls": 139,
+      "tris": 141143
     },
     "standing": {
       "x": 90,
@@ -29,8 +29,8 @@
   {
     "view": "hall-wide",
     "normalVsBase": {
-      "diffPixels": 26268,
-      "maxDelta": 1,
+      "diffPixels": 0,
+      "maxDelta": 0,
       "total": 329160
     },
     "base": {
@@ -42,8 +42,8 @@
       "tris": 161554
     },
     "dev01": {
-      "calls": 179,
-      "tris": 162148
+      "calls": 178,
+      "tris": 162228
     },
     "standing": {
       "x": 90,
@@ -56,8 +56,8 @@
   {
     "view": "hall-console",
     "normalVsBase": {
-      "diffPixels": 198582,
-      "maxDelta": 2,
+      "diffPixels": 0,
+      "maxDelta": 0,
       "total": 329160
     },
     "base": {
@@ -70,7 +70,7 @@
     },
     "dev01": {
       "calls": 109,
-      "tris": 176754
+      "tris": 176846
     },
     "standing": {
       "x": 87.5,
@@ -83,8 +83,8 @@
   {
     "view": "hall-maquette",
     "normalVsBase": {
-      "diffPixels": 33678,
-      "maxDelta": 1,
+      "diffPixels": 140232,
+      "maxDelta": 2,
       "total": 329160
     },
     "base": {
@@ -96,8 +96,8 @@
       "tris": 147972
     },
     "dev01": {
-      "calls": 112,
-      "tris": 148626
+      "calls": 111,
+      "tris": 148706
     },
     "standing": {
       "x": 87.5,
@@ -110,8 +110,8 @@
   {
     "view": "living-mantel",
     "normalVsBase": {
-      "diffPixels": 1008,
-      "maxDelta": 1,
+      "diffPixels": 234309,
+      "maxDelta": 3,
       "total": 329160
     },
     "base": {
@@ -124,7 +124,7 @@
     },
     "dev01": {
       "calls": 95,
-      "tris": 157626
+      "tris": 157706
     },
     "standing": {
       "x": 75.4,
@@ -137,7 +137,7 @@
   {
     "view": "library-wide",
     "normalVsBase": {
-      "diffPixels": 4400,
+      "diffPixels": 6838,
       "maxDelta": 1,
       "total": 329160
     },
@@ -151,7 +151,7 @@
     },
     "dev01": {
       "calls": 45,
-      "tris": 57266
+      "tris": 57358
     },
     "standing": {
       "x": 82.4,
@@ -164,7 +164,7 @@
   {
     "view": "library-table",
     "normalVsBase": {
-      "diffPixels": 1366,
+      "diffPixels": 5756,
       "maxDelta": 1,
       "total": 329160
     },
@@ -178,7 +178,7 @@
     },
     "dev01": {
       "calls": 39,
-      "tris": 54430
+      "tris": 54522
     },
     "standing": {
       "x": 82.4,
@@ -191,7 +191,7 @@
   {
     "view": "library-album",
     "normalVsBase": {
-      "diffPixels": 1136,
+      "diffPixels": 962,
       "maxDelta": 1,
       "total": 329160
     },
@@ -205,7 +205,7 @@
     },
     "dev01": {
       "calls": 23,
-      "tris": 52640
+      "tris": 52732
     },
     "standing": {
       "x": 79,
@@ -232,7 +232,7 @@
     },
     "dev01": {
       "calls": 36,
-      "tris": 55636
+      "tris": 55728
     },
     "standing": {
       "x": 80.5,
@@ -245,7 +245,7 @@
   {
     "view": "U04-desk",
     "normalVsBase": {
-      "diffPixels": 4897,
+      "diffPixels": 571,
       "maxDelta": 1,
       "total": 329160
     },
@@ -259,7 +259,7 @@
     },
     "dev01": {
       "calls": 47,
-      "tris": 60880
+      "tris": 60972
     },
     "standing": {
       "x": 80.6,
@@ -272,7 +272,7 @@
   {
     "view": "U04-rack",
     "normalVsBase": {
-      "diffPixels": 3444,
+      "diffPixels": 6,
       "maxDelta": 1,
       "total": 329160
     },
@@ -286,7 +286,7 @@
     },
     "dev01": {
       "calls": 29,
-      "tris": 26348
+      "tris": 26428
     },
     "standing": {
       "x": 83.3,
@@ -299,7 +299,7 @@
   {
     "view": "U10-botanic",
     "normalVsBase": {
-      "diffPixels": 9659,
+      "diffPixels": 7742,
       "maxDelta": 1,
       "total": 329160
     },
@@ -313,7 +313,7 @@
     },
     "dev01": {
       "calls": 51,
-      "tris": 32540
+      "tris": 32620
     },
     "standing": {
       "x": 103.2,

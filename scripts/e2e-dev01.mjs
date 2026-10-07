@@ -69,8 +69,8 @@ async function mainRoute() {
     await startSlice(page, 'new');
     await inject(page);
     await shot(page, '01-arrival');
-    const a0 = await step(page, 'arrival state', () => ({ obs: Object.keys(S.sl().obs), enc: S.sl().encountered, reg: S.sl().registerObserved, objective: S.text('#objective'), plaques: !!T.G().world.byId.get('library.catalog') }));
-    log('arrival: only the invitation (read at home) is observed; nothing encountered; no objective walkthrough', JSON.stringify(a0.obs) === '["c.invitation"]' && !a0.enc.length && !a0.reg && !a0.objective && !a0.plaques, JSON.stringify(a0));
+    const a0 = await step(page, 'arrival state', () => ({ obs: Object.keys(S.sl().obs), enc: S.sl().encountered, reg: S.sl().registerObserved, objective: S.text('#objective'), plaques: ['library.catalog', 'inspect.libraryPlan', 'inspect.guestbookTabs'].some((id) => !!T.G().world.byId.get(id)) }));
+    log('arrival: only the invitation (read at home) is observed; nothing encountered; no objective walkthrough; no catalogue / emblem plan / guestbook-tab evidence', JSON.stringify(a0.obs) === '["c.invitation"]' && !a0.enc.length && !a0.reg && !a0.objective && !a0.plaques, JSON.stringify(a0));
     // notebook before the register
     await step(page, 'notebook before register', () => { T.G().openNotebook(); S.click('[data-t="o"]'); });
     const nb0 = await page.evaluate(() => ({ html: document.getElementById('nb').innerText, tabs: [...document.querySelectorAll('#overlay [data-t]')].map((b) => b.textContent) }));
@@ -114,22 +114,22 @@ async function mainRoute() {
     await page.evaluate(() => T.lookAt(85.5, 0.9, 95.9)); await shot(page, '04b-hall-maquette-view');
     // --- G04 library: B01 table
     await step(page, 'to the library', () => { S.walkLeg('toLibrary'); T.act('door.library', 'Openen: deur'); T.wait(1.2); S.walkLeg('intoLibrary'); });
-    await step(page, 'B01 table panel', () => { T.act('b01.table', 'Bekijken: mappen en vakken'); if (!document.querySelector('.b01-slots')) throw new Error('no panel'); });
+    await step(page, 'B01 table panel', () => { T.act('b01.table', 'Bekijken: tekenbladen en vakken'); if (!document.querySelector('.b01-slots')) throw new Error('no panel'); });
     await measure('library-table');
     await shot(page, '05-b01-library-panel');
-    const b1 = await step(page, 'B01: open folio I, select II, place it, notes and back', async () => {
-      S.click('[data-view="I"]'); const folio = S.modalTitle(); const recorded = !!S.sl().obs['s.b01.folio.I'];
+    const b1 = await step(page, 'B01: view the stars sheet, select travel, place it, notes and back', async () => {
+      S.click('[data-view="stars"]'); const folio = S.modalTitle(); const recorded = !!S.sl().obs['EB.folio.stars'];
       S.click('[data-back]');
-      S.click('[data-pick="II"]'); S.click('[data-slot="vierkant"]');
+      S.click('[data-pick="travel"]'); S.click('[data-slot="vierkant"]');
       const wrong0 = S.sl().b01.wrong;
-      S.click('[data-pick="III"]');
+      S.click('[data-pick="plants"]');
       document.querySelector('#overlay .body').scrollTop = 40;
       S.click('[data-notes]');
       S.click('[data-return]');
       await new Promise((r) => setTimeout(r, 30));
       return { folio, recorded, wrong0, sel: document.querySelector('.folio-card.sel [data-pick]')?.dataset.pick, slots: S.sl().b01.slots, scroll: document.querySelector('#overlay .body').scrollTop };
     });
-    log('B01 panel: folio inspect records an observation; incomplete set is no attempt; draft selection survives notebook round-trip', b1.recorded && b1.wrong0 === 0 && b1.sel === 'III' && b1.slots.vierkant === 'II', JSON.stringify(b1));
+    log('B01 panel: folio inspect records an observation; incomplete set is no attempt; draft selection survives notebook round-trip', b1.recorded && b1.wrong0 === 0 && b1.sel === 'plants' && b1.slots.vierkant === 'travel', JSON.stringify(b1));
     await step(page, 'close B01', () => T.closeModal());
     await page.evaluate(() => T.lookAt(80.6, 0.9, 101.2)); await shot(page, '05b-b01-table-world');
     // --- DS01 B (album + letter)
@@ -176,10 +176,10 @@ async function mainRoute() {
     const sv = await step(page, 'B01: a wrong full set, then the right one', () => {
       T.act('b01.table');
       // current: vierkant=II. wrong: punt=I, rond=III
-      S.click('[data-pick="I"]'); S.click('[data-slot="punt"]'); S.click('[data-pick="III"]'); S.click('[data-slot="rond"]');
+      S.click('[data-pick="stars"]'); S.click('[data-slot="punt"]'); S.click('[data-pick="plants"]'); S.click('[data-slot="rond"]');
       const wrongMsg = S.text('.feedback'), wrong = S.sl().b01.wrong, open1 = !!T.G().state.open['library.desk'];
       S.click('[data-take="punt"]'); S.click('[data-take="rond"]');
-      S.click('[data-pick="III"]'); S.click('[data-slot="punt"]'); S.click('[data-pick="I"]'); S.click('[data-slot="rond"]');
+      S.click('[data-pick="plants"]'); S.click('[data-slot="punt"]'); S.click('[data-pick="stars"]'); S.click('[data-slot="rond"]');
       T.wait(1.2);
       return { wrongMsg, wrong, open1, solved: S.sl().b01.solved, open2: !!T.G().state.open['library.desk'], modal: T.modalOpen(), rewardBefore: S.sl().results.includes('b01.studyKey') };
     });
@@ -350,10 +350,10 @@ async function mobile() {
         return { small, hOverflow: body.scrollWidth > body.clientWidth + 1, fits: ov.getBoundingClientRect().bottom <= innerHeight + 1 };
       });
       log(`mobile ${name}: B01 panel opens from a tap, every button ≥ 44 px, no horizontal overflow, panel fits the screen`, opened === 'Leestafel' && m.small === 0 && !m.hOverflow && m.fits, JSON.stringify({ opened, ...m }));
-      await page.evaluate(() => S.click('[data-view="I"]'));
-      await shot(page, `21-${name}-folio-I`);
+      await page.evaluate(() => S.click('[data-view="stars"]'));
+      await shot(page, `21-${name}-folio-stars`);
       await page.evaluate(() => S.click('[data-zoombtn]'));
-      await shot(page, `22-${name}-folio-I-zoomed`);
+      await shot(page, `22-${name}-folio-stars-zoomed`);
       // click-through: close with a tap on ✕ while the table is under it; the panel must not re-open
       const close = await page.evaluate(() => { const r = document.querySelector('[data-close]').getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 }; });
       await page.touchscreen.tap(close.x, close.y);

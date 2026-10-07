@@ -133,7 +133,7 @@ export function b01Loose(s: GameState): FolioId[] {
  */
 export function b01Place(s: GameState, slot: SlotId, folio: FolioId): Outcome {
   const b = sl(s).b01;
-  if (b.solved) return no('De mappen liggen nu vast.', 'none');
+  if (b.solved) return no('De tekenbladen liggen nu vast.', 'none');
   if (!B01_SLOTS.includes(slot) || !B01_FOLIOS.includes(folio)) return no('Dat past hier niet.', 'fail');
   for (const k of B01_SLOTS) if (b.slots[k] === folio) b.slots[k] = null;
   b.slots[slot] = folio;
@@ -141,14 +141,14 @@ export function b01Place(s: GameState, slot: SlotId, folio: FolioId): Outcome {
 }
 export function b01Take(s: GameState, slot: SlotId): Outcome {
   const b = sl(s).b01;
-  if (b.solved) return no('De mappen liggen nu vast.', 'none');
+  if (b.solved) return no('De tekenbladen liggen nu vast.', 'none');
   if (!b.slots[slot]) return no('Dit vak is leeg.', 'none');
   b.slots[slot] = null;
-  return ok('Je pakt de map terug.', 'pickup');
+  return ok('Je pakt het tekenblad terug.', 'pickup');
 }
 function b01Evaluate(s: GameState): Outcome {
   const b = sl(s).b01;
-  if (B01_SLOTS.some((k) => !b.slots[k])) return ok('De map ligt in het vak.', 'click');
+  if (B01_SLOTS.some((k) => !b.slots[k])) return ok('Het tekenblad ligt in het vak.', 'click');
   if (!B01_SLOTS.every((k) => b.slots[k] === B01_ANSWER[k])) {
     b.wrong++;
     s.wrong.b01 = (s.wrong.b01 ?? 0) + 1;

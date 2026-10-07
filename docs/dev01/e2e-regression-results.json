@@ -42,7 +42,7 @@
   {
     "name": "F07 playtime counts panel reading as active and pause as paused",
     "ok": true,
-    "detail": "{\"activeDuringPanel\":5200,\"pausedDuringPause\":3017,\"activeDuringPause\":0}"
+    "detail": "{\"activeDuringPanel\":1983,\"pausedDuringPause\":2750,\"activeDuringPause\":0}"
   },
   {
     "name": "B4 context loss pauses with a recovery dialog and resumes on restore",
@@ -52,7 +52,7 @@
   {
     "name": "B4 repeated Start presses create one game loop",
     "ok": true,
-    "detail": "rAF/s 5 (software-rendered)"
+    "detail": "rAF/s 4 (software-rendered)"
   },
   {
     "name": "F05 stationary tap on the left side of the screen interacts",
@@ -72,7 +72,7 @@
   {
     "name": "L3 crossing the threshold changes nothing abruptly (smooth light, flame always visible)",
     "ok": true,
-    "detail": "{\"room\":\"living\",\"maxJump\":1.11,\"slotChanges\":1,\"hiddenFrames\":0}"
+    "detail": "{\"room\":\"living\",\"maxJump\":1.12,\"slotChanges\":1,\"hiddenFrames\":0}"
   },
   {
     "name": "L4 closed door blocks the neighbouring room light; open door lets it through",
@@ -207,7 +207,7 @@
   {
     "name": "touch: simultaneous joystick move + look drag",
     "ok": true,
-    "detail": "moved 5.48 m, turned 25°"
+    "detail": "moved 5.14 m, turned 25°"
   },
   {
     "name": "touch: release stops movement",
@@ -447,7 +447,7 @@
   {
     "name": "boslust sample: save restores underground and on the approach (sample world rebuilt)",
     "ok": true,
-    "detail": "{\"sv\":{\"x\":63.00001820764912,\"y\":-3.4,\"z\":29.791428193499293,\"yaw\":0.432585410138943,\"pitch\":-0.2858695845973646},\"back1\":{\"pose\":{\"x\":63.00001820764912,\"y\":-3.4,\"z\":29.791428193499293,\"yaw\":0.432585410138943,\"pitch\":-0.2858695845973646},\"open\":true,\"trees\":1},\"back2\":{\"x\":60.5,\"y\":0,\"z\":9.6,\"yaw\":0.432585410138943,\"pitch\":-0.2858695845973646}}"
+    "detail": "{\"sv\":{\"x\":63.000018209739416,\"y\":-3.4,\"z\":29.791404248759115,\"yaw\":0.432585410138943,\"pitch\":-0.2858695845973646},\"back1\":{\"pose\":{\"x\":63.000018209739416,\"y\":-3.4,\"z\":29.791404248759115,\"yaw\":0.432585410138943,\"pitch\":-0.2858695845973646},\"open\":true,\"trees\":1},\"back2\":{\"x\":60.5,\"y\":0,\"z\":9.6,\"yaw\":0.432585410138943,\"pitch\":-0.2858695845973646}}"
   },
   {
     "name": "boslust sample: entrance lanterns lit from the cut mouth and the door; trees and understory drawn at every pose",

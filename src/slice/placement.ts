@@ -87,8 +87,9 @@ export const PROPS: PropRec[] = [
   { id: 'ds01.maquetteTable', room: 'hall', x: 85.5, z: 95.9, y: GF, w: 0.62, d: 1.1, h: 0.74, kind: 'staging', parts: [{ id: 'ds01.note', dx: 0.06, dz: -0.38 }] },
   // G04 library — B01 table (the iteration-3 reading table, chairs moved to its west side)
   { id: 'b01.tableTop', room: 'library', x: 80.6, z: 101.2, y: GF, w: 1.1, d: 2.2, h: 0.81, kind: 'evidence-surface', parts: [{ id: 'b01.table', dx: 0, dz: 0 }] },
-  // G04 library — DS01 B: low side table by the reading chair, ~7 m from the B01 table
-  { id: 'ds01.sideTable', room: 'library', x: 74.55, z: 106.6, y: GF, w: 0.7, d: 0.9, h: 0.62, kind: 'evidence-surface', parts: [{ id: 'ds01.album', dx: -0.02, dz: -0.2 }, { id: 'ds01.letter', dx: 0.04, dz: 0.27 }] },
+  // G04 library — DS01 B: reading plank in the reading corner, ~7 m from the B01 table
+  // (DEV-01R canon: a quiet reading plank — a ledge on two trestles; same footprint as the DEV-01 side table)
+  { id: 'ds01.sideTable', room: 'library', x: 74.55, z: 106.6, y: GF, w: 0.7, d: 0.9, h: 0.95, kind: 'evidence-surface', parts: [{ id: 'ds01.album', dx: -0.02, dz: -0.2 }, { id: 'ds01.letter', dx: 0.04, dz: 0.27 }] },
   // U05 — B01 star cluster: table against the north wall under the (plain) wall star chart
   { id: 'b01.sterrenTable', room: 'sterren', x: 79.0, z: 93.45, y: UF, w: 1.0, d: 0.5, h: 0.74, kind: 'evidence-surface', parts: [{ id: 'b01.pair.sterren', dx: -0.18, dz: 0 }, { id: 'b01.clip.sterren', dx: 0.37, dz: 0 }] },
   // U04 — B01 travel cluster: writing desk against the north wall

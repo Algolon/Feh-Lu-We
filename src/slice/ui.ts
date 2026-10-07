@@ -12,7 +12,7 @@ import {
   ds01Front, ds01Back, togglePin, saveQuestion, setArchived, hintContexts, revealHint, notebookView, type NbSource,
 } from './model';
 import { ALIAS_OF, B01_SLOTS, SRC, type FolioId, type SlotId, type TopicId } from './ids';
-import { REGISTER_TOPICS, HINT_LEVEL_NAMES, TABLE_TEXT } from './content';
+import { REGISTER_TOPICS, HINT_LEVEL_NAMES, TABLE_TEXT, FOLIO_TITLE } from './content';
 import * as D from './drawings';
 
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
@@ -129,15 +129,17 @@ export class SliceUI {
     const solved = b01Solved(s);
     const slots = b01Slots(s), loose = b01Loose(s);
     if (draft.sel && !loose.includes(draft.sel)) draft.sel = null;
-    const cover = (f: FolioId, w = 64) => `<span class="folio-thumb">${D.folioCover(f).replace('width="200"', `width="${w}"`)}</span>`;
+    // a folio is a loose drawing sheet: its thumbnail IS the sheet with its two sketches
+    const cover = (f: FolioId, w = 96) => `<span class="folio-thumb">${D.folioPage(f).replace('width="320"', `width="${w}"`)}</span>`;
+    const name = (f: FolioId) => `tekenblad met ${FOLIO_TITLE[f]}`;
     const body = this.ui.modal('Leestafel', `
       <p class="kind kind-obs">Waarneming</p><p class="muted">${esc(TABLE_TEXT.split('\n\n')[1] ?? '')}</p>
       <div class="b01-slots">${B01_SLOTS.map((k) => `<div class="pslot"><div class="pslot-label">${D.slotMark(k).replace('width="160"', 'width="56"')}<span>${esc(D.SHAPE_NAME[k])} vak</span></div>` +
-        (slots[k] ? `<button class="btn piece" data-take="${k}" data-fk="take-${k}" ${solved ? 'disabled' : ''} aria-label="Map ${slots[k]} terugpakken uit het ${D.SHAPE_NAME[k]}e vak">${cover(slots[k]!, 44)}<span class="muted">${solved ? 'ligt vast' : 'terugpakken'}</span></button>`
-          : `<button class="btn slot-empty" data-slot="${k}" data-fk="slot-${k}" ${draft.sel && !solved ? '' : 'disabled'} aria-label="Leg map ${draft.sel ?? ''} in het ${D.SHAPE_NAME[k]}e vak">${draft.sel ? `Map ${draft.sel} hier leggen` : 'leeg'}</button>`) + '</div>').join('')}</div>
-      ${solved ? '<p><b>De lade van de leestafel staat open.</b></p>' : loose.length ? `<p class="muted">Kies een map, of open hem om erin te kijken:</p><div class="b01-folios">${loose.map((f) => `<div class="folio-card ${draft.sel === f ? 'sel' : ''}">
-          <button class="btn piece ${draft.sel === f ? 'sel' : ''}" data-pick="${f}" data-fk="pick-${f}" aria-pressed="${draft.sel === f}">${cover(f)}<span>Map ${f}</span></button>
-          <button class="btn small" data-view="${f}" data-fk="view-${f}">Openen</button></div>`).join('')}</div>` : '<p class="muted">Alle mappen liggen in een vak. Klopt het niet, pak er dan een terug.</p>'}
+        (slots[k] ? `<button class="btn piece" data-take="${k}" data-fk="take-${k}" ${solved ? 'disabled' : ''} aria-label="${esc(name(slots[k]!))} terugpakken uit het ${D.SHAPE_NAME[k]}e vak">${cover(slots[k]!, 72)}<span class="muted">${solved ? 'ligt vast' : 'terugpakken'}</span></button>`
+          : `<button class="btn slot-empty" data-slot="${k}" data-fk="slot-${k}" ${draft.sel && !solved ? '' : 'disabled'} aria-label="Leg ${esc(draft.sel ? name(draft.sel) : 'een tekenblad')} in het ${D.SHAPE_NAME[k]}e vak">${draft.sel ? 'Tekenblad hier leggen' : 'leeg'}</button>`) + '</div>').join('')}</div>
+      ${solved ? '<p><b>De lade van de leestafel staat open.</b></p>' : loose.length ? `<p class="muted">Kies een tekenblad, of bekijk het van dichtbij:</p><div class="b01-folios">${loose.map((f) => `<div class="folio-card ${draft.sel === f ? 'sel' : ''}">
+          <button class="btn piece ${draft.sel === f ? 'sel' : ''}" data-pick="${f}" data-fk="pick-${f}" aria-pressed="${draft.sel === f}" aria-label="${esc(name(f))}">${cover(f)}</button>
+          <button class="btn small" data-view="${f}" data-fk="view-${f}">Bekijken</button></div>`).join('')}</div>` : '<p class="muted">Alle tekenbladen liggen in een vak. Klopt het niet, pak er dan een terug.</p>'}
       <p class="feedback" aria-live="polite">${esc(draft.msg)}</p>
       <div class="row center"><button class="btn" data-notes data-fk="notes">Notities</button><button class="btn primary" data-ok>Klaar</button></div>`);
     body.querySelectorAll<HTMLButtonElement>('[data-pick]').forEach((b) => b.addEventListener('click', () => { draft.sel = b.dataset.pick as FolioId; draft.msg = ''; this.b01Panel(draft); this.refocus(`pick-${draft.sel}`); }));

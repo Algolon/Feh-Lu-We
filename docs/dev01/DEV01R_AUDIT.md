@@ -87,3 +87,21 @@ D1 (gingerbread maquette), D2 (reading plank on the same footprint).
 Keep and document: B16, B17 (near-misses for human review).
 Not changed: L1, L2, D4, B8/B9 literal texts, U3 wording — waiting for the documents.
 The review-only sauna vegetation fix stays review-only.
+
+## 6. Outcome (after the reconciliation commit)
+
+| # | Resolution |
+|---|---|
+| B1, U7 | Folios are loose drawing sheets everywhere (world: thin paper with the two sketches; panel: the sheet itself as thumbnail; texts: *tekenblad*). No "map"/folder wording in any B01 text (unit-tested). |
+| B2 | Ids `stars` / `plants` / `travel`, source ids `EB.folio.*`; slice schema 2 migrates DEV-01 review saves (unit-tested). |
+| B3–B5 | Canonical detail pairs in sheet sketches, room objects (3D telescope on fork mount with two round screw heads; 3D suitcase with two straps + square patch) and texts (unit-tested). |
+| B8, B9 | Re-worded to sheets and the canonical details; still provisional pending the literal v0.2 text. |
+| B14 | Painting captions off in the review build. |
+| D1 | Gingerbread maquette (brown body and roof, white icing). |
+| D2 | Reading plank (ledge on trestles), same validated footprint. |
+| B16, B17 | Kept as near-misses; listed for the human review. |
+| L1, L2, D4, U3 | Unchanged — not verifiable without the v0.2 files. |
+
+Checks after the reconciliation: typecheck ✅ · unit 137/137 ✅ · existing e2e 103/103 ✅ · e2e:dev01 32/32 ✅ ·
+normal game vs `ef6b7c3`: draw calls and triangles identical at 13 views, pixel deltas within run-to-run noise ✅.
+The review-only sauna vegetation fix stays review-only (separate follow-up).
