@@ -896,11 +896,11 @@ export function plantModel(kind: PlantKind, variant: number): THREE.BufferGeomet
  */
 export function logModel(seed: number, len = 3, rad = 0.22, o: { stub?: boolean; radial?: number } = {}): THREE.BufferGeometry {
   const r = mulberry32(seed);
-  const bend = (r() - 0.5) * 0.3, sag = rad * 0.25, radial = o.radial ?? 9;
+  const bend = (r() - 0.5) * 0.3, sag = rad * 0.25, radial = o.radial ?? 7;
   // built upright like a trunk (the tube's frames give outward-facing triangles along +y), then laid along +x
   const pts: P3[] = [0, 0.33, 0.66, 1].map((t) => [sag * Math.sin(t * Math.PI), t * len, bend * Math.sin(t * Math.PI) * len * 0.15]);
   const rr = [rad, rad * (0.95 + r() * 0.03), rad * (0.86 + r() * 0.04), rad * 0.78];
-  const body = taperTube(pts, rr, { radial, rows: 5, vScale: 1.2 });
+  const body = taperTube(pts, rr, { radial, rows: 4, vScale: 1.2 });
   const parts: THREE.BufferGeometry[] = [body];
   if (o.stub !== false && len > 0.8) {
     const sp: P3[] = [[-rad * 0.6, len * 0.4, 0], [-rad * 1.9, len * 0.47, rad * 0.7]];
@@ -934,8 +934,8 @@ function capRing(tube: THREE.BufferGeometry, which: 'start' | 'end', radial: num
   const ring: THREE.Vector3[] = [];
   for (let j = 0; j < radial; j++) ring.push(new THREE.Vector3().fromBufferAttribute(p, i0 + j));
   const c = ring.reduce((a, v) => a.add(v), new THREE.Vector3()).multiplyScalar(1 / radial);
-  const levels = [1, 0.86, 0.45, 0]; // rim (bark edge) → sapwood → heart → centre
-  const shade = [0.78, 1.28, 1.12, 0.95];
+  const levels = [1, 0.84, 0.4, 0]; // rim (bark edge) → sapwood → heart → centre
+  const shade = [0.78, 1.28, 1.08, 0.92];
   const pos: number[] = [], col: number[] = [], uv: number[] = [];
   const at = (j: number, l: number) => c.clone().lerp(ring[j % radial], levels[l]);
   const put = (v: THREE.Vector3, l: number) => { pos.push(v.x, v.y, v.z); col.push(shade[l], shade[l] * 0.96, shade[l] * 0.86); uv.push((BARK.smooth + 0.35 + 0.2 * levels[l]) / ATLAS_COLS, 0.4); };

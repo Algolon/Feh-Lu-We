@@ -598,7 +598,7 @@ export function livingRoomV2(w: World, g: GameApi, c: Ctx, sh: ContactShadows) {
   occasionalTable(c, sh, 83.9, 92.4, GF, 0.6, 0.6, 0.62, 0);
   c.col.addBoxC(83.9, 92.4, 0.6, 0.6, GF, GF + 0.62);
   // unchanged supporting pieces (bookshelf, plant, painting) — they get contact shadows only
-  bookshelf(c, 81.5, 93.6, GF, Math.PI, 2.0, 2.4, 'navy');
+  bookshelf(c, 81.5, 93.6, GF, Math.PI, 2.0, 2.4, 'navy', 0.35, 'living'); // DEV-04B: a living-room mix of books and objects
   sh.add(81.5, GF + 0.004, 93.5, 2.35, 0.75, 0, 0.6);
   plant(c, 84.4, 80.9, GF, 1.2);
   sh.add(84.4, GF + 0.004, 80.9, 0.85, 0.85, 0, 0.6);

@@ -466,7 +466,7 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   armchair(c, 76.4, 83.0, GF, -0.35, '#4f7f88');
   armchair(c, 76.4, 90.4, GF, Math.PI + 0.35, '#4f7f88');
   table(c, 77.3, 86.7, GF, 0.9, 1.5, 0, '#6b4426', 0.45);
-  bookshelf(c, 81.5, 93.6, GF, Math.PI, 2.0, 2.4, 'navy');
+  bookshelf(c, 81.5, 93.6, GF, Math.PI, 2.0, 2.4, 'navy', 0.35, 'living');
   plant(c, 84.4, 80.9, GF, 1.2);
   painting(c, 78, 2.1, 80.45, 0, 1.2, 0.85, 3);
   table(c, 83.9, 92.4, GF, 0.6, 0.6, 0, '#6b4426', 0.62);
@@ -488,7 +488,9 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   slatBench(c, 85.4, 102.8, GF, Math.PI / 2, 1.2, '#6b4426');
   staticSconce(c, w, 91.9, 2.2, 101.6, -Math.PI / 2, 3, 6);
 
+  c.chunk = 'mBil'; // DEV-04B: the billiard room is its own batch (it is not seen from the hall or the forecourt)
   billiard(w, g, c);
+  c.chunk = 'mHall';
 
   // ---------------------------------------------------------------- dining room (thread A: damaged hosting plan)
   c.chunk = 'mWing';

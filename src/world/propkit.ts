@@ -671,12 +671,12 @@ export function addCrateLoad(a: Asm, load: CrateLoad, seed: number, lx: number, 
       put(M.paint, '#7a9a4a', cached('cabbage', () => new THREE.IcosahedronGeometry(0.075, 1)), W / 2 - 0.09, 0.07, D / 2 - 0.12);
       for (let i = 0; i < 5; i++) put(M.paint, '#d8722a', cached('carrot', () => new THREE.ConeGeometry(0.014, 0.15, 6).rotateZ(Math.PI / 2)), W / 2 - 0.1, 0.016 + (i % 2) * 0.02, -D / 2 + 0.08 + i * 0.03, { ry: (r() - 0.5) * 0.5 });
       break; }
-    case 'bread': for (let i = 0; i < 3; i++) put(M.paint, ['#c08a4a', '#a8743a', '#d0a060'][i], cached('loaf', () => projectUV(cushion(0.12, 0.08, 0.22, 0.04, 0.03, 'top', 1, 3), 0.25)), -W / 2 + 0.07 + i * 0.11, 0.04, (r() - 0.5) * 0.1, { ry: (r() - 0.5) * 0.3 });
+    case 'bread': for (let i = 0; i < 3; i++) put(M.paint, ['#c08a4a', '#a8743a', '#d0a060'][i], cached('loaf', () => projectUV(cushion(0.12, 0.08, 0.22, 0.04, 0.03, 'top', 1, 2), 0.25)), -W / 2 + 0.07 + i * 0.11, 0.04, (r() - 0.5) * 0.1, { ry: (r() - 0.5) * 0.3 });
       put(M.paint, '#e2d2a8', cached('paperBag', () => projectUV(softBox(0.14, 0.24, 0.09, 0.01, 1, 1), 1)), W / 2 - 0.08, 0.12, D / 2 - 0.08, { rz: 0.06 }); break;
     case 'pantry': for (let i = 0; i < 6; i++) { const dx = -W / 2 + 0.05 + (i % 3) * 0.12, dz = -D / 2 + 0.1 + Math.floor(i / 3) * 0.2; if (i % 2) put(M.brass, '#b8b8b0', cached('tin', () => new THREE.CylinderGeometry(0.037, 0.037, 0.11, 10).translate(0, 0.055, 0)), dx, 0.012, dz); else put(M.paint, ['#e8dcc0', '#c4553d', '#3f6fa8'][i % 3], cached('carton', () => projectUV(softBox(0.07, 0.19, 0.05, 0.004, 1, 1), 1).translate(0, 0.095, 0)), dx, 0.012, dz, { ry: r() * 0.4 }); }
       put(M.paint, '#f2ead8', cached('flourBag', () => projectUV(cushion(0.13, 0.2, 0.09, 0.03, 0.01, 'top', 1, 3), 0.25).translate(0, 0.1, 0)), W / 2 - 0.08, 0.012, D / 2 - 0.1); break;
     case 'drinks': for (let i = 0; i < 6; i++) { const k: BottleKind = i % 3 === 2 ? 'milk' : 'wine'; put(M.ceramic, k === 'milk' ? '#efe9dc' : ['#2f5a2a', '#5a1e1e'][i % 2], bottleGeoOf(k), -W / 2 + 0.05 + (i % 3) * 0.12, 0.012, -D / 2 + 0.1 + Math.floor(i / 3) * 0.2); } break;
-    case 'mixed': pile(0.04, ['#b8382a', '#8aa040'], 0.35); put(M.paint, '#c08a4a', cached('loaf', () => projectUV(cushion(0.12, 0.08, 0.22, 0.04, 0.03, 'top', 1, 3), 0.25)), 0.06, 0.1, 0.12, { ry: 0.3, rz: 0.15 }); put(M.paint, '#c4553d', cached('carton', () => projectUV(softBox(0.07, 0.19, 0.05, 0.004, 1, 1), 1).translate(0, 0.095, 0)), -0.1, 0.012, 0.18, { ry: 0.2 }); break;
+    case 'mixed': pile(0.04, ['#b8382a', '#8aa040'], 0.35); put(M.paint, '#c08a4a', cached('loaf', () => projectUV(cushion(0.12, 0.08, 0.22, 0.04, 0.03, 'top', 1, 2), 0.25)), 0.06, 0.1, 0.12, { ry: 0.3, rz: 0.15 }); put(M.paint, '#c4553d', cached('carton', () => projectUV(softBox(0.07, 0.19, 0.05, 0.004, 1, 1), 1).translate(0, 0.095, 0)), -0.1, 0.012, 0.18, { ry: 0.2 }); break;
   }
 }
 
@@ -695,7 +695,9 @@ export function addShoppingCrate(a: Asm, lx: number, ly: number, lz: number, o: 
     P(bx(0.4, 0.035, 0.02), red, 0, 0.2875, s2 * 0.29);
     P(bx(0.02, 0.035, 0.6), red, s2 * 0.19, 0.2875, 0);
     for (const yy of [0.025, 0.115, 0.2]) { P(bx(0.4, 0.04, 0.016), red, 0, yy, s2 * 0.292); P(bx(0.016, 0.04, 0.6), red, s2 * 0.192, yy, 0); }
-    for (const q of [-1, 0, 1]) { P(bx(0.04, 0.3, 0.018), red, q * 0.17, 0.15, s2 * 0.291); P(bx(0.018, 0.3, 0.04), red, s2 * 0.191, 0.15, q * 0.27); }
+    // corner posts on the long sides, one centre post on each side (the ends had a second, doubled post at each corner)
+    P(bx(0.04, 0.3, 0.018), red, 0, 0.15, s2 * 0.291);
+    for (const q of [-1, 0, 1]) P(bx(0.018, 0.3, 0.04), red, s2 * 0.191, 0.15, q * 0.27);
     P(bx(0.12, 0.035, 0.022), '#3a1210', 0, 0.245, s2 * 0.294);
   }
   if (o.load) addCrateLoad(a, o.load, o.seed ?? 1, lx, ly + 0.02, lz, { ry: rot, w: 0.36, d: 0.56, topY: ly + 0.28 });

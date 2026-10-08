@@ -66,12 +66,12 @@ export function lounger(c: Ctx, x: number, z: number, y0: number, yaw: number, t
     a.add(M.timber, frame, bx(0.05, 0.08, 1.95), sx * 0.33, 0.3, 0); // rail 0.26–0.34
     a.add(M.timber, dk, bx(0.05, 0.28, 0.05), sx * 0.33, 0.14, 0.85); // foot legs
     a.add(M.timber, dk, bx(0.05, 0.2, 0.05), sx * 0.33, 0.17, -0.85); // head legs down to the axle
-    a.add(M.paint, '#2b2b2b', cg('loungerWheel', () => new THREE.CylinderGeometry(0.07, 0.07, 0.04, 12).rotateZ(Math.PI / 2)), sx * 0.375, 0.07, -0.85);
+    a.add(M.paint, '#2b2b2b', cg('loungerWheel', () => new THREE.CylinderGeometry(0.07, 0.07, 0.04, 10).rotateZ(Math.PI / 2)), sx * 0.375, 0.07, -0.85);
     a.add(M.timber, dk, bx(0.05, 0.05, 0.05), sx * 0.375, 0.07, -0.85); // hub block between leg and wheel
   }
   a.add(M.paint, '#3a3530', cg('loungerAxle', () => new THREE.CylinderGeometry(0.012, 0.012, 0.8, 6).rotateZ(Math.PI / 2)), 0, 0.07, -0.85);
   for (const lz of [-0.62, 0.85]) a.add(M.timber, dk, bx(0.61, 0.05, 0.05), 0, 0.29, lz); // cross rails
-  for (let q = 0; q < 9; q++) a.add(M.timber, frame, bx(0.62, 0.02, 0.1), 0, 0.35, -0.2 + q * 0.13);
+  for (let q = 0; q < 9; q += 2) a.add(M.timber, frame, bx(0.62, 0.02, 0.1), 0, 0.35, -0.2 + q * 0.13); // every other slat: the cushion covers the bed
   // the back: hinged at the head end of the seat (lz −0.26, on the rails), rising toward the head at 0.62 rad
   const al = 0.62, L = 0.72, hz = -0.26, hy = 0.355, ca = Math.cos(al), sa = Math.sin(al);
   a.add(M.timber, frame, bx(0.62, 0.02, L), 0, hy + (L / 2) * sa + 0.01, hz - (L / 2) * ca, { rx: -al });
@@ -79,8 +79,8 @@ export function lounger(c: Ctx, x: number, z: number, y0: number, yaw: number, t
   // stays from the rails (lz −0.62) up under the back (0.55 along it)
   const tz = hz - 0.55 * ca, ty = hy + 0.55 * sa, bz = -0.62, by = 0.34, sl = Math.hypot(tz - bz, ty - by);
   for (const sx of [-1, 1]) a.add(M.timber, dk, bx(0.03, sl, 0.03), sx * 0.27, (by + ty) / 2, (bz + tz) / 2, { rx: Math.atan2(bz - tz, ty - by) });
-  a.add(M.upholstery, '#f2ead8', cg('loungerSeat', () => projectUV(cushion(0.6, 0.05, 1.08, 0.02, 0.012, 'top', 1, 3), 0.25)), 0, 0.36 + 0.025, 0.31);
-  a.add(M.upholstery, '#f2ead8', cg('loungerBack', () => projectUV(cushion(0.6, 0.05, 0.68, 0.02, 0.012, 'top', 1, 3), 0.25)), 0, hy + (L / 2) * sa + 0.02 + 0.035 * ca, hz - (L / 2) * ca + 0.035 * sa, { rx: -al });
+  a.add(M.upholstery, '#f2ead8', cg('loungerSeat', () => projectUV(cushion(0.6, 0.05, 1.08, 0.02, 0.012, 'top', 1, 1), 0.25)), 0, 0.36 + 0.025, 0.31);
+  a.add(M.upholstery, '#f2ead8', cg('loungerBack', () => projectUV(cushion(0.6, 0.05, 0.68, 0.02, 0.012, 'top', 1, 1), 0.25)), 0, hy + (L / 2) * sa + 0.02 + 0.035 * ca, hz - (L / 2) * ca + 0.035 * sa, { rx: -al });
   a.add(M.upholstery, towel, sb(0.42, 0.06, 0.3, 0.02), 0.05, 0.435, 0.62, { ry: 0.12 });
   a.end();
   c.col.addBoxC(x, z, Math.abs(Math.sin(yaw)) > 0.7 ? 1.95 : 0.75, Math.abs(Math.sin(yaw)) > 0.7 ? 0.75 : 1.95, y0 - 0.15, y0 + 0.6);
@@ -138,7 +138,7 @@ export function chair(c: Ctx, x: number, z: number, y0: number, yaw: number, sea
     for (const sx of [-1, 1]) a.add(M.timber, wood, bx(0.026, yb - 0.48, 0.026), sx * R, (yb + 0.48) / 2, -0.17, { rx: -0.08 });
     a.add(M.timber, wood, cg('windsorBow', () => new THREE.TorusGeometry(R, 0.016, 5, 12, Math.PI)), 0, yb, -0.18, { rx: -0.08 });
     for (const q of [-0.1, -0.05, 0, 0.05, 0.1]) { const top = yb + Math.sqrt(R * R - q * q) - 0.012, len = top - 0.48; a.add(M.timber, wood, bx(0.014, len, 0.014), q * 1.6, 0.48 + len / 2, -0.175, { rx: -0.08 }); }
-    if (seat) a.add(M.upholstery, seat, cg('windsorPad', () => projectUV(cushion(0.34, 0.025, 0.32, 0.012, 0.008, 'top', 1, 2), 0.25)), 0, 0.4975, 0.02);
+    if (seat) a.add(M.upholstery, seat, cg('windsorPad', () => projectUV(cushion(0.34, 0.025, 0.32, 0.012, 0.008, 'top', 1, 1), 0.25)), 0, 0.4975, 0.02);
   } else {
     for (const sx of [-1, 1]) {
       a.add(M.timber, dk, taperLeg(0.43, 0.022, 0.018), sx * 0.19, 0, 0.18);
@@ -148,12 +148,12 @@ export function chair(c: Ctx, x: number, z: number, y0: number, yaw: number, sea
     a.add(M.timber, dk, bx(0.34, 0.022, 0.02), 0, 0.2, 0.18);
     a.add(M.timber, wood, sb(0.45, 0.035, 0.43, 0.008), 0, 0.447, 0);
     if (style === 'upholstered') {
-      a.add(M.upholstery, seat, cg('dinPad', () => projectUV(cushion(0.41, 0.06, 0.39, 0.02, 0.012, 'top', 1, 2), 0.25)), 0, 0.494, 0.01);
+      a.add(M.upholstery, seat, cg('dinPad', () => projectUV(cushion(0.41, 0.06, 0.39, 0.02, 0.012, 'top', 1, 1), 0.25)), 0, 0.494, 0.01);
       a.add(M.timber, wood, sb(0.42, 0.06, 0.03, 0.01), 0, 0.9, -0.236, { rx: -0.06 });
-      a.add(M.upholstery, seat, cg('dinBack', () => projectUV(cushion(0.34, 0.3, 0.045, 0.018, 0.014, 'front', 1, 2), 0.25)), 0, 0.71, -0.21, { rx: -0.06 });
+      a.add(M.upholstery, seat, cg('dinBack', () => projectUV(cushion(0.34, 0.3, 0.045, 0.018, 0.014, 'front', 1, 1), 0.25)), 0, 0.71, -0.21, { rx: -0.06 });
     } else {
-      if (seat) a.add(M.upholstery, seat, cg('ladderPad', () => projectUV(cushion(0.39, 0.045, 0.37, 0.018, 0.01, 'top', 1, 2), 0.25)), 0, 0.4875, 0.015);
-      a.add(M.timber, wood, sb(0.42, 0.075, 0.03, 0.01), 0, 0.88, -0.235, { rx: -0.06 });
+      if (seat) a.add(M.upholstery, seat, cg('ladderPad', () => projectUV(cushion(0.39, 0.045, 0.37, 0.018, 0.01, 'top', 1, 1), 0.25)), 0, 0.4875, 0.015);
+      a.add(M.timber, wood, bx(0.42, 0.075, 0.03), 0, 0.88, -0.235, { rx: -0.06 }); // cresting rail
       for (const yy of [0.62, 0.75]) a.add(M.timber, wood, bx(0.36, 0.045, 0.02), 0, yy, -0.215, { rx: -0.06 });
     }
     if (style === 'carver') for (const sx of [-1, 1]) {
@@ -194,7 +194,7 @@ const BOOK_PALETTES: Record<string, string[]> = {
  * and recessed paper blocks in four size and four thickness classes. Shelves are composed, not filled: sets that
  * share a binding, single books, a book leaning into a gap, short horizontal stacks, the odd object, empty space.
  */
-export function bookshelf(c: Ctx, x: number, z: number, y0: number, yaw: number, w = 1.6, h = 2.2, palette = 'leather', depth = 0.35) {
+export function bookshelf(c: Ctx, x: number, z: number, y0: number, yaw: number, w = 1.6, h = 2.2, palette = 'leather', depth = 0.35, mix: 'library' | 'living' = 'library') {
   const k = c.k, M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw), case_ = '#5a3a22';
   const pal = BOOK_PALETTES[palette] ?? BOOK_PALETTES.leather;
   // carcass: back, side panels standing 1 cm proud, a recessed plinth and a two-step cornice
@@ -219,16 +219,17 @@ export function bookshelf(c: Ctx, x: number, z: number, y0: number, yaw: number,
     let bx2 = -w / 2 + 0.045, prevRight = bx2, prevH = 0;
     const end = w / 2 - 0.045;
     while (bx2 < end - 0.03) {
-      const roll = r();
-      if (roll < 0.09) { bx2 += 0.06 + r() * 0.12; prevH = 0; continue; } // an empty stretch
-      if (roll < 0.17 && end - bx2 > 0.3) { // a short stack lying flat
+      // a living-room shelf holds fewer books: more gaps, stacks and objects (a library is packed)
+      const roll = r(), [tGap, tStack, tObj] = mix === 'living' ? [0.24, 0.29, 0.42] : [0.09, 0.17, 0.2];
+      if (roll < tGap) { bx2 += 0.06 + r() * 0.12; prevH = 0; continue; } // an empty stretch
+      if (roll < tStack && end - bx2 > 0.3) { // a short stack lying flat
         const n = 2 + Math.floor(r() * 4), sz = fits[Math.min(fits.length - 1, 1 + Math.floor(r() * (fits.length - 1)))];
         const cx = bx2 + BOOK_H[sz][0] / 2 + 0.01;
         addBookStack(a, r, pal, cx, base, front - BOOK_H[sz][1] / 2 - 0.004, n, { sizes: [sz, sz, ...fits.slice(0, 1)] });
         bx2 += BOOK_H[sz][0] + 0.03; prevH = 0; continue;
       }
-      if (roll < 0.2 && end - bx2 > 0.14) { // an object: a small jug or a lidded box
-        if (r() < 0.5) a.add(M.ceramic, ['#6f91a6', '#e6dcc4', '#b3813f'][Math.floor(r() * 3)], cg('shelfJug', () => lathe([[0.001, 0], [0.04, 0], [0.05, 0.05], [0.045, 0.11], [0.03, 0.14], [0.035, 0.16], [0.001, 0.15]], 10)), bx2 + 0.06, base, 0);
+      if (roll < tObj && end - bx2 > 0.14) { // an object: a small jug or a lidded box
+        if (r() < 0.5) a.add(M.ceramic, ['#6f91a6', '#e6dcc4', '#b3813f'][Math.floor(r() * 3)], cg('shelfJug', () => lathe([[0.001, 0], [0.04, 0], [0.05, 0.05], [0.045, 0.11], [0.03, 0.14], [0.035, 0.16], [0.001, 0.15]], 8)), bx2 + 0.06, base, 0);
         else { a.add(M.timber, '#6e4a2c', sb(0.11, 0.07, 0.09, 0.006), bx2 + 0.06, base + 0.035, 0); a.add(M.brass, '#c9a44c', bx(0.02, 0.008, 0.012), bx2 + 0.06, base + 0.04, 0.046); }
         bx2 += 0.13; prevH = 0; continue;
       }
@@ -751,11 +752,11 @@ export function stool(c: Ctx, x: number, z: number, y0: number) {
 export function slatBench(c: Ctx, x: number, z: number, y0: number, yaw: number, len = 1.5, wood = '#7a5232') {
   const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw), dk = darker(wood, 0.78);
   for (const sx of [-1, 1]) {
-    a.add(M.timber, dk, sb(0.06, 0.4, 0.36, 0.006), sx * (len / 2 - 0.12), 0.2, 0);
-    a.add(M.timber, dk, sb(0.08, 0.05, 0.42, 0.006), sx * (len / 2 - 0.12), 0.025, 0);
+    a.add(M.timber, dk, bx(0.06, 0.4, 0.36), sx * (len / 2 - 0.12), 0.2, 0);
+    a.add(M.timber, dk, bx(0.08, 0.05, 0.42), sx * (len / 2 - 0.12), 0.025, 0);
   }
   a.add(M.timber, dk, bx(len - 0.3, 0.05, 0.04), 0, 0.14, 0);
-  for (const dz of [-0.13, 0, 0.13]) a.add(M.timber, wood, sb(len, 0.035, 0.11, 0.008), 0, 0.42, dz);
+  for (const dz of [-0.13, 0, 0.13]) a.add(M.timber, wood, bx(len, 0.035, 0.11), 0, 0.42, dz);
   collide(c, x, z, yaw, len, 0.42, 0.45, y0);
 }
 /** DEV-03 joiner's workbench: thick laminated top, splayed square legs, stretchers, a lower shelf, a front vice. Along local x. */

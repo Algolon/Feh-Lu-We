@@ -129,7 +129,7 @@ const tmpE = new THREE.Euler();
  */
 export class Asm {
   private base: THREE.Matrix4;
-  private rec: { name: string; y0: number; boxes: THREE.Box3[] } | null = null;
+  private rec: { name: string; y0: number; boxes: THREE.Box3[]; tris: number } | null = null;
   constructor(public b: Batcher, public chunk: string, x: number, y0: number, z: number, yaw: number) {
     this.base = planMatrix(x, y0, z, yaw).clone();
   }
@@ -143,6 +143,7 @@ export class Asm {
     if (this.rec) {
       if (!g.boundingBox) g.computeBoundingBox();
       this.rec.boxes.push(g.boundingBox!.clone().applyMatrix4(tmpM));
+      this.rec.tris += (g.index ? g.index.count : g.attributes.position.count) / 3;
     }
     this.b.add(mat, g, tmpM, color, this.chunk, o.shadow ?? true, 0);
   }
@@ -152,12 +153,13 @@ export class Asm {
    * into the floor) and that every part touches the rest of the piece (no disconnected child pieces). Failures go to
    * `assetWarnings` (the DEV-04B browser suite fails on any).
    */
-  begin(name: string) { this.rec = { name, y0: this.base.elements[13], boxes: [] }; return this; }
+  begin(name: string) { this.rec = { name, y0: this.base.elements[13], boxes: [], tris: 0 }; return this; }
   end(o: { ground?: boolean; tol?: number; gap?: number } = {}) {
     const r = this.rec;
     this.rec = null;
     if (!r || !r.boxes.length) return;
     assetAudits.push(r.name);
+    assetTris[r.name] = (assetTris[r.name] ?? 0) + r.tris;
     const issues = auditParts(r.boxes, o.ground === false ? null : r.y0, o.tol ?? 0.012, o.gap ?? 0.006);
     for (const m of issues) assetWarnings.push(`${r.name}: ${m}`);
   }
@@ -167,6 +169,8 @@ export class Asm {
 export const assetWarnings: string[] = [];
 /** Names of every audited piece (the browser suite checks the families are actually covered). */
 export const assetAudits: string[] = [];
+/** DEV-04B: triangles per audited asset name (summed over its instances), for the performance report. */
+export const assetTris: Record<string, number> = {};
 /**
  * Pure audit used by Asm.end (exported for tests): the lowest point must be within `tol` of `y0` (when given), and
  * the parts' bounds (grown by `gap`) must form one connected group. Returns a list of human-readable problems.

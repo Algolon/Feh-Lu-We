@@ -145,8 +145,8 @@ export function floorGlobe(c: Ctx, x: number, z: number, y0: number, yaw = 0.6, 
 /** A woven log basket by a hearth: a wicker tub (rim, bands) with split logs standing in it. */
 export function logBasket(c: Ctx, x: number, z: number, y0: number, yaw = 0) {
   const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw).begin('logBasket');
-  a.add(M.upholstery, '#a8844a', cg('basket', () => projectUV(lathe([[0.001, 0], [0.2, 0], [0.24, 0.05], [0.26, 0.36], [0.27, 0.38], [0.255, 0.4], [0.24, 0.37], [0.001, 0.37]], 14), 0.25)), 0, 0, 0);
-  for (const yy of [0.12, 0.26]) a.add(M.upholstery, '#8a6a3a', cg(`basketBand${yy}`, () => new THREE.TorusGeometry(0.243 + yy * 0.05, 0.012, 4, 16).rotateX(Math.PI / 2)), 0, yy, 0);
+  a.add(M.upholstery, '#a8844a', cg('basket', () => projectUV(lathe([[0.001, 0], [0.2, 0], [0.24, 0.05], [0.26, 0.36], [0.27, 0.38], [0.255, 0.4], [0.24, 0.37], [0.001, 0.37]], 12), 0.25)), 0, 0, 0);
+  for (const yy of [0.12, 0.26]) a.add(M.upholstery, '#8a6a3a', cg(`basketBand${yy}`, () => new THREE.TorusGeometry(0.243 + yy * 0.05, 0.012, 3, 12).rotateX(Math.PI / 2)), 0, yy, 0);
   const logs = cg('basketLogs', () => {
     const parts = [0, 1, 2, 3, 4, 5].map((i) => { const an = i * 1.1, rr = i ? 0.12 : 0; return new THREE.CylinderGeometry(0.055, 0.06, 0.5 - (i % 3) * 0.05, 7).translate(Math.cos(an) * rr, 0.25, Math.sin(an) * rr).toNonIndexed(); });
     const g = parts[0].clone(); void g;
@@ -174,8 +174,8 @@ export function coatRail(c: Ctx, x: number, z: number, y: number, yaw: number, w
   for (let i = 0; i < n; i++) a.add(M.brass, '#c9a44c', cg('coatHook', () => new THREE.TorusGeometry(0.03, 0.006, 4, 8, Math.PI * 1.3).rotateY(Math.PI / 2)), -w / 2 + (w / n) * (i + 0.5), -0.03, 0.05);
   coats.forEach((col, i) => {
     const hx = -w / 2 + (w / n) * (i * 2 + 0.5);
-    a.add(M.upholstery, col, cg('coat', () => { const g = projectUV(cushion(0.42, 0.95, 0.12, 0.06, 0.03, 'front', 1, 3), 0.25); const p = g.attributes.position as THREE.BufferAttribute; for (let k = 0; k < p.count; k++) { const yy = p.getY(k); p.setX(k, p.getX(k) * (0.55 + 0.45 * (0.5 - yy / 0.95))); } g.computeVertexNormals(); return g; }), hx, -0.53, 0.09);
-    a.add(M.upholstery, darker(col, 0.85), cg('coatCollar', () => projectUV(cushion(0.2, 0.08, 0.1, 0.03, 0.01, 'top', 1, 2), 0.25)), hx, -0.06, 0.08);
+    a.add(M.upholstery, col, cg('coat', () => { const g = projectUV(cushion(0.42, 0.95, 0.12, 0.06, 0.03, 'front', 1, 1), 0.25); const p = g.attributes.position as THREE.BufferAttribute; for (let k = 0; k < p.count; k++) { const yy = p.getY(k); p.setX(k, p.getX(k) * (0.55 + 0.45 * (0.5 - yy / 0.95))); } g.computeVertexNormals(); return g; }), hx, -0.53, 0.09);
+    a.add(M.upholstery, darker(col, 0.85), cg('coatCollar', () => projectUV(cushion(0.2, 0.08, 0.1, 0.03, 0.01, 'top', 1, 1), 0.25)), hx, -0.06, 0.08);
   });
   a.end({ ground: false, gap: 0.04 });
 }

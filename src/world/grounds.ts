@@ -27,7 +27,7 @@ export function buildGrounds(w: World, g: GameApi, c: Ctx, veg: Vegetation, wood
   arrival(w, c);
   socialGarden(w, c);
   lake(w, g, c, veg, woods);
-  golf(w, { ...c, chunk: 'golf' }); // DEV-04B: own chunk (see forest.ts)
+  golf(w, c); // DEV-04B: in the grounds batch, which already carries the art-kit materials (an own chunk cost +7 draw calls)
   wickerman(w, c);
   // east glade loop: a rest point with a view back over the meadow (optional, no find yet)
   part(c, c.k.M.wood, '#7a5232', 176.4, 124, Math.PI / 2, 0, terrainHeight(176.4, 124), 0, 1.6, 0.45, 0.45, 1);
@@ -288,13 +288,13 @@ function golf(w: World, c: Ctx) {
     a.add(M.timber, '#7a5232', bx(1.7, 0.04, 0.7), 0, 0.02, 0);
     for (const sd of [-1, 1]) { a.add(M.timber, '#6b4a2a', bx(0.04, 0.24, 0.7), sd * 0.83, 0.12, 0); a.add(M.timber, '#6b4a2a', bx(0.04, 0.2, 0.42), sd * 0.66, 0.1, -0.5, { ry: sd * 0.45 }); } // sides + flaring wings
     a.add(M.timber, '#6b4a2a', bx(1.7, 0.24, 0.04), 0, 0.12, 0.33);
-    for (let i = 0; i < 3; i++) a.add(M.paint, '#f4f4f0', cg('golfBall', () => new THREE.SphereGeometry(0.021, 8, 6)), -0.3 + i * 0.27, 0.061, 0.05 + (i % 2) * 0.12); // returned balls
+    for (let i = 0; i < 3; i++) a.add(M.paint, '#f4f4f0', cg('golfBall', () => new THREE.SphereGeometry(0.021, 6, 4)), -0.3 + i * 0.27, 0.061, 0.05 + (i % 2) * 0.12); // returned balls
     a.end({ gap: 0.05 }); }
   // ---- top: a target board across the deck end with the cup
   { const yt = jy(z0), a = new Asm(c.b, o.chunk, cx, yt, z0 - 0.05, 0);
     a.add(M.timber, '#8a6440', bx(2 * HW + 0.1, 0.5, 0.05), 0, 0.25, -0.05);
-    a.add(M.paint, '#b84a2a', cg('golfTarget', () => new THREE.RingGeometry(0.1, 0.17, 18)), 0, 0.3, -0.02, { ry: Math.PI });
-    a.add(M.paint, '#1b1a18', cg('golfCup', () => new THREE.CircleGeometry(0.1, 18)), 0, 0.3, -0.021, { ry: Math.PI });
+    a.add(M.paint, '#b84a2a', cg('golfTarget', () => new THREE.RingGeometry(0.1, 0.17, 12)), 0, 0.3, -0.02, { ry: Math.PI });
+    a.add(M.paint, '#1b1a18', cg('golfCup', () => new THREE.CircleGeometry(0.1, 12)), 0, 0.3, -0.021, { ry: Math.PI });
     for (const sd of [-1, 1]) { const gy = terrainHeight(cx + sd * HW, z0 - 0.1); a.add(M.timber, '#5a3a22', bx(0.07, yt + 0.5 - gy, 0.07), sd * HW, (gy - yt + 0.5) / 2 + (0), -0.1); }
   }
   // ---- the stand bag (leaning back on its two legs)
@@ -302,11 +302,11 @@ function golf(w: World, c: Ctx) {
   const a = new Asm(c.b, o.chunk, gx, 0, gz, Math.PI * 0.85).begin('golfBag');
   const up = (h: number) => [Math.sin(tilt) * h, Math.cos(tilt) * h] as const; // along the leaning bag axis (toward −z local)
   const along = (h: number, q: object = {}) => { const [dz, dy] = up(h); return { y: dy, z: -dz, o: { rx: tilt, ...q } }; };
-  { const p = along(0); a.add(M.upholstery, bag, cg('bagBody', () => projectUV(lathe([[0.001, 0], [0.11, 0], [0.13, 0.03], [0.14, 0.5], [0.15, 0.78], [0.001, 0.78]], 14), 0.25)), 0, p.y + 0.02, p.z, p.o); }
-  { const p = along(0.78); a.add(M.upholstery, '#e8e2d4', cg('bagCollar', () => lathe([[0.15, 0], [0.165, 0.01], [0.17, 0.08], [0.15, 0.1], [0.12, 0.1], [0.12, 0.09], [0.145, 0.08], [0.145, 0.01]], 14)), 0, p.y + 0.02, p.z, p.o); }
-  { const p = along(0.85); a.add(M.paint, '#151412', cg('bagThroat', () => new THREE.CircleGeometry(0.125, 14).rotateX(-Math.PI / 2)), 0, p.y + 0.02, p.z, p.o); }
+  { const p = along(0); a.add(M.upholstery, bag, cg('bagBody', () => projectUV(lathe([[0.001, 0], [0.11, 0], [0.13, 0.03], [0.14, 0.5], [0.15, 0.78], [0.001, 0.78]], 10), 0.25)), 0, p.y + 0.02, p.z, p.o); }
+  { const p = along(0.78); a.add(M.upholstery, '#e8e2d4', cg('bagCollar', () => lathe([[0.15, 0], [0.165, 0.01], [0.17, 0.08], [0.15, 0.1], [0.12, 0.1], [0.12, 0.09], [0.145, 0.08], [0.145, 0.01]], 10)), 0, p.y + 0.02, p.z, p.o); }
+  { const p = along(0.85); a.add(M.paint, '#151412', cg('bagThroat', () => new THREE.CircleGeometry(0.125, 10).rotateX(-Math.PI / 2)), 0, p.y + 0.02, p.z, p.o); }
   { const p = along(0.86); a.add(M.paint, '#2b2b2b', bx(0.24, 0.02, 0.012), 0, p.y + 0.02, p.z, p.o); a.add(M.paint, '#2b2b2b', bx(0.012, 0.02, 0.24), 0, p.y + 0.02, p.z, p.o); } // dividers
-  { const p = along(0.3); a.add(M.upholstery, '#e8e2d4', cg('bagPocket', () => projectUV(cushion(0.16, 0.34, 0.07, 0.03, 0.02, 'front', 1, 2), 0.25)), 0, p.y + 0.02, p.z - 0.14 * Math.cos(tilt) + 0.0, p.o); }
+  { const p = along(0.3); a.add(M.upholstery, '#e8e2d4', cg('bagPocket', () => projectUV(cushion(0.16, 0.34, 0.07, 0.03, 0.02, 'front', 1, 1), 0.25)), 0, p.y + 0.02, p.z - 0.14 * Math.cos(tilt) + 0.0, p.o); }
   { const p = along(0.45); a.add(M.upholstery, '#1e2a3a', bx(0.06, 0.62, 0.02), 0, p.y + 0.02, p.z + 0.15, p.o); } // shoulder strap on the back
   // clubs: shafts out of the throat, heads above it (irons as angled blades, two woods in knitted covers, a putter)
   const clubs: [number, number, string, string][] = [[-0.06, 0.05, 'wood', '#b8463a'], [0.05, 0.06, 'wood', '#e8e2d4'], [-0.05, -0.05, 'iron', '#b8b8b0'], [0.0, -0.06, 'iron', '#b8b8b0'], [0.06, -0.03, 'putter', '#3a3a3a']];
@@ -314,7 +314,7 @@ function golf(w: World, c: Ctx) {
     const p = along(0.82), shaft = 0.32 + (kind === 'wood' ? 0.06 : 0), [sz, sy] = up(shaft / 2);
     a.add(M.brass, '#a8a8a2', cg(`clubShaft${shaft}`, () => new THREE.CylinderGeometry(0.006, 0.006, shaft, 5)), dx, p.y + 0.02 + sy, p.z - sz + dz, p.o);
     const [hz2, hy2] = up(shaft);
-    if (kind === 'wood') a.add(M.upholstery, col, cg('headCover', () => projectUV(cushion(0.09, 0.12, 0.08, 0.035, 0.01, 'top', 1, 2), 0.25)), dx, p.y + 0.02 + hy2 + 0.04, p.z - hz2 + dz, p.o);
+    if (kind === 'wood') a.add(M.upholstery, col, cg('headCover', () => projectUV(cushion(0.09, 0.12, 0.08, 0.035, 0.01, 'top', 1, 1), 0.25)), dx, p.y + 0.02 + hy2 + 0.04, p.z - hz2 + dz, p.o);
     else a.add(M.brass, col, bx(kind === 'putter' ? 0.1 : 0.07, 0.035, 0.018), dx + 0.02, p.y + 0.02 + hy2 + 0.01, p.z - hz2 + dz, { ...p.o, rz: kind === 'iron' ? 0.5 : 0 });
   }
   // stand legs: from the collar's back down to the ground behind the bag; the bag's foot touches the ground in front
