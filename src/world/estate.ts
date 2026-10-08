@@ -9,10 +9,10 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import { World, type GameApi } from '../interactions/world';
 import type { SceneExtras } from '../core/game';
 import { makeCtx, floor, type Ctx } from './arch';
-import { Batcher, box, boxMM, cyl, blob, compound, getKit, v3, geo } from './kit';
+import { Batcher, box, boxMM, cyl, blob, compound, getKit, v3, geo, supportWarnings } from './kit';
 import { softBox, projectUV } from './artkit';
 import { table, chair, lantern, plant, staticLantern } from './furniture';
-import { Vegetation, scatter, distToPolyline, smooth } from './nature';
+import { Vegetation, scatter, distToPolyline } from './nature';
 import { buildManor } from './manor';
 import { buildConservatory } from './conservatory';
 import { buildCottage } from './cottage';
@@ -33,8 +33,10 @@ import { mulberry32 } from '../core/rng';
 import { estateRooms } from './roomdefs';
 import { ESTATE, SITES, DRIVEWAY, TERRACE, GF, HILL, WOODS, lakeQ, COTTAGE_PAD, WELLNESS } from './layout';
 import { FOREST_PATHS, TCELL, TERRAIN_DIMS, gridAt, gridHeight, inHole, terrainHeight, walkHeight, entranceMound } from './terrain';
-import { ROUTE_LINES, FOOTPRINTS, vegetationClear } from './footprints';
+import { FOOTPRINTS, vegetationClear } from './footprints';
 import { inRect as inR } from './geom2d';
+import { beginOpenings, wallArtConflicts } from './openings';
+import { pathNetwork, type Run } from './junctions';
 
 /** The lantern circle on the lawn behind the manor (a wrong attempt never means crossing the garden). */
 export const LANTERN_CIRCLE = SITES.lanterns;
@@ -48,6 +50,8 @@ const inRect = (x: number, z: number, x0: number, x1: number, z0: number, z1: nu
 
 export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   const w = new World('estate');
+  const openings = beginOpenings(); // DEV-04A: openings, door sweeps and wall art of this build (see openings.ts)
+  supportWarnings.length = 0; // DEV-04A support contract (kit.ts `cyl` vs `rod`)
   w.ambience = 'estate';
   w.col.bounds = { minX: 0.6, maxX: ESTATE.w - 0.6, minZ: 0.6, maxZ: ESTATE.d - 0.6 };
   w.col.ground = walkHeight;
@@ -91,6 +95,11 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   buildGround(w, woods ? new TreeGrid(woods.points()) : null);
 
   for (const c of [ground, manorC, manorIn, manorB, consC, cotC, forestC, gardenC, groundsC, ugC]) c.b.build(w.scene);
+  w.scene.userData.openings = openings;
+  w.scene.userData.supportWarnings = [...supportWarnings];
+  if (supportWarnings.length) console.warn('DEV-04A support contract:', JSON.stringify(supportWarnings));
+  const artBad = wallArtConflicts(openings);
+  if (artBad.length) console.warn('DEV-04A wall-art contract:', JSON.stringify(artBad));
   for (const m of veg.build(w.scene, true)) m.userData.region = 'outdoor';
 
   // whole-room culling: chunks are shown only while one of their rooms can be seen from the player's room
@@ -253,64 +262,62 @@ function buildGround(w: World, trees: TreeGrid | null) {
   hills.build(w.scene, false);
 }
 
-/** Path ribbon draped on the terrain (densified along the line, three vertices across). */
-function drape(pts: readonly (readonly [number, number])[], width: number, lift = 0.035, widthAt?: (x: number, z: number, d: number) => number): THREE.BufferGeometry {
-  const dense: [number, number][] = [];
-  for (let i = 0; i < pts.length - 1; i++) {
-    const [ax, az] = pts[i], [bx, bz] = pts[i + 1];
-    const n = Math.max(1, Math.ceil(Math.hypot(bx - ax, bz - az) / 1.0));
-    for (let s = 0; s < n; s++) dense.push([ax + ((bx - ax) * s) / n, az + ((bz - az) * s) / n]);
-  }
-  dense.push([pts[pts.length - 1][0], pts[pts.length - 1][1]]);
-  const pos: number[] = [], uv: number[] = [], col: number[] = [], idx: number[] = [];
-  let dist = 0;
-  for (let i = 0; i < dense.length; i++) {
-    const p = dense[i], a = dense[Math.max(0, i - 1)], b = dense[Math.min(dense.length - 1, i + 1)];
-    let dx = b[0] - a[0], dz = b[1] - a[1];
-    const len = Math.hypot(dx, dz) || 1;
-    dx /= len; dz /= len;
-    if (i > 0) dist += Math.hypot(p[0] - dense[i - 1][0], p[1] - dense[i - 1][1]);
-    for (let s = -1; s <= 1; s++) {
-      // optional per-side width (art sample: irregular, wandering edges inside the BOSLUST zone)
-      const wd = widthAt ? widthAt(p[0], p[1], dist + s * 7.3) : width;
-      const x = p[0] - dz * s * wd / 2, z = p[1] + dx * s * wd / 2;
-      pos.push(x, terrainHeight(x, z) + lift, -z);
-      uv.push(((s + 1) / 2) * width / 3, dist / 3);
-      col.push(1, 1, 1);
+/** DEV-04A: a clipped network run draped on the terrain (three vertices across: left edge, centre, right edge). */
+function runGeo(run: Run, width: number, lift: number): THREE.BufferGeometry {
+  const pos: number[] = [], uv: number[] = [], col: number[] = [], mouth: number[] = [], idx: number[] = [];
+  run.rows.forEach((r, i) => {
+    for (const [x, z, u] of [[r.lx, r.lz, 0], [r.x, r.z, width / 6], [r.rx, r.rz, width / 3]] as const) {
+      pos.push(x, terrainHeight(x, z) + lift, -z); uv.push(u, r.d / 3); col.push(1, 1, 1); mouth.push(r.mouth);
     }
-    if (i > 0) {
-      const o = (i - 1) * 3;
-      for (const [q0, q1] of [[0, 1], [1, 2]]) idx.push(o + q0, o + q0 + 3, o + q1 + 3, o + q0, o + q1 + 3, o + q1);
-    }
-  }
+    if (i > 0) { const o = (i - 1) * 3; for (const [q0, q1] of [[0, 1], [1, 2]]) idx.push(o + q0, o + q0 + 3, o + q1 + 3, o + q0, o + q1 + 3, o + q1); }
+  });
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
   g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
   g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+  g.setAttribute('mouth', new THREE.Float32BufferAttribute(mouth, 1));
   g.setIndex(idx);
   const ng = g.toNonIndexed();
   g.dispose();
   ng.computeVertexNormals();
   const nn = ng.attributes.normal;
   for (let i = 0; i < nn.count; i++) if (nn.getY(i) < 0) nn.setXYZ(i, -nn.getX(i), -nn.getY(i), -nn.getZ(i));
+  ng.userData.mouth = (ng.attributes.mouth as THREE.BufferAttribute).array;
+  ng.deleteAttribute('mouth');
   return ng;
 }
 
 function buildPaths(w: World, c: Ctx) {
-  const k = c.k;
-  const add = (pts: readonly (readonly [number, number])[], width: number, color: string) => {
-    const gg = drape(pts, width);
-    c.b.add(k.M.dirt, gg, new THREE.Matrix4(), color, 'paths', false, 0);
-    gg.dispose();
-  };
-  add(smooth(DRIVEWAY, 2), 4.2, '#d4cfc2'); // DEV-03: near-neutral tint on the gravel texture (texture × warm tint read as orange clay)
-  if (ART.ext === 'sample') {
-    for (const p of FOREST_PATHS) { const gg = zonePathTint(drape(p, 1.9, 0.035, zonePathWidth)); c.b.add(k.M.dirt, gg, new THREE.Matrix4(), '#c8ad80', 'paths', false, 0); gg.dispose(); }
-    pathVerge(w, FOREST_PATHS, (k.M.dirt as THREE.MeshLambertMaterial).map!);
+  const k = getKit();
+  // DEV-04A: every drawn path comes from ONE ownership network (junctions.ts): the driveway owns its corridor, forest
+  // paths stop at the driveway and the arrival gravel, routes stop at every hard surface (terraces, platforms, the
+  // cottage landing, the tee mat, the viewpoint bay), the forest paths and the routes ranked above them. Where a path
+  // meets its owner it widens into a mouth cut flush to the owner's edge (no overlapping footprints, no leftover
+  // triangles); forest paths blend into the gravel's tint at the forecourt. Lifts follow rank (never coplanar).
+  const sample = ART.ext === 'sample';
+  const gravel = new THREE.Color('#d4cfc2'), forestTint = new THREE.Color('#c8ad80');
+  const toGravel = [gravel.r / forestTint.r, gravel.g / forestTint.g, gravel.b / forestTint.b];
+  const verge: [number, number][][] = [];
+  for (const line of pathNetwork(sample ? zonePathWidth : undefined)) {
+    for (const run of line.runs) {
+      const lift = line.kind === 'drive' ? 0.04 : line.kind === 'forest' ? 0.035 : 0.03;
+      let gg = runGeo(run, line.width, lift);
+      const woodland = line.kind === 'forest' || line.id.startsWith('wickerman') || line.id === 'golfSpur';
+      if (woodland && line.kind === 'route' && sample) gg = zonePathTint(gg); // same soil as the forest path it leaves
+      if (line.kind === 'forest') {
+        if (sample) gg = zonePathTint(gg);
+        // the mouth at the forecourt / driveway takes the gravel's colour: one surface handing over to the next
+        const cc = gg.attributes.color as THREE.BufferAttribute, mw = gg.userData.mouth as Float32Array;
+        for (let i = 0; i < cc.count; i++) { const m = mw[i] * 0.85; cc.setXYZ(i, cc.getX(i) * (1 + (toGravel[0] - 1) * m), cc.getY(i) * (1 + (toGravel[1] - 1) * m), cc.getZ(i) * (1 + (toGravel[2] - 1) * m)); }
+        gg.userData.keepColor = true;
+        verge.push(run.rows.map((r) => [r.x, r.z]));
+      }
+      const tint = line.kind === 'drive' ? '#d4cfc2' : woodland ? '#c8ad80' : '#d9d2c2';
+      c.b.add(k.M.dirt, gg, new THREE.Matrix4(), tint, 'paths', false, 0);
+      gg.dispose();
+    }
   }
-  else for (const p of FOREST_PATHS) add(p, 1.9, '#c8ad80');
-  // DEV-02 routes: cottage out/back, terrace → lanterns → lake view, east glade loop, wellness, BBQ, wickerman, golf
-  for (const r of ROUTE_LINES) add(r.pts, r.width, r.id === 'wickermanLoop' || r.id === 'golfSpur' ? '#c8ad80' : '#d9d2c2');
+  if (sample) pathVerge(w, verge, (k.M.dirt as THREE.MeshLambertMaterial).map!);
   // forecourt: the gravel court itself is one surface built with the arrival (grounds.ts); the central planter stays
   cyl(c.b, k.M.stone, '#d8ccb0', SITES.forecourt.x, 0, SITES.forecourt.z, 1.8, 1.9, 0.45, 18, { chunk: 'ground', uv: 1 });
   cyl(c.b, k.M.paint, '#6a5040', SITES.forecourt.x, 0.45, SITES.forecourt.z, 1.6, 1.6, 0.02, 18, { chunk: 'ground' });

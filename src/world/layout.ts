@@ -93,6 +93,9 @@ export const COTTAGE: Rect = { x0: 20, x1: 30, z0: 157, z1: 165 };
 export const COTTAGE_TERRACE: Rect = { x0: 20, x1: 30, z0: 152, z1: 157 };
 export const COTTAGE_PAD: Rect = { x0: 18, x1: 32, z0: 150, z1: 167 };
 export const COTTAGE_RAMP: Rect = { x0: 18, x1: 20, z0: 151.4, z1: 152.6 };
+/** DEV-04A: the path junction in front of the terrace — one tiled landing that owns the ground where both cottage
+ * routes meet (south / north mouths along X 18) and carries the ramp (COTTAGE_RAMP, X 18–20) up to the terrace. */
+export const COTTAGE_LANDING: Rect = { x0: 16.8, x1: 20, z0: 151.0, z1: 153.6 };
 
 /** The lake (ellipse; water is never walkable, the basin is real terrain). */
 export const LAKE = { x: 54, z: 146, rx: 22, rz: 12, water: -0.35, bottom: -1.8 };
@@ -111,6 +114,13 @@ export const CONS_EAST_DOOR = { x: 130, z0: 104.8, z1: 107.2, h: 2.35 };
 /** Arrival: one gravel court, five 2.8 × 5.5 bays (four cars + one optional), shared manoeuvring strip. */
 export const ARRIVAL: Rect = { x0: 80, x1: 100, z0: 61, z1: 78 };
 export const ARRIVAL_SERVICE: Rect = { x0: 69.5, x1: 108, z0: 66, z1: 72 };
+/** The arrival's ONE gravel surface as non-overlapping rectangles (strip, court, bays + foot strip, porch approach). */
+export const ARRIVAL_GRAVEL: Rect[] = [
+  ARRIVAL_SERVICE,
+  { x0: 80, x1: 100, z0: 62, z1: 66 },
+  { x0: 69.5, x1: 77.9, z0: 72, z1: 79 }, { x0: 77.9, x1: 101, z0: 72, z1: 78 }, { x0: 101, x1: 106.6, z0: 72, z1: 79 },
+  { x0: 86, x1: 94, z0: 78, z1: 78.6 },
+];
 export const PARKING: (Rect & { id: string; car: boolean; color: string })[] = [
   { id: 'car.1', x0: 69.5, x1: 72.3, z0: 72, z1: 77.5, car: true, color: '#5a6f8a' },
   { id: 'car.2', x0: 72.3, x1: 75.1, z0: 72, z1: 77.5, car: true, color: '#b8b2a4' },
@@ -132,6 +142,8 @@ export const LAKE_VIEW: Rect = { x0: 76, x1: 82, z0: 137, z1: 142 };
 /** Golf behind (north of) the BOSLUST hill: a tee beside the shed path, a cardboard return chute up the slope. */
 export const GOLF_TEE: Rect = { x0: 60, x1: 66, z0: 49, z1: 55 };
 export const GOLF_CHUTE: Rect = { x0: 62, x1: 64, z0: 38, z1: 49 };
+/** The tee mat on the tee pad (owns its ground; the golf spur meets its west edge). */
+export const GOLF_MAT: Rect = { x0: GOLF_TEE.x0 + 0.35, x1: GOLF_TEE.x0 + 3.05, z0: GOLF_TEE.z0 + 0.25, z1: GOLF_TEE.z0 + 2.25 };
 /** Separate wickerman clearing (scene only; burning/aftermath is open decision I04). */
 export const WICKERMAN = { x: 167, z: 54, r: 7.5, y: 1.2 };
 

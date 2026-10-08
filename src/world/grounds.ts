@@ -14,7 +14,7 @@ import { Asm, artMats, lathe, cushion, projectUV } from './artkit';
 import { makeInspect, place } from '../interactions/props';
 import type { Vegetation } from './nature';
 import {
-  ARRIVAL, ARRIVAL_SERVICE, PARKING, BBQ, OUTDOOR_DINING, MUSIC_BONG, BALLOON_NOOK, LAKE, LAKE_VIEW, GOLF_TEE, GOLF_CHUTE, WICKERMAN, GF, type Rect,
+  ARRIVAL_GRAVEL, PARKING, BBQ, OUTDOOR_DINING, MUSIC_BONG, BALLOON_NOOK, LAKE, LAKE_VIEW, GOLF_TEE, GOLF_CHUTE, WICKERMAN, GF, type Rect,
 } from './layout';
 import { terrainHeight } from './terrain';
 
@@ -38,12 +38,7 @@ export function buildGrounds(w: World, g: GameApi, c: Ctx, veg: Vegetation, wood
 function arrival(w: World, c: Ctx) {
   const k = c.k;
   // ONE gravel surface made of non-overlapping rectangles (no coplanar disc/plane overlap, audit VD-04)
-  const parts: Rect[] = [
-    ARRIVAL_SERVICE, // manoeuvring strip X 69.5–108 / Z 66–72
-    { x0: ARRIVAL.x0, x1: ARRIVAL.x1, z0: 62, z1: ARRIVAL_SERVICE.z0 }, // court south of the strip (the drive ribbon ends at Z 62)
-    { x0: 69.5, x1: 77.9, z0: 72, z1: 79 }, { x0: 77.9, x1: 101, z0: 72, z1: 78 }, { x0: 101, x1: 106.6, z0: 72, z1: 79 }, // bays + court + foot strip
-    { x0: 86, x1: 94, z0: 78, z1: 78.6 }, // porch approach
-  ];
+  const parts: Rect[] = ARRIVAL_GRAVEL; // strip X 69.5–108 / Z 66–72, court south of it (the drive ends at Z 62), bays, porch approach
   const geos = parts.map((r) => new THREE.PlaneGeometry(r.x1 - r.x0, r.z1 - r.z0).rotateX(-Math.PI / 2).translate((r.x0 + r.x1) / 2, 0.03, -(r.z0 + r.z1) / 2));
   for (const g0 of geos) { c.b.add(k.M.dirt, g0, new THREE.Matrix4(), '#d4cfc2', 'paths', false, 0); g0.dispose(); }
   // bay lines (raised a little, never coplanar)

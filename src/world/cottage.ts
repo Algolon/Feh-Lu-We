@@ -11,7 +11,7 @@ import { Asm, artMats } from './artkit';
 import { box, boxMM, cyl, compound } from './kit';
 import { table, chair, plant, lantern, staticLantern, joinery, bottleGeo } from './furniture';
 import { makeDoor, makeLamp, makeInspect, place } from '../interactions/props';
-import { COTTAGE, COTTAGE_TERRACE, COTTAGE_PAD, COTTAGE_RAMP, COTTAGE_FLOOR, COTTAGE_PAD_Y, COTTAGE_CANOPY } from './layout';
+import { COTTAGE, COTTAGE_TERRACE, COTTAGE_PAD, COTTAGE_LANDING, COTTAGE_FLOOR, COTTAGE_PAD_Y, COTTAGE_CANOPY } from './layout';
 import { terrainHeight } from './terrain';
 import { onRoute } from './footprints';
 
@@ -91,10 +91,27 @@ export function buildCottage(w: World, g: GameApi, c: Ctx) {
   const T = COTTAGE_TERRACE;
   // terracotta floor tiles (square flags tinted terracotta: the roof-tile texture is for roofs) with a stone edge
   floor(c, T.x0, T.x1, T.z0, T.z1, Y, k.M.tile, '#c98a64', Y - B + 0.15, true, 1.2);
-  boxMM(c.b, k.M.stone, '#d8ccb0', T.x0 - 0.04, T.x1 + 0.04, Y - 0.06, Y + 0.005, T.z0 - 0.04, T.z0 + 0.12, { chunk: c.chunk, uv: 1 });
-  const R = COTTAGE_RAMP;
-  boxMM(c.b, k.M.tile, '#c08060', R.x0, R.x1, B - 0.1, B + 0.08, R.z0, R.z1, { chunk: c.chunk, uv: 1 });
-  w.col.addRamp({ minX: R.x0, maxX: T.x0, minZ: R.z0, maxZ: R.z1, axis: 'x', a: R.x0, ya: B, b: T.x0, yb: Y });
+  boxMM(c.b, k.M.stone, '#d8ccb0', T.x0, T.x1 + 0.04, Y - 0.06, Y + 0.005, T.z0 - 0.04, T.z0 + 0.12, { chunk: c.chunk, uv: 1 });
+  // DEV-04A path junction: both cottage routes used to run on over the terrace edge and a loose tile slab (the "ramp",
+  // a flat box 8 cm proud of the path). One tiled landing now owns that ground (COTTAGE_LANDING, the routes are
+  // clipped at its edges by the path network): flat where the paths arrive (south and north mouths along X 18), it
+  // rises over its last 1.1 m (inside the v0.2 COTTAGE_RAMP strip) to the terrace floor; a stone border frames it and a stone
+  // cheek closes the raised edge in front of the terrace.
+  const L = COTTAGE_LANDING, LY = B + 0.05, RX = 18.9;
+  { const o = { chunk: c.chunk, uv: 1 } as const, e = 0.12;
+    boxMM(c.b, k.M.tile, '#c08060', L.x0 + e, RX, B - 0.3, LY - 0.005, L.z0 + e, L.z1 - e, o); // tile field (flat)
+    for (const [x0, x1, z0, z1] of [[L.x0, RX, L.z0, L.z0 + e], [L.x0, RX, L.z1 - e, L.z1], [L.x0, L.x0 + e, L.z0 + e, L.z1 - e]] as const) boxMM(c.b, k.M.stone, '#d8ccb0', x0, x1, B - 0.3, LY, z0, z1, o);
+    // the rising part: a tiled wedge from LY at X 18.9 to the terrace floor at X 20
+    const sh = new THREE.Shape();
+    sh.moveTo(RX, B - 0.3); sh.lineTo(L.x1, B - 0.3); sh.lineTo(L.x1, Y - 0.005); sh.lineTo(RX, LY - 0.005); sh.closePath();
+    const wg = new THREE.ExtrudeGeometry(sh, { depth: L.z1 - L.z0, bevelEnabled: false });
+    wg.translate(0, 0, -L.z1);
+    c.b.add(k.M.tile, wg, new THREE.Matrix4(), '#c08060', c.chunk, true, 0);
+    wg.dispose();
+    boxMM(c.b, k.M.stone, '#d8ccb0', L.x1 - 0.04, L.x1 + 0.08, B - 0.3, Y + 0.005, L.z0, T.z0 - 0.04, o); // cheek in front of the terrace
+  }
+  w.col.addFloor(L.x0, RX, L.z0, L.z1, LY);
+  w.col.addRamp({ minX: RX, maxX: L.x1, minZ: L.z0, maxZ: L.z1, axis: 'x', a: RX, ya: LY, b: L.x1, yb: Y });
   // lean-to canopy from the house wall (+7.15) to the front beam (+6.95): underside ≥ +6.85 everywhere
   const roofY0 = COTTAGE_CANOPY + 0.3, roofY1 = COTTAGE_CANOPY + 0.1, rd = T.z1 - T.z0 + 0.3;
   const tilt = Math.atan2(roofY0 - roofY1, rd);
