@@ -238,6 +238,15 @@ export function floor(c: Ctx, x0: number, x1: number, z0: number, z1: number, yT
   if (walk) c.col.addFloor(x0, x1, z0, z1, yTop);
 }
 
+/**
+ * DEV-04A door threshold: a dressed stone sill through the full depth of a wall opening, its top 12 mm over the floor
+ * level y (a readable threshold, never a knee-high piece of wall), walkable.
+ */
+export function threshold(c: Ctx, x0: number, x1: number, z0: number, z1: number, y: number, color: THREE.ColorRepresentation = '#d6c8a8') {
+  boxMM(c.b, c.k.M.stone, color, x0, x1, y - 0.14, y + 0.012, z0, z1, { uv: 0.8, chunk: c.chunk, jitter: 0 });
+  c.col.addFloor(x0, x1, z0, z1, y);
+}
+
 /** Ceiling (visual only), underside at y. */
 export function ceiling(c: Ctx, x0: number, x1: number, z0: number, z1: number, y: number, color: THREE.ColorRepresentation = '#efe4cc', thick = 0.2) {
   boxMM(c.b, c.k.M.plaster, color, x0, x1, y, y + thick, z0, z1, { uv: 3, chunk: c.chunk, shadow: false });

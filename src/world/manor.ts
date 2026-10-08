@@ -12,9 +12,9 @@
 // boiler room, route chamber (tunnel door).
 import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
-import { type Ctx, wall, floor, ceiling, stairsZ, railing, stairRail, hipRoof, gableRoof, windowAt, balustrade, newel, segBox, TRIM } from './arch';
+import { type Ctx, wall, floor, ceiling, stairsZ, railing, stairRail, hipRoof, gableRoof, windowAt, balustrade, newel, segBox, threshold, TRIM } from './arch';
 import { lathe, Asm, artMats } from './artkit';
-import { box, boxMM, cyl, blob, compound, v3, hipRoofGeo, geo } from './kit';
+import { box, boxMM, cyl, rod, blob, compound, v3, hipRoofGeo, geo } from './kit';
 import {
   table, chair, sofa, armchair, bookshelf, counter, rug, plant, painting, crate, tableLamp, floorLamp, chandelier, wallSconce,
   part, staticLantern, staticSconce, bed2, bedside, wardrobe, curtains, desk, lectern, bathtub, ladder, telescope, canvasPanel, nameBoard, joinery,
@@ -76,14 +76,35 @@ function shell(w: World, c: Ctx) {
   // DEV-03 facade grammar: a proud sandstone plinth with a weathered top, rusticated quoins at the corners, a string
   // course at the first floor and a moulded cornice under the eaves on all four sides (one family with the wing).
   const sand = '#cdbb98', dressed = TRIM.dressed;
-  const ring = (y0: number, y1: number, proud: number, col: string, x0 = 72, x1 = 108, z0 = 80, z1 = 110, mat: THREE.Material = k.M.stone) => {
-    boxMM(c.b, mat, col, x0 - proud, x1 + proud, y0, y1, z0 - proud, z0, { chunk: c.chunk, uv: 2, jitter: 0 });
-    boxMM(c.b, mat, col, x0 - proud, x1 + proud, y0, y1, z1, z1 + proud, { chunk: c.chunk, uv: 2, jitter: 0 });
-    boxMM(c.b, mat, col, x0 - proud, x0, y0, y1, z0, z1, { chunk: c.chunk, uv: 2, jitter: 0 });
-    boxMM(c.b, mat, col, x1, x1 + proud, y0, y1, z0, z1, { chunk: c.chunk, uv: 2, jitter: 0 });
+  type Runs = Partial<Record<'S' | 'N' | 'W' | 'E', [number, number][]>>;
+  const ring = (y0: number, y1: number, proud: number, col: string, x0 = 72, x1 = 108, z0 = 80, z1 = 110, mat: THREE.Material = k.M.stone, runs: Runs = {}) => {
+    const o = { chunk: c.chunk, uv: 2, jitter: 0 };
+    for (const [a, b] of runs.S ?? [[x0 - proud, x1 + proud]]) boxMM(c.b, mat, col, a, b, y0, y1, z0 - proud, z0, o);
+    for (const [a, b] of runs.N ?? [[x0 - proud, x1 + proud]]) boxMM(c.b, mat, col, a, b, y0, y1, z1, z1 + proud, o);
+    for (const [a, b] of runs.W ?? [[z0, z1]]) boxMM(c.b, mat, col, x0 - proud, x0, y0, y1, a, b, o);
+    for (const [a, b] of runs.E ?? [[z0, z1]]) boxMM(c.b, mat, col, x1, x1 + proud, y0, y1, a, b, o);
   };
-  ring(-0.1, 0.62, 0.1, sand); // plinth
-  ring(0.62, 0.7, 0.06, '#d9c9a6', 72, 108, 80, 110, k.M.paint); // weathered plinth top
+  // DEV-04A: the plinth course is a knee-high stone band; it ran straight across every ground-floor door (front door,
+  // both garden doors, the service door, the wing's yard and conservatory doors) and on through the service wing's
+  // rooms. Its runs now stop at each door opening (a stone threshold fills the wall depth instead) and it is only
+  // built where the wall is exterior. Door spans come from the facade definitions below.
+  const gaps = (lo: number, hi: number, doors: [number, number][]): [number, number][] => {
+    const out: [number, number][] = [];
+    let cur = lo;
+    for (const [a, b] of [...doors].sort((p, q) => p[0] - q[0])) { if (a > cur) out.push([cur, a]); cur = Math.max(cur, b); }
+    if (hi > cur) out.push([cur, hi]);
+    return out;
+  };
+  const span = (at: number, wd: number): [number, number] => [at - wd / 2, at + wd / 2];
+  const mainRuns = (p: number): Runs => ({
+    S: gaps(72 - p, 108 + p, [span(90, 1.7)]), N: gaps(72 - p, 108 + p, [span(91.5, 1.2), span(101, 1.0)]),
+    E: [[80, 92.0]], // the service wing covers Z 92–110 of the east face: no plinth inside its rooms
+  });
+  const wingRuns = (p: number): Runs => ({ S: gaps(108, 116 + p, [span(112, 1.1)]), N: [[108, 116 + p]], W: [], E: gaps(92.2, 109.8, [span(102.5, 1.3)]) });
+  ring(-0.1, 0.62, 0.1, sand, 72, 108, 80, 110, k.M.stone, mainRuns(0.1)); // plinth
+  ring(0.62, 0.7, 0.06, '#d9c9a6', 72, 108, 80, 110, k.M.paint, mainRuns(0.06)); // weathered plinth top
+  // stone thresholds through the wall depth of the ground-floor exterior doors (flush walking line, no knee-high sill)
+  for (const [x0, x1, z0, z1] of [[89.15, 90.85, 79.9, 80.42], [90.9, 92.1, 109.58, 110.1], [100.5, 101.5, 109.58, 110.1], [107.58, 108.42, 102, 103]] as const) threshold(c, x0, x1, z0, z1, GF);
   ring(UF - 0.12, UF + 0.08, 0.07, dressed, 72, 108, 80, 110, k.M.paint); // string course
   ring(TOP - 0.42, TOP - 0.26, 0.06, dressed, 72, 108, 80, 110, k.M.paint); // cornice: frieze band
   ring(TOP - 0.26, TOP - 0.12, 0.13, '#e9dcc0', 72, 108, 80, 110, k.M.paint); // corona
@@ -159,7 +180,8 @@ function shell(w: World, c: Ctx) {
   wall(c, 'x', 92.2, 107.6, 116, 0, WH, { ...stone, t: 0.4, exterior: -1, skin, uv: 2.4, winStyle: 'manor', openings: [{ at: 112, w: 1.1, h: 2.3 }], windows: [{ at: 110, sill: 1.1, h: 1.3, w: 1.0 }, { at: 114.4, sill: 1.1, h: 1.3, w: 0.8 }] });
   wall(c, 'x', 109.8, 107.6, 116, 0, WH, { ...stone, t: 0.4, exterior: 1, skin, uv: 2.4, winStyle: 'manor', windows: [{ at: 112, sill: 1.2, h: 1.1, w: 1.0 }] });
   wall(c, 'z', 115.8, 92.4, 109.6, 0, WH, { ...stone, t: 0.4, exterior: 1, skin, uv: 2.4, openings: [{ at: 102.5, w: 1.3, h: 2.35 }] });
-  ring(-0.1, 0.62, 0.1, sand, 108, 116, 92.2, 109.8);
+  ring(-0.1, 0.62, 0.1, sand, 108, 116, 92.2, 109.8, k.M.stone, wingRuns(0.1));
+  for (const [x0, x1, z0, z1] of [[111.45, 112.55, 92.0, 92.42], [115.58, 116.12, 101.85, 103.15]] as const) threshold(c, x0, x1, z0, z1, GF);
   ring(WH - 0.3, WH - 0.14, 0.08, dressed, 108, 116, 92.2, 109.8, k.M.paint);
   // DEV-03: the west eave stops on the manor's outer wall face (x 108); with the old symmetric 8 m footprint the
   // overhang, fascia and gutter ran 0.5 m through the manor wall into the north guest room as a "dado rail"

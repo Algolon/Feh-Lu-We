@@ -6,7 +6,7 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import type { World, GameApi } from '../interactions/world';
-import { type Ctx, wall, floor, ceiling, hipRoof, segBox } from './arch';
+import { type Ctx, wall, floor, ceiling, hipRoof, segBox, threshold } from './arch';
 import { Asm, artMats } from './artkit';
 import { box, boxMM, cyl, compound } from './kit';
 import { table, chair, plant, lantern, staticLantern, joinery, bottleGeo } from './furniture';
@@ -36,7 +36,15 @@ export function buildCottage(w: World, g: GameApi, c: Ctx) {
   };
   for (const x of [X0 + 2.2, X1 - 2.2]) for (const s of [-1, 1]) shutter(x + s * 0.73, Z0 - 0.02, 'x', -1);
   for (const z of [Z0 + 1.7, Z0 + 5.6]) for (const s of [-1, 1]) shutter(X1 + 0.02, z + s * 0.73, 'z', 1);
-  boxMM(c.b, k.M.paint, '#47709e', X0 - 0.06, X1 + 0.06, B - 0.3, B + 0.42, Z0 - 0.06, Z1 + 0.06, { chunk: c.chunk });
+  // DEV-04A: the barra was ONE solid box over the whole footprint (top +4.42): it buried the room's floor (+4.15) under
+  // a blue surface and ran across the doorway as a 27 cm sill. It is now a painted band on the four outer wall faces,
+  // stopping at the door, with a stone threshold through the wall depth
+  { const bo = { chunk: c.chunk }, y0 = B - 0.3, y1 = B + 0.42, dl = CX - 0.5, dr = CX + 0.5;
+    for (const [a, b2] of [[X0 - 0.06, dl], [dr, X1 + 0.06]] as const) boxMM(c.b, k.M.paint, '#47709e', a, b2, y0, y1, Z0 - 0.06, Z0, bo);
+    boxMM(c.b, k.M.paint, '#47709e', X0 - 0.06, X1 + 0.06, y0, y1, Z1, Z1 + 0.06, bo);
+    boxMM(c.b, k.M.paint, '#47709e', X0 - 0.06, X0, y0, y1, Z0, Z1, bo);
+    boxMM(c.b, k.M.paint, '#47709e', X1, X1 + 0.06, y0, y1, Z0, Z1, bo);
+    threshold(c, dl, dr, Z0 - 0.02, Z0 + 0.32, Y, '#d8ccb0'); }
   hipRoof(c, CX, CZ, X1 - X0, Z1 - Z0, TOPW, 2.2, k.M.terracotta, '#ffffff', 0.55);
   box(c.b, k.M.plaster, '#fbf6ec', X0 + 1.2, B + 4.0, Z1 - 1.4, 0.8, 2.0, 0.8, { chunk: c.chunk });
   box(c.b, k.M.terracotta, '#ffffff', X0 + 1.2, B + 6.0, Z1 - 1.4, 1.0, 0.15, 1.0, { chunk: c.chunk });
