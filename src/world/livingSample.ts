@@ -46,7 +46,9 @@ const footGeo = () => lathe([[0, 0], [0.024, 0], [0.028, 0.012], [0.022, 0.05], 
  * seat cushions, a raked back with an arched top, loose back cushions and rolled arms with piped scroll fronts.
  * Origin = floor centre of the footprint, facing heading `yaw`.
  */
-export function upholstered(c: Ctx, sh: ContactShadows, x: number, z: number, y0: number, yaw: number, o: { width: number; depth?: number; seats: number; color: string; pillows?: string[]; shadowY?: number }) {
+export function upholstered(c: Ctx, sh: ContactShadows, x: number, z: number, y0: number, yaw: number, o: { width: number; depth?: number; seats: number; color: string; pillows?: string[]; shadowY?: number; wings?: boolean; lite?: boolean }) {
+  // DEV-04B `lite`: the same build with fewer segments (the estate's other sofas / armchairs; the living room keeps full detail)
+  const sg = o.lite ? 1 : 2, rs = o.lite ? 10 : 16;
   const M = artMats();
   const a = new Asm(c.b, c.chunk, x, y0, z, yaw);
   const W = o.width, D = o.depth ?? 0.86, armW = 0.15, footH = 0.09;
@@ -65,7 +67,7 @@ export function upholstered(c: Ctx, sh: ContactShadows, x: number, z: number, y0
   const innerW = W - 2 * armW - 0.01;
   const seatW = innerW / o.seats;
   const seatD = D - 0.18, seatH = 0.12, seatY = footH + baseH;
-  const sc = bake(projectUV(cushion(seatW - 0.012, seatH, seatD, 0.045, 0.025), 0.25), (p) => (p.y < -seatH / 2 + 0.02 ? 0.72 : 1));
+  const sc = bake(projectUV(cushion(seatW - 0.012, seatH, seatD, 0.045, 0.025, 'top', sg, sg * 2), 0.25), (p) => (p.y < -seatH / 2 + 0.02 ? 0.72 : 1));
   const seatZ = D / 2 - 0.02 - seatD / 2; // front edge 2 cm behind the base front, back edge on the back frame
   for (let i = 0; i < o.seats; i++) a.add(M.upholstery, col, sc, -innerW / 2 + seatW * (i + 0.5), seatY + seatH / 2, seatZ);
   sc.dispose();
@@ -80,15 +82,15 @@ export function upholstered(c: Ctx, sh: ContactShadows, x: number, z: number, y0
   back.dispose();
   // loose back cushions, leaning further back
   const bcH = 0.42, bcT = 0.14;
-  const bc = bake(projectUV(cushion(seatW - 0.014, bcH, bcT, 0.05, 0.03, 'front'), 0.25), (p) => (p.y < -bcH / 2 + 0.05 ? 0.8 : 1));
+  const bc = bake(projectUV(cushion(seatW - 0.014, bcH, bcT, 0.05, 0.03, 'front', sg, sg * 2), 0.25), (p) => (p.y < -bcH / 2 + 0.05 ? 0.8 : 1));
   for (let i = 0; i < o.seats; i++) a.add(M.upholstery, col, bc, -innerW / 2 + seatW * (i + 0.5), seatY + seatH + bcH / 2 - 0.01, -(D / 2 - backT - bcT / 2 + 0.035), { rx: 0.2 });
   bc.dispose();
   // rolled arms: a body, the roll, and a piped scroll front
   const armH = 0.47, rollR = 0.075;
   const armBody = bake(projectUV(softBox(armW, armH, D - 0.06, 0.04), 0.25), baseAO(-armH / 2, 0.16, 0.7));
-  const roll = projectUV(new THREE.CylinderGeometry(rollR, rollR, D - 0.08, 16).rotateX(Math.PI / 2), 0.25);
-  const scroll = new THREE.CylinderGeometry(rollR + 0.006, rollR + 0.006, 0.02, 18).rotateX(Math.PI / 2);
-  const pipeRing = new THREE.TorusGeometry(rollR + 0.004, 0.0075, 6, 22);
+  const roll = projectUV(new THREE.CylinderGeometry(rollR, rollR, D - 0.08, rs).rotateX(Math.PI / 2), 0.25);
+  const scroll = new THREE.CylinderGeometry(rollR + 0.006, rollR + 0.006, 0.02, rs + 2).rotateX(Math.PI / 2);
+  const pipeRing = new THREE.TorusGeometry(rollR + 0.004, 0.0075, o.lite ? 4 : 6, rs + 6);
   for (const sx of [-1, 1]) {
     const ax = sx * (W / 2 - armW / 2);
     a.add(M.upholstery, col, armBody, ax, footH + armH / 2 + 0.01, 0);
@@ -97,9 +99,16 @@ export function upholstered(c: Ctx, sh: ContactShadows, x: number, z: number, y0
     a.add(M.upholstery, dark, pipeRing, ax + sx * 0.012, footH + armH + 0.03, D / 2 - 0.035 + 0.012);
   }
   armBody.dispose(); roll.dispose(); scroll.dispose(); pipeRing.dispose(); pipe.dispose();
+  // DEV-04B wing back (reading chairs): an upholstered wing each side of the back, from the arm roll up to the
+  // back's top, flaring a little outward; it overlaps the back and sits on the arm (carried, not floating)
+  if (o.wings) {
+    const wing = bake(projectUV(cushion(0.1, 0.5, D * 0.48, 0.04, 0.015, 'top', sg, sg * 2), 0.25), baseAO(-0.25, 0.2, 0.82));
+    for (const sx of [-1, 1]) a.add(M.upholstery, col, wing, sx * (W / 2 - 0.06), footH + armH + 0.03 + 0.24, -(D / 2 - D * 0.24 - 0.02), { ry: sx * 0.12 });
+    wing.dispose();
+  }
   // throw pillows (sofa only), tilted into the corners
   if (o.pillows) {
-    const pg = projectUV(cushion(0.4, 0.38, 0.12, 0.05, 0.04, 'front'), 0.25);
+    const pg = projectUV(cushion(0.4, 0.38, 0.12, 0.05, 0.04, 'front', sg, sg * 2), 0.25);
     o.pillows.forEach((pc, i) => {
       const sx = i ? 1 : -1;
       a.add(M.upholstery, pc, pg, sx * (innerW / 2 - 0.24), seatY + seatH + 0.2, -(D / 2 - backT - 0.2), { rx: 0.32, ry: -sx * 0.32, rz: sx * 0.12 });
