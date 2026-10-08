@@ -6,7 +6,7 @@
 import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, floor, gableRoof } from './arch';
-import { box, boxMM, cyl, blob, compound, v3, planMatrix } from './kit';
+import { box, boxMM, cyl, rod, blob, compound, v3, planMatrix } from './kit';
 import { lantern, crate, part, staticLantern } from './furniture';
 import { makeFire } from './fire';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeAction, makeInspect, place } from '../interactions/props';
@@ -166,9 +166,11 @@ function buildShed(w: World, g: GameApi, c: Ctx) {
   }
   makeDoor(w, g, { id: 'door.shed', x: X1, z: DZ - 0.5, dir: 'z+', width: 1.0, height: 2.2, y0: 0.1, swing: -1, color: '#6b4a2a', style: 'plank', key: 'shedKey' });
   staticLantern(c, w, X1 + 0.15, 2.0, DZ + 1.2, 0.6, 0, 2.5, 6);
-  // log pile + chopping stump outside
-  for (let i = 0; i < 9; i++) cyl(c.b, k.M.bark, '#8a6a4a', X1 + 0.6, 0.15 + Math.floor(i / 3) * 0.28, Z0 + 0.3 - (i % 3) * 0.3 - (Math.floor(i / 3) % 2) * 0.15, 0.14, 0.14, 1.0, 7, { chunk: c.chunk, rz: Math.PI / 2, yaw: Math.PI / 2 });
-  w.col.addBox(X1 + 0.05, X1 + 1.15, Z0 - 0.6, Z0 + 0.5, 0, 1);
+  // DEV-04A: the log pile floated ~0.5 m in the air (three long logs laid through `cyl`, which takes a BASE height). It is
+  // now a stacked log store against the east wall south of the door: split logs on the ground, end grain out, rows
+  // resting in the grooves of the row below, held by stakes at both ends (the same woodpile as the fire clearing)
+  woodpile(c, X1 + 0.47, Z0 + 0.62, -Math.PI / 2, 5, 4, mulberry32(2203));
+  w.col.addBox(X1, X1 + 0.95, Z0 + 0.0, Z0 + 1.24, 0, 1.0);
   cyl(c.b, k.M.bark, '#7a5a3a', X1 + 1.5, 0, Z0 + 0.1, 0.35, 0.4, 0.5, 9, { chunk: c.chunk });
   w.col.addCircle(X1 + 1.5, Z0 + 0.1, 0.4, 0, 0.6);
   // workbench along the north wall; its drawer holds the forest-walk journal
@@ -186,7 +188,7 @@ function buildShed(w: World, g: GameApi, c: Ctx) {
   makePickup(w, g, { id: 'pk.journal', item: 'journal', obj: journal, available: wd.isOpen, hit: [0.3, 0.12, 0.3], after: () => g.inspect('c.journal') });
   // kindling bundle on the floor
   const kind = compound((b) => {
-    for (let i = 0; i < 7; i++) cyl(b, k.M.bark, '#c8a070', (i % 3) * 0.08 - 0.08, 0.05 + Math.floor(i / 3) * 0.07, 0, 0.035, 0.035, 0.6, 5, { rz: Math.PI / 2 });
+    for (let i = 0; i < 7; i++) rod(b, k.M.bark, '#c8a070', 0, 0.035 + Math.floor(i / 3) * 0.065, (i % 3) * 0.075 - 0.075 + (Math.floor(i / 3) % 2) * 0.035, 0.035, 0.035, 0.6, 5, { rz: Math.PI / 2 });
     box(b, k.M.paint, '#c4553d', 0, 0.02, 0, 0.04, 0.22, 0.05);
   });
   place(kind, X0 + 0.9, 0.1, Z0 + 0.6, 0.2);
@@ -222,6 +224,21 @@ function buildShed(w: World, g: GameApi, c: Ctx) {
   });
 }
 
+/**
+ * A stacked woodpile of split logs: `base` logs in the bottom row, one fewer per row, each row resting in the grooves of
+ * the row below (log Ø 0.2 at 0.24 centres → rows 0.16 apart); the rows run along plan direction (cos yaw, −sin yaw),
+ * each log lies across it; a stake at each end of the row line.
+ */
+function woodpile(c: Ctx, x: number, z: number, yaw: number, base: number, rows: number, r: () => number) {
+  const M = woodMats(), ux = Math.cos(yaw), uz = -Math.sin(yaw);
+  for (let row = 0; row < rows; row++) for (let i = 0; i < base - row; i++) {
+    const off = (i - (base - 1 - row) / 2) * 0.24;
+    c.b.add(M.tree, SPLIT_LOG, planMatrix(x + ux * off, 0.1 + row * 0.165, z + uz * off, yaw + Math.PI / 2, 1, 1, 1), new THREE.Color('#a08c70').multiplyScalar(0.85 + r() * 0.25), c.chunk, true, 0);
+  }
+  const end = (base - 1) * 0.12 + 0.17;
+  for (const e of [-1, 1]) cyl(c.b, c.k.M.wood, '#5a4630', x + ux * e * end, 0, z + uz * e * end, 0.04, 0.05, 0.25 + rows * 0.17, 6, { chunk: c.chunk });
+}
+
 function buildFireClearing(w: World, g: GameApi, c: Ctx) {
   const k = c.k;
   const { x: FX, z: FZ } = SITES.fire;
@@ -249,14 +266,11 @@ function buildFireClearing(w: World, g: GameApi, c: Ctx) {
   bench(1.45, 3.2, 2.2); bench(4.3, 3.35, 2.2);
   // woodpile against a tree at the clearing edge: split logs stacked between two stakes
   const wpA = 5.45, wpx = FX + Math.cos(wpA) * 6.6, wpz = FZ + Math.sin(wpA) * 6.6, wpyaw = -wpA + Math.PI / 2;
-  for (let row = 0; row < 4; row++) for (let i = 0; i < 6 - row; i++) {
-    const off = (i - (5 - row) / 2) * 0.24;
-    c.b.add(M.tree, SPLIT_LOG, planMatrix(wpx + Math.cos(wpyaw) * off, 0.11 + row * 0.2, wpz - Math.sin(wpyaw) * off, wpyaw + Math.PI / 2, 1, 1, 1), new THREE.Color('#a08c70').multiplyScalar(0.85 + r() * 0.25), c.chunk, true, 0);
-  }
-  for (const e of [-1, 1]) cyl(c.b, k.M.wood, '#5a4630', wpx + Math.cos(wpyaw) * e * 0.85, 0, wpz - Math.sin(wpyaw) * e * 0.85, 0.04, 0.05, 1.0, 6, { chunk: c.chunk });
+  woodpile(c, wpx, wpz, wpyaw, 6, 4, r);
   w.col.addCircle(wpx, wpz, 0.75, 0, 1.0);
+  // DEV-04A: the firewood laid in the pit floated at +0.57 (`cyl` base height); two crossed layers resting on the hearth
   const logs = compound((b) => {
-    for (let i = 0; i < 4; i++) cyl(b, k.M.bark, '#8a6a4a', 0, 0.12, 0, 0.07, 0.07, 0.9, 6, { rz: Math.PI / 2, yaw: i * 0.8 });
+    for (let i = 0; i < 4; i++) rod(b, k.M.bark, '#8a6a4a', 0, 0.09 + (i % 2) * 0.12, 0, 0.07, 0.07, 0.9, 6, { rz: Math.PI / 2, yaw: (i % 2) * 1.57 + (i > 1 ? 0.35 : -0.35) });
   });
   place(logs, FX, 0, FZ);
   w.scene.add(logs);
@@ -328,8 +342,9 @@ function buildWell(w: World, g: GameApi, c: Ctx) {
   w.col.addCircle(WX, WZ, 1.15, 0, 1.5);
   for (const s of [-1, 1]) box(c.b, k.M.wood, '#6b4a2a', WX + s * 1.0, 0.9, WZ, 0.14, 1.6, 0.14, { chunk: c.chunk });
   gableRoof(c, WX, WZ, 2.6, 1.6, 2.5, 0.8, true, k.M.slate, '#7a8070');
-  cyl(c.b, k.M.wood, '#7a5a3a', WX, 1.75, WZ, 0.08, 0.08, 2.0, 8, { chunk: c.chunk, rz: Math.PI / 2 });
-  box(c.b, k.M.paint, '#3b3b3b', WX + 1.12, 1.55, WZ, 0.04, 0.3, 0.04, { chunk: c.chunk });
+  // DEV-04A: the winch axle sat at +2.75 (above the posts, in the roof): it now runs between the post heads
+  rod(c.b, k.M.wood, '#7a5a3a', WX, 2.2, WZ, 0.08, 0.08, 2.0, 8, { chunk: c.chunk, rz: Math.PI / 2 });
+  box(c.b, k.M.paint, '#3b3b3b', WX + 1.12, 1.92, WZ, 0.04, 0.3, 0.04, { chunk: c.chunk });
   cyl(c.b, k.M.wood, '#7a5a3a', WX + 0.3, 0.9, WZ + 0.55, 0.2, 0.17, 0.3, 10, { chunk: c.chunk });
   const hit = new THREE.Group();
   place(hit, WX, 0, WZ);

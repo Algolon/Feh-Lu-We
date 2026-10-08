@@ -1,0 +1,761 @@
+{
+  "rows": [
+    {
+      "name": "01-stars-door-walkway",
+      "pose": {
+        "x": 86.15,
+        "y": 3.35,
+        "z": 93.4,
+        "yaw": 3.490658503988659,
+        "pitch": -0.02
+      },
+      "low": {
+        "calls": 123,
+        "triangles": 278004
+      },
+      "room": "walkway",
+      "feetY": 3.35
+    },
+    {
+      "name": "01b-stars-door-from-hall",
+      "pose": {
+        "x": 92.6,
+        "y": 0.15,
+        "z": 90.2,
+        "yaw": -1.53588974175501,
+        "pitch": 0.38
+      },
+      "low": {
+        "calls": 138,
+        "triangles": 287680
+      },
+      "room": "hall",
+      "feetY": 0.15
+    },
+    {
+      "name": "02-dining-window-wall",
+      "pose": {
+        "x": 102.2,
+        "y": 0.15,
+        "z": 88.4,
+        "yaw": 1.3089969389957472,
+        "pitch": 0.06
+      },
+      "low": {
+        "calls": 164,
+        "triangles": 204129
+      },
+      "room": "dining",
+      "feetY": 0.15
+    },
+    {
+      "name": "03-kitchen-sink",
+      "pose": {
+        "x": 105,
+        "y": 0.15,
+        "z": 108.25,
+        "yaw": 0,
+        "pitch": -0.62
+      },
+      "low": {
+        "calls": 81,
+        "triangles": 201546
+      },
+      "room": "kitchen",
+      "feetY": 0.15
+    },
+    {
+      "name": "03b-kitchen-sink-shift",
+      "pose": {
+        "x": 105.12,
+        "y": 0.15,
+        "z": 108.2,
+        "yaw": -0.06981317007977318,
+        "pitch": -0.6
+      },
+      "low": {
+        "calls": 84,
+        "triangles": 200716
+      },
+      "room": "kitchen",
+      "feetY": 0.15
+    },
+    {
+      "name": "04-cons-double-door-inside",
+      "pose": {
+        "x": 126.3,
+        "y": 0.15,
+        "z": 106,
+        "yaw": 1.5707963267948966,
+        "pitch": -0.04
+      },
+      "low": {
+        "calls": 77,
+        "triangles": 132984
+      },
+      "room": "cons",
+      "feetY": 0.15
+    },
+    {
+      "name": "04b-cons-double-door-outside",
+      "pose": {
+        "x": 134.2,
+        "y": 0.15,
+        "z": 106,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.04
+      },
+      "low": {
+        "calls": 196,
+        "triangles": 238621
+      },
+      "room": "out",
+      "feetY": 0.15
+    },
+    {
+      "name": "04c-cons-double-door-half",
+      "pose": {
+        "x": 134.2,
+        "y": 0.15,
+        "z": 106,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.04,
+        "swing": 0.5
+      },
+      "low": {
+        "calls": 196,
+        "triangles": 238621
+      },
+      "room": "out",
+      "feetY": 0.15
+    },
+    {
+      "name": "04d-cons-double-door-closed",
+      "pose": {
+        "x": 126.3,
+        "y": 0.15,
+        "z": 106,
+        "yaw": 1.5707963267948966,
+        "pitch": -0.04,
+        "closed": [
+          "door.consEast"
+        ]
+      },
+      "low": {
+        "calls": 77,
+        "triangles": 135607
+      },
+      "room": "cons",
+      "feetY": 0.15
+    },
+    {
+      "name": "05-main-entrance-threshold",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 76.9,
+        "yaw": 0,
+        "pitch": -0.3
+      },
+      "low": {
+        "calls": 166,
+        "triangles": 279556
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "05b-main-entrance-inside",
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 82.6,
+        "yaw": 3.141592653589793,
+        "pitch": -0.32
+      },
+      "low": {
+        "calls": 85,
+        "triangles": 265694
+      },
+      "room": "vestibule",
+      "feetY": 0.15
+    },
+    {
+      "name": "05c-service-door-to-wing",
+      "pose": {
+        "x": 105.6,
+        "y": 0.15,
+        "z": 102.5,
+        "yaw": 1.5707963267948966,
+        "pitch": -0.3
+      },
+      "low": {
+        "calls": 166,
+        "triangles": 216786
+      },
+      "room": "kitchen",
+      "feetY": 0.15
+    },
+    {
+      "name": "05d-wing-to-conservatory",
+      "pose": {
+        "x": 112.6,
+        "y": 0.15,
+        "z": 102.6,
+        "yaw": 1.5707963267948966,
+        "pitch": -0.3
+      },
+      "low": {
+        "calls": 116,
+        "triangles": 208169
+      },
+      "room": "corridor",
+      "feetY": 0.15
+    },
+    {
+      "name": "05e-garden-door-billiard",
+      "pose": {
+        "x": 91.5,
+        "y": 0.15,
+        "z": 112.4,
+        "yaw": 3.141592653589793,
+        "pitch": -0.3
+      },
+      "low": {
+        "calls": 155,
+        "triangles": 319130
+      },
+      "room": "out",
+      "feetY": 0.15
+    },
+    {
+      "name": "06-copacabana-bar-sign",
+      "pose": {
+        "x": 124.2,
+        "y": 0.15,
+        "z": 105.2,
+        "yaw": 0.6981317007977318,
+        "pitch": 0.06
+      },
+      "low": {
+        "calls": 63,
+        "triangles": 126442
+      },
+      "room": "cons",
+      "feetY": 0.15
+    },
+    {
+      "name": "06b-copacabana-old-board",
+      "pose": {
+        "x": 112,
+        "y": 0.15,
+        "z": 102.6,
+        "yaw": 1.0471975511965976,
+        "pitch": 0.02
+      },
+      "low": {
+        "calls": 112,
+        "triangles": 200398
+      },
+      "room": "corridor",
+      "feetY": 0.15
+    },
+    {
+      "name": "07-sauna-access",
+      "pose": {
+        "x": 137.6,
+        "y": 0.15,
+        "z": 112.4,
+        "yaw": -2.443460952792061,
+        "pitch": -0.08
+      },
+      "low": {
+        "calls": 176,
+        "triangles": 258220
+      },
+      "room": "out",
+      "feetY": 0.15
+    },
+    {
+      "name": "07b-sauna-access-front",
+      "pose": {
+        "x": 134,
+        "y": 0.15,
+        "z": 110.5,
+        "yaw": 3.141592653589793,
+        "pitch": -0.05
+      },
+      "low": {
+        "calls": 128,
+        "triangles": 246692
+      },
+      "room": "out",
+      "feetY": 0.38
+    },
+    {
+      "name": "08-attic-wall-roof",
+      "pose": {
+        "x": 93.2,
+        "y": 6.65,
+        "z": 99.3,
+        "yaw": -1.9198621771937625,
+        "pitch": 0.3
+      },
+      "low": {
+        "calls": 40,
+        "triangles": 106036
+      },
+      "room": "atticCommon",
+      "feetY": 6.65
+    },
+    {
+      "name": "08b-attic-common-east",
+      "pose": {
+        "x": 84,
+        "y": 6.65,
+        "z": 96,
+        "yaw": 1.3962634015954636,
+        "pitch": 0.25
+      },
+      "low": {
+        "calls": 42,
+        "triangles": 105498
+      },
+      "room": "atticCommon",
+      "feetY": 6.65
+    },
+    {
+      "name": "09-attic-observatory",
+      "pose": {
+        "x": 97,
+        "y": 6.65,
+        "z": 96.8,
+        "yaw": 2.0943951023931953,
+        "pitch": 0.28
+      },
+      "low": {
+        "calls": 34,
+        "triangles": 95756
+      },
+      "room": "atticLookout",
+      "feetY": 6.65
+    },
+    {
+      "name": "09b-observatory-exterior",
+      "pose": {
+        "x": 124,
+        "y": 0.15,
+        "z": 86,
+        "yaw": -1.0821041362364843,
+        "pitch": 0.32
+      },
+      "low": {
+        "calls": 145,
+        "triangles": 172060
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "10-wickerman-main-path",
+      "pose": {
+        "x": 158,
+        "y": 1,
+        "z": 47,
+        "yaw": 1.0821041362364843,
+        "pitch": 0.04
+      },
+      "low": {
+        "calls": 30,
+        "triangles": 160793
+      },
+      "room": "out",
+      "feetY": 0.82
+    },
+    {
+      "name": "10b-wickerman-path-north",
+      "pose": {
+        "x": 168.5,
+        "y": 1,
+        "z": 62,
+        "yaw": 3.0543261909900767,
+        "pitch": 0.02
+      },
+      "low": {
+        "calls": 34,
+        "triangles": 198027
+      },
+      "room": "out",
+      "feetY": 1.19
+    },
+    {
+      "name": "11-wickerman-clearing",
+      "pose": {
+        "x": 158,
+        "y": 1,
+        "z": 50,
+        "yaw": 1.0471975511965976,
+        "pitch": 0.08
+      },
+      "low": {
+        "calls": 29,
+        "triangles": 180083
+      },
+      "room": "out",
+      "feetY": 0.91
+    },
+    {
+      "name": "12-portugal-path-terrace",
+      "pose": {
+        "x": 16.6,
+        "y": 4,
+        "z": 146.8,
+        "yaw": 0.4363323129985824,
+        "pitch": -0.22
+      },
+      "low": {
+        "calls": 32,
+        "triangles": 114718
+      },
+      "room": "out",
+      "feetY": 3.79
+    },
+    {
+      "name": "12b-portugal-terrace-ramp",
+      "pose": {
+        "x": 23,
+        "y": 4.15,
+        "z": 153.2,
+        "yaw": -2.0943951023931953,
+        "pitch": -0.3
+      },
+      "low": {
+        "calls": 21,
+        "triangles": 125688
+      },
+      "room": "out",
+      "feetY": 4.15
+    },
+    {
+      "name": "13-golf-path-platform",
+      "pose": {
+        "x": 56,
+        "y": 0,
+        "z": 47.6,
+        "yaw": 1.2217304763960306,
+        "pitch": -0.18
+      },
+      "low": {
+        "calls": 92,
+        "triangles": 228440
+      },
+      "room": "out",
+      "feetY": 0.02
+    },
+    {
+      "name": "13b-golf-tee-chute",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 51,
+        "yaw": 3.141592653589793,
+        "pitch": -0.08
+      },
+      "low": {
+        "calls": 44,
+        "triangles": 151104
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "14-woodland-hut-logs",
+      "pose": {
+        "x": 47.6,
+        "y": 0,
+        "z": 35.4,
+        "yaw": -0.9599310885968813,
+        "pitch": -0.15
+      },
+      "low": {
+        "calls": 37,
+        "triangles": 173666
+      },
+      "room": "out",
+      "feetY": 0.1
+    },
+    {
+      "name": "15-forest-path-forecourt",
+      "pose": {
+        "x": 76.2,
+        "y": 0,
+        "z": 63.4,
+        "yaw": 1.0122909661567112,
+        "pitch": -0.2
+      },
+      "low": {
+        "calls": 157,
+        "triangles": 302804
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "15b-forest-path-forecourt-east",
+      "pose": {
+        "x": 104.5,
+        "y": 0,
+        "z": 65.6,
+        "yaw": -1.2566370614359172,
+        "pitch": -0.2
+      },
+      "low": {
+        "calls": 117,
+        "triangles": 303631
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "p1-attic-common",
+      "pose": {
+        "x": 86,
+        "y": 6.65,
+        "z": 97.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "low": {
+        "calls": 37,
+        "triangles": 105770
+      },
+      "room": "atticCommon",
+      "feetY": 6.65
+    },
+    {
+      "name": "p2-front-forecourt",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 66,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "low": {
+        "calls": 177,
+        "triangles": 284595
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "p3-portugal-terrace",
+      "pose": {
+        "x": 25,
+        "y": 4.15,
+        "z": 152.8,
+        "yaw": 0.3490658503988659,
+        "pitch": -0.05
+      },
+      "low": {
+        "calls": 31,
+        "triangles": 92137
+      },
+      "room": "out",
+      "feetY": 4.15
+    },
+    {
+      "name": "p4-golf-vicinity",
+      "pose": {
+        "x": 66,
+        "y": 0,
+        "z": 57,
+        "yaw": -2.6179938779914944,
+        "pitch": 0.05
+      },
+      "low": {
+        "calls": 47,
+        "triangles": 183521
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "p5-wellness-deck",
+      "pose": {
+        "x": 132,
+        "y": 0.15,
+        "z": 114,
+        "yaw": 2.2689280275926285,
+        "pitch": -0.05
+      },
+      "low": {
+        "calls": 69,
+        "triangles": 148830
+      },
+      "room": "out",
+      "feetY": 0.15
+    },
+    {
+      "name": "05f-cottage-door",
+      "pose": {
+        "x": 25,
+        "y": 4.15,
+        "z": 155.2,
+        "yaw": 0,
+        "pitch": -0.32
+      },
+      "low": {
+        "calls": 41,
+        "triangles": 101608
+      },
+      "room": "out",
+      "feetY": 4.15
+    },
+    {
+      "name": "05g-shed-door",
+      "pose": {
+        "x": 47,
+        "y": 0,
+        "z": 38.9,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.25
+      },
+      "low": {
+        "calls": 31,
+        "triangles": 157283
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "09c-observatory-sightline",
+      "pose": {
+        "x": 100.2,
+        "y": 6.65,
+        "z": 96.3,
+        "yaw": 1.5707963267948966,
+        "pitch": 0.85
+      },
+      "low": {
+        "calls": 32,
+        "triangles": 95594
+      },
+      "room": "atticLookout",
+      "feetY": 6.65
+    },
+    {
+      "name": "09d-observatory-nook",
+      "pose": {
+        "x": 96.4,
+        "y": 6.65,
+        "z": 94.2,
+        "yaw": 1.0821041362364843,
+        "pitch": 0.22
+      },
+      "low": {
+        "calls": 35,
+        "triangles": 95802
+      },
+      "room": "atticLookout",
+      "feetY": 6.65
+    },
+    {
+      "name": "09e-sterren-telescope",
+      "pose": {
+        "x": 80.6,
+        "y": 3.35,
+        "z": 93.2,
+        "yaw": -1.9547687622336491,
+        "pitch": -0.05
+      },
+      "low": {
+        "calls": 53,
+        "triangles": 142968
+      },
+      "room": "sterren",
+      "feetY": 3.35
+    },
+    {
+      "name": "11b-wickerman-new-clearing",
+      "pose": {
+        "x": 176.4,
+        "y": 1.2,
+        "z": 59.9,
+        "yaw": 2.530727415391778,
+        "pitch": 0.12
+      },
+      "low": {
+        "calls": 26,
+        "triangles": 162658
+      },
+      "room": "out",
+      "feetY": 1.04
+    },
+    {
+      "name": "11c-wickerman-side-path",
+      "pose": {
+        "x": 167.4,
+        "y": 1.2,
+        "z": 56,
+        "yaw": 1.117010721276371,
+        "pitch": 0.02
+      },
+      "low": {
+        "calls": 23,
+        "triangles": 174822
+      },
+      "room": "out",
+      "feetY": 1.2
+    },
+    {
+      "name": "11d-wickerman-figure",
+      "pose": {
+        "x": 180,
+        "y": 1.2,
+        "z": 59.6,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "low": {
+        "calls": 32,
+        "triangles": 190317
+      },
+      "room": "out",
+      "feetY": 0.61
+    },
+    {
+      "name": "16-boslust-fork-unchanged",
+      "pose": {
+        "x": 51.5,
+        "y": 0,
+        "z": 7.6,
+        "yaw": 0.9599310885968813,
+        "pitch": 0.04
+      },
+      "low": {
+        "calls": 90,
+        "triangles": 230457
+      },
+      "room": "out",
+      "feetY": 0.05
+    },
+    {
+      "name": "17-lantern-lawn-junction",
+      "pose": {
+        "x": 88,
+        "y": 0,
+        "z": 125,
+        "yaw": 0.5235987755982988,
+        "pitch": -0.25
+      },
+      "low": {
+        "calls": 47,
+        "triangles": 135662
+      },
+      "room": "out",
+      "feetY": 0
+    }
+  ],
+  "problems": []
+}

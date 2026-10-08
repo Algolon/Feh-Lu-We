@@ -6,7 +6,7 @@ import LAYOUT from '../docs/design/v0.2/LEVEL_LAYOUT.json';
 import {
   ESTATE, MANOR, WING, CONS, POOL, TERRACE, COTTAGE, COTTAGE_TERRACE, COTTAGE_PAD, COTTAGE_RAMP, SHED, SAUNA, JACUZZI, PARKING, BBQ, OUTDOOR_DINING,
   MUSIC_BONG, BALLOON_NOOK, WELLNESS, LAKE_VIEW, LANTERN_LAWN, GOLF_TEE, GOLF_CHUTE, ARRIVAL, ARRIVAL_SERVICE, LAKE, lakeQ, WICKERMAN, COTTAGE_PAD_Y,
-  COTTAGE_FLOOR, AF, UF, S03, roofUnderside, MAQUETTE, CONS_EAST_DOOR, SAUNA_RAMP, SAUNA_FLOOR, ROUTES,
+  COTTAGE_FLOOR, AF, UF, S03, roofUnderside, MAQUETTE, CONS_EAST_DOOR, SAUNA_STEPS, SAUNA_FLOOR, ROUTES,
 } from '../src/world/layout';
 import { ROOMS, PORTALS, SOURCE_ROOM_IDS, estateRooms } from '../src/world/roomdefs';
 import { FOOTPRINTS, vegetationClear, inBuilding, ROUTE_LINES } from '../src/world/footprints';
@@ -32,7 +32,9 @@ describe('DEV-02 layout = v0.2 design data', () => {
       [COTTAGE_PAD, 'COTTAGE_PAD'], [SHED, 'SHED'], [SAUNA, 'SAUNA'], [JACUZZI, 'JACUZZI'], [COTTAGE_RAMP, 'COTTAGE_TERRACE_RAMP']] as const) same(mine, C[id]);
     expect(COTTAGE_FLOOR).toBe(C.COTTAGE.floor_y);
     expect(COTTAGE_PAD_Y).toBe(C.COTTAGE_PAD.terrain_y);
-    expect(SAUNA_FLOOR).toBe(C.SAUNA.floor_y);
+    // DEV-04A owner directive (compact sauna access, ~0.5 m above the deck): v0.2's floor +0.80 is superseded
+    expect(C.SAUNA.floor_y).toBe(0.8);
+    expect(SAUNA_FLOOR).toBe(0.65);
   });
   it('outdoor zones, parking bays, the lake and the clearing match the reservations', () => {
     const Z = (id: string) => P.outdoor_zones.find((z: { id: string }) => z.id === id).bounds;
@@ -46,15 +48,23 @@ describe('DEV-02 layout = v0.2 design data', () => {
     expect(PARKING.filter((b) => b.car)).toHaveLength(4); // four cars + the optional fifth bay
     same({ x0: LAKE.x - LAKE.rx, x1: LAKE.x + LAKE.rx, z0: LAKE.z - LAKE.rz, z1: LAKE.z + LAKE.rz }, Z('lake'));
     expect(WICKERMAN.y).toBe(P.heights.wickerman);
-    same({ x0: WICKERMAN.x - WICKERMAN.r, x1: WICKERMAN.x + WICKERMAN.r, z0: WICKERMAN.z - WICKERMAN.r, z1: WICKERMAN.z + WICKERMAN.r }, Z('wickerman'));
+    // DEV-04A owner directive: the v0.2 clearing centred ON the wickerman loop (a loop vertex); it is restaged east of
+    // the loop in its own enclosed clearing (reached by WICKERMAN_SIDE). The v0.2 reservation is kept as a check of the
+    // record it replaced.
+    same({ x0: 167 - 7.5, x1: 167 + 7.5, z0: 54 - 7.5, z1: 54 + 7.5 }, Z('wickerman'));
+    expect(Math.hypot(WICKERMAN.x - 167, WICKERMAN.z - 54)).toBeGreaterThan(WICKERMAN.r + 4);
   });
-  it('the Copacabana double door and the sauna ramp follow the v0.2 metrics', () => {
+  it('the Copacabana double door follows the v0.2 metrics; the sauna access is compact (DEV-04A)', () => {
     expect([CONS_EAST_DOOR.x, CONS_EAST_DOOR.z0, CONS_EAST_DOOR.z1]).toEqual([P.door_group_policy.clear_opening_xz.x, P.door_group_policy.clear_opening_xz.z0, P.door_group_policy.clear_opening_xz.z1]);
     expect(CONS_EAST_DOOR.z1 - CONS_EAST_DOOR.z0).toBeCloseTo(2.4, 6);
-    const grade = (SAUNA_RAMP.yTop - SAUNA_RAMP.yFoot) / (SAUNA_RAMP.zFoot - SAUNA_RAMP.zTop);
-    expect(grade).toBeLessThan(0.08);
-    expect(SAUNA_RAMP.x1 - SAUNA_RAMP.x0).toBeCloseTo(1.2, 6);
-    expect(SAUNA_RAMP.zTop - SAUNA_RAMP.zDoor).toBeCloseTo(1.2, 6); // flat landing before the door
+    // DEV-04A (owner directive): a landing and a few comfortable steps replace v0.2's 8 m ramp
+    const rise = SAUNA_STEPS.yTop - SAUNA_STEPS.yFoot;
+    expect(rise).toBeCloseTo(0.5, 6);
+    expect(rise / SAUNA_STEPS.risers).toBeLessThanOrEqual(0.18);
+    expect((SAUNA_STEPS.zFoot - SAUNA_STEPS.zLanding) / SAUNA_STEPS.risers).toBeGreaterThanOrEqual(0.2); // going per step
+    expect(SAUNA_STEPS.zFoot - SAUNA_STEPS.zDoor).toBeLessThan(2.0); // compact: landing + steps < 2 m in front of the door
+    expect(SAUNA_STEPS.zLanding - SAUNA_STEPS.zDoor).toBeGreaterThanOrEqual(0.9); // a landing to open the door from
+    expect(SAUNA_STEPS.x1 - SAUNA_STEPS.x0).toBeGreaterThanOrEqual(1.2);
   });
 });
 
@@ -66,7 +76,9 @@ describe('DEV-02 rooms and portals', () => {
     for (const d of P.rooms) {
       const r = ROOMS.find((q) => q.id === d.id);
       expect(r, d.id).toBeTruthy();
-      expect([r!.x0, r!.x1, r!.z0, r!.z1]).toEqual([d.bounds.x0, d.bounds.x1, d.bounds.z0, d.bounds.z1]);
+      // DEV-04A: the attic lookout became the observation nook and uses the roof volume east to X 103.6 (v0.2: 101)
+      const x1 = d.id === 'atticLookout' ? 103.6 : d.bounds.x1;
+      expect([r!.x0, r!.x1, r!.z0, r!.z1]).toEqual([d.bounds.x0, x1, d.bounds.z0, d.bounds.z1]);
     }
     expect(ROOMS.length).toBe(P.rooms.length); // 49
   });
@@ -98,7 +110,7 @@ describe('DEV-02 rooms and portals', () => {
 });
 
 describe('DEV-02 attic: headroom and stair S03', () => {
-  it('the roof leaves ≥ 2.1 m over the whole attic play zone (80–101 / 86–105.6)', () => {
+  it('the roof leaves ≥ 2.1 m over the whole attic play zone (80–103.6 / 86–105.6)', () => {
     for (const r of ROOMS.filter((q) => q.floor === 'a')) for (let x = r.x0; x <= r.x1; x += 0.5) for (let z = r.z0; z <= r.z1; z += 0.5) expect(roofUnderside(x, z) - AF, `${x},${z}`).toBeGreaterThanOrEqual(2.1);
   });
   it('S03: two 1.2 m flights, middle landing at +5.00, riser ≈ 0.165 and tread ≈ 0.25', () => {

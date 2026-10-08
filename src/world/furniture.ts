@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 import { type Ctx, segBox } from './arch';
 import { box, cyl, compound, planMatrix, v3, getKit } from './kit';
+import { registerArt, artFootprint } from './openings';
 import { Asm, artMats, softBox, lathe, projectUV, bake, baseAO } from './artkit';
 import { bushModel, BARK_TINT, LEAF_TINT, woodMats } from './woodkit';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
@@ -185,23 +186,56 @@ export function bed(c: Ctx, x: number, z: number, y0: number, yaw: number) {
   collide(c, x, z, yaw, 1.6, 2.15, 0.8, y0);
 }
 
-export function counter(c: Ctx, x: number, z: number, y0: number, yaw: number, w: number, top = '#d8cdb8', body = '#7f9a8a') {
+/**
+ * Kitchen run. DEV-04A `sink`: a cut-out for a sink module (centre `at` along the run in local units, width `w`): the
+ * worktop and carcass stop at the cut-out (only a strip behind it remains for the tap), the carcass under it is
+ * lowered for the bowl and the drawer row gives way to the sink's apron. The sink itself is `farmhouseSink`.
+ */
+export function counter(c: Ctx, x: number, z: number, y0: number, yaw: number, w: number, top = '#d8cdb8', body = '#7f9a8a', sink?: { at: number; w: number }) {
   const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw), gap = darker(body, 0.55);
   // kitchen run: recessed plinth, carcass, doors and a drawer row with shadow gaps, brass bar handles, a worktop
   // with a front overhang and a thin upstand at the wall
   a.add(M.paint, '#4a4038', bx(w - 0.02, 0.1, 0.54), 0, 0.05, -0.04);
-  a.add(M.paint, gap, bx(w, 0.74, 0.58), 0, 0.47, -0.02);
+  const s0 = sink ? sink.at - sink.w / 2 : 0, s1 = sink ? sink.at + sink.w / 2 : 0;
+  const runs: [number, number][] = sink ? [[-w / 2, s0], [s1, w / 2]] : [[-w / 2, w / 2]];
+  for (const [r0, r1] of runs) if (r1 - r0 > 0.01) a.add(M.paint, gap, bx(r1 - r0, 0.74, 0.58), (r0 + r1) / 2, 0.47, -0.02);
+  if (sink) a.add(M.paint, gap, bx(s1 - s0, 0.5, 0.58), sink.at, 0.35, -0.02); // carcass under the bowl (top 0.60)
   const n = Math.max(1, Math.round(w / 0.6)), uw = w / n;
   for (let i = 0; i < n; i++) {
-    const ux = -w / 2 + uw * (i + 0.5);
+    const ux = -w / 2 + uw * (i + 0.5), underSink = !!sink && ux + uw / 2 > s0 + 0.02 && ux - uw / 2 < s1 - 0.02;
     a.add(M.paint, body, sb(uw - 0.008, 0.52, 0.022, 0.004), ux, 0.37, 0.27);
+    if (underSink) continue; // the sink apron takes the drawer row's place
     a.add(M.paint, body, sb(uw - 0.008, 0.16, 0.022, 0.004), ux, 0.735, 0.27);
     a.add(M.brass, '#c9a44c', bx(0.12, 0.012, 0.02), ux, 0.76, 0.29);
     a.add(M.brass, '#c9a44c', bx(0.012, 0.12, 0.02), ux + uw / 2 - 0.06, 0.52, 0.29);
   }
-  a.add(M.stone, top, sb(w + 0.02, 0.04, 0.66, 0.006), 0, 0.88, 0.02);
+  if (!sink) a.add(M.stone, top, sb(w + 0.02, 0.04, 0.66, 0.006), 0, 0.88, 0.02);
+  else {
+    for (const [r0, r1] of [[-w / 2 - 0.01, s0], [s1, w / 2 + 0.01]] as const) if (r1 - r0 > 0.01) a.add(M.stone, top, sb(r1 - r0, 0.04, 0.66, 0.006), (r0 + r1) / 2, 0.88, 0.02);
+    a.add(M.stone, top, bx(s1 - s0, 0.04, 0.16), sink.at, 0.88, -0.23); // strip behind the bowl (the tap stands on it)
+  }
   a.add(M.stone, top, bx(w, 0.08, 0.015), 0, 0.94, -0.305);
   collide(c, x, z, yaw, w, 0.66, 0.92, y0);
+}
+
+/**
+ * DEV-04A farmhouse sink (fits a `counter` sink cut-out at the same position/yaw): one ceramic body built as a real
+ * bowl — apron, back and side walls (3.5 cm), a floor 22 cm below the rim, a drain, the rim 5 mm proud of the worktop
+ * — and a bridge tap on the worktop strip behind it. Every visible surface owns its own plane (the old sink drew its
+ * dark "water" plane in the body's top face and flickered with each camera move).
+ */
+export function farmhouseSink(c: Ctx, x: number, z: number, y0: number, yaw: number, W = 0.8) {
+  const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw);
+  const D = 0.52, zc = 0.11, top = 0.905, bot = 0.645, t = 0.035, hh = top - bot, outer = '#f4f1ea', inner = '#e9e6dd';
+  a.add(M.ceramic, outer, sb(W, hh, t, 0.01), 0, bot + hh / 2, zc + D / 2 - t / 2); // apron (front)
+  a.add(M.ceramic, inner, bx(W, hh, t), 0, bot + hh / 2, zc - D / 2 + t / 2); // back wall
+  for (const sx of [-1, 1]) a.add(M.ceramic, inner, bx(t, hh, D - 2 * t), sx * (W / 2 - t / 2), bot + hh / 2, zc);
+  a.add(M.ceramic, '#e2dfd5', bx(W - 2 * t, 0.04, D - 2 * t), 0, bot + 0.02, zc); // floor of the bowl between the walls (top 0.685)
+  a.add(M.paint, '#3a3c3a', cg('sinkDrain', () => new THREE.CylinderGeometry(0.035, 0.035, 0.006, 12)), 0, bot + 0.04 + 0.004, zc);
+  a.add(M.brass, '#b8b8b0', cg('sinkDrainRing', () => new THREE.TorusGeometry(0.04, 0.006, 4, 14).rotateX(Math.PI / 2)), 0, bot + 0.04 + 0.006, zc);
+  // bridge tap: a pillar on the worktop strip, a spout arching forward over the bowl
+  a.add(M.brass, '#c9a14e', bx(0.03, 0.1, 0.03), 0, 0.9 + 0.05, -0.24);
+  a.add(M.brass, '#c9a14e', cg('tapArc', () => new THREE.TorusGeometry(0.1, 0.012, 5, 10, Math.PI)), 0, 1.0, -0.14, { ry: Math.PI / 2 });
 }
 
 export function rug(c: Ctx, x: number, z: number, y: number, w: number, d: number, yaw = 0, tint = '#ffffff') {
@@ -266,6 +300,7 @@ function paintingAtlas() {
 
 /** Framed painting hung on a wall. Faces plan heading yaw. */
 export function painting(c: Ctx, x: number, y: number, z: number, yaw: number, w = 0.9, h = 0.68, idx = 0) {
+  registerArt(artFootprint(`painting@${x.toFixed(2)},${z.toFixed(2)}`, x, y, z, yaw, w + 0.14, h + 0.14)); // DEV-04A wall-art contract
   const g = new THREE.PlaneGeometry(w, h);
   const uv = g.attributes.uv as THREE.BufferAttribute;
   const u0 = (idx % 4) / 4, v0 = 1 - (Math.floor(idx / 4) + 1) / 2;
@@ -377,6 +412,7 @@ export function lantern(w: World, x: number, y0: number, z: number, s = 1, yaw =
 
 export function wallSconce(w: World, x: number, y: number, z: number, yaw: number): LampModel {
   const k = getKit();
+  registerArt(artFootprint(`sconce@${x.toFixed(2)},${z.toFixed(2)}`, x, y - 0.05, z, yaw, 0.2, 0.4)); // DEV-04A: wall decor contract
   const obj = compound((b) => {
     box(b, k.M.paint, '#b8892f', 0, -0.12, 0.03, 0.1, 0.24, 0.04);
     box(b, k.M.paint, '#b8892f', 0, -0.02, -0.08, 0.04, 0.04, 0.2);
@@ -413,6 +449,7 @@ export function staticLantern(c: Ctx, w: World, x: number, y0: number, z: number
 /** Always-on wall sconce baked into the static batch. Faces plan heading yaw (away from the wall). */
 export function staticSconce(c: Ctx, w: World, x: number, y: number, z: number, yaw: number, intensity = 3, distance = 6) {
   const k = c.k;
+  registerArt(artFootprint(`sconce@${x.toFixed(2)},${z.toFixed(2)}`, x, y - 0.05, z, yaw, 0.2, 0.4)); // DEV-04A: wall decor contract
   P(c, k.M.paint, '#b8892f', x, z, yaw, 0, y - 0.12, -0.03 + 0.03, 0.1, 0.24, 0.04);
   P(c, k.M.paint, '#b8892f', x, z, yaw, 0, y - 0.02, 0.08, 0.04, 0.04, 0.2);
   const [fx, fz] = [Math.sin(yaw), Math.cos(yaw)];
@@ -515,7 +552,13 @@ export function ladder(c: Ctx, x: number, z: number, y0: number, yaw: number, h 
   for (let y = 0.3; y < h; y += 0.3) P(c, k.M.wood, wood, x, z, yaw, 0, y0 + y, 0, 0.44, 0.04, 0.05, 0.5);
 }
 /** Small telescope on a tripod pointing out of a window. */
-export function telescope(c: Ctx, x: number, z: number, y0: number, yaw: number) {
+/**
+ * Brass refractor on an alt-az head over a timber tripod. It points along plan heading `yaw`, its tube raised by `alt`
+ * (rad). DEV-04A: the objective end (dew shield) faces `yaw` and the eyepiece sits at the LOW back end of the tube
+ * (it used to sit under the dew shield, at the wrong end); `alt` lets the attic telescope aim through its roof window.
+ */
+export const TELESCOPE = { pivotY: 1.38, back: 0.42, front: 0.4 };
+export function telescope(c: Ctx, x: number, z: number, y0: number, yaw: number, alt = 0.35) {
   // DEV-03: a brass refractor (tapered tube, dew shield, eyepiece) on an alt-az head over a timber tripod with a spreader
   const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw), oak = '#5a3a22', brass = '#b8892f';
   for (let i = 0; i < 3; i++) {
@@ -525,10 +568,20 @@ export function telescope(c: Ctx, x: number, z: number, y0: number, yaw: number)
   }
   a.add(M.timber, darker(oak, 0.8), cg('tsHead', () => lathe([[0.001, 0], [0.07, 0], [0.06, 0.06], [0.03, 0.1], [0.001, 0.1]], 8)), 0, 1.18, 0);
   a.add(M.brass, darker(brass, 0.7), bx(0.05, 0.12, 0.06), 0, 1.3, 0);
-  const tube = cg('tsTube', () => lathe([[0.001, 0], [0.032, 0], [0.036, 0.05], [0.042, 0.62], [0.055, 0.64], [0.055, 0.82], [0.001, 0.82]], 12).translate(0, -0.42, 0).rotateX(Math.PI / 2));
-  a.add(M.brass, brass, tube, 0, 1.38, 0.06, { rx: -0.35 });
-  a.add(M.timber, '#2b2622', cg('tsEye', () => new THREE.CylinderGeometry(0.016, 0.016, 0.1, 8).rotateX(Math.PI / 2)), 0, 1.25, -0.37, { rx: -0.35 });
+  // tube along plan-local +z (front = objective = dew shield), centred on the head's pivot, raised by alt
+  const tube = cg('tsTube2', () => lathe([[0.001, 0], [0.032, 0], [0.036, 0.05], [0.042, 0.62], [0.055, 0.64], [0.055, 0.82], [0.001, 0.82]], 12).translate(0, -TELESCOPE.back, 0).rotateX(-Math.PI / 2));
+  a.add(M.brass, brass, tube, 0, TELESCOPE.pivotY, 0, { rx: alt });
+  const eb = TELESCOPE.back + 0.05; // the eyepiece continues the tube's axis behind its back end
+  a.add(M.timber, '#2b2622', cg('tsEye2', () => new THREE.CylinderGeometry(0.016, 0.016, 0.1, 8).rotateX(-Math.PI / 2)), 0, TELESCOPE.pivotY - eb * Math.sin(alt), -eb * Math.cos(alt), { rx: alt });
   c.col.addCircle(x, z, 0.3, y0, y0 + 1.5);
+}
+/** DEV-04A observer's stool: a turned seat on three splayed legs with a ring stretcher (0.5 m). */
+export function stool(c: Ctx, x: number, z: number, y0: number) {
+  const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, 0.4);
+  for (let i = 0; i < 3; i++) { const an = (i / 3) * Math.PI * 2; a.add(M.timber, '#5a3a22', bx(0.03, 0.5, 0.03), Math.cos(an) * 0.13, 0.25, Math.sin(an) * 0.13, { rx: Math.sin(an) * 0.14, rz: -Math.cos(an) * 0.14 }); }
+  a.add(M.timber, '#6e4a2c', cg('stoolSeat', () => lathe([[0.001, 0], [0.17, 0], [0.18, 0.025], [0.16, 0.045], [0.001, 0.045]], 14)), 0, 0.49, 0);
+  a.add(M.timber, '#5a3a22', cg('stoolRing', () => new THREE.TorusGeometry(0.15, 0.012, 4, 12).rotateX(Math.PI / 2)), 0, 0.2, 0);
+  c.col.addCircle(x, z, 0.2, y0, y0 + 0.55);
 }
 /** DEV-03 slatted bench: two trestle ends, a stretcher, three seat slats with eased edges. Origin = centre, along local x. */
 export function slatBench(c: Ctx, x: number, z: number, y0: number, yaw: number, len = 1.5, wood = '#7a5232') {
@@ -594,6 +647,7 @@ export function canvasPanel(w: World, x: number, y: number, z: number, yaw: numb
   tex.anisotropy = 4;
   const mat = w.material(emissive ? new THREE.MeshBasicMaterial({ map: tex }) : new THREE.MeshLambertMaterial({ map: tex }));
   const grp = new THREE.Group();
+  registerArt(artFootprint(`panel@${x.toFixed(2)},${z.toFixed(2)}`, x, y, z, yaw, width + (frame ? 0.1 : 0), height + (frame ? 0.1 : 0))); // DEV-04A wall-art contract
   const plane = new THREE.Mesh(new THREE.PlaneGeometry(width, height), mat);
   plane.position.z = 0.03;
   grp.add(plane);
@@ -611,13 +665,19 @@ export function canvasPanel(w: World, x: number, y: number, z: number, yaw: numb
   return { grp, mat, tex, canvas: cv };
 }
 
-/** "Francois' Copacabana Room": the personal name board (LEVEL_PLAN v0.2 §3 — a P exception, never an emblem/tab). */
-export function nameBoard(w: World, x: number, y: number, z: number, yaw: number) {
-  return canvasPanel(w, x, y, z, yaw, 0.9, 0.34, (cx, W, H) => {
-    const gr = cx.createLinearGradient(0, 0, W, H); gr.addColorStop(0, '#f6c35a'); gr.addColorStop(1, '#e8743a');
+/**
+ * DEV-04A "Copacabana Room" bar sign (owner direction; replaces the corridor and outdoor name boards): a carved timber
+ * board, warm wood with a teal border and cream lettering, mounted on the bar's own canopy. Faces plan heading yaw.
+ */
+export function barSign(w: World, x: number, y: number, z: number, yaw: number) {
+  return canvasPanel(w, x, y, z, yaw, 1.6, 0.36, (cx, W, H) => {
+    const gr = cx.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, '#8a5530'); gr.addColorStop(1, '#6d3c1c');
     cx.fillStyle = gr; cx.fillRect(0, 0, W, H);
-    cx.fillStyle = '#2a5a4a'; cx.textAlign = 'center';
-    cx.font = 'italic 30px Georgia'; cx.fillText('Francois’', W / 2, H * 0.38);
-    cx.font = 'bold 40px Georgia'; cx.fillText('Copacabana Room', W / 2, H * 0.8);
-  }, 512, '#2f4a3c');
+    cx.strokeStyle = 'rgba(40,20,8,0.35)'; cx.lineWidth = 2; // a little wood grain
+    for (let i = 0; i < 7; i++) { cx.beginPath(); cx.moveTo(0, H * (0.12 + i * 0.13)); cx.bezierCurveTo(W * 0.3, H * (0.1 + i * 0.13), W * 0.6, H * (0.16 + i * 0.13), W, H * (0.12 + i * 0.13)); cx.stroke(); }
+    cx.strokeStyle = '#4e8690'; cx.lineWidth = 9; cx.strokeRect(9, 9, W - 18, H - 18);
+    cx.font = `bold ${Math.round(H * 0.5)}px Georgia, serif`; cx.textAlign = 'center'; cx.textBaseline = 'middle';
+    cx.lineWidth = 6; cx.strokeStyle = '#3a1e0c'; cx.strokeText('Copacabana Room', W / 2, H * 0.54);
+    cx.fillStyle = '#f2e2b8'; cx.fillText('Copacabana Room', W / 2, H * 0.54);
+  }, 512, '#5a3418');
 }

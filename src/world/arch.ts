@@ -1,9 +1,10 @@
 // Architecture helpers: walls with real door openings (geometry + colliders), decorative windows,
 // floors/ceilings, stairs with a hidden smooth collision ramp, and roofs.
 import * as THREE from 'three';
-import { Batcher, box, boxMM, cyl, geo, getKit, gableGeo, hipRoofGeo, planMatrix, type Kit } from './kit';
+import { Batcher, box, boxMM, boxGeo, cyl, geo, getKit, gableGeo, hipRoofGeo, planMatrix, type Kit } from './kit';
 import { lathe, softBox } from './artkit';
 import type { CollisionWorld } from '../player/collision';
+import { registerOpening } from './openings';
 
 export interface Ctx {
   b: Batcher;
@@ -36,6 +37,10 @@ export interface WallOpts {
   /** DEV-03: interior trim (skirting at the floor, a small cornice at the ceiling) on the interior face(s). Default on
    * for partitions (no exterior) and skinned walls; `false` for sheds, screens and other rough walls. */
   trim?: boolean | { skirting?: THREE.ColorRepresentation; cornice?: boolean };
+  /** DEV-04A: a sloped top (e.g. a partition under a roof): the wall's top at position `a` along it, piecewise linear
+   * between `kinks` (the profile's break points). Pieces that reach the wall top follow it; y1 is ignored for them. */
+  top?: (a: number) => number;
+  kinks?: number[];
 }
 export type WinStyle = 'plain' | 'manor' | 'cottage';
 /** Joinery (painted surrounds, skirting) and oak trim colours: ART_TOKENS world.joinery / world.oak family. */
@@ -50,6 +55,18 @@ export function wall(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number,
   const lo = Math.min(a0, a1), hi = Math.max(a0, a1);
   const piece = (s0: number, s1: number, ya: number, yb: number) => {
     if (s1 - s0 < 0.005 || yb - ya < 0.005) return;
+    if (o.top && yb >= y1 - 1e-6) { // runs up to a sloped top: one slanted slab per straight stretch of the profile
+      const cuts = [s0, ...(o.kinks ?? []).filter((q) => q > s0 + 0.01 && q < s1 - 0.01).sort((p, q) => p - q), s1];
+      for (let i = 0; i < cuts.length - 1; i++) {
+        const p = cuts[i], q = cuts[i + 1], tp = o.top(p), tq = o.top(q);
+        slantedSlab(c, axis, f, t, p, q, ya, tp, tq, mat, color, o.uv ?? 2);
+        if (o.collide !== false) {
+          if (axis === 'x') c.col.addBox(p, q, f - t / 2, f + t / 2, ya, Math.min(tp, tq), { occludes: true });
+          else c.col.addBox(f - t / 2, f + t / 2, p, q, ya, Math.min(tp, tq), { occludes: true });
+        }
+      }
+      return;
+    }
     if (axis === 'x') {
       boxMM(c.b, mat, color, s0, s1, ya, yb, f - t / 2, f + t / 2, { uv: o.uv ?? 2, chunk: c.chunk });
       if (o.collide !== false) c.col.addBox(s0, s1, f - t / 2, f + t / 2, ya, yb, { occludes: true });
@@ -61,6 +78,8 @@ export function wall(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number,
   let cur = lo;
   for (const op of ops) {
     const s = op.at - op.w / 2, e = op.at + op.w / 2;
+    // DEV-04A opening contract: every wall opening is a floor-level door/passage, clear from y0 up to its head
+    registerOpening({ kind: 'door', axis, f, t, a0: s, a1: e, y0, y1: y0 + (op.h ?? 2.3) });
     piece(cur, s, y0, y1);
     piece(s, e, y0 + (op.h ?? 2.3), y1); // lintel
     // door frame (visual only)
@@ -81,7 +100,7 @@ export function wall(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number,
       for (const op of ops) { runs.push([c0, op.at - op.w / 2 - 0.09]); c0 = op.at + op.w / 2 + 0.09; }
       runs.push([c0, hi]);
       for (const [s0, s1] of runs) if (s1 - s0 > 0.05) trimRun(c, axis, ff, sd, s0, s1, y0, 0.14, 0.022, tc.skirting ?? TRIM.joinery);
-      if (tc.cornice !== false) trimRun(c, axis, ff, sd, lo, hi, y1 - 0.09, 0.09, 0.035, TRIM.joinery, true);
+      if (tc.cornice !== false && !o.top) trimRun(c, axis, ff, sd, lo, hi, y1 - 0.09, 0.09, 0.035, TRIM.joinery, true);
     }
   }
   if (o.skin) {
@@ -93,12 +112,30 @@ export function wall(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number,
   }
   for (const wdef of o.windows ?? []) {
     const ext = o.exterior ?? 0;
+    const wy = y0 + (wdef.sill ?? 0.9), ww = wdef.w ?? 1.1;
+    registerOpening({ kind: 'window', axis, f, t, a0: wdef.at - ww / 2, a1: wdef.at + ww / 2, y0: wy, y1: wy + (wdef.h ?? 1.5) });
     const sides: (1 | -1)[] = wdef.side ? [wdef.side] : ext ? [ext as 1 | -1, (-ext) as 1 | -1] : [1, -1];
     for (const s of sides) {
       const outside = ext !== 0 && s === ext;
       windowAt(c, axis, f + s * (t / 2 + (o.skin && !outside ? 0.03 : 0)), s, wdef.at, y0 + (wdef.sill ?? 0.9), wdef.w ?? 1.1, wdef.h ?? 1.5, outside, { kind: outside ? o.winStyle ?? 'plain' : 'plain' });
     }
   }
+}
+
+/** A wall slab from a0 to a1 (thickness t at f) whose bottom is ya and whose top runs straight from ytA to ytB. */
+function slantedSlab(c: Ctx, axis: 'x' | 'z', f: number, t: number, a0: number, a1: number, ya: number, ytA: number, ytB: number, mat: THREE.Material, color: THREE.ColorRepresentation, uv: number) {
+  const L = a1 - a0, hMax = Math.max(ytA, ytB) - ya;
+  const g = axis === 'x' ? boxGeo(L, hMax, t, uv) : boxGeo(t, hMax, L, uv);
+  const pos = g.attributes.position as THREE.BufferAttribute;
+  for (let i = 0; i < pos.count; i++) {
+    // local along-wall coordinate in 0..1 from a0 to a1 (plan z runs against three z)
+    const u = axis === 'x' ? pos.getX(i) / L + 0.5 : -pos.getZ(i) / L + 0.5;
+    pos.setY(i, pos.getY(i) > 0 ? ytA + (ytB - ytA) * u : ya);
+  }
+  g.computeVertexNormals();
+  const m = axis === 'x' ? planMatrix((a0 + a1) / 2, 0, f) : planMatrix(f, 0, (a0 + a1) / 2);
+  c.b.add(mat, g, m, color, c.chunk, true);
+  g.dispose();
 }
 
 function wallNoFrames(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number, y0: number, y1: number, o: WallOpts) {
@@ -139,20 +176,24 @@ function frame(c: Ctx, axis: 'x' | 'z', f: number, s: number, e: number, y0: num
     if (axis === 'x') boxMM(c.b, m, cc, a0, a1, ya, yb, f + d0, f + d1, { chunk: c.chunk, jitter: 0 });
     else boxMM(c.b, m, cc, f + d0, f + d1, ya, yb, a0, a1, { chunk: c.chunk, jitter: 0 });
   };
-  const L = t / 2 + 0.005, w = 0.11;
-  // lining (the reveal) across the wall thickness
-  B(s - 0.03, s, y0, y1, -L, L);
-  B(e, e + 0.03, y0, y1, -L, L);
-  B(s - 0.03, e + 0.03, y1, y1 + 0.03, -L, L);
+  const L = t / 2 + 0.005, w = 0.11, p = 0.004;
+  // lining (the reveal) across the wall thickness. DEV-04A: 4 mm proud of the wall's reveal faces (it used to lie IN
+  // the plane of the wall's end faces and lintel soffit: the two surfaces z-fought in every doorway)
+  B(s - 0.03, s + p, y0, y1, -L, L);
+  B(e - p, e + 0.03, y0, y1, -L, L);
+  B(s - 0.03, e + 0.03, y1 - p, y1 + 0.03, -L, L);
   for (const sd of [-1, 1]) {
     const d0 = sd * L, d1 = sd * (L + 0.03);
     const lo = (a: number, b: number) => [Math.min(a, b), Math.max(a, b)] as [number, number];
-    // architrave legs + head, then the bead on the inner edge, then plinth blocks and a head cap
-    B(s - w, s, y0 + 0.16, y1 + w, ...lo(d0, d1));
-    B(e, e + w, y0 + 0.16, y1 + w, ...lo(d0, d1));
+    // architrave legs + head, then the bead on the inner edge, then plinth blocks and a head cap. DEV-04A: the legs
+    // stand 5 mm back from the reveal (a quirk, as in real joinery): their inner edge lay in the plane where wainscot
+    // and skirting runs end at the opening, and z-fought with those end faces
+    B(s - w, s - 0.005, y0 + 0.16, y1 + w, ...lo(d0, d1));
+    B(e + 0.005, e + w, y0 + 0.16, y1 + w, ...lo(d0, d1));
     B(s - w, e + w, y1, y1 + w, ...lo(d0, d1));
-    B(s - w - 0.012, s + 0.005, y0, y0 + 0.18, ...lo(d0, sd * (L + 0.04)));
-    B(e - 0.005, e + w + 0.012, y0, y0 + 0.18, ...lo(d0, sd * (L + 0.04)));
+    // plinth blocks 1 cm proud of the architrave and of the skirting that dies into them (same depth before: z-fighting)
+    B(s - w - 0.012, s + 0.005, y0, y0 + 0.18, ...lo(d0, sd * (L + 0.05)));
+    B(e - 0.005, e + w + 0.012, y0, y0 + 0.18, ...lo(d0, sd * (L + 0.05)));
     B(s - w - 0.03, e + w + 0.03, y1 + w, y1 + w + 0.04, ...lo(d0, sd * (L + 0.05)));
   }
 }
@@ -233,6 +274,15 @@ export function floor(c: Ctx, x0: number, x1: number, z0: number, z1: number, yT
   if (walk) c.col.addFloor(x0, x1, z0, z1, yTop);
 }
 
+/**
+ * DEV-04A door threshold: a dressed stone sill through the full depth of a wall opening, its top 12 mm over the floor
+ * level y (a readable threshold, never a knee-high piece of wall), walkable.
+ */
+export function threshold(c: Ctx, x0: number, x1: number, z0: number, z1: number, y: number, color: THREE.ColorRepresentation = '#d6c8a8') {
+  boxMM(c.b, c.k.M.stone, color, x0, x1, y - 0.14, y + 0.012, z0, z1, { uv: 0.8, chunk: c.chunk, jitter: 0 });
+  c.col.addFloor(x0, x1, z0, z1, y);
+}
+
 /** Ceiling (visual only), underside at y. */
 export function ceiling(c: Ctx, x0: number, x1: number, z0: number, z1: number, y: number, color: THREE.ColorRepresentation = '#efe4cc', thick = 0.2) {
   boxMM(c.b, c.k.M.plaster, color, x0, x1, y, y + thick, z0, z1, { uv: 3, chunk: c.chunk, shadow: false });
@@ -254,7 +304,8 @@ export function stairsZ(c: Ctx, x0: number, x1: number, zBottom: number, zTop: n
     const lo = Math.min(za, zb), hi = Math.max(za, zb);
     boxMM(c.b, P, mass, x0, x1, yBottom, yt - 0.045, lo, hi, { chunk: c.chunk });
     boxMM(c.b, W, color, x0 + sw, x1 - sw, yt - 0.045, yt, Math.min(za - dir * 0.03, zb), Math.max(za - dir * 0.03, zb), { uv: 1.2, chunk: c.chunk, jitter: 0.03 }); // tread + nosing
-    boxMM(c.b, P, riserCol, x0 + sw, x1 - sw, yt - rise, yt - 0.045, Math.min(za, za + dir * 0.02), Math.max(za, za + dir * 0.02), { chunk: c.chunk, shadow: false }); // riser
+    // riser: DEV-04A 4 mm proud of the step mass (its face lay in the mass's front face: z-fighting on every stair)
+    boxMM(c.b, P, riserCol, x0 + sw, x1 - sw, yt - rise, yt - 0.045, Math.min(za - dir * 0.004, za + dir * 0.02), Math.max(za - dir * 0.004, za + dir * 0.02), { chunk: c.chunk, shadow: false }); // riser
     if (runner) boxMM(c.b, P, runner, x0 + 0.28, x1 - 0.28, yt, yt + 0.01, Math.min(za - dir * 0.03, zb), Math.max(za - dir * 0.03, zb), { chunk: c.chunk, shadow: false, jitter: 0 });
     // per-step solid: blocks walking into the stair mass from the side, never from the ramp itself
     c.col.addBox(x0, x1, lo, hi, yBottom, yt);

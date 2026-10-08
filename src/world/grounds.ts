@@ -5,7 +5,7 @@
 import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, floor, segBox } from './arch';
-import { box, boxMM, cyl, blob, compound, v3, planMatrix } from './kit';
+import { box, boxMM, cyl, rod, blob, compound, v3, planMatrix } from './kit';
 import { woodMats, logModel, rockModel, trunkAt } from './woodkit';
 import { NEST_OAK, type EstateWoods } from './estateWoods';
 import { hash01 } from './woodlandPlan';
@@ -14,11 +14,10 @@ import { Asm, artMats, lathe, cushion, projectUV } from './artkit';
 import { makeInspect, place } from '../interactions/props';
 import type { Vegetation } from './nature';
 import {
-  ARRIVAL, ARRIVAL_SERVICE, PARKING, BBQ, OUTDOOR_DINING, MUSIC_BONG, BALLOON_NOOK, LAKE, LAKE_VIEW, GOLF_TEE, GOLF_CHUTE, WICKERMAN, GF, type Rect,
+  ARRIVAL_GRAVEL, PARKING, BBQ, OUTDOOR_DINING, MUSIC_BONG, BALLOON_NOOK, LAKE, LAKE_VIEW, GOLF_TEE, GOLF_CHUTE, WICKERMAN, GF, type Rect,
 } from './layout';
 import { terrainHeight } from './terrain';
 
-const PLATFORM_LOG = logModel(151, 2.1, 0.17);
 const BENCH_LOG2 = logModel(157, 2.2, 0.21);
 const SHORE_STONE = (() => { const g = rockModel(71); g.userData.keepColor = true; return g; })();
 
@@ -38,12 +37,7 @@ export function buildGrounds(w: World, g: GameApi, c: Ctx, veg: Vegetation, wood
 function arrival(w: World, c: Ctx) {
   const k = c.k;
   // ONE gravel surface made of non-overlapping rectangles (no coplanar disc/plane overlap, audit VD-04)
-  const parts: Rect[] = [
-    ARRIVAL_SERVICE, // manoeuvring strip X 69.5–108 / Z 66–72
-    { x0: ARRIVAL.x0, x1: ARRIVAL.x1, z0: 62, z1: ARRIVAL_SERVICE.z0 }, // court south of the strip (the drive ribbon ends at Z 62)
-    { x0: 69.5, x1: 77.9, z0: 72, z1: 79 }, { x0: 77.9, x1: 101, z0: 72, z1: 78 }, { x0: 101, x1: 106.6, z0: 72, z1: 79 }, // bays + court + foot strip
-    { x0: 86, x1: 94, z0: 78, z1: 78.6 }, // porch approach
-  ];
+  const parts: Rect[] = ARRIVAL_GRAVEL; // strip X 69.5–108 / Z 66–72, court south of it (the drive ends at Z 62), bays, porch approach
   const geos = parts.map((r) => new THREE.PlaneGeometry(r.x1 - r.x0, r.z1 - r.z0).rotateX(-Math.PI / 2).translate((r.x0 + r.x1) / 2, 0.03, -(r.z0 + r.z1) / 2));
   for (const g0 of geos) { c.b.add(k.M.dirt, g0, new THREE.Matrix4(), '#d4cfc2', 'paths', false, 0); g0.dispose(); }
   // bay lines (raised a little, never coplanar)
@@ -256,9 +250,10 @@ function lake(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods: EstateWoods 
 function golf(w: World, c: Ctx) {
   const k = c.k, o = { chunk: 'grounds' };
   const T = GOLF_TEE, C = GOLF_CHUTE;
-  boxMM(c.b, k.M.paint, '#3e6a34', T.x0 + 0.35, T.x0 + 3.05, 0.0, 0.035, T.z0 + 0.25, T.z0 + 2.25, { ...o, shadow: false }); // mat base
-  boxMM(c.b, k.M.paint, '#5c8f45', T.x0 + 0.42, T.x0 + 2.98, 0.035, 0.06, T.z0 + 0.32, T.z0 + 2.18, { ...o, shadow: false }); // tee mat
-  cyl(c.b, k.M.paint, '#f4f4f0', T.x0 + 1.8, 0.06, T.z0 + 1.2, 0.025, 0.025, 0.03, 8, o);
+  // DEV-04A: the mat stands 1 cm higher (its base top used to share the path ribbons' / woodland verge's plane)
+  boxMM(c.b, k.M.paint, '#3e6a34', T.x0 + 0.35, T.x0 + 3.05, -0.02, 0.045, T.z0 + 0.25, T.z0 + 2.25, { ...o, shadow: false }); // mat base
+  boxMM(c.b, k.M.paint, '#5c8f45', T.x0 + 0.42, T.x0 + 2.98, 0.045, 0.07, T.z0 + 0.32, T.z0 + 2.18, { ...o, shadow: false }); // tee mat
+  cyl(c.b, k.M.paint, '#f4f4f0', T.x0 + 1.8, 0.07, T.z0 + 1.2, 0.025, 0.025, 0.03, 8, o);
   // a stand bag: body, top collar, pocket, strap, two splayed legs; club shafts with heads and head covers
   const gx = T.x0 + 0.7, gz = T.z0 + 2.6;
   cyl(c.b, k.M.paint, '#2f4a6e', gx, 0.08, gz, 0.13, 0.15, 0.8, 12, { ...o, rx: 0.18 }); // bag
@@ -279,48 +274,83 @@ function golf(w: World, c: Ctx) {
     for (const s of [-1, 1]) box(c.b, k.M.wood, '#6b4a2a', cx + s * 0.28, (ya + yb) / 2 + 0.1, z + 0.5, 0.08, 0.2, len, { ...o, rx: ang });
     w.col.addBox(cx - 0.35, cx + 0.35, z, z + 1, Math.min(ya, yb) - 0.2, Math.max(ya, yb) + 0.45); // above ground only (never into the hall below)
   }
+  // DEV-04A support: the side beams rode 10 cm above the slope on nothing — a pair of stakes at every joint carries
+  // them, and the chute ends in a timber catch tray standing on the ground beside the tee mat
+  for (let z = C.z0; z <= C.z1 - 0.4 + 1e-6; z += 1) {
+    const zj = Math.min(z, C.z1 - 0.4), yg = terrainHeight(cx, zj), ys = (terrainHeight(cx, zj - 0.5) + terrainHeight(cx, zj + 0.5)) / 2 + 0.1;
+    for (const s of [-1, 1]) box(c.b, k.M.wood, '#5a3a22', cx + s * 0.28, yg - 0.1, zj, 0.06, Math.max(0.12, ys - yg + 0.12), 0.06, o);
+  }
+  { const zt = C.z1 - 0.25, yg = terrainHeight(cx, zt); // catch tray: floor + four low walls, open at the top
+    boxMM(c.b, k.M.wood, '#7a5232', cx - 0.36, cx + 0.36, yg, yg + 0.04, zt - 0.3, zt + 0.25, o);
+    for (const [x0, x1, z0, z1] of [[cx - 0.36, cx + 0.36, zt - 0.3, zt - 0.26], [cx - 0.36, cx + 0.36, zt + 0.21, zt + 0.25], [cx - 0.36, cx - 0.32, zt - 0.3, zt + 0.25], [cx + 0.32, cx + 0.36, zt - 0.3, zt + 0.25]] as const) boxMM(c.b, k.M.wood, '#6b4a2a', x0, x1, yg, yg + 0.24, z0, z1, o);
+  }
   const yt = terrainHeight(cx, C.z0);
   cyl(c.b, k.M.paint, '#c8a878', cx, yt, C.z0 - 0.2, 0.3, 0.3, 0.35, 12, o); // cup at the top
 }
 
 // ------------------------------------------------------------------------------------------------ wickerman (I04: scene only)
+/**
+ * DEV-04A staging (owner directive): the figure stands centred in its own enclosed clearing off the loop, reached by a
+ * short side path that bends so the figure is revealed only on it. Construction made legible (final remodel and the
+ * candle / ignition states are a later pass): a dry-stone plinth on the ground, two timber sleepers on it that the
+ * feet are bound to, straw-bundle limbs that run joint to joint (no floating branches: the arms were `cyl` pieces
+ * whose centres drifted off the shoulders), the candle ring on flat stones with walking room round the figure.
+ */
 function wickerman(w: World, c: Ctx) {
-  const k = c.k, o = { chunk: 'grounds' };
-  const { x, z, y } = WICKERMAN;
+  // its own meshes (chunk 'wick', drawn within 40 m: the clearing is enclosed by woodland): merged into 'grounds' the
+  // stones and the plinth stretched the lake-shore stone mesh's bounds across the estate and cost a draw call in views
+  // that never see the clearing
+  const k = c.k, o = { chunk: 'wick' };
+  const { x, z } = WICKERMAN;
   const straw = '#d8b860', twine = '#5a4430', M = woodMats();
-  // DEV-03 (ENVIRONMENT_STORY reference: bound limbs, broad shoulders): a platform of crossed logs; straw bundles
-  // for legs, body, arms and head, tied with twine at ankles, knees, waist, chest, elbows, wrists and neck
-  for (const [dz, yaw, yy] of [[-0.55, 0, 0], [0.55, 0, 0], [0, Math.PI / 2, 0.3]] as const) {
-    const L = 2.1, ax = x - (Math.cos(yaw) * L) / 2, az = z + dz + (Math.sin(yaw) * L) / 2;
-    c.b.add(M.tree, PLATFORM_LOG, planMatrix(ax, y - 0.08 + yy, az, yaw), '#8c7a64', o.chunk, true, 0);
+  const gy = terrainHeight(x, z);
+  // plinth: a ring of field stones round a stone-capped base, 0.25 m high, on the ground
+  for (let i = 0; i < 12; i++) {
+    const an = (i / 12) * Math.PI * 2, s2 = 0.32 + 0.06 * Math.sin(i * 2.7);
+    c.b.add(M.rock, SHORE_STONE, planMatrix(x + Math.cos(an) * 1.05, gy - 0.12, z + Math.sin(an) * 1.05, an * 3.1, s2 * 1.3, s2, s2), new THREE.Color('#8f877a').multiplyScalar(0.85 + 0.15 * Math.sin(i)), o.chunk, true, 0);
   }
-  const top = y + 0.62;
-  const band = (bx: number, by: number, r: number, rz = 0) => cyl(c.b, k.M.paint, twine, bx, by, z, r, r, 0.06, 8, { ...o, rz });
-  for (const s of [-1, 1]) {
-    cyl(c.b, k.M.bark, straw, x + s * 0.24, top, z, 0.13, 0.17, 1.15, 8, { ...o, rz: -s * 0.1 }); // legs
-    band(x + s * 0.22, top + 0.08, 0.17); band(x + s * 0.27, top + 0.55, 0.155);
+  cyl(c.b, k.M.stone, '#9a9282', x, gy - 0.05, z, 1.0, 1.08, 0.3, 14, { ...o, uv: 1 });
+  const top0 = gy + 0.25;
+  // two sleepers across the plinth, the feet bound onto them
+  for (const dx of [-0.26, 0.26]) boxMM(c.b, k.M.wood, '#5e4a36', x + dx - 0.09, x + dx + 0.09, top0, top0 + 0.12, z - 0.75, z + 0.75, o);
+  const foot = top0 + 0.12;
+  const limb = (ax: number, ay: number, bx: number, by: number, r0: number, r1: number) => { // a straw bundle from joint a to joint b
+    const dx = bx - ax, dy = by - ay, len = Math.hypot(dx, dy);
+    rod(c.b, k.M.bark, straw, (ax + bx) / 2, (ay + by) / 2, z, r1, r0, len, 8, { ...o, rz: Math.atan2(-dx, dy) });
+  };
+  const band = (bx: number, by: number, r: number, rz = 0) => rod(c.b, k.M.paint, twine, bx, by, z, r, r, 0.06, 8, { ...o, rz });
+  const hip = foot + 1.15, sh = hip + 1.05;
+  for (const sd of [-1, 1]) {
+    limb(x + sd * 0.26, foot, x + sd * 0.22, hip, 0.15, 0.13); // legs, bound at ankle and knee
+    band(x + sd * 0.26, foot + 0.1, 0.165); band(x + sd * 0.24, foot + 0.6, 0.15);
+    const elbow: [number, number] = [x + sd * 1.02, sh - 0.55], wrist: [number, number] = [x + sd * 1.2, sh - 1.25];
+    limb(x + sd * 0.4, sh - 0.05, elbow[0], elbow[1], 0.13, 0.1); // upper arm from the shoulder
+    limb(elbow[0], elbow[1], wrist[0], wrist[1], 0.1, 0.08); // forearm
+    band(elbow[0], elbow[1], 0.115, Math.atan2(-(elbow[0] - x - sd * 0.4), elbow[1] - sh)); band(wrist[0] + sd * 0.02, wrist[1] + 0.12, 0.09);
   }
-  cyl(c.b, k.M.bark, straw, x, top + 1.05, z, 0.46, 0.27, 1.05, 10, o); // body: broad at the shoulders
-  band(x, top + 1.15, 0.31); band(x, top + 1.75, 0.42);
-  for (const s of [-1, 1]) { // arms: bundles hanging out and down from the shoulders, bound at the elbow and wrist
-    cyl(c.b, k.M.bark, straw, x + s * 0.72, top + 1.62, z, 0.1, 0.13, 0.95, 7, { ...o, rz: s * 1.0 });
-    cyl(c.b, k.M.bark, straw, x + s * 1.15, top + 1.0, z, 0.08, 0.1, 0.75, 7, { ...o, rz: s * 0.35 });
-    band(x + s * 1.1, top + 1.45, 0.12, s * 1.0); band(x + s * 1.24, top + 1.05, 0.1, s * 0.35);
+  limb(x, hip - 0.05, x, sh + 0.05, 0.27, 0.46); // body: broad at the shoulders
+  band(x, hip + 0.1, 0.31); band(x, sh - 0.25, 0.42);
+  rod(c.b, k.M.wood, '#6b5236', x, sh - 0.02, z, 0.05, 0.05, 1.0, 6, { ...o, rz: Math.PI / 2 }); // shoulder yoke carrying the arms
+  limb(x, sh, x, sh + 0.22, 0.12, 0.1); // neck
+  band(x, sh + 0.12, 0.12);
+  blob(c.b, k.M.bark, straw, x, sh + 0.52, z, 0.25, 0.32, 0.25, o); // head (≈ 3.1 m in all)
+  for (let i = 0; i < 7; i++) rod(c.b, k.M.bark, '#c8a650', x + Math.cos(i * 0.9) * 0.14, sh + 0.86, z + Math.sin(i * 0.9) * 0.14, 0.015, 0.03, 0.3, 4, { ...o, rz: 0.4 * Math.cos(i * 1.3), rx: 0.4 * Math.sin(i * 1.3) }); // straw tuft
+  w.col.addCircle(x, z, 1.15, gy - 0.5, gy + 3.4);
+  // the candle ring (unlit glass jars on flat stones; lighting it is a later interaction pass), 1.9 m clear of the plinth
+  for (let i = 0; i < 9; i++) {
+    const an = (i / 9) * Math.PI * 2 + 0.15 * Math.sin(i * 2.3), d = 3.1 + 0.2 * Math.sin(i * 1.7), cxx = x + Math.cos(an) * d, czz = z + Math.sin(an) * d, cy = terrainHeight(cxx, czz);
+    c.b.add(M.rock, SHORE_STONE, planMatrix(cxx, cy - 0.06, czz, an * 2, 0.24, 0.1, 0.22), '#9a9282', o.chunk, true, 0);
+    cyl(c.b, k.M.paint, '#bfc8c0', cxx, cy + 0.03, czz, 0.065, 0.06, 0.16, 8, o);
+    cyl(c.b, k.M.paint, '#f2ead8', cxx, cy + 0.04, czz, 0.035, 0.035, 0.1 + (i % 3) * 0.02, 8, o);
+    box(c.b, k.M.glow, '#ffd27a', cxx, cy + 0.14 + (i % 3) * 0.02, czz, 0.022, 0.04, 0.022, { ...o, shadow: false, jitter: 0 });
   }
-  cyl(c.b, k.M.bark, straw, x, top + 2.12, z, 0.1, 0.12, 0.2, 7, o); // neck
-  band(x, top + 2.16, 0.12);
-  blob(c.b, k.M.bark, straw, x, top + 2.5, z, 0.25, 0.32, 0.25, o); // head (≈ 2.8 m in all)
-  for (let i = 0; i < 7; i++) cyl(c.b, k.M.bark, '#c8a650', x + Math.cos(i * 0.9) * 0.18, top + 2.75, z + Math.sin(i * 0.9) * 0.18, 0.015, 0.03, 0.3, 4, { ...o, rz: 0.4 * Math.cos(i * 1.3), rx: 0.4 * Math.sin(i * 1.3) }); // straw tuft
-  w.col.addCircle(x, z, 1.0, y - 0.5, y + 3);
-  for (let i = 0; i < 9; i++) { // a ring of candles in glass jars: local composition, not a route index
-    const a = (i / 9) * Math.PI * 2 + 0.15 * Math.sin(i * 2.3), d = 2.9 + 0.25 * Math.sin(i * 1.7), cxx = x + Math.cos(a) * d, czz = z + Math.sin(a) * d, gy = terrainHeight(cxx, czz);
-    cyl(c.b, k.M.paint, '#bfc8c0', cxx, gy, czz, 0.065, 0.06, 0.16, 8, o);
-    cyl(c.b, k.M.paint, '#f2ead8', cxx, gy + 0.01, czz, 0.035, 0.035, 0.1 + (i % 3) * 0.02, 8, o);
-    box(c.b, k.M.glow, '#ffd27a', cxx, gy + 0.11 + (i % 3) * 0.02, czz, 0.022, 0.04, 0.022, { ...o, shadow: false, jitter: 0 });
-  }
-  // a log bench facing the figure, a lantern on a stake
-  const bx = x - 5.2, bz = z + 1.5;
-  c.b.add(M.tree, BENCH_LOG2, planMatrix(bx, y - 0.02, bz - 1.1, Math.PI / 2 + 0.25), '#9a8a74', o.chunk, true, 0);
-  w.col.addBoxC(bx, bz, 1.2, 2.3, y - 0.3, y + 0.45);
-  staticLantern(c, w, x + 5.6, y, z - 2.0, 0.7, 0, 3, 8);
+  // a log bench on the east side facing the figure (clear of the path mouth in the north-west), a lantern on a stake
+  // marking where the side path opens into the clearing
+  const bx = x + 4.6, by = terrainHeight(bx, z);
+  c.b.add(M.tree, BENCH_LOG2, planMatrix(bx, by - 0.02, z + 1.1, Math.PI / 2), '#9a8a74', o.chunk, true, 0);
+  w.col.addBoxC(bx, z, 0.5, 2.3, by - 0.3, by + 0.45);
+  const [lx, lz] = [x - 4.2, z + 3.9], ly = terrainHeight(lx, lz);
+  cyl(c.b, k.M.wood, '#5a3a22', lx, ly, lz, 0.04, 0.05, 1.15, 6, o);
+  staticLantern({ ...c, chunk: 'wick' }, w, lx, ly + 1.15, lz, 0.7, 0, 3, 8);
+  w.col.addCircle(lx, lz, 0.08, ly, ly + 1.5);
 }

@@ -24,7 +24,7 @@ export const SITES = {
   sauna: { x: 134, z: 102 },
   jacuzzi: { x: 140.8, z: 102.8 },
   golf: { x: 63, z: 51 },
-  wickerman: { x: 167, z: 54 },
+  wickerman: { x: 180, z: 55 }, // DEV-04A: its own clearing off the loop (was ON the loop at 167, 54)
   eastGlade: { x: 163, z: 128 },
 };
 
@@ -76,6 +76,14 @@ export function roofUnderside(x: number, z: number) {
   const ax = 18.7, az = 15.7; // half extents incl. overhang, about the roof centre (90, 95)
   return ROOF_EAVE + (8.2 * Math.max(0, Math.min(az - Math.abs(z - 95), ax - Math.abs(x - 90), az))) / az - 0.25;
 }
+/** DEV-04A attic observation nook: the lookout uses the roof volume east to X 103.6 (headroom still ≥ 2.1 m). */
+export const ATTIC_NOOK = { x0: 95, x1: 103.6, z0: 92, z1: 98.6 };
+/**
+ * DEV-04A observation window in the east roof slope over the nook (plan extent of the opening) and the telescope that
+ * looks through it: pivot (x, z), yaw east, tube elevation `alt` (rad). Inside lining, glass and outside frame are built
+ * from the same record, so the opening is the same from both sides.
+ */
+export const ATTIC_ROOF_WINDOW = { x0: 101.6, x1: 103.0, z0: 95.75, z1: 96.85, scope: { x: 101.2, z: 96.3, alt: 0.95 } };
 /** S03 (LEVEL_LAYOUT vertical_connections): two 1.2 m flights side by side with a middle landing at +5.00. */
 export const S03 = {
   flight1: { x0: 96.6, x1: 97.8, z0: 99.8, z1: 102.32 }, // rises north from the lower landing (+3.35 → +5.00)
@@ -93,24 +101,37 @@ export const COTTAGE: Rect = { x0: 20, x1: 30, z0: 157, z1: 165 };
 export const COTTAGE_TERRACE: Rect = { x0: 20, x1: 30, z0: 152, z1: 157 };
 export const COTTAGE_PAD: Rect = { x0: 18, x1: 32, z0: 150, z1: 167 };
 export const COTTAGE_RAMP: Rect = { x0: 18, x1: 20, z0: 151.4, z1: 152.6 };
+/** DEV-04A: the path junction in front of the terrace — one tiled landing that owns the ground where both cottage
+ * routes meet (south / north mouths along X 18) and carries the ramp (COTTAGE_RAMP, X 18–20) up to the terrace. */
+export const COTTAGE_LANDING: Rect = { x0: 16.8, x1: 20, z0: 151.0, z1: 153.6 };
 
 /** The lake (ellipse; water is never walkable, the basin is real terrain). */
 export const LAKE = { x: 54, z: 146, rx: 22, rz: 12, water: -0.35, bottom: -1.8 };
 export const lakeQ = (x: number, z: number) => ((x - LAKE.x) / LAKE.rx) ** 2 + ((z - LAKE.z) / LAKE.rz) ** 2;
 
-/** Wellness: dry deck east of the Copacabana Room, barrel sauna (raised floor), jacuzzi, ramp to the sauna door. */
+/** Wellness: dry deck east of the Copacabana Room, barrel sauna (raised floor), jacuzzi, steps to the sauna door. */
 export const SAUNA: Rect = { x0: 132, x1: 136, z0: 100, z1: 104 };
-export const SAUNA_FLOOR = 0.8;
+/** DEV-04A owner directive: the sauna floor is ~0.5 m above the deck (v0.2: +0.80, reached by an 8 m ramp). The barrel
+ * sits 0.15 m lower on its cradles, so its interior (benches, heater, door, board) is unchanged relative to the floor. */
+export const SAUNA_FLOOR = 0.65;
 export const WELLNESS: Rect = { x0: 130, x1: 148, z0: 96, z1: 115 };
 export const JACUZZI: Rect = { x0: 139, x1: 142.6, z0: 101, z1: 104.6 };
-/** 1.2 m ramp from the deck (+0.15 at Z 113.4) to a flat landing (+0.80, Z 104–105.2) in front of the sauna door. */
-export const SAUNA_RAMP = { x0: 133.4, x1: 134.6, zFoot: 113.4, zTop: 105.2, zDoor: 104, yFoot: 0.15, yTop: 0.8 };
+/** DEV-04A compact sauna access (replaces the 8 m ramp): a 1.4 m landing in front of the door (Z 104–104.9, floor level)
+ * and three steps down to the deck (+0.15) at Z 105.54. */
+export const SAUNA_STEPS = { x0: 133.3, x1: 134.7, zDoor: 104, zLanding: 104.9, zFoot: 105.54, yFoot: 0.15, yTop: SAUNA_FLOOR, risers: 3 };
 /** Copacabana double door (one saved state door.consEast, two 1.2 m leaves opening outward/east). */
 export const CONS_EAST_DOOR = { x: 130, z0: 104.8, z1: 107.2, h: 2.35 };
 
 /** Arrival: one gravel court, five 2.8 × 5.5 bays (four cars + one optional), shared manoeuvring strip. */
 export const ARRIVAL: Rect = { x0: 80, x1: 100, z0: 61, z1: 78 };
 export const ARRIVAL_SERVICE: Rect = { x0: 69.5, x1: 108, z0: 66, z1: 72 };
+/** The arrival's ONE gravel surface as non-overlapping rectangles (strip, court, bays + foot strip, porch approach). */
+export const ARRIVAL_GRAVEL: Rect[] = [
+  ARRIVAL_SERVICE,
+  { x0: 80, x1: 100, z0: 62, z1: 66 },
+  { x0: 69.5, x1: 77.9, z0: 72, z1: 79 }, { x0: 77.9, x1: 101, z0: 72, z1: 78 }, { x0: 101, x1: 106.6, z0: 72, z1: 79 },
+  { x0: 86, x1: 94, z0: 78, z1: 78.6 },
+];
 export const PARKING: (Rect & { id: string; car: boolean; color: string })[] = [
   { id: 'car.1', x0: 69.5, x1: 72.3, z0: 72, z1: 77.5, car: true, color: '#5a6f8a' },
   { id: 'car.2', x0: 72.3, x1: 75.1, z0: 72, z1: 77.5, car: true, color: '#b8b2a4' },
@@ -132,8 +153,18 @@ export const LAKE_VIEW: Rect = { x0: 76, x1: 82, z0: 137, z1: 142 };
 /** Golf behind (north of) the BOSLUST hill: a tee beside the shed path, a cardboard return chute up the slope. */
 export const GOLF_TEE: Rect = { x0: 60, x1: 66, z0: 49, z1: 55 };
 export const GOLF_CHUTE: Rect = { x0: 62, x1: 64, z0: 38, z1: 49 };
-/** Separate wickerman clearing (scene only; burning/aftermath is open decision I04). */
-export const WICKERMAN = { x: 167, z: 54, r: 7.5, y: 1.2 };
+/** The tee mat on the tee pad (owns its ground; the golf spur meets its west edge). */
+export const GOLF_MAT: Rect = { x0: GOLF_TEE.x0 + 0.35, x1: GOLF_TEE.x0 + 3.05, z0: GOLF_TEE.z0 + 0.25, z1: GOLF_TEE.z0 + 2.25 };
+/**
+ * Separate wickerman clearing (scene only; burning/aftermath is open decision I04). DEV-04A owner directive: the figure
+ * stood ON the wickerman loop (v0.2 clearing centre 167, 54 = a loop vertex), an obstacle in the through-route. The
+ * clearing now lies east of the loop, enclosed by woodland, reached by a short side path (WICKERMAN_SIDE) that bends
+ * so the figure is revealed only once the player has turned onto it. Same level (+1.2) as the loop there.
+ */
+export const WICKERMAN = { x: 180, z: 55, r: 6.0, y: 1.2 };
+/** DEV-04A side path: leaves the loop at Z ≈ 57.6, heads north-east past the hedge, enters the clearing at its
+ * north-west rim (so the line of sight from the loop to the figure crosses unbroken hedge). */
+export const WICKERMAN_SIDE: [number, number][] = [[167.9, 57.6], [170.9, 59.7], [174.2, 60.6], [177.0, 60.1]];
 
 /** Authoring height fields (LEVEL_PLAN §2) + a west shoulder that carries the cottage plateau (DEV-02 addition). */
 export const RIDGES = [

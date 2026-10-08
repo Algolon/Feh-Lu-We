@@ -7,7 +7,7 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, wall, floor, ceiling, stairsZ } from './arch';
-import { box, boxMM, cyl, blob, compound, v3 } from './kit';
+import { box, boxMM, cyl, rod, blob, compound, v3 } from './kit';
 import { table, chair, chandelier, part, staticLantern, canvasPanel, bookshelf } from './furniture';
 import { makeDoor, makeAction, makeInspect, makeLamp, place } from '../interactions/props';
 import { makeFire } from './fire';
@@ -155,7 +155,7 @@ function entrance(w: World, g: GameApi, c0: Ctx, u: Ctx) {
     const y = -((z + 0.5 - 20) / 6) * (0 - UG) + 2.55;
     boxMM(u.b, U.M.stone, '#8a8270', 61.4, 64.6, Math.min(y, 2.6), Math.min(y, 2.6) + 0.3, z, z + 0.5, { chunk: u.chunk, uv: 1, shadow: false });
   }
-  for (let z = 21.5; z < 26; z += 1.5) cyl(u.b, U.M.bark, '#6b4a32', 63, -((z - 20) / 6) * (0 - UG) + 2.3, z, 0.05, 0.05, 2.8, 5, { chunk: u.chunk, rz: Math.PI / 2 });
+  for (let z = 21.5; z < 26; z += 1.5) rod(u.b, U.M.bark, '#6b4a32', 63, -((z - 20) / 6) * (0 - UG) + 2.3 + 1.4, z, 0.05, 0.05, 2.8, 5, { chunk: u.chunk, rz: Math.PI / 2 }); // DEV-04A: same centre as before (BOSLUST zone unchanged)
   staticLantern(u, w, 64.15, -1.2, 23.2, 0.5, 0, 2.5, 5);
 }
 

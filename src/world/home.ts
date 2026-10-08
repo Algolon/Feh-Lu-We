@@ -10,10 +10,12 @@ import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, pl
 import type { SceneExtras } from '../core/game';
 import { has } from '../core/state';
 import { tutorialMissing } from '../puzzles/rules';
+import { beginOpenings } from './openings';
 void _t;
 
 export function buildHome(g: GameApi): { world: World; extras: SceneExtras } {
   const w = new World('home');
+  beginOpenings(); // own opening / wall-art registry (never mixed into the estate's)
   w.ambience = 'home';
   w.col.bounds = { minX: 0.3, maxX: 7.7, minZ: 0.3, maxZ: 5.7 };
   const c = makeCtx(w.col, 'home');

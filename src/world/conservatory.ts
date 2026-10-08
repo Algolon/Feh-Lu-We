@@ -1,20 +1,22 @@
 // Glazed pool conservatory X 116–130, Z 94–112 — "Francois' Copacabana Room" — joined to the service wing (door
 // from the service corridor). The swimming pool is INSIDE, with a dry walkable perimeter; there is no outdoor pool.
 // DEV-02: a 2.4 m double door (one saved state `door.consEast`) opens east onto the wellness deck; a small bar in the
-// north-east corner; personal name boards inside (corridor) and outside. The barrel sauna stands on the deck, its
-// raised floor (+0.80) reached by a ramp and landing from the north (no steps up from a flat path).
+// north-east corner (DEV-04A: its "Copacabana Room" sign is mounted on the bar canopy; the corridor and outdoor name
+// boards are gone). The barrel sauna stands on the deck; DEV-04A: its floor (+0.65) is reached by a landing and three
+// steps from the north (the 8 m ramp is gone).
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import type { World, GameApi } from '../interactions/world';
-import { type Ctx, floor } from './arch';
+import { type Ctx, floor, stairsZ, segBox } from './arch';
 import { Batcher, box, boxMM, cyl, blob, compound, v3, getKit } from './kit';
-import { plant, staticLantern, nameBoard, lounger, joinery, bottleGeo } from './furniture';
+import { plant, staticLantern, barSign, lounger, joinery, bottleGeo } from './furniture';
 import { Asm, artMats, lathe } from './artkit';
 import { makeDoor, makePickup, makeInspect, makeAction, place } from '../interactions/props';
 import { drawSymbol } from '../content/symbols';
+import { registerOpening } from './openings';
 import { addClue } from '../core/state';
 import { turnWheel, wheels, WHEEL_SYMBOLS } from '../puzzles/rules';
-import { GF, CONS, POOL, SITES, CONS_EAST_DOOR, SAUNA_RAMP, SAUNA_FLOOR } from './layout';
+import { GF, CONS, POOL, SITES, CONS_EAST_DOOR, SAUNA_STEPS, SAUNA_FLOOR } from './layout';
 const poolDepth = (z: number) => -1.0 - ((z - POOL.z0) / (POOL.z1 - POOL.z0)) * 1.0; // shallow south → deep north
 
 function mosaicTexture(sym: string) {
@@ -131,23 +133,36 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
   // ---------------------------------------------------------------- glass shell (the wing wall closes most of the west side)
   const glass = new Batcher();
   const fr = '#2f4a3c';
-  const gw = (axis: 'x' | 'z', f: number, a0: number, a1: number, gaps: [number, number][] = []) => {
+  // DEV-04A: a door gap in a glazed wall is ONE architectural system with its doors: no mullion stands in the gap and
+  // the sill / knee / transom rails stop at the jambs (they used to run straight across the open double door); jamb
+  // posts carry the leaves, a head beam sits over the leaves' full height, glass fills the fanlight above it
+  const gw = (axis: 'x' | 'z', f: number, a0: number, a1: number, gaps: [number, number][] = [], headY = H) => {
+    const inGap = (a: number) => gaps.some(([s, e]) => a > s - 0.06 && a < e + 0.06);
+    // posts 1 cm deeper than the rails: where a rail crosses a post their faces no longer share a plane (no z-fighting)
+    const post = (a: number) => (axis === 'x' ? box(c.b, k.M.paint, fr, a, 0, f, 0.1, H, 0.11, { chunk: c.chunk }) : box(c.b, k.M.paint, fr, f, 0, a, 0.11, H, 0.1, { chunk: c.chunk }));
     const n = Math.max(1, Math.round((a1 - a0) / 2));
-    for (let i = 0; i <= n; i++) {
-      const a = a0 + ((a1 - a0) * i) / n;
-      if (axis === 'x') box(c.b, k.M.paint, fr, a, 0, f, 0.1, H, 0.1, { chunk: c.chunk });
-      else box(c.b, k.M.paint, fr, f, 0, a, 0.1, H, 0.1, { chunk: c.chunk });
-    }
-    for (const y of [0.0, 0.55, 2.4, H - 0.08]) {
-      if (axis === 'x') boxMM(c.b, k.M.paint, fr, a0, a1, y, y + 0.08, f - 0.05, f + 0.05, { chunk: c.chunk });
-      else boxMM(c.b, k.M.paint, fr, f - 0.05, f + 0.05, y, y + 0.08, a0, a1, { chunk: c.chunk });
-    }
+    for (let i = 0; i <= n; i++) { const a = a0 + ((a1 - a0) * i) / n; if (!inGap(a)) post(a); }
+    for (const [s, e] of gaps) { post(s - 0.05); post(e + 0.05); } // jambs just outside the clear opening
     let cur = a0;
     const segs: [number, number][] = [];
     for (const [s, e] of [...gaps].sort((p, q) => p[0] - q[0])) { segs.push([cur, s]); cur = e; }
     segs.push([cur, a1]);
-    for (const [s, e] of segs) {
-      if (e - s < 0.01) continue;
+    const rail = (r0: number, r1: number, y: number) => {
+      if (axis === 'x') boxMM(c.b, k.M.paint, fr, r0, r1, y, y + 0.08, f - 0.05, f + 0.05, { chunk: c.chunk });
+      else boxMM(c.b, k.M.paint, fr, f - 0.05, f + 0.05, y, y + 0.08, r0, r1, { chunk: c.chunk });
+    };
+    // rails stop 2 cm inside a door jamb post (their end face would lie on the post's face into the opening)
+    const jamb = (a: number, d: number) => (gaps.some(([gs, ge]) => Math.abs(gs - a) < 1e-6 || Math.abs(ge - a) < 1e-6) ? a + d : a);
+    for (const y of [0.0, 0.55, 2.4]) for (const [s, e] of segs) if (e - s > 0.01) rail(jamb(s, 0.02), jamb(e, -0.02), y);
+    rail(a0, a1, H - 0.08); // the wall plate runs over everything
+    for (const [s, e] of gaps) { // fanlight over the doors: glass between the head beam and the wall plate
+      if (axis === 'x') boxMM(glass, k.M.glass, '#ffffff', s, e, headY, H - 0.08, f - 0.015, f + 0.015, { chunk: 'glass' });
+      else boxMM(glass, k.M.glass, '#ffffff', f - 0.015, f + 0.015, headY, H - 0.08, s, e, { chunk: 'glass' });
+    }
+    for (const [s0, e0] of segs) {
+      if (e0 - s0 < 0.01) continue;
+      // glass ends 1 cm inside a door jamb (its end face never shares the jamb post's face)
+      const s = gaps.some(([, ge]) => Math.abs(ge - s0) < 1e-6) ? s0 + 0.01 : s0, e = gaps.some(([gs]) => Math.abs(gs - e0) < 1e-6) ? e0 - 0.01 : e0;
       if (axis === 'x') {
         boxMM(glass, k.M.glass, '#ffffff', s, e, 0.08, H - 0.08, f - 0.015, f + 0.015, { chunk: 'glass' });
         w.col.addBox(s, e, f - 0.08, f + 0.08, 0, H, { occludes: true });
@@ -160,9 +175,11 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
   const DD = CONS_EAST_DOOR; // double door opening Z 104.8–107.2 (2.4 m clear)
   gw('x', Z0, X0, X1);
   gw('x', Z1, X0, X1);
-  gw('z', X1, Z0, Z1, [[DD.z0, DD.z1]]);
-  boxMM(c.b, k.M.paint, fr, X1 - 0.06, X1 + 0.06, DD.h, DD.h + 0.12, DD.z0, DD.z1, { chunk: c.chunk });
-  w.col.addBox(X1 - 0.08, X1 + 0.08, DD.z0, DD.z1, DD.h, H, { occludes: true }); // glass above the doors
+  const headY = GF + DD.h; // the leaves stand on the floor (+0.15) and are DD.h tall: the head beam sits on top of them
+  gw('z', X1, Z0, Z1, [[DD.z0, DD.z1]], headY + 0.12);
+  boxMM(c.b, k.M.paint, fr, X1 - 0.06, X1 + 0.06, headY, headY + 0.12, DD.z0 - 0.06, DD.z1 + 0.06, { chunk: c.chunk }); // ends inside the jamb posts
+  w.col.addBox(X1 - 0.08, X1 + 0.08, DD.z0, DD.z1, headY, H, { occludes: true }); // head + fanlight over the doors
+  registerOpening({ kind: 'door', axis: 'z', f: X1, t: 0.1, a0: DD.z0, a1: DD.z1, y0: GF, y1: headY, id: 'door.consEast' });
   gw('z', X0, 109.6, Z1);
   // the wing roof meets the conservatory: a glazed lean-to strip above the wing wall
   const ridge = 5.8, half = (X1 - X0) / 2, slope = Math.atan((ridge - H) / half), rl = Math.hypot(half, ridge - H), RX = (X0 + X1) / 2;
@@ -189,10 +206,6 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
     id: 'door.consEast', x: X1, z: DD.z0, dir: 'z+', width: (DD.z1 - DD.z0) / 2, height: DD.h, y0: GF, swing: -1, style: 'glass', key: 'consKey', lockId: 'lock.door.consWest',
     pair: { x: X1, z: DD.z1, dir: 'z-', swing: 1 },
   });
-  // name board outside, on its own post beside the doors (outside the leaf sweep X 130–131.4 / Z 104.5–107.5)
-  box(c.b, k.M.wood, '#4a3a2a', 130.75, 0.15, 108.7, 0.1, 1.75, 0.1, { chunk: c.chunk });
-  w.col.addCircle(130.75, 108.7, 0.1, 0, 2);
-  nameBoard(w, 130.82, 1.95, 108.7, Math.PI / 2);
 
   // ---------------------------------------------------------------- furnishings
   lounger(c, 117.4, 104.5, GF, 0, '#6fae9a');
@@ -216,6 +229,10 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
     a.add(M.brass, '#c9a14e', cg('footRail', () => new THREE.CylinderGeometry(0.02, 0.02, 2.0, 8).rotateZ(Math.PI / 2)), 0, 0.22, 0.5);
     a.add(M.timber, '#4a2f1a', bx(2.3, 0.08, 0.95), 0, 2.38, -0.05);
     for (let i = 0; i < 24; i++) a.add(M.paint, '#c8a050', bx(0.1, 0.3, 0.02), -1.15 + i * 0.1, 2.2 - (i % 3) * 0.02, 0.42);
+    // DEV-04A: the "Copacabana Room" sign stands on the canopy, carried by two timber uprights fixed to the canopy board
+    // and capped by a rail (the sign itself: barSign below)
+    for (const sx of [-0.62, 0.62]) a.add(M.timber, '#4a2f1a', bx(0.06, 0.5, 0.06), sx, 2.42 + 0.25, 0.31);
+    a.add(M.timber, '#4a2f1a', bx(1.78, 0.05, 0.12), 0, 2.42 + 0.46 + 0.025, 0.36);
     // back bar against the glass, standing on its own frame
     const bb = new Asm(c.b, c.chunk, 128.7, GF, 111.35, Math.PI);
     bb.add(M.timber, '#6e4a2c', sb(2.0, 0.9, 0.4, 0.008), 0, 0.45, 0);
@@ -236,6 +253,7 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
     }
     void taperLeg;
   }
+  barSign(w, 128.6, GF + 2.42 + 0.23, 109.7 - 0.35, Math.PI); // on the canopy's front edge, facing the pool and the room
   w.col.addBox(127.5, 129.7, 109.3, 110.1, 0, GF + 1.1);
   w.col.addBox(127.7, 129.7, 111.15, 111.55, 0, GF + 1.0);
   for (const [x, z] of [[119, 96], [127, 96], [119, 110], [127, 110]] as const) {
@@ -345,8 +363,10 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
 
 function buildSauna(w: World, g: GameApi, c: Ctx) {
   const k = getKit();
-  const SX = SITES.sauna.x, R = 1.9, Z0 = SITES.sauna.z - 2, Z1 = SITES.sauna.z + 2, AY = 0.25 + R; // barrel axis height
-  const FY = 0.8; // raised floor so the curved walls leave a comfortable width
+  // DEV-04A: the barrel sits 0.15 m lower on its cradles (axis +2.0, floor +0.65): everything inside keeps its place
+  // relative to the floor, the door is ~0.5 m above the deck
+  const FY = SAUNA_FLOOR; // raised floor so the curved walls leave a comfortable width
+  const SX = SITES.sauna.x, R = 1.9, Z0 = SITES.sauna.z - 2, Z1 = SITES.sauna.z + 2, AY = FY + 1.35; // barrel axis height
   const woodMat = w.material(new THREE.MeshLambertMaterial({ map: k.T.wood, color: '#c48a52', side: THREE.DoubleSide }));
   // shell, both end caps and the two iron bands as two merged meshes (one per material): the sauna is in many views
   const cylG = new THREE.CylinderGeometry(R, R, Z1 - Z0, 22, 1, true).rotateX(Math.PI / 2).translate(SX, AY, -(Z0 + Z1) / 2);
@@ -371,20 +391,20 @@ function buildSauna(w: World, g: GameApi, c: Ctx) {
   for (const z of [Z0 + 0.6, Z1 - 0.6]) box(c.b, k.M.wood, '#7a5232', SX, 0, z, 3.2, 0.35, 0.3, { chunk: c.chunk });
   boxMM(c.b, k.M.wood, '#b07e4e', SX - 1.32, SX + 1.32, FY - 0.1, FY, Z0 + 0.05, Z1 - 0.05, { chunk: c.chunk, uv: 1 });
   w.col.addFloor(SX - 1.3, SX + 1.3, Z0 + 0.1, Z1 - 0.05, FY);
-  // DEV-02 (v0.2 §3): flat landing (+0.80) in front of the door, then a 1.2 m ramp down to the deck (+0.15) at < 8 %
-  const RP = SAUNA_RAMP;
-  floor(c, RP.x0, RP.x1, RP.zDoor, RP.zTop, SAUNA_FLOOR, k.M.wood, '#8a5a33', SAUNA_FLOOR, true);
-  w.col.addBox(RP.x0, RP.x1, RP.zDoor, RP.zTop, 0, SAUNA_FLOOR - 0.01); // solid under the landing
-  const rl = RP.zFoot - RP.zTop, slope = Math.atan2(RP.yTop - RP.yFoot, rl);
-  box(c.b, k.M.wood, '#9a6a3e', (RP.x0 + RP.x1) / 2, (RP.yTop + RP.yFoot) / 2 - 0.06, (RP.zTop + RP.zFoot) / 2, RP.x1 - RP.x0, 0.1, Math.hypot(rl, RP.yTop - RP.yFoot), { chunk: c.chunk, rx: -slope, uv: 1 });
-  w.col.addRamp({ minX: RP.x0, maxX: RP.x1, minZ: RP.zTop, maxZ: RP.zFoot, axis: 'z', a: RP.zTop, ya: RP.yTop, b: RP.zFoot, yb: RP.yFoot });
-  // handrails on both sides of ramp and landing (outside the 1.2 m width): no stepping on or off sideways
-  for (const [x, side] of [[RP.x0, -1], [RP.x1, 1]] as const) {
-    const f = x + side * 0.05;
-    boxMM(c.b, k.M.wood, '#6b4426', f - 0.04, f + 0.04, SAUNA_FLOOR + 0.9, SAUNA_FLOOR + 0.96, RP.zDoor, RP.zTop, { chunk: c.chunk });
-    box(c.b, k.M.wood, '#6b4426', f, (RP.yTop + RP.yFoot) / 2 + 0.9, (RP.zTop + RP.zFoot) / 2, 0.06, 0.06, Math.hypot(rl, RP.yTop - RP.yFoot), { chunk: c.chunk, rx: -slope });
-    for (let z = RP.zDoor + 0.1; z <= RP.zFoot; z += 1.0) { const y = z < RP.zTop ? SAUNA_FLOOR : RP.yTop + ((RP.yFoot - RP.yTop) * (z - RP.zTop)) / rl; box(c.b, k.M.wood, '#6b4426', f, y - 0.6, z, 0.06, 1.5, 0.06, { chunk: c.chunk }); }
-    w.col.addBox(side < 0 ? f - 0.1 : f - 0.04, side < 0 ? f + 0.04 : f + 0.1, RP.zDoor, RP.zFoot - 0.05, 0, SAUNA_FLOOR + 1.1, { tag: 'railing.saunaRamp' });
+  // DEV-04A owner directive: a compact landing and three steps instead of the 8 m ramp that dominated the sauna. The
+  // landing (floor level, 0.9 m deep) lies in front of the door, the steps (3 × 0.167 m rise, 0.21 m going) come down to
+  // the deck; open-sided like garden steps, a handrail on the east side
+  const ST = SAUNA_STEPS, sc = '#9a6a3e';
+  // the landing's visible slab starts 1 cm off the barrel's end cap (its end face lay in the cap's plane); the collider below still meets it
+  floor(c, ST.x0, ST.x1, ST.zDoor + 0.01, ST.zLanding, FY, k.M.wood, '#8a5a33', FY - ST.yFoot, false, 1);
+  w.col.addFloor(ST.x0, ST.x1, ST.zDoor, ST.zLanding, FY);
+  w.col.addBox(ST.x0, ST.x1, ST.zDoor, ST.zLanding, 0, FY - 0.01); // solid under the landing
+  stairsZ(c, ST.x0, ST.x1, ST.zFoot, ST.zLanding, ST.yFoot, FY, sc, ST.risers, { mass: '#7a5232', runner: false, riser: '#8a5a33' });
+  { const f = ST.x1 + 0.05, top = FY + 0.9;
+    boxMM(c.b, k.M.wood, '#6b4426', f - 0.03, f + 0.03, top, top + 0.05, ST.zDoor + 0.1, ST.zLanding, { chunk: c.chunk });
+    segBox(c, k.M.wood, '#6b4426', [f, top + 0.025, ST.zLanding], [f, ST.yFoot + 0.9, ST.zFoot + 0.15], 0.06, 0.05);
+    for (const [z, y] of [[ST.zDoor + 0.12, FY], [ST.zLanding, FY], [ST.zFoot + 0.12, ST.yFoot]] as const) box(c.b, k.M.wood, '#6b4426', f, y, z, 0.06, (z > ST.zLanding ? ST.yFoot + 0.92 : top + 0.02) - y, 0.06, { chunk: c.chunk });
+    w.col.addBox(f - 0.04, f + 0.08, ST.zDoor, ST.zFoot + 0.15, 0, FY + 1.0, { tag: 'railing.saunaSteps' });
   }
   // colliders: curved walls approximated by boxes
   w.col.addBox(SX - R - 0.1, SX - 1.3, Z0, Z1, 0, 4.2, { occludes: true });
@@ -466,7 +486,7 @@ function buildSauna(w: World, g: GameApi, c: Ctx) {
   makeDoor(w, g, { id: 'door.sauna', x: SX - 0.38, z: Z1 + 0.02, dir: 'x+', width: 0.76, height: 1.78, y0: FY, swing: 1, style: 'glass' });
   // a little bucket + ladle outside
   cyl(c.b, k.M.wood, '#a8743f', SX + 1.0, 0.15, Z1 + 0.6, 0.18, 0.15, 0.3, 10, { chunk: c.chunk });
-  blob(c.b, k.M.paint, '#6a6560', SX - 1.3, 0.25, Z1 + 0.7, 0.25, 0.15, 0.2, { chunk: c.chunk });
+  blob(c.b, k.M.paint, '#6a6560', SX - 1.25, 0.25, Z1 + 1.45, 0.25, 0.15, 0.2, { chunk: c.chunk }); // beside the steps
   w.checkpoints.push({ name: 'sauna', pose: { x: SX - 1.8, y: 0.15, z: 112.4, yaw: Math.PI, pitch: 0 } });
   // the sauna shell is exterior skin: visible from outside AND inside whatever the door does (audit VD-03)
   shell.userData.rooms = ['out', 'sauna'];
