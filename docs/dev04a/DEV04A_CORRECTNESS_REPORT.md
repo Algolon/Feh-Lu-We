@@ -166,7 +166,23 @@ clearing and its path.
 
 ## 11. Known remaining visual issues
 
-{{KNOWN}}
+- **Attic dormers**: the exterior dormers are unchanged; with the partitions now meeting the roof they light the void
+  behind the knee walls (eaves storage), which is not reachable or visible from the rooms. No dormer interiors yet.
+- **Wickerman from the loop**: from the old figure spot (capture 11) the head of the figure can be glimpsed through
+  foliage at the edge of the view; it is revealed properly only on the side path (11c). Denser screening would be a
+  DEV-04B staging decision.
+- **Mid-swing evidence**: the capture script's "half open" pose (04c) does not hold the leaves mid-swing on either build
+  (identical to fully open); the double door is evidenced closed (04d) and open (04, 04b) and walked in three lanes.
+- **Coplanar check scope**: the surface-ownership check runs on the corrected regions (sink, thresholds, double door,
+  cottage door / landing, golf mat, forecourt mouths, sauna steps), not as an estate-wide z-fighting sweep. Coplanar
+  overlaps of the same material and colour are not counted (they shade identically). The pre-existing deck cut-out
+  under the sauna barrel is out of sight and left as is.
+- **Views over the low triangle guide** (250 k) before DEV-04A stay over it, unchanged within ±3 %: Sterren gallery
+  (01/01b), front porch (05), billiard garden door (05e), forecourt (15/15b, p2), sauna deck (07). None of them went
+  over the call guide because of DEV-04A.
+- **Wickerman path views** carry +13–14 k triangles (+8 %) and +3 calls: the second hedge ring, the hedge arc and the
+  clearing itself, all still far under the guide (≤ 36 calls, ≤ 212 k).
+- BOSLUST's tunnel battens were left exactly as they were (calibration zone).
 
 ## 12. Deferred to DEV-04B (explicitly not done here)
 

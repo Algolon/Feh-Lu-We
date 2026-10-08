@@ -595,6 +595,166 @@
       },
       "room": "out",
       "feetY": 0.15
+    },
+    {
+      "name": "05f-cottage-door",
+      "pose": {
+        "x": 25,
+        "y": 4.15,
+        "z": 155.2,
+        "yaw": 0,
+        "pitch": -0.32
+      },
+      "low": {
+        "calls": 41,
+        "triangles": 101608
+      },
+      "room": "out",
+      "feetY": 4.15
+    },
+    {
+      "name": "05g-shed-door",
+      "pose": {
+        "x": 47,
+        "y": 0,
+        "z": 38.9,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.25
+      },
+      "low": {
+        "calls": 31,
+        "triangles": 157283
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "09c-observatory-sightline",
+      "pose": {
+        "x": 100.2,
+        "y": 6.65,
+        "z": 96.3,
+        "yaw": 1.5707963267948966,
+        "pitch": 0.85
+      },
+      "low": {
+        "calls": 32,
+        "triangles": 95594
+      },
+      "room": "atticLookout",
+      "feetY": 6.65
+    },
+    {
+      "name": "09d-observatory-nook",
+      "pose": {
+        "x": 96.4,
+        "y": 6.65,
+        "z": 94.2,
+        "yaw": 1.0821041362364843,
+        "pitch": 0.22
+      },
+      "low": {
+        "calls": 35,
+        "triangles": 95802
+      },
+      "room": "atticLookout",
+      "feetY": 6.65
+    },
+    {
+      "name": "09e-sterren-telescope",
+      "pose": {
+        "x": 80.6,
+        "y": 3.35,
+        "z": 93.2,
+        "yaw": -1.9547687622336491,
+        "pitch": -0.05
+      },
+      "low": {
+        "calls": 53,
+        "triangles": 142968
+      },
+      "room": "sterren",
+      "feetY": 3.35
+    },
+    {
+      "name": "11b-wickerman-new-clearing",
+      "pose": {
+        "x": 176.4,
+        "y": 1.2,
+        "z": 59.9,
+        "yaw": 2.530727415391778,
+        "pitch": 0.12
+      },
+      "low": {
+        "calls": 26,
+        "triangles": 162658
+      },
+      "room": "out",
+      "feetY": 1.04
+    },
+    {
+      "name": "11c-wickerman-side-path",
+      "pose": {
+        "x": 167.4,
+        "y": 1.2,
+        "z": 56,
+        "yaw": 1.117010721276371,
+        "pitch": 0.02
+      },
+      "low": {
+        "calls": 23,
+        "triangles": 174822
+      },
+      "room": "out",
+      "feetY": 1.2
+    },
+    {
+      "name": "11d-wickerman-figure",
+      "pose": {
+        "x": 180,
+        "y": 1.2,
+        "z": 59.6,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "low": {
+        "calls": 32,
+        "triangles": 190317
+      },
+      "room": "out",
+      "feetY": 0.61
+    },
+    {
+      "name": "16-boslust-fork-unchanged",
+      "pose": {
+        "x": 51.5,
+        "y": 0,
+        "z": 7.6,
+        "yaw": 0.9599310885968813,
+        "pitch": 0.04
+      },
+      "low": {
+        "calls": 90,
+        "triangles": 230457
+      },
+      "room": "out",
+      "feetY": 0.05
+    },
+    {
+      "name": "17-lantern-lawn-junction",
+      "pose": {
+        "x": 88,
+        "y": 0,
+        "z": 125,
+        "yaw": 0.5235987755982988,
+        "pitch": -0.25
+      },
+      "low": {
+        "calls": 47,
+        "triangles": 135662
+      },
+      "room": "out",
+      "feetY": 0
     }
   ],
   "problems": []
