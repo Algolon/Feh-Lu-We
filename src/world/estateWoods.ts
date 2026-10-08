@@ -25,7 +25,7 @@ import { woodMats, rockModel, litterLeafModel, logModel, LEAF_TINT, type TreeSpe
 import { CAPS } from '../core/caps';
 import { ESTATE, WOODS, CLEARINGS, HILL_CUT, DRIVEWAY, WICKERMAN, GOLF_TEE, type Rect } from './layout';
 import { FOREST_PATHS, terrainHeight } from './terrain';
-import { ROUTE_LINES, vegetationClear } from './footprints';
+import { ROUTE_LINES, vegetationClear, inWickermanClearing } from './footprints';
 import { inRect } from './geom2d';
 
 export type WoodGroup = 'forest' | 'mass' | 'garden' | 'outer';
@@ -49,7 +49,7 @@ const SOUTH_SITE: WoodlandSite = {
   seed: 3101,
   bounds: { x0: 0.8, x1: ESTATE.w - 0.8, z0: 0.8, z1: ESTATE.forestEdge - 0.5 },
   inArea: (x, z) => z < ESTATE.forestEdge - 0.5 && !inZone(x, z),
-  keepClear: (x, z) => inCut(x, z) || inClearing(x, z, -1.2) || distToPolyline(x, z, DRIVEWAY) < 3.4 || !vegetationClear(x, z, 'small'),
+  keepClear: (x, z) => inCut(x, z) || inClearing(x, z, -1.2) || inWickermanClearing(x, z, -0.5) || distToPolyline(x, z, DRIVEWAY) < 3.4 || !vegetationClear(x, z, 'small'),
   paths: SOUTH_PATHS,
   ground: terrainHeight,
 };
@@ -111,6 +111,7 @@ export class EstateWoods {
     const stumpNear = (x: number, z: number, d: number) => this.stumps.some((s) => Math.hypot(s.x - x, s.z - z) < s.s + d);
     const sapling = (x: number, z: number, k: number) => {
       if (stumpNear(x, z, 0.8)) return;
+      if (inWickermanClearing(x, z, 1.4)) return; // DEV-04A: young trees keep the tree margin round the clearing too
       const r = stream(4001, 'sapling', x, z), h = hash01(x, z, 9);
       const species: TreeSpecies = h < 0.55 ? 'beech' : h < 0.82 ? 'birch' : 'oak';
       const s = (species === 'birch' ? 0.34 : 0.3) + r() * 0.16 * k;
