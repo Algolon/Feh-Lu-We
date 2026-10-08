@@ -279,6 +279,16 @@ function golf(w: World, c: Ctx) {
     for (const s of [-1, 1]) box(c.b, k.M.wood, '#6b4a2a', cx + s * 0.28, (ya + yb) / 2 + 0.1, z + 0.5, 0.08, 0.2, len, { ...o, rx: ang });
     w.col.addBox(cx - 0.35, cx + 0.35, z, z + 1, Math.min(ya, yb) - 0.2, Math.max(ya, yb) + 0.45); // above ground only (never into the hall below)
   }
+  // DEV-04A support: the side beams rode 10 cm above the slope on nothing — a pair of stakes at every joint carries
+  // them, and the chute ends in a timber catch tray standing on the ground beside the tee mat
+  for (let z = C.z0; z <= C.z1 - 0.4 + 1e-6; z += 1) {
+    const zj = Math.min(z, C.z1 - 0.4), yg = terrainHeight(cx, zj), ys = (terrainHeight(cx, zj - 0.5) + terrainHeight(cx, zj + 0.5)) / 2 + 0.1;
+    for (const s of [-1, 1]) box(c.b, k.M.wood, '#5a3a22', cx + s * 0.28, yg - 0.1, zj, 0.06, Math.max(0.12, ys - yg + 0.12), 0.06, o);
+  }
+  { const zt = C.z1 - 0.25, yg = terrainHeight(cx, zt); // catch tray: floor + four low walls, open at the top
+    boxMM(c.b, k.M.wood, '#7a5232', cx - 0.36, cx + 0.36, yg, yg + 0.04, zt - 0.3, zt + 0.25, o);
+    for (const [x0, x1, z0, z1] of [[cx - 0.36, cx + 0.36, zt - 0.3, zt - 0.26], [cx - 0.36, cx + 0.36, zt + 0.21, zt + 0.25], [cx - 0.36, cx - 0.32, zt - 0.3, zt + 0.25], [cx + 0.32, cx + 0.36, zt - 0.3, zt + 0.25]] as const) boxMM(c.b, k.M.wood, '#6b4a2a', x0, x1, yg, yg + 0.24, z0, z1, o);
+  }
   const yt = terrainHeight(cx, C.z0);
   cyl(c.b, k.M.paint, '#c8a878', cx, yt, C.z0 - 0.2, 0.3, 0.3, 0.35, 12, o); // cup at the top
 }

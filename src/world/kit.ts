@@ -152,13 +152,28 @@ function cached(key: string, make: () => THREE.BufferGeometry) {
   return g;
 }
 
+/**
+ * DEV-04A support contract: `cyl` takes the BASE height y0 of an upright cylinder. Tipped over (rx / rz), that base is
+ * meaningless — the centre lands at y0 + h/2, which is how the shed's log pile, the fire logs, the kindling bundle and
+ * the hall's tapestry rod came to float half their length above their support. Lying or tilted cylinders use `rod`
+ * (centre-based); a long cylinder tipped past ~35° through `cyl` is recorded here and fails the DEV-04A suite.
+ */
+export const supportWarnings: string[] = [];
 export function cyl(b: Batcher, mat: THREE.Material, color: THREE.ColorRepresentation, x: number, y0: number, z: number, rTop: number, rBot: number, h: number, seg = 10, o: PartOpts = {}) {
+  if (h > 0.3 && Math.cos(o.rx ?? 0) * Math.cos(o.rz ?? 0) < 0.8) supportWarnings.push(`cyl@${x.toFixed(2)},${y0.toFixed(2)},${z.toFixed(2)} h ${h} tipped: use rod()`);
+  cylAt(b, mat, color, x, y0 + h / 2, z, rTop, rBot, h, seg, o);
+}
+/** A cylinder whose CENTRE is at (x, y, z): logs, rods, rails, pipes — anything not standing upright on its base. */
+export function rod(b: Batcher, mat: THREE.Material, color: THREE.ColorRepresentation, x: number, y: number, z: number, rTop: number, rBot: number, len: number, seg = 10, o: PartOpts = {}) {
+  cylAt(b, mat, color, x, y, z, rTop, rBot, len, seg, o);
+}
+function cylAt(b: Batcher, mat: THREE.Material, color: THREE.ColorRepresentation, x: number, yc: number, z: number, rTop: number, rBot: number, h: number, seg: number, o: PartOpts) {
   const g = cached(`cyl${seg}`, () => new THREE.CylinderGeometry(1, 1, 1, seg, 1));
   if (rTop === rBot) {
-    b.add(mat, g, planMatrix(x, y0 + h / 2, z, o.yaw ?? 0, rTop, h, rTop, o.rx ?? 0, o.rz ?? 0), color, o.chunk, o.shadow ?? true, o.jitter);
+    b.add(mat, g, planMatrix(x, yc, z, o.yaw ?? 0, rTop, h, rTop, o.rx ?? 0, o.rz ?? 0), color, o.chunk, o.shadow ?? true, o.jitter);
   } else {
     const gg = new THREE.CylinderGeometry(rTop, rBot, h, seg, 1);
-    b.add(mat, gg, planMatrix(x, y0 + h / 2, z, o.yaw ?? 0, 1, 1, 1, o.rx ?? 0, o.rz ?? 0), color, o.chunk, o.shadow ?? true, o.jitter);
+    b.add(mat, gg, planMatrix(x, yc, z, o.yaw ?? 0, 1, 1, 1, o.rx ?? 0, o.rz ?? 0), color, o.chunk, o.shadow ?? true, o.jitter);
     gg.dispose();
   }
 }

@@ -4,7 +4,7 @@
 import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import type { Ctx } from './arch';
-import { box, cyl, blob, geo, compound, v3, getKit, type Batcher } from './kit';
+import { box, cyl, rod, blob, geo, compound, v3, getKit, type Batcher } from './kit';
 import { makeFire } from './fire';
 import { makeInspect, makeAction, place, lightableItemLabel } from '../interactions/props';
 import { MANTEL, mantelSlots } from '../content/canon';
@@ -56,9 +56,10 @@ export function buildHearth(w: World, g: GameApi, c: Ctx, o: HearthOpts) {
     box(b, k.M.paint, '#2b2622', 0.32, 0.05, 0, 0.36, 0.03, 0.9);
     for (const s of [-1, 1]) box(b, k.M.paint, '#2b2622', 0.5, 0.05, s * 0.48, 0.05, 0.22, 0.05);
     // logs: two crossed and one across the front
-    cyl(b, k.M.bark, '#6b4a32', 0.3, 0.1, -0.12, 0.065, 0.075, 0.82, 7, { rx: Math.PI / 2, yaw: 0.25 });
-    cyl(b, k.M.bark, '#7a5a3a', 0.36, 0.1, 0.12, 0.06, 0.07, 0.78, 7, { rx: Math.PI / 2, yaw: -0.3 });
-    cyl(b, k.M.bark, '#5e4030', 0.44, 0.16, 0, 0.055, 0.06, 0.6, 7, { rx: Math.PI / 2, yaw: Math.PI / 2 });
+    // DEV-04A: centred on the grate (they floated ~0.4 m above it through `cyl`'s base height)
+    rod(b, k.M.bark, '#6b4a32', 0.3, 0.15, -0.12, 0.065, 0.075, 0.82, 7, { rx: Math.PI / 2, yaw: 0.25 });
+    rod(b, k.M.bark, '#7a5a3a', 0.36, 0.15, 0.12, 0.06, 0.07, 0.78, 7, { rx: Math.PI / 2, yaw: -0.3 });
+    rod(b, k.M.bark, '#5e4030', 0.44, 0.26, 0, 0.055, 0.06, 0.6, 7, { rx: Math.PI / 2, yaw: Math.PI / 2 });
     blob(b, k.M.paint, '#2a1f18', 0.32, 0.06, 0, 0.32, 0.03, 0.42); // ash bed
   });
   place(body, o.x, Y, o.z, yaw);

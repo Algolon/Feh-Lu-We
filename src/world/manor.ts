@@ -387,7 +387,7 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   painting(c, 85.12, 2.0, 92.5, Math.PI / 2, 0.9, 0.7, 0);
   // a woven hanging above the stair, on an oak rod with finials (DEV-03: was a carpet glued flat to the wall)
   boxMM(c.b, k.M.rug, '#e8d8c4', 94.84, 94.88, 3.95, 5.85, 88.5, 90.2, { chunk: c.chunk, shadow: false });
-  cyl(c.b, k.M.wood, '#6e4a2c', 94.8, 5.88, 89.35, 0.025, 0.025, 2.0, 8, { chunk: c.chunk, rx: Math.PI / 2 });
+  rod(c.b, k.M.wood, '#6e4a2c', 94.8, 5.88, 89.35, 0.025, 0.025, 2.0, 8, { chunk: c.chunk, rx: Math.PI / 2 }); // DEV-04A: was 1 m above the hanging
   for (const zz of [88.33, 90.37]) blob(c.b, k.M.wood, '#6e4a2c', 94.8, 5.9, zz, 0.045, 0.045, 0.045, { chunk: c.chunk });
   const ch = chandelier(w, 89.9, UCEIL, 90, 0.9, 1.8);
   const sw = compound((b) => box(b, k.M.paint, '#c9a44c', 0, 0, 0, 0.12, 0.18, 0.03));
@@ -1140,8 +1140,9 @@ function basement(w: World, g: GameApi, c: Ctx) {
   wall(c, 'x', 89.85, 77, 89, B0, B1, stoneW);
   wall(c, 'z', 76.85, 90, 100, B0, B1, { ...stoneW, openings: [{ at: 97, w: 1.2, h: 2.25 }] });
   // pipes along the ceilings converging on the route chamber (the service drawing made physical)
-  for (const [z, col] of [[108.8, '#8a6a3a'], [108.4, '#5a7a8a'], [108.0, '#6b8a5a']] as const) cyl(c.b, k.M.paint, col, 92, BCEIL - 0.25, z, 0.07, 0.07, 30, 8, { chunk: c.chunk, rz: Math.PI / 2 });
-  for (const [x, col] of [[86.0, '#8a6a3a'], [86.4, '#5a7a8a'], [86.8, '#6b8a5a']] as const) cyl(c.b, k.M.paint, col, x, BCEIL - 0.25, 99, 0.07, 0.07, 19, 8, { chunk: c.chunk, rx: Math.PI / 2 });
+  // DEV-04A: these pipe runs were drawn ~15 m up (above the roof ridge: `cyl` takes a base height); now under the ceiling
+  for (const [z, col] of [[108.8, '#8a6a3a'], [108.4, '#5a7a8a'], [108.0, '#6b8a5a']] as const) rod(c.b, k.M.paint, col, 92, BCEIL - 0.25, z, 0.07, 0.07, 30, 8, { chunk: c.chunk, rz: Math.PI / 2 });
+  for (const [x, col] of [[86.0, '#8a6a3a'], [86.4, '#5a7a8a'], [86.8, '#6b8a5a']] as const) rod(c.b, k.M.paint, col, x, BCEIL - 0.25, 99, 0.07, 0.07, 19, 8, { chunk: c.chunk, rx: Math.PI / 2 });
   staticLantern(c, w, 93, BCEIL - 0.45, 107.4, 0.6, 0, 3, 7);
   // boiler room
   cyl(c.b, k.M.paint, '#3a3530', 104, BF, 105, 1.0, 1.1, 2.2, 14, { chunk: c.chunk });
