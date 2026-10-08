@@ -82,7 +82,7 @@ export class World {
   /** Room-based visibility (estate): regions are static chunks that belong to a set of rooms ('out' = outdoors). */
   rooms: RoomGraph | null = null;
   isOpen: (door: string) => boolean = () => false;
-  private regions: { meshes: THREE.Object3D[]; rooms: Set<string>; on: boolean; far: number; outFar: number; sph: THREE.Sphere }[] = [];
+  private regions: { meshes: THREE.Object3D[]; rooms: Set<string>; on: boolean; far: number; outFar: number; sph: THREE.Sphere; shade?: boolean }[] = [];
   visibleRooms = new Set<string>(['out']);
   hereRoom = 'out';
   constructor(public readonly id: SceneId) {}
@@ -228,6 +228,13 @@ export class World {
         if (on && r.far < Infinity) on = r.sph.center.distanceTo(eye) - r.sph.radius < r.far;
         if (on && r.outFar < Infinity && this.hereRoom === 'out') on = this.interiorThroughDoor && r.sph.center.distanceTo(eye) - r.sph.radius < r.outFar;
         if (on !== r.on) { r.on = on; for (const m of r.meshes) { m.visible = on; m.userData.regionOff = !on; } }
+        // an interior seen from outside (through a doorway) lies under its own roof: it casts no sun shadow worth a
+        // second render of its furniture in the shadow pass; inside, its casters are restored
+        const shade = this.hereRoom !== 'out' || r.rooms.has('out');
+        if (shade !== (r.shade ?? true)) {
+          r.shade = shade;
+          for (const m of r.meshes) m.traverse((o) => { if ((o as THREE.Mesh).isMesh) { o.userData.cast0 ??= o.castShadow; o.castShadow = shade && o.userData.cast0; } });
+        }
       }
     }
     for (const v of this.veg) {

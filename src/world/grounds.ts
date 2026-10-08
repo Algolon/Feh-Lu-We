@@ -73,7 +73,7 @@ function car(w: World, c: Ctx, id: string, x: number, z: number, color: string) 
   for (const sx of [-1, 1]) for (const pz of [roofZ - roofL / 2 + 0.06, roofZ + roofL / 2 - 0.08, roofZ]) a.add(M.paint, pz === roofZ ? trim : body, bx(0.05, gh, 0.08), sx * 0.785, gy + gh / 2, pz);
   if (kind === 'van') a.add(M.paint, body, sb(1.7, 0.42, 1.0, 0.1, 2), 0, 0.98, L / 2 - 0.55);
   // wheels in arches, bumpers, lamps, plates, mirrors
-  const tyre = cg('tyre', () => new THREE.CylinderGeometry(0.33, 0.33, 0.22, 14).rotateZ(Math.PI / 2));
+  const tyre = cg('tyre', () => new THREE.CylinderGeometry(0.33, 0.33, 0.22, 12).rotateZ(Math.PI / 2));
   const hub = cg('hub', () => new THREE.CylinderGeometry(0.17, 0.17, 0.23, 10).rotateZ(Math.PI / 2));
   for (const sx of [-1, 1]) for (const wz of [L / 2 - 0.78, -L / 2 + 0.78]) {
     a.add(M.paint, '#1c1c1c', tyre, sx * 0.79, 0.33, wz);

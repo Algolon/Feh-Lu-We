@@ -505,8 +505,9 @@ function buildGarden(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods: Estat
     else if (flower) veg.smallThing('flower', x, z, 0.14, purple[Math.floor(v * 4)], 'garden', terrainHeight(x, z));
     else veg.smallThing('shrub', x, z, 0.4 + v * 0.3, '#5a8a3e', 'garden', terrainHeight(x, z));
   }
-  // soft meadow: grass tufts across the lawns (instanced, tiled so only nearby tiles draw)
-  for (const [x, z] of scatter(r, 2, ESTATE.w - 2, ESTATE.forestEdge - 4, ESTATE.d - 2, 2.2, 11000, (x, z) => clearOf(x, z) || (z > 118 && vegetationClear(x, z, 'small') && !inWood(x, z) && Math.hypot(x - LC.x, z - LC.z) > 4.5))) {
+  // soft meadow: grass tufts across the lawns (instanced, tiled so only nearby tiles draw; DEV-03: 2.5 m spacing, the
+  // low flowers and the woodland understory carry the ground detail now)
+  for (const [x, z] of scatter(r, 2, ESTATE.w - 2, ESTATE.forestEdge - 4, ESTATE.d - 2, 2.5, 11000, (x, z) => clearOf(x, z) || (z > 118 && vegetationClear(x, z, 'small') && !inWood(x, z) && Math.hypot(x - LC.x, z - LC.z) > 4.5))) {
     const size = 0.25 + r() * 0.2, col = r() < 0.5 ? '#7fae4a' : '#94bc58';
     veg.smallThing('grass', x, z, size, col, `gr${Math.floor(x / 40)}_${Math.floor(z / 40)}`, terrainHeight(x, z));
   }
@@ -516,11 +517,10 @@ function buildGarden(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods: Estat
     blob(c.b, k2.M.foliage, '#3f5f34', SITES.forecourt.x, 0.95, SITES.forecourt.z, 0.75, 0.6, 0.75, { chunk: c.chunk });
     for (let i = 0; i < 14; i++) { const a = (i / 14) * Math.PI * 2, d = 1.25 + (i % 2) * 0.15; woods.addPlant(i % 3 ? 'anemone' : 'foxglove', i, SITES.forecourt.x + Math.cos(a) * d, SITES.forecourt.z + Math.sin(a) * d, 0.9, 0.45); }
     // clipped box hedges along the manor front (two runs, the approach to the porch open), on a low collider
+    // one clipped piece per run (DEV-03 budget: 16 short pieces cost 9.4 k triangles in the forecourt view; one
+    // piece per run with the same wavy clipped top costs ~2 k)
     for (const [x0, x1] of [[72.6, 84.9], [95.1, 107.4]] as const) {
-      for (let x = x0; x < x1 - 0.01; x += 1.55) {
-        const len = Math.min(1.6, x1 - x);
-        geo(c.b, k2.M.foliage, new THREE.Color('#3f5f34').offsetHSL(0, 0, Math.sin(x * 3.1) * 0.02), hedgeGeo(len), x + len / 2, 0, 79.2, { chunk: c.chunk });
-      }
+      geo(c.b, k2.M.foliage, '#3f5f34', hedgeGeo(x1 - x0), (x0 + x1) / 2, 0, 79.2, { chunk: c.chunk });
       w.col.addBox(x0, x1, 78.85, 79.55, 0, 0.75);
     }
   } else {
@@ -540,7 +540,7 @@ function hedgeGeo(len: number) {
   const key = Math.round(len * 100);
   let g = hedgeCache.get(key);
   if (!g) {
-    g = softBox(len, 0.78, 0.7, 0.14, 2, 3).translate(0, 0.39, 0);
+    g = softBox(len, 0.78, 0.7, 0.14, 2, 5).translate(0, 0.39, 0);
     const p = g.attributes.position as THREE.BufferAttribute;
     for (let i = 0; i < p.count; i++) { const y = p.getY(i); if (y > 0.6) p.setY(i, y + 0.04 * Math.sin(p.getX(i) * 4.1) * Math.cos(p.getZ(i) * 5.3)); }
     g.computeVertexNormals();
