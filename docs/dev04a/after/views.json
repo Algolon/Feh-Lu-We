@@ -90,8 +90,8 @@
         "pitch": -0.04
       },
       "low": {
-        "calls": 82,
-        "triangles": 132272
+        "calls": 74,
+        "triangles": 130010
       },
       "room": "cons",
       "feetY": 0.15
@@ -142,8 +142,8 @@
         ]
       },
       "low": {
-        "calls": 82,
-        "triangles": 134973
+        "calls": 74,
+        "triangles": 132711
       },
       "room": "cons",
       "feetY": 0.15
@@ -318,8 +318,8 @@
         "pitch": -0.05
       },
       "low": {
-        "calls": 135,
-        "triangles": 248356
+        "calls": 127,
+        "triangles": 246094
       },
       "room": "out",
       "feetY": 0.15
@@ -750,8 +750,8 @@
         "pitch": -0.05
       },
       "low": {
-        "calls": 72,
-        "triangles": 146227
+        "calls": 64,
+        "triangles": 143965
       },
       "room": "out",
       "feetY": 0.15

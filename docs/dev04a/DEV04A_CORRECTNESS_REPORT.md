@@ -145,7 +145,21 @@ clearing and its path.
 
 ## 7. Test results
 
-{{GATE}}
+Full gate on the final branch (production build served by `vite preview`, SwiftShader Chromium):
+
+| Step | Result |
+|---|---|
+| `npx tsc --noEmit` | clean |
+| `npx vitest run` | **182 / 182** tests, 13 files (incl. 11 new in `tests/dev04a.test.ts`) |
+| `npm run build` (clean `dist/`) | OK |
+| `npm run e2e:dev04a` | **19 / 19** |
+| `npm run e2e:dev03` | **11 / 11** |
+| `npm run e2e` (full regression) | **103 / 103** |
+| `npm run e2e:dev02` | **34 / 34** |
+| `npm run e2e:dev01` | **34 / 34** |
+
+The last commit (wickerman clearing drawn within 40 m instead of 70 m, a culling range only) was followed by a re-run of
+`e2e:dev04a`, `e2e:dev02` and `e2e` — all green again; `e2e:dev03` and `e2e:dev01` ran on the build just before it.
 
 ## 8. Performance / render counts (low quality = mobile guide ≈ 150 calls / 250 k triangles)
 
@@ -184,8 +198,8 @@ front forecourt, Portugal terrace / golf.
 The full per-view capture set (47 poses, door state of the evidence script — every relevant door open) is in
 [`before/views.json`](before/views.json) and [`after/views.json`](after/views.json). Comparing those two files is only
 valid for views whose state is not order-dependent: e.g. the Portugal terrace pose reads 31 → 47 calls there, but
-measured fresh in the same state both builds draw 47 (the cottage interior through its open door); the before capture
-run had the interior culled.
+measured fresh in the same state both builds draw 47 (the cottage interior through its open door); the difference comes
+from the capture sequence, not from DEV-04A. The same-state table above is the budget record.
 
 ## 9. Save / ID status
 
@@ -198,7 +212,29 @@ run had the interior culled.
 
 ## 10. Before / after evidence
 
-{{EVIDENCE}}
+Same pose before and after, eye height, low quality, 1280 × 720 (`scripts/dev04a-views.mjs`; door states per view are in
+the script). Side-by-side images in [`compare/`](compare/), the single frames in [`before/`](before/) and
+[`after/`](after/) (47 poses, incl. the closed double door 04d, the cottage and shed doors, the nook from the stair
+side 09d, the sightline through the roof window 09c, the Sterrenkamer telescope 09e, the side path 11c and the figure
+11d, and two unchanged junctions as controls).
+
+| # | Brief pair | Before / after |
+|---|---|---|
+| 1 | Stars room door / art | [01-stars-door-walkway](compare/01-stars-door-walkway.jpg) |
+| 2 | Dining room window / art | [02-dining-window-wall](compare/02-dining-window-wall.jpg) |
+| 3 | Kitchen sink | [03-kitchen-sink](compare/03-kitchen-sink.jpg) |
+| 4 | Conservatory double door open — inside / outside | [04-cons-double-door-inside](compare/04-cons-double-door-inside.jpg) · [04b-cons-double-door-outside](compare/04b-cons-double-door-outside.jpg) |
+| 5 | Raised threshold — front door / service door | [05-main-entrance-threshold](compare/05-main-entrance-threshold.jpg) · [05c-service-door-to-wing](compare/05c-service-door-to-wing.jpg) |
+| 6 | Sauna access | [07-sauna-access](compare/07-sauna-access.jpg) |
+| 7 | Attic wall / roof junction | [08-attic-wall-roof](compare/08-attic-wall-roof.jpg) · [08b-attic-common-east](compare/08b-attic-common-east.jpg) |
+| 8 | Observatory / window — inside / outside | [09-attic-observatory](compare/09-attic-observatory.jpg) · [09b-observatory-exterior](compare/09b-observatory-exterior.jpg) |
+| 9 | Wickerman main-path approach | [10-wickerman-main-path](compare/10-wickerman-main-path.jpg) |
+| 10 | Wickerman clearing — old spot / new clearing | [11-wickerman-clearing](compare/11-wickerman-clearing.jpg) · [11b-wickerman-new-clearing](compare/11b-wickerman-new-clearing.jpg) |
+| 11 | Portugal terrace / path junction | [12-portugal-path-terrace](compare/12-portugal-path-terrace.jpg) |
+| 12 | Golf path / platform transition | [13-golf-path-platform](compare/13-golf-path-platform.jpg) |
+| 13 | Woodland hut / log support | [14-woodland-hut-logs](compare/14-woodland-hut-logs.jpg) |
+| + | Forest path → forecourt | [15-forest-path-forecourt](compare/15-forest-path-forecourt.jpg) |
+| + | Copacabana Room sign | [06-copacabana-bar-sign](compare/06-copacabana-bar-sign.jpg) |
 
 ## 11. Known remaining visual issues
 
