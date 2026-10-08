@@ -48,6 +48,7 @@ const taperLeg = (h: number, top = 0.036, foot = 0.024) => cg(`leg${f3(h)},${top
   return g;
 });
 const darker = (c: THREE.ColorRepresentation, k = 0.82) => new THREE.Color(c).multiplyScalar(k);
+export const joinery = { sb, bx, taperLeg, cg, darker };
 
 export function table(c: Ctx, x: number, z: number, y0: number, w: number, d: number, yaw = 0, color = '#7a4a28', h = 0.76) {
   const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw);
@@ -298,20 +299,29 @@ export function floorLamp(w: World, x: number, y0: number, z: number): LampModel
   return { obj, glow: [shade.m], light: v3(x, y0 + 1.6, z) };
 }
 
-/** Hanging candle chandelier with real candle flames (shown while the lamp is on). */
+/**
+ * Hanging candle chandelier with real candle flames (shown while the lamp is on). DEV-03: forged iron — a chain-like
+ * stem, a turned centre, a hoop at the candle line, S-scroll arms to brass drip pans and candle cups.
+ */
 export function chandelier(w: World, x: number, yTop: number, z: number, r = 0.8, drop = 1.2): LampModel {
-  const k = getKit();
+  const k = getKit(), M = artMats();
   const obj = new THREE.Group();
+  const iron = '#2f2a24';
   const frame = compound((b) => {
-    cyl(b, k.M.paint, '#2f2a24', 0, -drop, 0, 0.02, 0.02, drop, 5);
-    for (let i = 0; i < 12; i++) {
-      const a = (i / 12) * Math.PI * 2;
-      box(b, k.M.paint, '#2f2a24', Math.cos(a) * r, -drop - 0.04, Math.sin(a) * r, 0.06, 0.05, r * 0.55, { yaw: Math.PI / 2 - a });
-    }
+    cyl(b, k.M.paint, iron, 0, -drop + 0.35, 0, 0.012, 0.012, drop - 0.35, 5);
+    b.add(k.M.paint, cg('chandCentre', () => lathe([[0.001, 0], [0.05, 0.02], [0.09, 0.08], [0.05, 0.16], [0.035, 0.3], [0.06, 0.36], [0.001, 0.4]], 10)), planMatrix(0, -drop - 0.06, 0), iron, 'main', false, 0);
+    b.add(k.M.paint, cg(`chandRing${f3(r)}`, () => new THREE.TorusGeometry(r, 0.018, 5, 28).rotateX(Math.PI / 2)), planMatrix(0, -drop - 0.02, 0), iron, 'main', false, 0);
     for (let i = 0; i < 6; i++) {
-      const a = (i / 6) * Math.PI * 2;
-      cyl(b, k.M.paint, '#b8892f', Math.cos(a) * r, -drop, Math.sin(a) * r, 0.05, 0.045, 0.02, 8);
-      cyl(b, k.M.paint, '#efe6c8', Math.cos(a) * r, -drop + 0.02, Math.sin(a) * r, 0.026, 0.026, 0.16, 8);
+      const a = (i / 6) * Math.PI * 2, ca = Math.cos(a), sa = Math.sin(a);
+      // S-scroll arm: up and out from the centre, a dip, then up into the cup at the hoop
+      for (const [t0, y0, t1, y1] of [[0.08, 0.05, 0.45, 0.16], [0.45, 0.16, 0.75, 0.0], [0.75, 0.0, 1.0, 0.02]] as const) {
+        const ax = ca * r * t0, az = sa * r * t0, bx2 = ca * r * t1, bz2 = sa * r * t1;
+        const len = Math.hypot(bx2 - ax, bz2 - az, y1 - y0);
+        b.add(k.M.paint, k.unitBox, new THREE.Matrix4().lookAt(new THREE.Vector3(ax, -drop + y0, -az), new THREE.Vector3(bx2, -drop + y1, -bz2), new THREE.Vector3(0, 1, 0)).scale(new THREE.Vector3(0.022, 0.022, len)).setPosition((ax + bx2) / 2, -drop + (y0 + y1) / 2, -(az + bz2) / 2), iron, 'main', false, 0);
+      }
+      b.add(M.brass, cg('dripPan', () => lathe([[0.001, 0], [0.06, 0.005], [0.065, 0.018], [0.02, 0.02], [0.001, 0.02]], 10)), planMatrix(ca * r, -drop, sa * r), '#c9a14e', 'main', false, 0);
+      b.add(M.brass, cg('candleCup', () => lathe([[0.001, 0], [0.022, 0.0], [0.03, 0.03], [0.03, 0.04], [0.001, 0.04]], 8)), planMatrix(ca * r, -drop + 0.02, sa * r), '#c9a14e', 'main', false, 0);
+      cyl(b, k.M.paint, '#efe6c8', ca * r, -drop + 0.035, sa * r, 0.022, 0.024, 0.15, 8);
     }
   });
   obj.add(frame);

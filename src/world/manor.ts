@@ -13,11 +13,11 @@
 import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, wall, floor, ceiling, stairsZ, railing, stairRail, hipRoof, gableRoof, windowAt, balustrade, newel, segBox, TRIM } from './arch';
-import { lathe } from './artkit';
+import { lathe, Asm, artMats } from './artkit';
 import { box, boxMM, cyl, blob, compound, v3, hipRoofGeo, geo } from './kit';
 import {
   table, chair, sofa, armchair, bookshelf, counter, rug, plant, painting, crate, tableLamp, floorLamp, chandelier, wallSconce,
-  part, staticLantern, staticSconce, bed2, bedside, wardrobe, curtains, desk, lectern, bathtub, ladder, telescope, canvasPanel, nameBoard,
+  part, staticLantern, staticSconce, bed2, bedside, wardrobe, curtains, desk, lectern, bathtub, ladder, telescope, canvasPanel, nameBoard, joinery,
 } from './furniture';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place } from '../interactions/props';
 import { forestMapTexture } from './textures';
@@ -358,7 +358,10 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   plant(c, 91.6, 96.8, GF, 1.1);
   painting(c, 85.12, 4.6, 90, Math.PI / 2, 1.2, 0.9, 1);
   painting(c, 85.12, 2.0, 92.5, Math.PI / 2, 0.9, 0.7, 0);
-  boxMM(c.b, k.M.rug, '#c86060', 94.86, 94.9, 3.9, 5.9, 88.5, 90.2, { chunk: c.chunk, shadow: false }); // tapestry above the stair
+  // a woven hanging above the stair, on an oak rod with finials (DEV-03: was a carpet glued flat to the wall)
+  boxMM(c.b, k.M.rug, '#e8d8c4', 94.84, 94.88, 3.95, 5.85, 88.5, 90.2, { chunk: c.chunk, shadow: false });
+  cyl(c.b, k.M.wood, '#6e4a2c', 94.8, 5.88, 89.35, 0.025, 0.025, 2.0, 8, { chunk: c.chunk, rx: Math.PI / 2 });
+  for (const zz of [88.33, 90.37]) blob(c.b, k.M.wood, '#6e4a2c', 94.8, 5.9, zz, 0.045, 0.045, 0.045, { chunk: c.chunk });
   const ch = chandelier(w, 89.9, UCEIL, 90, 0.9, 1.8);
   const sw = compound((b) => box(b, k.M.paint, '#c9a44c', 0, 0, 0, 0.12, 0.18, 0.03));
   place(sw, 91.5, 1.35, 84.1, 0);
@@ -641,8 +644,14 @@ function libraryRest(w: World, g: GameApi, c: Ctx, tx: number, tz: number) {
   w.scene.add(lsw);
   makeLamp(w, g, { id: 'lamp.libraryChandelier', obj: lsw, glow: lch.glow, light: lch.light, flames: lch.flames, name: 'kroonluchter', defaultOn: true, intensity: 7, distance: 12, hit: [0.3, 0.4, 0.4], hitOffset: [0, 0.05, 0], patch: { y: GF + 0.03, r: 2.6 } });
   armchair(c, 74.4, 105.4, GF, Math.PI / 2, '#7a3a3a');
-  cyl(c.b, k.M.paint, '#4f7fa8', 82.4, GF, 108.2, 0.04, 0.05, 0.9, 6, { chunk: c.chunk });
-  blob(c.b, k.M.paint, '#6aa0c8', 82.4, GF + 1.08, 108.2, 0.22, 0.22, 0.22, { chunk: c.chunk });
+  // floor globe: an oak tripod with a horizon ring, a brass meridian, the globe itself (sea + a few land masses)
+  { const M = artMats(), a = new Asm(c.b, c.chunk, 82.4, GF, 108.2, 0.6);
+    for (let i = 0; i < 3; i++) { const an = (i / 3) * Math.PI * 2; a.add(M.timber, '#5a3a22', joinery.bx(0.035, 0.75, 0.035), Math.cos(an) * 0.2, 0.37, Math.sin(an) * 0.2, { rx: Math.sin(an) * 0.22, rz: -Math.cos(an) * 0.22 }); }
+    a.add(M.timber, '#6e4a2c', joinery.cg('globeHorizon', () => new THREE.TorusGeometry(0.29, 0.025, 5, 24).rotateX(Math.PI / 2)), 0, 0.98, 0);
+    a.add(M.brass, '#c9a14e', joinery.cg('globeMeridian', () => new THREE.TorusGeometry(0.265, 0.012, 4, 24)), 0, 0.98, 0, { rz: 0.4 });
+    a.add(M.ceramic, '#6f91a6', joinery.cg('globeBall', () => new THREE.IcosahedronGeometry(0.25, 2)), 0, 0.98, 0);
+    for (const [dx, dy, dz, sx] of [[0.12, 0.08, 0.19, 0.11], [-0.18, 0.04, 0.14, 0.09], [0.05, -0.12, 0.2, 0.07], [-0.08, 0.15, -0.18, 0.1]] as const) a.add(M.paint, '#b8a070', joinery.cg('globeLand', () => new THREE.IcosahedronGeometry(1, 1)), dx, 0.98 + dy, dz, { s: [sx, sx * 0.7, 0.03] , ry: Math.atan2(dx, dz) });
+  }
   c.col.addCircle(82.4, 108.2, 0.3, 0, 1.3);
 }
 
@@ -713,16 +722,18 @@ function billiard(w: World, g: GameApi, c: Ctx) {
 // ---------------------------------------------------------------- kitchen
 function kitchen(w: World, g: GameApi, c: Ctx) {
   const k = c.k;
+  // DEV-03 composition: a range cooker under a chimney hood is the focal point of the north run (between the back
+  // door and the window), the sink sits under the window, open shelves with crockery over the east run, a pot rack
+  // over the island. Footprints of the runs, the island, the table and every interactable are unchanged.
   counter(c, 96.6, 109.25, GF, Math.PI, 2.6);
-  counter(c, 104.4, 109.25, GF, Math.PI, 5.6);
+  counter(c, 101.95, 109.25, GF, Math.PI, 0.7);
+  rangeCooker(c, 102.9, 109.25, GF);
+  counter(c, 105.35, 109.25, GF, Math.PI, 3.7);
   counter(c, 107.25, 95.5, GF, -Math.PI / 2, 5.0);
-  box(c.b, k.M.paint, '#2b2b2b', 105.6, GF + 0.91, 109.3, 0.9, 0.04, 0.55, { chunk: c.chunk });
-  for (let i = 0; i < 4; i++) cyl(c.b, k.M.paint, '#b8682f', 103.9 + i * 0.5, 2.0, 109.45, 0.12, 0.1, 0.16, 10, { chunk: c.chunk });
-  box(c.b, k.M.paint, '#3b3026', 104.7, 2.18, 109.45, 2.2, 0.04, 0.04, { chunk: c.chunk });
+  kitchenDressing(c);
   table(c, 101.0, 100.0, GF, 1.2, 3.0, 0, '#8a5a33');
   for (let i = 0; i < 3; i++) { chair(c, 100.0, 98.9 + i * 1.1, GF, Math.PI / 2, '#6f8a7a'); chair(c, 102.0, 98.9 + i * 1.1, GF, -Math.PI / 2, '#6f8a7a'); }
-  box(c.b, k.M.paint, '#7f9a8a', 101, GF, 105.4, 2.6, 0.86, 1.0, { chunk: c.chunk });
-  box(c.b, k.M.paint, '#d8cdb8', 101, GF + 0.86, 105.4, 2.7, 0.05, 1.1, { chunk: c.chunk });
+  kitchenIsland(c, 101, 105.4); // same footprint and collider as before; the drawer (centre, south face) is untouched
   c.col.addBox(99.65, 102.35, 104.85, 105.95, 0, 1);
   const kd = makeDrawer(w, g, { id: 'kitchen.drawer', x: 101, y: GF + 0.7, z: 104.92, yaw: Math.PI, w: 0.7, h: 0.2, d: 0.42, color: '#6f8a7a' });
   const spare = compound((b) => { box(b, k.M.paint, '#e6dcc0', 0, 0, 0, 0.1, 0.03, 0.06); box(b, k.M.paint, '#c4553d', 0, 0.03, 0, 0.07, 0.003, 0.04); });
@@ -780,15 +791,125 @@ function kitchen(w: World, g: GameApi, c: Ctx) {
   // ES.kitchenCrates: eight red shopping crates (two stacks of four, against the counter's west face); beer crates apart
   for (let i = 0; i < 8; i++) redCrate(c, 106.6, 94.0 + (i % 4) * 0.45, GF + Math.floor(i / 4) * 0.3, 0);
   c.col.addBox(106.28, 106.92, 93.78, 95.57, 0, GF + 0.62);
-  for (const [x, z] of [[105.6, 92.55], [106.1, 92.55]] as const) { box(c.b, k.M.paint, '#e8b030', x, GF, z, 0.42, 0.3, 0.3, { chunk: c.chunk }); box(c.b, k.M.paint, '#2f5a2a', x, GF + 0.3, z, 0.42, 0.28, 0.3, { chunk: c.chunk }); }
+  for (const [x, z] of [[105.6, 92.55], [106.1, 92.55]] as const) { beerCrate(c, x, z, GF, '#e8b030'); beerCrate(c, x, z, GF + 0.3, '#2f5a2a'); }
   c.col.addBox(105.35, 106.35, 92.35, 92.75, 0, GF + 0.6);
 }
 
-/** Red plastic shopping crate (0.6 × 0.4 × 0.3), long side along `yaw`. Visual only; callers add one collider per stack. */
+/**
+ * Red plastic shopping crate (0.6 × 0.4 × 0.3), long side along `yaw`. Visual only; callers add one collider per stack.
+ * DEV-03: an open crate — floor, ribbed walls with two slots between the ribs, a rolled rim, a hand-grip slot in each
+ * short side — instead of a solid red block.
+ */
 function redCrate(c: Ctx, x: number, z: number, y0: number, yaw: number) {
-  const k = c.k;
-  box(c.b, k.M.paint, '#c8322a', x, y0, z, 0.6, 0.3, 0.4, { chunk: c.chunk, yaw });
-  box(c.b, k.M.paint, '#8a1f1a', x, y0 + 0.29, z, 0.56, 0.012, 0.36, { chunk: c.chunk, yaw, shadow: false });
+  const { bx } = joinery, M = artMats();
+  const a = new Asm(c.b, c.chunk, x, y0, z, yaw + Math.PI / 2), red = '#c8322a', dk = '#7a1c18';
+  a.add(M.paint, dk, bx(0.38, 0.02, 0.58), 0, 0.01, 0); // floor (seen from above: the dark inside)
+  for (const s2 of [-1, 1]) {
+    a.add(M.paint, red, bx(0.4, 0.035, 0.02), 0, 0.2875, s2 * 0.29); // rim (short sides)
+    a.add(M.paint, red, bx(0.02, 0.035, 0.6), s2 * 0.19, 0.2875, 0); // rim (long sides)
+    for (const yy of [0.025, 0.115, 0.2]) {
+      a.add(M.paint, red, bx(0.4, 0.04, 0.016), 0, yy, s2 * 0.292);
+      a.add(M.paint, red, bx(0.016, 0.04, 0.6), s2 * 0.192, yy, 0);
+    }
+    for (const q of [-1, 0, 1]) { a.add(M.paint, red, bx(0.04, 0.3, 0.018), q * 0.17, 0.15, s2 * 0.291); a.add(M.paint, red, bx(0.018, 0.3, 0.04), s2 * 0.191, 0.15, q * 0.27); }
+    a.add(M.paint, '#3a1210', bx(0.12, 0.035, 0.022), 0, 0.245, s2 * 0.294); // grip slot
+  }
+}
+/** A crate of beer (0.42 × 0.3 × 0.3): coloured crate with a darker label panel, 24 bottle caps showing on top. */
+function beerCrate(c: Ctx, x: number, z: number, y0: number, col: string) {
+  const { bx, sb } = joinery, M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, 0);
+  a.add(M.paint, col, sb(0.42, 0.28, 0.3, 0.01), 0, 0.14, 0);
+  for (const s2 of [-1, 1]) a.add(M.paint, new THREE.Color(col).multiplyScalar(0.7), bx(0.3, 0.12, 0.012), 0, 0.15, s2 * 0.152);
+  for (let i = 0; i < 6; i++) for (let j = 0; j < 4; j++) a.add(M.paint, '#2e3a2a', bx(0.045, 0.03, 0.045), -0.175 + i * 0.07, 0.295, -0.105 + j * 0.07);
+}
+
+/** Cream enamel range cooker (1.2 m) against the north wall: two oven doors, a black hob with four rings, a brass rail;
+ * a tiled splashback and a plastered chimney hood with an oak mantel shelf above it. */
+function rangeCooker(c: Ctx, x: number, z: number, y0: number) {
+  const { bx, sb, cg } = joinery, M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, Math.PI), cream = '#e6dcc4';
+  a.add(M.ceramic, cream, sb(1.2, 0.86, 0.62, 0.02), 0, 0.47, 0.02);
+  a.add(M.paint, '#2a2622', bx(1.16, 0.04, 0.58), 0, 0.92, 0.02);
+  for (const q of [-1, 1]) for (const r2 of [-1, 1]) a.add(M.paint, '#151311', cg('burner', () => new THREE.CylinderGeometry(0.09, 0.1, 0.02, 12)), q * 0.28, 0.95, 0.02 + r2 * 0.14);
+  for (const q of [-1, 1]) {
+    a.add(M.ceramic, '#d8ccb2', sb(0.52, 0.5, 0.02, 0.01), q * 0.29, 0.42, 0.335);
+    a.add(M.paint, '#2a2622', bx(0.3, 0.18, 0.01), q * 0.29, 0.5, 0.346);
+    a.add(M.brass, '#c9a14e', bx(0.4, 0.02, 0.025), q * 0.29, 0.7, 0.36);
+  }
+  a.add(M.brass, '#c9a14e', cg('rangeRail', () => new THREE.CylinderGeometry(0.012, 0.012, 1.1, 6).rotateZ(Math.PI / 2)), 0, 0.82, 0.38);
+  a.add(M.paint, '#3a3430', bx(1.18, 0.08, 0.5), 0, 0.04, 0);
+  // splashback (small ceramic-blue tiles: a band, tinted per course) and the hood with an oak mantel shelf
+  for (let r2 = 0; r2 < 5; r2++) a.add(M.ceramic, r2 % 2 ? '#7f9fb2' : '#6f91a6', bx(1.3, 0.11, 0.012), 0, 1.02 + r2 * 0.12, -0.32);
+  a.add(M.timber, '#6e4a2c', sb(1.45, 0.06, 0.26, 0.01), 0, 1.72, -0.2);
+  a.add(M.paint, '#ece3d0', sb(1.35, 0.42, 0.5, 0.03), 0, 1.96, -0.07);
+  a.add(M.paint, '#ece3d0', bx(0.8, 0.9, 0.38), 0, 2.6, -0.14);
+  c.col.addBox(x - 0.6, x + 0.6, z - 0.33, z + 0.33, 0, y0 + 0.95);
+}
+/** The kitchen island (2.6 × 1.0): recessed plinth, panelled doors either side of the central drawer (an interactable
+ * built separately), stools on the north side, a stone top with an overhang for the stools. */
+function kitchenIsland(c: Ctx, x: number, z: number) {
+  const { bx, sb, taperLeg } = joinery, M = artMats(), a = new Asm(c.b, c.chunk, x, GF, z, Math.PI), body = '#7f9a8a', gap = '#46564e';
+  a.add(M.paint, '#4a4038', bx(2.5, 0.1, 0.9), 0, 0.05, 0);
+  a.add(M.paint, gap, bx(2.6, 0.74, 1.0), 0, 0.47, 0);
+  for (const sd of [-1, 1]) for (const px of [-0.85, -0.5, 0.5, 0.85]) {
+    if (sd < 0 && Math.abs(px) < 0.6) continue; // south face: the centre is the drawer's
+    a.add(M.paint, body, sb(0.33, 0.66, 0.022, 0.004), px, 0.45, sd * -0.51);
+    a.add(M.brass, '#c9a44c', bx(0.012, 0.1, 0.02), px + 0.12 * Math.sign(px), 0.55, sd * -0.525);
+  }
+  a.add(M.paint, body, sb(0.66, 0.4, 0.022, 0.004), 0, 0.3, 0.51); // door under the drawer (south face)
+  a.add(M.stone, '#d8cdb8', sb(2.7, 0.05, 1.3, 0.006), 0, 0.885, -0.1);
+  // two stools tucked under the overhang (north side)
+  for (const px of [-0.6, 0.6]) {
+    const st = new Asm(c.b, c.chunk, x + px, GF, z + 0.95, 0);
+    for (const [lx, lz] of [[-0.14, -0.14], [0.14, -0.14], [-0.14, 0.14], [0.14, 0.14]] as const) st.add(M.timber, '#5a3a22', taperLeg(0.62, 0.022, 0.018), lx, 0, lz);
+    st.add(M.timber, '#6e4a2c', sb(0.36, 0.04, 0.36, 0.012), 0, 0.64, 0);
+    st.add(M.timber, '#5a3a22', bx(0.28, 0.02, 0.02), 0, 0.25, -0.14); st.add(M.timber, '#5a3a22', bx(0.28, 0.02, 0.02), 0, 0.25, 0.14);
+    c.col.addCircle(x + px, z + 0.95, 0.22, 0, 0.7);
+  }
+}
+
+/** Kitchen dressing (visual only): sink under the north window, open shelves with crockery, a pot rack, small props. */
+function kitchenDressing(c: Ctx) {
+  const { bx, sb, cg } = joinery, M = artMats();
+  // farmhouse sink in the run under the window (x 105): white apron, dark basin, brass bridge tap
+  const s = new Asm(c.b, c.chunk, 105, GF, 109.25, Math.PI);
+  s.add(M.ceramic, '#f4f1ea', sb(0.8, 0.26, 0.5, 0.02), 0, 0.78, 0.1);
+  s.add(M.paint, '#8a8c88', bx(0.68, 0.01, 0.38), 0, 0.905, 0.08);
+  s.add(M.brass, '#c9a14e', cg('tap', () => new THREE.TorusGeometry(0.1, 0.012, 5, 10, Math.PI)), 0, 0.96, -0.2);
+  s.add(M.brass, '#c9a14e', bx(0.03, 0.12, 0.03), 0, 0.97, -0.25);
+  // open oak shelves on brackets over the east run, with plates on edge, bowls and jars
+  const sh = new Asm(c.b, c.chunk, 107.45, GF, 95.5, -Math.PI / 2);
+  for (const yy of [1.55, 1.98]) {
+    sh.add(M.timber, '#7e5636', sb(3.6, 0.035, 0.26, 0.006), 0, yy, 0);
+    for (const q of [-1.5, 0, 1.5]) sh.add(M.timber, '#6e4a2c', bx(0.03, 0.18, 0.2), q, yy - 0.11, -0.02);
+  }
+  for (let i = 0; i < 7; i++) sh.add(M.ceramic, i % 3 ? '#efe9dc' : '#6f91a6', cg('plate', () => new THREE.CylinderGeometry(0.12, 0.12, 0.015, 14).rotateX(Math.PI / 2)), -1.5 + i * 0.12, 1.69, -0.05, { rx: -0.12 });
+  for (let i = 0; i < 4; i++) sh.add(M.ceramic, ['#e6dcc4', '#b3813f', '#6f91a6', '#e6dcc4'][i], cg('jar', () => lathe([[0.001, 0], [0.05, 0], [0.055, 0.12], [0.04, 0.15], [0.042, 0.17], [0.001, 0.17]], 10)), 0.4 + i * 0.16, 1.57, 0);
+  for (let i = 0; i < 3; i++) sh.add(M.ceramic, '#efe9dc', cg('bowl', () => lathe([[0.001, 0], [0.05, 0], [0.09, 0.05], [0.095, 0.07], [0.001, 0.02]], 12)), -0.9 + i * 0.22, 2.0, 0);
+  // pot rack hung over the island on four rods, copper pans on hooks
+  const pr = new Asm(c.b, c.chunk, 101, GF, 105.4, 0);
+  pr.add(M.paint, '#2f2a24', bx(1.8, 0.03, 0.03), 0, 2.25, -0.25); pr.add(M.paint, '#2f2a24', bx(1.8, 0.03, 0.03), 0, 2.25, 0.25);
+  for (const q of [-0.85, 0.85]) { pr.add(M.paint, '#2f2a24', bx(0.03, 0.03, 0.5), q, 2.25, 0); for (const r2 of [-0.25, 0.25]) pr.add(M.paint, '#2f2a24', bx(0.012, 0.9, 0.012), q, 2.7, r2); }
+  for (let i = 0; i < 4; i++) {
+    pr.add(M.brass, '#b8682f', cg('pan', () => lathe([[0.001, 0], [0.09, 0], [0.11, 0.06], [0.115, 0.08], [0.001, 0.07]], 12).rotateX(Math.PI / 2)), -0.6 + i * 0.4, 1.98, 0.25);
+    pr.add(M.paint, '#2f2a24', bx(0.012, 0.16, 0.012), -0.6 + i * 0.4, 2.15, 0.25);
+  }
+  // a painted kitchen dresser on the west wall (between the service hatch and the dining arch): cupboard base, a plate
+  // rack with plates on edge and cups on hooks
+  const dr = new Asm(c.b, c.chunk, 95.45, GF, 104.2, Math.PI / 2), drc = '#8fa596';
+  dr.add(M.paint, '#4a4038', bx(1.7, 0.08, 0.48), 0, 0.04, 0);
+  dr.add(M.paint, drc, sb(1.8, 0.8, 0.52, 0.006), 0, 0.48, 0);
+  for (const px of [-0.6, 0, 0.6]) { dr.add(M.paint, new THREE.Color(drc).multiplyScalar(1.06), sb(0.54, 0.6, 0.02, 0.004), px, 0.44, 0.27); dr.add(M.brass, '#c9a44c', bx(0.06, 0.012, 0.02), px, 0.66, 0.285); }
+  dr.add(M.timber, '#7e5636', sb(1.86, 0.04, 0.56, 0.006), 0, 0.9, 0.0);
+  dr.add(M.paint, drc, bx(1.8, 1.2, 0.02), 0, 1.52, -0.22);
+  for (const sx of [-0.91, 0.91]) dr.add(M.paint, drc, bx(0.04, 1.2, 0.26), sx, 1.52, -0.1);
+  for (const yy of [1.3, 1.72]) { dr.add(M.paint, drc, bx(1.8, 0.03, 0.24), 0, yy, -0.1); for (let i = 0; i < 6; i++) dr.add(M.ceramic, i % 2 ? '#efe9dc' : '#6f91a6', cg('plate', () => new THREE.CylinderGeometry(0.12, 0.12, 0.015, 14).rotateX(Math.PI / 2)), -0.7 + i * 0.28, yy + 0.13, -0.15, { rx: -0.15 }); }
+  dr.add(M.paint, drc, sb(1.9, 0.06, 0.32, 0.008), 0, 2.15, -0.07);
+  c.col.addBox(95.15, 95.75, 103.3, 105.1, 0, 2.2);
+  // on the kitchen table: a bread board and a fruit bowl
+  const t = new Asm(c.b, c.chunk, 101, GF, 100, 0);
+  t.add(M.timber, '#a8784a', sb(0.42, 0.025, 0.28, 0.008), 0.15, 0.775, -0.6, { ry: 0.2 });
+  t.add(M.ceramic, '#efe9dc', cg('fruitBowl', () => lathe([[0.001, 0], [0.08, 0], [0.16, 0.08], [0.17, 0.1], [0.001, 0.03]], 14)), -0.1, 0.76, 0.5);
+  for (const [dx, dz, col] of [[-0.12, 0.48, '#c8452a'], [-0.05, 0.55, '#e0a030'], [-0.08, 0.44, '#8aa040']] as const) t.add(M.paint, col, cg('fruit', () => new THREE.IcosahedronGeometry(0.04, 1)), dx, 0.83, dz);
 }
 
 function drawServiceChart(x: CanvasRenderingContext2D, W: number, H: number) {
