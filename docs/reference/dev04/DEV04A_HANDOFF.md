@@ -22,7 +22,7 @@ Internal calibration priority:
 2. current Portugal exterior;
 3. living-room sofa/armchair direction as owner-approved candidate.
 
-Generated art-direction and technical modelling master boards were approved in the design conversation. Due to the current image-generator -> GitHub binary handoff limitation, those generated PNG binaries are not yet in this branch. Their design contracts are captured in `PERSONALIZED_REFERENCE_BOARDS.md` and the subject-level `GENERATED_REFERENCE.md` files.
+Generated art-direction and technical modelling master boards were approved in the design conversation. The six-subject personalized collage is now in the repo, cut into one sheet per subject under each subject's `generated/` folder (index in `PERSONALIZED_REFERENCE_BOARDS.md`). The technical modelling board is still not committed. Design contracts remain in `PERSONALIZED_REFERENCE_BOARDS.md` and the subject-level `GENERATED_REFERENCE.md` files.
 
 ## DEV-04A can start now
 

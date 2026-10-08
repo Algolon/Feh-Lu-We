@@ -7,6 +7,12 @@ Priority:
 - **NEXT** = useful for the following authored-location/interior pass.
 - **LATER** = can wait until the base visual grammar is stable.
 
+## Status — 8 Oct 2026
+
+Personalized generated sheet (`generated/`) present for: `wickerman_clearing`, `gingerbread_maquette`, `copacabana_room` (contract in `copacabana_bar_sign`), `attic_observatory`, `books_closeup`, `living_dining_furniture` (contract in `sofas_armchairs` / `tables_chairs`).
+
+A generated sheet is the internal synthesis layer; it does **not** tick a box below on its own. Boxes stay open until the folder has the external/real or current-build image the item asks for. External URL-only notes (`REFERENCES.md`) do not tick a box either.
+
 ## 00 — Calibration
 
 - [ ] **NOW** `00_calibration/boslust/` — minimum **1**, recommended **3–4**  

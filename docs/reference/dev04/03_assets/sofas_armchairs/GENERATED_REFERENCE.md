@@ -23,3 +23,6 @@ Approved generated direction.
 Moss/olive upholstery, ochre, oxblood/rust accents, warm oak/walnut, muted blue/teal secondary accents.
 
 The current living-room sofa/armchair is already partly successful. Reuse/refine rather than replacing automatically.
+
+## Generated sheet
+`../living_dining_furniture/generated/living_dining_furniture_sheet_v01.png` — shared sheet for the whole family; see the README next to it.

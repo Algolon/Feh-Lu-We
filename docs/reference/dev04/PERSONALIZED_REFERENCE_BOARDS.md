@@ -17,9 +17,22 @@ The generated boards cover six subjects:
 
 ## Important asset status
 
-The image-generation environment and GitHub connector do not currently expose a direct binary handoff path. Therefore the generated PNG boards are **not yet committed as binary repository files**. Do not pretend they are present.
+Updated 8 Oct 2026: the six-subject personalized collage is now committed and cut into one sheet per subject:
 
-The subject folders contain the approved interpretation/usage contract below, so DEV-04A can proceed without waiting: DEV-04A is primarily a visible-correctness/spatial-cleanup pass. The generated image boards become materially important for DEV-04B's model/art-grammar implementation.
+| Subject | Sheet |
+|---|---|
+| Wickerman + clearing | `05_landmarks_hero_props/wickerman_clearing/generated/wickerman_clearing_sheet_v01.png` |
+| Gingerbread manor maquette | `05_landmarks_hero_props/gingerbread_maquette/generated/gingerbread_maquette_sheet_v01.png` |
+| Copacabana Room bar/sign | `04_special_locations/copacabana_room/generated/copacabana_room_sheet_v01.png` |
+| Attic observatory | `04_special_locations/attic_observatory/generated/attic_observatory_sheet_v01.png` |
+| Modular book family | `03_assets/books_closeup/generated/books_family_sheet_v01.png` |
+| Core living/dining furniture | `03_assets/living_dining_furniture/generated/living_dining_furniture_sheet_v01.png` |
+
+Source collage and crop boxes: `generated/README.md`. Each `generated/` folder has a README with subject-specific use/avoid notes and a sampled palette.
+
+Still **not** in the repo: the separate *technical modelling board* (orthographic views/joinery emphasis). Do not pretend it is present; add it as `*_v02` sheets when it is exported.
+
+These sheets are the first personalized internal reference layer on top of the external web references. They are modelling/stylization references (shape language, material breakup, construction logic, detail level), not final concept art.
 
 ## Shared Feh Lu We visual grammar carried by both boards
 

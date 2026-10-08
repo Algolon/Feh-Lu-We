@@ -25,3 +25,6 @@ Not DEV-04A unless separately authorized:
 4. burned aftermath/persistence.
 
 Do not make the fire interaction mandatory puzzle evidence.
+
+## Generated sheet
+`generated/wickerman_clearing_sheet_v01.png` — see `generated/README.md` for use/avoid notes.

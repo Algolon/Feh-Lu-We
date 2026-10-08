@@ -23,3 +23,6 @@ Use controlled variation in:
 - size/thickness.
 
 Current build already has useful colour/height/tilt/stack variation. Do **not** solve this by adding more random transforms; solve the underlying model construction first.
+
+## Generated sheet
+`generated/books_family_sheet_v01.png` — see `generated/README.md` for use/avoid notes.

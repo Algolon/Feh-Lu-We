@@ -16,3 +16,6 @@ Approved generated direction.
 
 ## Restraint
 Tropical, warm and playful; avoid theme-park tiki overload.
+
+## Generated sheet
+`../copacabana_room/generated/copacabana_room_sheet_v01.png` — see the README next to it for use/avoid notes.

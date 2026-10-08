@@ -16,3 +16,6 @@ Approved generated direction.
 - Adjacent storage/furniture can make the attic feel used without blocking the viewing position.
 
 DEV-04A may correct attic space/geometry; detailed telescope remodel is DEV-04B if not required for correctness.
+
+## Generated sheet
+`generated/attic_observatory_sheet_v01.png` — see `generated/README.md` for use/avoid notes.

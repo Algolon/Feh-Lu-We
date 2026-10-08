@@ -67,6 +67,10 @@ coolchair.png
 pinterest_123.jpg
 ```
 
+## Generated (internal) references
+
+Internal Feh Lu We sheets generated for this project live in a `generated/` subfolder of the subject they belong to, e.g. `03_assets/books_closeup/generated/books_family_sheet_v01.png`, with a `README.md` stating use and limits. They are a personalized layer on top of external references and in-game calibration — modelling/stylization references, not final concept art. External and calibration references stay in the subject folder itself.
+
 ## Practical notes
 
 - JPEG, PNG and WEBP are fine.
