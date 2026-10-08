@@ -149,7 +149,43 @@ clearing and its path.
 
 ## 8. Performance / render counts (low quality = mobile guide ≈ 150 calls / 250 k triangles)
 
-{{PERF}}
+Measured by `npm run e2e:dev04a` (check 9) on both builds in the **same** state: low quality, front door, Copacabana
+double door and attic stair door open, all other doors closed, identical poses (the pre-DEV-04A numbers are in
+`scripts/dev04a-baseline.json`). The brief's representative views: attic, conservatory / wellness, Wickerman clearing,
+front forecourt, Portugal terrace / golf.
+
+| View | before calls / tris | after calls / tris | Δ calls | Δ tris |
+|---|---|---|---|---|
+| Attic observation nook | 35 / 95,802 | 38 / 96,178 | +3 | +376 |
+| Attic common room | 36 / 105,710 | 36 / 105,926 | +0 | +216 |
+| Copacabana Room → double door | 77 / 132,984 | 73 / 126,740 | -4 | -6,244 |
+| Deck → double door | 142 / 207,920 | 142 / 207,986 | +0 | +66 |
+| Wellness deck | 69 / 151,767 | 64 / 147,311 | -5 | -4,456 |
+| Sauna access | 148 / 225,826 | 147 / 225,864 | -1 | +38 |
+| Wickerman clearing | 26 / 162,702 | 30 / 145,281 | +4 | -17,421 |
+| Wickerman path (loop) | 30 / 181,464 | 33 / 196,693 | +3 | +15,229 |
+| Front forecourt | 146 / 251,342 | 146 / 249,892 | +0 | -1,450 |
+| Arrival court | 140 / 247,884 | 140 / 246,434 | +0 | -1,450 |
+| Portugal terrace | 31 / 91,537 | 31 / 90,809 | +0 | -728 |
+| Portugal approach | 32 / 119,009 | 32 / 118,281 | +0 | -728 |
+| Golf vicinity | 48 / 183,281 | 48 / 185,725 | +0 | +2,444 |
+| Golf spur | 92 / 257,332 | 94 / 262,162 | +2 | +4,830 |
+
+- Every view that was within the guide stays within it; the only view over it (golf spur, 257 k triangles before) grows
+  by 1.9 % (chute stakes, catch tray, path mouths).
+- Draw calls went **down** in the Copacabana Room (77 → 73) and on the wellness deck (69 → 64): the wickerman clearing's
+  meshes are their own chunk drawn within 40 m (merged into `grounds` before, their bounds spanned the estate).
+- +3 calls in the attic nook (the roof window's lining, sash and stool), +4 in the clearing and +3 on the loop near it
+  (the clearing's own chunk and the second hedge ring).
+- Three batching regressions found during the pass were fixed before measuring: the roof window's exterior parts were in
+  the attic batch (+ calls in every attic view), the wickerman pieces stretched the `grounds` mesh, and the new path
+  ribbons were twice as dense as the old drape (now ~1 m rows, 0.5 m near ends).
+
+The full per-view capture set (47 poses, door state of the evidence script — every relevant door open) is in
+[`before/views.json`](before/views.json) and [`after/views.json`](after/views.json). Comparing those two files is only
+valid for views whose state is not order-dependent: e.g. the Portugal terrace pose reads 31 → 47 calls there, but
+measured fresh in the same state both builds draw 47 (the cottage interior through its open door); the before capture
+run had the interior culled.
 
 ## 9. Save / ID status
 
