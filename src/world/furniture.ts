@@ -186,23 +186,56 @@ export function bed(c: Ctx, x: number, z: number, y0: number, yaw: number) {
   collide(c, x, z, yaw, 1.6, 2.15, 0.8, y0);
 }
 
-export function counter(c: Ctx, x: number, z: number, y0: number, yaw: number, w: number, top = '#d8cdb8', body = '#7f9a8a') {
+/**
+ * Kitchen run. DEV-04A `sink`: a cut-out for a sink module (centre `at` along the run in local units, width `w`): the
+ * worktop and carcass stop at the cut-out (only a strip behind it remains for the tap), the carcass under it is
+ * lowered for the bowl and the drawer row gives way to the sink's apron. The sink itself is `farmhouseSink`.
+ */
+export function counter(c: Ctx, x: number, z: number, y0: number, yaw: number, w: number, top = '#d8cdb8', body = '#7f9a8a', sink?: { at: number; w: number }) {
   const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw), gap = darker(body, 0.55);
   // kitchen run: recessed plinth, carcass, doors and a drawer row with shadow gaps, brass bar handles, a worktop
   // with a front overhang and a thin upstand at the wall
   a.add(M.paint, '#4a4038', bx(w - 0.02, 0.1, 0.54), 0, 0.05, -0.04);
-  a.add(M.paint, gap, bx(w, 0.74, 0.58), 0, 0.47, -0.02);
+  const s0 = sink ? sink.at - sink.w / 2 : 0, s1 = sink ? sink.at + sink.w / 2 : 0;
+  const runs: [number, number][] = sink ? [[-w / 2, s0], [s1, w / 2]] : [[-w / 2, w / 2]];
+  for (const [r0, r1] of runs) if (r1 - r0 > 0.01) a.add(M.paint, gap, bx(r1 - r0, 0.74, 0.58), (r0 + r1) / 2, 0.47, -0.02);
+  if (sink) a.add(M.paint, gap, bx(s1 - s0, 0.5, 0.58), sink.at, 0.35, -0.02); // carcass under the bowl (top 0.60)
   const n = Math.max(1, Math.round(w / 0.6)), uw = w / n;
   for (let i = 0; i < n; i++) {
-    const ux = -w / 2 + uw * (i + 0.5);
+    const ux = -w / 2 + uw * (i + 0.5), underSink = !!sink && ux + uw / 2 > s0 + 0.02 && ux - uw / 2 < s1 - 0.02;
     a.add(M.paint, body, sb(uw - 0.008, 0.52, 0.022, 0.004), ux, 0.37, 0.27);
+    if (underSink) continue; // the sink apron takes the drawer row's place
     a.add(M.paint, body, sb(uw - 0.008, 0.16, 0.022, 0.004), ux, 0.735, 0.27);
     a.add(M.brass, '#c9a44c', bx(0.12, 0.012, 0.02), ux, 0.76, 0.29);
     a.add(M.brass, '#c9a44c', bx(0.012, 0.12, 0.02), ux + uw / 2 - 0.06, 0.52, 0.29);
   }
-  a.add(M.stone, top, sb(w + 0.02, 0.04, 0.66, 0.006), 0, 0.88, 0.02);
+  if (!sink) a.add(M.stone, top, sb(w + 0.02, 0.04, 0.66, 0.006), 0, 0.88, 0.02);
+  else {
+    for (const [r0, r1] of [[-w / 2 - 0.01, s0], [s1, w / 2 + 0.01]] as const) if (r1 - r0 > 0.01) a.add(M.stone, top, sb(r1 - r0, 0.04, 0.66, 0.006), (r0 + r1) / 2, 0.88, 0.02);
+    a.add(M.stone, top, bx(s1 - s0, 0.04, 0.16), sink.at, 0.88, -0.23); // strip behind the bowl (the tap stands on it)
+  }
   a.add(M.stone, top, bx(w, 0.08, 0.015), 0, 0.94, -0.305);
   collide(c, x, z, yaw, w, 0.66, 0.92, y0);
+}
+
+/**
+ * DEV-04A farmhouse sink (fits a `counter` sink cut-out at the same position/yaw): one ceramic body built as a real
+ * bowl — apron, back and side walls (3.5 cm), a floor 22 cm below the rim, a drain, the rim 5 mm proud of the worktop
+ * — and a bridge tap on the worktop strip behind it. Every visible surface owns its own plane (the old sink drew its
+ * dark "water" plane in the body's top face and flickered with each camera move).
+ */
+export function farmhouseSink(c: Ctx, x: number, z: number, y0: number, yaw: number, W = 0.8) {
+  const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw);
+  const D = 0.52, zc = 0.11, top = 0.905, bot = 0.645, t = 0.035, hh = top - bot, outer = '#f4f1ea', inner = '#e9e6dd';
+  a.add(M.ceramic, outer, sb(W, hh, t, 0.01), 0, bot + hh / 2, zc + D / 2 - t / 2); // apron (front)
+  a.add(M.ceramic, inner, bx(W, hh, t), 0, bot + hh / 2, zc - D / 2 + t / 2); // back wall
+  for (const sx of [-1, 1]) a.add(M.ceramic, inner, bx(t, hh, D - 2 * t), sx * (W / 2 - t / 2), bot + hh / 2, zc);
+  a.add(M.ceramic, '#e2dfd5', bx(W, 0.04, D), 0, bot + 0.02, zc); // floor of the bowl (top 0.685)
+  a.add(M.paint, '#3a3c3a', cg('sinkDrain', () => new THREE.CylinderGeometry(0.035, 0.035, 0.006, 12)), 0, bot + 0.04 + 0.004, zc);
+  a.add(M.brass, '#b8b8b0', cg('sinkDrainRing', () => new THREE.TorusGeometry(0.04, 0.006, 4, 14).rotateX(Math.PI / 2)), 0, bot + 0.04 + 0.006, zc);
+  // bridge tap: a pillar on the worktop strip, a spout arching forward over the bowl
+  a.add(M.brass, '#c9a14e', bx(0.03, 0.1, 0.03), 0, 0.9 + 0.05, -0.24);
+  a.add(M.brass, '#c9a14e', cg('tapArc', () => new THREE.TorusGeometry(0.1, 0.012, 5, 10, Math.PI)), 0, 1.0, -0.14, { ry: Math.PI / 2 });
 }
 
 export function rug(c: Ctx, x: number, z: number, y: number, w: number, d: number, yaw = 0, tint = '#ffffff') {

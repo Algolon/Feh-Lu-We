@@ -18,7 +18,7 @@ import { box, boxMM, cyl, rod, blob, compound, v3, hipRoofGeo, geo } from './kit
 import {
   table, chair, sofa, armchair, bookshelf, counter, rug, plant, painting, crate, tableLamp, floorLamp, chandelier, wallSconce,
   part, staticLantern, staticSconce, bed2, bedside, wardrobe, curtains, desk, lectern, bathtub, ladder, telescope, canvasPanel, nameBoard, joinery,
-  slatBench, blanketChest, gameBoxes, instrumentCase, workbench,
+  slatBench, blanketChest, gameBoxes, instrumentCase, workbench, farmhouseSink,
 } from './furniture';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place } from '../interactions/props';
 import { forestMapTexture } from './textures';
@@ -757,7 +757,7 @@ function kitchen(w: World, g: GameApi, c: Ctx) {
   counter(c, 96.6, 109.25, GF, Math.PI, 2.6);
   counter(c, 101.95, 109.25, GF, Math.PI, 0.7);
   rangeCooker(c, 102.9, 109.25, GF);
-  counter(c, 105.35, 109.25, GF, Math.PI, 3.7);
+  counter(c, 105.35, 109.25, GF, Math.PI, 3.7, undefined, undefined, { at: 0.35, w: 0.8 }); // sink cut-out at x 105
   counter(c, 107.25, 95.5, GF, -Math.PI / 2, 5.0);
   kitchenDressing(c);
   table(c, 101.0, 100.0, GF, 1.2, 3.0, 0, '#8a5a33');
@@ -899,12 +899,8 @@ function kitchenIsland(c: Ctx, x: number, z: number) {
 /** Kitchen dressing (visual only): sink under the north window, open shelves with crockery, a pot rack, small props. */
 function kitchenDressing(c: Ctx) {
   const { bx, sb, cg } = joinery, M = artMats();
-  // farmhouse sink in the run under the window (x 105): white apron, dark basin, brass bridge tap
-  const s = new Asm(c.b, c.chunk, 105, GF, 109.25, Math.PI);
-  s.add(M.ceramic, '#f4f1ea', sb(0.8, 0.26, 0.5, 0.02), 0, 0.78, 0.1);
-  s.add(M.paint, '#8a8c88', bx(0.68, 0.01, 0.38), 0, 0.905, 0.08);
-  s.add(M.brass, '#c9a14e', cg('tap', () => new THREE.TorusGeometry(0.1, 0.012, 5, 10, Math.PI)), 0, 0.96, -0.2);
-  s.add(M.brass, '#c9a14e', bx(0.03, 0.12, 0.03), 0, 0.97, -0.25);
+  // DEV-04A: farmhouse sink in the run under the window (x 105), a real bowl in the worktop's cut-out (furniture.ts)
+  farmhouseSink(c, 105, 109.25, GF, Math.PI);
   // open oak shelves on brackets over the east run, with plates on edge, bowls and jars
   const sh = new Asm(c.b, c.chunk, 107.45, GF, 95.5, -Math.PI / 2);
   for (const yy of [1.55, 1.98]) {
