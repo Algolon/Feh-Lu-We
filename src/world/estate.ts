@@ -10,7 +10,7 @@ import { World, type GameApi } from '../interactions/world';
 import type { SceneExtras } from '../core/game';
 import { makeCtx, floor, type Ctx } from './arch';
 import { Batcher, box, boxMM, cyl, blob, compound, getKit, v3, geo, supportWarnings } from './kit';
-import { softBox, projectUV } from './artkit';
+import { softBox, projectUV, assetWarnings, assetAudits } from './artkit';
 import { table, chair, lantern, plant, staticLantern } from './furniture';
 import { Vegetation, scatter, distToPolyline } from './nature';
 import { buildManor } from './manor';
@@ -52,6 +52,7 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   const w = new World('estate');
   const openings = beginOpenings(); // DEV-04A: openings, door sweeps and wall art of this build (see openings.ts)
   supportWarnings.length = 0; // DEV-04A support contract (kit.ts `cyl` vs `rod`)
+  assetWarnings.length = 0; assetAudits.length = 0; // DEV-04B construction audit (artkit Asm.begin / end)
   w.ambience = 'estate';
   w.col.bounds = { minX: 0.6, maxX: ESTATE.w - 0.6, minZ: 0.6, maxZ: ESTATE.d - 0.6 };
   w.col.ground = walkHeight;
@@ -98,6 +99,9 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   w.scene.userData.openings = openings;
   w.scene.userData.supportWarnings = [...supportWarnings];
   if (supportWarnings.length) console.warn('DEV-04A support contract:', JSON.stringify(supportWarnings));
+  w.scene.userData.assetWarnings = [...assetWarnings];
+  w.scene.userData.assetAudits = [...assetAudits];
+  if (assetWarnings.length) console.warn('DEV-04B construction audit:', JSON.stringify(assetWarnings));
   const artBad = wallArtConflicts(openings);
   w.scene.userData.artConflicts = artBad;
   if (artBad.length) console.warn('DEV-04A wall-art contract:', JSON.stringify(artBad));
@@ -119,7 +123,9 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   w.roomRegion(['mHall'], ['vestibule', 'hall', 'living', 'lobby', 'billiard', 'frontGallery', 'walkway', 'landing'], Infinity, IN_FAR);
   w.roomRegion(['mLib'], ['library', 'libGallery'], Infinity, IN_FAR); // DEV-03: drawn when the library itself is visible (its doors open), not whenever the living room or lobby is
   w.roomRegion(['mWing'], ['dining', 'kitchen', 'corridor', 'workshop', 'pantry', 'utility', 'guestWC', 'lobby'], Infinity, IN_FAR);
+  w.roomRegion(['mServ'], ['corridor', 'workshop', 'pantry', 'utility'], Infinity, IN_FAR); // DEV-04B split from mWing
   w.roomRegion(['mUp'], ['frontGallery', 'walkway', 'landing', 'libGallery', 'reis', 'sterren', 'bath', 'ucorr', 'study', 'botanic', 'storage', 'library', 'linen', 'rearNook', 'rearNookEast', 'atticStair'], Infinity, IN_FAR);
+  w.roomRegion(['mUpE'], ['study', 'botanic', 'storage', 'linen'], Infinity, IN_FAR); // DEV-04B split from mUp
   w.roomRegion(['mAttic'], [...atticRooms, 'atticStair'], Infinity, IN_FAR); // seen through the open stair doors (atticStair is then visible)
   w.roomRegion(['mB'], basementRooms);
   w.roomRegion(['ug'], ugRooms);
@@ -127,7 +133,8 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   w.roomRegion(['cottageIn'], ['cottageEntry', 'cottageRoom'], Infinity, 25);
   w.roomRegion(['cottage'], ['out', 'cottageEntry', 'cottageRoom'], 75); // a landmark across the lake: visible from the terrace and the lawn
   w.roomRegion(['ground', 'paths', 'wall', 'fence', 'garden', 'grounds', 'forest', 'outdoor', 'hills'], ['out', 'cons', 'sauna', 'shed', 'cottageEntry', 'cottageRoom']);
-  w.roomRegion(['wick'], ['out', 'cons', 'sauna', 'shed', 'cottageEntry', 'cottageRoom'], 40); // DEV-04A: the enclosed wickerman clearing (screened by woodland: drawn within ~47 m of its centre)
+  w.roomRegion(['wick'], ['out', 'cons', 'sauna', 'shed', 'cottageEntry', 'cottageRoom'], 40);
+  for (const ch of ['fireCamp', 'well', 'golf']) w.roomRegion([ch], ['out', 'shed'], 55); // DEV-04B hero places // DEV-04A: the enclosed wickerman clearing (screened by woodland: drawn within ~47 m of its centre)
 
   w.spawn = { x: SITES.gate.x, y: 0, z: 3, yaw: 0, pitch: 0.02 };
   w.checkpoints.push(
