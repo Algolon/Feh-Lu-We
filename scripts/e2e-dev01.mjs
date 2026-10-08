@@ -333,7 +333,7 @@ async function culling() {
       const g = window.__game, m4 = new (g.camera.matrix.constructor)(), bad = [];
       let n = 0;
       g.world.scene.traverse((o) => {
-        if (!o.isInstancedMesh || o.userData.lightPatches) return;
+        if (!o.isInstancedMesh || o.userData.lightPatches || o.userData.contactShadows) return; // decals, not vegetation
         for (let i = 0; i < o.count; i++) {
           o.getMatrixAt(i, m4); const x = m4.elements[12], z = -m4.elements[14]; n++;
           for (const [k, [x0, x1, z0, z1]] of Object.entries(FP)) if (x > x0 + 0.3 && x < x1 - 0.3 && z > z0 + 0.3 && z < z1 - 0.3) bad.push(`${k}@${x.toFixed(1)},${z.toFixed(1)}`);
