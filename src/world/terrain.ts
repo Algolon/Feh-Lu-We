@@ -4,7 +4,7 @@
 // hill cut. One 2 m grid drives BOTH the rendered ground mesh and collision (same triangle split), so the player's feet
 // always match what is drawn. The grid extends TMARGIN beyond the fence so ridges continue visually outside the estate.
 // A small hand-made mound over the BOSLUST entrance replaces the grid there (see `entranceMound`).
-import { ESTATE, HILL, HILL_CUT, FOREST_PATH_KEYS, DRIVEWAY, CLEARINGS, RIDGES, PADS, LAKE, lakeQ, ROUTES, WICKERMAN, WICKERMAN_LOOP, WICKERMAN_HEIGHTS, type Route } from './layout';
+import { ESTATE, HILL, HILL_CUT, FOREST_PATH_KEYS, DRIVEWAY, CLEARINGS, RIDGES, PADS, LAKE, lakeQ, ROUTES, WICKERMAN, WICKERMAN_LOOP, WICKERMAN_HEIGHTS, WICKERMAN_SIDE, type Route } from './layout';
 import { chaikin, distToPolyline, project, polylineLength, pointAt, interp, sstep, rectDist, inRect, type P2 } from './geom2d';
 
 export const TCELL = 2;
@@ -59,6 +59,8 @@ const vertexDistances = (pts: readonly P2[]) => { const out = [0]; for (let i = 
 export const PROFILED_ROUTES: ProfiledRoute[] = [
   ...ROUTES.filter((r): r is Route & { profile: NonNullable<Route['profile']> } => !!r.profile).map((r) => profiled(r.id, r.pts, r.profile.d, r.profile.h, r.width)),
   profiled('wickermanLoop', WICKERMAN_LOOP, vertexDistances(WICKERMAN_LOOP), WICKERMAN_HEIGHTS, 1.5),
+  // DEV-04A: the side path keeps the loop's and the clearing's level (+1.2) across the undulating woodland floor
+  profiled('wickermanSide', WICKERMAN_SIDE, vertexDistances(WICKERMAN_SIDE), WICKERMAN_SIDE.map(() => WICKERMAN.y), 1.2),
 ];
 /** Walking height of a profiled route at arc length `s` of its smoothed line. */
 export const profileAt = (r: ProfiledRoute, s: number) => interp(r.d, r.h, s);

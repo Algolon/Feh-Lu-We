@@ -33,8 +33,8 @@ interface Collected { t: SourceTree; group: WoodGroup }
 
 const ROUTE = (id: string) => ROUTE_LINES.find((r) => r.id === id)!.pts;
 /** Walked lines in the south forest: the forest network, the wickerman loop and the golf spur. */
-const SOUTH_PATHS = [...FOREST_PATHS, ROUTE('wickermanLoop'), ROUTE('golfSpur')];
-const NORTH_PATHS = ROUTE_LINES.filter((r) => r.id !== 'wickermanLoop' && r.id !== 'golfSpur').map((r) => r.pts);
+const SOUTH_PATHS = [...FOREST_PATHS, ROUTE('wickermanLoop'), ROUTE('wickermanSide'), ROUTE('golfSpur')];
+const NORTH_PATHS = ROUTE_LINES.filter((r) => r.id !== 'wickermanLoop' && r.id !== 'wickermanSide' && r.id !== 'golfSpur').map((r) => r.pts);
 const pathDist = (paths: readonly (readonly (readonly [number, number])[])[], x: number, z: number) => { let d = Infinity; for (const p of paths) d = Math.min(d, distToPolyline(x, z, p)); return d; };
 const inCut = (x: number, z: number) => x > HILL_CUT.x0 - 1.5 && x < HILL_CUT.x1 + 1.5 && z > HILL_CUT.z0 - 1 && z < 24;
 const inClearing = (x: number, z: number, m = 0) => CLEARINGS.some((c) => Math.hypot(x - c.x, z - c.z) < c.r + m);
@@ -136,17 +136,25 @@ export class EstateWoods {
       { x: (GOLF_TEE.x0 + GOLF_TEE.x1) / 2, z: (GOLF_TEE.z0 + GOLF_TEE.z1) / 2, r: 4.6, id: 'golf' },
     ];
     for (const sc of screens) {
-      const ring = (d: number, step: number, put: (x: number, z: number) => void, keep: number) => {
+      const ring = (d: number, step: number, put: (x: number, z: number) => void, keep: number, arc?: (a: number) => boolean, jitter = 1.2, nearD = 1.3) => {
         const n = Math.round((2 * Math.PI * d) / step);
         for (let i = 0; i < n; i++) {
-          const a = (i / n) * Math.PI * 2 + hash01(sc.x, sc.z, i) * 0.3, dd = d + (hash01(sc.z, sc.x, i) - 0.5) * 1.2;
+          const a = (i / n) * Math.PI * 2 + hash01(sc.x, sc.z, i) * 0.3, dd = d + (hash01(sc.z, sc.x, i) - 0.5) * jitter;
+          if (arc && !arc(a)) continue;
           const x = sc.x + Math.cos(a) * dd, z = sc.z + Math.sin(a) * dd;
           if (hash01(x, z, 11) > keep) continue;
-          if (inZone(x, z) || pathDist(SOUTH_PATHS, x, z) < 3.2 || pathDist(NORTH_PATHS, x, z) < 3.2 || distToPolyline(x, z, DRIVEWAY) < 4.5 || inCut(x, z) || !vegetationClear(x, z, 'small') || near(x, z, 1.3)) continue;
+          if (inZone(x, z) || pathDist(SOUTH_PATHS, x, z) < 3.2 || pathDist(NORTH_PATHS, x, z) < 3.2 || distToPolyline(x, z, DRIVEWAY) < 4.5 || inCut(x, z) || !vegetationClear(x, z, 'small') || near(x, z, nearD)) continue;
           put(x, z);
         }
       };
       ring(sc.r + 2.0, 1.7, (x, z) => bush(x, z, sc.id), 0.8);
+      // DEV-04A: the wickerman clearing is enclosed — a second, denser hedge ring of hazel and holly behind the first
+      if (sc.id === 'wickerman') {
+        ring(sc.r + 3.3, 1.6, (x, z) => bush(x, z, sc.id), 0.9);
+        // an unbroken hedge arc on the side that faces the loop (west): the figure is found from the side path, not
+        // seen from the through-route; the side path's mouth stays open (path keep-out)
+        ring(sc.r + 0.4, 1.1, (x, z) => bush(x, z, sc.id), 1.0, (a) => Math.cos(a) < -0.3, 0.3, 0.9);
+      }
       ring(sc.r + 4.6, 3.0, (x, z) => sapling(x, z, 1.2), 0.75);
     }
 

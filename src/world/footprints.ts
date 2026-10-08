@@ -30,6 +30,7 @@ export const footprint = (id: string) => FOOTPRINTS.find((f) => f.id === id)!;
 export const ROUTE_LINES: { id: string; pts: [number, number][]; width: number }[] = [
   ...ROUTES.map((r) => ({ id: r.id, pts: chaikin(r.pts, 2), width: r.width })),
   { id: 'wickermanLoop', pts: chaikin(WICKERMAN_LOOP, 2), width: 1.5 },
+  { id: 'wickermanSide', pts: chaikin(WICKERMAN_SIDE, 2), width: 1.2 }, // DEV-04A: loop → wickerman clearing
   { id: 'golfSpur', pts: chaikin(GOLF_SPUR, 1), width: 1.2 },
 ];
 

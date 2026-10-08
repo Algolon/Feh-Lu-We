@@ -24,7 +24,7 @@ export const SITES = {
   sauna: { x: 134, z: 102 },
   jacuzzi: { x: 140.8, z: 102.8 },
   golf: { x: 63, z: 51 },
-  wickerman: { x: 167, z: 54 },
+  wickerman: { x: 180, z: 55 }, // DEV-04A: its own clearing off the loop (was ON the loop at 167, 54)
   eastGlade: { x: 163, z: 128 },
 };
 
@@ -155,8 +155,16 @@ export const GOLF_TEE: Rect = { x0: 60, x1: 66, z0: 49, z1: 55 };
 export const GOLF_CHUTE: Rect = { x0: 62, x1: 64, z0: 38, z1: 49 };
 /** The tee mat on the tee pad (owns its ground; the golf spur meets its west edge). */
 export const GOLF_MAT: Rect = { x0: GOLF_TEE.x0 + 0.35, x1: GOLF_TEE.x0 + 3.05, z0: GOLF_TEE.z0 + 0.25, z1: GOLF_TEE.z0 + 2.25 };
-/** Separate wickerman clearing (scene only; burning/aftermath is open decision I04). */
-export const WICKERMAN = { x: 167, z: 54, r: 7.5, y: 1.2 };
+/**
+ * Separate wickerman clearing (scene only; burning/aftermath is open decision I04). DEV-04A owner directive: the figure
+ * stood ON the wickerman loop (v0.2 clearing centre 167, 54 = a loop vertex), an obstacle in the through-route. The
+ * clearing now lies east of the loop, enclosed by woodland, reached by a short side path (WICKERMAN_SIDE) that bends
+ * so the figure is revealed only once the player has turned onto it. Same level (+1.2) as the loop there.
+ */
+export const WICKERMAN = { x: 180, z: 55, r: 6.0, y: 1.2 };
+/** DEV-04A side path: leaves the loop at Z ≈ 57.6, heads north-east past the hedge, enters the clearing at its
+ * north-west rim (so the line of sight from the loop to the figure crosses unbroken hedge). */
+export const WICKERMAN_SIDE: [number, number][] = [[167.9, 57.6], [170.9, 59.7], [174.2, 60.6], [177.0, 60.1]];
 
 /** Authoring height fields (LEVEL_PLAN §2) + a west shoulder that carries the cottage plateau (DEV-02 addition). */
 export const RIDGES = [
