@@ -297,7 +297,7 @@ function golf(w: World, c: Ctx) {
  * whose centres drifted off the shoulders), the candle ring on flat stones with walking room round the figure.
  */
 function wickerman(w: World, c: Ctx) {
-  // its own meshes (chunk 'wick', drawn within 70 m: the clearing is enclosed by woodland): merged into 'grounds' the
+  // its own meshes (chunk 'wick', drawn within 40 m: the clearing is enclosed by woodland): merged into 'grounds' the
   // stones and the plinth stretched the lake-shore stone mesh's bounds across the estate and cost a draw call in views
   // that never see the clearing
   const k = c.k, o = { chunk: 'wick' };
