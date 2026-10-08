@@ -704,8 +704,9 @@ async function regressions() {
     await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: pt.x, y: pt.y, id: 9 }] });
     await t.page.waitForTimeout(80);
     await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-    await t.page.waitForTimeout(300);
-    const taken = await t.page.evaluate(() => __game.state.taken.includes('pk.torch'));
+    // DEV-03: wait for the tap to be processed by the next frames instead of a fixed 300 ms (the software renderer
+    // runs the furnished tutorial room at ~130 ms per frame; the check is that the tap interacts, not its latency)
+    const taken = await t.page.waitForFunction(() => __game.state.taken.includes('pk.torch'), null, { timeout: 2000 }).then(() => true, () => false);
     log('F05 stationary tap on the left side of the screen interacts', taken && pt.x < 844 * 0.42, `tap at ${pt.x.toFixed(0)},${pt.y.toFixed(0)}`);
   } catch (e) {
     log('F05', false, e.message.split('\n')[0]);

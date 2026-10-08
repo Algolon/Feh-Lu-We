@@ -665,8 +665,8 @@ export class Game implements GameApi {
     this.player.applyCamera(this.camera);
     this.cullTimer -= dt;
     if (this.cullTimer <= 0) {
-      this.cullTimer = 0.25;
-      w.updateCulling(this.camera.position);
+      this.cullTimer = 0.12; // DEV-03: indoor outdoor-view test (World.outdoorInView) needs a quick cadence
+      w.updateCulling(this.camera.position, this.camera);
       if (w.id === 'estate') this.markVisited();
     }
     w.update(dt, this.time);
