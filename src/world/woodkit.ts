@@ -519,6 +519,32 @@ export function pineModel(lod: Lod, variant = 0): Model {
   return { wood: woodG, leaves: mergeParts(leaves.map((g) => foliageUV(g, 1.2))) };
 }
 
+const nearWood = new Map<string, THREE.BufferGeometry>();
+/**
+ * DEV-03 (placement QA): the trunk's surface radius at height `y` toward model bearing `a` (radians, model xz plane: x =
+ * cos a, z = sin a) and the trunk axis offset there, measured on the near model's wood. Used to mount things ON a
+ * trunk (the nest box) instead of guessing an offset that floats or sinks once the model leans.
+ */
+export function trunkAt(species: TreeSpecies, variant: number, y: number, a: number) {
+  const key = `${species}.${variant}`;
+  let g = nearWood.get(key);
+  if (!g) { const m = treeModel(species, variant, 'near'); g = m.wood; m.leaves.dispose(); nearWood.set(key, g); }
+  const p = g.attributes.position as THREE.BufferAttribute;
+  let cx = 0, cz = 0, n = 0;
+  for (let i = 0; i < p.count; i++) if (Math.abs(p.getY(i) - y) < 0.12) { cx += p.getX(i); cz += p.getZ(i); n++; }
+  if (!n) return { r: 0.3, cx: 0, cz: 0 };
+  cx /= n; cz /= n;
+  let r = 0;
+  for (let i = 0; i < p.count; i++) {
+    if (Math.abs(p.getY(i) - y) >= 0.12) continue;
+    const dx = p.getX(i) - cx, dz = p.getZ(i) - cz, d = Math.hypot(dx, dz);
+    if (d > 1.2) continue; // branch vertices, not the trunk
+    const da = Math.abs(Math.atan2(Math.sin(Math.atan2(dz, dx) - a), Math.cos(Math.atan2(dz, dx) - a)));
+    if (da < 0.35) r = Math.max(r, d * Math.cos(da));
+  }
+  return { r: r || 0.3, cx, cz };
+}
+
 export function treeModel(species: TreeSpecies, variant: number, lod: Lod): Model {
   return species === 'oak' ? oakModel(variant, lod) : species === 'beech' ? beechModel(variant, lod) : species === 'birch' ? birchModel(variant, lod) : pineModel(lod, variant);
 }

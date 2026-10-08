@@ -8,7 +8,8 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, floor } from './arch';
 import { Batcher, box, boxMM, cyl, blob, compound, v3, getKit } from './kit';
-import { plant, part, staticLantern, nameBoard } from './furniture';
+import { plant, staticLantern, nameBoard, lounger, joinery, bottleGeo } from './furniture';
+import { Asm, artMats, lathe } from './artkit';
 import { makeDoor, makePickup, makeInspect, makeAction, place } from '../interactions/props';
 import { drawSymbol } from '../content/symbols';
 import { addClue } from '../core/state';
@@ -194,28 +195,49 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
   nameBoard(w, 130.82, 1.95, 108.7, Math.PI / 2);
 
   // ---------------------------------------------------------------- furnishings
-  const lounger = (x: number, z: number, yaw: number, towel: string) => {
-    part(c, k.M.wood, '#a8743f', x, z, yaw, 0, GF, 0, 0.7, 0.3, 1.9, 1);
-    part(c, k.M.paint, '#f2ead8', x, z, yaw, 0, GF + 0.3, 0.1, 0.62, 0.08, 1.4);
-    part(c, k.M.paint, '#f2ead8', x, z, yaw, 0, GF + 0.36, -0.75, 0.62, 0.5, 0.2);
-    part(c, k.M.paint, towel, x, z, yaw, 0, GF + 0.38, 0.3, 0.5, 0.04, 0.5);
-    w.col.addBoxC(x, z, 0.75, 1.95, 0, 0.6);
-  };
-  lounger(117.4, 104.5, 0, '#6fae9a');
-  lounger(117.4, 107.6, 0, '#e0a060');
+  lounger(c, 117.4, 104.5, GF, 0, '#6fae9a');
+  lounger(c, 117.4, 107.6, GF, 0, '#e0a060');
   // DEV-02: the east lounger moved out to the deck: the lane from the double door to the pool path stays free
   for (const [x, z, s] of [[116.8, 111.2, 1.6], [129.2, 94.8, 1.5], [121, 111.3, 1.3], [124.2, 111.3, 1.4]] as const) plant(c, x, z, GF, s, '#c9774a');
-  cyl(c.b, k.M.wood, '#a8743f', 129.1, GF, 103.6, 0.35, 0.35, 0.5, 12, { chunk: c.chunk });
-  for (let i = 0; i < 3; i++) box(c.b, k.M.paint, ['#6fae9a', '#f2ead8', '#9aa8d8'][i], 129.1, GF + 0.5 + i * 0.07, 103.6, 0.4, 0.07, 0.3, { chunk: c.chunk });
+  { const M = artMats(), a = new Asm(c.b, c.chunk, 129.1, GF, 103.6, 0.3); // teak side table with a stack of towels
+    a.add(M.timber, '#a8743f', joinery.cg('sideTable', () => lathe([[0.001, 0], [0.22, 0], [0.22, 0.03], [0.05, 0.05], [0.05, 0.45], [0.35, 0.46], [0.35, 0.5], [0.001, 0.5]], 14)), 0, 0, 0);
+    for (let i = 0; i < 3; i++) a.add(M.upholstery, ['#6fae9a', '#f2ead8', '#9aa8d8'][i], joinery.sb(0.4, 0.07, 0.3, 0.025), 0, 0.535 + i * 0.07, 0, { ry: i * 0.1 });
+  }
   w.col.addCircle(129.1, 103.6, 0.4, 0, 0.8);
-  // ES.copacabanaBar (X 127.5–129.5 / Z 109.2–111.4): a small straw-and-wood cocktail corner, outside the pool line
-  boxMM(c.b, k.M.wood, '#8a5a33', 127.6, 129.6, GF, GF + 1.05, 109.4, 110.0, { chunk: c.chunk, uv: 1 });
-  boxMM(c.b, k.M.paint, '#d8b86a', 127.5, 129.7, GF + 1.05, GF + 1.1, 109.3, 110.1, { chunk: c.chunk });
-  boxMM(c.b, k.M.paint, '#c8a050', 127.6, 129.6, GF + 0.1, GF + 1.0, 109.35, 109.4, { chunk: c.chunk }); // straw skirt
-  boxMM(c.b, k.M.wood, '#6b4426', 127.6, 129.9, GF + 1.5, GF + 1.53, 111.2, 111.6, { chunk: c.chunk }); // bottle shelf
-  for (let i = 0; i < 6; i++) cyl(c.b, k.M.paint, ['#2f6a3a', '#c8a050', '#7a2a2a', '#e8e0c8', '#3f6fa8', '#c4553d'][i], 127.8 + i * 0.32, GF + 1.53, 111.4, 0.04, 0.04, 0.28, 6, { chunk: c.chunk });
+  // ES.copacabanaBar (X 127.5–129.5 / Z 109.2–111.4): a small straw-and-wood cocktail corner, outside the pool line.
+  // DEV-03: a real bar — a counter with a reed (straw) front between timber posts, a thick rounded top, a brass foot
+  // rail, a straw fringe canopy on the posts; a back bar on its own frame (cabinet + two shelves of bottles and
+  // glasses) instead of a shelf stuck to a glazing bar; round bar stools with foot rings
+  { const { sb, bx, cg, taperLeg } = joinery, M = artMats(), a = new Asm(c.b, c.chunk, 128.6, GF, 109.7, Math.PI);
+    a.add(M.timber, '#6e4a2c', bx(2.1, 1.0, 0.7), 0, 0.5, 0.0);
+    for (let i = 0; i < 26; i++) a.add(M.paint, i % 2 ? '#c8a050' : '#d8b86a', bx(0.07, 0.92, 0.02), -1.0 + i * 0.08, 0.52, 0.36);
+    for (const sx of [-1, 1]) a.add(M.timber, '#4a2f1a', bx(0.1, 2.35, 0.1), sx * 1.05, 1.175, 0.36);
+    a.add(M.timber, '#a8743f', sb(2.25, 0.07, 0.85, 0.025), 0, 1.07, 0.06);
+    a.add(M.brass, '#c9a14e', cg('footRail', () => new THREE.CylinderGeometry(0.02, 0.02, 2.0, 8).rotateZ(Math.PI / 2)), 0, 0.22, 0.5);
+    a.add(M.timber, '#4a2f1a', bx(2.3, 0.08, 0.95), 0, 2.38, -0.05);
+    for (let i = 0; i < 24; i++) a.add(M.paint, '#c8a050', bx(0.1, 0.3, 0.02), -1.15 + i * 0.1, 2.2 - (i % 3) * 0.02, 0.42);
+    // back bar against the glass, standing on its own frame
+    const bb = new Asm(c.b, c.chunk, 128.7, GF, 111.35, Math.PI);
+    bb.add(M.timber, '#6e4a2c', sb(2.0, 0.9, 0.4, 0.008), 0, 0.45, 0);
+    for (const sx of [-1, 1]) bb.add(M.timber, '#4a2f1a', bx(0.06, 1.1, 0.06), sx * 0.97, 1.45, -0.1);
+    const bottles = ['#2f6a3a', '#c8a050', '#7a2a2a', '#e8e0c8', '#3f6fa8', '#c4553d', '#2f6a3a', '#8a5a33'];
+    for (const [yy, n] of [[1.35, 8], [1.8, 6]] as const) {
+      bb.add(M.timber, '#7e5636', sb(2.0, 0.03, 0.22, 0.006), 0, yy, -0.1);
+      for (let i = 0; i < n; i++) bb.add(k.M.glass, '#ffffff', bottleGeo(), -0.85 + i * (1.7 / (n - 1)), yy + 0.015, -0.1, { s: [1, 1, 1] });
+      for (let i = 0; i < n; i++) bb.add(M.paint, bottles[i], bottleGeo(), -0.85 + i * (1.7 / (n - 1)), yy + 0.015, -0.1, { s: [0.92, 0.85, 0.92] });
+    }
+    for (let i = 0; i < 5; i++) bb.add(k.M.glass, '#ffffff', cg('tumbler', () => new THREE.CylinderGeometry(0.035, 0.03, 0.09, 8)), -0.5 + i * 0.25, 0.9 + 0.045, 0.05);
+    for (const x of [128.0, 129.0]) {
+      const st = new Asm(c.b, c.chunk, x, GF, 108.8, 0);
+      st.add(M.timber, '#4a2f1a', cg('barStoolPost', () => lathe([[0.001, 0], [0.2, 0], [0.2, 0.03], [0.04, 0.06], [0.03, 0.7], [0.001, 0.7]], 12)), 0, 0, 0);
+      st.add(M.brass, '#c9a14e', cg('stoolRing', () => new THREE.TorusGeometry(0.16, 0.012, 4, 14).rotateX(Math.PI / 2)), 0, 0.28, 0);
+      st.add(M.upholstery, '#7a2e2a', cg('stoolSeat', () => lathe([[0.001, 0], [0.19, 0], [0.2, 0.04], [0.17, 0.08], [0.001, 0.09]], 14)), 0, 0.7, 0);
+      w.col.addCircle(x, 108.8, 0.2, 0, 0.8);
+    }
+    void taperLeg;
+  }
   w.col.addBox(127.5, 129.7, 109.3, 110.1, 0, GF + 1.1);
-  for (const x of [128.0, 129.0]) { cyl(c.b, k.M.wood, '#4a2f1a', x, GF, 108.8, 0.18, 0.18, 0.75, 10, { chunk: c.chunk }); w.col.addCircle(x, 108.8, 0.2, 0, 0.8); }
+  w.col.addBox(127.7, 129.7, 111.15, 111.55, 0, GF + 1.0);
   for (const [x, z] of [[119, 96], [127, 96], [119, 110], [127, 110]] as const) {
     staticLantern(c, w, x, 2.6, z, 1.0, 0, 3.5, 7);
     box(c.b, k.M.paint, '#2b2622', x, 3.0, z, 0.02, 0.4, 0.02, { chunk: c.chunk });

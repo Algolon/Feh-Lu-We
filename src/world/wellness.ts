@@ -5,7 +5,8 @@ import * as THREE from 'three';
 import type { World } from '../interactions/world';
 import { type Ctx, floor } from './arch';
 import { box, boxMM, cyl, v3 } from './kit';
-import { part, staticLantern } from './furniture';
+import { staticLantern, lounger, joinery } from './furniture';
+import { Asm, artMats, lathe } from './artkit';
 import { WELLNESS, SAUNA, JACUZZI } from './layout';
 
 export function buildWellness(w: World, c: Ctx) {
@@ -32,17 +33,14 @@ export function buildWellness(w: World, c: Ctx) {
   box(c.b, k.M.paint, '#6a6a62', 146.6, Y, 99.0, 1.0, 0.9, 0.7, { chunk: c.chunk }); // pump/heater box (service zone)
   w.col.addBox(146.1, 147.1, 98.65, 99.35, 0, 1.1);
   // loungers + towels along the north part of the deck, clear of the ramp (X 133.4–134.6) and the jacuzzi step-out
-  const lounger = (x: number, z: number, towel: string) => {
-    part(c, k.M.wood, '#a8743f', x, z, 0, 0, Y, 0, 0.7, 0.3, 1.9, 1);
-    part(c, k.M.paint, '#f2ead8', x, z, 0, 0, Y + 0.3, 0.1, 0.62, 0.08, 1.4);
-    part(c, k.M.paint, '#f2ead8', x, z, 0, 0, Y + 0.36, -0.75, 0.62, 0.5, 0.2);
-    part(c, k.M.paint, towel, x, z, 0, 0, Y + 0.38, 0.3, 0.5, 0.04, 0.5);
-    w.col.addBoxC(x, z, 0.75, 1.95, 0, Y + 0.6);
-  };
-  lounger(139.0, 111.5, '#9aa8d8');
-  lounger(140.4, 111.5, '#e0a060');
-  lounger(141.8, 111.5, '#6fae9a');
-  cyl(c.b, k.M.wood, '#a8743f', 143.2, Y, 111.6, 0.3, 0.3, 0.45, 12, { chunk: c.chunk });
+  lounger(c, 139.0, 111.5, Y, 0, '#9aa8d8');
+  lounger(c, 140.4, 111.5, Y, 0, '#e0a060');
+  lounger(c, 141.8, 111.5, Y, 0, '#6fae9a');
+  { const M = artMats(), a = new Asm(c.b, c.chunk, 143.2, Y, 111.6, 0); // teak side table: two glasses and a jug
+    a.add(M.timber, '#a8743f', joinery.cg('sideTable', () => lathe([[0.001, 0], [0.22, 0], [0.22, 0.03], [0.05, 0.05], [0.05, 0.45], [0.35, 0.46], [0.35, 0.5], [0.001, 0.5]], 14)), 0, 0, 0);
+    for (const [dx, dz] of [[-0.1, 0.06], [0.08, -0.1]] as const) a.add(k.M.glass, '#ffffff', joinery.cg('tumbler', () => new THREE.CylinderGeometry(0.035, 0.03, 0.09, 8)), dx, 0.545, dz);
+    a.add(M.ceramic, '#efe9dc', joinery.cg('jug', () => lathe([[0.001, 0], [0.06, 0], [0.075, 0.1], [0.05, 0.18], [0.06, 0.22], [0.001, 0.2]], 12)), 0.1, 0.5, 0.12);
+  }
   w.col.addCircle(143.2, 111.6, 0.32, 0, 0.7);
   for (const [x, z] of [[130.6, 96.6], [147.4, 96.6], [147.4, 114.4], [137.0, 114.4]] as const) {
     box(c.b, k.M.wood, '#4a3a2a', x, Y, z, 0.12, 1.6, 0.12, { chunk: c.chunk });

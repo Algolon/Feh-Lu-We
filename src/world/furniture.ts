@@ -50,6 +50,28 @@ const taperLeg = (h: number, top = 0.036, foot = 0.024) => cg(`leg${f3(h)},${top
 const darker = (c: THREE.ColorRepresentation, k = 0.82) => new THREE.Color(c).multiplyScalar(k);
 export const joinery = { sb, bx, taperLeg, cg, darker };
 
+/**
+ * DEV-03 sun lounger: a timber frame on four short legs (two little wheels at the head), a slatted bed, the back
+ * raised on its stay, a thin cushion and a folded towel. Origin = footprint centre, head toward local −z.
+ * Collider 0.75 × 1.95 (as the DEV-02 blockout).
+ */
+export function lounger(c: Ctx, x: number, z: number, y0: number, yaw: number, towel: string, frame = '#a8743f') {
+  const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw), dk = darker(frame, 0.8);
+  for (const sx of [-1, 1]) {
+    a.add(M.timber, frame, bx(0.05, 0.08, 1.95), sx * 0.33, 0.3, 0);
+    a.add(M.timber, dk, bx(0.05, 0.27, 0.05), sx * 0.33, 0.135, 0.85);
+    a.add(M.paint, '#2b2b2b', cg('loungerWheel', () => new THREE.CylinderGeometry(0.07, 0.07, 0.04, 10).rotateZ(Math.PI / 2)), sx * 0.36, 0.07, -0.85);
+  }
+  for (let q = 0; q < 9; q++) a.add(M.timber, frame, bx(0.62, 0.02, 0.1), 0, 0.34, -0.2 + q * 0.13);
+  a.add(M.timber, frame, bx(0.62, 0.02, 0.72), 0, 0.55, -0.62, { rx: 0.62 });
+  a.add(M.upholstery, '#f2ead8', sb(0.6, 0.05, 1.15, 0.02), 0, 0.38, 0.32);
+  a.add(M.upholstery, '#f2ead8', sb(0.6, 0.05, 0.7, 0.02), 0, 0.6, -0.6, { rx: 0.62 });
+  a.add(M.upholstery, towel, sb(0.42, 0.06, 0.3, 0.02), 0.05, 0.43, 0.65, { ry: 0.12 });
+  c.col.addBoxC(x, z, Math.abs(Math.sin(yaw)) > 0.7 ? 1.95 : 0.75, Math.abs(Math.sin(yaw)) > 0.7 ? 0.75 : 1.95, y0 - 0.15, y0 + 0.6);
+}
+/** A turned glass bottle (for bars and tables). */
+export function bottleGeo() { return cg('bottle', () => lathe([[0.001, 0], [0.035, 0], [0.037, 0.18], [0.02, 0.24], [0.012, 0.3], [0.001, 0.3]], 8)); }
+
 export function table(c: Ctx, x: number, z: number, y0: number, w: number, d: number, yaw = 0, color = '#7a4a28', h = 0.76) {
   const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw);
   const rail = darker(color, 0.86), inset = Math.min(0.07, Math.min(w, d) * 0.12);

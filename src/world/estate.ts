@@ -9,7 +9,8 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import { World, type GameApi } from '../interactions/world';
 import type { SceneExtras } from '../core/game';
 import { makeCtx, floor, type Ctx } from './arch';
-import { Batcher, box, boxMM, cyl, blob, compound, getKit, v3 } from './kit';
+import { Batcher, box, boxMM, cyl, blob, compound, getKit, v3, geo } from './kit';
+import { softBox, projectUV } from './artkit';
 import { table, chair, lantern, plant, staticLantern } from './furniture';
 import { Vegetation, scatter, distToPolyline, smooth } from './nature';
 import { buildManor } from './manor';
@@ -82,8 +83,8 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   buildForest(w, g, forestC, veg, woods);
   buildBoslust(w, g, forestC, ugC, veg);
   buildWoodlandMasses(w, veg);
-  buildGrounds(w, g, groundsC, veg);
-  buildGarden(w, g, gardenC, veg);
+  buildGrounds(w, g, groundsC, veg, woods);
+  buildGarden(w, g, gardenC, veg, woods);
   veg.drop = null; veg.capture = null;
   woods?.build(w, forestC);
   finishZone(w);
@@ -167,7 +168,7 @@ function buildGround(w: World, trees: TreeGrid | null) {
   const { NX, NZ, X0: GX0, Z0: GZ0 } = TERRAIN_DIMS;
   const n = (NX + 1) * (NZ + 1);
   const pos = new Float32Array(n * 3), uv = new Float32Array(n * 2), col = new Float32Array(n * 3);
-  const forest = new THREE.Color('#6f8c43'), lawn = new THREE.Color('#9cc05e'), moss = new THREE.Color('#5d7a38'), dirt = new THREE.Color('#9a8456'), hillC = new THREE.Color('#7f9a4a');
+  const forest = new THREE.Color('#6f8c43'), lawn = new THREE.Color(ART.ext === 'sample' ? '#8eac58' : '#9cc05e'), moss = new THREE.Color('#5d7a38'), dirt = new THREE.Color('#9a8456'), hillC = new THREE.Color('#7f9a4a');
   const c = new THREE.Color();
   for (let j = 0; j <= NZ; j++) for (let i = 0; i <= NX; i++) {
     const vi = j * (NX + 1) + i, x = GX0 + i * TCELL, z = GZ0 + j * TCELL, h = gridAt(i, j);
@@ -361,7 +362,7 @@ function buildBoundary(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
 
 // ---------------------------------------------------------------------------------------------
 // Garden: dining terrace, open lawn with the lantern circle (thread C), scattered trees and flowers.
-function buildGarden(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
+function buildGarden(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods: EstateWoods | null) {
   const k = c.k;
   const r = mulberry32(19);
   // dining terrace along the garden façade (level with the ground floor)
@@ -475,11 +476,15 @@ function buildGarden(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
     w.col.addCircle(x, z, 0.25, 0, 6);
   }
   // flower patches and low shrubs (no collision)
+  // DEV-03: flower beds of woodland-kit plants (foxglove for the purple, anemone for the white/pink/yellow) instead of
+  // icosahedron "crystals"; the random draws are still made, so nothing else in the garden moves
   const patch = (cx: number, cz: number, rad: number, n: number, colors: string[]) => {
     for (let i = 0; i < n; i++) {
       const a = r() * Math.PI * 2, d = Math.sqrt(r()) * rad;
       const fx = cx + Math.cos(a) * d, fz = cz + Math.sin(a) * d, sz = 0.12 + r() * 0.08, col = colors[Math.floor(r() * colors.length)];
-      if (vegetationClear(fx, fz, 'small')) veg.smallThing('flower', fx, fz, sz, col, 'garden', terrainHeight(fx, fz));
+      if (!vegetationClear(fx, fz, 'small')) continue;
+      if (woods) woods.addPlant(col.startsWith('#b8') || col.startsWith('#9a') ? 'foxglove' : 'anemone', i, fx, fz, 0.8 + sz * 1.5);
+      else veg.smallThing('flower', fx, fz, sz, col, 'garden', terrainHeight(fx, fz));
     }
   };
   const purple = ['#b89ad8', '#9a7ac8', '#f2f0e6', '#e8a8c8'];
@@ -496,7 +501,8 @@ function buildGarden(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
     Math.hypot(x - LC.x, z - LC.z) > 5.5 && distToPolyline(x, z, DRIVEWAY) > 3 && Math.hypot(x - SITES.forecourt.x, z - SITES.forecourt.z) > 10.5;
   for (const [x, z] of scatter(r, 2, ESTATE.w - 2, ESTATE.forestEdge, ESTATE.d - 2, 5.0, 2200, clearOf)) {
     const flower = r() < 0.55, v = r();
-    if (flower) veg.smallThing('flower', x, z, 0.14, purple[Math.floor(v * 4)], 'garden', terrainHeight(x, z));
+    if (woods) { if (flower && v < 0.4) for (let q = 0; q < 3; q++) woods.addPlant('anemone', q, x + (q - 1) * 0.25, z + ((q * 7) % 3 - 1) * 0.2, 0.9); } // a calm lawn: a few low clumps, no pebble shrubs
+    else if (flower) veg.smallThing('flower', x, z, 0.14, purple[Math.floor(v * 4)], 'garden', terrainHeight(x, z));
     else veg.smallThing('shrub', x, z, 0.4 + v * 0.3, '#5a8a3e', 'garden', terrainHeight(x, z));
   }
   // soft meadow: grass tufts across the lawns (instanced, tiled so only nearby tiles draw)
@@ -504,12 +510,45 @@ function buildGarden(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
     const size = 0.25 + r() * 0.2, col = r() < 0.5 ? '#7fae4a' : '#94bc58';
     veg.smallThing('grass', x, z, size, col, `gr${Math.floor(x / 40)}_${Math.floor(z / 40)}`, terrainHeight(x, z));
   }
-  for (let i = 0; i < 18; i++) {
-    const a = (i / 18) * Math.PI * 2, d = 0.9 + (i % 3) * 0.2;
-    veg.smallThing(i % 4 === 0 ? 'shrub' : 'flower', SITES.forecourt.x + Math.cos(a) * d, SITES.forecourt.z + Math.sin(a) * d, i % 4 === 0 ? 0.35 : 0.14, i % 4 === 0 ? '#4f7f38' : purple[i % 4], 'garden', 0.46);
+  if (woods) {
+    // forecourt planter: a clipped box ball in the middle, a ring of foxgloves and anemones (planted in the soil)
+    const k2 = c.k;
+    blob(c.b, k2.M.foliage, '#3f5f34', SITES.forecourt.x, 0.95, SITES.forecourt.z, 0.75, 0.6, 0.75, { chunk: c.chunk });
+    for (let i = 0; i < 14; i++) { const a = (i / 14) * Math.PI * 2, d = 1.25 + (i % 2) * 0.15; woods.addPlant(i % 3 ? 'anemone' : 'foxglove', i, SITES.forecourt.x + Math.cos(a) * d, SITES.forecourt.z + Math.sin(a) * d, 0.9, 0.45); }
+    // clipped box hedges along the manor front (two runs, the approach to the porch open), on a low collider
+    for (const [x0, x1] of [[72.6, 84.9], [95.1, 107.4]] as const) {
+      for (let x = x0; x < x1 - 0.01; x += 1.55) {
+        const len = Math.min(1.6, x1 - x);
+        geo(c.b, k2.M.foliage, new THREE.Color('#3f5f34').offsetHSL(0, 0, Math.sin(x * 3.1) * 0.02), hedgeGeo(len), x + len / 2, 0, 79.2, { chunk: c.chunk });
+      }
+      w.col.addBox(x0, x1, 78.85, 79.55, 0, 0.75);
+    }
+  } else {
+    for (let i = 0; i < 18; i++) {
+      const a = (i / 18) * Math.PI * 2, d = 0.9 + (i % 3) * 0.2;
+      veg.smallThing(i % 4 === 0 ? 'shrub' : 'flower', SITES.forecourt.x + Math.cos(a) * d, SITES.forecourt.z + Math.sin(a) * d, i % 4 === 0 ? 0.35 : 0.14, i % 4 === 0 ? '#4f7f38' : purple[i % 4], 'garden', 0.46);
+    }
+    // hedges along the manor front, leaving the approach to the porch open
+    for (let x = 72.5; x < 107.6; x += 1.1) if (Math.abs(x - 90) > 5) veg.smallThing('shrub', x, 79.15, 0.55, '#4a7a36', 'garden');
   }
-  // hedges along the manor front, leaving the approach to the porch open
-  for (let x = 72.5; x < 107.6; x += 1.1) if (Math.abs(x - 90) > 5) veg.smallThing('shrub', x, 79.15, 0.55, '#4a7a36', 'garden');
+}
+
+let hedgeCache: Map<number, THREE.BufferGeometry> | null = null;
+/** A clipped hedge segment (len × 0.7 × 0.78): a soft box with a slightly domed, uneven top (foliage texture). */
+function hedgeGeo(len: number) {
+  hedgeCache ??= new Map();
+  const key = Math.round(len * 100);
+  let g = hedgeCache.get(key);
+  if (!g) {
+    g = softBox(len, 0.78, 0.7, 0.14, 2, 3).translate(0, 0.39, 0);
+    const p = g.attributes.position as THREE.BufferAttribute;
+    for (let i = 0; i < p.count; i++) { const y = p.getY(i); if (y > 0.6) p.setY(i, y + 0.04 * Math.sin(p.getX(i) * 4.1) * Math.cos(p.getZ(i) * 5.3)); }
+    g.computeVertexNormals();
+    projectUV(g, 0.6);
+    g.userData.shared = true;
+    hedgeCache.set(key, g);
+  }
+  return g;
 }
 
 /** Landmarks whose name appears on the map only once visited (no puzzle answers are ever shown). */

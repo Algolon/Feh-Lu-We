@@ -21,7 +21,7 @@ import { scatter, distToPolyline } from './nature';
 import { planWoodland, stream, hash01, type WoodlandSite, type SourceTree, type SourceStump, type WoodlandPlan, type PlacedTree } from './woodlandPlan';
 import { TreeBatches, PlantBatch, BOSLUST_SITE, DECAL, WOOD, stumpsV2, contactAt, inBackdrop, mat, TreeGrid } from './boslustSample';
 import { inZone } from './boslustZone';
-import { woodMats, rockModel, litterLeafModel, logModel, LEAF_TINT, type TreeSpecies } from './woodkit';
+import { woodMats, rockModel, litterLeafModel, logModel, LEAF_TINT, type TreeSpecies, type PlantKind } from './woodkit';
 import { CAPS } from '../core/caps';
 import { ESTATE, WOODS, CLEARINGS, HILL_CUT, DRIVEWAY, WICKERMAN, GOLF_TEE, type Rect } from './layout';
 import { FOREST_PATHS, terrainHeight } from './terrain';
@@ -61,8 +61,10 @@ const massSite = (m: Rect & { id: string }, i: number): WoodlandSite => ({
   paths: NORTH_PATHS,
   ground: terrainHeight,
 });
+/** The old nest-box oak on the lake's east shore (grounds.ts mounts the box ON its trunk with woodkit.trunkAt). */
+export const NEST_OAK = { x: 80.2, z: 148.6, species: 'oak' as const, v: 1, yaw: 0.9 };
 /** Trees only (garden specimens, the ring beyond the fence): no understory is planned. */
-const TREES_ONLY: WoodlandSite = { seed: 3300, bounds: { x0: 0, x1: 12, z0: 0, z1: 12 }, inArea: () => false, keepClear: () => true, paths: [], ground: terrainHeight };
+const TREES_ONLY: WoodlandSite = { seed: 3300, bounds: { x0: 0, x1: 12, z0: 0, z1: 12 }, inArea: () => false, keepClear: () => true, paths: [], ground: terrainHeight, heroes: [NEST_OAK] };
 
 export class EstateWoods {
   private trees: Collected[] = [];
@@ -73,6 +75,9 @@ export class EstateWoods {
     const y = t.y ?? terrainHeight(t.x, t.z);
     this.trees.push({ t: { x: t.x, z: t.z, y, h: t.h, r: t.r, kind: t.kind, hue: t.hue }, group });
   }
+  /** Garden planting (DEV-03): woodland-kit plants on the lawns and in the beds, drawn in the plants batch. */
+  private garden: { kind: PlantKind; v: number; x: number; z: number; s: number; y?: number; show?: number }[] = [];
+  addPlant(kind: PlantKind, v: number, x: number, z: number, s = 1, y?: number, show?: number) { this.garden.push({ kind, v, x, z, s, y, show }); }
   /** A stump of the forest layout (its collider exists and is never moved). */
   addStump(s: SourceStump) { this.stumps.push(s); }
   /** Trunk positions of the woodland (forest floor colouring under the crowns). */
@@ -137,7 +142,7 @@ export class EstateWoods {
           const a = (i / n) * Math.PI * 2 + hash01(sc.x, sc.z, i) * 0.3, dd = d + (hash01(sc.z, sc.x, i) - 0.5) * 1.2;
           const x = sc.x + Math.cos(a) * dd, z = sc.z + Math.sin(a) * dd;
           if (hash01(x, z, 11) > keep) continue;
-          if (pathDist(SOUTH_PATHS, x, z) < 3.2 || pathDist(NORTH_PATHS, x, z) < 3.2 || distToPolyline(x, z, DRIVEWAY) < 4.5 || inCut(x, z) || !vegetationClear(x, z, 'small') || near(x, z, 1.3)) continue;
+          if (inZone(x, z) || pathDist(SOUTH_PATHS, x, z) < 3.2 || pathDist(NORTH_PATHS, x, z) < 3.2 || distToPolyline(x, z, DRIVEWAY) < 4.5 || inCut(x, z) || !vegetationClear(x, z, 'small') || near(x, z, 1.3)) continue;
           put(x, z);
         }
       };
@@ -163,6 +168,7 @@ export class EstateWoods {
       for (const st of p.stones) rb.addGeo('stone', stoneG, mat(st.x, st.y, st.z, st.yaw, st.scale), new THREE.Color(WOOD.rock).multiplyScalar(st.k), 32, 'stone');
       stumpsV2(c, p.stumps);
     }
+    for (const q of this.garden) pb.add(q.kind, q.v, mat(q.x, q.y ?? terrainHeight(q.x, q.z) - 0.02, q.z, hash01(q.x, q.z, 12) * 6.28, q.s), new THREE.Color(1, 1, 1).offsetHSL(0, 0, (hash01(q.z, q.x, 13) - 0.5) * 0.08), q.show ?? (q.kind === 'foxglove' ? 30 : 22));
     for (const t of extraTrees) { tb.add({ kind: 'tree', species: t.species, v: t.v }, mat(t.x, t.y, t.z, t.yaw, t.scale), t.tint); contactAt(t.x, t.z, DECAL[t.species] * t.scale[0] * 1.4, 0.35, t.yaw); }
     for (const b of extraBushes) { tb.add({ kind: 'bush', species: b.species, v: b.v }, mat(b.x, b.y, b.z, b.yaw, b.scale), b.tint); contactAt(b.x, b.z, (b.species === 'holly' ? 1.6 : 2.0) * b.scale, 0.4, b.yaw); }
     // fallen dead wood (with colliders: you walk round a trunk, as in a real wood) and mossy boulders
