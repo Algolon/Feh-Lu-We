@@ -1143,8 +1143,8 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   // shared linen: shelves along the north wall, reached centrally from the rear nook (not through a bedroom)
   // DEV-04B: open linen shelves holding folded stacks (were solid blocks with coloured slabs on their faces)
   for (let i = 0; i < 3; i++) shelvingUnit(c, 101.2 + i * 2.2, 109.25, R0, Math.PI, 1.9, 0.5, 2.0, ['linen', 'linen', 'linen', 'empty'], '#8a6a4a', 80 + i);
-  staticSconce(c, w, 98.88, R0 + 1.9, 106.4, -Math.PI / 2, 2, 4); // rear nook east (the linen itself is a cupboard)
   c.chunk = 'mUp';
+  staticSconce(c, w, 98.88, R0 + 1.9, 106.4, -Math.PI / 2, 2, 4); // rear nook east (the linen itself is a cupboard)
   // rear nook (landing side loop) and its east seat by the attic stair's back door
   armchair(c, 93.6, 108.6, R0, Math.PI, '#7a8a5a');
   plant(c, 90.7, 109.0, R0, 1.0);

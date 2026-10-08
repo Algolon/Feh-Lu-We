@@ -128,7 +128,7 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   const IN_FAR = 30;
   w.roomRegion(['mIn'], manorRooms, Infinity, IN_FAR);
   w.roomRegion(['mHall'], ['vestibule', 'hall', 'living', 'lobby', 'billiard', 'frontGallery', 'walkway', 'landing'], Infinity, IN_FAR);
-  w.roomRegion(['mBil'], ['billiard', 'lobby'], Infinity, IN_FAR); // DEV-04B split from mHall
+  w.roomRegion(['mBil'], ['billiard', 'lobby', 'bstair'], Infinity, IN_FAR); // DEV-04B split from mHall (the stair box overlaps the billiard room's south strip)
   w.roomRegion(['mLib'], ['library', 'libGallery'], Infinity, IN_FAR); // DEV-03: drawn when the library itself is visible (its doors open), not whenever the living room or lobby is
   w.roomRegion(['mWing'], ['dining', 'kitchen', 'corridor', 'workshop', 'pantry', 'utility', 'guestWC', 'lobby'], Infinity, IN_FAR);
   w.roomRegion(['mServ'], ['corridor', 'workshop', 'pantry', 'utility'], Infinity, IN_FAR); // DEV-04B split from mWing
