@@ -647,13 +647,19 @@ export function canvasPanel(w: World, x: number, y: number, z: number, yaw: numb
   return { grp, mat, tex, canvas: cv };
 }
 
-/** "Francois' Copacabana Room": the personal name board (LEVEL_PLAN v0.2 §3 — a P exception, never an emblem/tab). */
-export function nameBoard(w: World, x: number, y: number, z: number, yaw: number) {
-  return canvasPanel(w, x, y, z, yaw, 0.9, 0.34, (cx, W, H) => {
-    const gr = cx.createLinearGradient(0, 0, W, H); gr.addColorStop(0, '#f6c35a'); gr.addColorStop(1, '#e8743a');
+/**
+ * DEV-04A "Copacabana Room" bar sign (owner direction; replaces the corridor and outdoor name boards): a carved timber
+ * board, warm wood with a teal border and cream lettering, mounted on the bar's own canopy. Faces plan heading yaw.
+ */
+export function barSign(w: World, x: number, y: number, z: number, yaw: number) {
+  return canvasPanel(w, x, y, z, yaw, 1.6, 0.36, (cx, W, H) => {
+    const gr = cx.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, '#8a5530'); gr.addColorStop(1, '#6d3c1c');
     cx.fillStyle = gr; cx.fillRect(0, 0, W, H);
-    cx.fillStyle = '#2a5a4a'; cx.textAlign = 'center';
-    cx.font = 'italic 30px Georgia'; cx.fillText('Francois’', W / 2, H * 0.38);
-    cx.font = 'bold 40px Georgia'; cx.fillText('Copacabana Room', W / 2, H * 0.8);
-  }, 512, '#2f4a3c');
+    cx.strokeStyle = 'rgba(40,20,8,0.35)'; cx.lineWidth = 2; // a little wood grain
+    for (let i = 0; i < 7; i++) { cx.beginPath(); cx.moveTo(0, H * (0.12 + i * 0.13)); cx.bezierCurveTo(W * 0.3, H * (0.1 + i * 0.13), W * 0.6, H * (0.16 + i * 0.13), W, H * (0.12 + i * 0.13)); cx.stroke(); }
+    cx.strokeStyle = '#4e8690'; cx.lineWidth = 9; cx.strokeRect(9, 9, W - 18, H - 18);
+    cx.font = `bold ${Math.round(H * 0.5)}px Georgia, serif`; cx.textAlign = 'center'; cx.textBaseline = 'middle';
+    cx.lineWidth = 6; cx.strokeStyle = '#3a1e0c'; cx.strokeText('Copacabana Room', W / 2, H * 0.54);
+    cx.fillStyle = '#f2e2b8'; cx.fillText('Copacabana Room', W / 2, H * 0.54);
+  }, 512, '#5a3418');
 }

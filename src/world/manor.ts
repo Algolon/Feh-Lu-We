@@ -516,8 +516,7 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   // ---------------------------------------------------------------- service wing: corridor, pantry, workshop
   staticSconce(c, w, 110.2, 2.2, 101.12, 0, 2.5, 5);
   for (let i = 0; i < 4; i++) cyl(c.b, k.M.paint, '#6b4426', 109.6 + i * 0.4, GF + 1.6, 103.85, 0.02, 0.02, 0.12, 5, { chunk: c.chunk, rx: Math.PI / 2 });
-  // Francois' Copacabana Room — personal name board at the inner approach (P exception: no emblem/tab function)
-  nameBoard(w, 114.5, GF + 1.75, 101.1, 0);
+  // DEV-04A: the Copacabana Room is named by the sign on its bar (conservatory.ts); the corridor name board is gone
   // utility (v0.2): two machines side by side on the east wall, a sink and towel rails; daily household, no puzzle
   for (const z of [107.4, 108.1]) { box(c.b, k.M.paint, '#f2f0ea', 115.2, GF, z, 0.6, 0.85, 0.62, { chunk: c.chunk }); cyl(c.b, k.M.glass, '#ffffff', 114.89, GF + 0.42, z, 0.18, 0.18, 0.02, 14, { chunk: c.chunk, rz: Math.PI / 2 }); }
   c.col.addBox(114.9, 115.55, 107.05, 108.45, 0, GF + 0.9);

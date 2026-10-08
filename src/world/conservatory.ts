@@ -1,8 +1,9 @@
 // Glazed pool conservatory X 116–130, Z 94–112 — "Francois' Copacabana Room" — joined to the service wing (door
 // from the service corridor). The swimming pool is INSIDE, with a dry walkable perimeter; there is no outdoor pool.
 // DEV-02: a 2.4 m double door (one saved state `door.consEast`) opens east onto the wellness deck; a small bar in the
-// north-east corner; personal name boards inside (corridor) and outside. The barrel sauna stands on the deck, its
-// raised floor (+0.80) reached by a ramp and landing from the north (no steps up from a flat path).
+// north-east corner (DEV-04A: its "Copacabana Room" sign is mounted on the bar canopy; the corridor and outdoor name
+// boards are gone). The barrel sauna stands on the deck; DEV-04A: its floor (+0.65) is reached by a landing and three
+// steps from the north (the 8 m ramp is gone).
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import type { World, GameApi } from '../interactions/world';
@@ -200,10 +201,6 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
     id: 'door.consEast', x: X1, z: DD.z0, dir: 'z+', width: (DD.z1 - DD.z0) / 2, height: DD.h, y0: GF, swing: -1, style: 'glass', key: 'consKey', lockId: 'lock.door.consWest',
     pair: { x: X1, z: DD.z1, dir: 'z-', swing: 1 },
   });
-  // name board outside, on its own post beside the doors (outside the leaf sweep X 130–131.4 / Z 104.5–107.5)
-  box(c.b, k.M.wood, '#4a3a2a', 130.75, 0.15, 108.7, 0.1, 1.75, 0.1, { chunk: c.chunk });
-  w.col.addCircle(130.75, 108.7, 0.1, 0, 2);
-  nameBoard(w, 130.82, 1.95, 108.7, Math.PI / 2);
 
   // ---------------------------------------------------------------- furnishings
   lounger(c, 117.4, 104.5, GF, 0, '#6fae9a');
@@ -227,6 +224,10 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
     a.add(M.brass, '#c9a14e', cg('footRail', () => new THREE.CylinderGeometry(0.02, 0.02, 2.0, 8).rotateZ(Math.PI / 2)), 0, 0.22, 0.5);
     a.add(M.timber, '#4a2f1a', bx(2.3, 0.08, 0.95), 0, 2.38, -0.05);
     for (let i = 0; i < 24; i++) a.add(M.paint, '#c8a050', bx(0.1, 0.3, 0.02), -1.15 + i * 0.1, 2.2 - (i % 3) * 0.02, 0.42);
+    // DEV-04A: the "Copacabana Room" sign stands on the canopy, carried by two timber uprights fixed to the canopy board
+    // and capped by a rail (the sign itself: barSign below)
+    for (const sx of [-0.62, 0.62]) a.add(M.timber, '#4a2f1a', bx(0.06, 0.5, 0.06), sx, 2.42 + 0.25, 0.31);
+    a.add(M.timber, '#4a2f1a', bx(1.78, 0.05, 0.12), 0, 2.42 + 0.46 + 0.025, 0.36);
     // back bar against the glass, standing on its own frame
     const bb = new Asm(c.b, c.chunk, 128.7, GF, 111.35, Math.PI);
     bb.add(M.timber, '#6e4a2c', sb(2.0, 0.9, 0.4, 0.008), 0, 0.45, 0);
@@ -247,6 +248,7 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
     }
     void taperLeg;
   }
+  barSign(w, 128.6, GF + 2.42 + 0.23, 109.7 - 0.35, Math.PI); // on the canopy's front edge, facing the pool and the room
   w.col.addBox(127.5, 129.7, 109.3, 110.1, 0, GF + 1.1);
   w.col.addBox(127.7, 129.7, 111.15, 111.55, 0, GF + 1.0);
   for (const [x, z] of [[119, 96], [127, 96], [119, 110], [127, 110]] as const) {
