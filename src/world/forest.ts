@@ -191,7 +191,11 @@ function buildShed(w: World, g: GameApi, c: Ctx) {
   // resting in the grooves of the row below, held by stakes at both ends (the same woodpile as the fire clearing)
   woodpile(c, X1 + 0.47, Z0 + 0.62, -Math.PI / 2, 5, 4, mulberry32(2203));
   w.col.addBox(X1, X1 + 0.95, Z0 + 0.0, Z0 + 1.24, 0, 1.0);
-  cyl(c.b, k.M.bark, '#7a5a3a', X1 + 1.5, 0, Z0 + 0.1, 0.35, 0.4, 0.5, 9, { chunk: c.chunk });
+  // DEV-04B: the chopping block is a sawn stump (bark, pale cut top) with the axe sunk into it (was a bare cylinder)
+  stumpsV2(c, [{ x: X1 + 1.5, z: Z0 + 0.1, y: 0, s: 0.62, treatment: 'plain', vx: X1 + 1.5, vz: Z0 + 0.1, vr: 0.4 }]);
+  { const M2 = artMats(), a2 = new Asm(c.b, c.chunk, X1 + 1.5, 0, Z0 + 0.1, 0.6);
+    a2.add(M2.timber, '#a8784a', joinery.bx(0.035, 0.62, 0.03), 0.02, 0.5 + 0.3, 0.05, { rz: -0.5 });
+    a2.add(M2.paint, '#5a5a56', joinery.bx(0.16, 0.06, 0.012), -0.08, 0.5, 0.05, { rz: -0.5 }); }
   w.col.addCircle(X1 + 1.5, Z0 + 0.1, 0.4, 0, 0.6);
   // workbench along the north wall; its drawer holds the forest-walk journal
   boxMM(c.b, k.M.wood, '#6b4a2a', X0 + 0.5, X1 - 0.9, 0.9, 0.97, Z1 - 0.8, Z1 - 0.15, { chunk: c.chunk, uv: 1 });
@@ -464,7 +468,9 @@ function buildSideGate(w: World, g: GameApi, c: Ctx) {
   const { x: GX, z: GZ } = SITES.sideGate;
   for (const s of [-1, 1]) {
     box(c.b, k.M.stone, '#b8ae98', GX, 0, GZ + s * 0.85, 0.5, 1.9, 0.5, { chunk: c.chunk, uv: 1 });
-    blob(c.b, k.M.paint, '#6a8a40', GX, 1.95, GZ + s * 0.85, 0.3, 0.12, 0.3, { chunk: c.chunk });
+    // DEV-04B: a dressed pier cap and a ball finial (it was a green blob balanced on the pier)
+    box(c.b, k.M.stone, '#cfc5ae', GX, 1.9, GZ + s * 0.85, 0.6, 0.08, 0.6, { chunk: c.chunk });
+    new Asm(c.b, c.chunk, GX, 1.98, GZ + s * 0.85, 0).add(artMats().stone, '#cfc5ae', joinery.cg('pierBall', () => lathe([[0.001, 0], [0.09, 0], [0.06, 0.04], [0.13, 0.15], [0.06, 0.28], [0.001, 0.3]], 10)), 0, 0, 0);
     w.col.addBox(GX - 0.25, GX + 0.25, GZ + s * 0.85 - 0.25, GZ + s * 0.85 + 0.25, 0, 2);
   }
   for (const [a, b2] of [[2, GZ - 1.1], [GZ + 1.1, 32]] as const) {

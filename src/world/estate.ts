@@ -48,6 +48,12 @@ export const LANTERNS = [
 
 const inRect = (x: number, z: number, x0: number, x1: number, z0: number, z1: number) => x >= x0 && x <= x1 && z >= z0 && z <= z1;
 
+const FORECOURT_PLANTER = (() => {
+  const g = new THREE.LatheGeometry([[1.97, 0], [1.97, 0.08], [1.88, 0.1], [1.84, 0.34], [1.9, 0.38], [1.92, 0.46], [1.78, 0.47], [1.7, 0.43], [1.66, 0.43], [1.66, 0.41], [0.001, 0.41]].map(([r, y]) => new THREE.Vector2(r, y)), 24);
+  const uv = g.attributes.uv as THREE.BufferAttribute; for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i) * 9, uv.getY(i) * 0.8);
+  return g;
+})();
+
 export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   const w = new World('estate');
   const openings = beginOpenings(); // DEV-04A: openings, door sweeps and wall art of this build (see openings.ts)
@@ -328,8 +334,9 @@ function buildPaths(w: World, c: Ctx) {
   }
   if (sample) pathVerge(w, verge, (k.M.dirt as THREE.MeshLambertMaterial).map!);
   // forecourt: the gravel court itself is one surface built with the arrival (grounds.ts); the central planter stays
-  cyl(c.b, k.M.stone, '#d8ccb0', SITES.forecourt.x, 0, SITES.forecourt.z, 1.8, 1.9, 0.45, 18, { chunk: 'ground', uv: 1 });
-  cyl(c.b, k.M.paint, '#6a5040', SITES.forecourt.x, 0.45, SITES.forecourt.z, 1.6, 1.6, 0.02, 18, { chunk: 'ground' });
+  // DEV-04B: a dressed stone planter (plinth course, a moulded rim) instead of a plain drum; soil just under its rim
+  geo(c.b, k.M.stone, '#d8ccb0', FORECOURT_PLANTER, SITES.forecourt.x, 0, SITES.forecourt.z, { chunk: 'ground' });
+  cyl(c.b, k.M.paint, '#5a4434', SITES.forecourt.x, 0.4, SITES.forecourt.z, 1.62, 1.62, 0.02, 18, { chunk: 'ground' });
   w.col.addCircle(SITES.forecourt.x, SITES.forecourt.z, 1.9, 0, 0.8);
 }
 

@@ -69,6 +69,15 @@ export const VIEWS = [
   ['h15-boslust-calibration', { x: 51.5, y: 0, z: 7.6, yaw: 55 * D, pitch: 0.04 }],
   ['h16-boslust-door', { x: 63.0, y: 0, z: 11.5, yaw: 0, pitch: 0.05 }],
   ['h17-portugal-exterior', { x: 25.0, y: 4.0, z: 146.5, yaw: 0, pitch: 0.05 }],
+  // B4 estate audit (primitive / garbage fixes)
+  ['a01-hall-commode', { x: 88.2, y: 0.15, z: 85.5, yaw: -90 * D, pitch: -0.18 }],
+  ['a02-wc', { x: 87.3, y: 0.15, z: 104.4, yaw: -45 * D, pitch: -0.3 }],
+  ['a03-utility-sink', { x: 113.9, y: 0.15, z: 106.2, yaw: 90 * D, pitch: -0.3 }],
+  ['a04-boiler', { x: 100.0, y: -3.2, z: 101.5, yaw: 49 * D, pitch: 0.15 }],
+  ['a05-route-pipes', { x: 83.0, y: -3.2, z: 95.0, yaw: 180 * D, pitch: 0.15 }],
+  ['a06-side-gate', { x: 156.0, y: 0, z: 18.0, yaw: 90 * D, pitch: 0.05 }],
+  ['a07-chopping-block', { x: 47.5, y: 0, z: 35.0, yaw: -33 * D, pitch: -0.35 }],
+  ['a08-forecourt-planter', { x: 90.0, y: 0, z: 64.0, yaw: 0, pitch: -0.1 }],
 ];
 
 const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });

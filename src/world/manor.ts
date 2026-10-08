@@ -406,8 +406,19 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   staticSconce(c, w, 85.12, 2.2, 95.6, Math.PI / 2, 3, 6);
   // console (ladekast) with the dial drawer — the first lock
   const cx = 85.32, cz = 85.5;
-  box(c.b, k.M.wood, '#6b4426', cx, GF, cz, 0.46, 0.84, 1.3, { chunk: c.chunk, uv: 1 });
-  box(c.b, k.M.wood, '#5a3a22', cx + 0.02, GF + 0.84, cz, 0.52, 0.05, 1.4, { chunk: c.chunk, uv: 1 });
+  // DEV-04B: a commode with the dial drawer in its frame (sides, back, dust board, rails and stiles round the drawer,
+  // panelled doors below, a moulded top). The DEV-03 console was one solid box whose front face lay in the drawer
+  // front's plane (they z-fought); the drawer itself (hall.drawer) is unchanged.
+  { const M2 = artMats(), a2 = new Asm(c.b, c.chunk, cx, GF, cz, Math.PI / 2).begin('hallCommode'), wd = '#6b4426', dk = joinery.darker(wd, 0.8), front = 0.21;
+    for (const s2 of [-1, 1]) a2.add(M2.timber, wd, joinery.bx(0.04, 0.84, 0.46), s2 * 0.63, 0.42, -0.02);
+    a2.add(M2.timber, dk, joinery.bx(1.22, 0.84, 0.02), 0, 0.42, -0.24);
+    a2.add(M2.timber, dk, joinery.bx(1.22, 0.08, 0.44), 0, 0.04, -0.02);
+    a2.add(M2.timber, wd, joinery.bx(1.22, 0.03, 0.44), 0, 0.535, -0.02); // dust board under the drawer
+    a2.add(M2.timber, wd, joinery.bx(1.22, 0.06, 0.03), 0, 0.795, front - 0.015); // rail over the drawer
+    for (const s2 of [-1, 1]) a2.add(M2.timber, wd, joinery.bx(0.11, 0.21, 0.03), s2 * 0.555, 0.66, front - 0.015); // stiles beside it
+    for (const s2 of [-1, 1]) { a2.add(M2.timber, joinery.darker(wd, 1.1), joinery.sb(0.59, 0.4, 0.02, 0.006), s2 * 0.305, 0.31, front - 0.02); a2.add(M2.brass, '#c9a44c', joinery.cg('pullKnob', () => new THREE.SphereGeometry(0.014, 8, 6)), s2 * 0.05, 0.36, front - 0.004); }
+    a2.add(M2.timber, '#5a3a22', joinery.sb(1.4, 0.05, 0.52, 0.012), 0, 0.865, 0.01);
+    a2.end(); }
   w.col.addBox(85.08, 85.6, cz - 0.7, cz + 0.7, 0, GF + 0.9);
   const hallDrawer = makeDrawer(w, g, {
     id: 'hall.drawer', x: cx + 0.02, y: GF + 0.66, z: cz, yaw: Math.PI / 2, w: 1.0, h: 0.2, d: 0.42, color: '#7a5232',
@@ -547,18 +558,35 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
     a2.add(M2.paint, '#4a4a46', joinery.cg('dial', () => new THREE.CylinderGeometry(0.03, 0.03, 0.02, 10).rotateX(Math.PI / 2)), 0.18, 0.78, 0.325);
   }
   c.col.addBox(114.9, 115.55, 107.05, 108.45, 0, GF + 0.9);
-  box(c.b, k.M.paint, '#d8d4c8', 115.25, GF, 106.2, 0.6, 0.9, 0.9, { chunk: c.chunk });
-  box(c.b, k.M.paint, '#bfc8cc', 115.2, GF + 0.9, 106.2, 0.45, 0.04, 0.6, { chunk: c.chunk });
+  // DEV-04B: a utility sink: a cabinet with doors, a deep ceramic basin in its top, a pillar tap (was two boxes)
+  { const M2 = artMats(), a2 = new Asm(c.b, c.chunk, 115.25, GF, 106.2, -Math.PI / 2).begin('utilitySink');
+    a2.add(M2.paint, '#d8d4c8', joinery.sb(0.9, 0.8, 0.58, 0.008), 0, 0.4, 0);
+    for (const s2 of [-1, 1]) { a2.add(M2.paint, '#e2ded2', joinery.sb(0.42, 0.62, 0.02, 0.005), s2 * 0.215, 0.38, 0.295); a2.add(M2.brass, '#c9a44c', joinery.bx(0.012, 0.1, 0.02), s2 * 0.04, 0.5, 0.31); }
+    // the basin: a ceramic rim (back with the tap, front lip, sides) round a 12 cm deep bowl
+    a2.add(M2.ceramic, '#f4f1ea', joinery.sb(0.86, 0.12, 0.14, 0.015), 0, 0.86, -0.22);
+    a2.add(M2.ceramic, '#f4f1ea', joinery.sb(0.86, 0.12, 0.06, 0.015), 0, 0.86, 0.26);
+    for (const s2 of [-1, 1]) a2.add(M2.ceramic, '#eeebe2', joinery.bx(0.13, 0.12, 0.38), s2 * 0.365, 0.86, 0.04);
+    a2.add(M2.ceramic, '#c4c8c4', joinery.bx(0.6, 0.012, 0.38), 0, 0.806, 0.04); // the bowl's floor, in the rim's shadow
+    a2.add(M2.brass, '#c9c4b8', joinery.bx(0.025, 0.14, 0.025), 0, 0.99, -0.22);
+    a2.add(M2.brass, '#c9c4b8', joinery.cg('basinSpout', () => new THREE.CylinderGeometry(0.01, 0.01, 0.1, 6).rotateX(Math.PI / 2)), 0, 1.05, -0.18);
+    a2.end({ gap: 0.02 }); }
   c.col.addBox(114.9, 115.55, 105.75, 106.65, 0, GF + 0.95);
   towelRail(c, 113.7, 107.6, GF, Math.PI / 2, ['#6fae9a', '#9aa8d8']); // DEV-04B: the towels were three slabs on the bare wall
   staticLantern(c, w, 114.45, CEIL - 0.1, 107.6, 0.45, 0, 2, 4);
+  c.chunk = 'mWing'; // the guest WC lies off the lobby (west), not in the service wing
   // guest WC (v0.2): toilet and hand basin; daily credibility, no clue
-  box(c.b, k.M.paint, '#f4f1ea', 85.55, GF, 106.2, 0.45, 0.42, 0.65, { chunk: c.chunk });
-  box(c.b, k.M.paint, '#f4f1ea', 85.32, GF + 0.42, 106.45, 0.2, 0.45, 0.4, { chunk: c.chunk });
+  // DEV-04B: a toilet (pedestal, bowl, seat, cistern on the wall) and the pedestal basin instead of white boxes
+  { const M2 = artMats(), a2 = new Asm(c.b, c.chunk, 85.55, GF, 106.2, Math.PI / 2).begin('wc');
+    a2.add(M2.ceramic, '#f4f1ea', joinery.cg('wcPedestal', () => lathe([[0.001, 0], [0.13, 0], [0.11, 0.06], [0.1, 0.3], [0.17, 0.38], [0.001, 0.38]], 12).scale(1, 1, 1.25)), 0, 0, 0.02);
+    a2.add(M2.paint, '#e8e2d4', joinery.cg('wcSeat', () => new THREE.TorusGeometry(0.15, 0.03, 5, 14).rotateX(Math.PI / 2).scale(1, 1, 1.3)), 0, 0.4, 0.04);
+    a2.add(M2.ceramic, '#f4f1ea', joinery.sb(0.4, 0.42, 0.18, 0.02), 0, 0.62, -0.22);
+    a2.add(M2.brass, '#c9c4b8', joinery.bx(0.06, 0.015, 0.02), 0.12, 0.79, -0.13);
+    a2.end({ gap: 0.02 }); }
   c.col.addBox(85.1, 85.85, 105.85, 106.75, 0, GF + 0.85);
-  box(c.b, k.M.paint, '#f4f1ea', 87.65, GF + 0.75, 105.3, 0.4, 0.15, 0.5, { chunk: c.chunk });
+  pedestalBasin(c, 87.6, 105.3, GF, -Math.PI / 2);
   box(c.b, k.M.glow, '#cfe0e6', 87.9, GF + 1.2, 105.3, 0.02, 0.6, 0.45, { chunk: c.chunk, shadow: false });
   staticSconce(c, w, 87.88, 2.2, 104.5, -Math.PI / 2, 1.5, 3);
+  c.chunk = 'mServ';
   // DEV-04B pantry: open shelving with what a pantry holds (preserves, tins, crates of produce), sacks on the floor
   // (the shelves were one solid block with cylinders stuck to its face, the sacks three blobs)
   shelvingUnit(c, 109.0, 106.9, GF, Math.PI / 2, 4.6, 0.6, 2.2, ['crates', 'jars', 'tins', 'jars', 'linen'], '#7a5232', 71);
@@ -1213,7 +1241,10 @@ function basement(w: World, g: GameApi, c: Ctx) {
   staticLantern(c, w, 93, BCEIL - 0.45, 107.4, 0.6, 0, 3, 7);
   // boiler room
   cyl(c.b, k.M.paint, '#3a3530', 104, BF, 105, 1.0, 1.1, 2.2, 14, { chunk: c.chunk });
-  cyl(c.b, k.M.paint, '#b8682f', 104, BF + 2.2, 105, 0.12, 0.12, 0.6, 8, { chunk: c.chunk });
+  cyl(c.b, k.M.paint, '#b8682f', 104, BF + 2.2, 105, 0.12, 0.12, BCEIL - BF - 2.2, 8, { chunk: c.chunk }); // DEV-04B: the flue reaches the ceiling (it stopped short)
+  { const M2 = artMats(), a2 = new Asm(c.b, c.chunk, 104, BF, 105, 0); // riveted bands, a gauge
+    for (const yy of [0.35, 1.1, 1.85]) a2.add(M2.paint, '#2a2622', joinery.cg(`boilerBand${yy}`, () => new THREE.TorusGeometry(1.1 - yy * 0.045, 0.025, 4, 20).rotateX(Math.PI / 2)), 0, yy, 0);
+    a2.add(M2.brass, '#c9a14e', joinery.cg('gauge', () => new THREE.CylinderGeometry(0.08, 0.08, 0.03, 12).rotateX(Math.PI / 2)), 0, 1.45, 1.03); }
   c.col.addCircle(104, 105, 1.15, BF, BF + 2.6);
   box(c.b, k.M.paint, '#2a2622', 100.2, BF, 108.4, 1.6, 0.8, 1.2, { chunk: c.chunk });
   c.col.addBox(99.4, 101, 107.8, 109.4, BF, BF + 0.9);
@@ -1283,7 +1314,7 @@ function routeConsole(w: World, g: GameApi, c: Ctx) {
   const x0 = 83, z0 = 90.3; // against the south wall of the route chamber, facing north
   box(c.b, k.M.wood, '#5a3a22', x0, BF, z0 + 0.35, 2.8, 1.0, 0.7, { chunk: c.chunk, uv: 1 });
   c.col.addBox(x0 - 1.45, x0 + 1.45, z0, z0 + 0.75, BF, BF + 1.1);
-  for (let i = 0; i < 6; i++) cyl(c.b, k.M.paint, '#b8682f', x0 - 1.2 + i * 0.48, BF + 1.0, z0 + 0.1, 0.05, 0.05, 1.5, 8, { chunk: c.chunk });
+  for (let i = 0; i < 6; i++) cyl(c.b, k.M.paint, '#b8682f', x0 - 1.2 + i * 0.48, BF + 1.0, z0 + 0.1, 0.05, 0.05, BCEIL - BF - 1.0, 8, { chunk: c.chunk }); // DEV-04B: up into the ceiling (they ended 45 cm under it)
   const map = canvasPanel(w, x0, BF + 1.95, z0 + 0.02, 0, 2.4, 1.2, (x, W, H) => drawRouteMap(x, W, H, false), 512, '#4a3a2a');
   const lit = canvasPanel(w, x0, BF + 1.95, z0 + 0.05, 0, 2.4, 1.2, (x, W, H) => drawRouteMap(x, W, H, true), 512, null, true);
   w.onSync(() => { lit.grp.visible = placeSolved(g.state, 'con'); map.grp.visible = !placeSolved(g.state, 'con'); });
