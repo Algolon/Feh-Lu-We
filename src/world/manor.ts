@@ -18,7 +18,7 @@ import { box, boxMM, cyl, blob, compound, v3, hipRoofGeo, geo } from './kit';
 import {
   table, chair, sofa, armchair, bookshelf, counter, rug, plant, painting, crate, tableLamp, floorLamp, chandelier, wallSconce,
   part, staticLantern, staticSconce, bed2, bedside, wardrobe, curtains, desk, lectern, bathtub, ladder, telescope, canvasPanel, nameBoard, joinery,
-  slatBench, blanketChest, gameBoxes, instrumentCase,
+  slatBench, blanketChest, gameBoxes, instrumentCase, workbench,
 } from './furniture';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place } from '../interactions/props';
 import { forestMapTexture } from './textures';
@@ -519,8 +519,9 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   for (let i = 0; i < 3; i++) blob(c.b, k.M.paint, '#d9c8a0', 112 + (i - 1) * 0.7, GF + 0.3, 109.0, 0.32, 0.3, 0.25, { chunk: c.chunk });
   c.col.addBox(110.9, 113.1, 108.6, 109.5, 0, 0.6);
   staticLantern(c, w, 112, CEIL - 0.1, 106.8, 0.5, 0, 2.5, 5);
-  box(c.b, k.M.wood, '#7a5232', 112, GF, 100.3, 3.2, 0.9, 0.7, { chunk: c.chunk, uv: 1 });
-  c.col.addBox(110.4, 113.6, 99.9, 100.75, 0, 1);
+  // DEV-03: the workbench stood 0.25 m in front of door.workshop (the corridor door could not be walked through);
+  // it now stands under the tool board on the east wall
+  workbench(c, 115.2, 96.5, GF, Math.PI / 2, 3.0, 0.7);
   box(c.b, k.M.wood, '#5a3a22', 115.5, GF + 1.2, 96.5, 0.05, 1.4, 3.0, { chunk: c.chunk, uv: 1 });
   for (let i = 0; i < 6; i++) box(c.b, k.M.paint, '#3a3530', 115.45, GF + 1.4 + (i % 2) * 0.4, 95.3 + i * 0.45, 0.04, 0.4, 0.06, { chunk: c.chunk });
   for (const [x, z, s] of [[109.2, 93.4, 0.7], [109.9, 93.4, 0.55], [109.2, 94.2, 0.6]] as const) crate(c, x, z, GF, s, 0.2);

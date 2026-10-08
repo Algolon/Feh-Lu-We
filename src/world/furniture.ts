@@ -541,6 +541,18 @@ export function slatBench(c: Ctx, x: number, z: number, y0: number, yaw: number,
   for (const dz of [-0.13, 0, 0.13]) a.add(M.timber, wood, sb(len, 0.035, 0.11, 0.008), 0, 0.42, dz);
   collide(c, x, z, yaw, len, 0.42, 0.45, y0);
 }
+/** DEV-03 joiner's workbench: thick laminated top, splayed square legs, stretchers, a lower shelf, a front vice. Along local x. */
+export function workbench(c: Ctx, x: number, z: number, y0: number, yaw: number, len = 3.0, d = 0.7, wood = '#8a6440') {
+  const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw), dk = darker(wood, 0.75);
+  for (const sx of [-1, 1]) for (const sz of [-1, 1]) a.add(M.timber, dk, bx(0.09, 0.84, 0.09), sx * (len / 2 - 0.15), 0.42, sz * (d / 2 - 0.08));
+  for (const sx of [-1, 1]) a.add(M.timber, dk, bx(0.06, 0.08, d - 0.1), sx * (len / 2 - 0.15), 0.2, 0);
+  a.add(M.timber, dk, bx(len - 0.3, 0.08, 0.06), 0, 0.2, 0);
+  a.add(M.timber, darker(wood, 0.9), bx(len - 0.34, 0.03, d - 0.2), 0, 0.25, 0);
+  a.add(M.timber, wood, sb(len, 0.08, d, 0.012), 0, 0.88, 0);
+  a.add(M.timber, dk, bx(0.4, 0.14, 0.08), -len / 2 + 0.45, 0.8, d / 2 + 0.04); // vice chop
+  a.add(M.paint, '#3a3530', cg('viceScrew', () => new THREE.CylinderGeometry(0.018, 0.018, 0.34, 6).rotateZ(Math.PI / 2)), -len / 2 + 0.45, 0.78, d / 2 + 0.1);
+  collide(c, x, z, yaw, len, d, 0.95, y0);
+}
 /** DEV-03 blanket chest (bed foot): frame-and-panel box on a plinth, moulded lid, iron handles. */
 export function blanketChest(c: Ctx, x: number, z: number, y0: number, yaw: number, w = 1.1, wood = '#7a5a3a') {
   const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw), dk = darker(wood, 0.78), lt = darker(wood, 1.1);

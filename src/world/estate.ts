@@ -377,7 +377,7 @@ function buildGarden(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods: Estat
     const l = lantern(w, x, GF + 0.76, 114, 0.5);
     makeLamp(w, g, { id: `lamp.terrace.${x}`, ...l, name: 'tafellantaarn', defaultOn: true, intensity: 3, distance: 6, hit: [0.3, 0.4, 0.3] });
   }
-  for (const [x, z] of [[78.6, 110.6], [101.4, 110.6], [78.6, 116.4], [101.4, 116.4], [96, 116.4]] as const) plant(c, x, z, GF, 1.2, '#c9774a');
+  for (const [x, z] of [[78.6, 110.6], [102.4, 110.6], [78.6, 116.4], [101.4, 116.4], [96, 116.4]] as const) plant(c, x, z, GF, 1.2, '#c9774a'); // DEV-03: the pot by the kitchen back door clears its doorway
   staticLantern(c, w, 95, 2.4, 110.25, 0.7, 0, 3, 7);
 
   // three lantern posts in a circle on the open lawn around a flat stone (thread C)
