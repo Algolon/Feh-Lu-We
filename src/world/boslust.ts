@@ -146,7 +146,7 @@ function entrance(w: World, g: GameApi, c0: Ctx, u: Ctx) {
   for (let i = 0; i < 3; i++) cyl(u.b, U.M.paint, '#6b4426', HUT.x1 - 0.35, 1.6, 18.8 + i * 0.35, 0.02, 0.02, 0.14, 5, { chunk: u.chunk, rz: Math.PI / 2 });
   staticLantern(u, w, 63, 2.05, 19.4, 0.55, 0, 2.5, 5);
   // the descent: a real stair down into the hill, walls of stone, ceiling stepping down with it
-  stairsZ(u, 61.7, 64.3, 26, 20, UG, 0, '#6b5a44');
+  stairsZ(u, 61.7, 64.3, 26, 20, UG, 0, '#6b5a44', undefined, { mass: '#8a7e6a', runner: false, riser: '#7a6e5c' });
   for (const xs of [61.55, 64.45]) {
     boxMM(u.b, U.M.stone, '#9a9078', xs - 0.15, xs + 0.15, UG - 0.2, 2.6, HUT.z1, 26, { chunk: u.chunk, uv: 1.5 });
     u.col.addBox(xs - 0.15, xs + 0.15, HUT.z1, 26, UG - 0.2, 2.6, { occludes: true });

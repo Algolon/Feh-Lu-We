@@ -6,21 +6,20 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { makeVegBatch, onFrame, type VegBatch } from './vegbatch';
-import { CAPS } from '../core/caps';
 import type { World, GameApi } from '../interactions/world';
 import type { Ctx } from './arch';
 import { Batcher, compound, getKit, v3 } from './kit';
 import { Asm, artMats, softBox, projectUV, bake, baseAO, ContactShadows } from './artkit';
-import { lump as lumpGeo, treeModel, bushModel, plantModel, rockModel, litterLeafModel, woodMats, taperTube, PLANT_VARIANTS, BARK_TINT, LEAF_TINT, type Model, type Lod, type TreeSpecies, type BushSpecies, type PlantKind } from './woodkit';
-import { planWoodland, type WoodlandSite, type PlacedStump } from './woodlandPlan';
+import { lump as lumpGeo, treeModel, bushModel, plantModel, rockModel, woodMats, taperTube, PLANT_VARIANTS, BARK_TINT, LEAF_TINT, type Model, type Lod, type TreeSpecies, type BushSpecies, type PlantKind } from './woodkit';
+import type { WoodlandSite, PlacedStump } from './woodlandPlan';
 import { mulberry32 } from '../core/rng';
 import { FOREST_PATHS, terrainHeight, gridHeight, hillHeight } from './terrain';
 import { HILL_CUT, SITES } from './layout';
 import { distToPolyline } from './nature';
 import { makeInspect, place } from '../interactions/props';
 
-export { ZONE, inZone, zoneWeight } from './boslustZone';
-import { ZONE, inZone, zoneWeight } from './boslustZone';
+export { ZONE, inZone, zoneWeight, woodWeight } from './boslustZone';
+import { ZONE, inZone, woodWeight } from './boslustZone';
 const inCutArea = (x: number, z: number) => x > HILL_CUT.x0 - 1.2 && x < HILL_CUT.x1 + 1.2 && z > HILL_CUT.z0 + 2.8 && z < 24;
 const pathDist = (x: number, z: number) => Math.min(...FOREST_PATHS.map((p) => distToPolyline(x, z, p)));
 
@@ -38,17 +37,14 @@ const TEX_MEAN = new THREE.Color('#8fb35a');
 const fin = (hex: string) => { const c = new THREE.Color(hex); return new THREE.Color(c.r / TEX_MEAN.r, c.g / TEX_MEAN.g, c.b / TEX_MEAN.b); };
 const GROUND = { floor: fin('#535e2d'), sun: fin('#76833a'), moss: fin('#3f5226'), litter: fin('#5c4528'), soil: fin('#7a6040'), rockSoil: fin('#625a48'), hill: fin('#62723a') };
 const nz2 = (x: number, z: number) => Math.sin(x * 0.31 + Math.sin(z * 0.17) * 2.1) * Math.cos(z * 0.27 - x * 0.05);
-/** Ground fade: wider than the object fade so the forest floor changes gradually across the zone boundary. */
-const groundWeight = (x: number, z: number) => {
-  const d = Math.min(x - ZONE.x0 + 4, ZONE.x1 - x + 4, z - ZONE.z0 + 8, ZONE.z1 - z + 4);
-  return THREE.MathUtils.smoothstep(d, 0, 16);
-};
+/** Ground fade (DEV-03: estate-wide): the woodland weight, so the forest floor grades into the lawns and clearings. */
+const groundWeight = woodWeight;
 /**
  * Forest-floor colour in the zone (terrain vertex colours, 2 m grid): leaf litter under the crowns, a warm
  * worn-soil band either side of the path, earth and rock-dust at the cut, sunlit and mossy patches between, a
  * grassier hill. Blended in by a wide fade so the old/new boundary has no seam.
  */
-export function zoneGround(x: number, z: number, c: THREE.Color, trees: [number, number][]) {
+export function zoneGround(x: number, z: number, c: THREE.Color, trees: TreeGrid) {
   const zw = groundWeight(x, z);
   if (zw <= 0) return;
   const base = c.clone();
@@ -56,8 +52,7 @@ export function zoneGround(x: number, z: number, c: THREE.Color, trees: [number,
   c.copy(GROUND.floor).lerp(n > 0 ? GROUND.sun : GROUND.moss, Math.abs(n) * 0.6);
   const hr = Math.hypot(x - 63, z - 30);
   if (hr < 15) c.lerp(GROUND.hill, 0.6 * (1 - hr / 15));
-  let crown = 0;
-  for (const [tx, tz] of trees) { const d = Math.hypot(tx - x, tz - z); if (d < 4.2) crown = Math.max(crown, 1 - d / 4.2); }
+  const crown = trees.crown(x, z, 4.2);
   c.lerp(GROUND.litter, crown * 0.7);
   const dp = pathDist(x, z);
   if (dp < 3.8) c.lerp(GROUND.soil, (1 - dp / 3.8) ** 1.3 * 0.75); // worn soil grading out from the path into the floor
@@ -65,9 +60,22 @@ export function zoneGround(x: number, z: number, c: THREE.Color, trees: [number,
   c.lerp(base, 1 - zw);
 }
 
-/** Per-side path width for the drape: wanders slowly (1.4–2.6 m) inside the zone, the original 1.9 m outside it. */
+/** Tree positions bucketed on an 8 m grid: crown proximity for every terrain vertex without scanning all trees. */
+export class TreeGrid {
+  private cells = new Map<string, [number, number][]>();
+  constructor(pts: [number, number][]) { for (const p of pts) { const k = `${Math.floor(p[0] / 8)},${Math.floor(p[1] / 8)}`; let a = this.cells.get(k); if (!a) this.cells.set(k, (a = [])); a.push(p); } }
+  /** 0 … 1: how far under the nearest crown (1 at a trunk, 0 at `r` metres or more). */
+  crown(x: number, z: number, r: number) {
+    let best = 0;
+    const ix = Math.floor(x / 8), iz = Math.floor(z / 8);
+    for (let i = ix - 1; i <= ix + 1; i++) for (let j = iz - 1; j <= iz + 1; j++) for (const [tx, tz] of this.cells.get(`${i},${j}`) ?? []) { const d = Math.hypot(tx - x, tz - z); if (d < r) best = Math.max(best, 1 - d / r); }
+    return best;
+  }
+}
+
+/** Per-side path width for the drape: wanders slowly (1.4–2.6 m) in the woodland, the original 1.9 m outside it. */
 export const zonePathWidth = (x: number, z: number, d: number) => {
-  const zw = zoneWeight(x, z);
+  const zw = woodWeight(x, z);
   return 1.9 + zw * (0.45 * Math.sin(d * 0.71) + 0.12 * Math.sin(d * 1.31 + 1.3) + 0.1); // slow wander: no zigzag at the 1 m sampling
 };
 const PATH_T = (() => { const a = new THREE.Color('#c8ad80'), b = new THREE.Color('#948670'); return [b.r / a.r, b.g / a.g, b.b / a.b]; })();
@@ -116,7 +124,7 @@ export function pathVerge(w: World, paths: readonly (readonly (readonly [number,
       const len = Math.hypot(dx, dz) || 1;
       dx /= len; dz /= len;
       if (i > 0) dist += Math.hypot(p[0] - dense[i - 1][0], p[1] - dense[i - 1][1]);
-      const zw = zoneWeight(p[0], p[1]);
+      const zw = woodWeight(p[0], p[1]);
       const row: { a: number[]; b: number[]; zw: number } = { a: [], b: [], zw };
       for (const sd of [-1, 1]) {
         const wd = zonePathWidth(p[0], p[1], dist + sd * 7.3) / 2; // the drape's edge on this side
@@ -139,7 +147,7 @@ export function pathVerge(w: World, paths: readonly (readonly (readonly [number,
     // earth patches: soft, irregular, a little away from the path, here and there
     for (let i = 2; i < dense.length - 2; i += 3 + Math.floor(r() * 4)) {
       const p = dense[i], q = dense[i + 1];
-      if (zoneWeight(p[0], p[1]) < 0.5 || inCutArea(p[0], p[1])) continue;
+      if (woodWeight(p[0], p[1]) < 0.5 || inCutArea(p[0], p[1])) continue;
       if (r() < 0.4) continue;
       let dx = q[0] - p[0], dz = q[1] - p[1]; const len = Math.hypot(dx, dz) || 1; dx /= len; dz /= len;
       const sd = r() < 0.5 ? -1 : 1, d = 1.0 + r() * 1.1, R = 0.45 + r() * 0.6;
@@ -184,7 +192,9 @@ const groundN = (x: number, z: number) => {
 function ground(x: number, z: number, size: number, k: number, yaw = 0, aspect = 1) {
   (contact ??= new ContactShadows()).add(x, terrainHeight(x, z) + 0.05, z, size * aspect, size, yaw, k, groundN(x, z));
 }
-/** Called once after the whole zone is built (estate.ts). */
+/** DEV-03: a contact decal on the terrain (shared by the estate woodland; one draw call for all). */
+export const contactAt = ground;
+/** Called once after the whole woodland is built (estate.ts). */
 export function finishZone(w: World) {
   contact?.build(w.scene, 'outdoor', '#2e2416');
   contact = null;
@@ -197,13 +207,14 @@ const camPos = new THREE.Vector3();
 
 type Spec = { kind: 'tree'; species: TreeSpecies; v: number } | { kind: 'bush'; species: BushSpecies; v: number };
 interface TreeItem { key: string; bush: boolean; m: THREE.Matrix4; p: THREE.Vector3; c: THREE.Color; lod: number; vis: boolean; id: number; r: number }
-const LODS: Lod[] = ['near', 'mid', 'far'];
+const LODS: Lod[] = ['near', 'mid', 'far', 'xfar'];
 /**
  * Trees and bushes of every species and variant in ONE batch (one draw call with multi-draw). Each species ×
  * variant has a near, mid and far geometry, each bark + foliage merged on the tree-atlas material, the bark's
  * vertex colours pre-multiplied by bark ÷ leaf tint so that one instance colour (the leaf tint) serves both.
- * Near < 16 m, mid < 26 m (3 m hysteresis each way); trees drawn to 115 m, bushes to 50 m. All LODs are emitted
- * from one skeleton with the same cluster layout, so a switch coarsens the surface but keeps the silhouette.
+ * Near < 16 m, mid < 26 m, far < 48 m, xfar beyond (3 m hysteresis each way); trees drawn to 115 m, bushes to
+ * 50 m. All LODs are emitted from one skeleton with the same cluster layout, so a switch coarsens the surface but
+ * keeps the silhouette. DEV-03: one TreeBatches serves the whole estate (forest, masses, garden, outer ring).
  */
 export class TreeBatches {
   private geos: THREE.BufferGeometry[] = [];
@@ -212,7 +223,9 @@ export class TreeBatches {
   private batch: VegBatch | null = null;
   private last = new THREE.Vector3(Infinity, 0, 0);
   private cam: THREE.Camera | null = null;
-  constructor(private lodDist = [16, 26], private farDist = 115, private bushFar = 50) {}
+  private w: World | null = null;
+  private winVersion = -1;
+  constructor(private lodDist = [16, 26, 48], private farDist = 115, private bushFar = 50) {}
   private model(s: Spec) {
     const key = `${s.species}.${s.v}`;
     if (!this.keys.has(key)) {
@@ -221,35 +234,43 @@ export class TreeBatches {
       if (s.kind === 'tree') this.keys.set(key, LODS.map((lod) => this.geos.push(mergeModel(treeModel(s.species, s.v, lod), ratio)) - 1));
       else { // bushes: near and far only (one geometry serves mid and far: fewer groups in the instanced fallback)
         const near = this.geos.push(mergeModel(bushModel(s.species, s.v, 'near'), ratio)) - 1, far = this.geos.push(mergeModel(bushModel(s.species, s.v, 'far'), ratio)) - 1;
-        this.keys.set(key, [near, far, far]);
+        this.keys.set(key, [near, far, far, far]);
       }
     }
     return key;
   }
   add(s: Spec, m: THREE.Matrix4, leafTint: THREE.ColorRepresentation) {
     const key = this.model(s);
-    this.items.push({ key, bush: s.kind === 'bush', m: m.clone(), p: new THREE.Vector3().setFromMatrixPosition(m), c: new THREE.Color(leafTint), lod: 2, vis: true, id: -1, r: 0 });
+    this.items.push({ key, bush: s.kind === 'bush', m: m.clone(), p: new THREE.Vector3().setFromMatrixPosition(m), c: new THREE.Color(leafTint), lod: 3, vis: true, id: -1, r: 0 });
   }
   get size() { return this.items.length; }
   build(w: World) {
     this.batch = makeVegBatch(w, this.geos, this.items.length, woodMats().tree, { castShadow: true, tag: { artTrees: true, vegPart: 'trees' } });
     for (const it of this.items) {
       const g = this.keys.get(it.key)!;
-      it.id = this.batch.addInstance(g[2], it.m, it.c);
+      it.id = this.batch.addInstance(g[3], it.m, it.c);
       this.geos[g[0]].computeBoundingSphere();
       it.r = this.geos[g[0]].boundingSphere!.radius * it.m.getMaxScaleOnAxis();
     }
+    this.w = w;
     onFrame(w, (cam) => this.update(cam));
   }
   /** LOD and range by distance; only after the camera has moved (turning is handled by the per-instance culling). */
   update(camera: THREE.Camera) {
     this.cam = camera;
     camPos.setFromMatrixPosition(camera.matrixWorld);
-    if (camPos.distanceTo(this.last) < 0.3) return;
-    this.last.copy(camPos);
+    const wins = this.w?.outdoorWindows ?? null, wv = this.w?.outdoorWindowsVersion ?? 0;
+    if (camPos.distanceTo(this.last) < 0.3 && wv === this.winVersion) return;
+    this.last.copy(camPos); this.winVersion = wv;
     const b = this.batch!;
     for (const it of this.items) {
-      const d = it.p.distanceTo(camPos), vis = d < (it.bush ? this.bushFar : this.farDist);
+      const d = it.p.distanceTo(camPos);
+      let vis = d < (it.bush ? this.bushFar : this.farDist);
+      // DEV-03: inside, only what can be seen through an open doorway (World.outdoorWindows)
+      if (vis && wins) {
+        vis = false;
+        for (const q of wins) { const px = it.p.x - q.x, pz = -it.p.z - q.z, pd = Math.hypot(px, pz) || 1; if ((px * q.dx + pz * q.dz) / pd > q.cos - it.r / pd) { vis = true; break; } }
+      }
       // the LOD whose band holds d, with 3 m hysteresis: a tree keeps its current LOD until 3 m past a boundary
       let lod = 0;
       while (lod < this.lodDist.length && d >= this.lodDist[lod] + (it.lod <= lod ? 3 : -3)) lod++;
@@ -257,7 +278,7 @@ export class TreeBatches {
       if (vis !== it.vis) { b.setVisibleAt(it.id, vis); it.vis = vis; }
     }
   }
-  /** Diagnostics: LOD (0 near, 1 mid, 2 far; -1 out of range) of the tree or bush nearest to plan (x, z). */
+  /** Diagnostics: LOD (0 near, 1 mid, 2 far, 3 xfar; -1 out of range) of the tree or bush nearest to plan (x, z). */
   lodAt(x: number, z: number) {
     let best: TreeItem | null = null, bd = Infinity;
     for (const it of this.items) { const d = Math.hypot(it.p.x - x, -it.p.z - z); if (d < bd) { bd = d; best = it; } }
@@ -267,7 +288,7 @@ export class TreeBatches {
   list() { return this.items.map((it) => ({ key: it.key, bush: it.bush, x: +it.p.x.toFixed(2), z: +(-it.p.z).toFixed(2) })); }
   /** Diagnostics: per kind × LOD, how many are in range, and how many of those intersect the view. */
   stats() {
-    const z = () => ({ near: 0, mid: 0, far: 0, nearInView: 0, midInView: 0, farInView: 0 });
+    const z = () => ({ near: 0, mid: 0, far: 0, xfar: 0, nearInView: 0, midInView: 0, farInView: 0, xfarInView: 0 });
     const out = { trees: z(), bushes: z() };
     if (!this.cam) return out;
     const f = new THREE.Frustum().setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(this.cam.projectionMatrix, this.cam.matrixWorldInverse));
@@ -311,19 +332,24 @@ export class PlantBatch {
   private items: PlantItem[] = [];
   private batch: VegBatch | null = null;
   private last = new THREE.Vector3(Infinity, 0, 0);
-  private count = new Map<PlantKind, number>();
+  private count = new Map<string, number>();
   shown = 0;
-  constructor(private fade = 4) {}
+  /** DEV-03: any material and tag (the same range-faded batch draws litter, verge stones and dead wood). */
+  constructor(private fade = 4, private material?: THREE.Material, private tag: Record<string, unknown> = { understory: true, vegPart: 'plants' }) {}
   add(kind: PlantKind, v: number, m: THREE.Matrix4, c: THREE.ColorRepresentation, show = PLANT_SHOW[kind]) {
-    const key = `${kind}.${v % PLANT_VARIANTS[kind]}`;
-    if (!this.kinds.has(key)) { this.kinds.set(key, this.geos.length); this.geos.push(plantModel(kind, v)); }
+    this.addGeo(`${kind}.${v % PLANT_VARIANTS[kind]}`, () => plantModel(kind, v), m, c, show, kind);
+  }
+  /** Any geometry, shared by `key` (made once by `make`), shown within `show` metres. */
+  addGeo(key: string, make: () => THREE.BufferGeometry, m: THREE.Matrix4, c: THREE.ColorRepresentation, show: number, kind = key) {
+    if (!this.kinds.has(key)) { this.kinds.set(key, this.geos.length); this.geos.push(make()); }
     this.items.push({ geo: this.kinds.get(key)!, m: m.clone(), p: new THREE.Vector3().setFromMatrixPosition(m), c: new THREE.Color(c), show, id: -1, k: -1 });
     this.count.set(kind, (this.count.get(kind) ?? 0) + 1);
   }
+  get size() { return this.items.length; }
   counts() { return Object.fromEntries(this.count); }
   build(w: World) {
     if (!this.items.length) return;
-    this.batch = makeVegBatch(w, this.geos, this.items.length, woodMats().flat, { sortObjects: false, tag: { understory: true, vegPart: 'plants' } });
+    this.batch = makeVegBatch(w, this.geos, this.items.length, this.material ?? woodMats().flat, { sortObjects: false, tag: this.tag });
     for (const it of this.items) { it.id = this.batch.addInstance(it.geo, it.m, it.c); this.batch.setVisibleAt(it.id, false); }
     onFrame(w, (cam) => this.update(cam));
   }
@@ -350,7 +376,7 @@ export class PlantBatch {
 const tmpM = new THREE.Matrix4(), tmpS2 = new THREE.Matrix4();
 const tmpQ = new THREE.Quaternion(), tmpE = new THREE.Euler(), tmpS = new THREE.Vector3(), tmpP = new THREE.Vector3();
 /** Plan position (x, y, z), heading `yaw`, optional tilt, uniform or xyz scale → three.js matrix. */
-function mat(x: number, y: number, z: number, yaw: number, s: number | [number, number, number], rx = 0, rz = 0) {
+export function mat(x: number, y: number, z: number, yaw: number, s: number | [number, number, number], rx = 0, rz = 0) {
   tmpE.set(rx, -yaw, rz, 'YXZ');
   tmpQ.setFromEuler(tmpE);
   if (typeof s === 'number') tmpS.set(s, s, s); else tmpS.set(...s);
@@ -359,14 +385,9 @@ function mat(x: number, y: number, z: number, yaw: number, s: number | [number, 
 
 // ------------------------------------------------------------------------------------------------ the woodland
 export interface ZoneTree { x: number; z: number; y: number; h: number; r: number; kind: 'oak' | 'birch' | 'cypress' | 'pine'; hue: number }
-/**
- * The zone's backdrop: the visual-only woodland just beyond the south fence along the zone (seen over the fence
- * from the approach and the door). Without it the reverse views show the old cone pines right behind the new
- * trees. Only this strip; the rest of the outer ring is unchanged.
- */
+/** The zone's backdrop: the outer-ring trees just beyond the south fence along the zone (DEV-03: every outer tree
+ * is now a woodkit tree; this strip is planned with the zone so the approved sample plan is unchanged). */
 export const inBackdrop = (x: number, z: number) => x > ZONE.x0 && x < ZONE.x1 && z > -9 && z < -1.5;
-const backdrop: ZoneTree[] = [];
-export const addBackdrop = (t: ZoneTree) => { backdrop.push(t); };
 
 /** The BOSLUST site for the woodland kit: today's coordinates live here only (woodlandPlan.ts is layout-free). */
 export const BOSLUST_SITE: WoodlandSite = {
@@ -378,42 +399,8 @@ export const BOSLUST_SITE: WoodlandSite = {
   ground: terrainHeight,
   heroes: [{ x: 55.83, z: 11.65, species: 'oak', v: 0, yaw: 2.2 }, { x: 69.23, z: 16.07, species: 'pine', v: 0, yaw: 0.4 }],
 };
-const DECAL: Record<TreeSpecies, number> = { oak: 3.6, beech: 3.2, birch: 1.8, pine: 2.2 };
-
-/**
- * Trees (on the original positions), bushes, understory, litter, verge stones and the zone's stumps. Placement is
- * planned by woodlandPlan.ts (deterministic per object, see there); this function only renders the plan.
- * `trees` / `stumps` are the original scatter points inside the zone; their collision has already been added.
- */
-export function buildWoodland(w: World, c: Ctx, trees: ZoneTree[], stumps: { x: number; z: number; y: number; s: number }[] = []) {
-  const plan = planWoodland(BOSLUST_SITE, trees, backdrop.splice(0), stumps);
-  const tb = new TreeBatches();
-  for (const t of plan.trees) {
-    tb.add({ kind: 'tree', species: t.species, v: t.v }, mat(t.x, t.y, t.z, t.yaw, t.scale), t.tint);
-    if (!t.backdrop) ground(t.x, t.z, DECAL[t.species] * t.scale[0], t.species === 'birch' ? 0.4 : 0.5, t.yaw); // backdrop: no decals
-  }
-  for (const b of plan.bushes) {
-    tb.add({ kind: 'bush', species: b.species, v: b.v }, mat(b.x, b.y, b.z, b.yaw, b.scale), b.tint);
-    ground(b.x, b.z, (b.species === 'holly' ? 1.6 : 2.0) * b.scale, 0.4, b.yaw);
-  }
-  tb.build(w);
-  const M = woodMats();
-  const pb = new PlantBatch();
-  for (const p of plan.plants) pb.add(p.kind, p.v, mat(p.x, p.y, p.z, p.yaw, p.scale), p.tint);
-  const stoneG = rockModel(7); stoneG.userData.keepColor = true;
-  for (const st of plan.stones) c.b.add(M.rock, stoneG, mat(st.x, st.y, st.z, st.yaw, st.scale), new THREE.Color(WOOD.rock).multiplyScalar(st.k), c.chunk, true, 0);
-  const litterG = litterLeafModel(); // static, batched into the forest chunk
-  for (const l of plan.litter) c.b.add(M.flat, litterG, mat(l.x, l.y, l.z, l.yaw, l.scale), WOOD.litter[l.color], c.chunk, false, 0);
-  pb.build(w);
-  stumpsV2(c, plan.stumps);
-  // diagnostics for the measurement script, tests and the debug overlay (no effect on rendering)
-  w.scene.userData.vegPath = CAPS.multiDraw ? 'multi-draw' : 'instanced';
-  w.scene.userData.vegStats = () => ({ ...tb.stats(), plantsShown: pb.shown });
-  w.scene.userData.vegLodAt = (x: number, z: number) => tb.lodAt(x, z);
-  w.scene.userData.vegList = () => tb.list();
-  w.scene.userData.vegPlan = plan;
-  return { trees: plan.trees.length, bushes: plan.bushes.length, counts: { ...pb.counts(), litter: plan.litter.length, stones: plan.stones.length } };
-}
+/** Contact decal size per species (× instance scale). */
+export const DECAL: Record<TreeSpecies, number> = { oak: 3.6, beech: 3.2, birch: 1.8, pine: 2.2 };
 
 // ------------------------------------------------------------------------------------------------ stumps
 /**

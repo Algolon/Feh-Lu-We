@@ -665,8 +665,8 @@ export class Game implements GameApi {
     this.player.applyCamera(this.camera);
     this.cullTimer -= dt;
     if (this.cullTimer <= 0) {
-      this.cullTimer = 0.25;
-      w.updateCulling(this.camera.position);
+      this.cullTimer = 0.12; // DEV-03: indoor outdoor-view test (World.outdoorInView) needs a quick cadence
+      w.updateCulling(this.camera.position, this.camera);
       if (w.id === 'estate') this.markVisited();
     }
     w.update(dt, this.time);
@@ -714,7 +714,8 @@ export class Game implements GameApi {
     }
     const indoor = this.extras.isIndoor?.(this.player.x, this.player.z, this.player.y) ?? true;
     this.audio.update(dt, { indoor, fire, water, steam });
-    this.player.onStep = () => this.audio.sfx('step', this.extras.surfaceAt?.(this.player.x, this.player.z, this.player.y) ?? 'wood');
+    // footsteps: hooked once (the closure reads the current world's surface lookup), not re-created every frame
+    this.player.onStep ??= (e) => this.audio.step(this.extras.surfaceAt?.(this.player.x, this.player.z, this.player.y) ?? 'wood', e.gain, e.foot);
   }
 
   // ------------------------------------------------------------------ HUD + persistence

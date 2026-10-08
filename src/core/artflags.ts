@@ -1,5 +1,5 @@
-// Art-refresh comparison flags. Everything here is opt-in through the URL; with no parameters the game
-// renders exactly as before (baseline assets, baseline lighting, ACES tone mapping).
+// Art-refresh comparison flags. DEV-03: the sample sets are the default look; the URL flags opt back into the DEV-02
+// ("base") assets for comparison. Tone mapping stays ACES at exposure 1.15 unless ?tm=neutral.
 //
 //   ?review=living      art-review mode: isolated in-memory save, starts in the living room, comparison bar
 //   ?review=boslust     the same for the BOSLUST exterior sample (starts at the fork signpost)
@@ -24,9 +24,14 @@ export const REVIEW: 'living' | 'boslust' | 'dev01' | null = pick(q.get('review'
 /** DEV-01 slice review build (?review=dev01): B01 v0.2, DS01, notebook v0.2. The normal game never sets it. */
 export const SLICE = REVIEW === 'dev01';
 
+/**
+ * DEV-03 (art direction rollout): the approved samples are the production look, so every set defaults to "sample" in
+ * the normal game, the reviews and the DEV-01 slice alike. `?art=base`, `?ext=base`, `?light=base` still build the
+ * DEV-02 assets for a side-by-side comparison where both paths exist (living room, BOSLUST approach, lighting).
+ */
 export const ART: { set: ArtSet; ext: ArtSet; light: LightSet; tm: ToneSet } = {
-  set: pick(q.get('art'), ['base', 'sample'] as const, REVIEW === 'living' ? 'sample' : 'base'),
-  ext: pick(q.get('ext'), ['base', 'sample'] as const, REVIEW === 'boslust' ? 'sample' : 'base'),
-  light: pick(q.get('light'), ['base', 'sample'] as const, REVIEW && !SLICE ? 'sample' : 'base'),
+  set: pick(q.get('art'), ['base', 'sample'] as const, 'sample'),
+  ext: pick(q.get('ext'), ['base', 'sample'] as const, 'sample'),
+  light: pick(q.get('light'), ['base', 'sample'] as const, 'sample'),
   tm: pick(q.get('tm'), ['aces', 'neutral'] as const, 'aces'),
 };

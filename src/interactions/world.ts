@@ -55,6 +55,9 @@ export interface LampSource {
 
 export interface Checkpoint { name: string; pose: PlayerPose }
 
+const tmpFwd = new THREE.Vector3(), tmpTo = new THREE.Vector3();
+const DOOR_SAMPLES: [number, number][] = [[0, 0], [0.7, 0], [-0.7, 0], [0, 0.7], [0, -0.7]];
+
 export class World {
   readonly scene = new THREE.Scene();
   readonly col = new CollisionWorld();
@@ -79,7 +82,7 @@ export class World {
   /** Room-based visibility (estate): regions are static chunks that belong to a set of rooms ('out' = outdoors). */
   rooms: RoomGraph | null = null;
   isOpen: (door: string) => boolean = () => false;
-  private regions: { meshes: THREE.Object3D[]; rooms: Set<string>; on: boolean; far: number; sph: THREE.Sphere }[] = [];
+  private regions: { meshes: THREE.Object3D[]; rooms: Set<string>; on: boolean; far: number; outFar: number; sph: THREE.Sphere; shade?: boolean }[] = [];
   visibleRooms = new Set<string>(['out']);
   hereRoom = 'out';
   constructor(public readonly id: SceneId) {}
@@ -134,13 +137,17 @@ export class World {
     this.zones.push({ meshes, near, inside, on: true });
   }
   /** Static chunks (or objects tagged userData.region) shown only while one of `rooms` is visible. */
-  roomRegion(chunks: string[], rooms: string[], far = Infinity) {
+  /**
+   * `outFar` (DEV-03): while the player is OUTSIDE, the region is drawn only within this distance (an interior seen
+   * through an open door is a few pixels from 40 m but cost ~100 k triangles from the forest).
+   */
+  roomRegion(chunks: string[], rooms: string[], far = Infinity, outFar = Infinity) {
     const meshes = this.scene.children.filter((o) => chunks.includes(o.userData.chunk) || chunks.includes(o.userData.region));
     // bounding sphere of the whole region (for the optional distance limit)
     const box = new THREE.Box3();
     for (const m of meshes) box.expandByObject(m);
     const sph = box.isEmpty() ? new THREE.Sphere() : box.getBoundingSphere(new THREE.Sphere());
-    this.regions.push({ meshes, rooms: new Set(rooms), on: true, far, sph });
+    this.regions.push({ meshes, rooms: new Set(rooms), on: true, far, outFar, sph });
   }
   /** Top-level objects whose render meshes are currently culled: never pickable (explicit invariant). */
   readonly culledRoots = new Set<THREE.Object3D>();
@@ -149,16 +156,85 @@ export class World {
     while (p.parent && p.parent !== this.scene) p = p.parent;
     return this.culledRoots.has(p);
   }
-  updateCulling(eye: THREE.Vector3) {
+  /**
+   * DEV-03: exterior doorways (plan centre of the opening, radius, door id). Inside, when the outdoors is NOT directly
+   * adjacent (e.g. living → hall → vestibule → front door), it is drawn only while one of these open doorways lies in a
+   * generous cone round the view direction (half the horizontal FOV + 32°; culling runs every 0.12 s, so even a fast
+   * turn reaches the doorway only after the outdoors is back). In the
+   * living room this saved ~150 k triangles of forest drawn behind solid walls.
+   */
+  exteriorDoors: { door: string; x: number; y: number; z: number; r: number }[] = [];
+  private interiorThroughDoor = true;
+  /**
+   * DEV-03: while inside with the outdoors visible only through doorways, the plan-angle windows through them (eye
+   * position, direction, half-angle). Instanced woodland outside every window is not drawn (TreeBatches): from the
+   * lobby the drive is seen through the front door, not the forest to either side of it behind the walls.
+   */
+  outdoorWindows: { x: number; z: number; dx: number; dz: number; cos: number }[] | null = null;
+  outdoorWindowsVersion = 0;
+  private collectWindows = false;
+  private windowsTmp: { x: number; z: number; dx: number; dz: number; cos: number }[] = [];
+  private windowsKey = '';
+  private outdoorInView(eye: THREE.Vector3, cam?: THREE.PerspectiveCamera, maxDist = Infinity, all = false) {
+    if ((!cam && !all) || !this.exteriorDoors.length) return true;
+    const fwd = cam ? cam.getWorldDirection(tmpFwd) : tmpFwd.set(0, 0, -1);
+    const half = cam ? Math.atan(Math.tan(THREE.MathUtils.degToRad(cam.fov / 2)) * cam.aspect) + THREE.MathUtils.degToRad(32) : Math.PI;
+    for (const d of this.exteriorDoors) {
+      if (d.door && !this.isOpen(d.door)) continue; // '' = a glass wall (always see-through)
+      tmpTo.set(d.x - eye.x, d.y - eye.y, -d.z - eye.z);
+      const dist = tmpTo.length();
+      if (dist > maxDist) continue;
+      if (this.collectWindows) { // inside: every open doorway in line of sight contributes a window (no early exit)
+        let seen = false;
+        for (const [ox, oz] of DOOR_SAMPLES) if (!this.col.segmentBlocked(eye.x, eye.y, -eye.z, d.x + ox, d.y, d.z + oz)) { seen = true; break; }
+        if (seen) {
+          const px = d.x - eye.x, pz = d.z + eye.z, pd = Math.hypot(px, pz) || 1;
+          this.windowsTmp.push({ x: eye.x, z: -eye.z, dx: px / pd, dz: pz / pd, cos: Math.cos(Math.min(Math.PI / 2, Math.atan2(d.r + 0.6, pd) + 0.12)) });
+        }
+      }
+      if (all) continue; // window collection only (done above)
+      const ang = Math.acos(THREE.MathUtils.clamp(tmpTo.dot(fwd) / dist, -1, 1)) - Math.asin(Math.min(1, d.r / dist));
+      if (ang >= half) continue;
+      // in the cone: is any part of the doorway in line of sight (walls and closed doors occlude)?
+      for (const [ox, oz] of DOOR_SAMPLES) if (!this.col.segmentBlocked(eye.x, eye.y, -eye.z, d.x + ox, d.y, d.z + oz)) return true;
+    }
+    return false;
+  }
+  updateCulling(eye: THREE.Vector3, cam?: THREE.PerspectiveCamera) {
     if (this.rooms) {
       this.hereRoom = this.rooms.roomAt(eye.x, eye.y - 0.8, -eye.z);
       // outdoors, an open door shows only the first rooms behind it (windows are opaque panes)
       this.visibleRooms = this.rooms.visible(this.hereRoom, this.isOpen, this.hereRoom === 'out' ? 2 : 3);
+      // the outdoors and the glass Copacabana Room (whose walls show the outdoors) count as one view: from inside the
+      // house they are drawn only while an open doorway to them is in (a generous cone round) the view
+      if (this.hereRoom !== 'out' && this.hereRoom !== 'cons' && (this.visibleRooms.has('out') || this.visibleRooms.has('cons')) && !this.outdoorInView(eye, cam, 26)) {
+        this.visibleRooms.delete('out'); this.visibleRooms.delete('cons');
+      }
+      // portal windows for the woodland (inside, outdoors visible, not in the glass room or next to it)
+      let wins: typeof this.outdoorWindows = null;
+      if (this.hereRoom !== 'out' && this.hereRoom !== 'cons' && this.visibleRooms.has('out') && !this.rooms.visible(this.hereRoom, this.isOpen, 1).has('cons')) {
+        this.windowsTmp = []; this.collectWindows = true;
+        this.outdoorInView(eye, undefined, 60, true);
+        this.collectWindows = false;
+        wins = this.windowsTmp.length ? this.windowsTmp : null;
+      }
+      const key = wins ? wins.map((q) => `${q.dx.toFixed(2)},${q.dz.toFixed(2)},${q.cos.toFixed(2)}`).join('|') : '';
+      if (key !== this.windowsKey) { this.windowsKey = key; this.outdoorWindows = wins; this.outdoorWindowsVersion++; }
+      // from outside, interiors are drawn only through an open doorway within 22 m in (the cone round) the view
+      this.interiorThroughDoor = this.hereRoom !== 'out' || this.outdoorInView(eye, cam, 22);
       for (const r of this.regions) {
         let on = false;
         for (const id of r.rooms) if (this.visibleRooms.has(id)) { on = true; break; }
         if (on && r.far < Infinity) on = r.sph.center.distanceTo(eye) - r.sph.radius < r.far;
+        if (on && r.outFar < Infinity && this.hereRoom === 'out') on = this.interiorThroughDoor && r.sph.center.distanceTo(eye) - r.sph.radius < r.outFar;
         if (on !== r.on) { r.on = on; for (const m of r.meshes) { m.visible = on; m.userData.regionOff = !on; } }
+        // an interior seen from outside (through a doorway) lies under its own roof: it casts no sun shadow worth a
+        // second render of its furniture in the shadow pass; inside, its casters are restored
+        const shade = this.hereRoom !== 'out' || r.rooms.has('out');
+        if (shade !== (r.shade ?? true)) {
+          r.shade = shade;
+          for (const m of r.meshes) m.traverse((o) => { if ((o as THREE.Mesh).isMesh) { o.userData.cast0 ??= o.castShadow; o.castShadow = shade && o.userData.cast0; } });
+        }
       }
     }
     for (const v of this.veg) {

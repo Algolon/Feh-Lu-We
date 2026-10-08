@@ -3,7 +3,7 @@
 import * as THREE from 'three';
 import type { World } from '../interactions/world';
 import { ART } from '../core/artflags';
-import { zoneWeight } from './boslustZone';
+import { woodWeight } from './boslustZone';
 
 const A = {
   zenith: new THREE.Color('#79a9d8'), horizon: new THREE.Color('#f7dcae'), sun: new THREE.Color('#fff0cf'),
@@ -75,7 +75,7 @@ export function addEnvironment(w: World): Env {
     update(dusk, focus, indoor = 0) {
       const t = Math.min(1, Math.max(0, dusk));
       const k = ART.light === 'sample' ? Math.min(1, Math.max(0, indoor)) : 0;
-      const kw = ART.light === 'sample' && ART.ext === 'sample' ? zoneWeight(focus.x, -focus.z) * (1 - k) * (1 - t * 0.5) : 0;
+      const kw = ART.light === 'sample' && ART.ext === 'sample' ? woodWeight(focus.x, -focus.z) * (1 - k) * (1 - t * 0.5) : 0;
       uni.uZenith.value.lerpColors(A.zenith, D.zenith, t);
       uni.uHorizon.value.lerpColors(A.horizon, D.horizon, t);
       uni.uSunCol.value.lerpColors(A.sun, D.sun, t);

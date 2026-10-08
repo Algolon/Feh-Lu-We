@@ -83,6 +83,22 @@ export class Audio {
     o.stop(t + dur + 0.05);
   }
 
+  private lastStep = -1;
+  /**
+   * One footfall. Small per-step variation (filter ±7 %, level ±12 %, the two feet a touch apart) so a walk never
+   * sounds like one sample repeated; never two of the same variant in a row.
+   */
+  step(surface: 'grass' | 'wood' | 'stone', gain = 1, foot: 0 | 1 = 0) {
+    if (!this.ready || this.muted) return;
+    let v = Math.floor(Math.random() * 3);
+    if (v === this.lastStep) v = (v + 1) % 3;
+    this.lastStep = v;
+    const f = (1 + (v - 1) * 0.07) * (foot ? 0.96 : 1.03), g = gain * (0.88 + Math.random() * 0.24);
+    if (surface === 'wood') { this.noise(0.1, 'bandpass', 360 * f, 1.2, 0.16 * g); this.noise(0.05, 'lowpass', 160 * f, 0.8, 0.08 * g, 0.012); }
+    else if (surface === 'stone') this.noise(0.07, 'bandpass', 1300 * f, 1.5, 0.075 * g);
+    else this.noise(0.14, 'highpass', 1700 * f, 0.7, 0.045 * g, 0, 0.012);
+  }
+
   sfx(name: SfxName, surface: 'grass' | 'wood' | 'stone' = 'grass') {
     if (!this.ready || this.muted) return;
     switch (name) {

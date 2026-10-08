@@ -12,11 +12,13 @@
 // boiler room, route chamber (tunnel door).
 import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
-import { type Ctx, wall, floor, ceiling, stairsZ, railing, stairRail, hipRoof, gableRoof, windowAt } from './arch';
+import { type Ctx, wall, floor, ceiling, stairsZ, railing, stairRail, hipRoof, gableRoof, windowAt, balustrade, newel, segBox, TRIM } from './arch';
+import { lathe, Asm, artMats } from './artkit';
 import { box, boxMM, cyl, blob, compound, v3, hipRoofGeo, geo } from './kit';
 import {
   table, chair, sofa, armchair, bookshelf, counter, rug, plant, painting, crate, tableLamp, floorLamp, chandelier, wallSconce,
-  part, staticLantern, staticSconce, bed2, bedside, wardrobe, curtains, desk, lectern, bathtub, ladder, telescope, canvasPanel, nameBoard,
+  part, staticLantern, staticSconce, bed2, bedside, wardrobe, curtains, desk, lectern, bathtub, ladder, telescope, canvasPanel, nameBoard, joinery,
+  slatBench, blanketChest, gameBoxes, instrumentCase, workbench,
 } from './furniture';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place } from '../interactions/props';
 import { forestMapTexture } from './textures';
@@ -60,8 +62,8 @@ function shell(w: World, c: Ctx) {
   const stone = { mat: k.M.stone, color: '#f2e6cc' };
   const skin = { mat: k.M.plaster, color: '#f1e6cf' };
   const ext = (axis: 'x' | 'z', f: number, a0: number, a1: number, exterior: 1 | -1, gfOpen: { at: number; w: number; h?: number }[], gfWin: number[], ufWin: number[]) => {
-    wall(c, axis, f, a0, a1, 0, UF, { ...stone, t: 0.4, exterior, skin, uv: 2.4, openings: gfOpen, windows: gfWin.map((at) => ({ at, sill: 1.05, h: 1.6, w: 1.1 })) });
-    wall(c, axis, f, a0, a1, UF, TOP, { ...stone, t: 0.4, exterior, skin, uv: 2.4, windows: ufWin.map((at) => ({ at, sill: 0.8, h: 1.5, w: 1.0 })) });
+    wall(c, axis, f, a0, a1, 0, UF, { ...stone, t: 0.4, exterior, skin, uv: 2.4, winStyle: 'manor', openings: gfOpen, windows: gfWin.map((at) => ({ at, sill: 1.05, h: 1.6, w: 1.1 })) });
+    wall(c, axis, f, a0, a1, UF, TOP, { ...stone, t: 0.4, exterior, skin, uv: 2.4, winStyle: 'manor', windows: ufWin.map((at) => ({ at, sill: 0.8, h: 1.5, w: 1.0 })) });
   };
   // south (front)
   ext('x', 80.2, 72, 108, -1, [{ at: 90, w: 1.7, h: 2.7 }], [75.5, 79, 82.5, 98, 101.5, 105], [75.5, 79, 82.5, 87.5, 92.5, 98, 101.5, 105]);
@@ -71,25 +73,50 @@ function shell(w: World, c: Ctx) {
   ext('z', 72.2, 80.4, 109.6, -1, [], [83, 90.5, 97, 101, 105], [82.5, 90, 97, 101, 105]);
   // east: dining windows; the service wing joins at z 92–110 (door to the service corridor)
   ext('z', 107.8, 80.4, 109.6, 1, [{ at: 102.5, w: 1.0, h: 2.3 }], [83, 86.8, 90.4], [83, 87, 91]);
-  // plinth + string course
-  for (const [x0, x1, z0, z1] of [[71.85, 108.15, 79.85, 80.0], [71.85, 108.15, 110.0, 110.15], [71.85, 72.0, 79.85, 110.15], [108.0, 108.15, 79.85, 92]] as const) boxMM(c.b, k.M.stone, '#d8c8a8', x0, x1, 0, 0.5, z0, z1, { chunk: c.chunk, uv: 2 });
-  boxMM(c.b, k.M.paint, '#e8dcc0', 71.9, 108.1, 3.3, 3.45, 79.9, 80.0, { chunk: c.chunk });
-  boxMM(c.b, k.M.paint, '#e8dcc0', 71.9, 108.1, 3.3, 3.45, 110.0, 110.1, { chunk: c.chunk });
-  // roof (≈30°) with dormers, chimneys
-  hipRoof(c, 90, 95, 36, 30, TOP, 8.2, k.M.slate, '#8a93a8', 0.7);
+  // DEV-03 facade grammar: a proud sandstone plinth with a weathered top, rusticated quoins at the corners, a string
+  // course at the first floor and a moulded cornice under the eaves on all four sides (one family with the wing).
+  const sand = '#cdbb98', dressed = TRIM.dressed;
+  const ring = (y0: number, y1: number, proud: number, col: string, x0 = 72, x1 = 108, z0 = 80, z1 = 110, mat: THREE.Material = k.M.stone) => {
+    boxMM(c.b, mat, col, x0 - proud, x1 + proud, y0, y1, z0 - proud, z0, { chunk: c.chunk, uv: 2, jitter: 0 });
+    boxMM(c.b, mat, col, x0 - proud, x1 + proud, y0, y1, z1, z1 + proud, { chunk: c.chunk, uv: 2, jitter: 0 });
+    boxMM(c.b, mat, col, x0 - proud, x0, y0, y1, z0, z1, { chunk: c.chunk, uv: 2, jitter: 0 });
+    boxMM(c.b, mat, col, x1, x1 + proud, y0, y1, z0, z1, { chunk: c.chunk, uv: 2, jitter: 0 });
+  };
+  ring(-0.1, 0.62, 0.1, sand); // plinth
+  ring(0.62, 0.7, 0.06, '#d9c9a6', 72, 108, 80, 110, k.M.paint); // weathered plinth top
+  ring(UF - 0.12, UF + 0.08, 0.07, dressed, 72, 108, 80, 110, k.M.paint); // string course
+  ring(TOP - 0.42, TOP - 0.26, 0.06, dressed, 72, 108, 80, 110, k.M.paint); // cornice: frieze band
+  ring(TOP - 0.26, TOP - 0.12, 0.13, '#e9dcc0', 72, 108, 80, 110, k.M.paint); // corona
+  ring(TOP - 0.12, TOP - 0.02, 0.2, '#f0e5cd', 72, 108, 80, 110, k.M.paint); // cymatium under the soffit
+  // quoins: alternating long and short dressed blocks at the four corners, 4 cm proud
+  for (const [qx, qz, sx2, sz2] of [[72, 80, -1, -1], [108, 80, 1, -1], [72, 110, -1, 1], [108, 110, 1, 1]] as const) {
+    for (let i = 0, y = 0.7; y < TOP - 0.5; i++, y += 0.42) {
+      const long = i % 2 === 0, la = long ? 0.62 : 0.34;
+      boxMM(c.b, k.M.stone, dressed, qx + (sx2 < 0 ? -0.04 : -la), qx + (sx2 < 0 ? la : 0.04), y, y + 0.36, sz2 < 0 ? qz - 0.04 : qz - 0.02, sz2 < 0 ? qz + 0.02 : qz + 0.04, { chunk: c.chunk, uv: 1.2, jitter: 0.02 });
+      boxMM(c.b, k.M.stone, dressed, sx2 < 0 ? qx - 0.04 : qx - 0.02, sx2 < 0 ? qx + 0.02 : qx + 0.04, y, y + 0.36, qz + (sz2 < 0 ? -0.04 : -(long ? 0.34 : 0.62)), qz + (sz2 < 0 ? (long ? 0.34 : 0.62) : 0.04), { chunk: c.chunk, uv: 1.2, jitter: 0.02 });
+    }
+  }
+  // roof (≈30°) with a real eave (fascia, soffit, gutter, caps) and downpipes at the corners and either side of the bay
+  hipRoof(c, 90, 95, 36, 30, TOP, 8.2, k.M.slate, '#a39f9a', 0.7, { downpipes: [[71.86, 80.5], [108.14, 80.5], [71.86, 109.5], [108.14, 109.5], [85.85, 79.88], [94.15, 79.88]] });
+  // chimneys: stack with a projecting band and a cap, two pots each
   for (const [x, z] of [[72.9, 86.7], [100, 101], [86, 106]] as const) {
-    box(c.b, k.M.stone, '#e6d6b6', x, 8, z, 1.2, 8.4, 1.2, { chunk: c.chunk, uv: 2 });
-    box(c.b, k.M.paint, '#8a4a32', x, 16.4, z, 0.55, 0.5, 0.55, { chunk: c.chunk });
+    box(c.b, k.M.stone, '#d9c8a6', x, 8, z, 1.2, 8.4, 1.2, { chunk: c.chunk, uv: 2 });
+    box(c.b, k.M.paint, dressed, x, 15.6, z, 1.36, 0.14, 1.36, { chunk: c.chunk });
+    box(c.b, k.M.paint, '#e2d4b8', x, 16.25, z, 1.32, 0.15, 1.32, { chunk: c.chunk });
+    for (const d of [-0.28, 0.28]) cyl(c.b, k.M.paint, '#a5583c', x + d, 16.4, z, 0.13, 0.16, 0.5, 8, { chunk: c.chunk });
   }
   const dormer = (x: number, z: number, face: 'S' | 'N' | 'E' | 'W') => {
     const alongX = face === 'E' || face === 'W';
     const [fx, fz] = face === 'S' ? [0, -1] : face === 'N' ? [0, 1] : face === 'E' ? [1, 0] : [-1, 0];
     const top = TOP + 1.5;
     const sx = alongX ? 2.4 : 1.8, sz = alongX ? 1.8 : 2.4;
-    box(c.b, k.M.stone, '#efe2c4', x - fx * 1.0, TOP - 0.2, z - fz * 1.0, sx, top - TOP + 0.2, sz, { chunk: c.chunk, uv: 1.5 });
-    gableRoof(c, x - fx * 1.0, z - fz * 1.0, 2.6, 2.1, top, 0.8, alongX, k.M.slate, '#7d879c');
-    const wx = x - fx * 1.0 + fx * (alongX ? 1.21 : 0), wz = z - fz * 1.0 + fz * (alongX ? 0 : 1.21);
-    box(c.b, k.M.glow, '#ffc96e', wx, TOP + 0.25, wz, alongX ? 0.04 : 0.8, 1.0, alongX ? 0.8 : 0.04, { chunk: c.chunk, shadow: false, jitter: 0 });
+    const dx = x - fx * 1.0, dz = z - fz * 1.0;
+    box(c.b, k.M.stone, '#efe2c4', dx, TOP - 0.2, dz, sx, top - TOP + 0.2, sz, { chunk: c.chunk, uv: 1.5 });
+    gableRoof(c, dx, dz, 2.6, 2.1, top, 0.8, alongX, k.M.slate, '#9e9a94');
+    // the dormer window: framed glass in a dressed surround (same grammar as the facade)
+    const wx = dx + fx * (alongX ? 0.9 : 0), wz = dz + fz * (alongX ? 0 : 0.9);
+    if (alongX) windowAt(c, 'z', wx + fx * 0.3, fx as 1 | -1, wz, TOP + 0.12, 0.8, 1.05, true, { kind: 'plain' });
+    else windowAt(c, 'x', wz + fz * 0.3, fz as 1 | -1, wx, TOP + 0.12, 0.8, 1.05, true, { kind: 'plain' });
   };
   for (const x of [78, 102]) { dormer(x, 79.6, 'S'); dormer(x, 110.4, 'N'); }
   for (const z of [88, 98]) { dormer(71.6, z, 'W'); dormer(108.4, z, 'E'); }
@@ -101,20 +128,42 @@ function shell(w: World, c: Ctx) {
   bay(86.4, 89.05, 0.5, TOP);
   bay(90.95, 93.6, 0.5, TOP);
   bay(89.05, 90.95, 3.0, TOP);
+  for (const x of [86.4, 93.6]) for (let i = 0, y = 0.7; y < TOP - 0.5; i++, y += 0.42) { // quoins on the bay
+    const la = i % 2 ? 0.3 : 0.55;
+    boxMM(c.b, k.M.stone, dressed, x < 90 ? x - 0.04 : x - la, x < 90 ? x + la : x + 0.04, y, y + 0.36, 79.5, 79.56, { chunk: c.chunk, uv: 1.2, jitter: 0.02 });
+  }
   boxMM(c.b, k.M.stone, '#e2d2b2', 86.2, 93.8, TOP, TOP + 0.25, 79.45, 80.05, { chunk: c.chunk });
-  gableRoof(c, 90, 79.8, 0.6, 7.8, TOP + 0.25, 2.6, false, k.M.stone, '#f6ead0');
-  cyl(c.b, k.M.glow, '#ffc96e', 90, TOP + 1.0, 79.48, 0.5, 0.5, 0.05, 16, { chunk: c.chunk, rx: Math.PI / 2, shadow: false, jitter: 0 });
-  windowAt(c, 'x', 79.55, -1, 90, 4.0, 1.2, 1.6, true);
+  gableRoof(c, 90, 79.8, 0.6, 7.8, TOP + 0.25, 2.6, false, k.M.stone, '#f6ead0', false);
+  for (const s2 of [-1, 1]) segBox(c, k.M.paint, '#ecdfc4', [90 + s2 * 3.95, TOP + 0.2, 79.42], [90, TOP + 2.9, 79.42], 0.12, 0.26); // raking cornice
+  cyl(c.b, k.M.paint, dressed, 90, TOP + 1.0, 79.46, 0.62, 0.62, 0.06, 20, { chunk: c.chunk, rx: Math.PI / 2 }); // oculus ring
+  cyl(c.b, k.M.glow, '#5f6f78', 90, TOP + 1.0, 79.44, 0.5, 0.5, 0.05, 16, { chunk: c.chunk, rx: Math.PI / 2, shadow: false, jitter: 0 });
+  windowAt(c, 'x', 79.55, -1, 90, 4.0, 1.2, 1.6, true, { kind: 'manor' });
+  // porch: two steps up to a stone landing, Tuscan columns (base, shaft, capital) carrying an entablature and a
+  // shallow lead-covered roof with a fascia; lanterns either side of the door
   floor(c, 87.8, 92.2, 78.6, 80.0, GF, k.M.stone, '#d9ccb0', 0.4, true);
-  for (const x of [88.1, 91.9]) { cyl(c.b, k.M.stone, '#efe4ca', x, GF, 78.85, 0.17, 0.19, 2.95, 12, { chunk: c.chunk }); c.col.addCircle(x, 78.85, 0.2, 0, 3); }
-  boxMM(c.b, k.M.slate, '#7d879c', 87.5, 92.5, 3.1, 3.35, 78.3, 80.1, { chunk: c.chunk });
+  boxMM(c.b, k.M.stone, '#cfc0a2', 87.5, 92.5, -0.1, 0.075, 78.25, 80.0, { chunk: c.chunk, uv: 1 });
+  const colG = lathe([[0, 0], [0.24, 0], [0.24, 0.08], [0.2, 0.12], [0.19, 0.2], [0.165, 2.5], [0.2, 2.58], [0.23, 2.64], [0.23, 2.7], [0, 2.7]], 12);
+  for (const x of [88.1, 91.9]) {
+    c.b.add(k.M.stone, colG, new THREE.Matrix4().makeTranslation(x, GF, -78.85), '#efe4ca', c.chunk, true, 0);
+    box(c.b, k.M.paint, dressed, x, GF + 2.7, 78.85, 0.5, 0.06, 0.5, { chunk: c.chunk }); // abacus
+    c.col.addCircle(x, 78.85, 0.2, 0, 3);
+  }
+  colG.dispose();
+  boxMM(c.b, k.M.paint, dressed, 87.7, 92.3, GF + 2.76, GF + 3.05, 78.6, 79.1, { chunk: c.chunk }); // architrave beam
+  boxMM(c.b, k.M.paint, '#e8dcc2', 87.6, 92.4, GF + 3.05, GF + 3.15, 78.5, 80.0, { chunk: c.chunk }); // cornice
+  boxMM(c.b, k.M.slate, '#7f8486', 87.55, 92.45, GF + 3.15, GF + 3.27, 78.45, 80.0, { chunk: c.chunk, uv: 1 }); // leaded flat roof
+  boxMM(c.b, k.M.paint, '#6e6f6a', 87.55, 92.45, GF + 3.27, GF + 3.31, 78.45, 78.52, { chunk: c.chunk });
   for (const x of [88.8, 91.2]) staticLantern(c, w, x, 2.25, 79.7, 0.8, 0, 4, 7);
   // ---------------------------------------------------------------- service wing (single storey, own roof)
   const WH = 3.9;
-  wall(c, 'x', 92.2, 107.6, 116, 0, WH, { ...stone, t: 0.4, exterior: -1, skin, uv: 2.4, openings: [{ at: 112, w: 1.1, h: 2.3 }], windows: [{ at: 110, sill: 1.1, h: 1.3, w: 1.0 }, { at: 114.4, sill: 1.1, h: 1.3, w: 0.8 }] });
-  wall(c, 'x', 109.8, 107.6, 116, 0, WH, { ...stone, t: 0.4, exterior: 1, skin, uv: 2.4, windows: [{ at: 112, sill: 1.2, h: 1.1, w: 1.0 }] });
+  wall(c, 'x', 92.2, 107.6, 116, 0, WH, { ...stone, t: 0.4, exterior: -1, skin, uv: 2.4, winStyle: 'manor', openings: [{ at: 112, w: 1.1, h: 2.3 }], windows: [{ at: 110, sill: 1.1, h: 1.3, w: 1.0 }, { at: 114.4, sill: 1.1, h: 1.3, w: 0.8 }] });
+  wall(c, 'x', 109.8, 107.6, 116, 0, WH, { ...stone, t: 0.4, exterior: 1, skin, uv: 2.4, winStyle: 'manor', windows: [{ at: 112, sill: 1.2, h: 1.1, w: 1.0 }] });
   wall(c, 'z', 115.8, 92.4, 109.6, 0, WH, { ...stone, t: 0.4, exterior: 1, skin, uv: 2.4, openings: [{ at: 102.5, w: 1.3, h: 2.35 }] });
-  hipRoof(c, 112, 101, 8, 18, WH, 2.6, k.M.slate, '#848da0', 0.5);
+  ring(-0.1, 0.62, 0.1, sand, 108, 116, 92.2, 109.8);
+  ring(WH - 0.3, WH - 0.14, 0.08, dressed, 108, 116, 92.2, 109.8, k.M.paint);
+  // DEV-03: the west eave stops on the manor's outer wall face (x 108); with the old symmetric 8 m footprint the
+  // overhang, fascia and gutter ran 0.5 m through the manor wall into the north guest room as a "dado rail"
+  hipRoof(c, 112.25, 101, 7.5, 18, WH, 2.6, k.M.slate, '#a39f9a', 0.5, { downpipes: [[116.14, 92.6]] });
 }
 
 // =====================================================================================================
@@ -203,18 +252,13 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   railing(c, 'x', 107.8, 72.4, 83.2, UF, '#4a2f1a');
   // grand stair along the hall's east wall, with a sloped handrail on its open side
   stairsZ(c, 93.05, 94.92, 86.5, 95.5, GF, UF);
-  for (let i = 0; i <= 9; i++) {
-    const z = 86.6 + i * 0.98, y = GF + ((z - 86.5) / 9) * (UF - GF);
-    cyl(c.b, k.M.wood, '#5e3b1f', 93.12, y, z, 0.025, 0.025, 0.95, 6, { chunk: c.chunk });
-  }
-  const len = Math.hypot(9, UF - GF), ang = Math.atan2(UF - GF, 9);
-  box(c.b, k.M.wood, '#5e3b1f', 93.12, GF + 0.95 + (UF - GF) / 2 - 0.03, 91, 0.07, 0.06, len, { rx: ang, chunk: c.chunk });
-  cyl(c.b, k.M.wood, '#4a2f1a', 93.12, GF, 86.5, 0.1, 0.1, 1.25, 8, { chunk: c.chunk });
+  balustrade(c, 'z', 93.12, 86.6, 95.5, GF + 0.02, UF, '#5e3b1f', 0.95, 0.24); // turned balusters, rounded handrail
+  newel(c, 93.12, GF, 86.35, '#4a2f1a', 1.3); // a heavier newel at the foot
   // DEV-02: the open side of the flight has a real railing collider over its full height (DEV-01 review: you could
   // step off the stair into the hall). Outside the flight's width, so walking ON the stair is never touched.
   c.col.addBox(92.97, 93.12, 86.5, 95.5, GF, UF + 1.1, { tag: 'railing.S01' });
   // basement stair (descends north from the sealed door)
-  stairsZ(c, 92.08, 94.92, 104.8, 99.6, BF, GF, '#6b4a2a');
+  stairsZ(c, 92.08, 94.92, 104.8, 99.6, BF, GF, '#6b4a2a', undefined, { mass: '#cbbd9f', runner: false });
 
   // ---------------------------------------------------------------- doors
   makeDoor(w, g, { id: 'door.front', x: 89.15, z: 80.2, dir: 'x+', width: 1.7, height: 2.62, y0: GF, swing: 1, color: '#6b3f22', key: 'frontKey', thickness: 0.09 });
@@ -317,7 +361,10 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   plant(c, 91.6, 96.8, GF, 1.1);
   painting(c, 85.12, 4.6, 90, Math.PI / 2, 1.2, 0.9, 1);
   painting(c, 85.12, 2.0, 92.5, Math.PI / 2, 0.9, 0.7, 0);
-  boxMM(c.b, k.M.rug, '#c86060', 94.86, 94.9, 3.9, 5.9, 88.5, 90.2, { chunk: c.chunk, shadow: false }); // tapestry above the stair
+  // a woven hanging above the stair, on an oak rod with finials (DEV-03: was a carpet glued flat to the wall)
+  boxMM(c.b, k.M.rug, '#e8d8c4', 94.84, 94.88, 3.95, 5.85, 88.5, 90.2, { chunk: c.chunk, shadow: false });
+  cyl(c.b, k.M.wood, '#6e4a2c', 94.8, 5.88, 89.35, 0.025, 0.025, 2.0, 8, { chunk: c.chunk, rx: Math.PI / 2 });
+  for (const zz of [88.33, 90.37]) blob(c.b, k.M.wood, '#6e4a2c', 94.8, 5.9, zz, 0.045, 0.045, 0.045, { chunk: c.chunk });
   const ch = chandelier(w, 89.9, UCEIL, 90, 0.9, 1.8);
   const sw = compound((b) => box(b, k.M.paint, '#c9a44c', 0, 0, 0, 0.12, 0.18, 0.03));
   place(sw, 91.5, 1.35, 84.1, 0);
@@ -472,8 +519,9 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   for (let i = 0; i < 3; i++) blob(c.b, k.M.paint, '#d9c8a0', 112 + (i - 1) * 0.7, GF + 0.3, 109.0, 0.32, 0.3, 0.25, { chunk: c.chunk });
   c.col.addBox(110.9, 113.1, 108.6, 109.5, 0, 0.6);
   staticLantern(c, w, 112, CEIL - 0.1, 106.8, 0.5, 0, 2.5, 5);
-  box(c.b, k.M.wood, '#7a5232', 112, GF, 100.3, 3.2, 0.9, 0.7, { chunk: c.chunk, uv: 1 });
-  c.col.addBox(110.4, 113.6, 99.9, 100.75, 0, 1);
+  // DEV-03: the workbench stood 0.25 m in front of door.workshop (the corridor door could not be walked through);
+  // it now stands under the tool board on the east wall
+  workbench(c, 115.2, 96.5, GF, Math.PI / 2, 3.0, 0.7);
   box(c.b, k.M.wood, '#5a3a22', 115.5, GF + 1.2, 96.5, 0.05, 1.4, 3.0, { chunk: c.chunk, uv: 1 });
   for (let i = 0; i < 6; i++) box(c.b, k.M.paint, '#3a3530', 115.45, GF + 1.4 + (i % 2) * 0.4, 95.3 + i * 0.45, 0.04, 0.4, 0.06, { chunk: c.chunk });
   for (const [x, z, s] of [[109.2, 93.4, 0.7], [109.9, 93.4, 0.55], [109.2, 94.2, 0.6]] as const) crate(c, x, z, GF, s, 0.2);
@@ -600,8 +648,14 @@ function libraryRest(w: World, g: GameApi, c: Ctx, tx: number, tz: number) {
   w.scene.add(lsw);
   makeLamp(w, g, { id: 'lamp.libraryChandelier', obj: lsw, glow: lch.glow, light: lch.light, flames: lch.flames, name: 'kroonluchter', defaultOn: true, intensity: 7, distance: 12, hit: [0.3, 0.4, 0.4], hitOffset: [0, 0.05, 0], patch: { y: GF + 0.03, r: 2.6 } });
   armchair(c, 74.4, 105.4, GF, Math.PI / 2, '#7a3a3a');
-  cyl(c.b, k.M.paint, '#4f7fa8', 82.4, GF, 108.2, 0.04, 0.05, 0.9, 6, { chunk: c.chunk });
-  blob(c.b, k.M.paint, '#6aa0c8', 82.4, GF + 1.08, 108.2, 0.22, 0.22, 0.22, { chunk: c.chunk });
+  // floor globe: an oak tripod with a horizon ring, a brass meridian, the globe itself (sea + a few land masses)
+  { const M = artMats(), a = new Asm(c.b, c.chunk, 82.4, GF, 108.2, 0.6);
+    for (let i = 0; i < 3; i++) { const an = (i / 3) * Math.PI * 2; a.add(M.timber, '#5a3a22', joinery.bx(0.035, 0.75, 0.035), Math.cos(an) * 0.2, 0.37, Math.sin(an) * 0.2, { rx: Math.sin(an) * 0.22, rz: -Math.cos(an) * 0.22 }); }
+    a.add(M.timber, '#6e4a2c', joinery.cg('globeHorizon', () => new THREE.TorusGeometry(0.29, 0.025, 5, 24).rotateX(Math.PI / 2)), 0, 0.98, 0);
+    a.add(M.brass, '#c9a14e', joinery.cg('globeMeridian', () => new THREE.TorusGeometry(0.265, 0.012, 4, 24)), 0, 0.98, 0, { rz: 0.4 });
+    a.add(M.ceramic, '#6f91a6', joinery.cg('globeBall', () => new THREE.IcosahedronGeometry(0.25, 2)), 0, 0.98, 0);
+    for (const [dx, dy, dz, sx] of [[0.12, 0.08, 0.19, 0.11], [-0.18, 0.04, 0.14, 0.09], [0.05, -0.12, 0.2, 0.07], [-0.08, 0.15, -0.18, 0.1]] as const) a.add(M.paint, '#b8a070', joinery.cg('globeLand', () => new THREE.IcosahedronGeometry(1, 1)), dx, 0.98 + dy, dz, { s: [sx, sx * 0.7, 0.03] , ry: Math.atan2(dx, dz) });
+  }
   c.col.addCircle(82.4, 108.2, 0.3, 0, 1.3);
 }
 
@@ -672,16 +726,18 @@ function billiard(w: World, g: GameApi, c: Ctx) {
 // ---------------------------------------------------------------- kitchen
 function kitchen(w: World, g: GameApi, c: Ctx) {
   const k = c.k;
+  // DEV-03 composition: a range cooker under a chimney hood is the focal point of the north run (between the back
+  // door and the window), the sink sits under the window, open shelves with crockery over the east run, a pot rack
+  // over the island. Footprints of the runs, the island, the table and every interactable are unchanged.
   counter(c, 96.6, 109.25, GF, Math.PI, 2.6);
-  counter(c, 104.4, 109.25, GF, Math.PI, 5.6);
+  counter(c, 101.95, 109.25, GF, Math.PI, 0.7);
+  rangeCooker(c, 102.9, 109.25, GF);
+  counter(c, 105.35, 109.25, GF, Math.PI, 3.7);
   counter(c, 107.25, 95.5, GF, -Math.PI / 2, 5.0);
-  box(c.b, k.M.paint, '#2b2b2b', 105.6, GF + 0.91, 109.3, 0.9, 0.04, 0.55, { chunk: c.chunk });
-  for (let i = 0; i < 4; i++) cyl(c.b, k.M.paint, '#b8682f', 103.9 + i * 0.5, 2.0, 109.45, 0.12, 0.1, 0.16, 10, { chunk: c.chunk });
-  box(c.b, k.M.paint, '#3b3026', 104.7, 2.18, 109.45, 2.2, 0.04, 0.04, { chunk: c.chunk });
+  kitchenDressing(c);
   table(c, 101.0, 100.0, GF, 1.2, 3.0, 0, '#8a5a33');
   for (let i = 0; i < 3; i++) { chair(c, 100.0, 98.9 + i * 1.1, GF, Math.PI / 2, '#6f8a7a'); chair(c, 102.0, 98.9 + i * 1.1, GF, -Math.PI / 2, '#6f8a7a'); }
-  box(c.b, k.M.paint, '#7f9a8a', 101, GF, 105.4, 2.6, 0.86, 1.0, { chunk: c.chunk });
-  box(c.b, k.M.paint, '#d8cdb8', 101, GF + 0.86, 105.4, 2.7, 0.05, 1.1, { chunk: c.chunk });
+  kitchenIsland(c, 101, 105.4); // same footprint and collider as before; the drawer (centre, south face) is untouched
   c.col.addBox(99.65, 102.35, 104.85, 105.95, 0, 1);
   const kd = makeDrawer(w, g, { id: 'kitchen.drawer', x: 101, y: GF + 0.7, z: 104.92, yaw: Math.PI, w: 0.7, h: 0.2, d: 0.42, color: '#6f8a7a' });
   const spare = compound((b) => { box(b, k.M.paint, '#e6dcc0', 0, 0, 0, 0.1, 0.03, 0.06); box(b, k.M.paint, '#c4553d', 0, 0.03, 0, 0.07, 0.003, 0.04); });
@@ -739,15 +795,125 @@ function kitchen(w: World, g: GameApi, c: Ctx) {
   // ES.kitchenCrates: eight red shopping crates (two stacks of four, against the counter's west face); beer crates apart
   for (let i = 0; i < 8; i++) redCrate(c, 106.6, 94.0 + (i % 4) * 0.45, GF + Math.floor(i / 4) * 0.3, 0);
   c.col.addBox(106.28, 106.92, 93.78, 95.57, 0, GF + 0.62);
-  for (const [x, z] of [[105.6, 92.55], [106.1, 92.55]] as const) { box(c.b, k.M.paint, '#e8b030', x, GF, z, 0.42, 0.3, 0.3, { chunk: c.chunk }); box(c.b, k.M.paint, '#2f5a2a', x, GF + 0.3, z, 0.42, 0.28, 0.3, { chunk: c.chunk }); }
+  for (const [x, z] of [[105.6, 92.55], [106.1, 92.55]] as const) { beerCrate(c, x, z, GF, '#e8b030'); beerCrate(c, x, z, GF + 0.3, '#2f5a2a'); }
   c.col.addBox(105.35, 106.35, 92.35, 92.75, 0, GF + 0.6);
 }
 
-/** Red plastic shopping crate (0.6 × 0.4 × 0.3), long side along `yaw`. Visual only; callers add one collider per stack. */
+/**
+ * Red plastic shopping crate (0.6 × 0.4 × 0.3), long side along `yaw`. Visual only; callers add one collider per stack.
+ * DEV-03: an open crate — floor, ribbed walls with two slots between the ribs, a rolled rim, a hand-grip slot in each
+ * short side — instead of a solid red block.
+ */
 function redCrate(c: Ctx, x: number, z: number, y0: number, yaw: number) {
-  const k = c.k;
-  box(c.b, k.M.paint, '#c8322a', x, y0, z, 0.6, 0.3, 0.4, { chunk: c.chunk, yaw });
-  box(c.b, k.M.paint, '#8a1f1a', x, y0 + 0.29, z, 0.56, 0.012, 0.36, { chunk: c.chunk, yaw, shadow: false });
+  const { bx } = joinery, M = artMats();
+  const a = new Asm(c.b, c.chunk, x, y0, z, yaw + Math.PI / 2), red = '#c8322a', dk = '#7a1c18';
+  a.add(M.paint, dk, bx(0.38, 0.02, 0.58), 0, 0.01, 0); // floor (seen from above: the dark inside)
+  for (const s2 of [-1, 1]) {
+    a.add(M.paint, red, bx(0.4, 0.035, 0.02), 0, 0.2875, s2 * 0.29); // rim (short sides)
+    a.add(M.paint, red, bx(0.02, 0.035, 0.6), s2 * 0.19, 0.2875, 0); // rim (long sides)
+    for (const yy of [0.025, 0.115, 0.2]) {
+      a.add(M.paint, red, bx(0.4, 0.04, 0.016), 0, yy, s2 * 0.292);
+      a.add(M.paint, red, bx(0.016, 0.04, 0.6), s2 * 0.192, yy, 0);
+    }
+    for (const q of [-1, 0, 1]) { a.add(M.paint, red, bx(0.04, 0.3, 0.018), q * 0.17, 0.15, s2 * 0.291); a.add(M.paint, red, bx(0.018, 0.3, 0.04), s2 * 0.191, 0.15, q * 0.27); }
+    a.add(M.paint, '#3a1210', bx(0.12, 0.035, 0.022), 0, 0.245, s2 * 0.294); // grip slot
+  }
+}
+/** A crate of beer (0.42 × 0.3 × 0.3): coloured crate with a darker label panel, 24 bottle caps showing on top. */
+function beerCrate(c: Ctx, x: number, z: number, y0: number, col: string) {
+  const { bx, sb } = joinery, M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, 0);
+  a.add(M.paint, col, sb(0.42, 0.28, 0.3, 0.01), 0, 0.14, 0);
+  for (const s2 of [-1, 1]) a.add(M.paint, new THREE.Color(col).multiplyScalar(0.7), bx(0.3, 0.12, 0.012), 0, 0.15, s2 * 0.152);
+  for (let i = 0; i < 6; i++) for (let j = 0; j < 4; j++) a.add(M.paint, '#2e3a2a', bx(0.045, 0.03, 0.045), -0.175 + i * 0.07, 0.295, -0.105 + j * 0.07);
+}
+
+/** Cream enamel range cooker (1.2 m) against the north wall: two oven doors, a black hob with four rings, a brass rail;
+ * a tiled splashback and a plastered chimney hood with an oak mantel shelf above it. */
+function rangeCooker(c: Ctx, x: number, z: number, y0: number) {
+  const { bx, sb, cg } = joinery, M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, Math.PI), cream = '#e6dcc4';
+  a.add(M.ceramic, cream, sb(1.2, 0.86, 0.62, 0.02), 0, 0.47, 0.02);
+  a.add(M.paint, '#2a2622', bx(1.16, 0.04, 0.58), 0, 0.92, 0.02);
+  for (const q of [-1, 1]) for (const r2 of [-1, 1]) a.add(M.paint, '#151311', cg('burner', () => new THREE.CylinderGeometry(0.09, 0.1, 0.02, 12)), q * 0.28, 0.95, 0.02 + r2 * 0.14);
+  for (const q of [-1, 1]) {
+    a.add(M.ceramic, '#d8ccb2', sb(0.52, 0.5, 0.02, 0.01), q * 0.29, 0.42, 0.335);
+    a.add(M.paint, '#2a2622', bx(0.3, 0.18, 0.01), q * 0.29, 0.5, 0.346);
+    a.add(M.brass, '#c9a14e', bx(0.4, 0.02, 0.025), q * 0.29, 0.7, 0.36);
+  }
+  a.add(M.brass, '#c9a14e', cg('rangeRail', () => new THREE.CylinderGeometry(0.012, 0.012, 1.1, 6).rotateZ(Math.PI / 2)), 0, 0.82, 0.38);
+  a.add(M.paint, '#3a3430', bx(1.18, 0.08, 0.5), 0, 0.04, 0);
+  // splashback (small ceramic-blue tiles: a band, tinted per course) and the hood with an oak mantel shelf
+  for (let r2 = 0; r2 < 5; r2++) a.add(M.ceramic, r2 % 2 ? '#7f9fb2' : '#6f91a6', bx(1.3, 0.11, 0.012), 0, 1.02 + r2 * 0.12, -0.32);
+  a.add(M.timber, '#6e4a2c', sb(1.45, 0.06, 0.26, 0.01), 0, 1.72, -0.2);
+  a.add(M.paint, '#ece3d0', sb(1.35, 0.42, 0.5, 0.03), 0, 1.96, -0.07);
+  a.add(M.paint, '#ece3d0', bx(0.8, 0.9, 0.38), 0, 2.6, -0.14);
+  c.col.addBox(x - 0.6, x + 0.6, z - 0.33, z + 0.33, 0, y0 + 0.95);
+}
+/** The kitchen island (2.6 × 1.0): recessed plinth, panelled doors either side of the central drawer (an interactable
+ * built separately), stools on the north side, a stone top with an overhang for the stools. */
+function kitchenIsland(c: Ctx, x: number, z: number) {
+  const { bx, sb, taperLeg } = joinery, M = artMats(), a = new Asm(c.b, c.chunk, x, GF, z, Math.PI), body = '#7f9a8a', gap = '#46564e';
+  a.add(M.paint, '#4a4038', bx(2.5, 0.1, 0.9), 0, 0.05, 0);
+  a.add(M.paint, gap, bx(2.6, 0.74, 1.0), 0, 0.47, 0);
+  for (const sd of [-1, 1]) for (const px of [-0.85, -0.5, 0.5, 0.85]) {
+    if (sd < 0 && Math.abs(px) < 0.6) continue; // south face: the centre is the drawer's
+    a.add(M.paint, body, sb(0.33, 0.66, 0.022, 0.004), px, 0.45, sd * -0.51);
+    a.add(M.brass, '#c9a44c', bx(0.012, 0.1, 0.02), px + 0.12 * Math.sign(px), 0.55, sd * -0.525);
+  }
+  a.add(M.paint, body, sb(0.66, 0.4, 0.022, 0.004), 0, 0.3, 0.51); // door under the drawer (south face)
+  a.add(M.stone, '#d8cdb8', sb(2.7, 0.05, 1.3, 0.006), 0, 0.885, -0.1);
+  // two stools tucked under the overhang (north side)
+  for (const px of [-0.6, 0.6]) {
+    const st = new Asm(c.b, c.chunk, x + px, GF, z + 0.95, 0);
+    for (const [lx, lz] of [[-0.14, -0.14], [0.14, -0.14], [-0.14, 0.14], [0.14, 0.14]] as const) st.add(M.timber, '#5a3a22', taperLeg(0.62, 0.022, 0.018), lx, 0, lz);
+    st.add(M.timber, '#6e4a2c', sb(0.36, 0.04, 0.36, 0.012), 0, 0.64, 0);
+    st.add(M.timber, '#5a3a22', bx(0.28, 0.02, 0.02), 0, 0.25, -0.14); st.add(M.timber, '#5a3a22', bx(0.28, 0.02, 0.02), 0, 0.25, 0.14);
+    c.col.addCircle(x + px, z + 0.95, 0.22, 0, 0.7);
+  }
+}
+
+/** Kitchen dressing (visual only): sink under the north window, open shelves with crockery, a pot rack, small props. */
+function kitchenDressing(c: Ctx) {
+  const { bx, sb, cg } = joinery, M = artMats();
+  // farmhouse sink in the run under the window (x 105): white apron, dark basin, brass bridge tap
+  const s = new Asm(c.b, c.chunk, 105, GF, 109.25, Math.PI);
+  s.add(M.ceramic, '#f4f1ea', sb(0.8, 0.26, 0.5, 0.02), 0, 0.78, 0.1);
+  s.add(M.paint, '#8a8c88', bx(0.68, 0.01, 0.38), 0, 0.905, 0.08);
+  s.add(M.brass, '#c9a14e', cg('tap', () => new THREE.TorusGeometry(0.1, 0.012, 5, 10, Math.PI)), 0, 0.96, -0.2);
+  s.add(M.brass, '#c9a14e', bx(0.03, 0.12, 0.03), 0, 0.97, -0.25);
+  // open oak shelves on brackets over the east run, with plates on edge, bowls and jars
+  const sh = new Asm(c.b, c.chunk, 107.45, GF, 95.5, -Math.PI / 2);
+  for (const yy of [1.55, 1.98]) {
+    sh.add(M.timber, '#7e5636', sb(3.6, 0.035, 0.26, 0.006), 0, yy, 0);
+    for (const q of [-1.5, 0, 1.5]) sh.add(M.timber, '#6e4a2c', bx(0.03, 0.18, 0.2), q, yy - 0.11, -0.02);
+  }
+  for (let i = 0; i < 7; i++) sh.add(M.ceramic, i % 3 ? '#efe9dc' : '#6f91a6', cg('plate', () => new THREE.CylinderGeometry(0.12, 0.12, 0.015, 14).rotateX(Math.PI / 2)), -1.5 + i * 0.12, 1.69, -0.05, { rx: -0.12 });
+  for (let i = 0; i < 4; i++) sh.add(M.ceramic, ['#e6dcc4', '#b3813f', '#6f91a6', '#e6dcc4'][i], cg('jar', () => lathe([[0.001, 0], [0.05, 0], [0.055, 0.12], [0.04, 0.15], [0.042, 0.17], [0.001, 0.17]], 10)), 0.4 + i * 0.16, 1.57, 0);
+  for (let i = 0; i < 3; i++) sh.add(M.ceramic, '#efe9dc', cg('bowl', () => lathe([[0.001, 0], [0.05, 0], [0.09, 0.05], [0.095, 0.07], [0.001, 0.02]], 12)), -0.9 + i * 0.22, 2.0, 0);
+  // pot rack hung over the island on four rods, copper pans on hooks
+  const pr = new Asm(c.b, c.chunk, 101, GF, 105.4, 0);
+  pr.add(M.paint, '#2f2a24', bx(1.8, 0.03, 0.03), 0, 2.25, -0.25); pr.add(M.paint, '#2f2a24', bx(1.8, 0.03, 0.03), 0, 2.25, 0.25);
+  for (const q of [-0.85, 0.85]) { pr.add(M.paint, '#2f2a24', bx(0.03, 0.03, 0.5), q, 2.25, 0); for (const r2 of [-0.25, 0.25]) pr.add(M.paint, '#2f2a24', bx(0.012, 0.9, 0.012), q, 2.7, r2); }
+  for (let i = 0; i < 4; i++) {
+    pr.add(M.brass, '#b8682f', cg('pan', () => lathe([[0.001, 0], [0.09, 0], [0.11, 0.06], [0.115, 0.08], [0.001, 0.07]], 12).rotateX(Math.PI / 2)), -0.6 + i * 0.4, 1.98, 0.25);
+    pr.add(M.paint, '#2f2a24', bx(0.012, 0.16, 0.012), -0.6 + i * 0.4, 2.15, 0.25);
+  }
+  // a painted kitchen dresser on the west wall (between the service hatch and the dining arch): cupboard base, a plate
+  // rack with plates on edge and cups on hooks
+  const dr = new Asm(c.b, c.chunk, 95.45, GF, 104.2, Math.PI / 2), drc = '#8fa596';
+  dr.add(M.paint, '#4a4038', bx(1.7, 0.08, 0.48), 0, 0.04, 0);
+  dr.add(M.paint, drc, sb(1.8, 0.8, 0.52, 0.006), 0, 0.48, 0);
+  for (const px of [-0.6, 0, 0.6]) { dr.add(M.paint, new THREE.Color(drc).multiplyScalar(1.06), sb(0.54, 0.6, 0.02, 0.004), px, 0.44, 0.27); dr.add(M.brass, '#c9a44c', bx(0.06, 0.012, 0.02), px, 0.66, 0.285); }
+  dr.add(M.timber, '#7e5636', sb(1.86, 0.04, 0.56, 0.006), 0, 0.9, 0.0);
+  dr.add(M.paint, drc, bx(1.8, 1.2, 0.02), 0, 1.52, -0.22);
+  for (const sx of [-0.91, 0.91]) dr.add(M.paint, drc, bx(0.04, 1.2, 0.26), sx, 1.52, -0.1);
+  for (const yy of [1.3, 1.72]) { dr.add(M.paint, drc, bx(1.8, 0.03, 0.24), 0, yy, -0.1); for (let i = 0; i < 6; i++) dr.add(M.ceramic, i % 2 ? '#efe9dc' : '#6f91a6', cg('plate', () => new THREE.CylinderGeometry(0.12, 0.12, 0.015, 14).rotateX(Math.PI / 2)), -0.7 + i * 0.28, yy + 0.13, -0.15, { rx: -0.15 }); }
+  dr.add(M.paint, drc, sb(1.9, 0.06, 0.32, 0.008), 0, 2.15, -0.07);
+  c.col.addBox(95.15, 95.75, 103.3, 105.1, 0, 2.2);
+  // on the kitchen table: a bread board and a fruit bowl
+  const t = new Asm(c.b, c.chunk, 101, GF, 100, 0);
+  t.add(M.timber, '#a8784a', sb(0.42, 0.025, 0.28, 0.008), 0.15, 0.775, -0.6, { ry: 0.2 });
+  t.add(M.ceramic, '#efe9dc', cg('fruitBowl', () => lathe([[0.001, 0], [0.08, 0], [0.16, 0.08], [0.17, 0.1], [0.001, 0.03]], 14)), -0.1, 0.76, 0.5);
+  for (const [dx, dz, col] of [[-0.12, 0.48, '#c8452a'], [-0.05, 0.55, '#e0a030'], [-0.08, 0.44, '#8aa040']] as const) t.add(M.paint, col, cg('fruit', () => new THREE.IcosahedronGeometry(0.04, 1)), dx, 0.83, dz);
 }
 
 function drawServiceChart(x: CanvasRenderingContext2D, W: number, H: number) {
@@ -786,9 +952,10 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   part(c, k.M.wood, '#6b4426', 93.2, 81.0, 0, 0, UF, 0, 1.4, 0.45, 0.4, 1);
   c.col.addBox(92.5, 93.9, 80.6, 81.4, UF, UF + 0.5);
   // ---------------------------------------------------------------- Reiskamer (warm, travel)
-  rug(c, 78.5, 83.6, R0 + 0.01, 3.0, 2.8, 0, '#c9774a');
-  bed2(c, 75.0, 83.6, R0, Math.PI / 2, '#b5643c', '#7a4f2c');
-  bedside(c, 73.4, 81.6, R0, Math.PI / 2, '#7a4f2c');
+  // DEV-03: headboard on the west wall beside its window (it stood 1.5 m off the wall with the bedside behind it)
+  rug(c, 75.0, 84.9, R0 + 0.01, 3.0, 2.6, 0, '#c9774a');
+  bed2(c, 73.5, 84.9, R0, Math.PI / 2, '#b5643c', '#7a4f2c');
+  for (const bz of [83.75, 86.05]) bedside(c, 72.65, bz, R0, Math.PI / 2, '#7a4f2c');
   wardrobe(c, 81.6, 86.35, R0, Math.PI, 1.4, '#7a4f2c');
   curtains(c, 75.5, 80.45, R0 + 0.75, 0, 1.0, 1.9, '#c8643a');
   curtains(c, 82.5, 80.45, R0 + 0.75, 0, 1.0, 1.9, '#c8643a');
@@ -803,12 +970,12 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   w.scene.add(suitcase);
   c.col.addBox(83.5, 84.9, 83.9, 84.9, R0, R0 + 0.7);
   makeInspect(w, g, { id: 'mem.reis.suitcase', obj: suitcase, clue: 'mem.reis.suitcase', hit: [0.9, 0.5, 0.6], label: 'Bekijken: koffer' });
-  const rl = tableLamp(w, 73.4, R0 + 0.59, 81.6);
+  const rl = tableLamp(w, 72.65, R0 + 0.59, 83.75);
   makeLamp(w, g, { id: 'lamp.reis', ...rl, name: 'lamp', defaultOn: true, hit: [0.4, 0.7, 0.4], intensity: 4, distance: 6, patch: { y: R0 + 0.03, r: 1.0 } });
   // ---------------------------------------------------------------- Sterrenkamer (cool, astronomy)
-  rug(c, 78.5, 90.4, R0 + 0.01, 3.0, 3.0, 0, '#3f5a7a');
-  bed2(c, 75.0, 90.4, R0, Math.PI / 2, '#26344a', '#4a3a2a');
-  bedside(c, 73.4, 92.4, R0, Math.PI / 2, '#4a3a2a');
+  rug(c, 75.4, 91.6, R0 + 0.01, 3.0, 3.0, 0, '#3f5a7a');
+  bed2(c, 73.5, 92.2, R0, Math.PI / 2, '#26344a', '#4a3a2a');
+  for (const bz of [91.05, 93.35]) bedside(c, 72.65, bz, R0, Math.PI / 2, '#4a3a2a');
   curtains(c, 72.45, 90.0, R0 + 0.75, Math.PI / 2, 1.0, 1.9, '#2f3f5f');
   canvasPanel(w, 78.6, R0 + 1.6, 93.9, Math.PI, 1.4, 0.95, (x, W, H) => { x.fillStyle = '#1c2a44'; x.fillRect(0, 0, W, H); for (let i = 0; i < 60; i++) { x.fillStyle = i % 5 ? '#f4ecd8' : '#e8c547'; x.beginPath(); x.arc((Math.sin(i * 12.9) * 0.5 + 0.5) * W, (Math.sin(i * 7.3) * 0.5 + 0.5) * H, i % 7 ? 2 : 4, 0, Math.PI * 2); x.fill(); } x.strokeStyle = 'rgba(244,236,216,.5)'; x.lineWidth = 1.5; x.beginPath(); x.moveTo(W * 0.2, H * 0.3); x.lineTo(W * 0.32, H * 0.42); x.lineTo(W * 0.45, H * 0.36); x.lineTo(W * 0.58, H * 0.5); x.stroke(); x.font = 'italic 20px Georgia'; x.fillStyle = '#f4ecd8'; if (!SLICE) x.fillText('sterrenkaart', 16, H - 14); /* DEV-01R */ }, 384);
   telescope(c, 82.6, 91.4, R0, -Math.PI / 2 - 0.4);
@@ -817,7 +984,7 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   place(logbook, 83.9, R0 + 0.7, 93.0, 0.4);
   w.scene.add(logbook);
   makeInspect(w, g, { id: 'mem.sterren.telescope', obj: logbook, clue: 'mem.sterren.telescope', hit: [0.4, 0.2, 0.4], label: 'Lezen: logboek' });
-  const sl = tableLamp(w, 73.4, R0 + 0.59, 92.4);
+  const sl = tableLamp(w, 72.65, R0 + 0.59, 93.35);
   // DEV-01: on by default so the B01 evidence is readable on arrival
   makeLamp(w, g, { id: 'lamp.sterren', ...sl, name: 'lamp', defaultOn: SLICE, hit: [0.4, 0.7, 0.4], intensity: 4, distance: 6, patch: { y: R0 + 0.03, r: 1.0 } });
   // ---------------------------------------------------------------- bathroom
@@ -851,10 +1018,15 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   const bl = tableLamp(w, 103.9, R0 + 0.76, 89.4);
   makeLamp(w, g, { id: 'lamp.botanic', ...bl, name: 'lamp', defaultOn: true, hit: [0.4, 0.7, 0.4], intensity: 4, distance: 7, patch: { y: R0 + 0.03, r: 1.2 } });
   // ---------------------------------------------------------------- north guest room (source id `storage`), linen, rear nooks
-  bed2(c, 105.4, 102.6, R0, -Math.PI / 2, '#6f8a7a', '#7a5a3a');
-  bedside(c, 107.15, 100.6, R0, -Math.PI / 2, '#7a5a3a');
+  // DEV-03: headboard on the east wall (it stood 1.1 m off it), a bedside each side, a chest at the foot, a reading
+  // chair in the free corner by the door; the wardrobe keeps the north wall, the walk line door → bed stays clear
+  bed2(c, 106.45, 102.6, R0, -Math.PI / 2, '#6f8a7a', '#7a5a3a');
+  for (const bz of [101.35, 103.85]) bedside(c, 107.33, bz, R0, -Math.PI / 2, '#7a5a3a');
+  blanketChest(c, 104.95, 102.6, R0, -Math.PI / 2, 1.1, '#7a5a3a');
+  painting(c, 107.58, R0 + 1.75, 102.6, -Math.PI / 2, 1.0, 0.6, 3);
   wardrobe(c, 101.6, 106.25, R0, Math.PI, 1.4, '#7a5a3a');
-  rug(c, 103.4, 102.6, R0 + 0.01, 2.6, 3.0, 0, '#b8a888');
+  armchair(c, 100.0, 104.9, R0, Math.PI * 0.75, '#8a9a7a');
+  rug(c, 104.7, 102.6, R0 + 0.01, 3.0, 2.4, 0, '#b8a888');
   staticLantern(c, w, 103.3, UCEIL - 0.6, 101.0, 0.5, 0, 2.5, 6);
   // shared linen: shelves along the north wall, reached centrally from the rear nook (not through a bedroom)
   for (let i = 0; i < 3; i++) {
@@ -1097,11 +1269,11 @@ function attic(w: World, g: GameApi, c: Ctx) {
   const MID = S03.mid.y, wood = '#8a6a4a';
   // ---------------------------------------------------------------- S03: flight 1, middle landing, flight 2 (real steps)
   const f1 = S03.flight1, f2 = S03.flight2, m = S03.mid;
-  stairsZ(c, f1.x0, f1.x1, f1.z0, f1.z1, UF, MID, wood, 10);
+  stairsZ(c, f1.x0, f1.x1, f1.z0, f1.z1, UF, MID, wood, 10, { runner: false, mass: '#d4c6a8' });
   boxMM(c.b, k.M.wood, wood, m.x0, m.x1, UF, MID, m.z0, m.z1, { chunk: c.chunk, uv: 1.2 });
   w.col.addFloor(m.x0, m.x1, m.z0, m.z1, MID);
   w.col.addBox(m.x0, m.x1, m.z0, m.z1, UF, MID, { occludes: true }); // solid under the landing (too low to walk under)
-  stairsZ(c, f2.x0, f2.x1, f2.z1, f2.z0, MID, AF, wood, 10);
+  stairsZ(c, f2.x0, f2.x1, f2.z1, f2.z0, MID, AF, wood, 10, { runner: false, mass: '#d4c6a8' });
   boxMM(c.b, k.M.wood, '#7a5a3a', f2.x0, f2.x1, UF, MID, f2.z0, f2.z1, { chunk: c.chunk, uv: 1.2 });
   w.col.addBox(f2.x0, f2.x1, f2.z0, f2.z1, UF, MID, { occludes: true }); // closed under flight 2
   // railings: flight 1 | lane, between the flights (full height), middle landing edges, upper landing over the well
@@ -1153,17 +1325,27 @@ function attic(w: World, g: GameApi, c: Ctx) {
   for (let x = 81; x < 101; x += 2.4) box(c.b, k.M.wood, '#6b4a2a', x, AF, 95, 0.14, roofUnderside(x, 95) - AF - 0.15, 0.14, { chunk: c.chunk }); // king posts
   // ---------------------------------------------------------------- staging: A02 weekend attic, A03 seasonal store, A04 lookout
   for (const [x, z, sz, col] of [[81.0, 102.9, 0.7, '#a0784a'], [81.8, 102.9, 0.55, '#b08a5a'], [81.0, 102.1, 0.6, '#8a6a4a'], [93.7, 102.9, 0.65, '#a0784a'], [92.9, 102.9, 0.5, '#c8a070'], [81.0, 96.0, 0.6, '#a0784a']] as const) crate(c, x, z, AF, sz, 0.15, col);
-  for (let i = 0; i < 3; i++) { // instrument cases leaning against the north wall
-    box(c.b, k.M.paint, ['#2b2622', '#4a2f2a', '#2f3f4a'][i], 86 + i * 0.7, AF, 103.65, 0.4, 1.1 - i * 0.15, 0.22, { chunk: c.chunk, yaw: 0.05 * i });
+  // DEV-03 A02 weekend attic composed as one room: the sofa group under its lantern against the north knee wall,
+  // instrument cases at the west gable, the drying line moved off the walking line onto the south partition
+  for (let i = 0; i < 3; i++) instrumentCase(c, 80.32, 99.8 + i * 0.62, AF, Math.PI / 2, ['#2b2622', '#4a2f2a', '#2f3f4a'][i], 1.1 - i * 0.15);
+  c.col.addBox(80.06, 80.75, 99.5, 101.4, AF, AF + 1.1);
+  for (const x of [88.6, 93.4]) {
+    cyl(c.b, k.M.wood, '#6b4a2a', x, AF, 92.7, 0.035, 0.04, 1.8, 6, { chunk: c.chunk }); // drying line posts on feet
+    box(c.b, k.M.wood, '#5a3a22', x, AF, 92.7, 0.36, 0.05, 0.08, { chunk: c.chunk });
+    c.col.addCircle(x, 92.7, 0.14, AF, AF + 1.8);
   }
-  c.col.addBox(85.7, 87.9, 103.4, 103.9, AF, AF + 1.1);
-  for (const x of [84, 89]) cyl(c.b, k.M.wood, '#6b4a2a', x, AF, 97.5, 0.04, 0.04, 1.8, 6, { chunk: c.chunk }); // drying line posts
-  box(c.b, k.M.paint, '#efe8d8', 86.5, AF + 1.75, 97.5, 5.0, 0.01, 0.01, { chunk: c.chunk });
-  for (let i = 0; i < 5; i++) box(c.b, k.M.paint, ['#6fae9a', '#f2ead8', '#9aa8d8', '#e0a060', '#c4553d'][i], 84.8 + i * 0.8, AF + 1.15, 97.5, 0.55, 0.6, 0.02, { chunk: c.chunk });
-  c.col.addCircle(84, 97.5, 0.12, AF, AF + 1.8); c.col.addCircle(89, 97.5, 0.12, AF, AF + 1.8);
-  sofa(c, 82.0, 99.5, AF, Math.PI / 2, 2.0, '#8a7a5a');
-  table(c, 88.5, 101.4, AF, 1.4, 0.8, 0, '#7a5a3a', 0.72);
-  for (let i = 0; i < 3; i++) box(c.b, k.M.paint, ['#c4553d', '#3f6fa8', '#e8c547'][i], 88.0 + i * 0.45, AF + 0.72, 101.4, 0.36, 0.06, 0.28, { chunk: c.chunk });
+  box(c.b, k.M.paint, '#efe8d8', 91.0, AF + 1.74, 92.7, 4.8, 0.012, 0.012, { chunk: c.chunk });
+  for (let i = 0; i < 5; i++) {
+    const lx = 89.3 + i * 0.9, h = [0.6, 0.45, 0.7, 0.5, 0.4][i];
+    box(c.b, k.M.paint, ['#6fae9a', '#f2ead8', '#9aa8d8', '#e0a060', '#c4553d'][i], lx, AF + 1.74 - h, 92.7, 0.55, h, 0.015, { chunk: c.chunk, yaw: (i % 2 ? 1 : -1) * 0.04 });
+    for (const px of [-0.22, 0.22]) box(c.b, k.M.wood, '#c8b090', lx + px, AF + 1.7, 92.7, 0.015, 0.07, 0.025, { chunk: c.chunk }); // pegs
+  }
+  rug(c, 86.0, 101.7, AF + 0.01, 3.4, 2.6, 0, '#b8956a');
+  sofa(c, 86.0, 103.4, AF, Math.PI, 2.0, '#8a7a5a');
+  table(c, 86.0, 101.9, AF, 1.0, 0.55, 0, '#7a5a3a', 0.42);
+  gameBoxes(c, 85.8, 101.9, AF + 0.42, 0.15, ['#c4553d', '#3f6fa8', '#e8c547']);
+  armchair(c, 84.6, 100.4, AF, -0.35, '#7a5a3a');
+  armchair(c, 87.4, 100.4, AF, 0.35, '#6f7a5a');
   // A03 seasonal store (behind its door): garden cushions, a boxed tree, the old games box (memory moved here, same id)
   for (const [x, z, sz] of [[81.0, 86.8, 0.7], [81.8, 86.8, 0.6], [94.1, 86.8, 0.7], [94.1, 87.6, 0.55], [90.5, 86.8, 0.6]] as const) crate(c, x, z, AF, sz, 0.1, '#9a7a52');
   box(c.b, k.M.paint, '#3f5a3a', 92.0, AF, 87.0, 1.6, 0.35, 0.35, { chunk: c.chunk });
@@ -1174,10 +1356,9 @@ function attic(w: World, g: GameApi, c: Ctx) {
   c.col.addCircle(84.4, 87.0, 0.4, AF, AF + 0.5);
   makeInspect(w, g, { id: 'mem.storage.box', obj: memBox, clue: 'mem.storage.box', hit: [0.7, 0.5, 0.6] });
   // A04 lookout: observatory reservation only (I03 open) — a bench and the stars hobby, no roof opening claimed
-  part(c, k.M.wood, '#6b4426', 99.8, 94.6, -Math.PI / 2, 0, AF, 0, 1.6, 0.45, 0.45, 1);
-  c.col.addBox(99.5, 100.1, 93.8, 95.4, AF, AF + 0.5);
+  slatBench(c, 100.45, 93.5, AF, Math.PI / 2, 1.6, '#6b4426'); // clear of the king post at z 95
   telescope(c, 97.4, 93.2, AF, -0.5);
-  for (const [x, z] of [[88, 98.5], [86.5, 89], [98, 95.4], [97, 102.6]] as const) staticLantern(c, w, x, AF + 1.9, z, 0.5, 0, 2.5, 7);
+  for (const [x, z] of [[86, 101.6], [86.5, 89], [98, 95.4], [97, 102.6]] as const) staticLantern(c, w, x, AF + 1.9, z, 0.5, 0, 2.5, 7);
   staticLantern(c, w, 98.4, UF + 2.4, 103.2, 0.5, 0, 3, 8); // stairwell light over the return lane
   c.chunk = base;
 }

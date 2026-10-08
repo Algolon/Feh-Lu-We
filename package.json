@@ -13,6 +13,7 @@
     "e2e": "node scripts/e2e.mjs",
     "e2e:dev01": "node scripts/e2e-dev01.mjs",
     "e2e:dev02": "node scripts/e2e-dev02.mjs",
+    "e2e:dev03": "node scripts/e2e-dev03.mjs",
     "views:dev02": "node scripts/dev02-views.mjs"
   },
   "engines": {

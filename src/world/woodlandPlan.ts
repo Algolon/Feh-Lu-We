@@ -60,7 +60,19 @@ export interface PlacedStone { x: number; z: number; y: number; yaw: number; sca
  */
 export interface PlacedStump { x: number; z: number; y: number; s: number; treatment: 'plain' | 'absorbed' | 'nurse'; vx: number; vz: number; vr: number; tree?: string }
 export interface WoodlandPlan { trees: PlacedTree[]; bushes: PlacedBush[]; plants: PlacedPlant[]; litter: PlacedLitter[]; stones: PlacedStone[]; stumps: PlacedStump[] }
-export interface PlanOptions { variantOf?: (species: TreeSpecies, x: number, z: number, v: number) => number }
+export interface PlanOptions {
+  variantOf?: (species: TreeSpecies, x: number, z: number, v: number) => number;
+  /** DEV-03 (estate-wide woodland): multiplier on the scatter tries (an area larger than the BOSLUST zone). Default 1. */
+  scale?: number;
+  /** Share of broadleaves with a hazel/holly group at the crown edge (default 0.42) and the group size (default 1–3). */
+  bushP?: number; bushMax?: number;
+  /** Litter leaves per broadleaf/birch (default 22). */
+  litterN?: number;
+  /** Z band for foxgloves / anemones (defaults: the BOSLUST approach, z0 + 2.4 … 34 / 30). */
+  foxBand?: [number, number]; anemoneBand?: [number, number];
+  /** Ground-cover density multiplier for ferns and tufts (default 1; < 1 for glades). */
+  cover?: number;
+}
 
 /** Trunk collider radii of the layout's trees (forest.ts): birch 0.22, others 0.34. */
 export const TRUNK_COLLIDER = (sp: TreeSpecies) => (sp === 'birch' ? 0.22 : 0.34);
@@ -69,7 +81,7 @@ const id = (x: number, z: number) => `${x.toFixed(2)},${z.toFixed(2)}`;
 export const STUMP_VISUAL = 1.3;
 
 export function planWoodland(site: WoodlandSite, trees: SourceTree[], backdrop: SourceTree[], stumps: SourceStump[], opt: PlanOptions = {}): WoodlandPlan {
-  const S = site.seed;
+  const S = site.seed, K = opt.scale ?? 1, cover = opt.cover ?? 1;
   const pathDist = (x: number, z: number) => Math.min(...site.paths.map((p) => distToPolyline(x, z, p)));
   const free = (x: number, z: number, corridor = 1.35) => site.inArea(x, z) && !site.keepClear(x, z) && pathDist(x, z) > corridor;
   const treeNear = (x: number, z: number, d: number) => trees.some((t) => Math.hypot(t.x - x, t.z - z) < d);
@@ -102,8 +114,8 @@ export function planWoodland(site: WoodlandSite, trees: SourceTree[], backdrop: 
   // ---- bushes: hazel groups at the edge of broadleaf crowns, the odd holly; one stream per anchor tree
   const bushes: PlacedBush[] = [];
   for (const t of broadleaves) {
-    if (hash01(t.x, t.z, 4) > 0.42) continue;
-    const r = stream(S, 'bushes', t.x, t.z), a0 = r() * Math.PI * 2, n = 1 + Math.floor(r() * 3);
+    if (hash01(t.x, t.z, 4) > (opt.bushP ?? 0.42)) continue;
+    const r = stream(S, 'bushes', t.x, t.z), a0 = r() * Math.PI * 2, n = 1 + Math.floor(r() * (opt.bushMax ?? 3));
     for (let i = 0; i < n; i++) {
       const a = a0 + i * 0.9 + r() * 0.4, d = 2.4 + r() * 1.6, holly = r() < 0.25, sc = 0.8 + r() * 0.4, yaw = r() * 6.3, bv = Math.floor(r() * 3), th = (r() - 0.5) * 0.02, tl = (r() - 0.5) * 0.06;
       const x = t.x + Math.cos(a) * d, z = t.z + Math.sin(a) * d;
@@ -128,13 +140,14 @@ export function planWoodland(site: WoodlandSite, trees: SourceTree[], backdrop: 
   };
   const { x0, x1, z0, z1 } = site.bounds;
   // ferns in hollows and at tree feet
-  for (const [cx, cz] of scatter(stream(S, 'fern-scatter'), x0, x1, z0 + 1.4, z1 - 2, 6.5, 900, (x, z) => free(x, z, 2.0))) { const r = stream(S, 'fern', cx, cz); patch('fern', r, cx, cz, 2 + Math.floor(r() * 4), 2.2, [0.9, 0.5], 1.5); }
+  for (const [cx, cz] of scatter(stream(S, 'fern-scatter'), x0, x1, z0 + 1.4, z1 - 2, 6.5 / Math.sqrt(cover), Math.round(900 * K * cover), (x, z) => free(x, z, 2.0))) { const r = stream(S, 'fern', cx, cz); patch('fern', r, cx, cz, 2 + Math.floor(r() * 4), 2.2, [0.9, 0.5], 1.5); }
   // bilberry carpets under the pines; lily of the valley under oaks and beeches (one stream per anchor tree)
   for (const t of pines) { const r = stream(S, 'bilberry', t.x, t.z); if (r() < 0.8) { const cx = t.x + (r() - 0.5) * 3, cz = t.z + (r() - 0.5) * 3; patch('bilberry', r, cx, cz, 6 + Math.floor(r() * 7), 3.4, [0.9, 0.6], 1.6); } }
   for (const t of broadleaves) { const r = stream(S, 'lily', t.x, t.z); if (r() < 0.4) { const a = r() * 6.3, d = 1.0 + r() * 1.2; patch('lily', r, t.x + Math.cos(a) * d, t.z + Math.sin(a) * d, 4 + Math.floor(r() * 5), 1.1, [0.9, 0.5], 1.6); } }
   // foxgloves in the lighter openings set back from the path; wood anemones in drifts near the broadleaves
-  for (const [cx, cz] of scatter(stream(S, 'foxglove-scatter'), x0 + 3, x1 - 3, z0 + 2.4, 34, 8.5, 400, (x, z) => free(x, z, 2.3) && pathDist(x, z) < 6 && !treeNear(x, z, 2.2))) { const r = stream(S, 'foxglove', cx, cz); patch('foxglove', r, cx, cz, 2 + Math.floor(r() * 4), 1.4, [0.85, 0.35], 2.0, 1.2); }
-  for (const [cx, cz] of scatter(stream(S, 'anemone-scatter'), x0 + 4, x1 - 4, z0 + 2.4, 30, 7, 300, (x, z) => free(x, z, 1.8) && nearOf(broadleaves, x, z, 5))) { const r = stream(S, 'anemone', cx, cz); patch('anemone', r, cx, cz, 5 + Math.floor(r() * 5), 1.6, [0.9, 0.4], 1.4); }
+  const [fz0, fz1] = opt.foxBand ?? [z0 + 2.4, 34], [az0, az1] = opt.anemoneBand ?? [z0 + 2.4, 30];
+  for (const [cx, cz] of scatter(stream(S, 'foxglove-scatter'), x0 + 3, x1 - 3, fz0, fz1, 8.5, Math.round(400 * K), (x, z) => free(x, z, 2.3) && pathDist(x, z) < 6 && !treeNear(x, z, 2.2))) { const r = stream(S, 'foxglove', cx, cz); patch('foxglove', r, cx, cz, 2 + Math.floor(r() * 4), 1.4, [0.85, 0.35], 2.0, 1.2); }
+  for (const [cx, cz] of scatter(stream(S, 'anemone-scatter'), x0 + 4, x1 - 4, az0, az1, 7, Math.round(300 * K), (x, z) => free(x, z, 1.8) && nearOf(broadleaves, x, z, 5))) { const r = stream(S, 'anemone', cx, cz); patch('anemone', r, cx, cz, 5 + Math.floor(r() * 5), 1.6, [0.9, 0.4], 1.4); }
   // verge: grass clumps with gaps and the odd stone along every path segment (one stream per segment)
   const stones: PlacedStone[] = [];
   for (const p of site.paths) for (let i = 1; i < p.length; i++) {
@@ -156,7 +169,7 @@ export function planWoodland(site: WoodlandSite, trees: SourceTree[], backdrop: 
     }
   }
   // loose tufts in the openings, sedge near trees (one stream per tuft)
-  for (const [x, z] of scatter(stream(S, 'grass-scatter'), x0, x1, z0 + 1.4, z1 - 2, 2.6, 2500, (x, z) => free(x, z, 2.2) && !treeNear(x, z, 1.4))) {
+  for (const [x, z] of scatter(stream(S, 'grass-scatter'), x0, x1, z0 + 1.4, z1 - 2, 2.6 / Math.sqrt(cover), Math.round(2500 * K * cover), (x, z) => free(x, z, 2.2) && !treeNear(x, z, 1.4))) {
     const r = stream(S, 'grass', x, z), keep = r() < 0.55, pick = r(), sc = r(), yaw = r() * 6.3, th = (r() - 0.5) * 0.02, tl = r() - 0.5;
     if (keep) put('grass', nearOf(trees, x, z, 3) ? 3 : [0, 0, 1, 2][Math.floor(pick * 4)], x, z, 0.7 + sc * 0.5, yaw, th, tl);
   }
@@ -165,7 +178,7 @@ export function planWoodland(site: WoodlandSite, trees: SourceTree[], backdrop: 
   for (const t of trees) {
     if (t.kind === 'pine') continue;
     const r = stream(S, 'litter', t.x, t.z);
-    for (let i = 0; i < 22; i++) {
+    for (let i = 0; i < (opt.litterN ?? 22); i++) {
       const a = r() * Math.PI * 2, d = 0.5 + Math.sqrt(r()) * 3.2, yaw = r() * 6.3, sc = 0.8 + r() * 0.7, color = Math.floor(r() * 4);
       const x = t.x + Math.cos(a) * d, z = t.z + Math.sin(a) * d;
       if (!site.inArea(x, z) || site.keepClear(x, z) || pathDist(x, z) < 0.4) continue;

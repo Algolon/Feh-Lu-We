@@ -9,7 +9,8 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import { World, type GameApi } from '../interactions/world';
 import type { SceneExtras } from '../core/game';
 import { makeCtx, floor, type Ctx } from './arch';
-import { Batcher, box, boxMM, cyl, blob, compound, getKit, v3 } from './kit';
+import { Batcher, box, boxMM, cyl, blob, compound, getKit, v3, geo } from './kit';
+import { softBox, projectUV } from './artkit';
 import { table, chair, lantern, plant, staticLantern } from './furniture';
 import { Vegetation, scatter, distToPolyline, smooth } from './nature';
 import { buildManor } from './manor';
@@ -17,11 +18,13 @@ import { buildConservatory } from './conservatory';
 import { buildCottage } from './cottage';
 import { buildWellness } from './wellness';
 import { buildGrounds } from './grounds';
-import { buildForest, forestTreePoints, buildWoodlandMasses } from './forest';
+import { buildForest, buildWoodlandMasses } from './forest';
+import { EstateWoods } from './estateWoods';
 import { buildBoslust } from './boslust';
 import { addEnvironment } from './env';
 import { ART } from '../core/artflags';
-import { inZone, inBackdrop, addBackdrop, zoneGround, zonePathWidth, zonePathTint, pathVerge, finishZone } from './boslustSample';
+import { zoneGround, zonePathWidth, zonePathTint, pathVerge, finishZone, TreeGrid } from './boslustSample';
+import { DENSE_WOODS } from './boslustZone';
 import { makeLamp, makeAction, makeDoor, makePickup, place } from '../interactions/props';
 import { pressLantern } from '../puzzles/rules';
 import { addClue } from '../core/state';
@@ -61,22 +64,31 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   const groundsC = makeCtx(w.col, 'grounds');
   const ugC = makeCtx(w.col, 'ug');
 
-  buildGround(w);
+  // DEV-03: every tree of the layout goes to the estate woodland (woodkit); the cypresses stay clipped garden columns.
+  // Old undergrowth blobs in the woodland (ferns, shrubs, rocks, flowers, grass, stumps) are replaced by the planned
+  // understory; toadstools stay. Random draws are still made, so nothing else moves.
+  // ?ext=base keeps the DEV-02 blob woodland for side-by-side comparison (review=boslust "Toon oud")
+  const woods = ART.ext === 'sample' ? new EstateWoods() : null;
+  if (woods) {
+    veg.capture = (t, chunk) => { if (t.kind === 'cypress') return false; woods.addTree(t, chunk); return true; };
+    const inWoodland = (x: number, z: number) => z < ESTATE.forestEdge + 1 || DENSE_WOODS.some((m) => inR(x, z, m, 1));
+    veg.drop = (x, z, kind) => kind !== 'cap' && kind !== 'stem' && inWoodland(x, z);
+  }
   buildPaths(w, ground);
   buildBoundary(w, g, ground, veg);
   buildManor(w, g, manorC, manorIn, manorB);
   buildConservatory(w, g, consC);
   buildWellness(w, gardenC);
   buildCottage(w, g, cotC);
-  // art sample (?ext=sample): old visuals in the BOSLUST zone are generated but discarded
-  if (ART.ext === 'sample') veg.drop = (x, z) => inZone(x, z); // zone stumps are rebuilt by stumpsV2 (same colliders)
-  buildForest(w, g, forestC, veg);
+  buildForest(w, g, forestC, veg, woods);
   buildBoslust(w, g, forestC, ugC, veg);
-  veg.drop = null;
-  if (ART.ext === 'sample') finishZone(w);
   buildWoodlandMasses(w, veg);
-  buildGrounds(w, g, groundsC, veg);
-  buildGarden(w, g, gardenC, veg);
+  buildGrounds(w, g, groundsC, veg, woods);
+  buildGarden(w, g, gardenC, veg, woods);
+  veg.drop = null; veg.capture = null;
+  woods?.build(w, forestC);
+  finishZone(w);
+  buildGround(w, woods ? new TreeGrid(woods.points()) : null);
 
   for (const c of [ground, manorC, manorIn, manorB, consC, cotC, forestC, gardenC, groundsC, ugC]) c.b.build(w.scene);
   for (const m of veg.build(w.scene, true)) m.userData.region = 'outdoor';
@@ -90,16 +102,19 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   // furnishings per area: listed rooms are the ones from which that area can actually be seen (seen from
   // outside through the front door, only the vestibule and hall furnishings are drawn)
   w.roomRegion(['manor'], [...manorRooms, 'out', 'cons'], 130);
-  w.roomRegion(['mIn'], manorRooms);
-  w.roomRegion(['mHall'], ['vestibule', 'hall', 'living', 'lobby', 'billiard', 'frontGallery', 'walkway', 'landing']);
-  w.roomRegion(['mLib'], ['library', 'libGallery', 'living', 'lobby']);
-  w.roomRegion(['mWing'], ['dining', 'kitchen', 'corridor', 'workshop', 'pantry', 'utility', 'guestWC', 'lobby']);
-  w.roomRegion(['mUp'], ['frontGallery', 'walkway', 'landing', 'libGallery', 'reis', 'sterren', 'bath', 'ucorr', 'study', 'botanic', 'storage', 'library', 'linen', 'rearNook', 'rearNookEast', 'atticStair']);
-  w.roomRegion(['mAttic'], [...atticRooms, 'atticStair']); // seen through the open stair doors (atticStair is then visible)
+  // DEV-03: interiors seen from OUTSIDE (through an open door) only within ~30 m of the house: beyond that the opening
+  // is a few pixels, but drawing the hall's furnishings from the forest cost ~100 k triangles (render budget)
+  const IN_FAR = 30;
+  w.roomRegion(['mIn'], manorRooms, Infinity, IN_FAR);
+  w.roomRegion(['mHall'], ['vestibule', 'hall', 'living', 'lobby', 'billiard', 'frontGallery', 'walkway', 'landing'], Infinity, IN_FAR);
+  w.roomRegion(['mLib'], ['library', 'libGallery'], Infinity, IN_FAR); // DEV-03: drawn when the library itself is visible (its doors open), not whenever the living room or lobby is
+  w.roomRegion(['mWing'], ['dining', 'kitchen', 'corridor', 'workshop', 'pantry', 'utility', 'guestWC', 'lobby'], Infinity, IN_FAR);
+  w.roomRegion(['mUp'], ['frontGallery', 'walkway', 'landing', 'libGallery', 'reis', 'sterren', 'bath', 'ucorr', 'study', 'botanic', 'storage', 'library', 'linen', 'rearNook', 'rearNookEast', 'atticStair'], Infinity, IN_FAR);
+  w.roomRegion(['mAttic'], [...atticRooms, 'atticStair'], Infinity, IN_FAR); // seen through the open stair doors (atticStair is then visible)
   w.roomRegion(['mB'], basementRooms);
   w.roomRegion(['ug'], ugRooms);
   w.roomRegion(['cons', 'glass'], ['cons', 'out', 'corridor'], 95);
-  w.roomRegion(['cottageIn'], ['cottageEntry', 'cottageRoom']);
+  w.roomRegion(['cottageIn'], ['cottageEntry', 'cottageRoom'], Infinity, 25);
   w.roomRegion(['cottage'], ['out', 'cottageEntry', 'cottageRoom'], 75); // a landmark across the lake: visible from the terrace and the lawn
   w.roomRegion(['ground', 'paths', 'wall', 'fence', 'garden', 'grounds', 'forest', 'outdoor', 'hills'], ['out', 'cons', 'sauna', 'shed', 'cottageEntry', 'cottageRoom']);
 
@@ -110,6 +125,28 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
     { name: 'garden', pose: { x: 90, y: 0, z: 122, yaw: 0, pitch: 0 } },
   );
 
+  // exterior openings for the indoor view test (World.exteriorDoors): open doors to 'out' and glass walls
+  for (const p of R.portals) {
+    if (p.a !== 'out' && p.b !== 'out') continue;
+    if (p.kind === 'door' && p.door) {
+      const it = w.byId.get(p.door);
+      if (!it) continue;
+      it.hit[0].updateWorldMatrix(true, false);
+      const v = it.hit[0].getWorldPosition(new THREE.Vector3());
+      w.exteriorDoors.push({ door: p.door, x: v.x, y: v.y, z: -v.z, r: 0.9 });
+    } else if (p.kind === 'glass') {
+      // a glass room shows the outdoors: its doors from the house count as exterior openings
+      const glassRoom = p.a === 'out' ? p.b : p.a;
+      for (const q of R.portals) {
+        if (!q.door || q.kind !== 'door' || (q.a !== glassRoom && q.b !== glassRoom) || q.a === 'out' || q.b === 'out') continue;
+        const it = w.byId.get(q.door);
+        if (!it) continue;
+        it.hit[0].updateWorldMatrix(true, false);
+        const v = it.hit[0].getWorldPosition(new THREE.Vector3());
+        w.exteriorDoors.push({ door: q.door, x: v.x, y: v.y, z: -v.z, r: 0.9 });
+      }
+    }
+  }
   const isIndoor = (x: number, z: number, y = 0) => R.roomAt(x, y + 0.8, z) !== 'out';
   const surfaceAt = (x: number, z: number, y = 0): 'grass' | 'wood' | 'stone' => {
     const room = R.roomAt(x, y + 0.8, z);
@@ -125,14 +162,13 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
 
 // ---------------------------------------------------------------------------------------------
 // Ground: one indexed heightfield (same 2 m grid + triangle split as collision), holes under buildings.
-function buildGround(w: World) {
+function buildGround(w: World, trees: TreeGrid | null) {
   const k = getKit();
   const r = mulberry32(3);
   const { NX, NZ, X0: GX0, Z0: GZ0 } = TERRAIN_DIMS;
   const n = (NX + 1) * (NZ + 1);
   const pos = new Float32Array(n * 3), uv = new Float32Array(n * 2), col = new Float32Array(n * 3);
-  const zoneTreePts = ART.ext === 'sample' ? forestTreePoints().filter(([x, z]) => inZone(x, z)) : null;
-  const forest = new THREE.Color('#6f8c43'), lawn = new THREE.Color('#9cc05e'), moss = new THREE.Color('#5d7a38'), dirt = new THREE.Color('#9a8456'), hillC = new THREE.Color('#7f9a4a');
+  const forest = new THREE.Color('#6f8c43'), lawn = new THREE.Color(ART.ext === 'sample' ? '#8eac58' : '#9cc05e'), moss = new THREE.Color('#5d7a38'), dirt = new THREE.Color('#9a8456'), hillC = new THREE.Color('#7f9a4a');
   const c = new THREE.Color();
   for (let j = 0; j <= NZ; j++) for (let i = 0; i <= NX; i++) {
     const vi = j * (NX + 1) + i, x = GX0 + i * TCELL, z = GZ0 + j * TCELL, h = gridAt(i, j);
@@ -150,7 +186,7 @@ function buildGround(w: World) {
     const lq = lakeQ(x, z);
     if (lq < 1.35) c.lerp(new THREE.Color('#7a7a4a'), 0.5 * (1 - Math.max(0, lq - 1) / 0.35));
     if (inR(x, z, COTTAGE_PAD)) c.lerp(dirt, 0.15);
-    if (zoneTreePts) zoneGround(x, z, c, zoneTreePts);
+    if (trees) zoneGround(x, z, c, trees); // DEV-03: the woodland floor wherever the woodland weight is > 0
     col.set([c.r, c.g, c.b], vi * 3);
   }
   const idx: number[] = [];
@@ -178,7 +214,7 @@ function buildGround(w: World) {
     for (let j = 0; j <= N; j++) for (let i = 0; i <= N; i++) {
       const x = x0 + i * S, z = z0 + j * S, h = entranceMound(x, z);
       mp.push(x, h, -z); mu.push(x / 5, z / 5);
-      c.copy(hillC).lerp(moss, 0.35 + 0.3 * Math.sin(i * 1.7 + j)); if (zoneTreePts) zoneGround(x, z, c, zoneTreePts); mc.push(c.r, c.g, c.b);
+      c.copy(hillC).lerp(moss, 0.35 + 0.3 * Math.sin(i * 1.7 + j)); if (trees) zoneGround(x, z, c, trees); mc.push(c.r, c.g, c.b);
     }
     for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) { const a = j * (N + 1) + i; mi.push(a, a + 1, a + N + 2, a, a + N + 2, a + N + 1); }
     const mg = new THREE.BufferGeometry();
@@ -267,14 +303,14 @@ function buildPaths(w: World, c: Ctx) {
     c.b.add(k.M.dirt, gg, new THREE.Matrix4(), color, 'paths', false, 0);
     gg.dispose();
   };
-  add(smooth(DRIVEWAY, 2), 4.2, '#d8c3a0');
+  add(smooth(DRIVEWAY, 2), 4.2, '#d4cfc2'); // DEV-03: near-neutral tint on the gravel texture (texture × warm tint read as orange clay)
   if (ART.ext === 'sample') {
     for (const p of FOREST_PATHS) { const gg = zonePathTint(drape(p, 1.9, 0.035, zonePathWidth)); c.b.add(k.M.dirt, gg, new THREE.Matrix4(), '#c8ad80', 'paths', false, 0); gg.dispose(); }
     pathVerge(w, FOREST_PATHS, (k.M.dirt as THREE.MeshLambertMaterial).map!);
   }
   else for (const p of FOREST_PATHS) add(p, 1.9, '#c8ad80');
   // DEV-02 routes: cottage out/back, terrace → lanterns → lake view, east glade loop, wellness, BBQ, wickerman, golf
-  for (const r of ROUTE_LINES) add(r.pts, r.width, r.id === 'wickermanLoop' || r.id === 'golfSpur' ? '#c8ad80' : '#e2d2b0');
+  for (const r of ROUTE_LINES) add(r.pts, r.width, r.id === 'wickermanLoop' || r.id === 'golfSpur' ? '#c8ad80' : '#d9d2c2');
   // forecourt: the gravel court itself is one surface built with the arrival (grounds.ts); the central planter stays
   cyl(c.b, k.M.stone, '#d8ccb0', SITES.forecourt.x, 0, SITES.forecourt.z, 1.8, 1.9, 0.45, 18, { chunk: 'ground', uv: 1 });
   cyl(c.b, k.M.paint, '#6a5040', SITES.forecourt.x, 0.45, SITES.forecourt.z, 1.6, 1.6, 0.02, 18, { chunk: 'ground' });
@@ -317,21 +353,16 @@ function buildBoundary(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
   // woodland continues beyond the fence (visual only): low-poly crowns
   const r = mulberry32(77);
   const outside = scatter(r, -18, W + 18, -18, D + 18, 5.6, 6000, (x, z) => x < -0.8 || x > W + 0.8 || z < -1.5 || z > D + 0.8);
-  // art sample: the nearest row beyond the fence behind the BOSLUST zone is its backdrop; those trees get the
-  // sample's models (generated-then-discarded here, so the random sequence and every other tree are unchanged)
-  if (ART.ext === 'sample') veg.drop = (x, z) => inBackdrop(x, z);
   for (const [x, z] of outside) {
     const kind = r() < 0.25 ? 'pine' : 'oak';
     const spec = { x, z, h: kind === 'pine' ? 6 + r() * 3 : 3.5 + r() * 2.5, r: 1.8 + r() * 1.0, kind, hue: r() - 0.5, y: terrainHeight(x, z) } as const;
-    veg.tree(spec, 'outer'); // DEV-02: one chunk for the low-poly ring beyond the fence (3 draw calls instead of 12)
-    if (ART.ext === 'sample' && inBackdrop(x, z)) addBackdrop({ ...spec, y: terrainHeight(x, z) });
+    veg.tree(spec, 'outer'); // DEV-03: captured by the estate woodland (woodkit trees, LOD by distance)
   }
-  veg.drop = null;
 }
 
 // ---------------------------------------------------------------------------------------------
 // Garden: dining terrace, open lawn with the lantern circle (thread C), scattered trees and flowers.
-function buildGarden(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
+function buildGarden(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods: EstateWoods | null) {
   const k = c.k;
   const r = mulberry32(19);
   // dining terrace along the garden façade (level with the ground floor)
@@ -346,7 +377,7 @@ function buildGarden(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
     const l = lantern(w, x, GF + 0.76, 114, 0.5);
     makeLamp(w, g, { id: `lamp.terrace.${x}`, ...l, name: 'tafellantaarn', defaultOn: true, intensity: 3, distance: 6, hit: [0.3, 0.4, 0.3] });
   }
-  for (const [x, z] of [[78.6, 110.6], [101.4, 110.6], [78.6, 116.4], [101.4, 116.4], [96, 116.4]] as const) plant(c, x, z, GF, 1.2, '#c9774a');
+  for (const [x, z] of [[78.6, 110.6], [102.4, 110.6], [78.6, 116.4], [101.4, 116.4], [96, 116.4]] as const) plant(c, x, z, GF, 1.2, '#c9774a'); // DEV-03: the pot by the kitchen back door clears its doorway
   staticLantern(c, w, 95, 2.4, 110.25, 0.7, 0, 3, 7);
 
   // three lantern posts in a circle on the open lawn around a flat stone (thread C)
@@ -445,11 +476,15 @@ function buildGarden(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
     w.col.addCircle(x, z, 0.25, 0, 6);
   }
   // flower patches and low shrubs (no collision)
+  // DEV-03: flower beds of woodland-kit plants (foxglove for the purple, anemone for the white/pink/yellow) instead of
+  // icosahedron "crystals"; the random draws are still made, so nothing else in the garden moves
   const patch = (cx: number, cz: number, rad: number, n: number, colors: string[]) => {
     for (let i = 0; i < n; i++) {
       const a = r() * Math.PI * 2, d = Math.sqrt(r()) * rad;
       const fx = cx + Math.cos(a) * d, fz = cz + Math.sin(a) * d, sz = 0.12 + r() * 0.08, col = colors[Math.floor(r() * colors.length)];
-      if (vegetationClear(fx, fz, 'small')) veg.smallThing('flower', fx, fz, sz, col, 'garden', terrainHeight(fx, fz));
+      if (!vegetationClear(fx, fz, 'small')) continue;
+      if (woods) woods.addPlant(col.startsWith('#b8') || col.startsWith('#9a') ? 'foxglove' : 'anemone', i, fx, fz, 0.8 + sz * 1.5);
+      else veg.smallThing('flower', fx, fz, sz, col, 'garden', terrainHeight(fx, fz));
     }
   };
   const purple = ['#b89ad8', '#9a7ac8', '#f2f0e6', '#e8a8c8'];
@@ -466,20 +501,54 @@ function buildGarden(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
     Math.hypot(x - LC.x, z - LC.z) > 5.5 && distToPolyline(x, z, DRIVEWAY) > 3 && Math.hypot(x - SITES.forecourt.x, z - SITES.forecourt.z) > 10.5;
   for (const [x, z] of scatter(r, 2, ESTATE.w - 2, ESTATE.forestEdge, ESTATE.d - 2, 5.0, 2200, clearOf)) {
     const flower = r() < 0.55, v = r();
-    if (flower) veg.smallThing('flower', x, z, 0.14, purple[Math.floor(v * 4)], 'garden', terrainHeight(x, z));
+    if (woods) { if (flower && v < 0.4) for (let q = 0; q < 3; q++) woods.addPlant('anemone', q, x + (q - 1) * 0.25, z + ((q * 7) % 3 - 1) * 0.2, 0.9); } // a calm lawn: a few low clumps, no pebble shrubs
+    else if (flower) veg.smallThing('flower', x, z, 0.14, purple[Math.floor(v * 4)], 'garden', terrainHeight(x, z));
     else veg.smallThing('shrub', x, z, 0.4 + v * 0.3, '#5a8a3e', 'garden', terrainHeight(x, z));
   }
-  // soft meadow: grass tufts across the lawns (instanced, tiled so only nearby tiles draw)
-  for (const [x, z] of scatter(r, 2, ESTATE.w - 2, ESTATE.forestEdge - 4, ESTATE.d - 2, 2.2, 11000, (x, z) => clearOf(x, z) || (z > 118 && vegetationClear(x, z, 'small') && !inWood(x, z) && Math.hypot(x - LC.x, z - LC.z) > 4.5))) {
+  // soft meadow: grass tufts across the lawns (instanced, tiled so only nearby tiles draw; DEV-03: 2.5 m spacing, the
+  // low flowers and the woodland understory carry the ground detail now)
+  for (const [x, z] of scatter(r, 2, ESTATE.w - 2, ESTATE.forestEdge - 4, ESTATE.d - 2, 2.5, 11000, (x, z) => clearOf(x, z) || (z > 118 && vegetationClear(x, z, 'small') && !inWood(x, z) && Math.hypot(x - LC.x, z - LC.z) > 4.5))) {
     const size = 0.25 + r() * 0.2, col = r() < 0.5 ? '#7fae4a' : '#94bc58';
     veg.smallThing('grass', x, z, size, col, `gr${Math.floor(x / 40)}_${Math.floor(z / 40)}`, terrainHeight(x, z));
   }
-  for (let i = 0; i < 18; i++) {
-    const a = (i / 18) * Math.PI * 2, d = 0.9 + (i % 3) * 0.2;
-    veg.smallThing(i % 4 === 0 ? 'shrub' : 'flower', SITES.forecourt.x + Math.cos(a) * d, SITES.forecourt.z + Math.sin(a) * d, i % 4 === 0 ? 0.35 : 0.14, i % 4 === 0 ? '#4f7f38' : purple[i % 4], 'garden', 0.46);
+  if (woods) {
+    // forecourt planter: a clipped box ball in the middle, a ring of foxgloves and anemones (planted in the soil)
+    const k2 = c.k;
+    blob(c.b, k2.M.foliage, '#3f5f34', SITES.forecourt.x, 0.95, SITES.forecourt.z, 0.75, 0.6, 0.75, { chunk: c.chunk });
+    for (let i = 0; i < 14; i++) { const a = (i / 14) * Math.PI * 2, d = 1.25 + (i % 2) * 0.15; woods.addPlant(i % 3 ? 'anemone' : 'foxglove', i, SITES.forecourt.x + Math.cos(a) * d, SITES.forecourt.z + Math.sin(a) * d, 0.9, 0.45); }
+    // clipped box hedges along the manor front (two runs, the approach to the porch open), on a low collider
+    // one clipped piece per run (DEV-03 budget: 16 short pieces cost 9.4 k triangles in the forecourt view; one
+    // piece per run with the same wavy clipped top costs ~2 k)
+    for (const [x0, x1] of [[72.6, 84.9], [95.1, 107.4]] as const) {
+      geo(c.b, k2.M.foliage, '#3f5f34', hedgeGeo(x1 - x0), (x0 + x1) / 2, 0, 79.2, { chunk: c.chunk });
+      w.col.addBox(x0, x1, 78.85, 79.55, 0, 0.75);
+    }
+  } else {
+    for (let i = 0; i < 18; i++) {
+      const a = (i / 18) * Math.PI * 2, d = 0.9 + (i % 3) * 0.2;
+      veg.smallThing(i % 4 === 0 ? 'shrub' : 'flower', SITES.forecourt.x + Math.cos(a) * d, SITES.forecourt.z + Math.sin(a) * d, i % 4 === 0 ? 0.35 : 0.14, i % 4 === 0 ? '#4f7f38' : purple[i % 4], 'garden', 0.46);
+    }
+    // hedges along the manor front, leaving the approach to the porch open
+    for (let x = 72.5; x < 107.6; x += 1.1) if (Math.abs(x - 90) > 5) veg.smallThing('shrub', x, 79.15, 0.55, '#4a7a36', 'garden');
   }
-  // hedges along the manor front, leaving the approach to the porch open
-  for (let x = 72.5; x < 107.6; x += 1.1) if (Math.abs(x - 90) > 5) veg.smallThing('shrub', x, 79.15, 0.55, '#4a7a36', 'garden');
+}
+
+let hedgeCache: Map<number, THREE.BufferGeometry> | null = null;
+/** A clipped hedge segment (len × 0.7 × 0.78): a soft box with a slightly domed, uneven top (foliage texture). */
+function hedgeGeo(len: number) {
+  hedgeCache ??= new Map();
+  const key = Math.round(len * 100);
+  let g = hedgeCache.get(key);
+  if (!g) {
+    g = softBox(len, 0.78, 0.7, 0.14, 2, 5).translate(0, 0.39, 0);
+    const p = g.attributes.position as THREE.BufferAttribute;
+    for (let i = 0; i < p.count; i++) { const y = p.getY(i); if (y > 0.6) p.setY(i, y + 0.04 * Math.sin(p.getX(i) * 4.1) * Math.cos(p.getZ(i) * 5.3)); }
+    g.computeVertexNormals();
+    projectUV(g, 0.6);
+    g.userData.shared = true;
+    hedgeCache.set(key, g);
+  }
+  return g;
 }
 
 /** Landmarks whose name appears on the map only once visited (no puzzle answers are ever shown). */

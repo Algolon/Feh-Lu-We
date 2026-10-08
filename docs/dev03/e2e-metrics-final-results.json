@@ -1,0 +1,92 @@
+[
+  {
+    "name": "render low (phone default): gate (driveway)",
+    "ok": true,
+    "detail": "99 calls, 237325 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): gate (driveway)",
+    "ok": true,
+    "detail": "110 calls, 379332 tris"
+  },
+  {
+    "name": "render low (phone default): forecourt → manor",
+    "ok": true,
+    "detail": "135 calls, 249069 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): forecourt → manor",
+    "ok": true,
+    "detail": "171 calls, 409030 tris"
+  },
+  {
+    "name": "render low (phone default): entrance hall",
+    "ok": true,
+    "detail": "97 calls, 169832 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): entrance hall",
+    "ok": true,
+    "detail": "128 calls, 295604 tris"
+  },
+  {
+    "name": "render low (phone default): library",
+    "ok": true,
+    "detail": "54 calls, 127766 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): library",
+    "ok": true,
+    "detail": "71 calls, 210338 tris"
+  },
+  {
+    "name": "render low (phone default): garden → manor + conservatory",
+    "ok": true,
+    "detail": "139 calls, 209462 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): garden → manor + conservatory",
+    "ok": true,
+    "detail": "167 calls, 299139 tris"
+  },
+  {
+    "name": "render low (phone default): forest (shed area)",
+    "ok": true,
+    "detail": "33 calls, 160422 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): forest (shed area)",
+    "ok": true,
+    "detail": "60 calls, 389197 tris"
+  },
+  {
+    "name": "render low (phone default): BOSLUST cut",
+    "ok": true,
+    "detail": "88 calls, 215476 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): BOSLUST cut",
+    "ok": true,
+    "detail": "102 calls, 351142 tris"
+  },
+  {
+    "name": "render low (phone default): conservatory pool",
+    "ok": true,
+    "detail": "104 calls, 176940 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): conservatory pool",
+    "ok": true,
+    "detail": "158 calls, 311762 tris"
+  },
+  {
+    "name": "render low (phone default): gathering room",
+    "ok": true,
+    "detail": "28 calls, 20482 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): gathering room",
+    "ok": true,
+    "detail": "36 calls, 31750 tris"
+  }
+]

@@ -20,7 +20,8 @@ async function newPage(opts = {}) {
   page.on('pageerror', (e) => page.problems.push(`pageerror: ${e.message}`));
   page.on('console', (m) => { if (m.type() === 'error') page.problems.push(`console: ${m.text()}`); });
   page.on('response', (r) => { if (r.status() >= 400) page.problems.push(`HTTP ${r.status()} ${r.url()}`); });
-  page.on('requestfailed', (r) => page.problems.push(`failed ${r.url()}`));
+  // a navigation (goto / reload) cancels a favicon fetch still in flight: that is not a missing asset
+  page.on('requestfailed', (r) => { if (!(/favicon/.test(r.url()) && /ERR_ABORTED/.test(r.failure()?.errorText ?? ''))) page.problems.push(`failed ${r.url()}`); });
   return { ctx, page };
 }
 async function startGame(page, query = '?autotest=1', fresh = true) {
@@ -704,8 +705,9 @@ async function regressions() {
     await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: pt.x, y: pt.y, id: 9 }] });
     await t.page.waitForTimeout(80);
     await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-    await t.page.waitForTimeout(300);
-    const taken = await t.page.evaluate(() => __game.state.taken.includes('pk.torch'));
+    // DEV-03: wait for the tap to be processed by the next frames instead of a fixed 300 ms (the software renderer
+    // runs the furnished tutorial room at ~130 ms per frame; the check is that the tap interacts, not its latency)
+    const taken = await t.page.waitForFunction(() => __game.state.taken.includes('pk.torch'), null, { timeout: 2000 }).then(() => true, () => false);
     log('F05 stationary tap on the left side of the screen interacts', taken && pt.x < 844 * 0.42, `tap at ${pt.x.toFixed(0)},${pt.y.toFixed(0)}`);
   } catch (e) {
     log('F05', false, e.message.split('\n')[0]);
@@ -821,7 +823,7 @@ async function artSample() {
   const aims = [[[75.4, 86.7], [72.9, 1.55, 86.7]], [[75.2, 86.0], [72.75, 0.5, 86.7]], [[82.6, 85.0], [84.2, 1.2, 83.6]], [[82.6, 91.2], [83.9, 0.7, 92.4]], [[77.2, 86.7], [72.9, 1.45, 85.0]]];
   const aimAll = (list) => list.map(([[x, z], [tx, ty, tz]]) => { const g = T.G(); g.player.x = x; g.player.z = z; g.player.y = 0.15; T.lookAt(tx, ty, tz); return g.metrics().target; });
   try {
-    await start('');
+    await start('art=base&light=base');
     const base = await E(page, roomContract);
     const baseAims = await E(page, aimAll, aims);
     await start(SAMPLE);
@@ -960,7 +962,7 @@ async function boslustSample() {
   const aims = [[[53.6, 7.0], [54.4, 1.75, 7.9]], [[61.4, 16.4], [60.75, 1.6, 17.97]], [[64.4, 16.6], [64.85, 1.15, 17.94]], [[63, 16.8], [63, 1.2, 18.2]], [[57.5, 8.0], [54.3, 1.8, 7.8]]];
   const aimAll = (list) => list.map(([[x, z], [tx, ty, tz]]) => { const g = T.G(); g.player.x = x; g.player.z = z; g.player.y = g.world.col.ground(x, z); T.lookAt(tx, ty, tz); return g.metrics().target; });
   try {
-    await start('');
+    await start('ext=base&light=base');
     const base = await E(page, zoneContract);
     const baseAims = await E(page, aimAll, aims);
     await start(SAMPLE);
@@ -972,7 +974,10 @@ async function boslustSample() {
     log('boslust sample: same interactables in the zone', same(base.items, smp.items), same(base.items, smp.items) ? `${smp.items.length}: ${smp.items.join(', ')}` : JSON.stringify(diff(base.items, smp.items)));
     const added = smp.lamps.filter((l) => !base.lamps.includes(l)), removed = base.lamps.filter((l) => !smp.lamps.includes(l));
     log('boslust sample: every original light kept; only the two fixed entrance lanterns added', !removed.length && added.length === 2 && added.every((l) => l.startsWith('fixed.boslust.')), JSON.stringify({ added, removed }));
-    log('boslust sample: the forest outside the zone is unchanged (all vegetation instances identical)', same(base.veg, smp.veg), `${smp.veg.length} instances${same(base.veg, smp.veg) ? '' : ' DIFF ' + JSON.stringify(diff(base.veg, smp.veg))}`);
+    // DEV-03: the woodland kit now replaces the old trees / shrubs estate-wide (EstateWoods, one multi-draw batch); what
+    // the old instanced path still draws outside the zone (cypresses, grass tufts) must be untouched — a subset of base
+    const extra = smp.veg.filter((v) => !base.veg.includes(v));
+    log('boslust sample: old vegetation left outside the zone is unchanged (subset of base; trees moved to the woodland kit)', !extra.length && smp.veg.length < base.veg.length, `${smp.veg.length}/${base.veg.length} instances${extra.length ? ' EXTRA ' + JSON.stringify(extra.slice(0, 5)) : ''}`);
     log('boslust sample: reticle targets the same objects from the same poses', same(baseAims, smpAims) && smpAims.slice(0, 4).every(Boolean), JSON.stringify({ base: baseAims, sample: smpAims }));
     // the whole entrance by real movement and the real panels: fork → cut → inscription → cover → 2413 → stair
     await start(SAMPLE, { inventory: [...ESSENTIALS, 'cipherStrip'], flags: { leftHome: true, routeRestored: true }, clues: ['c.routeRestored', 'c.letterstrook'], player: { estate: { x: 70, y: 0, z: 9.4, yaw: -Math.PI / 2, pitch: 0 } } });
