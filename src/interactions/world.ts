@@ -116,11 +116,12 @@ export class World {
       else if (this.rooms) {
         // sample around the centre so objects in doorways belong to both rooms
         const set = new Set<string>();
-        const r = Math.min(0.6, sph.radius);
-        for (const [dx, dz] of [[0, 0], [r, 0], [-r, 0], [0, r], [0, -r]]) set.add(this.rooms.roomAt(sph.center.x + dx, sph.center.y, -sph.center.z + dz));
+        const cc = (o.userData.cullCentre as THREE.Vector3 | undefined) ?? sph.center; // doors: their closed pose (DEV-04A)
+        const r = o.userData.cullCentre ? 0.6 : Math.min(0.6, sph.radius);
+        for (const [dx, dz] of [[0, 0], [r, 0], [-r, 0], [0, r], [0, -r]]) set.add(this.rooms.roomAt(cc.x + dx, cc.y, -cc.z + dz));
         // a sample poking through a wall reads as 'out'; underground and upstairs that is never true
-        const centre = this.rooms.roomAt(sph.center.x, sph.center.y, -sph.center.z);
-        if (centre !== 'out' && (sph.center.y < -0.6 || sph.center.y > 3.3)) set.delete('out');
+        const centre = this.rooms.roomAt(cc.x, cc.y, -cc.z);
+        if (centre !== 'out' && (cc.y < -0.6 || cc.y > 3.3)) set.delete('out');
         rooms = [...set];
       }
       this.cullables.push({ root: o, meshes, pos: sph.center.clone(), dist2: d * d, on: true, zone, rooms });

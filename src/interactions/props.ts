@@ -76,6 +76,9 @@ export function makeDoor(w: World, g: GameApi, o: DoorOpts) {
   pivot.add(leaf);
   const hb = hitbox(leaf, o.width, o.height, Math.max(0.2, th + 0.1), o.width / 2, o.height / 2, 0);
   w.scene.add(pivot);
+  // DEV-04A: rooms for culling are sampled round the CLOSED leaf (straddling the wall), not its current pose: a door
+  // loaded open swung its sphere into one room, and once closed it vanished (and could not be targeted) from the other
+  pivot.userData.cullCentre = v3(o.x + (dx * o.width) / 2, o.y0 + o.height / 2, o.z + (dz * o.width) / 2);
 
   const leafCollider = (hx: number, hz: number, ddx: number, ddz: number) => {
     const sx = ddx ? o.width : th + 0.08, sz = ddz ? o.width : th + 0.08;
@@ -94,6 +97,7 @@ export function makeDoor(w: World, g: GameApi, o: DoorOpts) {
     pv.add(pl);
     const phb = hitbox(pl, o.width, o.height, Math.max(0.2, th + 0.1), o.width / 2, o.height / 2, 0);
     w.scene.add(pv);
+    pv.userData.cullCentre = v3(o.pair.x + (pdx * o.width) / 2, o.y0 + o.height / 2, o.pair.z + (pdz * o.width) / 2);
     const pcol = leafCollider(o.pair.x, o.pair.z, pdx, pdz);
     const [pnx, pnz] = [-pdz * o.pair.swing, pdx * o.pair.swing];
     const sweep: Box = {
