@@ -145,9 +145,11 @@ clearing and its path.
 
 ## 7. Test results
 
-Full gate on the final branch (production build served by `vite preview`, SwiftShader Chromium):
+Complete final gate, run in one pass on **`6a00be56e39de1d96f7f497a475e5406566ae6a0`** (the PR head at closeout: all code,
+tests and evidence), clean working tree, `dist/` deleted and rebuilt from that commit, served by `vite preview`
+(SwiftShader Chromium); HEAD verified unchanged before and after the run:
 
-| Step | Result |
+| Step | Result on `6a00be5` |
 |---|---|
 | `npx tsc --noEmit` | clean |
 | `npx vitest run` | **182 / 182** tests, 13 files (incl. 11 new in `tests/dev04a.test.ts`) |
@@ -158,8 +160,8 @@ Full gate on the final branch (production build served by `vite preview`, SwiftS
 | `npm run e2e:dev02` | **34 / 34** |
 | `npm run e2e:dev01` | **34 / 34** |
 
-The last commit (wickerman clearing drawn within 40 m instead of 70 m, a culling range only) was followed by a re-run of
-`e2e:dev04a`, `e2e:dev02` and `e2e` — all green again; `e2e:dev03` and `e2e:dev01` ran on the build just before it.
+No check failed, so no fix was made. The only commit after `6a00be5` is the one that updates this section (this
+report file only; no code, test or asset change).
 
 ## 8. Performance / render counts (low quality = mobile guide ≈ 150 calls / 250 k triangles)
 
