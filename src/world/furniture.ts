@@ -412,6 +412,7 @@ export function lantern(w: World, x: number, y0: number, z: number, s = 1, yaw =
 
 export function wallSconce(w: World, x: number, y: number, z: number, yaw: number): LampModel {
   const k = getKit();
+  registerArt(artFootprint(`sconce@${x.toFixed(2)},${z.toFixed(2)}`, x, y - 0.05, z, yaw, 0.2, 0.4)); // DEV-04A: wall decor contract
   const obj = compound((b) => {
     box(b, k.M.paint, '#b8892f', 0, -0.12, 0.03, 0.1, 0.24, 0.04);
     box(b, k.M.paint, '#b8892f', 0, -0.02, -0.08, 0.04, 0.04, 0.2);
@@ -448,6 +449,7 @@ export function staticLantern(c: Ctx, w: World, x: number, y0: number, z: number
 /** Always-on wall sconce baked into the static batch. Faces plan heading yaw (away from the wall). */
 export function staticSconce(c: Ctx, w: World, x: number, y: number, z: number, yaw: number, intensity = 3, distance = 6) {
   const k = c.k;
+  registerArt(artFootprint(`sconce@${x.toFixed(2)},${z.toFixed(2)}`, x, y - 0.05, z, yaw, 0.2, 0.4)); // DEV-04A: wall decor contract
   P(c, k.M.paint, '#b8892f', x, z, yaw, 0, y - 0.12, -0.03 + 0.03, 0.1, 0.24, 0.04);
   P(c, k.M.paint, '#b8892f', x, z, yaw, 0, y - 0.02, 0.08, 0.04, 0.04, 0.2);
   const [fx, fz] = [Math.sin(yaw), Math.cos(yaw)];

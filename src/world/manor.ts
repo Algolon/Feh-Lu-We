@@ -967,7 +967,7 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   rug(c, 90, 99.7, UF + 0.01, 4.0, 2.6, 0, '#d0b8a0');
   plant(c, 85.6, 103.3, UF, 1.0);
   painting(c, 90, UF + 1.7, 103.92, Math.PI, 1.1, 0.8, 2);
-  const ls = wallSconce(w, 92.5, UF + 1.9, 103.9, Math.PI);
+  const ls = wallSconce(w, 93.7, UF + 1.9, 103.9, Math.PI); // DEV-04A: it hung in the rear-nook arch (x 91.4–92.6)
   makeLamp(w, g, { id: 'lamp.landing', ...ls, name: 'wandlamp', defaultOn: true, intensity: 4, distance: 7, hit: [0.4, 0.5, 0.4], patch: { y: UF + 0.03, r: 1.3 } });
   painting(c, 85.12, UF + 1.6, 93, Math.PI / 2, 0.9, 0.7, 5);
   rug(c, 90, 82.2, UF + 0.01, 3.4, 2.2, 0, '#c8b0a0');

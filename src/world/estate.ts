@@ -99,6 +99,7 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   w.scene.userData.supportWarnings = [...supportWarnings];
   if (supportWarnings.length) console.warn('DEV-04A support contract:', JSON.stringify(supportWarnings));
   const artBad = wallArtConflicts(openings);
+  w.scene.userData.artConflicts = artBad;
   if (artBad.length) console.warn('DEV-04A wall-art contract:', JSON.stringify(artBad));
   for (const m of veg.build(w.scene, true)) m.userData.region = 'outdoor';
 
