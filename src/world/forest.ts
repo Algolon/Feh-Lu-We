@@ -6,8 +6,9 @@
 import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, floor, gableRoof } from './arch';
-import { box, boxMM, cyl, rod, blob, compound, v3, planMatrix } from './kit';
-import { lantern, crate, part, staticLantern } from './furniture';
+import { box, boxMM, cyl, rod, blob, compound, v3, planMatrix, getKit } from './kit';
+import { lantern, crate, part, staticLantern, joinery } from './furniture';
+import { Asm, artMats, lathe, softBox, projectUV } from './artkit';
 import { makeFire } from './fire';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeAction, makeInspect, place } from '../interactions/props';
 import { Vegetation, scatter, distToPolyline } from './nature';
@@ -21,12 +22,29 @@ import { vegetationClear } from './footprints';
 import { FOREST_PATHS, terrainHeight } from './terrain';
 import { ART } from '../core/artflags';
 import { signpostV2, stumpsV2 } from './boslustSample';
-import { woodMats, rockModel, logModel } from './woodkit';
+import { woodMats, rockModel, logModel, splitLogModel } from './woodkit';
 import type { EstateWoods } from './estateWoods';
 
 const FIRE_STONE = (() => { const g = rockModel(61); g.userData.keepColor = true; return g; })();
-const BENCH_LOG = logModel(131, 2.2, 0.21);
-const SPLIT_LOG = logModel(137, 0.9, 0.1).translate(-0.45, -0.07, 0);
+/** DEV-04B hearth stone: the same rock, recoloured — no moss on a fire ring: weathered grey, sooted toward the fire's
+ * side (local −x after placement faces the fire) and toward the ground. */
+const HEARTH_STONE = (() => {
+  const g = rockModel(61).clone(), p = g.attributes.position as THREE.BufferAttribute, c = new Float32Array(p.count * 3);
+  g.computeBoundingBox();
+  const b = g.boundingBox!;
+  for (let i = 0; i < p.count; i++) {
+    const ty = (p.getY(i) - b.min.y) / (b.max.y - b.min.y), tx = (p.getX(i) - b.min.x) / (b.max.x - b.min.x);
+    const k = (0.55 + 0.45 * THREE.MathUtils.smoothstep(ty, 0, 0.7)) * (0.55 + 0.45 * THREE.MathUtils.smoothstep(tx, 0.05, 0.6));
+    c.set([k, k * 0.97, k * 0.93], i * 3);
+  }
+  g.setAttribute('color', new THREE.BufferAttribute(c, 3));
+  g.userData.keepColor = true;
+  return g;
+})();
+// DEV-04B timber family: closed split firewood (bark arc, pale split faces, end grain) for every woodpile
+const SPLIT_LOGS = [0, 1, 2].map((i) => splitLogModel(137 + i * 5, 0.42 + i * 0.04, 0.11 + i * 0.012).translate(-0.21 - i * 0.02, 0, 0));
+const CHAR_LOG = logModel(201, 0.36, 0.05, { stub: false, radial: 6 }).translate(-0.18, -0.035, 0);
+const SEAT_LOGS = [0, 1, 2].map((i) => logModel(171 + i * 9, [2.2, 1.9, 2.35][i], [0.22, 0.2, 0.24][i]));
 
 export function forestTreeOk(x: number, z: number) {
   if (z > ESTATE.forestEdge - 0.8 || z < 1.8) return false;
@@ -99,8 +117,10 @@ export function buildForest(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods
   }
 
   buildShed(w, g, c);
-  buildFireClearing(w, g, c);
-  buildWell(w, g, c);
+  // DEV-04B: the hero places carry their own chunks (drawn within ~55 m): their art-kit materials no longer add a
+  // draw call to the estate-wide forest batch
+  buildFireClearing(w, g, { ...c, chunk: 'fireCamp' });
+  buildWell(w, g, { ...c, chunk: 'well' });
   buildSideGate(w, g, c);
   if (ART.ext === 'sample') signpostV2(w, g, c);
   else buildFork(w, g, c);
@@ -230,10 +250,12 @@ function buildShed(w: World, g: GameApi, c: Ctx) {
  * each log lies across it; a stake at each end of the row line.
  */
 function woodpile(c: Ctx, x: number, z: number, yaw: number, base: number, rows: number, r: () => number) {
+  // DEV-04B: split firewood (closed wedges, end grain out), each row resting on the one below, lengths varying
   const M = woodMats(), ux = Math.cos(yaw), uz = -Math.sin(yaw);
   for (let row = 0; row < rows; row++) for (let i = 0; i < base - row; i++) {
-    const off = (i - (base - 1 - row) / 2) * 0.24;
-    c.b.add(M.tree, SPLIT_LOG, planMatrix(x + ux * off, 0.1 + row * 0.165, z + uz * off, yaw + Math.PI / 2, 1, 1, 1), new THREE.Color('#a08c70').multiplyScalar(0.85 + r() * 0.25), c.chunk, true, 0);
+    const off = (i - (base - 1 - row) / 2) * 0.24 + (r() - 0.5) * 0.03;
+    const g = SPLIT_LOGS[Math.floor(r() * SPLIT_LOGS.length)], flip = r() < 0.5 ? Math.PI : 0;
+    c.b.add(M.tree, g, planMatrix(x + ux * off, row * 0.155, z + uz * off, yaw + Math.PI / 2 + flip + (r() - 0.5) * 0.12, 1, 1, 1), new THREE.Color('#b0987a').multiplyScalar(0.85 + r() * 0.25), c.chunk, true, 0);
   }
   const end = (base - 1) * 0.12 + 0.17;
   for (const e of [-1, 1]) cyl(c.b, c.k.M.wood, '#5a4630', x + ux * e * end, 0, z + uz * e * end, 0.04, 0.05, 0.25 + rows * 0.17, 6, { chunk: c.chunk });
@@ -242,35 +264,47 @@ function woodpile(c: Ctx, x: number, z: number, yaw: number, base: number, rows:
 function buildFireClearing(w: World, g: GameApi, c: Ctx) {
   const k = c.k;
   const { x: FX, z: FZ } = SITES.fire;
-  // DEV-03: an authored fire place instead of six pegs in a perfect ring: a ring of real field stones round a sooty
-  // hearth, two log benches and two stump seats (asymmetric, facing the fire), a woodpile at the edge of the clearing
+  // DEV-04B: the social fire place restored and made solid — a ring of substantial field stones round a sooty ash
+  // bed with charred ends in it; seat logs (closed, end-capped, lying on chock stones so they cannot roll) in a rough
+  // circle round the fire with two stumps, gaps left where the two paths arrive (NE and SE) and at the lantern post
   const M = woodMats(), r = mulberry32(2101);
-  for (let i = 0; i < 11; i++) {
-    const a = (i / 11) * Math.PI * 2 + (r() - 0.5) * 0.2, d = 0.95 + (r() - 0.5) * 0.08, s = 0.2 + r() * 0.08;
-    c.b.add(M.rock, FIRE_STONE, planMatrix(FX + Math.cos(a) * d, -0.04, FZ + Math.sin(a) * d, r() * 6.3, s * 1.2, s, s), new THREE.Color('#8f877a').multiplyScalar(0.8 + r() * 0.25), c.chunk, true, 0);
+  for (let i = 0; i < 12; i++) {
+    const a = (i / 12) * Math.PI * 2 + (r() - 0.5) * 0.14, d = 1.04 + (r() - 0.5) * 0.08, s = 0.3 + r() * 0.1;
+    // yaw so the stone's sooted side (local −x) faces the fire
+    c.b.add(M.rock, HEARTH_STONE, planMatrix(FX + Math.cos(a) * d, -0.06 + r() * 0.03, FZ + Math.sin(a) * d, -a, s * 1.15, s * (1.15 + r() * 0.3), s), new THREE.Color('#9a9286').multiplyScalar(0.8 + r() * 0.2), c.chunk, true, 0);
   }
-  cyl(c.b, k.M.paint, '#2e2a26', FX, 0.01, FZ, 0.8, 0.8, 0.04, 14, { chunk: c.chunk });
-  w.col.addCircle(FX, FZ, 1.15, 0, 0.8);
+  { const am = artMats(), a = new Asm(c.b, c.chunk, FX, 0, FZ, 0);
+    a.add(am.paint, '#2a2622', joinery.cg('ashBed', () => lathe([[0.001, 0.035], [0.4, 0.03], [0.72, 0.02], [0.86, 0.0], [0.001, 0.0]], 18)), 0, 0, 0); // ash, crowned a little
+    for (let i = 0; i < 5; i++) { const an = i * 1.3 + 0.4, rr = 0.25 + (i % 2) * 0.22; a.add(M.tree, '#3a2a1e', CHAR_LOG, Math.cos(an) * rr, 0.035, Math.sin(an) * rr, { ry: an + Math.PI / 2 }); } // charred ends
+  }
+  w.col.addCircle(FX, FZ, 1.25, 0, 0.8);
   const seat = (a: number, d: number) => {
     const x = FX + Math.cos(a) * d, z = FZ + Math.sin(a) * d;
     stumpsV2(c, [{ x, z, y: 0, s: 0.5, treatment: 'plain', vx: x, vz: z, vr: 0.34 }]);
     w.col.addCircle(x, z, 0.35, 0, 0.5);
   };
-  const bench = (a: number, d: number, len: number) => {
-    const cx = FX + Math.cos(a) * d, cz = FZ + Math.sin(a) * d, yaw = -a + Math.PI / 2; // tangential: you sit facing the fire
+  const bench = (a: number, d: number, v: number) => {
+    const g = SEAT_LOGS[v], len = [2.2, 1.9, 2.35][v], rad = [0.22, 0.2, 0.24][v];
+    const cx = FX + Math.cos(a) * d, cz = FZ + Math.sin(a) * d, yaw = -a + Math.PI / 2 + (r() - 0.5) * 0.25; // tangential: you sit facing the fire
     const ax = cx - (Math.cos(yaw) * len) / 2, az = cz + (Math.sin(yaw) * len) / 2;
-    c.b.add(M.tree, BENCH_LOG, planMatrix(ax, 0.02, az, yaw), '#9a8a74', c.chunk, true, 0);
-    for (let q = 0.3; q < len; q += 0.5) w.col.addCircle(ax + Math.cos(yaw) * q, az - Math.sin(yaw) * q, 0.26, 0, 0.45);
+    c.b.add(M.tree, g, planMatrix(ax, 0.02, az, yaw), '#8a6e54', c.chunk, true, 0);
+    // chock stones each side of the log near both ends (they keep it from rolling; it lies in them)
+    for (const q of [0.25, len - 0.25]) for (const side of [-1, 1]) {
+      const px = ax + Math.cos(yaw) * q + Math.sin(yaw) * side * (rad + 0.05), pz = az - Math.sin(yaw) * q + Math.cos(yaw) * side * (rad + 0.05);
+      c.b.add(M.rock, FIRE_STONE, planMatrix(px, -0.05, pz, r() * 6, 0.16, 0.11, 0.13), new THREE.Color('#8f877a').multiplyScalar(0.8 + r() * 0.2), c.chunk, true, 0);
+    }
+    for (let q = 0.3; q < len; q += 0.5) w.col.addCircle(ax + Math.cos(yaw) * q, az - Math.sin(yaw) * q, rad + 0.04, 0, 0.45);
   };
-  seat(0.35, 3.1); seat(2.55, 3.3);
-  bench(1.45, 3.2, 2.2); bench(4.3, 3.35, 2.2);
+  bench(1.6, 2.75, 0); bench(2.85, 2.9, 1); bench(4.1, 2.8, 2);
+  seat(0.05, 2.7); seat(3.55, 3.35);
   // woodpile against a tree at the clearing edge: split logs stacked between two stakes
   const wpA = 5.45, wpx = FX + Math.cos(wpA) * 6.6, wpz = FZ + Math.sin(wpA) * 6.6, wpyaw = -wpA + Math.PI / 2;
   woodpile(c, wpx, wpz, wpyaw, 6, 4, r);
   w.col.addCircle(wpx, wpz, 0.75, 0, 1.0);
   // DEV-04A: the firewood laid in the pit floated at +0.57 (`cyl` base height); two crossed layers resting on the hearth
+  // the laid fire (shown once the kindling is in): split logs leaning together in a cone on the ash bed
   const logs = compound((b) => {
-    for (let i = 0; i < 4; i++) rod(b, k.M.bark, '#8a6a4a', 0, 0.09 + (i % 2) * 0.12, 0, 0.07, 0.07, 0.9, 6, { rz: Math.PI / 2, yaw: (i % 2) * 1.57 + (i > 1 ? 0.35 : -0.35) });
+    for (let i = 0; i < 7; i++) { const an = (i / 7) * Math.PI * 2, tilt = 1.0; b.add(woodMats().tree, SPLIT_LOGS[i % 3], new THREE.Matrix4().makeRotationY(an).multiply(new THREE.Matrix4().makeTranslation(0.24, 0.03, 0)).multiply(new THREE.Matrix4().makeRotationZ(Math.PI - tilt)).multiply(new THREE.Matrix4().makeTranslation(0.21, 0, -0.05)), '#a08c70', 'main', true, 0); }
   });
   place(logs, FX, 0, FZ);
   w.scene.add(logs);
@@ -332,20 +366,52 @@ function buildFireClearing(w: World, g: GameApi, c: Ctx) {
   });
 }
 
-/** The old stone well (the start of the morning walk on the study map): scenery with a little life. */
+/**
+ * The old stone well (the start of the morning walk on the study map). DEV-04B: it reads as a working well, not a
+ * solid stone drum — a round shaft with a 27 cm wall (outer face, coping, inner face going down into the dark),
+ * dressed coping stones on the rim, water far down; two posts on stone pads carry a shingled gable roof and the
+ * windlass (axle in the posts, a crank, rope wound on it running down into the shaft, a bucket hanging in it and a
+ * second bucket on the rim). The ground inside the shaft is not drawn: a depth-only disc just under the rim, drawn
+ * after the shaft's interior and before the terrain, stops the grass from capping the hole (see wellShaft).
+ */
 function buildWell(w: World, g: GameApi, c: Ctx) {
-  const k = c.k;
+  const k = c.k, M = artMats();
   const { x: WX, z: WZ } = SITES.well;
-  cyl(c.b, k.M.stone, '#b8b0a0', WX, 0, WZ, 1.05, 1.1, 0.9, 16, { chunk: c.chunk, uv: 1 });
-  cyl(c.b, k.M.paint, '#1a1612', WX, 0.6, WZ, 0.85, 0.85, 0.31, 16, { chunk: c.chunk });
-  cyl(c.b, k.M.stone, '#a8a090', WX, 0.9, WZ, 1.12, 1.12, 0.1, 16, { chunk: c.chunk, uv: 1 });
-  w.col.addCircle(WX, WZ, 1.15, 0, 1.5);
-  for (const s of [-1, 1]) box(c.b, k.M.wood, '#6b4a2a', WX + s * 1.0, 0.9, WZ, 0.14, 1.6, 0.14, { chunk: c.chunk });
-  gableRoof(c, WX, WZ, 2.6, 1.6, 2.5, 0.8, true, k.M.slate, '#7a8070');
-  // DEV-04A: the winch axle sat at +2.75 (above the posts, in the roof): it now runs between the post heads
-  rod(c.b, k.M.wood, '#7a5a3a', WX, 2.2, WZ, 0.08, 0.08, 2.0, 8, { chunk: c.chunk, rz: Math.PI / 2 });
-  box(c.b, k.M.paint, '#3b3b3b', WX + 1.12, 1.92, WZ, 0.04, 0.3, 0.04, { chunk: c.chunk });
-  cyl(c.b, k.M.wood, '#7a5a3a', WX + 0.3, 0.9, WZ + 0.55, 0.2, 0.17, 0.3, 10, { chunk: c.chunk });
+  const RO = 0.98, RI = 0.71, RIM = 0.86;
+  wellShaft(w, WX, WZ, RO, RI, RIM);
+  // coping: 12 dressed stones on the wall head, slightly irregular
+  const a = new Asm(c.b, c.chunk, WX, 0, WZ, 0).begin('well');
+  for (let i = 0; i < 12; i++) {
+    const an = (i / 12) * Math.PI * 2 + 0.13, rr = (RO + RI) / 2;
+    a.add(M.stone, i % 3 ? '#b8b0a0' : '#aaa292', joinery.cg('copingStone', () => projectUV(softBox(0.43, 0.11, 0.34, 0.02, 1, 1), 0.8)), Math.cos(an) * rr, RIM + 0.05 + (i % 2) * 0.006, Math.sin(an) * rr, { ry: Math.PI / 2 - an });
+  }
+  // posts on stone pads either side (outside the wall), braced, carrying the roof beam and the windlass
+  for (const sd of [-1, 1]) {
+    const px = sd * (RO + 0.14);
+    a.add(M.stone, '#9a9282', joinery.sb(0.34, 0.2, 0.34, 0.02), px, 0.1, 0);
+    a.add(M.timber, '#6b4a2a', joinery.bx(0.15, 2.32, 0.15), px, 0.2 + 1.16, 0);
+    a.add(M.timber, '#5a3a22', joinery.bx(0.08, 0.6, 0.08), px - sd * 0.18, 2.12, 0, { rz: sd * 0.7 }); // knee brace to the beam
+  }
+  a.add(M.timber, '#5a3a22', joinery.bx(2 * (RO + 0.14) + 0.4, 0.14, 0.16), 0, 2.52 + 0.07, 0); // tie beam on the posts
+  a.add(M.timber, '#7a5a3a', joinery.cg('windlass', () => new THREE.CylinderGeometry(0.075, 0.075, 2 * (RO + 0.14) + 0.12, 10).rotateZ(Math.PI / 2)), 0, 1.75, 0);
+  a.add(M.paint, '#c8b48a', joinery.cg('ropeCoil', () => new THREE.CylinderGeometry(0.095, 0.095, 0.5, 12).rotateZ(Math.PI / 2)), -0.2, 1.75, 0); // rope wound on the axle
+  a.add(M.paint, '#c8b48a', joinery.bx(0.02, 0.25, 0.02), 0.04, 1.535, 0); // the rope from the axle to the bucket's bail
+  // crank on the east post: arm + handle
+  a.add(M.paint, '#3b3b3b', joinery.bx(0.04, 0.32, 0.04), RO + 0.3, 1.75 - 0.14, 0);
+  a.add(M.paint, '#3b3b3b', joinery.cg('crankHandle', () => new THREE.CylinderGeometry(0.018, 0.018, 0.18, 6).rotateZ(Math.PI / 2)), RO + 0.38, 1.47, 0);
+  a.add(M.timber, '#6b4a2a', joinery.cg('crankGrip', () => new THREE.CylinderGeometry(0.024, 0.024, 0.12, 8).rotateZ(Math.PI / 2)), RO + 0.42, 1.47, 0);
+  // the buckets: one wound up on the rope, hanging just over the opening (anything inside the shaft below the coping is
+  // part of the shaft's own early-drawn interior); one standing on the coping
+  const bucket = joinery.cg('wellBucket', () => lathe([[0.001, 0], [0.13, 0], [0.16, 0.26], [0.17, 0.27], [0.16, 0.28], [0.13, 0.02], [0.001, 0.02]], 12));
+  const by = 1.0;
+  a.add(M.timber, '#7a5a3a', bucket, 0.04, by, 0);
+  for (const yy of [0.06, 0.2]) a.add(M.paint, '#3b3b3b', joinery.cg(`bucketHoop${yy}`, () => new THREE.TorusGeometry(0.135 + yy * 0.12, 0.008, 4, 14).rotateX(Math.PI / 2)), 0.04, by + yy, 0);
+  a.add(M.paint, '#3b3b3b', joinery.cg('bucketBail', () => new THREE.TorusGeometry(0.15, 0.008, 4, 10, Math.PI)), 0.04, by + 0.27, 0);
+  a.add(M.timber, '#7a5a3a', bucket, -0.6, RIM + 0.105, -0.57);
+  a.end({ gap: 0.04 });
+  gableRoof(c, WX, WZ, 2.9, 1.7, 2.66, 0.75, true, k.M.slate, '#7a8070');
+  w.col.addCircle(WX, WZ, RO + 0.17, 0, 1.5);
+  for (const sd of [-1, 1]) w.col.addCircle(WX + sd * (RO + 0.14), WZ, 0.2, 0, 2.6);
   const hit = new THREE.Group();
   place(hit, WX, 0, WZ);
   w.scene.add(hit);
@@ -354,6 +420,43 @@ function buildWell(w: World, g: GameApi, c: Ctx) {
     label: () => 'Put',
     run: () => g.act({ ok: true, msg: 'Een oude put. Ver beneden glinstert water, en het touw is nieuw. Hier begon iemand elke ochtend een wandeling.', sfx: 'none' }, { save: false }),
   });
+}
+
+/**
+ * DEV-04B open well shaft: the wall as one lathe (outer face from below ground up to the coping, across the wall head,
+ * the inner face down 2.6 m) and dark water at −1.7 with a darker gradient down the shaft. Drawn BEFORE everything
+ * else (renderOrder −2); then a depth-only disc just under the coping (renderOrder −1, colour writes off) claims the
+ * opening's depth, so the terrain drawn after it cannot cover the hole. Anything nearer than the disc (the rim, the
+ * buckets, the player's view across the shaft) still draws normally. Two meshes, one extra draw call each.
+ */
+function wellShaft(w: World, x: number, z: number, RO: number, RI: number, RIM: number) {
+  const pts: [number, number][] = [[RO + 0.05, -0.3], [RO, -0.05], [RO, RIM], [RI, RIM], [RI, -2.6]];
+  const g0 = lathe(pts, 24);
+  const g = g0.toNonIndexed(); g0.dispose();
+  g.computeVertexNormals();
+  const p = g.attributes.position as THREE.BufferAttribute, uv = new Float32Array(p.count * 2), col = new Float32Array(p.count * 3);
+  for (let i = 0; i < p.count; i++) {
+    const px = p.getX(i), py = p.getY(i), pz = p.getZ(i), rr = Math.hypot(px, pz);
+    uv.set([(Math.atan2(pz, px) * rr) / 1.2, (py + (rr < (RO + RI) / 2 ? 3 : 0)) / 1.2], i * 2);
+    const kk = rr < (RO + RI) / 2 - 0.01 && py < RIM - 0.02 ? THREE.MathUtils.lerp(0.06, 0.8, THREE.MathUtils.smoothstep(py, -1.7, RIM - 0.1)) : 1; // darker down the shaft
+    col.set([kk, kk, kk], i * 3);
+  }
+  g.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+  g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  const tint = new THREE.Color('#b8b0a0');
+  for (let i = 0; i < p.count; i++) col.set([col[i * 3] * tint.r, col[i * 3 + 1] * tint.g, col[i * 3 + 2] * tint.b], i * 3);
+  const k = getKit();
+  const wall = new THREE.Mesh(g, k.M.stone);
+  const water = new THREE.Mesh(new THREE.CircleGeometry(RI, 20).rotateX(-Math.PI / 2), w.material(new THREE.MeshLambertMaterial({ color: '#15302f', emissive: new THREE.Color('#06100f') })));
+  water.position.y = -1.7;
+  const interior = new THREE.Group();
+  interior.add(wall, water);
+  for (const m of [wall, water]) { m.renderOrder = -2; m.castShadow = false; m.receiveShadow = true; }
+  wall.castShadow = true;
+  const mask = new THREE.Mesh(new THREE.CircleGeometry(RI + 0.005, 24).rotateX(-Math.PI / 2), w.material(new THREE.MeshBasicMaterial({ colorWrite: false })));
+  mask.position.y = RIM - 0.03;
+  mask.renderOrder = -1;
+  for (const o of [interior, mask]) { o.position.x += x; o.position.z -= z; o.userData.region = 'well'; w.scene.add(o); }
 }
 
 function buildSideGate(w: World, g: GameApi, c: Ctx) {
