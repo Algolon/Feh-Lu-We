@@ -95,7 +95,8 @@ function shell(w: World, c: Ctx) {
     if (hi > cur) out.push([cur, hi]);
     return out;
   };
-  const span = (at: number, wd: number): [number, number] => [at - wd / 2, at + wd / 2];
+  // runs end 2 cm behind each door reveal, so a run's end face never shares the door lining's plane (z-fighting)
+  const span = (at: number, wd: number): [number, number] => [at - wd / 2 - 0.02, at + wd / 2 + 0.02];
   const mainRuns = (p: number): Runs => ({
     S: gaps(72 - p, 108 + p, [span(90, 1.7)]), N: gaps(72 - p, 108 + p, [span(91.5, 1.2), span(101, 1.0)]),
     E: [[80, 92.0]], // the service wing covers Z 92–110 of the east face: no plinth inside its rooms

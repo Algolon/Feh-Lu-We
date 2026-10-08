@@ -45,10 +45,12 @@ export function makeDoor(w: World, g: GameApi, o: DoorOpts) {
   const buildLeaf = () => compound((b: Batcher) => {
     // local leaf frame: built at plan origin, spanning +X; local plan z ≡ thickness
     if (o.style === 'glass') {
-      box(b, k.M.paint, '#2f4a3c', o.width / 2, 0, 0, o.width, 0.1, th);
-      box(b, k.M.paint, '#2f4a3c', o.width / 2, o.height - 0.1, 0, o.width, 0.1, th);
-      box(b, k.M.paint, '#2f4a3c', 0.05, 0, 0, 0.1, o.height, th);
-      box(b, k.M.paint, '#2f4a3c', o.width - 0.05, 0, 0, 0.1, o.height, th);
+      // DEV-04A: rails run BETWEEN the stiles (they overlapped them, sharing end, top and bottom faces: z-fighting), and
+      // the stiles are 4 mm thicker so the joint faces never share a plane
+      box(b, k.M.paint, '#2f4a3c', o.width / 2, 0, 0, o.width - 0.2, 0.1, th);
+      box(b, k.M.paint, '#2f4a3c', o.width / 2, o.height - 0.1, 0, o.width - 0.2, 0.1, th);
+      box(b, k.M.paint, '#2f4a3c', 0.05, 0, 0, 0.1, o.height, th + 0.004);
+      box(b, k.M.paint, '#2f4a3c', o.width - 0.05, 0, 0, 0.1, o.height, th + 0.004);
       box(b, k.M.glass, '#ffffff', o.width / 2, 0.1, 0, o.width - 0.2, o.height - 0.2, 0.02);
     } else if (o.style === 'gate') {
       for (let i = 0; i < 6; i++) box(b, k.M.paint, '#2b2b2b', 0.1 + (i * (o.width - 0.2)) / 5, 0, 0, 0.05, o.height, 0.05);

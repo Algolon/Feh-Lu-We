@@ -40,7 +40,8 @@ export function buildCottage(w: World, g: GameApi, c: Ctx) {
   // a blue surface and ran across the doorway as a 27 cm sill. It is now a painted band on the four outer wall faces,
   // stopping at the door, with a stone threshold through the wall depth
   { const bo = { chunk: c.chunk }, y0 = B - 0.3, y1 = B + 0.42, dl = CX - 0.5, dr = CX + 0.5;
-    for (const [a, b2] of [[X0 - 0.06, dl], [dr, X1 + 0.06]] as const) boxMM(c.b, k.M.paint, '#47709e', a, b2, y0, y1, Z0 - 0.06, Z0, bo);
+    // band ends 2 cm behind the door reveal, so its end face never shares the lining's plane
+    for (const [a, b2] of [[X0 - 0.06, dl - 0.02], [dr + 0.02, X1 + 0.06]] as const) boxMM(c.b, k.M.paint, '#47709e', a, b2, y0, y1, Z0 - 0.06, Z0, bo);
     boxMM(c.b, k.M.paint, '#47709e', X0 - 0.06, X1 + 0.06, y0, y1, Z1, Z1 + 0.06, bo);
     boxMM(c.b, k.M.paint, '#47709e', X0 - 0.06, X0, y0, y1, Z0, Z1, bo);
     boxMM(c.b, k.M.paint, '#47709e', X1, X1 + 0.06, y0, y1, Z0, Z1, bo);
@@ -91,7 +92,7 @@ export function buildCottage(w: World, g: GameApi, c: Ctx) {
   const T = COTTAGE_TERRACE;
   // terracotta floor tiles (square flags tinted terracotta: the roof-tile texture is for roofs) with a stone edge
   floor(c, T.x0, T.x1, T.z0, T.z1, Y, k.M.tile, '#c98a64', Y - B + 0.15, true, 1.2);
-  boxMM(c.b, k.M.stone, '#d8ccb0', T.x0, T.x1 + 0.04, Y - 0.06, Y + 0.005, T.z0 - 0.04, T.z0 + 0.12, { chunk: c.chunk, uv: 1 });
+  boxMM(c.b, k.M.stone, '#d8ccb0', T.x0 + 0.01, T.x1 + 0.04, Y - 0.06, Y + 0.005, T.z0 - 0.04, T.z0 + 0.12, { chunk: c.chunk, uv: 1 }); // starts at the landing
   // DEV-04A path junction: both cottage routes used to run on over the terrace edge and a loose tile slab (the "ramp",
   // a flat box 8 cm proud of the path). One tiled landing now owns that ground (COTTAGE_LANDING, the routes are
   // clipped at its edges by the path network): flat where the paths arrive (south and north mouths along X 18), it
@@ -108,7 +109,7 @@ export function buildCottage(w: World, g: GameApi, c: Ctx) {
     wg.translate(0, 0, -L.z1);
     c.b.add(k.M.tile, wg, new THREE.Matrix4(), '#c08060', c.chunk, true, 0);
     wg.dispose();
-    boxMM(c.b, k.M.stone, '#d8ccb0', L.x1 - 0.04, L.x1 + 0.08, B - 0.3, Y + 0.005, L.z0, T.z0 - 0.04, o); // cheek in front of the terrace
+    boxMM(c.b, k.M.stone, '#d8ccb0', L.x1 - 0.04, L.x1 + 0.08, B - 0.3, Y + 0.005, L.z0 + 0.01, T.z0 - 0.04, o); // cheek in front of the terrace (1 cm behind the wedge's end face)
   }
   w.col.addFloor(L.x0, RX, L.z0, L.z1, LY);
   w.col.addRamp({ minX: RX, maxX: L.x1, minZ: L.z0, maxZ: L.z1, axis: 'x', a: RX, ya: LY, b: L.x1, yb: Y });

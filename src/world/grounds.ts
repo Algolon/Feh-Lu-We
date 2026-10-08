@@ -250,9 +250,10 @@ function lake(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods: EstateWoods 
 function golf(w: World, c: Ctx) {
   const k = c.k, o = { chunk: 'grounds' };
   const T = GOLF_TEE, C = GOLF_CHUTE;
-  boxMM(c.b, k.M.paint, '#3e6a34', T.x0 + 0.35, T.x0 + 3.05, 0.0, 0.035, T.z0 + 0.25, T.z0 + 2.25, { ...o, shadow: false }); // mat base
-  boxMM(c.b, k.M.paint, '#5c8f45', T.x0 + 0.42, T.x0 + 2.98, 0.035, 0.06, T.z0 + 0.32, T.z0 + 2.18, { ...o, shadow: false }); // tee mat
-  cyl(c.b, k.M.paint, '#f4f4f0', T.x0 + 1.8, 0.06, T.z0 + 1.2, 0.025, 0.025, 0.03, 8, o);
+  // DEV-04A: the mat stands 1 cm higher (its base top used to share the path ribbons' / woodland verge's plane)
+  boxMM(c.b, k.M.paint, '#3e6a34', T.x0 + 0.35, T.x0 + 3.05, -0.02, 0.045, T.z0 + 0.25, T.z0 + 2.25, { ...o, shadow: false }); // mat base
+  boxMM(c.b, k.M.paint, '#5c8f45', T.x0 + 0.42, T.x0 + 2.98, 0.045, 0.07, T.z0 + 0.32, T.z0 + 2.18, { ...o, shadow: false }); // tee mat
+  cyl(c.b, k.M.paint, '#f4f4f0', T.x0 + 1.8, 0.07, T.z0 + 1.2, 0.025, 0.025, 0.03, 8, o);
   // a stand bag: body, top collar, pocket, strap, two splayed legs; club shafts with heads and head covers
   const gx = T.x0 + 0.7, gz = T.z0 + 2.6;
   cyl(c.b, k.M.paint, '#2f4a6e', gx, 0.08, gz, 0.13, 0.15, 0.8, 12, { ...o, rx: 0.18 }); // bag

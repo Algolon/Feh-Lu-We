@@ -230,7 +230,7 @@ export function farmhouseSink(c: Ctx, x: number, z: number, y0: number, yaw: num
   a.add(M.ceramic, outer, sb(W, hh, t, 0.01), 0, bot + hh / 2, zc + D / 2 - t / 2); // apron (front)
   a.add(M.ceramic, inner, bx(W, hh, t), 0, bot + hh / 2, zc - D / 2 + t / 2); // back wall
   for (const sx of [-1, 1]) a.add(M.ceramic, inner, bx(t, hh, D - 2 * t), sx * (W / 2 - t / 2), bot + hh / 2, zc);
-  a.add(M.ceramic, '#e2dfd5', bx(W, 0.04, D), 0, bot + 0.02, zc); // floor of the bowl (top 0.685)
+  a.add(M.ceramic, '#e2dfd5', bx(W - 2 * t, 0.04, D - 2 * t), 0, bot + 0.02, zc); // floor of the bowl between the walls (top 0.685)
   a.add(M.paint, '#3a3c3a', cg('sinkDrain', () => new THREE.CylinderGeometry(0.035, 0.035, 0.006, 12)), 0, bot + 0.04 + 0.004, zc);
   a.add(M.brass, '#b8b8b0', cg('sinkDrainRing', () => new THREE.TorusGeometry(0.04, 0.006, 4, 14).rotateX(Math.PI / 2)), 0, bot + 0.04 + 0.006, zc);
   // bridge tap: a pillar on the worktop strip, a spout arching forward over the bowl

@@ -176,20 +176,24 @@ function frame(c: Ctx, axis: 'x' | 'z', f: number, s: number, e: number, y0: num
     if (axis === 'x') boxMM(c.b, m, cc, a0, a1, ya, yb, f + d0, f + d1, { chunk: c.chunk, jitter: 0 });
     else boxMM(c.b, m, cc, f + d0, f + d1, ya, yb, a0, a1, { chunk: c.chunk, jitter: 0 });
   };
-  const L = t / 2 + 0.005, w = 0.11;
-  // lining (the reveal) across the wall thickness
-  B(s - 0.03, s, y0, y1, -L, L);
-  B(e, e + 0.03, y0, y1, -L, L);
-  B(s - 0.03, e + 0.03, y1, y1 + 0.03, -L, L);
+  const L = t / 2 + 0.005, w = 0.11, p = 0.004;
+  // lining (the reveal) across the wall thickness. DEV-04A: 4 mm proud of the wall's reveal faces (it used to lie IN
+  // the plane of the wall's end faces and lintel soffit: the two surfaces z-fought in every doorway)
+  B(s - 0.03, s + p, y0, y1, -L, L);
+  B(e - p, e + 0.03, y0, y1, -L, L);
+  B(s - 0.03, e + 0.03, y1 - p, y1 + 0.03, -L, L);
   for (const sd of [-1, 1]) {
     const d0 = sd * L, d1 = sd * (L + 0.03);
     const lo = (a: number, b: number) => [Math.min(a, b), Math.max(a, b)] as [number, number];
-    // architrave legs + head, then the bead on the inner edge, then plinth blocks and a head cap
-    B(s - w, s, y0 + 0.16, y1 + w, ...lo(d0, d1));
-    B(e, e + w, y0 + 0.16, y1 + w, ...lo(d0, d1));
+    // architrave legs + head, then the bead on the inner edge, then plinth blocks and a head cap. DEV-04A: the legs
+    // stand 5 mm back from the reveal (a quirk, as in real joinery): their inner edge lay in the plane where wainscot
+    // and skirting runs end at the opening, and z-fought with those end faces
+    B(s - w, s - 0.005, y0 + 0.16, y1 + w, ...lo(d0, d1));
+    B(e + 0.005, e + w, y0 + 0.16, y1 + w, ...lo(d0, d1));
     B(s - w, e + w, y1, y1 + w, ...lo(d0, d1));
-    B(s - w - 0.012, s + 0.005, y0, y0 + 0.18, ...lo(d0, sd * (L + 0.04)));
-    B(e - 0.005, e + w + 0.012, y0, y0 + 0.18, ...lo(d0, sd * (L + 0.04)));
+    // plinth blocks 1 cm proud of the architrave and of the skirting that dies into them (same depth before: z-fighting)
+    B(s - w - 0.012, s + 0.005, y0, y0 + 0.18, ...lo(d0, sd * (L + 0.05)));
+    B(e - 0.005, e + w + 0.012, y0, y0 + 0.18, ...lo(d0, sd * (L + 0.05)));
     B(s - w - 0.03, e + w + 0.03, y1 + w, y1 + w + 0.04, ...lo(d0, sd * (L + 0.05)));
   }
 }
@@ -300,7 +304,8 @@ export function stairsZ(c: Ctx, x0: number, x1: number, zBottom: number, zTop: n
     const lo = Math.min(za, zb), hi = Math.max(za, zb);
     boxMM(c.b, P, mass, x0, x1, yBottom, yt - 0.045, lo, hi, { chunk: c.chunk });
     boxMM(c.b, W, color, x0 + sw, x1 - sw, yt - 0.045, yt, Math.min(za - dir * 0.03, zb), Math.max(za - dir * 0.03, zb), { uv: 1.2, chunk: c.chunk, jitter: 0.03 }); // tread + nosing
-    boxMM(c.b, P, riserCol, x0 + sw, x1 - sw, yt - rise, yt - 0.045, Math.min(za, za + dir * 0.02), Math.max(za, za + dir * 0.02), { chunk: c.chunk, shadow: false }); // riser
+    // riser: DEV-04A 4 mm proud of the step mass (its face lay in the mass's front face: z-fighting on every stair)
+    boxMM(c.b, P, riserCol, x0 + sw, x1 - sw, yt - rise, yt - 0.045, Math.min(za - dir * 0.004, za + dir * 0.02), Math.max(za - dir * 0.004, za + dir * 0.02), { chunk: c.chunk, shadow: false }); // riser
     if (runner) boxMM(c.b, P, runner, x0 + 0.28, x1 - 0.28, yt, yt + 0.01, Math.min(za - dir * 0.03, zb), Math.max(za - dir * 0.03, zb), { chunk: c.chunk, shadow: false, jitter: 0 });
     // per-step solid: blocks walking into the stair mass from the side, never from the ramp itself
     c.col.addBox(x0, x1, lo, hi, yBottom, yt);

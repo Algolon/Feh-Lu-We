@@ -138,7 +138,8 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
   // posts carry the leaves, a head beam sits over the leaves' full height, glass fills the fanlight above it
   const gw = (axis: 'x' | 'z', f: number, a0: number, a1: number, gaps: [number, number][] = [], headY = H) => {
     const inGap = (a: number) => gaps.some(([s, e]) => a > s - 0.06 && a < e + 0.06);
-    const post = (a: number) => (axis === 'x' ? box(c.b, k.M.paint, fr, a, 0, f, 0.1, H, 0.1, { chunk: c.chunk }) : box(c.b, k.M.paint, fr, f, 0, a, 0.1, H, 0.1, { chunk: c.chunk }));
+    // posts 1 cm deeper than the rails: where a rail crosses a post their faces no longer share a plane (no z-fighting)
+    const post = (a: number) => (axis === 'x' ? box(c.b, k.M.paint, fr, a, 0, f, 0.1, H, 0.11, { chunk: c.chunk }) : box(c.b, k.M.paint, fr, f, 0, a, 0.11, H, 0.1, { chunk: c.chunk }));
     const n = Math.max(1, Math.round((a1 - a0) / 2));
     for (let i = 0; i <= n; i++) { const a = a0 + ((a1 - a0) * i) / n; if (!inGap(a)) post(a); }
     for (const [s, e] of gaps) { post(s - 0.05); post(e + 0.05); } // jambs just outside the clear opening
@@ -150,14 +151,18 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
       if (axis === 'x') boxMM(c.b, k.M.paint, fr, r0, r1, y, y + 0.08, f - 0.05, f + 0.05, { chunk: c.chunk });
       else boxMM(c.b, k.M.paint, fr, f - 0.05, f + 0.05, y, y + 0.08, r0, r1, { chunk: c.chunk });
     };
-    for (const y of [0.0, 0.55, 2.4]) for (const [s, e] of segs) if (e - s > 0.01) rail(s, e, y);
+    // rails stop 2 cm inside a door jamb post (their end face would lie on the post's face into the opening)
+    const jamb = (a: number, d: number) => (gaps.some(([gs, ge]) => Math.abs(gs - a) < 1e-6 || Math.abs(ge - a) < 1e-6) ? a + d : a);
+    for (const y of [0.0, 0.55, 2.4]) for (const [s, e] of segs) if (e - s > 0.01) rail(jamb(s, 0.02), jamb(e, -0.02), y);
     rail(a0, a1, H - 0.08); // the wall plate runs over everything
     for (const [s, e] of gaps) { // fanlight over the doors: glass between the head beam and the wall plate
       if (axis === 'x') boxMM(glass, k.M.glass, '#ffffff', s, e, headY, H - 0.08, f - 0.015, f + 0.015, { chunk: 'glass' });
       else boxMM(glass, k.M.glass, '#ffffff', f - 0.015, f + 0.015, headY, H - 0.08, s, e, { chunk: 'glass' });
     }
-    for (const [s, e] of segs) {
-      if (e - s < 0.01) continue;
+    for (const [s0, e0] of segs) {
+      if (e0 - s0 < 0.01) continue;
+      // glass ends 1 cm inside a door jamb (its end face never shares the jamb post's face)
+      const s = gaps.some(([, ge]) => Math.abs(ge - s0) < 1e-6) ? s0 + 0.01 : s0, e = gaps.some(([gs]) => Math.abs(gs - e0) < 1e-6) ? e0 - 0.01 : e0;
       if (axis === 'x') {
         boxMM(glass, k.M.glass, '#ffffff', s, e, 0.08, H - 0.08, f - 0.015, f + 0.015, { chunk: 'glass' });
         w.col.addBox(s, e, f - 0.08, f + 0.08, 0, H, { occludes: true });
@@ -172,7 +177,7 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
   gw('x', Z1, X0, X1);
   const headY = GF + DD.h; // the leaves stand on the floor (+0.15) and are DD.h tall: the head beam sits on top of them
   gw('z', X1, Z0, Z1, [[DD.z0, DD.z1]], headY + 0.12);
-  boxMM(c.b, k.M.paint, fr, X1 - 0.06, X1 + 0.06, headY, headY + 0.12, DD.z0 - 0.1, DD.z1 + 0.1, { chunk: c.chunk });
+  boxMM(c.b, k.M.paint, fr, X1 - 0.06, X1 + 0.06, headY, headY + 0.12, DD.z0 - 0.06, DD.z1 + 0.06, { chunk: c.chunk }); // ends inside the jamb posts
   w.col.addBox(X1 - 0.08, X1 + 0.08, DD.z0, DD.z1, headY, H, { occludes: true }); // head + fanlight over the doors
   registerOpening({ kind: 'door', axis: 'z', f: X1, t: 0.1, a0: DD.z0, a1: DD.z1, y0: GF, y1: headY, id: 'door.consEast' });
   gw('z', X0, 109.6, Z1);
@@ -390,7 +395,9 @@ function buildSauna(w: World, g: GameApi, c: Ctx) {
   // landing (floor level, 0.9 m deep) lies in front of the door, the steps (3 × 0.167 m rise, 0.21 m going) come down to
   // the deck; open-sided like garden steps, a handrail on the east side
   const ST = SAUNA_STEPS, sc = '#9a6a3e';
-  floor(c, ST.x0, ST.x1, ST.zDoor, ST.zLanding, FY, k.M.wood, '#8a5a33', FY - ST.yFoot, true, 1);
+  // the landing's visible slab starts 1 cm off the barrel's end cap (its end face lay in the cap's plane); the collider below still meets it
+  floor(c, ST.x0, ST.x1, ST.zDoor + 0.01, ST.zLanding, FY, k.M.wood, '#8a5a33', FY - ST.yFoot, false, 1);
+  w.col.addFloor(ST.x0, ST.x1, ST.zDoor, ST.zLanding, FY);
   w.col.addBox(ST.x0, ST.x1, ST.zDoor, ST.zLanding, 0, FY - 0.01); // solid under the landing
   stairsZ(c, ST.x0, ST.x1, ST.zFoot, ST.zLanding, ST.yFoot, FY, sc, ST.risers, { mass: '#7a5232', runner: false, riser: '#8a5a33' });
   { const f = ST.x1 + 0.05, top = FY + 0.9;
