@@ -173,16 +173,19 @@ await run('house', async (page) => {
     const closed = W.doorColliders('door.consEast');
     const back = W.push(-3, 0);
     T.act('door.consEast', 'Openen'); T.wait(1.4);
-    const ramp = W.walk([[131.6, 106.0], [131.6, 113.6], [134, 113.8], [134, 109.4]]);
-    const side = W.push(-2.5, 0);
-    const top = W.walk([[134, 104.9]]); // the flat landing in front of the door
+    // DEV-04A: a landing and three steps replace the ramp; the landing cannot be climbed from the side (0.5 m)
+    const ramp = W.walk([[131.6, 106.0], [131.6, 106.4], [134, 106.4]]);
+    W.walk([[132.6, 106.4], [132.6, 104.4]]);
+    const side = W.push(2.5, 0);
+    W.walk([[132.6, 106.4], [134, 106.4]]);
+    const top = W.walk([[134, 104.45]]); // the landing in front of the door
     T.act('door.sauna', 'Openen'); T.wait(1.2);
     const inside = W.walk([[134, 104.6], [134, 101.8]]);
     return { shutA, shutB, before, open, out: out.room, closed, back, ramp: ramp.maxDy, side, top: top.pos, inside: inside.pos, room: inside.room };
   });
   await page.evaluate(() => T.lookAt(134, 1.5, 104)); await shot(page, 'house-05-sauna-from-inside');
   log('Copacabana double door: both leaves solid while closed, ONE saved state opens both (both colliders follow)', cop.shutA.x < 130 && cop.shutB.x < 130 && cop.before.length === 2 && cop.before.every(Boolean) && cop.open.state === true && cop.open.colliders.every((e) => !e) && cop.closed.every(Boolean) && cop.back.x > 130, JSON.stringify({ a: cop.shutA.x, b: cop.shutB.x, before: cop.before, open: cop.open, closed: cop.closed, back: cop.back.x }));
-  log('sauna: reached by the ramp onto a flat landing (+0.80) and in on its real floor; no stepping onto the ramp sideways', cop.ramp < 0.45 && Math.abs(cop.top.y - 0.8) < 0.04 && cop.inside.y > 0.78 && cop.room === 'sauna' && cop.side.x > 133.65, JSON.stringify({ ramp: cop.ramp, top: cop.top, inside: cop.inside, side: cop.side }));
+  log('sauna (DEV-04A): up three steps onto the landing (+0.65) and in on its real floor; the landing is not climbed from the side', cop.ramp < 0.45 && Math.abs(cop.top.y - 0.65) < 0.04 && cop.inside.y > 0.63 && cop.room === 'sauna' && cop.side.x < 133.3 && cop.side.y < 0.3, JSON.stringify({ ramp: cop.ramp, top: cop.top, inside: cop.inside, side: cop.side }));
 });
 
 // =================================================================================================== 2. the locked double door holds

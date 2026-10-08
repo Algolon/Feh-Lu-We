@@ -119,8 +119,8 @@ async function walkthrough() {
       T.G().doAction(); T.tick(2); T.closeModal();
       T.walk([[127.7, 95.6], [127.7, 97.9]]); T.act('inspect.trolley', 'serveerwagen'); T.closeModal();
     });
-    // DEV-02: double door at Z 104.8–107.2; the sauna (floor +0.80) is reached by its ramp from the north (no side steps)
-    await step('A: out to the sauna', () => { T.walk([[127.7, 101.5], [128.6, 106.0]]); T.act('door.consEast', 'Openen'); T.wait(1.2); T.walk([[131.6, 106.0], [131.6, 113.6], [134, 113.8], [134, 105.6]]); T.act('door.sauna', 'Openen'); T.wait(1.2); T.walk([[134, 104.6], [134, 101.8]]); const p = T.pos(); if (p.y < 0.75) throw new Error('not on sauna floor ' + JSON.stringify(p)); });
+    // DEV-02: double door at Z 104.8–107.2; DEV-04A: the sauna (floor +0.65) is reached by its landing and three steps from the north
+    await step('A: out to the sauna', () => { T.walk([[127.7, 101.5], [128.6, 106.0]]); T.act('door.consEast', 'Openen'); T.wait(1.2); T.walk([[131.6, 106.0], [131.6, 113.6], [134, 113.8], [134, 105.6]]); T.act('door.sauna', 'Openen'); T.wait(1.2); T.walk([[134, 104.6], [134, 101.8]]); const p = T.pos(); if (p.y < 0.6) throw new Error('not on sauna floor ' + JSON.stringify(p)); });
     await step('A: sauna heater + board', () => { T.act('sauna.heater', 'Kachel'); T.act('inspect.saunaBoard', 'bord'); T.closeModal(); });
     await shot(page, '13-sauna');
     await step('A: cabinet wheels 1 Ruit 2 Golf 3 Driehoek 4 Cirkel', () => {

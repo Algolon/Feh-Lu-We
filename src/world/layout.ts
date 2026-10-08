@@ -101,13 +101,16 @@ export const COTTAGE_LANDING: Rect = { x0: 16.8, x1: 20, z0: 151.0, z1: 153.6 };
 export const LAKE = { x: 54, z: 146, rx: 22, rz: 12, water: -0.35, bottom: -1.8 };
 export const lakeQ = (x: number, z: number) => ((x - LAKE.x) / LAKE.rx) ** 2 + ((z - LAKE.z) / LAKE.rz) ** 2;
 
-/** Wellness: dry deck east of the Copacabana Room, barrel sauna (raised floor), jacuzzi, ramp to the sauna door. */
+/** Wellness: dry deck east of the Copacabana Room, barrel sauna (raised floor), jacuzzi, steps to the sauna door. */
 export const SAUNA: Rect = { x0: 132, x1: 136, z0: 100, z1: 104 };
-export const SAUNA_FLOOR = 0.8;
+/** DEV-04A owner directive: the sauna floor is ~0.5 m above the deck (v0.2: +0.80, reached by an 8 m ramp). The barrel
+ * sits 0.15 m lower on its cradles, so its interior (benches, heater, door, board) is unchanged relative to the floor. */
+export const SAUNA_FLOOR = 0.65;
 export const WELLNESS: Rect = { x0: 130, x1: 148, z0: 96, z1: 115 };
 export const JACUZZI: Rect = { x0: 139, x1: 142.6, z0: 101, z1: 104.6 };
-/** 1.2 m ramp from the deck (+0.15 at Z 113.4) to a flat landing (+0.80, Z 104–105.2) in front of the sauna door. */
-export const SAUNA_RAMP = { x0: 133.4, x1: 134.6, zFoot: 113.4, zTop: 105.2, zDoor: 104, yFoot: 0.15, yTop: 0.8 };
+/** DEV-04A compact sauna access (replaces the 8 m ramp): a 1.4 m landing in front of the door (Z 104–104.9, floor level)
+ * and three steps down to the deck (+0.15) at Z 105.54. */
+export const SAUNA_STEPS = { x0: 133.3, x1: 134.7, zDoor: 104, zLanding: 104.9, zFoot: 105.54, yFoot: 0.15, yTop: SAUNA_FLOOR, risers: 3 };
 /** Copacabana double door (one saved state door.consEast, two 1.2 m leaves opening outward/east). */
 export const CONS_EAST_DOOR = { x: 130, z0: 104.8, z1: 107.2, h: 2.35 };
 
