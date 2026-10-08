@@ -359,7 +359,9 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   // ---------------------------------------------------------------- entrance hall (double height)
   rug(c, 90, 90, GF + 0.01, 3.4, 6.5, 0);
   plant(c, 91.6, 96.8, GF, 1.1);
-  painting(c, 85.12, 4.6, 90, Math.PI / 2, 1.2, 0.9, 1);
+  // DEV-04A: this landscape hung IN the Sterrenkamer doorway on the gallery wall (it floated in the opening when the door
+  // opened); it now hangs on the free gallery wall between the Reiskamer and Sterrenkamer doors (wall-art contract)
+  painting(c, 85.12, 4.6, 86.2, Math.PI / 2, 1.2, 0.9, 1);
   painting(c, 85.12, 2.0, 92.5, Math.PI / 2, 0.9, 0.7, 0);
   // a woven hanging above the stair, on an oak rod with finials (DEV-03: was a carpet glued flat to the wall)
   boxMM(c.b, k.M.rug, '#e8d8c4', 94.84, 94.88, 3.95, 5.85, 88.5, 90.2, { chunk: c.chunk, shadow: false });
@@ -478,7 +480,8 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   place(plan, 107.05, GF + 0.9, 86.0, -Math.PI / 2);
   w.scene.add(plan);
   makeInspect(w, g, { id: 'inspect.hostingPlan', obj: plan, clue: 'c.hostingPlan', hit: [0.5, 0.2, 0.55], label: 'Lezen: tafelplan' });
-  painting(c, 107.55, 2.1, 89.7, -Math.PI / 2, 0.8, 0.6, 7);
+  // DEV-04A: was hung across the north window's glass and curtain on the east wall; now on the free north wall (z 92)
+  painting(c, 104.8, 2.0, 91.92, Math.PI, 0.8, 0.6, 7);
   const dch = chandelier(w, 101.3, CEIL, 86.2, 0.7, 0.9);
   const dsw = compound((b) => box(b, k.M.paint, '#c9a44c', 0, 0, 0, 0.12, 0.18, 0.03));
   place(dsw, 95.09, 1.35, 90.4, Math.PI / 2);
@@ -1010,8 +1013,9 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   w.scene.add(herb);
   makeInspect(w, g, { id: 'inspect.herbarium', obj: herb, clue: 'c.herbarium', hit: [0.6, 0.25, 0.5], label: 'Lezen: herbarium' });
   // botanical prints; DEV-01 drops them (they reuse the old emblem drawings: no second emblem system)
+  // DEV-04A: the first print overlapped the window at z 83; the four prints now use the wall between the windows
   if (!SLICE) for (let i = 0; i < 4; i++) {
-    const z = 82.5 + i * 3.4;
+    const z = [85.0, 89.0, 93.0, 94.6][i];
     canvasPanel(w, 107.5, R0 + 1.6, z, -Math.PI / 2, 0.5, 0.65, (x, W, H) => { x.fillStyle = '#f2e8d2'; x.fillRect(0, 0, W, H); drawSymbol(x, ['blad', 'e.varen', 'blad', 'e.varen'][i], W * 0.15, H * 0.15, W * 0.7); }, 128, '#8a6a3a');
   }
   for (const [x, z] of [[106.9, 81.0], [102.0, 81.0], [106.9, 95.2]] as const) plant(c, x, z, R0, 1.0, '#c9774a');

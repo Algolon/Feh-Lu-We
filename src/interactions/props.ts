@@ -7,6 +7,7 @@ import { getKit, compound, box, hitbox, v3, type Batcher } from '../world/kit';
 import { has } from '../core/state';
 import { pickup as pickupRule, unlockWithKey } from '../puzzles/rules';
 import { ITEMS } from '../content/items';
+import { registerSweep } from '../world/openings';
 
 const DIRS = { 'x+': [1, 0], 'x-': [-1, 0], 'z+': [0, 1], 'z-': [0, -1] } as const;
 export type Dir = keyof typeof DIRS;
@@ -163,6 +164,8 @@ export function makeDoor(w: World, g: GameApi, o: DoorOpts) {
     minZ: Math.min(o.z, o.z + dz * o.width, o.z + nz * o.width) - 0.05, maxZ: Math.max(o.z, o.z + dz * o.width, o.z + nz * o.width) + 0.05,
     minY: o.y0, maxY: o.y0 + o.height,
   };
+  // DEV-04A wall-art contract: nothing hangs where a leaf sweeps (both leaves of a double door)
+  for (const sw of pair ? [sweepBox, pair.sweep] : [sweepBox]) registerSweep({ id: o.id, x0: sw.minX, x1: sw.maxX, z0: sw.minZ, z1: sw.maxZ, y0: o.y0, y1: o.y0 + o.height });
   const applyCollision = () => { collider.enabled = Math.abs(angle) < SOLID_BELOW; if (pair) pair.pcol.enabled = collider.enabled; };
   const pose = () => { pivot.rotation.y = base + angle; if (pair) pair.pv.rotation.y = pair.pbase + angle * pair.k; };
   w.onSync(() => {

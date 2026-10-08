@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 import { type Ctx, segBox } from './arch';
 import { box, cyl, compound, planMatrix, v3, getKit } from './kit';
+import { registerArt, artFootprint } from './openings';
 import { Asm, artMats, softBox, lathe, projectUV, bake, baseAO } from './artkit';
 import { bushModel, BARK_TINT, LEAF_TINT, woodMats } from './woodkit';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
@@ -266,6 +267,7 @@ function paintingAtlas() {
 
 /** Framed painting hung on a wall. Faces plan heading yaw. */
 export function painting(c: Ctx, x: number, y: number, z: number, yaw: number, w = 0.9, h = 0.68, idx = 0) {
+  registerArt(artFootprint(`painting@${x.toFixed(2)},${z.toFixed(2)}`, x, y, z, yaw, w + 0.14, h + 0.14)); // DEV-04A wall-art contract
   const g = new THREE.PlaneGeometry(w, h);
   const uv = g.attributes.uv as THREE.BufferAttribute;
   const u0 = (idx % 4) / 4, v0 = 1 - (Math.floor(idx / 4) + 1) / 2;
@@ -594,6 +596,7 @@ export function canvasPanel(w: World, x: number, y: number, z: number, yaw: numb
   tex.anisotropy = 4;
   const mat = w.material(emissive ? new THREE.MeshBasicMaterial({ map: tex }) : new THREE.MeshLambertMaterial({ map: tex }));
   const grp = new THREE.Group();
+  registerArt(artFootprint(`panel@${x.toFixed(2)},${z.toFixed(2)}`, x, y, z, yaw, width + (frame ? 0.1 : 0), height + (frame ? 0.1 : 0))); // DEV-04A wall-art contract
   const plane = new THREE.Mesh(new THREE.PlaneGeometry(width, height), mat);
   plane.position.z = 0.03;
   grp.add(plane);

@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { Batcher, box, boxMM, cyl, geo, getKit, gableGeo, hipRoofGeo, planMatrix, type Kit } from './kit';
 import { lathe, softBox } from './artkit';
 import type { CollisionWorld } from '../player/collision';
+import { registerOpening } from './openings';
 
 export interface Ctx {
   b: Batcher;
@@ -61,6 +62,8 @@ export function wall(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number,
   let cur = lo;
   for (const op of ops) {
     const s = op.at - op.w / 2, e = op.at + op.w / 2;
+    // DEV-04A opening contract: every wall opening is a floor-level door/passage, clear from y0 up to its head
+    registerOpening({ kind: 'door', axis, f, t, a0: s, a1: e, y0, y1: y0 + (op.h ?? 2.3) });
     piece(cur, s, y0, y1);
     piece(s, e, y0 + (op.h ?? 2.3), y1); // lintel
     // door frame (visual only)
@@ -93,6 +96,8 @@ export function wall(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number,
   }
   for (const wdef of o.windows ?? []) {
     const ext = o.exterior ?? 0;
+    const wy = y0 + (wdef.sill ?? 0.9), ww = wdef.w ?? 1.1;
+    registerOpening({ kind: 'window', axis, f, t, a0: wdef.at - ww / 2, a1: wdef.at + ww / 2, y0: wy, y1: wy + (wdef.h ?? 1.5) });
     const sides: (1 | -1)[] = wdef.side ? [wdef.side] : ext ? [ext as 1 | -1, (-ext) as 1 | -1] : [1, -1];
     for (const s of sides) {
       const outside = ext !== 0 && s === ext;
