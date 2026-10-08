@@ -1,6 +1,6 @@
 // Static furniture and decor (batched), plus lamp/lantern models for interactive lights.
 import * as THREE from 'three';
-import { type Ctx } from './arch';
+import { type Ctx, segBox } from './arch';
 import { box, cyl, compound, planMatrix, v3, getKit } from './kit';
 import { Asm, artMats, softBox, lathe, projectUV, bake, baseAO } from './artkit';
 import { bushModel, BARK_TINT, LEAF_TINT, woodMats } from './woodkit';
@@ -516,10 +516,60 @@ export function ladder(c: Ctx, x: number, z: number, y0: number, yaw: number, h 
 }
 /** Small telescope on a tripod pointing out of a window. */
 export function telescope(c: Ctx, x: number, z: number, y0: number, yaw: number) {
-  const k = c.k;
-  for (let i = 0; i < 3; i++) { const a = (i / 3) * Math.PI * 2; cyl(c.b, k.M.wood, '#5a3a22', x + Math.cos(a) * 0.2, y0, z + Math.sin(a) * 0.2, 0.015, 0.02, 1.25, 5, { chunk: c.chunk, rz: Math.cos(a) * 0.16, rx: -Math.sin(a) * 0.16 }); }
-  cyl(c.b, k.M.paint, '#b8892f', x, y0 + 1.25, z, 0.05, 0.06, 0.8, 10, { chunk: c.chunk, rx: Math.PI / 2 - 0.35, yaw });
+  // DEV-03: a brass refractor (tapered tube, dew shield, eyepiece) on an alt-az head over a timber tripod with a spreader
+  const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw), oak = '#5a3a22', brass = '#b8892f';
+  for (let i = 0; i < 3; i++) {
+    const t = yaw + (i / 3) * Math.PI * 2, fx = x + Math.sin(t) * 0.26, fz = z + Math.cos(t) * 0.26;
+    segBox(c, M.timber, oak, [fx, y0, fz], [x + Math.sin(t) * 0.04, y0 + 1.2, z + Math.cos(t) * 0.04], 0.035, 0.025);
+    segBox(c, M.timber, oak, [x + Math.sin(t) * 0.17, y0 + 0.42, z + Math.cos(t) * 0.17], [x, y0 + 0.42, z], 0.025, 0.02);
+  }
+  a.add(M.timber, darker(oak, 0.8), cg('tsHead', () => lathe([[0.001, 0], [0.07, 0], [0.06, 0.06], [0.03, 0.1], [0.001, 0.1]], 8)), 0, 1.18, 0);
+  a.add(M.brass, darker(brass, 0.7), bx(0.05, 0.12, 0.06), 0, 1.3, 0);
+  const tube = cg('tsTube', () => lathe([[0.001, 0], [0.032, 0], [0.036, 0.05], [0.042, 0.62], [0.055, 0.64], [0.055, 0.82], [0.001, 0.82]], 12).translate(0, -0.42, 0).rotateX(Math.PI / 2));
+  a.add(M.brass, brass, tube, 0, 1.38, 0.06, { rx: -0.35 });
+  a.add(M.timber, '#2b2622', cg('tsEye', () => new THREE.CylinderGeometry(0.016, 0.016, 0.1, 8).rotateX(Math.PI / 2)), 0, 1.25, -0.37, { rx: -0.35 });
   c.col.addCircle(x, z, 0.3, y0, y0 + 1.5);
+}
+/** DEV-03 slatted bench: two trestle ends, a stretcher, three seat slats with eased edges. Origin = centre, along local x. */
+export function slatBench(c: Ctx, x: number, z: number, y0: number, yaw: number, len = 1.5, wood = '#7a5232') {
+  const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw), dk = darker(wood, 0.78);
+  for (const sx of [-1, 1]) {
+    a.add(M.timber, dk, sb(0.06, 0.4, 0.36, 0.006), sx * (len / 2 - 0.12), 0.2, 0);
+    a.add(M.timber, dk, sb(0.08, 0.05, 0.42, 0.006), sx * (len / 2 - 0.12), 0.025, 0);
+  }
+  a.add(M.timber, dk, bx(len - 0.3, 0.05, 0.04), 0, 0.14, 0);
+  for (const dz of [-0.13, 0, 0.13]) a.add(M.timber, wood, sb(len, 0.035, 0.11, 0.008), 0, 0.42, dz);
+  collide(c, x, z, yaw, len, 0.42, 0.45, y0);
+}
+/** DEV-03 blanket chest (bed foot): frame-and-panel box on a plinth, moulded lid, iron handles. */
+export function blanketChest(c: Ctx, x: number, z: number, y0: number, yaw: number, w = 1.1, wood = '#7a5a3a') {
+  const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw), dk = darker(wood, 0.78), lt = darker(wood, 1.1);
+  a.add(M.timber, dk, bx(w - 0.04, 0.07, 0.4), 0, 0.035, 0);
+  a.add(M.timber, wood, sb(w, 0.4, 0.44, 0.008), 0, 0.27, 0);
+  for (const dx of [-w / 4, w / 4]) a.add(M.timber, lt, sb(w / 2 - 0.12, 0.24, 0.02, 0.008), dx, 0.27, 0.22);
+  a.add(M.timber, dk, sb(w + 0.04, 0.05, 0.48, 0.012), 0, 0.495, 0);
+  for (const sx of [-1, 1]) a.add(M.paint, '#2f2b28', bx(0.02, 0.03, 0.16), sx * (w / 2 + 0.01), 0.36, 0);
+  a.add(M.upholstery, '#d9cbb0', sb(w * 0.7, 0.06, 0.36, 0.02, 2), -0.05, 0.55, 0, { ry: 0.04 });
+  collide(c, x, z, yaw, w, 0.46, 0.55, y0);
+}
+/** Stacked board-game boxes (lid band over a darker base), slightly askew. */
+export function gameBoxes(c: Ctx, x: number, z: number, y: number, yaw: number, colors: string[]) {
+  const M = artMats(), a = new Asm(c.b, c.chunk, x, y, z, yaw);
+  colors.forEach((col, i) => {
+    const w = 0.4 - i * 0.04, d = 0.28 - i * 0.02, h = 0.07, ry = (i % 2 ? 1 : -1) * 0.08 * i;
+    a.add(M.paint, darker(col, 0.75), sb(w - 0.01, h - 0.02, d - 0.01, 0.004), 0, i * h + (h - 0.02) / 2, 0, { ry });
+    a.add(M.paint, col, sb(w, 0.035, d, 0.004), 0, i * h + h - 0.0175, 0, { ry });
+    a.add(M.paint, '#f2ead8', bx(w * 0.5, 0.002, d * 0.3), -0.03, i * h + h + 0.001, 0.02, { ry });
+  });
+}
+/** A hard instrument case leaning against a wall: body + neck, edge band, handle. Origin = foot at the floor. */
+export function instrumentCase(c: Ctx, x: number, z: number, y0: number, yaw: number, color: string, len = 1.05) {
+  const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw), lean = 0.14;
+  const body = len * 0.55, neck = len - body;
+  a.add(M.upholstery, color, sb(0.4, body, 0.13, 0.04, 2), 0, body / 2, 0, { rx: lean });
+  a.add(M.upholstery, color, sb(0.22, neck, 0.11, 0.035, 2), 0, body + neck / 2 - 0.02, -lean * (body + neck / 2), { rx: lean });
+  a.add(M.paint, '#8a8278', bx(0.41, 0.015, 0.135), 0, body * 0.5, -lean * body * 0.5, { rx: lean });
+  a.add(M.paint, '#1e1a17', bx(0.12, 0.025, 0.03), 0.21, body * 0.55, -lean * body * 0.55, { rx: lean, rz: Math.PI / 2 });
 }
 /** A flat framed panel with its own canvas texture (signs, boards, drawn diagrams). Faces plan heading yaw. */
 export function canvasPanel(w: World, x: number, y: number, z: number, yaw: number, width: number, height: number, draw: (x: CanvasRenderingContext2D, W: number, H: number) => void, px = 512, frame: string | null = '#6b4426', emissive = false) {

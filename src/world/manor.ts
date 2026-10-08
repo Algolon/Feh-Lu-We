@@ -18,6 +18,7 @@ import { box, boxMM, cyl, blob, compound, v3, hipRoofGeo, geo } from './kit';
 import {
   table, chair, sofa, armchair, bookshelf, counter, rug, plant, painting, crate, tableLamp, floorLamp, chandelier, wallSconce,
   part, staticLantern, staticSconce, bed2, bedside, wardrobe, curtains, desk, lectern, bathtub, ladder, telescope, canvasPanel, nameBoard, joinery,
+  slatBench, blanketChest, gameBoxes, instrumentCase,
 } from './furniture';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place } from '../interactions/props';
 import { forestMapTexture } from './textures';
@@ -160,7 +161,9 @@ function shell(w: World, c: Ctx) {
   wall(c, 'z', 115.8, 92.4, 109.6, 0, WH, { ...stone, t: 0.4, exterior: 1, skin, uv: 2.4, openings: [{ at: 102.5, w: 1.3, h: 2.35 }] });
   ring(-0.1, 0.62, 0.1, sand, 108, 116, 92.2, 109.8);
   ring(WH - 0.3, WH - 0.14, 0.08, dressed, 108, 116, 92.2, 109.8, k.M.paint);
-  hipRoof(c, 112, 101, 8, 18, WH, 2.6, k.M.slate, '#a39f9a', 0.5, { downpipes: [[116.14, 92.6]] });
+  // DEV-03: the west eave stops on the manor's outer wall face (x 108); with the old symmetric 8 m footprint the
+  // overhang, fascia and gutter ran 0.5 m through the manor wall into the north guest room as a "dado rail"
+  hipRoof(c, 112.25, 101, 7.5, 18, WH, 2.6, k.M.slate, '#a39f9a', 0.5, { downpipes: [[116.14, 92.6]] });
 }
 
 // =====================================================================================================
@@ -948,9 +951,10 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   part(c, k.M.wood, '#6b4426', 93.2, 81.0, 0, 0, UF, 0, 1.4, 0.45, 0.4, 1);
   c.col.addBox(92.5, 93.9, 80.6, 81.4, UF, UF + 0.5);
   // ---------------------------------------------------------------- Reiskamer (warm, travel)
-  rug(c, 78.5, 83.6, R0 + 0.01, 3.0, 2.8, 0, '#c9774a');
-  bed2(c, 75.0, 83.6, R0, Math.PI / 2, '#b5643c', '#7a4f2c');
-  bedside(c, 73.4, 81.6, R0, Math.PI / 2, '#7a4f2c');
+  // DEV-03: headboard on the west wall beside its window (it stood 1.5 m off the wall with the bedside behind it)
+  rug(c, 75.0, 84.9, R0 + 0.01, 3.0, 2.6, 0, '#c9774a');
+  bed2(c, 73.5, 84.9, R0, Math.PI / 2, '#b5643c', '#7a4f2c');
+  for (const bz of [83.75, 86.05]) bedside(c, 72.65, bz, R0, Math.PI / 2, '#7a4f2c');
   wardrobe(c, 81.6, 86.35, R0, Math.PI, 1.4, '#7a4f2c');
   curtains(c, 75.5, 80.45, R0 + 0.75, 0, 1.0, 1.9, '#c8643a');
   curtains(c, 82.5, 80.45, R0 + 0.75, 0, 1.0, 1.9, '#c8643a');
@@ -965,12 +969,12 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   w.scene.add(suitcase);
   c.col.addBox(83.5, 84.9, 83.9, 84.9, R0, R0 + 0.7);
   makeInspect(w, g, { id: 'mem.reis.suitcase', obj: suitcase, clue: 'mem.reis.suitcase', hit: [0.9, 0.5, 0.6], label: 'Bekijken: koffer' });
-  const rl = tableLamp(w, 73.4, R0 + 0.59, 81.6);
+  const rl = tableLamp(w, 72.65, R0 + 0.59, 83.75);
   makeLamp(w, g, { id: 'lamp.reis', ...rl, name: 'lamp', defaultOn: true, hit: [0.4, 0.7, 0.4], intensity: 4, distance: 6, patch: { y: R0 + 0.03, r: 1.0 } });
   // ---------------------------------------------------------------- Sterrenkamer (cool, astronomy)
-  rug(c, 78.5, 90.4, R0 + 0.01, 3.0, 3.0, 0, '#3f5a7a');
-  bed2(c, 75.0, 90.4, R0, Math.PI / 2, '#26344a', '#4a3a2a');
-  bedside(c, 73.4, 92.4, R0, Math.PI / 2, '#4a3a2a');
+  rug(c, 75.4, 91.6, R0 + 0.01, 3.0, 3.0, 0, '#3f5a7a');
+  bed2(c, 73.5, 92.2, R0, Math.PI / 2, '#26344a', '#4a3a2a');
+  for (const bz of [91.05, 93.35]) bedside(c, 72.65, bz, R0, Math.PI / 2, '#4a3a2a');
   curtains(c, 72.45, 90.0, R0 + 0.75, Math.PI / 2, 1.0, 1.9, '#2f3f5f');
   canvasPanel(w, 78.6, R0 + 1.6, 93.9, Math.PI, 1.4, 0.95, (x, W, H) => { x.fillStyle = '#1c2a44'; x.fillRect(0, 0, W, H); for (let i = 0; i < 60; i++) { x.fillStyle = i % 5 ? '#f4ecd8' : '#e8c547'; x.beginPath(); x.arc((Math.sin(i * 12.9) * 0.5 + 0.5) * W, (Math.sin(i * 7.3) * 0.5 + 0.5) * H, i % 7 ? 2 : 4, 0, Math.PI * 2); x.fill(); } x.strokeStyle = 'rgba(244,236,216,.5)'; x.lineWidth = 1.5; x.beginPath(); x.moveTo(W * 0.2, H * 0.3); x.lineTo(W * 0.32, H * 0.42); x.lineTo(W * 0.45, H * 0.36); x.lineTo(W * 0.58, H * 0.5); x.stroke(); x.font = 'italic 20px Georgia'; x.fillStyle = '#f4ecd8'; if (!SLICE) x.fillText('sterrenkaart', 16, H - 14); /* DEV-01R */ }, 384);
   telescope(c, 82.6, 91.4, R0, -Math.PI / 2 - 0.4);
@@ -979,7 +983,7 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   place(logbook, 83.9, R0 + 0.7, 93.0, 0.4);
   w.scene.add(logbook);
   makeInspect(w, g, { id: 'mem.sterren.telescope', obj: logbook, clue: 'mem.sterren.telescope', hit: [0.4, 0.2, 0.4], label: 'Lezen: logboek' });
-  const sl = tableLamp(w, 73.4, R0 + 0.59, 92.4);
+  const sl = tableLamp(w, 72.65, R0 + 0.59, 93.35);
   // DEV-01: on by default so the B01 evidence is readable on arrival
   makeLamp(w, g, { id: 'lamp.sterren', ...sl, name: 'lamp', defaultOn: SLICE, hit: [0.4, 0.7, 0.4], intensity: 4, distance: 6, patch: { y: R0 + 0.03, r: 1.0 } });
   // ---------------------------------------------------------------- bathroom
@@ -1013,10 +1017,15 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   const bl = tableLamp(w, 103.9, R0 + 0.76, 89.4);
   makeLamp(w, g, { id: 'lamp.botanic', ...bl, name: 'lamp', defaultOn: true, hit: [0.4, 0.7, 0.4], intensity: 4, distance: 7, patch: { y: R0 + 0.03, r: 1.2 } });
   // ---------------------------------------------------------------- north guest room (source id `storage`), linen, rear nooks
-  bed2(c, 105.4, 102.6, R0, -Math.PI / 2, '#6f8a7a', '#7a5a3a');
-  bedside(c, 107.15, 100.6, R0, -Math.PI / 2, '#7a5a3a');
+  // DEV-03: headboard on the east wall (it stood 1.1 m off it), a bedside each side, a chest at the foot, a reading
+  // chair in the free corner by the door; the wardrobe keeps the north wall, the walk line door → bed stays clear
+  bed2(c, 106.45, 102.6, R0, -Math.PI / 2, '#6f8a7a', '#7a5a3a');
+  for (const bz of [101.35, 103.85]) bedside(c, 107.33, bz, R0, -Math.PI / 2, '#7a5a3a');
+  blanketChest(c, 104.95, 102.6, R0, -Math.PI / 2, 1.1, '#7a5a3a');
+  painting(c, 107.58, R0 + 1.75, 102.6, -Math.PI / 2, 1.0, 0.6, 3);
   wardrobe(c, 101.6, 106.25, R0, Math.PI, 1.4, '#7a5a3a');
-  rug(c, 103.4, 102.6, R0 + 0.01, 2.6, 3.0, 0, '#b8a888');
+  armchair(c, 100.0, 104.9, R0, Math.PI * 0.75, '#8a9a7a');
+  rug(c, 104.7, 102.6, R0 + 0.01, 3.0, 2.4, 0, '#b8a888');
   staticLantern(c, w, 103.3, UCEIL - 0.6, 101.0, 0.5, 0, 2.5, 6);
   // shared linen: shelves along the north wall, reached centrally from the rear nook (not through a bedroom)
   for (let i = 0; i < 3; i++) {
@@ -1315,17 +1324,27 @@ function attic(w: World, g: GameApi, c: Ctx) {
   for (let x = 81; x < 101; x += 2.4) box(c.b, k.M.wood, '#6b4a2a', x, AF, 95, 0.14, roofUnderside(x, 95) - AF - 0.15, 0.14, { chunk: c.chunk }); // king posts
   // ---------------------------------------------------------------- staging: A02 weekend attic, A03 seasonal store, A04 lookout
   for (const [x, z, sz, col] of [[81.0, 102.9, 0.7, '#a0784a'], [81.8, 102.9, 0.55, '#b08a5a'], [81.0, 102.1, 0.6, '#8a6a4a'], [93.7, 102.9, 0.65, '#a0784a'], [92.9, 102.9, 0.5, '#c8a070'], [81.0, 96.0, 0.6, '#a0784a']] as const) crate(c, x, z, AF, sz, 0.15, col);
-  for (let i = 0; i < 3; i++) { // instrument cases leaning against the north wall
-    box(c.b, k.M.paint, ['#2b2622', '#4a2f2a', '#2f3f4a'][i], 86 + i * 0.7, AF, 103.65, 0.4, 1.1 - i * 0.15, 0.22, { chunk: c.chunk, yaw: 0.05 * i });
+  // DEV-03 A02 weekend attic composed as one room: the sofa group under its lantern against the north knee wall,
+  // instrument cases at the west gable, the drying line moved off the walking line onto the south partition
+  for (let i = 0; i < 3; i++) instrumentCase(c, 80.32, 99.8 + i * 0.62, AF, Math.PI / 2, ['#2b2622', '#4a2f2a', '#2f3f4a'][i], 1.1 - i * 0.15);
+  c.col.addBox(80.06, 80.75, 99.5, 101.4, AF, AF + 1.1);
+  for (const x of [88.6, 93.4]) {
+    cyl(c.b, k.M.wood, '#6b4a2a', x, AF, 92.7, 0.035, 0.04, 1.8, 6, { chunk: c.chunk }); // drying line posts on feet
+    box(c.b, k.M.wood, '#5a3a22', x, AF, 92.7, 0.36, 0.05, 0.08, { chunk: c.chunk });
+    c.col.addCircle(x, 92.7, 0.14, AF, AF + 1.8);
   }
-  c.col.addBox(85.7, 87.9, 103.4, 103.9, AF, AF + 1.1);
-  for (const x of [84, 89]) cyl(c.b, k.M.wood, '#6b4a2a', x, AF, 97.5, 0.04, 0.04, 1.8, 6, { chunk: c.chunk }); // drying line posts
-  box(c.b, k.M.paint, '#efe8d8', 86.5, AF + 1.75, 97.5, 5.0, 0.01, 0.01, { chunk: c.chunk });
-  for (let i = 0; i < 5; i++) box(c.b, k.M.paint, ['#6fae9a', '#f2ead8', '#9aa8d8', '#e0a060', '#c4553d'][i], 84.8 + i * 0.8, AF + 1.15, 97.5, 0.55, 0.6, 0.02, { chunk: c.chunk });
-  c.col.addCircle(84, 97.5, 0.12, AF, AF + 1.8); c.col.addCircle(89, 97.5, 0.12, AF, AF + 1.8);
-  sofa(c, 82.0, 99.5, AF, Math.PI / 2, 2.0, '#8a7a5a');
-  table(c, 88.5, 101.4, AF, 1.4, 0.8, 0, '#7a5a3a', 0.72);
-  for (let i = 0; i < 3; i++) box(c.b, k.M.paint, ['#c4553d', '#3f6fa8', '#e8c547'][i], 88.0 + i * 0.45, AF + 0.72, 101.4, 0.36, 0.06, 0.28, { chunk: c.chunk });
+  box(c.b, k.M.paint, '#efe8d8', 91.0, AF + 1.74, 92.7, 4.8, 0.012, 0.012, { chunk: c.chunk });
+  for (let i = 0; i < 5; i++) {
+    const lx = 89.3 + i * 0.9, h = [0.6, 0.45, 0.7, 0.5, 0.4][i];
+    box(c.b, k.M.paint, ['#6fae9a', '#f2ead8', '#9aa8d8', '#e0a060', '#c4553d'][i], lx, AF + 1.74 - h, 92.7, 0.55, h, 0.015, { chunk: c.chunk, yaw: (i % 2 ? 1 : -1) * 0.04 });
+    for (const px of [-0.22, 0.22]) box(c.b, k.M.wood, '#c8b090', lx + px, AF + 1.7, 92.7, 0.015, 0.07, 0.025, { chunk: c.chunk }); // pegs
+  }
+  rug(c, 86.0, 101.7, AF + 0.01, 3.4, 2.6, 0, '#b8956a');
+  sofa(c, 86.0, 103.4, AF, Math.PI, 2.0, '#8a7a5a');
+  table(c, 86.0, 101.9, AF, 1.0, 0.55, 0, '#7a5a3a', 0.42);
+  gameBoxes(c, 85.8, 101.9, AF + 0.42, 0.15, ['#c4553d', '#3f6fa8', '#e8c547']);
+  armchair(c, 84.6, 100.4, AF, -0.35, '#7a5a3a');
+  armchair(c, 87.4, 100.4, AF, 0.35, '#6f7a5a');
   // A03 seasonal store (behind its door): garden cushions, a boxed tree, the old games box (memory moved here, same id)
   for (const [x, z, sz] of [[81.0, 86.8, 0.7], [81.8, 86.8, 0.6], [94.1, 86.8, 0.7], [94.1, 87.6, 0.55], [90.5, 86.8, 0.6]] as const) crate(c, x, z, AF, sz, 0.1, '#9a7a52');
   box(c.b, k.M.paint, '#3f5a3a', 92.0, AF, 87.0, 1.6, 0.35, 0.35, { chunk: c.chunk });
@@ -1336,10 +1355,9 @@ function attic(w: World, g: GameApi, c: Ctx) {
   c.col.addCircle(84.4, 87.0, 0.4, AF, AF + 0.5);
   makeInspect(w, g, { id: 'mem.storage.box', obj: memBox, clue: 'mem.storage.box', hit: [0.7, 0.5, 0.6] });
   // A04 lookout: observatory reservation only (I03 open) — a bench and the stars hobby, no roof opening claimed
-  part(c, k.M.wood, '#6b4426', 99.8, 94.6, -Math.PI / 2, 0, AF, 0, 1.6, 0.45, 0.45, 1);
-  c.col.addBox(99.5, 100.1, 93.8, 95.4, AF, AF + 0.5);
+  slatBench(c, 100.45, 93.5, AF, Math.PI / 2, 1.6, '#6b4426'); // clear of the king post at z 95
   telescope(c, 97.4, 93.2, AF, -0.5);
-  for (const [x, z] of [[88, 98.5], [86.5, 89], [98, 95.4], [97, 102.6]] as const) staticLantern(c, w, x, AF + 1.9, z, 0.5, 0, 2.5, 7);
+  for (const [x, z] of [[86, 101.6], [86.5, 89], [98, 95.4], [97, 102.6]] as const) staticLantern(c, w, x, AF + 1.9, z, 0.5, 0, 2.5, 7);
   staticLantern(c, w, 98.4, UF + 2.4, 103.2, 0.5, 0, 3, 8); // stairwell light over the return lane
   c.chunk = base;
 }
