@@ -126,6 +126,7 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   w.roomRegion(['cottageIn'], ['cottageEntry', 'cottageRoom'], Infinity, 25);
   w.roomRegion(['cottage'], ['out', 'cottageEntry', 'cottageRoom'], 75); // a landmark across the lake: visible from the terrace and the lawn
   w.roomRegion(['ground', 'paths', 'wall', 'fence', 'garden', 'grounds', 'forest', 'outdoor', 'hills'], ['out', 'cons', 'sauna', 'shed', 'cottageEntry', 'cottageRoom']);
+  w.roomRegion(['wick'], ['out', 'cons', 'sauna', 'shed', 'cottageEntry', 'cottageRoom'], 70); // DEV-04A: the enclosed wickerman clearing
 
   w.spawn = { x: SITES.gate.x, y: 0, z: 3, yaw: 0, pitch: 0.02 };
   w.checkpoints.push(

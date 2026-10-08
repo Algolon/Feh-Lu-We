@@ -297,7 +297,10 @@ function golf(w: World, c: Ctx) {
  * whose centres drifted off the shoulders), the candle ring on flat stones with walking room round the figure.
  */
 function wickerman(w: World, c: Ctx) {
-  const k = c.k, o = { chunk: 'grounds' };
+  // its own meshes (chunk 'wick', drawn within 70 m: the clearing is enclosed by woodland): merged into 'grounds' the
+  // stones and the plinth stretched the lake-shore stone mesh's bounds across the estate and cost a draw call in views
+  // that never see the clearing
+  const k = c.k, o = { chunk: 'wick' };
   const { x, z } = WICKERMAN;
   const straw = '#d8b860', twine = '#5a4430', M = woodMats();
   const gy = terrainHeight(x, z);
@@ -348,6 +351,6 @@ function wickerman(w: World, c: Ctx) {
   w.col.addBoxC(bx, z, 0.5, 2.3, by - 0.3, by + 0.45);
   const [lx, lz] = [x - 4.2, z + 3.9], ly = terrainHeight(lx, lz);
   cyl(c.b, k.M.wood, '#5a3a22', lx, ly, lz, 0.04, 0.05, 1.15, 6, o);
-  staticLantern(c, w, lx, ly + 1.15, lz, 0.7, 0, 3, 8);
+  staticLantern({ ...c, chunk: 'wick' }, w, lx, ly + 1.15, lz, 0.7, 0, 3, 8);
   w.col.addCircle(lx, lz, 0.08, ly, ly + 1.5);
 }

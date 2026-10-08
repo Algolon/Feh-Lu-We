@@ -78,6 +78,17 @@ export function clipLine(pts: readonly P2[], owned: Owned, snap = 1.2): Part[] {
       }
     }
   }
+  // render density: clipping works on a 0.5 m sampling, but a ribbon only needs ~1 m rows away from its ends (as the
+  // old drape had); within 2 m of an end the 0.5 m rows stay so the mouth and its flush cap keep their shape
+  for (const part of out) {
+    const P = part.pts, keep: [number, number][] = [], L = P.reduce((s, q, i) => (i ? s + Math.hypot(q[0] - P[i - 1][0], q[1] - P[i - 1][1]) : 0), 0);
+    let d = 0, last = -Infinity;
+    for (let i = 0; i < P.length; i++) {
+      if (i) d += Math.hypot(P[i][0] - P[i - 1][0], P[i][1] - P[i - 1][1]);
+      if (i === 0 || i === P.length - 1 || d < 2 || L - d < 2 || d - last >= 0.95) { keep.push(P[i]); last = d; }
+    }
+    part.pts = keep;
+  }
   return out.filter((p) => p.pts.length > 1 && Math.hypot(p.pts[0][0] - p.pts[p.pts.length - 1][0], p.pts[0][1] - p.pts[p.pts.length - 1][1]) > 0.3);
 }
 

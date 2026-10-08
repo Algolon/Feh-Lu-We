@@ -120,6 +120,7 @@ function shell(w: World, c: Ctx) {
   }
   // roof (≈30°) with a real eave (fascia, soffit, gutter, caps) and downpipes at the corners and either side of the bay
   hipRoof(c, 90, 95, 36, 30, TOP, 8.2, k.M.slate, '#a39f9a', 0.7, { downpipes: [[71.86, 80.5], [108.14, 80.5], [71.86, 109.5], [108.14, 109.5], [85.85, 79.88], [94.15, 79.88]] });
+  roofWindowOutside(c); // DEV-04A: the attic observation window in the east slope (inside: attic())
   // chimneys: stack with a projecting band and a cap, two pots each
   for (const [x, z] of [[72.9, 86.7], [100, 101], [86, 106]] as const) {
     box(c.b, k.M.stone, '#d9c8a6', x, 8, z, 1.2, 8.4, 1.2, { chunk: c.chunk, uv: 2 });
@@ -1434,41 +1435,46 @@ function atticRoofSkin(c: Ctx) {
   g.dispose();
 }
 
+// DEV-04A observation window (ATTIC_ROOF_WINDOW): shared heights and the sloped quad for its inside and outside
+const rwIn = (x: number) => roofUnderside(x, 95) + 0.05, rwOut = (x: number) => rwIn(x) + 0.2; // inner skin / slate surface
+const rwQuad = (x0: number, x1: number, z0: number, z1: number, yf: (x: number) => number) => { // wound to face up and out (east)
+  const g = new THREE.BufferGeometry();
+  const v = [[x0, z0], [x1, z0], [x1, z1], [x0, z0], [x1, z1], [x0, z1]].flatMap(([x, z]) => [x, yf(x), -z]);
+  g.setAttribute('position', new THREE.Float32BufferAttribute(v, 3));
+  g.setAttribute('uv', new THREE.Float32BufferAttribute(new Array(12).fill(0), 2));
+  g.computeVertexNormals();
+  return g;
+};
+/** The observation window seen from outside (built with the exterior shell, so it merges into the shell's meshes). */
+function roofWindowOutside(c: Ctx) {
+  const k = c.k, RW = ATTIC_ROOF_WINDOW, P = k.M.paint, yOut = rwOut;
+  // dark glazing facing the sky (single-sided: from inside it is culled and the sky shows), frame and lead apron
+  const pane = rwQuad(RW.x0, RW.x1, RW.z0, RW.z1, (x) => yOut(x) + 0.05);
+  c.b.add(k.M.glow, pane, new THREE.Matrix4(), '#55656e', c.chunk, false, 0);
+  pane.dispose();
+  const fr = '#4a3a2c';
+  for (const z of [RW.z0 - 0.04, RW.z1 + 0.04]) segBox(c, P, fr, [RW.x0 - 0.06, yOut(RW.x0 - 0.06) + 0.04, z], [RW.x1 + 0.06, yOut(RW.x1 + 0.06) + 0.04, z], 0.1, 0.12);
+  for (const x of [RW.x0 - 0.04, RW.x1 + 0.04]) segBox(c, P, fr, [x, yOut(x) + 0.04, RW.z0 - 0.08], [x, yOut(x) + 0.04, RW.z1 + 0.08], 0.1, 0.12);
+  segBox(c, P, '#6e6f6a', [RW.x1 + 0.12, yOut(RW.x1 + 0.12) + 0.01, RW.z0 - 0.12], [RW.x1 + 0.12, yOut(RW.x1 + 0.12) + 0.01, RW.z1 + 0.12], 0.14, 0.02); // lead apron
+}
 /**
  * DEV-04A observation window: a real roof window in the east slope over the nook — a lined reveal through the roof's
  * depth (inside), a glazed sash in the roof plane and a timber frame with flashing standing on the slates (outside).
- * Inside and outside are the same opening (ATTIC_ROOF_WINDOW).
+ * Inside and outside are the same opening; this is the inside (attic chunk), roofWindowOutside() the outside.
  */
 function atticRoofWindow(c: Ctx) {
   const k = c.k, RW = ATTIC_ROOF_WINDOW, P = k.M.paint;
-  const yIn = (x: number) => roofUnderside(x, 95) + 0.05, yOut = (x: number) => yIn(x) + 0.2; // inner skin / slate surface
-  const cIn = c, cOut: Ctx = { ...c, chunk: 'manor' }; // the frame on the roof belongs to the exterior shell
+  const yIn = rwIn, cIn = c;
   // lining (reveal) on all four sides, from the inner skin up through the roof to the slates
   for (const z of [RW.z0, RW.z1]) segBox(cIn, k.M.wood, '#d9c7a4', [RW.x0, yIn(RW.x0) + 0.1, z], [RW.x1, yIn(RW.x1) + 0.1, z], 0.04, 0.24);
   for (const x of [RW.x0, RW.x1]) segBox(cIn, k.M.wood, '#d9c7a4', [x, yIn(x) + 0.1, RW.z0], [x, yIn(x) + 0.1, RW.z1], 0.05, 0.22);
   // the glazed sash in the roof plane: clear glass seen from inside, a sash frame with a handle bar at its head
-  const gl = (ya: number) => (x: number) => yIn(x) + ya;
-  const quad = (x0: number, x1: number, z0: number, z1: number, yf: (x: number) => number) => {
-    const g = new THREE.BufferGeometry();
-    const v = [[x0, z0], [x1, z0], [x1, z1], [x0, z0], [x1, z1], [x0, z1]].flatMap(([x, z]) => [x, yf(x), -z]);
-    g.setAttribute('position', new THREE.Float32BufferAttribute(v, 3));
-    g.setAttribute('uv', new THREE.Float32BufferAttribute(new Array(12).fill(0), 2));
-    g.computeVertexNormals();
-    return g;
-  };
+  const gl = (ya: number) => (x: number) => yIn(x) + ya, quad = rwQuad;
   const glass = quad(RW.x0, RW.x1, RW.z0, RW.z1, gl(0.16));
   c.b.add(k.M.glass, glass, new THREE.Matrix4(), '#ffffff', cIn.chunk, false, 0);
   glass.dispose();
   for (const z of [RW.z0 + 0.04, RW.z1 - 0.04]) segBox(cIn, P, '#e8e0cc', [RW.x0, gl(0.16)(RW.x0), z], [RW.x1, gl(0.16)(RW.x1), z], 0.07, 0.06);
   for (const x of [RW.x0 + 0.04, RW.x1 - 0.04]) segBox(cIn, P, '#e8e0cc', [x, gl(0.16)(x), RW.z0], [x, gl(0.16)(x), RW.z1], 0.07, 0.06);
   segBox(cIn, k.M.paint, '#c9a44c', [RW.x0 + 0.1, gl(0.1)(RW.x0 + 0.1), RW.z0 + 0.25], [RW.x0 + 0.1, gl(0.1)(RW.x0 + 0.1), RW.z1 - 0.25], 0.025, 0.025);
-  // outside: dark glazing facing the sky (single-sided: from inside it is culled, the sky shows), frame + flashing
-  const pane = quad(RW.x0, RW.x1, RW.z0, RW.z1, (x) => yOut(x) + 0.05); // wound to face up and out (east)
-  c.b.add(k.M.glow, pane, new THREE.Matrix4(), '#55656e', cOut.chunk, false, 0);
-  pane.dispose();
-  const fr = '#4a3a2c';
-  for (const z of [RW.z0 - 0.04, RW.z1 + 0.04]) segBox(cOut, P, fr, [RW.x0 - 0.06, yOut(RW.x0 - 0.06) + 0.04, z], [RW.x1 + 0.06, yOut(RW.x1 + 0.06) + 0.04, z], 0.1, 0.12);
-  for (const x of [RW.x0 - 0.04, RW.x1 + 0.04]) segBox(cOut, P, fr, [x, yOut(x) + 0.04, RW.z0 - 0.08], [x, yOut(x) + 0.04, RW.z1 + 0.08], 0.1, 0.12);
-  segBox(cOut, P, '#6e6f6a', [RW.x1 + 0.12, yOut(RW.x1 + 0.12) + 0.01, RW.z0 - 0.12], [RW.x1 + 0.12, yOut(RW.x1 + 0.12) + 0.01, RW.z1 + 0.12], 0.14, 0.02); // lead apron
 }
 
