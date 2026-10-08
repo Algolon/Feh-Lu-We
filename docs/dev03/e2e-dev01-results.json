@@ -1,0 +1,172 @@
+[
+  {
+    "name": "arrival: only the invitation (read at home) is observed; nothing encountered; no objective walkthrough; no catalogue / emblem plan / guestbook-tab evidence",
+    "ok": true,
+    "detail": "{\"obs\":[\"c.invitation\"],\"enc\":[],\"reg\":false,\"objective\":\"\",\"plaques\":false}"
+  },
+  {
+    "name": "notebook before register: three entries Waarnemingen · Mijn onderzoek · Archief; no topics, no threads, no next steps",
+    "ok": true,
+    "detail": "{\"html\":\"EIGEN VRAGEN EN IDEEËN\\nBewaren\",\"tabs\":[\"Waarnemingen (1)\",\"Mijn onderzoek\",\"Archief\"]}"
+  },
+  {
+    "name": "return-context: dial draft and focus survive notebook → back (parent panel restored)",
+    "ok": true,
+    "detail": "{\"inNb\":\"Notitieboek\",\"back\":\"← Terug naar het slot\",\"faces\":[\"Veer\",\"Dennenappel\",\"Kaars\"],\"focus\":\"down-1\"}"
+  },
+  {
+    "name": "register owned but not read: no topics in the notebook (RewardClaimed recorded, RegisterObserved not)",
+    "ok": true,
+    "detail": "{\"reg\":false,\"t\":\"EIGEN VRAGEN EN IDEEËN\\nBewaren\\nRESULTATEN\\n✓ RESULTAAT BEVESTIGD De lade van de ladekast in de hal ging open.\\n✓ RESULTAAT BEVESTIGD Je nam het landgoedregister uit de lade in de hal.\",\"results\":[\"drawer.solved\",\"drawer.register\"]}"
+  },
+  {
+    "name": "register read: exactly the three topics it names, no actions (no \"plaats boeken\", \"ga naar kamer\")",
+    "ok": true,
+    "detail": "[\"Aan tafel\",\"In de kantlijn\",\"Buiten de paden\"]"
+  },
+  {
+    "name": "attention switch changes no world state; the HUD label is off by default and shows only the chosen topic after opt-in",
+    "ok": true,
+    "detail": "{\"same\":true,\"att\":\"paden\",\"objOff\":\"\",\"obj\":\"Mijn aandacht: Buiten de paden\"}"
+  },
+  {
+    "name": "B01 panel: folio inspect records an observation; incomplete set is no attempt; draft selection survives notebook round-trip",
+    "ok": true,
+    "detail": "{\"folio\":\"Leestafel · Tekenblad: telescoop en schrift\",\"recorded\":true,\"wrong0\":0,\"sel\":\"plants\",\"slots\":{\"punt\":null,\"rond\":null,\"vierkant\":\"travel\"},\"scroll\":40}"
+  },
+  {
+    "name": "B01: literal v0.2 instruction; practice card readable from the table (no fourth slot); Controleer on an incomplete set is no attempt",
+    "ok": true,
+    "detail": "{\"instr\":true,\"inc\":{\"msg\":\"Leg eerst in elk vak een tekenblad.\",\"wrong\":0},\"title\":\"Leestafel · Oefenkaart op de leestafel\",\"rec\":true,\"slots\":3}"
+  },
+  {
+    "name": "grand stair: route reaches the upper floor by walking",
+    "ok": true,
+    "detail": "{\"x\":94,\"y\":3.35,\"z\":96.11}"
+  },
+  {
+    "name": "DS01 C: front sets photoFound with the one notice \"Afbeelding bewaard in notities\" (back not yet); back recorded only after Omkeren, literal back text; never enters the bag",
+    "ok": true,
+    "detail": "{\"ph\":{\"found\":true,\"back\":false,\"faces\":\"front\",\"notice\":\"✎ Afbeelding bewaard in notities\"},\"ph2\":{\"back\":true,\"faces\":\"front,back\",\"inv\":false}}"
+  },
+  {
+    "name": "grand stair: back down by walking",
+    "ok": true,
+    "detail": "{\"x\":88.56,\"y\":0.15,\"z\":96.81}"
+  },
+  {
+    "name": "B01: complete wrong set → neutral local feedback (one attempt); correct set opens the drawer; solved ≠ reward claimed",
+    "ok": true,
+    "detail": "{\"wrongMsg\":\"Alle drie de vakken zijn gevuld, maar de lade blijft dicht.\",\"wrong\":1,\"open1\":false,\"solved\":true,\"open2\":true,\"modal\":false,\"rewardBefore\":false}"
+  },
+  {
+    "name": "B01 reward: the studiesleutel is claimed only by taking it",
+    "ok": true,
+    "detail": "[\"drawer.solved\",\"drawer.register\",\"ds01.memory\",\"b01.solved\",\"b01.studyKey\"]"
+  },
+  {
+    "name": "hints: solved riddles leave the hint menu",
+    "ok": true,
+    "detail": "Waar hoort deze afbeelding bij?\nHet bureau in de studeerkamer\nDe kelderdeur\nHULP BIJ Waar hoort deze afbeelding bij?\n\nDr"
+  },
+  {
+    "name": "notebook: observations carry provenance (\"Waargenomen\"); results (\"✓ Resultaat bevestigd\") and the DS01 memory (\"Bekeken\", never \"Opgelost\") are typed separately; no solution summary",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "save/reload: mechanical and observation state restored exactly; only the dev01 keys were written",
+    "ok": true,
+    "detail": "{\"keys\":[\"fehluwe.dev01.save\"],\"pose\":{\"x\":82.0463591415408,\"y\":0.15,\"z\":101.18275989194598,\"yaw\":-1.6341554130591507,\"pitch\":-1.0720862713722357}}"
+  },
+  {
+    "name": "main route: no console errors or failed requests",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "DS01 C-first: works before A/B and before the register; memory granted once; no question or quest created",
+    "ok": true,
+    "detail": "{\"c\":{\"found\":true,\"q\":0,\"results\":[\"ds01.memory\"]},\"mem\":1,\"reg\":false}"
+  },
+  {
+    "name": "DS01 hints: offered after C first under \"Waar hoort deze afbeelding bij?\"; level 1 is the literal v0.2 text",
+    "ok": true,
+    "detail": "{\"t\":\"HULP BIJ Waar hoort deze afbeelding bij?\\n\\nDrie niveaus, elk alleen als je erom vraagt: 1 Aandacht · 2 Relatie · 3 Oplossing.\\n\\nHints zijn geen bewijs uit het huis en komen niet in je notitieboek.\\n\\nToon hint 1 (aandacht)\\nTerug\",\"l1\":\"Kijk naar de titel en herkomst van de afbeelding. Het album en de maquette vertellen iets over hetzelfde huisje.\"}"
+  },
+  {
+    "name": "DS01: A stays meaningful after C (ordinary note, no change in reward)",
+    "ok": true,
+    "detail": "{\"a\":true,\"mem\":1}"
+  },
+  {
+    "name": "notebook: player-made question (\"Mijn idee\") with a pinned image (\"Door jou vastgezet\"); opbergen solves nothing",
+    "ok": true,
+    "detail": "{\"own\":\"MIJN IDEE\\n\\nWaarom hangt de foto boven?\\n\\nDoor jou vastgezet: Afbeelding aan het droogrek\\n\\nOpbergen\",\"n\":1,\"archived\":true,\"solvedAfter\":false}"
+  },
+  {
+    "name": "old save (catalogue solved): imported as B01 alias, study key still opens the study, no replay",
+    "ok": true,
+    "detail": "{\"b01\":{\"slots\":{\"punt\":null,\"rond\":null,\"vierkant\":null},\"solved\":true,\"legacy\":\"catalogSolved\",\"wrong\":0},\"open\":true,\"notice\":\"Testversie (DEV-01)\"}"
+  },
+  {
+    "name": "old save: the player's own save is byte-identical after playing the copy",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "normal game unchanged: no slice objects, the iteration-3 catalogue and plan exist, save has no slice block, no dev01 keys",
+    "ok": true,
+    "detail": "{\"slice\":null,\"ids\":[],\"cat\":true,\"plan\":true,\"saved\":false,\"keys\":[]}"
+  },
+  {
+    "name": "culling: shell drawn from outside and inside; hall/library chunks shown in their rooms",
+    "ok": true,
+    "detail": "{\"forecourt\":{\"shell\":true,\"up\":false,\"lib\":false},\"hall\":{\"shell\":true,\"hallChunk\":true,\"up\":true},\"hallTargetUp\":null,\"library\":{\"shell\":true,\"lib\":true,\"up\":true},\"libTargetUp\":null}"
+  },
+  {
+    "name": "placement: no vegetation instance inside a building footprint",
+    "ok": true,
+    "detail": "{\"n\":1222,\"bad\":[],\"count\":0}"
+  },
+  {
+    "name": "LOS: upstairs evidence cannot be targeted through floors/walls from the ground floor",
+    "ok": true,
+    "detail": "{\"hall\":null,\"lib\":null}"
+  },
+  {
+    "name": "mobile landscape: B01 panel opens from a tap, every button ≥ 44 px, no horizontal overflow, panel fits the screen",
+    "ok": true,
+    "detail": "{\"opened\":\"Leestafel\",\"small\":0,\"hOverflow\":false,\"fits\":true}"
+  },
+  {
+    "name": "mobile landscape: closing an overlay never clicks through to the world",
+    "ok": true,
+    "detail": "{\"open\":false}"
+  },
+  {
+    "name": "mobile landscape: notebook has no horizontal overflow",
+    "ok": true,
+    "detail": "{\"hOverflow\":false}"
+  },
+  {
+    "name": "mobile portrait: B01 panel opens from a tap, every button ≥ 44 px, no horizontal overflow, panel fits the screen",
+    "ok": true,
+    "detail": "{\"opened\":\"Leestafel\",\"small\":0,\"hOverflow\":false,\"fits\":true}"
+  },
+  {
+    "name": "mobile portrait: closing an overlay never clicks through to the world",
+    "ok": true,
+    "detail": "{\"open\":false}"
+  },
+  {
+    "name": "hints: none before a riddle is met; level 0 names the riddle and explains the three levels, without a next step",
+    "ok": true,
+    "detail": "HULP BIJ De leestafel met drie vakken en drie tekenbladen.\n\nDrie niveaus, elk alleen als je erom vraagt: 1 Aandacht · 2 Relatie · 3 Oplossing.\n\nHints zijn geen bewijs uit het huis en komen niet in je "
+  },
+  {
+    "name": "hints: levels 1 attention · 2 relation · 3 solution, labelled as Hint, never stored as observations",
+    "ok": true,
+    "detail": "[\"Hint 1 · Aandacht\",\"Hint 1 · Aandacht|Hint 2 · Relatie\",\"Hint 1 · Aandacht|Hint 2 · Relatie|Hint 3 · Oplossing\"]"
+  }
+]

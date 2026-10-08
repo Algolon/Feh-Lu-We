@@ -1,0 +1,57 @@
+[
+ {
+  "name": "spatial: no tree / bush / stump inside a building footprint (trees with 0.6 m crown margin)",
+  "ok": true,
+  "detail": "{\"n\":1775,\"bad\":[],\"nBad\":0}"
+ },
+ {
+  "name": "spatial: woodland plants seated on the terrain (no floating / buried trunks)",
+  "ok": true,
+  "detail": "{\"floating\":[],\"nFloat\":0,\"counts\":{\"trees\":1713,\"plants\":11623,\"rocks\":230,\"logs\":35,\"boulders\":50,\"saplings\":358,\"screenBushes\":93}}"
+ },
+ {
+  "name": "woodland: dense forest rollout present (trees + saplings + understory + dead wood)",
+  "ok": true,
+  "detail": "{\"trees\":1713,\"plants\":11623,\"rocks\":230,\"logs\":35,\"boulders\":50,\"saplings\":358,\"screenBushes\":93}"
+ },
+ {
+  "name": "spatial: every doorway has a free standing spot on both sides (0.55 m, body r 0.22)",
+  "ok": true,
+  "detail": "{\"doors\":34,\"bad\":[],\"nBad\":0}"
+ },
+ {
+  "name": "spatial: every interactable has a free standing spot within reach and line of sight",
+  "ok": true,
+  "detail": "{\"items\":128,\"bad\":[],\"nBad\":0}"
+ },
+ {
+  "name": "spatial: no two indoor furniture pieces interpenetrate (> 12 cm in x, z and y)",
+  "ok": true,
+  "detail": "{\"pieces\":221,\"bad\":[],\"nBad\":0}"
+ },
+ {
+  "name": "footsteps: walk cadence of an adult at a normal pace (1.7–2.1 Hz, stride ≥ 0.6 m)",
+  "ok": true,
+  "detail": "{\"n\":8,\"hz\":1.95,\"stride\":1.57,\"minGap\":0.5,\"speed\":3.15}"
+ },
+ {
+  "name": "footsteps: sprint faster but no machine-gun (≤ 2.8 Hz, never < 0.33 s apart)",
+  "ok": true,
+  "detail": "{\"n\":8,\"hz\":2.53,\"stride\":1.83,\"minGap\":0.383,\"speed\":4.89}"
+ },
+ {
+  "name": "footsteps: stairs keep a walking cadence (≤ 2.3 Hz)",
+  "ok": true,
+  "detail": "{\"n\":6,\"hz\":1.95,\"stride\":1.48,\"minGap\":0.5,\"speed\":2.22}"
+ },
+ {
+  "name": "footsteps: turning on the spot makes no steps",
+  "ok": true,
+  "detail": "steps 0"
+ },
+ {
+  "name": "dev03: no console errors / page errors",
+  "ok": true,
+  "detail": ""
+ }
+]
