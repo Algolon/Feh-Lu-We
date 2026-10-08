@@ -550,7 +550,13 @@ export function ladder(c: Ctx, x: number, z: number, y0: number, yaw: number, h 
   for (let y = 0.3; y < h; y += 0.3) P(c, k.M.wood, wood, x, z, yaw, 0, y0 + y, 0, 0.44, 0.04, 0.05, 0.5);
 }
 /** Small telescope on a tripod pointing out of a window. */
-export function telescope(c: Ctx, x: number, z: number, y0: number, yaw: number) {
+/**
+ * Brass refractor on an alt-az head over a timber tripod. It points along plan heading `yaw`, its tube raised by `alt`
+ * (rad). DEV-04A: the objective end (dew shield) faces `yaw` and the eyepiece sits at the LOW back end of the tube
+ * (it used to sit under the dew shield, at the wrong end); `alt` lets the attic telescope aim through its roof window.
+ */
+export const TELESCOPE = { pivotY: 1.38, back: 0.42, front: 0.4 };
+export function telescope(c: Ctx, x: number, z: number, y0: number, yaw: number, alt = 0.35) {
   // DEV-03: a brass refractor (tapered tube, dew shield, eyepiece) on an alt-az head over a timber tripod with a spreader
   const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw), oak = '#5a3a22', brass = '#b8892f';
   for (let i = 0; i < 3; i++) {
@@ -560,10 +566,20 @@ export function telescope(c: Ctx, x: number, z: number, y0: number, yaw: number)
   }
   a.add(M.timber, darker(oak, 0.8), cg('tsHead', () => lathe([[0.001, 0], [0.07, 0], [0.06, 0.06], [0.03, 0.1], [0.001, 0.1]], 8)), 0, 1.18, 0);
   a.add(M.brass, darker(brass, 0.7), bx(0.05, 0.12, 0.06), 0, 1.3, 0);
-  const tube = cg('tsTube', () => lathe([[0.001, 0], [0.032, 0], [0.036, 0.05], [0.042, 0.62], [0.055, 0.64], [0.055, 0.82], [0.001, 0.82]], 12).translate(0, -0.42, 0).rotateX(Math.PI / 2));
-  a.add(M.brass, brass, tube, 0, 1.38, 0.06, { rx: -0.35 });
-  a.add(M.timber, '#2b2622', cg('tsEye', () => new THREE.CylinderGeometry(0.016, 0.016, 0.1, 8).rotateX(Math.PI / 2)), 0, 1.25, -0.37, { rx: -0.35 });
+  // tube along plan-local +z (front = objective = dew shield), centred on the head's pivot, raised by alt
+  const tube = cg('tsTube2', () => lathe([[0.001, 0], [0.032, 0], [0.036, 0.05], [0.042, 0.62], [0.055, 0.64], [0.055, 0.82], [0.001, 0.82]], 12).translate(0, -TELESCOPE.back, 0).rotateX(-Math.PI / 2));
+  a.add(M.brass, brass, tube, 0, TELESCOPE.pivotY, 0, { rx: alt });
+  const eb = TELESCOPE.back + 0.05; // the eyepiece continues the tube's axis behind its back end
+  a.add(M.timber, '#2b2622', cg('tsEye2', () => new THREE.CylinderGeometry(0.016, 0.016, 0.1, 8).rotateX(-Math.PI / 2)), 0, TELESCOPE.pivotY - eb * Math.sin(alt), -eb * Math.cos(alt), { rx: alt });
   c.col.addCircle(x, z, 0.3, y0, y0 + 1.5);
+}
+/** DEV-04A observer's stool: a turned seat on three splayed legs with a ring stretcher (0.5 m). */
+export function stool(c: Ctx, x: number, z: number, y0: number) {
+  const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, 0.4);
+  for (let i = 0; i < 3; i++) { const an = (i / 3) * Math.PI * 2; a.add(M.timber, '#5a3a22', bx(0.03, 0.5, 0.03), Math.cos(an) * 0.13, 0.25, Math.sin(an) * 0.13, { rx: Math.sin(an) * 0.14, rz: -Math.cos(an) * 0.14 }); }
+  a.add(M.timber, '#6e4a2c', cg('stoolSeat', () => lathe([[0.001, 0], [0.17, 0], [0.18, 0.025], [0.16, 0.045], [0.001, 0.045]], 14)), 0, 0.49, 0);
+  a.add(M.timber, '#5a3a22', cg('stoolRing', () => new THREE.TorusGeometry(0.15, 0.012, 4, 12).rotateX(Math.PI / 2)), 0, 0.2, 0);
+  c.col.addCircle(x, z, 0.2, y0, y0 + 0.55);
 }
 /** DEV-03 slatted bench: two trestle ends, a stretcher, three seat slats with eased edges. Origin = centre, along local x. */
 export function slatBench(c: Ctx, x: number, z: number, y0: number, yaw: number, len = 1.5, wood = '#7a5232') {

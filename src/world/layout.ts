@@ -76,6 +76,14 @@ export function roofUnderside(x: number, z: number) {
   const ax = 18.7, az = 15.7; // half extents incl. overhang, about the roof centre (90, 95)
   return ROOF_EAVE + (8.2 * Math.max(0, Math.min(az - Math.abs(z - 95), ax - Math.abs(x - 90), az))) / az - 0.25;
 }
+/** DEV-04A attic observation nook: the lookout uses the roof volume east to X 103.6 (headroom still ≥ 2.1 m). */
+export const ATTIC_NOOK = { x0: 95, x1: 103.6, z0: 92, z1: 98.6 };
+/**
+ * DEV-04A observation window in the east roof slope over the nook (plan extent of the opening) and the telescope that
+ * looks through it: pivot (x, z), yaw east, tube elevation `alt` (rad). Inside lining, glass and outside frame are built
+ * from the same record, so the opening is the same from both sides.
+ */
+export const ATTIC_ROOF_WINDOW = { x0: 101.6, x1: 103.0, z0: 95.75, z1: 96.85, scope: { x: 101.2, z: 96.3, alt: 0.95 } };
 /** S03 (LEVEL_LAYOUT vertical_connections): two 1.2 m flights side by side with a middle landing at +5.00. */
 export const S03 = {
   flight1: { x0: 96.6, x1: 97.8, z0: 99.8, z1: 102.32 }, // rises north from the lower landing (+3.35 → +5.00)

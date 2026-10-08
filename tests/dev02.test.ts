@@ -76,7 +76,9 @@ describe('DEV-02 rooms and portals', () => {
     for (const d of P.rooms) {
       const r = ROOMS.find((q) => q.id === d.id);
       expect(r, d.id).toBeTruthy();
-      expect([r!.x0, r!.x1, r!.z0, r!.z1]).toEqual([d.bounds.x0, d.bounds.x1, d.bounds.z0, d.bounds.z1]);
+      // DEV-04A: the attic lookout became the observation nook and uses the roof volume east to X 103.6 (v0.2: 101)
+      const x1 = d.id === 'atticLookout' ? 103.6 : d.bounds.x1;
+      expect([r!.x0, r!.x1, r!.z0, r!.z1]).toEqual([d.bounds.x0, x1, d.bounds.z0, d.bounds.z1]);
     }
     expect(ROOMS.length).toBe(P.rooms.length); // 49
   });
@@ -108,7 +110,7 @@ describe('DEV-02 rooms and portals', () => {
 });
 
 describe('DEV-02 attic: headroom and stair S03', () => {
-  it('the roof leaves ≥ 2.1 m over the whole attic play zone (80–101 / 86–105.6)', () => {
+  it('the roof leaves ≥ 2.1 m over the whole attic play zone (80–103.6 / 86–105.6)', () => {
     for (const r of ROOMS.filter((q) => q.floor === 'a')) for (let x = r.x0; x <= r.x1; x += 0.5) for (let z = r.z0; z <= r.z1; z += 0.5) expect(roofUnderside(x, z) - AF, `${x},${z}`).toBeGreaterThanOrEqual(2.1);
   });
   it('S03: two 1.2 m flights, middle landing at +5.00, riser ≈ 0.165 and tread ≈ 0.25', () => {

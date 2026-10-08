@@ -17,8 +17,8 @@ import { lathe, Asm, artMats } from './artkit';
 import { box, boxMM, cyl, rod, blob, compound, v3, hipRoofGeo, geo } from './kit';
 import {
   table, chair, sofa, armchair, bookshelf, counter, rug, plant, painting, crate, tableLamp, floorLamp, chandelier, wallSconce,
-  part, staticLantern, staticSconce, bed2, bedside, wardrobe, curtains, desk, lectern, bathtub, ladder, telescope, canvasPanel, nameBoard, joinery,
-  slatBench, blanketChest, gameBoxes, instrumentCase, workbench, farmhouseSink,
+  part, staticLantern, staticSconce, bed2, bedside, wardrobe, curtains, desk, lectern, bathtub, ladder, telescope, canvasPanel, joinery,
+  slatBench, blanketChest, gameBoxes, instrumentCase, workbench, farmhouseSink, stool,
 } from './furniture';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place } from '../interactions/props';
 import { forestMapTexture } from './textures';
@@ -31,7 +31,7 @@ import { makeFire } from './fire';
 import { drawSymbol } from '../content/symbols';
 import { EMBLEMS, SERVICE, CATALOG, CONSOLE_SOCKETS, ROUTE_LINES } from '../content/canon';
 import { addClue, has } from '../core/state';
-import { GF, CEIL, UF, UCEIL, TOP, BF, BCEIL, AF, S03, roofUnderside } from './layout';
+import { GF, CEIL, UF, UCEIL, TOP, BF, BCEIL, AF, S03, roofUnderside, ATTIC_NOOK, ATTIC_ROOF_WINDOW } from './layout';
 import { buildMaquette } from './maquette';
 import { placeSolved, slotContents, openBasement } from '../puzzles/rules';
 
@@ -998,7 +998,7 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   for (const bz of [91.05, 93.35]) bedside(c, 72.65, bz, R0, Math.PI / 2, '#4a3a2a');
   curtains(c, 72.45, 90.0, R0 + 0.75, Math.PI / 2, 1.0, 1.9, '#2f3f5f');
   canvasPanel(w, 78.6, R0 + 1.6, 93.9, Math.PI, 1.4, 0.95, (x, W, H) => { x.fillStyle = '#1c2a44'; x.fillRect(0, 0, W, H); for (let i = 0; i < 60; i++) { x.fillStyle = i % 5 ? '#f4ecd8' : '#e8c547'; x.beginPath(); x.arc((Math.sin(i * 12.9) * 0.5 + 0.5) * W, (Math.sin(i * 7.3) * 0.5 + 0.5) * H, i % 7 ? 2 : 4, 0, Math.PI * 2); x.fill(); } x.strokeStyle = 'rgba(244,236,216,.5)'; x.lineWidth = 1.5; x.beginPath(); x.moveTo(W * 0.2, H * 0.3); x.lineTo(W * 0.32, H * 0.42); x.lineTo(W * 0.45, H * 0.36); x.lineTo(W * 0.58, H * 0.5); x.stroke(); x.font = 'italic 20px Georgia'; x.fillStyle = '#f4ecd8'; if (!SLICE) x.fillText('sterrenkaart', 16, H - 14); /* DEV-01R */ }, 384);
-  telescope(c, 82.6, 91.4, R0, -Math.PI / 2 - 0.4);
+  telescope(c, 82.6, 91.4, R0, -1.71); // DEV-04A: aimed at the west window (z 90); the old tube faced into the room
   table(c, 83.9, 93.0, R0, 0.6, 0.5, 0, '#4a3a2a', 0.7);
   const logbook = compound((b) => { box(b, k.M.paint, '#2f3f5f', 0, 0, 0, 0.2, 0.03, 0.28); box(b, k.M.paint, '#efe2c2', 0.005, 0.005, 0, 0.18, 0.025, 0.26); });
   place(logbook, 83.9, R0 + 0.7, 93.0, 0.4);
@@ -1311,21 +1311,25 @@ function attic(w: World, g: GameApi, c: Ctx) {
     w.col.addOccluder(x0, x1, z0, z1, AF - 0.2, AF);
   };
   af(80, 95, 86, 104); // atticStore + atticCommon
-  af(95, 101, 92, 98.6); // atticLookout
+  af(95, ATTIC_NOOK.x1, 92, 98.6); // atticLookout — DEV-04A: the observation nook uses the roof volume east to X 103.6
   af(95, 99, 98.6, 99.8); // upper landing (atticLanding)
-  // ---------------------------------------------------------------- partitions + knee walls up to the roof (play zone 80–101 / 86–105.6)
+  // ---------------------------------------------------------------- partitions up to the roof (play zone 80–103.6 / 86–105.6)
+  // DEV-04A: every attic partition is an enclosing wall that MEETS the roof: its top follows the roof's underside along
+  // its whole length (piecewise linear between the hip / ridge break lines) and tucks 4 cm past the inner roof skin.
+  // They used to stop flat at the lowest roof point along their length, leaving metre-high gaps under the slopes.
+  const skinAt = (x: number, z: number) => roofUnderside(x, z) + 0.09;
   const aw = (axis: 'x' | 'z', f: number, a0: number, a1: number, openings: { at: number; w: number; h?: number }[] = []) => {
-    let top = Infinity;
-    for (let a = a0; a <= a1 + 1e-6; a += 0.5) top = Math.min(top, axis === 'x' ? roofUnderside(a, f) : roofUnderside(f, a));
-    wall(c, axis, f, a0, a1, AF, top - 0.05, { t: 0.12, mat: k.M.wood, color: '#c8ad84', uv: 1.6, openings });
+    const kinks = axis === 'x' ? [90 - 3 - Math.abs(f - 95), 90 + 3 + Math.abs(f - 95)] : Math.abs(f - 90) > 3 ? [95 - (Math.abs(f - 90) - 3), 95 + (Math.abs(f - 90) - 3)] : [];
+    const top = (a: number) => (axis === 'x' ? skinAt(a, f) : skinAt(f, a));
+    wall(c, axis, f, a0, a1, AF, Math.max(top(a0), top(a1), ...kinks.filter((q) => q > a0 && q < a1).map(top)), { t: 0.12, mat: k.M.wood, color: '#c8ad84', uv: 1.6, openings, top, kinks });
   };
   aw('z', 80, 86, 104);
   aw('x', 86, 80, 95);
   aw('z', 95, 86, 92);
   aw('x', 92, 80, 95, [{ at: 86, w: 1.0, h: 2.1 }]); // atticStore door
-  aw('x', 92, 95, 101);
-  aw('z', 101, 92, 98.6);
-  aw('x', 98.6, 99, 101);
+  aw('x', 92, 95, ATTIC_NOOK.x1); // nook | void over the botanic room
+  aw('z', ATTIC_NOOK.x1, 92, 98.6); // nook knee wall (2.16 m) under the east slope
+  aw('x', 98.6, 99, ATTIC_NOOK.x1); // nook | void east of the stairwell
   aw('z', 95, 92, 98.6, [{ at: 95, w: 1.3, h: 2.2 }]); // common | lookout (arch)
   aw('x', 98.6, 95, 99, [{ at: 97, w: 1.2, h: 2.2 }]); // lookout | landing (arch)
   aw('z', 95, 99.8, 105.6); // common | stairwell (the opening Z 98.6–99.8 is the stair exit, v0.2 "X95/Z99.2")
@@ -1334,17 +1338,22 @@ function attic(w: World, g: GameApi, c: Ctx) {
   aw('x', 105.6, 95, 99);
   makeDoor(w, g, { id: 'door.atticStore', x: 85.5, z: 92, dir: 'x+', width: 1.0, height: 2.05, y0: AF, swing: -1, style: 'plank', color: '#8a6a4a' });
   // ---------------------------------------------------------------- inner roof skin (the exterior roof is single-sided)
-  const skin = hipRoofGeo(36, 30, 8.2, 0.7);
-  const pos = skin.attributes.position as THREE.BufferAttribute, uvA = skin.attributes.uv as THREE.BufferAttribute;
-  for (let i = 0; i < pos.count; i += 3) { // reverse each triangle: faces point into the attic
-    const p1 = [pos.getX(i + 1), pos.getY(i + 1), pos.getZ(i + 1)], u1 = [uvA.getX(i + 1), uvA.getY(i + 1)];
-    pos.setXYZ(i + 1, pos.getX(i + 2), pos.getY(i + 2), pos.getZ(i + 2)); uvA.setXY(i + 1, uvA.getX(i + 2), uvA.getY(i + 2));
-    pos.setXYZ(i + 2, p1[0], p1[1], p1[2]); uvA.setXY(i + 2, u1[0], u1[1]);
+  // DEV-04A: rebuilt face by face so the east slope carries the observation window's opening (ATTIC_ROOF_WINDOW)
+  atticRoofSkin(c);
+  // structure that carries the roof volume: a ridge beam, a crown rafter down each hip face's centre line, the four hip
+  // rafters, king posts under the ridge and the west crown rafter (clear of every passage; the old posts stood in the
+  // lookout arch and in the nook's operating space)
+  { const tc = '#6b4a2a', R = (x: number, z: number) => roofUnderside(x, z) - 0.03;
+    segBox(c, k.M.wood, tc, [87, R(87, 95), 95], [93, R(93, 95), 95], 0.18, 0.2);
+    segBox(c, k.M.wood, tc, [79.6, R(79.6, 95), 95], [87, R(87, 95), 95], 0.14, 0.16);
+    segBox(c, k.M.wood, tc, [93, R(93, 95), 95], [ATTIC_NOOK.x1, R(ATTIC_NOOK.x1, 95), 95], 0.14, 0.16);
+    for (const [ex, ez] of [[87, 95], [93, 95]] as const) for (const sz of [-1, 1]) {
+      const d = 5.9, hx = ex + (ex < 90 ? -d : d), hz = ez + sz * d; // ≈ to the play-zone walls
+      segBox(c, k.M.wood, tc, [ex, R(ex, ez), ez], [hx, R(hx, hz), hz], 0.14, 0.16);
+    }
+    for (const x of [84, 87, 90, 93]) { box(c.b, k.M.wood, tc, x, AF, 95, 0.16, R(x, 95) - 0.09 - AF, 0.16, { chunk: c.chunk }); w.col.addCircle(x, 95, 0.1, AF, AF + 2.4); }
   }
-  skin.computeVertexNormals();
-  geo(c.b, k.M.wood, '#b89a72', skin, 90, TOP - 0.2, 95, { chunk: c.chunk, shadow: false });
-  skin.dispose();
-  for (let x = 81; x < 101; x += 2.4) box(c.b, k.M.wood, '#6b4a2a', x, AF, 95, 0.14, roofUnderside(x, 95) - AF - 0.15, 0.14, { chunk: c.chunk }); // king posts
+  atticRoofWindow(c);
   // ---------------------------------------------------------------- staging: A02 weekend attic, A03 seasonal store, A04 lookout
   for (const [x, z, sz, col] of [[81.0, 102.9, 0.7, '#a0784a'], [81.8, 102.9, 0.55, '#b08a5a'], [81.0, 102.1, 0.6, '#8a6a4a'], [93.7, 102.9, 0.65, '#a0784a'], [92.9, 102.9, 0.5, '#c8a070'], [81.0, 96.0, 0.6, '#a0784a']] as const) crate(c, x, z, AF, sz, 0.15, col);
   // DEV-03 A02 weekend attic composed as one room: the sofa group under its lantern against the north knee wall,
@@ -1377,10 +1386,88 @@ function attic(w: World, g: GameApi, c: Ctx) {
   w.scene.add(memBox);
   c.col.addCircle(84.4, 87.0, 0.4, AF, AF + 0.5);
   makeInspect(w, g, { id: 'mem.storage.box', obj: memBox, clue: 'mem.storage.box', hit: [0.7, 0.5, 0.6] });
-  // A04 lookout: observatory reservation only (I03 open) — a bench and the stars hobby, no roof opening claimed
-  slatBench(c, 100.45, 93.5, AF, Math.PI / 2, 1.6, '#6b4426'); // clear of the king post at z 95
-  telescope(c, 97.4, 93.2, AF, -0.5);
-  for (const [x, z] of [[86, 101.6], [86.5, 89], [98, 95.4], [97, 102.6]] as const) staticLantern(c, w, x, AF + 1.9, z, 0.5, 0, 2.5, 7);
+  // A04 lookout → DEV-04A observation nook: the telescope stands under the roof window in the east slope and points
+  // through it (sightline checked in tests/dev04a.test.ts); a stool for the observer, the bench along the south wall
+  const RW = ATTIC_ROOF_WINDOW;
+  telescope(c, RW.scope.x, RW.scope.z, AF, Math.PI / 2, RW.scope.alt);
+  stool(c, RW.scope.x - 0.75, RW.scope.z - 0.15, AF);
+  slatBench(c, 100.6, 92.45, AF, 0, 1.6, '#6b4426');
+  for (const [x, z] of [[86, 101.6], [86.5, 89], [98, 96.2], [97, 102.6]] as const) staticLantern(c, w, x, AF + 1.9, z, 0.5, 0, 2.5, 7);
   staticLantern(c, w, 98.4, UF + 2.4, 103.2, 0.5, 0, 3, 8); // stairwell light over the return lane
   c.chunk = base;
 }
+
+/**
+ * DEV-04A inner roof skin, face by face (the exterior roof is single-sided). The east hip face is triangulated with the
+ * observation window's opening cut out of it, so from the nook the sky shows through the window's lining and glass.
+ */
+function atticRoofSkin(c: Ctx) {
+  const k = c.k, ax = 18.7, az = 15.7, h = 8.2, rx = ax - az, base = TOP - 0.2;
+  const skin = hipRoofGeo(36, 30, h, 0.7);
+  const pos = skin.attributes.position as THREE.BufferAttribute;
+  const keep: number[] = [];
+  for (let i = 0; i < pos.count; i += 3) { // drop the east triangle (all three corners at X ≥ the ridge end)
+    if ([0, 1, 2].every((q) => pos.getX(i + q) >= rx - 1e-4)) continue;
+    // reverse each triangle: faces point into the attic
+    for (const q of [0, 2, 1]) keep.push(pos.getX(i + q), pos.getY(i + q), pos.getZ(i + q));
+  }
+  skin.dispose();
+  // east face in its own 2D frame (u = three z, v = X); the window is a hole in it
+  const RW = ATTIC_ROOF_WINDOW, X0 = RW.x0 - 90, X1 = RW.x1 - 90, U0 = -(RW.z1 - 95), U1 = -(RW.z0 - 95);
+  const outer = [new THREE.Vector2(-az, ax), new THREE.Vector2(az, ax), new THREE.Vector2(0, rx)];
+  const hole = [new THREE.Vector2(U0, X0), new THREE.Vector2(U0, X1), new THREE.Vector2(U1, X1), new THREE.Vector2(U1, X0)];
+  const pts = [...outer, ...hole];
+  for (const [a, b2, cc] of THREE.ShapeUtils.triangulateShape(outer, [hole])) {
+    const tri = [pts[a], pts[b2], pts[cc]].map((p) => new THREE.Vector3(p.y, (h * (ax - p.y)) / az, p.x));
+    const n = new THREE.Vector3().subVectors(tri[1], tri[0]).cross(new THREE.Vector3().subVectors(tri[2], tri[0]));
+    const order = n.x < 0 ? [0, 1, 2] : [0, 2, 1]; // inward (towards −X, down)
+    for (const q of order) keep.push(tri[q].x, tri[q].y, tri[q].z);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(keep, 3));
+  const uv: number[] = [];
+  for (let i = 0; i < keep.length; i += 3) uv.push((keep[i] + keep[i + 2]) / 2, keep[i + 1] / 1.5 + (Math.abs(keep[i]) + Math.abs(keep[i + 2])) / 6);
+  g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  g.computeVertexNormals();
+  geo(c.b, k.M.wood, '#b89a72', g, 90, base, 95, { chunk: c.chunk, shadow: false });
+  g.dispose();
+}
+
+/**
+ * DEV-04A observation window: a real roof window in the east slope over the nook — a lined reveal through the roof's
+ * depth (inside), a glazed sash in the roof plane and a timber frame with flashing standing on the slates (outside).
+ * Inside and outside are the same opening (ATTIC_ROOF_WINDOW).
+ */
+function atticRoofWindow(c: Ctx) {
+  const k = c.k, RW = ATTIC_ROOF_WINDOW, P = k.M.paint;
+  const yIn = (x: number) => roofUnderside(x, 95) + 0.05, yOut = (x: number) => yIn(x) + 0.2; // inner skin / slate surface
+  const cIn = c, cOut: Ctx = { ...c, chunk: 'manor' }; // the frame on the roof belongs to the exterior shell
+  // lining (reveal) on all four sides, from the inner skin up through the roof to the slates
+  for (const z of [RW.z0, RW.z1]) segBox(cIn, k.M.wood, '#d9c7a4', [RW.x0, yIn(RW.x0) + 0.1, z], [RW.x1, yIn(RW.x1) + 0.1, z], 0.04, 0.24);
+  for (const x of [RW.x0, RW.x1]) segBox(cIn, k.M.wood, '#d9c7a4', [x, yIn(x) + 0.1, RW.z0], [x, yIn(x) + 0.1, RW.z1], 0.05, 0.22);
+  // the glazed sash in the roof plane: clear glass seen from inside, a sash frame with a handle bar at its head
+  const gl = (ya: number) => (x: number) => yIn(x) + ya;
+  const quad = (x0: number, x1: number, z0: number, z1: number, yf: (x: number) => number) => {
+    const g = new THREE.BufferGeometry();
+    const v = [[x0, z0], [x1, z0], [x1, z1], [x0, z0], [x1, z1], [x0, z1]].flatMap(([x, z]) => [x, yf(x), -z]);
+    g.setAttribute('position', new THREE.Float32BufferAttribute(v, 3));
+    g.setAttribute('uv', new THREE.Float32BufferAttribute(new Array(12).fill(0), 2));
+    g.computeVertexNormals();
+    return g;
+  };
+  const glass = quad(RW.x0, RW.x1, RW.z0, RW.z1, gl(0.16));
+  c.b.add(k.M.glass, glass, new THREE.Matrix4(), '#ffffff', cIn.chunk, false, 0);
+  glass.dispose();
+  for (const z of [RW.z0 + 0.04, RW.z1 - 0.04]) segBox(cIn, P, '#e8e0cc', [RW.x0, gl(0.16)(RW.x0), z], [RW.x1, gl(0.16)(RW.x1), z], 0.07, 0.06);
+  for (const x of [RW.x0 + 0.04, RW.x1 - 0.04]) segBox(cIn, P, '#e8e0cc', [x, gl(0.16)(x), RW.z0], [x, gl(0.16)(x), RW.z1], 0.07, 0.06);
+  segBox(cIn, k.M.paint, '#c9a44c', [RW.x0 + 0.1, gl(0.1)(RW.x0 + 0.1), RW.z0 + 0.25], [RW.x0 + 0.1, gl(0.1)(RW.x0 + 0.1), RW.z1 - 0.25], 0.025, 0.025);
+  // outside: dark glazing facing the sky (single-sided: from inside it is culled, the sky shows), frame + flashing
+  const pane = quad(RW.x0, RW.x1, RW.z0, RW.z1, (x) => yOut(x) + 0.05); // wound to face up and out (east)
+  c.b.add(k.M.glow, pane, new THREE.Matrix4(), '#55656e', cOut.chunk, false, 0);
+  pane.dispose();
+  const fr = '#4a3a2c';
+  for (const z of [RW.z0 - 0.04, RW.z1 + 0.04]) segBox(cOut, P, fr, [RW.x0 - 0.06, yOut(RW.x0 - 0.06) + 0.04, z], [RW.x1 + 0.06, yOut(RW.x1 + 0.06) + 0.04, z], 0.1, 0.12);
+  for (const x of [RW.x0 - 0.04, RW.x1 + 0.04]) segBox(cOut, P, fr, [x, yOut(x) + 0.04, RW.z0 - 0.08], [x, yOut(x) + 0.04, RW.z1 + 0.08], 0.1, 0.12);
+  segBox(cOut, P, '#6e6f6a', [RW.x1 + 0.12, yOut(RW.x1 + 0.12) + 0.01, RW.z0 - 0.12], [RW.x1 + 0.12, yOut(RW.x1 + 0.12) + 0.01, RW.z1 + 0.12], 0.14, 0.02); // lead apron
+}
+

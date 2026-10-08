@@ -1,7 +1,7 @@
 // Architecture helpers: walls with real door openings (geometry + colliders), decorative windows,
 // floors/ceilings, stairs with a hidden smooth collision ramp, and roofs.
 import * as THREE from 'three';
-import { Batcher, box, boxMM, cyl, geo, getKit, gableGeo, hipRoofGeo, planMatrix, type Kit } from './kit';
+import { Batcher, box, boxMM, boxGeo, cyl, geo, getKit, gableGeo, hipRoofGeo, planMatrix, type Kit } from './kit';
 import { lathe, softBox } from './artkit';
 import type { CollisionWorld } from '../player/collision';
 import { registerOpening } from './openings';
@@ -37,6 +37,10 @@ export interface WallOpts {
   /** DEV-03: interior trim (skirting at the floor, a small cornice at the ceiling) on the interior face(s). Default on
    * for partitions (no exterior) and skinned walls; `false` for sheds, screens and other rough walls. */
   trim?: boolean | { skirting?: THREE.ColorRepresentation; cornice?: boolean };
+  /** DEV-04A: a sloped top (e.g. a partition under a roof): the wall's top at position `a` along it, piecewise linear
+   * between `kinks` (the profile's break points). Pieces that reach the wall top follow it; y1 is ignored for them. */
+  top?: (a: number) => number;
+  kinks?: number[];
 }
 export type WinStyle = 'plain' | 'manor' | 'cottage';
 /** Joinery (painted surrounds, skirting) and oak trim colours: ART_TOKENS world.joinery / world.oak family. */
@@ -51,6 +55,18 @@ export function wall(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number,
   const lo = Math.min(a0, a1), hi = Math.max(a0, a1);
   const piece = (s0: number, s1: number, ya: number, yb: number) => {
     if (s1 - s0 < 0.005 || yb - ya < 0.005) return;
+    if (o.top && yb >= y1 - 1e-6) { // runs up to a sloped top: one slanted slab per straight stretch of the profile
+      const cuts = [s0, ...(o.kinks ?? []).filter((q) => q > s0 + 0.01 && q < s1 - 0.01).sort((p, q) => p - q), s1];
+      for (let i = 0; i < cuts.length - 1; i++) {
+        const p = cuts[i], q = cuts[i + 1], tp = o.top(p), tq = o.top(q);
+        slantedSlab(c, axis, f, t, p, q, ya, tp, tq, mat, color, o.uv ?? 2);
+        if (o.collide !== false) {
+          if (axis === 'x') c.col.addBox(p, q, f - t / 2, f + t / 2, ya, Math.min(tp, tq), { occludes: true });
+          else c.col.addBox(f - t / 2, f + t / 2, p, q, ya, Math.min(tp, tq), { occludes: true });
+        }
+      }
+      return;
+    }
     if (axis === 'x') {
       boxMM(c.b, mat, color, s0, s1, ya, yb, f - t / 2, f + t / 2, { uv: o.uv ?? 2, chunk: c.chunk });
       if (o.collide !== false) c.col.addBox(s0, s1, f - t / 2, f + t / 2, ya, yb, { occludes: true });
@@ -84,7 +100,7 @@ export function wall(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number,
       for (const op of ops) { runs.push([c0, op.at - op.w / 2 - 0.09]); c0 = op.at + op.w / 2 + 0.09; }
       runs.push([c0, hi]);
       for (const [s0, s1] of runs) if (s1 - s0 > 0.05) trimRun(c, axis, ff, sd, s0, s1, y0, 0.14, 0.022, tc.skirting ?? TRIM.joinery);
-      if (tc.cornice !== false) trimRun(c, axis, ff, sd, lo, hi, y1 - 0.09, 0.09, 0.035, TRIM.joinery, true);
+      if (tc.cornice !== false && !o.top) trimRun(c, axis, ff, sd, lo, hi, y1 - 0.09, 0.09, 0.035, TRIM.joinery, true);
     }
   }
   if (o.skin) {
@@ -104,6 +120,22 @@ export function wall(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number,
       windowAt(c, axis, f + s * (t / 2 + (o.skin && !outside ? 0.03 : 0)), s, wdef.at, y0 + (wdef.sill ?? 0.9), wdef.w ?? 1.1, wdef.h ?? 1.5, outside, { kind: outside ? o.winStyle ?? 'plain' : 'plain' });
     }
   }
+}
+
+/** A wall slab from a0 to a1 (thickness t at f) whose bottom is ya and whose top runs straight from ytA to ytB. */
+function slantedSlab(c: Ctx, axis: 'x' | 'z', f: number, t: number, a0: number, a1: number, ya: number, ytA: number, ytB: number, mat: THREE.Material, color: THREE.ColorRepresentation, uv: number) {
+  const L = a1 - a0, hMax = Math.max(ytA, ytB) - ya;
+  const g = axis === 'x' ? boxGeo(L, hMax, t, uv) : boxGeo(t, hMax, L, uv);
+  const pos = g.attributes.position as THREE.BufferAttribute;
+  for (let i = 0; i < pos.count; i++) {
+    // local along-wall coordinate in 0..1 from a0 to a1 (plan z runs against three z)
+    const u = axis === 'x' ? pos.getX(i) / L + 0.5 : -pos.getZ(i) / L + 0.5;
+    pos.setY(i, pos.getY(i) > 0 ? ytA + (ytB - ytA) * u : ya);
+  }
+  g.computeVertexNormals();
+  const m = axis === 'x' ? planMatrix((a0 + a1) / 2, 0, f) : planMatrix(f, 0, (a0 + a1) / 2);
+  c.b.add(mat, g, m, color, c.chunk, true);
+  g.dispose();
 }
 
 function wallNoFrames(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number, y0: number, y1: number, o: WallOpts) {

@@ -4,7 +4,7 @@
 // is most-specific first: attic before the attic stair, the attic stair and the split north rooms before the broad
 // upper rooms, the guest WC before the billiard room; utility and pantry do not overlap.
 import { RoomGraph, type RoomDef, type PortalDef } from './rooms';
-import { SHED, COTTAGE, COTTAGE_FLOOR, SAUNA } from './layout';
+import { SHED, COTTAGE, COTTAGE_FLOOR, SAUNA, ATTIC_NOOK } from './layout';
 
 const R = (id: string, name: string, floor: RoomDef['floor'], x0: number, x1: number, z0: number, z1: number, y0: number, y1: number, map = true): RoomDef => ({ id, name, floor, x0, x1, z0, z1, y0, y1, map });
 const G0 = -0.5, G1 = 3.2, U0 = 3.2, U1 = 6.4, B0 = -3.7, B1 = -0.2, A0 = 6.55, A1 = 9.8;
@@ -14,7 +14,7 @@ export const ROOMS: RoomDef[] = [
   R('atticLanding', 'Zolderoverloop', 'a', 95, 99, 98.6, 105.6, A0, A1),
   R('atticCommon', 'Weekendzolder', 'a', 80, 95, 92, 104, A0, A1),
   R('atticStore', 'Seizoensopslag', 'a', 80, 95, 86, 92, A0, A1),
-  R('atticLookout', 'Kijkhoek', 'a', 95, 101, 92, 98.6, A0, A1),
+  R('atticLookout', 'Kijkhoek', 'a', ATTIC_NOOK.x0, ATTIC_NOOK.x1, ATTIC_NOOK.z0, ATTIC_NOOK.z1, A0, A1), // DEV-04A: X 95–103.6 (v0.2: 95–101)
   // ---------------------------------------------------------------- upstairs (listed before the ground floor: more specific in height)
   R('atticStair', 'Zoldertrap', 'u', 95, 99, 98.6, 105.6, U0, A0),
   R('rearNookEast', 'Zitnis', 'u', 95, 99, 105.6, 109.6, U0, U1),
