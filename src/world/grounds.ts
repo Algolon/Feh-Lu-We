@@ -5,7 +5,8 @@
 import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, floor } from './arch';
-import { box, boxMM, cyl, blob, compound, v3 } from './kit';
+import { box, boxMM, cyl, blob, compound, v3, planMatrix } from './kit';
+import { woodMats, logModel } from './woodkit';
 import { table, chair, part, staticLantern } from './furniture';
 import { makeInspect, place } from '../interactions/props';
 import type { Vegetation } from './nature';
@@ -13,6 +14,9 @@ import {
   ARRIVAL, ARRIVAL_SERVICE, PARKING, BBQ, OUTDOOR_DINING, MUSIC_BONG, BALLOON_NOOK, LAKE, LAKE_VIEW, GOLF_TEE, GOLF_CHUTE, WICKERMAN, GF, type Rect,
 } from './layout';
 import { terrainHeight } from './terrain';
+
+const PLATFORM_LOG = logModel(151, 2.1, 0.17);
+const BENCH_LOG2 = logModel(157, 2.2, 0.21);
 
 export function buildGrounds(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
   arrival(w, c);
@@ -147,10 +151,19 @@ function lake(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
 function golf(w: World, c: Ctx) {
   const k = c.k, o = { chunk: 'grounds' };
   const T = GOLF_TEE, C = GOLF_CHUTE;
-  boxMM(c.b, k.M.paint, '#4f8a3a', T.x0 + 0.4, T.x0 + 3.0, 0.02, 0.06, T.z0 + 0.3, T.z0 + 2.2, { ...o, shadow: false }); // tee mat
+  boxMM(c.b, k.M.paint, '#3e6a34', T.x0 + 0.35, T.x0 + 3.05, 0.0, 0.035, T.z0 + 0.25, T.z0 + 2.25, { ...o, shadow: false }); // mat base
+  boxMM(c.b, k.M.paint, '#5c8f45', T.x0 + 0.42, T.x0 + 2.98, 0.035, 0.06, T.z0 + 0.32, T.z0 + 2.18, { ...o, shadow: false }); // tee mat
   cyl(c.b, k.M.paint, '#f4f4f0', T.x0 + 1.8, 0.06, T.z0 + 1.2, 0.025, 0.025, 0.03, 8, o);
-  cyl(c.b, k.M.paint, '#3a4a6a', T.x0 + 0.7, 0, T.z0 + 2.6, 0.13, 0.15, 0.85, 10, { ...o, rx: 0.15 }); // bag
-  for (const dx of [-0.05, 0.05]) cyl(c.b, k.M.paint, '#b8b8b0', T.x0 + 0.7 + dx, 0.8, T.z0 + 2.5, 0.012, 0.012, 0.45, 5, o);
+  // a stand bag: body, top collar, pocket, strap, two splayed legs; club shafts with heads and head covers
+  const gx = T.x0 + 0.7, gz = T.z0 + 2.6;
+  cyl(c.b, k.M.paint, '#2f4a6e', gx, 0.08, gz, 0.13, 0.15, 0.8, 12, { ...o, rx: 0.18 }); // bag
+  cyl(c.b, k.M.paint, '#e8e2d4', gx, 0.86, gz + 0.14, 0.15, 0.14, 0.08, 12, { ...o, rx: 0.18 }); // collar
+  box(c.b, k.M.paint, '#e8e2d4', gx, 0.3, gz - 0.15, 0.16, 0.3, 0.05, { ...o, rx: 0.18 }); // pocket
+  for (const s2 of [-1, 1]) cyl(c.b, k.M.paint, '#2a2a2a', gx + s2 * 0.12, 0, gz + 0.32, 0.012, 0.012, 0.75, 5, { ...o, rx: -0.42, rz: s2 * 0.15 }); // legs
+  for (const [dx, dz, col] of [[-0.06, 0.18, '#c8c4bc'], [0.04, 0.2, '#c8c4bc'], [0.0, 0.1, '#b8463a'], [0.07, 0.12, '#2f2f2f']] as const) {
+    cyl(c.b, k.M.paint, '#b8b8b0', gx + dx, 0.85, gz + dz, 0.008, 0.008, 0.38, 5, { ...o, rx: 0.18 });
+    box(c.b, k.M.paint, col, gx + dx, 1.2, gz + dz + 0.07, 0.07, 0.08, 0.1, o);
+  }
   w.col.addCircle(T.x0 + 0.7, T.z0 + 2.6, 0.2, 0, 1);
   // cardboard return chute climbing the hill's north slope, on timber side beams; not walkable
   const cx = (C.x0 + C.x1) / 2;
@@ -169,21 +182,40 @@ function golf(w: World, c: Ctx) {
 function wickerman(w: World, c: Ctx) {
   const k = c.k, o = { chunk: 'grounds' };
   const { x, z, y } = WICKERMAN;
-  const straw = '#d8b860', twig = '#8a6a3a';
-  boxMM(c.b, k.M.wood, '#6b4a2a', x - 0.9, x + 0.9, y - 0.05, y + 0.25, z - 0.9, z + 0.9, o); // log base
-  for (const s of [-1, 1]) cyl(c.b, k.M.bark, straw, x + s * 0.28, y + 0.25, z, 0.14, 0.18, 1.1, 7, { ...o, rz: -s * 0.12 }); // legs
-  cyl(c.b, k.M.bark, straw, x, y + 1.3, z, 0.34, 0.26, 0.9, 8, o); // body
-  cyl(c.b, k.M.bark, straw, x, y + 1.95, z, 0.1, 0.1, 1.7, 6, { ...o, rz: Math.PI / 2 }); // arms
-  for (const s of [-1, 1]) cyl(c.b, k.M.bark, straw, x + s * 0.85, y + 1.95, z, 0.08, 0.1, 0.55, 6, { ...o, rz: s * 0.5 });
-  blob(c.b, k.M.bark, straw, x, y + 2.45, z, 0.24, 0.3, 0.24, o); // head (≈ 2.8 m tall)
-  for (let i = 0; i < 6; i++) cyl(c.b, k.M.bark, twig, x + Math.cos(i) * 0.2, y + 1.4, z + Math.sin(i) * 0.2, 0.02, 0.02, 0.9, 4, { ...o, rz: 0.3 * Math.sin(i * 2) });
-  w.col.addCircle(x, z, 1.0, y - 0.5, y + 3);
-  for (let i = 0; i < 9; i++) { // a ring of candles: local composition, not a route index
-    const a = (i / 9) * Math.PI * 2, cxx = x + Math.cos(a) * 3.0, czz = z + Math.sin(a) * 3.0;
-    cyl(c.b, k.M.paint, '#f2ead8', cxx, y, czz, 0.05, 0.05, 0.18 + (i % 3) * 0.06, 8, o);
-    box(c.b, k.M.glow, '#ffd27a', cxx, y + 0.18 + (i % 3) * 0.06, czz, 0.03, 0.05, 0.03, { ...o, shadow: false, jitter: 0 });
+  const straw = '#d8b860', twine = '#5a4430', M = woodMats();
+  // DEV-03 (ENVIRONMENT_STORY reference: bound limbs, broad shoulders): a platform of crossed logs; straw bundles
+  // for legs, body, arms and head, tied with twine at ankles, knees, waist, chest, elbows, wrists and neck
+  for (const [dz, yaw, yy] of [[-0.55, 0, 0], [0.55, 0, 0], [0, Math.PI / 2, 0.3]] as const) {
+    const L = 2.1, ax = x - (Math.cos(yaw) * L) / 2, az = z + dz + (Math.sin(yaw) * L) / 2;
+    c.b.add(M.tree, PLATFORM_LOG, planMatrix(ax, y - 0.08 + yy, az, yaw), '#8c7a64', o.chunk, true, 0);
   }
-  part(c, k.M.bark, '#7a5a3a', x - 5.2, z + 1.5, 0.4, 0, y, 0, 2.2, 0.4, 0.4, 1); // log bench
-  w.col.addBoxC(x - 5.2, z + 1.5, 1.2, 2.3, y - 0.3, y + 0.45);
+  const top = y + 0.62;
+  const band = (bx: number, by: number, r: number, rz = 0) => cyl(c.b, k.M.paint, twine, bx, by, z, r, r, 0.06, 8, { ...o, rz });
+  for (const s of [-1, 1]) {
+    cyl(c.b, k.M.bark, straw, x + s * 0.24, top, z, 0.13, 0.17, 1.15, 8, { ...o, rz: -s * 0.1 }); // legs
+    band(x + s * 0.22, top + 0.08, 0.17); band(x + s * 0.27, top + 0.55, 0.155);
+  }
+  cyl(c.b, k.M.bark, straw, x, top + 1.05, z, 0.46, 0.27, 1.05, 10, o); // body: broad at the shoulders
+  band(x, top + 1.15, 0.31); band(x, top + 1.75, 0.42);
+  for (const s of [-1, 1]) { // arms: bundles hanging out and down from the shoulders, bound at the elbow and wrist
+    cyl(c.b, k.M.bark, straw, x + s * 0.72, top + 1.62, z, 0.1, 0.13, 0.95, 7, { ...o, rz: s * 1.0 });
+    cyl(c.b, k.M.bark, straw, x + s * 1.15, top + 1.0, z, 0.08, 0.1, 0.75, 7, { ...o, rz: s * 0.35 });
+    band(x + s * 1.1, top + 1.45, 0.12, s * 1.0); band(x + s * 1.24, top + 1.05, 0.1, s * 0.35);
+  }
+  cyl(c.b, k.M.bark, straw, x, top + 2.12, z, 0.1, 0.12, 0.2, 7, o); // neck
+  band(x, top + 2.16, 0.12);
+  blob(c.b, k.M.bark, straw, x, top + 2.5, z, 0.25, 0.32, 0.25, o); // head (≈ 2.8 m in all)
+  for (let i = 0; i < 7; i++) cyl(c.b, k.M.bark, '#c8a650', x + Math.cos(i * 0.9) * 0.18, top + 2.75, z + Math.sin(i * 0.9) * 0.18, 0.015, 0.03, 0.3, 4, { ...o, rz: 0.4 * Math.cos(i * 1.3), rx: 0.4 * Math.sin(i * 1.3) }); // straw tuft
+  w.col.addCircle(x, z, 1.0, y - 0.5, y + 3);
+  for (let i = 0; i < 9; i++) { // a ring of candles in glass jars: local composition, not a route index
+    const a = (i / 9) * Math.PI * 2 + 0.15 * Math.sin(i * 2.3), d = 2.9 + 0.25 * Math.sin(i * 1.7), cxx = x + Math.cos(a) * d, czz = z + Math.sin(a) * d, gy = terrainHeight(cxx, czz);
+    cyl(c.b, k.M.paint, '#bfc8c0', cxx, gy, czz, 0.065, 0.06, 0.16, 8, o);
+    cyl(c.b, k.M.paint, '#f2ead8', cxx, gy + 0.01, czz, 0.035, 0.035, 0.1 + (i % 3) * 0.02, 8, o);
+    box(c.b, k.M.glow, '#ffd27a', cxx, gy + 0.11 + (i % 3) * 0.02, czz, 0.022, 0.04, 0.022, { ...o, shadow: false, jitter: 0 });
+  }
+  // a log bench facing the figure, a lantern on a stake
+  const bx = x - 5.2, bz = z + 1.5;
+  c.b.add(M.tree, BENCH_LOG2, planMatrix(bx, y - 0.02, bz - 1.1, Math.PI / 2 + 0.25), '#9a8a74', o.chunk, true, 0);
+  w.col.addBoxC(bx, bz, 1.2, 2.3, y - 0.3, y + 0.45);
   staticLantern(c, w, x + 5.6, y, z - 2.0, 0.7, 0, 3, 8);
 }

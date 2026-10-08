@@ -150,8 +150,11 @@ function foliageUV(g: THREE.BufferGeometry, scale: number) {
 }
 
 export interface Model { wood: THREE.BufferGeometry; leaves: THREE.BufferGeometry }
-/** near < 16 m (inspected), mid 16–26 m, far beyond (in the haze). All three share one skeleton and layout. */
-export type Lod = 'near' | 'mid' | 'far';
+/**
+ * near < 16 m (inspected), mid 16–26 m, far 26–48 m, xfar beyond (DEV-03: estate-wide woodland). All share one
+ * skeleton and the outline clusters, so a switch coarsens the surface but keeps the silhouette.
+ */
+export type Lod = 'near' | 'mid' | 'far' | 'xfar';
 export type TreeSpecies = 'oak' | 'beech' | 'birch' | 'pine';
 export type BushSpecies = 'hazel' | 'holly';
 /**
@@ -198,7 +201,7 @@ function clusterGeo(k: Cluster, lod: Lod, crownC: THREE.Vector3, crownR: number,
   // small clusters one step coarser: near icosphere (80) / octasphere (32); far octasphere (32) / icosahedron (20)
   // far: icosahedron (20) for every cluster
   const small = Math.max(...k.r) < (lod === 'near' ? nearSmall : 0.9);
-  const g0 = lod === 'near' ? (small ? new THREE.OctahedronGeometry(1, 1) : new THREE.IcosahedronGeometry(1, 1)) : small || lod === 'far' ? new THREE.IcosahedronGeometry(1, 0) : new THREE.OctahedronGeometry(1, 1);
+  const g0 = lod === 'near' ? (small ? new THREE.OctahedronGeometry(1, 1) : new THREE.IcosahedronGeometry(1, 1)) : small || lod === 'far' || lod === 'xfar' ? new THREE.IcosahedronGeometry(1, 0) : new THREE.OctahedronGeometry(1, 1);
   g0.deleteAttribute('normal'); g0.deleteAttribute('uv');
   const g = mergeVertices(g0, 1e-5);
   g0.dispose();
@@ -393,17 +396,18 @@ function growBroadleaf(sp: Broadleaf): Skeleton {
 }
 
 function emitBroadleaf(sp: Broadleaf, sk: Skeleton, lod: Lod): Model {
-  const near = lod === 'near', far = lod === 'far';
+  const near = lod === 'near', xfar = lod === 'xfar', far = lod === 'far' || xfar;
   const girth = THREE.MathUtils.clamp(sp.trunk[0] / 0.45, 0.6, 1); // slim trunks need fewer sides
-  const wood: THREE.BufferGeometry[] = [flaredTrunk(sk.trunk.path, sk.trunk.radius, sk.trunk.lobes, sp.flare, 1.25, Math.round((near ? 20 : far ? 6 : 9) * girth), near ? 11 : far ? 3 : 4, sp.vScale)];
+  const wood: THREE.BufferGeometry[] = [flaredTrunk(sk.trunk.path, sk.trunk.radius, sk.trunk.lobes, sp.flare, 1.25, xfar ? 5 : Math.round((near ? 20 : far ? 6 : 9) * girth), near ? 11 : far ? 3 : 4, sp.vScale)];
   for (const b of sk.branches) {
     if (!near && b.level === 2) continue; // mid/far: limbs only; side branches are hidden in the foliage at that distance
+    if (xfar) continue; // xfar: trunk and crown masses only
     wood.push(taperTube(b.pts, b.r, { radial: near ? (b.level === 1 ? 6 : 3) : far ? 3 : 4, rows: near ? (b.level === 1 ? 4 : 3) : far ? 1 : 2, vScale: 1.2 }));
   }
   const crownC = sk.clusters.reduce((s, k) => s.add(k.c), new THREE.Vector3()).divideScalar(sk.clusters.length);
   const crownR = Math.max(...sk.clusters.map((k) => k.c.distanceTo(crownC) + Math.max(...k.r)));
   let ks = near ? sk.clusters : dropFillers(sk.clusters); // mid/far: the small filler clumps are dropped
-  if (far) ks = largest(ks, 14);
+  if (far) ks = largest(ks, xfar ? 6 : 14);
   const leaves = cullBuried(ks.map((k) => clusterGeo(k, lod, crownC, crownR)), ks);
   const woodG = mergeParts(wood.map((g) => barkCol(paint(g, (p) => sp.barkK(p.y)), sp.bark)));
   return { wood: woodG, leaves: mergeParts(leaves.map((g) => foliageUV(g, 1.4))) };
@@ -464,7 +468,7 @@ export function birchModel(variant: number, lod: Lod): Model { return broadleaf(
  */
 const pineLobes = (rnd: (a: number, b: number) => number) => [0, 1, 2, 3].map((i) => ({ a: i * 1.57 + rnd(-0.4, 0.4), w: rnd(0.5, 1) }));
 export function pineModel(lod: Lod, variant = 0): Model {
-  const v = variant % 3, r = mulberry32(733 + v * 211), near = lod === 'near', far = lod === 'far';
+  const v = variant % 3, r = mulberry32(733 + v * 211), near = lod === 'near', xfar = lod === 'xfar', far = lod === 'far' || xfar;
   const rnd = (a: number, b: number) => a + r() * (b - a);
   const T = [12.2, 11.0, 13.4][v], bend = [[0.45, -0.25], [-0.3, 0.2], [0.75, 0.4]][v], light = [0.6, 2.4, 4.1][v];
   const axis = (y: number): P3 => { const t = Math.max(0, y) / T; return [bend[0] * (t * t * 0.8 + 0.25 * Math.sin(t * 3.1)), y, bend[1] * (t * t * 0.8 + 0.2 * Math.sin(t * 2.6))]; };
@@ -485,7 +489,7 @@ export function pineModel(lod: Lod, variant = 0): Model {
       const S = vec(axis(y + rnd(-0.25, 0.25)));
       const d = new THREE.Vector3(Math.cos(el) * Math.cos(a), Math.sin(el), Math.cos(el) * Math.sin(a));
       const E = S.clone().addScaledVector(d, L), M = S.clone().lerp(E, 0.5).add(new THREE.Vector3(0, -0.12 + f * 0.2, 0));
-      wood.push(taperTube([[S.x, S.y, S.z], [M.x, M.y, M.z], [E.x, E.y, E.z]], [0.1 - f * 0.03, 0.06, 0.025], { radial: near ? 5 : 3, rows: near ? 4 : far ? 1 : 2, vScale: 1.2 }));
+      if (!xfar) wood.push(taperTube([[S.x, S.y, S.z], [M.x, M.y, M.z], [E.x, E.y, E.z]], [0.1 - f * 0.03, 0.06, 0.025], { radial: near ? 5 : 3, rows: near ? 4 : far ? 1 : 2, vScale: 1.2 }));
       // two or three ragged clumps along the end of the branch, tilted with it, at different heights
       const m = 2 + Math.floor(r() * 2.5);
       for (let q = 0; q < m; q++) {
@@ -510,7 +514,7 @@ export function pineModel(lod: Lod, variant = 0): Model {
   }), BARK.fissured)));
   const centre = clusters.reduce((s, k) => s.add(k.c), new THREE.Vector3()).divideScalar(clusters.length);
   const cr = Math.max(...clusters.map((k) => k.c.distanceTo(centre) + k.r[0]));
-  const ks = near ? clusters : dropFillers(clusters);
+  const ks = near ? clusters : xfar ? largest(dropFillers(clusters), 8) : dropFillers(clusters);
   const leaves = cullBuried(ks.map((k) => clusterGeo(k, lod, centre, cr, 0.4, 0.75)), ks); // high crown, seen from 6 m+ below
   return { wood: woodG, leaves: mergeParts(leaves.map((g) => foliageUV(g, 1.2))) };
 }
@@ -854,6 +858,38 @@ export function anemoneModel(variant = 0): THREE.BufferGeometry {
 
 export function plantModel(kind: PlantKind, variant: number): THREE.BufferGeometry {
   return kind === 'fern' ? fernModel(variant) : kind === 'grass' ? grassModel(variant) : kind === 'bilberry' ? bilberryModel(variant) : kind === 'foxglove' ? foxgloveModel(variant) : kind === 'lily' ? lilyModel(variant) : anemoneModel(variant);
+}
+
+/**
+ * DEV-03 dead wood: a fallen, slightly bent log (fissured bark from the tree atlas, a paler sawn or broken end),
+ * lying along local +x from 0 to `len`, radius `rad`, its underside sunk a little. Geometry for the tree material.
+ */
+export function logModel(seed: number, len = 3, rad = 0.22): THREE.BufferGeometry {
+  const r = mulberry32(seed);
+  const bend = (r() - 0.5) * 0.3, sag = rad * 0.25;
+  // built upright like a trunk (the tube's frames give outward-facing triangles along +y), then laid along +x
+  const pts: P3[] = [0, 0.33, 0.66, 1].map((t) => [sag * Math.sin(t * Math.PI), t * len, bend * Math.sin(t * Math.PI) * len * 0.15]);
+  const body = taperTube(pts, [rad, rad * 0.95, rad * 0.85, rad * 0.75], { radial: 7, rows: 4, vScale: 1.2 });
+  const stub = taperTube([[-rad * 0.9, len * 0.4, 0], [-rad * 2.2, len * 0.48, rad * 0.8]], [rad * 0.35, rad * 0.12], { radial: 4, rows: 2 });
+  for (const g of [body, stub]) {
+    g.rotateZ(-Math.PI / 2).translate(0, rad * 0.7, 0); // +y → +x; x (sag) → −y
+    const ix = g.index!.array as Uint16Array | Uint32Array; // taperTube winds inward for this frame: face the triangles out
+    for (let t = 0; t < ix.length; t += 3) { const a = ix[t + 1]; ix[t + 1] = ix[t + 2]; ix[t + 2] = a; }
+    g.computeVertexNormals();
+  }
+  paint(body, (p) => { const k = 0.62 + 0.38 * THREE.MathUtils.smoothstep(p.y, 0, rad * 1.4); return [k, k * 0.97, k * 0.92]; });
+  barkCol(body, BARK.fissured);
+  paint(stub, 0.85); barkCol(stub, BARK.fissured);
+  // sawn ends: pale end grain (smooth-bark column, lightened by vertex colour)
+  const ends = [[0, rad, -1], [len, rad * 0.75, 1]].map(([x, rr, d]) => {
+    const e = new THREE.CircleGeometry(rr * 0.98, 8).rotateY((d * Math.PI) / 2).translate(x, rad * 0.7, 0);
+    const uv = e.attributes.uv as THREE.BufferAttribute;
+    for (let i = 0; i < uv.count; i++) uv.setXY(i, (BARK.smooth + 0.3 + uv.getX(i) * 0.3) / ATLAS_COLS, uv.getY(i) * 0.3);
+    return paint(e, 1.25);
+  });
+  const g = mergeParts([body, stub, ...ends]);
+  g.computeBoundingSphere();
+  return g;
 }
 
 /** A fallen leaf lying flat (instanced by the hundred as litter). */

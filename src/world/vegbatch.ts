@@ -47,6 +47,8 @@ export interface VegBatch {
 export interface VegBatchOpts { castShadow?: boolean; sortObjects?: boolean; tag: Record<string, unknown> }
 
 export function makeVegBatch(w: World, geos: THREE.BufferGeometry[], maxInstances: number, material: THREE.Material, o: VegBatchOpts): VegBatch {
+  // a BatchedMesh needs all its geometries indexed or all non-indexed (DEV-03 batches mix kit pieces)
+  if (geos.some((g) => !g.index) && geos.some((g) => g.index)) for (let i = 0; i < geos.length; i++) if (geos[i].index) { const n = geos[i].toNonIndexed(); geos[i].dispose(); geos[i] = n; }
   return CAPS.multiDraw ? new BatchedVeg(w, geos, maxInstances, material, o) : new InstancedVeg(w, geos, material, o);
 }
 

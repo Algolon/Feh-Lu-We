@@ -38,6 +38,9 @@ export class Vegetation {
    * other tree and plant, stays exactly as in the base build) but not kept. Used while the BOSLUST zone is built.
    */
   drop: ((x: number, z: number, kind: string) => boolean) | null = null;
+  /** DEV-03: a tree for which this returns true is handed to the estate woodland (woodkit models) instead of being
+   * drawn here; its random draws are still made, so every other entry stays where it was. */
+  capture: ((t: TreeSpec, chunk: string) => boolean) | null = null;
   constructor(seed = 5) {
     this.r = mulberry32(seed);
   }
@@ -56,7 +59,7 @@ export class Vegetation {
     const n0 = [this.trunks.length, this.crowns.length, this.cones.length];
     this.treeParts(t, chunk);
     if (coarse) { for (let i = n0[0]; i < this.trunks.length; i++) this.trunks[i].chunk = coarse; for (let i = n0[2]; i < this.cones.length; i++) this.cones[i].chunk = coarse; }
-    if (this.drop?.(t.x, t.z, t.kind ?? 'oak')) { this.trunks.length = n0[0]; this.crowns.length = n0[1]; this.cones.length = n0[2]; }
+    if (this.capture?.(t, chunk) || this.drop?.(t.x, t.z, t.kind ?? 'oak')) { this.trunks.length = n0[0]; this.crowns.length = n0[1]; this.cones.length = n0[2]; }
   }
 
   private treeParts(t: TreeSpec, chunk: string) {

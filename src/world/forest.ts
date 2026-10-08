@@ -6,7 +6,7 @@
 import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, floor, gableRoof } from './arch';
-import { box, boxMM, cyl, blob, compound, v3 } from './kit';
+import { box, boxMM, cyl, blob, compound, v3, planMatrix } from './kit';
 import { lantern, crate, part, staticLantern } from './furniture';
 import { makeFire } from './fire';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeAction, makeInspect, place } from '../interactions/props';
@@ -20,7 +20,13 @@ import { ESTATE, SITES, DRIVEWAY, CLEARINGS, SHED, HILL, WOODS } from './layout'
 import { vegetationClear } from './footprints';
 import { FOREST_PATHS, terrainHeight } from './terrain';
 import { ART } from '../core/artflags';
-import { inZone, buildWoodland, signpostV2, type ZoneTree } from './boslustSample';
+import { signpostV2, stumpsV2 } from './boslustSample';
+import { woodMats, rockModel, logModel } from './woodkit';
+import type { EstateWoods } from './estateWoods';
+
+const FIRE_STONE = (() => { const g = rockModel(61); g.userData.keepColor = true; return g; })();
+const BENCH_LOG = logModel(131, 2.2, 0.21);
+const SPLIT_LOG = logModel(137, 0.9, 0.1).translate(-0.45, -0.07, 0);
 
 export function forestTreeOk(x: number, z: number) {
   if (z > ESTATE.forestEdge - 0.8 || z < 1.8) return false;
@@ -37,14 +43,13 @@ export function forestTreePoints() {
   return scatter(mulberry32(42), 1.2, ESTATE.w - 1.2, 1.2, ESTATE.forestEdge, 4.0, 15600, forestTreeOk);
 }
 
-export function buildForest(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
+export function buildForest(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods: EstateWoods | null) {
   const k = c.k;
   const r = mulberry32(42);
   // trees: Poisson-disc spacing ≥ 4.0 m keeps ≥ 2 m gaps between trunks — never a sealed wall
   const pts = scatter(r, 1.2, ESTATE.w - 1.2, 1.2, ESTATE.forestEdge, 4.0, 15600, forestTreeOk);
-  // art sample: trees in the BOSLUST zone keep their position and collision but get the new models (the
-  // Vegetation drop filter set by estate.ts discards their old visuals without changing the random sequence)
-  const zoneTrees: ZoneTree[] = [], zoneStumps: { x: number; z: number; y: number; s: number }[] = [];
+  // DEV-03: every tree keeps its position and collision but is drawn by the estate woodland (woodkit; the Vegetation
+  // capture hook set by estate.ts hands it over without changing the random sequence)
   for (const [x, z] of pts) {
     const roll = r();
     const onHill = Math.hypot(x - HILL.x, z - HILL.z) < HILL.r;
@@ -54,7 +59,6 @@ export function buildForest(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
     const y = terrainHeight(x, z);
     const spec = { x, z, h, r: rad, kind, hue: r() - 0.5, y } as const;
     veg.tree(spec, `f${Math.floor(x / 45)}_${Math.floor(z / 36)}`, `T${Math.floor(x / 100)}_${Math.floor(z / 90)}`); // DEV-02: trunks/cones on a coarse grid
-    if (ART.ext === 'sample' && inZone(x, z)) zoneTrees.push(spec);
     w.col.addCircle(x, z, kind === 'birch' ? 0.22 : 0.34, y - 0.5, y + 6);
   }
   // undergrowth (no collision): ferns, shrubs, rocks, flowers
@@ -79,7 +83,7 @@ export function buildForest(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
   for (const [x, z] of scatter(r, 3, ESTATE.w - 3, 3, ESTATE.forestEdge - 2, 11, 1200, forestTreeOk)) {
     const y = terrainHeight(x, z), sc = 0.25 + r() * 0.2;
     veg.smallThing('stump', x, z, sc, '#8a6a4a', `f${Math.floor(x / 45)}_${Math.floor(z / 36)}`, y);
-    if (ART.ext === 'sample' && inZone(x, z)) zoneStumps.push({ x, z, y, s: sc });
+    woods?.addStump({ x, z, y, s: sc }); // drawn by the estate woodland (stumpsV2: same collider)
     w.col.addCircle(x, z, sc, y - 0.2, y + sc * 0.9);
     if (r() < 0.5) veg.mushrooms(x + sc + 0.15, z, y, `f${Math.floor(x / 45)}_${Math.floor(z / 36)}`, 2);
   }
@@ -98,10 +102,8 @@ export function buildForest(w: World, g: GameApi, c: Ctx, veg: Vegetation) {
   buildFireClearing(w, g, c);
   buildWell(w, g, c);
   buildSideGate(w, g, c);
-  if (ART.ext === 'sample') {
-    buildWoodland(w, c, zoneTrees, zoneStumps); // also draws the zone's stumps (same colliders as above)
-    signpostV2(w, g, c);
-  } else buildFork(w, g, c);
+  if (ART.ext === 'sample') signpostV2(w, g, c);
+  else buildFork(w, g, c);
 
   // forest lanterns along the paths for orientation at dusk (every ~30 m, just off the path)
   let li = 0;
@@ -223,17 +225,36 @@ function buildShed(w: World, g: GameApi, c: Ctx) {
 function buildFireClearing(w: World, g: GameApi, c: Ctx) {
   const k = c.k;
   const { x: FX, z: FZ } = SITES.fire;
-  for (let i = 0; i < 12; i++) {
-    const a = (i / 12) * Math.PI * 2;
-    blob(c.b, k.M.paint, '#8a8580', FX + Math.cos(a) * 0.95, 0.12, FZ + Math.sin(a) * 0.95, 0.25, 0.18, 0.22, { chunk: c.chunk, yaw: a });
+  // DEV-03: an authored fire place instead of six pegs in a perfect ring: a ring of real field stones round a sooty
+  // hearth, two log benches and two stump seats (asymmetric, facing the fire), a woodpile at the edge of the clearing
+  const M = woodMats(), r = mulberry32(2101);
+  for (let i = 0; i < 11; i++) {
+    const a = (i / 11) * Math.PI * 2 + (r() - 0.5) * 0.2, d = 0.95 + (r() - 0.5) * 0.08, s = 0.2 + r() * 0.08;
+    c.b.add(M.rock, FIRE_STONE, planMatrix(FX + Math.cos(a) * d, -0.04, FZ + Math.sin(a) * d, r() * 6.3, s * 1.2, s, s), new THREE.Color('#8f877a').multiplyScalar(0.8 + r() * 0.25), c.chunk, true, 0);
   }
-  cyl(c.b, k.M.paint, '#3a3530', FX, 0.01, FZ, 0.8, 0.8, 0.04, 14, { chunk: c.chunk });
+  cyl(c.b, k.M.paint, '#2e2a26', FX, 0.01, FZ, 0.8, 0.8, 0.04, 14, { chunk: c.chunk });
   w.col.addCircle(FX, FZ, 1.15, 0, 0.8);
-  for (let i = 0; i < 6; i++) {
-    const a = (i / 6) * Math.PI * 2 + 0.3;
-    cyl(c.b, k.M.bark, '#7a5a3a', FX + Math.cos(a) * 3.2, 0, FZ + Math.sin(a) * 3.2, 0.32, 0.36, 0.45, 9, { chunk: c.chunk });
-    w.col.addCircle(FX + Math.cos(a) * 3.2, FZ + Math.sin(a) * 3.2, 0.35, 0, 0.5);
+  const seat = (a: number, d: number) => {
+    const x = FX + Math.cos(a) * d, z = FZ + Math.sin(a) * d;
+    stumpsV2(c, [{ x, z, y: 0, s: 0.5, treatment: 'plain', vx: x, vz: z, vr: 0.34 }]);
+    w.col.addCircle(x, z, 0.35, 0, 0.5);
+  };
+  const bench = (a: number, d: number, len: number) => {
+    const cx = FX + Math.cos(a) * d, cz = FZ + Math.sin(a) * d, yaw = -a + Math.PI / 2; // tangential: you sit facing the fire
+    const ax = cx - (Math.cos(yaw) * len) / 2, az = cz + (Math.sin(yaw) * len) / 2;
+    c.b.add(M.tree, BENCH_LOG, planMatrix(ax, 0.02, az, yaw), '#9a8a74', c.chunk, true, 0);
+    for (let q = 0.3; q < len; q += 0.5) w.col.addCircle(ax + Math.cos(yaw) * q, az - Math.sin(yaw) * q, 0.26, 0, 0.45);
+  };
+  seat(0.35, 3.1); seat(2.55, 3.3);
+  bench(1.45, 3.2, 2.2); bench(4.3, 3.35, 2.2);
+  // woodpile against a tree at the clearing edge: split logs stacked between two stakes
+  const wpA = 5.45, wpx = FX + Math.cos(wpA) * 6.6, wpz = FZ + Math.sin(wpA) * 6.6, wpyaw = -wpA + Math.PI / 2;
+  for (let row = 0; row < 4; row++) for (let i = 0; i < 6 - row; i++) {
+    const off = (i - (5 - row) / 2) * 0.24;
+    c.b.add(M.tree, SPLIT_LOG, planMatrix(wpx + Math.cos(wpyaw) * off, 0.11 + row * 0.2, wpz - Math.sin(wpyaw) * off, wpyaw + Math.PI / 2, 1, 1, 1), new THREE.Color('#a08c70').multiplyScalar(0.85 + r() * 0.25), c.chunk, true, 0);
   }
+  for (const e of [-1, 1]) cyl(c.b, k.M.wood, '#5a4630', wpx + Math.cos(wpyaw) * e * 0.85, 0, wpz - Math.sin(wpyaw) * e * 0.85, 0.04, 0.05, 1.0, 6, { chunk: c.chunk });
+  w.col.addCircle(wpx, wpz, 0.75, 0, 1.0);
   const logs = compound((b) => {
     for (let i = 0; i < 4; i++) cyl(b, k.M.bark, '#8a6a4a', 0, 0.12, 0, 0.07, 0.07, 0.9, 6, { rz: Math.PI / 2, yaw: i * 0.8 });
   });
