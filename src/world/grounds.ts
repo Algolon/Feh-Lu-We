@@ -290,7 +290,8 @@ function golf(w: World, c: Ctx) {
     for (const sd of [-1, 1]) { a.add(M.timber, '#6b4a2a', bx(0.04, 0.24, 0.7), sd * 0.83, 0.12, 0); a.add(M.timber, '#6b4a2a', bx(0.04, 0.2, 0.42), sd * 0.66, 0.1, -0.5, { ry: sd * 0.45 }); } // sides + flaring wings
     a.add(M.timber, '#6b4a2a', bx(1.7, 0.24, 0.04), 0, 0.12, 0.33);
     for (let i = 0; i < 3; i++) a.add(M.paint, '#f4f4f0', cg('golfBall', () => new THREE.SphereGeometry(0.021, 6, 4)), -0.3 + i * 0.27, 0.061, 0.05 + (i % 2) * 0.12); // returned balls
-    a.end({ gap: 0.05 }); }
+    a.end({ gap: 0.05 });
+    w.col.addBox(cx - 0.87, cx + 0.87, zt - 0.75, zt + 0.37, yg - 0.2, yg + 0.8); } // the tray is part of the chute: not walkable
   // ---- top: a target board across the deck end with the cup
   { const yt = jy(z0), a = new Asm(c.b, o.chunk, cx, yt, z0 - 0.05, 0);
     a.add(M.timber, '#8a6440', bx(2 * HW + 0.1, 0.5, 0.05), 0, 0.25, -0.05);

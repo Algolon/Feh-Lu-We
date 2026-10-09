@@ -452,6 +452,8 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   c.col.addBox(85.15, 85.95, 95.9, 97.3, 0, GF + 0.62);
 
   // ---------------------------------------------------------------- living room (west, front)
+  c.chunk = 'mLiv'; // DEV-04B: its own batch — it cannot be seen from outside (windows are opaque to culling), so the
+  // forecourt views no longer pay for it through the open front door
   if (ART.set === 'sample') {
     // art-refresh interior sample (review mode / ?art=sample): same gameplay contract, new assets
     const sh = new ContactShadows();
@@ -477,7 +479,9 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   const fl = floorLamp(w, 84.2, GF, 83.6);
   makeLamp(w, g, { id: 'lamp.livingFloor', ...fl, name: 'staande lamp', defaultOn: true, hit: [0.5, 1.9, 0.5], intensity: 5, distance: 8, patch: { y: GF + 0.03, r: 1.5 } });
   for (const z of [83, 90.5]) curtains(c, 72.45, z, GF + 0.85, Math.PI / 2, 1.1, 2.0, '#7a3a3a');
+  logBasket(c, 73.05, 84.45, GF, 0.3); // DEV-04B: as in the sample room (both sets keep identical colliders)
   }
+  c.chunk = 'mHall';
 
   c.chunk = 'mLib';
   library(w, g, c);
@@ -840,17 +844,18 @@ function kitchen(w: World, g: GameApi, c: Ctx) {
   makeInspect(w, g, { id: 'mem.kitchen.list', obj: list, clue: 'mem.kitchen.list', hit: [0.35, 0.15, 0.4] });
   const kl = wallSconce(w, 104.0, 2.2, 92.1, 0);
   makeLamp(w, g, { id: 'lamp.kitchen', ...kl, name: 'wandlamp', defaultOn: true, intensity: 5, distance: 9, hit: [0.4, 0.5, 0.4], patch: { y: GF + 0.03, r: 1.6 } });
-  // DEV-04B: a scrubbed prep table in the empty south half (the way from the arch to the chart and the service door stays
-  // free), a bread board, a bowl and a jug on it, a basket of vegetables on its shelf
-  table(c, 98.6, 94.5, GF, 1.6, 0.75, 0, '#a8845a', 0.88);
-  tabletop(c, 98.6, 94.5, GF + 0.88, 0, ['bowl', 'jug'], 21);
-  { const M2 = artMats(), a2 = new Asm(c.b, c.chunk, 98.6, GF, 94.5, 0);
+  // DEV-04B: a scrubbed prep table in the empty south-east floor, off the walk line from the service corridor to the
+  // dining arch (x ≈ 98 → 101), a bowl and a jug on it, a crate of vegetables on its shelf
+  const PX = 103.6, PZ = 95.2;
+  table(c, PX, PZ, GF, 1.6, 0.75, 0, '#a8845a', 0.88);
+  tabletop(c, PX, PZ, GF + 0.88, 0, ['bowl', 'jug'], 21);
+  { const M2 = artMats(), a2 = new Asm(c.b, c.chunk, PX, GF, PZ, 0);
     a2.add(M2.timber, '#8a6440', joinery.bx(1.36, 0.025, 0.55), 0, 0.22, 0);
     for (const sx of [-1, 1]) for (const sz of [-1, 1]) a2.add(M2.timber, '#8a6440', joinery.bx(0.03, 0.025, 0.03), sx * 0.66, 0.22, sz * 0.27);
     addShoppingCrate(a2, -0.35, 0.2325, 0, { ry: Math.PI / 2, load: 'veg', seed: 5 }); }
   // DEV-04B: a tall larder cupboard fills the empty south-west corner (the plant moved to the dining arch)
   larder(c, 95.38, 93.4, GF, Math.PI / 2, 1.2, 0.5, 2.05);
-  plant(c, 99.4, 92.6, GF, 0.9, '#d0a070');
+  plant(c, 104.4, 92.6, GF, 0.9, '#d0a070'); // beside the arch, clear of the walk line through it
   // ---- service chart (thread A) on the west wall + hook board with the three trolley tags
   const chart = canvasPanel(w, 95.1, GF + 1.65, 96.0, Math.PI / 2, 2.0, 1.0, (x, W, H) => drawServiceChart(x, W, H), 768);
   const tagGroups: Record<string, THREE.Object3D> = {};
