@@ -28,7 +28,10 @@ Commits (each builds and passes its own checks):
 | `310da50` | B4 estate-wide primitive audit fixes |
 | `5b8ef58` | performance pass (arrival views back under the low guide) |
 | `03d3812` | `e2e:dev04b` browser suite + two culling fixes it found |
-| (this) | report, after / compare evidence |
+| `67fc0d5` | report draft |
+| `e19e257` | Wickerman packed with hay (owner request during the pass) |
+| `7ae10f3` | regressions found by the full / dev02 suites (walkthrough route, living-room colliders, golf chute) + living-room batch |
+| (last) | report, after / compare evidence |
 
 ## 1. Asset inventory and decisions (B1)
 
@@ -125,7 +128,7 @@ Pre-existing problem found by the audit and fixed: the dormer bodies z-fought wi
 |---|---|---|
 | BOSLUST | **protected** — no edit; used as the calibration view | everything |
 | Campfire | 12 sooted hearth stones round an ash bed with charred ends; three closed seat logs on chock stones in a rough circle with two stumps, gaps at the paths; split-log teepee for the firewood state | fire ids, states, firewood logic |
-| Wickerman | willow figure (`wickerman.ts`): armature of bundled legs, elliptical torso staves, shoulder yoke, bent arms, neck; irregular woven bands, twine bindings, splayed fingers, woven head cage; feet lashed into timber shoes on the sleepers; candles unlit in glass jars | DEV-04A plinth, staging, collider; **no interaction / fire state**: candle positions are published as `scene.userData.wickerCandles = { centre, candles[9] }` for DEV-04C |
+| Wickerman | willow figure (`wickerman.ts`): armature of bundled legs, elliptical torso staves, shoulder yoke, bent arms, neck; irregular woven bands, twine bindings, splayed fingers, woven head cage; feet lashed into timber shoes on the sleepers. **Packed with hay** (owner request): lumpy closed hay volumes just inside the staves and bands, straw wisps through the gaps, cuffs and crown, textured from a straw sheet on the prop atlas so it reads as straw, not a smooth body. Candles unlit in glass jars | DEV-04A plinth, staging, collider; **no interaction / fire state**: candle positions are published as `scene.userData.wickerCandles = { centre, candles[9] }` for DEV-04C |
 | Well | open shaft (lathe wall, coping stones, water 1.7 m down, darkening with depth); a depth-only disc drawn after the shaft interior stops the terrain from capping the hole; posts on pads, tie beam, roof, windlass with rope and crank, a wound-up bucket and one on the rim | well ids / interactions |
 | Golf | 1.5 m wide ramp on trestles with side boards and a centre guide, a flaring catch tray with returned balls, a target board with the cup; the stand bag rebuilt (body, collar, open throat with dividers and clubs, pocket, strap, legs) | tee mat, spur, collider |
 | Copacabana sign | shaped board, display lettering fitted to it with a playful bounce, ROOM line; taller uprights and cap rail so it sits in the canopy; readable at phone size (see `h11`) | DEV-04A doors, wall-art id |
