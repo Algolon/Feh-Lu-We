@@ -69,6 +69,17 @@ export const VIEWS = [
   ['h15-boslust-calibration', { x: 51.5, y: 0, z: 7.6, yaw: 55 * D, pitch: 0.04 }],
   ['h16-boslust-door', { x: 63.0, y: 0, z: 11.5, yaw: 0, pitch: 0.05 }],
   ['h17-portugal-exterior', { x: 25.0, y: 4.0, z: 146.5, yaw: 0, pitch: 0.05 }],
+  // DEV-04B-R owner-review corrections (golf bag clubs, tee mat on the chute axis, chair backs, hall wall art)
+  ['c01-golf-bag-close', { x: 62.1, y: 0, z: 52.4, yaw: -131.6 * D, pitch: -0.45 }],
+  ['c02-golf-bag', { x: 63.5, y: 0, z: 53.5, yaw: -124 * D, pitch: -0.22 }],
+  ['c10-golf-bag-side', { x: 62.55, y: 0, z: 52.3, yaw: -117 * D, pitch: -0.32 }],
+  ['c03-golf-mat-chute', { x: 63.0, y: 0, z: 53.4, yaw: 180 * D, pitch: -0.22 }],
+  ['c04-golf-mat-side', { x: 66.4, y: 0, z: 51.2, yaw: -112 * D, pitch: -0.3 }],
+  ['c05-dining-chairs', { x: 99.4, y: 0.15, z: 82.9, yaw: 15 * D, pitch: -0.25 }],
+  ['c06-dining-chair-back', { x: 99.1, y: 0.15, z: 87.0, yaw: 124.8 * D, pitch: -0.45 }],
+  ['c07-cottage-chairs', { x: 21.6, y: 4.15, z: 160.6, yaw: 65 * D, pitch: -0.25 }],
+  ['c08-hall-art', { x: 90.5, y: 0.15, z: 89.35, yaw: 90 * D, pitch: 0.55 }],
+  ['c09-hall-art-wide', { x: 88.6, y: 0.15, z: 84.6, yaw: 52 * D, pitch: 0.3 }],
   // B4 estate audit (primitive / garbage fixes)
   ['a01-hall-commode', { x: 88.2, y: 0.15, z: 85.5, yaw: -90 * D, pitch: -0.18 }],
   ['a02-wc', { x: 87.3, y: 0.15, z: 104.4, yaw: -45 * D, pitch: -0.3 }],

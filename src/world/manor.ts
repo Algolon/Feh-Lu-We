@@ -23,8 +23,9 @@ import {
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place } from '../interactions/props';
 import { sideboard, billiardTable, cueRack, shelvingUnit, toolWall, floorGlobe, logBasket, coatRail, pedestalBasin, towelRail, luggageRack, writingDesk, tabletop, larder, boardGameSet } from './dressing';
 import { addBeerCrate, addShoppingCrate, addOpenBook, addBook, PAPER, bottleGeoOf, capGeo, bottleTop, type CrateLoad } from './propkit';
-import { forestMapTexture } from './textures';
+import { forestMapTexture, drawManorLandscape } from './textures';
 import { buildHearth } from './hearth';
+import { registerArt, artFootprint } from './openings';
 import { ART, SLICE } from '../core/artflags';
 import { sliceHall, sliceLibraryTable, sliceUpstairs } from '../slice/world';
 import { livingRoomV2 } from './livingSample';
@@ -392,11 +393,21 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   // opened); it now hangs on the free gallery wall between the Reiskamer and Sterrenkamer doors (wall-art contract)
   painting(c, 85.12, 4.6, 86.2, Math.PI / 2, 1.2, 0.9, 1);
   painting(c, 85.12, 2.0, 92.5, Math.PI / 2, 0.9, 0.7, 0);
-  // a woven hanging above the stair, on an oak rod with finials (DEV-03: was a carpet glued flat to the wall)
-  // DEV-04B: the hanging is a woven textile of its own (tree of life, fringe), no longer the floor rug's pattern
-  rug(c, 94.86, 89.35, 3.95, 1.7, 1.9, 0, '#ffffff', 'hanging', false);
-  rod(c.b, k.M.wood, '#6e4a2c', 94.8, 5.88, 89.35, 0.025, 0.025, 2.0, 8, { chunk: c.chunk, rx: Math.PI / 2 }); // DEV-04A: was 1 m above the hanging
-  for (const zz of [88.33, 90.37]) blob(c.b, k.M.wood, '#6e4a2c', 94.8, 5.9, zz, 0.045, 0.045, 0.045, { chunk: c.chunk });
+  // DEV-04B-R: a large framed painting above the stair — the manor across the lake at dusk (original, procedural) in a
+  // gilt moulded frame. It replaces the woven hanging, which was a floor-rug mesh and stood out of the wall as a ledge
+  // under an empty rod. Same wall, same centre; registered with its full frame for the DEV-04A wall-art contract.
+  { const PX = 94.9, PY = 4.65, PZ = 89.35, PW = 2.0, PH = 1.4, FW = 0.1, yaw = -Math.PI / 2;
+    canvasPanel(w, PX, PY, PZ, yaw, PW, PH, drawManorLandscape, 640, null);
+    registerArt(artFootprint(`painting@${PX.toFixed(2)},${PZ.toFixed(2)}`, PX, PY, PZ, yaw, PW + 2 * FW + 0.04, PH + 2 * FW + 0.04));
+    const M2 = artMats(), a2 = new Asm(c.b, c.chunk, PX, PY, PZ, yaw).begin('hallPainting');
+    a2.add(M2.paint, '#3a2a1c', joinery.bx(PW + 0.04, PH + 0.04, 0.02), 0, 0, 0.015); // backing behind the canvas
+    for (const s2 of [-1, 1]) {
+      a2.add(M2.brass, '#a8823c', joinery.sb(PW + 2 * FW, FW, 0.06, 0.02), 0, s2 * (PH / 2 + FW / 2), 0.04);
+      a2.add(M2.brass, '#a8823c', joinery.sb(FW, PH + 0.002, 0.06, 0.02), s2 * (PW / 2 + FW / 2), 0, 0.04);
+      a2.add(M2.brass, '#6e5426', joinery.bx(PW + 0.02, 0.012, 0.012), 0, s2 * (PH / 2 + 0.004), 0.034); // dark inner sight edge
+      a2.add(M2.brass, '#6e5426', joinery.bx(0.012, PH, 0.012), s2 * (PW / 2 + 0.004), 0, 0.034);
+    }
+    a2.end({ ground: false }); }
   const ch = chandelier(w, 89.9, UCEIL, 90, 0.9, 1.8);
   const sw = compound((b) => box(b, k.M.paint, '#c9a44c', 0, 0, 0, 0.12, 0.18, 0.03));
   place(sw, 91.5, 1.35, 84.1, 0);
