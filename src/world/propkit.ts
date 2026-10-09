@@ -93,6 +93,19 @@ function spineTex() {
   return c;
 }
 /** Paper block: fine page lines across U (one repeat = 8 cm across the block's thickness). */
+/** Packed straw (the Wickerman's hay): short stalks along v on a darker packed ground, light and shadowed ones mixed. */
+function strawTex() {
+  const [c, x] = canvas(384, 256), r = mulberry32(911);
+  x.fillStyle = '#8f7438'; x.fillRect(0, 0, 384, 256);
+  const cols = ['#e4cf8e', '#d2b66e', '#c2a35a', '#a98a46', '#7a6030', '#efdca0'];
+  x.lineCap = 'round';
+  for (let i = 0; i < 2600; i++) {
+    const px = r() * 384, py = r() * 256, len = 8 + r() * 26, a = Math.PI / 2 + (r() - 0.5) * 0.9;
+    x.strokeStyle = cols[Math.floor(r() * cols.length)]; x.lineWidth = 0.8 + r() * 1.6;
+    x.beginPath(); x.moveTo(px, py); x.lineTo(px + Math.cos(a) * len, py + Math.sin(a) * len); x.stroke();
+  }
+  return c;
+}
 function paperTex() {
   const [c, x] = canvas(128, 8), r = mulberry32(502);
   for (let i = 0; i < 32; i++) { x.fillStyle = grey(0.95 + r() * 0.05); x.fillRect(i * 4, 0, 3, 8); x.fillStyle = grey(0.74 + r() * 0.08); x.fillRect(i * 4 + 3, 0, 1, 8); }
@@ -213,7 +226,7 @@ function printTex() {
  * sheet's rectangle (canvas pixels: x, y from the top, w, h); 16 px gutters keep mip levels from bleeding.
  */
 const ATLAS = 1024;
-export const SHEETS = { rug: [0, 0, 320, 960], spine: [336, 0, 288, 256], print: [336, 272, 512, 256], paper: [336, 544, 256, 16] } as const;
+export const SHEETS = { rug: [0, 0, 320, 960], spine: [336, 0, 288, 256], print: [336, 272, 512, 256], paper: [336, 544, 256, 16], straw: [640, 0, 384, 256] } as const;
 export type Sheet = keyof typeof SHEETS;
 export function toAtlas(g: THREE.BufferGeometry, sheet: Sheet) {
   const [X, Y, W, H] = SHEETS[sheet], uv = g.attributes.uv as THREE.BufferAttribute, k = 0.5 / ATLAS;
@@ -228,7 +241,7 @@ function atlasTex() {
   const [c, x] = canvas(ATLAS, ATLAS);
   x.fillStyle = '#ffffff'; x.fillRect(0, 0, ATLAS, ATLAS);
   const put = (src: HTMLCanvasElement, sheet: Sheet) => { const [X, Y, W, H] = SHEETS[sheet]; x.drawImage(src, X, Y, W, H); };
-  put(rugTex(), 'rug'); put(spineTex(), 'spine'); put(printTex(), 'print'); put(paperTex(), 'paper');
+  put(rugTex(), 'rug'); put(spineTex(), 'spine'); put(printTex(), 'print'); put(paperTex(), 'paper'); put(strawTex(), 'straw');
   return tex(c);
 }
 

@@ -12,6 +12,7 @@ import { hash01 } from './woodlandPlan';
 import { table, part, staticLantern, joinery } from './furniture';
 import { Asm, artMats, lathe, cushion, projectUV } from './artkit';
 import { wickermanGeo, WICKER } from './wickerman';
+import { propMats } from './propkit';
 import { makeInspect, place } from '../interactions/props';
 import type { Vegetation } from './nature';
 import {
@@ -356,6 +357,7 @@ function wickerman(w: World, c: Ctx) {
   // woven head cage — in place of straw-coloured cylinders with a ball head. Each foot stands in a timber shoe
   // bolted to its sleeper with two iron straps (sheet: "stable base support").
   c.b.add(k.M.paint, WICKER_GEO, planMatrix(x, foot, z, 0), '#ffffff', o.chunk, true, 0);
+  c.b.add(propMats().props, WICKER_GEO.userData.hay, planMatrix(x, foot, z, 0), '#ffffff', o.chunk, true, 0); // the hay packed into it
   { const M2 = artMats(), a = new Asm(c.b, o.chunk, x, foot, z, 0);
     for (const sd of [-1, 1]) {
       a.add(M2.timber, '#5e4a36', joinery.bx(0.2, 0.12, 0.3), sd * WICKER.footX, 0.06, 0); // shoe

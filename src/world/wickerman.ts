@@ -4,21 +4,28 @@
 // tilt (not a regular trellis grid), diagonal wraps on the limbs, twine bindings at every joint, splayed willow
 // fingers, a woven head cage, and feet lashed into timber shoes bolted to the sleepers. One merged geometry with baked
 // vertex colours (keepColor), local space: y up from the top of the sleepers, the figure facing −z.
-// Pure geometry: tests check it is grounded, connected and inside its collider. Fire states are DEV-04C.
+// The cage is packed with hay (lumpy volumes inside the weave, wisps through the gaps).
+// Pure geometry: tests/dev04b.test.ts checks the fill is finite and sits inside the cage. Fire states are DEV-04C.
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { taperTube } from './woodkit';
+import { toAtlas } from './propkit';
 import { mulberry32 } from '../core/rng';
 
 type P3 = [number, number, number];
 const WILLOW = ['#7a5e48', '#6e5238', '#86684c', '#64381c', '#8a6e50'];
 const TWINE = '#3e3226';
+const HAY = ['#c4a862', '#b39552', '#cdb676', '#a8894a'];
+const HAY_TINT = ['#ffffff', '#f2eadc', '#fff6e0', '#e8ddc8'];
 
 /** Joint positions of the figure (local, metres): used by the builder and the tests. */
 export const WICKER = {
   ankle: 0.14, knee: 0.66, hip: 1.18, waist: 1.45, chest: 1.86, shoulder: 2.2, neck: 2.36, head: 2.64, headR: 0.21,
   footX: 0.26, hipX: 0.19, shoulderX: 0.4, elbow: [0.86, 1.74] as const, wrist: [1.08, 1.34] as const,
 };
+
+/** The hay volumes of the last `wickermanGeo` build (tests: closed, inside the cage). */
+export const wickerHay: THREE.BufferGeometry[] = [];
 
 export function wickermanGeo(seed = 404) {
   const r = mulberry32(seed), parts: THREE.BufferGeometry[] = [];
@@ -87,7 +94,75 @@ export function wickermanGeo(seed = 404) {
   for (let q = -2; q <= 2; q++) { const y = J.head + q * R * 0.36, rr = Math.sqrt(Math.max(0.01, 1 - (q * 0.36) ** 2)) * R; band(0, y, 0, rr, rr * 0.88, 0.012, 0.15); }
   for (let q = 0; q < 4; q++) { const a = (q / 4) * Math.PI, pts: P3[] = []; for (let i = 0; i <= 8; i++) { const t = -Math.PI / 2 + (i / 8) * Math.PI; pts.push([Math.cos(a) * Math.cos(t) * R, J.head + Math.sin(t) * R * 1.12, Math.sin(a) * Math.cos(t) * R * 0.88]); } rod(pts, 0.012, 0.012); }
   for (let q = 0; q < 6; q++) { const a = q * 1.05; rod([[Math.cos(a) * 0.05, J.head + R * 0.95, Math.sin(a) * 0.04], [Math.cos(a) * 0.14, J.head + R * 1.55, Math.sin(a) * 0.1]], 0.01, 0.004, '#8a6e50', 4); } // willow ends sprouting from the crown
-  const g = mergeGeometries(parts.map((p) => { p.deleteAttribute('uv'); return p; }))!;
+  // ---- the hay packed into the cage: lumpy closed volumes just inside the staves and bands (the weave reads over
+  // them), straw wisps poking out through the gaps. Fire states (DEV-04C) will burn this; here it is only seen.
+  const lumpy = (gg: THREE.BufferGeometry, amp: number) => { // deterministic per position, so seam vertices stay welded
+    const p = gg.attributes.position as THREE.BufferAttribute;
+    for (let i = 0; i < p.count; i++) {
+      const x = p.getX(i), y = p.getY(i), z = p.getZ(i), n = Math.sin(x * 23.1 + y * 7.7) * Math.sin(z * 19.3 - y * 11.9) + 0.5 * Math.sin((x - z) * 31.7 + y * 17.3);
+      p.setXYZ(i, x * (1 + amp * n), y, z * (1 + amp * n));
+    }
+    return gg;
+  };
+  const hayVolumes: THREE.BufferGeometry[] = [];
+  // straw is mottled, not a flat colour: every vertex gets its own shade (light stalks, darker packed hollows)
+  const hash = (x: number, y: number, z: number) => { const h = Math.sin(x * 127.1 + y * 311.7 + z * 74.7) * 43758.5453; return h - Math.floor(h); };
+  const strawColour = (gg: THREE.BufferGeometry, hex: string) => { // a tint over the straw sheet of the prop atlas
+    const c = new THREE.Color(hex), p = gg.attributes.position as THREE.BufferAttribute, a = new Float32Array(p.count * 3);
+    for (let i = 0; i < p.count; i++) { const k = 0.86 + 0.24 * hash(p.getX(i), p.getY(i), p.getZ(i)); a[i * 3] = c.r * k; a[i * 3 + 1] = c.g * k; a[i * 3 + 2] = c.b * k; }
+    gg.setAttribute('color', new THREE.BufferAttribute(a, 3));
+    return gg;
+  };
+  const pushHay = (gg: THREE.BufferGeometry) => { gg.computeVertexNormals(); hayVolumes.push(strawColour(gg, HAY_TINT[Math.floor(r() * HAY_TINT.length)])); };
+  // a lump of hay along a limb segment a → b (an ellipsoid with a bulging, uneven skin)
+  const lump = (a: P3, b: P3, rad: number, w = 8, h = 6) => {
+    const A = new THREE.Vector3(...a), B = new THREE.Vector3(...b), d = B.clone().sub(A), len = d.length();
+    const gg = lumpy(new THREE.SphereGeometry(1, w, h).scale(rad, len / 2 + rad * 0.35, rad), 0.18);
+    gg.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), d.normalize()));
+    gg.translate((A.x + B.x) / 2, (A.y + B.y) / 2, (A.z + B.z) / 2);
+    pushHay(gg);
+  };
+  // torso: a lathe following the cage's ellipse at 0.88 of the stave radius, closed at hip and shoulder
+  { const prof: THREE.Vector2[] = [new THREE.Vector2(0, J.hip - 0.05)];
+    for (let i = 0; i <= 7; i++) { const y = J.hip + ((J.shoulder - J.hip) * i) / 7; prof.push(new THREE.Vector2(ell(y)[0] * (i === 0 || i === 7 ? 0.7 : 0.88), y)); }
+    prof.push(new THREE.Vector2(0, J.shoulder + 0.03));
+    const gg = lumpy(new THREE.LatheGeometry(prof, 12), 0.1), p = gg.attributes.position as THREE.BufferAttribute;
+    for (let i = 0; i < p.count; i++) { const y = p.getY(i), [ex, ez] = ell(THREE.MathUtils.clamp(y, J.hip, J.shoulder)); p.setZ(i, (p.getZ(i) * ez) / ex); }
+    pushHay(gg); }
+  for (const sd of [-1, 1]) {
+    const ankle: P3 = [sd * J.footX, J.ankle + 0.035, 0], knee: P3 = [sd * (J.footX * 0.85 + J.hipX * 0.15), J.knee, -0.02], hip: P3 = [sd * J.hipX, J.hip + 0.02, 0];
+    lump(ankle, knee, 0.07); lump(knee, hip, 0.08);
+    const sh: P3 = [sd * (J.shoulderX - 0.04), J.shoulder - 0.06, 0], el: P3 = [sd * J.elbow[0], J.elbow[1], -0.06], wr: P3 = [sd * J.wrist[0], J.wrist[1] + 0.02, -0.04];
+    lump(sh, el, 0.045); lump(el, wr, 0.04);
+  }
+  lump([0, J.shoulder - 0.06, 0], [0, J.head - 0.14, 0], 0.045); // neck
+  { const gg = lumpy(new THREE.SphereGeometry(1, 10, 8).scale(J.headR * 0.84, J.headR * 0.92, J.headR * 0.74), 0.1); gg.translate(0, J.head, 0); pushHay(gg); }
+  // wisps: thin three-sided straws from just under the hay skin, outward and a little down, in small bunches
+  const straw = (o: P3, dir: THREE.Vector3, len: number) => {
+    const gg = new THREE.ConeGeometry(0.008, len, 3, 1).translate(0, len / 2, 0);
+    gg.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize()));
+    gg.translate(...o);
+    parts.push(colour(gg, HAY[Math.floor(r() * HAY.length)], 1.08 + r() * 0.12));
+  };
+  const bunch = (o: P3, out: THREE.Vector3, n = 4) => {
+    for (let q = 0; q < n; q++) straw(o, out.clone().add(new THREE.Vector3((r() - 0.5) * 0.8, -0.2 - r() * 0.35, (r() - 0.5) * 0.8)), 0.1 + r() * 0.1);
+  };
+  for (let q = 0; q < 26; q++) { // torso
+    const y = J.hip + 0.1 + r() * (J.shoulder - J.hip - 0.18), a = r() * Math.PI * 2, [ex, ez] = ell(y);
+    bunch([Math.cos(a) * ex * 0.84, y, Math.sin(a) * ez * 0.84], new THREE.Vector3(Math.cos(a), 0, Math.sin(a)));
+  }
+  for (const sd of [-1, 1]) {
+    for (let q = 0; q < 5; q++) { const t = 0.12 + q * 0.18, y = J.ankle + (J.hip - J.ankle) * t, x = sd * (J.footX + (J.hipX - J.footX) * t), a = r() * Math.PI * 2; bunch([x + Math.cos(a) * 0.06, y, Math.sin(a) * 0.06], new THREE.Vector3(Math.cos(a), 0, Math.sin(a)), 2); }
+    bunch([sd * J.wrist[0], J.wrist[1] + 0.03, -0.04], new THREE.Vector3(sd, -0.6, 0), 3); // straw out of the cuffs
+    bunch([sd * J.elbow[0], J.elbow[1], -0.06], new THREE.Vector3(sd * 0.3, 0.2, -1), 2);
+  }
+  for (let q = 0; q < 5; q++) { const a = q * 1.26 + 0.3; bunch([Math.cos(a) * J.headR * 0.7, J.head + J.headR * 0.4, Math.sin(a) * J.headR * 0.6], new THREE.Vector3(Math.cos(a), 0.9, Math.sin(a)), 2); } // under the crown
+  const g = mergeGeometries(parts.map((p) => { if (p.attributes.uv) p.deleteAttribute('uv'); return p; }))!;
+  wickerHay.length = 0; wickerHay.push(...hayVolumes);
+  // the hay is its own geometry on the prop atlas (straw sheet): the textured stalks are what make it read as hay
+  const hay = toAtlas(mergeGeometries(hayVolumes.map((h) => h.clone()))!, 'straw');
+  hay.userData.keepColor = true;
+  g.userData.hay = hay;
   parts.forEach((p) => p.dispose());
   g.userData.keepColor = true;
   g.computeBoundingBox();

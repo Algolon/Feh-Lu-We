@@ -6,6 +6,7 @@ import * as THREE from 'three';
 import { logModel, splitLogModel } from '../src/world/woodkit';
 import { meshAudit, bookCoverGeo, bookBlockGeo, shelfBookGeo, bookDims, drapeGeo, openBookGeo, openCoverGeo, rugGeo, BOOK_H, BOOK_T, toAtlas, SHEETS, type BookSpec } from '../src/world/propkit';
 import { auditParts } from '../src/world/artkit';
+import { wickermanGeo, wickerHay, WICKER } from '../src/world/wickerman';
 
 /** Signed volume (positive when the closed mesh's triangles face outward). */
 function volume(g: THREE.BufferGeometry) {
@@ -127,5 +128,28 @@ describe('DEV-04B construction audit', () => {
   });
   it('wall-mounted pieces skip the ground rule', () => {
     expect(auditParts([B(0, 1.5, 0, 1, 1.6, 0.02)], null)).toEqual([]);
+  });
+});
+
+describe('DEV-04B Wickerman', () => {
+  it('the willow figure is packed with hay: closed lumps inside the cage, the whole figure finite and on its shoes', () => {
+    const g = wickermanGeo();
+    expect(finite(g)).toBe(true);
+    expect(box(g).min.y).toBeGreaterThan(0); // stands on the shoes / sleepers (y 0 = their top)
+    expect(wickerHay.length).toBeGreaterThanOrEqual(10); // torso, 4 leg + 4 arm lumps, neck, head
+    const cage = box(g);
+    for (const h of wickerHay) {
+      const m = meshAudit(h);
+      expect(m.open, 'hay lump open').toBe(0);
+      const b = box(h);
+      expect(cage.containsBox(b)).toBe(true);
+    }
+    // the torso fill sits inside the stave ellipse (it is packed in, not bulging through the weave)
+    const torso = wickerHay[0], p = torso.attributes.position;
+    for (let i = 0; i < p.count; i++) {
+      const y = THREE.MathUtils.clamp(p.getY(i), WICKER.hip, WICKER.shoulder), t = (y - WICKER.hip) / (WICKER.shoulder - WICKER.hip);
+      const ex = 0.27 + 0.08 * Math.sin(t * Math.PI * 0.85), ez = 0.16 + 0.05 * Math.sin(t * Math.PI);
+      expect((p.getX(i) / ex) ** 2 + (p.getZ(i) / ez) ** 2).toBeLessThan(1.0);
+    }
   });
 });
