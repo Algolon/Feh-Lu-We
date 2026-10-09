@@ -128,37 +128,46 @@ export function roundTable(c: Ctx, x: number, z: number, y0: number, r: number, 
 export type ChairStyle = 'ladder' | 'spindle' | 'upholstered' | 'carver';
 export function chair(c: Ctx, x: number, z: number, y0: number, yaw: number, seat = '#b5643c', collideIt = true, style: ChairStyle = 'ladder', wood = '#6b4426') {
   const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw).begin(`chair.${style}`), dk = darker(wood, 0.85);
+  // DEV-04B-R: every part of the back sits on ONE raked line — the back rises from the seat's rear edge and leans
+  // backward (top toward −lz) by `rake`; each part is centred on that line at its own height and tilted by the same
+  // angle (+rx tilts the top toward −lz). The posts used to lean forward while the top rail sat on the backward line,
+  // so the rail floated ~4 cm behind the posts (the AABB audit could not see it: tilted boxes' bounds overlap).
+  const back = (z0: number, y0b: number, rake: number) => (y: number) => z0 - (y - y0b) * Math.tan(rake);
   if (style === 'spindle') {
+    const rake = 0.08, zb = back(-0.175, 0.48, rake);
     for (const sx of [-1, 1]) for (const sz of [-1, 1]) a.add(M.timber, dk, taperLeg(0.44, 0.022, 0.017), sx * 0.17, 0, sz * 0.16);
     for (const sx of [-1, 1]) a.add(M.timber, dk, bx(0.02, 0.02, 0.32), sx * 0.17, 0.17, 0);
     a.add(M.timber, dk, bx(0.34, 0.02, 0.02), 0, 0.17, 0);
     a.add(M.timber, wood, cg('windsorSeat', () => projectUV(cushion(0.44, 0.045, 0.42, 0.015, -0.008, 'top', 1, 3), 1)), 0, 0.4625, 0);
     // bow back: two posts from the seat into a half-round bow, five spindles between seat and bow
-    const R = 0.19, yb = 0.66;
-    for (const sx of [-1, 1]) a.add(M.timber, wood, bx(0.026, yb - 0.48, 0.026), sx * R, (yb + 0.48) / 2, -0.17, { rx: -0.08 });
-    a.add(M.timber, wood, cg('windsorBow', () => new THREE.TorusGeometry(R, 0.016, 5, 12, Math.PI)), 0, yb, -0.18, { rx: -0.08 });
-    for (const q of [-0.1, -0.05, 0, 0.05, 0.1]) { const top = yb + Math.sqrt(R * R - q * q) - 0.012, len = top - 0.48; a.add(M.timber, wood, bx(0.014, len, 0.014), q * 1.6, 0.48 + len / 2, -0.175, { rx: -0.08 }); }
+    const R = 0.19, yb = 0.66, py = (yb + 0.47) / 2, ph = yb - 0.47 + 0.02;
+    for (const sx of [-1, 1]) a.add(M.timber, wood, bx(0.026, ph, 0.026), sx * R, py, zb(py), { rx: rake });
+    a.add(M.timber, wood, cg('windsorBow', () => new THREE.TorusGeometry(R, 0.016, 5, 12, Math.PI)), 0, yb, zb(yb), { rx: rake });
+    for (const q of [-0.1, -0.05, 0, 0.05, 0.1]) { const top = yb + Math.sqrt(R * R - (q * 1.6) ** 2) - 0.004, len = top - 0.47, cy = 0.47 + len / 2; a.add(M.timber, wood, bx(0.014, len, 0.014), q * 1.6, cy, zb(cy), { rx: rake }); }
     if (seat) a.add(M.upholstery, seat, cg('windsorPad', () => projectUV(cushion(0.34, 0.025, 0.32, 0.012, 0.008, 'top', 1, 1), 0.25)), 0, 0.4975, 0.02);
   } else {
+    const rake = 0.06, zb = back(-0.19, 0.475, rake); // the back posts' centre line (a post is 0.95 tall, centred at 0.475)
     for (const sx of [-1, 1]) {
       a.add(M.timber, dk, taperLeg(0.43, 0.022, 0.018), sx * 0.19, 0, 0.18);
-      a.add(M.timber, wood, bx(0.034, 0.95, 0.034), sx * 0.19, 0.475, -0.19, { rx: -0.06 });
+      a.add(M.timber, wood, bx(0.034, 0.95, 0.034), sx * 0.19, 0.475, zb(0.475), { rx: rake });
       a.add(M.timber, dk, bx(0.02, 0.022, 0.34), sx * 0.19, 0.16, 0);
     }
     a.add(M.timber, dk, bx(0.34, 0.022, 0.02), 0, 0.2, 0.18);
     a.add(M.timber, wood, sb(0.45, 0.035, 0.43, 0.008), 0, 0.447, 0);
+    // back members span between the posts (0.38 between centres): their ends sit inside the posts
     if (style === 'upholstered') {
       a.add(M.upholstery, seat, cg('dinPad', () => projectUV(cushion(0.41, 0.06, 0.39, 0.02, 0.012, 'top', 1, 1), 0.25)), 0, 0.494, 0.01);
-      a.add(M.timber, wood, sb(0.42, 0.06, 0.03, 0.01), 0, 0.9, -0.236, { rx: -0.06 });
-      a.add(M.upholstery, seat, cg('dinBack', () => projectUV(cushion(0.34, 0.3, 0.045, 0.018, 0.014, 'front', 1, 1), 0.25)), 0, 0.71, -0.21, { rx: -0.06 });
+      a.add(M.timber, wood, sb(0.4, 0.06, 0.03, 0.01), 0, 0.885, zb(0.885), { rx: rake }); // top rail, its underside on the pad
+      a.add(M.upholstery, seat, cg('dinBack', () => projectUV(cushion(0.34, 0.3, 0.045, 0.018, 0.014, 'front', 1, 1), 0.25)), 0, 0.71, zb(0.71) + 0.004, { rx: rake });
+      a.add(M.timber, wood, bx(0.36, 0.035, 0.026), 0, 0.555, zb(0.555), { rx: rake }); // lower back rail under the pad
     } else {
       if (seat) a.add(M.upholstery, seat, cg('ladderPad', () => projectUV(cushion(0.39, 0.045, 0.37, 0.018, 0.01, 'top', 1, 1), 0.25)), 0, 0.4875, 0.015);
-      a.add(M.timber, wood, bx(0.42, 0.075, 0.03), 0, 0.88, -0.235, { rx: -0.06 }); // cresting rail
-      for (const yy of [0.62, 0.75]) a.add(M.timber, wood, bx(0.36, 0.045, 0.02), 0, yy, -0.215, { rx: -0.06 });
+      a.add(M.timber, wood, bx(0.4, 0.075, 0.03), 0, 0.88, zb(0.88), { rx: rake }); // cresting rail
+      for (const yy of [0.62, 0.75]) a.add(M.timber, wood, bx(0.36, 0.045, 0.02), 0, yy, zb(yy), { rx: rake });
     }
     if (style === 'carver') for (const sx of [-1, 1]) {
       a.add(M.timber, wood, bx(0.03, 0.22, 0.03), sx * 0.21, 0.575, 0.16); // arm support over the front leg
-      a.add(M.timber, wood, sb(0.055, 0.03, 0.42, 0.008), sx * 0.21, 0.7, -0.02);
+      a.add(M.timber, wood, sb(0.055, 0.03, 0.17 - zb(0.7) + 0.02, 0.008), sx * 0.21, 0.7, (0.17 + zb(0.7)) / 2 + 0.005); // arm from the support into the back post
     }
   }
   a.end();
