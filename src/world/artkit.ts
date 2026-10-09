@@ -56,8 +56,8 @@ export function deform(g: THREE.BufferGeometry, fn: (p: THREE.Vector3) => void):
 }
 
 /** Cushion: a soft box whose top (or front, -z) face crowns by `crown` metres in the middle. */
-export function cushion(sx: number, sy: number, sz: number, r: number, crown: number, face: 'top' | 'front' = 'top', seg = 2) {
-  const g = softBox(sx, sy, sz, r, seg, 4);
+export function cushion(sx: number, sy: number, sz: number, r: number, crown: number, face: 'top' | 'front' = 'top', seg = 2, mid = 4) {
+  const g = softBox(sx, sy, sz, r, seg, mid);
   const hx = sx / 2, hy = sy / 2, hz = sz / 2;
   return deform(g, (p) => {
     if (face === 'top' && p.y > 0) p.y += crown * (1 - (p.x / hx) ** 2) * (1 - (p.z / hz) ** 2) * (p.y / hy);
@@ -129,6 +129,7 @@ const tmpE = new THREE.Euler();
  */
 export class Asm {
   private base: THREE.Matrix4;
+  private rec: { name: string; y0: number; boxes: THREE.Box3[]; tris: number } | null = null;
   constructor(public b: Batcher, public chunk: string, x: number, y0: number, z: number, yaw: number) {
     this.base = planMatrix(x, y0, z, yaw).clone();
   }
@@ -139,8 +140,55 @@ export class Asm {
     if (o.s) tmpL.scale(new THREE.Vector3(...o.s));
     tmpL.setPosition(lx, ly, -lz);
     tmpM.multiplyMatrices(this.base, tmpL);
+    if (this.rec) {
+      if (!g.boundingBox) g.computeBoundingBox();
+      this.rec.boxes.push(g.boundingBox!.clone().applyMatrix4(tmpM));
+      this.rec.tris += (g.index ? g.index.count : g.attributes.position.count) / 3;
+    }
     this.b.add(mat, g, tmpM, color, this.chunk, o.shadow ?? true, 0);
   }
+  /**
+   * DEV-04B construction audit: from here until `end()`, every part's world bounds are recorded. `end()` checks the
+   * piece stands on its support (its lowest point within `tol` of the origin height: no floating feet, no legs sunk
+   * into the floor) and that every part touches the rest of the piece (no disconnected child pieces). Failures go to
+   * `assetWarnings` (the DEV-04B browser suite fails on any).
+   */
+  begin(name: string) { this.rec = { name, y0: this.base.elements[13], boxes: [], tris: 0 }; return this; }
+  end(o: { ground?: boolean; tol?: number; gap?: number } = {}) {
+    const r = this.rec;
+    this.rec = null;
+    if (!r || !r.boxes.length) return;
+    assetAudits.push(r.name);
+    assetTris[r.name] = (assetTris[r.name] ?? 0) + r.tris;
+    const issues = auditParts(r.boxes, o.ground === false ? null : r.y0, o.tol ?? 0.012, o.gap ?? 0.006);
+    for (const m of issues) assetWarnings.push(`${r.name}: ${m}`);
+  }
+}
+
+/** DEV-04B: construction problems found by `Asm.begin/end` (ground contact, disconnected parts). */
+export const assetWarnings: string[] = [];
+/** Names of every audited piece (the browser suite checks the families are actually covered). */
+export const assetAudits: string[] = [];
+/** DEV-04B: triangles per audited asset name (summed over its instances), for the performance report. */
+export const assetTris: Record<string, number> = {};
+/**
+ * Pure audit used by Asm.end (exported for tests): the lowest point must be within `tol` of `y0` (when given), and
+ * the parts' bounds (grown by `gap`) must form one connected group. Returns a list of human-readable problems.
+ */
+export function auditParts(boxes: THREE.Box3[], y0: number | null, tol = 0.012, gap = 0.006): string[] {
+  const out: string[] = [];
+  const minY = Math.min(...boxes.map((b) => b.min.y));
+  if (y0 != null && Math.abs(minY - y0) > tol) out.push(`${minY > y0 ? 'floats' : 'sinks'} ${(Math.abs(minY - y0) * 100).toFixed(1)} cm ${minY > y0 ? 'above' : 'into'} its support`);
+  const grown = boxes.map((b) => b.clone().expandByScalar(gap));
+  const seen = new Uint8Array(boxes.length), stack = [0];
+  seen[0] = 1;
+  while (stack.length) {
+    const i = stack.pop()!;
+    for (let j = 0; j < boxes.length; j++) if (!seen[j] && grown[i].intersectsBox(grown[j])) { seen[j] = 1; stack.push(j); }
+  }
+  const loose = [...seen].map((v, i) => (v ? -1 : i)).filter((i) => i >= 0);
+  if (loose.length) out.push(`${loose.length} part(s) not touching the rest (first at y ${boxes[loose[0]].min.y.toFixed(2)})`);
+  return out;
 }
 
 // ------------------------------------------------------------------------------------------------ textures

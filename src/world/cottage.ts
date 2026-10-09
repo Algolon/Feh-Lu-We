@@ -7,9 +7,12 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, wall, floor, ceiling, hipRoof, segBox, threshold } from './arch';
-import { Asm, artMats } from './artkit';
-import { box, boxMM, cyl, compound } from './kit';
-import { table, chair, plant, lantern, staticLantern, joinery, bottleGeo } from './furniture';
+import { Asm, artMats, projectUV, cushion, lathe } from './artkit';
+import { box, boxMM, compound } from './kit';
+import { table, chair, plant, lantern, staticLantern, joinery, rug, gameBoxes } from './furniture';
+import { sideboard, tabletop } from './dressing';
+import { addBookStack, bottleGeoOf, addGameBox, GAME_BOXES } from './propkit';
+import { mulberry32 } from '../core/rng';
 import { makeDoor, makeLamp, makeInspect, place } from '../interactions/props';
 import { COTTAGE, COTTAGE_TERRACE, COTTAGE_PAD, COTTAGE_LANDING, COTTAGE_FLOOR, COTTAGE_PAD_Y, COTTAGE_CANOPY } from './layout';
 import { terrainHeight } from './terrain';
@@ -67,9 +70,16 @@ export function buildCottage(w: World, g: GameApi, c: Ctx) {
     if (i !== 2) chair(c, CX - 2 + i, TZ - 1.1, Y, 0, '#c4553d');
     chair(c, CX - 2 + i, TZ + 1.1, Y, Math.PI, '#c4553d');
   }
-  for (let i = 0; i < 3; i++) box(c.b, k.M.paint, ['#efe6d6', '#e8d8c0', '#f5f0e6'][i], CX - 1.6 + i * 1.6, Y + 0.76, TZ, 0.4, 0.04 + i * 0.01, 0.3, { chunk: c.chunk });
-  cyl(c.b, k.M.paint, '#c9a44c', CX + 1.9, Y + 0.76, TZ, 0.06, 0.07, 0.02, 10, { chunk: c.chunk });
-  cyl(c.b, k.M.paint, '#efe6c8', CX + 1.9, Y + 0.78, TZ, 0.03, 0.03, 0.08, 8, { chunk: c.chunk }); // burnt-down candle
+  // DEV-04B: folded cloths as soft folded linen (were slabs), the burnt-down candle in a turned candlestick; a blue
+  // and white kilim under the table and a sideboard with plates on the west wall give the room a use and a palette
+  { const M = artMats();
+    for (let i = 0; i < 3; i++) { const a = new Asm(c.b, c.chunk, CX - 1.6 + i * 1.6, Y + 0.76, TZ, (i - 1) * 0.12); for (let q = 0; q <= i % 2; q++) a.add(M.upholstery, ['#efe6d6', '#e8d8c0', '#f5f0e6'][i], joinery.cg('foldedCloth', () => projectUV(cushion(0.4, 0.035, 0.3, 0.014, 0.004, 'top', 1, 2), 0.25)), 0, 0.0175 + q * 0.035, 0, { ry: q * 0.1 }); } }
+  tabletop(c, CX + 1.9, TZ, Y + 0.76, 0, ['candle'], 3);
+  rug(c, CX, TZ, Y + 0.005, 6.0, 2.8, 0, '#d8e4f4', 'kilim', true);
+  sideboard(c, X0 + 0.55, TZ - 0.6, Y, Math.PI / 2, 1.5, 0.45, 0.85, '#6b4426');
+  { const M = artMats(), a = new Asm(c.b, c.chunk, X0 + 0.55, Y + 0.85, TZ - 0.6, Math.PI / 2);
+    for (let i = 0; i < 4; i++) a.add(M.ceramic, i % 2 ? '#f2f0ea' : '#3f6fa8', joinery.cg('azulejoPlate', () => new THREE.CylinderGeometry(0.12, 0.11, 0.016, 14).rotateX(Math.PI / 2)), -0.45 + i * 0.3, 0.13, -0.15, { rx: -0.15 });
+    a.add(M.ceramic, '#e6dcc4', joinery.cg('cottageJug', () => lathe([[0.001, 0], [0.06, 0], [0.075, 0.08], [0.06, 0.18], [0.04, 0.22], [0.05, 0.24], [0.001, 0.23]], 12)), 0.55, 0, 0.05); }
   const card = compound((b) => { box(b, k.M.paint, '#f5eedc', 0, 0, 0, 0.18, 0.12, 0.01, { rx: -0.3 }); });
   place(card, CX, Y + 0.77, TZ - 0.5, 0);
   w.scene.add(card);
@@ -136,9 +146,10 @@ export function buildCottage(w: World, g: GameApi, c: Ctx) {
     box(c.b, k.M.paint, col, tx, Y + 0.76, tz + dz, 0.6, 0.004, 0.32, { chunk: c.chunk }); // play mats
     for (let i = 0; i < 4; i++) box(c.b, k.M.paint, '#f2ead8', tx - 0.22 + i * 0.15, Y + 0.765, tz + dz, 0.06, 0.003, 0.09, { chunk: c.chunk, yaw: (i - 1.5) * 0.08 });
   }
-  for (let i = 0; i < 4; i++) box(c.b, k.M.paint, ['#c4553d', '#3f6fa8', '#e8c547', '#4f8a3a'][i], tx + 0.85, Y + 0.76 + i * 0.06, tz - 0.25, 0.32, 0.06, 0.24, { chunk: c.chunk, yaw: i * 0.15 }); // games stack
-  box(c.b, k.M.paint, '#e85a8a', tx - 0.85, Y + 0.76, tz - 0.25, 0.26, 0.08, 0.26, { chunk: c.chunk }); // 30 Seconds
-  for (let i = 0; i < 2; i++) box(c.b, k.M.paint, ['#5a3a2a', '#2f5a6a'][i], tx - 0.85, Y + 0.76 + i * 0.04, tz + 0.25, 0.18, 0.04, 0.24, { chunk: c.chunk, yaw: 0.2 + i * 0.3 }); // books
+  // DEV-04B: the games stack and the quiz box are printed game boxes (lids over trays), the books are the book family
+  gameBoxes(c, tx + 0.85, tz - 0.25, Y + 0.76, 0.1, ['a', 'b', 'c', 'd'], 2);
+  addGameBox(new Asm(c.b, c.chunk, tx - 0.85, Y + 0.76, tz - 0.25, -0.1), { ...GAME_BOXES[4], w: 0.26, d: 0.26, h: 0.08, art: 1 }, 0, 0, 0); // the quiz box
+  addBookStack(new Asm(c.b, c.chunk, tx - 0.85, Y + 0.76, tz + 0.25, 0.2), mulberry32(77), ['#5a3a2a', '#2f5a6a', '#8e372c'], 0, 0, 0, 2);
   { // an open pizza box with what is left of the pizza; three bottles (glass with a darker fill)
     const M = artMats(), a = new Asm(c.b, c.chunk, tx + 0.6, Y + 0.76, tz + 0.3, 0.25);
     a.add(M.paint, '#d8c8a8', joinery.bx(0.36, 0.035, 0.36), 0, 0.018, 0);
@@ -147,8 +158,7 @@ export function buildCottage(w: World, g: GameApi, c: Ctx) {
     a.add(M.paint, '#b84a2a', joinery.cg('pizzaTop', () => new THREE.CylinderGeometry(0.14, 0.14, 0.004, 14, 1, false, 0.05, Math.PI * 1.25)), 0, 0.048, 0);
     for (let i = 0; i < 3; i++) {
       const b2 = new Asm(c.b, c.chunk, tx + 0.25 + i * 0.12, Y + 0.76, tz - 0.05, i);
-      b2.add(k.M.glass, '#ffffff', bottleGeo(), 0, 0, 0);
-      b2.add(M.paint, ['#4a6a2a', '#6a4a1a', '#4a6a2a'][i], bottleGeo(), 0, 0.005, 0, { s: [0.9, 0.7, 0.9] });
+      b2.add(M.ceramic, ['#3a5a24', '#5a3414', '#3a5a24'][i], bottleGeoOf(i === 1 ? 'beer' : 'wine'), 0, 0, 0);
     }
   }
   { // slatted bench against the house

@@ -1,0 +1,165 @@
+{
+  "rows": [
+    {
+      "name": "c01-golf-bag-close",
+      "pose": {
+        "x": 62.1,
+        "y": 0,
+        "z": 52.4,
+        "yaw": -2.2968532956245378,
+        "pitch": -0.45
+      },
+      "low": {
+        "calls": 54,
+        "triangles": 181356
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "c02-golf-bag",
+      "pose": {
+        "x": 63.5,
+        "y": 0,
+        "z": 53.5,
+        "yaw": -2.1642082724729685,
+        "pitch": -0.22
+      },
+      "low": {
+        "calls": 54,
+        "triangles": 198673
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "c10-golf-bag-side",
+      "pose": {
+        "x": 62.55,
+        "y": 0,
+        "z": 52.3,
+        "yaw": -2.0420352248333655,
+        "pitch": -0.32
+      },
+      "low": {
+        "calls": 50,
+        "triangles": 193242
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "c03-golf-mat-chute",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 53.4,
+        "yaw": 3.141592653589793,
+        "pitch": -0.22
+      },
+      "low": {
+        "calls": 53,
+        "triangles": 166886
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "c04-golf-mat-side",
+      "pose": {
+        "x": 66.4,
+        "y": 0,
+        "z": 51.2,
+        "yaw": -1.9547687622336491,
+        "pitch": -0.3
+      },
+      "low": {
+        "calls": 51,
+        "triangles": 211463
+      },
+      "room": "out",
+      "feetY": 0.09
+    },
+    {
+      "name": "c05-dining-chairs",
+      "pose": {
+        "x": 99.4,
+        "y": 0.15,
+        "z": 82.9,
+        "yaw": 0.2617993877991494,
+        "pitch": -0.25
+      },
+      "low": {
+        "calls": 183,
+        "triangles": 327189
+      },
+      "room": "dining",
+      "feetY": 0.15
+    },
+    {
+      "name": "c06-dining-chair-back",
+      "pose": {
+        "x": 99.1,
+        "y": 0.15,
+        "z": 87,
+        "yaw": 2.178170906488923,
+        "pitch": -0.45
+      },
+      "low": {
+        "calls": 93,
+        "triangles": 301237
+      },
+      "room": "dining",
+      "feetY": 0.15
+    },
+    {
+      "name": "c07-cottage-chairs",
+      "pose": {
+        "x": 21.6,
+        "y": 4.15,
+        "z": 160.6,
+        "yaw": 1.1344640137963142,
+        "pitch": -0.25
+      },
+      "low": {
+        "calls": 66,
+        "triangles": 152995
+      },
+      "room": "cottageRoom",
+      "feetY": 4.15
+    },
+    {
+      "name": "c08-hall-art",
+      "pose": {
+        "x": 90.5,
+        "y": 0.15,
+        "z": 89.35,
+        "yaw": 1.5707963267948966,
+        "pitch": 0.55
+      },
+      "low": {
+        "calls": 162,
+        "triangles": 403529
+      },
+      "room": "hall",
+      "feetY": 0.15
+    },
+    {
+      "name": "c09-hall-art-wide",
+      "pose": {
+        "x": 88.6,
+        "y": 0.15,
+        "z": 84.6,
+        "yaw": 0.9075712110370514,
+        "pitch": 0.3
+      },
+      "low": {
+        "calls": 206,
+        "triangles": 408096
+      },
+      "room": "hall",
+      "feetY": 0.15
+    }
+  ],
+  "problems": []
+}

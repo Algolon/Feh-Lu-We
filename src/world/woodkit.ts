@@ -887,17 +887,28 @@ export function plantModel(kind: PlantKind, variant: number): THREE.BufferGeomet
 }
 
 /**
- * DEV-03 dead wood: a fallen, slightly bent log (fissured bark from the tree atlas, a paler sawn or broken end),
- * lying along local +x from 0 to `len`, radius `rad`, its underside sunk a little. Geometry for the tree material.
+ * DEV-04B timber family: a fallen / cut log as ONE CLOSED solid (no open tube ends, no hollow branch stub). Fissured
+ * bark body, slightly bent, tapering; both ends are sawn faces built on the body's own end ring (shared vertices, so
+ * the end grain can never leave a gap or show the inside), pale sapwood with a darker heart and a bark rim; the
+ * branch stub is capped. Lies along local +x from 0 to `len`, radius `rad`, its underside a little sunk. Colours are
+ * baked (keepColor): bark darker toward the ground, pale end grain.
+ * DEV-03 had the same silhouette but an open-ended stub and separate end discs that could gap from the body.
  */
-export function logModel(seed: number, len = 3, rad = 0.22): THREE.BufferGeometry {
+export function logModel(seed: number, len = 3, rad = 0.22, o: { stub?: boolean; radial?: number } = {}): THREE.BufferGeometry {
   const r = mulberry32(seed);
-  const bend = (r() - 0.5) * 0.3, sag = rad * 0.25;
+  const bend = (r() - 0.5) * 0.3, sag = rad * 0.25, radial = o.radial ?? 7;
   // built upright like a trunk (the tube's frames give outward-facing triangles along +y), then laid along +x
   const pts: P3[] = [0, 0.33, 0.66, 1].map((t) => [sag * Math.sin(t * Math.PI), t * len, bend * Math.sin(t * Math.PI) * len * 0.15]);
-  const body = taperTube(pts, [rad, rad * 0.95, rad * 0.85, rad * 0.75], { radial: 7, rows: 4, vScale: 1.2 });
-  const stub = taperTube([[-rad * 0.9, len * 0.4, 0], [-rad * 2.2, len * 0.48, rad * 0.8]], [rad * 0.35, rad * 0.12], { radial: 4, rows: 2 });
-  for (const g of [body, stub]) {
+  const rr = [rad, rad * (0.95 + r() * 0.03), rad * (0.86 + r() * 0.04), rad * 0.78];
+  const body = taperTube(pts, rr, { radial, rows: 4, vScale: 1.2 });
+  const parts: THREE.BufferGeometry[] = [body];
+  if (o.stub !== false && len > 0.8) {
+    const sp: P3[] = [[-rad * 0.6, len * 0.4, 0], [-rad * 1.9, len * 0.47, rad * 0.7]];
+    const stub = taperTube(sp, [rad * 0.34, rad * 0.16], { radial: 5, rows: 2 });
+    parts.push(stub, capRing(stub, 'start', 5), capRing(stub, 'end', 5)); // closed at both ends (its base sits inside the log)
+  }
+  parts.push(capRing(body, 'start', radial), capRing(body, 'end', radial));
+  for (const g of parts) {
     g.rotateZ(-Math.PI / 2).translate(0, rad * 0.7, 0); // +y → +x; x (sag) → −y
     const ix = g.index!.array as Uint16Array | Uint32Array; // taperTube winds inward for this frame: face the triangles out
     for (let t = 0; t < ix.length; t += 3) { const a = ix[t + 1]; ix[t + 1] = ix[t + 2]; ix[t + 2] = a; }
@@ -905,15 +916,82 @@ export function logModel(seed: number, len = 3, rad = 0.22): THREE.BufferGeometr
   }
   paint(body, (p) => { const k = 0.62 + 0.38 * THREE.MathUtils.smoothstep(p.y, 0, rad * 1.4); return [k, k * 0.97, k * 0.92]; });
   barkCol(body, BARK.fissured);
-  paint(stub, 0.85); barkCol(stub, BARK.fissured);
-  // sawn ends: pale end grain (smooth-bark column, lightened by vertex colour)
-  const ends = [[0, rad, -1], [len, rad * 0.75, 1]].map(([x, rr, d]) => {
-    const e = new THREE.CircleGeometry(rr * 0.98, 8).rotateY((d * Math.PI) / 2).translate(x, rad * 0.7, 0);
-    const uv = e.attributes.uv as THREE.BufferAttribute;
-    for (let i = 0; i < uv.count; i++) uv.setXY(i, (BARK.smooth + 0.3 + uv.getX(i) * 0.3) / ATLAS_COLS, uv.getY(i) * 0.3);
-    return paint(e, 1.25);
-  });
-  const g = mergeParts([body, stub, ...ends]);
+  for (const g of parts.slice(1)) if (!g.attributes.color) { paint(g, 0.85); barkCol(g, BARK.fissured); }
+  const g = mergeParts(parts);
+  g.userData.keepColor = true;
+  g.computeBoundingSphere();
+  return g;
+}
+
+/**
+ * End cap on a taperTube's first or last ring: a fan from the ring centre with two inner rings, coloured as end grain
+ * (pale sapwood, darker heart, the outer ring stays bark). Uses the ring's own vertex positions, so the solid closes.
+ * Its winding is the tube's (the caller flips both together).
+ */
+function capRing(tube: THREE.BufferGeometry, which: 'start' | 'end', radial: number) {
+  const p = tube.attributes.position as THREE.BufferAttribute, n = radial + 1;
+  const i0 = which === 'start' ? 0 : p.count - n;
+  const ring: THREE.Vector3[] = [];
+  for (let j = 0; j < radial; j++) ring.push(new THREE.Vector3().fromBufferAttribute(p, i0 + j));
+  const c = ring.reduce((a, v) => a.add(v), new THREE.Vector3()).multiplyScalar(1 / radial);
+  const levels = [1, 0.84, 0.4, 0]; // rim (bark edge) → sapwood → heart → centre
+  const shade = [0.78, 1.28, 1.08, 0.92];
+  const pos: number[] = [], col: number[] = [], uv: number[] = [];
+  const at = (j: number, l: number) => c.clone().lerp(ring[j % radial], levels[l]);
+  const put = (v: THREE.Vector3, l: number) => { pos.push(v.x, v.y, v.z); col.push(shade[l], shade[l] * 0.96, shade[l] * 0.86); uv.push((BARK.smooth + 0.35 + 0.2 * levels[l]) / ATLAS_COLS, 0.4); };
+  for (let l = 0; l < 3; l++) for (let j = 0; j < radial; j++) {
+    const a0 = at(j, l), a1 = at(j + 1, l), b0 = at(j, l + 1), b1 = at(j + 1, l + 1);
+    // wound against the tube's own ring edges (each rim edge then pairs with the body's: a closed solid)
+    const quad: [THREE.Vector3, number][][] = which === 'start' ? [[[a0, l], [a1, l], [b0, l + 1]], [[a1, l], [b1, l + 1], [b0, l + 1]]] : [[[a0, l], [b0, l + 1], [a1, l]], [[a1, l], [b0, l + 1], [b1, l + 1]]];
+    for (const tri of quad) { if (l === 2 && tri.filter(([, q]) => q === 3).length > 1) continue; for (const [v, q] of tri) put(v, q); }
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+  g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  g.setIndex([...Array(pos.length / 3).keys()]);
+  return g;
+}
+
+/**
+ * DEV-04B split firewood: a closed wedge (a sector of a log, ~110°) along local +x from 0 to `len`, outer radius
+ * `rad`: bark on the curved face, pale split wood on the two flat faces, end grain on the ends. Its lowest point is
+ * at y 0 when it lies on a flat face (stacked woodpiles: alternate `flip`).
+ */
+export function splitLogModel(seed: number, len = 0.42, rad = 0.12): THREE.BufferGeometry {
+  const r = mulberry32(seed), ang = 1.7 + r() * 0.5, seg = 4;
+  const sh = new THREE.Shape();
+  sh.moveTo(0, 0);
+  for (let i = 0; i <= seg; i++) { const a = (ang * i) / seg, k = 1 + (r() - 0.5) * 0.08; sh.lineTo(Math.cos(a) * rad * k, Math.sin(a) * rad * k); }
+  sh.closePath();
+  const g0 = new THREE.ExtrudeGeometry(sh, { depth: len, bevelEnabled: false, curveSegments: 1 });
+  // extrusion (+z) → +x; one split face lies along the shape's x axis = the ground (y 0), the bark arc above it
+  g0.rotateY(Math.PI / 2);
+  const g = g0.index ? g0.toNonIndexed() : g0;
+  const pos = g.attributes.position as THREE.BufferAttribute;
+  g.computeVertexNormals();
+  const nor = g.attributes.normal as THREE.BufferAttribute;
+  const col = new Float32Array(pos.count * 3), uv = new Float32Array(pos.count * 2);
+  for (let t = 0; t < pos.count; t += 3) {
+    let cx = 0, cy = 0, cz = 0;
+    for (let q = 0; q < 3; q++) { cx += pos.getX(t + q); cy += pos.getY(t + q); cz += pos.getZ(t + q); }
+    const nx = nor.getX(t), radial = Math.hypot(cy / 3, cz / 3);
+    // bark: the curved face (far from the apex axis and not an end); end grain: faces along x; split faces: the rest
+    const kind = Math.abs(nx) > 0.9 ? 'end' : radial > rad * 0.8 ? 'bark' : 'split';
+    for (let q = 0; q < 3; q++) {
+      const i = t + q, k = kind === 'bark' ? 0.72 : kind === 'end' ? 1.25 : 1.15;
+      col.set([k, k * 0.96, k * (kind === 'bark' ? 0.9 : 0.84)], i * 3);
+      if (kind === 'bark') uv.set([(BARK.fissured + GUT + 0.5 * (1 - 2 * GUT)) / ATLAS_COLS + (pos.getZ(i) / rad) * 0.03, pos.getX(i) / 1.2], i * 2);
+      else uv.set([(BARK.smooth + 0.4 + (kind === 'end' ? 0.1 : 0)) / ATLAS_COLS, pos.getX(i) * 0.5], i * 2);
+    }
+    void cx;
+  }
+  g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  g.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+  // lowest point at 0
+  g.computeBoundingBox();
+  g.translate(0, -g.boundingBox!.min.y, 0);
+  g.userData.keepColor = true;
   g.computeBoundingSphere();
   return g;
 }

@@ -10,7 +10,7 @@ import { World, type GameApi } from '../interactions/world';
 import type { SceneExtras } from '../core/game';
 import { makeCtx, floor, type Ctx } from './arch';
 import { Batcher, box, boxMM, cyl, blob, compound, getKit, v3, geo, supportWarnings } from './kit';
-import { softBox, projectUV } from './artkit';
+import { softBox, projectUV, assetWarnings, assetAudits, assetTris } from './artkit';
 import { table, chair, lantern, plant, staticLantern } from './furniture';
 import { Vegetation, scatter, distToPolyline } from './nature';
 import { buildManor } from './manor';
@@ -48,10 +48,17 @@ export const LANTERNS = [
 
 const inRect = (x: number, z: number, x0: number, x1: number, z0: number, z1: number) => x >= x0 && x <= x1 && z >= z0 && z <= z1;
 
+const FORECOURT_PLANTER = (() => {
+  const g = new THREE.LatheGeometry([[1.97, 0], [1.97, 0.08], [1.88, 0.1], [1.84, 0.34], [1.9, 0.38], [1.92, 0.46], [1.78, 0.47], [1.7, 0.43], [1.66, 0.43], [1.66, 0.41], [0.001, 0.41]].map(([r, y]) => new THREE.Vector2(r, y)), 24);
+  const uv = g.attributes.uv as THREE.BufferAttribute; for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i) * 9, uv.getY(i) * 0.8);
+  return g;
+})();
+
 export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   const w = new World('estate');
   const openings = beginOpenings(); // DEV-04A: openings, door sweeps and wall art of this build (see openings.ts)
   supportWarnings.length = 0; // DEV-04A support contract (kit.ts `cyl` vs `rod`)
+  assetWarnings.length = 0; assetAudits.length = 0; for (const k in assetTris) delete assetTris[k]; // DEV-04B construction audit (artkit Asm.begin / end)
   w.ambience = 'estate';
   w.col.bounds = { minX: 0.6, maxX: ESTATE.w - 0.6, minZ: 0.6, maxZ: ESTATE.d - 0.6 };
   w.col.ground = walkHeight;
@@ -98,6 +105,10 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   w.scene.userData.openings = openings;
   w.scene.userData.supportWarnings = [...supportWarnings];
   if (supportWarnings.length) console.warn('DEV-04A support contract:', JSON.stringify(supportWarnings));
+  w.scene.userData.assetWarnings = [...assetWarnings];
+  w.scene.userData.assetAudits = [...assetAudits];
+  w.scene.userData.assetTris = { ...assetTris };
+  if (assetWarnings.length) console.warn('DEV-04B construction audit:', JSON.stringify(assetWarnings));
   const artBad = wallArtConflicts(openings);
   w.scene.userData.artConflicts = artBad;
   if (artBad.length) console.warn('DEV-04A wall-art contract:', JSON.stringify(artBad));
@@ -117,9 +128,13 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   const IN_FAR = 30;
   w.roomRegion(['mIn'], manorRooms, Infinity, IN_FAR);
   w.roomRegion(['mHall'], ['vestibule', 'hall', 'living', 'lobby', 'billiard', 'frontGallery', 'walkway', 'landing'], Infinity, IN_FAR);
+  w.roomRegion(['mLiv'], ['vestibule', 'hall', 'living', 'lobby', 'library', 'frontGallery', 'walkway', 'landing'], Infinity, 0); // DEV-04B split from mHall: never from outside
+  w.roomRegion(['mBil'], ['billiard', 'lobby', 'bstair'], Infinity, IN_FAR); // DEV-04B split from mHall (the stair box overlaps the billiard room's south strip)
   w.roomRegion(['mLib'], ['library', 'libGallery'], Infinity, IN_FAR); // DEV-03: drawn when the library itself is visible (its doors open), not whenever the living room or lobby is
   w.roomRegion(['mWing'], ['dining', 'kitchen', 'corridor', 'workshop', 'pantry', 'utility', 'guestWC', 'lobby'], Infinity, IN_FAR);
+  w.roomRegion(['mServ'], ['corridor', 'workshop', 'pantry', 'utility'], Infinity, IN_FAR); // DEV-04B split from mWing
   w.roomRegion(['mUp'], ['frontGallery', 'walkway', 'landing', 'libGallery', 'reis', 'sterren', 'bath', 'ucorr', 'study', 'botanic', 'storage', 'library', 'linen', 'rearNook', 'rearNookEast', 'atticStair'], Infinity, IN_FAR);
+  w.roomRegion(['mUpE'], ['study', 'botanic', 'storage', 'linen'], Infinity, IN_FAR); // DEV-04B split from mUp
   w.roomRegion(['mAttic'], [...atticRooms, 'atticStair'], Infinity, IN_FAR); // seen through the open stair doors (atticStair is then visible)
   w.roomRegion(['mB'], basementRooms);
   w.roomRegion(['ug'], ugRooms);
@@ -127,7 +142,8 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   w.roomRegion(['cottageIn'], ['cottageEntry', 'cottageRoom'], Infinity, 25);
   w.roomRegion(['cottage'], ['out', 'cottageEntry', 'cottageRoom'], 75); // a landmark across the lake: visible from the terrace and the lawn
   w.roomRegion(['ground', 'paths', 'wall', 'fence', 'garden', 'grounds', 'forest', 'outdoor', 'hills'], ['out', 'cons', 'sauna', 'shed', 'cottageEntry', 'cottageRoom']);
-  w.roomRegion(['wick'], ['out', 'cons', 'sauna', 'shed', 'cottageEntry', 'cottageRoom'], 40); // DEV-04A: the enclosed wickerman clearing (screened by woodland: drawn within ~47 m of its centre)
+  w.roomRegion(['wick'], ['out', 'cons', 'sauna', 'shed', 'cottageEntry', 'cottageRoom'], 40);
+  for (const ch of ['fireCamp', 'well']) w.roomRegion([ch], ['out', 'shed'], 55); // DEV-04B hero places // DEV-04A: the enclosed wickerman clearing (screened by woodland: drawn within ~47 m of its centre)
 
   w.spawn = { x: SITES.gate.x, y: 0, z: 3, yaw: 0, pitch: 0.02 };
   w.checkpoints.push(
@@ -321,8 +337,9 @@ function buildPaths(w: World, c: Ctx) {
   }
   if (sample) pathVerge(w, verge, (k.M.dirt as THREE.MeshLambertMaterial).map!);
   // forecourt: the gravel court itself is one surface built with the arrival (grounds.ts); the central planter stays
-  cyl(c.b, k.M.stone, '#d8ccb0', SITES.forecourt.x, 0, SITES.forecourt.z, 1.8, 1.9, 0.45, 18, { chunk: 'ground', uv: 1 });
-  cyl(c.b, k.M.paint, '#6a5040', SITES.forecourt.x, 0.45, SITES.forecourt.z, 1.6, 1.6, 0.02, 18, { chunk: 'ground' });
+  // DEV-04B: a dressed stone planter (plinth course, a moulded rim) instead of a plain drum; soil just under its rim
+  geo(c.b, k.M.stone, '#d8ccb0', FORECOURT_PLANTER, SITES.forecourt.x, 0, SITES.forecourt.z, { chunk: 'ground' });
+  cyl(c.b, k.M.paint, '#5a4434', SITES.forecourt.x, 0.4, SITES.forecourt.z, 1.62, 1.62, 0.02, 18, { chunk: 'ground' });
   w.col.addCircle(SITES.forecourt.x, SITES.forecourt.z, 1.9, 0, 0.8);
 }
 

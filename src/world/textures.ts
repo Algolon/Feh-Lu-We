@@ -250,6 +250,50 @@ export function paintingTexture(seed: number): THREE.CanvasTexture {
   return tex(c, false);
 }
 
+/**
+ * DEV-04B-R hall painting (original, procedural): the manor seen across the lake at dusk, painted in short oil-like
+ * strokes — a warm sky over blue hills, the pale stone house with its dark roof and lit windows among trees, its
+ * reflection in the water, a reed bank in the foreground. No reproduction of an existing work.
+ */
+export function drawManorLandscape(x: CanvasRenderingContext2D, W: number, H: number) {
+  const r = mulberry32(1871);
+  const sky = x.createLinearGradient(0, 0, 0, H * 0.62);
+  sky.addColorStop(0, '#5d6f8f'); sky.addColorStop(0.45, '#c9a27a'); sky.addColorStop(1, '#efc98e');
+  x.fillStyle = sky; x.fillRect(0, 0, W, H);
+  const dab = (cx: number, cy: number, w: number, h: number, col: string, a = 0.55) => { x.globalAlpha = a; x.fillStyle = col; x.beginPath(); x.ellipse(cx, cy, w, h, (r() - 0.5) * 0.6, 0, Math.PI * 2); x.fill(); x.globalAlpha = 1; };
+  for (let i = 0; i < 260; i++) { const y = r() * H * 0.55; dab(r() * W, y, 6 + r() * 16, 2 + r() * 3, y < H * 0.22 ? (r() < 0.5 ? '#6f7f9c' : '#8a8aa0') : r() < 0.5 ? '#e8b682' : '#f2d29a', 0.35); }
+  // distant hills, two blue bands
+  for (const [base, col, amp] of [[0.5, '#6d7f95', 0.06], [0.56, '#566b5a', 0.05]] as const) {
+    x.fillStyle = col; x.beginPath(); x.moveTo(0, H);
+    for (let i = 0; i <= 24; i++) x.lineTo((W * i) / 24, H * (base - amp * (0.5 + 0.5 * Math.sin(i * 0.9 + base * 7)) - r() * 0.012));
+    x.lineTo(W, H); x.fill();
+  }
+  const shore = H * 0.62, hx = W * 0.56, hw = W * 0.22, hh = H * 0.11;
+  // trees flanking the house
+  for (let i = 0; i < 70; i++) { const tx = r() * W, side = Math.abs(tx - hx) < hw * 0.62 ? 0.35 : 1; dab(tx, shore - (8 + r() * 46) * side * (H / 384), 10 + r() * 16, 8 + r() * 14, ['#3e5534', '#4d6a3c', '#33472c', '#5d7a45'][Math.floor(r() * 4)], 0.8); }
+  // the house: wings, centre block with a pediment, dark roof, lit windows
+  const stone = '#e6d6b6', roof = '#4a4038';
+  x.fillStyle = stone; x.fillRect(hx - hw / 2, shore - hh, hw, hh);
+  x.fillStyle = roof; x.beginPath(); x.moveTo(hx - hw / 2 - 4, shore - hh); x.lineTo(hx - hw / 2 + hw * 0.08, shore - hh * 1.42); x.lineTo(hx + hw / 2 - hw * 0.08, shore - hh * 1.42); x.lineTo(hx + hw / 2 + 4, shore - hh); x.fill();
+  x.fillStyle = '#efe2c6'; x.beginPath(); x.moveTo(hx - hw * 0.14, shore - hh); x.lineTo(hx, shore - hh * 1.62); x.lineTo(hx + hw * 0.14, shore - hh); x.fill();
+  for (let row = 0; row < 2; row++) for (let i = 0; i < 9; i++) { const wx = hx - hw / 2 + hw * (0.07 + i * 0.107), wy = shore - hh * (0.82 - row * 0.45); x.fillStyle = r() < 0.4 ? '#f6c66a' : '#5d6670'; x.fillRect(wx, wy, hw * 0.035, hh * 0.22); }
+  for (const cx of [hx - hw * 0.36, hx + hw * 0.36]) { x.fillStyle = '#7a6a5a'; x.fillRect(cx - 3, shore - hh * 1.68, 7, hh * 0.3); } // chimneys
+  // the lake: sky colour darkened, the house reflected in broken horizontal strokes
+  const lake = x.createLinearGradient(0, shore, 0, H);
+  lake.addColorStop(0, '#b89a78'); lake.addColorStop(1, '#3f4f5f');
+  x.fillStyle = lake; x.fillRect(0, shore, W, H - shore);
+  for (let i = 0; i < 160; i++) { const y = shore + r() * (H - shore) * 0.7, near = Math.abs(r() * W - hx); dab(hx + (r() - 0.5) * hw, y, 10 + r() * 22, 1.2 + r() * 1.5, near < hw * 0.5 && y < shore + hh ? '#d8c6a4' : '#7f8d96', 0.35); }
+  for (let i = 0; i < 220; i++) dab(r() * W, shore + r() * (H - shore), 8 + r() * 26, 1 + r() * 1.6, r() < 0.5 ? '#5c6e7c' : '#c9b08a', 0.18);
+  // foreground reeds
+  x.strokeStyle = '#3c4a2a'; x.lineWidth = 2;
+  for (let i = 0; i < 90; i++) { const bx = r() * W * 0.4, by = H; x.globalAlpha = 0.7; x.beginPath(); x.moveTo(bx, by); x.quadraticCurveTo(bx + (r() - 0.5) * 20, by - H * 0.12, bx + (r() - 0.3) * 30, by - H * (0.14 + r() * 0.16)); x.stroke(); }
+  x.globalAlpha = 1;
+  // varnish: a warm, slightly darker edge
+  const v = x.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.3, W / 2, H / 2, Math.max(W, H) * 0.75);
+  v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(40,24,8,0.45)');
+  x.fillStyle = v; x.fillRect(0, 0, W, H);
+}
+
 /** Text/symbol plaque texture: parchment, brass or wood background with symbols and short text. */
 export function plaqueTexture(opts: { w?: number; h?: number; bg?: string; ink?: string; symbols?: string[]; arrows?: boolean; lines?: string[]; title?: string; symbolColor?: string }): THREE.CanvasTexture {
   const w = opts.w ?? 256, h = opts.h ?? 128;

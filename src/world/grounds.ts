@@ -5,27 +5,30 @@
 import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, floor, segBox } from './arch';
-import { box, boxMM, cyl, rod, blob, compound, v3, planMatrix } from './kit';
+import { box, boxMM, cyl, compound, v3, planMatrix } from './kit';
 import { woodMats, logModel, rockModel, trunkAt } from './woodkit';
 import { NEST_OAK, type EstateWoods } from './estateWoods';
 import { hash01 } from './woodlandPlan';
 import { table, part, staticLantern, joinery } from './furniture';
 import { Asm, artMats, lathe, cushion, projectUV } from './artkit';
+import { wickermanGeo, WICKER } from './wickerman';
+import { propMats } from './propkit';
 import { makeInspect, place } from '../interactions/props';
 import type { Vegetation } from './nature';
 import {
-  ARRIVAL_GRAVEL, PARKING, BBQ, OUTDOOR_DINING, MUSIC_BONG, BALLOON_NOOK, LAKE, LAKE_VIEW, GOLF_TEE, GOLF_CHUTE, WICKERMAN, GF, type Rect,
+  ARRIVAL_GRAVEL, PARKING, BBQ, OUTDOOR_DINING, MUSIC_BONG, BALLOON_NOOK, LAKE, LAKE_VIEW, GOLF_TEE, GOLF_CHUTE, GOLF_MAT, WICKERMAN, GF, type Rect,
 } from './layout';
 import { terrainHeight } from './terrain';
 
 const BENCH_LOG2 = logModel(157, 2.2, 0.21);
+const WICKER_GEO = wickermanGeo();
 const SHORE_STONE = (() => { const g = rockModel(71); g.userData.keepColor = true; return g; })();
 
 export function buildGrounds(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods: EstateWoods | null) {
   arrival(w, c);
   socialGarden(w, c);
   lake(w, g, c, veg, woods);
-  golf(w, c);
+  golf(w, c); // DEV-04B: in the grounds batch, which already carries the art-kit materials (an own chunk cost +7 draw calls)
   wickerman(w, c);
   // east glade loop: a rest point with a view back over the meadow (optional, no find yet)
   part(c, c.k.M.wood, '#7a5232', 176.4, 124, Math.PI / 2, 0, terrainHeight(176.4, 124), 0, 1.6, 0.45, 0.45, 1);
@@ -247,45 +250,93 @@ function lake(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods: EstateWoods 
 }
 
 // ------------------------------------------------------------------------------------------------ golf (I05: decor first)
+/**
+ * Golf behind the BOSLUST hill (I05: decor first, no minigame). DEV-04B composition: the tee mat at the foot of the
+ * slope, a broad home-built return ramp running straight up the hill's north slope — a 1.5 m plywood deck with raised
+ * side boards and a centre guide, carried on timber trestles (two legs and a cross beam at every joint, standing on
+ * the slope), flaring at its foot into a catch tray beside the mat; at the top a target board with a cup. A stand bag
+ * rebuilt from the golf references: tapered body with a padded top collar and an open throat (dividers, clubs with
+ * readable heads and two knitted head covers), a side pocket, a shoulder strap, two stand legs and a foot that meet
+ * the ground. Not walkable (colliders per segment), never into the hall below.
+ */
 function golf(w: World, c: Ctx) {
-  const k = c.k, o = { chunk: 'grounds' };
+  const k = c.k, o = { chunk: c.chunk }, M = artMats(), { bx, cg } = joinery;
   const T = GOLF_TEE, C = GOLF_CHUTE;
   // DEV-04A: the mat stands 1 cm higher (its base top used to share the path ribbons' / woodland verge's plane)
-  boxMM(c.b, k.M.paint, '#3e6a34', T.x0 + 0.35, T.x0 + 3.05, -0.02, 0.045, T.z0 + 0.25, T.z0 + 2.25, { ...o, shadow: false }); // mat base
-  boxMM(c.b, k.M.paint, '#5c8f45', T.x0 + 0.42, T.x0 + 2.98, 0.045, 0.07, T.z0 + 0.32, T.z0 + 2.18, { ...o, shadow: false }); // tee mat
-  cyl(c.b, k.M.paint, '#f4f4f0', T.x0 + 1.8, 0.07, T.z0 + 1.2, 0.025, 0.025, 0.03, 8, o);
-  // a stand bag: body, top collar, pocket, strap, two splayed legs; club shafts with heads and head covers
-  const gx = T.x0 + 0.7, gz = T.z0 + 2.6;
-  cyl(c.b, k.M.paint, '#2f4a6e', gx, 0.08, gz, 0.13, 0.15, 0.8, 12, { ...o, rx: 0.18 }); // bag
-  cyl(c.b, k.M.paint, '#e8e2d4', gx, 0.86, gz + 0.14, 0.15, 0.14, 0.08, 12, { ...o, rx: 0.18 }); // collar
-  box(c.b, k.M.paint, '#e8e2d4', gx, 0.3, gz - 0.15, 0.16, 0.3, 0.05, { ...o, rx: 0.18 }); // pocket
-  for (const s2 of [-1, 1]) cyl(c.b, k.M.paint, '#2a2a2a', gx + s2 * 0.12, 0, gz + 0.32, 0.012, 0.012, 0.75, 5, { ...o, rx: -0.42, rz: s2 * 0.15 }); // legs
-  for (const [dx, dz, col] of [[-0.06, 0.18, '#c8c4bc'], [0.04, 0.2, '#c8c4bc'], [0.0, 0.1, '#b8463a'], [0.07, 0.12, '#2f2f2f']] as const) {
-    cyl(c.b, k.M.paint, '#b8b8b0', gx + dx, 0.85, gz + dz, 0.008, 0.008, 0.38, 5, { ...o, rx: 0.18 });
-    box(c.b, k.M.paint, col, gx + dx, 1.2, gz + dz + 0.07, 0.07, 0.08, 0.1, o);
+  // DEV-04B-R: the mat is centred on the chute's centreline (GOLF_MAT); the ball waits on a rubber tee near its chute end
+  const Mt = GOLF_MAT, mx = (Mt.x0 + Mt.x1) / 2;
+  boxMM(c.b, k.M.paint, '#3e6a34', Mt.x0, Mt.x1, -0.02, 0.045, Mt.z0, Mt.z1, { ...o, shadow: false }); // mat base
+  boxMM(c.b, k.M.paint, '#5c8f45', Mt.x0 + 0.07, Mt.x1 - 0.07, 0.045, 0.07, Mt.z0 + 0.07, Mt.z1 - 0.07, { ...o, shadow: false }); // tee mat
+  { const a = new Asm(c.b, o.chunk, mx, 0.07, Mt.z0 + 0.55, 0).begin('golfTeeBall');
+    a.add(M.paint, '#2b2b2b', cg('rubberTee', () => new THREE.CylinderGeometry(0.014, 0.02, 0.028, 8).translate(0, 0.014, 0)), 0, 0, 0);
+    a.add(M.paint, '#fbfbf6', cg('teeBall', () => new THREE.SphereGeometry(0.027, 12, 9)), 0, 0.028 + 0.025, 0); // a touch over regulation size: it reads from the path
+    a.end(); }
+  // ---- the return ramp: deck segments between joints that follow the slope, trestles at the joints
+  const cx = (C.x0 + C.x1) / 2, HW = 0.75, lift = 0.32; // half width of the deck; deck height above the ground
+  const z0 = C.z0, z1 = C.z1 - 0.6, n = Math.round(z1 - z0);
+  const jy = (z: number) => terrainHeight(cx, z) + lift; // deck height at a joint
+  for (let i = 0; i < n; i++) {
+    const za = z0 + ((z1 - z0) * i) / n, zb = z0 + ((z1 - z0) * (i + 1)) / n, ya = jy(za), yb = jy(zb);
+    const len = Math.hypot(zb - za, yb - ya), ang = Math.atan2(yb - ya, zb - za), zm = (za + zb) / 2, ym = (ya + yb) / 2;
+    const a = new Asm(c.b, o.chunk, cx, ym, zm, 0);
+    a.add(M.timber, '#c8a878', bx(2 * HW, 0.025, len + 0.01), 0, 0, 0, { rx: ang }); // plywood deck
+    for (const sd of [-1, 1]) a.add(M.timber, '#7a5232', bx(0.04, 0.16, len + 0.01), sd * (HW - 0.02), 0.07, 0, { rx: ang }); // side boards
+    a.add(M.timber, '#b89868', bx(0.03, 0.04, len), 0, 0.03, 0, { rx: ang }); // centre guide
+    w.col.addBox(cx - HW - 0.05, cx + HW + 0.05, za, zb, Math.min(ya, yb) - lift - 0.2, Math.max(ya, yb) + 0.25); // above ground only
   }
-  w.col.addCircle(T.x0 + 0.7, T.z0 + 2.6, 0.2, 0, 1);
-  // cardboard return chute climbing the hill's north slope, on timber side beams; not walkable
-  const cx = (C.x0 + C.x1) / 2;
-  for (let z = C.z0; z < C.z1 - 1e-6; z += 1) {
-    const ya = terrainHeight(cx, z), yb = terrainHeight(cx, z + 1);
-    const len = Math.hypot(1, yb - ya), ang = Math.atan2(yb - ya, 1);
-    box(c.b, k.M.paint, '#c8a878', cx, (ya + yb) / 2 + 0.15, z + 0.5, 0.5, 0.04, len, { ...o, rx: ang });
-    for (const s of [-1, 1]) box(c.b, k.M.wood, '#6b4a2a', cx + s * 0.28, (ya + yb) / 2 + 0.1, z + 0.5, 0.08, 0.2, len, { ...o, rx: ang });
-    w.col.addBox(cx - 0.35, cx + 0.35, z, z + 1, Math.min(ya, yb) - 0.2, Math.max(ya, yb) + 0.45); // above ground only (never into the hall below)
+  for (let i = 0; i <= n; i++) { // trestles: two legs from the ground to the deck underside and a cross beam
+    const z = z0 + ((z1 - z0) * i) / n, yd = jy(z) - 0.0125, a = new Asm(c.b, o.chunk, cx, 0, z, 0);
+    for (const sd of [-1, 1]) { const gy = terrainHeight(cx + sd * (HW - 0.12), z) - 0.06; a.add(M.timber, '#5a3a22', bx(0.07, yd - gy, 0.07), sd * (HW - 0.12), (yd + gy) / 2, 0); }
+    a.add(M.timber, '#6b4a2a', bx(2 * HW - 0.1, 0.07, 0.06), 0, yd - 0.035, 0);
   }
-  // DEV-04A support: the side beams rode 10 cm above the slope on nothing — a pair of stakes at every joint carries
-  // them, and the chute ends in a timber catch tray standing on the ground beside the tee mat
-  for (let z = C.z0; z <= C.z1 - 0.4 + 1e-6; z += 1) {
-    const zj = Math.min(z, C.z1 - 0.4), yg = terrainHeight(cx, zj), ys = (terrainHeight(cx, zj - 0.5) + terrainHeight(cx, zj + 0.5)) / 2 + 0.1;
-    for (const s of [-1, 1]) box(c.b, k.M.wood, '#5a3a22', cx + s * 0.28, yg - 0.1, zj, 0.06, Math.max(0.12, ys - yg + 0.12), 0.06, o);
+  // ---- foot: the deck flares into a wide catch tray standing on the ground beside the tee mat
+  { const zt = C.z1 - 0.25, yg = terrainHeight(cx, zt), a = new Asm(c.b, o.chunk, cx, yg, zt, 0).begin('golfTray');
+    a.add(M.timber, '#7a5232', bx(1.66, 0.04, 0.66), 0, 0.02, 0); // DEV-04B-R: its ends inside the side / back boards (at 1.70 × 0.70 its end faces lay in the boards' outer planes and z-fought)
+    for (const sd of [-1, 1]) { a.add(M.timber, '#6b4a2a', bx(0.04, 0.24, 0.7), sd * 0.83, 0.12, 0); a.add(M.timber, '#6b4a2a', bx(0.04, 0.2, 0.42), sd * 0.66, 0.1, -0.5, { ry: sd * 0.45 }); } // sides + flaring wings
+    a.add(M.timber, '#6b4a2a', bx(1.66, 0.24, 0.04), 0, 0.12, 0.325); // its ends inside the side boards, its face 5 mm in from theirs
+    for (let i = 0; i < 3; i++) a.add(M.paint, '#f4f4f0', cg('golfBall', () => new THREE.SphereGeometry(0.021, 6, 4)), -0.3 + i * 0.27, 0.061, 0.05 + (i % 2) * 0.12); // returned balls
+    a.end({ gap: 0.05 });
+    w.col.addBox(cx - 0.87, cx + 0.87, zt - 0.75, zt + 0.37, yg - 0.2, yg + 0.8); } // the tray is part of the chute: not walkable
+  // ---- top: a target board across the deck end with the cup
+  { const yt = jy(z0), a = new Asm(c.b, o.chunk, cx, yt, z0 - 0.05, 0);
+    a.add(M.timber, '#8a6440', bx(2 * HW + 0.1, 0.5, 0.05), 0, 0.25, -0.05);
+    a.add(M.paint, '#b84a2a', cg('golfTarget', () => new THREE.RingGeometry(0.1, 0.17, 12)), 0, 0.3, -0.02, { ry: Math.PI });
+    a.add(M.paint, '#1b1a18', cg('golfCup', () => new THREE.CircleGeometry(0.1, 12)), 0, 0.3, -0.021, { ry: Math.PI });
+    for (const sd of [-1, 1]) { const gy = terrainHeight(cx + sd * HW, z0 - 0.1); a.add(M.timber, '#5a3a22', bx(0.07, yt + 0.5 - gy, 0.07), sd * HW, (gy - yt + 0.5) / 2 + (0), -0.1); }
   }
-  { const zt = C.z1 - 0.25, yg = terrainHeight(cx, zt); // catch tray: floor + four low walls, open at the top
-    boxMM(c.b, k.M.wood, '#7a5232', cx - 0.36, cx + 0.36, yg, yg + 0.04, zt - 0.3, zt + 0.25, o);
-    for (const [x0, x1, z0, z1] of [[cx - 0.36, cx + 0.36, zt - 0.3, zt - 0.26], [cx - 0.36, cx + 0.36, zt + 0.21, zt + 0.25], [cx - 0.36, cx - 0.32, zt - 0.3, zt + 0.25], [cx + 0.32, cx + 0.36, zt - 0.3, zt + 0.25]] as const) boxMM(c.b, k.M.wood, '#6b4a2a', x0, x1, yg, yg + 0.24, z0, z1, o);
+  // ---- the stand bag (leaning back on its two legs)
+  const gx = GOLF_MAT.x0 - 0.45, gz = T.z0 + 2.6, tilt = 0.24, bag = '#2f4a6e'; // DEV-04B-R: beside the re-centred mat's back corner
+  const a = new Asm(c.b, o.chunk, gx, 0, gz, Math.PI * 0.85).begin('golfBag');
+  const up = (h: number) => [Math.sin(tilt) * h, Math.cos(tilt) * h] as const; // along the leaning bag axis (toward −z local)
+  const along = (h: number, q: object = {}) => { const [dz, dy] = up(h); return { y: dy, z: -dz, o: { rx: tilt, ...q } }; };
+  { const p = along(0); a.add(M.upholstery, bag, cg('bagBody', () => projectUV(lathe([[0.001, 0], [0.11, 0], [0.13, 0.03], [0.14, 0.5], [0.15, 0.78], [0.001, 0.78]], 10), 0.25)), 0, p.y + 0.02, p.z, p.o); }
+  { const p = along(0.78); a.add(M.upholstery, '#e8e2d4', cg('bagCollar', () => lathe([[0.15, 0], [0.165, 0.01], [0.17, 0.08], [0.15, 0.1], [0.12, 0.1], [0.12, 0.09], [0.145, 0.08], [0.145, 0.01]], 10)), 0, p.y + 0.02, p.z, p.o); }
+  { const p = along(0.85); a.add(M.paint, '#151412', cg('bagThroat', () => new THREE.CircleGeometry(0.125, 10).rotateX(-Math.PI / 2)), 0, p.y + 0.02, p.z, p.o); }
+  { const p = along(0.86); a.add(M.paint, '#2b2b2b', bx(0.24, 0.02, 0.012), 0, p.y + 0.02, p.z, p.o); a.add(M.paint, '#2b2b2b', bx(0.012, 0.02, 0.24), 0, p.y + 0.02, p.z, p.o); } // dividers
+  { const p = along(0.3); a.add(M.upholstery, '#e8e2d4', cg('bagPocket', () => projectUV(cushion(0.16, 0.34, 0.07, 0.03, 0.02, 'front', 1, 1), 0.25)), 0, p.y + 0.02, p.z - 0.14 * Math.cos(tilt) + 0.0, p.o); }
+  { const p = along(0.45); a.add(M.upholstery, '#1e2a3a', bx(0.06, 0.62, 0.02), 0, p.y + 0.02, p.z + 0.15, p.o); } // shoulder strap on the back
+  // clubs: shafts out of the throat, heads above it (irons as angled blades, two woods in knitted covers, a putter)
+  const clubs: [number, number, string, string][] = [[-0.06, 0.05, 'wood', '#b8463a'], [0.05, 0.06, 'wood', '#e8e2d4'], [-0.05, -0.05, 'iron', '#b8b8b0'], [0.0, -0.06, 'iron', '#b8b8b0'], [0.06, -0.03, 'putter', '#3a3a3a']];
+  for (const [dx, dz, kind, col] of clubs) {
+    const p = along(0.82), shaft = 0.32 + (kind === 'wood' ? 0.06 : 0), [sz, sy] = up(shaft / 2);
+    a.add(M.brass, '#a8a8a2', cg(`clubShaft${shaft}`, () => new THREE.CylinderGeometry(0.006, 0.006, shaft, 5)), dx, p.y + 0.02 + sy, p.z - sz + dz, p.o);
+    const [hz2, hy2] = up(shaft);
+    if (kind === 'wood') a.add(M.upholstery, col, cg('headCover', () => projectUV(cushion(0.09, 0.12, 0.08, 0.035, 0.01, 'top', 1, 1), 0.25)), dx, p.y + 0.02 + hy2 + 0.04, p.z - hz2 + dz, p.o);
+    else a.add(M.brass, col, bx(kind === 'putter' ? 0.1 : 0.07, 0.035, 0.018), dx + 0.02, p.y + 0.02 + hy2 + 0.01, p.z - hz2 + dz, { ...p.o, rz: kind === 'iron' ? 0.5 : 0 });
   }
-  const yt = terrainHeight(cx, C.z0);
-  cyl(c.b, k.M.paint, '#c8a878', cx, yt, C.z0 - 0.2, 0.3, 0.3, 0.35, 12, o); // cup at the top
+  // stand legs (DEV-04B-R): hinged at a bracket on the collar on the side the bag leans to, down to the ground behind it,
+  // so the bag rests on them (they used to start in the air on the opposite side and read as loose sticks)
+  { const A = along(0.74), ny = -Math.sin(tilt), nz = -Math.cos(tilt), R = 0.16; // outward normal of the leaning body, toward its lean
+    const py = A.y + 0.02 + ny * R, pz = A.z + nz * R;
+    a.add(M.paint, '#2a2a2a', bx(0.18, 0.04, 0.025), 0, py, pz + 0.004, { rx: tilt }); // hinge bracket on the bag's back
+    for (const sd of [-1, 1]) {
+      const tx = sd * 0.07, fx = sd * 0.21, fz = pz - 0.34, dx = fx - tx, dy = -py, dz = fz - pz, len = Math.hypot(dx, dy, dz);
+      // built along the leg direction in the Asm's three-local frame (plan lz = −three z)
+      a.add(M.paint, '#2a2a2a', cg(`bagLegR${sd}${len.toFixed(3)}`, () => new THREE.CylinderGeometry(0.009, 0.009, len, 5).applyQuaternion(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(dx, dy, -dz).normalize()))), (tx + fx) / 2, py / 2, (pz + fz) / 2);
+      a.add(M.paint, '#2a2a2a', cg('bagFoot', () => new THREE.CylinderGeometry(0.016, 0.018, 0.02, 6).translate(0, 0.01, 0)), fx, 0, fz); // rubber foot on the ground
+    } }
+  a.end({ gap: 0.03, tol: 0.03 });
+  w.col.addCircle(gx, gz, 0.25, 0, 1);
 }
 
 // ------------------------------------------------------------------------------------------------ wickerman (I04: scene only)
@@ -302,7 +353,7 @@ function wickerman(w: World, c: Ctx) {
   // that never see the clearing
   const k = c.k, o = { chunk: 'wick' };
   const { x, z } = WICKERMAN;
-  const straw = '#d8b860', twine = '#5a4430', M = woodMats();
+  const M = woodMats();
   const gy = terrainHeight(x, z);
   // plinth: a ring of field stones round a stone-capped base, 0.25 m high, on the ground
   for (let i = 0; i < 12; i++) {
@@ -314,36 +365,35 @@ function wickerman(w: World, c: Ctx) {
   // two sleepers across the plinth, the feet bound onto them
   for (const dx of [-0.26, 0.26]) boxMM(c.b, k.M.wood, '#5e4a36', x + dx - 0.09, x + dx + 0.09, top0, top0 + 0.12, z - 0.75, z + 0.75, o);
   const foot = top0 + 0.12;
-  const limb = (ax: number, ay: number, bx: number, by: number, r0: number, r1: number) => { // a straw bundle from joint a to joint b
-    const dx = bx - ax, dy = by - ay, len = Math.hypot(dx, dy);
-    rod(c.b, k.M.bark, straw, (ax + bx) / 2, (ay + by) / 2, z, r1, r0, len, 8, { ...o, rz: Math.atan2(-dx, dy) });
-  };
-  const band = (bx: number, by: number, r: number, rz = 0) => rod(c.b, k.M.paint, twine, bx, by, z, r, r, 0.06, 8, { ...o, rz });
-  const hip = foot + 1.15, sh = hip + 1.05;
-  for (const sd of [-1, 1]) {
-    limb(x + sd * 0.26, foot, x + sd * 0.22, hip, 0.15, 0.13); // legs, bound at ankle and knee
-    band(x + sd * 0.26, foot + 0.1, 0.165); band(x + sd * 0.24, foot + 0.6, 0.15);
-    const elbow: [number, number] = [x + sd * 1.02, sh - 0.55], wrist: [number, number] = [x + sd * 1.2, sh - 1.25];
-    limb(x + sd * 0.4, sh - 0.05, elbow[0], elbow[1], 0.13, 0.1); // upper arm from the shoulder
-    limb(elbow[0], elbow[1], wrist[0], wrist[1], 0.1, 0.08); // forearm
-    band(elbow[0], elbow[1], 0.115, Math.atan2(-(elbow[0] - x - sd * 0.4), elbow[1] - sh)); band(wrist[0] + sd * 0.02, wrist[1] + 0.12, 0.09);
-  }
-  limb(x, hip - 0.05, x, sh + 0.05, 0.27, 0.46); // body: broad at the shoulders
-  band(x, hip + 0.1, 0.31); band(x, sh - 0.25, 0.42);
-  rod(c.b, k.M.wood, '#6b5236', x, sh - 0.02, z, 0.05, 0.05, 1.0, 6, { ...o, rz: Math.PI / 2 }); // shoulder yoke carrying the arms
-  limb(x, sh, x, sh + 0.22, 0.12, 0.1); // neck
-  band(x, sh + 0.12, 0.12);
-  blob(c.b, k.M.bark, straw, x, sh + 0.52, z, 0.25, 0.32, 0.25, o); // head (≈ 3.1 m in all)
-  for (let i = 0; i < 7; i++) rod(c.b, k.M.bark, '#c8a650', x + Math.cos(i * 0.9) * 0.14, sh + 0.86, z + Math.sin(i * 0.9) * 0.14, 0.015, 0.03, 0.3, 4, { ...o, rz: 0.4 * Math.cos(i * 1.3), rx: 0.4 * Math.sin(i * 1.3) }); // straw tuft
+  // DEV-04B: the figure is the willow build (wickerman.ts): armature uprights, irregular woven bands, bound joints, a
+  // woven head cage — in place of straw-coloured cylinders with a ball head. Each foot stands in a timber shoe
+  // bolted to its sleeper with two iron straps (sheet: "stable base support").
+  c.b.add(k.M.paint, WICKER_GEO, planMatrix(x, foot, z, 0), '#ffffff', o.chunk, true, 0);
+  c.b.add(propMats().props, WICKER_GEO.userData.hay, planMatrix(x, foot, z, 0), '#ffffff', o.chunk, true, 0); // the hay packed into it
+  { const M2 = artMats(), a = new Asm(c.b, o.chunk, x, foot, z, 0);
+    for (const sd of [-1, 1]) {
+      a.add(M2.timber, '#5e4a36', joinery.bx(0.2, 0.12, 0.3), sd * WICKER.footX, 0.06, 0); // shoe
+      for (const dz of [-0.11, 0.11]) a.add(M2.paint, '#2b2622', joinery.bx(0.22, 0.03, 0.025), sd * WICKER.footX, 0.105, dz); // iron straps over it
+      for (const dz of [-0.11, 0.11]) for (const dx of [-0.1, 0.1]) a.add(M2.paint, '#2b2622', joinery.cg('boltHead', () => new THREE.CylinderGeometry(0.012, 0.012, 0.01, 6)), sd * WICKER.footX + dx, 0.125, dz);
+    } }
   w.col.addCircle(x, z, 1.15, gy - 0.5, gy + 3.4);
-  // the candle ring (unlit glass jars on flat stones; lighting it is a later interaction pass), 1.9 m clear of the plinth
+  // the candle ring, 1.9 m clear of the plinth: DEV-04B production model — a church candle in a glass lantern jar
+  // (base, wall, rim, wire bail) on a flat stone, UNLIT (the DEV-03 jars carried a glowing flame block). The lit /
+  // ignition states are DEV-04C: the candle positions are published as w.scene.userData.wickerCandles (with the
+  // figure's centre) so that pass can attach flames and state without re-authoring the ring.
+  const candles: { x: number; y: number; z: number }[] = [];
+  const CM = artMats();
   for (let i = 0; i < 9; i++) {
     const an = (i / 9) * Math.PI * 2 + 0.15 * Math.sin(i * 2.3), d = 3.1 + 0.2 * Math.sin(i * 1.7), cxx = x + Math.cos(an) * d, czz = z + Math.sin(an) * d, cy = terrainHeight(cxx, czz);
-    c.b.add(M.rock, SHORE_STONE, planMatrix(cxx, cy - 0.06, czz, an * 2, 0.24, 0.1, 0.22), '#9a9282', o.chunk, true, 0);
-    cyl(c.b, k.M.paint, '#bfc8c0', cxx, cy + 0.03, czz, 0.065, 0.06, 0.16, 8, o);
-    cyl(c.b, k.M.paint, '#f2ead8', cxx, cy + 0.04, czz, 0.035, 0.035, 0.1 + (i % 3) * 0.02, 8, o);
-    box(c.b, k.M.glow, '#ffd27a', cxx, cy + 0.14 + (i % 3) * 0.02, czz, 0.022, 0.04, 0.022, { ...o, shadow: false, jitter: 0 });
+    c.b.add(M.rock, SHORE_STONE, planMatrix(cxx, cy - 0.06, czz, an * 2, 0.26, 0.1, 0.24), '#9a9282', o.chunk, true, 0);
+    const a = new Asm(c.b, o.chunk, cxx, cy + 0.035, czz, an);
+    a.add(CM.ceramic, '#cfd8d0', joinery.cg('candleJar', () => lathe([[0.001, 0], [0.06, 0], [0.065, 0.01], [0.065, 0.17], [0.07, 0.18], [0.062, 0.18], [0.058, 0.17], [0.058, 0.012], [0.001, 0.012]], 10)), 0, 0, 0);
+    a.add(CM.paint, '#f2ead8', joinery.cg(`candleWax${i % 3}`, () => new THREE.CylinderGeometry(0.035, 0.036, 0.09 + (i % 3) * 0.02, 10).translate(0, (0.09 + (i % 3) * 0.02) / 2 + 0.012, 0)), 0, 0, 0);
+    a.add(CM.paint, '#2b2622', joinery.bx(0.004, 0.015, 0.004), 0, 0.102 + (i % 3) * 0.02 + 0.007, 0); // wick (unlit)
+    a.add(CM.paint, '#3a3530', joinery.cg('candleBail', () => new THREE.TorusGeometry(0.066, 0.003, 3, 10, Math.PI)), 0, 0.18, 0);
+    candles.push({ x: cxx, y: cy + 0.035 + 0.12 + (i % 3) * 0.02, z: czz });
   }
+  w.scene.userData.wickerCandles = { centre: { x, y: gy, z }, candles };
   // a log bench on the east side facing the figure (clear of the path mouth in the north-west), a lantern on a stake
   // marking where the side path opens into the clearing
   const bx = x + 4.6, by = terrainHeight(bx, z);

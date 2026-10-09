@@ -9,7 +9,7 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, floor, stairsZ, segBox } from './arch';
 import { Batcher, box, boxMM, cyl, blob, compound, v3, getKit } from './kit';
-import { plant, staticLantern, barSign, lounger, joinery, bottleGeo } from './furniture';
+import { plant, staticLantern, barSign, BAR_SIGN, lounger, joinery, bottleGeo } from './furniture';
 import { Asm, artMats, lathe } from './artkit';
 import { makeDoor, makePickup, makeInspect, makeAction, place } from '../interactions/props';
 import { drawSymbol } from '../content/symbols';
@@ -231,8 +231,9 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
     for (let i = 0; i < 24; i++) a.add(M.paint, '#c8a050', bx(0.1, 0.3, 0.02), -1.15 + i * 0.1, 2.2 - (i % 3) * 0.02, 0.42);
     // DEV-04A: the "Copacabana Room" sign stands on the canopy, carried by two timber uprights fixed to the canopy board
     // and capped by a rail (the sign itself: barSign below)
-    for (const sx of [-0.62, 0.62]) a.add(M.timber, '#4a2f1a', bx(0.06, 0.5, 0.06), sx, 2.42 + 0.25, 0.31);
-    a.add(M.timber, '#4a2f1a', bx(1.78, 0.05, 0.12), 0, 2.42 + 0.46 + 0.025, 0.36);
+    // DEV-04B: the larger shaped sign (BAR_SIGN 1.9 × 0.62) is fixed to taller uprights, the cap rail above it
+    for (const sx of [-0.62, 0.62]) a.add(M.timber, '#4a2f1a', bx(0.06, 0.68, 0.06), sx, 2.42 + 0.34, 0.31);
+    a.add(M.timber, '#4a2f1a', bx(2.02, 0.05, 0.12), 0, 2.42 + 0.68 + 0.025, 0.33);
     // back bar against the glass, standing on its own frame
     const bb = new Asm(c.b, c.chunk, 128.7, GF, 111.35, Math.PI);
     bb.add(M.timber, '#6e4a2c', sb(2.0, 0.9, 0.4, 0.008), 0, 0.45, 0);
@@ -253,7 +254,7 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
     }
     void taperLeg;
   }
-  barSign(w, 128.6, GF + 2.42 + 0.23, 109.7 - 0.35, Math.PI); // on the canopy's front edge, facing the pool and the room
+  barSign(w, 128.6, GF + 2.42 + 0.02 + BAR_SIGN.h / 2, 109.7 - 0.35, Math.PI); // on the canopy's front edge, facing the pool and the room
   w.col.addBox(127.5, 129.7, 109.3, 110.1, 0, GF + 1.1);
   w.col.addBox(127.7, 129.7, 111.15, 111.55, 0, GF + 1.0);
   for (const [x, z] of [[119, 96], [127, 96], [119, 110], [127, 110]] as const) {

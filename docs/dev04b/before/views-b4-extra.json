@@ -1,0 +1,149 @@
+{
+  "rows": [
+    {
+      "name": "h07b-well-down",
+      "pose": {
+        "x": 144.35,
+        "y": 0,
+        "z": 39.45,
+        "yaw": -2.6179938779914944,
+        "pitch": -1.35
+      },
+      "low": {
+        "calls": 25,
+        "triangles": 65544
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "a01-hall-commode",
+      "pose": {
+        "x": 88.2,
+        "y": 0.15,
+        "z": 85.5,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.18
+      },
+      "low": {
+        "calls": 122,
+        "triangles": 308923
+      },
+      "room": "hall",
+      "feetY": 0.15
+    },
+    {
+      "name": "a02-wc",
+      "pose": {
+        "x": 87.3,
+        "y": 0.15,
+        "z": 104.4,
+        "yaw": -0.7853981633974483,
+        "pitch": -0.3
+      },
+      "low": {
+        "calls": 33,
+        "triangles": 120546
+      },
+      "room": "guestWC",
+      "feetY": 0.15
+    },
+    {
+      "name": "a03-utility-sink",
+      "pose": {
+        "x": 113.9,
+        "y": 0.15,
+        "z": 106.2,
+        "yaw": 1.5707963267948966,
+        "pitch": -0.3
+      },
+      "low": {
+        "calls": 105,
+        "triangles": 169336
+      },
+      "room": "utility",
+      "feetY": 0.15
+    },
+    {
+      "name": "a04-boiler",
+      "pose": {
+        "x": 100,
+        "y": -3.2,
+        "z": 101.5,
+        "yaw": 0.8552113334772214,
+        "pitch": 0.15
+      },
+      "low": {
+        "calls": 22,
+        "triangles": 55372
+      },
+      "room": "boiler",
+      "feetY": -3.2
+    },
+    {
+      "name": "a05-route-pipes",
+      "pose": {
+        "x": 83,
+        "y": -3.2,
+        "z": 95,
+        "yaw": 3.141592653589793,
+        "pitch": 0.15
+      },
+      "low": {
+        "calls": 33,
+        "triangles": 55802
+      },
+      "room": "route",
+      "feetY": -3.2
+    },
+    {
+      "name": "a06-side-gate",
+      "pose": {
+        "x": 156,
+        "y": 0,
+        "z": 18,
+        "yaw": 1.5707963267948966,
+        "pitch": 0.05
+      },
+      "low": {
+        "calls": 26,
+        "triangles": 136345
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "a07-chopping-block",
+      "pose": {
+        "x": 47.5,
+        "y": 0,
+        "z": 35,
+        "yaw": -0.5759586531581288,
+        "pitch": -0.35
+      },
+      "low": {
+        "calls": 45,
+        "triangles": 170440
+      },
+      "room": "out",
+      "feetY": 0.14
+    },
+    {
+      "name": "a08-forecourt-planter",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 64,
+        "yaw": 0,
+        "pitch": -0.1
+      },
+      "low": {
+        "calls": 176,
+        "triangles": 281509
+      },
+      "room": "out",
+      "feetY": 0
+    }
+  ],
+  "problems": []
+}
