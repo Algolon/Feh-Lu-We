@@ -16,7 +16,7 @@ import { propMats } from './propkit';
 import { makeInspect, place } from '../interactions/props';
 import type { Vegetation } from './nature';
 import {
-  ARRIVAL_GRAVEL, PARKING, BBQ, OUTDOOR_DINING, MUSIC_BONG, BALLOON_NOOK, LAKE, LAKE_VIEW, GOLF_TEE, GOLF_CHUTE, WICKERMAN, GF, type Rect,
+  ARRIVAL_GRAVEL, PARKING, BBQ, OUTDOOR_DINING, MUSIC_BONG, BALLOON_NOOK, LAKE, LAKE_VIEW, GOLF_TEE, GOLF_CHUTE, GOLF_MAT, WICKERMAN, GF, type Rect,
 } from './layout';
 import { terrainHeight } from './terrain';
 
@@ -263,9 +263,14 @@ function golf(w: World, c: Ctx) {
   const k = c.k, o = { chunk: c.chunk }, M = artMats(), { bx, cg } = joinery;
   const T = GOLF_TEE, C = GOLF_CHUTE;
   // DEV-04A: the mat stands 1 cm higher (its base top used to share the path ribbons' / woodland verge's plane)
-  boxMM(c.b, k.M.paint, '#3e6a34', T.x0 + 0.35, T.x0 + 3.05, -0.02, 0.045, T.z0 + 0.25, T.z0 + 2.25, { ...o, shadow: false }); // mat base
-  boxMM(c.b, k.M.paint, '#5c8f45', T.x0 + 0.42, T.x0 + 2.98, 0.045, 0.07, T.z0 + 0.32, T.z0 + 2.18, { ...o, shadow: false }); // tee mat
-  cyl(c.b, k.M.paint, '#f4f4f0', T.x0 + 1.8, 0.07, T.z0 + 1.2, 0.025, 0.025, 0.03, 8, o);
+  // DEV-04B-R: the mat is centred on the chute's centreline (GOLF_MAT); the ball waits on a rubber tee near its chute end
+  const Mt = GOLF_MAT, mx = (Mt.x0 + Mt.x1) / 2;
+  boxMM(c.b, k.M.paint, '#3e6a34', Mt.x0, Mt.x1, -0.02, 0.045, Mt.z0, Mt.z1, { ...o, shadow: false }); // mat base
+  boxMM(c.b, k.M.paint, '#5c8f45', Mt.x0 + 0.07, Mt.x1 - 0.07, 0.045, 0.07, Mt.z0 + 0.07, Mt.z1 - 0.07, { ...o, shadow: false }); // tee mat
+  { const a = new Asm(c.b, o.chunk, mx, 0.07, Mt.z0 + 0.55, 0).begin('golfTeeBall');
+    a.add(M.paint, '#2b2b2b', cg('rubberTee', () => new THREE.CylinderGeometry(0.014, 0.02, 0.028, 8).translate(0, 0.014, 0)), 0, 0, 0);
+    a.add(M.paint, '#fbfbf6', cg('teeBall', () => new THREE.SphereGeometry(0.027, 12, 9)), 0, 0.028 + 0.025, 0); // a touch over regulation size: it reads from the path
+    a.end(); }
   // ---- the return ramp: deck segments between joints that follow the slope, trestles at the joints
   const cx = (C.x0 + C.x1) / 2, HW = 0.75, lift = 0.32; // half width of the deck; deck height above the ground
   const z0 = C.z0, z1 = C.z1 - 0.6, n = Math.round(z1 - z0);
@@ -300,7 +305,7 @@ function golf(w: World, c: Ctx) {
     for (const sd of [-1, 1]) { const gy = terrainHeight(cx + sd * HW, z0 - 0.1); a.add(M.timber, '#5a3a22', bx(0.07, yt + 0.5 - gy, 0.07), sd * HW, (gy - yt + 0.5) / 2 + (0), -0.1); }
   }
   // ---- the stand bag (leaning back on its two legs)
-  const gx = T.x0 + 0.7, gz = T.z0 + 2.6, tilt = 0.24, bag = '#2f4a6e';
+  const gx = GOLF_MAT.x0 - 0.45, gz = T.z0 + 2.6, tilt = 0.24, bag = '#2f4a6e'; // DEV-04B-R: beside the re-centred mat's back corner
   const a = new Asm(c.b, o.chunk, gx, 0, gz, Math.PI * 0.85).begin('golfBag');
   const up = (h: number) => [Math.sin(tilt) * h, Math.cos(tilt) * h] as const; // along the leaning bag axis (toward −z local)
   const along = (h: number, q: object = {}) => { const [dz, dy] = up(h); return { y: dy, z: -dz, o: { rx: tilt, ...q } }; };
@@ -319,11 +324,17 @@ function golf(w: World, c: Ctx) {
     if (kind === 'wood') a.add(M.upholstery, col, cg('headCover', () => projectUV(cushion(0.09, 0.12, 0.08, 0.035, 0.01, 'top', 1, 1), 0.25)), dx, p.y + 0.02 + hy2 + 0.04, p.z - hz2 + dz, p.o);
     else a.add(M.brass, col, bx(kind === 'putter' ? 0.1 : 0.07, 0.035, 0.018), dx + 0.02, p.y + 0.02 + hy2 + 0.01, p.z - hz2 + dz, { ...p.o, rz: kind === 'iron' ? 0.5 : 0 });
   }
-  // stand legs: from the collar's back down to the ground behind the bag; the bag's foot touches the ground in front
-  for (const sd of [-1, 1]) {
-    const top = along(0.74), tx = sd * 0.1, tz = top.z + 0.15, ty = top.y + 0.02, fx = sd * 0.22, fz = 0.4, fy = 0, len = Math.hypot(fx - tx, fy - ty, fz - tz);
-    a.add(M.paint, '#2a2a2a', cg(`bagLeg${len.toFixed(3)}`, () => new THREE.CylinderGeometry(0.009, 0.009, len, 5)), (tx + fx) / 2, (ty + fy) / 2, (tz + fz) / 2, { rx: -Math.atan2(fz - tz, ty - fy), rz: Math.atan2(fx - tx, ty - fy) });
-  }
+  // stand legs (DEV-04B-R): hinged at a bracket on the collar on the side the bag leans to, down to the ground behind it,
+  // so the bag rests on them (they used to start in the air on the opposite side and read as loose sticks)
+  { const A = along(0.74), ny = -Math.sin(tilt), nz = -Math.cos(tilt), R = 0.16; // outward normal of the leaning body, toward its lean
+    const py = A.y + 0.02 + ny * R, pz = A.z + nz * R;
+    a.add(M.paint, '#2a2a2a', bx(0.18, 0.04, 0.025), 0, py, pz + 0.004, { rx: tilt }); // hinge bracket on the bag's back
+    for (const sd of [-1, 1]) {
+      const tx = sd * 0.07, fx = sd * 0.21, fz = pz - 0.34, dx = fx - tx, dy = -py, dz = fz - pz, len = Math.hypot(dx, dy, dz);
+      // built along the leg direction in the Asm's three-local frame (plan lz = −three z)
+      a.add(M.paint, '#2a2a2a', cg(`bagLegR${sd}${len.toFixed(3)}`, () => new THREE.CylinderGeometry(0.009, 0.009, len, 5).applyQuaternion(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(dx, dy, -dz).normalize()))), (tx + fx) / 2, py / 2, (pz + fz) / 2);
+      a.add(M.paint, '#2a2a2a', cg('bagFoot', () => new THREE.CylinderGeometry(0.016, 0.018, 0.02, 6).translate(0, 0.01, 0)), fx, 0, fz); // rubber foot on the ground
+    } }
   a.end({ gap: 0.03, tol: 0.03 });
   w.col.addCircle(gx, gz, 0.25, 0, 1);
 }

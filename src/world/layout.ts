@@ -154,7 +154,8 @@ export const LAKE_VIEW: Rect = { x0: 76, x1: 82, z0: 137, z1: 142 };
 export const GOLF_TEE: Rect = { x0: 60, x1: 66, z0: 49, z1: 55 };
 export const GOLF_CHUTE: Rect = { x0: 62, x1: 64, z0: 38, z1: 49 };
 /** The tee mat on the tee pad (owns its ground; the golf spur meets its west edge). */
-export const GOLF_MAT: Rect = { x0: GOLF_TEE.x0 + 0.35, x1: GOLF_TEE.x0 + 3.05, z0: GOLF_TEE.z0 + 0.25, z1: GOLF_TEE.z0 + 2.25 };
+// DEV-04B-R: centred on the chute's longitudinal centreline (it sat 1.3 m west of it); same size, same depth band
+export const GOLF_MAT: Rect = { x0: (GOLF_CHUTE.x0 + GOLF_CHUTE.x1) / 2 - 1.35, x1: (GOLF_CHUTE.x0 + GOLF_CHUTE.x1) / 2 + 1.35, z0: GOLF_TEE.z0 + 0.25, z1: GOLF_TEE.z0 + 2.25 };
 /**
  * Separate wickerman clearing (scene only; burning/aftermath is open decision I04). DEV-04A owner directive: the figure
  * stood ON the wickerman loop (v0.2 clearing centre 167, 54 = a loop vertex), an obstacle in the through-route. The
@@ -206,7 +207,7 @@ export const WICKERMAN_LOOP: [number, number][] = [[146.5, 43.5], [154, 45], [16
 /** Walking height at each WICKERMAN_LOOP vertex (LEVEL_LAYOUT terrain_profiles.wickermanLoop, start moved onto the well path). */
 export const WICKERMAN_HEIGHTS = [0, 0.5, 1.2, 1.2, 1.2, 0.8, 0.5, 0.2, 0];
 /** Golf spur: from the shed path to the tee (the tee itself lies beside the existing forecourt → shed path). */
-export const GOLF_SPUR: [number, number][] = [[52.5, 46.5], [57, 49.6], [61.5, 50.4]];
+export const GOLF_SPUR: [number, number][] = [[52.5, 46.5], [57, 49.6], [62.2, 50.4]]; // DEV-04B-R: runs into the re-centred mat's west edge (clipped there)
 
 /**
  * Woodland masses in the north half (LEVEL_LAYOUT outdoor_zones west/north/eastForest + the east glade). `gap` is the

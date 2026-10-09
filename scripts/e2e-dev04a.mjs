@@ -280,7 +280,7 @@ try {
   // ---------------------------------------------------------------- 3. surface ownership: no same-facing coplanar overlaps in corrected regions
   const regions = {
     kitchenSink: [104.45, 105.55, 0.6, 1.0, 108.85, 109.62], frontThreshold: [88.9, 91.1, 0.05, 0.6, 79.6, 80.6], consDoubleDoor: [129.5, 130.5, 0.05, 2.8, 104.5, 107.5],
-    cottageDoor: [24.3, 25.7, 4.05, 4.6, 156.7, 157.6], cottageLanding: [16.6, 20.2, 3.72, 4.3, 150.8, 153.8], golfMat: [59.6, 61.6, -0.1, 0.2, 48.8, 52.0],
+    cottageDoor: [24.3, 25.7, 4.05, 4.6, 156.7, 157.6], cottageLanding: [16.6, 20.2, 3.72, 4.3, 150.8, 153.8], golfMat: [60.65, 62.65, -0.1, 0.2, 48.8, 52.0] /* DEV-04B-R: the spur → mat junction moved with the re-centred mat (x 61.65) */,
     forecourtWest: [76.5, 81.5, -0.1, 0.2, 63.5, 67.5], forecourtEast: [101.5, 106.0, -0.1, 0.2, 63.5, 67.5], saunaSteps: [133.2, 134.8, 0.16, 0.8, 103.9, 105.7], // from the deck surface up (the pre-DEV-04A deck cut-out under the barrel is out of sight)
   };
   const cop = await step('coplanar', (R) => {
