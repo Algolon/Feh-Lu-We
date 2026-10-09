@@ -157,10 +157,10 @@ architecture (DEV-04A), the living-room calibration set.
 
 ## 7. Validation added
 
-- **Unit** `tests/dev04b.test.ts` (12): logs / split logs / book covers closed and outward-facing; covers overhang and
+- **Unit** `tests/dev04b.test.ts` (13): logs / split logs / book covers closed and outward-facing; covers overhang and
   the block is recessed in every size class; size / thickness / cover type give different constructions (not
   recolours); the shelf variant is cheaper and carries only visible faces; open books finite; duvets keep thickness
-  and hang; rugs map inside their atlas sheet; `toAtlas` clamps; the audit's floating / sinking / disconnected rules.
+  and hang; rugs map inside their atlas sheet; `toAtlas` clamps; the audit's floating / sinking / disconnected rules; the Wickerman is finite, on its shoes and its hay is closed and inside the willow cage.
 - **Construction audit** (`Asm.begin/end`, `artkit.ts`): runs on every build; 123 audited pieces, 0 warnings.
 - **Browser** `npm run e2e:dev04b` (9 checks): audit clean and every converged family (26) built through it;
   DEV-04A contracts still hold; no NaN / infinite vertex; **every room-culled batch is drawn in the rooms its geometry
@@ -168,28 +168,159 @@ architecture (DEV-04A), the living-room calibration set.
   service-wing batch fails it); Wickerman candle hook; ids / checkpoints / save schema; hero-view budgets.
 - **Dev probes**: `dev04b-probe` (warnings + NaN), `dev04b-chunks` (triangles per chunk), `dev04b-pick` (what surface
   is under a pixel), `dev04b-drawlist` (render list of one view by batch and material), `dev04b-tris` (triangles per
-  audited asset).
+  audited asset), `dev04b-budget` (calls / triangles of the full-suite and hero poses on any build).
 
 ## 8. Test results
 
-PLACEHOLDER_TESTS
+Final gate on a clean production build (`rm -rf dist && npm run build`, served with `vite preview`), last code commit
+`7ae10f3`:
+
+| Check | Result |
+|---|---|
+| `npx tsc --noEmit` | pass |
+| `npx vitest run` | **195 / 195** (14 files; 13 in `tests/dev04b.test.ts`) |
+| `npm run build` | pass (the chunk-size warning is pre-existing) |
+| `npm run e2e:dev04b` (new) | **9 / 9** |
+| `npm run e2e:dev04a` | **19 / 19** |
+| `npm run e2e:dev03` | **11 / 11** |
+| `npm run e2e` (full) | **103 / 103** |
+| `npm run e2e:dev02` | **34 / 34** |
+| `npm run e2e:dev01` | **34 / 34** |
+
+The suites caught real regressions on the way, all fixed rather than worked round: the guest WC, the rear-nook sconce
+and the billiard south strip disappearing after the batch splits (`e2e:dev04b`), the kitchen prep table on the
+walkthrough route and the log basket's collider existing in one living-room set only (`e2e`), the golf catch tray
+walkable (`e2e:dev02`), and the forecourt → manor view at 252.0k triangles (`e2e`).
 
 ## 9. Performance (low quality — mobile guide ≈ 150 calls / 250 k triangles)
 
-PLACEHOLDER_PERF
+Counts are `renderer.info` after one low-quality frame (the phone default: no shadow maps), 1280 × 720.
+
+**DEV-04A budget views** (`e2e:dev04a` check 8; standard door state: front door + Copacabana double door open). Rule:
+calls ≤ max(150, before) + 6, triangles ≤ max(250k, before) × 1.08, and a view under the guide must stay under it.
+
+| View | Before (c97a06f) calls / tris | After | Δ |
+|---|---|---|---|
+| atticNook | 35 / 95,802 | 41 / 99,132 | +6 / +3.5% |
+| atticCommon | 36 / 105,710 | 39 / 101,408 | +3 / -4.1% |
+| conservatoryInside | 77 / 132,984 | 74 / 128,198 | -3 / -3.6% |
+| conservatoryDoorDeck | 142 / 207,920 | 142 / 205,264 | +0 / -1.3% |
+| wellnessDeck | 69 / 151,767 | 65 / 155,249 | -4 / +2.3% |
+| saunaAccess | 148 / 225,826 | 148 / 225,558 | +0 / -0.1% |
+| wickermanClearing | 26 / 162,702 | 31 / 160,577 | +5 / -1.3% |
+| wickermanPath | 30 / 181,464 | 35 / 211,041 | +5 / +16.3% |
+| frontForecourt | 146 / 251,342 | 138 / 205,474 | -8 / -18.2% |
+| arrivalCourt | 140 / 247,884 | 132 / 202,016 | -8 / -18.5% |
+| portugalTerrace | 31 / 91,537 | 31 / 91,407 | +0 / -0.1% |
+| portugalApproach | 32 / 119,009 | 33 / 119,023 | +1 / +0.0% |
+| golfVicinity | 48 / 183,281 | 56 / 197,645 | +8 / +7.8% |
+| golfSpur | 92 / 257,332 | 93 / 262,430 | +1 / +2.0% |
+
+**Full-suite render poses and DEV-04B hero views** (`scripts/dev04b-budget.mjs`, front door open, both builds measured
+the same way):
+
+| View | Before (c97a06f) calls / tris | After | Δ |
+|---|---|---|---|
+| gate (driveway) | 99 / 234,707 | 99 / 234,905 | +0 / +0.1% |
+| forecourt → manor | 137 / 248,837 | 129 / 204,419 | -8 / -17.9% |
+| entrance hall | 97 / 169,994 | 104 / 192,890 | +7 / +13.5% |
+| library | 54 / 127,984 | 54 / 185,684 | +0 / +45.1% |
+| garden → manor + conservatory | 137 / 207,792 | 138 / 205,026 | +1 / -1.3% |
+| forest (shed area) | 33 / 158,537 | 36 / 148,647 | +3 / -6.2% |
+| BOSLUST cut | 87 / 225,857 | 87 / 223,019 | +0 / -1.3% |
+| conservatory pool | 102 / 175,446 | 101 / 174,466 | -1 / -0.6% |
+| campfire | 25 / 118,513 | 27 / 108,527 | +2 / -8.4% |
+| well | 42 / 168,763 | 52 / 177,995 | +10 / +5.5% |
+| wickerman figure | 36 / 181,556 | 36 / 196,152 | +0 / +8.0% |
+| golf chute | 47 / 152,385 | 55 / 164,413 | +8 / +7.9% |
+| dining | 68 / 129,870 | 60 / 132,070 | -8 / +1.7% |
+| kitchen | 58 / 148,222 | 55 / 135,888 | -3 / -8.3% |
+| attic observatory | 36 / 95,976 | 37 / 93,704 | +1 / -2.4% |
+| Copacabana bar | 51 / 124,045 | 52 / 125,503 | +1 / +1.2% |
+| Portugal cottage | 36 / 101,301 | 39 / 103,083 | +3 / +1.8% |
+
+Every view stays inside the mobile guide (≤ 150 calls, ≤ 250k triangles) except **golfSpur**, which was already over it
+before DEV-04B (257.3k) and is now 262.4k (+2.0%, inside the +8% regression allowance). Increases and why they are
+accepted:
+
+- **Library +45% triangles (128k → 186k, same 54 calls)**: real books. Each shelf book carries only the faces a shelf
+  shows (14–26 triangles) and the library is still 64k under the guide; the books are the point of the room.
+- **Wickerman path +16% (181k → 211k), figure +8%**: the willow figure (rods, bands, bindings) and its hay. Still 39k
+  under the guide; the figure is the clearing's landmark.
+- **Entrance hall +7 calls / +13.5% (97 → 104 calls)**: the hall's dressing (commode, crates with loads, coat rail,
+  bench, runner, hanging) and the living room's own batch, drawn when you can actually see into it.
+- **Well +10 calls, golf chute / golf vicinity +8 calls**: the fire clearing and the well are their own distance-culled
+  batches (drawn within 55 m) so their detail is not paid for elsewhere; seen from the golf area that is the price of
+  the culling. Golf itself stays in the shared grounds batch (as its own batch it cost +7 more calls).
+- **Attic nook +6 calls**: the observatory dressing on the atlas and art-kit materials; at 41 calls it is still among
+  the cheapest interior views.
+
+Where the arrival views went the other way (−18%): the living room cannot be seen from outside (windows are opaque to
+the room-visibility culling), yet its whole batch was drawn through the open front door. It is now its own batch
+(`mLiv`) that is never drawn from outside. The same split pattern (billiard `mBil`, service wing `mServ`, upstairs
+east `mUpE`) keeps each area's new detail paid only where the area can be seen, and the `e2e:dev04b` coverage check
+makes sure no piece lands in a batch that is hidden in its own room.
+
+Biggest families by total triangles (all instances, `scene.userData.assetTris`): shelving units 60.8k (pantry, linen,
+workshop, archive: four separate batches), ladder chairs 13.5k, beds 9.0k, upholstered chairs 5.6k, tables 4.8k,
+Windsor chairs 4.7k. Every prop-kit texture is on one atlas material, so families add no per-object draw calls.
 
 ## 10. Save / ID status
 
-PLACEHOLDER_SAVE
+Unchanged. `e2e:dev04a` check 7, `e2e:dev04b` check 6 and `e2e:dev01` compare against the pre-DEV-04A baseline:
+**128 interactables, 21 checkpoints, save version 4**, the same state keys, none added or removed. Every interactable
+the pass touched kept its id, collider and behaviour (`hall.drawer` with its dials, ledger and shed key; `lamp.*`;
+`mem.*` inspects; the billiard panel; the bar sign's wall-art id; the fire / well / golf ids). Legacy save poses on
+changed surfaces still load onto valid support (`e2e:dev04a` check 9).
 
 ## 11. Before / after evidence
 
-PLACEHOLDER_EVIDENCE
+Captured with `scripts/dev04b-views.mjs` (1280 × 720, eye height over the support surface, low quality) on `c97a06f`
+before any code change ([`before/`](before/): 49 poses, plus the B4 poses `a01`–`a08` and `h07b` captured on the same
+baseline build afterwards) and on the final build ([`after/`](after/): 58 poses). Side-by-side sheets in
+[`compare/`](compare/) (before on top):
+
+| Required | Sheets |
+|---|---|
+| Books | `b01-library-books-close`, `b02-library-room` |
+| Bed / bedding | `b04-reis-bed`, `b05-guest-bed`, `b06-sterren-bed` |
+| Chair / table | `b07-dining-table-chairs`, `b08-kitchen-table` |
+| Rugs | `b10-hall-rugs`, `r03-dining` |
+| Crates | `b11-kitchen-crates`, `b12-hall-grocery-crates` |
+| Campfire | `h01-campfire`, `h02-campfire-wide` |
+| Wickerman | `h03-wickerman-figure`, `h04-wickerman-clearing`, `h05-wickerman-close` |
+| Well | `h06-well`, `h07-well-shaft`, `h07b-well-down` |
+| Golf | `h08-golf-chute`, `h09-golf-bag` |
+| Copacabana sign | `h11-copa-sign`, `h12-copa-bar-close` |
+| Attic observatory | `h13-attic-observatory`, `h14-attic-nook`, `r11-attic-common` |
+| Rooms | `r01-living`, `r02-hall`, `r03-dining`, `r04-kitchen`, `r05-billiard`, `r08-reis`, `r10-guest`, `r12-cottage-room` |
+| B4 audit | `a01-hall-commode` … `a08-forecourt-planter` |
+| Calibration (unchanged) | `h15-boslust-calibration` |
+
+`after/views.json` and `before/views.json` (+ `before/views-b4-extra.json`) hold the room, support height and render
+cost per pose (all doors open, so these are worst cases, not the budget views of §9).
 
 ## 12. Known issues
 
-PLACEHOLDER_ISSUES
+- **Kitchen** still reads large: the south half now has the prep table, larder and crates, but the room's scale
+  (12.6 × 17.6 m) is architecture, not dressing (no estate / manor resize in scope).
+- **Copacabana sign**: the small ROOM line is legible at the bar and from the pool edge, not from across the deck at
+  phone size; the main word reads everywhere.
+- **Living room**: kept as the owner-approved calibration set; only the log basket and the shelf mix changed.
+- **Route chamber**: the six pipes stand in front of the route map (pre-existing composition); they now reach the
+  ceiling but still cross the map.
+- **Shelving units** are the biggest family by triangles (60.8k across four batches); the loads could share a cheaper
+  jar / tin model if a later pass needs the budget.
+- **golfSpur** was over the low guide before DEV-04B (257k) and still is (262k).
+- **Build**: the 16 `toNonIndexed()` warnings are pre-existing (the baseline has them too).
 
 ## 13. Deferred to DEV-04C
 
-PLACEHOLDER_DEFER
+Explicitly not done here (hooks left in place):
+
+- **Candle interaction and states**: the Wickerman candles are unlit jars; their positions are published as
+  `scene.userData.wickerCandles = { centre, candles[9] }` (checked by `e2e:dev04b`).
+- **Wickerman ignition and fire VFX**: the figure (willow + hay) is one static geometry pair; burning, charring and
+  collapse are DEV-04C.
+- Campfire fire states beyond the existing ones (the split-log teepee is the laid-fire look only).
+- New puzzles, finale, notebook, puzzle copy, the painting system, estate resize, manor expansion, new required routes.
