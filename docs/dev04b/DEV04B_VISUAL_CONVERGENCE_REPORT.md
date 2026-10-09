@@ -31,7 +31,23 @@ Commits (each builds and passes its own checks):
 | `67fc0d5` | report draft |
 | `e19e257` | Wickerman packed with hay (owner request during the pass) |
 | `7ae10f3` | regressions found by the full / dev02 suites (walkthrough route, living-room colliders, golf chute) + living-room batch |
-| (last) | report, after / compare evidence |
+| `9303989` | report: Wickerman hay, commit list (docs only) |
+| `f943647` | report, after / compare evidence, `scripts/dev04b-budget.mjs` — **the exact tested commit** |
+| (final) | closeout section (report only) |
+
+### Closeout: tested commit vs final HEAD
+
+| | Commit | What it is |
+|---|---|---|
+| **Exact tested commit** | `f9436470fd1399beb90bce0e2b8451fd55d56f8d` | the complete final gate (§8) was re-run on this exact commit, with a clean working tree before and after the run |
+| **Final PR HEAD** | the commit that adds this closeout section (its parent is `f943647`) | **report-only**: it changes `docs/dev04b/DEV04B_VISUAL_CONVERGENCE_REPORT.md` and nothing else |
+
+History of the gate: the first full gate ran on the working tree just before `e19e257` / `7ae10f3` were committed, so
+it was not tied to a recorded SHA. After it, `9303989` and `f943647` added only documentation and evidence
+(`docs/dev04b/**`) and one standalone dev probe (`scripts/dev04b-budget.mjs`; no npm script or suite runs it). To
+remove any doubt, the whole gate was re-run on `f943647` itself, without reusing earlier results. After the tested
+commit, no code, tests, assets, geometry, materials, textures, batching, performance logic or generated game content
+changed.
 
 ## 1. Asset inventory and decisions (B1)
 
@@ -172,8 +188,8 @@ architecture (DEV-04A), the living-room calibration set.
 
 ## 8. Test results
 
-Final gate on a clean production build (`rm -rf dist && npm run build`, served with `vite preview`), last code commit
-`7ae10f3`:
+Final gate on a clean production build (`rm -rf dist && npm run build`, served with `vite preview`), run on the exact
+commit `f9436470fd1399beb90bce0e2b8451fd55d56f8d` (clean tree before and after; see the closeout in §0):
 
 | Check | Result |
 |---|---|
@@ -239,7 +255,8 @@ the same way):
 | Copacabana bar | 51 / 124,045 | 52 / 125,503 | +1 / +1.2% |
 | Portugal cottage | 36 / 101,301 | 39 / 103,083 | +3 / +1.8% |
 
-Every view stays inside the mobile guide (≤ 150 calls, ≤ 250k triangles) except **golfSpur**, which was already over it
+Re-checked on the tested commit (`e2e:dev04a` budget views, `e2e` render poses, `e2e:dev04b` hero / room views):
+every representative view stays inside the mobile guide (≤ 150 calls, ≤ 250k triangles) except **golfSpur**, which was already over it
 before DEV-04B (257.3k) and is now 262.4k (+2.0%, inside the +8% regression allowance). Increases and why they are
 accepted:
 
