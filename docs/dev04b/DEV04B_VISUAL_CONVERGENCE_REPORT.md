@@ -32,22 +32,27 @@ Commits (each builds and passes its own checks):
 | `e19e257` | Wickerman packed with hay (owner request during the pass) |
 | `7ae10f3` | regressions found by the full / dev02 suites (walkthrough route, living-room colliders, golf chute) + living-room batch |
 | `9303989` | report: Wickerman hay, commit list (docs only) |
-| `f943647` | report, after / compare evidence, `scripts/dev04b-budget.mjs` — **the exact tested commit** |
-| (final) | closeout section (report only) |
+| `f943647` | report, after / compare evidence, `scripts/dev04b-budget.mjs` (tested in the first closeout) |
+| `40a0234` | closeout section (report only) |
+| `57daaee` | **DEV-04B-R** golf: tee mat on the chute axis, ball on the mat, stand legs attached |
+| `95411fd` | **DEV-04B-R** chairs: one connected, raked back in the shared chair family (+ `tests/dev04b-chairs.test.ts`) |
+| `6098d6c` | **DEV-04B-R** hall: large framed painting instead of the woven hanging; focused review poses |
+| `83b39fe`, `55fbd49` | **DEV-04B-R** golf: catch-tray boards end inside the side boards (z-fight the moved junction check exposed) — `55fbd49` is **the exact tested commit** |
+| (final) | DEV-04B-R report + review evidence (docs only) |
 
 ### Closeout: tested commit vs final HEAD
 
 | | Commit | What it is |
 |---|---|---|
-| **Exact tested commit** | `f9436470fd1399beb90bce0e2b8451fd55d56f8d` | the complete final gate (§8) was re-run on this exact commit, with a clean working tree before and after the run |
-| **Final PR HEAD** | the commit that adds this closeout section (its parent is `f943647`) | **report-only**: it changes `docs/dev04b/DEV04B_VISUAL_CONVERGENCE_REPORT.md` and nothing else |
+| **Exact tested commit** | `55fbd494ce05661fc407783d42e6863ddb6a20cc` | the complete final gate (§8) was run on this exact commit after the owner-review corrections (§14), with a clean working tree before and after the run |
+| **Final PR HEAD** | the commit that adds the DEV-04B-R report section and review evidence (its parent is `55fbd49`) | **report / evidence only**: it changes `docs/dev04b/DEV04B_VISUAL_CONVERGENCE_REPORT.md` and adds `docs/dev04b/review-r/**`, nothing else |
 
-History of the gate: the first full gate ran on the working tree just before `e19e257` / `7ae10f3` were committed, so
-it was not tied to a recorded SHA. After it, `9303989` and `f943647` added only documentation and evidence
-(`docs/dev04b/**`) and one standalone dev probe (`scripts/dev04b-budget.mjs`; no npm script or suite runs it). To
-remove any doubt, the whole gate was re-run on `f943647` itself, without reusing earlier results. After the tested
-commit, no code, tests, assets, geometry, materials, textures, batching, performance logic or generated game content
-changed.
+History of the gate: the first full gate ran on the working tree just before `e19e257` / `7ae10f3` were committed (not
+tied to a recorded SHA); the whole gate was then re-run on `f943647` (all green). The owner-review correction pass
+(DEV-04B-R, §14) changed code, so the complete gate was run again, without reusing earlier results: on `6098d6c` it
+found one regression (a coplanar overlap in the golf catch tray, exposed because the junction check moved with the
+mat), fixed in `83b39fe` / `55fbd49`, and the complete gate passed on `55fbd49`. After the tested commit, no code,
+tests, assets, geometry, materials, textures, batching, performance logic or generated game content changed.
 
 ## 1. Asset inventory and decisions (B1)
 
@@ -177,7 +182,10 @@ architecture (DEV-04A), the living-room calibration set.
   the block is recessed in every size class; size / thickness / cover type give different constructions (not
   recolours); the shelf variant is cheaper and carries only visible faces; open books finite; duvets keep thickness
   and hang; rugs map inside their atlas sheet; `toAtlas` clamps; the audit's floating / sinking / disconnected rules; the Wickerman is finite, on its shoes and its hay is closed and inside the willow cage.
-- **Construction audit** (`Asm.begin/end`, `artkit.ts`): runs on every build; 123 audited pieces, 0 warnings.
+- **Unit** `tests/dev04b-chairs.test.ts` (4, DEV-04B-R): chair backs are connected on the real transformed geometry (every
+  rail / slat end inside both posts, carver arms reach the posts, Windsor spindles meet the seat and the bow); all four
+  fail on the pre-correction chair.
+- **Construction audit** (`Asm.begin/end`, `artkit.ts`): runs on every build; 125 audited pieces, 0 warnings.
 - **Browser** `npm run e2e:dev04b` (9 checks): audit clean and every converged family (26) built through it;
   DEV-04A contracts still hold; no NaN / infinite vertex; **every room-culled batch is drawn in the rooms its geometry
   stands in** (catches a piece batched with the wrong area — verified by mutation: the guest WC back in the
@@ -189,12 +197,12 @@ architecture (DEV-04A), the living-room calibration set.
 ## 8. Test results
 
 Final gate on a clean production build (`rm -rf dist && npm run build`, served with `vite preview`), run on the exact
-commit `f9436470fd1399beb90bce0e2b8451fd55d56f8d` (clean tree before and after; see the closeout in §0):
+commit `55fbd494ce05661fc407783d42e6863ddb6a20cc` (after the DEV-04B-R corrections; clean tree before and after; see the closeout in §0):
 
 | Check | Result |
 |---|---|
 | `npx tsc --noEmit` | pass |
-| `npx vitest run` | **195 / 195** (14 files; 13 in `tests/dev04b.test.ts`) |
+| `npx vitest run` | **199 / 199** (15 files; 13 in `tests/dev04b.test.ts`, 4 in `tests/dev04b-chairs.test.ts`) |
 | `npm run build` | pass (the chunk-size warning is pre-existing) |
 | `npm run e2e:dev04b` (new) | **9 / 9** |
 | `npm run e2e:dev04a` | **19 / 19** |
@@ -206,7 +214,8 @@ commit `f9436470fd1399beb90bce0e2b8451fd55d56f8d` (clean tree before and after; 
 The suites caught real regressions on the way, all fixed rather than worked round: the guest WC, the rear-nook sconce
 and the billiard south strip disappearing after the batch splits (`e2e:dev04b`), the kitchen prep table on the
 walkthrough route and the log basket's collider existing in one living-room set only (`e2e`), the golf catch tray
-walkable (`e2e:dev02`), and the forecourt → manor view at 252.0k triangles (`e2e`).
+walkable (`e2e:dev02`), and the forecourt → manor view at 252.0k triangles (`e2e`). In the DEV-04B-R pass `e2e:dev04a` caught the catch-tray
+coplanar overlap (above).
 
 ## 9. Performance (low quality — mobile guide ≈ 150 calls / 250 k triangles)
 
@@ -341,3 +350,22 @@ Explicitly not done here (hooks left in place):
   collapse are DEV-04C.
 - Campfire fire states beyond the existing ones (the split-log teepee is the laid-fire look only).
 - New puzzles, finale, notebook, puzzle copy, the painting system, estate resize, manor expansion, new required routes.
+
+## 14. Owner-review corrections (DEV-04B-R)
+
+Four targeted corrections from the owner review, on the same branch, nothing else broadened. Focused before / after
+evidence (before = `40a0234`, the DEV-04B head before this pass; after = the tested commit `55fbd49`) is in
+[`review-r/`](review-r/) (`before/`, `after/`, `compare/`).
+
+| # | Correction | What changed | Evidence |
+|---|---|---|---|
+| 1 | Golf bag: loose sticks floating outside the bag | They were the stand legs: on the side away from the lean, starting in the air beside the bag. They now hinge at a bracket on the collar on the side the bag leans to and stand on rubber feet behind it; the bag rests on them. The bag model is unchanged; it stands beside the re-centred mat's back corner. | `c01-golf-bag-close`, `c02-golf-bag`, `c10-golf-bag-side` |
+| 2 | Tee mat offset from the chute | `GOLF_MAT` is centred on the chute's centreline (it sat 1.3 m west); same size and depth band. One golf ball on a rubber tee near the mat's chute end. The spur's last point runs into the mat's new west edge, so the junction network clips it flush; `e2e:dev04a`'s coplanar region follows the junction. Walkability and collision unchanged in kind (`e2e:dev04a` golf walk, `e2e:dev02` chute-not-walkable both pass). | `c03-golf-mat-chute`, `c04-golf-mat-side` |
+| 3 | Dining / Portugal chair backs: the top piece floats | Root cause in the shared `chair()`: the back posts leaned forward (rotation sign) while the top rail sat on the backward line, ~4 cm behind the posts. Every back member of every style (ladder, upholstered, carver, Windsor) is now centred on one back line raked backward and tilted by the same angle; members span between the posts. The Windsor spindles also took the bow height at the wrong x. Dining, cottage, kitchen, study and attic chairs all inherit it. New unit test on the transformed geometry (the AABB audit cannot see gaps between tilted parts). | `c05-dining-chairs`, `c06-dining-chair-back`, `c07-cottage-chairs` |
+| 4 | Hall wall art reads as a hanging rug | It *was* a floor-rug mesh: it stood out of the wall as a dark ledge under an empty rod. Replaced on the same wall and centre by a 2.0 × 1.4 m painting in a gilt moulded frame: the manor seen across the lake at dusk (original, procedural, oil-like strokes). Its full frame is registered with the DEV-04A wall-art contract (`e2e:dev04a`: no conflict with doors, windows or sweeps). Rod and finials removed. | `c08-hall-art`, `c09-hall-art-wide` |
+| — | Found by the gate | The golf catch tray's base slab and back board had end faces in the side boards' planes (same-facing coplanar overlap); they now end inside the sides. | `e2e:dev04a` surface ownership |
+
+Budget effect (tested commit, low quality): within noise. Front forecourt 206.0k / 139 calls, arrival court 202.6k /
+133, golf vicinity 198.0k / 55, golf spur 262.7k / 93 (still the only view over the guide, as before DEV-04B),
+entrance hall (full suite) 193.3k / 105. IDs unchanged: 128 interactables, 21 checkpoints, save version 4. No DEV-04C
+interaction or fire logic.
