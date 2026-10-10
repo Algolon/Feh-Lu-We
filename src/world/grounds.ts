@@ -201,7 +201,7 @@ function festoon(c: Ctx, ends: [[number, number], [number, number]], y0: number)
  * pass: one mesh, one material, as before.
  */
 function lakeGeo() {
-  const g = new THREE.RingGeometry(0, 1, 64, 10);
+  const g = new THREE.RingGeometry(0, 1, 48, 5); // 480 triangles: enough rings for the depth gradient
   const p = g.attributes.position as THREE.BufferAttribute, n = p.count, col = new Float32Array(n * 4);
   const deep = new THREE.Color('#1d4a52'), mid = new THREE.Color('#2e6a6e'), shallow = new THREE.Color('#5f978a'), c = new THREE.Color();
   for (let i = 0; i < n; i++) {

@@ -17,7 +17,8 @@ export const SET_B = {
   dining: [96.4, 0.15, 83, 60 * D, -0.1], kitchen: [101, 0.15, 96, 0, 0], 'attic observatory': [97, 6.65, 96.8, 120 * D, 0.28], 'Copacabana bar': [127, 0.15, 107, 25 * D, 0.1], 'Portugal cottage': [25, 4.15, 158.6, 0, -0.12],
   livingRoom: [83.4, 0.15, 87.2, -90 * D, -0.06], sterrenBedroom: [83.6, 3.35, 88.4, -60 * D, -0.08], copaRoom: [118, 0.15, 99, 30 * D, -0.05], lakeApproach: [64, 0, 121.5, -22 * D, 0], lakeShore: [80, 0, 136.4, -70 * D, -0.04], woodlandRoute: [120, 0, 13.6, 85 * D, 0.02], boslustCalibration: [51.5, 0, 7.6, 55 * D, 0.04],
 };
-const lit = (c, f) => ({ 'wicker.candles': c, 'wicker.figure': f });
+// `burning`: run the real interaction (a figure set straight into the save loads as the settled aftermath)
+const lit = (c, f) => (f ? { burning: true } : { 'wicker.candles': c, 'wicker.figure': false });
 export const SET_C = {
   wickerUnlit: [176.4, 1.2, 59.9, 145 * D, 0.12, lit(false, false)], wickerLit: [176.4, 1.2, 59.9, 145 * D, 0.12, lit(true, false)], wickerBurning: [176.4, 1.2, 59.9, 145 * D, 0.12, lit(true, true)],
   wickerBurningClose: [178.2, 1.2, 57.4, 140 * D, 0.35, lit(true, true)], wickerPathBurning: [158, 1.0, 47, 1.08, 0, lit(true, true)], wickerApproachBurning: [172, 1.2, 60.4, 105 * D, 0.06, lit(true, true)],
@@ -33,13 +34,14 @@ const start = async (open) => {
 const measure = (P) => page.evaluate(async (P) => {
   const g = window.__game, res = {};
   for (const [k, [x, y, z, yaw, pitch = 0.05, st]] of Object.entries(P)) {
-    if (st) { for (const [kk, v] of Object.entries(st)) g.state.lit[kk] = v; g.world.syncAll(); }
+    if (st && !st.burning) { for (const [kk, v] of Object.entries(st)) g.state.lit[kk] = v; g.world.syncAll(); }
     g.player.setPose({ x, y, z, yaw, pitch }); g.player.y = g.world.col.supportHeight(x, z, y + 0.05, 0.42);
     for (let i = 0; i < 20; i++) g.tick(1 / 30);
+    if (st?.burning) { if (!g.state.inventory.includes('matches')) g.state.inventory.push('matches'); for (const id of ['wicker.candles', 'wicker.figure']) g.world.byId.get(id)?.useItem('matches'); for (let i = 0; i < 300; i++) g.tick(1 / 30); }
     await new Promise((r) => setTimeout(r, 100));
     g.settings.quality = 'low'; g.applyQuality(true); g.tick(1 / 30); g.renderer.render(g.world.scene, g.camera);
     res[k] = { calls: g.renderer.info.render.calls, triangles: g.renderer.info.render.triangles };
-    if (st) { for (const kk of Object.keys(st)) delete g.state.lit[kk]; g.world.syncAll(); }
+    if (st) { for (const kk of ['wicker.candles', 'wicker.figure']) delete g.state.lit[kk]; g.world.syncAll(); }
   }
   return res;
 }, P);

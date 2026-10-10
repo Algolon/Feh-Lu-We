@@ -17,14 +17,13 @@ describe('DEV-04C authored surfaces', () => {
   it('profiles are distinct and their breakup stays restrained (broad, not noisy; no dirty extremes)', () => {
     const ids = Object.values(SURFACE_PROFILES);
     expect(new Set(ids).size).toBe(ids.length);
-    for (const [k, [ls, la, ms, ma, ha, sa, ga]] of Object.entries(SURFACE_PARAMS)) {
+    for (const [k, [ls, la, ms, ma, ha, sa]] of Object.entries(SURFACE_PARAMS)) {
       expect(ls, `${k} low scale is broad`).toBeGreaterThanOrEqual(1);
       expect(la + ma, `${k} total value swing`).toBeLessThanOrEqual(0.3);
       if (ms > 0) expect(ms, `${k} mid scale under the low scale`).toBeLessThan(ls);
       expect(ha).toBeLessThanOrEqual(0.12);
       expect(sa).toBeGreaterThanOrEqual(0.7);
       expect(sa).toBeLessThanOrEqual(1);
-      expect(ga).toBeLessThanOrEqual(0.1);
     }
   });
   it('opt-in by define on lit materials only; the shader chunks are extended once and guarded', () => {

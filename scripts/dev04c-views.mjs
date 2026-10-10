@@ -50,6 +50,8 @@ export const VIEWS = [
   ['w05-wickerman-burning-close', { x: 178.2, y: 1.2, z: 57.4, yaw: 140 * D, pitch: 0.35, lit: W0, act: ['wicker.candles', 'wicker.figure'], burn: 30 }],
   ['w06-wickerman-approach-burning', { x: 172.0, y: 1.2, z: 60.4, yaw: 105 * D, pitch: 0.06, lit: W0, act: ['wicker.candles', 'wicker.figure'], burn: 10 }],
   ['w07-wickerman-aftermath', { x: 176.4, y: 1.2, z: 59.9, yaw: 145 * D, pitch: 0.12, lit: W2 }],
+  ['w08-wickerman-burning-dusk', { x: 176.4, y: 1.2, z: 59.9, yaw: 145 * D, pitch: 0.12, lit: W0, act: ['wicker.candles', 'wicker.figure'], burn: 16, dusk: 0.9 }],
+  ['c16-woodland-route-dusk', { x: 120.0, y: 0, z: 13.6, yaw: 85 * D, pitch: 0.02, dusk: 0.9 }],
   // fire / light continuity (C3)
   ['f01-hall-from-forecourt', { x: 90.0, y: 0, z: 74.0, yaw: 0, pitch: 0.12 }],
   ['f02-dining-candles', { x: 96.4, y: 0.15, z: 83.0, yaw: 60 * D, pitch: -0.1 }],
@@ -85,9 +87,11 @@ for (const [name, pose] of VIEWS) {
     for (let i = 0; i < 60 + Math.round((p.burn ?? 0) * 30); i++) g.tick(1 / 30);
     g.player.setPose(p);
     g.player.y = g.world.col.supportHeight(p.x, p.z, p.y + 0.05, 0.42);
+    if (p.dusk != null) g.dusk = p.dusk; // the puzzle-progress mood value (afternoon 0 → evening 1), for the evidence only
     g.tick(1 / 30);
     await new Promise((r) => setTimeout(r, 250));
     g.settings.quality = 'low'; g.applyQuality(true);
+    if (p.dusk != null) g.dusk = p.dusk;
     g.tick(1 / 30);
     g.renderer.render(g.world.scene, g.camera);
     const i = g.renderer.info.render;
@@ -98,7 +102,7 @@ for (const [name, pose] of VIEWS) {
   rows.push({ name, pose, ...m });
   console.log(`${name.padEnd(34)} room ${String(m.room).padEnd(14)} y ${m.feetY}  low ${m.calls}/${m.triangles}`);
   // reset optional state so the next view starts from the standard state
-  await page.evaluate(({ p }) => { const g = window.__game; for (const k of Object.keys(p.lit ?? {})) delete g.state.lit[k]; g.world.syncAll(); }, { p: pose });
+  await page.evaluate(({ p }) => { const g = window.__game; for (const k of Object.keys(p.lit ?? {})) delete g.state.lit[k]; if (p.dusk != null) g.dusk = 0; g.world.syncAll(); }, { p: pose });
 }
 writeFileSync(`${OUT}/views.json`, JSON.stringify({ rows, problems }, null, 2));
 if (problems.length) console.log('PROBLEMS:\n' + problems.slice(0, 10).join('\n'));

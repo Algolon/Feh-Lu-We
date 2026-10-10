@@ -201,8 +201,10 @@ export function buildWickerSetpiece(w: World, g: GameApi, o: WickerSetOpts) {
   let look = burnLook(null);
   w.lamps.push({ id: WICKER_KEYS.candles, pos: v3(x, gy + 0.6, z), color: '#ffb35a', intensity: 3.2, distance: 9, on: () => candlesLit(s()), flicker: 0.18, room: 'out' });
   w.lamps.push({ id: WICKER_KEYS.figure, pos: v3(x, foot + 1.4, z - 0.6), color: '#ff8a3a', get intensity() { return 18 * Math.max(0.05, look.light); }, distance: 20, on: () => figureLit(s()), flicker: 0.32, room: 'out' });
-  for (const cd of o.candles) w.patches.add(cd.x, cd.y - 0.12, cd.z, 0.42, '#ffae55', () => candlesLit(s()), 0.24, { soft: true });
-  w.patches.add(x, gy + 0.05, z, 3.4, '#ff8a3a', () => figureLit(s()), 0.32, { soft: true });
+  // floor glow under the candles and the fire: the clearing's own additive mesh (in the shared LightPatches mesh its
+  // bounding sphere would span the estate and cost a draw call in every view)
+  const glow = glowPatches(w, x, gy, z, [...o.candles.map((cd) => ({ x: cd.x, y: cd.y - 0.12, z: cd.z, r: 0.42, k: 0 })), { x, y: gy + 0.05, z, r: 3.4, k: 1 }]);
+  regionOwned(w, glow.mesh, region);
   w.emitters.push({ kind: 'fire', pos: v3(x, foot + 1, z), on: () => look.flameLow > 0.05 });
 
   // ---- timeline: candles light one after another from the one nearest the player; the burn runs on the game clock
@@ -213,6 +215,9 @@ export function buildWickerSetpiece(w: World, g: GameApi, o: WickerSetOpts) {
     flames.visible = cl;
     reveal.uReveal.value = cl ? Math.min(1, (now - litAt) / 1.8) : 0;
     jarGlow.value = cl ? 1 : 0;
+    glow.uCandle.value = cl ? 0.24 * reveal.uReveal.value : 0;
+    glow.uFire.value = figureLit(s()) ? 0.34 * Math.max(0.25, look.light) : 0;
+    glow.mesh.visible = cl || figureLit(s());
     fLow.visible = look.flameLow > 0.01; fHigh.visible = look.flameHigh > 0.01;
     fLow.scale.set(0.55 + 0.45 * look.flameLow, 0.15 + 0.85 * look.flameLow, 0.55 + 0.45 * look.flameLow);
     fHigh.scale.set(0.55 + 0.45 * look.flameHigh, 0.35 + 0.65 * look.flameHigh, 0.55 + 0.45 * look.flameHigh);
@@ -285,4 +290,40 @@ function mergeAll(parts: THREE.BufferGeometry[]) {
   }
   out.computeBoundingSphere();
   return out;
+}
+
+/** Soft additive floor glows (one mesh): `k` 0 = candle patches (uCandle), 1 = the fire patch (uFire). */
+function glowPatches(w: World, x: number, gy: number, z: number, items: { x: number; y: number; z: number; r: number; k: number }[]) {
+  const cv = document.createElement('canvas'); cv.width = cv.height = 64;
+  const c2 = cv.getContext('2d')!, img = c2.createImageData(64, 64);
+  for (let j = 0; j < 64; j++) for (let i = 0; i < 64; i++) {
+    const d = Math.hypot((i + 0.5) / 32 - 1, (j + 0.5) / 32 - 1), a = d >= 1 ? 0 : Math.exp(-3.2 * d * d) * (1 - d * d), q = (j * 64 + i) * 4;
+    img.data[q] = img.data[q + 1] = img.data[q + 2] = Math.round(a * 255); img.data[q + 3] = 255;
+  }
+  c2.putImageData(img, 0, 0);
+  const parts = items.map((p) => {
+    const g = new THREE.PlaneGeometry(p.r * 2, p.r * 2).rotateX(-Math.PI / 2).translate(p.x - x, p.y - gy, -(p.z - z));
+    g.setAttribute('aKind', new THREE.BufferAttribute(new Float32Array(g.attributes.position.count).fill(p.k), 1));
+    return g.index ? g.toNonIndexed() : g;
+  });
+  const geo = new THREE.BufferGeometry();
+  for (const name of ['position', 'uv', 'aKind']) {
+    const size = parts[0].attributes[name].itemSize, arr = new Float32Array(parts.reduce((n, p) => n + p.attributes[name].count, 0) * size);
+    let off = 0; for (const p of parts) { arr.set(p.attributes[name].array as Float32Array, off); off += p.attributes[name].count * size; }
+    geo.setAttribute(name, new THREE.BufferAttribute(arr, size));
+  }
+  geo.computeBoundingSphere();
+  const uCandle = { value: 0 }, uFire = { value: 0 };
+  const mat = w.material(new THREE.MeshBasicMaterial({ map: w.texture(new THREE.CanvasTexture(cv)), color: '#ffffff', transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4 }));
+  mat.onBeforeCompile = (sh) => {
+    Object.assign(sh.uniforms, { uCandle, uFire });
+    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute float aKind; varying float vKind;').replace('#include <begin_vertex>', '#include <begin_vertex>\nvKind = aKind;');
+    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying float vKind; uniform float uCandle; uniform float uFire;')
+      .replace('#include <opaque_fragment>', 'outgoingLight *= mix(vec3(1.0, 0.68, 0.33) * uCandle, vec3(1.0, 0.54, 0.23) * uFire, vKind);\n#include <opaque_fragment>');
+  };
+  mat.customProgramCacheKey = () => 'wicker-glow';
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.copy(v3(x, gy, z));
+  mesh.renderOrder = 1;
+  return { mesh, uCandle, uFire };
 }

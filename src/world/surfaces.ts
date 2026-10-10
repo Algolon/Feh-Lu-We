@@ -5,7 +5,7 @@
 // flat value. This layer adds the missing *large* structure — low-frequency value zones and a slight warm / cool drift,
 // material-specific in scale and strength — the way a painted environment carries broad shapes before detail:
 //   timber    long soft value drift + per-metre warmth changes (warmer exposed wood, cooler shadowed)
-//   plaster   very broad clouding, a faint grounding darker band in the lowest ~0.5 m of every storey
+//   plaster   very broad clouding with a slight warm / cool drift
 //   stone     broader + mid breakup (mass, not noise)
 //   fabric    soft, short-range variation (reads as cloth, not as painted solid)
 //   paint     very little (painted objects stay clean)
@@ -20,26 +20,26 @@ import * as THREE from 'three';
 export const SURFACE_PROFILES = { timber: 1, plaster: 2, stone: 3, fabric: 4, paint: 5, ground: 6, foliage: 7, metal: 8, tree: 9 } as const;
 export type SurfaceProfile = keyof typeof SURFACE_PROFILES;
 
-/** Per profile: [low scale m, low amp, mid scale m, mid amp, hue amp, saturation, storey grounding amp]. */
-export const SURFACE_PARAMS: Record<SurfaceProfile, [number, number, number, number, number, number, number]> = {
-  timber: [3.2, 0.1, 0.55, 0.05, 0.05, 1.0, 0.0],
-  plaster: [2.6, 0.12, 0.9, 0.045, 0.05, 1.0, 0.08],
-  stone: [1.9, 0.1, 0.42, 0.07, 0.035, 0.97, 0.04],
-  fabric: [1.1, 0.07, 0.3, 0.035, 0.03, 1.0, 0.0],
-  paint: [2.4, 0.04, 0.0, 0.0, 0.02, 1.0, 0.0],
-  ground: [11.0, 0.2, 2.8, 0.09, 0.11, 0.72, 0.0],
-  foliage: [8.0, 0.14, 1.6, 0.05, 0.09, 0.84, 0.0],
-  metal: [1.2, 0.03, 0.0, 0.0, 0.0, 1.0, 0.0],
-  tree: [7.0, 0.12, 1.4, 0.05, 0.08, 0.86, 0.0],
+/** Per profile: [low scale m, low amp, mid scale m, mid amp, hue amp, saturation]. */
+export const SURFACE_PARAMS: Record<SurfaceProfile, [number, number, number, number, number, number]> = {
+  timber: [3.2, 0.1, 0.55, 0.05, 0.05, 1.0],
+  plaster: [2.6, 0.12, 0.9, 0.045, 0.05, 1.0],
+  stone: [1.9, 0.1, 0.42, 0.07, 0.035, 0.97],
+  fabric: [1.1, 0.07, 0.3, 0.035, 0.03, 1.0],
+  paint: [2.4, 0.04, 0.0, 0.0, 0.02, 1.0],
+  ground: [11.0, 0.2, 2.8, 0.09, 0.11, 0.72],
+  foliage: [8.0, 0.15, 0.0, 0.0, 0.09, 0.84], // no mid lookup: canopy overdraw is the most expensive fill; the crowns break it up
+  metal: [1.2, 0.03, 0.0, 0.0, 0.0, 1.0],
+  tree: [7.0, 0.13, 0.0, 0.0, 0.08, 0.86],
 };
 
 const f = (n: number) => n.toFixed(4);
 function profileGlsl() {
   return (Object.keys(SURFACE_PROFILES) as SurfaceProfile[]).map((k) => {
-    const [ls, la, ms, ma, ha, sa, ga] = SURFACE_PARAMS[k];
+    const [ls, la, ms, ma, ha, sa] = SURFACE_PARAMS[k];
     return `#if FLW_SURFACE == ${SURFACE_PROFILES[k]}
   const vec4 FLW_A = vec4(${f(1 / ls)}, ${f(la)}, ${f(ms > 0 ? 1 / ms : 0)}, ${f(ma)});
-  const vec3 FLW_B = vec3(${f(ha)}, ${f(sa)}, ${f(ga)});
+  const vec2 FLW_B = vec2(${f(ha)}, ${f(sa)});
 #endif`;
   }).join('\n');
 }
@@ -47,23 +47,20 @@ function profileGlsl() {
 const COMMON = /* glsl */ `
 #ifdef FLW_SURFACE
 varying vec3 vFlwP;
-varying vec3 vFlwN;
 ${profileGlsl()}
-float flwHash(vec3 p) { p = fract(p * 0.3183099 + 0.1); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
-float flwNoise(vec3 x) {
+vec2 flwHash2(vec3 p) { p = fract(p * vec3(0.1031, 0.103, 0.0973)); p += dot(p, p.yzx + 33.33); return fract((p.xx + p.yz) * p.zy); }
+// value noise with two decorrelated channels for the price of one lookup set
+vec2 flwNoise2(vec3 x) {
   vec3 i = floor(x), u = fract(x); u = u * u * (3.0 - 2.0 * u);
-  return mix(mix(mix(flwHash(i), flwHash(i + vec3(1, 0, 0)), u.x), mix(flwHash(i + vec3(0, 1, 0)), flwHash(i + vec3(1, 1, 0)), u.x), u.y),
-             mix(mix(flwHash(i + vec3(0, 0, 1)), flwHash(i + vec3(1, 0, 1)), u.x), mix(flwHash(i + vec3(0, 1, 1)), flwHash(i + vec3(1, 1, 1)), u.x), u.y), u.z);
+  return mix(mix(mix(flwHash2(i), flwHash2(i + vec3(1, 0, 0)), u.x), mix(flwHash2(i + vec3(0, 1, 0)), flwHash2(i + vec3(1, 1, 0)), u.x), u.y),
+             mix(mix(flwHash2(i + vec3(0, 0, 1)), flwHash2(i + vec3(1, 0, 1)), u.x), mix(flwHash2(i + vec3(0, 1, 1)), flwHash2(i + vec3(1, 1, 1)), u.x), u.y), u.z);
 }
-vec3 flwSurface(vec3 base, vec3 p, vec3 n) {
-  // broad value zones (two octaves at the profile's own scale), a mid-scale breakup, a separate warm / cool drift
-  float lo = flwNoise(p * FLW_A.x) * 0.65 + flwNoise(p * FLW_A.x * 2.13 + 11.7) * 0.35;
-  float v = 1.0 + (lo - 0.5) * 2.0 * FLW_A.y;
-  if (FLW_A.w > 0.0) v += (flwNoise(p * FLW_A.z + 31.1) - 0.5) * 2.0 * FLW_A.w;
-  float hue = (flwNoise(p * FLW_A.x * 0.61 - 7.3) - 0.5) * 2.0 * FLW_B.x;
-  vec3 c = base * v * (vec3(1.0) + vec3(0.6, 0.12, -0.75) * hue);
-  // grounding: the lowest half metre of each storey (floors at 0.15 / 3.35 / 6.65 m) sits a little darker on walls
-  if (FLW_B.z > 0.0 && abs(n.y) < 0.5) { float h = mod(p.y + 0.05, 3.2); c *= 1.0 - FLW_B.z * (1.0 - smoothstep(0.05, 0.55, h)); }
+vec3 flwSurface(vec3 base, vec3 p) {
+  // broad value zone + a separate warm / cool drift (one lookup), a mid-scale breakup (a second, only where used)
+  vec2 lo = flwNoise2(p * FLW_A.x) - 0.5;
+  float v = 1.0 + lo.x * 2.0 * FLW_A.y;
+  if (FLW_A.w > 0.0) v += (flwNoise2(p * FLW_A.z + 31.1).x - 0.5) * 2.0 * FLW_A.w;
+  vec3 c = base * v * (vec3(1.0) + vec3(0.6, 0.12, -0.75) * (lo.y * 2.0 * FLW_B.x));
   float g = dot(c, vec3(0.299, 0.587, 0.114));
   return mix(vec3(g), c, FLW_B.y);
 }
@@ -80,13 +77,12 @@ const WORLDPOS = /* glsl */ `
     flwW = instanceMatrix * flwW;
   #endif
   vFlwP = (modelMatrix * flwW).xyz;
-  vFlwN = inverseTransformDirection(transformedNormal, viewMatrix);
 #endif
 `;
 
 const COLOR = /* glsl */ `
 #ifdef FLW_SURFACE
-  diffuseColor.rgb = flwSurface(diffuseColor.rgb, vFlwP, normalize(vFlwN));
+  diffuseColor.rgb = flwSurface(diffuseColor.rgb, vFlwP);
 #endif
 `;
 
@@ -112,10 +108,15 @@ export function surface<T extends THREE.Material>(m: T, profile: SurfaceProfile)
   return m;
 }
 
-/** CPU mirror of the GLSL value-noise (tests and probes): same hash, same interpolation. */
+/** CPU mirror of the GLSL value noise (first channel; tests and probes): same hash, same interpolation. */
 export function flwNoiseCPU(x: number, y: number, z: number) {
   const fr = (v: number) => v - Math.floor(v);
-  const hash = (a: number, b: number, c: number) => { let px = fr(a * 0.3183099 + 0.1) * 17, py = fr(b * 0.3183099 + 0.1) * 17, pz = fr(c * 0.3183099 + 0.1) * 17; return fr(px * py * pz * (px + py + pz)); };
+  const hash = (a: number, b: number, c: number) => {
+    let px = fr(a * 0.1031), py = fr(b * 0.103), pz = fr(c * 0.0973);
+    const d = px * (py + 33.33) + py * (pz + 33.33) + pz * (px + 33.33);
+    px += d; py += d; pz += d;
+    return fr((px + py) * pz);
+  };
   const ix = Math.floor(x), iy = Math.floor(y), iz = Math.floor(z);
   const s = (t: number) => t * t * (3 - 2 * t);
   const ux = s(x - ix), uy = s(y - iy), uz = s(z - iz);
