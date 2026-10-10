@@ -78,6 +78,23 @@ for (const [n, x, y, z, yaw, far, near, pitch = 0.06] of [
   D1.push([`d1-${n}-room`, { ...at(far), pitch }], [`d1-${n}-close`, { ...at(near), pitch: pitch * 1.6 }]);
 }
 
+// DEV-04D D1-R (SET=d1r): room-composition views at eye height — each art wall seen whole from across the room, and
+// each room from its main approach (the curator's read, not the 1.5 m canvas check)
+const D1R = [
+  ['hall-west-elevation', 93.0, 0.15, 89.0, -90, 0.28], ['hall-east-hero', 87.6, 0.15, 89.5, 90, 0.22], ['hall-approach', 90, 0.15, 83.0, 0, 0.16],
+  ['walkway-along', 86.0, 3.35, 94.8, 180, 0.0], ['walkway-across-void', 91.5, 3.35, 82.6, -55, -0.02], ['landing-across-void', 92.2, 3.35, 97.2, -125, -0.02],
+  ['living-south', 78.7, 0.15, 92.6, 180, 0.08], ['living-approach', 84.2, 0.15, 89.0, -125, 0.04],
+  ['dining-north', 101.3, 0.15, 81.2, 0, 0.1], ['dining-approach', 95.7, 0.15, 86.8, 55, 0.04],
+  ['kitchen-east', 96.4, 0.15, 100.4, 90, 0.08], ['kitchen-approach', 101, 0.15, 92.7, 35, 0.04],
+  ['landing-north', 90, 3.35, 96.2, 0, 0.08],
+  ['reis-south', 78.6, 3.35, 86.1, 180, 0.08], ['reis-wide', 84.3, 3.35, 86.2, -130, 0.03],
+  ['sterren-south', 78.6, 3.35, 93.4, 180, 0.08], ['sterren-wide', 84.3, 3.35, 93.4, -135, 0.03],
+  ['guest-east', 99.7, 3.35, 102.6, 90, 0.1], ['workshop-east', 109.0, 0.15, 98.4, 90, 0.08],
+  ['cottage-room-south', 25, 4.15, 164.2, 180, 0.08], ['cottage-entry-west', 29.0, 4.15, 158.6, -90, 0.08], ['cottage-door', 25, 4.15, 157.6, 0, 0.04],
+  ['gathering-north', 63.5, -3.2, 45.9, 0, 0.1], ['gathering-door', 62.4, -3.2, 45.7, -25, 0.04],
+  ['bath-mirror-wide', 86.0, 3.35, 104.6, 80, 0.0], ['wc-mirror-wide', 85.5, 0.15, 104.4, 70, 0.0],
+].map(([n, x, y, z, yaw, pitch]) => [`d1r-${n}`, { x, y, z, yaw: (yaw * Math.PI) / 180, pitch }]);
+
 const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
 const page = await ctx.newPage();
 const problems = [];
@@ -113,6 +130,7 @@ if (!process.env.EXT && !process.env.SET) for (const r of rooms) {
   views.push([`r-${r.id}-b`, { x: B[0], y, z: B[1], yaw: yawTo(B, A), pitch: -0.08 }]);
 }
 if (process.env.SET === 'd1') views.push(...D1);
+else if (process.env.SET === 'd1r') views.push(...D1R);
 else if (!process.env.ROOMS) views.push(...EXT);
 const sel = process.env.VIEWS ? new Set(process.env.VIEWS.split(',')) : null;
 const rows = [];
