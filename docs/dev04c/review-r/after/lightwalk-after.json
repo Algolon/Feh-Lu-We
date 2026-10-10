@@ -1,0 +1,61 @@
+{
+  "base": "http://localhost:4173/Feh-Lu-We/",
+  "out": [
+    {
+      "name": "living→hall, looking back at the hearth",
+      "lamp": "fire.living",
+      "rooms": [
+        "living",
+        "hall"
+      ],
+      "seenSamples": 64,
+      "drops": 0,
+      "late": 0,
+      "bad": 0,
+      "min": 0.78,
+      "trace": "living:0.79 living:0.86 living:0.88 hall:0.81 hall:0.88 hall:0.83 hall:0.85 hall:0.88 hall:0.8 hall:0.89 hall:0.87 hall:0.78"
+    },
+    {
+      "name": "dining→hall, looking back at the table candles",
+      "lamp": "candles.dining",
+      "rooms": [
+        "dining",
+        "hall"
+      ],
+      "seenSamples": 59,
+      "drops": 0,
+      "late": 0,
+      "bad": 0,
+      "min": 0.85,
+      "trace": "dining:0.89 dining:0.9 dining:0.92 hall:0.87 hall:0.93 hall:0.91 hall:0.86 hall:0.94 hall:0.89 hall:0.87 hall:0.94 hall:0.88"
+    },
+    {
+      "name": "BOSLUST passage→entry, looking at the descent sconce",
+      "lamp": "fixed.64.15.23.20",
+      "rooms": [
+        "passage",
+        "entry"
+      ],
+      "seenSamples": 81,
+      "drops": 0,
+      "late": 0,
+      "bad": 0,
+      "min": 1,
+      "trace": "passage:1 passage:1 passage:1 passage:1 entry:1 entry:1 entry:1 entry:1 entry:1 entry:1 entry:1 entry:1 entry:1"
+    },
+    {
+      "name": "upper corridor→landing, looking at the hall chandelier",
+      "lamp": "lamp.hallChandelier",
+      "rooms": [
+        "ucorr",
+        "landing"
+      ],
+      "seenSamples": 69,
+      "drops": 0,
+      "late": 0,
+      "bad": 0,
+      "min": 0,
+      "trace": "ucorr:0(hidden) ucorr:0 ucorr:0 landing:0 landing:0 landing:0 landing:0.84 landing:0.98 landing:1 landing:1 landing:1 landing:1 landing:1"
+    }
+  ]
+}
