@@ -1,5 +1,12 @@
 # DEV-04D — Asset & source manifest (D0)
 
+> **D0 PAUSED, PROVISIONAL (owner instruction, 10 Oct 2026).** The owner confirmed that the later FLW-D2, FLW-S3,
+> FLW-K3 and partial FLW-RSV reference images exist: they were generated and approved in separate project chats and
+> were never committed. Every "not available" / `WAITING_FOR_SOURCE` statement below describes **the repository at
+> `6c5e5c6` only**, meaning *not yet imported*, not *does not exist*. The asset manifest, the D1 / D2 plan, the phase
+> order (O1), the priorities and the owner decisions are **not final**. They will be reconciled against the imported
+> FLW reference library. The room audit, captures and Wickerman design are preserved as working notes.
+
 Audit date 10 Oct 2026, production `6c5e5c6` (PR #6 merge, verified = `origin/ccr-75ef4113-kfkimm`).
 
 ## 0. Search performed
@@ -14,8 +21,10 @@ Audit date 10 Oct 2026, production `6c5e5c6` (PR #6 merge, verified = `origin/cc
 | The D brief | text only | no attachments |
 | Image files in the repo | `docs/reference/**`, `assets/**`, `public/**` | the 6 personalized sheets + source collage (below); branding (logo, favicon, 2 concept arts); `docs/concept-art/01–07` (early concept images); evidence captures |
 
-**Conclusion: no FLW-D2, FLW-S3 or FLW-K3 source image exists in the repository or this session, and no
-individual FLW id other than RSV-019…022 is known.** Rows for those families are therefore *family-level* plus the
+**Finding (repository state only): no FLW-D2, FLW-S3 or FLW-K3 source image has been committed to the repository or is
+present in this session, and no individual FLW id other than RSV-019…022 is recorded in it.** The owner confirms the
+library exists outside the repo (separate project chats) and will be imported; this section is re-run after that
+import. Rows for those families are therefore *family-level* plus the
 concrete **integration slots** that a delivered file will plug into. No visual content is inferred for a missing
 source; nothing was generated to stand in for one.
 

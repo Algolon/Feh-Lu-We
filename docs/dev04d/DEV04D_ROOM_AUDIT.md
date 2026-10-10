@@ -1,5 +1,12 @@
 # DEV-04D — Estate-wide room & zone audit (D0)
 
+> **D0 PAUSED, PROVISIONAL (owner instruction, 10 Oct 2026).** The owner confirmed that the later FLW-D2, FLW-S3,
+> FLW-K3 and partial FLW-RSV reference images exist: they were generated and approved in separate project chats and
+> were never committed. Every "not available" / `WAITING_FOR_SOURCE` statement below describes **the repository at
+> `6c5e5c6` only**, meaning *not yet imported*, not *does not exist*. The asset manifest, the D1 / D2 plan, the phase
+> order (O1), the priorities and the owner decisions are **not final**. They will be reconciled against the imported
+> FLW reference library. The room audit, captures and Wickerman design are preserved as working notes.
+
 Production `6c5e5c6`, audited 10 Oct 2026 at normal first-person eye height (1.65 m above the support surface).
 
 **Evidence**: `docs/dev04d/audit/*.jpg` (124 captures, `views.json` with room / draw calls / triangles per view),
