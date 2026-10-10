@@ -79,3 +79,7 @@ Internal Feh Lu We sheets generated for this project live in a `generated/` subf
 - Do not add dozens of near-duplicates. 2–6 strong references are usually better than 20 weak ones.
 - When a current-build screenshot is the best calibration reference, put that screenshot in the relevant calibration folder.
 - The `99_avoid` folders are useful: showing what *not* to do reduces style drift.
+
+## Recovered stable-ID sources
+
+The separate [FLW stable-ID reference library](../flw/README.md) recovers later D2/S3/K3/RSV source images and tracks approval, ambiguous attempts and missing sources. This DEV-04 architectural/environment collection remains unchanged.
