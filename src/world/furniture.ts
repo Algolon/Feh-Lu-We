@@ -10,7 +10,7 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import { paintingTexture } from './textures';
 import type { World } from '../interactions/world';
 import type { Batcher } from './kit';
-import { makeFire } from './fire';
+import { makeFire, regionOwned } from './fire';
 import { mulberry32 } from '../core/rng';
 import { addBook, addShelfBook, addBookStack, bookSpec, bookDims, BOOK_H, PAPER, propMats, rugGeo, addGameBox, GAME_BOXES, drapeGeo, type BookSize, type BookSpec, type RugPattern } from './propkit';
 
@@ -446,7 +446,9 @@ export function floorLamp(w: World, x: number, y0: number, z: number): LampModel
  * Hanging candle chandelier with real candle flames (shown while the lamp is on). DEV-03: forged iron — a chain-like
  * stem, a turned centre, a hoop at the candle line, S-scroll arms to brass drip pans and candle cups.
  */
-export function chandelier(w: World, x: number, yTop: number, z: number, r = 0.8, drop = 1.2): LampModel {
+/** DEV-04C: `region` gives the whole fixture (frame + flames) to its room's region batch, so it is drawn exactly when the
+ * room is — including the DEV-03 rule that an interior is drawn from outside only near an open doorway. */
+export function chandelier(w: World, x: number, yTop: number, z: number, r = 0.8, drop = 1.2, region?: string): LampModel {
   const k = getKit(), M = artMats();
   const obj = new THREE.Group();
   const iron = '#2f2a24';
@@ -470,9 +472,10 @@ export function chandelier(w: World, x: number, yTop: number, z: number, r = 0.8
   obj.add(frame);
   obj.position.copy(v3(x, yTop, z));
   w.scene.add(obj);
+  if (region) regionOwned(w, obj, region);
   const wicks: [number, number, number][] = [];
   for (let i = 0; i < 6; i++) { const a = (i / 6) * Math.PI * 2; wicks.push([Math.cos(a) * r, 0, Math.sin(a) * r]); }
-  const flames = makeFire(w, { kind: 'candles', x, y: yTop - drop + 0.185, z, wicks, s: 1.2 });
+  const flames = makeFire(w, { kind: 'candles', x, y: yTop - drop + 0.185, z, wicks, s: 1.2, owner: { parent: obj } }); // DEV-04C: culled with the chandelier
   // an invisible material handle keeps the LampModel contract (no glow sphere needed)
   const glow = w.material(new THREE.MeshBasicMaterial({ color: '#ffd27a' }));
   return { obj, glow: [glow], light: v3(x, yTop - drop + 0.1, z), flames };

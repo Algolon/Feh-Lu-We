@@ -4,6 +4,7 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { makeTextures } from './textures';
+import { surface } from './surfaces';
 
 export const v3 = (x: number, y: number, n: number) => new THREE.Vector3(x, y, -n);
 
@@ -41,6 +42,12 @@ export function getKit(): Kit {
     poolTile: lam({ map: T.poolTile }),
     rug: lam({ map: T.rug, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }),
   };
+  // DEV-04C ART-01.1: broad authored value / hue breakup per material family (surfaces.ts; no extra draw calls)
+  const SURF: Partial<Record<MatKey, Parameters<typeof surface>[1]>> = {
+    paint: 'paint', plaster: 'plaster', stone: 'stone', wood: 'timber', tile: 'stone', slate: 'stone', terracotta: 'stone',
+    grass: 'ground', dirt: 'ground', foliage: 'foliage', bark: 'timber', rug: 'fabric',
+  };
+  for (const [key, prof] of Object.entries(SURF)) surface(M[key as MatKey], prof);
   const unitBox = new THREE.BoxGeometry(1, 1, 1);
   unitBox.userData.shared = true;
   kit = { T, M, unitBox, hitMat: new THREE.MeshBasicMaterial({ visible: false }) };

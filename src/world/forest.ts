@@ -9,7 +9,7 @@ import { type Ctx, floor, gableRoof } from './arch';
 import { box, boxMM, cyl, rod, blob, compound, v3, planMatrix, getKit } from './kit';
 import { lantern, crate, part, staticLantern, joinery } from './furniture';
 import { Asm, artMats, lathe, softBox, projectUV } from './artkit';
-import { makeFire } from './fire';
+import { makeFire, regionOwned } from './fire';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeAction, makeInspect, place } from '../interactions/props';
 import { Vegetation, scatter, distToPolyline } from './nature';
 import { mulberry32 } from '../core/rng';
@@ -311,8 +311,8 @@ function buildFireClearing(w: World, g: GameApi, c: Ctx) {
     for (let i = 0; i < 7; i++) { const an = (i / 7) * Math.PI * 2, tilt = 1.0; b.add(woodMats().tree, SPLIT_LOGS[i % 3], new THREE.Matrix4().makeRotationY(an).multiply(new THREE.Matrix4().makeTranslation(0.24, 0.03, 0)).multiply(new THREE.Matrix4().makeRotationZ(Math.PI - tilt)).multiply(new THREE.Matrix4().makeTranslation(0.21, 0, -0.05)), '#a08c70', 'main', true, 0); }
   });
   place(logs, FX, 0, FZ);
-  w.scene.add(logs);
-  const fire = makeFire(w, { kind: 'campfire', x: FX, y: 0.14, z: FZ, s: 1.15 });
+  regionOwned(w, logs, c.chunk); // DEV-04C: the laid fire and its flames are drawn with the clearing (they were culled ~25 m earlier)
+  const fire = makeFire(w, { kind: 'campfire', x: FX, y: 0.14, z: FZ, s: 1.15, owner: { region: c.chunk } });
   w.lamps.push({ id: 'fire.clearing', pos: v3(FX, 1.2, FZ), color: '#ff9a4a', intensity: 14, distance: 14, on: () => !!g.state.lit['fire.clearing'], flicker: 0.3 });
   w.emitters.push({ kind: 'fire', pos: v3(FX, 0.5, FZ), on: () => !!g.state.lit['fire.clearing'] });
   w.onSync(() => {

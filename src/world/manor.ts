@@ -408,7 +408,7 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
       a2.add(M2.brass, '#6e5426', joinery.bx(0.012, PH, 0.012), s2 * (PW / 2 + 0.004), 0, 0.034);
     }
     a2.end({ ground: false }); }
-  const ch = chandelier(w, 89.9, UCEIL, 90, 0.9, 1.8);
+  const ch = chandelier(w, 89.9, UCEIL, 90, 0.9, 1.8, c.chunk); // DEV-04C: owned by the hall batch (mHall)
   const sw = compound((b) => box(b, k.M.paint, '#c9a44c', 0, 0, 0, 0.12, 0.18, 0.03));
   place(sw, 91.5, 1.35, 84.1, 0);
   w.scene.add(sw);
@@ -525,7 +525,7 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
     a2.add(M2.brass, '#c9a44c', joinery.cg('diningCandlestick', () => lathe([[0.001, 0], [0.065, 0], [0.065, 0.012], [0.025, 0.03], [0.018, 0.2], [0.035, 0.215], [0.035, 0.225], [0.001, 0.225]], 12)), 0, 0, 0);
     a2.add(M2.paint, '#efe6c8', joinery.cg('diningCandle', () => new THREE.CylinderGeometry(0.018, 0.02, 0.03, 8).translate(0, 0.015, 0)), 0, 0.225, 0);
   }
-  makeFire(w, { kind: 'candles', x: 101.3, y: GF + 1.01, z: 85.2, wicks: [[0, 0, 0], [0, 0, 1], [0, 0, 2]] });
+  makeFire(w, { kind: 'candles', x: 101.3, y: GF + 1.01, z: 85.2, wicks: [[0, 0, 0], [0, 0, 1], [0, 0, 2]], owner: { region: c.chunk } }); // DEV-04C: drawn with the table
   // ES.gameTable: the home-made duo board game, cards, dice and beer at the south end of the table (eat/game room)
   // DEV-04B: the game as pieces — a board with its squares, pawns, two small dice, card piles — and real beer bottles
   // (they were 5–6 cm cubes and brown cylinders); the score pad stays where it was
@@ -551,7 +551,7 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   makeInspect(w, g, { id: 'inspect.hostingPlan', obj: plan, clue: 'c.hostingPlan', hit: [0.5, 0.2, 0.55], label: 'Lezen: tafelplan' });
   // DEV-04A: was hung across the north window's glass and curtain on the east wall; now on the free north wall (z 92)
   painting(c, 104.8, 2.0, 91.92, Math.PI, 0.8, 0.6, 7);
-  const dch = chandelier(w, 101.3, CEIL, 86.2, 0.7, 0.9);
+  const dch = chandelier(w, 101.3, CEIL, 86.2, 0.7, 0.9, c.chunk); // DEV-04C: owned by the dining batch (mWing)
   const dsw = compound((b) => box(b, k.M.paint, '#c9a44c', 0, 0, 0, 0.12, 0.18, 0.03));
   place(dsw, 95.09, 1.35, 90.4, Math.PI / 2);
   w.scene.add(dsw);
@@ -747,7 +747,7 @@ function libraryRest(w: World, g: GameApi, c: Ctx, tx: number, tz: number) {
   makeInspect(w, g, { id: 'inspect.cipherExample', obj: nt, clue: 'c.cipherExample', hit: [0.5, 0.4, 0.45], hitOffset: [0, 0.1, 0], label: 'Lezen: notitie' });
   const rl = tableLamp(w, tx - 0.3, GF + 0.81, tz + 0.9);
   makeLamp(w, g, { id: 'lamp.library', ...rl, name: 'leeslamp', defaultOn: true, hit: [0.4, 0.7, 0.4], intensity: 5, distance: 8, patch: { y: GF + 0.82, r: 0.8, strength: 0.3 } });
-  const lch = chandelier(w, 78.4, UCEIL, 101, 0.8, 1.6);
+  const lch = chandelier(w, 78.4, UCEIL, 101, 0.8, 1.6, 'mLib'); // DEV-04C: owned by the library batch
   const lsw = compound((b) => box(b, k.M.paint, '#c9a44c', 0, 0, 0, 0.12, 0.18, 0.03));
   place(lsw, 84.9, 1.35, 99.4, -Math.PI / 2);
   w.scene.add(lsw);

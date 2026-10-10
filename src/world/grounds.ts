@@ -12,16 +12,18 @@ import { hash01 } from './woodlandPlan';
 import { table, part, staticLantern, joinery } from './furniture';
 import { Asm, artMats, lathe, cushion, projectUV } from './artkit';
 import { wickermanGeo, WICKER } from './wickerman';
-import { propMats } from './propkit';
+import { buildWickerSetpiece } from './wickerFire';
 import { makeInspect, place } from '../interactions/props';
 import type { Vegetation } from './nature';
 import {
   ARRIVAL_GRAVEL, PARKING, BBQ, OUTDOOR_DINING, MUSIC_BONG, BALLOON_NOOK, LAKE, LAKE_VIEW, GOLF_TEE, GOLF_CHUTE, GOLF_MAT, WICKERMAN, GF, type Rect,
 } from './layout';
 import { terrainHeight } from './terrain';
+import { FIRE_UNIFORMS } from './fire';
 
 const BENCH_LOG2 = logModel(157, 2.2, 0.21);
 const WICKER_GEO = wickermanGeo();
+WICKER_GEO.userData.shared = true; WICKER_GEO.userData.hay.userData.shared = true; // DEV-04C: drawn directly (not batched): never disposed with a world
 const SHORE_STONE = (() => { const g = rockModel(71); g.userData.keepColor = true; return g; })();
 
 export function buildGrounds(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods: EstateWoods | null) {
@@ -29,7 +31,7 @@ export function buildGrounds(w: World, g: GameApi, c: Ctx, veg: Vegetation, wood
   socialGarden(w, c);
   lake(w, g, c, veg, woods);
   golf(w, c); // DEV-04B: in the grounds batch, which already carries the art-kit materials (an own chunk cost +7 draw calls)
-  wickerman(w, c);
+  wickerman(w, g, c);
   // east glade loop: a rest point with a view back over the meadow (optional, no find yet)
   part(c, c.k.M.wood, '#7a5232', 176.4, 124, Math.PI / 2, 0, terrainHeight(176.4, 124), 0, 1.6, 0.45, 0.45, 1);
   w.col.addBox(176.15, 176.65, 123.2, 124.8, terrainHeight(176.4, 124), terrainHeight(176.4, 124) + 0.5);
@@ -191,10 +193,51 @@ function festoon(c: Ctx, ends: [[number, number], [number, number]], y0: number)
 }
 
 // ------------------------------------------------------------------------------------------------ lake + viewpoint
+/**
+ * DEV-04C lake surface: the water read as one flat teal disc. Now it carries depth as value: a radial gradient from a
+ * dark, nearly opaque centre to lighter, more transparent shallows over the sloping bed at the rim (the shore reads as
+ * a soft band, not a cut), a haze-coloured sheen at grazing angles (the sky's colour, by reference to the fog colour, so
+ * it follows dusk and the woodland haze) and slow, sparse glints on the shared flame clock. No reflections, no extra
+ * pass: one mesh, one material, as before.
+ */
+function lakeGeo() {
+  const g = new THREE.RingGeometry(0, 1, 48, 5); // 480 triangles: enough rings for the depth gradient
+  const p = g.attributes.position as THREE.BufferAttribute, n = p.count, col = new Float32Array(n * 4);
+  const deep = new THREE.Color('#1d4a52'), mid = new THREE.Color('#2e6a6e'), shallow = new THREE.Color('#5f978a'), c = new THREE.Color();
+  for (let i = 0; i < n; i++) {
+    const r = Math.hypot(p.getX(i), p.getY(i));
+    if (r < 0.55) c.copy(deep).lerp(mid, r / 0.55); else c.copy(mid).lerp(shallow, THREE.MathUtils.smoothstep(r, 0.55, 0.97));
+    col.set([c.r, c.g, c.b, THREE.MathUtils.lerp(0.93, 0.5, THREE.MathUtils.smoothstep(r, 0.7, 1.0))], i * 4);
+  }
+  g.setAttribute('color', new THREE.BufferAttribute(col, 4));
+  return g;
+}
+function lakeMaterial(w: World) {
+  const m = w.material(new THREE.MeshLambertMaterial({ vertexColors: true, transparent: true, emissive: new THREE.Color('#06191c') }));
+  const sky = w.scene.fog ? (w.scene.fog as THREE.Fog).color : new THREE.Color('#dfd6c0');
+  m.onBeforeCompile = (sh) => {
+    sh.uniforms.uTime = FIRE_UNIFORMS.uTime;
+    sh.uniforms.uMotion = FIRE_UNIFORMS.uMotion;
+    sh.uniforms.uSky = { value: sky };
+    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying vec3 vLakeP;')
+      .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvLakeP = (modelMatrix * vec4(transformed, 1.0)).xyz;');
+    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying vec3 vLakeP; uniform float uTime; uniform float uMotion; uniform vec3 uSky;')
+      .replace('#include <opaque_fragment>', `
+        float fr = pow(1.0 - abs(dot(normalize(vViewPosition), normalize(vNormal))), 5.0);
+        outgoingLight = mix(outgoingLight, uSky * vec3(0.62, 0.74, 0.8), fr * 0.38); // a cooler, darker sky tone, not milk
+        vec2 q = vLakeP.xz; float tt = uTime * uMotion * 0.6;
+        float g1 = sin(q.x * 0.9 + q.y * 0.25 + tt) * sin(q.y * 3.4 - q.x * 0.3 - tt * 0.7); // long thin ripple crests
+        outgoingLight += vec3(1.0, 0.95, 0.82) * smoothstep(0.86, 0.98, g1) * 0.1;
+        diffuseColor.a = mix(diffuseColor.a, 1.0, fr * 0.4);
+        #include <opaque_fragment>`);
+  };
+  m.customProgramCacheKey = () => 'flw-lake';
+  return m;
+}
+
 function lake(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods: EstateWoods | null) {
   const k = c.k;
-  const mat = w.material(new THREE.MeshLambertMaterial({ color: '#3f8088', transparent: true, opacity: 0.86, emissive: new THREE.Color('#0a2a30') }));
-  const water = new THREE.Mesh(new THREE.CircleGeometry(1, 64), mat);
+  const water = new THREE.Mesh(lakeGeo(), lakeMaterial(w));
   water.rotation.x = -Math.PI / 2;
   water.scale.set(LAKE.rx + 0.6, LAKE.rz + 0.6, 1);
   water.position.copy(v3(LAKE.x, LAKE.water, LAKE.z));
@@ -347,7 +390,7 @@ function golf(w: World, c: Ctx) {
  * feet are bound to, straw-bundle limbs that run joint to joint (no floating branches: the arms were `cyl` pieces
  * whose centres drifted off the shoulders), the candle ring on flat stones with walking room round the figure.
  */
-function wickerman(w: World, c: Ctx) {
+function wickerman(w: World, g: GameApi, c: Ctx) {
   // its own meshes (chunk 'wick', drawn within 40 m: the clearing is enclosed by woodland): merged into 'grounds' the
   // stones and the plinth stretched the lake-shore stone mesh's bounds across the estate and cost a draw call in views
   // that never see the clearing
@@ -368,8 +411,7 @@ function wickerman(w: World, c: Ctx) {
   // DEV-04B: the figure is the willow build (wickerman.ts): armature uprights, irregular woven bands, bound joints, a
   // woven head cage — in place of straw-coloured cylinders with a ball head. Each foot stands in a timber shoe
   // bolted to its sleeper with two iron straps (sheet: "stable base support").
-  c.b.add(k.M.paint, WICKER_GEO, planMatrix(x, foot, z, 0), '#ffffff', o.chunk, true, 0);
-  c.b.add(propMats().props, WICKER_GEO.userData.hay, planMatrix(x, foot, z, 0), '#ffffff', o.chunk, true, 0); // the hay packed into it
+  // DEV-04C: the figure and its hay are their own meshes (built by the setpiece below): their materials char and glow
   { const M2 = artMats(), a = new Asm(c.b, o.chunk, x, foot, z, 0);
     for (const sd of [-1, 1]) {
       a.add(M2.timber, '#5e4a36', joinery.bx(0.2, 0.12, 0.3), sd * WICKER.footX, 0.06, 0); // shoe
@@ -381,19 +423,22 @@ function wickerman(w: World, c: Ctx) {
   // (base, wall, rim, wire bail) on a flat stone, UNLIT (the DEV-03 jars carried a glowing flame block). The lit /
   // ignition states are DEV-04C: the candle positions are published as w.scene.userData.wickerCandles (with the
   // figure's centre) so that pass can attach flames and state without re-authoring the ring.
-  const candles: { x: number; y: number; z: number }[] = [];
+  const candles: { x: number; y: number; z: number }[] = [], jarY: number[] = [];
   const CM = artMats();
+  const jar = joinery.cg('candleJar', () => lathe([[0.001, 0], [0.06, 0], [0.065, 0.01], [0.065, 0.17], [0.07, 0.18], [0.062, 0.18], [0.058, 0.17], [0.058, 0.012], [0.001, 0.012]], 10));
   for (let i = 0; i < 9; i++) {
     const an = (i / 9) * Math.PI * 2 + 0.15 * Math.sin(i * 2.3), d = 3.1 + 0.2 * Math.sin(i * 1.7), cxx = x + Math.cos(an) * d, czz = z + Math.sin(an) * d, cy = terrainHeight(cxx, czz);
     c.b.add(M.rock, SHORE_STONE, planMatrix(cxx, cy - 0.06, czz, an * 2, 0.26, 0.1, 0.24), '#9a9282', o.chunk, true, 0);
     const a = new Asm(c.b, o.chunk, cxx, cy + 0.035, czz, an);
-    a.add(CM.ceramic, '#cfd8d0', joinery.cg('candleJar', () => lathe([[0.001, 0], [0.06, 0], [0.065, 0.01], [0.065, 0.17], [0.07, 0.18], [0.062, 0.18], [0.058, 0.17], [0.058, 0.012], [0.001, 0.012]], 10)), 0, 0, 0);
+    jarY.push(cy + 0.035); // DEV-04C: the glass jar is the setpiece's own mesh (it glows when its candle burns)
     a.add(CM.paint, '#f2ead8', joinery.cg(`candleWax${i % 3}`, () => new THREE.CylinderGeometry(0.035, 0.036, 0.09 + (i % 3) * 0.02, 10).translate(0, (0.09 + (i % 3) * 0.02) / 2 + 0.012, 0)), 0, 0, 0);
     a.add(CM.paint, '#2b2622', joinery.bx(0.004, 0.015, 0.004), 0, 0.102 + (i % 3) * 0.02 + 0.007, 0); // wick (unlit)
     a.add(CM.paint, '#3a3530', joinery.cg('candleBail', () => new THREE.TorusGeometry(0.066, 0.003, 3, 10, Math.PI)), 0, 0.18, 0);
     candles.push({ x: cxx, y: cy + 0.035 + 0.12 + (i % 3) * 0.02, z: czz });
   }
   w.scene.userData.wickerCandles = { centre: { x, y: gy, z }, candles };
+  // DEV-04C setpiece: candles → ignitable figure → burning → charred aftermath (optional; wickerFire.ts)
+  buildWickerSetpiece(w, g, { x, z, gy, foot, figure: WICKER_GEO, hay: WICKER_GEO.userData.hay, candles, jar, jarY, region: o.chunk });
   // a log bench on the east side facing the figure (clear of the path mouth in the north-west), a lantern on a stake
   // marking where the side path opens into the clearing
   const bx = x + 4.6, by = terrainHeight(bx, z);

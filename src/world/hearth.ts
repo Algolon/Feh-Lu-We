@@ -73,7 +73,7 @@ export function buildHearth(w: World, g: GameApi, c: Ctx, o: HearthOpts) {
   // the fire itself: in front of the dark back wall, on the grate
   const lit = () => g.state.lit[o.id] ?? o.defaultLit ?? false;
   const fp = P(0.32, 0);
-  const fire = makeFire(w, { kind: 'hearth', x: fp.x, y: Y + 0.09, z: fp.z, s: 0.95 });
+  const fire = makeFire(w, { kind: 'hearth', x: fp.x, y: Y + 0.09, z: fp.z, s: 0.95, owner: { region: c.chunk } }); // DEV-04C: drawn with its room
   const lp = P(0.95, 0);
   w.lamps.push({ id: o.id, pos: v3(lp.x, Y + 0.6, lp.z), color: '#ff9a4a', intensity: 7, distance: 8, on: lit, flicker: 0.3 });
   w.emitters.push({ kind: 'fire', pos: v3(fp.x, Y + 0.5, fp.z), on: lit });

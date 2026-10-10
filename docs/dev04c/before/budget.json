@@ -1,0 +1,185 @@
+{
+  "base": "http://localhost:4174/Feh-Lu-We/",
+  "A": {
+    "atticNook": {
+      "calls": 41,
+      "triangles": 99132
+    },
+    "atticCommon": {
+      "calls": 39,
+      "triangles": 101408
+    },
+    "conservatoryInside": {
+      "calls": 74,
+      "triangles": 128214
+    },
+    "conservatoryDoorDeck": {
+      "calls": 143,
+      "triangles": 205534
+    },
+    "wellnessDeck": {
+      "calls": 65,
+      "triangles": 155549
+    },
+    "saunaAccess": {
+      "calls": 148,
+      "triangles": 225826
+    },
+    "wickermanClearing": {
+      "calls": 31,
+      "triangles": 160593
+    },
+    "wickermanPath": {
+      "calls": 35,
+      "triangles": 211057
+    },
+    "frontForecourt": {
+      "calls": 139,
+      "triangles": 206032
+    },
+    "arrivalCourt": {
+      "calls": 133,
+      "triangles": 202574
+    },
+    "portugalTerrace": {
+      "calls": 31,
+      "triangles": 91423
+    },
+    "portugalApproach": {
+      "calls": 33,
+      "triangles": 119039
+    },
+    "golfVicinity": {
+      "calls": 55,
+      "triangles": 198013
+    },
+    "golfSpur": {
+      "calls": 93,
+      "triangles": 262690
+    }
+  },
+  "B": {
+    "gate (driveway)": {
+      "calls": 99,
+      "triangles": 235173
+    },
+    "forecourt → manor": {
+      "calls": 130,
+      "triangles": 204977
+    },
+    "entrance hall": {
+      "calls": 105,
+      "triangles": 193300
+    },
+    "library": {
+      "calls": 54,
+      "triangles": 185684
+    },
+    "garden → manor + conservatory": {
+      "calls": 138,
+      "triangles": 205294
+    },
+    "forest (shed area)": {
+      "calls": 36,
+      "triangles": 148663
+    },
+    "BOSLUST cut": {
+      "calls": 87,
+      "triangles": 223287
+    },
+    "conservatory pool": {
+      "calls": 100,
+      "triangles": 174506
+    },
+    "campfire": {
+      "calls": 27,
+      "triangles": 108543
+    },
+    "well": {
+      "calls": 51,
+      "triangles": 178035
+    },
+    "wickerman figure": {
+      "calls": 36,
+      "triangles": 196168
+    },
+    "golf chute": {
+      "calls": 54,
+      "triangles": 164445
+    },
+    "dining": {
+      "calls": 59,
+      "triangles": 132634
+    },
+    "kitchen": {
+      "calls": 55,
+      "triangles": 136008
+    },
+    "attic observatory": {
+      "calls": 37,
+      "triangles": 93704
+    },
+    "Copacabana bar": {
+      "calls": 52,
+      "triangles": 125519
+    },
+    "Portugal cottage": {
+      "calls": 39,
+      "triangles": 103099
+    },
+    "livingRoom": {
+      "calls": 50,
+      "triangles": 152010
+    },
+    "sterrenBedroom": {
+      "calls": 28,
+      "triangles": 73522
+    },
+    "copaRoom": {
+      "calls": 85,
+      "triangles": 166914
+    },
+    "lakeApproach": {
+      "calls": 38,
+      "triangles": 133165
+    },
+    "lakeShore": {
+      "calls": 38,
+      "triangles": 126640
+    },
+    "woodlandRoute": {
+      "calls": 33,
+      "triangles": 190861
+    },
+    "boslustCalibration": {
+      "calls": 90,
+      "triangles": 235111
+    }
+  },
+  "C": {
+    "wickerUnlit": {
+      "calls": 31,
+      "triangles": 160589
+    },
+    "wickerLit": {
+      "calls": 31,
+      "triangles": 160589
+    },
+    "wickerBurning": {
+      "calls": 31,
+      "triangles": 160589
+    },
+    "wickerBurningClose": {
+      "calls": 30,
+      "triangles": 155412
+    },
+    "wickerPathBurning": {
+      "calls": 35,
+      "triangles": 217435
+    },
+    "wickerApproachBurning": {
+      "calls": 30,
+      "triangles": 159920
+    }
+  }
+}

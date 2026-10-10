@@ -676,7 +676,7 @@ export class Game implements GameApi {
     this.dusk += (targetDusk - this.dusk) * Math.min(1, dt * 0.3);
     // art-refresh lighting comparison (opt-in): indoor factor for the environment, gain for fixture light
     this.indoor += ((w.hereRoom !== 'out' ? 1 : 0) - this.indoor) * Math.min(1, dt * 2.5);
-    if (this.pool) this.pool.gain = ART.light === 'sample' ? 1 + 0.35 * this.indoor : 1;
+    if (this.pool) this.pool.gain = ART.light === 'sample' ? 1 + 0.7 * this.indoor : 1; // DEV-04C: interiors lean on their fixtures (env pulls back sun + fill)
     this.extras.env?.update(this.dusk, this.camera.position, this.indoor);
     this.audio.dusk = this.dusk;
     this.torch.intensity = this.state.lit.torch ? 30 : 0;

@@ -15,6 +15,9 @@ const OUT = process.env.E2E_OUT ?? 'scripts/out/dev04a';
 mkdirSync(OUT, { recursive: true });
 const helpers = readFileSync(new URL('./e2e-helpers.js', import.meta.url), 'utf8');
 const baseline = JSON.parse(readFileSync(new URL('./dev04a-baseline.json', import.meta.url), 'utf8'));
+// DEV-04C: the baseline ids plus exactly the documented additions (scripts/dev04c-additions.json); nothing else may appear or go
+const additions = JSON.parse(readFileSync(new URL('./dev04c-additions.json', import.meta.url), 'utf8')).interactables;
+const expectedIds = [...baseline.interactables, ...additions].sort();
 const exe = process.env.CHROME ?? '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
 const browser = await chromium.launch({ executablePath: exe, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 const results = [];
@@ -377,7 +380,7 @@ try {
   // ---------------------------------------------------------------- 7. ids, checkpoints and the save schema unchanged
   const ids = await E(page, () => { const g = T.G(); return { interactables: [...g.world.byId.keys()].sort(), checkpoints: g.world.checkpoints.map((c) => c.name).sort(), stateKeys: Object.keys(g.state).sort(), version: g.state.version }; });
   const same = (a, b) => a.length === b.length && a.every((x, i) => x === b[i]);
-  log('no id regression: every interactable / door id, checkpoint and save key of the pre-DEV-04A build is unchanged (none added, none removed)', same(ids.interactables, baseline.interactables) && same(ids.checkpoints, baseline.checkpoints) && same(ids.stateKeys, baseline.stateKeys) && ids.version === baseline.saveVersion, JSON.stringify({ interactables: ids.interactables.length, missing: baseline.interactables.filter((i) => !ids.interactables.includes(i)), added: ids.interactables.filter((i) => !baseline.interactables.includes(i)), checkpoints: ids.checkpoints.length, version: ids.version }));
+  log('no id regression: every interactable / door id, checkpoint and save key of the pre-DEV-04A build is unchanged (none removed; the only additions are the documented DEV-04C ids)', same(ids.interactables, expectedIds) && same(ids.checkpoints, baseline.checkpoints) && same(ids.stateKeys, baseline.stateKeys) && ids.version === baseline.saveVersion, JSON.stringify({ interactables: ids.interactables.length, missing: baseline.interactables.filter((i) => !ids.interactables.includes(i)), added: ids.interactables.filter((i) => !expectedIds.includes(i)), checkpoints: ids.checkpoints.length, version: ids.version }));
 
   // ---------------------------------------------------------------- 8. render budget at representative views
   const budget = await measureBudget();
