@@ -307,24 +307,29 @@ New: `wicker.candles` ("Kaarsen" / "Kaarsen aansteken" with matches / "Kaarsen u
 ("Stroman" / "Stroman aansteken" with matches, refused before the ring burns / "Verkoolde stroman" afterwards). No
 existing interaction, label, puzzle answer, notebook entry, hint or objective changed.
 
-## 11. Known issues and owner-review questions
+## 11. Owner review decisions (DEV-04C review) and known issues
 
-1. **New interactable ids (decision)**: is adding `wicker.candles` / `wicker.figure` (128 → 130) acceptable, with the
-   older suites checking "baseline + documented additions"? The alternative — no new ids — would mean no interaction.
-2. **Burn persistence (decision)**: the burn is a ~80 s session timeline; a reload shows the charred aftermath, never the
-   fire again. Should the figure instead be re-buildable (e.g. reset after leaving the estate), or stay burned forever
-   (current)?
-3. **Surface strength (taste)**: the interior breakup is deliberately quiet (§2.1). Stronger is one number per profile
-   in `SURFACE_PARAMS`; the brief's "not dirty, not noisy" is why it was kept low.
-4. **Mobile GPU cost**: the surface layer's fragment cost was only measured in SwiftShader (+0 … +15 %). A frame-time
-   check on a mid / low-end phone is recommended before merge; if needed, `ground` can drop its mid lookup like the
-   canopy did.
-5. **Flame look**: the effigy flames reuse the stylised teardrop tongues; at close range they read as a stack of
-   tongues rather than one sheet of fire. Acceptable for C; a bespoke sheet-fire is a D candidate.
-6. **Smoke** is a faceted low-poly column (same language as the foliage); it reads at distance, less so overhead.
-7. **Not done because unavailable**: FLW-D2 wall art (C4), FLW-K3 keys (C5), FLW-S3 3D refs — see the manifest; nothing
+**Decided by the owner — recorded, nothing in the tested code changes:**
+
+| # | Question | Decision | State in the tested commit `0681519` |
+|---|---|---|---|
+| 1 | New interactable ids | **Approved**: `wicker.candles`, `wicker.figure`. The established baseline after DEV-04C is **130 interactable / door ids**. The older suites stay strict: all 128 prior ids must remain and only these two documented additions may appear | already so: `e2e:dev04a` check 8 / `e2e:dev04b` check 5 / `e2e:dev04c` check 16 compare against `dev04a-baseline.json` + exactly `scripts/dev04c-additions.json`; any other addition or removal fails |
+| 2 | Burn persistence | **Permanent per save.** Once burned, loading the save shows the charred aftermath; the figure is not rebuildable or re-ignitable. A new game starts with the intact, unlit figure | already so: `wicker.figure` is never cleared by the game; `igniteFigure` refuses a burned figure (unit), the figure takes no item afterwards (`itemLabel` → none), a reload shows the settled aftermath (`e2e:dev04c` check 14), a new game's state has no `wicker.*` key (`defaultState`) |
+| 3 | Interior surface strength | **Keep the current restrained strength** in DEV-04C; DEV-04D's approved wall art, 3D references and room-by-room richness come first and the surface layer supports them | unchanged |
+| 4 | Merge | **Hold PR #5** for a real-phone performance / visual check (§13). No further visual change unless that check exposes a concrete blocker | no merge, no deploy |
+| 5 | DEV-04D | **Not started** | — |
+
+**Known issues (unchanged):**
+
+1. **Mobile GPU cost**: the surface layer's fragment cost was only measured in SwiftShader (+0 … +15 %); the phone check
+   (§13) decides. If it is a blocker, the smallest lever is `ground` dropping its mid lookup like the canopy did (a cost
+   change, not a look change worth reopening the pass for).
+2. **Flame look**: the effigy flames reuse the stylised teardrop tongues; at close range they read as a stack of tongues
+   rather than one sheet of fire. Acceptable for C; a bespoke sheet-fire is a D candidate.
+3. **Smoke** is a faceted low-poly column (same language as the foliage); it reads at distance, less so overhead.
+4. **Not done because unavailable**: FLW-D2 wall art (C4), FLW-K3 keys (C5), FLW-S3 3D refs — see the manifest; nothing
    was fabricated. RSV-019–022 untouched (PENDING).
-8. Pre-existing and unchanged: the evidence pose `f01` (all relevant doors open, worst case) was already over the
+5. Pre-existing and unchanged: the evidence pose `f01` (all relevant doors open, worst case) was already over the
    triangle guide before (289 k) and is 293 k after; it is not a budget view. Build chunk-size warning pre-existing.
 
 ## 12. Deferred to DEV-04D
@@ -332,3 +337,23 @@ existing interaction, label, puzzle answer, notebook entry, hint or objective ch
 Estate-wide curation of the surface strength per room; FLW-D2 / S3 / K3 rollout through the manifest contracts once the
 files exist; gingerbread maquette material re-skin; bespoke fire / smoke shapes; any device-specific quality tiering of
 the surface layer.
+
+## 13. Real-phone check (hold condition for PR #5)
+
+Purpose: confirm on real hardware what SwiftShader can only approximate — the surface layer's fragment cost and the
+look at phone size. Run the **tested commit** (`0681519`, or the PR head: identical code) against production
+(`4f2b2ed`) on the same phone, same orientation, low quality (the phone default).
+
+1. Serve each build to the phone on the local network (`npm run build && npx vite preview --host --port 4173`, and
+   the production build on another port) — no deployment needed. Open `…/Feh-Lu-We/?debug=1`: the overlay shows median
+   FPS, p95 frame time, draw calls and triangles.
+2. Stand still ~10 s at each pose (debug overlay checkpoint buttons, or walk there) and note median FPS / p95 for both
+   builds: **lawn → lake** (the lake approach, the most expensive surface case: +5 … +15 % in SwiftShader), **front
+   forecourt → manor**, **living room**, **woodland route** (south forest path), **Wickerman clearing** unlit and burning
+   (matches from the bag on the candles, then the figure).
+3. Look for: banding or shimmer in the broad surface variation, the lake sheen at grazing angles, flame / smoke
+   readability at phone size, interior readability (not too dark), heat / throttling after a few minutes.
+
+**Blocker criteria** (the only reasons to change visuals before merge, per the owner): a sustained median FPS drop of
+more than ~10 % vs production in the same pose, a visible artefact (banding, shimmer, precision noise in the world-space
+variation), or a readability problem (navigation, puzzle evidence). Anything else is recorded for DEV-04D.

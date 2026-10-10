@@ -192,6 +192,8 @@ propagation; per-area tuning only where a calibration view demands it).
 
 ### ID decision (owner review)
 
+**Owner decision (DEV-04C review): approved.** The established baseline after DEV-04C is 130 interactable / door ids; the older suites stay strict (all 128 prior ids present, only the two documented additions allowed).
+
 The interaction needs two **new** interactables: `wicker.candles` and `wicker.figure`. All 128 existing ids, the 21
 checkpoints and the save keys stay unchanged. `e2e:dev04a` / `e2e:dev04b` currently assert "none added"; they will
 assert "every baseline id present, and the only additions are the documented DEV-04C ids"
