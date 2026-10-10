@@ -392,8 +392,11 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   plant(c, 91.6, 96.8, GF, 1.1);
   // DEV-04A: this landscape hung IN the Sterrenkamer doorway on the gallery wall (it floated in the opening when the door
   // opened); it now hangs on the free gallery wall between the Reiskamer and Sterrenkamer doors (wall-art contract)
-  flwPainting(c, 'FLW-D2-002', 85.12, 4.6, 86.2, Math.PI / 2); // DEV-04D D1 (was atlas placeholder #1; same art id)
-  flwPainting(c, 'FLW-D2-007', 85.12, 2.0, 92.5, Math.PI / 2); // DEV-04D D1 (was atlas #0)
+  // DEV-04D D1-R: an upper-gallery picture: centred in the walkway bay between the gallery corner (z 84) and the Sterrenkamer
+  // door (z 89.7), on the walkway hanging line UF + 1.6, plain moulded frame (the stair landscape keeps the hall's gilt)
+  flwPainting(c, 'FLW-D2-002', 85.12, UF + 1.6, 86.9, Math.PI / 2);
+  // DEV-04D D1-R: centred over the maquette presentation table (z 93.4–95.4), bottom ≈ 0.45 m above its top, lit by the sconce beside it
+  flwPainting(c, 'FLW-D2-007', 85.12, 1.95, 94.4, Math.PI / 2);
   // DEV-04B-R: a large framed painting above the stair — the manor across the lake at dusk (original, procedural) in a
   // gilt moulded frame. It replaces the woven hanging, which was a floor-rug mesh and stood out of the wall as a ledge
   // under an empty rod. Same wall, same centre; registered with its full frame for the DEV-04A wall-art contract.
@@ -620,7 +623,7 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   workbench(c, 115.2, 96.5, GF, Math.PI / 2, 3.0, 0.7);
   // DEV-04B: the tool board is a tool wall — battens, pegs and the tools themselves (it was a board with six bars)
   toolWall(c, 115.53, 96.5, GF + 1.85, -Math.PI / 2, 2.8);
-  flwPainting(c, 'FLW-D2-044', 115.56, GF + 1.75, 99.7, -Math.PI / 2); // DEV-04D D1: the woodcut beside the tool wall
+  flwPainting(c, 'FLW-D2-044', 115.56, GF + 1.85, 98.55, -Math.PI / 2); // DEV-04D D1-R: pinned up 0.3 m beside the tool board, on its centre line
   tabletop(c, 115.15, 97.6, GF + 0.92, -Math.PI / 2, ['jug'], 5);
   shelvingUnit(c, 108.68, 98.3, GF, Math.PI / 2, 1.8, 0.45, 1.9, ['tools', 'tins', 'crates', 'empty'], '#6b4a2a', 73);
   { // two sawhorses carrying a plank
@@ -992,7 +995,7 @@ function kitchenDressing(c: Ctx) {
   for (let i = 0; i < 4; i++) sh.add(M.ceramic, ['#e6dcc4', '#b3813f', '#6f91a6', '#e6dcc4'][i], cg('jar', () => lathe([[0.001, 0], [0.05, 0], [0.055, 0.12], [0.04, 0.15], [0.042, 0.17], [0.001, 0.17]], 10)), 0.4 + i * 0.16, 1.57, 0);
   for (let i = 0; i < 3; i++) sh.add(M.ceramic, '#efe9dc', cg('bowl', () => lathe([[0.001, 0], [0.05, 0], [0.09, 0.05], [0.095, 0.07], [0.001, 0.02]], 12)), -0.9 + i * 0.22, 2.0, 0);
   // DEV-04D D1: a still life on the east wall past the end of the shelves and the run (the service-chart wall stays clear)
-  flwPainting(c, 'FLW-D2-005', 107.56, GF + 1.7, 99.9, -Math.PI / 2);
+  flwPainting(c, 'FLW-D2-005', 107.56, GF + 1.75, 99.65, -Math.PI / 2); // D1-R: 1.0 × 1.25, centred between shelves (97.3) and door (102)
   // pot rack hung over the island on four rods, copper pans on hooks
   const pr = new Asm(c.b, c.chunk, 101, GF, 105.4, 0);
   pr.add(M.paint, '#2f2a24', bx(1.8, 0.03, 0.03), 0, 2.25, -0.25); pr.add(M.paint, '#2f2a24', bx(1.8, 0.03, 0.03), 0, 2.25, 0.25);
@@ -1057,10 +1060,11 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   // gallery + landing
   rug(c, 90, 99.7, UF + 0.01, 4.0, 2.6, 0, '#ffffff', 'kilim', true);
   plant(c, 85.6, 103.3, UF, 1.0);
-  flwPainting(c, 'FLW-D2-028', 90, UF + 1.7, 103.92, Math.PI); // DEV-04D D1 (was atlas #2)
+  flwPainting(c, 'FLW-D2-028', 90, UF + 1.65, 103.92, Math.PI); // DEV-04D D1-R: the upstairs anchor on the hall axis, 1.6 m; top on the door-head line
   const ls = wallSconce(w, 93.7, UF + 1.9, 103.9, Math.PI); // DEV-04A: it hung in the rear-nook arch (x 91.4–92.6)
   makeLamp(w, g, { id: 'lamp.landing', ...ls, name: 'wandlamp', defaultOn: true, intensity: 4, distance: 7, hit: [0.4, 0.5, 0.4], patch: { y: UF + 0.03, r: 1.3 } });
-  painting(c, 85.12, UF + 1.6, 93, Math.PI / 2, 0.9, 0.7, 5);
+  // DEV-04D D1-R: the walkway's procedural placeholder (atlas #5, z 93) is retired; the bay right of the Sterrenkamer door
+  // stays empty until a later deliberate choice (owner decision D-1)
   // DEV-04B: the gallery bench is the joinery bench; the gallery walkway carries no rug (it only filled floor)
   slatBench(c, 93.2, 81.0, UF, 0, 1.4, '#6b4426');
   // ---------------------------------------------------------------- Reiskamer (warm, travel)
@@ -1068,10 +1072,11 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   rug(c, 75.4, 84.9, R0 + 0.01, 2.2, 3.0, Math.PI / 2, '#f4e0cc', 'kilim', true);
   bed2(c, 73.5, 84.9, R0, Math.PI / 2, '#b5643c', '#7a4f2c', 1.6, { style: 'panel', throwColor: '#3f6f78', cushion: '#c9a25a' });
   for (const bz of [83.75, 86.05]) bedside(c, 72.65, bz, R0, Math.PI / 2, '#7a4f2c');
-  wardrobe(c, 81.6, 86.35, R0, Math.PI, 1.4, '#7a4f2c');
+  // DEV-04D D1-R: the traveller over the bed, on the view from the door, lit by the bedside lamp; bottom 0.155 m above the
+  // headboard capping (R0 + 1.20; the post finials stand outside the frame)
+  flwPainting(c, 'FLW-D2-022', 72.42, R0 + 1.92, 84.9, Math.PI / 2);  wardrobe(c, 81.6, 86.35, R0, Math.PI, 1.4, '#7a4f2c');
   curtains(c, 75.5, 80.45, R0 + 0.75, 0, 1.0, 1.9, '#c8643a');
   curtains(c, 82.5, 80.45, R0 + 0.75, 0, 1.0, 1.9, '#c8643a');
-  flwPainting(c, 'FLW-D2-022', 80.8, R0 + 1.65, 80.44, 0); // DEV-04D D1: opposite the travel sketch (koffer emblem stays on its own wall)
   canvasPanel(w, 78.6, R0 + 1.6, 86.68, Math.PI, 1.1, 0.75, (x, W, H) => { const gr = x.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, '#f6e2b8'); gr.addColorStop(1, '#e8d2a0'); x.fillStyle = gr; x.fillRect(0, 0, W, H); x.strokeStyle = '#7a5a3a'; x.lineWidth = 3; x.beginPath(); x.moveTo(0, H * 0.7); for (let i = 0; i <= 10; i++) x.lineTo((W * i) / 10, H * (0.55 + 0.12 * Math.sin(i * 1.3))); x.stroke(); x.beginPath(); x.arc(W * 0.75, H * 0.3, 26, 0, Math.PI * 2); x.stroke(); x.font = 'italic 22px Georgia'; x.fillStyle = '#7a5a3a'; if (!SLICE) x.fillText('onderweg', 20, H - 18); /* DEV-01R: no label-like words in clue rooms */ }, 256);
   // DEV-04B: a folding luggage rack carries an open travel case — shell walls with a lining, the lid propped open on
   // its hinges with straps inside and travel labels outside, clothes folded in it (was a box and a tilted slab)
@@ -1110,7 +1115,7 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   curtains(c, 72.45, 90.0, R0 + 0.75, Math.PI / 2, 1.0, 1.9, '#2f3f5f');
   canvasPanel(w, 78.6, R0 + 1.6, 93.9, Math.PI, 1.4, 0.95, (x, W, H) => { x.fillStyle = '#1c2a44'; x.fillRect(0, 0, W, H); for (let i = 0; i < 60; i++) { x.fillStyle = i % 5 ? '#f4ecd8' : '#e8c547'; x.beginPath(); x.arc((Math.sin(i * 12.9) * 0.5 + 0.5) * W, (Math.sin(i * 7.3) * 0.5 + 0.5) * H, i % 7 ? 2 : 4, 0, Math.PI * 2); x.fill(); } x.strokeStyle = 'rgba(244,236,216,.5)'; x.lineWidth = 1.5; x.beginPath(); x.moveTo(W * 0.2, H * 0.3); x.lineTo(W * 0.32, H * 0.42); x.lineTo(W * 0.45, H * 0.36); x.lineTo(W * 0.58, H * 0.5); x.stroke(); x.font = 'italic 20px Georgia'; x.fillStyle = '#f4ecd8'; if (!SLICE) x.fillText('sterrenkaart', 16, H - 14); /* DEV-01R */ }, 384);
   telescope(c, 82.6, 91.4, R0, -1.71);
-  flwPainting(c, 'FLW-D2-029', 82.0, R0 + 1.65, 86.9, 0); // DEV-04D D1: on the south wall, away from the star map (identity panel) // DEV-04A: aimed at the west window (z 90); the old tube faced into the room
+  flwPainting(c, 'FLW-D2-029', 78.6, R0 + 1.6, 86.9, 0); // DEV-04D D1-R: centre of the south wall, facing the star map on its axis and line // DEV-04A: aimed at the west window (z 90); the old tube faced into the room
   table(c, 83.9, 93.0, R0, 0.6, 0.5, 0, '#4a3a2a', 0.7);
   const logbook = compound((b) => { addBook(new Asm(b, 'main', 0, 0, 0, Math.PI / 2), { size: 'tall', thick: 'medium', hard: true, design: 5 }, '#2f3f5f', 0, 0, 0, { flat: true, paper: PAPER.fresh }); });
   place(logbook, 83.9, R0 + 0.7, 93.0, 0.4);

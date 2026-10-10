@@ -11,6 +11,7 @@
 //   7. render budgets (low quality, doors closed) of every D1 view inside the mobile guide; the art adds ≤ 1 draw call.
 import { chromium } from 'playwright-core';
 import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
+const ATLAS = JSON.parse(readFileSync(new URL('../src/world/artAtlas.json', import.meta.url), 'utf8'));
 
 const BASE = process.argv[2] ?? 'http://localhost:4173/Feh-Lu-We/';
 const OUT = process.env.E2E_OUT ?? 'scripts/out/dev04d';
@@ -25,21 +26,23 @@ const log = (name, ok, detail = '') => { results.push({ name, ok: !!ok, detail }
 const E = (page, fn, arg) => page.evaluate(fn, arg);
 
 // the D1 slots: art id (registry), FLW id, art centre, facing (deg), canvas w × h, frame rail
-const SLOTS = [
-  ['painting@85.12,86.20', 'FLW-D2-002', 85.12, 4.6, 86.2, 90, 1.35, 0.81, 0.095],
-  ['painting@85.12,92.50', 'FLW-D2-007', 85.12, 2.0, 92.5, 90, 0.66, 0.88, 0.065],
+const SLOTS = [ // DEV-04D D1-R placements (docs/dev04d/DEV04D_D1R_GALLERY_AUDIT.md)
+  ['painting@85.12,86.90', 'FLW-D2-002', 85.12, 4.95, 86.9, 90, 1.35, 0.81, 0.065],
+  ['painting@85.12,94.40', 'FLW-D2-007', 85.12, 1.95, 94.4, 90, 0.66, 0.88, 0.065],
   ['painting@77.25,80.45', 'FLW-D2-026', 77.25, 2.1, 80.45, 0, 1.4, 0.7875, 0.095],
-  ['painting@90.00,103.92', 'FLW-D2-028', 90, 5.05, 103.92, 180, 1.3, 0.78, 0.095],
-  ['painting@27.90,160.12', 'FLW-D2-046', 27.9, 5.8, 160.12, 0, 0.9, 0.506, 0.065],
-  ['painting@107.56,99.90', 'FLW-D2-005', 107.56, 1.85, 99.9, -90, 0.8, 1.0, 0.065],
+  ['painting@90.00,103.92', 'FLW-D2-028', 90, 5.0, 103.92, 180, 1.6, 0.96, 0.095],
+  ['painting@25.00,164.68', 'FLW-D2-046', 25.0, 5.9, 164.68, 180, 1.2, 0.675, 0.065],
+  ['painting@107.56,99.65', 'FLW-D2-005', 107.56, 1.9, 99.65, -90, 1.0, 1.25, 0.065],
   ['painting@104.80,91.92', 'FLW-D2-010', 104.8, 2.0, 91.92, 180, 1.4, 1.05, 0.095],
-  ['painting@80.80,80.44', 'FLW-D2-022', 80.8, 5.0, 80.44, 0, 0.75, 1.0, 0.065],
-  ['painting@82.00,86.90', 'FLW-D2-029', 82.0, 5.0, 86.9, 0, 0.8, 0.8, 0.032],
+  ['painting@72.42,84.90', 'FLW-D2-022', 72.42, 5.27, 84.9, 90, 0.75, 1.0, 0.065],
+  ['painting@78.60,86.90', 'FLW-D2-029', 78.6, 4.95, 86.9, 0, 1.2, 1.2, 0.032],
   ['painting@107.58,102.60', 'FLW-D2-035', 107.58, 5.2, 102.6, -90, 1.0, 0.75, 0.065],
   ['painting@58.60,56.83', 'FLW-D2-042', 58.6, -1.55, 56.83, 180, 1.4, 0.7875, 0.065],
-  ['painting@115.56,99.70', 'FLW-D2-044', 115.56, 1.9, 99.7, -90, 0.8, 0.6, 0.032],
+  ['painting@115.56,98.55', 'FLW-D2-044', 115.56, 2.0, 98.55, -90, 0.8, 0.6, 0.032],
   ['painting@20.32,158.60', 'FLW-D2-045', 20.32, 5.75, 158.6, 90, 0.8, 0.6, 0.065],
 ];
+// D1-R: retired placeholder (owner decision D-1) and the old slots of the moved pieces: none may come back
+const RETIRED = ['painting@85.12,93.00', 'painting@85.12,86.20', 'painting@85.12,92.50', 'painting@27.90,160.12', 'painting@107.56,99.90', 'painting@80.80,80.44', 'painting@82.00,86.90', 'painting@115.56,99.70'];
 const MIRRORS = [['mirror@87.92,105.30', 87.92, 1.7, 105.3, -90], ['mirror@89.92,105.00', 89.92, 4.9, 105.0, -90]];
 // puzzle / evidence / identity panels (DEV04D_ASSET_MANIFEST.md §10): must stay, and keep their wall to themselves
 const PROTECTED = ['panel@84.82,96.60', 'panel@95.10,96.00', 'panel@82.50,109.44', 'panel@78.60,93.90', 'panel@78.60,86.68', 'panel@107.50,85.00', 'panel@107.50,89.00', 'panel@107.50,93.00', 'panel@107.50,94.60', 'panel@99.75,98.52', 'panel@128.60,109.35'];
@@ -67,20 +70,24 @@ try {
     const m = [...mats][0];
     return { materials: mats.size, meshes: meshes.length, chunks: [...new Set(meshes)], w: m?.map?.image?.naturalWidth ?? 0, h: m?.map?.image?.naturalHeight ?? 0, srgb: m?.map?.colorSpace };
   });
-  log('FLW-D2 atlas: one shared material, the 2048 × 1024 image loaded (sRGB)', atlas.materials === 1 && atlas.w === 2048 && atlas.h === 1024 && atlas.srgb === 'srgb', JSON.stringify(atlas));
+  log(`FLW-D2 atlas: one shared material, the ${ATLAS.size.join(' × ')} image loaded (sRGB)`, atlas.materials === 1 && atlas.w === ATLAS.size[0] && atlas.h === ATLAS.size[1] && atlas.srgb === 'srgb', JSON.stringify(atlas));
 
   // ---------------------------------------------------------------- 2. slots + contracts
   const reg = await E(page, () => { const u = window.__game.world.scene.userData; return { art: u.openings.art, conflicts: u.artConflicts ?? [], support: u.supportWarnings ?? [], asset: u.assetWarnings ?? [] }; });
   const ids = reg.art.map((a) => a.id);
   const missing = [...SLOTS.map((s) => s[0]), ...MIRRORS.map((m) => m[0])].filter((id) => !ids.includes(id));
   log(`all ${SLOTS.length} D1 paintings and ${MIRRORS.length} mirrors are hung in their bound slots`, missing.length === 0, missing.join(', '));
+  const back = RETIRED.filter((id) => ids.includes(id));
+  log('D1-R: the walkway placeholder is retired and no moved piece is left in its old slot', back.length === 0, back.join(', '));
   log('wall-art contract (no art in a door, window or door sweep) and construction audits clean', reg.conflicts.length === 0 && reg.support.length === 0 && (reg.asset.length ?? 0) === 0, JSON.stringify({ conflicts: reg.conflicts, support: reg.support.slice(0, 3), asset: reg.asset.slice?.(0, 3) }).slice(0, 400));
 
   // ---------------------------------------------------------------- 3. evidence walls
   const prot = reg.art.filter((a) => PROTECTED.includes(a.id)), d1 = reg.art.filter((a) => SLOTS.some((s) => s[0] === a.id) || a.id.startsWith('mirror@'));
   const ov = (a0, a1, b0, b1) => Math.min(a1, b1) - Math.max(a0, b0) > -0.3; // 0.3 m breathing room along the wall
+  // same wall FACE: pieces on one face lie within a few cm of each other; the two faces of a partition are ≥ its
+  // thickness (0.16 m) apart (e.g. D2-029 in the Sterrenkamer backs onto the Reiskamer travel sketch: different rooms)
   const clash = [];
-  for (const a of d1) for (const p of prot) if (a.axis === p.axis && Math.abs(a.f - p.f) < 0.35 && ov(a.a0, a.a1, p.a0, p.a1) && Math.min(a.y1, p.y1) - Math.max(a.y0, p.y0) > -0.3) clash.push(`${a.id}~${p.id}`);
+  for (const a of d1) for (const p of prot) if (a.axis === p.axis && Math.abs(a.f - p.f) < 0.1 && ov(a.a0, a.a1, p.a0, p.a1) && Math.min(a.y1, p.y1) - Math.max(a.y0, p.y0) > -0.3) clash.push(`${a.id}~${p.id}`);
   log(`evidence / identity panels untouched (${PROTECTED.length} present) and no D1 piece within 0.3 m of one on the same wall`, prot.length === PROTECTED.length && clash.length === 0, JSON.stringify({ present: prot.length, clash }));
 
   // ---------------------------------------------------------------- 4/5. visible, seated, framed; mirrors not glowing

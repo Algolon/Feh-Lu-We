@@ -32,15 +32,15 @@ export interface ArtPiece {
 const OAK = '#8a6038', DARK = '#5c3b22', GILT = '#b8924c';
 
 export const ART: Record<string, ArtPiece> = {
-  'FLW-D2-002': { id: 'FLW-D2-002', title: 'Het laatste zonlicht', basis: 'APPROVED_2D', room: 'hall', w: 1.35, h: 0.81, frame: { family: 'antique', rail: DARK, bead: GILT } },
+  'FLW-D2-002': { id: 'FLW-D2-002', title: 'Het laatste zonlicht', basis: 'APPROVED_2D', room: 'hall', w: 1.35, h: 0.81, frame: { family: 'simple', rail: '#6e4b2e' } },
   'FLW-D2-007': { id: 'FLW-D2-007', title: 'De stille eik', basis: 'APPROVED_2D', room: 'hall', w: 0.66, h: 0.88, frame: { family: 'simple', rail: '#6e4b2e' } },
   'FLW-D2-026': { id: 'FLW-D2-026', title: 'De kust na de regen', basis: 'APPROVED_2D', room: 'living', w: 1.4, h: 0.7875, frame: { family: 'antique', rail: DARK, bead: GILT } },
-  'FLW-D2-028': { id: 'FLW-D2-028', title: 'Het huis in de nacht', basis: 'APPROVED_2D', room: 'landing', w: 1.3, h: 0.78, frame: { family: 'antique', rail: '#5c3b22', bead: GILT } },
-  'FLW-D2-046': { id: 'FLW-D2-046', title: 'Een middag in Portugal', basis: 'APPROVED_2D', room: 'cottageRoom', w: 0.9, h: 0.506, frame: { family: 'simple', rail: '#5e7f86' } },
-  'FLW-D2-005': { id: 'FLW-D2-005', title: 'Kleikom, appels, ruwe tafel en linnen', basis: 'OWNER_GROUP_A', room: 'kitchen', w: 0.8, h: 1.0, frame: { family: 'simple', rail: OAK } },
+  'FLW-D2-028': { id: 'FLW-D2-028', title: 'Het huis in de nacht', basis: 'APPROVED_2D', room: 'landing', w: 1.6, h: 0.96, frame: { family: 'antique', rail: '#5c3b22', bead: GILT } },
+  'FLW-D2-046': { id: 'FLW-D2-046', title: 'Een middag in Portugal', basis: 'APPROVED_2D', room: 'cottageRoom', w: 1.2, h: 0.675, frame: { family: 'simple', rail: '#5e7f86' } },
+  'FLW-D2-005': { id: 'FLW-D2-005', title: 'Kleikom, appels, ruwe tafel en linnen', basis: 'OWNER_GROUP_A', room: 'kitchen', w: 1.0, h: 1.25, frame: { family: 'simple', rail: OAK } },
   'FLW-D2-010': { id: 'FLW-D2-010', title: 'Na het feest', basis: 'OWNER_GROUP_A', room: 'dining', w: 1.4, h: 1.05, frame: { family: 'antique', rail: DARK, bead: GILT } },
   'FLW-D2-022': { id: 'FLW-D2-022', title: 'De onbekende reiziger', basis: 'OWNER_GROUP_A', room: 'reis', w: 0.75, h: 1.0, frame: { family: 'simple', rail: '#6e4b2e' } },
-  'FLW-D2-029': { id: 'FLW-D2-029', title: 'Maanlicht op water', basis: 'OWNER_GROUP_A', room: 'sterren', w: 0.8, h: 0.8, frame: { family: 'print', rail: '#2f2a28' } },
+  'FLW-D2-029': { id: 'FLW-D2-029', title: 'Maanlicht op water', basis: 'OWNER_GROUP_A', room: 'sterren', w: 1.2, h: 1.2, frame: { family: 'print', rail: '#c8a77a' } },
   'FLW-D2-035': { id: 'FLW-D2-035', title: 'Zomerregen op een landweg', basis: 'OWNER_GROUP_A', room: 'storage', w: 1.0, h: 0.75, frame: { family: 'simple', rail: OAK } },
   'FLW-D2-042': { id: 'FLW-D2-042', title: 'Onder hetzelfde bladerdak', basis: 'OWNER_GROUP_A', room: 'gathering', w: 1.4, h: 0.7875, frame: { family: 'simple', rail: '#5a3a22' } },
   'FLW-D2-044': { id: 'FLW-D2-044', title: 'Houtdruk: hout, zaagsel en gereedschap', basis: 'OWNER_GROUP_A', room: 'workshop', w: 0.8, h: 0.6, frame: { family: 'print', rail: '#c8a77a' } },

@@ -61,16 +61,16 @@ const EXT = [
   ['h06-maquette', { x: 86.75, y: 0.15, z: 94.4, yaw: -90 * D, pitch: -0.42 }],
 ];
 
-// DEV-04D D1 evidence (SET=d1): every D1 wall-art slot and both mirrors, from ≈ 3 m (room read) and ≈ 1.5 m (close
+// DEV-04D D1 evidence (SET=d1; D1-R positions since D1-R — D1's own before/after frames are committed): every wall-art slot and both mirrors, from ≈ 3 m (room read) and ≈ 1.5 m (close
 // read); the same poses run on the base build (before) and the D1 build (after).
 const D1 = [];
 for (const [n, x, y, z, yaw, far, near, pitch = 0.06] of [
-  ['hall-002', 85.12, 0.15, 86.2, -90, 5.4, 3.2, 0.42], ['hall-007', 85.12, 0.15, 92.5, -90, 2.9, 1.5],
+  ['hall-002', 85.12, 0.15, 86.9, -90, 5.4, 3.2, 0.42], ['hall-007', 85.12, 0.15, 94.4, -90, 2.9, 1.5],
   ['living-026', 77.25, 0.15, 80.45, 180, 2.9, 1.6], ['landing-028', 90, 3.35, 103.92, 0, 2.9, 1.6],
-  ['cottage-046', 27.9, 4.15, 160.12, 180, 2.7, 1.4], ['cottageEntry-045', 20.32, 4.15, 158.6, -90, 2.4, 1.3],
-  ['kitchen-005', 107.58, 0.15, 99.0, 90, 3.1, 1.6], ['dining-010', 104.8, 0.15, 91.92, 0, 3.3, 1.8],
-  ['reis-022', 80.8, 3.35, 80.42, 180, 3.0, 1.6], ['sterren-029', 82.0, 3.35, 86.92, 180, 3.0, 1.5],
-  ['guest-035', 107.58, 3.35, 102.6, 90, 3.0, 1.6], ['workshop-044', 115.58, 0.15, 99.7, 90, 3.0, 1.5],
+  ['cottage-046', 25.0, 4.15, 164.68, 0, 2.7, 1.4], ['cottageEntry-045', 20.32, 4.15, 158.6, -90, 2.4, 1.3],
+  ['kitchen-005', 107.56, 0.15, 99.65, 90, 3.1, 1.6], ['dining-010', 104.8, 0.15, 91.92, 0, 3.3, 1.8],
+  ['reis-022', 72.42, 3.35, 84.9, -90, 3.0, 1.6], ['sterren-029', 78.6, 3.35, 86.9, 180, 3.0, 1.5],
+  ['guest-035', 107.58, 3.35, 102.6, 90, 3.0, 1.6], ['workshop-044', 115.56, 0.15, 98.55, 90, 3.0, 1.5],
   ['gathering-042', 58.6, -3.2, 56.82, 0, 3.2, 1.7], ['bath-mirror', 89.85, 3.35, 105.0, 90, 2.0, 1.2], ['wc-mirror', 87.9, 0.15, 105.3, 90, 1.9, 1.1],
 ]) {
   // (x, z) = the art on its wall; yaw = the camera heading towards it; stand `far` / `near` metres out

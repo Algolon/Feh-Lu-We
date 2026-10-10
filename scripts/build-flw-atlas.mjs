@@ -4,19 +4,19 @@
 //
 // Sources: docs/reference/flw/2d/<canonical file> (never modified). Each source is checked against the sha256 in
 // docs/reference/flw/MANIFEST.json, then only resized (aspect kept, Chromium high-quality resampling) and placed on a
-// shelf-packed atlas with a 4 px edge-extruded gutter (mip bleed). No crop, no colour change, no sharpening.
+// skyline-packed atlas with a 4 px edge-extruded gutter (mip bleed). No crop, no colour change, no sharpening.
 // Output: src/assets/art/flw-d2-atlas.webp + src/world/artAtlas.json (uv rects, sizes, provenance).
-// Texel density: ≈ 400 px per metre of the hung canvas, long side clamped to 320…512 px (a phone sees a 1.4 m canvas
-// from 2 m at ≈ 300 px).
+// Texel density: see ITEMS.
 import { chromium } from 'playwright-core';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 
-// id → long side in px (from the hung size in src/content/art.ts: ≈ 400 px/m, clamped 320…512)
+// id → long side in px: ≈ 340 px per metre of the hung canvas's long side (src/content/art.ts), clamped 320…512
+// (a phone sees a 1.4 m canvas from 2 m at ≈ 300 px; D1-R normalised the density so the page stays 2048 × 1024)
 const ITEMS = {
-  'FLW-D2-002': 512, 'FLW-D2-026': 512, 'FLW-D2-028': 512, 'FLW-D2-010': 512, 'FLW-D2-042': 512,
-  'FLW-D2-007': 352, 'FLW-D2-046': 360, 'FLW-D2-005': 400, 'FLW-D2-022': 400, 'FLW-D2-029': 320,
-  'FLW-D2-035': 400, 'FLW-D2-044': 320, 'FLW-D2-045': 320,
+  'FLW-D2-002': 460, 'FLW-D2-026': 476, 'FLW-D2-028': 512, 'FLW-D2-010': 476, 'FLW-D2-042': 476,
+  'FLW-D2-007': 320, 'FLW-D2-046': 408, 'FLW-D2-005': 425, 'FLW-D2-022': 340, 'FLW-D2-029': 408,
+  'FLW-D2-035': 340, 'FLW-D2-044': 320, 'FLW-D2-045': 320,
 };
 const W = 2048, GUT = 4;
 const manifest = JSON.parse(readFileSync('docs/reference/flw/MANIFEST.json', 'utf8'));
@@ -33,15 +33,35 @@ const items = Object.entries(ITEMS).map(([id, long]) => {
   return { id, path: a.path, sha256: sha, status: a.status, src: [sw, sh], w: Math.round(sw * s), h: Math.round(sh * s), buf };
 });
 
-// shelf packing, tallest first
+// skyline bottom-left packing (tallest first): each cell goes where its top edge ends lowest; ties → leftmost
 items.sort((p, q) => q.h - p.h || q.w - p.w);
-let x = 0, y = 0, shelf = 0;
+const sky = [{ x: 0, y: 0, w: W }];
 for (const it of items) {
   const cw = it.w + 2 * GUT, ch = it.h + 2 * GUT;
-  if (x + cw > W) { x = 0; y += shelf; shelf = 0; }
-  it.x = x + GUT; it.y = y + GUT; x += cw; shelf = Math.max(shelf, ch);
+  let best = null;
+  for (let i = 0; i < sky.length; i++) {
+    if (sky[i].x + cw > W) break;
+    let y = 0, rem = cw;
+    for (let j = i; j < sky.length && rem > 0; j++) { y = Math.max(y, sky[j].y); rem -= sky[j].w; }
+    if (rem > 0) continue;
+    if (!best || y + ch < best.y + ch || (y === best.y && sky[i].x < best.x)) best = { x: sky[i].x, y };
+  }
+  if (!best) throw new Error(`${it.id}: no room on the skyline`);
+  it.x = best.x + GUT; it.y = best.y + GUT;
+  // raise the skyline under the placed cell
+  const x0 = best.x, x1 = best.x + cw, top = best.y + ch, next = [];
+  for (const s2 of sky) {
+    const a0 = s2.x, a1 = s2.x + s2.w;
+    if (a1 <= x0 || a0 >= x1) { next.push(s2); continue; }
+    if (a0 < x0) next.push({ x: a0, y: s2.y, w: x0 - a0 });
+    if (a1 > x1) next.push({ x: x1, y: s2.y, w: a1 - x1 });
+  }
+  next.push({ x: x0, y: top, w: cw });
+  next.sort((p, q) => p.x - q.x);
+  sky.length = 0;
+  for (const s2 of next) { const l = sky[sky.length - 1]; if (l && l.y === s2.y && l.x + l.w === s2.x) l.w += s2.w; else sky.push({ ...s2 }); }
 }
-const H = Math.ceil((y + shelf) / 64) * 64;
+const H = Math.ceil(Math.max(...items.map((it) => it.y + it.h + GUT)) / 64) * 64;
 
 const browser = await chromium.launch({ executablePath: process.env.CHROME ?? '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
 const page = await browser.newPage();
