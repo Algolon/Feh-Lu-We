@@ -410,6 +410,8 @@ export function painting(c: Ctx, x: number, y: number, z: number, yaw: number, w
 // ---------------------------------------------------------------- DEV-04D D1: FLW-D2 artwork (one image atlas)
 let flwMat: THREE.MeshLambertMaterial | null = null;
 let flwReady: Promise<void> = Promise.resolve();
+/** Linear albedo gain of the FLW atlas material (see flwAtlas). */
+export const FLW_EXPOSURE = 1.35;
 /** The shared FLW-D2 atlas material. Until the image arrives the texture shows a dim neutral (no black flash). */
 function flwAtlas() {
   if (flwMat) return flwMat;
@@ -427,6 +429,10 @@ function flwAtlas() {
     img.src = FLW_ATLAS_URL;
   });
   flwMat = new THREE.MeshLambertMaterial({ map: tex, vertexColors: true });
+  // exposure compensation (pixels untouched): the paintings are full-range images, the walls round them pale plaster;
+  // under ACES tone mapping a 1:1 albedo reads a stop under the wall. A linear albedo gain keeps them lit by the room
+  // (dark room → dark painting: no emission, no glow), only restoring the source's own exposure
+  flwMat.color.setScalar(FLW_EXPOSURE);
   flwMat.userData.flwAtlas = true;
   return flwMat;
 }
@@ -494,9 +500,8 @@ export function wallMirror(c: Ctx, x: number, y: number, z: number, yaw: number,
   registerArt(artFootprint(`mirror@${x.toFixed(2)},${z.toFixed(2)}`, x, y, z, yaw, w + 2 * fw, h + 2 * fw));
   const M = artMats(), a = new Asm(c.b, c.chunk, x, y, z, yaw);
   a.add(M.paint, '#7f9296', bx(w, h, 0.008), 0, 0, 0.022);
-  a.add(M.paint, '#6d7f84', bx(w, h * 0.22, 0.008), 0, -h * 0.39, 0.0235); // the lower edge reads deeper
-  a.add(M.paint, '#a9babb', bx(w * 0.16, h * 0.9, 0.006), -w * 0.12, h * 0.02, 0.0245, { rz: 0.42 }); // a soft sheen
-  a.add(M.paint, '#98abad', bx(w * 0.06, h * 0.7, 0.006), w * 0.08, h * 0.06, 0.0245, { rz: 0.42 });
+  a.add(M.paint, '#76898d', bx(w, h * 0.18, 0.008), 0, -h * 0.41, 0.0235); // the lower edge reads a touch deeper
+  a.add(M.paint, '#8a9da0', bx(w * 0.22, h * 0.86, 0.006), -w * 0.1, h * 0.03, 0.0245, { rz: 0.42 }); // a faint sheen
   for (const s2 of [-1, 1]) {
     a.add(M.timber, rail, sb(w + 2 * fw, fw, 0.035, 0.008), 0, s2 * (h / 2 + fw / 2), 0.02);
     a.add(M.timber, rail, sb(fw, h, 0.035, 0.008), s2 * (w / 2 + fw / 2), 0, 0.02);

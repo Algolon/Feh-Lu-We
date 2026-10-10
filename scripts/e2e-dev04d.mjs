@@ -139,8 +139,9 @@ try {
   writeFileSync(`${OUT}/budget.json`, JSON.stringify(budget, null, 2));
   const over = budget.filter((b) => b.calls > 150 || b.triangles > 250000);
   log(`render budgets (low, doors closed): all ${budget.length} D1 views inside the mobile guide`, over.length === 0, (over.length ? over : budget).map((b) => `${b.view} ${b.room} ${b.calls}/${b.triangles}`).join(', '));
-  const maxArt = Math.max(...budget.map((b) => b.artMeshesVisible));
-  log('the art atlas adds at most one draw call per room (one merged mesh per chunk)', maxArt <= 2, `max visible atlas meshes in a view: ${maxArt}`);
+  // batching contract: the atlas is ONE material; each room chunk merges all its paintings into one mesh (as every
+  // shared material does), so the art costs at most one draw call per chunk in view, never one per painting
+  log('the art atlas costs one merged mesh per room chunk (never one per painting)', atlas.meshes === atlas.chunks.length && atlas.meshes < Object.keys(SLOTS).length, `${atlas.meshes} meshes for ${SLOTS.length} paintings in ${atlas.chunks.length} chunks; max chunks with art in one view ${Math.max(...budget.map((b) => b.artMeshesVisible))}`);
 } catch (e) {
   log('suite crashed', false, String(e?.stack ?? e).slice(0, 500));
 }
