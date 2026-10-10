@@ -1,0 +1,4 @@
+{
+  "note": "DEV-04C: the only interactable ids added since the pre-DEV-04A baseline (scripts/dev04a-baseline.json). Optional Wickerman setpiece (src/world/wickerFire.ts). Every baseline id must still exist; any other addition or removal fails the id checks of e2e:dev04a / e2e:dev04b / e2e:dev04c.",
+  "interactables": ["wicker.candles", "wicker.figure"]
+}

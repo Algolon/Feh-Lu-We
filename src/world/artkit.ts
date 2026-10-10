@@ -9,6 +9,7 @@
 // - Baked shading lives in vertex colours (flag `keepColor`, see Batcher.add). It only encodes OCCLUSION
 //   (contact, seams, soot), never light direction, so it stays correct when lamps or the fire toggle.
 import * as THREE from 'three';
+import { surface } from './surfaces';
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { planMatrix, type Batcher } from './kit';
 import { mulberry32 } from '../core/rng';
@@ -316,6 +317,9 @@ export function artMats(): ArtMats {
     ceramic: new THREE.MeshPhongMaterial({ vertexColors: true, color: '#ffffff', specular: '#6a6a66', shininess: 70 }),
     rug: lam({ map: rugTex(), polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }),
   };
+  // DEV-04C ART-01.1 authored surfaces (surfaces.ts)
+  surface(mats.upholstery, 'fabric'); surface(mats.timber, 'timber'); surface(mats.stone, 'stone'); surface(mats.paint, 'paint');
+  surface(mats.brass, 'metal'); surface(mats.ceramic, 'metal'); surface(mats.rug, 'fabric');
   return mats;
 }
 

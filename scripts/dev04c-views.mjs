@@ -6,7 +6,9 @@
 // the standard evidence state (front door + Copacabana doors open). `lit` sets optional environmental state for the view
 // (the Wickerman candle / figure keys are DEV-04C state: on a pre-DEV-04C build they are simply ignored, so the same
 // script captures the "before" frame of every view). `burn` advances the simulated clock after the state is set
-// (seconds), so the burning view is not the first frame of the ignition.
+// (seconds), so the burning view is not the first frame of the ignition. `act` runs the real interaction (matches in hand)
+// for the listed ids: a figure is only *burning* after an in-session ignition — set straight into the save it loads as
+// the settled aftermath (w07).
 import { chromium } from 'playwright-core';
 import { mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 
@@ -42,11 +44,12 @@ export const VIEWS = [
   ['c15-boslust-door', { x: 63.0, y: 0, z: 11.5, yaw: 0, pitch: 0.05 }],
   // Wickerman setpiece (C6)
   ['w01-wickerman-unlit', { x: 176.4, y: 1.2, z: 59.9, yaw: 145 * D, pitch: 0.12, lit: W0 }],
-  ['w02-wickerman-lit', { x: 176.4, y: 1.2, z: 59.9, yaw: 145 * D, pitch: 0.12, lit: W1, burn: 3 }],
-  ['w03-wickerman-burning', { x: 176.4, y: 1.2, z: 59.9, yaw: 145 * D, pitch: 0.12, lit: W2, burn: 4 }],
-  ['w04-wickerman-candles-close', { x: 178.6, y: 1.2, z: 58.6, yaw: 135 * D, pitch: -0.35, lit: W1, burn: 3 }],
-  ['w05-wickerman-burning-close', { x: 178.2, y: 1.2, z: 57.4, yaw: 140 * D, pitch: 0.35, lit: W2, burn: 4 }],
-  ['w06-wickerman-approach-burning', { x: 172.0, y: 1.2, z: 60.4, yaw: 105 * D, pitch: 0.06, lit: W2, burn: 6 }],
+  ['w02-wickerman-lit', { x: 176.4, y: 1.2, z: 59.9, yaw: 145 * D, pitch: 0.12, lit: W0, act: ['wicker.candles'], burn: 3 }],
+  ['w03-wickerman-burning', { x: 176.4, y: 1.2, z: 59.9, yaw: 145 * D, pitch: 0.12, lit: W0, act: ['wicker.candles', 'wicker.figure'], burn: 16 }],
+  ['w04-wickerman-candles-close', { x: 178.6, y: 1.2, z: 58.6, yaw: 135 * D, pitch: -0.35, lit: W0, act: ['wicker.candles'], burn: 3 }],
+  ['w05-wickerman-burning-close', { x: 178.2, y: 1.2, z: 57.4, yaw: 140 * D, pitch: 0.35, lit: W0, act: ['wicker.candles', 'wicker.figure'], burn: 30 }],
+  ['w06-wickerman-approach-burning', { x: 172.0, y: 1.2, z: 60.4, yaw: 105 * D, pitch: 0.06, lit: W0, act: ['wicker.candles', 'wicker.figure'], burn: 10 }],
+  ['w07-wickerman-aftermath', { x: 176.4, y: 1.2, z: 59.9, yaw: 145 * D, pitch: 0.12, lit: W2 }],
   // fire / light continuity (C3)
   ['f01-hall-from-forecourt', { x: 90.0, y: 0, z: 74.0, yaw: 0, pitch: 0.12 }],
   ['f02-dining-candles', { x: 96.4, y: 0.15, z: 83.0, yaw: 60 * D, pitch: -0.1 }],
@@ -77,6 +80,8 @@ for (const [name, pose] of VIEWS) {
     g.world.syncAll();
     g.player.setPose(p);
     g.player.y = g.world.col.supportHeight(p.x, p.z, p.y + 0.05, 0.42);
+    // `act`: run the real interaction (matches in hand) — a burning figure only exists after an in-session ignition
+    for (const id of p.act ?? []) { const it = g.world.byId.get(id); if (it?.useItem) { it.useItem('matches'); for (let i = 0; i < 15; i++) g.tick(1 / 30); } }
     for (let i = 0; i < 60 + Math.round((p.burn ?? 0) * 30); i++) g.tick(1 / 30);
     g.player.setPose(p);
     g.player.y = g.world.col.supportHeight(p.x, p.z, p.y + 0.05, 0.42);

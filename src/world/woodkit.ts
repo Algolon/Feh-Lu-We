@@ -6,6 +6,7 @@
 // OCCLUSION / material variation (darker crown interiors and undersides, moss on rock tops, bark tone), never a
 // light direction, so they stay right under any sun angle.
 import * as THREE from 'three';
+import { surface } from './surfaces';
 import { ConvexGeometry } from 'three/examples/jsm/geometries/ConvexGeometry.js';
 import { mergeGeometries, mergeVertices, toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { mulberry32, type Rng } from '../core/rng';
@@ -1079,6 +1080,6 @@ export function woodMats(): WoodMats {
 #endif`);
   };
   tree.customProgramCacheKey = () => 'woodkit-tree-atlas';
-  wm = { tree, rock: lam({ map: strata }), flat: lam({}) };
+  wm = { tree: surface(tree, 'tree'), rock: surface(lam({ map: strata }), 'stone'), flat: surface(lam({}), 'foliage') }; // DEV-04C authored surfaces
   return wm;
 }

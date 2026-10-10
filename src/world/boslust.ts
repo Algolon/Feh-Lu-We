@@ -331,10 +331,10 @@ function gathering(w: World, g: GameApi, c: Ctx) {
     cyl(c.b, k.M.paint, '#c9a44c', TX + dx, UG + 0.76, TZ + 0.05, 0.06, 0.07, 0.02, 10, { chunk: c.chunk });
     cyl(c.b, k.M.paint, '#efe6c8', TX + dx, UG + 0.78, TZ + 0.05, 0.03, 0.03, 0.22, 8, { chunk: c.chunk });
   }
-  makeFire(w, { kind: 'candles', x: TX, y: UG + 1.01, z: TZ + 0.05, wicks: [[-2, 0, 0], [0, 0, 0], [2, 0, 0]] });
+  makeFire(w, { kind: 'candles', x: TX, y: UG + 1.01, z: TZ + 0.05, wicks: [[-2, 0, 0], [0, 0, 0], [2, 0, 0]], owner: { region: c.chunk } }); // DEV-04C: drawn with the table
   w.lamps.push({ id: 'candles.gathering', pos: v3(TX, UG + 1.4, TZ), color: '#ffc06a', intensity: 5, distance: 8, on: () => true, flicker: 0.15 });
   w.patches.add(TX, UG + 0.8, TZ, 2.2, '#ffb35a', () => true, 0.3);
-  const ch = chandelier(w, TX, UGCEIL, TZ, 0.8, 0.9);
+  const ch = chandelier(w, TX, UGCEIL, TZ, 0.8, 0.9, c.chunk); // DEV-04C: owned by the BOSLUST batch
   const sw = compound((b) => box(b, k.M.paint, '#c9a44c', 0, 0, 0, 0.12, 0.18, 0.03));
   place(sw, 64.6, UG + 1.35, Z0 + 0.17, 0);
   w.scene.add(sw);

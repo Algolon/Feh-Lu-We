@@ -7,6 +7,7 @@
 // Conventions (art kit): three.js local space, the piece facing −z (forward), y up, origin at the base centre.
 // Textures are value/colour atlases sampled through custom UVs, one material per family (propMats).
 import * as THREE from 'three';
+import { surface } from './surfaces';
 import { mergeGeometries, mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { mulberry32, type Rng } from '../core/rng';
 import { Asm, artMats, softBox, lathe, cushion, projectUV } from './artkit';
@@ -250,7 +251,7 @@ let pm: PropMats | null = null;
 /** The DEV-04B family material (Lambert, vertex colour × the atlas): one draw call per area for all the families. */
 export function propMats(): PropMats {
   if (pm) return pm;
-  const props = new THREE.MeshLambertMaterial({ vertexColors: true, map: atlasTex() });
+  const props = surface(new THREE.MeshLambertMaterial({ vertexColors: true, map: atlasTex() }), 'paint'); // DEV-04C: books, prints, cloth, hay: kept clean
   pm = { props, cloth: props, paper: props, rug: props, print: props };
   return pm;
 }

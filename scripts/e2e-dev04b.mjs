@@ -16,6 +16,9 @@ const OUT = process.env.E2E_OUT ?? 'scripts/out/dev04b';
 mkdirSync(OUT, { recursive: true });
 const helpers = readFileSync(new URL('./e2e-helpers.js', import.meta.url), 'utf8');
 const baseline = JSON.parse(readFileSync(new URL('./dev04a-baseline.json', import.meta.url), 'utf8'));
+// DEV-04C: the baseline ids plus exactly the documented additions (scripts/dev04c-additions.json); nothing else may appear or go
+const additions = JSON.parse(readFileSync(new URL('./dev04c-additions.json', import.meta.url), 'utf8')).interactables;
+const expectedIds = [...baseline.interactables, ...additions].sort();
 const exe = process.env.CHROME ?? '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
 const browser = await chromium.launch({ executablePath: exe, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 const results = [];
@@ -99,12 +102,12 @@ try {
     const near = wc ? wc.candles.every((c) => Math.hypot(c.x - wc.centre.x, c.z - wc.centre.z) < 8 && Number.isFinite(c.y)) : false;
     return { candles: wc?.candles?.length ?? 0, near };
   });
-  log('Wickerman candle hook published for DEV-04C (positions round the figure, no ignition state)', hooks.candles >= 6 && hooks.near, JSON.stringify(hooks));
+  log('Wickerman candle hook published (positions round the figure; DEV-04C builds its candle ring on it)', hooks.candles >= 6 && hooks.near, JSON.stringify(hooks));
 
   // ---------------------------------------------------------------- 5. ids, checkpoints, save schema
   const ids = await E(page, () => { const g = T.G(); return { interactables: [...g.world.byId.keys()].sort(), checkpoints: g.world.checkpoints.map((c) => c.name).sort(), stateKeys: Object.keys(g.state).sort(), version: g.state.version }; });
   const same = (a, b) => a.length === b.length && a.every((x, i) => x === b[i]);
-  log(`canonical ids unchanged (${ids.interactables.length} interactables, ${ids.checkpoints.length} checkpoints, save version ${ids.version})`, same(ids.interactables, baseline.interactables) && same(ids.checkpoints, baseline.checkpoints) && same(ids.stateKeys, baseline.stateKeys) && ids.version === baseline.saveVersion, JSON.stringify({ missing: baseline.interactables.filter((i) => !ids.interactables.includes(i)), added: ids.interactables.filter((i) => !baseline.interactables.includes(i)) }));
+  log(`canonical ids unchanged (${ids.interactables.length} interactables = baseline + documented DEV-04C additions, ${ids.checkpoints.length} checkpoints, save version ${ids.version})`, same(ids.interactables, expectedIds) && same(ids.checkpoints, baseline.checkpoints) && same(ids.stateKeys, baseline.stateKeys) && ids.version === baseline.saveVersion, JSON.stringify({ missing: baseline.interactables.filter((i) => !ids.interactables.includes(i)), added: ids.interactables.filter((i) => !expectedIds.includes(i)) }));
 
   // ---------------------------------------------------------------- 6. hero view budgets
   const budget = await E(page, async (V) => {

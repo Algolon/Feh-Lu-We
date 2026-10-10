@@ -5,6 +5,7 @@
 // North: the lake with the Portugal cottage on its plateau, wooded ridges along the north and east, the west bank.
 // Layout constants live in layout.ts, keepouts in footprints.ts, ground in terrain.ts.
 import * as THREE from 'three';
+import { surface } from './surfaces';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { World, type GameApi } from '../interactions/world';
 import type { SceneExtras } from '../core/game';
@@ -257,7 +258,7 @@ function buildGround(w: World, trees: TreeGrid | null) {
     w.scene.add(mm);
   }
   // the land beyond the estate: a frame AROUND it (one draw call)
-  const outerMat = w.material(new THREE.MeshLambertMaterial({ color: '#5f7d3a' }));
+  const outerMat = w.material(surface(new THREE.MeshLambertMaterial({ color: '#5f7d3a' }), 'ground'));
   const W = ESTATE.w, D = ESTATE.d;
   const gx0 = GX0, gx1 = GX0 + NX * TCELL, gz0 = GZ0, gz1 = GZ0 + NZ * TCELL; // the grid itself reaches beyond the fence
   const parts = ([[-300, W + 300, -300, gz0], [-300, W + 300, gz1, D + 300], [-300, gx0, gz0, gz1], [gx1, W + 300, gz0, gz1]] as const).map(([x0, x1, z0, z1]) => {
