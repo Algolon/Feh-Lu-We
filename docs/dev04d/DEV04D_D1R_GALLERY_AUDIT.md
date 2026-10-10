@@ -146,3 +146,56 @@ Not owner-level (implemented with the rehang unless the owner objects):
 - D2-007 over the maquette;
 - D2-005 1.0 × 1.25;
 - D2-044 beside the tool board.
+
+---
+
+## 6. Implementation record (owner-approved, all five decisions + the small corrections)
+
+Commits `7c81c93` (rehang) + evidence / this record. Gameplay and save ids untouched; only wall-registry ids moved.
+
+| Piece | Final placement | Canvas | Frame | Wall-art id |
+|---|---|---|---|---|
+| D2-002 | walkway west wall, centred in the bay z 84.0–89.7: x 85.12, z 86.90, **y 4.95** (walkway line UF + 1.6) | 1.35 × 0.81 | **simple** walnut (was antique) | `painting@85.12,86.90` (was 86.20) |
+| D2-007 | hall ground west wall, over the maquette table: z **94.40**, y 1.95 | 0.66 × 0.88 | simple | `painting@85.12,94.40` (was 92.50) |
+| D2-026 | unchanged (living, south window pier) | 1.40 × 0.79 | antique | `painting@77.25,80.45` |
+| D2-028 | landing axis x 90.00, y **5.00**; top 5.575 on the door-head line (5.45–5.55) | **1.60 × 0.96** | antique | `painting@90.00,103.92` |
+| D2-046 | cottage room **north wall on the arch axis**: x 25.00, z 164.68, facing south, y 5.90 (top 6.30 = window heads) | **1.20 × 0.675** | simple blue-grey | `painting@25.00,164.68` (was 27.90,160.12) |
+| D2-005 | kitchen east wall, centred between the shelves (97.3) and the door (102.0): z **99.65**, y 1.90 | **1.00 × 1.25** | simple oak | `painting@107.56,99.65` (was 99.90) |
+| D2-010 | unchanged (dining north wall, east bay) | 1.40 × 1.05 | antique | `painting@104.80,91.92` |
+| D2-022 | Reiskamer **west wall over the bed**: x 72.42, z 84.90, y **5.27** (bottom 0.155 m above the headboard capping at UF + 1.20; the post finials stand outside the frame); lit by the bedside lamp | 0.75 × 1.00 | simple | `painting@72.42,84.90` (was 80.80,80.44) |
+| D2-029 | Sterrenkamer **south-wall centre** x 78.60, facing the star map on its axis, y **4.95** (the star map's line) | **1.20 × 1.20** | print, **light oak** | `painting@78.60,86.90` (was 82.00) |
+| D2-035 | unchanged (guest room, over the bed) | 1.00 × 0.75 | simple oak | `painting@107.58,102.60` |
+| D2-042 | unchanged (gathering hall) | 1.40 × 0.79 | simple | `painting@58.60,56.83` |
+| D2-044 | workshop east wall, 0.3 m from the tool board's end: z **98.55**, y **2.00** (the board's centre line) | 0.80 × 0.60 | print | `painting@115.56,98.55` (was 99.70) |
+| D2-045 | unchanged (cottage entry, west wall) | 0.80 × 0.60 | simple blue-grey | `painting@20.32,158.60` |
+| walkway placeholder (atlas #5) | **retired**; the bay right of the Sterrenkamer door is left empty (no group-B piece) | — | — | `painting@85.12,93.00` removed |
+| mirrors | unchanged | 0.50 × 0.70 / 0.45 × 0.60 | painted | unchanged |
+
+**Atlas**:
+- rebuilt from the untouched originals (checksums verified by the builder and the unit test);
+- skyline packing with texel density normalised to ≈ 340 px/m of canvas (every piece ≥ 320 px/m; the 1.2 m D2-029 / D2-046 cells grew to 408 px);
+- page **2048 × 960** (was 2048 × 1024): **10.0 MiB GPU** with mips (was 10.7), webp **570 KiB** (was 608).
+- A straight resize of the two cells overflowed the page; normalising the density keeps one page without any image going under the 300 px/m floor.
+
+**Performance** (low, doors closed, 28 room views, `docs/dev04d/d1r/budget/views.json`):
+- all inside the mobile guide;
+- vs D1: −1…0 draw calls, −446…0 triangles (the retired placeholder);
+- vs production: +0…+2 calls, +0.9 k…+4.9 k triangles.
+- Tightest: living-a 131 / 210 k, kitchen-b 128 / 208 k.
+- `e2e:dev04d` D1 views: all 13 inside the guide (largest hall 73 / 173 k).
+
+**Checks**:
+- `npm test` 227 / 227;
+- `e2e:dev04d` **11 / 11**:
+  - new check: the placeholder and the old slots stay empty;
+  - the evidence clearance compares same wall faces, so D2-029 is correctly not confused with the Reiskamer travel sketch on the other face of the partition;
+  - every canvas is seated 4.3–8.5 cm proud of its wall;
+  - no door / window / sweep conflict;
+- `e2e:dev04a` **19 / 19** (D2-002 assertion moved to `painting@85.12,86.90`); `e2e:dev04b` **9 / 9**; `e2e:dev04c` **22 / 22**.
+
+**Evidence**:
+- close / room reads at the new positions: `docs/dev04d/d1r/after-close/`;
+- the room-composition set after the rehang: `docs/dev04d/d1r/after-context/`;
+- D1 → D1-R side by side: `docs/dev04d/d1r/compare/`.
+
+Deferred (as decided): group-B walkway piece, OPTIONAL_D3_LIGHTING for D2-029. D2–D4 not started.
