@@ -503,8 +503,10 @@ export function wallMirror(c: Ctx, x: number, y: number, z: number, yaw: number,
   a.add(M.paint, '#76898d', bx(w, h * 0.18, 0.008), 0, -h * 0.41, 0.0235); // the lower edge reads a touch deeper
   a.add(M.paint, '#8a9da0', bx(w * 0.22, h * 0.86, 0.006), -w * 0.1, h * 0.03, 0.0245, { rz: 0.42 }); // a faint sheen
   for (const s2 of [-1, 1]) {
-    a.add(M.timber, rail, sb(w + 2 * fw, fw, 0.035, 0.008), 0, s2 * (h / 2 + fw / 2), 0.02);
-    a.add(M.timber, rail, sb(fw, h, 0.035, 0.008), s2 * (w / 2 + fw / 2), 0, 0.02);
+    // painted rails (untextured paint material): the guest WC is batched into the wing chunk, whose textured-timber
+    // mesh would otherwise stretch its culling sphere across the hall (measured: +14 k triangles drawn from the living)
+    a.add(M.paint, rail, sb(w + 2 * fw, fw, 0.035, 0.008), 0, s2 * (h / 2 + fw / 2), 0.02);
+    a.add(M.paint, rail, sb(fw, h, 0.035, 0.008), s2 * (w / 2 + fw / 2), 0, 0.02);
   }
 }
 
