@@ -307,11 +307,19 @@ export class World {
   }
 }
 
+/** What the light pool may know about the view (DEV-04C-R): the view direction, the cone, and a line-of-sight test. */
+export interface LightView { dir: THREE.Vector3; cosHalf: number; blocked: (x0: number, y0: number, z0: number, x1: number, y1: number, z1: number) => boolean }
+
 /**
- * A small, fixed pool of point lights (no shader recompiles). Which lamps get a real light is decided by
- * room/portal relevance (current room + rooms seen through OPEN doors/arches; outdoor lamps through
- * windows), never by view direction. Logical lamp state and the emissive fixture never depend on this:
- * losing a pooled light only fades its illumination, the source stays visibly lit.
+ * A small, fixed pool of point lights (no shader recompiles). Logical lamp state and the emissive fixture never depend
+ * on this: losing a pooled light only fades its illumination, the source stays visibly lit.
+ *
+ * Candidates (DEV-04C-R): the lamps of every room the player can SEE — the same room/portal visibility the renderer
+ * uses (two portal steps through open doors / arches / stairs) — plus outdoor lamps through windows. Ranking: distance,
+ * a penalty per portal step, source strength, and a strong bonus for a source that is in the view cone with a clear line
+ * of sight: a hearth you are looking at through an arch keeps its light when you step across the threshold (it used to
+ * lose it to a nearer lamp behind you, or never got one because its room was two steps away). The keep-margin exceeds
+ * the room penalty, so crossing a boundary alone never evicts a light. Lamps in rooms you cannot see are never lit.
  */
 export class LightPool {
   readonly lights: THREE.PointLight[] = [];
@@ -333,7 +341,12 @@ export class LightPool {
   private roomCache = new Map<LampSource, string>();
   /** Global multiplier for fixture light (art-refresh lighting comparison; 1 = original behaviour). */
   gain = 1;
-  update(dt: number, t: number, lamps: LampSource[], eye: THREE.Vector3, rooms?: RoomGraph, isOpen: (door: string) => boolean = () => true) {
+  /** Ranking weights (DEV-04C-R). */
+  static readonly VIEW_BONUS = 16;
+  static readonly VIEW_RANGE = 24;
+  static readonly TWO_STEP_PENALTY = 1.5;
+  static readonly KEEP_MARGIN = 3.0;
+  update(dt: number, t: number, lamps: LampSource[], eye: THREE.Vector3, rooms?: RoomGraph, isOpen: (door: string) => boolean = () => true, view?: LightView) {
     this.timer -= dt;
     if (this.timer <= 0) {
       this.timer = 0.25;
@@ -343,17 +356,26 @@ export class LightPool {
         return r;
       };
       this.here = rooms ? rooms.roomAt(eye.x, eye.y - 0.8, -eye.z) : 'out';
-      const rel = rooms ? rooms.relevant(this.here, isOpen) : null;
+      const rel = rooms ? rooms.relevant(this.here, isOpen) : null; // one step + outdoor lamps through windows
+      const vis = rooms ? rooms.visible(this.here, isOpen, 2) : null; // what the renderer can show (no windows)
       const byId = new Map<string, LampSource>();
       const cands: LampCandidate[] = [];
       for (const l of lamps) {
         if (!l.on()) continue;
         const room = roomOf(l);
-        if (rel && !rel.has(room)) continue;
+        if (rel && !rel.has(room) && !(vis && vis.has(room))) continue;
+        const d = l.pos.distanceTo(eye);
+        let inView = false;
+        if (view && d < LightPool.VIEW_RANGE && d > 0.01) {
+          const c = (view.dir.x * (l.pos.x - eye.x) + view.dir.y * (l.pos.y - eye.y) + view.dir.z * (l.pos.z - eye.z)) / d;
+          inView = c > view.cosHalf && !view.blocked(eye.x, eye.y, -eye.z, l.pos.x, l.pos.y, -l.pos.z);
+        }
+        // a source you can see is not penalised for being two rooms away; one you cannot see is ranked down
+        const w = 0.2 * l.intensity + (inView ? LightPool.VIEW_BONUS : rel && !rel.has(room) ? -LightPool.TWO_STEP_PENALTY : 0);
         byId.set(l.id, l);
-        cands.push({ id: l.id, room, d: l.pos.distanceTo(eye), w: 0.2 * l.intensity });
+        cands.push({ id: l.id, room, d, w });
       }
-      this.want = chooseLamps(cands, this.here, this.want, this.lights.length);
+      this.want = chooseLamps(cands, this.here, this.want, this.lights.length, LightPool.KEEP_MARGIN);
       this.lookup = byId;
     }
     for (let i = 0; i < this.lights.length; i++) {
@@ -362,7 +384,7 @@ export class LightPool {
       const cur = this.shown[i];
       if (cur !== target) {
         // fade the old source out before the light moves: no pop when a slot changes hands
-        l.intensity = Math.max(0, l.intensity - dt * 30);
+        l.intensity = Math.max(0, l.intensity - dt * 12); // DEV-04C-R: a gentler hand-over (was 30/s: a visible blink)
         if (l.intensity > 0.05 && cur) continue;
         this.shown[i] = target;
         if (target) { l.position.copy(target.pos); l.color.set(target.color); l.distance = target.distance; }

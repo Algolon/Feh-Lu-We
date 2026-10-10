@@ -15,6 +15,7 @@
 //  10. render budgets of the DEV-04C views and the established views vs the pre-DEV-04C build.
 import { chromium } from 'playwright-core';
 import { readFileSync, mkdirSync, writeFileSync, existsSync } from 'node:fs';
+import { LIGHT_CASES, walkLightCases } from './dev04cr-lightcases.js';
 
 const BASE = process.argv[2] ?? 'http://localhost:4173/Feh-Lu-We/';
 const OUT = process.env.E2E_OUT ?? 'scripts/out/dev04c';
@@ -159,24 +160,34 @@ try {
     const c0 = T.lookAtId('wicker.figure');
     const m0 = g.metrics();
     out.gateTarget = m0.target; out.gateLabel = m0.label;
+    // the toast from selecting the matches ("Lucifers in de hand …") is cleared first: only what the action shows counts
+    const clearToast = () => document.getElementById('toast')?.classList.remove('show');
+    const toast = () => document.getElementById('toast')?.classList.contains('show') ?? false;
+    clearToast();
     g.doAction(); T.tick(5);
-    out.gated = { figure: !!g.state.lit['wicker.figure'], fire: set.fLow.visible };
+    out.gated = { figure: !!g.state.lit['wicker.figure'], fire: set.fLow.visible, toast: toast() };
     // candles: stand outside one candle, aim at it, the action button lights the ring (one after another)
     const cd = wc.candles[2], dx = cd.x - wc.centre.x, dz = cd.z - wc.centre.z, d = Math.hypot(dx, dz);
     at(wc.centre.x + dx / d * (d + 1.0), wc.centre.z + dz / d * (d + 1.0));
     T.lookAt(cd.x, cd.y, cd.z);
     const m1 = g.metrics();
     out.candleTarget = m1.target; out.candleLabel = m1.label;
-    g.doAction(); T.tick(3);
-    out.reveal0 = +set.reveal.uReveal.value.toFixed(2);
-    T.wait(2.5);
+    clearToast();
+    g.doAction();
+    // DEV-04C-R: the ring lights progressively — sample the number of burning candles every 0.2 s
+    out.seq = []; out.full = null;
+    for (let k = 0; k < 26; k++) { T.tick(6); const nLit = set.litCount(); out.seq.push(nLit); if (nLit === 9 && out.full === null) out.full = +((k + 1) * 0.2).toFixed(1); }
+    out.candleToast = toast();
+    T.wait(0.5);
     out.lit = { state: !!g.state.lit['wicker.candles'], flames: set.flames.visible, reveal: set.reveal.uReveal.value, lamp: g.pool.assigned().includes('wicker.candles') || w.lamps.some((l) => l.id === 'wicker.candles' && l.on()) };
     // ignite: back inside the ring, aim at the figure
     at(180 - 2.3, 55 + 0.6, 90 * Math.PI / 180);
     T.lookAtId('wicker.figure');
     const m2 = g.metrics();
     out.igniteLabel = m2.label;
+    clearToast();
     g.doAction(); T.tick(3);
+    out.igniteToast = toast();
     T.wait(12);
     const lk = set.look();
     out.burning = { state: !!g.state.lit['wicker.figure'], low: set.fLow.visible, high: set.fHigh.visible, char: +lk.char.toFixed(2), light: +lk.light.toFixed(2), hay: set.hay.visible, smoke: set.smoke.visible, embers: set.embers.visible, uChar: +set.burnUniforms.uChar.value.toFixed(2) };
@@ -194,9 +205,10 @@ try {
   if (wick) {
     const w0 = wick;
     log('Wickerman starts unlit (no flames, no fire state)', !w0.initial.candles && !w0.initial.figure && !w0.initial.flames && !w0.initial.fire, JSON.stringify(w0.initial));
-    log('ignition gating: with matches in hand the figure is targeted but refuses before the candle ring burns (state unchanged)', w0.gateTarget === 'wicker.figure' && !w0.gated.figure && !w0.gated.fire, JSON.stringify({ t: w0.gateTarget, l: w0.gateLabel, g: w0.gated }));
-    log('candle state through the real input: reticle on a candle → "Kaarsen aansteken" → ring lit one after another, flames + jar glow + light source on', w0.candleTarget === 'wicker.candles' && /Kaarsen aansteken/.test(w0.candleLabel ?? '') && w0.reveal0 < 1 && w0.lit.state && w0.lit.flames && w0.lit.reveal === 1 && w0.lit.lamp, JSON.stringify({ t: w0.candleTarget, l: w0.candleLabel, r0: w0.reveal0, lit: w0.lit }));
-    log('burn state: with the ring lit the figure ignites ("Stroman aansteken"): flames on body, char rising, hay burning, smoke / embers, strong light', /Stroman aansteken/.test(w0.igniteLabel ?? '') && w0.burning.state && w0.burning.low && w0.burning.high && w0.burning.char > 0.1 && w0.burning.uChar === w0.burning.char && w0.burning.light > 0.8 && w0.burning.hay && w0.burning.smoke && w0.burning.embers, JSON.stringify({ l: w0.igniteLabel, b: w0.burning }));
+    log('ignition gating: with matches in hand the figure is targeted, the prompt says "eerst de kaarsen", the action changes nothing and shows no message card', w0.gateTarget === 'wicker.figure' && /eerst de kaarsen/.test(w0.gateLabel ?? '') && !w0.gated.figure && !w0.gated.fire && !w0.gated.toast, JSON.stringify({ t: w0.gateTarget, l: w0.gateLabel, g: w0.gated }));
+    const seq = w0.seq ?? [], mono = seq.every((v, i) => i === 0 || v >= seq[i - 1]), distinct = new Set(seq).size;
+    log(`candle sequence (DEV-04C-R): one action → candles light one after another round the ring, no message card (lit per 0.2 s: ${seq.join(' ')})`, w0.candleTarget === 'wicker.candles' && /Kaarsen aansteken/.test(w0.candleLabel ?? '') && seq[0] <= 2 && mono && distinct >= 5 && seq[seq.length - 1] === 9 && w0.full >= 2.5 && w0.full <= 4.5 && !w0.candleToast && w0.lit.state && w0.lit.flames && w0.lit.reveal === 1 && w0.lit.lamp, JSON.stringify({ t: w0.candleTarget, l: w0.candleLabel, full: w0.full, toast: w0.candleToast, lit: w0.lit }));
+    log('burn state: with the ring lit the figure ignites ("Stroman aansteken", no message card): flames on body, char rising, hay burning, smoke / embers, strong light', /Stroman aansteken/.test(w0.igniteLabel ?? '') && !w0.igniteToast && w0.burning.state && w0.burning.low && w0.burning.high && w0.burning.char > 0.1 && w0.burning.uChar === w0.burning.char && w0.burning.light > 0.8 && w0.burning.hay && w0.burning.smoke && w0.burning.embers, JSON.stringify({ l: w0.igniteLabel, b: w0.burning }));
     log('burn settles into the charred aftermath (flames out, hay gone, smouldering remains, fully charred)', w0.after.settled && !w0.after.low && !w0.after.high && !w0.after.hay && w0.after.smoulder && w0.after.char === 1, JSON.stringify(w0.after));
     log('optional: no puzzle flag set by the setpiece; only the two lit keys saved', w0.solvedFlags.length === 0 && w0.saved['wicker.candles'] === true && w0.saved['wicker.figure'] === true, JSON.stringify({ f: w0.solvedFlags, lit: w0.saved }));
   }
@@ -215,8 +227,35 @@ try {
   if (re) log('save / load: the lit ring and the burned figure persist (save version 4, aftermath on load, other lit state kept)', re.version === 4 && re.candles && re.figure && re.flames && re.reveal === 1 && re.settled && !re.low && !re.hay && re.smoulder && re.fireClearing, JSON.stringify(re));
   // an older save without the keys loads unlit
   await boot({ version: 4, scene: 'estate', inventory: ['matches'], flags: { leftHome: true }, open: {} });
-  const old = await step('old save', () => { const g = T.G(), set = g.world.scene.userData.wickerSet; return { candles: !!g.state.lit['wicker.candles'], figure: !!g.state.lit['wicker.figure'], flames: set.flames.visible, settled: set.look().settled }; });
-  if (old) log('a save from before DEV-04C loads with the clearing unlit', !old.candles && !old.figure && !old.flames && !old.settled, JSON.stringify(old));
+  const old = await step('old save', () => {
+    const g = T.G(), w = g.world, set = w.scene.userData.wickerSet, wc = w.scene.userData.wickerCandles;
+    const out = { candles: !!g.state.lit['wicker.candles'], figure: !!g.state.lit['wicker.figure'], flames: set.flames.visible, settled: set.look().settled };
+    // DEV-04C-R: matches only carried (nothing in hand) — the plain action button lights the ring
+    const cd = wc.candles[5], dx = cd.x - wc.centre.x, dz = cd.z - wc.centre.z, d = Math.hypot(dx, dz);
+    g.player.setPose({ x: wc.centre.x + dx / d * (d + 1.0), y: 1.2, z: wc.centre.z + dz / d * (d + 1.0), yaw: 0, pitch: 0 }); g.player.y = w.col.supportHeight(g.player.x, g.player.z, 1.3, 0.42); T.tick(3);
+    T.lookAt(cd.x, cd.y, cd.z);
+    out.selected = g.selected; out.label = g.metrics().label; out.target = g.metrics().target;
+    g.doAction(); T.wait(4.5);
+    out.litAfter = !!g.state.lit['wicker.candles']; out.count = set.litCount();
+    return out;
+  });
+  if (old) {
+    log('a save from before DEV-04C loads with the clearing unlit', !old.candles && !old.figure && !old.flames && !old.settled, JSON.stringify(old));
+    log('one action: with matches only carried, the action button on a candle ("Kaarsen aansteken") lights the whole ring', old.selected === null && old.target === 'wicker.candles' && /Kaarsen aansteken/.test(old.label ?? '') && old.litAfter && old.count === 9, JSON.stringify(old));
+  }
+
+  // ---------------------------------------------------------------- DEV-04C-R lake material + room-boundary light continuity
+  const lake = await step('lake', () => {
+    const g = T.G(); let m = null, finite = true;
+    g.world.scene.traverse((o) => { if (o.material?.customProgramCacheKey?.() === 'flw-lake-r') { m = o; const a = o.geometry.attributes.position.array; for (let i = 0; i < a.length; i++) if (!Number.isFinite(a[i])) finite = false; } });
+    if (!m) return { found: false };
+    g.player.setPose({ x: 80, y: 0, z: 136.4, yaw: -70 * Math.PI / 180, pitch: -0.04 }); T.tick(10); g.renderer.render(g.world.scene, g.camera);
+    const prog = g.renderer.properties.get(m.material).currentProgram;
+    return { found: true, finite, compiled: !!prog, tris: m.geometry.index ? m.geometry.index.count / 3 : m.geometry.attributes.position.count / 3, alpha: m.geometry.attributes.color.itemSize };
+  });
+  if (lake) log('lake (DEV-04C-R): the reworked water material initialises and compiles; one mesh, ≤ 480 triangles, per-vertex depth / alpha', lake.found && lake.finite && lake.compiled && lake.tris <= 480 && lake.alpha === 4, JSON.stringify(lake));
+  const lightRes = await step('light continuity', walkLightCases, LIGHT_CASES);
+  if (lightRes) log(`room-boundary light continuity (DEV-04C-R): a source in view keeps its light across the threshold (${lightRes.length} walks; rule: ≥ 50 % once visible for 1 s)`, lightRes.length >= 4 && lightRes.every((r) => !r.error && r.bad === 0) && lightRes.filter((r) => r.seenSamples > 0).length >= 3, lightRes.map((r) => `${r.name}: ${r.error ?? `${r.bad}/${r.seenSamples}`}`).join(' | '));
 
   // ---------------------------------------------------------------- 8. ids, checkpoints, save schema
   const ids = await E(page, () => { const g = T.G(); return { interactables: [...g.world.byId.keys()].sort(), checkpoints: g.world.checkpoints.map((c) => c.name).sort(), stateKeys: Object.keys(g.state).sort(), version: g.state.version }; });

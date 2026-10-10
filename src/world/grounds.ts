@@ -194,44 +194,56 @@ function festoon(c: Ctx, ends: [[number, number], [number, number]], y0: number)
 
 // ------------------------------------------------------------------------------------------------ lake + viewpoint
 /**
- * DEV-04C lake surface: the water read as one flat teal disc. Now it carries depth as value: a radial gradient from a
- * dark, nearly opaque centre to lighter, more transparent shallows over the sloping bed at the rim (the shore reads as
- * a soft band, not a cut), a haze-coloured sheen at grazing angles (the sky's colour, by reference to the fog colour, so
- * it follows dusk and the woodland haze) and slow, sparse glints on the shared flame clock. No reflections, no extra
- * pass: one mesh, one material, as before.
+ * Lake surface (DEV-04C, reworked in DEV-04C-R after the phone acceptance pass: the first version read too cyan, and its
+ * bright elongated ripple marks looked like painted decals). Still one mesh / one material, no reflections:
+ *   - muted, slightly green-grey water: a dark, nearly opaque centre grading over most of the radius into olive
+ *     shallows, and at the rim a translucent muddy band over the sloping bed, so the shore stays readable but soft;
+ *   - a restrained haze-coloured sheen at grazing angles (the fog colour by reference: follows dusk and woodland haze);
+ *   - a low-contrast moving shimmer (±3 %) and sparse, small glints (a few percent of 30 cm cells, twinkling) instead
+ *     of large repeated highlight ellipses. Computed in lake-centred coordinates (small numbers: no precision noise on
+ *     mobile GPUs), on the shared flame clock (frozen in reduced motion).
  */
 function lakeGeo() {
   const g = new THREE.RingGeometry(0, 1, 48, 5); // 480 triangles: enough rings for the depth gradient
   const p = g.attributes.position as THREE.BufferAttribute, n = p.count, col = new Float32Array(n * 4);
-  const deep = new THREE.Color('#1d4a52'), mid = new THREE.Color('#2e6a6e'), shallow = new THREE.Color('#5f978a'), c = new THREE.Color();
+  const deep = new THREE.Color('#1d3236'), mid = new THREE.Color('#304749'), shallow = new THREE.Color('#566a5f'), rim = new THREE.Color('#6c6c55'), c = new THREE.Color();
   for (let i = 0; i < n; i++) {
     const r = Math.hypot(p.getX(i), p.getY(i));
-    if (r < 0.55) c.copy(deep).lerp(mid, r / 0.55); else c.copy(mid).lerp(shallow, THREE.MathUtils.smoothstep(r, 0.55, 0.97));
-    col.set([c.r, c.g, c.b, THREE.MathUtils.lerp(0.93, 0.5, THREE.MathUtils.smoothstep(r, 0.7, 1.0))], i * 4);
+    if (r < 0.5) c.copy(deep).lerp(mid, THREE.MathUtils.smoothstep(r, 0, 0.5));
+    else if (r < 0.9) c.copy(mid).lerp(shallow, THREE.MathUtils.smoothstep(r, 0.5, 0.9));
+    else c.copy(shallow).lerp(rim, THREE.MathUtils.smoothstep(r, 0.9, 1.0));
+    col.set([c.r, c.g, c.b, THREE.MathUtils.lerp(0.94, 0.42, THREE.MathUtils.smoothstep(r, 0.62, 1.0))], i * 4);
   }
   g.setAttribute('color', new THREE.BufferAttribute(col, 4));
   return g;
 }
 function lakeMaterial(w: World) {
-  const m = w.material(new THREE.MeshLambertMaterial({ vertexColors: true, transparent: true, emissive: new THREE.Color('#06191c') }));
+  const m = w.material(new THREE.MeshLambertMaterial({ vertexColors: true, transparent: true, emissive: new THREE.Color('#040b0b') }));
   const sky = w.scene.fog ? (w.scene.fog as THREE.Fog).color : new THREE.Color('#dfd6c0');
   m.onBeforeCompile = (sh) => {
     sh.uniforms.uTime = FIRE_UNIFORMS.uTime;
     sh.uniforms.uMotion = FIRE_UNIFORMS.uMotion;
     sh.uniforms.uSky = { value: sky };
-    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying vec3 vLakeP;')
-      .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvLakeP = (modelMatrix * vec4(transformed, 1.0)).xyz;');
-    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying vec3 vLakeP; uniform float uTime; uniform float uMotion; uniform vec3 uSky;')
+    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying vec2 vLakeP;')
+      .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvLakeP = (modelMatrix * vec4(transformed, 1.0)).xz - modelMatrix[3].xz;');
+    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying vec2 vLakeP; uniform float uTime; uniform float uMotion; uniform vec3 uSky;')
       .replace('#include <opaque_fragment>', `
         float fr = pow(1.0 - abs(dot(normalize(vViewPosition), normalize(vNormal))), 5.0);
-        outgoingLight = mix(outgoingLight, uSky * vec3(0.62, 0.74, 0.8), fr * 0.38); // a cooler, darker sky tone, not milk
-        vec2 q = vLakeP.xz; float tt = uTime * uMotion * 0.6;
-        float g1 = sin(q.x * 0.9 + q.y * 0.25 + tt) * sin(q.y * 3.4 - q.x * 0.3 - tt * 0.7); // long thin ripple crests
-        outgoingLight += vec3(1.0, 0.95, 0.82) * smoothstep(0.86, 0.98, g1) * 0.1;
-        diffuseColor.a = mix(diffuseColor.a, 1.0, fr * 0.4);
+        outgoingLight = mix(outgoingLight, uSky * vec3(0.76, 0.84, 0.88), fr * 0.38);
+        float tt = uTime * uMotion;
+        // low-contrast moving shimmer: two slow crossing wave trains, ±3 %
+        float rip = sin(dot(vLakeP, vec2(2.3, 1.1)) + tt * 1.1) * sin(dot(vLakeP, vec2(-1.2, 2.7)) - tt * 0.8);
+        outgoingLight *= 1.0 + 0.03 * rip;
+        // sparse small glints: a few 30 cm cells catch the light at a time, twinkling
+        vec2 q = vLakeP * 3.2, f = fract(q) - 0.5;
+        vec3 h3 = fract(vec3(floor(q).xyx) * 0.1031); h3 += dot(h3, h3.yzx + 33.33);
+        float h = fract((h3.x + h3.y) * h3.z);
+        float tw = 0.5 + 0.5 * sin(tt * 1.9 + h * 37.0);
+        outgoingLight += vec3(1.0, 0.96, 0.86) * step(0.972, h) * smoothstep(0.16, 0.02, length(f)) * tw * (0.06 + 0.22 * fr);
+        diffuseColor.a = mix(diffuseColor.a, 1.0, fr * 0.35);
         #include <opaque_fragment>`);
   };
-  m.customProgramCacheKey = () => 'flw-lake';
+  m.customProgramCacheKey = () => 'flw-lake-r';
   return m;
 }
 

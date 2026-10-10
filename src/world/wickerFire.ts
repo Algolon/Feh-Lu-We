@@ -59,6 +59,11 @@ export function figureMessage(s: GameState): string {
   return has(s, 'matches') ? 'De kaarsen branden. Neem de lucifers in de hand om de stroman aan te steken.' : 'De kaarsen branden. Je hebt niets om de stroman mee aan te steken.';
 }
 
+/** DEV-04C-R: the candle sweep round the ring (s): ~0.4 s per candle — readable, not tedious. */
+export const CANDLE_SWEEP = 3.6;
+/** How many of `n` candles burn at sweep progress `reveal` (0..1): candle i lights once its rank (i + 0.5) / n is reached. */
+export const candlesShown = (reveal: number, n: number) => Math.max(0, Math.min(n, Math.floor(reveal * n + 0.5)));
+
 /** Burn timeline (seconds since ignition in this session). */
 export const WICKER_BURN = { catch: 5, charEnd: 62, fadeStart: 66, settled: 80 } as const;
 export interface BurnLook {
@@ -199,11 +204,11 @@ export function buildWickerSetpiece(w: World, g: GameApi, o: WickerSetOpts) {
 
   // ---- light: the ring (soft, warm) and the fire (strong, flickering, fading to an ember glow)
   let look = burnLook(null);
-  w.lamps.push({ id: WICKER_KEYS.candles, pos: v3(x, gy + 0.6, z), color: '#ffb35a', intensity: 3.2, distance: 9, on: () => candlesLit(s()), flicker: 0.18, room: 'out' });
+  w.lamps.push({ id: WICKER_KEYS.candles, pos: v3(x, gy + 0.6, z), color: '#ffb35a', get intensity() { return 3.2 * Math.max(0.12, reveal.uReveal.value); }, distance: 9, on: () => candlesLit(s()), flicker: 0.18, room: 'out' }); // ramps with the sweep
   w.lamps.push({ id: WICKER_KEYS.figure, pos: v3(x, foot + 1.4, z - 0.6), color: '#ff8a3a', get intensity() { return 18 * Math.max(0.05, look.light); }, distance: 20, on: () => figureLit(s()), flicker: 0.32, room: 'out' });
   // floor glow under the candles and the fire: the clearing's own additive mesh (in the shared LightPatches mesh its
   // bounding sphere would span the estate and cost a draw call in every view)
-  const glow = glowPatches(w, x, gy, z, [...o.candles.map((cd) => ({ x: cd.x, y: cd.y - 0.12, z: cd.z, r: 0.42, k: 0 })), { x, y: gy + 0.05, z, r: 3.4, k: 1 }]);
+  const glow = glowPatches(w, x, gy, z, [...o.candles.map((cd, i) => ({ x: cd.x, y: cd.y - 0.12, z: cd.z, r: 0.42, k: 0, order: (i + 0.5) / n })), { x, y: gy + 0.05, z, r: 3.4, k: 1, order: 0 }], reveal);
   regionOwned(w, glow.mesh, region);
   w.emitters.push({ kind: 'fire', pos: v3(x, foot + 1, z), on: () => look.flameLow > 0.05 });
 
@@ -213,9 +218,9 @@ export function buildWickerSetpiece(w: World, g: GameApi, o: WickerSetOpts) {
     look = burnLook(ignAt === null ? null : ignAt === -Infinity ? Infinity : now - ignAt);
     const cl = candlesLit(s());
     flames.visible = cl;
-    reveal.uReveal.value = cl ? Math.min(1, (now - litAt) / 1.8) : 0;
+    reveal.uReveal.value = cl ? Math.min(1, (now - litAt) / CANDLE_SWEEP) : 0;
     jarGlow.value = cl ? 1 : 0;
-    glow.uCandle.value = cl ? 0.24 * reveal.uReveal.value : 0;
+    glow.uCandle.value = cl ? 0.24 : 0; // per candle: each floor glow follows its own candle in the sweep (glowPatches)
     glow.uFire.value = figureLit(s()) ? 0.34 * Math.max(0.25, look.light) : 0;
     glow.mesh.visible = cl || figureLit(s());
     fLow.visible = look.flameLow > 0.01; fHigh.visible = look.flameHigh > 0.01;
@@ -236,47 +241,54 @@ export function buildWickerSetpiece(w: World, g: GameApi, o: WickerSetOpts) {
   });
   w.onUpdate((_dt, t) => { now = t; if (candlesLit(s()) || figureLit(s())) apply(); });
 
-  // ---- interaction: the ring (nine hit boxes, one id) and the figure
+  // ---- interaction: the ring (nine hit boxes, one id) and the figure. DEV-04C-R: no toasts here — the action label
+  // says what will happen and the scene shows that it did (the toast card covered the very sequence it described).
+  // Carrying matches is enough: the action button lights the ring / the figure (holding the matches still works too).
+  const quiet = (r: Outcome) => g.act({ ...r, msg: '' }, { save: r.ok });
+  const lightRing = (item: string) => {
+    const p = g.playerXZ();
+    let best = 0, bd = Infinity; // the sweep starts at the candle nearest the player and runs round the ring
+    o.candles.forEach((cd, i) => { const d = Math.hypot(cd.x - p.x, cd.z - p.z); if (d < bd) { bd = d; best = i; } });
+    const r = lightCandles(s(), item);
+    if (r.ok) { litAt = now; reveal.uStart.value = best / n; }
+    quiet(r);
+  };
+  const ignite = (item: string) => {
+    const r = igniteFigure(s(), item);
+    if (r.ok) ignAt = now;
+    quiet(r);
+  };
   const ring = new THREE.Group();
   ring.position.copy(v3(x, gy, z));
   regionOwned(w, ring, region);
   const hits = o.candles.map((cd) => hitbox(ring, 0.42, 0.42, 0.42, cd.x - x, cd.y - gy - 0.08, -(cd.z - z)));
   w.add({
     id: WICKER_IDS.candles, obj: ring, hit: hits, focus: v3(x, gy + 0.3, z), reach: 2.4,
-    label: () => (candlesLit(s()) ? 'Kaarsen uitblazen' : 'Kaarsen'),
+    label: () => (candlesLit(s()) ? 'Kaarsen uitblazen' : has(s(), 'matches') ? 'Kaarsen aansteken' : 'Kaarsen (geen lucifers)'),
     run: () => {
-      if (candlesLit(s())) { g.act(blowCandles(s())); return; }
-      g.toast(has(s(), 'matches') ? 'Negen kaarsen in glazen potten, in een kring om de stroman. Neem de lucifers in de hand om ze aan te steken.' : 'Negen kaarsen in glazen potten, in een kring om de stroman. Je hebt niets om ze aan te steken.');
+      if (candlesLit(s())) quiet(blowCandles(s()));
+      else if (has(s(), 'matches')) lightRing('matches');
+      else g.sfx('locked');
     },
     acceptsItems: true,
     itemLabel: (item) => (candlesLit(s()) ? null : item === 'matches' ? 'Kaarsen aansteken' : `Gebruik: ${ITEMS[item]?.name ?? item}`),
-    useItem: (item) => {
-      const p = g.playerXZ();
-      // start the sweep at the candle nearest the player
-      let best = 0, bd = Infinity;
-      o.candles.forEach((cd, i) => { const d = Math.hypot(cd.x - p.x, cd.z - p.z); if (d < bd) { bd = d; best = i; } });
-      const r = lightCandles(s(), item);
-      if (r.ok) { litAt = now; reveal.uStart.value = best / n; }
-      g.act(r, { save: r.ok });
-    },
+    useItem: lightRing,
   });
   const fig = new THREE.Group();
   fig.position.copy(v3(x, foot, z));
   regionOwned(w, fig, region);
   const fh = hitbox(fig, 1.1, 2.7, 0.75, 0, 1.4, 0);
+  const figLabel = () => (figureLit(s()) ? (look.settled ? 'Verkoolde stroman' : null) : !candlesLit(s()) ? 'Stroman — eerst de kaarsen' : has(s(), 'matches') ? 'Stroman aansteken' : 'Stroman (geen lucifers)');
   w.add({
     id: WICKER_IDS.figure, obj: fig, hit: [fh], focus: v3(x, foot + 1.4, z), reach: 3.4,
-    label: () => (figureLit(s()) ? (look.settled ? 'Verkoolde stroman' : null) : 'Stroman'),
-    run: () => g.toast(figureMessage(s())),
+    label: figLabel,
+    run: () => { if (!figureLit(s()) && candlesLit(s()) && has(s(), 'matches')) ignite('matches'); else g.sfx(figureLit(s()) ? 'click' : 'locked'); },
     acceptsItems: true,
-    itemLabel: (item) => (figureLit(s()) ? null : item === 'matches' ? 'Stroman aansteken' : `Gebruik: ${ITEMS[item]?.name ?? item}`),
-    useItem: (item) => {
-      const r = igniteFigure(s(), item);
-      if (r.ok) ignAt = now;
-      g.act(r, { save: r.ok });
-    },
+    // the gate reads in the prompt itself: before the ring burns the matches offer nothing but "eerst de kaarsen"
+    itemLabel: (item) => (figureLit(s()) ? null : item === 'matches' ? (candlesLit(s()) ? 'Stroman aansteken' : 'Stroman — eerst de kaarsen') : `Gebruik: ${ITEMS[item]?.name ?? item}`),
+    useItem: ignite,
   });
-  w.scene.userData.wickerSet = { look: () => look, ids: WICKER_IDS, figure, hay, flames, fLow, fHigh, embers, smoke, smoulder, jars, reveal, burnUniforms: U };
+  w.scene.userData.wickerSet = { look: () => look, litCount: () => (candlesLit(s()) ? candlesShown(reveal.uReveal.value, n) : 0), ids: WICKER_IDS, figure, hay, flames, fLow, fHigh, embers, smoke, smoulder, jars, reveal, burnUniforms: U };
 }
 
 function mergeAll(parts: THREE.BufferGeometry[]) {
@@ -293,7 +305,7 @@ function mergeAll(parts: THREE.BufferGeometry[]) {
 }
 
 /** Soft additive floor glows (one mesh): `k` 0 = candle patches (uCandle), 1 = the fire patch (uFire). */
-function glowPatches(w: World, x: number, gy: number, z: number, items: { x: number; y: number; z: number; r: number; k: number }[]) {
+function glowPatches(w: World, x: number, gy: number, z: number, items: { x: number; y: number; z: number; r: number; k: number; order: number }[], reveal: FireReveal) {
   const cv = document.createElement('canvas'); cv.width = cv.height = 64;
   const c2 = cv.getContext('2d')!, img = c2.createImageData(64, 64);
   for (let j = 0; j < 64; j++) for (let i = 0; i < 64; i++) {
@@ -304,10 +316,11 @@ function glowPatches(w: World, x: number, gy: number, z: number, items: { x: num
   const parts = items.map((p) => {
     const g = new THREE.PlaneGeometry(p.r * 2, p.r * 2).rotateX(-Math.PI / 2).translate(p.x - x, p.y - gy, -(p.z - z));
     g.setAttribute('aKind', new THREE.BufferAttribute(new Float32Array(g.attributes.position.count).fill(p.k), 1));
+    g.setAttribute('aOrder', new THREE.BufferAttribute(new Float32Array(g.attributes.position.count).fill(p.order), 1));
     return g.index ? g.toNonIndexed() : g;
   });
   const geo = new THREE.BufferGeometry();
-  for (const name of ['position', 'uv', 'aKind']) {
+  for (const name of ['position', 'uv', 'aKind', 'aOrder']) {
     const size = parts[0].attributes[name].itemSize, arr = new Float32Array(parts.reduce((n, p) => n + p.attributes[name].count, 0) * size);
     let off = 0; for (const p of parts) { arr.set(p.attributes[name].array as Float32Array, off); off += p.attributes[name].count * size; }
     geo.setAttribute(name, new THREE.BufferAttribute(arr, size));
@@ -316,10 +329,10 @@ function glowPatches(w: World, x: number, gy: number, z: number, items: { x: num
   const uCandle = { value: 0 }, uFire = { value: 0 };
   const mat = w.material(new THREE.MeshBasicMaterial({ map: w.texture(new THREE.CanvasTexture(cv)), color: '#ffffff', transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4 }));
   mat.onBeforeCompile = (sh) => {
-    Object.assign(sh.uniforms, { uCandle, uFire });
-    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute float aKind; varying float vKind;').replace('#include <begin_vertex>', '#include <begin_vertex>\nvKind = aKind;');
-    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying float vKind; uniform float uCandle; uniform float uFire;')
-      .replace('#include <opaque_fragment>', 'outgoingLight *= mix(vec3(1.0, 0.68, 0.33) * uCandle, vec3(1.0, 0.54, 0.23) * uFire, vKind);\n#include <opaque_fragment>');
+    Object.assign(sh.uniforms, { uCandle, uFire, uReveal: reveal.uReveal, uStart: reveal.uStart });
+    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute float aKind; attribute float aOrder; uniform float uReveal; uniform float uStart; varying float vKind; varying float vLit;').replace('#include <begin_vertex>', '#include <begin_vertex>\nvKind = aKind; vLit = fract(aOrder - uStart + 1.0) > uReveal ? 0.0 : 1.0;');
+    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying float vKind; varying float vLit; uniform float uCandle; uniform float uFire;')
+      .replace('#include <opaque_fragment>', 'outgoingLight *= mix(vec3(1.0, 0.68, 0.33) * uCandle * vLit, vec3(1.0, 0.54, 0.23) * uFire, vKind);\n#include <opaque_fragment>');
   };
   mat.customProgramCacheKey = () => 'wicker-glow';
   const mesh = new THREE.Mesh(geo, mat);

@@ -168,3 +168,46 @@ describe('DEV-04C Wickerman burn look', () => {
     }
   });
 });
+
+// ------------------------------------------------------------------------------------------------ DEV-04C-R corrections
+import { candlesShown, CANDLE_SWEEP } from '../src/world/wickerFire';
+import { LightPool } from '../src/interactions/world';
+import { RoomGraph } from '../src/world/rooms';
+
+describe('DEV-04C-R Wickerman candle sequence', () => {
+  it('a readable sweep (not one frame, not tedious) that lights the candles one after another', () => {
+    expect(CANDLE_SWEEP).toBeGreaterThanOrEqual(2.5);
+    expect(CANDLE_SWEEP).toBeLessThanOrEqual(4.5);
+    const counts = Array.from({ length: 37 }, (_, i) => candlesShown(i / 36, 9));
+    expect(counts[0]).toBe(0);
+    expect(counts[counts.length - 1]).toBe(9);
+    expect(counts.every((c, i) => i === 0 || c >= counts[i - 1])).toBe(true);
+    expect(new Set(counts).size).toBe(10); // every count from 0 to 9 is passed through: one candle at a time
+  });
+});
+
+describe('DEV-04C-R light pool: sources in view keep their light across room boundaries', () => {
+  // three rooms in a row joined by arches (A | B | C) and a fourth behind a closed door (A | D)
+  const R = (id: string, x0: number, x1: number) => ({ id, name: id, floor: 'g' as const, x0, x1, z0: 0, z1: 10, y0: 0, y1: 3 });
+  const graph = new RoomGraph([R('A', 0, 10), R('B', 10, 20), R('C', 20, 30), R('D', -10, 0)], [
+    { a: 'A', b: 'B', kind: 'arch' }, { a: 'B', b: 'C', kind: 'arch' }, { a: 'A', b: 'D', kind: 'door', door: 'door.d' },
+  ]);
+  const lamp = (id: string, x: number) => ({ id, pos: new THREE.Vector3(x, 1.5, -5), color: '#ffaa55', intensity: 6, distance: 8, on: () => true });
+  const eye = new THREE.Vector3(8, 1.6, -5); // in A, looking +x through B into C
+  const view = { dir: new THREE.Vector3(1, 0, 0), cosHalf: Math.cos(0.9), blocked: () => false };
+  const pick = (lamps: ReturnType<typeof lamp>[], v?: typeof view, slots = 1) => { const p = new LightPool(new THREE.Scene(), slots); p.update(0.016, 0, lamps, eye, graph, () => false, v); return slots === 1 ? p.assigned()[0] : p.assigned(); };
+  const scene3 = () => [lamp('behind1', 3), lamp('behind2', 4), lamp('hearthC', 25)];
+  it('a source two rooms away that you are looking at takes a pooled light from a nearer one behind you', () => {
+    expect(pick(scene3(), view, 2)).toContain('hearthC');
+  });
+  it('without a view the old distance / room ranking still applies (the nearest ones in the own room)', () => {
+    expect(pick(scene3(), undefined, 2)).not.toContain('hearthC');
+  });
+  it('a lamp in a room you cannot see (closed door) is never lit, even in the view cone', () => {
+    const behindDoor = { ...lamp('d', -5), pos: new THREE.Vector3(-5, 1.5, -5) };
+    expect(pick([behindDoor], { ...view, dir: new THREE.Vector3(-1, 0, 0) })).toBe(null);
+  });
+  it('a blocked line of sight gives no bonus', () => {
+    expect(pick(scene3(), { ...view, blocked: () => true }, 2)).not.toContain('hearthC');
+  });
+});
