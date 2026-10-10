@@ -1,0 +1,75 @@
+{
+  "base": "http://localhost:4173/Feh-Lu-We/",
+  "rows": [
+    {
+      "name": "l01-lake-approach",
+      "calls": 38,
+      "triangles": 133581
+    },
+    {
+      "name": "l02-lake-shore",
+      "calls": 38,
+      "triangles": 127056
+    },
+    {
+      "name": "l03-lake-close",
+      "calls": 50,
+      "triangles": 145541
+    },
+    {
+      "name": "l01-lake-approach-phone",
+      "calls": 32,
+      "triangles": 98351
+    },
+    {
+      "name": "l02-lake-shore-phone",
+      "calls": 33,
+      "triangles": 86939
+    },
+    {
+      "name": "l03-lake-close-phone",
+      "calls": 21,
+      "triangles": 82394
+    },
+    {
+      "name": "w-candles-0_3s",
+      "lit": 1,
+      "toast": false,
+      "label": "Kaarsen aansteken"
+    },
+    {
+      "name": "w-candles-1s",
+      "lit": 4,
+      "toast": false,
+      "label": "Kaarsen aansteken"
+    },
+    {
+      "name": "w-candles-1_8s",
+      "lit": 7,
+      "toast": false,
+      "label": "Kaarsen aansteken"
+    },
+    {
+      "name": "w-candles-2_6s",
+      "lit": 9,
+      "toast": false,
+      "label": "Kaarsen aansteken"
+    },
+    {
+      "name": "w-candles-3_8s",
+      "lit": 9,
+      "toast": false,
+      "label": "Kaarsen aansteken"
+    },
+    {
+      "name": "r-hall-looking-back-at-hearth",
+      "room": "hall",
+      "hearthLight": 10.39,
+      "assigned": [
+        "lamp.livingFloor",
+        "fire.living",
+        "lamp.hallChandelier"
+      ]
+    }
+  ]
+}

@@ -338,6 +338,33 @@ Estate-wide curation of the surface strength per room; FLW-D2 / S3 / K3 rollout 
 files exist; gingerbread maquette material re-skin; bespoke fire / smoke shapes; any device-specific quality tiering of
 the surface layer.
 
+### DEV-04D backlog (recorded during DEV-04C-R; not implemented)
+
+**D-BL-01 — The social board-game table: a played evening, not a set table** *(owner, DEV-04C-R acceptance; not
+started)*
+
+- **Where** (confirmed by the owner): the long table in the eat / game room, the room immediately to the right when
+  you enter the manor and look in from the hall. In code: `ES.gameTable`, `src/world/manor.ts` around the
+  `boardGameSet(c, 101.3, 84.35, …)` call, ground floor.
+- **Today**: the home-made duo game (board, pawns, two dice, card piles), a score pad and 3 beer bottles at the table's
+  south end. Marshmallows (one bowl) and 4 shot glasses stand on a separate small side table (96.2, 90.6).
+- **Wanted**:
+  - **≥ ~15 beer bottles**, naturally varied: mostly empties with a few still in use, some standing, one or two
+    tipped over, a few labels turned away, slight height / tint variation. Clustered where people sat (by the seats,
+    near the players' hands, a knot of empties at the table end), not spread evenly.
+  - **Shot glasses** (several, some empty, one or two upturned) next to **one bottle of strong liquor**.
+  - **Marshmallows / a marshmallow bag** on the table: an opened bag with a few loose ones.
+  - Keep the **board game / cards / dice identity** readable: the board stays the focal point and nothing covers it.
+- **Constraints**:
+  - Hand-placed or seeded-jitter clusters only; no grid, ring or evenly spaced procedural placement.
+  - Reuse the existing bottle / cap / glass geometry (`bottleGeoOf('beer')`, `capGeo`, `shotGlass`) through the
+    chunk batch (`Asm`). No new interactables, no new save keys.
+  - The dining views stay inside the mobile guide (today `dining` 59 calls / 133 k triangles).
+  - Decide whether the side table's marshmallow / shots group moves to the big table or stays as a second spot.
+
+**DEV-04C-R** (mobile acceptance corrections: lake, room-boundary light continuity, Wickerman candle sequence and no
+message card) is reported in [`DEV04C_R_REPORT.md`](DEV04C_R_REPORT.md).
+
 ## 13. Real-phone check (hold condition for PR #5)
 
 Purpose: confirm on real hardware what SwiftShader can only approximate — the surface layer's fragment cost and the

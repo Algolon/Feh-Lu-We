@@ -641,15 +641,22 @@ async function regressions() {
     // F07/G — time reading a panel counts as active; the pause menu counts as paused
     r.time = await E(page, async () => {
       T.G().settings.quality = 'low'; T.G().applyQuality(true); // software rendering: keep frames short
-      await new Promise((res) => setTimeout(res, 4000)); // let shader recompilation settle
+      // Frame-aware windows (DEV-04C-R): time is credited per frame to the modal open when the frame ENDS, and in
+      // software rendering a frame can take seconds (the recompile after applyQuality 5–12 s). So: let two frames pass
+      // after each state change, then measure ≥ 3 s AND ≥ 3 frames. Same assertion, robust to slow frames.
+      const frame = () => new Promise((res) => requestAnimationFrame(() => res()));
+      const frames = async (n) => { for (let i = 0; i < n; i++) await frame(); };
+      const span = async () => { const t0 = performance.now(); let n = 0; while (n < 3 || performance.now() - t0 < 3000) { await frame(); n++; } };
+      await new Promise((res) => setTimeout(res, 4000)); await frames(2); // let shader recompilation settle
       const st = T.G().state.stats;
-      const a0 = st.activeMs, p0 = st.pausedMs;
-      T.G().openPanel('studyLock');
-      await new Promise((res) => setTimeout(res, 3000));
+      T.G().openPanel('studyLock'); await frames(2);
+      const a0 = st.activeMs;
+      await span();
       const a1 = st.activeMs;
-      T.closeModal(); T.G().openPause();
-      await new Promise((res) => setTimeout(res, 3000));
-      const p1 = st.pausedMs, a2 = st.activeMs;
+      T.closeModal(); T.G().openPause(); await frames(2);
+      const p0 = st.pausedMs, a1p = st.activeMs;
+      await span();
+      const p1 = st.pausedMs, a2 = a1 + (st.activeMs - a1p);
       T.closeModal();
       return { activeDuringPanel: Math.round(a1 - a0), pausedDuringPause: Math.round(p1 - p0), activeDuringPause: Math.round(a2 - a1) };
     });
