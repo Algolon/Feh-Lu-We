@@ -195,10 +195,18 @@ describe('DEV-04C-R light pool: sources in view keep their light across room bou
   const lamp = (id: string, x: number) => ({ id, pos: new THREE.Vector3(x, 1.5, -5), color: '#ffaa55', intensity: 6, distance: 8, on: () => true });
   const eye = new THREE.Vector3(8, 1.6, -5); // in A, looking +x through B into C
   const view = { dir: new THREE.Vector3(1, 0, 0), cosHalf: Math.cos(0.9), blocked: () => false };
-  const pick = (lamps: ReturnType<typeof lamp>[], v?: typeof view, slots = 1) => { const p = new LightPool(new THREE.Scene(), slots); p.update(0.016, 0, lamps, eye, graph, () => false, v); return slots === 1 ? p.assigned()[0] : p.assigned(); };
-  const scene3 = () => [lamp('behind1', 3), lamp('behind2', 4), lamp('hearthC', 25)];
-  it('a source two rooms away that you are looking at takes a pooled light from a nearer one behind you', () => {
+  // `secs` of steady viewing (the pool ranks every 0.25 s; attention needs ≥ 1.2 s of dwell, full at 2 s)
+  const pick = (lamps: ReturnType<typeof lamp>[], v?: typeof view, slots = 1, secs = 3) => {
+    const p = new LightPool(new THREE.Scene(), slots);
+    for (let t = 0; t <= secs; t += 0.25) p.update(0.25, t, lamps, eye, graph, () => false, v);
+    return slots === 1 ? p.assigned()[0] : p.assigned();
+  };
+  const scene3 = () => [lamp('behind1', 4), lamp('behind2', 1), lamp('hearthC', 25)]; // 4 m and 7 m behind, the hearth 17 m ahead
+  it('a source two rooms away that you keep looking at takes a pooled light from a nearer one behind you', () => {
     expect(pick(scene3(), view, 2)).toContain('hearthC');
+  });
+  it('a glance is not attention: a source only briefly in view does not take a light (turning never reorders the pool)', () => {
+    expect(pick(scene3(), view, 2, 0.75)).not.toContain('hearthC');
   });
   it('without a view the old distance / room ranking still applies (the nearest ones in the own room)', () => {
     expect(pick(scene3(), undefined, 2)).not.toContain('hearthC');

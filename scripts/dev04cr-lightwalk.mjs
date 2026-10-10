@@ -11,6 +11,6 @@ await p.evaluate(() => localStorage.setItem('fehluwe.save', JSON.stringify({ ver
 await p.reload(); await p.click('[data-cont]');
 await p.waitForFunction(() => window.__game?.world?.id === 'estate', null, { timeout: 180000 });
 const out = await p.evaluate(walkLightCases, LIGHT_CASES);
-for (const r of out) console.log(`${r.bad === 0 ? 'OK ' : 'POP'}  ${r.name}  (visible ≥1 s: ${r.seenSamples} ticks, under 50 %: ${r.bad})\n     ${r.trace}`);
+for (const r of out) console.log(`${r.bad === 0 ? 'OK ' : 'POP'}  ${r.name}  (drops while visible: ${r.drops}; in view ≥ 2.5 s: ${r.seenSamples} ticks, under 50 %: ${r.late})\n     ${r.trace}`);
 if (process.argv[3]) writeFileSync(process.argv[3], JSON.stringify({ base: BASE, out }, null, 2));
 await b.close();

@@ -316,10 +316,11 @@ export interface LightView { dir: THREE.Vector3; cosHalf: number; blocked: (x0: 
  *
  * Candidates (DEV-04C-R): the lamps of every room the player can SEE — the same room/portal visibility the renderer
  * uses (two portal steps through open doors / arches / stairs) — plus outdoor lamps through windows. Ranking: distance,
- * a penalty per portal step, source strength, and a strong bonus for a source that is in the view cone with a clear line
- * of sight: a hearth you are looking at through an arch keeps its light when you step across the threshold (it used to
- * lose it to a nearer lamp behind you, or never got one because its room was two steps away). The keep-margin exceeds
- * the room penalty, so crossing a boundary alone never evicts a light. Lamps in rooms you cannot see are never lit.
+ * a penalty for another room (more for two steps away), source strength, and an ATTENTION bonus: a source that has been
+ * in the view cone with a clear line of sight for a while (dwell ≥ 1.2 s, full at 2 s; decaying at half speed once out of
+ * view) ranks first and is not penalised for its room. So a hearth you keep looking at through an arch keeps its light as
+ * you step across the threshold (it used to lose it to a nearer lamp behind you, or never got one two rooms away), while
+ * glancing or turning round never reorders the pool (the iteration-3 rule). Lamps in rooms you cannot see are never lit.
  */
 export class LightPool {
   readonly lights: THREE.PointLight[] = [];
@@ -345,11 +346,19 @@ export class LightPool {
   static readonly VIEW_BONUS = 16;
   static readonly VIEW_RANGE = 24;
   static readonly TWO_STEP_PENALTY = 1.5;
-  static readonly KEEP_MARGIN = 3.0;
+  /** Attention: seconds of continuous viewing before the bonus starts / is full. */
+  static readonly DWELL_START = 1.2;
+  static readonly DWELL_FULL = 2.0;
+  private dwell = new Map<string, number>();
+  private sinceRank = 0;
   update(dt: number, t: number, lamps: LampSource[], eye: THREE.Vector3, rooms?: RoomGraph, isOpen: (door: string) => boolean = () => true, view?: LightView) {
     this.timer -= dt;
+    this.sinceRank += dt;
     if (this.timer <= 0) {
       this.timer = 0.25;
+      const elapsed = Math.min(0.5, this.sinceRank);
+      this.sinceRank = 0;
+      const seen = new Set<string>();
       const roomOf = (l: LampSource) => {
         let r = this.roomCache.get(l);
         if (r === undefined) { r = l.room ?? (rooms ? rooms.roomAt(l.pos.x, l.pos.y, -l.pos.z) : 'out'); this.roomCache.set(l, r); }
@@ -370,12 +379,15 @@ export class LightPool {
           const c = (view.dir.x * (l.pos.x - eye.x) + view.dir.y * (l.pos.y - eye.y) + view.dir.z * (l.pos.z - eye.z)) / d;
           inView = c > view.cosHalf && !view.blocked(eye.x, eye.y, -eye.z, l.pos.x, l.pos.y, -l.pos.z);
         }
-        // a source you can see is not penalised for being two rooms away; one you cannot see is ranked down
-        const w = 0.2 * l.intensity + (inView ? LightPool.VIEW_BONUS : rel && !rel.has(room) ? -LightPool.TWO_STEP_PENALTY : 0);
+        if (inView) { this.dwell.set(l.id, Math.min(3, (this.dwell.get(l.id) ?? 0) + elapsed)); seen.add(l.id); }
+        const att = THREE.MathUtils.smoothstep(this.dwell.get(l.id) ?? 0, LightPool.DWELL_START, LightPool.DWELL_FULL);
+        // a source you keep looking at ranks first and is not penalised for being two rooms away
+        const w = 0.2 * l.intensity + att * LightPool.VIEW_BONUS - (rel && !rel.has(room) ? (1 - att) * LightPool.TWO_STEP_PENALTY : 0);
         byId.set(l.id, l);
         cands.push({ id: l.id, room, d, w });
       }
-      this.want = chooseLamps(cands, this.here, this.want, this.lights.length, LightPool.KEEP_MARGIN);
+      for (const [id, v] of this.dwell) if (!seen.has(id)) { const nv = v - elapsed * 0.5; if (nv <= 0) this.dwell.delete(id); else this.dwell.set(id, nv); }
+      this.want = chooseLamps(cands, this.here, this.want, this.lights.length);
       this.lookup = byId;
     }
     for (let i = 0; i < this.lights.length; i++) {
@@ -384,7 +396,7 @@ export class LightPool {
       const cur = this.shown[i];
       if (cur !== target) {
         // fade the old source out before the light moves: no pop when a slot changes hands
-        l.intensity = Math.max(0, l.intensity - dt * 12); // DEV-04C-R: a gentler hand-over (was 30/s: a visible blink)
+        l.intensity = Math.max(0, l.intensity - dt * 20); // DEV-04C-R: a gentler hand-over (was 30/s: a visible blink)
         if (l.intensity > 0.05 && cur) continue;
         this.shown[i] = target;
         if (target) { l.position.copy(target.pos); l.color.set(target.color); l.distance = target.distance; }

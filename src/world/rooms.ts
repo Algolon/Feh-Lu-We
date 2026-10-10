@@ -70,26 +70,17 @@ export class RoomGraph {
 export interface LampCandidate { id: string; room: string; d: number; w?: number /* brighter sources are slightly preferred */ }
 
 /**
- * Choose which lamps get the few real point lights. Pure and view-direction independent (turning the
- * camera never reorders sources). Lamps in the viewer's own room are preferred; an already assigned
- * lamp keeps its light while it stays relevant and is not clearly worse than the best alternative
- * (hysteresis), so walking across a threshold does not swap lights back and forth.
+ * Choose which lamps get the few real point lights. Pure (the caller decides which lamps are candidates and folds any
+ * extra preference into `w`). Lamps in the viewer's own room are preferred. Hysteresis: a lamp that already holds a light
+ * ranks `keepMargin` better than its score, so walking across a threshold does not swap lights back and forth, while a
+ * clearly better newcomer (by more than the margin) still takes the slot (DEV-04C-R: previously every held lamp within
+ * the margin of the cut-off was kept outright, so no newcomer could ever displace a near-tie incumbent).
  */
 export function chooseLamps(cands: LampCandidate[], here: string, current: (string | null)[], slots: number, keepMargin = 2.0, otherRoomPenalty = 2.5): (string | null)[] {
   const score = (c: LampCandidate) => c.d + (c.room === here ? 0 : otherRoomPenalty) - (c.w ?? 0);
-  const sorted = [...cands].sort((a, b) => score(a) - score(b) || (a.id < b.id ? -1 : 1));
-  const want = sorted.slice(0, slots);
-  const cutoff = want.length ? score(want[want.length - 1]) : Infinity;
-  const byId = new Map(cands.map((c) => [c.id, c]));
-  // keep current lamps that are still candidates and within the margin of the cut-off
-  const keep = new Set(current.filter((id): id is string => !!id && byId.has(id) && (want.some((w) => w.id === id) || score(byId.get(id)!) <= cutoff + keepMargin)));
-  const chosen: string[] = [...keep];
-  for (const c of want) if (chosen.length < slots && !chosen.includes(c.id)) chosen.push(c.id);
-  while (chosen.length > slots) {
-    // drop the worst-scoring kept lamp
-    chosen.sort((a, b) => score(byId.get(a)!) - score(byId.get(b)!));
-    chosen.pop();
-  }
+  const held = new Set(current.filter((id): id is string => !!id));
+  const rank = (c: LampCandidate) => score(c) - (held.has(c.id) ? keepMargin : 0);
+  const chosen = [...cands].sort((a, b) => rank(a) - rank(b) || (a.id < b.id ? -1 : 1)).slice(0, slots).map((c) => c.id);
   // stable slots: a lamp that stays keeps its slot index
   const result: (string | null)[] = current.map((id) => (id && chosen.includes(id) ? id : null));
   while (result.length < slots) result.push(null);

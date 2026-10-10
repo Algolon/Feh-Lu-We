@@ -255,7 +255,7 @@ try {
   });
   if (lake) log('lake (DEV-04C-R): the reworked water material initialises and compiles; one mesh, ≤ 480 triangles, per-vertex depth / alpha', lake.found && lake.finite && lake.compiled && lake.tris <= 480 && lake.alpha === 4, JSON.stringify(lake));
   const lightRes = await step('light continuity', walkLightCases, LIGHT_CASES);
-  if (lightRes) log(`room-boundary light continuity (DEV-04C-R): a source in view keeps its light across the threshold (${lightRes.length} walks; rule: ≥ 50 % once visible for 1 s)`, lightRes.length >= 4 && lightRes.every((r) => !r.error && r.bad === 0) && lightRes.filter((r) => r.seenSamples > 0).length >= 3, lightRes.map((r) => `${r.name}: ${r.error ?? `${r.bad}/${r.seenSamples}`}`).join(' | '));
+  if (lightRes) log(`room-boundary light continuity (DEV-04C-R): a source in view keeps its light across the threshold (${lightRes.length} walks; rules: never drops below 50 % while visible once lit; ≥ 50 % after 2.5 s in view)`, lightRes.length >= 4 && lightRes.every((r) => !r.error && r.bad === 0) && lightRes.filter((r) => r.seenSamples > 0).length >= 3, lightRes.map((r) => `${r.name}: ${r.error ?? `drops ${r.drops}, late ${r.late}/${r.seenSamples}`}`).join(' | '));
 
   // ---------------------------------------------------------------- 8. ids, checkpoints, save schema
   const ids = await E(page, () => { const g = T.G(); return { interactables: [...g.world.byId.keys()].sort(), checkpoints: g.world.checkpoints.map((c) => c.name).sort(), stateKeys: Object.keys(g.state).sort(), version: g.state.version }; });
