@@ -1,0 +1,1652 @@
+{
+  "indexFilename": "FLW_Recovery_Archive_Master.json",
+  "indexLibraryFileID": "libfile_8c8c043ef3f081918d17f6039781fe8e",
+  "indexSHA256": "be4ad9d4abea4b7e97df1753fbd42b2d3b58ce917abaca5d99af3edbf9adb931",
+  "originalRecoveryCommit": "93206ddbbe03d244438b2ecd97d8284d9f76687f",
+  "PNGCount": 246,
+  "SVGCount": 3,
+  "storage": "External persistent recovery archive; not a production Git ancestor",
+  "parts": [
+    {
+      "filename": "FLW_Recovery_Archive_Master_part-01.zip",
+      "sha256": "f150bf50ae925e81e87b4b8e368e49a9b6a67aac5a2df4d2256310f75d57f7bf",
+      "sizeBytes": 227797556,
+      "files": 90,
+      "PNGCount": 82,
+      "libraryFileID": "libfile_8c4b820fa300819198fd5564f30f2305"
+    },
+    {
+      "filename": "FLW_Recovery_Archive_Master_part-02.zip",
+      "sha256": "78839ae45f83ef6729138e6c68223df4e359140aaf8fbb8bd162100aa12e59be",
+      "sizeBytes": 226108751,
+      "files": 76,
+      "PNGCount": 76,
+      "libraryFileID": "libfile_c2eaba5efa708191b9eb2e6b2f262482"
+    },
+    {
+      "filename": "FLW_Recovery_Archive_Master_part-03.zip",
+      "sha256": "861e29d02c58d51ed69d8928b9a6fca085800d81c66a849e2521bd79aba8edcb",
+      "sizeBytes": 210710422,
+      "files": 103,
+      "PNGCount": 88,
+      "libraryFileID": "libfile_508fe99338188191889d0136dce01bbf"
+    }
+  ],
+  "archivePathSemantics": "Archive entry paths are repository-relative paths inside the ZIP parts, not promised files in the lean Git checkout. Extract all parts into the same directory.",
+  "files": [
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-002_het-laatste-zonlicht.png",
+      "sha256": "0e98e32f150a74d1913caea981c02cde4041ecf6e90d1d1a9cd42c4bb2ad064b",
+      "sizeBytes": 2770964,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-004_regen-op-de-veluwe.png",
+      "sha256": "bd1d7c82fccb9881f469239eb34ed095c1626031df3d78eabf065c0a4a26fd85",
+      "sizeBytes": 2789225,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-005_kleikom-appels-ruwe-tafel-en-linnen.png",
+      "sha256": "c71b483e112ecc5836d1e2ded335d9ae562c0285466054e67bd264ea9ad130a3",
+      "sizeBytes": 2250169,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-006_onbekende-portretstudie.png",
+      "sha256": "b3ae1cba1783d2c4cb5f9fa0685a81462ef14a663ac0524fd4e614583baf6c07",
+      "sizeBytes": 3110826,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-007_de-stille-eik.png",
+      "sha256": "8243ffe040a7b7982d24c549893cd0c59a916a50c7484e7637cc2b654140ae89",
+      "sizeBytes": 2790628,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-008_schaduwvlakken.png",
+      "sha256": "25b3cca5323c733a71d3d70dbe93e6129a8ef77d4904ae5684c6e0c7e1d8e67b",
+      "sizeBytes": 2267335,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-009_mot-boven-wilde-bloemen.png",
+      "sha256": "9c0a5fd7d47e78232d0e4beab5c5d84c24421c6d49351260c91955d3c20f155e",
+      "sizeBytes": 1756530,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-010_na-het-feest.png",
+      "sha256": "f5a12e7cacdc2f8a718205574838a0bbe73f4d1016ceafd4689a3ae41cead879",
+      "sizeBytes": 2192131,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-013_perentak-in-houtdrukstijl.png",
+      "sha256": "0891e9598e5137527decc611633bc6306679435297399f1dde67207fb5408451",
+      "sizeBytes": 3306685,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-015_laatste-partij.png",
+      "sha256": "bd25454bbf5d342b96d3506fcaed564f2fc3a9e60ac09d6ca8620c8453a1256d",
+      "sizeBytes": 2388491,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-016_recreatieprint.png",
+      "sha256": "ef526785c23b508427640f2447bbc6626081e71af1502ddf5f0279ffc471a34c",
+      "sizeBytes": 3164757,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-017_botanische-cyanotypie-siergras.png",
+      "sha256": "6d5ba95d712b9cbf93f1c8afa8686cb03966eb9ce70533caf0886bf9e0132417",
+      "sizeBytes": 2296134,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-021_berkenstudie.png",
+      "sha256": "399bce62dd513e976ca1e2ce1baaca9d260e62dee21805f674caee898c1611e1",
+      "sizeBytes": 3350980,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-022_de-onbekende-reiziger.png",
+      "sha256": "34dc481390effd136237e92b61cc2ace7f4c01d1bc5227d8b1926366d304629e",
+      "sizeBytes": 2396281,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-023_twee-elkaar-rakende-horizonvlakken.png",
+      "sha256": "c69d00638c702aaa61bd0c88a6cb68d94112753bcf8d12719330f306e119e1a1",
+      "sizeBytes": 3130722,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-025_abstracte-papiermarmering.png",
+      "sha256": "452d045c64ef219c284f8c6d2d002235dc1a8022fa8b7396038d43e001b8bedc",
+      "sizeBytes": 3691819,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-026_de-kust-na-de-regen.png",
+      "sha256": "66b22b18cf44bcf6b9b88b4f94a35ac2d55b403eb80d9a7ea5a78c0361598311",
+      "sizeBytes": 2691720,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-027_bergreisprint.png",
+      "sha256": "5c8aa2dcaf4332e4ef248f54f2d7777fd189e249640b46593860078f34f827b0",
+      "sizeBytes": 2645616,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-028_het-huis-in-de-nacht.png",
+      "sha256": "7fb2d64d0ad29d5076860debcdc33060139bb1553f3006d6cb78443019465f55",
+      "sizeBytes": 2212124,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-029_maanlicht-op-water.png",
+      "sha256": "92a03f38ad640b512259035369c989e819668837d5b27d76098da2665958a012",
+      "sizeBytes": 3264350,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-030_gestileerde-varens-en-waterpoel.png",
+      "sha256": "55c3d98fbfd1573ea7c6904943ff578508e965a01857a7590ee7e45cdc60d0f9",
+      "sizeBytes": 2428412,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-035_zomerregen-op-een-landweg.png",
+      "sha256": "034413c74caaf4be09dfcd85729e50062880253136af0bb5438b9afd4fedfb56",
+      "sizeBytes": 3451191,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-036_recovered-reference.png",
+      "sha256": "637d3c098f74772468a53383cf1fff68d32a70ef67d7ea86c1a8451645baf0ec",
+      "sizeBytes": 3371808,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-037_takken-op-wit.png",
+      "sha256": "2b32b76ac174352a6a95197e9da0efae37c6212689eb37e1b358427b3eedbd48",
+      "sizeBytes": 2675406,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-038_bos-in-vier-seizoenen.png",
+      "sha256": "2c4c139197eebab7b32550931ad1a8445f6b68204d1747d4871d43416ba81191",
+      "sizeBytes": 3285431,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-039_voorbij-de-boomtoppen.png",
+      "sha256": "efded430b83834364464fef832a62f96019a2c216718b5b37c582f60bb70f28e",
+      "sizeBytes": 2773976,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-041_het-bos-zonder-wind.png",
+      "sha256": "a2ff86d2a1614ba87f0b897e238ce22de3fbabb6c46067005aa80b86fc8ad985",
+      "sizeBytes": 2963026,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-042_onder-hetzelfde-bladerdak.png",
+      "sha256": "9aadf22c34203ffaa87c126f2899b01fc6ff2fa3cb83486f2b79a2db4040d9ea",
+      "sizeBytes": 3360982,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-044_houtdruk-hout-zaagsel-en-gereedschap.png",
+      "sha256": "ab21717bcfe5273998d106ef6a34ae30d1405309025b4c5a39dd3c168e929b8f",
+      "sizeBytes": 2979715,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-045_de-weg-naar-de-kust.png",
+      "sha256": "35085788a25ba3c28889e284f65876461119c3e71426fb7092bf596bd4ce7818",
+      "sizeBytes": 3278943,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-046_een-middag-in-portugal.png",
+      "sha256": "758d7f7b11041cac525a779d34f9c33bdd0c5ec92838820f78bb1366f2dfcd97",
+      "sizeBytes": 2830196,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/2d/FLW-D2-047_vogels-rond-een-schaakachtig-tafelblad.png",
+      "sha256": "ed111dc06898f2dad6ad0fded731d92481e603c659e4d6161da30fbd66d612f7",
+      "sizeBytes": 3116121,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-001_eikenbladconsole.png",
+      "sha256": "c325d97d097e13f08eaf96806893b06bdbd691ef3141e884efd1002d541e9b55",
+      "sizeBytes": 2374897,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-004_houten-vogelbeeld.png",
+      "sha256": "c68d5ce4fe2dcab219ccb4a3d8fc9ba9725e13cf3320c9ce8f12740e8e9fe1f6",
+      "sizeBytes": 2313125,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-007_oude-koperen-bakvorm.png",
+      "sha256": "9baacda4e4b3fafc089444e2374c18ac359d24c56c88822a68f782373b51bbb2",
+      "sizeBytes": 2461061,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-008_houten-vosmasker.png",
+      "sha256": "79df7f3c2237393e2e7163ea10ae699710775da428821032cf2e30980c66edae",
+      "sizeBytes": 1195600,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-009_copacabana-room-interior.png",
+      "sha256": "ed1d6280e10321bd1c1fd84efce76d69a5633ab93add4d2acaab61639238bc89",
+      "sizeBytes": 1781712,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-011_abstract-relief-uit-teruggewonnen-hout.png",
+      "sha256": "c60c025368aa72ef505138811daa364e588cf7f68bd6880dfc6eda0f02aaaebb",
+      "sizeBytes": 2857415,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-012_tropisch-houten-wandmasker.png",
+      "sha256": "c6a22acad6a4e5f8341947025a1b8596272849b5df6f65238424bc689856f2da",
+      "sizeBytes": 1460742,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-013_copacabana-room-exterior.png",
+      "sha256": "d5ebbcef3fb4191371a5afd78b568f857e83fb809093929c6a5909a3b04fa677",
+      "sizeBytes": 1803194,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-014_gesneden-zwaluwen.png",
+      "sha256": "81f7ddd58270eff8147e4d7e102ca93be66102201d23eee34e3315b4c16fc247",
+      "sizeBytes": 1451775,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-015_miniatuurzeilboot.png",
+      "sha256": "6a9b4e3a3a0b206960513bd4178a08dec7ec112a43bcdff9e605afb0d513bbe3",
+      "sizeBytes": 2304881,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-016_keramische-maanvorm.png",
+      "sha256": "5b80576055540e4bcba130e949dfa10015af95c235a6fcbb0696e2bcdb1f8389",
+      "sizeBytes": 1477552,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-017_terracotta-bloemmedaillon.png",
+      "sha256": "dcb5ff264d3d6d038fad517b809bbf3bc31a40f255fbea594a941264389b3e63",
+      "sizeBytes": 1573475,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-022_stenen-bloemornament.png",
+      "sha256": "5348d9443095b8a61275af3acf914788969a7ef120f3360d47809e47f5fef4df",
+      "sizeBytes": 3294573,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-023_houten-drukbloksculptuur.png",
+      "sha256": "3dc9054ed83dcb98b2f2a7888bb12f75c4cdb39527cc80e9c6c6261f43f8f4b5",
+      "sizeBytes": 2401924,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-025_houten-bladeren-schorsrelief.png",
+      "sha256": "0235928feb95cfead758a8f59d35eec6664c707469f1878d172215cf980d2c25",
+      "sizeBytes": 2868106,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-026_takfries.png",
+      "sha256": "62716815df86babe0f77b8911b52a7fdc563db298a68349852aac742046f35fa",
+      "sizeBytes": 2563605,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-027_houten-bloemrozet.png",
+      "sha256": "c054f8aa20157f690fe23c8e1809e48cfb31fcc289afe859ea9cc869246e1043",
+      "sizeBytes": 2681334,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-030_papier-mache-wandmasker.png",
+      "sha256": "25a2aa43e9c85900e443fb8557cfb11adae5f5f65e6c7ecec28b67954d9f1a98",
+      "sizeBytes": 2267248,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-031_keramisch-tegelrelief.png",
+      "sha256": "62ca5ee476be740609a034b14ab7f1a2ca054841c1ec1df3068ad84296ff6729",
+      "sizeBytes": 2942180,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-033_smeedijzeren-bbq-haardplaat.png",
+      "sha256": "4832b73660c07ae08fa3e36cbed3315d89b72867bbfc99ab1f7c988721a57116",
+      "sizeBytes": 2690807,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-034_houten-bladschaalornament.png",
+      "sha256": "2e34cbd48439fedba77e2d862c692138c2edde9c9e6b9c8508e22b7ca9fe51c8",
+      "sizeBytes": 2581865,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-036_laag-stenen-relief-met-golfvormen.png",
+      "sha256": "d56200fe0612dcb60bdec54b4a91b3333355a496b13da1df377c4652e60a8e76",
+      "sizeBytes": 2510677,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-037_houten-reigerbeeld.png",
+      "sha256": "ce57d6e31a30be637fd09bd775a71b56abf37f917c484badd343f609a5ca06ff",
+      "sizeBytes": 2162200,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-039_wickerman.png",
+      "sha256": "7809bc93c653b11c9811894bc0400a2f9e4dfc643281bf58eef33f2f50e9bd5c",
+      "sizeBytes": 2704798,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-043_eenvoudig-schilderijkader.png",
+      "sha256": "a0e6b09ce222cf87fd6b8a4dd876a48f3fd6f7637513e4d5454be4e0dd73073f",
+      "sizeBytes": 615202,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-044_dieper-antiek-kader.png",
+      "sha256": "0342578ca6d6d4e7fc1a1656627d01ddda6ed176ae1ac14ac7a9b7d0a70c7627",
+      "sizeBytes": 464313,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/3d/FLW-S3-045_smal-printkader.png",
+      "sha256": "4a9f22f8c083331a6ccc7872ac2f8e56b61cf102adae42b29eb29820ea7dbe0f",
+      "sizeBytes": 643744,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/MANIFEST.json",
+      "sha256": "427cedf8b69ca20fed592b4ab38b817b935d95a3681a2fc9d12df816bcac4764",
+      "sizeBytes": 230129,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/MANIFEST.md",
+      "sha256": "185508bfbfdcc7b10d13bd86322d330e3c9421b94290f79b57284dbd79f45d99",
+      "sizeBytes": 43346,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/README.md",
+      "sha256": "495f14cbf576ae31017d8f1d7372a4659daa0c0c3950f141515b177309b4b927",
+      "sizeBytes": 4460,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/VALIDATION.json",
+      "sha256": "eb0a215d6493bc937c06de74f41567dcdb31529860b0c5c7a94976766523d2fe",
+      "sizeBytes": 1915,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/VALIDATION.md",
+      "sha256": "7c72d6597ee8e89389e5d8e35b36c23582113d4bdc04c551ef3bd1c64d159133",
+      "sizeBytes": 1326,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/keys/FLW-K3-001_landhuissleutel.png",
+      "sha256": "d7c506a953252f4efc91ffdc0457ca387f35d73c7e0831f6aa359a4f5048c081",
+      "sizeBytes": 2179089,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/keys/FLW-K3-002_studeerkamersleutel.png",
+      "sha256": "c08d2c8242d3509fbcd2408ada920d8070f893988b060d124f058d51c568b006",
+      "sizeBytes": 2066393,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/keys/FLW-K3-003_bosschuursleutel.png",
+      "sha256": "ca8f08c08466456c3e6ab625a8e19fe3c3b70eb4d360b4d17a544b71345cb661",
+      "sizeBytes": 2116175,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/keys/FLW-K3-004_serresleutel.png",
+      "sha256": "69d29f8dcd30a8d16dd8039f0bfe2c2bf01f7ee3e2eee247297ff67ea8297bc8",
+      "sizeBytes": 2068782,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/README.md",
+      "sha256": "941e86caa18d6f70d623d654bce80b2f3212010e4313c0df9e7a3b9e2feea466",
+      "sizeBytes": 3728,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/RECOVERY_INDEX.md",
+      "sha256": "005251ed08b9181985294f8c67a6bcb503636cb35999e3908f61ad53d97fb74f",
+      "sizeBytes": 34953,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/SOURCE_INDEX.json",
+      "sha256": "fa76def5eb64e3abcd24ca289951f97f546e6b683a54fdd81f3d58e419599308",
+      "sizeBytes": 256808,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-001_34bf5425b7490fee.png",
+      "sha256": "34bf5425b7490fee1469da1b7af66dcf3559b3e572363161266eeb129521711f",
+      "sizeBytes": 3290991,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-002_a7f66cbce5e12bb3.png",
+      "sha256": "a7f66cbce5e12bb342eafc390eb680f440e9d97eed05247bf3d11d2f8f29cdf9",
+      "sizeBytes": 1995759,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-003_1ab7df6f3831609f.png",
+      "sha256": "1ab7df6f3831609f1f3910da2575dc3d6f2a68f24b3053a5cb4302e80695a75c",
+      "sizeBytes": 2436868,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-003_7aa3189d313a1e51.png",
+      "sha256": "7aa3189d313a1e516b37126687d6e8e662889b9e60bb2a1a90c71ebd228e7936",
+      "sizeBytes": 2711340,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-003_e2f4c4767c7e0223.png",
+      "sha256": "e2f4c4767c7e02238f086ab564e180e2032d38ddf34999337fb4a03523ea1bff",
+      "sizeBytes": 2641783,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-004_03b2eaacdcb6d464.png",
+      "sha256": "03b2eaacdcb6d464334e70137c41026bdad0589d50882003b947067c73c3d4d6",
+      "sizeBytes": 8329889,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-005_a2da3caf10724846.png",
+      "sha256": "a2da3caf1072484610bddebeb7d69fae3366bc6cb6dd6f7dc87ebac49199185f",
+      "sizeBytes": 5179361,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-008_b648dae1b9d3552d.png",
+      "sha256": "b648dae1b9d3552d83b148753ead0efbaa242dc95e5f4727b3affede0a522fde",
+      "sizeBytes": 5470063,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-010_ed315c7246447508.png",
+      "sha256": "ed315c7246447508fad899b2017403df4df967b7ecd1fa4a962597662f8a2d3d",
+      "sizeBytes": 6331103,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-011_83290359bd8bb64c.png",
+      "sha256": "83290359bd8bb64cdd8ec80fb5b82b89c067f8377a6f2c7460f9b876a6762ac6",
+      "sizeBytes": 2656927,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-011_bb20c62f4d342c0c.png",
+      "sha256": "bb20c62f4d342c0c12bc8879c3251a6e4a52f22fe640686a01fae7e184ee11d4",
+      "sizeBytes": 1365837,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-011_d9b5150449bc13ed.png",
+      "sha256": "d9b5150449bc13edc45c8f0c78643c905b8b2219ce1665a3f4fa41ff19c04838",
+      "sizeBytes": 3227109,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-011_f10cd40f83cf5433.png",
+      "sha256": "f10cd40f83cf543352d59371fd5628f15960dfe112f78e12da0a0ed85d2f1dc8",
+      "sizeBytes": 7409391,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-011_f28212b360597cfa.png",
+      "sha256": "f28212b360597cfab9cc2a28b2f59ff2cd96021f32deafbe38123866286f0c1a",
+      "sizeBytes": 2515889,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-012_0a64ab46ae032eef.png",
+      "sha256": "0a64ab46ae032eefa06f97d6793378edf83e6689c7aa05072167e58c9e0db375",
+      "sizeBytes": 3746659,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-012_1ba8079abacae185.png",
+      "sha256": "1ba8079abacae18509893c4de3ffa4319be01dec06094a91fdf722d79187cbd0",
+      "sizeBytes": 2653333,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-012_3595ff445fe00f11.png",
+      "sha256": "3595ff445fe00f11f5f443f99507816c4491bb1a02182dc95e88aeb25f72183d",
+      "sizeBytes": 2974336,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-012_e7460feb570d0e84.png",
+      "sha256": "e7460feb570d0e84ee85bc6a380ea9dfbf6482a17138b0dbe8fd65de3873dbd3",
+      "sizeBytes": 2821300,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-014_4b3d61108c96aed7.png",
+      "sha256": "4b3d61108c96aed7c90098f22cfc9f6973534255a2e8fde5f3066838835c0f09",
+      "sizeBytes": 3584349,
+      "part": "FLW_Recovery_Archive_Master_part-01.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-014_ed429acf4895f6d1.png",
+      "sha256": "ed429acf4895f6d1d0d536412b1be0e60d7940ecd8edaac3dd34a35399f2ffaf",
+      "sizeBytes": 3785155,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-015_f3f201b7717f0e05.png",
+      "sha256": "f3f201b7717f0e050aee87b87f76684ab835b9c8738793e236ae035db7fedc77",
+      "sizeBytes": 4514903,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-018_23622c4ceec7a91c.png",
+      "sha256": "23622c4ceec7a91c8f394a9c64ff41afa7f6a45587e6947d6a374c978072ccd9",
+      "sizeBytes": 2832480,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-018_2ecca2323074b071.png",
+      "sha256": "2ecca2323074b07130ccf4b66df623786ea3c81f20a31d68538c30238375982d",
+      "sizeBytes": 3079511,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-018_6338fb2b6f9b43fe.png",
+      "sha256": "6338fb2b6f9b43fe12b59d38069615c2b6963cd8a3d8f5dc082e0b4231d52c35",
+      "sizeBytes": 2977383,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-018_789469b495287229.png",
+      "sha256": "789469b495287229d9a675cd91de22615960c7265b7b6bb2f89621c027791c85",
+      "sizeBytes": 3131479,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-018_a116377da4ea0194.png",
+      "sha256": "a116377da4ea019440e53cca78279d181a2a585dab76c40dcb545efe7ed81744",
+      "sizeBytes": 3015456,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-018_f56860b3d33a31d3.png",
+      "sha256": "f56860b3d33a31d345fc72036013382328d60428f7f433ad92823c35f05dcc7d",
+      "sizeBytes": 2995178,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-019_285e8a49da643cd4.png",
+      "sha256": "285e8a49da643cd477df1a308ba5d09e57ab8ad2d844b8347c62211de786675b",
+      "sizeBytes": 3443034,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-019_3f29c41efb5bfe3f.png",
+      "sha256": "3f29c41efb5bfe3f35e75cf430abf77fc5919373f0deee55c18df34493607f13",
+      "sizeBytes": 3242998,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-019_66c5c37a195dc725.png",
+      "sha256": "66c5c37a195dc725ad411a3ccfd612f25377fa1ef4776a183ed541d1f4761262",
+      "sizeBytes": 2673197,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-020_023b6ec51ea5a385.png",
+      "sha256": "023b6ec51ea5a385d31e051d666ca74c4310f4effe2e7f3fd55b5f1c8e97dc13",
+      "sizeBytes": 3051733,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-020_daf5f331afefae3c.png",
+      "sha256": "daf5f331afefae3c68100fa082424c3b5fce81725b31db52948a30a2f4c617dd",
+      "sizeBytes": 2745379,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-024_0594ba539024e17c.png",
+      "sha256": "0594ba539024e17cb8115e381768bbd3b522f1fcaf8dbd4fe6728965ec8ebbf0",
+      "sizeBytes": 2578588,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-024_5b4a8bc908ba53f4.png",
+      "sha256": "5b4a8bc908ba53f4b843f0068140b203e18e0a6cf251942a69e144420fc9df28",
+      "sizeBytes": 2806263,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-024_91e9305ba749dcd8.png",
+      "sha256": "91e9305ba749dcd81804530e38be30e784552794a5a7bfaa2f286eb9dd59d893",
+      "sizeBytes": 2651819,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-024_cf592fb162d0f6b8.png",
+      "sha256": "cf592fb162d0f6b85977f6c34c72fc2cdadfdccbfe11c79f8204e76ac5d9baa5",
+      "sizeBytes": 2655160,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-031_1a3f3c39dd0383bd.png",
+      "sha256": "1a3f3c39dd0383bd6817958efb2c78b85d62922c130bdcf7e31e5408a7793344",
+      "sizeBytes": 3462036,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-031_4b94375abf23e615.png",
+      "sha256": "4b94375abf23e615f8deca39e8813eab35b3da5a71e58b209d1466c9505c3f87",
+      "sizeBytes": 3367678,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-031_843539a205977bf8.png",
+      "sha256": "843539a205977bf82a76c959f538864986642a3ebb0459646470a142a4d8bc9f",
+      "sizeBytes": 3531450,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-032_1713638611839b88.png",
+      "sha256": "1713638611839b88083811efb0df85a044e6bc076d367abab9ce9c843bab455c",
+      "sizeBytes": 2899975,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-032_46ed023853783142.png",
+      "sha256": "46ed0238537831424e8afdbf1a64fa236d6d461ecdcbfdcb6049bf51849bf7c8",
+      "sizeBytes": 3360850,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-032_a6b02d85b8bef387.png",
+      "sha256": "a6b02d85b8bef3879a3864b790fada99084b8db1048b8b21cb5db8fd408c9d4e",
+      "sizeBytes": 3348525,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-033_25314592efb42a03.png",
+      "sha256": "25314592efb42a03560c49e7d46095675144a3fb47d89836ae4f9048f5928712",
+      "sizeBytes": 2684023,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-033_6cff0bb3c53acff3.png",
+      "sha256": "6cff0bb3c53acff3a0a6a07020a6db2a93072aa90e434209e06a3a2928d9e7be",
+      "sizeBytes": 3355044,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-034_4ae6948043fb8994.png",
+      "sha256": "4ae6948043fb89940e92f29e3365378331becb634bda121322b620d130439343",
+      "sizeBytes": 3328817,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-034_c9e56b67aba6327b.png",
+      "sha256": "c9e56b67aba6327b3af7049f6278643a7c05509135c7cd02883c67372f75165e",
+      "sizeBytes": 3155767,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-040_0ca976a4a961893f.png",
+      "sha256": "0ca976a4a961893fe5893889170701dbfa75381a776621f2d2475cd1184ac01f",
+      "sizeBytes": 3098074,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-040_c221dbc283299c0c.png",
+      "sha256": "c221dbc283299c0cf6c00dde33abfbdca59f5c8651588f9d643096bbb77b80f8",
+      "sizeBytes": 3010169,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-040_dcee6641ef66a107.png",
+      "sha256": "dcee6641ef66a107039098c2019c79b80fd8fbe8965a997a3d5614fc894ac596",
+      "sizeBytes": 3257495,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-048_3ad71201f7f6c6d6.png",
+      "sha256": "3ad71201f7f6c6d6b4ac12a4b8a666346f814abc2d92d0ff50fa6466501f5c94",
+      "sizeBytes": 4027723,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-048_829544fbd93b775a.png",
+      "sha256": "829544fbd93b775ab351a75d234f49f920e409edfeebb0f79e8529503037100c",
+      "sizeBytes": 3195587,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-048_a0d7dd33b20b4818.png",
+      "sha256": "a0d7dd33b20b481818f454e71ae5c36d2d93f85e7756f7527511e37f83d77a0b",
+      "sizeBytes": 3887542,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-048_a3069dd2fab339f0.png",
+      "sha256": "a3069dd2fab339f04601541a842fccc059e0236626458121256cabdb5af66e9a",
+      "sizeBytes": 3954917,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-049_09532aa5824dfcee.png",
+      "sha256": "09532aa5824dfcee77105ce2584f6d37299942d9a5d0a381fe68dc8f5e4eaa90",
+      "sizeBytes": 4595740,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-049_b215187b6cd529cf.png",
+      "sha256": "b215187b6cd529cf6266f487d92f384ae0c0fc9f9fe8604499182f3e7c72ed78",
+      "sizeBytes": 4212544,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-049_d0ac6e56aa7c5d79.png",
+      "sha256": "d0ac6e56aa7c5d79c21755a6267ac062d476a18db19d0ccd3646687fae3db945",
+      "sizeBytes": 4243986,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-D2-050_38a37a8dd6c79ee1.png",
+      "sha256": "38a37a8dd6c79ee166b81c2e036effab4bd82f66a0ab56626a49330bad5c81e7",
+      "sizeBytes": 2933889,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-001_2b48018eb27b9748.png",
+      "sha256": "2b48018eb27b9748453982e42eceda0c0bd00034cf70ce16d7c95cd4b4d2ee71",
+      "sizeBytes": 2824118,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-001_5eb6e0afa6d6c51c.png",
+      "sha256": "5eb6e0afa6d6c51ccee19fddeec59d3039d69bf6568154db3d3ad38c7dfeb995",
+      "sizeBytes": 2569086,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-002_24edf8923af5a2af.png",
+      "sha256": "24edf8923af5a2af322d07f68db6640a904df48ffc555cedd5a298b78868582e",
+      "sizeBytes": 2518070,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-002_89206238e7dbdf35.png",
+      "sha256": "89206238e7dbdf359bc2cd426b59b40968e1fff8844021892f17a5b1d408e103",
+      "sizeBytes": 2867248,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-003_6885addde13b3c6d.png",
+      "sha256": "6885addde13b3c6d3314bff0e2afccb13a43fe24cede6dbf786a3439bbba9efe",
+      "sizeBytes": 2871708,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-003_7d62c64559e77732.png",
+      "sha256": "7d62c64559e777326797886769ec8c94efde7e0d95dc419e9350c4008d27231d",
+      "sizeBytes": 2287884,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-003_e6607b627e528d09.png",
+      "sha256": "e6607b627e528d09dfd4817e8e2de614ed879999d7b2f18d9e09cfa93c6de072",
+      "sizeBytes": 2786555,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-004_ce0985b969839c04.png",
+      "sha256": "ce0985b969839c04e8f06db23b78ef59499c2f459c021b09ef694978c4b52bee",
+      "sizeBytes": 3200043,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-005_b569feeb950213f8.png",
+      "sha256": "b569feeb950213f850b3fa0006757af2d101f0aebc011994117201f6dbb0abbf",
+      "sizeBytes": 3114498,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-006_f1c5d2f79b1a9c80.png",
+      "sha256": "f1c5d2f79b1a9c80447cdbdd0c78a77e2cb973022d7827d967967d43071f54e3",
+      "sizeBytes": 3137085,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-008_6e29d199d10b1482.png",
+      "sha256": "6e29d199d10b14825d0e79e7404aaa2f487c91dd7661e5f36970861742b6bb98",
+      "sizeBytes": 2527775,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-008_6fb6372907a31fed.png",
+      "sha256": "6fb6372907a31fed0b9c4e74a7f3bab4a3bdfa2914a575d559eefb752c481d57",
+      "sizeBytes": 2732040,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-008_b3f7f54984f017ed.png",
+      "sha256": "b3f7f54984f017edc1d7b0ff9117b2bc8b98688027747823fef739ccdfc319e1",
+      "sizeBytes": 2762819,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-008_b3f8a652d8b94323.png",
+      "sha256": "b3f8a652d8b94323378cf0ffe168296ba569a505af4dd6b0d6168fda266dfd52",
+      "sizeBytes": 2626303,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-009_05aad439b1da752e.png",
+      "sha256": "05aad439b1da752e6843ef669d3485d825f984dcd122d5366e4e00492b155b7f",
+      "sizeBytes": 2244629,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-009_2d84947311b35129.png",
+      "sha256": "2d84947311b35129174e0f524a746e5b6ea59ed2f73f91836f8eda3fd2894bb0",
+      "sizeBytes": 2339147,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-009_98de40ed71bc05b0.png",
+      "sha256": "98de40ed71bc05b0aeec35181aa3c043e531e870719b46f3aa722efacb559272",
+      "sizeBytes": 2418887,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-010_67d5406255329d98.png",
+      "sha256": "67d5406255329d985e6a12a9e4b330aefa65d0f231c3b8fb6faccab4e7ed8b78",
+      "sizeBytes": 2336577,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-010_8c96e457f6db7af9.png",
+      "sha256": "8c96e457f6db7af95cd7be2801d5f0da673a1e5e1a8c7148a9f58b8b29868481",
+      "sizeBytes": 3231053,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-010_ebb7e5e5049d7378.png",
+      "sha256": "ebb7e5e5049d737816486ffe3a74f96677d6d1795bfb059858d2b153e6053c7d",
+      "sizeBytes": 3287811,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-011_54e68bb92d374097.png",
+      "sha256": "54e68bb92d37409768cf602bdb78d84b1b5d1f1bd21f4bae0f13dac031d97bf7",
+      "sizeBytes": 2565464,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-011_9f98625ba02b6c03.png",
+      "sha256": "9f98625ba02b6c031f38862f4c27d8277f68e705bdaa4b0e198fac19898dfe49",
+      "sizeBytes": 2261096,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-013_32c307616a9b1ae2.png",
+      "sha256": "32c307616a9b1ae2295b49b7a77ebf782275f0df5e63b85a07efeb92a9e8d140",
+      "sizeBytes": 2551862,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-014_7d967ed0eb37ecd0.png",
+      "sha256": "7d967ed0eb37ecd043733bf18664364a4dca2f067e18a6a174234880b194c170",
+      "sizeBytes": 2788801,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-014_c6e650990955fc11.png",
+      "sha256": "c6e650990955fc1168a6d6c4f11c84b4c8378a96d00098d16d87e6f36be9dc52",
+      "sizeBytes": 3251504,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-014_e268c5238cb2b352.png",
+      "sha256": "e268c5238cb2b352465c605e08c5b2305ab354c7100e3cdfdf2238b980b70448",
+      "sizeBytes": 3589282,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-018_9cd4660975285311.png",
+      "sha256": "9cd4660975285311c1c0193aa2099fc8f5e47675ce98cb81b9ee45ca706cd7e1",
+      "sizeBytes": 2662901,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-RSV-018_ea91fdf09309a349.png",
+      "sha256": "ea91fdf09309a349b776499746252b191744e5877c2c1b97de2b62a93be7a99a",
+      "sizeBytes": 2471833,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-002_1de61b8d128bbeee.png",
+      "sha256": "1de61b8d128bbeeeed992990c6fd41cb6d80d803f5b88fb85778b7e0e7e588f1",
+      "sizeBytes": 3072731,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-003_354b015e33e1fe83.png",
+      "sha256": "354b015e33e1fe83f80d64887711ddb9c12d305ff613c88a8b1cfeee0b7f7ae0",
+      "sizeBytes": 2189166,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-003_778e86acb59f45a9.png",
+      "sha256": "778e86acb59f45a9c0864930287f2c323f97c32285b102bc869b211595ffa08f",
+      "sizeBytes": 2228687,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-003_d504e4506e926f31.png",
+      "sha256": "d504e4506e926f317f699dd98db2f12209fc3487ebebc49288f91c2edc1973a6",
+      "sizeBytes": 2584622,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-003_d681c5e69b576d0d.png",
+      "sha256": "d681c5e69b576d0d0e023ee2cfaef3d3466d30a7f6da9fbcfbea3f08435a4428",
+      "sizeBytes": 2111677,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-004_6e99c7c9964c2a9d.png",
+      "sha256": "6e99c7c9964c2a9db3a8925d650475dea779e6c4e70329c24eeb849c50082c1f",
+      "sizeBytes": 1070366,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-005_3ae310a7d6dc6e6f.png",
+      "sha256": "3ae310a7d6dc6e6f4c39ebd027687183092cd32ae7655fc3bfff61c300e53b62",
+      "sizeBytes": 2335475,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-005_713ab4adac6651b2.png",
+      "sha256": "713ab4adac6651b226b1edf358b27ccbd689e171b8de4399fde6d0d0e38cd652",
+      "sizeBytes": 2240475,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-006_c6ef851967b107f6.png",
+      "sha256": "c6ef851967b107f68d32fffa2de63e63fd1c8d141e793269ce04afbef7bb774c",
+      "sizeBytes": 2294897,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-008_dfa4a4585cf9fd3c.png",
+      "sha256": "dfa4a4585cf9fd3c026b2ba1f5ccca7ad020e46dbc8cea5553d82bb12d1423ce",
+      "sizeBytes": 4046383,
+      "part": "FLW_Recovery_Archive_Master_part-02.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-009_9703a503009df78c.png",
+      "sha256": "9703a503009df78c2bf1bc6d7622349cc68b7ff7d16f2c96987cf04881652eb0",
+      "sizeBytes": 6323382,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-010_11925786c98870a1.png",
+      "sha256": "11925786c98870a1f61b723c95057efe47ea7c12059ff664ad80a13dfde8a624",
+      "sizeBytes": 2433703,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-012_76fbcb17c8eff7e5.png",
+      "sha256": "76fbcb17c8eff7e559da06412c692de7707aa6cce44a95f4ecdd84c731017cfc",
+      "sizeBytes": 4997661,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-013_6afa7dee87460db6.png",
+      "sha256": "6afa7dee87460db6bfaf2faf6955d125bf45ef43ca6757c0354ecf0bc4af91df",
+      "sizeBytes": 6324722,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-014_5ad869741e28c809.png",
+      "sha256": "5ad869741e28c8099d00cd5e08e4455e46df51080ffec490739697f2b001dcd9",
+      "sizeBytes": 94830,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-014_b86e18013f9c8f91.png",
+      "sha256": "b86e18013f9c8f918610e6eeb698888925d95ad36bb4ed161069080d1eed669f",
+      "sizeBytes": 595910,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-016_65f2c3bf1f57d8b8.png",
+      "sha256": "65f2c3bf1f57d8b8b4a5dd520340d3073af61d5c5dd314066893d49b7e19a895",
+      "sizeBytes": 508986,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-016_ec59e615ef3470b4.png",
+      "sha256": "ec59e615ef3470b46b3bc6a3e93171e3f0baae822ee92750c658197fa945e93f",
+      "sizeBytes": 87164,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-017_725d63de1feef792.png",
+      "sha256": "725d63de1feef79220ee073ae9af36f16e3eb241bd36e2b99d3b0fea422082b0",
+      "sizeBytes": 534255,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-017_7a7ef34eb0ed1791.png",
+      "sha256": "7a7ef34eb0ed17917e7e350052e4ad079bc5354b12f7737d347ec390f34cd3c4",
+      "sizeBytes": 100542,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-018_40981aea20532b69.png",
+      "sha256": "40981aea20532b695fbf582bf507cff4e51603c597d876d9768ee2033c50a258",
+      "sizeBytes": 1961949,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-019_1563463cb9427b48.png",
+      "sha256": "1563463cb9427b480ff55ebe59b689707f7db46fe89eb9324aeb9afee2ea7005",
+      "sizeBytes": 2401344,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-019_3638b1bf87c0f23b.png",
+      "sha256": "3638b1bf87c0f23ba9d42f240ce463587122c92cec496419b1a294205b398b97",
+      "sizeBytes": 2229428,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-019_ea136de5d7c2f614.png",
+      "sha256": "ea136de5d7c2f61414df50b8804156fe2889f8167bf6f6740dbcf3acdb479437",
+      "sizeBytes": 2304787,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-020_83129c9faa30e99f.png",
+      "sha256": "83129c9faa30e99f29bd94d9500d99c98db741973af1aaa122cd8fb02f1c0dae",
+      "sizeBytes": 2066001,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-020_cf0f1e4fb621179c.png",
+      "sha256": "cf0f1e4fb621179ce93353a36fd68af663b6bb24adebda2c04210c5b242a0ed8",
+      "sizeBytes": 2039251,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-020_f64dca8fa7821cc2.png",
+      "sha256": "f64dca8fa7821cc2c7d8c4738d4a690ca6e2582a68345572c001fdc72d6b838c",
+      "sizeBytes": 2023301,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-021_8bd7c005719595ae.png",
+      "sha256": "8bd7c005719595ae8f5e48a839915558fe18160c242de8ef7ee86692b223e611",
+      "sizeBytes": 1978969,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-021_c6eba2782130e9bf.png",
+      "sha256": "c6eba2782130e9bf1cf79952a01d8d623c64e17babd9592a6b78c91df72b8f74",
+      "sizeBytes": 2020700,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-024_14f50fafc6806ac2.png",
+      "sha256": "14f50fafc6806ac23ceef8dc50e6aaa86673196eae7218e914d2b95bd24e7b60",
+      "sizeBytes": 2313374,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-024_410c85557c9a17e3.png",
+      "sha256": "410c85557c9a17e375d894a45642722b3221c7ea1032e824e8f3a7e008f981cb",
+      "sizeBytes": 2150469,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-024_d434581c3bd2a5fb.png",
+      "sha256": "d434581c3bd2a5fb0abe2ce2cbf7c2623d24a45bbf944ed4947e4b454e918c95",
+      "sizeBytes": 2327217,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-028_586e437465ff9b10.png",
+      "sha256": "586e437465ff9b10c38f5c98d00955024cb4be18459ef336ec53fd6693799e32",
+      "sizeBytes": 2132817,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-028_bf2c9232ae61d701.png",
+      "sha256": "bf2c9232ae61d70118caf4f0ac9b243e701beb67e8842794a8c575e5c2e7e3ee",
+      "sizeBytes": 2174455,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-028_cb7a2c359e74f049.png",
+      "sha256": "cb7a2c359e74f049aaeaf0529827e018fc9e763959046bf457f07628c65b5a7e",
+      "sizeBytes": 2034251,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-028_debbf1f265cfc84f.png",
+      "sha256": "debbf1f265cfc84f30a51f97fc11fbc65863a243627705b3825b60f139f82519",
+      "sizeBytes": 2310219,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-029_3d044612150095cf.png",
+      "sha256": "3d044612150095cfbdb54fa5909d776ba64f4425fe8b7a51fd9d2b667697a198",
+      "sizeBytes": 2558889,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-032_77a697272dc6d4c3.png",
+      "sha256": "77a697272dc6d4c3e5d25f2bd7e65d57b9d74d3245b7c0e01e568ec1b475332e",
+      "sizeBytes": 2568028,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-032_ec6024c44d10d217.png",
+      "sha256": "ec6024c44d10d217a0b76cbcbbbd7319fc1286a1522a223b0544cf30c0af2656",
+      "sizeBytes": 2408184,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-035_59d452a735ebf278.png",
+      "sha256": "59d452a735ebf27844c1e61441238d58724407ad43b584e755406a57dae2de35",
+      "sizeBytes": 2126897,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-035_6447801782d0073b.png",
+      "sha256": "6447801782d0073ba98f9baf6b559b7082a9e01754c5906c8e6526b712039250",
+      "sizeBytes": 2093184,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-043_6e83c4190765acca.png",
+      "sha256": "6e83c4190765acca09caf3fa10e35554ce1c949fb7a1275d15a55bd344d128c4",
+      "sizeBytes": 2063687,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-044_5b51a8eec3db4e3a.png",
+      "sha256": "5b51a8eec3db4e3aa040ac253ca675d266de524d0a98010ff3db66c9e25683ab",
+      "sizeBytes": 2268733,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/FLW-S3-045_320c72d7263faab8.png",
+      "sha256": "320c72d7263faab8a3c6c7fc303ffdcce4311a1d78fbb0dbdcb9c9eb7f9dda7b",
+      "sizeBytes": 1692670,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_004948dd5d4dfc14.png",
+      "sha256": "004948dd5d4dfc14d97c9994c290c665b7ce1cc540192f0d051ef2201dc641d2",
+      "sizeBytes": 3393640,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_00e56549d519d423.png",
+      "sha256": "00e56549d519d423e631ce8f451afa784299ecc5119bd93601ebf7957830c366",
+      "sizeBytes": 2394037,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_05c7218252e216c5.png",
+      "sha256": "05c7218252e216c5aaabda8c488491f16ea65ca82948da91295a014ca41f6937",
+      "sizeBytes": 1317870,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_14ef90bc1528de26.png",
+      "sha256": "14ef90bc1528de26d23a38ff446c2bf360eb398b3ecf948dfdfe7d6c3fa3a1ea",
+      "sizeBytes": 3029911,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_15efbec73ca2cfa8.png",
+      "sha256": "15efbec73ca2cfa8acfa7f9c78ce65434f338885c088f12525d267eb84f73249",
+      "sizeBytes": 1754976,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_1a9a934ffb1eb75f.png",
+      "sha256": "1a9a934ffb1eb75f693eac8c19a4082cfd34590cb3e7ad07d5598a329f0a0cf3",
+      "sizeBytes": 2619614,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_225fe7df4e7a1908.png",
+      "sha256": "225fe7df4e7a19088ed4499e0cf6724b6c2011ead914ca11c2697c2350252c72",
+      "sizeBytes": 2630004,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_2919952736657536.png",
+      "sha256": "29199527366575364b531dd41e2cd5edf5eb4ac112e1af783afd6fdeb3de617f",
+      "sizeBytes": 3577413,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_2a2edb88ec693ca7.png",
+      "sha256": "2a2edb88ec693ca7a1a6b88c982f3423c16582c04525e0dbb436a3c678179cc7",
+      "sizeBytes": 2241219,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_3000df5f36c57f4b.png",
+      "sha256": "3000df5f36c57f4b227ae2080741811040c1e8e7aa708ee065e16b9782c36b7d",
+      "sizeBytes": 3195415,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_3175be2b81601a13.png",
+      "sha256": "3175be2b81601a13b27b3c2b38f446578ca5bbb5ca54f5ec2c6fb14cedf24ecd",
+      "sizeBytes": 1017161,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_3707cd24e924c0e4.png",
+      "sha256": "3707cd24e924c0e44a1863a3334a398a74d5fddfa123fe7ae1f832ca58e824b0",
+      "sizeBytes": 3155306,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_3d7a4db6aa214c2f.png",
+      "sha256": "3d7a4db6aa214c2f08c3fa5a7acc2a48eaa2818d553fc3fb35f86dd5ff3b79ad",
+      "sizeBytes": 3602450,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_3dfe2fd88722ace6.png",
+      "sha256": "3dfe2fd88722ace6d9b03f620216d6812f75adbac0fddef1b13846c2965e73a1",
+      "sizeBytes": 3368712,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_4181bcfbcf637c23.png",
+      "sha256": "4181bcfbcf637c235e6fecf6196f1b692b0cf0faa82d231edc31486d52e80f12",
+      "sizeBytes": 2369871,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_4495ff8ce2620cc4.png",
+      "sha256": "4495ff8ce2620cc462ca1960ebcf1f418833996d65b70de92530a25051854be9",
+      "sizeBytes": 3095122,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_4885bedaf2bfec14.png",
+      "sha256": "4885bedaf2bfec14ec34a3e822a1a611a4364925cea6c99c356c4e12aba1cea9",
+      "sizeBytes": 1006857,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_48ecd3efe7920eee.png",
+      "sha256": "48ecd3efe7920eeeff002ef11fe5d024ec0d769cee7921e49e1eb19764e85d44",
+      "sizeBytes": 1960034,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_5abf5692e70bb09a.png",
+      "sha256": "5abf5692e70bb09af86bc56437bf9894aad77d6dbf655cf07a9f375ae2ff019c",
+      "sizeBytes": 2675113,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_60f71476338aabf8.png",
+      "sha256": "60f71476338aabf8ae54094ef7005806b39b9cda37175dbed6f84fa13e8180e2",
+      "sizeBytes": 3067262,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_61021a272905e52a.png",
+      "sha256": "61021a272905e52a9c0478f98b45db2aae4a6a748b97d681d3dc6e93ccc055be",
+      "sizeBytes": 2150448,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_6b39885704a4a9b9.png",
+      "sha256": "6b39885704a4a9b93c6e9eeb7d213f1aa3f4792ad13dc3a9441d7aa349acc10d",
+      "sizeBytes": 3537778,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_6b83ae47aa158893.png",
+      "sha256": "6b83ae47aa158893f41b04dd78972d401f2ea7051de54cdff24d6c43351ca60a",
+      "sizeBytes": 2482486,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_7816c0fdd4dbe036.png",
+      "sha256": "7816c0fdd4dbe03680f475ed3c4c61f63371968656c1d67f5164671a8c922e29",
+      "sizeBytes": 3141854,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_7b2db259671ca8c3.png",
+      "sha256": "7b2db259671ca8c3a595ed00d7f6b529536d06efd91787d267783980e79572a3",
+      "sizeBytes": 2509023,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_7ed9699b390cd31a.png",
+      "sha256": "7ed9699b390cd31aa2a5f3fae41dc3e71bdb9fed3e85ad266bad3e3d7af99f77",
+      "sizeBytes": 2542193,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_845f74f6cc8fc494.png",
+      "sha256": "845f74f6cc8fc4948d97bb2cbaf2ab77f6a93afc31a63cf3616f89abb59a7192",
+      "sizeBytes": 3369078,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_890ea5dcfa2a8c46.png",
+      "sha256": "890ea5dcfa2a8c46931f3a15d30a48b039e9be81d81665cf466799f8c588d781",
+      "sizeBytes": 2755847,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_8eab528ac99803e5.png",
+      "sha256": "8eab528ac99803e5af8aedc11934916095f779ad6f15bf214eedd965edb5e301",
+      "sizeBytes": 2923775,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_95d7bd6490dd0435.png",
+      "sha256": "95d7bd6490dd0435c8cc1c74e343670818464814ddf60a2c9a9e2d88f41198e1",
+      "sizeBytes": 2215590,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_9863fb1fc9b98525.png",
+      "sha256": "9863fb1fc9b98525df111bc6b5c39b764049977a9664361ef9d6d4fce1d68a80",
+      "sizeBytes": 2588720,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_9bafa52784058baf.png",
+      "sha256": "9bafa52784058baf074a1e96ac173754a195bbc07f20698766a447a4645352dd",
+      "sizeBytes": 3168632,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_a11df331def23834.png",
+      "sha256": "a11df331def23834872331610f46428efc53e693261dd71350e864eb71bff530",
+      "sizeBytes": 1394293,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_a8ef99254141dab7.png",
+      "sha256": "a8ef99254141dab740f35283c2118616ccf164bf5cc51b4dd19d189c92e80f47",
+      "sizeBytes": 2716757,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_ac0b1861d2e1b05a.png",
+      "sha256": "ac0b1861d2e1b05a97a2229d4ec5c7d29e312ee2a4e695dd469d48a91f70cf64",
+      "sizeBytes": 3432621,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_b9b13126c730d9aa.png",
+      "sha256": "b9b13126c730d9aafdbbab6787be8e46594d49d652b5ae6f2b8c90df7c758f48",
+      "sizeBytes": 2075387,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_c42e9374b5c5573b.png",
+      "sha256": "c42e9374b5c5573b1cf8bfcca17decf71eeef90ebaef48bf34136518b3624dd4",
+      "sizeBytes": 2816602,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_c9d756d0a935f8ef.png",
+      "sha256": "c9d756d0a935f8ef8ae0474a06ab22da55947b392256da5f25619b35ca4acc91",
+      "sizeBytes": 2481791,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_cbf9c5db7d6b673f.png",
+      "sha256": "cbf9c5db7d6b673f39c39eb4509b6cac1ef17009b70d4037f5f7c566aa45def6",
+      "sizeBytes": 3138969,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_cf91b7d2131daee6.png",
+      "sha256": "cf91b7d2131daee6fbf5d81141fe3a7da78f7080f432ddd6bc639fa0df2a5d00",
+      "sizeBytes": 3335604,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_d12d64f21087c6b9.png",
+      "sha256": "d12d64f21087c6b91568c93ab3d96ee2f31060ad4ff4e98e75df3a35fb6a25cb",
+      "sizeBytes": 2283177,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_d226bdc694850301.png",
+      "sha256": "d226bdc694850301a637d73852a982bb4816a222edddc74777e0591d6713bde0",
+      "sizeBytes": 2871733,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_d22b5f7ae59d4b59.png",
+      "sha256": "d22b5f7ae59d4b5992b6ede433bf9ff05d7396987ceaf7a6bd1c740356288b85",
+      "sizeBytes": 2933363,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_d539b1d0d32e557f.png",
+      "sha256": "d539b1d0d32e557f0edacdc713a6a6f0fa0def3f661b7d9127bb50a3db4e0a80",
+      "sizeBytes": 3580131,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_daccbf73f5311c4d.png",
+      "sha256": "daccbf73f5311c4d8631fb96096ba9d95e3187cc2264b42f18382c7cd3643e81",
+      "sizeBytes": 2719168,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_df0bff489bf1fc8c.png",
+      "sha256": "df0bff489bf1fc8c6bb995109849e550aefecfad909254dc0a0e7284ffbe4909",
+      "sizeBytes": 2504289,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_dfd9b1bb624bd1a1.png",
+      "sha256": "dfd9b1bb624bd1a1d02924a9dbe07ace294b33a89c6232da81c156eb542e6009",
+      "sizeBytes": 2313833,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_e5cce4b315fdb8d1.png",
+      "sha256": "e5cce4b315fdb8d1998bfc5eb71ea61389f63661161b46804a05e79068dd8d46",
+      "sizeBytes": 2565000,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_ebcd55646682d9a6.png",
+      "sha256": "ebcd55646682d9a6f4d1396836ee793991b4866b6bbceb6065666d8bb1bc034c",
+      "sizeBytes": 2333722,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/recovered/UNASSIGNED_fde5f9b4aaa9661d.png",
+      "sha256": "fde5f9b4aaa9661d8b140fc41c214a2e08957445f6ce9ed858d438a8b3b59fc9",
+      "sizeBytes": 2347643,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/source-notes/FLW_Batch02_3D_3K_references_README.md",
+      "sha256": "cc5a8c834c647b71768495bd28b0d75a2be456babc3b9a7d881173d0aae751d8",
+      "sizeBytes": 2341,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/source-notes/FLW_Batch02_3D_3K_references_manifest.csv",
+      "sha256": "20e5e61dc192bfa182169669467c1f338aa09ef16d10ca2de1db57d5b20b3097",
+      "sizeBytes": 3838,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/source-notes/FLW_Batch02_review_previews_manifest.json",
+      "sha256": "6e9f1711b2a181e9567c5062991bc04b94c89eb4dabf7c438d40c634474e3e43",
+      "sizeBytes": 2442,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/source-notes/FLW_Batch03_art_refinement_v1_README.md",
+      "sha256": "5a9cc56c3added53d21491bb98d4df2e973829352830ad7a7a9bac07e18b7b21",
+      "sizeBytes": 2047,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/source-notes/FLW_Batch03_art_refinement_v1_manifest.csv",
+      "sha256": "02aa439ed9b5616543ddce711b6dff31e6fbec4d0f18659b1ed5d77a1a23f4bc",
+      "sizeBytes": 1389,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/source-notes/FLW_Decorative_Art_Batch_04_Production_Candidates_README.md",
+      "sha256": "7e15229311ded771af7d08a8a4731143faab0ad067a21eea6b3ff7789b002b2f",
+      "sizeBytes": 1938,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/source-notes/FLW_Decorative_Art_Batch_04_Production_Candidates_manifest.csv",
+      "sha256": "30f372413bebc738afbdaf7c487f46084a821584f3e68c4e004a39c34bd84b5c",
+      "sizeBytes": 2791,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/source-notes/FLW_Decorative_Art_Batch_04_Production_Candidates_manifest.json",
+      "sha256": "1032e40732cbd355cad31ed874cf841cd2c6e1040fe798a09399c0104d1d4fac",
+      "sizeBytes": 5389,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/source-notes/FLW_RESERVED_R00_contracts.json",
+      "sha256": "08167d48dc755d710df75236b1194377a6d8df58130bc4b332348fe2b14aa2a1",
+      "sizeBytes": 37311,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/source-notes/Feh_Lu_We_RESERVED_R00_Audit_v0.1.md",
+      "sha256": "2f9eb330ea0b5365b430d4c49035512fe6b5df0345b466b92c7d1e4c6ace2363",
+      "sizeBytes": 50146,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/provenance/source-notes/REFERENCE_REGISTER.md",
+      "sha256": "ad10ea8ce94da897ce39fc1cb5d2d98d587f8ea6549b4c0dde739dd5b4799ca2",
+      "sizeBytes": 1087,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/reserved/FLW-RSV-007_oefenkaart-objectdetails-clip-vak.png",
+      "sha256": "b37e285e26332969c1cb3796beb5f798b5cf270b69fd87f914ddba191370ad9c",
+      "sizeBytes": 335859,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/reserved/FLW-RSV-007_oefenkaart_objectdetail_clip_archiefvak.svg",
+      "sha256": "d6fad33659eed20db2b4cf8513a29a8e9fe951f1a5f809bc250a2d8a5832f701",
+      "sizeBytes": 26400,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/reserved/FLW-RSV-012_dienstplan-en-plaatsingslabels.png",
+      "sha256": "509386d668eb55cc7205e76b6c76ed33c9f5811a6d804f60fab91b8f3cf3d7d3",
+      "sizeBytes": 418638,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/reserved/FLW-RSV-012_dienstplan_plaatsingslabels_reference.svg",
+      "sha256": "3c2fec3a470fc502bbbac869e518ad93524254c4a00845afc26ee610579ad726",
+      "sizeBytes": 39083,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/reserved/FLW-RSV-015_schuurinstructie-c00.png",
+      "sha256": "cc38f0a45921fb9cbdd5a144952911893d9091a7298fcd4449d2746f4dd7a0cc",
+      "sizeBytes": 544344,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/reserved/FLW-RSV-015_schuurinstructie_C00.svg",
+      "sha256": "1391f914a8c3af9a00ef9e18eed1384175dce661940215d3258f1b97416ab4b4",
+      "sizeBytes": 18138,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/flw/reserved/FLW-RSV-016_maan-blad-zonlantaarns-en-ontvanger.png",
+      "sha256": "ccc4ff070e80e622dd4f67e2318bdb6f3e3d51cabe4a89e71153c5fac9e38c0d",
+      "sizeBytes": 2239733,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    },
+    {
+      "path": "docs/reference/dev04/REFERENCE_INDEX.md",
+      "sha256": "ccc48b67e57d110a317e435af373add794c6a4c5659bbcd5678347f1284b1c2e",
+      "sizeBytes": 3263,
+      "part": "FLW_Recovery_Archive_Master_part-03.zip"
+    }
+  ]
+}
