@@ -9,6 +9,12 @@
 //   5. the bathroom and guest-WC mirrors are framed, non-emissive (no glowing panel left);
 //   6. ids / checkpoints / save keys / save version unchanged (D1 adds no interactable);
 //   7. render budgets (low quality, doors closed) of every D1 view inside the mobile guide; the art adds ≤ 1 draw call.
+// D2 (FLW 3D pieces and the key family):
+//   8. keys: the four pickups keep their ids / items, lie on their container floor (seated, not floating, not sunk),
+//      are offered only when the container is open and are targeted by the reticle from a standing pose;
+//   9. S3 pieces: each is built and audited (no warnings), within its triangle budget, resting on its support (surface /
+//      ground) or flush on its wall face (wall pieces, registered `relief@` with the wall-art contract), clear of the
+//      evidence panels; the lake bench memory and the BBQ stay reachable on foot; no D2 piece adds an interactable.
 import { chromium } from 'playwright-core';
 import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 const ATLAS = JSON.parse(readFileSync(new URL('../src/world/artAtlas.json', import.meta.url), 'utf8'));
@@ -52,6 +58,13 @@ const page = await ctx.newPage();
 const problems = [];
 page.on('pageerror', (e) => problems.push(`pageerror: ${e.message}`));
 page.on('console', (m) => { if (m.type() === 'error' || (m.type() === 'warning' && /^DEV-04/.test(m.text()))) problems.push(`console: ${m.text().slice(0, 300)}`); });
+// D2: S3 anchors (src/content/props3d.ts) and the key pickups with their container and floor height
+const { PROPS3D } = await import('../src/content/props3d.ts'); // plain data module: Node strips its types natively
+const KEYS = [ // pickup, item, container id, container floor top (world y), stand pose
+  ['pk.shedKey', 'shedKey', 'hall.drawer', 0.15 + 0.66 - 0.1 + 0.03, { x: 86.5, z: 85.5 }], // stand poses as the main e2e
+  ['pk.studyKey', 'studyKey', 'library.desk', 0.15 + 0.68 - 0.06 + 0.03, { x: 81.9, z: 101.2 }],
+  ['pk.consKey', 'consKey', 'kitchen.hatch', 0.15 + 1.02, { x: 96.6, z: 98.6 }],
+];
 const SAVE = { version: 4, scene: 'estate', inventory: ['invitation', 'torch', 'matches', 'notebook', 'frontKey', 'consKey'], flags: { leftHome: true, basementOpen: true, boslustOpen: true } };
 
 try {
@@ -149,6 +162,86 @@ try {
   // batching contract: the atlas is ONE material; each room chunk merges all its paintings into one mesh (as every
   // shared material does), so the art costs at most one draw call per chunk in view, never one per painting
   log('the art atlas costs one merged mesh per room chunk (never one per painting)', atlas.meshes === atlas.chunks.length && atlas.meshes < Object.keys(SLOTS).length, `${atlas.meshes} meshes for ${SLOTS.length} paintings in ${atlas.chunks.length} chunks; max chunks with art in one view ${Math.max(...budget.map((b) => b.artMeshesVisible))}`);
+
+  // ---------------------------------------------------------------- 8. D2 keys
+  const keys = await E(page, (KEYS) => {
+    const g = window.__game, out = [];
+    for (const [pk, item, box, floorY, stand] of KEYS) {
+      const it = g.world.byId.get(pk);
+      if (!it) { out.push({ pk, missing: true }); continue; }
+      g.state.open[box] = false; g.world.syncAll(); for (let i = 0; i < 40; i++) g.tick(1 / 30);
+      const closedLabel = it.label();
+      g.state.open[box] = true; g.world.syncAll(); for (let i = 0; i < 60; i++) g.tick(1 / 30);
+      // lowest point of the visible model (the pickup's own hitbox excluded)
+      let minY = Infinity; it.obj.updateWorldMatrix(true, true);
+      it.obj.traverse((o) => { if (!o.isMesh || o.userData.hit) return; const p = o.geometry.attributes.position, v = new (g.camera.position.constructor)(); for (let i = 0; i < p.count; i++) { v.fromBufferAttribute(p, i).applyMatrix4(o.matrixWorld); minY = Math.min(minY, v.y); } });
+      g.player.setPose({ x: stand.x, y: 0.15, z: stand.z, yaw: -Math.PI / 2, pitch: 0 }); for (let i = 0; i < 10; i++) g.tick(1 / 30);
+      window.T.lookAtId(pk); for (let i = 0; i < 5; i++) g.tick(1 / 30);
+      const m = g.metrics();
+      out.push({ pk, item, closedLabel, openLabel: it.label(), target: m.target, seat: +(minY - floorY).toFixed(4) });
+      g.state.open[box] = false; g.world.syncAll();
+    }
+    return out;
+  }, KEYS);
+  const badKey = keys.filter((k) => k.missing || k.closedLabel !== null || !k.openLabel || k.target !== k.pk || Math.abs(k.seat) > 0.004);
+  log('D2 keys: pickup ids kept, offered only when the container is open, targeted from a standing pose, seated on the container floor (±4 mm)', badKey.length === 0, JSON.stringify(badKey.length ? badKey : keys.map((k) => `${k.pk} seat ${k.seat}`)));
+
+  // ---------------------------------------------------------------- 9. D2 S3 pieces
+  const s3 = await E(page, (PROPS) => {
+    const g = window.__game, scene = g.world.scene, u = scene.userData, V = g.camera.position.constructor, rc = new (g.raycaster.constructor)();
+    scene.traverse((o) => { if (o.isMesh) { o.userData._vis = o.visible; o.visible = true; } }); scene.updateMatrixWorld(true);
+    const out = [];
+    for (const p of PROPS) {
+      const fx = Math.sin(p.yaw), fz = Math.cos(p.yaw);
+      let gap = null;
+      if (p.mount === 'wall') { rc.set(new V(p.x + fx * 0.006, p.y, -(p.z + fz * 0.006)), new V(-fx, 0, fz)); rc.far = 0.3; const h = rc.intersectObjects(scene.children, true)[0]; gap = h ? +(h.distance - 0.006).toFixed(4) : null; }
+      else { rc.set(new V(p.x, p.y + 0.004, -p.z), new V(0, -1, 0)); rc.far = 0.3; const h = rc.intersectObjects(scene.children, true)[0]; gap = h ? +(h.distance - 0.004).toFixed(4) : null; }
+      out.push({ id: p.id, mount: p.mount, built: p.id in (u.assetTris ?? {}), tris: u.assetTris?.[p.id] ?? 0, max: p.maxTris, gap, warn: (u.assetWarnings ?? []).filter((w) => w.startsWith(p.id)) });
+    }
+    const keyTris = Object.fromEntries(Object.entries(u.assetTris ?? {}).filter(([k]) => k.startsWith('key:')));
+    scene.traverse((o) => { if (o.isMesh && o.userData._vis !== undefined) { o.visible = o.userData._vis; delete o.userData._vis; } });
+    return { out, keyTris, reliefs: u.openings.art.filter((a) => a.id.startsWith('relief@')).map((a) => a.id) };
+  }, PROPS3D);
+  const badS3 = s3.out.filter((r) => !r.built || r.tris > r.max || r.warn.length || r.gap === null || Math.abs(r.gap) > 0.006);
+  log(`D2 S3: all ${PROPS3D.length} pieces built, audited and within budget; each rests on its support or sits flush on its wall (≤ 6 mm)`, badS3.length === 0 && s3.out.length === PROPS3D.length, JSON.stringify(badS3.length ? badS3 : s3.out.map((r) => `${r.id.slice(4)} ${r.tris}t gap ${r.gap}`)));
+  const kt = Object.values(s3.keyTris);
+  // the front key lives in the home world: built there, checked below
+  log('D2 key family (estate): shed, study and conservatory key models, each ≈ 200–450 triangles', kt.length === 3 && kt.every((t) => t >= 200 && t <= 450), JSON.stringify(s3.keyTris));
+  const walls = PROPS3D.filter((p) => p.mount === 'wall'), relClash = [];
+  for (const a of reg.art.filter((x) => x.id.startsWith('relief@'))) for (const p of prot) if (a.axis === p.axis && Math.abs(a.f - p.f) < 0.1 && ov(a.a0, a.a1, p.a0, p.a1) && Math.min(a.y1, p.y1) - Math.max(a.y0, p.y0) > -0.3) relClash.push(`${a.id}~${p.id}`);
+  log(`D2 wall pieces: ${walls.length} registered with the wall-art contract (no door / window / sweep conflict) and clear of the evidence panels`, s3.reliefs.length === walls.length && reg.conflicts.length === 0 && relClash.length === 0, JSON.stringify({ reliefs: s3.reliefs, relClash }));
+  const reach = await E(page, () => {
+    const g = window.__game, out = {};
+    try { g.player.setPose({ x: 80.6, y: 0.04, z: 137.6, yaw: 0, pitch: 0 }); g.player.y = g.world.col.supportHeight(80.6, 137.6, 0.5, 0.42); window.T.walk([[79.3, 138.1], [77.85, 138.3], [77.85, 139.6]]); window.T.lookAtId('mem.pond.bench'); out.bench = g.metrics().target; } catch (e) { out.bench = String(e.message).slice(0, 120); }
+    try { g.player.setPose({ x: 107.5, y: 0.15, z: 113.5, yaw: 0, pitch: 0 }); g.player.y = g.world.col.supportHeight(107.5, 113.5, 0.6, 0.42); window.T.walkTo(106.9, 116.7); window.T.walkTo(105.2, 117.6); out.bbq = 'ok'; } catch (e) { out.bbq = String(e.message).slice(0, 120); }
+    return out;
+  });
+  log('D2 paths: the lake bench memory is still reached and targeted past the heron; the grill front and the gas bottle stay reachable past the fire screen', reach.bench === 'mem.pond.bench' && reach.bbq === 'ok', JSON.stringify(reach));
+
+  // ---------------------------------------------------------------- 8b. the front key in the home world
+  const home = await (async () => {
+    const p2 = await ctx.newPage();
+    p2.on('pageerror', (e) => problems.push(`pageerror (home): ${e.message}`));
+    await p2.goto(BASE + '?autotest=1');
+    await p2.evaluate(() => localStorage.setItem('fehluwe.save', JSON.stringify({ version: 4, scene: 'home', inventory: ['invitation', 'torch'], flags: {} })));
+    await p2.reload(); await p2.click('[data-cont]');
+    await p2.waitForFunction(() => window.__game?.world?.id === 'home', null, { timeout: 120000 });
+    await p2.evaluate(helpers);
+    const r = await p2.evaluate(() => {
+      const g = window.__game, it = g.world.byId.get('pk.frontKey');
+      if (!it) return { missing: true };
+      const closedLabel = it.label();
+      g.state.open['home.drawer'] = true; g.world.syncAll(); for (let i = 0; i < 60; i++) g.tick(1 / 30);
+      let minY = Infinity, tris = 0; it.obj.updateWorldMatrix(true, true);
+      it.obj.traverse((o) => { if (!o.isMesh || o.userData.hit) return; const p = o.geometry.attributes.position, v = new (g.camera.position.constructor)(); tris += p.count / 3; for (let i = 0; i < p.count; i++) { v.fromBufferAttribute(p, i).applyMatrix4(o.matrixWorld); minY = Math.min(minY, v.y); } });
+      g.player.setPose({ x: 1.3, y: 0, z: 3.2, yaw: -Math.PI / 2, pitch: 0 }); for (let i = 0; i < 10; i++) g.tick(1 / 30);
+      window.T.lookAtId('pk.frontKey'); for (let i = 0; i < 5; i++) g.tick(1 / 30);
+      return { closedLabel, openLabel: it.label(), target: g.metrics().target, seat: +(minY - (0.73 - 0.09 + 0.03)).toFixed(4), tris };
+    });
+    await p2.close();
+    return r;
+  })();
+  log('D2 front key (home world): pk.frontKey offered only with the drawer open, targeted, seated (±4 mm), ≈ 200–450 triangles', !home.missing && home.closedLabel === null && !!home.openLabel && home.target === 'pk.frontKey' && Math.abs(home.seat) <= 0.004 && home.tris >= 200 && home.tris <= 450, JSON.stringify(home));
 } catch (e) {
   log('suite crashed', false, String(e?.stack ?? e).slice(0, 500));
 }

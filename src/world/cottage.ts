@@ -11,6 +11,7 @@ import { Asm, artMats, projectUV, cushion, lathe } from './artkit';
 import { box, boxMM, compound } from './kit';
 import { table, chair, plant, lantern, staticLantern, joinery, rug, gameBoxes, flwPainting } from './furniture';
 import { sideboard, tabletop } from './dressing';
+import { S3_BUILDERS } from './d2props';
 import { addBookStack, bottleGeoOf, addGameBox, GAME_BOXES } from './propkit';
 import { mulberry32 } from '../core/rng';
 import { makeDoor, makeLamp, makeInspect, place } from '../interactions/props';
@@ -81,6 +82,7 @@ export function buildCottage(w: World, g: GameApi, c: Ctx) {
   // DEV-04D D1-R: the room's anchor on the arch axis (seen from the front door through the arch), over the long table,
   // between the two north windows; its top on their head line
   flwPainting(c, 'FLW-D2-046', CX, Y + 1.75, Z1 - 0.32, Math.PI);
+  S3_BUILDERS['FLW-S3-030'](c); // DEV-04D D2: papier-maché mask on the east wall, between the windows
   { const M = artMats(), a = new Asm(c.b, c.chunk, X0 + 0.55, Y + 0.85, TZ - 0.6, Math.PI / 2);
     for (let i = 0; i < 4; i++) a.add(M.ceramic, i % 2 ? '#f2f0ea' : '#3f6fa8', joinery.cg('azulejoPlate', () => new THREE.CylinderGeometry(0.12, 0.11, 0.016, 14).rotateX(Math.PI / 2)), -0.45 + i * 0.3, 0.13, -0.15, { rx: -0.15 });
     a.add(M.ceramic, '#e6dcc4', joinery.cg('cottageJug', () => lathe([[0.001, 0], [0.06, 0], [0.075, 0.08], [0.06, 0.18], [0.04, 0.22], [0.05, 0.24], [0.001, 0.23]], 12)), 0.55, 0, 0.05); }
@@ -172,6 +174,7 @@ export function buildCottage(w: World, g: GameApi, c: Ctx) {
   }
   w.col.addBox(T.x1 - 0.85, T.x1 - 0.35, T.z1 - 1.4, T.z1 + 0.2, Y, Y + 0.5);
   for (const [x, z] of [[T.x0 + 0.6, T.z1 - 0.5], [T.x1 - 0.6, T.z0 + 0.8]] as const) plant(c, x, z, Y, 1.1, '#c8643a');
+  S3_BUILDERS['FLW-S3-031'](c); // DEV-04D D2: azulejo lemon relief on the house front, over the corner plant
   for (const x of [CX - 1, CX + 1]) staticLantern(c, w, x, Y + 2.2, Z0, 0.7, 0, 3, 6);
 
   // ---------------------------------------------------------------- plateau edge: retaining wall where the drop is steep

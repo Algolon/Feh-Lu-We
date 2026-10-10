@@ -95,6 +95,38 @@ const D1R = [
   ['bath-mirror-wide', 86.0, 3.35, 104.6, 80, 0.0], ['wc-mirror-wide', 85.5, 0.15, 104.4, 70, 0.0],
 ].map(([n, x, y, z, yaw, pitch]) => [`d1r-${n}`, { x, y, z, yaw: (yaw * Math.PI) / 180, pitch }]);
 
+// DEV-04D D2 (SET=d2): every D2 model three ways — close-up, room composition, and the gameplay-distance read from its
+// approach — plus the four key pickups in their open drawers / hatch and the maquette. (x, z, h) = the object; yaw =
+// the camera heading towards it; [near, room, approach] = stand-off distances; floor = the walking surface.
+const D2 = [];
+for (const [n, x, z, h, floor, yaw, dists] of [
+  ['s3-004-bird', 92.55, 108.84, 4.2, 3.35, 15, [0.75, 2.2, 4.0]],
+  ['s3-014-swallows', 90.0, 80.42, 5.35, 3.35, 180, [1.3, 2.4, 3.45]],
+  ['s3-015-sloop', 79.25, 80.92, 4.25, 3.35, 200, [0.85, 2.2, 4.6]],
+  ['s3-016-moon', 72.66, 91.0, 4.05, 3.35, -100, [0.9, 2.2, 4.4]],
+  ['s3-017-medallion', 101.38, 88.5, 4.95, 3.35, -90, [1.1, 2.4, 4.6]],
+  ['s3-030-mask', 29.7, 160.95, 5.75, 4.15, 90, [1.1, 2.6, 4.2]],
+  ['s3-031-tile', 20.78, 157.0, 5.7, 4.15, 15, [1.1, 2.6, 4.5]],
+  ['s3-033-firescreen', 106.15, 118.5, 0.65, 0.15, 20, [1.8, 3.4, 6.2]],
+  ['s3-037-heron', 78.75, 141.05, 0.55, 0.04, -40, [1.4, 3.0, 6.5]],
+]) {
+  const r = (yaw * Math.PI) / 180;
+  ['close', 'room', 'approach'].forEach((k, i) => {
+    const d = dists[i], eye = floor + 1.65;
+    D2.push([`d2-${n}-${k}`, { x: x - Math.sin(r) * d, y: floor, z: z - Math.cos(r) * d, yaw: r, pitch: Math.atan2(h - eye, d) }]);
+  });
+}
+// keys in their containers (opened for the capture only) and the maquette
+const D2KEYS = [
+  ['d2-key-shedKey-drawer', { x: 86.15, y: 0.15, z: 85.5, yaw: -Math.PI / 2, pitch: -0.95 }, 'hall.drawer'],
+  ['d2-key-studyKey-drawer', { x: 81.75, y: 0.15, z: 101.2, yaw: -Math.PI / 2, pitch: -0.95 }, 'library.desk'],
+  ['d2-key-consKey-hatch', { x: 95.85, y: 0.15, z: 98.6, yaw: -Math.PI / 2, pitch: -0.68 }, 'kitchen.hatch'],
+  ['d2-maquette-close', { x: 86.55, y: 0.15, z: 94.4, yaw: -Math.PI / 2, pitch: -0.75 }, null],
+  ['d2-maquette-room', { x: 88.4, y: 0.15, z: 93.2, yaw: -1.2, pitch: -0.35 }, null],
+];
+if (process.env.SET === 'd2') D2.push(...D2KEYS.map(([n, p]) => [n, p]));
+const OPEN_FOR = Object.fromEntries(D2KEYS.filter((k) => k[2]).map(([n, , id]) => [n, id]));
+
 const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
 const page = await ctx.newPage();
 const problems = [];
@@ -130,14 +162,16 @@ if (!process.env.EXT && !process.env.SET) for (const r of rooms) {
   views.push([`r-${r.id}-b`, { x: B[0], y, z: B[1], yaw: yawTo(B, A), pitch: -0.08 }]);
 }
 if (process.env.SET === 'd1') views.push(...D1);
+else if (process.env.SET === 'd2') views.push(...D2);
 else if (process.env.SET === 'd1r') views.push(...D1R);
 else if (!process.env.ROOMS) views.push(...EXT);
 const sel = process.env.VIEWS ? new Set(process.env.VIEWS.split(',')) : null;
 const rows = [];
 for (const [name, pose] of views) {
   if (sel && !sel.has(name)) continue;
-  const m = await page.evaluate(async ({ p }) => {
+  const m = await page.evaluate(async ({ p, open }) => {
     const g = window.__game;
+    if (open) { g.state.open[open] = true; g.world.syncAll(); for (let i = 0; i < 60; i++) g.tick(1 / 30); }
     const place = () => { g.player.setPose(p); if (!p.fly) g.player.y = g.world.col.supportHeight(p.x, p.z, p.y + 0.05, 0.42); };
     place();
     for (let i = 0; i < 40; i++) g.tick(1 / 30);
@@ -147,7 +181,7 @@ for (const [name, pose] of views) {
     g.renderer.render(g.world.scene, g.camera);
     const i = g.renderer.info.render;
     return { calls: i.calls, triangles: i.triangles, room: g.world.hereRoom, feetY: +g.player.y.toFixed(2) };
-  }, { p: pose });
+  }, { p: pose, open: OPEN_FOR[name] ?? null });
   await page.waitForTimeout(120);
   await page.screenshot({ path: `${OUT}/${name}.jpg`, quality: 72, type: 'jpeg' });
   rows.push({ name, pose, ...m });

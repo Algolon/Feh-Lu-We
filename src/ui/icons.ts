@@ -8,9 +8,10 @@ type P = [d: string, fill?: string, stroke?: string, w?: number];
 const circ = (cx: number, cy: number, r: number) => `M${cx - r} ${cy} A${r} ${r} 0 1 0 ${cx + r} ${cy} A${r} ${r} 0 1 0 ${cx - r} ${cy} Z`;
 
 /** A key with a given bow shape, metal colour and tag; shared so all keys read as keys. */
-function key(metal: string, bow: 'ring' | 'trefoil' | 'square', tag: P[], big = false): P[] {
+function key(metal: string, bow: 'ring' | 'oval' | 'trefoil' | 'square', tag: P[], big = false): P[] {
   const s = big ? 1 : 0.85;
   const bowD = bow === 'ring' ? circ(17, 30, 9 * s)
+    : bow === 'oval' ? `M${17 - 10.5 * s} 30 A${10.5 * s} ${7 * s} 0 1 0 ${17 + 10.5 * s} 30 A${10.5 * s} ${7 * s} 0 1 0 ${17 - 10.5 * s} 30 Z` // DEV-04D D2: FLW-K3-004's oval bow, long along the key
     : bow === 'square' ? `M${17 - 8 * s} ${30 - 8 * s} h${16 * s} v${16 * s} h${-16 * s} Z`
       : `${circ(17, 23, 6)}${circ(11, 34, 6)}${circ(23, 34, 6)}`;
   return [
@@ -133,7 +134,7 @@ const ICONS: Record<string, P[]> = {
     ['M30 44 V37 C30 34 35 34 35 37 V44', '#5a3a22', INK, 1.2],
   ],
   // conservatory key with a green glass drop
-  consKey: key('#d9b14a', 'ring', [['M10 38 L8 46', 'none', INK, 1.5], ['M8 46 C14 50 14 58 8 60 C2 58 2 50 8 46 Z', '#5fbf8f', INK, 2]]),
+  consKey: key('#d9b14a', 'oval', [['M10 38 L8 46', 'none', INK, 1.5], ['M8 46 C14 50 14 58 8 60 C2 58 2 50 8 46 Z', '#5fbf8f', INK, 2]]),
   // the three seals: round terracotta (table), square blue (book), green leaf (tree)
   tableSeal: [
     [circ(32, 32, 24), '#c4553d', INK, 2.5],

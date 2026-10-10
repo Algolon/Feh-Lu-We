@@ -20,6 +20,7 @@ import {
 } from './layout';
 import { terrainHeight } from './terrain';
 import { FIRE_UNIFORMS } from './fire';
+import { S3_BUILDERS } from './d2props';
 
 const BENCH_LOG2 = logModel(157, 2.2, 0.21);
 const WICKER_GEO = wickermanGeo();
@@ -115,6 +116,7 @@ function socialGarden(w: World, c: Ctx) {
     a.add(M.paint, '#8a8a86', bx(0.32, 0.02, 0.04), 0.35, 0.91, 0.05, { ry: -0.3 });
   }
   w.col.addBox(106.3, 107.7, 117.25, 117.95, 0, GF + 1.2);
+  S3_BUILDERS['FLW-S3-033'](c); // DEV-04D D2: wrought-iron fire screen behind the grill
   w.col.addCircle(105.0, 118.5, 0.2, 0, 0.8);
   // outdoor dining: one long table with slatted garden benches; a festoon of warm bulbs on two posts; plates set
   platform(c, OUTDOOR_DINING, '#e2d6bc');
@@ -286,6 +288,7 @@ function lake(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods: EstateWoods 
   place(benchNote, bx - 0.05, 0.46, bz + 0.3, 0.2);
   w.scene.add(benchNote);
   makeInspect(w, g, { id: 'mem.pond.bench', obj: benchNote, clue: 'mem.pond.bench', hit: [0.4, 0.2, 0.4] });
+  S3_BUILDERS['FLW-S3-037'](c); // DEV-04D D2: carved heron beside the bench's north end (the view west stays open)
   // the old oak on the east side of the water with its nest box (herbarium: "aan de oostkant van de vijver")
   const OX = NEST_OAK.x, OZ = NEST_OAK.z, OY = terrainHeight(OX, OZ);
   veg.tree({ x: OX, z: OZ, h: 5.2, r: 3.2, kind: 'oak', hue: -0.3, y: OY }, 'garden');
