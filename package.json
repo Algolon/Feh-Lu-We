@@ -17,6 +17,7 @@
     "e2e:dev04a": "node scripts/e2e-dev04a.mjs",
     "e2e:dev04b": "node scripts/e2e-dev04b.mjs",
     "e2e:dev04c": "node scripts/e2e-dev04c.mjs",
+    "e2e:dev04d": "node scripts/e2e-dev04d.mjs",
     "views:dev02": "node scripts/dev02-views.mjs"
   },
   "engines": {

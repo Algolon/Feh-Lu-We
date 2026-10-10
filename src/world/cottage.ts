@@ -9,7 +9,7 @@ import type { World, GameApi } from '../interactions/world';
 import { type Ctx, wall, floor, ceiling, hipRoof, segBox, threshold } from './arch';
 import { Asm, artMats, projectUV, cushion, lathe } from './artkit';
 import { box, boxMM, compound } from './kit';
-import { table, chair, plant, lantern, staticLantern, joinery, rug, gameBoxes } from './furniture';
+import { table, chair, plant, lantern, staticLantern, joinery, rug, gameBoxes, flwPainting } from './furniture';
 import { sideboard, tabletop } from './dressing';
 import { addBookStack, bottleGeoOf, addGameBox, GAME_BOXES } from './propkit';
 import { mulberry32 } from '../core/rng';
@@ -61,6 +61,7 @@ export function buildCottage(w: World, g: GameApi, c: Ctx) {
   wall(c, 'x', MID, X0 + 0.3, X1 - 0.3, Y, B + 3.05, { t: 0.2, mat: k.M.plaster, color: '#f6efe2', openings: [{ at: CX, w: 1.4, h: 2.3 }] });
   makeDoor(w, g, { id: 'door.cottage', x: CX - 0.5, z: Z0 + 0.15, dir: 'x+', width: 1.0, height: 2.2, y0: Y, swing: 1, color: '#3f6fa8' });
   for (const x of [X0 + 1, X1 - 1.2]) plant(c, x, Z0 + 0.8, Y, 0.9, '#c9774a');
+  flwPainting(c, 'FLW-D2-045', X0 + 0.32, Y + 1.6, Z0 + 1.6, Math.PI / 2); // DEV-04D D1: the coast path, on the entry's west wall
   const el = lantern(w, X1 - 0.6, Y + 1.8, Z0 + 2.6, 0.7);
   makeLamp(w, g, { id: 'lamp.cottageEntry', ...el, name: 'lantaarn', defaultOn: true, intensity: 3, distance: 6, hit: [0.4, 0.5, 0.4] });
   // the old gathering room: an empty table with folded cloths, chairs pushed in
@@ -77,6 +78,7 @@ export function buildCottage(w: World, g: GameApi, c: Ctx) {
   tabletop(c, CX + 1.9, TZ, Y + 0.76, 0, ['candle'], 3);
   rug(c, CX, TZ, Y + 0.005, 6.0, 2.8, 0, '#d8e4f4', 'kilim', true);
   sideboard(c, X0 + 0.55, TZ - 0.6, Y, Math.PI / 2, 1.5, 0.45, 0.85, '#6b4426');
+  flwPainting(c, 'FLW-D2-046', X1 - 2.1, Y + 1.65, MID + 0.12, 0); // DEV-04D D1: one piece only (the set table stays the story)
   { const M = artMats(), a = new Asm(c.b, c.chunk, X0 + 0.55, Y + 0.85, TZ - 0.6, Math.PI / 2);
     for (let i = 0; i < 4; i++) a.add(M.ceramic, i % 2 ? '#f2f0ea' : '#3f6fa8', joinery.cg('azulejoPlate', () => new THREE.CylinderGeometry(0.12, 0.11, 0.016, 14).rotateX(Math.PI / 2)), -0.45 + i * 0.3, 0.13, -0.15, { rx: -0.15 });
     a.add(M.ceramic, '#e6dcc4', joinery.cg('cottageJug', () => lathe([[0.001, 0], [0.06, 0], [0.075, 0.08], [0.06, 0.18], [0.04, 0.22], [0.05, 0.24], [0.001, 0.23]], 12)), 0.55, 0, 0.05); }

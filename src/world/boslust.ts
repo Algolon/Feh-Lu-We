@@ -8,7 +8,7 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, wall, floor, ceiling, stairsZ } from './arch';
 import { box, boxMM, cyl, rod, blob, compound, v3 } from './kit';
-import { table, chair, chandelier, part, staticLantern, canvasPanel, bookshelf } from './furniture';
+import { table, chair, chandelier, part, staticLantern, canvasPanel, bookshelf, flwPainting } from './furniture';
 import { makeDoor, makeAction, makeInspect, makeLamp, place } from '../interactions/props';
 import { makeFire } from './fire';
 import { buildHearth } from './hearth';
@@ -339,6 +339,8 @@ function gathering(w: World, g: GameApi, c: Ctx) {
   place(sw, 64.6, UG + 1.35, Z0 + 0.17, 0);
   w.scene.add(sw);
   makeLamp(w, g, { id: 'lamp.gathering', obj: sw, glow: ch.glow, light: ch.light, flames: ch.flames, name: 'kroonluchter', defaultOn: true, intensity: 7, distance: 11, hit: [0.3, 0.4, 0.3], hitOffset: [0, 0.05, 0], patch: { y: UG + 0.03, r: 2.6 } });
+  // DEV-04D D1: a story-neutral woodland painting on the north wall, west of the door (the letter stays on the table)
+  flwPainting(c, 'FLW-D2-042', 58.6, UG + 1.85, Z1 - 0.17, Math.PI);
   // hearth on the west wall
   buildHearth(w, g, c, { id: 'fire.gathering', x: X0, z: TZ, y: UG, facing: Math.PI / 2, ceil: UGCEIL, defaultLit: true });
   // bunting of little lights

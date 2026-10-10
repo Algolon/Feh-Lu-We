@@ -1,0 +1,258 @@
+{
+ "size": [
+  2048,
+  1024
+ ],
+ "gutter": 4,
+ "file": "src/assets/art/flw-d2-atlas.webp",
+ "bytes": 622818,
+ "items": {
+  "FLW-D2-002": {
+   "source": "docs/reference/flw/2d/FLW-D2-002_het-laatste-zonlicht.png",
+   "sha256": "0e98e32f150a74d1913caea981c02cde4041ecf6e90d1d1a9cd42c4bb2ad064b",
+   "status": "APPROVED_2D",
+   "sourcePx": [
+    1619,
+    971
+   ],
+   "px": [
+    512,
+    307
+   ],
+   "uv": [
+    0.002197265625,
+    0.29833984375,
+    0.251708984375,
+    0.59716796875
+   ]
+  },
+  "FLW-D2-005": {
+   "source": "docs/reference/flw/2d/FLW-D2-005_kleikom-appels-ruwe-tafel-en-linnen.png",
+   "sha256": "c71b483e112ecc5836d1e2ded335d9ae562c0285466054e67bd264ea9ad130a3",
+   "status": "REVIEW_READY",
+   "sourcePx": [
+    1122,
+    1402
+   ],
+   "px": [
+    320,
+    400
+   ],
+   "uv": [
+    0.002197265625,
+    0.60595703125,
+    0.157958984375,
+    0.99560546875
+   ]
+  },
+  "FLW-D2-007": {
+   "source": "docs/reference/flw/2d/FLW-D2-007_de-stille-eik.png",
+   "sha256": "8243ffe040a7b7982d24c549893cd0c59a916a50c7484e7637cc2b654140ae89",
+   "status": "APPROVED_2D",
+   "sourcePx": [
+    1086,
+    1448
+   ],
+   "px": [
+    264,
+    352
+   ],
+   "uv": [
+    0.566650390625,
+    0.65283203125,
+    0.695068359375,
+    0.99560546875
+   ]
+  },
+  "FLW-D2-010": {
+   "source": "docs/reference/flw/2d/FLW-D2-010_na-het-feest.png",
+   "sha256": "f5a12e7cacdc2f8a718205574838a0bbe73f4d1016ceafd4689a3ae41cead879",
+   "status": "REVIEW_READY",
+   "sourcePx": [
+    1448,
+    1086
+   ],
+   "px": [
+    512,
+    384
+   ],
+   "uv": [
+    0.312744140625,
+    0.62158203125,
+    0.562255859375,
+    0.99560546875
+   ]
+  },
+  "FLW-D2-022": {
+   "source": "docs/reference/flw/2d/FLW-D2-022_de-onbekende-reiziger.png",
+   "sha256": "34dc481390effd136237e92b61cc2ace7f4c01d1bc5227d8b1926366d304629e",
+   "status": "REVIEW_READY",
+   "sourcePx": [
+    1086,
+    1448
+   ],
+   "px": [
+    300,
+    400
+   ],
+   "uv": [
+    0.162353515625,
+    0.60595703125,
+    0.308349609375,
+    0.99560546875
+   ]
+  },
+  "FLW-D2-026": {
+   "source": "docs/reference/flw/2d/FLW-D2-026_de-kust-na-de-regen.png",
+   "sha256": "66b22b18cf44bcf6b9b88b4f94a35ac2d55b403eb80d9a7ea5a78c0361598311",
+   "status": "APPROVED_2D",
+   "sourcePx": [
+    1672,
+    941
+   ],
+   "px": [
+    512,
+    288
+   ],
+   "uv": [
+    0.709228515625,
+    0.31689453125,
+    0.958740234375,
+    0.59716796875
+   ]
+  },
+  "FLW-D2-028": {
+   "source": "docs/reference/flw/2d/FLW-D2-028_het-huis-in-de-nacht.png",
+   "sha256": "7fb2d64d0ad29d5076860debcdc33060139bb1553f3006d6cb78443019465f55",
+   "status": "APPROVED_2D",
+   "sourcePx": [
+    1619,
+    971
+   ],
+   "px": [
+    512,
+    307
+   ],
+   "uv": [
+    0.256103515625,
+    0.29833984375,
+    0.505615234375,
+    0.59716796875
+   ]
+  },
+  "FLW-D2-029": {
+   "source": "docs/reference/flw/2d/FLW-D2-029_maanlicht-op-water.png",
+   "sha256": "92a03f38ad640b512259035369c989e819668837d5b27d76098da2665958a012",
+   "status": "REVIEW_READY",
+   "sourcePx": [
+    1254,
+    1254
+   ],
+   "px": [
+    320,
+    320
+   ],
+   "uv": [
+    0.699462890625,
+    0.68408203125,
+    0.855224609375,
+    0.99560546875
+   ]
+  },
+  "FLW-D2-035": {
+   "source": "docs/reference/flw/2d/FLW-D2-035_zomerregen-op-een-landweg.png",
+   "sha256": "034413c74caaf4be09dfcd85729e50062880253136af0bb5438b9afd4fedfb56",
+   "status": "REVIEW_READY",
+   "sourcePx": [
+    1448,
+    1086
+   ],
+   "px": [
+    400,
+    300
+   ],
+   "uv": [
+    0.510009765625,
+    0.30517578125,
+    0.704833984375,
+    0.59716796875
+   ]
+  },
+  "FLW-D2-042": {
+   "source": "docs/reference/flw/2d/FLW-D2-042_onder-hetzelfde-bladerdak.png",
+   "sha256": "9aadf22c34203ffaa87c126f2899b01fc6ff2fa3cb83486f2b79a2db4040d9ea",
+   "status": "REVIEW_READY",
+   "sourcePx": [
+    1672,
+    941
+   ],
+   "px": [
+    512,
+    288
+   ],
+   "uv": [
+    0.002197265625,
+    0.00927734375,
+    0.251708984375,
+    0.28955078125
+   ]
+  },
+  "FLW-D2-044": {
+   "source": "docs/reference/flw/2d/FLW-D2-044_houtdruk-hout-zaagsel-en-gereedschap.png",
+   "sha256": "ab21717bcfe5273998d106ef6a34ae30d1405309025b4c5a39dd3c168e929b8f",
+   "status": "REVIEW_READY",
+   "sourcePx": [
+    1400,
+    1050
+   ],
+   "px": [
+    320,
+    240
+   ],
+   "uv": [
+    0.256103515625,
+    0.05615234375,
+    0.411865234375,
+    0.28955078125
+   ]
+  },
+  "FLW-D2-045": {
+   "source": "docs/reference/flw/2d/FLW-D2-045_de-weg-naar-de-kust.png",
+   "sha256": "35085788a25ba3c28889e284f65876461119c3e71426fb7092bf596bd4ce7818",
+   "status": "REVIEW_READY",
+   "sourcePx": [
+    1448,
+    1086
+   ],
+   "px": [
+    320,
+    240
+   ],
+   "uv": [
+    0.416259765625,
+    0.05615234375,
+    0.572021484375,
+    0.28955078125
+   ]
+  },
+  "FLW-D2-046": {
+   "source": "docs/reference/flw/2d/FLW-D2-046_een-middag-in-portugal.png",
+   "sha256": "758d7f7b11041cac525a779d34f9c33bdd0c5ec92838820f78bb1366f2dfcd97",
+   "status": "APPROVED_2D",
+   "sourcePx": [
+    1672,
+    941
+   ],
+   "px": [
+    360,
+    203
+   ],
+   "uv": [
+    0.576416015625,
+    0.09228515625,
+    0.751708984375,
+    0.28955078125
+   ]
+  }
+ }
+}

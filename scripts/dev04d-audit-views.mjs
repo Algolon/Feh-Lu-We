@@ -61,6 +61,23 @@ const EXT = [
   ['h06-maquette', { x: 86.75, y: 0.15, z: 94.4, yaw: -90 * D, pitch: -0.42 }],
 ];
 
+// DEV-04D D1 evidence (SET=d1): every D1 wall-art slot and both mirrors, from ≈ 3 m (room read) and ≈ 1.5 m (close
+// read); the same poses run on the base build (before) and the D1 build (after).
+const D1 = [];
+for (const [n, x, y, z, yaw, far, near, pitch = 0.06] of [
+  ['hall-002', 85.12, 0.15, 86.2, -90, 5.4, 3.2, 0.42], ['hall-007', 85.12, 0.15, 92.5, -90, 2.9, 1.5],
+  ['living-026', 77.25, 0.15, 80.45, 180, 2.9, 1.6], ['landing-028', 90, 3.35, 103.92, 0, 2.9, 1.6],
+  ['cottage-046', 27.9, 4.15, 160.12, 180, 2.7, 1.4], ['cottageEntry-045', 20.32, 4.15, 158.6, -90, 2.4, 1.3],
+  ['kitchen-005', 107.58, 0.15, 99.0, 90, 3.1, 1.6], ['dining-010', 104.8, 0.15, 91.92, 0, 3.3, 1.8],
+  ['reis-022', 80.8, 3.35, 80.42, 180, 3.0, 1.6], ['sterren-029', 82.0, 3.35, 86.92, 180, 3.0, 1.5],
+  ['guest-035', 107.58, 3.35, 102.6, 90, 3.0, 1.6], ['workshop-044', 115.58, 0.15, 99.7, 90, 3.0, 1.5],
+  ['gathering-042', 58.6, -3.2, 56.82, 0, 3.2, 1.7], ['bath-mirror', 89.85, 3.35, 105.0, 90, 2.0, 1.2], ['wc-mirror', 87.9, 0.15, 105.3, 90, 1.9, 1.1],
+]) {
+  // (x, z) = the art on its wall; yaw = the camera heading towards it; stand `far` / `near` metres out
+  const r = (yaw * Math.PI) / 180, at = (d) => ({ x: x - Math.sin(r) * d, y, z: z - Math.cos(r) * d, yaw: r });
+  D1.push([`d1-${n}-room`, { ...at(far), pitch }], [`d1-${n}-close`, { ...at(near), pitch: pitch * 1.6 }]);
+}
+
 const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
 const page = await ctx.newPage();
 const problems = [];
@@ -72,6 +89,8 @@ await page.reload();
 await page.click('[data-cont]');
 await page.waitForFunction(() => window.__game?.world?.id === 'estate', null, { timeout: 180000 });
 await page.evaluate(helpers);
+// DEV-04D D1: wait until the FLW atlas image (if the build has one) has replaced its placeholder
+await page.waitForFunction(() => { let ok = true; window.__game.world.scene.traverse((o) => { const m = o.material; if (m?.userData?.flwAtlas && !(m.map?.image?.naturalWidth > 4)) ok = false; }); return ok; }, null, { timeout: 60000 });
 await page.addStyleTag({ content: '#hud, .hud, #joy, #topbar, #objective, #toast, .toast { opacity: 0 !important; }' }).catch(() => {});
 // evidence state: every door open (so a room reads with its neighbours as a player would see them walking through);
 // DOORS=closed keeps every door shut (a realistic budget state for the same poses)
@@ -84,7 +103,7 @@ const rooms = await page.evaluate((allOpen) => {
 }, process.env.DOORS !== 'closed');
 const FLOOR_Y = { g: 0.15, u: 3.35, a: 6.7, b: -3.2 };
 const views = [];
-if (!process.env.EXT) for (const r of rooms) {
+if (!process.env.EXT && !process.env.SET) for (const r of rooms) {
   if (['tunnel', 'tunnel2', 'descent', 'hut', 'bstair', 'atticStair', 'walkway'].includes(r.id)) continue; // passages: covered by neighbours
   const y = r.floor === 'x' ? r.y0 + 0.4 : FLOOR_Y[r.floor];
   const inset = Math.min(0.9, (r.x1 - r.x0) / 4, (r.z1 - r.z0) / 4);
@@ -93,7 +112,8 @@ if (!process.env.EXT) for (const r of rooms) {
   views.push([`r-${r.id}-a`, { x: A[0], y, z: A[1], yaw: yawTo(A, B), pitch: -0.08 }]);
   views.push([`r-${r.id}-b`, { x: B[0], y, z: B[1], yaw: yawTo(B, A), pitch: -0.08 }]);
 }
-if (!process.env.ROOMS) views.push(...EXT);
+if (process.env.SET === 'd1') views.push(...D1);
+else if (!process.env.ROOMS) views.push(...EXT);
 const sel = process.env.VIEWS ? new Set(process.env.VIEWS.split(',')) : null;
 const rows = [];
 for (const [name, pose] of views) {
