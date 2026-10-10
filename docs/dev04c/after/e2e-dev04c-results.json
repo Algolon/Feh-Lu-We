@@ -1,0 +1,100 @@
+{
+  "base": "http://localhost:4173/Feh-Lu-We/",
+  "results": [
+    {
+      "name": "environment updates to finite light / haze values over dusk × indoor × open / woodland",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "authored-surface profiles initialised on the shared materials (fabric, foliage, ground, metal, paint, plaster, stone, timber, tree)",
+      "ok": true,
+      "detail": "missing: "
+    },
+    {
+      "name": "no NaN / infinite vertex in the scene",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "light hierarchy: woodland haze nearer + cooler than open ground; interiors clear of haze, less sun / fill, stronger fixtures",
+      "ok": true,
+      "detail": "{\"lawn\":{\"near\":16,\"far\":165,\"hemi\":1.48278244866201,\"sun\":2.5048039277377763,\"gain\":1,\"room\":\"out\",\"fogB\":-0.21141394437038552},\"wood\":{\"near\":7.268137235783078,\"far\":103.87696065048155,\"hemi\":1.3615906878997155,\"sun\":2.1495689434623717,\"gain\":1,\"room\":\"out\",\"fogB\":-0.04990374441104928},\"hall\":{\"near\":39.990466754839055,\"far\":219.9781529798395,\"hemi\":0.9137846753132393,\"sun\":1.2406950018407725,\"gain\":1.699721947016139,\"room\":\"hall\",\"fogB\":-0.2117479298670749}}"
+    },
+    {
+      "name": "every flame has a visibility owner — its fixture or its host room region (14 flame objects)",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "fire continuity: a flame is drawn exactly when its fixture / room batch is (75 flame × pose samples incl. 40–55 m from the campfire)",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "existing routes walkable with the real controller (front door → hall, lake viewpoint, loop → side path → clearing)",
+      "ok": true,
+      "detail": "{\"forecourt → front door → hall\":true,\"lake viewpoint (route → bench bay)\":true,\"wickerman loop → side path → clearing → inside the candle ring\":true}"
+    },
+    {
+      "name": "Wickerman starts unlit (no flames, no fire state)",
+      "ok": true,
+      "detail": "{\"candles\":false,\"figure\":false,\"flames\":false,\"fire\":false}"
+    },
+    {
+      "name": "ignition gating: with matches in hand the figure is targeted but refuses before the candle ring burns (state unchanged)",
+      "ok": true,
+      "detail": "{\"t\":\"wicker.figure\",\"l\":\"Stroman aansteken\",\"g\":{\"figure\":false,\"fire\":false}}"
+    },
+    {
+      "name": "candle state through the real input: reticle on a candle → \"Kaarsen aansteken\" → ring lit one after another, flames + jar glow + light source on",
+      "ok": true,
+      "detail": "{\"t\":\"wicker.candles\",\"l\":\"Kaarsen aansteken\",\"r0\":0.06,\"lit\":{\"state\":true,\"flames\":true,\"reveal\":1,\"lamp\":true}}"
+    },
+    {
+      "name": "burn state: with the ring lit the figure ignites (\"Stroman aansteken\"): flames on body, char rising, hay burning, smoke / embers, strong light",
+      "ok": true,
+      "detail": "{\"l\":\"Stroman aansteken\",\"b\":{\"state\":true,\"low\":true,\"high\":true,\"char\":0.18,\"light\":1,\"hay\":true,\"smoke\":true,\"embers\":true,\"uChar\":0.18}}"
+    },
+    {
+      "name": "burn settles into the charred aftermath (flames out, hay gone, smouldering remains, fully charred)",
+      "ok": true,
+      "detail": "{\"settled\":true,\"low\":false,\"high\":false,\"hay\":false,\"smoulder\":true,\"char\":1,\"label\":\"Verkoolde stroman\"}"
+    },
+    {
+      "name": "optional: no puzzle flag set by the setpiece; only the two lit keys saved",
+      "ok": true,
+      "detail": "{\"f\":[],\"lit\":{\"fire.clearing\":true,\"wicker.candles\":true,\"wicker.figure\":true}}"
+    },
+    {
+      "name": "save / load: the lit ring and the burned figure persist (save version 4, aftermath on load, other lit state kept)",
+      "ok": true,
+      "detail": "{\"version\":4,\"candles\":true,\"figure\":true,\"flames\":true,\"reveal\":1,\"settled\":true,\"low\":false,\"hay\":false,\"smoulder\":true,\"fireClearing\":true}"
+    },
+    {
+      "name": "a save from before DEV-04C loads with the clearing unlit",
+      "ok": true,
+      "detail": "{\"candles\":false,\"figure\":false,\"flames\":false,\"settled\":false}"
+    },
+    {
+      "name": "ids: all 128 baseline interactables unchanged + only the documented additions (wicker.candles, wicker.figure); 21 checkpoints; save keys + version 4 unchanged",
+      "ok": true,
+      "detail": "{\"n\":130,\"missing\":[],\"undocumented\":[]}"
+    },
+    {
+      "name": "no unfinished RESERVED / FLW-RSV content integrated (ids, scene, flags)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "render budgets (low): every view inside the mobile guide stays inside; golfSpur not materially worse (28 views)",
+      "ok": true,
+      "detail": "wickermanClearing 31/160593, wickermanPath 35/211057, golfSpur 90/260998, livingRoom 50/152010, entrance hall 105/193300, lakeApproach 38/134713, lakeShore 38/127056, wickerUnlit 31/160589, wickerLit 35/164011, wickerBurning 43/175751, wickerPathBurning 47/224481"
+    },
+    {
+      "name": "no page errors / contract warnings",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}

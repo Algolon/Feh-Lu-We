@@ -1,0 +1,462 @@
+{
+  "rows": [
+    {
+      "name": "c01-arrival-manor",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "calls": 148,
+      "triangles": 257687,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "c02-hall",
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 84.6,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "calls": 121,
+      "triangles": 202988,
+      "room": "hall",
+      "feetY": 0.15
+    },
+    {
+      "name": "c03-living",
+      "pose": {
+        "x": 83.4,
+        "y": 0.15,
+        "z": 87.2,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.06
+      },
+      "calls": 50,
+      "triangles": 152010,
+      "room": "living",
+      "feetY": 0.15
+    },
+    {
+      "name": "c04-living-hearth",
+      "pose": {
+        "x": 77.4,
+        "y": 0.15,
+        "z": 88.6,
+        "yaw": -1.9198621771937625,
+        "pitch": -0.12
+      },
+      "calls": 39,
+      "triangles": 119382,
+      "room": "living",
+      "feetY": 0.15
+    },
+    {
+      "name": "c05-sterren-bedroom",
+      "pose": {
+        "x": 83.6,
+        "y": 3.35,
+        "z": 88.4,
+        "yaw": -1.0471975511965976,
+        "pitch": -0.08
+      },
+      "calls": 28,
+      "triangles": 73522,
+      "room": "sterren",
+      "feetY": 3.35
+    },
+    {
+      "name": "c06-copa-room",
+      "pose": {
+        "x": 118,
+        "y": 0.15,
+        "z": 99,
+        "yaw": 0.5235987755982988,
+        "pitch": -0.05
+      },
+      "calls": 89,
+      "triangles": 201052,
+      "room": "cons",
+      "feetY": 0.15
+    },
+    {
+      "name": "c07-copa-bar",
+      "pose": {
+        "x": 127,
+        "y": 0.15,
+        "z": 107,
+        "yaw": 0.4363323129985824,
+        "pitch": 0.1
+      },
+      "calls": 54,
+      "triangles": 125543,
+      "room": "cons",
+      "feetY": 0.15
+    },
+    {
+      "name": "c08-portugal-exterior",
+      "pose": {
+        "x": 25,
+        "y": 4,
+        "z": 146.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "calls": 31,
+      "triangles": 91443,
+      "room": "out",
+      "feetY": 3.58
+    },
+    {
+      "name": "c09-portugal-interior",
+      "pose": {
+        "x": 25,
+        "y": 4.15,
+        "z": 158.6,
+        "yaw": 0,
+        "pitch": -0.12
+      },
+      "calls": 39,
+      "triangles": 103099,
+      "room": "cottageEntry",
+      "feetY": 4.15
+    },
+    {
+      "name": "c10-lake-approach",
+      "pose": {
+        "x": 64,
+        "y": 0,
+        "z": 121.5,
+        "yaw": -0.3839724354387525,
+        "pitch": 0
+      },
+      "calls": 38,
+      "triangles": 134713,
+      "room": "out",
+      "feetY": 0.04
+    },
+    {
+      "name": "c11-lake-shore",
+      "pose": {
+        "x": 80,
+        "y": 0,
+        "z": 136.4,
+        "yaw": -1.2217304763960306,
+        "pitch": -0.04
+      },
+      "calls": 38,
+      "triangles": 127056,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "c12-woodland-route",
+      "pose": {
+        "x": 120,
+        "y": 0,
+        "z": 13.6,
+        "yaw": 1.4835298641951802,
+        "pitch": 0.02
+      },
+      "calls": 33,
+      "triangles": 190861,
+      "room": "out",
+      "feetY": 0.01
+    },
+    {
+      "name": "c13-woodland-shed-path",
+      "pose": {
+        "x": 64,
+        "y": 0,
+        "z": 56,
+        "yaw": -2.2689280275926285,
+        "pitch": 0
+      },
+      "calls": 56,
+      "triangles": 195301,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "c14-boslust-calibration",
+      "pose": {
+        "x": 51.5,
+        "y": 0,
+        "z": 7.6,
+        "yaw": 0.9599310885968813,
+        "pitch": 0.04
+      },
+      "calls": 90,
+      "triangles": 236122,
+      "room": "out",
+      "feetY": 0.05
+    },
+    {
+      "name": "c15-boslust-door",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "calls": 87,
+      "triangles": 216431,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "w01-wickerman-unlit",
+      "pose": {
+        "x": 176.4,
+        "y": 1.2,
+        "z": 59.9,
+        "yaw": 2.530727415391778,
+        "pitch": 0.12,
+        "lit": {
+          "wicker.candles": false,
+          "wicker.figure": false
+        }
+      },
+      "calls": 31,
+      "triangles": 160589,
+      "room": "out",
+      "feetY": 1.2
+    },
+    {
+      "name": "w02-wickerman-lit",
+      "pose": {
+        "x": 176.4,
+        "y": 1.2,
+        "z": 59.9,
+        "yaw": 2.530727415391778,
+        "pitch": 0.12,
+        "lit": {
+          "wicker.candles": false,
+          "wicker.figure": false
+        },
+        "act": [
+          "wicker.candles"
+        ],
+        "burn": 3
+      },
+      "calls": 35,
+      "triangles": 164011,
+      "room": "out",
+      "feetY": 1.2
+    },
+    {
+      "name": "w03-wickerman-burning",
+      "pose": {
+        "x": 176.4,
+        "y": 1.2,
+        "z": 59.9,
+        "yaw": 2.530727415391778,
+        "pitch": 0.12,
+        "lit": {
+          "wicker.candles": false,
+          "wicker.figure": false
+        },
+        "act": [
+          "wicker.candles",
+          "wicker.figure"
+        ],
+        "burn": 16
+      },
+      "calls": 43,
+      "triangles": 175751,
+      "room": "out",
+      "feetY": 1.2
+    },
+    {
+      "name": "w04-wickerman-candles-close",
+      "pose": {
+        "x": 178.6,
+        "y": 1.2,
+        "z": 58.6,
+        "yaw": 2.356194490192345,
+        "pitch": -0.35,
+        "lit": {
+          "wicker.candles": false,
+          "wicker.figure": false
+        },
+        "act": [
+          "wicker.candles"
+        ],
+        "burn": 3
+      },
+      "calls": 35,
+      "triangles": 158420,
+      "room": "out",
+      "feetY": 1.2
+    },
+    {
+      "name": "w05-wickerman-burning-close",
+      "pose": {
+        "x": 178.2,
+        "y": 1.2,
+        "z": 57.4,
+        "yaw": 2.443460952792061,
+        "pitch": 0.35,
+        "lit": {
+          "wicker.candles": false,
+          "wicker.figure": false
+        },
+        "act": [
+          "wicker.candles",
+          "wicker.figure"
+        ],
+        "burn": 30
+      },
+      "calls": 42,
+      "triangles": 170574,
+      "room": "out",
+      "feetY": 1.2
+    },
+    {
+      "name": "w06-wickerman-approach-burning",
+      "pose": {
+        "x": 172,
+        "y": 1.2,
+        "z": 60.4,
+        "yaw": 1.8325957145940461,
+        "pitch": 0.06,
+        "lit": {
+          "wicker.candles": false,
+          "wicker.figure": false
+        },
+        "act": [
+          "wicker.candles",
+          "wicker.figure"
+        ],
+        "burn": 10
+      },
+      "calls": 42,
+      "triangles": 217204,
+      "room": "out",
+      "feetY": 1.2
+    },
+    {
+      "name": "w07-wickerman-aftermath",
+      "pose": {
+        "x": 176.4,
+        "y": 1.2,
+        "z": 59.9,
+        "yaw": 2.530727415391778,
+        "pitch": 0.12,
+        "lit": {
+          "wicker.candles": true,
+          "wicker.figure": true
+        }
+      },
+      "calls": 38,
+      "triangles": 193149,
+      "room": "out",
+      "feetY": 1.2
+    },
+    {
+      "name": "w08-wickerman-burning-dusk",
+      "pose": {
+        "x": 176.4,
+        "y": 1.2,
+        "z": 59.9,
+        "yaw": 2.530727415391778,
+        "pitch": 0.12,
+        "lit": {
+          "wicker.candles": false,
+          "wicker.figure": false
+        },
+        "act": [
+          "wicker.candles",
+          "wicker.figure"
+        ],
+        "burn": 16,
+        "dusk": 0.9
+      },
+      "calls": 43,
+      "triangles": 203397,
+      "room": "out",
+      "feetY": 1.2
+    },
+    {
+      "name": "c16-woodland-route-dusk",
+      "pose": {
+        "x": 120,
+        "y": 0,
+        "z": 13.6,
+        "yaw": 1.4835298641951802,
+        "pitch": 0.02,
+        "dusk": 0.9
+      },
+      "calls": 33,
+      "triangles": 194508,
+      "room": "out",
+      "feetY": 0.01
+    },
+    {
+      "name": "f01-hall-from-forecourt",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 74,
+        "yaw": 0,
+        "pitch": 0.12
+      },
+      "calls": 160,
+      "triangles": 292519,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "f02-dining-candles",
+      "pose": {
+        "x": 96.4,
+        "y": 0.15,
+        "z": 83,
+        "yaw": 1.0471975511965976,
+        "pitch": -0.1
+      },
+      "calls": 59,
+      "triangles": 132634,
+      "room": "dining",
+      "feetY": 0.15
+    },
+    {
+      "name": "f03-campfire",
+      "pose": {
+        "x": 26,
+        "y": 0,
+        "z": 21.5,
+        "yaw": -2.181661564992912,
+        "pitch": -0.25,
+        "lit": {
+          "fire.clearing": true
+        }
+      },
+      "calls": 30,
+      "triangles": 111707,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "f04-living-from-hall",
+      "pose": {
+        "x": 86.2,
+        "y": 0.15,
+        "z": 86.4,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.04
+      },
+      "calls": 70,
+      "triangles": 189708,
+      "room": "hall",
+      "feetY": 0.15
+    }
+  ],
+  "problems": []
+}

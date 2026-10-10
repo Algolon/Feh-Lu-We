@@ -10,7 +10,25 @@ Plan and audit (written before any code change): [`DEV04C_PLAN.md`](DEV04C_PLAN.
 
 ## 0. Start point, commits, tested commit
 
-__GATE_TABLE__
+| | |
+|---|---|
+| Production start | `ccr-75ef4113-kfkimm` @ `4f2b2ed4b5e91bfcaecd63b0e85859849ef13078` — verified unchanged before the first edit (no delta to audit) |
+| Work branch | `ccr-b04299a9-fwl08f`; draft PR against `ccr-75ef4113-kfkimm` |
+| Not done | no merge, no deploy |
+
+| Commit | Scope |
+|---|---|
+| `c0d4565` | audit, plan, reference manifest, evidence + budget harness, **before** captures on `4f2b2ed` |
+| `37e54a2` | authored surfaces, atmosphere hierarchy, lake, fire continuity (incl. chandeliers), Wickerman setpiece, unit tests, `e2e:dev04c`, documented-id check in `e2e:dev04a/b` |
+| `7bbe2a4` | surfaces cost halved, storey band removed, clearing glow in its own mesh, lake ring trimmed, frametime probe, dusk evidence views (removes a temporary probe committed by mistake in `37e54a2`) |
+| `0681519` | report draft (docs only) — **the exact tested commit** |
+| (final) | this report + after / compare evidence (docs only) |
+
+**Exact tested commit: `0681519015cf1b49bb1b1cfdb1c351af890fe9b7`.** The complete gate (§8) ran on it in one pass with
+a clean working tree before and after (`git status --porcelain` empty, HEAD unchanged), `dist/` deleted and rebuilt from
+it, served by `vite preview` (SwiftShader Chromium). No earlier result was reused. The after captures and budgets (§6, §7)
+were taken on that same build. The only commit after it changes `docs/dev04c/**` (this report, `after/`, `compare/`) and
+nothing else: no code, tests, assets, materials or generated content.
 
 ## 1. Observed baseline (production `4f2b2ed`, before any change)
 
@@ -127,13 +145,152 @@ No `FLW-D2/S3/K3/RSV` asset exists in the repository or the session (searched; m
 - Used as reference: `wickerman_clearing_sheet_v01` (state flow, char / ember palette), `copacabana_room_sheet_v01`,
   `living_dining_furniture_sheet_v01` (warm-room value hierarchy), the timber / external style URL notes (principles).
 
-__EVIDENCE__
+## 6. Visual evidence
 
-__PERF__
+Same poses before (`4f2b2ed`) and after (`0681519`), eye height, low quality (the phone default), 1280 × 720, standard
+evidence door state; per-view render cost in `before/views.json` / `after/views.json`. Side-by-side sheets (before on top)
+in [`compare/`](compare/):
 
-__TESTS__
+| Brief item | Sheets |
+|---|---|
+| manor exterior / arrival | `c01-arrival-manor`, `f01-hall-from-forecourt` |
+| hall | `c02-hall` |
+| living room | `c03-living`, `c04-living-hearth`, `f04-living-from-hall` |
+| quiet interior (bedroom) | `c05-sterren-bedroom` |
+| Copacabana Room | `c06-copa-room`, `c07-copa-bar` |
+| Portugal exterior / interior | `c08-portugal-exterior`, `c09-portugal-interior` |
+| lake / shore | `c10-lake-approach`, `c11-lake-shore` |
+| normal woodland routes | `c12-woodland-route`, `c13-woodland-shed-path` |
+| BOSLUST calibration | `c14-boslust-calibration`, `c15-boslust-door` |
+| Wickerman unlit / lit / burning | `w01`–`w06`, and the 4-up **[`wickerman-states`](compare/wickerman-states.jpg)** (unlit → candles lit → burning → aftermath) |
+| dusk (atmosphere at the other end of the `dusk` range) | **[`woodland-dusk`](compare/woodland-dusk.jpg)** (before / after afternoon, after at dusk 0.9, the burning figure at dusk); single frames `after/c16-*`, `after/w07-*`, `after/w08-*` |
+| fire continuity | `f02-dining-candles`, `f03-campfire` (the continuity itself is a behaviour check, §8) |
 
-## 10. Regression fixes found on the way
+Reading the sheets: the woodland views gain the most (canopy reads as shade, mid-distance trees step back into a cool
+haze, the far path dissolves); the lake reads as water; interiors are warmer and lit more by their fixtures, with broad
+value drift on plaster and floors that stays below "dirty"; BOSLUST and the Portugal exterior keep their composition,
+values and identity (slightly cooler canopy / greyer rock — consistency, not a redesign). In the interiors the surface
+layer is deliberately quiet; the owner may want it stronger (§11).
+
+The `before/` frames of the Wickerman lit / burning poses show the unlit clearing: those states did not exist.
+
+## 7. Performance delta (low quality — mobile guide ≈ 150 calls / 250 k triangles)
+
+`renderer.info` after one low-quality frame, 1280 × 720, both builds measured by `scripts/dev04c-budget.mjs` in the same
+door state per set ([`before/budget.json`](before/budget.json), [`after/budget.json`](after/budget.json)); `e2e:dev04c`
+check 10 re-measures 28 of them on every run (the after run is in `after/e2e-dev04c-budget.json`). ⚠ = over the guide.
+
+**DEV-04A budget views (front + Copacabana + attic stair doors open)**
+
+| View | Before `4f2b2ed` | After `0681519` | Δ calls | Δ triangles |
+|---|---|---|---|---|
+| atticNook | 41 / 99,132 | 41 / 99,132 | +0 | +0.0 % |
+| atticCommon | 39 / 101,408 | 39 / 101,408 | +0 | +0.0 % |
+| conservatoryInside | 74 / 128,214 | 74 / 128,214 | +0 | +0.0 % |
+| conservatoryDoorDeck | 143 / 205,534 | 140 / 204,258 | -3 | -0.6 % |
+| wellnessDeck | 65 / 155,549 | 65 / 155,549 | +0 | +0.0 % |
+| saunaAccess | 148 / 225,826 | 145 / 224,134 | -3 | -0.7 % |
+| wickermanClearing | 31 / 160,593 | 31 / 160,593 | +0 | +0.0 % |
+| wickermanPath | 35 / 211,057 | 35 / 211,057 | +0 | +0.0 % |
+| frontForecourt | 139 / 206,032 | 135 / 203,720 | -4 | -1.1 % |
+| arrivalCourt | 133 / 202,574 | 129 / 200,262 | -4 | -1.1 % |
+| portugalTerrace | 31 / 91,423 | 31 / 91,839 | +0 | +0.5 % |
+| portugalApproach | 33 / 119,039 | 33 / 119,455 | +0 | +0.3 % |
+| golfVicinity | 55 / 198,013 | 55 / 198,013 | +0 | +0.0 % |
+| golfSpur ⚠ | 93 / 262,690 | 90 / 260,998 | -3 | -0.6 % |
+
+**DEV-04B render poses + DEV-04C calibration views (front door open)**
+
+| View | Before `4f2b2ed` | After `0681519` | Δ calls | Δ triangles |
+|---|---|---|---|---|
+| gate (driveway) | 99 / 235,173 | 99 / 235,589 | +0 | +0.2 % |
+| forecourt → manor | 130 / 204,977 | 126 / 202,665 | -4 | -1.1 % |
+| entrance hall | 105 / 193,300 | 105 / 193,300 | +0 | +0.0 % |
+| library | 54 / 185,684 | 54 / 185,684 | +0 | +0.0 % |
+| garden → manor + conservatory | 138 / 205,294 | 132 / 201,334 | -6 | -1.9 % |
+| forest (shed area) | 36 / 148,663 | 36 / 148,663 | +0 | +0.0 % |
+| BOSLUST cut | 87 / 223,287 | 87 / 223,703 | +0 | +0.2 % |
+| conservatory pool | 100 / 174,506 | 100 / 174,506 | +0 | +0.0 % |
+| campfire | 27 / 108,543 | 27 / 108,543 | +0 | +0.0 % |
+| well | 51 / 178,035 | 51 / 178,035 | +0 | +0.0 % |
+| wickerman figure | 36 / 196,168 | 36 / 196,168 | +0 | +0.0 % |
+| golf chute | 54 / 164,445 | 54 / 164,445 | +0 | +0.0 % |
+| dining | 59 / 132,634 | 59 / 132,634 | +0 | +0.0 % |
+| kitchen | 55 / 136,008 | 55 / 136,008 | +0 | +0.0 % |
+| attic observatory | 37 / 93,704 | 37 / 93,704 | +0 | +0.0 % |
+| Copacabana bar | 52 / 125,519 | 52 / 125,519 | +0 | +0.0 % |
+| Portugal cottage | 39 / 103,099 | 39 / 103,099 | +0 | +0.0 % |
+| livingRoom | 50 / 152,010 | 50 / 152,010 | +0 | +0.0 % |
+| sterrenBedroom | 28 / 73,522 | 28 / 73,522 | +0 | +0.0 % |
+| copaRoom | 85 / 166,914 | 85 / 166,914 | +0 | +0.0 % |
+| lakeApproach | 38 / 133,165 | 38 / 133,581 | +0 | +0.3 % |
+| lakeShore | 38 / 126,640 | 38 / 127,056 | +0 | +0.3 % |
+| woodlandRoute | 33 / 190,861 | 33 / 190,861 | +0 | +0.0 % |
+| boslustCalibration | 90 / 235,111 | 90 / 235,527 | +0 | +0.2 % |
+
+**Wickerman states (burning = real in-session ignition, 10 s in)**
+
+| View | Before `4f2b2ed` | After `0681519` | Δ calls | Δ triangles |
+|---|---|---|---|---|
+| wickerUnlit | 31 / 160,589 | 31 / 160,589 | +0 | +0.0 % |
+| wickerLit | 31 / 160,589 | 35 / 164,011 | +4 | +2.1 % |
+| wickerBurning | 31 / 160,589 | 43 / 175,751 | +12 | +9.4 % |
+| wickerBurningClose | 30 / 155,412 | 42 / 170,574 | +12 | +9.8 % |
+| wickerPathBurning | 35 / 217,435 | 47 / 232,597 | +12 | +7.0 % |
+| wickerApproachBurning | 30 / 159,920 | 42 / 175,082 | +12 | +9.5 % |
+
+- **Every view inside the guide stays inside it.** The only view over it, **golfSpur**, went *down* (93 → 90 calls,
+  262,690 → 260,998 triangles).
+- **Cheaper arrival / garden / sauna views (−3 … −6 calls)**: the chandeliers are now owned by their room batch, so the
+  DEV-03 "interior from outside only near an open door" rule finally applies to them (their frames used to be drawn 50 m
+  away through the front door).
+- **+0.2 … +0.5 % triangles in lake-facing views**: the lake's depth gradient needs rings (64 → 480 triangles).
+- **Wickerman (local, measured, justified)**: unlit 0; candles lit +4 calls / +3.4 k triangles (flame pair, jar mesh,
+  floor glow); burning +12 calls / ~+15 k (two flame pairs, embers, smoke, smoulder, glow) — at most 47 calls / 232.6 k
+  (path view while burning), inside the guide; only drawn within the clearing's 40 m region.
+- **Fragment cost of the surface layer** (no draw-call or triangle cost): measured with `scripts/dev04c-frametime.mjs`
+  as median ms per render in SwiftShader (CPU rasteriser, a fill-rate proxy, run-to-run noise ≈ ±5 %): woodland route
+  ±0 %, living room +6 … +9 %, arrival +6 … +10 %, lake approach +5 … +15 % vs `4f2b2ed`. First version cost +10 … +20 %;
+  halved by one vec2 noise lookup instead of two scalars and no mid-scale lookup on the canopy (the heaviest overdraw).
+  **Not yet measured on a real phone GPU** (§11).
+
+## 8. Test results — final gate on `0681519`
+
+| Step | Result |
+|---|---|
+| `npx tsc --noEmit` | clean |
+| `npx vitest run` | **212 / 212** (16 files; 13 new in `tests/dev04c.test.ts`) |
+| `npm run build` (clean `dist/`) | OK (the chunk-size warning is pre-existing) |
+| `npm run e2e:dev04c` (new) | **19 / 19** |
+| `npm run e2e:dev04b` | **9 / 9** |
+| `npm run e2e:dev04a` | **19 / 19** |
+| `npm run e2e:dev03` | **11 / 11** |
+| `npm run e2e` (full) | **103 / 103** |
+| `npm run e2e:dev02` | **34 / 34** |
+| `npm run e2e:dev01` | **34 / 34** |
+
+**`e2e:dev04c`** (`scripts/e2e-dev04c.mjs`, real input paths, no pixel snapshots): (1) environment finite over dusk ×
+indoor × open / woodland; (2) all nine surface profiles initialised; (3) no NaN vertex; (4) light hierarchy measured on
+the live environment (woodland haze nearer and cooler, interiors clear, less sun / fill, fixtures up); (5) every flame
+has a visibility owner; (6) **fire continuity**: flame drawn ⇔ host drawn at 75 flame × pose samples incl. 40–55 m from
+the campfire; (7) routes walked with the real controller (front door → hall, lake viewpoint, loop → side path → inside
+the candle ring); (8) unlit start; (9) **gating** — matches in hand, the figure is targeted and refuses, state unchanged;
+(10) **candles** via reticle + action button, staggered reveal, jars / light on; (11) **burn**: flames on body, char
+rising, hay burning, smoke / embers, light; (12) settles into the aftermath; (13) optional — no puzzle flag, only the two
+lit keys saved; (14) **save / load across a real page reload** (version 4, aftermath on load, other `lit` state kept);
+(15) a pre-DEV-04C save loads unlit; (16) **ids**: 128 baseline + only the 2 documented, 21 checkpoints, save keys /
+version unchanged; (17) **no RESERVED / FLW-RSV content**; (18) budgets vs `before/budget.json`; (19) no page errors.
+
+**Unit** `tests/dev04c.test.ts`: surface profiles bounded (broad, not noisy), opt-in only on lit materials, chunks
+extended once and guarded, noise continuous; flame ownership (region holder / fixture parent, same world position),
+reveal uniforms keep two meshes; Wickerman rules (matches only, gate, once, blow-out), optional (puzzles / flags / items
+untouched), save round-trip without schema change, v3 migration filters the keys; burn timeline monotone, finite,
+settled aftermath; flame tongues finite and on the figure.
+
+Changed suites: `e2e:dev04a` check 8 / `e2e:dev04b` check 5 accept exactly the ids in `scripts/dev04c-additions.json`
+(still fail on any other addition or removal); `e2e:dev04b`'s hook label no longer says "no ignition state".
+
+## 9. Regression fixes found on the way
 
 | Found by | Problem | Fix |
 |---|---|---|
@@ -144,4 +301,34 @@ __TESTS__
 | capture review | first lake sheen read as ice; glints as floes | darker, cooler sheen; thin ripple crests |
 | frametime probe | surface shader +10–20 % render time (SwiftShader) | one vec2 noise instead of two scalars, no mid lookup on canopy: now ±0 % (woodland) to +15 % (lawn) |
 
-__ISSUES__
+## 10. Interaction changes (summary)
+
+New: `wicker.candles` ("Kaarsen" / "Kaarsen aansteken" with matches / "Kaarsen uitblazen"), `wicker.figure`
+("Stroman" / "Stroman aansteken" with matches, refused before the ring burns / "Verkoolde stroman" afterwards). No
+existing interaction, label, puzzle answer, notebook entry, hint or objective changed.
+
+## 11. Known issues and owner-review questions
+
+1. **New interactable ids (decision)**: is adding `wicker.candles` / `wicker.figure` (128 → 130) acceptable, with the
+   older suites checking "baseline + documented additions"? The alternative — no new ids — would mean no interaction.
+2. **Burn persistence (decision)**: the burn is a ~80 s session timeline; a reload shows the charred aftermath, never the
+   fire again. Should the figure instead be re-buildable (e.g. reset after leaving the estate), or stay burned forever
+   (current)?
+3. **Surface strength (taste)**: the interior breakup is deliberately quiet (§2.1). Stronger is one number per profile
+   in `SURFACE_PARAMS`; the brief's "not dirty, not noisy" is why it was kept low.
+4. **Mobile GPU cost**: the surface layer's fragment cost was only measured in SwiftShader (+0 … +15 %). A frame-time
+   check on a mid / low-end phone is recommended before merge; if needed, `ground` can drop its mid lookup like the
+   canopy did.
+5. **Flame look**: the effigy flames reuse the stylised teardrop tongues; at close range they read as a stack of
+   tongues rather than one sheet of fire. Acceptable for C; a bespoke sheet-fire is a D candidate.
+6. **Smoke** is a faceted low-poly column (same language as the foliage); it reads at distance, less so overhead.
+7. **Not done because unavailable**: FLW-D2 wall art (C4), FLW-K3 keys (C5), FLW-S3 3D refs — see the manifest; nothing
+   was fabricated. RSV-019–022 untouched (PENDING).
+8. Pre-existing and unchanged: the evidence pose `f01` (all relevant doors open, worst case) was already over the
+   triangle guide before (289 k) and is 293 k after; it is not a budget view. Build chunk-size warning pre-existing.
+
+## 12. Deferred to DEV-04D
+
+Estate-wide curation of the surface strength per room; FLW-D2 / S3 / K3 rollout through the manifest contracts once the
+files exist; gingerbread maquette material re-skin; bespoke fire / smoke shapes; any device-specific quality tiering of
+the surface layer.
