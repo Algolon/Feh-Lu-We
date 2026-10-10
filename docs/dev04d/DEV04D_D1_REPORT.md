@@ -7,7 +7,7 @@ started.**
 |---|---|
 | Base | production `ccr-75ef4113-kfkimm` @ `3e09c98` (PR #7 lean FLW library merged); the D branch is rebased onto it |
 | Library check after the merge | all 67 canonical files in `docs/reference/flw/` match the D0 manifest's paths and sha256 byte for byte; all 126 records present, no status change (canonical ≠ approved kept) |
-| Commits | `2dec5d9` implementation · `bdf2968` exposure / frames / mirror polish · evidence + this report (see `git log`) |
+| Commits | `2dec5d9` implementation · `bdf2968` exposure / frames / mirror polish · `7ddd732` mirror culling fix · evidence, budgets and this report (see `git log`) |
 | Owner decisions applied | R-A approved (group A), R-B deferred, R-C parked; hall hero kept; F1 framed tinted mirrors |
 
 ## 1. What was implemented
@@ -82,7 +82,8 @@ D1 adds no interactable and makes no puzzle, story, save or id change.
 | Download | +**631 KB** (608 KiB atlas webp + 8 KB JS) |
 | Materials | +1 (the shared atlas material); frames and mirrors reuse the existing art materials |
 | Static geometry (whole estate, per chunk, base vs D1) | ≈ **+9.2 k triangles in total**; largest per chunk +2.2 k (upstairs `mUp`), hall +0.9 k, living +0.4 k; canvas quads 2–6 triangles per chunk; mirrors −12 (glow boxes gone) |
-| Room budgets (low, doors closed; 28 views) | **all inside the mobile guide** (≤ 150 calls, ≤ 250 k); per view **+0…+2 draw calls** and +0.9 k…+5.3 k rendered triangles (rendered counts include the shadow pass). Tightest: living-a 132 / 210 k, kitchen-b 129 / 208 k (D0 baseline 131 / 205 k, 128 / 203 k) |
+| Room budgets (low, doors closed; 28 views, final build) | **all inside the mobile guide** (≤ 150 calls, ≤ 250 k) and inside the D0 per-batch limits (≤ +2 calls, ≤ +12 k): per view **+0…+2 draw calls**, **+0.9 k…+5.3 k** rendered triangles (rendered counts include the shadow pass). Tightest: living-a 132 / 210 k, kitchen-b 129 / 208 k (base 131 / 205 k, 128 / 203 k) |
+| Culling regression found and fixed | first build: r-living-b **+2 / +18 k** (deterministic). Cause: the guest WC is batched into the wing chunk, and the mirror's timber-textured rails stretched the wing's textured-timber mesh's bounding sphere 3.7 m west (r 13.4 → 14.9 m), so that mesh passed the frustum test from the living room. Fix `7ddd732`: painted rails (untextured paint mesh, which already spans the WC) → r-living-b +1 / +4.4 k |
 | D1 views in e2e (low, doors closed) | all 13 inside the guide (largest: cottage room 94 / 179 k; hall 74 / 187 k) |
 | Doors-open evidence views | +0…+5 calls; rendered-triangle deltas there swing ± 25 k between runs (workshop close −11.9 k), i.e. sampling variance of culling / LOD state, not D1 geometry (see the static diff) |
 
@@ -119,4 +120,23 @@ Browser `e2e:dev04d` (new) checks:
 
 ## 6. Run log
 
-(filled in from the gate run: see below)
+Gate on the D1 build `bdf2968` (everything except the mirror-rail material). Re-gate on the final build `7ddd732` for the suites the change can affect (marked ✓✓).
+
+| Check | Result |
+|---|---|
+| `npm run typecheck` | clean (final build) |
+| `npm test` (vitest) | **227 / 227** (17 files; 9 new in `dev04d-art.test.ts`) (final build) |
+| `npm run build` | clean (pre-existing chunk-size warning only) |
+| `e2e:dev04d` (new) | **10 / 10** ✓✓ |
+| `e2e:dev04c` | **22 / 22** |
+| `e2e:dev04b` | **9 / 9** ✓✓ |
+| `e2e:dev04a` | **19 / 19** ✓✓ |
+| `e2e:dev03` | **11 / 11** |
+| `e2e:dev02` | **34 / 34** |
+| `e2e:dev01` | **34 / 34** |
+| full `e2e` | **103 / 103**: the two touch-tap timing failures accepted in C-R did not occur in this run; input timing was not touched |
+| Doors-closed room budgets | 28 / 28 inside the guide, final build (`docs/dev04d/d1/budget-d1/views.json`) |
+
+`e2e:dev04c`, `dev03`, `dev02`, `dev01` and the full `e2e` ran on `bdf2968`. The only later change (`7ddd732`) is the
+material of the two mirror frames: it cannot affect those suites' subjects. The suites that cover wall art, construction
+and ids were re-run on the final build.

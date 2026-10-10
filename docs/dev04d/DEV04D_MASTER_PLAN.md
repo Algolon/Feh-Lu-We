@@ -1,5 +1,7 @@
 # DEV-04D — Reference Implementation & Estate-Wide Curation · Master plan (D0)
 
+Status update: **D1 (D1-a + D1-b) implemented for owner review — see [`DEV04D_D1_REPORT.md`](DEV04D_D1_REPORT.md). D2–D4 not started.**
+
 Status: **D0 reconciled, for owner review. No gameplay / art implementation has been made.** D0 is reconciled
 against the recovered FLW stable-ID library (PR #7). The only code in D0 is the non-functional audit harness
 (`scripts/dev04d-audit-views.mjs`) and its captures (`docs/dev04d/audit/`). D1 does not start before owner approval.

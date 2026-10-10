@@ -123,7 +123,7 @@
         "pitch": -0.08
       },
       "calls": 31,
-      "triangles": 113178,
+      "triangles": 112746,
       "room": "storage",
       "feetY": 3.35
     },
@@ -220,8 +220,8 @@
         "yaw": -2.400413434587998,
         "pitch": -0.08
       },
-      "calls": 69,
-      "triangles": 186458,
+      "calls": 68,
+      "triangles": 172842,
       "room": "living",
       "feetY": 0.15
     },
