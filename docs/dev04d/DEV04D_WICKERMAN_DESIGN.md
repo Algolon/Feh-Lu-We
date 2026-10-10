@@ -1,11 +1,8 @@
 # DEV-04D — Wickerman ritual lifecycle (design)
 
-> **D0 PAUSED, PROVISIONAL (owner instruction, 10 Oct 2026).** The owner confirmed that the later FLW-D2, FLW-S3,
-> FLW-K3 and partial FLW-RSV reference images exist: they were generated and approved in separate project chats and
-> were never committed. Every "not available" / `WAITING_FOR_SOURCE` statement below describes **the repository at
-> `6c5e5c6` only**, meaning *not yet imported*, not *does not exist*. The asset manifest, the D1 / D2 plan, the phase
-> order (O1), the priorities and the owner decisions are **not final**. They will be reconciled against the imported
-> FLW reference library. The room audit, captures and Wickerman design are preserved as working notes.
+> **D0 reconciled (10 Oct 2026)** against the recovered FLW library (PR #7 @ `93206dd`, not merged). New in this
+> revision: §1.1 (FLW-S3-039 vs. the DEV-04 sheet vs. the current figure) and decision W8. The lifecycle, save
+> migration, bale, audio and tests are unchanged from the paused draft: the approved D direction stands.
 
 Status: **D0 design, for owner review. Nothing here is implemented.** Implementation is D4 (§11 of the master plan).
 Baseline: production `6c5e5c6` (PR #6 / DEV-04C-R merge).
@@ -35,6 +32,37 @@ Observed weaknesses (DEV-04C report §11 known issues + `docs/dev04c/after/w0*.j
 - the dry-stone plinth reads as a smooth light disc (a "cake board") from the entrance view;
 - the candle ring **stays lit forever** after the burn (no closure to the ritual);
 - the burn is audible only within 10 m and sounds like the campfire.
+
+### 1.1 Reference reconciliation (FLW-S3-039 · `wickerman_clearing_sheet_v01` · in game)
+
+Inspected side by side: `docs/reference/flw/3d/FLW-S3-039_wickerman.png` (REVIEW_READY, 1448 × 1086, four views +
+lashing detail), `docs/reference/dev04/05_landmarks_hero_props/wickerman_clearing/generated/wickerman_clearing_sheet_v01.png`
+(approved DEV-04 direction) and the current figure (`docs/dev04d/audit/x27`, `x28`).
+
+| Aspect | FLW-S3-039 | DEV-04 sheet (approved direction) | In game today | D0 conclusion |
+|---|---|---|---|---|
+| Body read | **straw-dominant**: thick straw bundles form torso and limbs; bark / withy lashing bands bind them; flared straw at wrists, ankles and the crown | **open willow lattice**: armature visible, light woven bands, no fill | willow lattice + hay packed *inside* the weave (separate hay mesh), willow-dominant read | the two references describe the two ends of the D lifecycle: S3-039 ≈ **filled**, the DEV-04 sheet ≈ **empty frame**. This validates the cycle rather than asking for a remodel |
+| Height / pose | ≈ 2.8 m, arms hanging at the sides, head a bound bundle with a tuft | human-scale, arms slightly out | crown ≈ 2.85 m (`WICKER.head` 2.64 + r 0.21) on the plinth, arms angled out | height already matches. Keep the pose: the arms-out silhouette reads better from the side path and is the approved C state |
+| Support | a pole frame between / behind the legs. **Inconsistent across views**: front = two poles up to the crotch with rungs; side = a separate ladder *behind* the figure; back = a three-pole spine to the neck; ¾ = poles beside the right leg | stable base: stone plinth, timber feet with iron straps | dry-stone plinth, sleepers, timber shoes with straps (DEV-04B) | do **not** reproduce the S3-039 frame (no consistent geometry). The only consistent statement, "a rear support exists", is already met by the plinth / shoe construction |
+| Shrine composition | figure only: no plinth, no candles, no clearing | clearing, candle ring, plinth | clearing, 9 candles at r ≈ 3.1, bench, lantern | the DEV-04 sheet + contract stay the composition authority. S3-039 adds nothing here |
+| Burn / char / clean | **intact only**: the package explicitly supplies or approves no ignition, char or changed state | not depicted | C burn shader | the charred → cleaned visuals stay design-driven (§6). No source exists, and none is invented |
+
+What the recovered sheet usefully improves, in order of value:
+
+1. **Filled vs. empty contrast** (lifecycle legibility). Today the filled figure is willow-dominant, so `READY` and
+   `EMPTY_FRAME` would differ less than they should. S3-039's flared straw tufts at the wrist / ankle bands and a
+   crown tuft, added **to the hay mesh** (so they burn, clean and refill with it), make "filled" read at 15 m. Cost:
+   ≈ +1.5–3 k triangles in the existing hay geometry, 0 draw calls. **Owner decision W8**, because S3-039 is
+   REVIEW_READY.
+2. **Hay bale material**: the bale uses the same straw palette / atlas sheet as the figure's hay. S3-039 confirms the
+   tone (pale gold straw, darker bound bands) and the bark-lashing colour for the bale twine (§4). No new texture.
+3. **Refill visual**: the `uFill` front (§6) grows hay from the feet up. S3-039's bundled limbs suggest the fill
+   should end with the tufts appearing last (wrists / ankles / crown), which costs nothing extra.
+4. **Charred → cleaned**: no input (intact-only reference).
+5. **Material treatment**: S3-039's bark lashings are darker and coarser than the current twine (`#3e3226`). Optional
+   tint shift within the existing vertex colours, part of W8.
+
+Not taken from S3-039: the remodel of the armature, the hanging-arm pose, the pole frame, or any burning state.
 
 ---
 
@@ -312,3 +340,4 @@ permanence assertions listed in §7, which are rewritten, not deleted.
 | W5 | Permanent faint scorch on shoes / sleepers / plinth in every stage (shrine "has burned before") | yes |
 | W6 | Burn length stays ≈ 80 s per cycle (vs. ≈ 60 s for a repeatable ritual) | keep 80 s; revisit after a phone play |
 | W7 | Procedural ritual layer as specified, no recorded / composed audio | yes |
+| W8 | Adopt the FLW-S3-039 straw read for the **filled** state only: flared straw tufts at wrists / ankles / crown in the hay mesh, slightly darker bark lashings; no armature remodel, no pose change (§1.1) | yes (S3-039 group A as reference) |

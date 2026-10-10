@@ -1,11 +1,9 @@
 # DEV-04D — Estate-wide room & zone audit (D0)
 
-> **D0 PAUSED, PROVISIONAL (owner instruction, 10 Oct 2026).** The owner confirmed that the later FLW-D2, FLW-S3,
-> FLW-K3 and partial FLW-RSV reference images exist: they were generated and approved in separate project chats and
-> were never committed. Every "not available" / `WAITING_FOR_SOURCE` statement below describes **the repository at
-> `6c5e5c6` only**, meaning *not yet imported*, not *does not exist*. The asset manifest, the D1 / D2 plan, the phase
-> order (O1), the priorities and the owner decisions are **not final**. They will be reconciled against the imported
-> FLW reference library. The room audit, captures and Wickerman design are preserved as working notes.
+> **D0 reconciled (10 Oct 2026)** against the recovered FLW library (PR #7 @ `93206dd`, not merged; inspected per
+> image, see `DEV04D_ASSET_MANIFEST.md`). Where this audit said "waiting for FLW-D2 / S3", the actual recovered asset
+> is now named: approved ones as bound, REVIEW_READY ones as an owner-gated proposal (group A / B / C). New §6 gives
+> the per-zone reference integration. The observations and captures are unchanged.
 
 Production `6c5e5c6`, audited 10 Oct 2026 at normal first-person eye height (1.65 m above the support surface).
 
@@ -33,7 +31,7 @@ where the build falls short of it.
 | # | Finding | Where | Prio |
 |---|---|---|---|
 | X1 | **Big rooms, small islands.** The v0.2 manor rooms are large (dining 12.6 × 11.6 m, kitchen 12.6 × 17.6 m, study / botanic room 6.3 × 15.6 m, Sterrenkamer 12.6 × 7.2 m). The furniture is one island or one end-cluster, so most of the floor is dead space with no story. D3's main lever is **zoning** (a second use cluster, rugs that define zones, furniture that faces something), not scatter | dining, kitchen, study, botanic room, bedrooms, attic | P1 |
-| X2 | **Generic placeholder paintings.** 8 wall paintings share one 4 × 2 procedural atlas (sky gradient, hill line, dark blobs, 128 × 96 px), and two images repeat (living = north guest room). They are the clearest placeholder read in the manor. Waiting for FLW-D2 (manifest §5) | hall, living, dining, landing, walkway, guest room | P1 (blocked) |
+| X2 | **Generic placeholder paintings.** 8 wall paintings share one 4 × 2 procedural atlas (sky gradient, hill line, dark blobs, 128 × 96 px), and two images repeat (living = north guest room). They are the clearest placeholder read in the manor. **Now sourced**: 4 of the 7 estate slots take approved FLW-D2 (hall ×2, living, landing), 2 more take group-A candidates (dining D2-010, guest room D2-035), the walkway waits for a group-B choice (manifest §10) | hall, living, dining, landing, walkway, guest room | P1 (D1-a ready) |
 | X3 | **Unframed "mirrors"**: bathroom and guest WC carry a frameless emissive light-blue box that reads as a blank white panel (`manor.ts:603`, `manor.ts:1119`) | bath, guest WC | P1 |
 | X4 | **Everything stands on its marks.** Chairs in perfect rows, beds made, tables "set": almost no use traces (pushed-back chairs, a mug, an open bag, a coat over a chair). Matches the brief's "people actually used it" gap | manor-wide | P1 |
 | X5 | Exterior hard surfaces (forecourt gravel, terrace slabs, sauna deck) are large single-value planes with no edge wear, path wear or seams at player scale | forecourt, terraces | P2 |
@@ -44,20 +42,20 @@ where the build falls short of it.
 
 ---
 
-## 1. Top-10 priorities
+## 1. Top-10 priorities (revised after inspecting the recovered references)
 
 | # | Area | Biggest opportunity | Planned intervention | Prio | Subpass |
 |---|---|---|---|---|---|
-| 1 | Dining / game room | the owner's required **played-evening memory scene**; today a "set table" (h01, h02) | §4 composition plan: bottles, shots + liquor, marshmallow bag + chubby-bunny card, cards / dice in play, used chairs | P1 | D3-a |
-| 2 | Wickerman clearing | repeatable ritual, hay bale, burn audio | `DEV04D_WICKERMAN_DESIGN.md` | P1 | D4 |
-| 3 | Kitchen | group cooking is not legible: perimeter counters, empty 12 × 17 m floor, one small table | a working island (board, knife, produce, pans), a "big shop" unpacking cluster tied to the 8 red crates, a bread / cheese remnant on the table | P1 | D3-a |
-| 4 | Study + botanic room | 15.6 m long rooms with everything at one end (`r-study-*`, `r-botanic-*`) | study: a map-chest + reading-chair cluster mid-room; botanic room: the design's potting bench / sink + drying rack + plant trays. Evidence (B2 map, fern prints) untouched | P1 | D3-b |
-| 5 | Wall art | 8 placeholder paintings + 2 unframed mirrors | framed mirrors now; FLW-D2 into the manifest slots when delivered | P1 | D1 |
-| 6 | Attic seasonal store + common | "seasonal storage" holds one crate (`r-atticStore-a`); common is a big empty floor | dust-sheeted furniture, game / instrument cases, labelled crates in a clear lane; common: a used games corner near the bunting | P1 | D3-c |
-| 7 | Gingerbread maquette | plain cream / slate-grey model (h06) | material re-skin per the approved sheet | P1 | D2 |
-| 8 | Upstairs bedrooms | big empty floors, blank walls, no guests' traces | luggage, clothes on a chair, a book on the bedside; keep star / travel identity | P2 | D3-b |
-| 9 | Forecourt + garden terrace | large flat gravel / slab planes, a "staged" outdoor table | arrival traces at the door (bags, instrument case), gravel wear, a used outdoor table (glasses, a board game box, a blanket) | P2 | D3-e |
-| 10 | Wickerman / fire polish | petal-like flame stack, faceted smoke, "cake-board" plinth, candle stones invisible | sheet fire, soft smoke, dry-stone plinth, darker stones, worn ritual ring in the grass | P2 | D4 |
+| 1 | Dining / game room | the owner's required **played-evening memory scene**; today a "set table" (h01, h02) and an undersized generic painting | §4 composition plan; D2-010 *Na het feest* enlarged on the north wall (group A) | P1 | D3-a · D1-b |
+| 2 | Wall art, approved set | 8 placeholder paintings + 2 unframed mirrors; five approved FLW-D2 now exist | D2-002 / 007 (hall), 026 (living), 028 (landing), 046 (cottage); framed mirrors; frame family per S3-043/044/045 | P1 | D1-a |
+| 3 | Wickerman clearing | repeatable ritual, hay bale, burn audio; filled vs. empty contrast | `DEV04D_WICKERMAN_DESIGN.md` incl. W8 (S3-039 straw read) and the fire / smoke / plinth polish | P1 | D4 |
+| 4 | Key prop family | every player handles all four keys; today boxes and a glowing blob | K3-001…004 models on the gameplay ids, icon fix (consKey oval) | P1 | D2-a |
+| 5 | Kitchen | group cooking is not legible: perimeter counters, empty 12 × 17 m floor | island prep zone, unpacking cluster tied to the 8 red crates; D2-005 on one wall (A) | P1 | D3-a · D1-b |
+| 6 | Study + botanic room | 15.6 m long rooms with everything at one end | working centres mid-room (D3); S3-017 medallion in the botanic room (A). Evidence untouched | P1 | D3-b · D2-b |
+| 7 | Upstairs identity rooms | landing / Reiskamer / Sterrenkamer: big blank walls, the inventory's identity pieces now exist | S3-014 swallows (landing), D2-022 + S3-015 (Reiskamer), D2-029 + S3-016 (Sterrenkamer), D2-035 (guest room); guests' traces in D3 | P1 | D1-b · D2-b · D3-b |
+| 8 | Attic seasonal store + common | "seasonal storage" holds one crate; common is a big empty floor | storage groups with a clear lane; a used games corner | P1 | D3-c |
+| 9 | Gingerbread maquette | plain cream / slate model (h06) | material re-skin per its approved sheet | P1 | D2-a |
+| 10 | Arrival forecourt + garden terrace + BBQ | flat gravel / slab planes, staged outdoor tables | arrival traces, gravel wear, used outdoor table; S3-033 fire screen at the BBQ (A) | P2 | D3-e |
 
 ---
 
@@ -71,9 +69,9 @@ Columns: **Observed** (what the captures show) · **Opportunity** · **Intervent
 | Area | Observed | Biggest opportunity | Planned intervention | Prio | Dependencies / no-go |
 |---|---|---|---|---|---|
 | Vestibule (`r-vestibule-*`) | tiled, door mat, small bench, sconce; doorway to the hall | the design's "coming in with wet things" (coat rail, umbrella, boots) is only a mat and a bench | coat rail with two jackets, boots / umbrella by the bench, one bag dropped | P2 | keep the front-door swing and the view to the hall clear |
-| Hall (`r-hall-*`, h03) | strong: stair, runner, stair landscape painting, maquette table, red crates, guestbook console | maquette material; two generic paintings | D2 maquette re-skin; D1 paintings | P2 | **start console / drawer evidence, maquette inspect `mem.hall.maquette`** stay; crates not on the console |
-| Living (`r-living-*`) | calibration room; hearth corner works; east half of the room is open floor with a floor lamp and a plant | one small secondary use in the east half (reading / games corner), without competing with the hearth | a card table with two chairs and a half-finished puzzle / game; a throw on the sofa; Nerf only if the owner provides the reference (G3) | P2 | **mantel / brass selection evidence (E01) exact**; tight budget (X7) |
-| Dining / game room (`r-dining-*`, h01, h02) | 1.3 × 4.6 m table, 10 upholstered chairs in exact rows + 2 carvers, board / 2 dice / 2 card decks / 3 bottles at the south end; marshmallow bowl + 4 shots on a lone side table at (96.2, 90.6); one small generic painting | the required memory scene; break the set-table read | **§4** | **P1** | **A01 hosting-plan inspect on the sideboard (107.05, 86.0)** stays separate from the game; no new interactable unless G2; route hall ↔ kitchen clear |
+| Hall (`r-hall-*`, h03) | strong: stair, runner, stair landscape painting, maquette table, red crates, guestbook console | maquette material; two generic paintings | D2 maquette re-skin; **D2-002** (gallery height) + **D2-007** (ground, portrait) replace the atlas pieces; the stair landscape stays the hero | P2 | **start console / drawer evidence, maquette inspect `mem.hall.maquette`** stay; crates not on the console |
+| Living (`r-living-*`) | calibration room; hearth corner works; east half of the room is open floor with a floor lamp and a plant | one small secondary use in the east half (reading / games corner), without competing with the hearth | **D2-026** replaces the atlas painting on the south wall; a card table with two chairs and a half-finished puzzle / game; a throw on the sofa; Nerf only if the owner provides the reference (G3) | P2 | **mantel / brass selection evidence (E01) exact**; tight budget (X7) |
+| Dining / game room (`r-dining-*`, h01, h02) | 1.3 × 4.6 m table, 10 upholstered chairs in exact rows + 2 carvers, board / 2 dice / 2 card decks / 3 bottles at the south end; marshmallow bowl + 4 shots on a lone side table at (96.2, 90.6); one small generic painting | the required memory scene; break the set-table read | **§4**; wall: D2-010 *Na het feest* at ≈ 1.4 × 1.05 replaces the undersized atlas piece (group A) | **P1** | **A01 hosting-plan inspect on the sideboard (107.05, 86.0)** stays separate from the game; no new interactable unless G2; route hall ↔ kitchen clear |
 | Kitchen (`r-kitchen-*`) | perimeter counters, island, table + chairs, 8 red crates (2 stacks), pans on a rail, plate rack; huge empty tiled centre | legible group cooking | island as the prep zone (board, knife, onions / bread, an open crate being unpacked), a pan on the stove, a fridge corner with the beer crates, a dish towel; leave the centre aisle free | **P1** | **service chart + hatch (A1 evidence, `kitchen.hatch`, `pk.consKey`)** untouched; tight budget from the NE view (X7) |
 | Back lobby (`r-lobby-*`) | three doors, emblem plaque, sconce, bench | — | none (design: "geen extra verzamelobject") | P3 | **three-seal gate**; plaques |
 | Billiard (`r-billiard-*`) | table, cue rack, chalk scoreboard, open garden door | a game in progress (balls mid-game, a cue on the table edge, chalk) | small: ball spread + a cue across two chairs, a glass on the rail shelf | P2 | **optional billiard evidence: "ball layout not decoratively changed"** (ENVIRONMENT_STORY G08), so only off-table props |
@@ -89,10 +87,10 @@ Columns: **Observed** (what the captures show) · **Opportunity** · **Intervent
 
 | Area | Observed | Biggest opportunity | Planned intervention | Prio | Dependencies / no-go |
 |---|---|---|---|---|---|
-| Front gallery / walkway / landing (`r-frontGallery-*`, `r-landing-*`) | balustrade, runner rug, generic paintings, sconces; landing rug floats in a large empty floor | art (D1); the landing is a crossing, negative space is fine | D1 only; maybe a bench with a folded blanket | P3 | — |
+| Front gallery / walkway / landing (`r-frontGallery-*`, `r-landing-*`) | balustrade, runner rug, generic paintings, sconces; landing rug floats in a large empty floor | art (D1); the landing is a crossing, negative space is fine | **D2-028** on the landing; S3-014 swallows (group A, the inventory's "bovenoverloop" identity piece) on the long gallery wall; walkway: D2-038 or 021 (group B). Nothing else | P2 | — |
 | Reiskamer (`r-reis-*`) | bed + chest, wardrobe, desk, chair, travel sketch, luggage rack with open suitcase (memory), very large empty floor | guests' travel traces | a second bag on the floor, clothes over the chair, a map / guidebook on the desk; keep the suitcase memory the focal point | P2 | **koffer emblem identity (B1)**, `mem.reis.suitcase`; travel sketch stays |
 | Sterrenkamer (`r-sterren-*`) | bed, rug, star map, telescope at the west window, empty middle | observing traces | a blanket on a chair by the telescope, a red torch, star wheel on the side table; no new emblem-like objects | P2 | **ster emblem identity (B1), EB.stars contract**, `mem.sterren.telescope` |
-| North guest room (`storage`, `r-storage-*`) | bed, chest, rug, wardrobe, armchair, generic painting (duplicate) | "beds, bags, game shelf" (design U11) | bags, a games shelf, clothes; painting via D1 | P2 | source id `storage` / `door.storage` stay |
+| North guest room (`storage`, `r-storage-*`) | bed, chest, rug, wardrobe, armchair, generic painting (duplicate) | "beds, bags, game shelf" (design U11) | bags, a games shelf, clothes; D2-035 replaces the duplicate atlas painting (group A) | P2 | source id `storage` / `door.storage` stay |
 | Study (`r-study-*`) | 6.3 × 15.6 m; desk + globe + chair at the north end, two bookcases, map chest; the rest is empty floor | a working centre mid-room | reading chair + side table + lamp + stacked folders on a rug mid-room; papers on the desk | **P1** | **B2 framed route map, study desk / compartment lock** untouched |
 | Botanic room (`r-botanic-*`) | 6.3 × 15.6 m; one table with lamp + plants at the far end, fern / leaf prints | the design's potting bench / sink (U10) | a potting bench with trays, a sink, a drying rack of pressed plants mid-room; plants grouped | **P1** | **varen emblem identity, EB.plants contract, herbarium inspect** untouched; prints stay |
 | Bathroom (`r-bath-*`) | tub, basin, towel rail, unframed glowing panel | X3 | framed mirror, bath mat, a toiletry shelf | P1 (mirror) | — |
@@ -118,7 +116,7 @@ Columns: **Observed** (what the captures show) · **Opportunity** · **Intervent
 | Boiler room (`r-boiler-*`) | boiler drum with bands and gauge, flue; an unexplained black 1.6 × 0.8 × 1.2 m box (`manor.ts:1267`) | give the box an identity (water tank / pump with pipes) | REFINE the box only | P2 | — |
 | Route room (`r-route-*`) | console / frame on a sideboard, pipes, big empty floor | finale-adjacent: restraint | none | P3 | **D evidence / console**, finale untouched |
 | BOSLUST entry / passage (`r-entry-*`, `r-passage-*`) | roots, timber, panels, lanterns: strong, the calibration benchmark | — | none | P3 | **cipher / plate evidence** |
-| Gathering hall (`r-gathering-*`) | long candlelit table in a big room | emotional landing: restraint | none in D (finale is not redesigned) | P3 | **finale / end letter** |
+| Gathering hall (`r-gathering-*`) | long candlelit table in a big room | emotional landing: restraint | D2-042 (group A, inventory Hero P1, "D03 story neutral") on a side wall away from the end letter; S3-026 frieze optional (B). Finale not redesigned | P3 | **finale / end letter** |
 
 ### Other buildings
 
@@ -126,7 +124,7 @@ Columns: **Observed** (what the captures show) · **Opportunity** · **Intervent
 |---|---|---|---|---|---|
 | Sauna (`r-sauna-*`, x12) | barrel interior, benches; a thin light-leak seam along the barrel curve | — | close the seam (geometry gap); towels on the deck | P2 | sauna index evidence (A) kept clear |
 | Shed (`r-shed-*`, x19, x20) | dark by design (C1: torch), bench, crate; exterior a plain plank box | exterior reads boxy next to BOSLUST (`99_avoid/too_boxy_geometric`) | exterior: plank breakup, roof overhang / fascia, a lean-to woodpile; interior untouched | P2 | **C1 shed evidence and darkness** |
-| Portugal cottage interior (`r-cottageRoom-*`) | long table set with chairs, papers, a candle: "the table is set elsewhere this year" (`mem.cottage.table`) | restraint is the story | none | P3 | memory card |
+| Portugal cottage interior (`r-cottageRoom-*`) | long table set with chairs, papers, a candle: "the table is set elsewhere this year" (`mem.cottage.table`) | restraint is the story | **D2-046** on one free wall; optionally S3-030 mask (A); D2-045 in the entree (A). D2-047 would crowd (B) | P3 | memory card wall stays clear |
 
 ---
 
@@ -138,12 +136,12 @@ Columns: **Observed** (what the captures show) · **Opportunity** · **Intervent
 | Arrival forecourt / parking (x03, x04) | facade strong; a big flat gravel plane, roundel planter, 4 cars | arrival traces (PB01: "luggage / instrument hint", the group came with lots of stuff) | a car boot open with bags, a crate on the step, gravel wear along the drive line and car bays | P2 | keep the final approach to the front door clear (design); no car in the approach |
 | Social garden / terrace (x05) | long rear facade, terrace platforms, string lights, balloons; plain slab planes | the terrace as a lived-in outdoor room | cushions / blankets on chairs, a game box, glasses on the long table; slab seam / edge wear | P2 | central path X 87–94 stays free |
 | Outdoor dining (x06) | table + two benches with plates on a large bare slab | used, not staged | glasses, a bottle, a folded blanket; shade umbrella optional | P2 | — |
-| BBQ (x07) | kettle grill, prep table, gas bottle on a bare slab | cooking traces | tongs, a covered tray, charcoal bag, an apron on the table | P2 | — |
+| BBQ (x07) | kettle grill, prep table, gas bottle on a bare slab | cooking traces | tongs, a covered tray, charcoal bag, an apron on the table; S3-033 iron fire screen (group A) as the backdrop | P2 | — |
 | Music / bong / balloons (x08) | rug, cushions, low table, gas tank + balloons, chairs | recognisable cluster already present | handpan on its stand reads? (verify at close range); none otherwise | P3 | PB04: no use mechanic, no attribution |
 | Lantern lawn (x09) | three lanterns round the stone: C2 puzzle space | evidence clarity | none | P3 | **C2 lanterns / stone** |
-| Lake + viewpoint (x10, x11) | C-R lake; bench viewpoint | — | none (C-R accepted) | P3 | `mem.pond.bench` |
-| Wellness deck (x12, x13) | sauna barrel, jacuzzi, loungers on a deck; barrel end face reads as one flat plank disc | towels, a robe hook; barrel end detail (staves, door) | small | P2 | sauna index evidence |
-| Portugal exterior + terrace (x14, x15) | calibration target #2: strong | — | none | P3 | `mem.cottage.table` |
+| Lake + viewpoint (x10, x11) | C-R lake; bench viewpoint | one identity object | S3-037 carved heron on a stump beside the bench (group A, inventory P1), nothing else | P3 | `mem.pond.bench`; view to the water unobstructed |
+| Wellness deck (x12, x13) | sauna barrel, jacuzzi, loungers on a deck; barrel end face reads as one flat plank disc | towels, a robe hook; barrel end detail (staves, door) | small; S3-036 wave relief / S3-027 rosette are optional (B) | P2 | sauna index evidence |
+| Portugal exterior + terrace (x14, x15) | calibration target #2: strong | — | S3-031 azulejo lemon relief on the terrace wall (group A, inventory P1); nothing else | P3 | `mem.cottage.table` |
 | East glade (x16) | open grassy slope under oaks | negative space between destinations: acceptable | none (optionally one log seat) | P3 | — |
 | Woodland routes (x17, x18) | layered woodland, paths: strong | — | none | P3 | map landmarks |
 | Campfire (x21) | stone ring, logs, stumps, post lantern, kindling | — | none | P3 | **C1 fire / plate / post lantern** |
@@ -199,9 +197,43 @@ two full ones. This keeps one memory scene instead of two half-scenes and gives 
 
 ---
 
-## 5. What is intentionally left restrained
+## 5. Reference integration per room / zone (after inspecting the recovered library)
+
+Selection over coverage: 10 approved + 16 group-A assets go into ≈ 20 zones. 27 recovered sources are deliberately
+**not** placed (group B / C), and several zones get **no** reference art because their restraint is the point.
+"Improves?" answers whether integration makes the room better or just fuller.
+
+| Zone | Wall identity (D2) | Decor (S3) | Generic art still to replace later | Deliberate negative space | Improves? |
+|---|---|---|---|---|---|
+| Hall | **002** gallery height, **007** ground (approved); stair landscape stays hero | — (S3-001 corbels B, only if a shelf is added) | none | the stair run, the floor between door and stair | yes: removes the two clearest placeholders in the first room |
+| Living | **026** south wall (approved) | S3-004 bird is a candidate (location K-B) | none | the hearth corner (calibration), mantel E01 | yes, with 0 new calls (tight budget) |
+| Dining / game room | 010 (A) enlarged | — | atlas #7 until 010 is approved | the floor round the game table (§4) | yes: the wall finally matches the room's story |
+| Kitchen | 005 (A) | S3-007 copper tin (B, via D3) | — | the centre aisle, service-chart wall (A1) | yes, one piece |
+| Pantry · utility · corridor · back lobby · linen | — (013 B only for the pantry) | — | — | all | no: utility spaces stay plain |
+| Workshop | 044 (A) | — | — | the tool wall stays the focus | yes: woodcut tools tie to "the game was built here" |
+| Library · archive | — (025 B) | S3-023 printing block (B) | — | the whole room (B1 / D evidence) | no: restraint rooms |
+| Billiard | — (016 B) | S3-011 relief (B) | — | the table zone (optional evidence) | marginal: leave for owner choice |
+| Copacabana Room | — | the bar sign stays (S3-009 `KEEP_EXISTING`); S3-012 / 013 rejected | — | the pool and symbols (A2) | no new art; the D3 bar refine is the work |
+| Landing / walkway / front gallery | **028** landing (approved); walkway 038 / 021 (B) | **S3-014** swallows (A) on the long gallery wall | atlas #5 on the walkway until a B choice | the landing floor | yes: the inventory's identity piece for this space |
+| Reiskamer | 022 (A) on the wall opposite the travel sketch | S3-015 sloop (A) on the desk | — | the suitcase memory cluster | yes, if kept apart from the koffer emblem |
+| Sterrenkamer | 029 (A) | S3-016 moon (A) | — | the star map wall, telescope window | yes: night theme without new star symbols |
+| North guest room | 035 (A) replaces the duplicate | — | — | — | yes |
+| Study | — (008 / 023 B) | — | — | the B2 route-map wall | D3 furniture is the real fix; art optional |
+| Botanic room | — (009 B) | S3-017 medallion (A) | — | the prints wall (varen emblem) | yes, one object |
+| Bathroom · guest WC | framed mirrors (F1); 017 / 030 (B) | — | — | — | the mirrors are the fix |
+| Attic common · store · lookout | — (016 / 039 B) | S3-008 fox mask (B) | — | the seasonal-store lane | no: D3 storage groups first |
+| Portugal cottage | **046** room (approved); 045 entree (A) | S3-030 mask (A); terrace S3-031 (A) | — | the set table (`mem.cottage.table`) | yes, but max one piece per room |
+| BOSLUST entry / passage | — (041 B) | S3-025 relief (B) | — | evidence walls (cipher, plate) | no: calibration benchmark |
+| BOSLUST gathering | 042 (A) on a side wall | S3-026 frieze (B) | — | the end-letter wall | yes, quietly (story-neutral painting) |
+| BBQ · outdoor dining | — | S3-033 fire screen (A); S3-034 bowl (B, D3) | — | — | yes |
+| Lake viewpoint | — | S3-037 heron (A) | — | the view to the water | yes: one identity object |
+| Wellness | — | S3-036 / 027 (B) | — | — | marginal |
+| Wickerman clearing | — | S3-039 as filled-state reference (W8) | — | the candle ring walking clearance | yes, through the lifecycle, not a remodel |
+| Woodland, campfire, well, golf, east glade, lantern lawn | — | S3-038 / 040 / 041 / 042 have no source | — | all | no |
+
+## 6. What is intentionally left restrained
 
 Hall circulation, back lobby, corridors, landings, linen, basement lobby, route room, gathering hall, the lantern lawn,
-the lake, the east glade, the woodland routes, the campfire, the golf spur, BOSLUST, the Portugal cottage. Each either
+the lake (at most the S3-037 heron, if approved), the east glade, the woodland routes, the campfire, the golf spur, BOSLUST (at most one story-neutral painting in the gathering hall, if approved), the Portugal cottage (at most one reference piece per room). Each either
 carries puzzle evidence that must read cleanly, is a calibration target, is a finale-adjacent space, or works as
 negative space between destinations. D3 leaves them alone or adds at most one small trace.
