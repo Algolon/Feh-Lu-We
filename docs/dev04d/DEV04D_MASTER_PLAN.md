@@ -8,7 +8,7 @@ Status update (11 Oct 2026, D3 started):
 | D1-R | complete, merged (PR #8) |
 | D2 | complete, merged and deployed (PR #8, `f26e563`) |
 | D2-R | complete, merged and deployed (PR #10, `31c80bf`); owner-reviewed and **closed as a milestone**. Open points carried forward into D3-b / D3-f / D4 ([`DEV04D_D3_KICKOFF.md`](DEV04D_D3_KICKOFF.md) §3) |
-| D3 | in progress: **D3-a** (dining / game room, kitchen) implemented on the D branch, awaiting owner phone review ([`DEV04D_D3A_REPORT.md`](DEV04D_D3A_REPORT.md)); D3-b…f pending |
+| D3 | in progress: **D3-a** merged and deployed (PR #11, `444de9b`), owner PASS. **D3-A2** (entrance / portico / central bay calibration) on the D branch, awaiting owner review ([`DEV04D_D3_ARCH_CALIBRATION_REPORT.md`](DEV04D_D3_ARCH_CALIBRATION_REPORT.md)). D3-b…f pending. |
 | D4 | pending: the Wickerman's full ritual cycle is binding D4 scope (kick-off §3.3) |
 
 - D2 report: [`DEV04D_D2_REPORT.md`](DEV04D_D2_REPORT.md).
