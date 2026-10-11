@@ -102,10 +102,13 @@ if (!ONLY || ONLY.has('moon')) {
   S('moon', 't01-eye-room-clay', PHONE, { ...base, variant: 't01', mode: 'clay', ...rel(MOON, POSES.moon[1][1]) });
 }
 
-if (!ONLY || ONLY.has('sloop')) { // reviewed only (no Track 01 rebuild): the production model against its sheet
-  const base = { asset: 'FLW-S3-015', h: SLOOP.h, stage: 'bedside', variant: 'prod' }, v = standViews(SLOOP.h, 0.45);
-  for (const k of ['front', 'side', 'tq']) for (const mode of ['standard', 'clay']) S('sloop', `prod-${k}-${mode}`, MODEL, { ...base, mode, ...v[k] });
-  for (const [n, pose] of POSES.sloop) S('sloop', `prod-${n}`, PHONE, { ...base, mode: 'standard', ...rel(SLOOP, pose) });
+if (!ONLY || ONLY.has('sloop')) { // Track 01 rebuild (owner, closeout) against the production model, from the same cameras
+  const base = { asset: 'FLW-S3-015', h: SLOOP.h, stage: 'bedside' }, v = standViews(SLOOP.h, 0.5);
+  for (const k of ['front', 'side', 'tq']) for (const mode of MODES) S('sloop', `t01-${k}-${mode}`, MODEL, { ...base, variant: 't01', mode, ...v[k] });
+  for (const k of ['side', 'tq']) for (const mode of ['standard', 'clay']) S('sloop', `prod-${k}-${mode}`, MODEL, { ...base, variant: 'prod', mode, ...v[k] });
+  S('sloop', 't01-detail-standard', MODEL, { ...base, variant: 't01', mode: 'standard', cam: [0.55, SLOOP.h + 0.16, 0.12], look: [0, SLOOP.h + 0.1, 0.0], fov: 32 });
+  for (const [n, pose] of POSES.sloop) for (const variant of ['t01', 'prod']) S('sloop', `${variant}-${n}`, PHONE, { ...base, variant, mode: 'standard', ...rel(SLOOP, pose) });
+  S('sloop', 't01-eye-room-clay', PHONE, { ...base, variant: 't01', mode: 'clay', ...rel(SLOOP, POSES.sloop[1][1]) });
 }
 
 // 2D group-B candidates for the D3-b rooms: proposed canvas size (m), frame rail (S3-043 simple / S3-045 print), atlas px
@@ -205,9 +208,11 @@ if (has('moon')) await sheet(`${OUT}/sheet-moon.jpg`, 'FLW-S3-016 moon · Track 
   [['', null], ['production standard', P('moon', 'prod-front-standard')], ['production clay', P('moon', 'prod-front-clay')], ['production player-eye · 2.2 m', P('moon', 'prod-eye-room')]],
   [['T01 three-quarter', P('moon', 't01-tq-standard')], ['T01 side', P('moon', 't01-side-standard')], ['T01 player-eye · 4.4 m', P('moon', 't01-eye-approach')], ['production player-eye · 4.4 m', P('moon', 'prod-eye-approach')]],
 ]);
-if (has('sloop')) await sheet(`${OUT}/sheet-sloop.jpg`, 'FLW-S3-015 sloop · production model reviewed against its sheet (no Track 01 rebuild)', [
-  [['reference', `${OUT}/ref/sloop.jpg`], ['production standard', P('sloop', 'prod-side-standard')], ['production clay', P('sloop', 'prod-side-clay')], ['player-eye · 2.2 m', P('sloop', 'prod-eye-room')]],
-  [['production front', P('sloop', 'prod-front-standard')], ['production three-quarter', P('sloop', 'prod-tq-standard')], ['player-eye · 0.85 m', P('sloop', 'prod-eye-close')], ['player-eye · 4.6 m', P('sloop', 'prod-eye-approach')]],
+if (has('sloop')) await sheet(`${OUT}/sheet-sloop.jpg`, 'FLW-S3-015 sloop · Track 01 hull rebuild vs production · REFERENCE | STANDARD | CLAY | PLAYER-EYE (phone, desk 2.2 m)', [
+  [['reference (sheet)', `${OUT}/ref/sloop.jpg`], ['T01 side, standard', P('sloop', 't01-side-standard')], ['T01 side, clay', P('sloop', 't01-side-clay')], ['T01 player-eye · 2.2 m', P('sloop', 't01-eye-room')]],
+  [['', null], ['production side, standard', P('sloop', 'prod-side-standard')], ['production side, clay', P('sloop', 'prod-side-clay')], ['production player-eye · 2.2 m', P('sloop', 'prod-eye-room')]],
+  [['T01 three-quarter', P('sloop', 't01-tq-standard')], ['T01 hull / supports detail', P('sloop', 't01-detail-standard')], ['T01 player-eye · 0.85 m', P('sloop', 't01-eye-close')], ['production player-eye · 0.85 m', P('sloop', 'prod-eye-close')]],
+  [['T01 front', P('sloop', 't01-front-standard')], ['production three-quarter', P('sloop', 'prod-tq-standard')], ['T01 player-eye · 4.6 m', P('sloop', 't01-eye-approach')], ['production player-eye · 4.6 m', P('sloop', 'prod-eye-approach')]],
 ]);
 if (has('art2d')) await sheet(`${OUT}/sheet-2d.jpg`, '2D group-B candidates for the D3-b rooms · framed previews at the planned atlas density, production art material (isolated wall; NOT placed: owner review)', ART2D.map(([id, room, , w, h]) => [
   [`${id} · ${room} · source`, `${OUT}/ref/${id}.jpg`], [`room read 3 m · ${w} × ${h} m · ${atlasPx(w, h)} px`, P('art2d', `${id}-room`)], ['close 1.5 m', P('art2d', `${id}-close`)],

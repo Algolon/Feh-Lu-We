@@ -1,85 +1,85 @@
 {
-  "commit": "444de9b+wip",
+  "commit": "af73850+closeout",
   "stats": {
     "swallows/t01-front-standard": {
-      "tris": 2802,
+      "tris": 3042,
       "materials": [
         "timber"
       ],
       "meshes": 1,
-      "frame": 2838
+      "frame": 3078
     },
     "swallows/t01-front-neutral": {
-      "tris": 2802,
+      "tris": 3042,
       "materials": [
         "timber"
       ],
       "meshes": 1,
-      "frame": 2838
+      "frame": 3078
     },
     "swallows/t01-front-clay": {
-      "tris": 2802,
+      "tris": 3042,
       "materials": [
         "timber"
       ],
       "meshes": 1,
-      "frame": 2838
+      "frame": 3078
     },
     "swallows/t01-tq-standard": {
-      "tris": 2802,
+      "tris": 3042,
       "materials": [
         "timber"
       ],
       "meshes": 1,
-      "frame": 2838
+      "frame": 3078
     },
     "swallows/t01-tq-neutral": {
-      "tris": 2802,
+      "tris": 3042,
       "materials": [
         "timber"
       ],
       "meshes": 1,
-      "frame": 2838
+      "frame": 3078
     },
     "swallows/t01-tq-clay": {
-      "tris": 2802,
+      "tris": 3042,
       "materials": [
         "timber"
       ],
       "meshes": 1,
-      "frame": 2838
+      "frame": 3078
     },
     "swallows/t01-side-standard": {
-      "tris": 2802,
+      "tris": 3042,
       "materials": [
         "timber"
       ],
       "meshes": 1,
-      "frame": 2838
+      "frame": 3078
     },
     "swallows/t01-side-neutral": {
-      "tris": 2802,
+      "tris": 3042,
       "materials": [
         "timber"
       ],
       "meshes": 1,
-      "frame": 2838
+      "frame": 3078
     },
     "swallows/t01-side-clay": {
-      "tris": 2802,
+      "tris": 3042,
       "materials": [
         "timber"
       ],
       "meshes": 1,
-      "frame": 2838
+      "frame": 3078
     },
     "swallows/t01-detail-standard": {
-      "tris": 2802,
+      "tris": 3042,
       "materials": [
         "timber"
       ],
       "meshes": 1,
-      "frame": 2838
+      "frame": 3078
     },
     "swallows/prod-front-standard": {
       "tris": 864,
@@ -90,12 +90,12 @@
       "frame": 900
     },
     "swallows/t01-detail-clay": {
-      "tris": 2802,
+      "tris": 3042,
       "materials": [
         "timber"
       ],
       "meshes": 1,
-      "frame": 2838
+      "frame": 3078
     },
     "swallows/prod-front-clay": {
       "tris": 864,
@@ -114,12 +114,12 @@
       "frame": 900
     },
     "swallows/t01-eye-walk": {
-      "tris": 2802,
+      "tris": 3042,
       "materials": [
         "timber"
       ],
       "meshes": 1,
-      "frame": 2838
+      "frame": 3078
     },
     "swallows/prod-eye-walk": {
       "tris": 864,
@@ -130,12 +130,12 @@
       "frame": 900
     },
     "swallows/t01-eye-close": {
-      "tris": 2802,
+      "tris": 3042,
       "materials": [
         "timber"
       ],
       "meshes": 1,
-      "frame": 2838
+      "frame": 3078
     },
     "swallows/prod-eye-close": {
       "tris": 864,
@@ -146,12 +146,12 @@
       "frame": 900
     },
     "swallows/t01-eye-void": {
-      "tris": 2802,
+      "tris": 3042,
       "materials": [
         "timber"
       ],
       "meshes": 1,
-      "frame": 2838
+      "frame": 3078
     },
     "swallows/prod-eye-void": {
       "tris": 864,
@@ -162,12 +162,12 @@
       "frame": 900
     },
     "swallows/t01-eye-walk-clay": {
-      "tris": 2802,
+      "tris": 3042,
       "materials": [
         "timber"
       ],
       "meshes": 1,
-      "frame": 2838
+      "frame": 3078
     },
     "medallion/t01-front-standard": {
       "tris": 1972,
@@ -638,25 +638,95 @@
       "meshes": 2,
       "frame": 1268
     },
-    "sloop/prod-front-standard": {
-      "tris": 526,
+    "sloop/t01-front-standard": {
+      "tris": 1334,
       "materials": [
         "timber",
         "metal",
         "paint"
       ],
       "meshes": 3,
-      "frame": 586
+      "frame": 1394
     },
-    "sloop/prod-front-clay": {
-      "tris": 526,
+    "sloop/t01-front-neutral": {
+      "tris": 1334,
       "materials": [
         "timber",
         "metal",
         "paint"
       ],
       "meshes": 3,
-      "frame": 586
+      "frame": 1394
+    },
+    "sloop/t01-front-clay": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
+    "sloop/t01-side-standard": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
+    "sloop/t01-side-neutral": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
+    "sloop/t01-side-clay": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
+    "sloop/t01-tq-standard": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
+    "sloop/t01-tq-neutral": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
+    "sloop/t01-tq-clay": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
     },
     "sloop/prod-side-standard": {
       "tris": 526,
@@ -698,6 +768,26 @@
       "meshes": 3,
       "frame": 586
     },
+    "sloop/t01-detail-standard": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
+    "sloop/t01-eye-close": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
     "sloop/prod-eye-close": {
       "tris": 526,
       "materials": [
@@ -707,6 +797,16 @@
       ],
       "meshes": 3,
       "frame": 586
+    },
+    "sloop/t01-eye-room": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
     },
     "sloop/prod-eye-room": {
       "tris": 526,
@@ -718,6 +818,16 @@
       "meshes": 3,
       "frame": 586
     },
+    "sloop/t01-eye-approach": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
     "sloop/prod-eye-approach": {
       "tris": 526,
       "materials": [
@@ -727,6 +837,16 @@
       ],
       "meshes": 3,
       "frame": 586
+    },
+    "sloop/t01-eye-room-clay": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
     },
     "art2d/FLW-D2-008-room": {
       "tris": 48,

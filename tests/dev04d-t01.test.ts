@@ -34,7 +34,7 @@ describe('DEV-04D Track 01: construction and cost', () => {
     const { assetWarnings } = await import('../src/world/artkit');
     const before = assetWarnings.length;
     const caps: [string, (b: never) => unknown, number][] = [
-      ['swallows', (b) => buildSwallows(b, 't', 0, 2, 0, 0), 3200], // hero prop (landing identity piece)
+      ['swallows', (b) => buildSwallows(b, 't', 0, 2, 0, 0), 3200], // hero prop (gallery identity piece)
       ['medallion', (b) => buildMedallion(b, 't', 0, 1.65, 0, 0), 2400], // medium identity prop
       ['medallion ×3', (b) => buildMedallion(b, 't', 0, 1.65, 0, 0, 3), 3200], // more lathe segments above s = 1.6
       ['moon', (b) => buildMoon(b, 't', 0, 0.6, 0, 0), 1400], // medium identity prop
@@ -131,6 +131,50 @@ describe('DEV-04D Track 01: FLW-S3-016 moon', () => {
     const s = g.boundingBox!.getSize(new THREE.Vector3());
     expect(s.z / s.x).toBeGreaterThan(0.18); // D2 moon: 22 mm slab on a 0.17 m crescent (0.13)
     expect(s.y / s.x).toBeGreaterThan(1.1); // taller than wide: the sheet's crescent
+  });
+});
+
+describe('DEV-04D Track 01: FLW-S3-015 sloop', () => {
+  it('stands on its base; deep hull with a keel seated in the brass cradle cups; within its cost class', async () => {
+    const { buildSloop } = await import('../src/world/d3bAssets');
+    const { assetWarnings } = await import('../src/world/artkit');
+    const before = assetWarnings.length;
+    const { b, parts } = batcher();
+    buildSloop(b, 't', 0, 0.76, 0, 0);
+    expect(assetWarnings.slice(before)).toEqual([]);
+    const box = bounds(parts);
+    expect(box.min.y).toBeCloseTo(0.76, 3);
+    expect(box.max.y - box.min.y).toBeGreaterThan(0.5); // masthead ≈ 0.56 above the desk
+    expect(tris(parts)).toBeLessThanOrEqual(1600);
+    // facing plan +z = three −z: the bowsprit reaches forward of the hull
+    expect(-box.min.z).toBeGreaterThan(0.2);
+  });
+  it('the hull is deeper than the production one, and the keel bottom rests in the cups (posts reach the boat)', async () => {
+    const { buildSloop } = await import('../src/world/d3bAssets');
+    const { b, parts } = batcher();
+    buildSloop(b, 't', 0, 0, 0, 0);
+    const sized = parts.map((p) => { p.geo.computeBoundingBox(); return { p, bb: p.geo.boundingBox!.clone().applyMatrix4(p.m) }; });
+    const hull = sized.reduce((m, q) => (q.bb.getSize(new THREE.Vector3()).z > m.bb.getSize(new THREE.Vector3()).z && q.bb.max.y < 0.2 && q.bb.min.y > 0.05 ? q : m));
+    const hs = hull.bb.getSize(new THREE.Vector3());
+    expect(hs.y).toBeGreaterThan(0.065); // production hull: 0.05 deep
+    expect(hs.z).toBeGreaterThan(0.34);
+    const cups = sized.filter((q) => { const s3 = q.bb.getSize(new THREE.Vector3()); return Math.abs(s3.x - 0.018) < 0.002 && Math.abs(s3.y - 0.012) < 0.001; });
+    expect(cups.length).toBe(2);
+    const keelBottom = Math.min(...sized.filter((q) => q.bb.getSize(new THREE.Vector3()).x < 0.01 && q.bb.getSize(new THREE.Vector3()).z > 0.25).map((q) => q.bb.min.y));
+    for (const c of cups) { expect(keelBottom).toBeGreaterThan(c.bb.min.y); expect(keelBottom).toBeLessThan(c.bb.max.y); }
+  });
+});
+
+describe('DEV-04D Track 01: loft winding (regression)', () => {
+  it('the swallow body faces outwards (an inverted loft is culled from the front and shows the wing roots through it)', async () => {
+    const { swallowGroupGeometry } = await import('../src/world/d3bAssets');
+    const g = swallowGroupGeometry()[1];
+    const p = g.attributes.position as THREE.BufferAttribute;
+    // the body's most forward triangle (largest D) must face the viewer (+D)
+    let best = 0, bestD = -Infinity;
+    for (let t = 0; t < p.count; t += 3) { const d = (p.getZ(t) + p.getZ(t + 1) + p.getZ(t + 2)) / 3; if (d > bestD) { bestD = d; best = t; } }
+    const a = new THREE.Vector3().fromBufferAttribute(p, best), b = new THREE.Vector3().fromBufferAttribute(p, best + 1), c = new THREE.Vector3().fromBufferAttribute(p, best + 2);
+    expect(b.sub(a).cross(c.sub(a)).z).toBeGreaterThan(0);
   });
 });
 

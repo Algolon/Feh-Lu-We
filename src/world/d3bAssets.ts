@@ -68,6 +68,23 @@ function plate(outline: V2[], t: number, bevel: number) {
   return faceted(g);
 }
 
+/** Flip every triangle whose face normal points against `out(centroid)` (indexed or not). */
+function orient(g: THREE.BufferGeometry, out: (c: THREE.Vector3) => THREE.Vector3) {
+  const p = g.attributes.position as THREE.BufferAttribute, ix = g.index;
+  const n = ix ? ix.count : p.count, at = (k: number) => (ix ? ix.getX(k) : k);
+  const a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3(), m = new THREE.Vector3();
+  for (let t = 0; t < n; t += 3) {
+    a.fromBufferAttribute(p, at(t)); b.fromBufferAttribute(p, at(t + 1)); c.fromBufferAttribute(p, at(t + 2));
+    const nrm = b.clone().sub(a).cross(c.clone().sub(a));
+    m.copy(a).add(b).add(c).multiplyScalar(1 / 3);
+    if (nrm.dot(out(m)) >= 0) continue;
+    if (ix) { const k = ix.getX(t + 1); ix.setX(t + 1, ix.getX(t + 2)); ix.setX(t + 2, k); }
+    else for (const attr of Object.values(g.attributes) as THREE.BufferAttribute[]) for (let j = 0; j < attr.itemSize; j++) {
+      const k = attr.getComponent(t + 1, j); attr.setComponent(t + 1, j, attr.getComponent(t + 2, j)); attr.setComponent(t + 2, j, k);
+    }
+  }
+  return g;
+}
 /** Make sure a viewer-frame surface faces the viewer (+D); flips the winding if it does not. */
 function facingViewer(g: THREE.BufferGeometry) {
   g.computeVertexNormals();
@@ -116,9 +133,14 @@ function loft(n: number, seg: number, ring: (t: number) => { c: THREE.Vector3; u
       const cc = paint(t, phi, p); cols.push(cc.r, cc.g, cc.b);
     }
   }
+  // winding: the side faces must point away from the centre line whichever way the sections turn (checked on the middle
+  // ring; an inverted loft is culled from the front and shows what lies behind it)
+  const mid = Math.floor(n / 2), r = ring(mid / n), q = (k: number) => new THREE.Vector3(pos[k * 3], pos[k * 3 + 1], pos[k * 3 + 2]);
+  const a0 = q(mid * seg), c0 = q((mid + 1) * seg), b0 = q(mid * seg + 1);
+  const flip = c0.clone().sub(a0).cross(b0.clone().sub(a0)).dot(a0.clone().sub(r.c)) < 0;
   for (let i = 0; i < n; i++) for (let j = 0; j < seg; j++) {
     const a = i * seg + j, b = i * seg + ((j + 1) % seg), c = a + seg, d = b + seg;
-    idx.push(a, c, b, b, c, d);
+    if (flip) idx.push(a, b, c, b, d, c); else idx.push(a, c, b, b, c, d);
   }
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
@@ -186,8 +208,8 @@ const BODY_D = 0.07; // stand-off of the body axis from the wall
 
 /** Body half-height / half-depth / centre-line height along the body axis (X, bird frame, tail base → beak base). */
 const BODY_ST: [number, number, number][] = [ // [x, half-height, centre y]
-  [-0.112, 0.005, 0.0], [-0.09, 0.016, 0.0], [-0.055, 0.028, -0.003], [-0.015, 0.039, -0.006], [0.022, 0.043, -0.006],
-  [0.055, 0.038, -0.002], [0.078, 0.029, 0.003], [0.097, 0.031, 0.006], [0.116, 0.027, 0.007], [0.131, 0.015, 0.007], [0.14, 0.004, 0.007],
+  [-0.112, 0.006, 0.0], [-0.09, 0.019, 0.0], [-0.055, 0.033, -0.004], [-0.015, 0.046, -0.008], [0.022, 0.05, -0.008],
+  [0.055, 0.044, -0.003], [0.078, 0.034, 0.003], [0.097, 0.035, 0.006], [0.116, 0.03, 0.007], [0.131, 0.017, 0.007], [0.142, 0.004, 0.007],
 ];
 function bodyAt(x: number) {
   const st = BODY_ST;
@@ -200,10 +222,10 @@ function bodyAt(x: number) {
 }
 function swallowBody() {
   const x0 = BODY_ST[0][0], x1 = BODY_ST[BODY_ST.length - 1][0];
-  const g = loft(14, 9, (t) => {
+  const g = loft(15, 10, (t) => {
     const x = x0 + (x1 - x0) * t, { h, yc } = bodyAt(x);
     // half relief: the wall-side half is flattened (b on the back is smaller), so the section centre sits forward
-    return { c: new THREE.Vector3(x, yc, BODY_D + h * 0.12), u: new THREE.Vector3(0, 1, 0), v: new THREE.Vector3(0, 0, 1), a: h, b: h * 0.86 };
+    return { c: new THREE.Vector3(x, yc, BODY_D + h * 0.12), u: new THREE.Vector3(0, 1, 0), v: new THREE.Vector3(0, 0, 1), a: h, b: h * 0.92 };
   }, (t, phi) => {
     const x = x0 + (x1 - x0) * t, up = Math.cos(phi); // up = 1 on the back, −1 on the belly
     let c = up > 0.1 ? SW.stain.clone() : SW.cream.clone();
@@ -211,8 +233,13 @@ function swallowBody() {
     if (x > 0.07 && up < 0.55) c = mixC(c, SW.rufous, smooth(x, 0.07, 0.1)); // throat and face
     if (x > 0.105 && up > 0.55) c = SW.stainDark.clone(); // crown
     return c;
-  }, (t, phi) => (Math.sin(phi) < -0.2 ? -0.18 * Math.abs(Math.sin(phi)) : 0)); // wall side flatter still
-  return faceted(g);
+  }, (t, phi) => {
+    const x = x0 + (x1 - x0) * t;
+    if (Math.sin(phi) < -0.2) return -0.18 * Math.abs(Math.sin(phi)); // wall side flatter still
+    // the shoulder: the upper front of the body swells over the near wing's root, so the wing grows out from under it
+    return 0.24 * Math.max(0, Math.cos(phi - Math.PI / 3)) ** 2 * gauss(x, 0.012, 0.034);
+  });
+  return g; // smooth-shaded: the body is the soft, organic mass the carved wing plates grow from
 }
 /**
  * A wing outline in the bird frame: root at (0, 0), pointing at angle `a`. Leading edge convex towards the bird's front,
@@ -227,17 +254,18 @@ function wingOutline(w: WingDef, scaleLen = 1, scaleChord = 1, tips = 4): V2[] {
     const back = -w.sweep * len * s * s; // the scythe: the outer wing bends back
     return [ux * s * len + vx * (v + back), uy * s * len + vy * (v + back)];
   };
-  const le = (s: number) => ch * (0.5 + 0.12 * gauss(s, 0.3, 0.2)) * (1 - s ** 1.9) ** 0.6; // convex leading edge, full at the wrist
-  const te = (s: number) => -ch * 0.5 * (1 - s) ** 0.62 * (1 + 0.22 * gauss(s, 0.22, 0.2)); // broad secondaries, hollow towards the tip
+  const root = (s: number) => 0.42 + 0.58 * smooth(s, 0, 0.24); // the wing narrows into the shoulder (no broad plate edge across the body)
+  const le = (s: number) => ch * (0.5 + 0.12 * gauss(s, 0.3, 0.2)) * (1 - s ** 1.9) ** 0.6 * root(s); // convex leading edge, full at the wrist
+  const te = (s: number) => -ch * 0.5 * (1 - s) ** 0.62 * (1 + 0.22 * gauss(s, 0.22, 0.2)) * root(s); // broad secondaries, hollow towards the tip
   const out: V2[] = [];
-  for (let i = 0; i <= 8; i++) { const s = i / 8; out.push(P(s, le(s))); } // root → tip along the leading edge
+  for (let i = 0; i <= 9; i++) { const s = (i / 9) ** 1.1; out.push(P(s, le(s))); } // root → tip along the leading edge
   // trailing edge back from the tip, stepped: each primary tip juts back, a notch between
   const s0 = 0.38;
   for (let k = 0; k < tips; k++) { // feather tips lean outwards: the notch sits nearer the root than the tip it follows
     const sa = 1 - ((1 - s0) * (k + 0.05)) / tips, sb = 1 - ((1 - s0) * (k + 0.7)) / tips;
     out.push(P(sa, te(sa) - ch * 0.04), P(sb, te(sb) + ch * 0.025));
   }
-  for (let i = 1; i <= 4; i++) { const s = s0 * (1 - i / 4); out.push(P(s, te(s))); } // secondaries back to the root
+  for (let i = 1; i <= 5; i++) { const s = s0 * (1 - i / 5); out.push(P(s, te(s))); } // secondaries back to the root
   return out;
 }
 /** The covert band: the inner half of the wing along its leading edge (the marginal and greater coverts), its trailing
@@ -249,9 +277,10 @@ function covertOutline(w: WingDef): V2[] {
   const off = w.chord * 0.2; // shifted towards the leading edge
   const P = (s: number, v: number): V2 => { const back = -w.sweep * w.len * (s * 0.5) ** 2; return [ux * s * len + vx * (v + off + back), uy * s * len + vy * (v + off + back)]; };
   const out: V2[] = [];
-  for (let i = 0; i <= 6; i++) { const s = i / 6; out.push(P(s, ch * 0.5 * (1 - s ** 2.4) ** 0.7)); }
+  const root = (s: number) => 0.5 + 0.5 * smooth(s, 0, 0.3);
+  for (let i = 0; i <= 6; i++) { const s = i / 6; out.push(P(s, ch * 0.5 * (1 - s ** 2.4) ** 0.7 * root(s))); }
   for (let k = 0; k < 3; k++) { const sa = 1 - (k + 0.2) / 3.2, sb = 1 - (k + 0.85) / 3.2; out.push(P(sa, -ch * 0.42 * (1 - sa) ** 0.5 - ch * 0.08), P(sb, -ch * 0.42 * (1 - sb) ** 0.5 + ch * 0.06)); }
-  out.push(P(0, -ch * 0.5));
+  out.push(P(0, -ch * 0.25));
   return out;
 }
 /** One wing plate, placed at its root; `lift` = D at the root, `dTip` = D change towards the tip (tips nearer the wall). */
@@ -288,18 +317,21 @@ function swallowBird(b: BirdDef) {
   const parts: THREE.BufferGeometry[] = [swallowBody(), swallowTail(b)];
   for (const w of b.wings) {
     const ang = w.a * D2R, up = Math.sin(ang) > 0;
-    const rootX = 0.008, rootY = up ? 0.026 : -0.016; // from the shoulder on the back (up) or under the breast (down): the body stays readable
-    const dRoot = w.near ? BODY_D + 0.018 : BODY_D - 0.022, dTip = w.near ? -0.022 : -0.012;
+    // near wing: from the shoulder on the back, under a soft shoulder mass; far wing: rooted behind the body's centre
+    // line (the body hides the joint), its covert starting out along the wing, clear of the belly
+    const rootX = w.near ? 0.01 : 0.004, rootY = up ? (w.near ? 0.03 : 0.012) : -0.006;
+    const dRoot = w.near ? BODY_D + 0.016 : BODY_D - 0.03, dTip = w.near ? -0.022 : -0.01;
     const prim = wingPlate(wingOutline(w), w.len, ang, 0.011, 0.0035, dRoot, dTip, 'primary');
     // the covert plate (the inner feather group) sits on the viewer side of its primary plate
     const cov = wingPlate(covertOutline(w), w.len * 0.5, ang, 0.009, 0.003, dRoot + 0.009, dTip * 0.5, 'covert');
-    prim.translate(rootX, rootY, 0); cov.translate(rootX, rootY, 0);
+    const out = w.near ? 0 : 0.05; // far covert: shifted out along the span
+    prim.translate(rootX, rootY, 0); cov.translate(rootX + Math.cos(ang) * out, rootY + Math.sin(ang) * out, 0);
     parts.push(prim, cov);
   }
   // beak and eye: small, but they set the head's direction at the approach distance
   const beak = faceted(new THREE.ConeGeometry(0.0075, 0.04, 5).rotateZ(-Math.PI / 2).translate(0.153, 0.006, BODY_D + 0.003));
   paintFaces(beak, () => SW.dark.clone());
-  const eye = faceted(new THREE.IcosahedronGeometry(0.0055, 0).translate(0.114, 0.012, BODY_D + 0.003 + 0.019));
+  const eye = faceted(new THREE.IcosahedronGeometry(0.006, 0).translate(0.113, 0.013, BODY_D + 0.031)); // set into the head's surface
   paintFaces(eye, () => SW.dark.clone());
   // hidden dowel: from the chest into the wall (D = 0)
   const dowel = faceted(new THREE.CylinderGeometry(0.008, 0.008, BODY_D, 6).rotateX(Math.PI / 2).translate(0.01, -0.004, BODY_D / 2));
@@ -506,9 +538,158 @@ export function buildMoon(bt: Batcher, chunk: string, x: number, y: number, z: n
   return { tris, w: BW, h: cres.boundingBox ? BH + gap + (cres.boundingBox.max.y - cres.boundingBox.min.y) : BH };
 }
 
+// ================================================================================================ FLW-S3-015
+// Miniatuurzeilboot (Track 01 rebuild, owner: rebuild now). Kept from the production model: the rig silhouette (mast
+// height, boom, bowsprit, the cream triangular mainsail, four rigging lines) and the oak base on brass posts. Rebuilt:
+// the hull. Construction note:
+// - What supports it: an oak base board carries two brass posts; each post ends in a brass cradle cup and the keel's
+//   flat bottom sits in both cups (no floating hull, no post stopping short of the boat).
+// - Silhouette: a deep, planked hull (the sheet's round-bilged sloop): a fine raked stem, the forefoot cut away, full
+//   sections amidships, a rounded counter ending in a small transom; the sheer rises towards the bow. A long fin keel
+//   with a rudder hung on its aft end.
+// - Construction / material: the hull is built from eight strakes (alternating walnut tones, crisp seams between them),
+//   one strake painted as the cream sheer stripe; a dark toe rail along the sheer; a honey deck with the cabin trunk.
+// - Size: 0.36 m long, ≈ 0.57 m to the masthead at s = 1 (the production boat was 0.34 m with a shallow hull). D3-b sets
+//   the scale on the Reiskamer desk (audit: up to ×1.15).
+const SL = { walnut: col('#764628'), walnut2: col('#8a5631'), cream: col('#ece0c6'), rail: col('#3e2414'), deck: '#b88a58', base: '#7a5232', brass: '#c9a24c', spar: '#7e4e2a', sail: '#ece2cc', rig: '#c8b48a' };
+const HULL = { L: 0.36, B: 0.056, bot: 0.088, sheer: 0.16 }; // length, half-beam, hull bottom (above the keel), sheer amidships
+/** Hull section at t (0 = stern, 1 = bow): half-beam, bottom height and sheer height. */
+function hullAt(t: number) {
+  const b = HULL.B * Math.max(0, Math.sin(Math.PI * (0.2 + 0.8 * t))) ** 0.62; // a small transom aft, a fine stem forward
+  const bot = HULL.bot + 0.05 * smooth(t, 0.66, 1) ** 1.3 + 0.03 * (1 - smooth(t, 0, 0.16)); // forefoot cut away; counter lifts aft
+  const sheer = HULL.sheer + 0.016 * t * t + 0.008 * (1 - t) ** 3; // sheer springs up at the bow, a little at the stern
+  return { b, bot, sheer, z: (t - 0.5) * HULL.L };
+}
+/** Girth: u 0 (keel line) → 1 (sheer); the section is round-bilged (full at the turn of the bilge). */
+const girthX = (u: number) => Math.sin((u * Math.PI) / 2) ** 0.5;
+const girthY = (u: number) => 1 - Math.cos((u * Math.PI) / 2) ** 1.25;
+const STRAKES = [0, 0.16, 0.31, 0.45, 0.58, 0.7, 0.8, 0.88, 0.94, 1]; // 9 bands; band 7 (0.88–0.94) is the cream sheer stripe
+function sloopHull() {
+  const N = 16, parts: THREE.BufferGeometry[] = [];
+  for (let k = 0; k < STRAKES.length - 1; k++) {
+    const u0 = STRAKES[k], u1 = STRAKES[k + 1], c = k === 7 ? SL.cream : k % 2 ? SL.walnut2 : SL.walnut;
+    for (const side of [-1, 1]) {
+      const pos: number[] = [], idx: number[] = [];
+      for (let i = 0; i <= N; i++) {
+        const t = i / N, h = hullAt(t);
+        for (const u of [u0, u1]) pos.push(side * h.b * girthX(u), h.bot + (h.sheer - h.bot) * girthY(u), h.z);
+      }
+      for (let i = 0; i < N; i++) { const a = i * 2; idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); }
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+      g.setIndex(idx);
+      orient(g, (q) => new THREE.Vector3(q.x, q.y - (HULL.bot + HULL.sheer) / 2, 0)); // outwards from the hull's middle
+      g.computeVertexNormals(); // smooth along the strake; the seams between strakes stay crisp (the planking)
+      g.setAttribute('color', new THREE.Float32BufferAttribute(new Array((N + 1) * 2).fill(0).flatMap(() => [c.r, c.g, c.b]), 3));
+      parts.push(g);
+    }
+  }
+  // transom: a fan closing the stern section
+  const h0 = hullAt(0), tp: number[] = [], tc: number[] = [];
+  const ring = Array.from({ length: 9 }, (_, i) => { const u = i / 8; return [h0.b * girthX(u), h0.bot + (h0.sheer - h0.bot) * girthY(u)]; });
+  for (let i = 0; i < 8; i++) for (const side of [-1, 1]) {
+    const a = ring[i], b = ring[i + 1];
+    const tri = side > 0 ? [[0, h0.sheer], [side * b[0], b[1]], [side * a[0], a[1]]] : [[0, h0.sheer], [side * a[0], a[1]], [side * b[0], b[1]]];
+    for (const [x, y] of tri) { tp.push(x, y, h0.z); tc.push(SL.walnut2.r, SL.walnut2.g, SL.walnut2.b); }
+  }
+  const tr = new THREE.BufferGeometry();
+  tr.setAttribute('position', new THREE.Float32BufferAttribute(tp, 3));
+  tr.setAttribute('color', new THREE.Float32BufferAttribute(tc, 3));
+  orient(tr, () => new THREE.Vector3(0, 0, -1));
+  tr.computeVertexNormals();
+  parts.push(tr);
+  const g = mergeParts(parts);
+  return g;
+}
+/** The deck: flush with the sheer, following its spring (honey planking). */
+function sloopDeck() {
+  const N = 16, pos: number[] = [], idx: number[] = [];
+  for (let i = 0; i <= N; i++) { const h = hullAt(i / N); pos.push(-h.b, h.sheer, h.z, h.b, h.sheer, h.z); }
+  for (let i = 0; i < N; i++) { const a = i * 2; idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  g.setIndex(idx);
+  orient(g, () => new THREE.Vector3(0, 1, 0));
+  g.computeVertexNormals();
+  return g;
+}
+/** Keel profile (side view, z along the hull): a long fin with a flat bottom over the posts, a raked forefoot, and the
+ * rudder as the fin's aft end (a vertical trailing edge up under the counter). Extruded thin about the centre line. */
+function sloopKeel(kb: number) {
+  const zF = 0.15, top = HULL.bot + 0.006, zR = -HULL.L / 2 + 0.004, under = hullAt(0.02).bot + 0.004;
+  const pts: V2[] = [[zR, under], [zR, kb + 0.02], [zR + 0.022, kb + 0.004], [-0.12, kb], [0.07, kb], [0.105, kb + 0.012], [zF, hullAt(1).bot - 0.004], [zF - 0.03, hullAt(0.92).bot + 0.006], [0.05, top], [-0.12, top], [zR + 0.02, under]];
+  const s2 = new THREE.Shape(pts.map(([z, y]) => new THREE.Vector2(z, y)));
+  const g = new THREE.ExtrudeGeometry(s2, { depth: 0.008, bevelEnabled: false, curveSegments: 1 });
+  g.translate(0, 0, -0.004);
+  g.rotateY(-Math.PI / 2); // shape x (along the hull) → z, extrusion → x (across)
+  return faceted(g);
+}
+/** A thin cylinder between two viewer-frame points. */
+function rodBetween(a: THREE.Vector3, b: THREE.Vector3, r0: number, r1 = r0, seg = 5, open = false) {
+  const d = b.clone().sub(a), g = new THREE.CylinderGeometry(r1, r0, d.length(), seg, 1, open);
+  g.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), d.normalize()));
+  g.translate((a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + b.z) / 2);
+  return g;
+}
+/** FLW-S3-015 Track 01 candidate standing on its support at the anchor, the bow towards the facing `yaw`. */
+export function buildSloop(bt: Batcher, chunk: string, x: number, y: number, z: number, yaw: number, s = 1) {
+  const M = artMats(), V = (a: number, b: number, c: number) => new THREE.Vector3(a, b, c);
+  const a = new Asm(bt, chunk, x, y, z, yaw).begin(T01('FLW-S3-015'));
+  let tris = 0;
+  const add = (mat: THREE.Material, color: string, g: THREE.BufferGeometry) => {
+    g.scale(s, s, s); toLocal(g);
+    a.add(mat, color, g, 0, 0, 0);
+    tris += (g.index ? g.index.count : g.attributes.position.count) / 3;
+    g.dispose();
+  };
+  const BASE_T = 0.022, POST = 0.034, kb = BASE_T + POST; // keel bottom = post tops
+  const base = softBox(0.09, BASE_T, 0.27, 0.004, 1, 1).translate(0, BASE_T / 2, -0.02);
+  projectUV(base, 0.3, 'z');
+  add(M.timber, SL.base, base);
+  for (const pz of [-0.085, 0.045]) { // brass posts with cradle cups the keel sits in
+    add(M.brass, SL.brass, new THREE.CylinderGeometry(0.0045, 0.0055, POST - 0.006, 7).translate(0, BASE_T + (POST - 0.006) / 2, pz));
+    add(M.brass, SL.brass, new THREE.CylinderGeometry(0.009, 0.007, 0.012, 8, 1, true).translate(0, kb - 0.002, pz)); // cup: its rim rises 4 mm round the keel
+    add(M.brass, SL.brass, new THREE.CylinderGeometry(0.011, 0.012, 0.004, 8).translate(0, BASE_T + 0.002, pz)); // foot rose on the base
+  }
+  const keel = sloopKeel(kb);
+  projectUV(keel, 0.3, 'z');
+  add(M.timber, '#ffffff', paintFaces(keel, () => SL.walnut.clone()));
+  const hull = sloopHull();
+  projectUV(hull, 0.3, 'z');
+  add(M.timber, '#ffffff', hull);
+  const deck = sloopDeck();
+  projectUV(deck, 0.2, 'z');
+  add(M.timber, SL.deck, deck);
+  for (const side of [-1, 1]) { // toe rail along the sheer
+    const curve = new THREE.CatmullRomCurve3(Array.from({ length: 9 }, (_, i) => { const h = hullAt(0.02 + 0.96 * (i / 8)); return V(side * h.b * 0.97, h.sheer + 0.002, h.z); }));
+    add(M.timber, '#3e2414', new THREE.TubeGeometry(curve, 14, 0.0028, 3, false));
+  }
+  // cabin trunk and cockpit coaming (production proportions)
+  const hc = hullAt(0.4);
+  add(M.timber, '#8a5a34', softBox(0.046, 0.022, 0.06, 0.003, 1, 1).translate(0, hc.sheer + 0.011, -0.03));
+  add(M.timber, '#6e4327', new THREE.BoxGeometry(0.05, 0.012, 0.004).translate(0, hullAt(0.28).sheer + 0.006, -0.08));
+  // rig, as the production model: mast, boom, bowsprit, collar, the mainsail, four lines
+  const mz = 0.04, deckM = hullAt(0.5 + mz / HULL.L).sheer, top = deckM + 0.4, bowT = hullAt(1);
+  add(M.timber, SL.spar, rodBetween(V(0, deckM - 0.01, mz), V(0, top, mz), 0.006, 0.0042, 6));
+  add(M.timber, SL.spar, rodBetween(V(0, deckM + 0.05, mz), V(0, deckM + 0.055, -0.15), 0.0036, 0.003, 5));
+  add(M.timber, SL.spar, rodBetween(V(0, bowT.sheer - 0.004, HULL.L / 2 - 0.012), V(0, bowT.sheer + 0.006, HULL.L / 2 + 0.05), 0.003, 0.0025, 5));
+  add(M.brass, SL.brass, rodBetween(V(0, deckM - 0.002, mz), V(0, deckM + 0.014, mz), 0.0095, 0.0095, 8));
+  const sail = new THREE.BufferGeometry(), A = V(0, deckM + 0.06, mz - 0.006), B = V(0, top - 0.015, mz - 0.006), C = V(0, deckM + 0.06, -0.145), sp: number[] = [];
+  for (const sd of [1, -1]) { const q = [A, B, C].map((v) => v.clone().setX(sd * 0.0012)); (sd > 0 ? [q[0], q[2], q[1]] : [q[0], q[1], q[2]]).forEach((v) => sp.push(v.x, v.y, v.z)); }
+  sail.setAttribute('position', new THREE.Float32BufferAttribute(sp, 3));
+  sail.computeVertexNormals();
+  add(M.paint, SL.sail, sail);
+  const hm = hullAt(0.5 + mz / HULL.L);
+  for (const [f, t] of [[V(0, top, mz), V(0, bowT.sheer + 0.006, HULL.L / 2 + 0.045)], [V(0, top - 0.08, mz), V(hm.b * 0.92, hm.sheer, mz - 0.012)], [V(0, top - 0.08, mz), V(-hm.b * 0.92, hm.sheer, mz - 0.012)], [V(0, top, mz), V(0, hullAt(0).sheer + 0.003, -HULL.L / 2 + 0.006)]] as [THREE.Vector3, THREE.Vector3][])
+    add(M.paint, SL.rig, rodBetween(f, t, 0.0011, 0.0011, 3, true));
+  a.end();
+  return { tris, w: 0.09 * s, h: (top + 0.0) * s, len: (HULL.L + 0.05) * s };
+}
+
 /** Track 01 3D candidates: id → builder, cost class (Track 01 §9) and authored size at s = 1. */
 export const T01_BUILDERS = {
   'FLW-S3-014': { build: buildSwallows, mount: 'wall' as const, cls: 'hero' as const, size: '1.73 × 0.60 m group' },
   'FLW-S3-017': { build: buildMedallion, mount: 'wall' as const, cls: 'medium identity' as const, size: 'Ø 0.58 m (× s)' },
-  'FLW-S3-016': { build: buildMoon, mount: 'surface' as const, cls: 'medium identity' as const, size: '≈ 0.32 m overall' },
+  'FLW-S3-016': { build: buildMoon, mount: 'surface' as const, cls: 'medium identity' as const, size: '≈ 0.33 m overall' },
+  'FLW-S3-015': { build: buildSloop, mount: 'surface' as const, cls: 'medium identity' as const, size: '0.36 m hull, ≈ 0.57 m to the masthead' },
 };
