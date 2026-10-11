@@ -1,0 +1,342 @@
+{
+  "commit": null,
+  "rows": [
+    {
+      "name": "d2r-sw-walk",
+      "pose": {
+        "x": 90.3,
+        "y": 3.35,
+        "z": 83.5,
+        "yaw": 3.141592653589793,
+        "pitch": 0.3
+      },
+      "calls": 42,
+      "triangles": 124642,
+      "room": "frontGallery",
+      "feetY": 3.35
+    },
+    {
+      "name": "d2r-sw-void",
+      "pose": {
+        "x": 86,
+        "y": 3.35,
+        "z": 94,
+        "yaw": 2.8623399732707,
+        "pitch": 0.12
+      },
+      "calls": 182,
+      "triangles": 418864,
+      "room": "walkway",
+      "feetY": 3.35
+    },
+    {
+      "name": "d2r-sw-close",
+      "pose": {
+        "x": 90,
+        "y": 3.35,
+        "z": 81.9,
+        "yaw": 3.141592653589793,
+        "pitch": 0.28
+      },
+      "calls": 32,
+      "triangles": 111364,
+      "room": "frontGallery",
+      "feetY": 3.35
+    },
+    {
+      "name": "d2r-med-door",
+      "pose": {
+        "x": 104,
+        "y": 3.35,
+        "z": 95.3,
+        "yaw": -2.775073510670984,
+        "pitch": 0.03
+      },
+      "calls": 109,
+      "triangles": 222530,
+      "room": "botanic",
+      "feetY": 3.35
+    },
+    {
+      "name": "d2r-med-room",
+      "pose": {
+        "x": 105.4,
+        "y": 3.35,
+        "z": 91.2,
+        "yaw": -1.9547687622336491,
+        "pitch": 0.05
+      },
+      "calls": 128,
+      "triangles": 340256,
+      "room": "botanic",
+      "feetY": 3.35
+    },
+    {
+      "name": "d2r-med-close",
+      "pose": {
+        "x": 102.7,
+        "y": 3.35,
+        "z": 88.5,
+        "yaw": -1.5707963267948966,
+        "pitch": 0.12
+      },
+      "calls": 124,
+      "triangles": 341116,
+      "room": "botanic",
+      "feetY": 3.35
+    },
+    {
+      "name": "d2r-cot-entry-approach",
+      "pose": {
+        "x": 25,
+        "y": 4.15,
+        "z": 154.6,
+        "yaw": 0,
+        "pitch": 0.04
+      },
+      "calls": 48,
+      "triangles": 111558,
+      "room": "out",
+      "feetY": 4.15
+    },
+    {
+      "name": "d2r-cot-through-arch",
+      "pose": {
+        "x": 25,
+        "y": 4.15,
+        "z": 158.2,
+        "yaw": 0,
+        "pitch": 0.04
+      },
+      "calls": 42,
+      "triangles": 110621,
+      "room": "cottageEntry",
+      "feetY": 4.15
+    },
+    {
+      "name": "d2r-cot-room-south",
+      "pose": {
+        "x": 25,
+        "y": 4.15,
+        "z": 164,
+        "yaw": 3.141592653589793,
+        "pitch": 0
+      },
+      "calls": 214,
+      "triangles": 415123,
+      "room": "cottageRoom",
+      "feetY": 4.15
+    },
+    {
+      "name": "d2r-cot-room-sideboard",
+      "pose": {
+        "x": 28.6,
+        "y": 4.15,
+        "z": 163.6,
+        "yaw": -2.0594885173533086,
+        "pitch": 0.04
+      },
+      "calls": 48,
+      "triangles": 133535,
+      "room": "cottageRoom",
+      "feetY": 4.15
+    },
+    {
+      "name": "d2r-cot-room-east",
+      "pose": {
+        "x": 22,
+        "y": 4.15,
+        "z": 163.8,
+        "yaw": 2.1816615649929116,
+        "pitch": 0.04
+      },
+      "calls": 219,
+      "triangles": 439774,
+      "room": "cottageRoom",
+      "feetY": 4.15
+    },
+    {
+      "name": "d2r-cot-mask-close",
+      "pose": {
+        "x": 21.7,
+        "y": 4.15,
+        "z": 161.8,
+        "yaw": -1.5707963267948966,
+        "pitch": 0.12
+      },
+      "calls": 29,
+      "triangles": 113970,
+      "room": "cottageRoom",
+      "feetY": 4.15
+    },
+    {
+      "name": "d2r-cot-045-close",
+      "pose": {
+        "x": 28.1,
+        "y": 4.15,
+        "z": 160.9,
+        "yaw": 1.5707963267948966,
+        "pitch": 0.1
+      },
+      "calls": 158,
+      "triangles": 382297,
+      "room": "cottageRoom",
+      "feetY": 4.15
+    },
+    {
+      "name": "d2r-ter-approach",
+      "pose": {
+        "x": 19.4,
+        "y": 4.1,
+        "z": 152.5,
+        "yaw": 1.2566370614359172,
+        "pitch": 0.06
+      },
+      "calls": 94,
+      "triangles": 201554,
+      "room": "out",
+      "feetY": 4.1
+    },
+    {
+      "name": "d2r-ter-table",
+      "pose": {
+        "x": 25.6,
+        "y": 4.15,
+        "z": 153,
+        "yaw": 0.7853981633974483,
+        "pitch": 0.05
+      },
+      "calls": 57,
+      "triangles": 141174,
+      "room": "out",
+      "feetY": 4.15
+    },
+    {
+      "name": "d2r-ter-panel-close",
+      "pose": {
+        "x": 29.3,
+        "y": 4.15,
+        "z": 155.4,
+        "yaw": 0,
+        "pitch": 0.18
+      },
+      "calls": 48,
+      "triangles": 118817,
+      "room": "out",
+      "feetY": 4.15
+    },
+    {
+      "name": "d2r-her-path",
+      "pose": {
+        "x": 82.6,
+        "y": 0,
+        "z": 137,
+        "yaw": -1.0122909661567112,
+        "pitch": 0.02
+      },
+      "calls": 41,
+      "triangles": 138784,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "d2r-her-bench",
+      "pose": {
+        "x": 78.6,
+        "y": 0,
+        "z": 139.6,
+        "yaw": -1.5707963267948966,
+        "pitch": 0
+      },
+      "calls": 52,
+      "triangles": 153680,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "d2r-her-close",
+      "pose": {
+        "x": 78,
+        "y": 0,
+        "z": 140,
+        "yaw": -0.7853981633974483,
+        "pitch": 0.05
+      },
+      "calls": 35,
+      "triangles": 116819,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "d2-key-shedKey-drawer",
+      "pose": {
+        "x": 86.15,
+        "y": 0.15,
+        "z": 85.5,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.95
+      },
+      "calls": 119,
+      "triangles": 405066,
+      "room": "hall",
+      "feetY": 0.15
+    },
+    {
+      "name": "d2-key-studyKey-drawer",
+      "pose": {
+        "x": 81.75,
+        "y": 0.15,
+        "z": 101.2,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.95
+      },
+      "calls": 68,
+      "triangles": 275238,
+      "room": "library",
+      "feetY": 0.15
+    },
+    {
+      "name": "d2-key-consKey-hatch",
+      "pose": {
+        "x": 95.85,
+        "y": 0.15,
+        "z": 98.6,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.68
+      },
+      "calls": 147,
+      "triangles": 317334,
+      "room": "kitchen",
+      "feetY": 0.15
+    },
+    {
+      "name": "d2-maquette-close",
+      "pose": {
+        "x": 86.55,
+        "y": 0.15,
+        "z": 94.4,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.75
+      },
+      "calls": 139,
+      "triangles": 432222,
+      "room": "hall",
+      "feetY": 0.15
+    },
+    {
+      "name": "d2-maquette-room",
+      "pose": {
+        "x": 88.4,
+        "y": 0.15,
+        "z": 93.2,
+        "yaw": -1.2,
+        "pitch": -0.35
+      },
+      "calls": 194,
+      "triangles": 502043,
+      "room": "hall",
+      "feetY": 0.15
+    }
+  ],
+  "problems": []
+}

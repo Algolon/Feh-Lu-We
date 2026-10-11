@@ -45,10 +45,10 @@ const SLOTS = [ // DEV-04D D1-R placements (docs/dev04d/DEV04D_D1R_GALLERY_AUDIT
   ['painting@107.58,102.60', 'FLW-D2-035', 107.58, 5.2, 102.6, -90, 1.0, 0.75, 0.065],
   ['painting@58.60,56.83', 'FLW-D2-042', 58.6, -1.55, 56.83, 180, 1.4, 0.7875, 0.065],
   ['painting@115.56,98.55', 'FLW-D2-044', 115.56, 2.0, 98.55, -90, 0.8, 0.6, 0.032],
-  ['painting@20.32,158.60', 'FLW-D2-045', 20.32, 5.75, 158.6, 90, 0.8, 0.6, 0.065],
+  ['painting@29.68,160.90', 'FLW-D2-045', 29.68, 5.75, 160.9, -90, 0.8, 0.6, 0.065], // D2-R: moved from the entry into the room
 ];
 // D1-R: retired placeholder (owner decision D-1) and the old slots of the moved pieces: none may come back
-const RETIRED = ['painting@85.12,93.00', 'painting@85.12,86.20', 'painting@85.12,92.50', 'painting@27.90,160.12', 'painting@107.56,99.90', 'painting@80.80,80.44', 'painting@82.00,86.90', 'painting@115.56,99.70'];
+const RETIRED = ['painting@20.32,158.60', /* D2-R: D2-045's entry slot */ 'painting@85.12,93.00', 'painting@85.12,86.20', 'painting@85.12,92.50', 'painting@27.90,160.12', 'painting@107.56,99.90', 'painting@80.80,80.44', 'painting@82.00,86.90', 'painting@115.56,99.70'];
 const MIRRORS = [['mirror@87.92,105.30', 87.92, 1.7, 105.3, -90], ['mirror@89.92,105.00', 89.92, 4.9, 105.0, -90]];
 // puzzle / evidence / identity panels (DEV04D_ASSET_MANIFEST.md §10): must stay, and keep their wall to themselves
 const PROTECTED = ['panel@84.82,96.60', 'panel@95.10,96.00', 'panel@82.50,109.44', 'panel@78.60,93.90', 'panel@78.60,86.68', 'panel@107.50,85.00', 'panel@107.50,89.00', 'panel@107.50,93.00', 'panel@107.50,94.60', 'panel@99.75,98.52', 'panel@128.60,109.35'];
@@ -65,10 +65,10 @@ import { register } from 'node:module';
 register('data:text/javascript,' + encodeURIComponent("export async function resolve(s, c, next) { try { return await next(s, c); } catch (e) { if (s.startsWith('.') && !/\\.[cm]?[jt]s$/.test(s)) return next(s + '.ts', c); throw e; } }"));
 const { PROPS3D } = await import('../src/content/props3d.ts');
 const { SALON_LAYOUT, SALON_SITES, frameBox } = await import('../src/content/gallery.ts'); // D2 salon wall
-const KEYS = [ // pickup, item, container id, container floor top (world y), stand pose
-  ['pk.shedKey', 'shedKey', 'hall.drawer', 0.15 + 0.66 - 0.1 + 0.03, { x: 86.5, z: 85.5 }], // stand poses as the main e2e
-  ['pk.studyKey', 'studyKey', 'library.desk', 0.15 + 0.68 - 0.06 + 0.03, { x: 81.9, z: 101.2 }],
-  ['pk.consKey', 'consKey', 'kitchen.hatch', 0.15 + 1.02, { x: 96.6, z: 98.6 }],
+const KEYS = [ // pickup, item, container id, stand pose (as the main e2e)
+  ['pk.shedKey', 'shedKey', 'hall.drawer', { x: 86.5, z: 85.5 }],
+  ['pk.studyKey', 'studyKey', 'library.desk', { x: 81.9, z: 101.2 }],
+  ['pk.consKey', 'consKey', 'kitchen.hatch', { x: 96.6, z: 98.6 }],
 ];
 const SAVE = { version: 4, scene: 'estate', inventory: ['invitation', 'torch', 'matches', 'notebook', 'frontKey', 'consKey'], flags: { leftHome: true, basementOpen: true, boslustOpen: true } };
 
@@ -171,15 +171,23 @@ try {
   // ---------------------------------------------------------------- 8. D2 keys
   const keys = await E(page, (KEYS) => {
     const g = window.__game, out = [];
-    for (const [pk, item, box, floorY, stand] of KEYS) {
+    for (const [pk, item, box, stand] of KEYS) {
       const it = g.world.byId.get(pk);
       if (!it) { out.push({ pk, missing: true }); continue; }
       g.state.open[box] = false; g.world.syncAll(); for (let i = 0; i < 40; i++) g.tick(1 / 30);
       const closedLabel = it.label();
       g.state.open[box] = true; g.world.syncAll(); for (let i = 0; i < 60; i++) g.tick(1 / 30);
-      // lowest point of the visible model (the pickup's own hitbox excluded)
-      let minY = Infinity; it.obj.updateWorldMatrix(true, true);
-      it.obj.traverse((o) => { if (!o.isMesh || o.userData.hit) return; const p = o.geometry.attributes.position, v = new (g.camera.position.constructor)(); for (let i = 0; i < p.count; i++) { v.fromBufferAttribute(p, i).applyMatrix4(o.matrixWorld); minY = Math.min(minY, v.y); } });
+      // lowest point of the visible model (the pickup's own hitbox excluded), and what is right under it: the support
+      // (drawer bottom, liner, card or dish) must be within 4 mm (D2-R: keys lie on a liner / blotter / dish)
+      let minY = Infinity, cx = 0, cz = 0, n = 0; it.obj.updateWorldMatrix(true, true);
+      const V = g.camera.position.constructor, own = new Set();
+      it.obj.traverse((o) => { own.add(o); if (!o.isMesh || o.userData.hit) return; const p = o.geometry.attributes.position, v = new V(); for (let i = 0; i < p.count; i++) { v.fromBufferAttribute(p, i).applyMatrix4(o.matrixWorld); minY = Math.min(minY, v.y); cx += v.x; cz += v.z; n++; } });
+      const rc = new (g.raycaster.constructor)(new V(cx / n, minY + 0.003, cz / n), new V(0, -1, 0), 0, 0.2);
+      const scene = g.world.scene; scene.traverse((o) => { if (o.isMesh) { o.userData._v = o.visible; o.visible = true; } });
+      scene.updateMatrixWorld(true); // the drawer just slid open: its liner's world matrix must follow before the cast
+      const hit = rc.intersectObjects(scene.children, true).find((h) => !own.has(h.object) && !h.object.userData.hit);
+      scene.traverse((o) => { if (o.isMesh && o.userData._v !== undefined) { o.visible = o.userData._v; delete o.userData._v; } });
+      const floorY = hit ? hit.point.y : -9;
       g.player.setPose({ x: stand.x, y: 0.15, z: stand.z, yaw: -Math.PI / 2, pitch: 0 }); for (let i = 0; i < 10; i++) g.tick(1 / 30);
       window.T.lookAtId(pk); for (let i = 0; i < 5; i++) g.tick(1 / 30);
       const m = g.metrics();
@@ -189,7 +197,7 @@ try {
     return out;
   }, KEYS);
   const badKey = keys.filter((k) => k.missing || k.closedLabel !== null || !k.openLabel || k.target !== k.pk || Math.abs(k.seat) > 0.004);
-  log('D2 keys: pickup ids kept, offered only when the container is open, targeted from a standing pose, seated on the container floor (±4 mm)', badKey.length === 0, JSON.stringify(badKey.length ? badKey : keys.map((k) => `${k.pk} seat ${k.seat}`)));
+  log('D2 keys: pickup ids kept, offered only when the container is open, targeted from a standing pose, seated on their support (±4 mm)', badKey.length === 0, JSON.stringify(badKey.length ? badKey : keys.map((k) => `${k.pk} seat ${k.seat}`)));
 
   // ---------------------------------------------------------------- 9. D2 S3 pieces
   const s3 = await E(page, (PROPS) => {
@@ -254,16 +262,19 @@ try {
       if (!it) return { missing: true };
       const closedLabel = it.label();
       g.state.open['home.drawer'] = true; g.world.syncAll(); for (let i = 0; i < 60; i++) g.tick(1 / 30);
-      let minY = Infinity, tris = 0; it.obj.updateWorldMatrix(true, true);
-      it.obj.traverse((o) => { if (!o.isMesh || o.userData.hit) return; const p = o.geometry.attributes.position, v = new (g.camera.position.constructor)(); tris += p.count / 3; for (let i = 0; i < p.count; i++) { v.fromBufferAttribute(p, i).applyMatrix4(o.matrixWorld); minY = Math.min(minY, v.y); } });
+      let minY = Infinity, tris = 0, cx = 0, cz = 0, n = 0; it.obj.updateWorldMatrix(true, true);
+      const V = g.camera.position.constructor, own = new Set();
+      it.obj.traverse((o) => { own.add(o); if (!o.isMesh || o.userData.hit) return; const p = o.geometry.attributes.position, v = new V(); tris += p.count / 3; for (let i = 0; i < p.count; i++) { v.fromBufferAttribute(p, i).applyMatrix4(o.matrixWorld); minY = Math.min(minY, v.y); cx += v.x; cz += v.z; n++; } });
+      g.world.scene.updateMatrixWorld(true);
+      const hit = new (g.raycaster.constructor)(new V(cx / n, minY + 0.003, cz / n), new V(0, -1, 0), 0, 0.2).intersectObjects(g.world.scene.children, true).find((h) => !own.has(h.object) && !h.object.userData.hit);
       g.player.setPose({ x: 1.3, y: 0, z: 3.2, yaw: -Math.PI / 2, pitch: 0 }); for (let i = 0; i < 10; i++) g.tick(1 / 30);
       window.T.lookAtId('pk.frontKey'); for (let i = 0; i < 5; i++) g.tick(1 / 30);
-      return { closedLabel, openLabel: it.label(), target: g.metrics().target, seat: +(minY - (0.73 - 0.09 + 0.03)).toFixed(4), tris };
+      return { closedLabel, openLabel: it.label(), target: g.metrics().target, seat: hit ? +(minY - hit.point.y).toFixed(4) : null, tris };
     });
     await p2.close();
     return r;
   })();
-  log('D2 front key (home world): pk.frontKey offered only with the drawer open, targeted, seated (±4 mm), ≈ 200–450 triangles', !home.missing && home.closedLabel === null && !!home.openLabel && home.target === 'pk.frontKey' && Math.abs(home.seat) <= 0.004 && home.tris >= 200 && home.tris <= 450, JSON.stringify(home));
+  log('D2 front key (home world): pk.frontKey offered only with the drawer open, targeted, seated (±4 mm), ≈ 200–450 triangles', !home.missing && home.closedLabel === null && !!home.openLabel && home.target === 'pk.frontKey' && home.seat !== null && Math.abs(home.seat) <= 0.004 && home.tris >= 200 && home.tris <= 450, JSON.stringify(home));
 } catch (e) {
   log('suite crashed', false, String(e?.stack ?? e).slice(0, 500));
 }

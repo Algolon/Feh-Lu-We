@@ -62,7 +62,7 @@ export function buildCottage(w: World, g: GameApi, c: Ctx) {
   wall(c, 'x', MID, X0 + 0.3, X1 - 0.3, Y, B + 3.05, { t: 0.2, mat: k.M.plaster, color: '#f6efe2', openings: [{ at: CX, w: 1.4, h: 2.3 }] });
   makeDoor(w, g, { id: 'door.cottage', x: CX - 0.5, z: Z0 + 0.15, dir: 'x+', width: 1.0, height: 2.2, y0: Y, swing: 1, color: '#3f6fa8' });
   for (const x of [X0 + 1, X1 - 1.2]) plant(c, x, Z0 + 0.8, Y, 0.9, '#c9774a');
-  flwPainting(c, 'FLW-D2-045', X0 + 0.32, Y + 1.6, Z0 + 1.6, Math.PI / 2); // DEV-04D D1: the coast path, on the entry's west wall
+  // DEV-04D D2-R: D2-045 (the coast path) moved from the entry's west wall into the room (see below)
   const el = lantern(w, X1 - 0.6, Y + 1.8, Z0 + 2.6, 0.7);
   makeLamp(w, g, { id: 'lamp.cottageEntry', ...el, name: 'lantaarn', defaultOn: true, intensity: 3, distance: 6, hit: [0.4, 0.5, 0.4] });
   // the old gathering room: an empty table with folded cloths, chairs pushed in
@@ -78,12 +78,19 @@ export function buildCottage(w: World, g: GameApi, c: Ctx) {
     for (let i = 0; i < 3; i++) { const a = new Asm(c.b, c.chunk, CX - 1.6 + i * 1.6, Y + 0.76, TZ, (i - 1) * 0.12); for (let q = 0; q <= i % 2; q++) a.add(M.upholstery, ['#efe6d6', '#e8d8c0', '#f5f0e6'][i], joinery.cg('foldedCloth', () => projectUV(cushion(0.4, 0.035, 0.3, 0.014, 0.004, 'top', 1, 2), 0.25)), 0, 0.0175 + q * 0.035, 0, { ry: q * 0.1 }); } }
   tabletop(c, CX + 1.9, TZ, Y + 0.76, 0, ['candle'], 3);
   rug(c, CX, TZ, Y + 0.005, 6.0, 2.8, 0, '#d8e4f4', 'kilim', true);
-  sideboard(c, X0 + 0.55, TZ - 0.6, Y, Math.PI / 2, 1.5, 0.45, 0.85, '#6b4426');
+  sideboard(c, X0 + 0.55, TZ - 1.4, Y, Math.PI / 2, 1.5, 0.45, 0.85, '#6b4426'); // D2-R: 0.8 m south, out from under the west window, for the mask above it
   // DEV-04D D1-R: the room's anchor on the arch axis (seen from the front door through the arch), over the long table,
   // between the two north windows; its top on their head line
   flwPainting(c, 'FLW-D2-046', CX, Y + 1.75, Z1 - 0.32, Math.PI);
-  S3_BUILDERS['FLW-S3-030'](c); // DEV-04D D2: papier-maché mask on the east wall, between the windows
-  { const M = artMats(), a = new Asm(c.b, c.chunk, X0 + 0.55, Y + 0.85, TZ - 0.6, Math.PI / 2);
+  // DEV-04D D2-R composition (owner micro-review): one axis piece, one supporting painting, one object tied to use.
+  // - D2-046 stays the anchor on the arch axis (north wall, over the long table);
+  // - D2-045 (the coast path) leaves the entry for the room's east wall, between the partition and the east window,
+  //   seen from the table and on the right as one comes through the arch;
+  // - the remodelled mask hangs over the sideboard with the blue and white plates and the jug: a Portuguese dresser
+  //   vignette on the west wall. Three walls, three roles; nothing competes on the axis.
+  flwPainting(c, 'FLW-D2-045', X1 - 0.32, Y + 1.6, Z0 + 3.9, -Math.PI / 2);
+  S3_BUILDERS['FLW-S3-030'](c);
+  { const M = artMats(), a = new Asm(c.b, c.chunk, X0 + 0.55, Y + 0.85, TZ - 1.4, Math.PI / 2);
     for (let i = 0; i < 4; i++) a.add(M.ceramic, i % 2 ? '#f2f0ea' : '#3f6fa8', joinery.cg('azulejoPlate', () => new THREE.CylinderGeometry(0.12, 0.11, 0.016, 14).rotateX(Math.PI / 2)), -0.45 + i * 0.3, 0.13, -0.15, { rx: -0.15 });
     a.add(M.ceramic, '#e6dcc4', joinery.cg('cottageJug', () => lathe([[0.001, 0], [0.06, 0], [0.075, 0.08], [0.06, 0.18], [0.04, 0.22], [0.05, 0.24], [0.001, 0.23]], 12)), 0.55, 0, 0.05); }
   const card = compound((b) => { box(b, k.M.paint, '#f5eedc', 0, 0, 0, 0.18, 0.12, 0.01, { rx: -0.3 }); });

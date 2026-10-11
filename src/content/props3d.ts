@@ -12,6 +12,12 @@ export const KEY_REF = { frontKey: 'FLW-K3-001', studyKey: 'FLW-K3-002', shedKey
 export type KeyItem = keyof typeof KEY_REF;
 
 /** Key-family game scale (owner K1): a key reads in a drawer at arm's length. */
+/**
+ * D2-R presentation scale (owner): the K3 models at ×1.3 of the sheets are about the size of the original gameplay prop
+ * (≈ 16 cm); they are drawn ×1.7 on top of that for first-person readability. Visual only: item, pickup, hit box, reach
+ * and save are unchanged.
+ */
+export const KEY_PRESENT = 1.7;
 export const KEY_SCALE = 1.3;
 const KS = KEY_SCALE;
 export interface KeySpec { len: number; bowW: number; bowH: number; shaftR: number; bow: 'trefoil' | 'ring' | 'square' | 'oval'; metal: 'brass' | 'paint'; col: string; dark: string; bitW: number; teeth: number[] }
@@ -52,21 +58,21 @@ export const PROPS3D: Prop3D[] = [
   // rear nook side table (round table, top at +0.76), beside the book stack, looking towards the landing
   { id: 'FLW-S3-004', title: 'Houten vogelbeeld', basis: 'APPROVED_3D_REF', room: 'rearNook', mount: 'surface', x: 92.55, y: UF + 0.76, z: 108.84, yaw: Math.PI - 0.45, maxTris: 600 },
   // front gallery: the long south wall between the windows, above the bench line (face z 80.422)
-  { id: 'FLW-S3-014', title: 'Gesneden zwaluwen', basis: 'OWNER_GROUP_A', room: 'frontGallery', mount: 'wall', x: 90.0, y: UF + 2.0, z: 80.422, yaw: 0, maxTris: 900 }, // a set of three
+  { id: 'FLW-S3-014', title: 'Gesneden zwaluwen', basis: 'OWNER_GROUP_A', room: 'frontGallery', mount: 'wall', x: 90.0, y: UF + 2.0, z: 80.422, yaw: 0, maxTris: 1500 }, // D2-R: ≈ 1.7 m group
   // Reiskamer writing desk (top at +0.76), east half; the open book keeps the west half
   { id: 'FLW-S3-015', title: 'Miniatuurzeilboot', basis: 'OWNER_GROUP_A', room: 'reis', mount: 'surface', x: 79.25, y: UF + 0.76, z: 80.92, yaw: Math.PI / 2, maxTris: 1500 },
   // Sterrenkamer: the free bedside (window side), facing into the room
   { id: 'FLW-S3-016', title: 'Keramische maanvorm', basis: 'OWNER_GROUP_A', room: 'sterren', mount: 'surface', x: 72.66, y: UF + 0.5775, z: 91.0, yaw: Math.PI / 2 - 0.35, maxTris: 600 },
   // botanic room: the long west wall opposite the prints, on the table's axis (face x 101.38)
-  { id: 'FLW-S3-017', title: 'Terracotta bloemmedaillon', basis: 'OWNER_GROUP_A', room: 'botanic', mount: 'wall', x: 101.38, y: UF + 1.6, z: 88.5, yaw: Math.PI / 2, maxTris: 600 },
-  // Portugal cottage room: east wall between the entry window and the room window (face x 29.70)
-  { id: 'FLW-S3-030', title: 'Papier-maché wandmasker', basis: 'OWNER_GROUP_A', room: 'cottageRoom', mount: 'wall', x: 29.7, y: CF + 1.6, z: 160.95, yaw: -Math.PI / 2, maxTris: 600 },
-  // Portugal terrace: the house's south face, west of the window shutters, over the terrace plant (face z 157.0)
-  { id: 'FLW-S3-031', title: 'Keramisch tegelreliëf', basis: 'OWNER_GROUP_A', room: 'cottageTerrace', mount: 'wall', x: 20.78, y: CF + 1.55, z: 157.0, yaw: Math.PI, maxTris: 600 },
+  { id: 'FLW-S3-017', title: 'Terracotta bloemmedaillon', basis: 'OWNER_GROUP_A', room: 'botanic', mount: 'wall', x: 101.38, y: UF + 1.65, z: 88.5, yaw: Math.PI / 2, maxTris: 1500 }, // D2-R: Ø 0.58 m; interim spot until D3-b
+  // Portugal cottage room (D2-R): over the sideboard on the west wall, part of the plates / jug vignette
+  { id: 'FLW-S3-030', title: 'Papier-maché wandmasker', basis: 'OWNER_GROUP_A', room: 'cottageRoom', mount: 'wall', x: 20.3, y: CF + 1.62, z: 161.0, yaw: Math.PI / 2, maxTris: 1500 }, // D2-R: over the sideboard (west wall face x 20.30), with the azulejo plates; clear of the window at z 162.3
+  // Portugal terrace (D2-R): the façade pier east of the window, behind the game table and over the bench end
+  { id: 'FLW-S3-031', title: 'Keramisch tegelreliëf', basis: 'OWNER_GROUP_A', room: 'cottageTerrace', mount: 'wall', x: 29.35, y: CF + 1.5, z: 157.0, yaw: Math.PI, maxTris: 1500 }, // D2-R: azulejo panel on the façade pier behind the table / bench (face z 157.0)
   // BBQ: the grill's backdrop, set back-left of it (straight behind, the kettle hid it from every approach) and turned
   // towards the way in from the house; the gas bottle stays clear on its west side, the feet stay on the platform
   { id: 'FLW-S3-033', title: 'Smeedijzeren BBQ-haardplaat', basis: 'OWNER_GROUP_A', room: 'bbq', mount: 'ground', x: 106.15, y: GF, z: 118.5, yaw: Math.PI + 0.35, maxTris: 600 },
-  // lake viewpoint: beside the bench's north end, never in front of it (the view west to the water stays open)
-  { id: 'FLW-S3-037', title: 'Houten reigerbeeld', basis: 'OWNER_GROUP_A', room: 'lakeView', mount: 'ground', x: 78.75, y: 0.04, z: 141.05, yaw: -Math.PI / 2 + 0.35, maxTris: 1500 },
+  // lake viewpoint (D2-R): at the water's edge, front-right of the bench; frames the view west, never stands in it
+  { id: 'FLW-S3-037', title: 'Houten reigerbeeld', basis: 'OWNER_GROUP_A', room: 'lakeView', mount: 'ground', x: 77.25, y: 0.04, z: 141.6, yaw: -Math.PI / 2 + 0.3, maxTris: 1500 }, // D2-R: ×1.45 at the bay's lakeside corner, front-right of the bench, clear of its silhouette from the path
 ];
 export const PROP3D = Object.fromEntries(PROPS3D.map((p) => [p.id, p])) as Record<string, Prop3D>;

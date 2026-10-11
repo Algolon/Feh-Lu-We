@@ -8,12 +8,14 @@
 // carving the sheets show.
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
-import type { Batcher } from './kit';
+import { compound, type Batcher } from './kit';
 import type { Ctx } from './arch';
+import type { World } from '../interactions/world';
 import { Asm, artMats, lathe, projectUV } from './artkit';
 import { joinery } from './furniture';
 import { registerArt, artFootprint } from './openings';
-import { PROP3D, KEY_SPECS, KEY_SCALE as KS, type KeyItem } from '../content/props3d';
+import { woodMats } from './woodkit';
+import { PROP3D, KEY_SPECS, KEY_SCALE as KS, KEY_PRESENT, type KeyItem } from '../content/props3d';
 
 const { sb, bx, cg } = joinery;
 type V3 = [number, number, number];
@@ -136,6 +138,48 @@ export function addKey(b: Batcher, item: KeyItem, x = 0, y = 0, z = 0, yaw = 0) 
   a.end({ ground: false });
 }
 
+/**
+ * D2-R key presentation (owner): the key's visible meshes are drawn ×KEY_PRESENT about their own origin (the underside
+ * stays on its support). Call before `makePickup`, which adds the (unscaled) hit box: item, pickup, hit box and reach
+ * are unchanged.
+ */
+export function presentKey<T extends THREE.Object3D>(grp: T): T {
+  for (const m of grp.children) m.scale.setScalar(KEY_PRESENT);
+  return grp;
+}
+/**
+ * D2-R: what a key lies on, inside its drawer (a child of the drawer's slider, so it rides with it and stays when the key
+ * is taken). Each container has its own support, chosen for contrast with that key:
+ * - `felt` (front key, home dresser): a dark green felt liner under the brass key and red tag;
+ * - `linen` (shed key, hall drawer): a pale folded linen cloth under the dark iron key and its wooden hanger;
+ * - `blotter` (study key, library desk): a dark leather blotter under the ivory archive card.
+ * Height of the support's top above its origin: LINER_TOP.
+ */
+export const LINER_TOP = { felt: 0.006, linen: 0.008, blotter: 0.006 } as const;
+export function keyLiner(kind: keyof typeof LINER_TOP) {
+  return compound((b) => {
+    const M = artMats(), a = new Asm(b, 'main', 0, 0, 0, 0);
+    if (kind === 'felt') a.add(M.paint, '#2e4a3c', sb(0.32, 0.006, 0.34, 0.0025), 0, 0.003, 0);
+    else if (kind === 'linen') { a.add(M.paint, '#e8dfca', sb(0.3, 0.008, 0.34, 0.003), 0, 0.004, 0); a.add(M.paint, '#ddd2ba', sb(0.3, 0.006, 0.05, 0.003), 0, 0.011, 0.15); } // the folded-back end, clear of the key
+    else a.add(M.paint, '#3a2a22', sb(0.24, 0.006, 0.32, 0.0025), 0, 0.003, 0);
+  });
+}
+/**
+ * A liner is drawn only while its drawer is open: shut inside the drawer it cannot be seen, and as its own mesh it would
+ * otherwise cost a draw call in every view that frames the closed chest (measured: +1 call in the hall / living views).
+ */
+export function linerWhenOpen(w: World, liner: THREE.Object3D, isOpen: () => boolean) {
+  w.onSync(() => { liner.visible = isOpen(); });
+}
+/** D2-R: the conservatory key's support in the service hatch: a small oval cream enamel dish (static, in the room batch). */
+export function hatchDish(c: Ctx, x: number, y: number, z: number) {
+  const M = artMats(), a = new Asm(c.b, c.chunk, x, y, z, 0);
+  a.add(M.ceramic, '#efe8da', cg('hatchDish', () => lathe([[0.001, 0], [0.095, 0], [0.105, 0.008], [0.112, 0.016], [0.106, 0.018], [0.096, 0.01], [0.001, 0.01]], 16).scale(0.72, 1, 1.3)), 0, 0, 0);
+  a.add(M.ceramic, '#2f56a0', cg('hatchDishRim', () => new THREE.TorusGeometry(0.108, 0.0025, 3, 16).rotateX(Math.PI / 2).scale(0.72, 1, 1.3)), 0, 0.016, 0);
+}
+/** Top of the hatch dish's floor above its base (where the key lies). */
+export const HATCH_DISH_FLOOR = 0.01;
+
 // ------------------------------------------------------------------------------------------------ S3 pieces
 const anchor = (id: string) => { const p = PROP3D[id]; if (!p) throw new Error(`d2props: ${id} not in PROPS3D`); return p; };
 
@@ -154,57 +198,6 @@ export function carvedBird(c: Ctx) {
   a.add(M.timber, dk, cg('birdBeak', () => projectUV(new THREE.ConeGeometry(0.011, 0.034, 4).rotateX(-Math.PI / 2), 2)), 0, 0.174, 0.072);
   for (const s of [-1, 1]) a.add(M.paint, '#2a1c12', gem(0.0055, 0.0055, 0.004), s * 0.026, 0.188, 0.044, { ry: s * 0.9 });
   a.end();
-}
-
-/** Mirror a non-indexed geometry in x, keeping its faces outward (swap each triangle's winding). */
-function mirrorX(g: THREE.BufferGeometry) {
-  g.scale(-1, 1, 1);
-  for (const name of Object.keys(g.attributes)) {
-    const at = g.attributes[name] as THREE.BufferAttribute, n = at.itemSize, arr = at.array as Float32Array;
-    for (let t = 0; t < at.count; t += 3) for (let k = 0; k < n; k++) { const i1 = (t + 1) * n + k, i2 = (t + 2) * n + k, tmp = arr[i1]; arr[i1] = arr[i2]; arr[i2] = tmp; }
-  }
-  g.deleteAttribute('normal');
-  g.computeVertexNormals();
-  return g;
-}
-
-/** One carved swallow (built flying along local +x, then mirrored: on the wall it flies to the viewer's right), split in dark back / wings / tail and the light belly. */
-function swallowGeos() {
-  const dark = merge([
-    new THREE.IcosahedronGeometry(1, 1).scale(0.072, 0.022, 0.02),
-    new THREE.IcosahedronGeometry(1, 0).scale(0.024, 0.021, 0.02).translate(0.068, 0.006, -0.003),
-    slab([[0.02, 0.006], [-0.008, 0.05], [-0.055, 0.115], [-0.105, 0.165], [-0.085, 0.112], [-0.048, 0.052], [-0.02, 0.006]], 0.006).translate(0, 0, -0.0),
-    slab([[0.016, -0.004], [-0.018, -0.042], [-0.065, -0.088], [-0.098, -0.118], [-0.07, -0.068], [-0.03, -0.012]], 0.006).translate(0, 0, -0.012),
-    slab([[-0.055, 0.006], [-0.165, 0.036], [-0.118, 0.0], [-0.165, -0.03], [-0.055, -0.006]], 0.005).translate(0, 0, 0.002),
-    new THREE.ConeGeometry(0.005, 0.016, 4).rotateZ(-Math.PI / 2).translate(0.098, 0.004, -0.003),
-    strut([0, 0, -0.035], [0, 0, -0.008], 0.006, 0.006, 5), // hidden dowel to the rail
-  ].map((g) => flat(g)));
-  const light = flat(new THREE.IcosahedronGeometry(1, 0).scale(0.056, 0.013, 0.016).translate(0.008, -0.01, -0.008));
-  return { dark: projectUV(mirrorX(dark), 2), light: projectUV(mirrorX(light), 2) };
-}
-
-/**
- * FLW-S3-014 Gesneden zwaluwen: three carved swallows (oiled oak with a cool stain on the backs) on a concealed rail.
- * The art's horizontal flight direction (not the blockout's triangle), set as a loose, asymmetric shallow arc (owner):
- * uneven spacing, the middle bird highest, each at its own pitch and size and a few mm deeper or shallower.
- */
-export function carvedSwallows(c: Ctx) {
-  const p = anchor('FLW-S3-014'), M = artMats();
-  wallPiece(p.id, p.x, p.y, p.z, p.yaw, 1.3, 0.7);
-  const a = new Asm(c.b, c.chunk, p.x, p.y, p.z, p.yaw).begin(p.id);
-  const g = swallowGeos();
-  // ≈ 1.2 × 0.55 m on a 2.85 m gallery wall: the sheet's 90 × 50 cm grouping read as three dots from the gallery
-  const birds: [number, number, number, number, number][] = [[-0.5, -0.1, 0.05, 0.22, 1.32], [-0.03, 0.08, 0.058, 0.07, 1.52], [0.48, 0.03, 0.052, -0.13, 1.42]]; // x, y, depth, pitch, scale
-  for (const [x, y, d, rz, k] of birds) {
-    // cool-stained oak on the backs, wings and tail (matte paint; the tone is lifted because the window wall stands in
-    // its own shadow at ≈ 37 % light), the pale carved belly in textured oak
-    a.add(M.paint, '#b8a48a', g.dark, x, y, d, { rz, s: [k, k, k] });
-    a.add(M.timber, '#e2c08e', g.light, x, y, d, { rz, s: [k, k, k] }); // pale carved belly
-  }
-  g.dark.dispose(); g.light.dispose();
-  // each bird is carried by its own hidden dowel into the wall (the sheet's concealed rail sits behind the plaster), so
-  // the three are separate parts by design: the audit's part gap is widened to the group's spacing
-  a.end({ ground: false, gap: 0.08 });
 }
 
 /** FLW-S3-015 Miniatuurzeilboot: wooden model sloop on brass posts and an oak base; rigging simplified to 4 lines. */
@@ -293,59 +286,6 @@ export function ceramicMoon(c: Ctx) {
 }
 
 /** FLW-S3-017 Terracotta bloemmedaillon: a shallow terracotta disc (Ø 35 cm) with a raised bud on paired leaves. */
-export function terracottaMedallion(c: Ctx) {
-  const p = anchor('FLW-S3-017'), M = artMats(), clay = '#b4603f', hi = '#cf875e', lf = '#9e7a4e';
-  wallPiece(p.id, p.x, p.y, p.z, p.yaw, 0.35, 0.35);
-  const a = new Asm(c.b, c.chunk, p.x, p.y, p.z, p.yaw).begin(p.id);
-  a.add(M.paint, clay, cg('medDisc', () => new THREE.CylinderGeometry(0.175, 0.175, 0.026, 20).rotateX(Math.PI / 2)), 0, 0, 0.013);
-  a.add(M.paint, '#a5553a', cg('medRim', () => new THREE.TorusGeometry(0.158, 0.011, 4, 20)), 0, 0, 0.026);
-  a.add(M.paint, hi, gem(0.03, 0.048, 0.02, 1), 0, 0.045, 0.034); // bud
-  for (const s of [-1, 1]) a.add(M.paint, lf, gem(0.012, 0.03, 0.008), s * 0.022, 0.018, 0.036, { rz: s * 0.5 }); // sepals
-  a.add(M.paint, hi, bx(0.012, 0.14, 0.012), 0, -0.06, 0.032); // stem
-  for (const [x, y, r] of [[-0.05, -0.02, 0.45], [0.05, -0.04, -0.45], [-0.046, -0.085, 0.25], [0.044, -0.1, -0.2]] as const) a.add(M.paint, lf, gem(0.048, 0.017, 0.009), x, y, 0.033, { rz: r });
-  a.end({ ground: false });
-}
-
-/** FLW-S3-030 Papier-maché wandmasker: a coral / olive / cream shell mask (≈ 40 cm), hung by a rear cord. */
-export function paperMask(c: Ctx) {
-  const p = anchor('FLW-S3-030'), M = artMats(), cream = '#e9dcc2', coral = '#d8735a', olive = '#6c7646';
-  wallPiece(p.id, p.x, p.y, p.z, p.yaw, 0.26, 0.42);
-  const a = new Asm(c.b, c.chunk, p.x, p.y, p.z, p.yaw).begin(p.id);
-  const SX = 0.12, SY = 0.2, SZ = 0.055;
-  const shell = (key: string, k: number, ws: number, hs: number, ph0: number, ph1: number, th0: number, th1: number) => cg(`mask${key}`, () => new THREE.SphereGeometry(1, ws, hs, ph0, ph1 - ph0, th0, th1 - th0).scale(SX * k, SY * k, SZ * k));
-  a.add(M.paint, cream, shell('Base', 1, 10, 8, Math.PI, Math.PI * 2, 0, Math.PI), 0, 0, 0);
-  a.add(M.paint, olive, shell('Olive', 1.02, 4, 6, Math.PI * 1.55, Math.PI * 2, Math.PI * 0.12, Math.PI * 0.94), 0, 0, 0); // one cheek and temple
-  a.add(M.paint, coral, shell('Coral', 1.025, 5, 3, Math.PI, Math.PI * 1.6, 0, Math.PI * 0.3), 0, 0, 0); // flame over the brow
-  const surf = (x: number, y: number) => SZ * Math.sqrt(Math.max(0.02, 1 - (x / SX) ** 2 - (y / SY) ** 2));
-  for (const s of [-1, 1]) {
-    a.add(M.paint, coral, oct(0.03, 0.03, 0.006), s * 0.062, -0.055, surf(s * 0.062, -0.055) + 0.001); // cheek discs
-    a.add(M.paint, '#f2ead8', gem(0.026, 0.011, 0.008), s * 0.045, 0.03, surf(s * 0.045, 0.03) + 0.001); // eye whites
-    a.add(M.paint, '#2a2018', oct(0.007, 0.007, 0.004), s * 0.045, 0.03, surf(s * 0.045, 0.03) + 0.008); // pupils
-    a.add(M.paint, olive, oct(0.03, 0.006, 0.006), s * 0.045, 0.058, surf(s * 0.045, 0.058) + 0.002, { rz: s * 0.15 }); // brows
-  }
-  a.add(M.paint, coral, gem(0.014, 0.06, 0.024), 0, -0.005, surf(0, -0.005) + 0.006); // nose
-  a.add(M.paint, coral, oct(0.036, 0.009, 0.008), 0, -0.115, surf(0, -0.115) + 0.002); // mouth
-  a.end({ ground: false });
-}
-
-/** FLW-S3-031 Keramisch tegelreliëf: a 45 × 45 cm glazed azulejo slab with a raised lemon branch, on a hidden wire. */
-export function lemonTile(c: Ctx) {
-  const p = anchor('FLW-S3-031'), M = artMats(), blue = '#2f56a0', yel = '#e0a830', green = '#3f6a3a';
-  wallPiece(p.id, p.x, p.y, p.z, p.yaw, 0.45, 0.45);
-  const a = new Asm(c.b, c.chunk, p.x, p.y, p.z, p.yaw).begin(p.id);
-  a.add(M.paint, '#b8693e', bx(0.45, 0.45, 0.022), 0, 0, 0.011); // terracotta body (edges show)
-  a.add(M.ceramic, '#efe2c4', bx(0.43, 0.43, 0.004), 0, 0, 0.024); // glazed face
-  for (const s of [-1, 1]) { a.add(M.ceramic, blue, bx(0.43, 0.026, 0.003), 0, s * 0.198, 0.0275); a.add(M.ceramic, blue, bx(0.026, 0.37, 0.003), s * 0.198, 0, 0.0275); }
-  a.add(M.ceramic, yel, cg('tileRing', () => new THREE.TorusGeometry(0.158, 0.007, 3, 16)), 0, 0, 0.027);
-  a.add(M.ceramic, blue, cg('tileRing2', () => new THREE.TorusGeometry(0.143, 0.004, 3, 16)), 0, 0, 0.027);
-  for (const [x, y] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) a.add(M.ceramic, blue, oct(0.032, 0.032, 0.004), x * 0.16, y * 0.16, 0.027, { rz: 0.785 });
-  a.add(M.ceramic, '#7a5a3a', bx(0.2, 0.008, 0.005), 0, 0.03, 0.028, { rz: -0.35 }); // branch
-  for (const [x, y, r] of [[-0.09, 0.07, 0.5], [-0.05, 0.1, -0.4], [0.02, 0.06, 0.9], [0.07, 0.015, -0.6], [-0.08, -0.01, -0.3], [0.1, -0.03, 0.4], [-0.02, -0.06, 1.2], [0.05, 0.1, 0.2]] as const) a.add(M.ceramic, green, oct(0.042, 0.013, 0.008), x, y, 0.03, { rz: r });
-  for (const [x, y] of [[-0.06, -0.055], [0.055, -0.07]] as const) a.add(M.ceramic, '#e8b42c', gem(0.03, 0.04, 0.022), x, y, 0.036);
-  for (const [x, y] of [[-0.03, 0.12], [0.1, 0.07], [-0.11, 0.035]] as const) a.add(M.ceramic, '#f6f0e2', oct(0.017, 0.017, 0.006), x, y, 0.033);
-  a.end({ ground: false });
-}
-
 /** FLW-S3-033 Smeedijzeren BBQ-haardplaat: a wrought-iron screen with a shouldered arch, scrollwork, A-frame feet. */
 export function fireScreen(c: Ctx) {
   const p = anchor('FLW-S3-033'), M = artMats(), iron = '#2a2724', iron2 = '#5a534c'; // the raised scrollwork catches light
@@ -373,34 +313,270 @@ export function fireScreen(c: Ctx) {
   a.end();
 }
 
-/** FLW-S3-037 Houten reigerbeeld: a carved heron on a stump (≈ 0.8 m); thick legs, feathers as a few broad facets. */
-export function carvedHeron(c: Ctx) {
-  const p = anchor('FLW-S3-037'), M = artMats(), wood = '#8c7b66', dk = '#6e5f4e', K = 0.86;
-  const a = new Asm(c.b, c.chunk, p.x, p.y, p.z, p.yaw).begin(p.id);
-  a.add(M.timber, '#76664f', cg('heronStump', () => {
-    const g = new THREE.CylinderGeometry(0.12, 0.15, 0.26, 8, 2);
-    const pa = g.attributes.position as THREE.BufferAttribute;
-    for (let i = 0; i < pa.count; i++) { const k = 1 + 0.08 * Math.sin(i * 2.3); if (Math.abs(pa.getY(i)) < 0.129) pa.setXYZ(i, pa.getX(i) * k, pa.getY(i), pa.getZ(i) * k); }
-    return projectUV(flat(g.translate(0, 0.13, 0)), 2, 'y');
-  }), 0, 0, 0);
-  const T = 0.26, v = (x: number, y: number, z: number): V3 => [x * K, T + (y - T) * K, z * K]; // scaled above the stump top
-  for (const s of [-1, 1]) {
-    a.add(M.timber, dk, gem(0.03 * K, 0.008, 0.05 * K), s * 0.035 * K, T + 0.006, 0.02 * K); // toes
-    put(a, M.timber, wood, strut(v(s * 0.035, T, 0.0), v(s * 0.03, 0.54, -0.02), 0.012, 0.01, 4)); // legs
-    a.add(M.timber, dk, gem(0.026 * K, 0.1 * K, 0.16 * K), s * 0.055 * K, T + (0.63 - T) * K, -0.05 * K, { rx: 0.42 }); // folded wings
+// ------------------------------------------------------------------------------------------------ D2-R craft pieces
+// DEV-04D D2-R (owner phone review): the wall reliefs are rebuilt as authored surfaces instead of a base with scattered
+// primitives. Silhouette first (an outline that reads at 5 m), real relief depth (6–10 cm) and paint zones that follow
+// the surface (authored vertex colour, `keepColor`), on the shared paint / ceramic / timber materials.
+const smooth = THREE.MathUtils.smoothstep;
+const gauss = (x: number, c: number, w: number) => Math.exp(-(((x - c) / w) ** 2));
+const mixC = (a: string, b: string, t: number) => new THREE.Color(a).lerp(new THREE.Color(b), THREE.MathUtils.clamp(t, 0, 1));
+
+/** Turn every triangle of `g` to face the viewer of a wall piece (local +lz = three −z), then recompute normals. */
+function faceFront(g: THREE.BufferGeometry) {
+  g.computeVertexNormals();
+  const n = g.attributes.normal as THREE.BufferAttribute;
+  let sum = 0;
+  for (let i = 0; i < n.count; i++) sum += n.getZ(i);
+  if (sum > 0) {
+    const idx = g.index!;
+    for (let t = 0; t < idx.count; t += 3) { const b2 = idx.getX(t + 1); idx.setX(t + 1, idx.getX(t + 2)); idx.setX(t + 2, b2); }
+    g.computeVertexNormals();
   }
-  a.add(M.timber, wood, gem(0.072 * K, 0.1 * K, 0.165 * K, 1), 0, T + (0.62 - T) * K, -0.02 * K, { rx: 0.38 }); // body
+  return g;
+}
+
+/**
+ * Authored relief surface: a nu × nv grid; `f(s, t)` (both 0…1) gives a point in the viewer's frame (x to the
+ * viewer's right, y up, d off the wall) and its paint colour. Returned in Asm local space, facing the viewer.
+ */
+function reliefSurface(nu: number, nv: number, f: (s: number, t: number) => { x: number; y: number; d: number; c: THREE.ColorRepresentation }) {
+  const pos: number[] = [], col: number[] = [], idx: number[] = [], tc = new THREE.Color();
+  for (let j = 0; j <= nv; j++) for (let i = 0; i <= nu; i++) {
+    const q = f(i / nu, j / nv);
+    pos.push(-q.x, q.y, -q.d); // viewer right = local −x; off the wall = local +lz = three −z
+    tc.set(q.c); col.push(tc.r, tc.g, tc.b);
+  }
+  for (let j = 0; j < nv; j++) for (let i = 0; i < nu; i++) {
+    const a0 = j * (nu + 1) + i, b0 = a0 + 1, c0 = a0 + nu + 1, d0 = c0 + 1;
+    idx.push(a0, b0, d0, a0, d0, c0);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+  g.setIndex(idx);
+  faceFront(g);
+  g.userData.keepColor = true;
+  return g;
+}
+
+/**
+ * FLW-S3-030 Papier-maché wandmasker (D2-R remodel): one sculpted shell, ≈ 0.65 × 0.38 m. An almond face that rises
+ * into an asymmetric three-tongue flame crown; brow, nose ridge, cheek planes and lips modelled in the surface; eye
+ * sockets cut in; the coral / olive / cream paint zones follow the form (authored colour), with a hand-made waver in
+ * both relief and edges. Hung flush on a rear cord: its rim meets the wall all round.
+ */
+function maskSurface() {
+  // paint as soft washes (weights, not hard zones): lighter coral / olive / cream, read in the cottage's warm, dim light
+  const C = { cream: '#efe5cf', coral: '#e3826a', olive: '#7f8f55', white: '#f6f1e2', dark: '#3a2c22' };
+  const crown = (u: number) => 0.03 + 0.07 * gauss(u, -0.5, 0.26) + 0.12 * gauss(u, 0.06, 0.26) + 0.06 * gauss(u, 0.58, 0.24);
+  const halfW = (y: number) => (y < 0 ? 0.19 * Math.max(0, 1 - (y / 0.33) ** 2) ** 0.6 : 0.19 * Math.max(0.3, 1 - (y / 0.6) ** 2) ** 0.5);
+  const soft = (v: number, w: number) => smooth(v, -w, w); // 0 → 1 across ±w
+  return reliefSurface(22, 34, (s, t) => {
+    const u = s * 2 - 1, yTop = 0.2 + crown(u), y = -0.3 + t * (yTop + 0.3), x = u * halfW(y) * (1 + 0.025 * Math.sin(y * 17 + 1)), ax = Math.abs(x);
+    let d = 0.085 * Math.max(0, 1 - u * u) ** 0.55 * (y > 0.2 ? 0.75 : 1);
+    d += 0.042 * gauss(x, 0, 0.022) * smooth(y, -0.15, -0.1) * (1 - smooth(y, 0.06, 0.11)); // nose ridge
+    d += 0.02 * gauss(x, 0, 0.03) * gauss(y, -0.12, 0.03); // nose tip
+    d += 0.014 * gauss(y, 0.075, 0.02) * gauss(ax, 0.07, 0.05); // brows
+    d -= 0.024 * gauss(ax, 0.075, 0.032) * gauss(y, 0.035, 0.02); // eye sockets
+    d += 0.012 * gauss(ax, 0.1, 0.05) * gauss(y, -0.08, 0.05); // cheek planes
+    d += 0.007 * gauss(x, 0, 0.05) * (gauss(y, -0.188, 0.01) + gauss(y, -0.212, 0.01)) - 0.008 * gauss(x, 0, 0.05) * gauss(y, -0.2, 0.006); // lips
+    d += 0.004 * Math.sin(13 * x + 3) * Math.sin(9 * y + 1) + 0.003 * Math.sin(27 * y + 5 * x); // papier-maché waver
+    d = Math.max(0.0008, d) * Math.min(1, (1 - u * u) * 6) * Math.sin(Math.PI * t) ** 0.25; // the rim meets the wall
+    const c = new THREE.Color(C.cream), mix = (col: string, w: number) => c.lerp(new THREE.Color(col), THREE.MathUtils.clamp(w, 0, 1));
+    mix(C.olive, soft(u - (0.3 + 0.1 * Math.sin(y * 8)), 0.06) * soft(0.25 - Math.abs(y), 0.04)); // olive sweep, right temple and cheek
+    mix(C.olive, soft(y - (0.19 + 0.02 * Math.sin(x * 30)), 0.02) * soft(u - 0.15, 0.08)); // crown, olive on the right
+    mix(C.coral, soft(y - (0.19 + 0.02 * Math.sin(x * 30)), 0.02) * soft(0.15 - u, 0.08)); // crown, coral tongues
+    mix(C.coral, soft(-0.2 - y, 0.025) * soft(-u - 0.1, 0.08)); // chin, left
+    mix(C.coral, 1 - soft(Math.hypot(ax - 0.1, (y + 0.09) * 0.9) - 0.045, 0.012)); // cheek discs
+    mix(C.coral, (1 - soft(ax - 0.022, 0.008)) * soft(y + 0.13, 0.015) * soft(0.1 - y, 0.015)); // nose
+    const eye = ((ax - 0.075) / 0.032) ** 2 + ((y - 0.035) / 0.017) ** 2;
+    mix(C.olive, 1 - soft(eye - 2.3, 0.5)); // lids
+    mix(C.white, 1 - soft(eye - 1, 0.25));
+    mix(C.dark, 1 - soft(eye - 0.35, 0.12)); // eye holes
+    mix(C.olive, (1 - soft(Math.abs(y - (0.082 + 2.2 * (ax - 0.075) ** 2)) - 0.009, 0.004)) * soft(ax - 0.03, 0.01) * soft(0.12 - ax, 0.01)); // brows
+    mix(C.coral, 1 - soft((x / 0.045) ** 2 + ((y + 0.2) / 0.018) ** 2 - 1, 0.3)); // lips
+    mix(C.dark, (1 - soft(Math.abs(y + 0.2) - 0.003, 0.002)) * soft(0.04 - ax, 0.01)); // mouth line
+    return { x: x * 0.96, y: y * 0.96, d, c };
+  });
+}
+export function paperMask(c: Ctx) {
+  const p = anchor('FLW-S3-030'), M = artMats();
+  wallPiece(p.id, p.x, p.y, p.z, p.yaw, 0.42, 0.7);
+  const a = new Asm(c.b, c.chunk, p.x, p.y, p.z, p.yaw).begin(p.id);
+  a.add(M.paint, '#ffffff', cg('d2rMask', maskSurface), 0, -0.04, 0); // anchor at the visual centre
+  a.end({ ground: false });
+}
+
+/**
+ * FLW-S3-017 Terracotta bloemmedaillon (D2-R remodel): Ø 0.58 m. A turned clay disc with a profiled, rolled rim
+ * (slightly out of round, by hand); the plant grows out of the field: a curving stem, five leaves with a sunk midrib
+ * that lift at the tip and overlap the stem, a bud cupped by two sepals. One terracotta family, the relief lighter, its
+ * contact with the field darker.
+ */
+function medallionBody() {
+  const prof: [number, number][] = [[0.001, 0.036], [0.215, 0.036], [0.226, 0.04], [0.24, 0.058], [0.258, 0.066], [0.276, 0.058], [0.287, 0.035], [0.29, 0.0]];
+  const g = new THREE.LatheGeometry(prof.map(([r, h]) => new THREE.Vector2(r, h)), 40);
+  const pa = g.attributes.position as THREE.BufferAttribute, col: number[] = [];
+  for (let i = 0; i < pa.count; i++) {
+    const x = pa.getX(i), y = pa.getY(i), z = pa.getZ(i), r = Math.hypot(x, z), an = Math.atan2(z, x);
+    const k = 1 + 0.012 * Math.sin(3 * an + 0.7) + 0.007 * Math.sin(7 * an);
+    pa.setXYZ(i, x * k, y + 0.002 * Math.sin(5 * an) * (r > 0.2 ? 1 : 0), z * k);
+    const cc = r < 0.216 ? mixC('#a9583a', '#b8633f', r / 0.216) : y > 0.06 ? new THREE.Color('#cb7650') : y < 0.042 && r < 0.235 ? new THREE.Color('#924b31') : new THREE.Color('#b8633f');
+    col.push(cc.r, cc.g, cc.b);
+  }
+  g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+  g.rotateX(-Math.PI / 2); // depth along local +lz
+  g.deleteAttribute('uv');
+  faceFront(g);
+  g.userData.keepColor = true;
+  return g;
+}
+function leaf(px: number, py: number, ang: number, len: number, wid: number, d0: number, hi = '#c8845a') {
+  const ca = Math.cos(ang), sa = Math.sin(ang);
+  return reliefSurface(7, 4, (s, t) => {
+    const across = t * 2 - 1, w = wid * Math.sin(Math.PI * Math.max(0.02, s)) ** 0.8, lx = s * len, ly = across * w;
+    const h = 0.002 + 0.022 * (1 - across * across) * Math.sin(Math.PI * Math.min(1, s * 1.05)) ** 0.6 - 0.006 * gauss(across, 0, 0.18) + 0.016 * s * s;
+    return { x: px + lx * ca - ly * sa, y: py + lx * sa + ly * ca, d: d0 + h, c: mixC('#9c5c3a', hi, s * 0.9 + (1 - Math.abs(across)) * 0.2) };
+  });
+}
+export function terracottaMedallion(c: Ctx) {
+  const p = anchor('FLW-S3-017'), M = artMats();
+  wallPiece(p.id, p.x, p.y, p.z, p.yaw, 0.6, 0.6);
+  const a = new Asm(c.b, c.chunk, p.x, p.y, p.z, p.yaw).begin(p.id);
+  a.add(M.paint, '#ffffff', cg('d2rMedBody', medallionBody), 0, 0, 0);
+  const F = 0.036; // field surface
+  const stem = new THREE.CatmullRomCurve3([[0.005, -0.2, F + 0.004], [-0.022, -0.1, F + 0.008], [0.004, -0.02, F + 0.009], [0.012, 0.05, F + 0.01]].map(([x, y, d]) => new THREE.Vector3(-x, y, -d)));
+  put(a, M.paint, '#bf7149', new THREE.TubeGeometry(stem, 12, 0.012, 5, false));
+  for (const [x, y, an, l, w] of [[-0.012, -0.15, Math.PI - 0.5, 0.15, 0.04], [0.0, -0.13, 0.45, 0.14, 0.038], [-0.01, -0.06, Math.PI - 0.25, 0.13, 0.036], [0.004, -0.04, 0.2, 0.13, 0.035], [0.008, 0.0, Math.PI - 0.9, 0.09, 0.028]] as const) put(a, M.paint, '#ffffff', leaf(x, y, an, l, w, F));
+  for (const s2 of [-1, 1]) put(a, M.paint, '#ffffff', leaf(0.012, 0.045, Math.PI / 2 + s2 * 0.55, 0.06, 0.02, F + 0.012, '#d08a5e')); // sepals
+  a.add(M.paint, '#d28c62', cg('d2rBud', () => { const g = lathe([[0.001, 0], [0.03, 0.012], [0.041, 0.036], [0.033, 0.066], [0.017, 0.09], [0.001, 0.104]], 10); g.scale(1, 1, 0.7); return g; }), -0.012, 0.045, F + 0.022);
+  a.end({ ground: false });
+}
+
+/**
+ * FLW-S3-014 Gesneden zwaluwen (D2-R remodel): three carved swallows, ≈ 1.7 m as a group, on the owner's loose shallow
+ * arc. Each bird: a turned, slightly flattened body (slate back, rufous throat, cream belly painted on the form),
+ * swept tapered wings on two separate planes (the near wing proud of the body, the far one behind it), a deeply forked
+ * tail; carried by a hidden dowel.
+ */
+function swallowBody() {
+  const prof: [number, number][] = [[0.001, -0.1], [0.012, -0.085], [0.022, -0.05], [0.03, -0.01], [0.031, 0.02], [0.027, 0.05], [0.022, 0.075], [0.013, 0.097], [0.001, 0.118]];
+  const g = new THREE.LatheGeometry(prof.map(([r, h]) => new THREE.Vector2(r, h)), 8);
+  g.rotateZ(Math.PI / 2); // axis along local −x = the viewer's right: the head leads
+  g.scale(1, 1, 0.75);
+  const pa = g.attributes.position as THREE.BufferAttribute, col: number[] = [];
+  for (let i = 0; i < pa.count; i++) {
+    const along = -pa.getX(i), y = pa.getY(i);
+    const cc = y < -0.006 ? (along > 0.055 ? '#b8683f' : '#efdcb6') : along > 0.09 ? '#b8683f' : '#8a93a6';
+    const k = new THREE.Color(cc); col.push(k.r, k.g, k.b);
+  }
+  g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+  g.deleteAttribute('uv');
+  g.userData.keepColor = true;
+  return g;
+}
+const vslab = (pts: [number, number][], depth: number, bevel: number, lz: number) => slab(pts.map(([x, y]) => [-x, y] as [number, number]), depth, bevel).translate(0, 0, -lz);
+function swallowWings() {
+  return merge([
+    vslab([[0.03, 0.012], [0.0, 0.062], [-0.06, 0.15], [-0.145, 0.222], [-0.11, 0.158], [-0.06, 0.082], [-0.02, 0.02]], 0.008, 0.003, 0.018), // near wing, raised
+    vslab([[0.025, -0.008], [0.0, -0.052], [-0.05, -0.122], [-0.122, -0.172], [-0.09, -0.112], [-0.042, -0.052], [-0.01, -0.016]], 0.007, 0.002, -0.006), // far wing, behind the body
+    vslab([[-0.085, 0.008], [-0.245, 0.052], [-0.15, 0.0], [-0.255, -0.042], [-0.085, -0.01]], 0.006, 0.002, -0.002), // forked tail
+    strut([0, 0, -0.06], [0, 0, -0.012], 0.007, 0.007, 5), // hidden dowel into the wall
+  ]);
+}
+export function carvedSwallows(c: Ctx) {
+  const p = anchor('FLW-S3-014'), M = artMats();
+  wallPiece(p.id, p.x, p.y, p.z, p.yaw, 1.8, 0.8);
+  const a = new Asm(c.b, c.chunk, p.x, p.y, p.z, p.yaw).begin(p.id);
+  const body = swallowBody(), wings = swallowWings();
+  // x (viewer right), y, pitch, scale: uneven spacing, the middle bird highest, the leader slightly smaller
+  for (const [x, y, rz, k] of [[-0.6, -0.12, 0.2, 1.0], [-0.02, 0.09, 0.06, 1.18], [0.6, 0.03, -0.12, 1.07]] as const) {
+    a.add(M.paint, '#ffffff', body, -x, y, 0.06, { rz: -rz, s: [k, k, k] });
+    a.add(M.paint, '#8a93a6', wings, -x, y, 0.06, { rz: -rz, s: [k, k, k] }); // slate, lifted: the window wall stands at ≈ 37 % light
+  }
+  body.dispose(); wings.dispose();
+  a.end({ ground: false, gap: 0.25 }); // three birds, each on its own dowel into the wall: the audit gap spans the group spacing
+}
+
+/** FLW-S3-031 lemon relief (the core motif, 45 × 45 cm): built into `a` at its origin. */
+function addLemonRelief(a: Asm, M: ReturnType<typeof artMats>) {
+  const blue = '#2f56a0', yel = '#e0a830', green = '#3f6a3a';
+  a.add(M.paint, '#b8693e', bx(0.45, 0.45, 0.022), 0, 0, 0.011); // terracotta body
+  a.add(M.ceramic, '#efe2c4', bx(0.43, 0.43, 0.004), 0, 0, 0.024); // glazed face
+  for (const s of [-1, 1]) { a.add(M.ceramic, blue, bx(0.43, 0.026, 0.003), 0, s * 0.198, 0.0275); a.add(M.ceramic, blue, bx(0.026, 0.37, 0.003), s * 0.198, 0, 0.0275); }
+  a.add(M.ceramic, yel, cg('tileRing', () => new THREE.TorusGeometry(0.158, 0.007, 3, 16)), 0, 0, 0.027);
+  a.add(M.ceramic, blue, cg('tileRing2', () => new THREE.TorusGeometry(0.143, 0.004, 3, 16)), 0, 0, 0.027);
+  for (const [x, y] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) a.add(M.ceramic, blue, oct(0.032, 0.032, 0.004), x * 0.16, y * 0.16, 0.027, { rz: 0.785 });
+  a.add(M.ceramic, '#7a5a3a', bx(0.2, 0.008, 0.005), 0, 0.03, 0.028, { rz: -0.35 }); // branch
+  for (const [x, y, r] of [[-0.09, 0.07, 0.5], [-0.05, 0.1, -0.4], [0.02, 0.06, 0.9], [0.07, 0.015, -0.6], [-0.08, -0.01, -0.3], [0.1, -0.03, 0.4], [-0.02, -0.06, 1.2], [0.05, 0.1, 0.2]] as const) a.add(M.ceramic, green, oct(0.042, 0.013, 0.008), x, y, 0.03, { rz: r });
+  for (const [x, y] of [[-0.06, -0.055], [0.055, -0.07]] as const) a.add(M.ceramic, '#e8b42c', gem(0.03, 0.04, 0.022), x, y, 0.036);
+  for (const [x, y] of [[-0.03, 0.12], [0.1, 0.07], [-0.11, 0.035]] as const) a.add(M.ceramic, '#f6f0e2', oct(0.017, 0.017, 0.006), x, y, 0.033);
+}
+/**
+ * FLW-S3-031 Keramisch tegelreliëf (D2-R): the lemon relief set as an architectural azulejo panel, ≈ 1.04 m. A 4 × 4
+ * field of 22.5 cm glazed tiles (the relief takes the centre 2 × 2) on a grout bed, framed by a blue plaster surround
+ * in the house's trim colour; the twelve border tiles carry a blue diamond and a yellow eye, the corners a quarter
+ * rosette, so the panel reads as one tiled wall piece from the terrace.
+ */
+export function lemonPanel(c: Ctx) {
+  const p = anchor('FLW-S3-031'), M = artMats(), cell = 0.225, field = cell * 4, fr = 0.07;
+  wallPiece(p.id, p.x, p.y, p.z, p.yaw, field + 2 * fr, field + 2 * fr);
+  const a = new Asm(c.b, c.chunk, p.x, p.y, p.z, p.yaw).begin(p.id);
+  a.add(M.paint, '#cfc6b2', bx(field, field, 0.012), 0, 0, 0.006); // grout bed
+  for (const s2 of [-1, 1]) { // blue plaster surround, 4 cm proud
+    a.add(M.paint, '#3f6fa8', bx(field + 2 * fr, fr, 0.04), 0, s2 * (field / 2 + fr / 2), 0.02);
+    a.add(M.paint, '#3f6fa8', bx(fr, field, 0.04), s2 * (field / 2 + fr / 2), 0, 0.02);
+  }
+  for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) {
+    if ((i === 1 || i === 2) && (j === 1 || j === 2)) continue; // the relief
+    const x = (i - 1.5) * cell, y = (j - 1.5) * cell, corner = (i === 0 || i === 3) && (j === 0 || j === 3);
+    a.add(M.ceramic, '#f1ead8', bx(cell - 0.008, cell - 0.008, 0.014), x, y, 0.019);
+    a.add(M.ceramic, '#2f56a0', oct(corner ? 0.075 : 0.065, corner ? 0.075 : 0.065, 0.004), x, y, 0.026, { rz: corner ? 0 : 0.785 });
+    a.add(M.ceramic, '#f1ead8', oct(0.032, 0.032, 0.004), x, y, 0.028, { rz: 0.785 });
+    a.add(M.ceramic, '#e0a830', oct(0.016, 0.016, 0.004), x, y, 0.03);
+  }
+  const core = new Asm(c.b, c.chunk, p.x, p.y, p.z, p.yaw);
+  addLemonRelief(core, M);
+  a.end({ ground: false });
+}
+
+/**
+ * FLW-S3-037 Houten reigerbeeld (D2-R): the accepted heron design at ×1.45 (≈ 1.18 m overall), now on a broad rooted
+ * stump (flared root lobes) bedded in three shore stones, set at the water's edge in front-right of the bench, so it
+ * frames the lake view without standing in it; it reads against the water from the path.
+ */
+export function carvedHeron(c: Ctx) {
+  const p = anchor('FLW-S3-037'), M = artMats(), wood = '#8c7b66', dk = '#6e5f4e', K = 1.25, T = 0.32;
+  const a = new Asm(c.b, c.chunk, p.x, p.y, p.z, p.yaw).begin(p.id);
+  a.add(M.timber, '#76664f', cg('heronStump2', () => {
+    const g = new THREE.CylinderGeometry(0.19, 0.25, T, 9, 2);
+    const pa = g.attributes.position as THREE.BufferAttribute;
+    for (let i = 0; i < pa.count; i++) { const k = 1 + 0.09 * Math.sin(i * 2.3) + 0.05 * Math.sin(i * 5.1); if (Math.abs(pa.getY(i)) < T / 2 - 0.001) pa.setXYZ(i, pa.getX(i) * k, pa.getY(i), pa.getZ(i) * k); }
+    return projectUV(flat(g.translate(0, T / 2, 0)), 2, 'y');
+  }), 0, 0, 0);
+  for (let i = 0; i < 5; i++) { const an = i * 1.31 + 0.4; a.add(M.timber, '#6c5c46', gem(0.06, 0.05, 0.15), Math.cos(an) * 0.22, 0.05, Math.sin(an) * 0.22, { ry: -an + Math.PI / 2 }); } // root lobes, on the ground
+  // shore stones in the lake's own rock material: its mesh already spans the shore, so the chunk's culling sphere does
+  // not grow (a paint-material stone stretched the grounds paint mesh into the lake view: +9 k triangles, D1 lesson)
+  const rock = woodMats().rock;
+  for (const [x, z, s] of [[0.32, 0.12, 0.14], [-0.28, 0.2, 0.11], [0.08, -0.33, 0.12]] as const) a.add(rock, '#8f877a', gem(s, s * 0.6, s * 0.85, 1), x, s * 0.6, z); // resting on the gravel
+  const v = (x: number, y: number, z: number): V3 => [x * K, T + (y - 0.26) * K, z * K]; // the design is authored on a 0.26 m stump
+  for (const s of [-1, 1]) {
+    a.add(M.timber, dk, gem(0.03 * K, 0.008 * K, 0.05 * K), s * 0.035 * K, T + 0.008, 0.02 * K); // toes
+    put(a, M.timber, wood, strut(v(s * 0.035, 0.26, 0.0), v(s * 0.03, 0.54, -0.02), 0.012 * K, 0.01 * K, 4)); // legs
+    a.add(M.timber, dk, gem(0.026 * K, 0.1 * K, 0.16 * K), s * 0.055 * K, T + (0.63 - 0.26) * K, -0.05 * K, { rx: 0.42 }); // folded wings
+  }
+  a.add(M.timber, wood, gem(0.072 * K, 0.1 * K, 0.165 * K, 1), 0, T + (0.62 - 0.26) * K, -0.02 * K, { rx: 0.38 }); // body
   const neck: V3[] = [v(0, 0.66, 0.1), v(0, 0.76, 0.14), v(0, 0.84, 0.1), v(0, 0.9, 0.12)];
   for (let i = 0; i < 3; i++) put(a, M.timber, wood, strut(neck[i], neck[i + 1], (0.024 - i * 0.003) * K, (0.021 - i * 0.003) * K, 5));
-  a.add(M.timber, wood, gem(0.024 * K, 0.026 * K, 0.042 * K), 0, T + (0.915 - T) * K, 0.135 * K); // head
-  put(a, M.timber, dk, strut(v(0, 0.912, 0.165), v(0, 0.9, 0.28), 0.01 * K, 0.0015, 4)); // beak
+  a.add(M.timber, wood, gem(0.024 * K, 0.026 * K, 0.042 * K), 0, T + (0.915 - 0.26) * K, 0.135 * K); // head
+  put(a, M.timber, dk, strut(v(0, 0.912, 0.165), v(0, 0.9, 0.28), 0.01 * K, 0.002, 4)); // beak
   put(a, M.timber, dk, strut(v(0, 0.93, 0.115), v(0, 0.925, 0.06), 0.006 * K, 0.001, 3)); // crest plume
-  c.col.addCircle(p.x, p.z, 0.16, p.y, p.y + 0.85);
+  c.col.addCircle(p.x, p.z, 0.3, p.y, p.y + 1.2);
   a.end();
 }
 
 /** All D2-b pieces whose anchor lies in `room` (callers pass their own chunk context). */
 export const S3_BUILDERS: Record<string, (c: Ctx) => void> = {
   'FLW-S3-004': carvedBird, 'FLW-S3-014': carvedSwallows, 'FLW-S3-015': modelSloop, 'FLW-S3-016': ceramicMoon, 'FLW-S3-017': terracottaMedallion,
-  'FLW-S3-030': paperMask, 'FLW-S3-031': lemonTile, 'FLW-S3-033': fireScreen, 'FLW-S3-037': carvedHeron,
+  'FLW-S3-030': paperMask, 'FLW-S3-031': lemonPanel, 'FLW-S3-033': fireScreen, 'FLW-S3-037': carvedHeron,
 };

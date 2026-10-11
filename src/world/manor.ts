@@ -37,7 +37,7 @@ import { EMBLEMS, SERVICE, CATALOG, CONSOLE_SOCKETS, ROUTE_LINES } from '../cont
 import { addClue, has } from '../core/state';
 import { GF, CEIL, UF, UCEIL, TOP, BF, BCEIL, AF, S03, roofUnderside, ATTIC_NOOK, ATTIC_ROOF_WINDOW } from './layout';
 import { buildMaquette } from './maquette';
-import { addKey, S3_BUILDERS } from './d2props';
+import { addKey, presentKey, keyLiner, linerWhenOpen, hatchDish, LINER_TOP, HATCH_DISH_FLOOR, S3_BUILDERS } from './d2props';
 import { SALON_LAYOUT, SALON_SITES } from '../content/gallery';
 import { placeSolved, slotContents, openBasement } from '../puzzles/rules';
 
@@ -450,8 +450,12 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   hallDrawer.slider.add(ledger);
   // DEV-01: picking the register up does not read it (pickup ≠ observation); it is read from the bag
   makePickup(w, g, { id: 'pk.ledger', item: 'ledger', obj: ledger, available: hallDrawer.isOpen, hit: [0.3, 0.12, 0.36], after: SLICE ? undefined : () => g.inspect('c.ledger') });
-  const shedKey = compound((b) => addKey(b, 'shedKey')); // DEV-04D D2: FLW-K3-003 key-family model (was two boxes)
-  shedKey.position.set(0.22, -0.07, 0); // DEV-04D D2: on the drawer bottom (its top is at −0.07; the key sat 1 cm into it)
+  const shedKey = presentKey(compound((b) => addKey(b, 'shedKey'))); // DEV-04D D2: FLW-K3-003 key-family model; D2-R: ×1.7 presentation
+  const linen = keyLiner('linen'); // D2-R: a pale folded linen cloth under the dark iron key
+  linen.position.set(0.22, -0.07, 0); // the drawer bottom's top is at −0.07
+  hallDrawer.slider.add(linen);
+  linerWhenOpen(w, linen, hallDrawer.isOpen);
+  shedKey.position.set(0.22, -0.07 + LINER_TOP.linen, 0);
   hallDrawer.slider.add(shedKey);
   makePickup(w, g, { id: 'pk.shedKey', item: 'shedKey', obj: shedKey, available: hallDrawer.isOpen, hit: [0.3, 0.12, 0.3] });
   const gb = compound((b) => { box(b, k.M.paint, '#6a2f2a', 0, 0, 0, 0.3, 0.04, 0.22); box(b, k.M.paint, '#f2e8d2', 0, 0.04, 0, 0.28, 0.005, 0.2); });
@@ -725,8 +729,14 @@ function libraryCatalogue(w: World, g: GameApi, c: Ctx, tx: number, tz: number, 
     run: () => { if (addClue(g.state, 'c.catalogDesk')) g.changed(); g.openPanel('catalog'); },
   });
   // DEV-04D D2: the archive card carries the FLW-K3-002 key-family model (was a brass box); the card stays the pickup object
-  const card = compound((b) => { box(b, k.M.paint, '#f5eedc', 0, 0, 0, 0.12, 0.004, 0.18); addKey(b, 'studyKey', 0.025, 0.004, 0.02, 0.2); });
-  card.position.set(0.05, -0.03, 0.1); // DEV-04D D2: on the drawer bottom (top at −0.03): the card lay 1 cm under it, unseen
+  // D2-R: the card a little larger, on a dark leather blotter; the key ×1.7 on it (presentation only)
+  const card = compound((b) => box(b, k.M.paint, '#f5eedc', 0, 0, 0, 0.15, 0.004, 0.225));
+  card.add(presentKey(compound((b) => addKey(b, 'studyKey', 0, 0, 0, 0.2))).translateY(0.004).translateX(0.012).translateZ(0.01));
+  const blotter = keyLiner('blotter');
+  blotter.position.set(0.05, -0.03, 0.1); // DEV-04D D2: on the drawer bottom (top at −0.03)
+  deskDrawer.slider.add(blotter);
+  linerWhenOpen(w, blotter, deskDrawer.isOpen);
+  card.position.set(0.05, -0.03 + LINER_TOP.blotter, 0.1);
   deskDrawer.slider.add(card);
   makePickup(w, g, { id: 'pk.studyKey', item: 'studyKey', obj: card, available: deskDrawer.isOpen, hit: [0.3, 0.12, 0.3], label: 'Pakken: messing sleutel en kaart', after: () => g.inspect('c.archiveCard') });
   // framed floor plan with the room emblems, on the east wall facing into the library
@@ -914,8 +924,9 @@ function kitchen(w: World, g: GameApi, c: Ctx) {
   for (const [y0, y1, z0, z1] of [[GF + 0.95, GF + 1.02, hz - 0.45, hz + 0.45], [GF + 1.68, GF + 1.75, hz - 0.45, hz + 0.45], [GF + 1.02, GF + 1.68, hz - 0.45, hz - 0.36], [GF + 1.02, GF + 1.68, hz + 0.36, hz + 0.45]] as const) boxMM(c.b, k.M.wood, '#4a2f1a', 95.08, 95.28, y0, y1, z0, z1, { chunk: c.chunk });
   boxMM(c.b, k.M.paint, '#2a201a', 95.08, 95.1, GF + 1.02, GF + 1.68, hz - 0.36, hz + 0.36, { chunk: c.chunk });
   makeDoor(w, g, { id: 'kitchen.hatch', x: 95.32, z: hz - 0.36, dir: 'z+', width: 0.72, height: 0.66, y0: GF + 1.02, swing: -1, color: '#7a5232', unlock: 'lock.serviceHatch', lockedMsg: 'Een serveerluik met een klein slotje zonder sleutelgat. Het hoort bij het dienstrooster ernaast.', thickness: 0.04 });
-  const key = compound((b) => addKey(b, 'consKey')); // DEV-04D D2: FLW-K3-004 key-family model; the glass drop no longer glows
-  place(key, 95.19, GF + 1.02, hz, 0.3); // DEV-04D D2: lying on the sill (it hung 3 cm above it, inside the block)
+  const key = presentKey(compound((b) => addKey(b, 'consKey'))); // DEV-04D D2: FLW-K3-004 key-family model, no glow; D2-R: ×1.7 presentation
+  hatchDish(c, 95.19, GF + 1.02, hz); // D2-R: on a small cream enamel dish on the hatch sill
+  place(key, 95.19, GF + 1.02 + HATCH_DISH_FLOOR, hz, 0.3);
   w.scene.add(key);
   makePickup(w, g, { id: 'pk.consKey', item: 'consKey', obj: key, available: () => !!g.state.open['kitchen.hatch'], hit: [0.3, 0.2, 0.3], after: () => g.inspect('c.consNote') });
   // ES.kitchenCrates: eight red shopping crates (two stacks of four, against the counter's west face); beer crates apart

@@ -30,8 +30,9 @@ describe('DEV-04D D2 ship rule', () => {
     for (const id of ids) expect(['APPROVED_3D_REF', 'APPROVED_KEY_REF', 'REVIEW_READY'], `${id}: ${status[id]}`).toContain(status[id]);
     for (const id of ['FLW-RSV-019', 'FLW-RSV-020', 'FLW-RSV-021', 'FLW-RSV-022']) expect(ids.has(id), id).toBe(false);
   });
-  it('triangle budgets follow the brief (most ≤ 600; heron and sloop ≤ 1.5 k; the swallow set ≤ 900)', () => {
-    for (const p of PROPS3D) expect(p.maxTris, p.id).toBeLessThanOrEqual(['FLW-S3-037', 'FLW-S3-015'].includes(p.id) ? 1500 : p.id === 'FLW-S3-014' ? 900 : 600);
+  it('triangle budgets follow the brief (most ≤ 600; heron, sloop and the D2-R remodels / panel ≤ 1.5 k)', () => {
+    const big = ['FLW-S3-037', 'FLW-S3-015', 'FLW-S3-014', 'FLW-S3-017', 'FLW-S3-030', 'FLW-S3-031'];
+    for (const p of PROPS3D) expect(p.maxTris, p.id).toBeLessThanOrEqual(big.includes(p.id) ? 1500 : 600);
   });
 });
 
@@ -80,10 +81,11 @@ describe('DEV-04D D2 placements', () => {
       expect(Number.isFinite(p.y), p.id).toBe(true);
     }
   });
-  it('the heron stands beside the lake bench, never in front of it (the view west to the water stays open)', () => {
-    const h = PROPS3D.find((p) => p.id === 'FLW-S3-037')!, bench = { x: 78.4, z: 139.6, halfLen: 0.85 };
-    expect(h.x).toBeGreaterThan(bench.x - 0.25); // the bench faces −x: in front = west of its seat
-    expect(Math.abs(h.z - bench.z)).toBeGreaterThan(bench.halfLen + 0.15);
+  it('the heron frames the lake bench view, never stands in it (outside the bench\'s ±35° view cone west)', () => {
+    const h = PROPS3D.find((p) => p.id === 'FLW-S3-037')!, bench = { x: 78.4, z: 139.6 };
+    const dx = h.x - bench.x, dz = h.z - bench.z, off = Math.abs(Math.atan2(dz, -dx)); // angle from the bench's facing (−x)
+    expect(off).toBeGreaterThan((35 * Math.PI) / 180);
+    expect(Math.hypot(dx, dz)).toBeGreaterThan(1.2); // a sculpture beside the seat, not on it
   });
   it('the botanic medallion is on the west wall, not on the evidence prints wall (x 107.5)', () => {
     const m = PROPS3D.find((p) => p.id === 'FLW-S3-017')!;

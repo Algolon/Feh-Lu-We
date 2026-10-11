@@ -1,0 +1,524 @@
+{
+  "commit": null,
+  "rows": [
+    {
+      "name": "r-rearNookEast-a",
+      "pose": {
+        "x": 95.9,
+        "y": 3.35,
+        "z": 106.5,
+        "yaw": 0.7853981633974483,
+        "pitch": -0.08
+      },
+      "calls": 24,
+      "triangles": 70140,
+      "room": "rearNookEast",
+      "feetY": 3.35
+    },
+    {
+      "name": "r-rearNookEast-b",
+      "pose": {
+        "x": 98.1,
+        "y": 3.35,
+        "z": 108.69999999999999,
+        "yaw": -2.356194490192345,
+        "pitch": -0.08
+      },
+      "calls": 85,
+      "triangles": 147774,
+      "room": "rearNookEast",
+      "feetY": 3.35
+    },
+    {
+      "name": "r-rearNook-a",
+      "pose": {
+        "x": 90.9,
+        "y": 3.35,
+        "z": 104.9,
+        "yaw": 0.6998928697192441,
+        "pitch": -0.08
+      },
+      "calls": 34,
+      "triangles": 131134,
+      "room": "rearNook",
+      "feetY": 3.35
+    },
+    {
+      "name": "r-rearNook-b",
+      "pose": {
+        "x": 94.1,
+        "y": 3.35,
+        "z": 108.69999999999999,
+        "yaw": -2.441699783870549,
+        "pitch": -0.08
+      },
+      "calls": 112,
+      "triangles": 208634,
+      "room": "rearNook",
+      "feetY": 3.35
+    },
+    {
+      "name": "r-frontGallery-a",
+      "pose": {
+        "x": 85.9,
+        "y": 3.35,
+        "z": 81.30000000000001,
+        "yaw": 1.354711354498112,
+        "pitch": -0.08
+      },
+      "calls": 84,
+      "triangles": 166592,
+      "room": "frontGallery",
+      "feetY": 3.35
+    },
+    {
+      "name": "r-frontGallery-b",
+      "pose": {
+        "x": 94.1,
+        "y": 3.35,
+        "z": 83.1,
+        "yaw": -1.7868812990916814,
+        "pitch": -0.08
+      },
+      "calls": 74,
+      "triangles": 175232,
+      "room": "frontGallery",
+      "feetY": 3.35
+    },
+    {
+      "name": "r-landing-a",
+      "pose": {
+        "x": 85.9,
+        "y": 3.35,
+        "z": 96.4,
+        "yaw": 0.8857312676180688,
+        "pitch": -0.08
+      },
+      "calls": 81,
+      "triangles": 151676,
+      "room": "landing",
+      "feetY": 3.35
+    },
+    {
+      "name": "r-landing-b",
+      "pose": {
+        "x": 94.1,
+        "y": 3.35,
+        "z": 103.1,
+        "yaw": -2.2558613859717243,
+        "pitch": -0.08
+      },
+      "calls": 104,
+      "triangles": 205070,
+      "room": "landing",
+      "feetY": 3.35
+    },
+    {
+      "name": "r-reis-a",
+      "pose": {
+        "x": 73.30000000000001,
+        "y": 3.35,
+        "z": 81.30000000000001,
+        "yaw": 1.1681416732430248,
+        "pitch": -0.08
+      },
+      "calls": 34,
+      "triangles": 82004,
+      "room": "reis",
+      "feetY": 3.35
+    },
+    {
+      "name": "r-reis-b",
+      "pose": {
+        "x": 84.1,
+        "y": 3.35,
+        "z": 85.89999999999999,
+        "yaw": -1.9734509803467686,
+        "pitch": -0.08
+      },
+      "calls": 33,
+      "triangles": 78866,
+      "room": "reis",
+      "feetY": 3.35
+    },
+    {
+      "name": "r-sterren-a",
+      "pose": {
+        "x": 73.30000000000001,
+        "y": 3.35,
+        "z": 87.7,
+        "yaw": 1.1071487177940904,
+        "pitch": -0.08
+      },
+      "calls": 32,
+      "triangles": 80620,
+      "room": "sterren",
+      "feetY": 3.35
+    },
+    {
+      "name": "r-sterren-b",
+      "pose": {
+        "x": 84.1,
+        "y": 3.35,
+        "z": 93.1,
+        "yaw": -2.0344439357957027,
+        "pitch": -0.08
+      },
+      "calls": 31,
+      "triangles": 77502,
+      "room": "sterren",
+      "feetY": 3.35
+    },
+    {
+      "name": "r-study-a",
+      "pose": {
+        "x": 95.9,
+        "y": 3.35,
+        "z": 81.30000000000001,
+        "yaw": 0.3152146997507105,
+        "pitch": -0.08
+      },
+      "calls": 47,
+      "triangles": 138974,
+      "room": "study",
+      "feetY": 3.35
+    },
+    {
+      "name": "r-study-b",
+      "pose": {
+        "x": 100.39999999999999,
+        "y": 3.35,
+        "z": 95.1,
+        "yaw": -2.8263779538390827,
+        "pitch": -0.08
+      },
+      "calls": 49,
+      "triangles": 136176,
+      "room": "study",
+      "feetY": 3.35
+    },
+    {
+      "name": "r-botanic-a",
+      "pose": {
+        "x": 102.2,
+        "y": 3.35,
+        "z": 81.30000000000001,
+        "yaw": 0.3152146997507105,
+        "pitch": -0.08
+      },
+      "calls": 55,
+      "triangles": 139030,
+      "room": "botanic",
+      "feetY": 3.35
+    },
+    {
+      "name": "r-botanic-b",
+      "pose": {
+        "x": 106.69999999999999,
+        "y": 3.35,
+        "z": 95.1,
+        "yaw": -2.8263779538390827,
+        "pitch": -0.08
+      },
+      "calls": 52,
+      "triangles": 136084,
+      "room": "botanic",
+      "feetY": 3.35
+    },
+    {
+      "name": "r-hall-a",
+      "pose": {
+        "x": 85.9,
+        "y": 0.15,
+        "z": 84.9,
+        "yaw": 0.5917761705415028,
+        "pitch": -0.08
+      },
+      "calls": 114,
+      "triangles": 183066,
+      "room": "hall",
+      "feetY": 0.15
+    },
+    {
+      "name": "r-hall-b",
+      "pose": {
+        "x": 94.1,
+        "y": 0.15,
+        "z": 97.1,
+        "yaw": -2.5498164830482906,
+        "pitch": -0.08
+      },
+      "calls": 95,
+      "triangles": 199084,
+      "room": "hall",
+      "feetY": 0.15
+    },
+    {
+      "name": "r-living-a",
+      "pose": {
+        "x": 73.30000000000001,
+        "y": 0.15,
+        "z": 81.30000000000001,
+        "yaw": 0.7411792190017954,
+        "pitch": -0.08
+      },
+      "calls": 130,
+      "triangles": 212340,
+      "room": "living",
+      "feetY": 0.15
+    },
+    {
+      "name": "r-living-b",
+      "pose": {
+        "x": 84.1,
+        "y": 0.15,
+        "z": 93.1,
+        "yaw": -2.400413434587998,
+        "pitch": -0.08
+      },
+      "calls": 69,
+      "triangles": 174880,
+      "room": "living",
+      "feetY": 0.15
+    },
+    {
+      "name": "r-library-a",
+      "pose": {
+        "x": 73.30000000000001,
+        "y": 0.15,
+        "z": 94.9,
+        "yaw": 0.6640461628266845,
+        "pitch": -0.08
+      },
+      "calls": 72,
+      "triangles": 214628,
+      "room": "library",
+      "feetY": 0.15
+    },
+    {
+      "name": "r-library-b",
+      "pose": {
+        "x": 84.1,
+        "y": 0.15,
+        "z": 108.69999999999999,
+        "yaw": -2.4775464907631086,
+        "pitch": -0.08
+      },
+      "calls": 85,
+      "triangles": 242970,
+      "room": "library",
+      "feetY": 0.15
+    },
+    {
+      "name": "r-dining-a",
+      "pose": {
+        "x": 95.9,
+        "y": 0.15,
+        "z": 81.30000000000001,
+        "yaw": 0.8339037756378319,
+        "pitch": -0.08
+      },
+      "calls": 76,
+      "triangles": 146026,
+      "room": "dining",
+      "feetY": 0.15
+    },
+    {
+      "name": "r-dining-b",
+      "pose": {
+        "x": 106.69999999999999,
+        "y": 0.15,
+        "z": 91.1,
+        "yaw": -2.3076888779519615,
+        "pitch": -0.08
+      },
+      "calls": 98,
+      "triangles": 201614,
+      "room": "dining",
+      "feetY": 0.15
+    },
+    {
+      "name": "r-kitchen-a",
+      "pose": {
+        "x": 95.9,
+        "y": 0.15,
+        "z": 92.9,
+        "yaw": 0.5995962869690175,
+        "pitch": -0.08
+      },
+      "calls": 62,
+      "triangles": 146520,
+      "room": "kitchen",
+      "feetY": 0.15
+    },
+    {
+      "name": "r-kitchen-b",
+      "pose": {
+        "x": 106.69999999999999,
+        "y": 0.15,
+        "z": 108.69999999999999,
+        "yaw": -2.5419963666207757,
+        "pitch": -0.08
+      },
+      "calls": 128,
+      "triangles": 210502,
+      "room": "kitchen",
+      "feetY": 0.15
+    },
+    {
+      "name": "r-cottageEntry-a",
+      "pose": {
+        "x": 20.974999999999998,
+        "y": 4.3500000000000005,
+        "z": 157.97500000000002,
+        "yaw": 1.4046406003752883,
+        "pitch": -0.08
+      },
+      "calls": 86,
+      "triangles": 171646,
+      "room": "cottageEntry",
+      "feetY": 4.15
+    },
+    {
+      "name": "r-cottageEntry-b",
+      "pose": {
+        "x": 29.025000000000002,
+        "y": 4.3500000000000005,
+        "z": 159.325,
+        "yaw": -1.736952053214505,
+        "pitch": -0.08
+      },
+      "calls": 46,
+      "triangles": 120707,
+      "room": "cottageEntry",
+      "feetY": 4.15
+    },
+    {
+      "name": "r-cottageRoom-a",
+      "pose": {
+        "x": 21.2,
+        "y": 4.3500000000000005,
+        "z": 160.9,
+        "yaw": 1.2062703243879649,
+        "pitch": -0.08
+      },
+      "calls": 70,
+      "triangles": 169206,
+      "room": "cottageRoom",
+      "feetY": 4.15
+    },
+    {
+      "name": "r-cottageRoom-b",
+      "pose": {
+        "x": 28.8,
+        "y": 4.3500000000000005,
+        "z": 163.79999999999998,
+        "yaw": -1.9353223292018285,
+        "pitch": -0.08
+      },
+      "calls": 43,
+      "triangles": 124932,
+      "room": "cottageRoom",
+      "feetY": 4.15
+    },
+    {
+      "name": "x05-garden-terrace",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 124,
+        "yaw": 3.141592653589793,
+        "pitch": 0.06
+      },
+      "calls": 101,
+      "triangles": 200009,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "x07-bbq",
+      "pose": {
+        "x": 107.5,
+        "y": 0,
+        "z": 122,
+        "yaw": 3.141592653589793,
+        "pitch": -0.1
+      },
+      "calls": 112,
+      "triangles": 205556,
+      "room": "out",
+      "feetY": 0.21
+    },
+    {
+      "name": "x10-lake-approach",
+      "pose": {
+        "x": 64,
+        "y": 0,
+        "z": 121.5,
+        "yaw": -0.3839724354387525,
+        "pitch": 0
+      },
+      "calls": 38,
+      "triangles": 135902,
+      "room": "out",
+      "feetY": 0.04
+    },
+    {
+      "name": "x11-lake-viewpoint",
+      "pose": {
+        "x": 79,
+        "y": 0,
+        "z": 139.5,
+        "yaw": -1.3962634015954636,
+        "pitch": -0.04
+      },
+      "calls": 38,
+      "triangles": 131344,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "x14-portugal-exterior",
+      "pose": {
+        "x": 25,
+        "y": 4,
+        "z": 146.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "calls": 31,
+      "triangles": 92611,
+      "room": "out",
+      "feetY": 3.58
+    },
+    {
+      "name": "x15-portugal-terrace",
+      "pose": {
+        "x": 28.5,
+        "y": 4.15,
+        "z": 154.2,
+        "yaw": -2.0943951023931953,
+        "pitch": -0.08
+      },
+      "calls": 29,
+      "triangles": 117385,
+      "room": "out",
+      "feetY": 4.15
+    },
+    {
+      "name": "h06-maquette",
+      "pose": {
+        "x": 86.75,
+        "y": 0.15,
+        "z": 94.4,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.42
+      },
+      "calls": 57,
+      "triangles": 184578,
+      "room": "hall",
+      "feetY": 0.15
+    }
+  ],
+  "problems": []
+}
