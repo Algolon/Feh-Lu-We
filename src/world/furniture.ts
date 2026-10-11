@@ -9,6 +9,7 @@ import { bushModel, BARK_TINT, LEAF_TINT, woodMats } from './woodkit';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { paintingTexture } from './textures';
 import { ART, FRAME_RAIL, type FrameStyle } from '../content/art';
+import { frameBox, FINISH, type SalonFrame } from '../content/gallery';
 import FLW_ATLAS from './artAtlas.json';
 import FLW_ATLAS_URL from '../assets/art/flw-d2-atlas.webp';
 import type { World } from '../interactions/world';
@@ -489,6 +490,35 @@ export function flwPainting(c: Ctx, id: string, x: number, y: number, z: number,
   g.dispose();
   const a = new Asm(c.b, c.chunk, x, y, z, yaw);
   frameRails(a, artMats(), p.frame, p.w, p.h);
+}
+
+/**
+ * DEV-04D2: an asymmetrical salon gallery wall (src/content/gallery.ts) hung on a wall face at (x, y, z) facing `yaw`.
+ * Every frame: an atlas canvas (the one FLW material: no extra draw call), an optional off-white mat, and four slim
+ * square-section rails (black / off-white in paint, light wood in timber): ≈ 60 triangles a frame. Each frame registers
+ * its own footprint with the DEV-04A wall-art contract (`painting@x,z`; a registry key, not a gameplay id).
+ */
+export function salonWall(c: Ctx, layout: SalonFrame[], x: number, y: number, z: number, yaw: number) {
+  const M = artMats(), fx = Math.sin(yaw), fz = Math.cos(yaw), rx = -Math.cos(yaw), rz = Math.sin(yaw); // facing; viewer's right
+  for (const f of layout) {
+    const b = frameBox(f), cell = (FLW_ATLAS.items as Record<string, { uv: number[] }>)[f.id];
+    if (!cell) throw new Error(`salonWall: ${f.id} is not in the atlas`);
+    const px = x + rx * b.uc, pz = z + rz * b.uc, py = y + b.vc;
+    registerArt(artFootprint(`painting@${px.toFixed(2)},${pz.toFixed(2)}`, px, py, pz, yaw, b.w, b.h));
+    const g = new THREE.PlaneGeometry(f.cw, b.ch);
+    const uv = g.attributes.uv as THREE.BufferAttribute, [u0, v0, u1, v1] = cell.uv;
+    for (let i = 0; i < uv.count; i++) uv.setXY(i, u0 + uv.getX(i) * (u1 - u0), v0 + uv.getY(i) * (v1 - v0));
+    c.b.add(flwAtlas(), g, planMatrix(px + fx * 0.024, py, pz + fz * 0.024, yaw + Math.PI), '#ffffff', c.chunk, false, 0);
+    g.dispose();
+    const a = new Asm(c.b, c.chunk, px, py, pz, yaw), mat = f.finish === 'wood' ? M.timber : M.paint, col = FINISH[f.finish];
+    const W = b.w, H = b.h, r = f.rail, d = 0.03;
+    if (f.mat > 0) a.add(M.paint, '#efe9dc', bx(f.cw + 2 * f.mat, b.ch + 2 * f.mat, 0.004), 0, 0, 0.02);
+    else a.add(M.paint, '#2a2622', bx(f.cw, b.ch, 0.004), 0, 0, 0.02); // backing board behind the canvas
+    for (const s2 of [-1, 1]) {
+      a.add(mat, col, bx(W, r, d), 0, s2 * (H / 2 - r / 2), d / 2);
+      a.add(mat, col, bx(r, H - 2 * r, d), s2 * (W / 2 - r / 2), 0, d / 2);
+    }
+  }
 }
 
 /**

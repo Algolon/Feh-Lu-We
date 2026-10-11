@@ -191,9 +191,42 @@ The full regression gate was run because the keys touch pickup and inventory inf
 exception did not show up in this run.
 
 ## 7. Deferred / open
-- The asymmetrical salon gallery wall reference (owner photo, 10 Oct) is registered in
-  `docs/reference/dev04/06_art_decor/frames_wall_display/`. It is not built: it needs more D2 art (group B promotion) or
-  owner leave to move hung pieces.
 - Pre-existing, outside D2: the hall drawer's ledger also lies 1 cm into the drawer bottom (evidence object: left as is).
   The console shows `toNonIndexed` warnings from `fire.ts` (pre-D2).
 - D3 / D4 not started. Nothing merged or deployed.
+
+## 8. Addendum: asymmetrical salon gallery wall (owner reference; duplicates allowed, 11 Oct 2026)
+- **Reference.** The owner's photo and composition contract:
+  `docs/reference/dev04/06_art_decor/frames_wall_display/GALLERY_WALL_REFERENCE.md`. Composition reference only; no
+  new artwork, and no hung piece moved or replaced.
+- **Layout.** `SALON_LAYOUT` in `src/content/gallery.ts` is reusable data: outer-box corner, canvas width, rail, mat
+  and finish per frame. `salonWall(c, layout, x, y, z, yaw)` hangs it on any wall face.
+  - 15 frames from 13 canonical FLW-D2 sources; 010 and 044 appear twice, at small sizes and far apart. Each frame keeps
+    its source aspect ratio and FLW id.
+  - Anchors: centre, D2-029 *Maanlicht op water*, 0.75 × 0.75 m outer, black frame with mat; right, D2-007 *De stille
+    eik*, portrait, black frame with mat.
+  - Mixed portrait, landscape and square formats; black, light-wood and off-white frames.
+  - Nearest-neighbour gaps 6–10 cm (mean within 4–8 cm, tested). Compact core, airier edges, irregular top and bottom
+    contour.
+- **Site.** The study's long east wall over the reading corner (face x 101.20, centre z 92.4, centre height floor +
+  1.72 m), the same armchair-under-gallery arrangement as the photo.
+  - Footprint about 2.9 × 1.65 m, at floor + 0.98 m to + 2.64 m (ceiling 2.85 m).
+  - Clear of every evidence panel and opening (wall-art contract), and about 1.9 m from the study's framed map on the
+    same wall.
+- **Construction.** Atlas canvas (the shared FLW material), an off-white mat or dark backing board, four slim
+  square-section rails (paint for black and off-white, timber for light wood): about 62 triangles a frame. Each frame
+  registers `painting@x,z` with the wall-art contract.
+- **Performance** vs D2 before the wall (`budget/d2-salon-rooms.json`):
+  - only the study and botanic room views change: +0 to +1 calls, about +930 triangles;
+  - no other room changes, living and kitchen included;
+  - no new material or texture.
+- **Tests:**
+  - `tests/dev04d-gallery.test.ts` (5): 14–16 shippable pieces at source aspect; no overlaps; gap rules; two anchors
+    (centre + right), clearly the largest; format and finish mix; irregular contour; fits under the ceiling and above
+    the chair;
+  - `e2e:dev04d` gains a check: all 15 frames registered without conflicts, each canvas unobstructed and seated
+    1.5–5 cm off the wall;
+  - results after the addendum: typecheck clean; unit 244 / 244; e2e:dev04d 18 / 18; dev04a 19 / 19; dev04b 9 / 9;
+    dev04c 22 / 22;
+  - the gallery touches no key, pickup or inventory code, so the dev01–03 / full e2e gate above still stands.
+- **Evidence:** `docs/dev04d/d2/evidence/d2-salon-wall-close.jpg`, `-room.jpg`, `-approach.jpg`.

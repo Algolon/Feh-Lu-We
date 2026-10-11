@@ -19,7 +19,7 @@ import {
   table, roundTable, chair, sofa, armchair, bookshelf, counter, rug, plant, painting, crate, tableLamp, floorLamp, chandelier, wallSconce,
   staticLantern, staticSconce, bed2, bedside, wardrobe, curtains, desk, lectern, bathtub, ladder, telescope, canvasPanel, joinery,
   slatBench, blanketChest, gameBoxes, instrumentCase, workbench, farmhouseSink, stool,
-  flwPainting, wallMirror,
+  flwPainting, wallMirror, salonWall,
 } from './furniture';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place } from '../interactions/props';
 import { sideboard, billiardTable, cueRack, shelvingUnit, toolWall, floorGlobe, logBasket, coatRail, pedestalBasin, towelRail, luggageRack, writingDesk, tabletop, larder, boardGameSet } from './dressing';
@@ -38,6 +38,7 @@ import { addClue, has } from '../core/state';
 import { GF, CEIL, UF, UCEIL, TOP, BF, BCEIL, AF, S03, roofUnderside, ATTIC_NOOK, ATTIC_ROOF_WINDOW } from './layout';
 import { buildMaquette } from './maquette';
 import { addKey, S3_BUILDERS } from './d2props';
+import { SALON_LAYOUT, SALON_SITES } from '../content/gallery';
 import { placeSolved, slotContents, openBasement } from '../puzzles/rules';
 
 export { GF, CEIL, UF, UCEIL, TOP };
@@ -1206,6 +1207,8 @@ function study(w: World, g: GameApi, c: Ctx) {
   rug(c, 99.4, 93.2, R0 + 0.01, 1.8, 2.2, 0.2, '#ffffff', 'field');
   roundTable(c, 100.75, 94.5, R0, 0.26, '#5a3a22');
   tabletop(c, 100.75, 94.5, R0 + 0.76, 0.5, ['stack'], 63);
+  // DEV-04D2: the salon gallery wall (owner reference) over the reading corner, on the long east wall
+  for (const s of SALON_SITES) salonWall(c, SALON_LAYOUT, s.x, s.y, s.z, s.yaw);
   // desk under the front window; the drawer front faces north (into the room)
   const dkx = 98.2, dkz = 81.6;
   desk(c, dkx, dkz, R0, Math.PI, 1.8, 0.8);

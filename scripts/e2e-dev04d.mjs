@@ -59,7 +59,12 @@ const problems = [];
 page.on('pageerror', (e) => problems.push(`pageerror: ${e.message}`));
 page.on('console', (m) => { if (m.type() === 'error' || (m.type() === 'warning' && /^DEV-04/.test(m.text()))) problems.push(`console: ${m.text().slice(0, 300)}`); });
 // D2: S3 anchors (src/content/props3d.ts) and the key pickups with their container and floor height
-const { PROPS3D } = await import('../src/content/props3d.ts'); // plain data module: Node strips its types natively
+// the D2 data modules are plain TS: Node strips their types natively; this hook resolves their extensionless relative
+// imports (the bundler style the app uses) to the .ts files
+import { register } from 'node:module';
+register('data:text/javascript,' + encodeURIComponent("export async function resolve(s, c, next) { try { return await next(s, c); } catch (e) { if (s.startsWith('.') && !/\\.[cm]?[jt]s$/.test(s)) return next(s + '.ts', c); throw e; } }"));
+const { PROPS3D } = await import('../src/content/props3d.ts');
+const { SALON_LAYOUT, SALON_SITES, frameBox } = await import('../src/content/gallery.ts'); // D2 salon wall
 const KEYS = [ // pickup, item, container id, container floor top (world y), stand pose
   ['pk.shedKey', 'shedKey', 'hall.drawer', 0.15 + 0.66 - 0.1 + 0.03, { x: 86.5, z: 85.5 }], // stand poses as the main e2e
   ['pk.studyKey', 'studyKey', 'library.desk', 0.15 + 0.68 - 0.06 + 0.03, { x: 81.9, z: 101.2 }],
@@ -217,6 +222,23 @@ try {
     return out;
   });
   log('D2 paths: the lake bench memory is still reached and targeted past the heron; the grill front and the gas bottle stay reachable past the fire screen', reach.bench === 'mem.pond.bench' && reach.bbq === 'ok', JSON.stringify(reach));
+
+  // ---------------------------------------------------------------- 9b. the salon gallery wall
+  const salonSlots = SALON_SITES.flatMap((st) => SALON_LAYOUT.map((f) => { const b = frameBox(f), rx = -Math.cos(st.yaw), rz = Math.sin(st.yaw); return { id: f.id, x: st.x + rx * b.uc, y: st.y + b.vc, z: st.z + rz * b.uc, yaw: st.yaw, w: b.w }; }));
+  const salon = await E(page, (slots) => {
+    const g = window.__game, scene = g.world.scene, V = g.camera.position.constructor, rc = new (g.raycaster.constructor)(), reg = scene.userData.openings.art.map((a) => a.id);
+    scene.traverse((o) => { if (o.isMesh) { o.userData._vis = o.visible; o.visible = true; } }); scene.updateMatrixWorld(true);
+    const out = slots.map((s2) => {
+      const fx = Math.sin(s2.yaw), fz = Math.cos(s2.yaw);
+      rc.set(new V(s2.x + fx * 1.2, s2.y, -(s2.z + fz * 1.2)), new V(-fx, 0, fz)); rc.far = 1.5;
+      const h = rc.intersectObjects(scene.children, true)[0];
+      return { id: s2.id, reg: reg.includes(`painting@${s2.x.toFixed(2)},${s2.z.toFixed(2)}`), art: !!h?.object.material?.userData?.flwAtlas, stand: h ? +(1.2 - h.distance).toFixed(3) : null };
+    });
+    scene.traverse((o) => { if (o.isMesh && o.userData._vis !== undefined) { o.visible = o.userData._vis; delete o.userData._vis; } });
+    return out;
+  }, salonSlots);
+  const badSalon = salon.filter((r) => !r.reg || !r.art || r.stand === null || r.stand < 0.015 || r.stand > 0.05);
+  log(`D2 salon wall: all ${salonSlots.length} frames registered with the wall-art contract (no conflicts), each canvas unobstructed and seated 1.5–5 cm off the wall`, badSalon.length === 0 && reg.conflicts.length === 0, JSON.stringify(badSalon.length ? badSalon : `${salon.length} ok`));
 
   // ---------------------------------------------------------------- 8b. the front key in the home world
   const home = await (async () => {

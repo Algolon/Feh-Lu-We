@@ -42,9 +42,9 @@
     placement pass.
 
 ## Status
-Registered as an **additional environment-dressing requirement**. It is **not implemented in D2**:
-- D2's scope is 3D props and keys;
-- the D1-R gallery pass is closed;
-- the art-supply blocker above needs an owner decision first.
-
-It is queued for the next fitting environment-art pass (D3 curation or a dedicated D1-G pass).
+**Implemented** in D2. The owner allowed duplicate pieces for this composition on 11 Oct 2026.
+- Layout: `src/content/gallery.ts` (`SALON_LAYOUT`, `SALON_SITES`).
+- Builder: `salonWall` in `src/world/furniture.ts`.
+- Site: the study's long east wall over the reading corner.
+- Tests: `tests/dev04d-gallery.test.ts`, `e2e:dev04d`.
+- Details: `docs/dev04d/DEV04D_D2_REPORT.md` §8.
