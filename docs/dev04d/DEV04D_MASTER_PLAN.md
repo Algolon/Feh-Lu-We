@@ -1,6 +1,20 @@
 # DEV-04D — Reference Implementation & Estate-Wide Curation · Master plan (D0)
 
-Status update: **D1 (D1-a + D1-b) implemented for owner review — see [`DEV04D_D1_REPORT.md`](DEV04D_D1_REPORT.md). D2–D4 not started.**
+Status update (11 Oct 2026, after D3-0):
+
+| Phase | Status |
+|---|---|
+| D1 | complete, merged (PR #8) |
+| D1-R | complete, merged (PR #8) |
+| D2 | complete, merged and deployed (PR #8, `f26e563`); **visually subject to D2-R refinement** |
+| D3 | pending; recalibrated |
+| D4 | pending |
+
+- D2 report: [`DEV04D_D2_REPORT.md`](DEV04D_D2_REPORT.md).
+- D2-R triage and D3 recalibration: [`DEV04D_D3_CRAFTSMANSHIP_AUDIT.md`](DEV04D_D3_CRAFTSMANSHIP_AUDIT.md) and
+  [`DEV04D_D3_EXECUTION_PLAN.md`](DEV04D_D3_EXECUTION_PLAN.md).
+
+Earlier status: D1 (D1-a + D1-b) implemented for owner review; see [`DEV04D_D1_REPORT.md`](DEV04D_D1_REPORT.md).
 
 Status: **D0 reconciled, for owner review. No gameplay / art implementation has been made.** D0 is reconciled
 against the recovered FLW stable-ID library (PR #7). The only code in D0 is the non-functional audit harness

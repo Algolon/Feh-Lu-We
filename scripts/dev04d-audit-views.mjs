@@ -128,7 +128,20 @@ const D2KEYS = [
 if (process.env.SET === 'd2') D2.push(...D2KEYS.map(([n, p]) => [n, p]));
 const OPEN_FOR = Object.fromEntries(D2KEYS.filter((k) => k[2]).map(([n, , id]) => [n, id]));
 
-const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
+// DEV-04D D3-0 (SET=d30): the craftsmanship audit's environment views at player eye / approach distance (the phone
+// viewport: VW=915 VH=412). Façade and portico, hard ground, library shelving, billiard, dining / kitchen (D3-a),
+// cottage walls and terrace; D2 assets come from SET=d2 run at the same viewport.
+const D30 = [
+  ['e-facade-approach', 90, 0, 62, 0, 0.08], ['e-portico', 90, 0, 74.5, 0, 0.14], ['e-portico-close', 89.2, 0, 77.6, 10, 0.2],
+  ['e-facade-oblique', 78, 0, 70, 35, 0.1], ['e-forecourt-ground', 90, 0, 66, -20, -0.25], ['e-terrace-garden', 92, 0, 113, 180, 0.04],
+  ['e-library-shelves', 79, 0.15, 100, 0, 0.05], ['e-library-wide', 83.8, 0.15, 95.2, -40, 0.02], ['e-billiard', 89.0, 0.15, 105.1, 40, -0.2],
+  ['e-dining', 96.2, 0.15, 81.5, 40, -0.05], ['e-dining-table', 101.3, 0.15, 84.2, 0, -0.3], ['e-kitchen', 96.2, 0.15, 93.5, 35, -0.05], ['e-kitchen-back', 106.5, 0.15, 108.5, -150, -0.05],
+  ['e-living', 84, 0.15, 92.8, -130, -0.02], ['e-vestibule-lobby', 90, 0.15, 81.2, 0, 0.0],
+  ['e-cottage-room', 25, 4.15, 160.6, 0, 0.0], ['e-cottage-from-door', 25, 4.15, 157.8, 0, 0.0], ['e-terrace-table', 23.5, 4.15, 153.2, 40, -0.05],
+  ['e-botanic', 104.4, 3.35, 95.2, 180, -0.05], ['e-study', 98.2, 3.35, 95.2, 180, -0.05], ['e-gallery-landing', 94.2, 3.35, 99.5, -100, 0.0],
+].map(([n, x, y, z, yaw, pitch]) => [n, { x, y, z, yaw: (yaw * Math.PI) / 180, pitch }]);
+
+const ctx = await browser.newContext({ viewport: { width: +(process.env.VW ?? 1280), height: +(process.env.VH ?? 720) } });
 const page = await ctx.newPage();
 const problems = [];
 page.on('pageerror', (e) => problems.push(`pageerror: ${e.message}`));
@@ -164,6 +177,7 @@ if (!process.env.EXT && !process.env.SET) for (const r of rooms) {
 }
 if (process.env.SET === 'd1') views.push(...D1);
 else if (process.env.SET === 'd2') views.push(...D2);
+else if (process.env.SET === 'd30') views.push(...D30);
 else if (process.env.SET === 'd1r') views.push(...D1R);
 else if (!process.env.ROOMS) views.push(...EXT);
 const sel = process.env.VIEWS ? new Set(process.env.VIEWS.split(',')) : null;

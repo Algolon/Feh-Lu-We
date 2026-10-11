@@ -1,0 +1,300 @@
+{
+  "commit": null,
+  "rows": [
+    {
+      "name": "e-facade-approach",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 62,
+        "yaw": 0,
+        "pitch": 0.08
+      },
+      "calls": 167,
+      "triangles": 267398,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "e-portico",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 74.5,
+        "yaw": 0,
+        "pitch": 0.14
+      },
+      "calls": 196,
+      "triangles": 310747,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "e-portico-close",
+      "pose": {
+        "x": 89.2,
+        "y": 0,
+        "z": 77.6,
+        "yaw": 0.17453292519943295,
+        "pitch": 0.2
+      },
+      "calls": 200,
+      "triangles": 314148,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "e-facade-oblique",
+      "pose": {
+        "x": 78,
+        "y": 0,
+        "z": 70,
+        "yaw": 0.6108652381980153,
+        "pitch": 0.1
+      },
+      "calls": 171,
+      "triangles": 274120,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "e-forecourt-ground",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 66,
+        "yaw": -0.3490658503988659,
+        "pitch": -0.25
+      },
+      "calls": 164,
+      "triangles": 273329,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "e-terrace-garden",
+      "pose": {
+        "x": 92,
+        "y": 0,
+        "z": 113,
+        "yaw": 3.141592653589793,
+        "pitch": 0.04
+      },
+      "calls": 210,
+      "triangles": 372119,
+      "room": "out",
+      "feetY": 0.15
+    },
+    {
+      "name": "e-library-shelves",
+      "pose": {
+        "x": 79,
+        "y": 0.15,
+        "z": 100,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "calls": 70,
+      "triangles": 240524,
+      "room": "library",
+      "feetY": 0.15
+    },
+    {
+      "name": "e-library-wide",
+      "pose": {
+        "x": 83.8,
+        "y": 0.15,
+        "z": 95.2,
+        "yaw": -0.6981317007977318,
+        "pitch": 0.02
+      },
+      "calls": 93,
+      "triangles": 278190,
+      "room": "library",
+      "feetY": 0.15
+    },
+    {
+      "name": "e-billiard",
+      "pose": {
+        "x": 86.2,
+        "y": 0.15,
+        "z": 105,
+        "yaw": 1.0471975511965976,
+        "pitch": -0.12
+      },
+      "calls": 66,
+      "triangles": 256294,
+      "room": "guestWC",
+      "feetY": 0.15
+    },
+    {
+      "name": "e-dining",
+      "pose": {
+        "x": 96.2,
+        "y": 0.15,
+        "z": 81.5,
+        "yaw": 0.6981317007977318,
+        "pitch": -0.05
+      },
+      "calls": 196,
+      "triangles": 353746,
+      "room": "dining",
+      "feetY": 0.15
+    },
+    {
+      "name": "e-dining-table",
+      "pose": {
+        "x": 101.3,
+        "y": 0.15,
+        "z": 84.2,
+        "yaw": 0,
+        "pitch": -0.3
+      },
+      "calls": 288,
+      "triangles": 463905,
+      "room": "dining",
+      "feetY": 0.15
+    },
+    {
+      "name": "e-kitchen",
+      "pose": {
+        "x": 96.2,
+        "y": 0.15,
+        "z": 93.5,
+        "yaw": 0.6108652381980153,
+        "pitch": -0.05
+      },
+      "calls": 202,
+      "triangles": 318815,
+      "room": "kitchen",
+      "feetY": 0.15
+    },
+    {
+      "name": "e-kitchen-back",
+      "pose": {
+        "x": 106.5,
+        "y": 0.15,
+        "z": 108.5,
+        "yaw": -2.6179938779914944,
+        "pitch": -0.05
+      },
+      "calls": 227,
+      "triangles": 378872,
+      "room": "kitchen",
+      "feetY": 0.15
+    },
+    {
+      "name": "e-living",
+      "pose": {
+        "x": 84,
+        "y": 0.15,
+        "z": 92.8,
+        "yaw": -2.2689280275926285,
+        "pitch": -0.02
+      },
+      "calls": 86,
+      "triangles": 290414,
+      "room": "living",
+      "feetY": 0.15
+    },
+    {
+      "name": "e-vestibule-lobby",
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 81.2,
+        "yaw": 0,
+        "pitch": 0
+      },
+      "calls": 280,
+      "triangles": 526406,
+      "room": "vestibule",
+      "feetY": 0.15
+    },
+    {
+      "name": "e-cottage-room",
+      "pose": {
+        "x": 25,
+        "y": 4.15,
+        "z": 160.6,
+        "yaw": 0,
+        "pitch": 0
+      },
+      "calls": 36,
+      "triangles": 105612,
+      "room": "cottageRoom",
+      "feetY": 4.15
+    },
+    {
+      "name": "e-cottage-from-door",
+      "pose": {
+        "x": 25,
+        "y": 4.15,
+        "z": 157.8,
+        "yaw": 0,
+        "pitch": 0
+      },
+      "calls": 42,
+      "triangles": 76099,
+      "room": "cottageEntry",
+      "feetY": 4.15
+    },
+    {
+      "name": "e-terrace-table",
+      "pose": {
+        "x": 23.5,
+        "y": 4.15,
+        "z": 153.2,
+        "yaw": 0.6981317007977318,
+        "pitch": -0.05
+      },
+      "calls": 58,
+      "triangles": 149117,
+      "room": "out",
+      "feetY": 4.15
+    },
+    {
+      "name": "e-botanic",
+      "pose": {
+        "x": 104.4,
+        "y": 3.35,
+        "z": 95.2,
+        "yaw": 3.141592653589793,
+        "pitch": -0.05
+      },
+      "calls": 82,
+      "triangles": 194218,
+      "room": "botanic",
+      "feetY": 3.35
+    },
+    {
+      "name": "e-study",
+      "pose": {
+        "x": 98.2,
+        "y": 3.35,
+        "z": 95.2,
+        "yaw": 3.141592653589793,
+        "pitch": -0.05
+      },
+      "calls": 102,
+      "triangles": 215722,
+      "room": "study",
+      "feetY": 3.35
+    },
+    {
+      "name": "e-gallery-landing",
+      "pose": {
+        "x": 94.2,
+        "y": 3.35,
+        "z": 99.5,
+        "yaw": -1.7453292519943295,
+        "pitch": 0
+      },
+      "calls": 222,
+      "triangles": 516264,
+      "room": "landing",
+      "feetY": 3.35
+    }
+  ],
+  "problems": []
+}
