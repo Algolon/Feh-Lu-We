@@ -258,7 +258,7 @@ node scripts/d3b-asset-views.mjs http://localhost:5173/Feh-Lu-We/ docs/dev04d/d3
 | unit (vitest) | 259 / 259 (21 files, incl. the 10 new Track 01 tests) |
 | build | ok; `asset-review.html` and `d3bAssets` are not in `dist/` |
 | e2e:dev04d | 18 / 18: **130 interactables / doors, 21 checkpoints, save keys and version 4 unchanged**; production S3 pieces unchanged (S3-014 864 t, S3-017 1,172 t, S3-016 352 t); wall-art contract and audits clean; no page errors |
-| e2e:dev04a / dev04b / dev04c | 19 / 19, 9 / 9, see §9.1 |
+| e2e:dev04a / dev04b / dev04c | 19 / 19, 9 / 9, 22 / 22 |
 | world placement | none: the builders are imported only by the harness and the tests (unit test asserts it) |
 | puzzle / evidence | untouched (no gameplay file changed) |
 
@@ -271,7 +271,7 @@ Production build `vite preview`, sequential runs:
 | e2e:dev04d | 18 / 18 |
 | e2e:dev04a | 19 / 19 |
 | e2e:dev04b | 9 / 9 (construction audit clean) |
-| e2e:dev04c | running at the first commit; result added below |
+| e2e:dev04c | 22 / 22 |
 
 ## 10. Owner decisions requested
 
