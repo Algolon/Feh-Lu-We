@@ -128,7 +128,33 @@ const D2KEYS = [
 if (process.env.SET === 'd2') D2.push(...D2KEYS.map(([n, p]) => [n, p]));
 const OPEN_FOR = Object.fromEntries(D2KEYS.filter((k) => k[2]).map(([n, , id]) => [n, id]));
 
-const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
+// DEV-04D D3-0 (SET=d30): the craftsmanship audit's environment views at player eye / approach distance (the phone
+// viewport: VW=915 VH=412). Façade and portico, hard ground, library shelving, billiard, dining / kitchen (D3-a),
+// cottage walls and terrace; D2 assets come from SET=d2 run at the same viewport.
+const D30 = [
+  ['e-facade-approach', 90, 0, 62, 0, 0.08], ['e-portico', 90, 0, 74.5, 0, 0.14], ['e-portico-close', 89.2, 0, 77.6, 10, 0.2],
+  ['e-facade-oblique', 78, 0, 70, 35, 0.1], ['e-forecourt-ground', 90, 0, 66, -20, -0.25], ['e-terrace-garden', 92, 0, 113, 180, 0.04],
+  ['e-library-shelves', 79, 0.15, 100, 0, 0.05], ['e-library-wide', 83.8, 0.15, 95.2, -40, 0.02], ['e-billiard', 89.0, 0.15, 105.1, 40, -0.2],
+  ['e-dining', 96.2, 0.15, 81.5, 40, -0.05], ['e-dining-table', 101.3, 0.15, 84.2, 0, -0.3], ['e-kitchen', 96.2, 0.15, 93.5, 35, -0.05], ['e-kitchen-back', 106.5, 0.15, 108.5, -150, -0.05],
+  ['e-living', 84, 0.15, 92.8, -130, -0.02], ['e-vestibule-lobby', 90, 0.15, 81.2, 0, 0.0],
+  ['e-cottage-room', 25, 4.15, 160.6, 0, 0.0], ['e-cottage-from-door', 25, 4.15, 157.8, 0, 0.0], ['e-terrace-table', 23.5, 4.15, 153.2, 40, -0.05],
+  ['e-botanic', 104.4, 3.35, 95.2, 180, -0.05], ['e-study', 98.2, 3.35, 95.2, 180, -0.05], ['e-gallery-landing', 94.2, 3.35, 99.5, -100, 0.0],
+].map(([n, x, y, z, yaw, pitch]) => [n, { x, y, z, yaw: (yaw * Math.PI) / 180, pitch }]);
+
+// DEV-04D D2-R (SET=d2r): fixed poses (not object-relative), so production and the D2-R build are captured from the same
+// cameras even where a piece moved. Player-eye approach / room / close per changed item, and the Portugal cottage
+// sequence (entry approach, through the arch, room composition, terrace approach).
+const D2R = [
+  ['sw-walk', 90.3, 3.35, 83.5, 180, 0.3], ['sw-void', 86.0, 3.35, 94.0, 164, 0.12], ['sw-close', 90.0, 3.35, 81.9, 180, 0.28],
+  ['med-door', 104.0, 3.35, 95.3, -159, 0.03], ['med-room', 105.4, 3.35, 91.2, -112, 0.05], ['med-close', 102.7, 3.35, 88.5, -90, 0.12],
+  ['cot-entry-approach', 25.0, 4.15, 154.6, 0, 0.04], ['cot-through-arch', 25.0, 4.15, 158.2, 0, 0.04], ['cot-room-south', 25.0, 4.15, 164.0, 180, 0.0],
+  ['cot-room-sideboard', 28.6, 4.15, 163.6, -118, 0.04], ['cot-room-east', 22.0, 4.15, 163.8, 125, 0.04], ['cot-mask-close', 21.7, 4.15, 161.0, -90, 0.12], ['cot-mask-face', 21.15, 4.15, 161.0, -90, 0.0],
+  ['cot-045-close', 28.1, 4.15, 160.9, 90, 0.1],
+  ['ter-approach', 19.4, 4.1, 152.5, 72, 0.06], ['ter-table', 25.6, 4.15, 153.0, 45, 0.05], ['ter-panel-close', 29.3, 4.15, 155.4, 0, 0.18],
+  ['her-path', 82.6, 0.0, 137.0, -58, 0.02], ['her-bench', 78.6, 0.0, 139.6, -90, 0.0], ['her-close', 78.0, 0.0, 140.0, -45, 0.05],
+].map(([n, x, y, z, yaw, pitch]) => [`d2r-${n}`, { x, y, z, yaw: (yaw * Math.PI) / 180, pitch }]);
+
+const ctx = await browser.newContext({ viewport: { width: +(process.env.VW ?? 1280), height: +(process.env.VH ?? 720) } });
 const page = await ctx.newPage();
 const problems = [];
 page.on('pageerror', (e) => problems.push(`pageerror: ${e.message}`));
@@ -151,6 +177,18 @@ const rooms = await page.evaluate((allOpen) => {
   g.settings.quality = 'low'; g.applyQuality(true); // once: the phone default (a per-view switch recompiles every program)
   return g.world.rooms.rooms.map((r) => ({ id: r.id, name: r.name, floor: r.floor, x0: r.x0, x1: r.x1, z0: r.z0, z1: r.z1, y0: r.y0 }));
 }, process.env.DOORS !== 'closed');
+// MODE=clay (one grey Lambert, no maps, no vertex colour: form and construction only) or MODE=neutral (vertex colour
+// kept, maps removed: material breakup without texture noise); standard otherwise
+if (process.env.MODE) await page.evaluate((mode) => {
+  const g = window.__game, Mat = g.world.scene.children.find((o) => o.isMesh)?.material?.constructor;
+  const cache = new Map();
+  g.world.scene.traverse((o) => {
+    if (!o.isMesh || !o.material || Array.isArray(o.material) || o.material.isMeshBasicMaterial || o.material.transparent) return;
+    const vc = mode === 'neutral' && !!o.material.vertexColors, key = `${vc}|${o.material.side}`;
+    if (!cache.has(key)) { const m = o.material.clone(); m.map = null; m.alphaTest = 0; m.opacity = 1; m.vertexColors = vc; if (m.color) m.color.set(mode === 'clay' ? '#bdb6ab' : '#ffffff'); if (m.specular) m.specular.set('#222222'); m.needsUpdate = true; cache.set(key, m); }
+    o.material = cache.get(key);
+  });
+}, process.env.MODE);
 const FLOOR_Y = { g: 0.15, u: 3.35, a: 6.7, b: -3.2 };
 const views = [];
 if (!process.env.EXT && !process.env.SET) for (const r of rooms) {
@@ -164,6 +202,8 @@ if (!process.env.EXT && !process.env.SET) for (const r of rooms) {
 }
 if (process.env.SET === 'd1') views.push(...D1);
 else if (process.env.SET === 'd2') views.push(...D2);
+else if (process.env.SET === 'd30') views.push(...D30);
+else if (process.env.SET === 'd2r') views.push(...D2R, ...D2KEYS.map(([n, p]) => [n, p]));
 else if (process.env.SET === 'd1r') views.push(...D1R);
 else if (!process.env.ROOMS) views.push(...EXT);
 const sel = process.env.VIEWS ? new Set(process.env.VIEWS.split(',')) : null;

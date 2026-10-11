@@ -10,7 +10,7 @@ const OUT = process.argv[3] ?? 'docs/dev04d/d2/keys';
 mkdirSync(OUT, { recursive: true });
 const helpers = readFileSync(new URL('./e2e-helpers.js', import.meta.url), 'utf8');
 const browser = await chromium.launch({ executablePath: process.env.CHROME ?? '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
-const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
+const ctx = await browser.newContext({ viewport: { width: +(process.env.VW ?? 1280), height: +(process.env.VH ?? 720) } });
 
 // world, pickup, container, stand pose (the main e2e's), close-up offset (metres east of the key, up)
 const KEYS = [

@@ -1,0 +1,104 @@
+{
+  "commit": null,
+  "rows": [
+    {
+      "name": "d2r-sw-close",
+      "pose": {
+        "x": 90,
+        "y": 3.35,
+        "z": 81.9,
+        "yaw": 3.141592653589793,
+        "pitch": 0.28
+      },
+      "calls": 32,
+      "triangles": 111604,
+      "room": "frontGallery",
+      "feetY": 3.35
+    },
+    {
+      "name": "d2r-med-close",
+      "pose": {
+        "x": 102.7,
+        "y": 3.35,
+        "z": 88.5,
+        "yaw": -1.5707963267948966,
+        "pitch": 0.12
+      },
+      "calls": 125,
+      "triangles": 342292,
+      "room": "botanic",
+      "feetY": 3.35
+    },
+    {
+      "name": "d2r-cot-room-sideboard",
+      "pose": {
+        "x": 28.6,
+        "y": 4.15,
+        "z": 163.6,
+        "yaw": -2.0594885173533086,
+        "pitch": 0.04
+      },
+      "calls": 48,
+      "triangles": 124338,
+      "room": "cottageRoom",
+      "feetY": 4.15
+    },
+    {
+      "name": "d2r-cot-mask-close",
+      "pose": {
+        "x": 21.7,
+        "y": 4.15,
+        "z": 161,
+        "yaw": -1.5707963267948966,
+        "pitch": 0.12
+      },
+      "calls": 28,
+      "triangles": 114308,
+      "room": "cottageRoom",
+      "feetY": 4.15
+    },
+    {
+      "name": "d2r-cot-mask-face",
+      "pose": {
+        "x": 21.15,
+        "y": 4.15,
+        "z": 161,
+        "yaw": -1.5707963267948966,
+        "pitch": 0
+      },
+      "calls": 28,
+      "triangles": 112438,
+      "room": "cottageRoom",
+      "feetY": 4.15
+    },
+    {
+      "name": "d2r-ter-panel-close",
+      "pose": {
+        "x": 29.3,
+        "y": 4.15,
+        "z": 155.4,
+        "yaw": 0,
+        "pitch": 0.18
+      },
+      "calls": 48,
+      "triangles": 127016,
+      "room": "out",
+      "feetY": 4.15
+    },
+    {
+      "name": "d2r-her-close",
+      "pose": {
+        "x": 78,
+        "y": 0,
+        "z": 140,
+        "yaw": -0.7853981633974483,
+        "pitch": 0.05
+      },
+      "calls": 35,
+      "triangles": 118769,
+      "room": "out",
+      "feetY": 0
+    }
+  ],
+  "problems": []
+}

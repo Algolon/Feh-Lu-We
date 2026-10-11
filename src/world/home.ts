@@ -11,7 +11,7 @@ import type { SceneExtras } from '../core/game';
 import { has } from '../core/state';
 import { tutorialMissing } from '../puzzles/rules';
 import { beginOpenings } from './openings';
-import { addKey } from './d2props';
+import { addKey, presentKey, keyLiner, linerWhenOpen, LINER_TOP } from './d2props';
 void _t;
 
 export function buildHome(g: GameApi): { world: World; extras: SceneExtras } {
@@ -70,8 +70,12 @@ export function buildHome(g: GameApi): { world: World; extras: SceneExtras } {
   for (const zz of [dz - 0.6, dz + 0.6]) box(c.b, k.M.paint, '#5a3a22', dx + 0.26, 0.1, zz, 0.02, 0.5, 0.5, { chunk: 'home' });
   w.col.addBox(0.05, 0.6, dz - 0.95, dz + 0.95, 0, 0.92);
   const drawer = makeDrawer(w, g, { id: 'home.drawer', x: dx + 0.03, y: 0.73, z: dz, yaw: Math.PI / 2, w: 0.7, h: 0.18, d: 0.42, color: '#7a5232' });
-  const key = compound((b) => addKey(b, 'frontKey')); // DEV-04D D2: FLW-K3-001 key-family model (was three boxes)
-  key.position.set(0, -0.06, 0);
+  const key = presentKey(compound((b) => addKey(b, 'frontKey'))); // DEV-04D D2: FLW-K3-001 key-family model; D2-R: ×1.7 presentation
+  const felt = keyLiner('felt'); // D2-R: on a green felt liner (contrast for the brass key and red tag)
+  felt.position.set(0, -0.06, 0);
+  drawer.slider.add(felt);
+  linerWhenOpen(w, felt, drawer.isOpen);
+  key.position.set(0, -0.06 + LINER_TOP.felt, 0);
   drawer.slider.add(key);
   makePickup(w, g, { id: 'pk.frontKey', item: 'frontKey', obj: key, available: drawer.isOpen, hit: [0.3, 0.12, 0.3] });
 
