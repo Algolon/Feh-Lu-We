@@ -1,0 +1,146 @@
+{
+  "commit": "base-444de9b",
+  "rows": [
+    {
+      "name": "d3arch-long-approach",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 62,
+        "yaw": 0,
+        "pitch": 0.08
+      },
+      "calls": 98,
+      "triangles": 164188,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "d3arch-facade-whole",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 56,
+        "yaw": 0,
+        "pitch": 0.14
+      },
+      "calls": 93,
+      "triangles": 172683,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "d3arch-medium-approach",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 71.5,
+        "yaw": 0,
+        "pitch": 0.12
+      },
+      "calls": 99,
+      "triangles": 167147,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "d3arch-before-steps",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 76.4,
+        "yaw": 0,
+        "pitch": 0.2
+      },
+      "calls": 96,
+      "triangles": 166096,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "d3arch-angled-left",
+      "pose": {
+        "x": 85.2,
+        "y": 0,
+        "z": 74.2,
+        "yaw": 0.5585053606381855,
+        "pitch": 0.12
+      },
+      "calls": 98,
+      "triangles": 172223,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "d3arch-angled-right",
+      "pose": {
+        "x": 94.8,
+        "y": 0,
+        "z": 74.2,
+        "yaw": -0.5585053606381855,
+        "pitch": 0.12
+      },
+      "calls": 67,
+      "triangles": 156025,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "d3arch-portico-close",
+      "pose": {
+        "x": 87.2,
+        "y": 0,
+        "z": 77.4,
+        "yaw": 0.4363323129985824,
+        "pitch": 0.22
+      },
+      "calls": 103,
+      "triangles": 173676,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "d3arch-door-reveal",
+      "pose": {
+        "x": 89.4,
+        "y": 0,
+        "z": 78,
+        "yaw": 0.20943951023931953,
+        "pitch": 0.08
+      },
+      "calls": 105,
+      "triangles": 170103,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "d3arch-oblique-far",
+      "pose": {
+        "x": 78,
+        "y": 0,
+        "z": 68,
+        "yaw": 0.6632251157578452,
+        "pitch": 0.1
+      },
+      "calls": 96,
+      "triangles": 175415,
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "d3arch-out-through-door",
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 83.2,
+        "yaw": 3.141592653589793,
+        "pitch": 0
+      },
+      "calls": 37,
+      "triangles": 127084,
+      "room": "vestibule",
+      "feetY": 0.15
+    }
+  ],
+  "problems": []
+}

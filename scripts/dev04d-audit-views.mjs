@@ -165,6 +165,16 @@ const D3A = [
   ['kit-sw', 96.2, 0.15, 93.5, 35, -0.05], ['kit-island', 99.0, 0.15, 103.0, 40, -0.25], ['kit-dresser', 98.4, 0.15, 104.2, -90, -0.05],
 ].map(([n, x, y, z, yaw, pitch]) => [`d3a-${n}`, { x, y, z, yaw: (yaw * Math.PI) / 180, pitch }]);
 
+// DEV-04D D3-A2 (SET=d3arch): manor entrance / portico / central front facade at player eye. Fixed poses: the long
+// forecourt approach, the medium approach, in front of the steps, angled from the left and right, the portico close,
+// the facade whole, and looking out through the front doorway from the hall.
+const D3ARCH = [
+  ['long-approach', 90, 0, 62, 0, 0.08], ['facade-whole', 90, 0, 56, 0, 0.14], ['medium-approach', 90, 0, 71.5, 0, 0.12],
+  ['before-steps', 90, 0, 76.4, 0, 0.2], ['angled-left', 85.2, 0, 74.2, 32, 0.12], ['angled-right', 94.8, 0, 74.2, -32, 0.12],
+  ['portico-close', 87.2, 0, 77.4, 25, 0.22], ['door-reveal', 89.4, 0, 78.0, 12, 0.08], ['oblique-far', 78, 0, 68, 38, 0.1],
+  ['out-through-door', 90, 0.15, 83.2, 180, 0.0],
+].map(([n, x, y, z, yaw, pitch]) => [`d3arch-${n}`, { x, y, z, yaw: (yaw * Math.PI) / 180, pitch }]);
+
 const ctx = await browser.newContext({ viewport: { width: +(process.env.VW ?? 1280), height: +(process.env.VH ?? 720) } });
 const page = await ctx.newPage();
 const problems = [];
@@ -217,6 +227,7 @@ else if (process.env.SET === 'd30') views.push(...D30);
 else if (process.env.SET === 'd2r') views.push(...D2R, ...D2KEYS.map(([n, p]) => [n, p]));
 else if (process.env.SET === 'd1r') views.push(...D1R);
 else if (process.env.SET === 'd3a') views.push(...D3A);
+else if (process.env.SET === 'd3arch') views.push(...D3ARCH);
 else if (!process.env.ROOMS) views.push(...EXT);
 const sel = process.env.VIEWS ? new Set(process.env.VIEWS.split(',')) : null;
 const rows = [];

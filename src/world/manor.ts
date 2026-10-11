@@ -39,6 +39,7 @@ import { GF, CEIL, UF, UCEIL, TOP, BF, BCEIL, AF, S03, roofUnderside, ATTIC_NOOK
 import { buildMaquette } from './maquette';
 import { addKey, presentKey, keyLiner, linerWhenOpen, hatchDish, LINER_TOP, HATCH_DISH_FLOOR, S3_BUILDERS } from './d2props';
 import { SALON_LAYOUT, SALON_SITES } from '../content/gallery';
+import { buildEntrance, entranceBay } from './entrance';
 import { wainscot, refectoryTable, gamesCabinet, dartboard, servingConsole, chinaCabinet, wallCupboards, splashback, enamelPendant, pegRailClock, panelDoor } from './d3a';
 import { placeSolved, slotContents, openBasement } from '../puzzles/rules';
 
@@ -170,22 +171,18 @@ function shell(w: World, c: Ctx) {
   cyl(c.b, k.M.paint, dressed, 90, TOP + 1.0, 79.46, 0.62, 0.62, 0.06, 20, { chunk: c.chunk, rx: Math.PI / 2 }); // oculus ring
   cyl(c.b, k.M.glow, '#5f6f78', 90, TOP + 1.0, 79.44, 0.5, 0.5, 0.05, 16, { chunk: c.chunk, rx: Math.PI / 2, shadow: false, jitter: 0 });
   windowAt(c, 'x', 79.55, -1, 90, 4.0, 1.2, 1.6, true, { kind: 'manor' });
-  // porch: two steps up to a stone landing, Tuscan columns (base, shaft, capital) carrying an entablature and a
-  // shallow lead-covered roof with a fascia; lanterns either side of the door
+  // porch (DEV-04D D3-A2, entrance.ts): the walk surfaces and colliders stay exactly as before (the landing floor at GF,
+  // the 7.5 cm step, the column circles); the portico, doorway surround, steps and bay base are rebuilt as construction
   floor(c, 87.8, 92.2, 78.6, 80.0, GF, k.M.stone, '#d9ccb0', 0.4, true);
-  boxMM(c.b, k.M.stone, '#cfc0a2', 87.5, 92.5, -0.1, 0.075, 78.25, 80.0, { chunk: c.chunk, uv: 1 });
-  const colG = lathe([[0, 0], [0.24, 0], [0.24, 0.08], [0.2, 0.12], [0.19, 0.2], [0.165, 2.5], [0.2, 2.58], [0.23, 2.64], [0.23, 2.7], [0, 2.7]], 12);
-  for (const x of [88.1, 91.9]) {
-    c.b.add(k.M.stone, colG, new THREE.Matrix4().makeTranslation(x, GF, -78.85), '#efe4ca', c.chunk, true, 0);
-    box(c.b, k.M.paint, dressed, x, GF + 2.7, 78.85, 0.5, 0.06, 0.5, { chunk: c.chunk }); // abacus
-    c.col.addCircle(x, 78.85, 0.2, 0, 3);
+  for (const x of [88.1, 91.9]) c.col.addCircle(x, 78.85, 0.2, 0, 3);
+  buildEntrance(c, { x: 90, bayZ: 79.55, colZ: 78.85, colX: [88.1, 91.9], gf: GF });
+  entranceBay(c, 86.4, 93.6, 79.55, 80.0, [87.375, 92.625], UF);
+  // lanterns on wrought brackets on the bay face, between each pilaster and the door surround (they sat inside the bay)
+  for (const x of [88.6, 91.4]) {
+    boxMM(c.b, k.M.paint, '#2b2622', x - 0.02, x + 0.02, 2.62, 2.66, 79.34, 79.56, { chunk: c.chunk, shadow: false }); // bracket arm
+    boxMM(c.b, k.M.paint, '#2b2622', x - 0.01, x + 0.01, 2.54, 2.63, 79.35, 79.37, { chunk: c.chunk, shadow: false }); // drop to the lantern cap
+    staticLantern(c, w, x, 2.15, 79.36, 0.7, 0, 2.2, 5); // out of the bay the same 4 / 7 washed the portico white
   }
-  colG.dispose();
-  boxMM(c.b, k.M.paint, dressed, 87.7, 92.3, GF + 2.76, GF + 3.05, 78.6, 79.1, { chunk: c.chunk }); // architrave beam
-  boxMM(c.b, k.M.paint, '#e8dcc2', 87.6, 92.4, GF + 3.05, GF + 3.15, 78.5, 80.0, { chunk: c.chunk }); // cornice
-  boxMM(c.b, k.M.slate, '#7f8486', 87.55, 92.45, GF + 3.15, GF + 3.27, 78.45, 80.0, { chunk: c.chunk, uv: 1 }); // leaded flat roof
-  boxMM(c.b, k.M.paint, '#6e6f6a', 87.55, 92.45, GF + 3.27, GF + 3.31, 78.45, 78.52, { chunk: c.chunk });
-  for (const x of [88.8, 91.2]) staticLantern(c, w, x, 2.25, 79.7, 0.8, 0, 4, 7);
   // ---------------------------------------------------------------- service wing (single storey, own roof)
   const WH = 3.9;
   wall(c, 'x', 92.2, 107.6, 116, 0, WH, { ...stone, t: 0.4, exterior: -1, skin, uv: 2.4, winStyle: 'manor', openings: [{ at: 112, w: 1.1, h: 2.3 }], windows: [{ at: 110, sill: 1.1, h: 1.3, w: 1.0 }, { at: 114.4, sill: 1.1, h: 1.3, w: 0.8 }] });
