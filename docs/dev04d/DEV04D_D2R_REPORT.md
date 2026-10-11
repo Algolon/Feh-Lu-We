@@ -101,7 +101,8 @@ No new material or texture.
 | e2e:dev03 / dev02 / dev01 | 11 / 11, 34 / 34, 34 / 34 |
 | full e2e (all four keys taken through their real pickups) | 103 / 103 |
 
-The final regression re-run on the last build is recorded in §7.
+The full table was re-run on the final D2-R build: the liners drawn only while open, the heron stones in shore rock,
+the construction-audit fixes. Every suite passed; dev04d 18 / 18 was run on the same final build.
 
 Confirmed:
 - 130 interactables / doors and 21 checkpoints unchanged; save schema 4.
