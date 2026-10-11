@@ -7,13 +7,13 @@
 // Faceted forms (carved wood, papier-maché, clay relief) use flat-shaded icosahedra ("gems"), matching the faceted
 // carving the sheets show.
 import * as THREE from 'three';
-import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { compound, type Batcher } from './kit';
 import type { Ctx } from './arch';
 import type { World } from '../interactions/world';
 import { Asm, artMats, lathe, projectUV } from './artkit';
 import { joinery } from './furniture';
 import { registerArt, artFootprint } from './openings';
+import { buildMedallion, buildSwallows } from './d3bAssets';
 import { woodMats } from './woodkit';
 import { PROP3D, KEY_SPECS, KEY_SCALE as KS, KEY_PRESENT, type KeyItem } from '../content/props3d';
 
@@ -59,14 +59,6 @@ function put(a: Asm, mat: THREE.Material, color: string, g: THREE.BufferGeometry
   const [x, y, z] = o.at ?? [0, 0, 0];
   a.add(mat, color, g, x, y, z, { rz: o.rz, s: o.s });
   g.dispose();
-}
-/** Merge one-off parts into one geometry (all non-indexed, position / normal / uv only). */
-function merge(parts: THREE.BufferGeometry[]) {
-  const ps = parts.map((g) => { const n = g.index ? g.toNonIndexed() : g; for (const k of Object.keys(n.attributes)) if (!['position', 'normal', 'uv'].includes(k)) n.deleteAttribute(k); return n; });
-  const m = mergeGeometries(ps, false)!;
-  parts.forEach((g) => g.dispose());
-  ps.forEach((g) => g.dispose());
-  return m;
 }
 const wallPiece = (id: string, x: number, y: number, z: number, yaw: number, w: number, h: number) =>
   registerArt(artFootprint(`relief@${x.toFixed(2)},${z.toFixed(2)}`, x, y, z, yaw, w, h)); // id = registry key, not a gameplay id
@@ -319,7 +311,6 @@ export function fireScreen(c: Ctx) {
 // the surface (authored vertex colour, `keepColor`), on the shared paint / ceramic / timber materials.
 const smooth = THREE.MathUtils.smoothstep;
 const gauss = (x: number, c: number, w: number) => Math.exp(-(((x - c) / w) ** 2));
-const mixC = (a: string, b: string, t: number) => new THREE.Color(a).lerp(new THREE.Color(b), THREE.MathUtils.clamp(t, 0, 1));
 
 /** Turn every triangle of `g` to face the viewer of a wall piece (local +lz = three −z), then recompute normals. */
 function faceFront(g: THREE.BufferGeometry) {
@@ -407,95 +398,17 @@ export function paperMask(c: Ctx) {
   a.end({ ground: false });
 }
 
-/**
- * FLW-S3-017 Terracotta bloemmedaillon (D2-R remodel): Ø 0.58 m. A turned clay disc with a profiled, rolled rim
- * (slightly out of round, by hand); the plant grows out of the field: a curving stem, five leaves with a sunk midrib
- * that lift at the tip and overlap the stem, a bud cupped by two sepals. One terracotta family, the relief lighter, its
- * contact with the field darker.
- */
-function medallionBody() {
-  const prof: [number, number][] = [[0.001, 0.036], [0.215, 0.036], [0.226, 0.04], [0.24, 0.058], [0.258, 0.066], [0.276, 0.058], [0.287, 0.035], [0.29, 0.0]];
-  const g = new THREE.LatheGeometry(prof.map(([r, h]) => new THREE.Vector2(r, h)), 40);
-  const pa = g.attributes.position as THREE.BufferAttribute, col: number[] = [];
-  for (let i = 0; i < pa.count; i++) {
-    const x = pa.getX(i), y = pa.getY(i), z = pa.getZ(i), r = Math.hypot(x, z), an = Math.atan2(z, x);
-    const k = 1 + 0.012 * Math.sin(3 * an + 0.7) + 0.007 * Math.sin(7 * an);
-    pa.setXYZ(i, x * k, y + 0.002 * Math.sin(5 * an) * (r > 0.2 ? 1 : 0), z * k);
-    const cc = r < 0.216 ? mixC('#a9583a', '#b8633f', r / 0.216) : y > 0.06 ? new THREE.Color('#cb7650') : y < 0.042 && r < 0.235 ? new THREE.Color('#924b31') : new THREE.Color('#b8633f');
-    col.push(cc.r, cc.g, cc.b);
-  }
-  g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
-  g.rotateX(-Math.PI / 2); // depth along local +lz
-  g.deleteAttribute('uv');
-  faceFront(g);
-  g.userData.keepColor = true;
-  return g;
+// FLW-S3-017 / FLW-S3-014: the D2-R interim models are superseded by the owner-approved Track 01 builds
+// (d3bAssets.ts `buildMedallion` / `buildSwallows`), placed by D3-b1 through their PROPS3D anchors and scales.
+function t01Medallion(c: Ctx) {
+  const p = anchor('FLW-S3-017'), s = p.scale ?? 1;
+  wallPiece(p.id, p.x, p.y, p.z, p.yaw, 0.6 * s, 0.6 * s);
+  buildMedallion(c.b, c.chunk, p.x, p.y, p.z, p.yaw, s, p.id);
 }
-function leaf(px: number, py: number, ang: number, len: number, wid: number, d0: number, hi = '#c8845a') {
-  const ca = Math.cos(ang), sa = Math.sin(ang);
-  return reliefSurface(7, 4, (s, t) => {
-    const across = t * 2 - 1, w = wid * Math.sin(Math.PI * Math.max(0.02, s)) ** 0.8, lx = s * len, ly = across * w;
-    const h = 0.002 + 0.022 * (1 - across * across) * Math.sin(Math.PI * Math.min(1, s * 1.05)) ** 0.6 - 0.006 * gauss(across, 0, 0.18) + 0.016 * s * s;
-    return { x: px + lx * ca - ly * sa, y: py + lx * sa + ly * ca, d: d0 + h, c: mixC('#9c5c3a', hi, s * 0.9 + (1 - Math.abs(across)) * 0.2) };
-  });
-}
-export function terracottaMedallion(c: Ctx) {
-  const p = anchor('FLW-S3-017'), M = artMats();
-  wallPiece(p.id, p.x, p.y, p.z, p.yaw, 0.6, 0.6);
-  const a = new Asm(c.b, c.chunk, p.x, p.y, p.z, p.yaw).begin(p.id);
-  a.add(M.paint, '#ffffff', cg('d2rMedBody', medallionBody), 0, 0, 0);
-  const F = 0.036; // field surface
-  const stem = new THREE.CatmullRomCurve3([[0.005, -0.2, F + 0.004], [-0.022, -0.1, F + 0.008], [0.004, -0.02, F + 0.009], [0.012, 0.05, F + 0.01]].map(([x, y, d]) => new THREE.Vector3(-x, y, -d)));
-  put(a, M.paint, '#bf7149', new THREE.TubeGeometry(stem, 12, 0.012, 5, false));
-  for (const [x, y, an, l, w] of [[-0.012, -0.15, Math.PI - 0.5, 0.15, 0.04], [0.0, -0.13, 0.45, 0.14, 0.038], [-0.01, -0.06, Math.PI - 0.25, 0.13, 0.036], [0.004, -0.04, 0.2, 0.13, 0.035], [0.008, 0.0, Math.PI - 0.9, 0.09, 0.028]] as const) put(a, M.paint, '#ffffff', leaf(x, y, an, l, w, F));
-  for (const s2 of [-1, 1]) put(a, M.paint, '#ffffff', leaf(0.012, 0.045, Math.PI / 2 + s2 * 0.55, 0.06, 0.02, F + 0.012, '#d08a5e')); // sepals
-  a.add(M.paint, '#d28c62', cg('d2rBud', () => { const g = lathe([[0.001, 0], [0.03, 0.012], [0.041, 0.036], [0.033, 0.066], [0.017, 0.09], [0.001, 0.104]], 10); g.scale(1, 1, 0.7); return g; }), -0.012, 0.045, F + 0.022);
-  a.end({ ground: false });
-}
-
-/**
- * FLW-S3-014 Gesneden zwaluwen (D2-R remodel): three carved swallows, ≈ 1.7 m as a group, on the owner's loose shallow
- * arc. Each bird: a turned, slightly flattened body (slate back, rufous throat, cream belly painted on the form),
- * swept tapered wings on two separate planes (the near wing proud of the body, the far one behind it), a deeply forked
- * tail; carried by a hidden dowel.
- */
-function swallowBody() {
-  const prof: [number, number][] = [[0.001, -0.1], [0.012, -0.085], [0.022, -0.05], [0.03, -0.01], [0.031, 0.02], [0.027, 0.05], [0.022, 0.075], [0.013, 0.097], [0.001, 0.118]];
-  const g = new THREE.LatheGeometry(prof.map(([r, h]) => new THREE.Vector2(r, h)), 8);
-  g.rotateZ(Math.PI / 2); // axis along local −x = the viewer's right: the head leads
-  g.scale(1, 1, 0.75);
-  const pa = g.attributes.position as THREE.BufferAttribute, col: number[] = [];
-  for (let i = 0; i < pa.count; i++) {
-    const along = -pa.getX(i), y = pa.getY(i);
-    const cc = y < -0.006 ? (along > 0.055 ? '#b8683f' : '#efdcb6') : along > 0.09 ? '#b8683f' : '#8a93a6';
-    const k = new THREE.Color(cc); col.push(k.r, k.g, k.b);
-  }
-  g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
-  g.deleteAttribute('uv');
-  g.userData.keepColor = true;
-  return g;
-}
-const vslab = (pts: [number, number][], depth: number, bevel: number, lz: number) => slab(pts.map(([x, y]) => [-x, y] as [number, number]), depth, bevel).translate(0, 0, -lz);
-function swallowWings() {
-  return merge([
-    vslab([[0.03, 0.012], [0.0, 0.062], [-0.06, 0.15], [-0.145, 0.222], [-0.11, 0.158], [-0.06, 0.082], [-0.02, 0.02]], 0.008, 0.003, 0.018), // near wing, raised
-    vslab([[0.025, -0.008], [0.0, -0.052], [-0.05, -0.122], [-0.122, -0.172], [-0.09, -0.112], [-0.042, -0.052], [-0.01, -0.016]], 0.007, 0.002, -0.006), // far wing, behind the body
-    vslab([[-0.085, 0.008], [-0.245, 0.052], [-0.15, 0.0], [-0.255, -0.042], [-0.085, -0.01]], 0.006, 0.002, -0.002), // forked tail
-    strut([0, 0, -0.06], [0, 0, -0.012], 0.007, 0.007, 5), // hidden dowel into the wall
-  ]);
-}
-export function carvedSwallows(c: Ctx) {
-  const p = anchor('FLW-S3-014'), M = artMats();
-  wallPiece(p.id, p.x, p.y, p.z, p.yaw, 1.8, 0.8);
-  const a = new Asm(c.b, c.chunk, p.x, p.y, p.z, p.yaw).begin(p.id);
-  const body = swallowBody(), wings = swallowWings();
-  // x (viewer right), y, pitch, scale: uneven spacing, the middle bird highest, the leader slightly smaller
-  for (const [x, y, rz, k] of [[-0.6, -0.12, 0.2, 1.0], [-0.02, 0.09, 0.06, 1.18], [0.6, 0.03, -0.12, 1.07]] as const) {
-    a.add(M.paint, '#ffffff', body, -x, y, 0.06, { rz: -rz, s: [k, k, k] });
-    a.add(M.paint, '#8a93a6', wings, -x, y, 0.06, { rz: -rz, s: [k, k, k] }); // slate, lifted: the window wall stands at ≈ 37 % light
-  }
-  body.dispose(); wings.dispose();
-  a.end({ ground: false, gap: 0.25 }); // three birds, each on its own dowel into the wall: the audit gap spans the group spacing
+function t01Swallows(c: Ctx) {
+  const p = anchor('FLW-S3-014'), s = p.scale ?? 1;
+  wallPiece(p.id, p.x, p.y, p.z, p.yaw, 1.73 * s, 0.6 * s);
+  buildSwallows(c.b, c.chunk, p.x, p.y, p.z, p.yaw, s, p.id);
 }
 
 /** FLW-S3-031 lemon relief (the core motif, 45 × 45 cm): built into `a` at its origin. */
@@ -577,6 +490,6 @@ export function carvedHeron(c: Ctx) {
 
 /** All D2-b pieces whose anchor lies in `room` (callers pass their own chunk context). */
 export const S3_BUILDERS: Record<string, (c: Ctx) => void> = {
-  'FLW-S3-004': carvedBird, 'FLW-S3-014': carvedSwallows, 'FLW-S3-015': modelSloop, 'FLW-S3-016': ceramicMoon, 'FLW-S3-017': terracottaMedallion,
+  'FLW-S3-004': carvedBird, 'FLW-S3-014': t01Swallows, 'FLW-S3-015': modelSloop, 'FLW-S3-016': ceramicMoon, 'FLW-S3-017': t01Medallion,
   'FLW-S3-030': paperMask, 'FLW-S3-031': lemonPanel, 'FLW-S3-033': fireScreen, 'FLW-S3-037': carvedHeron,
 };

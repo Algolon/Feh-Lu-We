@@ -5,7 +5,7 @@
  ],
  "gutter": 4,
  "file": "src/assets/art/flw-d2-atlas.webp",
- "bytes": 583490,
+ "bytes": 616022,
  "items": {
   "FLW-D2-002": {
    "source": "docs/reference/flw/2d/FLW-D2-002_het-laatste-zonlicht.png",
@@ -58,9 +58,28 @@
     320
    ],
    "uv": [
+    0.868896484375,
+    0.6630208333333334,
+    0.985595703125,
+    0.9953125
+   ]
+  },
+  "FLW-D2-009": {
+   "source": "docs/reference/flw/2d/FLW-D2-009_mot-boven-wilde-bloemen.png",
+   "sha256": "9c0a5fd7d47e78232d0e4beab5c5d84c24421c6d49351260c91955d3c20f155e",
+   "status": "REVIEW_READY",
+   "sourcePx": [
+    868,
+    1085
+   ],
+   "px": [
+    256,
+    320
+   ],
+   "uv": [
     0.739990234375,
     0.6630208333333334,
-    0.856689453125,
+    0.864501953125,
     0.9953125
    ]
   },

@@ -1,0 +1,366 @@
+{
+  "commit": "d3b1",
+  "rows": [
+    {
+      "name": "d3b1-st-door",
+      "pose": {
+        "x": 98.2,
+        "y": 3.35,
+        "z": 97.4,
+        "yaw": 3.141592653589793,
+        "pitch": -0.04
+      },
+      "calls": 90,
+      "triangles": 205858,
+      "room": "ucorr",
+      "feetY": 3.35,
+      "chunks": {
+        "mUp": {
+          "calls": 9,
+          "triangles": 28624
+        }
+      }
+    },
+    {
+      "name": "d3b1-st-centre",
+      "pose": {
+        "x": 98.2,
+        "y": 3.35,
+        "z": 93.6,
+        "yaw": 3.141592653589793,
+        "pitch": -0.1
+      },
+      "calls": 47,
+      "triangles": 146884,
+      "room": "study",
+      "feetY": 3.35,
+      "chunks": {
+        "mUpE": {
+          "calls": 10,
+          "triangles": 65468
+        },
+        "mUp": {
+          "calls": 7,
+          "triangles": 28304
+        }
+      }
+    },
+    {
+      "name": "d3b1-st-north",
+      "pose": {
+        "x": 98.6,
+        "y": 3.35,
+        "z": 83.2,
+        "yaw": 0.17453292519943295,
+        "pitch": -0.04
+      },
+      "calls": 44,
+      "triangles": 149798,
+      "room": "study",
+      "feetY": 3.35,
+      "chunks": {
+        "mUpE": {
+          "calls": 12,
+          "triangles": 65568
+        },
+        "mUp": {
+          "calls": 11,
+          "triangles": 31686
+        }
+      }
+    },
+    {
+      "name": "d3b1-st-centrepiece",
+      "pose": {
+        "x": 100.2,
+        "y": 3.35,
+        "z": 85.6,
+        "yaw": -0.6108652381980153,
+        "pitch": -0.32
+      },
+      "calls": 44,
+      "triangles": 149798,
+      "room": "study",
+      "feetY": 3.35,
+      "chunks": {
+        "mUpE": {
+          "calls": 12,
+          "triangles": 65568
+        },
+        "mUp": {
+          "calls": 11,
+          "triangles": 31686
+        }
+      }
+    },
+    {
+      "name": "d3b1-st-desk",
+      "pose": {
+        "x": 98.2,
+        "y": 3.35,
+        "z": 84,
+        "yaw": 3.141592653589793,
+        "pitch": -0.32
+      },
+      "calls": 37,
+      "triangles": 115874,
+      "room": "study",
+      "feetY": 3.35,
+      "chunks": {
+        "mUp": {
+          "calls": 4,
+          "triangles": 21774
+        },
+        "mUpE": {
+          "calls": 7,
+          "triangles": 55738
+        }
+      }
+    },
+    {
+      "name": "d3b1-st-corner",
+      "pose": {
+        "x": 100.7,
+        "y": 3.35,
+        "z": 81.2,
+        "yaw": -0.4886921905584123,
+        "pitch": -0.05
+      },
+      "calls": 51,
+      "triangles": 150106,
+      "room": "study",
+      "feetY": 3.35,
+      "chunks": {
+        "mUpE": {
+          "calls": 12,
+          "triangles": 65568
+        },
+        "mUp": {
+          "calls": 11,
+          "triangles": 31686
+        }
+      }
+    },
+    {
+      "name": "d3b1-bo-door",
+      "pose": {
+        "x": 104.5,
+        "y": 3.35,
+        "z": 97.4,
+        "yaw": 3.141592653589793,
+        "pitch": -0.02
+      },
+      "calls": 69,
+      "triangles": 182796,
+      "room": "ucorr",
+      "feetY": 3.35,
+      "chunks": {
+        "mUp": {
+          "calls": 7,
+          "triangles": 28304
+        }
+      }
+    },
+    {
+      "name": "d3b1-bo-room",
+      "pose": {
+        "x": 104.6,
+        "y": 3.35,
+        "z": 95.2,
+        "yaw": 3.141592653589793,
+        "pitch": 0.02
+      },
+      "calls": 51,
+      "triangles": 147158,
+      "room": "botanic",
+      "feetY": 3.35,
+      "chunks": {
+        "mUpE": {
+          "calls": 10,
+          "triangles": 65468
+        },
+        "mUp": {
+          "calls": 7,
+          "triangles": 28304
+        }
+      }
+    },
+    {
+      "name": "d3b1-bo-work",
+      "pose": {
+        "x": 103.6,
+        "y": 3.35,
+        "z": 85,
+        "yaw": 3.141592653589793,
+        "pitch": -0.08
+      },
+      "calls": 27,
+      "triangles": 106822,
+      "room": "botanic",
+      "feetY": 3.35,
+      "chunks": {
+        "mUp": {
+          "calls": 2,
+          "triangles": 13306
+        },
+        "mUpE": {
+          "calls": 6,
+          "triangles": 55462
+        }
+      }
+    },
+    {
+      "name": "d3b1-bo-plants",
+      "pose": {
+        "x": 105.6,
+        "y": 3.35,
+        "z": 89,
+        "yaw": -0.6632251157578452,
+        "pitch": -0.06
+      },
+      "calls": 44,
+      "triangles": 149158,
+      "room": "botanic",
+      "feetY": 3.35,
+      "chunks": {
+        "mUpE": {
+          "calls": 11,
+          "triangles": 65292
+        },
+        "mUp": {
+          "calls": 11,
+          "triangles": 31686
+        }
+      }
+    },
+    {
+      "name": "d3b1-bo-medallion",
+      "pose": {
+        "x": 103.3,
+        "y": 3.35,
+        "z": 86.6,
+        "yaw": 3.141592653589793,
+        "pitch": 0.16
+      },
+      "calls": 29,
+      "triangles": 115186,
+      "room": "botanic",
+      "feetY": 3.35,
+      "chunks": {
+        "mUp": {
+          "calls": 3,
+          "triangles": 21394
+        },
+        "mUpE": {
+          "calls": 7,
+          "triangles": 55738
+        }
+      }
+    },
+    {
+      "name": "d3b1-bo-prints",
+      "pose": {
+        "x": 104,
+        "y": 3.35,
+        "z": 89.6,
+        "yaw": 1.5707963267948966,
+        "pitch": 0.05
+      },
+      "calls": 32,
+      "triangles": 106586,
+      "room": "botanic",
+      "feetY": 3.35,
+      "chunks": {
+        "mUp": {
+          "calls": 2,
+          "triangles": 13306
+        },
+        "mUpE": {
+          "calls": 7,
+          "triangles": 55496
+        }
+      }
+    },
+    {
+      "name": "d3b1-ga-walk-w",
+      "pose": {
+        "x": 86,
+        "y": 3.35,
+        "z": 82.8,
+        "yaw": 1.9547687622336491,
+        "pitch": 0.1
+      },
+      "calls": 58,
+      "triangles": 173994,
+      "room": "frontGallery",
+      "feetY": 3.35,
+      "chunks": {
+        "mUp": {
+          "calls": 7,
+          "triangles": 28304
+        }
+      }
+    },
+    {
+      "name": "d3b1-ga-walk-e",
+      "pose": {
+        "x": 94.2,
+        "y": 3.35,
+        "z": 82.9,
+        "yaw": -1.9547687622336491,
+        "pitch": 0.1
+      },
+      "calls": 69,
+      "triangles": 196588,
+      "room": "frontGallery",
+      "feetY": 3.35,
+      "chunks": {
+        "mUp": {
+          "calls": 7,
+          "triangles": 28304
+        }
+      }
+    },
+    {
+      "name": "d3b1-ga-close",
+      "pose": {
+        "x": 90,
+        "y": 3.35,
+        "z": 82.9,
+        "yaw": 3.141592653589793,
+        "pitch": 0.14
+      },
+      "calls": 36,
+      "triangles": 130266,
+      "room": "frontGallery",
+      "feetY": 3.35,
+      "chunks": {
+        "mUp": {
+          "calls": 6,
+          "triangles": 28298
+        }
+      }
+    },
+    {
+      "name": "d3b1-ga-void",
+      "pose": {
+        "x": 90,
+        "y": 3.35,
+        "z": 97.2,
+        "yaw": 3.141592653589793,
+        "pitch": 0.06
+      },
+      "calls": 87,
+      "triangles": 207846,
+      "room": "landing",
+      "feetY": 3.35,
+      "chunks": {
+        "mUp": {
+          "calls": 9,
+          "triangles": 28624
+        }
+      }
+    }
+  ],
+  "problems": []
+}

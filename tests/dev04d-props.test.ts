@@ -30,9 +30,9 @@ describe('DEV-04D D2 ship rule', () => {
     for (const id of ids) expect(['APPROVED_3D_REF', 'APPROVED_KEY_REF', 'REVIEW_READY'], `${id}: ${status[id]}`).toContain(status[id]);
     for (const id of ['FLW-RSV-019', 'FLW-RSV-020', 'FLW-RSV-021', 'FLW-RSV-022']) expect(ids.has(id), id).toBe(false);
   });
-  it('triangle budgets follow the brief (most ≤ 600; heron, sloop and the D2-R remodels / panel ≤ 1.5 k)', () => {
-    const big = ['FLW-S3-037', 'FLW-S3-015', 'FLW-S3-014', 'FLW-S3-017', 'FLW-S3-030', 'FLW-S3-031'];
-    for (const p of PROPS3D) expect(p.maxTris, p.id).toBeLessThanOrEqual(big.includes(p.id) ? 1500 : 600);
+  it('triangle budgets follow the brief (most ≤ 600; heron, sloop, the D2-R remodels / panel ≤ 1.5 k; the Track 01 builds at their owner-approved cost)', () => {
+    const big = ['FLW-S3-037', 'FLW-S3-015', 'FLW-S3-030', 'FLW-S3-031'], t01: Record<string, number> = { 'FLW-S3-014': 3200, 'FLW-S3-017': 2600 }; // Track 01: 3,042 / 2,468 tris
+    for (const p of PROPS3D) expect(p.maxTris, p.id).toBeLessThanOrEqual(t01[p.id] ?? (big.includes(p.id) ? 1500 : 600));
   });
 });
 
@@ -87,8 +87,10 @@ describe('DEV-04D D2 placements', () => {
     expect(off).toBeGreaterThan((35 * Math.PI) / 180);
     expect(Math.hypot(dx, dz)).toBeGreaterThan(1.2); // a sculpture beside the seat, not on it
   });
-  it('the botanic medallion is on the west wall, not on the evidence prints wall (x 107.5)', () => {
-    const m = PROPS3D.find((p) => p.id === 'FLW-S3-017')!;
-    expect(m.x).toBeLessThan(102);
+  it('the botanic medallion is on the south work-end pier between the windows (x 102.22–104.28), never on the evidence prints wall (x 107.5)', () => {
+    const m = PROPS3D.find((p) => p.id === 'FLW-S3-017')!, r = (0.6 * (m.scale ?? 1)) / 2;
+    expect(m.z).toBeCloseTo(80.422, 3);
+    expect(m.x - r).toBeGreaterThanOrEqual(102.22);
+    expect(m.x + r).toBeLessThanOrEqual(104.28);
   });
 });

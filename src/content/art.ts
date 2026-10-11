@@ -3,11 +3,14 @@
 // scripts/build-flw-atlas.mjs out of the canonical originals in docs/reference/flw/2d (left untouched).
 //
 // Ship rule (tests/dev04d-art.test.ts): an id ships only if docs/reference/flw/MANIFEST.json marks it APPROVED_2D,
-// or it is REVIEW_READY and listed in OWNER_GROUP_A (owner decision on the D0 review, 10 Oct 2026). Group B is
-// deferred and group C parked: neither may appear here.
+// or it is REVIEW_READY and listed in OWNER_GROUP_A (owner decision on the D0 review, 10 Oct 2026), or it is a group-B
+// piece the owner approved as READY_2D at the Track 01 closeout AND D3 actually hangs it (OWNER_GROUP_B_D2: a piece is
+// registered only when it is used). Group C stays parked.
 
 /** REVIEW_READY D2 sources the owner approved as group A on the D0 review (DEV04D_ASSET_MANIFEST.md §9). */
 export const OWNER_GROUP_A_D2 = ['FLW-D2-005', 'FLW-D2-010', 'FLW-D2-022', 'FLW-D2-029', 'FLW-D2-035', 'FLW-D2-042', 'FLW-D2-044', 'FLW-D2-045'] as const;
+/** Group-B READY_2D pieces (Track 01 closeout, owner) that D3 hangs: D3-b1 uses D2-009 only (D2-008 / 023 stay unused). */
+export const OWNER_GROUP_B_D2 = ['FLW-D2-009'] as const;
 
 /**
  * Frame families after the owner-approved S3-043 / 044 / 045 direction:
@@ -21,7 +24,7 @@ export interface FrameStyle { family: FrameFamily; rail: string; bead?: string }
 export interface ArtPiece {
   id: string;
   title: string;
-  basis: 'APPROVED_2D' | 'OWNER_GROUP_A';
+  basis: 'APPROVED_2D' | 'OWNER_GROUP_A' | 'OWNER_GROUP_B';
   room: string;
   /** canvas size in metres (the source aspect, ±1 %); the frame adds its rails around it */
   w: number;
@@ -37,6 +40,7 @@ export const ART: Record<string, ArtPiece> = {
   'FLW-D2-026': { id: 'FLW-D2-026', title: 'De kust na de regen', basis: 'APPROVED_2D', room: 'living', w: 1.4, h: 0.7875, frame: { family: 'antique', rail: DARK, bead: GILT } },
   'FLW-D2-028': { id: 'FLW-D2-028', title: 'Het huis in de nacht', basis: 'APPROVED_2D', room: 'landing', w: 1.6, h: 0.96, frame: { family: 'antique', rail: '#5c3b22', bead: GILT } },
   'FLW-D2-046': { id: 'FLW-D2-046', title: 'Een middag in Portugal', basis: 'APPROVED_2D', room: 'cottageRoom', w: 1.2, h: 0.675, frame: { family: 'simple', rail: '#5e7f86' } },
+  'FLW-D2-009': { id: 'FLW-D2-009', title: 'Mot boven wilde bloemen', basis: 'OWNER_GROUP_B', room: 'botanic', w: 0.72, h: 0.9, frame: { family: 'print', rail: '#8a6038' } },
   'FLW-D2-005': { id: 'FLW-D2-005', title: 'Kleikom, appels, ruwe tafel en linnen', basis: 'OWNER_GROUP_A', room: 'kitchen', w: 1.0, h: 1.25, frame: { family: 'simple', rail: OAK } },
   'FLW-D2-010': { id: 'FLW-D2-010', title: 'Na het feest', basis: 'OWNER_GROUP_A', room: 'dining', w: 1.4, h: 1.05, frame: { family: 'antique', rail: DARK, bead: GILT } },
   'FLW-D2-022': { id: 'FLW-D2-022', title: 'De onbekende reiziger', basis: 'OWNER_GROUP_A', room: 'reis', w: 0.75, h: 1.0, frame: { family: 'simple', rail: '#6e4b2e' } },

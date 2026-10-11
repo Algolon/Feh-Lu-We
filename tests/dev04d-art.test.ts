@@ -4,7 +4,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync, statSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { ART, OWNER_GROUP_A_D2, FRAME_RAIL } from '../src/content/art';
+import { ART, OWNER_GROUP_A_D2, OWNER_GROUP_B_D2, FRAME_RAIL } from '../src/content/art';
 import { ITEMS } from '../src/content/items';
 import ATLAS from '../src/world/artAtlas.json';
 
@@ -23,14 +23,15 @@ describe('DEV-04D D1 ship rule', () => {
       if (m.status === 'APPROVED_2D') expect(p.basis, p.id).toBe('APPROVED_2D');
       else {
         expect(m.status, p.id).toBe('REVIEW_READY');
-        expect(OWNER_GROUP_A_D2 as readonly string[], p.id).toContain(p.id);
-        expect(p.basis, p.id).toBe('OWNER_GROUP_A');
+        if ((OWNER_GROUP_B_D2 as readonly string[]).includes(p.id)) expect(p.basis, p.id).toBe('OWNER_GROUP_B');
+        else { expect(OWNER_GROUP_A_D2 as readonly string[], p.id).toContain(p.id); expect(p.basis, p.id).toBe('OWNER_GROUP_A'); }
       }
     }
   });
-  it('the D1 set is exactly the five approved + the eight group-A paintings; nothing from group B / C', () => {
-    expect(Object.keys(ART).sort()).toEqual(['FLW-D2-002', 'FLW-D2-005', 'FLW-D2-007', 'FLW-D2-010', 'FLW-D2-022', 'FLW-D2-026', 'FLW-D2-028', 'FLW-D2-029', 'FLW-D2-035', 'FLW-D2-042', 'FLW-D2-044', 'FLW-D2-045', 'FLW-D2-046']);
-    for (const id of [...GROUP_B_D2, ...GROUP_C_D2]) expect(ART[id], id).toBeUndefined();
+  it('the hung set is the five approved + the eight group-A paintings + the group-B pieces D3 uses (D3-b1: D2-009); nothing from group C', () => {
+    expect(Object.keys(ART).sort()).toEqual(['FLW-D2-002', 'FLW-D2-005', 'FLW-D2-007', 'FLW-D2-009', 'FLW-D2-010', 'FLW-D2-022', 'FLW-D2-026', 'FLW-D2-028', 'FLW-D2-029', 'FLW-D2-035', 'FLW-D2-042', 'FLW-D2-044', 'FLW-D2-045', 'FLW-D2-046']);
+    // group B: only the READY_2D pieces D3 actually hangs (OWNER_GROUP_B_D2); every other group-B / C id stays out
+    for (const id of [...GROUP_B_D2.filter((i) => !(OWNER_GROUP_B_D2 as readonly string[]).includes(i)), ...GROUP_C_D2]) expect(ART[id], id).toBeUndefined();
   });
   it('art ids never collide with gameplay ids', () => {
     for (const id of Object.keys(ART)) expect(ITEMS[id], id).toBeUndefined();
