@@ -154,6 +154,17 @@ const D2R = [
   ['her-path', 82.6, 0.0, 137.0, -58, 0.02], ['her-bench', 78.6, 0.0, 139.6, -90, 0.0], ['her-close', 78.0, 0.0, 140.0, -45, 0.05],
 ].map(([n, x, y, z, yaw, pitch]) => [`d2r-${n}`, { x, y, z, yaw: (yaw * Math.PI) / 180, pitch }]);
 
+// DEV-04D D3-a (SET=d3a): dining / game room and kitchen at player eye (phone viewport VW=915 VH=412). Fixed poses, so
+// production and the D3-a build are captured from the same cameras: arrival, room whole from each end, zone reads, close.
+const D3A = [
+  ['din-from-hall', 93.4, 0.15, 85.2, 90, 0.0], ['din-entry', 95.8, 0.15, 84.6, 70, -0.02], ['din-north', 101.3, 0.15, 81.1, 0, -0.02],
+  ['din-south', 101.3, 0.15, 91.3, 180, -0.02], ['din-west', 106.6, 0.15, 89.6, -120, -0.02], ['din-table', 99.2, 0.15, 83.0, 45, -0.3],
+  ['din-sideboard', 104.4, 0.15, 84.4, 70, -0.08], ['din-games-corner', 99.0, 0.15, 87.5, -45, -0.12],
+  ['kit-through-arch', 101.0, 0.15, 89.8, 0, -0.02], ['kit-enter', 101.0, 0.15, 93.0, 0, -0.04], ['kit-north-end', 101.0, 0.15, 108.4, 180, -0.04],
+  ['kit-west', 106.6, 0.15, 101.5, -90, -0.04], ['kit-east', 96.2, 0.15, 101.0, 90, -0.04], ['kit-range', 101.2, 0.15, 106.6, 30, -0.1],
+  ['kit-sw', 96.2, 0.15, 93.5, 35, -0.05], ['kit-island', 99.0, 0.15, 103.0, 40, -0.25], ['kit-dresser', 98.4, 0.15, 104.2, -90, -0.05],
+].map(([n, x, y, z, yaw, pitch]) => [`d3a-${n}`, { x, y, z, yaw: (yaw * Math.PI) / 180, pitch }]);
+
 const ctx = await browser.newContext({ viewport: { width: +(process.env.VW ?? 1280), height: +(process.env.VH ?? 720) } });
 const page = await ctx.newPage();
 const problems = [];
@@ -205,6 +216,7 @@ else if (process.env.SET === 'd2') views.push(...D2);
 else if (process.env.SET === 'd30') views.push(...D30);
 else if (process.env.SET === 'd2r') views.push(...D2R, ...D2KEYS.map(([n, p]) => [n, p]));
 else if (process.env.SET === 'd1r') views.push(...D1R);
+else if (process.env.SET === 'd3a') views.push(...D3A);
 else if (!process.env.ROOMS) views.push(...EXT);
 const sel = process.env.VIEWS ? new Set(process.env.VIEWS.split(',')) : null;
 const rows = [];
