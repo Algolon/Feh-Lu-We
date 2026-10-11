@@ -20,7 +20,7 @@ const q = typeof location !== 'undefined' ? new URLSearchParams(location.search)
 const pick = <T extends string>(v: string | null, ok: readonly T[], d: T): T => (ok as readonly string[]).includes(v ?? '') ? (v as T) : d;
 
 /** Art-review mode: isolated state (see state.ts `storage`), review bar, direct start in the room under review. */
-export const REVIEW: 'living' | 'boslust' | 'dev01' | null = pick(q.get('review'), ['living', 'boslust', 'dev01'] as const, '' as never) || null;
+export const REVIEW: 'living' | 'boslust' | 'dev01' | 'library-craft' | null = pick(q.get('review'), ['living', 'boslust', 'dev01', 'library-craft'] as const, '' as never) || null;
 /** DEV-01 slice review build (?review=dev01): B01 v0.2, DS01, notebook v0.2. The normal game never sets it. */
 export const SLICE = REVIEW === 'dev01';
 
@@ -35,3 +35,7 @@ export const ART: { set: ArtSet; ext: ArtSet; light: LightSet; tm: ToneSet } = {
   light: pick(q.get('light'), ['base', 'sample'] as const, 'sample'),
   tm: pick(q.get('tm'), ['aces', 'neutral'] as const, 'aces'),
 };
+
+/** VCP-01 is reachable only inside the isolated library review. */
+export const CRAFT = { set: REVIEW === 'library-craft' ? pick(q.get('craft'), ['base', 'pilot'] as const, 'base') : 'base' as 'base' | 'pilot' };
+export const libraryCraft = () => REVIEW === 'library-craft' && CRAFT.set === 'pilot';

@@ -7,7 +7,7 @@
 // - A small collapsible bar compares the asset set (rebuilds the world at the same pose), the interior lighting
 //   treatment and the tone mapping (both live).
 import * as THREE from 'three';
-import { ART, REVIEW } from '../core/artflags';
+import { ART, REVIEW, CRAFT } from '../core/artflags';
 import { defaultState, type GameState } from '../core/state';
 import { BUILD, type Game } from '../core/game';
 import { vegPathLabel } from '../core/caps';
@@ -35,6 +35,7 @@ export function reviewState(): GameState {
   s.clues = ['c.invitation'];
   // in the hall, in the wide arch to the living room, looking at the hearth
   s.player.estate = { x: 85.6, y: 0.15, z: 88.5, yaw: -Math.PI / 2, pitch: -0.04 };
+  if (REVIEW === 'library-craft') s.player.estate = { x: 82.4, y: 0.15, z: 105.2, yaw: 0, pitch: -0.28 };
   return s;
 }
 
@@ -43,13 +44,13 @@ export function showReviewStart(onStart: () => void) {
   el.hidden = false;
   el.innerHTML = `<div class="card">
     <h1>Feh Lu We</h1>
-    <p class="sub">Kunstreview · ${REVIEW === 'boslust' ? 'het pad naar BOSLUST' : 'woonkamer'} (voorstel, nog niet goedgekeurd)</p>
+    <p class="sub">Kunstreview · ${REVIEW === 'library-craft' ? 'bibliotheek · VCP-01' : REVIEW === 'boslust' ? 'het pad naar BOSLUST' : 'woonkamer'} (voorstel, nog niet goedgekeurd)</p>
     <div class="row"><button class="btn primary" data-review-start>Start review</button></div>
     <p class="note">${REVIEW === 'boslust'
       ? 'Je begint bij de wegwijzer op de splitsing, met de gewone besturing. Volg het zijpad naar de heuvel. Voor deze review heb je de letterstrook al en is de route hersteld, zodat je het klepje en de deur kunt proberen.'
-      : 'Je begint in de boog tussen hal en woonkamer, met de gewone besturing.'} Deze review gebruikt een
+      : REVIEW === 'library-craft' ? 'Je begint bij de wereldbol in de bibliotheek. Vergelijk origineel en pilot; loop ook naar de leestafel en de leesstoel.' : 'Je begint in de boog tussen hal en woonkamer, met de gewone besturing.'} Deze review gebruikt een
     tijdelijke, losse spelstand: jouw eigen opgeslagen spel wordt niet gelezen, overschreven of gewist.
-    Met de knop <b>Review</b> bovenaan vergelijk je oud/nieuw, licht en tonemapping.<br>
+    ${REVIEW === 'library-craft' ? 'Met de knop bovenaan wissel je origineel en pilot op dezelfde kijkplek. Licht en spelregels blijven gelijk.' : 'Met de knop <b>Review</b> bovenaan vergelijk je oud/nieuw, licht en tonemapping.'}<br>
     <a href="${location.pathname}" style="color:inherit">Naar het gewone spel</a><br>Build ${BUILD}</p>
   </div>`;
   el.querySelector('[data-review-start]')!.addEventListener('click', onStart);
@@ -61,6 +62,7 @@ export function mountReviewBar(game: Game) {
   bar.setAttribute('role', 'toolbar');
   bar.setAttribute('aria-label', 'Kunstreview');
   document.getElementById('app')!.appendChild(bar);
+  if (REVIEW === 'library-craft') { mountCraftBar(game, bar); return; }
   let open = false, busy = false;
   const ext = REVIEW === 'boslust';
   const isNew = () => (ext ? ART.ext : ART.set) === 'sample';
@@ -98,5 +100,27 @@ export function mountReviewBar(game: Game) {
   });
   // keep taps on the bar from reaching the look/move zones underneath
   for (const ev of ['pointerdown', 'touchstart'] as const) bar.addEventListener(ev, (e) => e.stopPropagation(), { passive: true });
+  render();
+}
+
+/** Uses the established in-memory review and world disposal path, retaining pose and puzzle/lamp state. */
+function mountCraftBar(game: Game, bar: HTMLElement) {
+  let busy = false;
+  const render = () => {
+    bar.innerHTML = `<button data-craft aria-label="Wissel origineel en pilot">${CRAFT.set === 'pilot' ? 'Pilot → toon origineel' : 'Origineel → toon pilot'}</button><a href="${location.pathname}" style="color:inherit;padding:10px">Verlaat review</a>`;
+  };
+  bar.addEventListener('click', async (e) => {
+    if (!(e.target as HTMLElement).closest('[data-craft]') || busy) return;
+    busy = true; bar.classList.add('busy');
+    const pose = game.player.pose();
+    CRAFT.set = CRAFT.set === 'pilot' ? 'base' : 'pilot';
+    game.state.player.estate = pose;
+    try {
+      await game.loadScene('estate');
+      const url = new URL(location.href); url.searchParams.set('craft', CRAFT.set);
+      history.replaceState(null, '', url);
+    } finally { busy = false; bar.classList.remove('busy'); render(); }
+  });
+  for (const ev of ['pointerdown', 'touchstart'] as const) bar.addEventListener(ev, e => e.stopPropagation(), { passive: true });
   render();
 }

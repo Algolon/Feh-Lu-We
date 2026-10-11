@@ -307,7 +307,7 @@ export function parseSettings(text: string | null, coarse: boolean): Settings {
 
 /** In art-review mode (?review=living|boslust) nothing is written to or read from the real save slots: the review runs on
  * an in-memory sandbox, so opening a review link can never overwrite, reset or migrate the player's own game.
- * Settings are the one key read through from localStorage (read-only) so quality/sensitivity match the device.
+ * Settings are read through (read-only) for older art reviews; library-craft isolates settings too.
  * The DEV-01 slice review (?review=dev01) must survive reloads, so it gets its OWN persistent keys instead
  * (fehluwe.dev01.*); the player's own keys are never written by it (see readMainSave for the read-only import). */
 const sandbox: Map<string, string> | null = REVIEW && REVIEW !== 'dev01' ? new Map() : null;
@@ -326,7 +326,7 @@ export const storage = {
   get(key: string): string | null {
     if (sandbox) {
       if (sandbox.has(key)) return sandbox.get(key)!;
-      if (key !== SETTINGS_KEY) return null;
+      if (key !== SETTINGS_KEY || REVIEW === 'library-craft') return null;
     }
     const v = rawGet(remap(key));
     // dev01 settings fall back to the device's normal settings (read-only) until changed in the review

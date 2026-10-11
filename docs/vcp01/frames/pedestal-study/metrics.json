@@ -1,0 +1,878 @@
+{
+  "variant": "pilot",
+  "viewport": [
+    844,
+    390
+  ],
+  "dpr": 1,
+  "quality": "low",
+  "softwareRenderer": true,
+  "simulationSeconds": 2.066666666666667,
+  "records": [
+    {
+      "name": "library-wide",
+      "target": [
+        76,
+        1.6,
+        103
+      ],
+      "viewport": [
+        844,
+        390
+      ],
+      "pose": {
+        "x": 82.4,
+        "y": 0.15,
+        "z": 97.5,
+        "yaw": -0.8608847083313722,
+        "pitch": -0.02369617264888554
+      },
+      "fov": 68,
+      "exposure": 1.15,
+      "room": "library",
+      "lamps": {},
+      "audit": [],
+      "metrics": {
+        "fps": 0,
+        "frame": {
+          "fps": 6,
+          "medianMs": 175.6,
+          "p95Ms": 3166.5,
+          "frames": 3
+        },
+        "calls": 59,
+        "triangles": 208010,
+        "geometries": 65,
+        "textures": 21,
+        "multiDraw": true,
+        "pos": {
+          "x": 82.4,
+          "y": 0.15,
+          "z": 97.5,
+          "yaw": -0.8608847083313722,
+          "pitch": -0.02369617264888554
+        },
+        "target": null,
+        "label": null,
+        "actualQuality": "low",
+        "antialias": false,
+        "pixelRatio": 1,
+        "assetTris": {
+          "coatRail": 1656,
+          "hallPainting": 492,
+          "hallCommode": 580,
+          "table": 4512,
+          "logBasket": 480,
+          "vcp.table": 2076,
+          "chair.ladder": 13536,
+          "lectern": 1056,
+          "vcp.chair": 3852,
+          "vcp.globe": 4752,
+          "billiardTable": 2472,
+          "cueRack": 420,
+          "chair.upholstered": 5680,
+          "chair.carver": 2464,
+          "boardGameSet": 960,
+          "sideboard": 3980,
+          "chair.spindle": 4656,
+          "larder": 924,
+          "utilitySink": 636,
+          "towelRail": 960,
+          "wc": 380,
+          "pedestalBasin": 808,
+          "shelvingUnit": 60832,
+          "toolWall": 526,
+          "sawhorses": 228,
+          "bed": 9024,
+          "luggageRack": 96,
+          "writingDesk": 872,
+          "bathtub": 1106,
+          "floorGlobe": 1064,
+          "lounger": 3340,
+          "well": 2332,
+          "golfTeeBall": 224,
+          "golfTray": 180,
+          "golfBag": 846
+        },
+        "renderer": "WebKit WebGL"
+      },
+      "clay": {
+        "types": [
+          "MeshLambertMaterial",
+          "MeshPhongMaterial"
+        ],
+        "replaced": 500,
+        "hidden": 248
+      }
+    },
+    {
+      "name": "table-near",
+      "target": [
+        80.6,
+        0.75,
+        101.2
+      ],
+      "viewport": [
+        844,
+        390
+      ],
+      "pose": {
+        "x": 82.4,
+        "y": 0.15,
+        "z": 99.4,
+        "yaw": -0.7853981633974523,
+        "pitch": -0.39121759480758955
+      },
+      "fov": 68,
+      "exposure": 1.15,
+      "room": "library",
+      "lamps": {},
+      "audit": [],
+      "metrics": {
+        "fps": 0,
+        "frame": {
+          "fps": 1,
+          "medianMs": 1633.3,
+          "p95Ms": 1633.3,
+          "frames": 2
+        },
+        "calls": 48,
+        "triangles": 188172,
+        "geometries": 61,
+        "textures": 20,
+        "multiDraw": true,
+        "pos": {
+          "x": 82.4,
+          "y": 0.15,
+          "z": 99.4,
+          "yaw": -0.7853981633974523,
+          "pitch": -0.39121759480758955
+        },
+        "target": "library.catalog",
+        "label": "Boeken en vakken bekijken",
+        "actualQuality": "low",
+        "antialias": false,
+        "pixelRatio": 1,
+        "assetTris": {
+          "coatRail": 1656,
+          "hallPainting": 492,
+          "hallCommode": 580,
+          "table": 4512,
+          "logBasket": 480,
+          "vcp.table": 2076,
+          "chair.ladder": 13536,
+          "lectern": 1056,
+          "vcp.chair": 3852,
+          "vcp.globe": 4752,
+          "billiardTable": 2472,
+          "cueRack": 420,
+          "chair.upholstered": 5680,
+          "chair.carver": 2464,
+          "boardGameSet": 960,
+          "sideboard": 3980,
+          "chair.spindle": 4656,
+          "larder": 924,
+          "utilitySink": 636,
+          "towelRail": 960,
+          "wc": 380,
+          "pedestalBasin": 808,
+          "shelvingUnit": 60832,
+          "toolWall": 526,
+          "sawhorses": 228,
+          "bed": 9024,
+          "luggageRack": 96,
+          "writingDesk": 872,
+          "bathtub": 1106,
+          "floorGlobe": 1064,
+          "lounger": 3340,
+          "well": 2332,
+          "golfTeeBall": 224,
+          "golfTray": 180,
+          "golfBag": 846
+        },
+        "renderer": "WebKit WebGL"
+      },
+      "clay": {
+        "types": [
+          "MeshLambertMaterial",
+          "MeshPhongMaterial"
+        ],
+        "replaced": 500,
+        "hidden": 248
+      }
+    },
+    {
+      "name": "seating-near",
+      "target": [
+        74.4,
+        0.7,
+        105.4
+      ],
+      "viewport": [
+        844,
+        390
+      ],
+      "pose": {
+        "x": 76.4,
+        "y": 0.15,
+        "z": 106.8,
+        "yaw": -2.1815222911841023,
+        "pitch": -0.42333411859772396
+      },
+      "fov": 68,
+      "exposure": 1.15,
+      "room": "library",
+      "lamps": {},
+      "audit": [],
+      "metrics": {
+        "fps": 0,
+        "frame": {
+          "fps": 60,
+          "medianMs": 16.7,
+          "p95Ms": 1066.7,
+          "frames": 3
+        },
+        "calls": 47,
+        "triangles": 231802,
+        "geometries": 78,
+        "textures": 24,
+        "multiDraw": true,
+        "pos": {
+          "x": 76.4,
+          "y": 0.15,
+          "z": 106.8,
+          "yaw": -2.1815222911841023,
+          "pitch": -0.42333411859772396
+        },
+        "target": null,
+        "label": null,
+        "actualQuality": "low",
+        "antialias": false,
+        "pixelRatio": 1,
+        "assetTris": {
+          "coatRail": 1656,
+          "hallPainting": 492,
+          "hallCommode": 580,
+          "table": 4512,
+          "logBasket": 480,
+          "vcp.table": 2076,
+          "chair.ladder": 13536,
+          "lectern": 1056,
+          "vcp.chair": 3852,
+          "vcp.globe": 4752,
+          "billiardTable": 2472,
+          "cueRack": 420,
+          "chair.upholstered": 5680,
+          "chair.carver": 2464,
+          "boardGameSet": 960,
+          "sideboard": 3980,
+          "chair.spindle": 4656,
+          "larder": 924,
+          "utilitySink": 636,
+          "towelRail": 960,
+          "wc": 380,
+          "pedestalBasin": 808,
+          "shelvingUnit": 60832,
+          "toolWall": 526,
+          "sawhorses": 228,
+          "bed": 9024,
+          "luggageRack": 96,
+          "writingDesk": 872,
+          "bathtub": 1106,
+          "floorGlobe": 1064,
+          "lounger": 3340,
+          "well": 2332,
+          "golfTeeBall": 224,
+          "golfTray": 180,
+          "golfBag": 846
+        },
+        "renderer": "WebKit WebGL"
+      },
+      "clay": {
+        "types": [
+          "MeshLambertMaterial",
+          "MeshPhongMaterial"
+        ],
+        "replaced": 500,
+        "hidden": 248
+      }
+    },
+    {
+      "name": "globe-3m",
+      "target": [
+        82.4,
+        0.9,
+        108.2
+      ],
+      "viewport": [
+        844,
+        390
+      ],
+      "pose": {
+        "x": 82.4,
+        "y": 0.15,
+        "z": 105.2,
+        "yaw": 0,
+        "pitch": -0.29145679447786704
+      },
+      "fov": 68,
+      "exposure": 1.15,
+      "room": "library",
+      "lamps": {},
+      "audit": [],
+      "metrics": {
+        "fps": 0,
+        "frame": {
+          "fps": 60,
+          "medianMs": 16.6,
+          "p95Ms": 1783.2,
+          "frames": 3
+        },
+        "calls": 32,
+        "triangles": 190722,
+        "geometries": 60,
+        "textures": 20,
+        "multiDraw": true,
+        "pos": {
+          "x": 82.4,
+          "y": 0.15,
+          "z": 105.2,
+          "yaw": 0,
+          "pitch": -0.29145679447786704
+        },
+        "target": null,
+        "label": null,
+        "actualQuality": "low",
+        "antialias": false,
+        "pixelRatio": 1,
+        "assetTris": {
+          "coatRail": 1656,
+          "hallPainting": 492,
+          "hallCommode": 580,
+          "table": 4512,
+          "logBasket": 480,
+          "vcp.table": 2076,
+          "chair.ladder": 13536,
+          "lectern": 1056,
+          "vcp.chair": 3852,
+          "vcp.globe": 4752,
+          "billiardTable": 2472,
+          "cueRack": 420,
+          "chair.upholstered": 5680,
+          "chair.carver": 2464,
+          "boardGameSet": 960,
+          "sideboard": 3980,
+          "chair.spindle": 4656,
+          "larder": 924,
+          "utilitySink": 636,
+          "towelRail": 960,
+          "wc": 380,
+          "pedestalBasin": 808,
+          "shelvingUnit": 60832,
+          "toolWall": 526,
+          "sawhorses": 228,
+          "bed": 9024,
+          "luggageRack": 96,
+          "writingDesk": 872,
+          "bathtub": 1106,
+          "floorGlobe": 1064,
+          "lounger": 3340,
+          "well": 2332,
+          "golfTeeBall": 224,
+          "golfTray": 180,
+          "golfBag": 846
+        },
+        "renderer": "WebKit WebGL"
+      },
+      "clay": {
+        "types": [
+          "MeshLambertMaterial",
+          "MeshPhongMaterial"
+        ],
+        "replaced": 500,
+        "hidden": 248
+      }
+    },
+    {
+      "name": "globe-1m",
+      "target": [
+        82.4,
+        0.88,
+        108.2
+      ],
+      "viewport": [
+        844,
+        390
+      ],
+      "pose": {
+        "x": 82.4,
+        "y": 0.15,
+        "z": 107.2,
+        "yaw": 0,
+        "pitch": -0.7437555842988598
+      },
+      "fov": 68,
+      "exposure": 1.15,
+      "room": "library",
+      "lamps": {},
+      "audit": [],
+      "metrics": {
+        "fps": 0,
+        "frame": {
+          "fps": 20,
+          "medianMs": 50,
+          "p95Ms": 11566.2,
+          "frames": 5
+        },
+        "calls": 29,
+        "triangles": 187488,
+        "geometries": 60,
+        "textures": 20,
+        "multiDraw": true,
+        "pos": {
+          "x": 82.4,
+          "y": 0.15,
+          "z": 107.2,
+          "yaw": 0,
+          "pitch": -0.7437555842988598
+        },
+        "target": null,
+        "label": null,
+        "actualQuality": "low",
+        "antialias": false,
+        "pixelRatio": 1,
+        "assetTris": {
+          "coatRail": 1656,
+          "hallPainting": 492,
+          "hallCommode": 580,
+          "table": 4512,
+          "logBasket": 480,
+          "vcp.table": 2076,
+          "chair.ladder": 13536,
+          "lectern": 1056,
+          "vcp.chair": 3852,
+          "vcp.globe": 4752,
+          "billiardTable": 2472,
+          "cueRack": 420,
+          "chair.upholstered": 5680,
+          "chair.carver": 2464,
+          "boardGameSet": 960,
+          "sideboard": 3980,
+          "chair.spindle": 4656,
+          "larder": 924,
+          "utilitySink": 636,
+          "towelRail": 960,
+          "wc": 380,
+          "pedestalBasin": 808,
+          "shelvingUnit": 60832,
+          "toolWall": 526,
+          "sawhorses": 228,
+          "bed": 9024,
+          "luggageRack": 96,
+          "writingDesk": 872,
+          "bathtub": 1106,
+          "floorGlobe": 1064,
+          "lounger": 3340,
+          "well": 2332,
+          "golfTeeBall": 224,
+          "golfTray": 180,
+          "golfBag": 846
+        },
+        "renderer": "WebKit WebGL"
+      },
+      "clay": {
+        "types": [
+          "MeshLambertMaterial",
+          "MeshPhongMaterial"
+        ],
+        "replaced": 500,
+        "hidden": 248
+      }
+    },
+    {
+      "name": "globe-side",
+      "target": [
+        82.4,
+        0.85,
+        108.2
+      ],
+      "viewport": [
+        844,
+        390
+      ],
+      "pose": {
+        "x": 84,
+        "y": 0.15,
+        "z": 108,
+        "yaw": -1.446441332248133,
+        "pitch": -0.532414485627129
+      },
+      "fov": 68,
+      "exposure": 1.15,
+      "room": "library",
+      "lamps": {},
+      "audit": [],
+      "metrics": {
+        "fps": 0,
+        "frame": {
+          "fps": 60,
+          "medianMs": 16.6,
+          "p95Ms": 1699.9,
+          "frames": 3
+        },
+        "calls": 32,
+        "triangles": 187682,
+        "geometries": 62,
+        "textures": 21,
+        "multiDraw": true,
+        "pos": {
+          "x": 84,
+          "y": 0.15,
+          "z": 108,
+          "yaw": -1.446441332248133,
+          "pitch": -0.532414485627129
+        },
+        "target": null,
+        "label": null,
+        "actualQuality": "low",
+        "antialias": false,
+        "pixelRatio": 1,
+        "assetTris": {
+          "coatRail": 1656,
+          "hallPainting": 492,
+          "hallCommode": 580,
+          "table": 4512,
+          "logBasket": 480,
+          "vcp.table": 2076,
+          "chair.ladder": 13536,
+          "lectern": 1056,
+          "vcp.chair": 3852,
+          "vcp.globe": 4752,
+          "billiardTable": 2472,
+          "cueRack": 420,
+          "chair.upholstered": 5680,
+          "chair.carver": 2464,
+          "boardGameSet": 960,
+          "sideboard": 3980,
+          "chair.spindle": 4656,
+          "larder": 924,
+          "utilitySink": 636,
+          "towelRail": 960,
+          "wc": 380,
+          "pedestalBasin": 808,
+          "shelvingUnit": 60832,
+          "toolWall": 526,
+          "sawhorses": 228,
+          "bed": 9024,
+          "luggageRack": 96,
+          "writingDesk": 872,
+          "bathtub": 1106,
+          "floorGlobe": 1064,
+          "lounger": 3340,
+          "well": 2332,
+          "golfTeeBall": 224,
+          "golfTray": 180,
+          "golfBag": 846
+        },
+        "renderer": "WebKit WebGL"
+      },
+      "clay": {
+        "types": [
+          "MeshLambertMaterial",
+          "MeshPhongMaterial"
+        ],
+        "replaced": 500,
+        "hidden": 248
+      }
+    },
+    {
+      "name": "library-alternate",
+      "target": [
+        78.4,
+        1.1,
+        101.2
+      ],
+      "viewport": [
+        844,
+        390
+      ],
+      "pose": {
+        "x": 83.2,
+        "y": 0.15,
+        "z": 106,
+        "yaw": -2.356194490192345,
+        "pitch": -0.10275653929051967
+      },
+      "fov": 68,
+      "exposure": 1.15,
+      "room": "library",
+      "lamps": {},
+      "audit": [],
+      "metrics": {
+        "fps": 0,
+        "frame": {
+          "fps": 60,
+          "medianMs": 16.7,
+          "p95Ms": 1933.2,
+          "frames": 3
+        },
+        "calls": 81,
+        "triangles": 241100,
+        "geometries": 85,
+        "textures": 25,
+        "multiDraw": true,
+        "pos": {
+          "x": 83.2,
+          "y": 0.15,
+          "z": 106,
+          "yaw": -2.356194490192345,
+          "pitch": -0.10275653929051967
+        },
+        "target": null,
+        "label": null,
+        "actualQuality": "low",
+        "antialias": false,
+        "pixelRatio": 1,
+        "assetTris": {
+          "coatRail": 1656,
+          "hallPainting": 492,
+          "hallCommode": 580,
+          "table": 4512,
+          "logBasket": 480,
+          "vcp.table": 2076,
+          "chair.ladder": 13536,
+          "lectern": 1056,
+          "vcp.chair": 3852,
+          "vcp.globe": 4752,
+          "billiardTable": 2472,
+          "cueRack": 420,
+          "chair.upholstered": 5680,
+          "chair.carver": 2464,
+          "boardGameSet": 960,
+          "sideboard": 3980,
+          "chair.spindle": 4656,
+          "larder": 924,
+          "utilitySink": 636,
+          "towelRail": 960,
+          "wc": 380,
+          "pedestalBasin": 808,
+          "shelvingUnit": 60832,
+          "toolWall": 526,
+          "sawhorses": 228,
+          "bed": 9024,
+          "luggageRack": 96,
+          "writingDesk": 872,
+          "bathtub": 1106,
+          "floorGlobe": 1064,
+          "lounger": 3340,
+          "well": 2332,
+          "golfTeeBall": 224,
+          "golfTray": 180,
+          "golfBag": 846
+        },
+        "renderer": "WebKit WebGL"
+      },
+      "clay": {
+        "types": [
+          "MeshLambertMaterial",
+          "MeshPhongMaterial"
+        ],
+        "replaced": 500,
+        "hidden": 248
+      }
+    },
+    {
+      "name": "globe-rear",
+      "target": [
+        82.4,
+        0.9,
+        108.2
+      ],
+      "viewport": [
+        844,
+        390
+      ],
+      "pose": {
+        "x": 82.8,
+        "y": 0.15,
+        "z": 109.05,
+        "yaw": -2.7017500707740627,
+        "pitch": -0.7639735872214861
+      },
+      "fov": 68,
+      "exposure": 1.15,
+      "room": "library",
+      "lamps": {},
+      "audit": [],
+      "metrics": {
+        "fps": 0,
+        "frame": {
+          "fps": 60,
+          "medianMs": 16.7,
+          "p95Ms": 1299.9,
+          "frames": 3
+        },
+        "calls": 46,
+        "triangles": 228666,
+        "geometries": 69,
+        "textures": 22,
+        "multiDraw": true,
+        "pos": {
+          "x": 82.8,
+          "y": 0.15,
+          "z": 109.05,
+          "yaw": -2.7017500707740627,
+          "pitch": -0.7639735872214861
+        },
+        "target": null,
+        "label": null,
+        "actualQuality": "low",
+        "antialias": false,
+        "pixelRatio": 1,
+        "assetTris": {
+          "coatRail": 1656,
+          "hallPainting": 492,
+          "hallCommode": 580,
+          "table": 4512,
+          "logBasket": 480,
+          "vcp.table": 2076,
+          "chair.ladder": 13536,
+          "lectern": 1056,
+          "vcp.chair": 3852,
+          "vcp.globe": 4752,
+          "billiardTable": 2472,
+          "cueRack": 420,
+          "chair.upholstered": 5680,
+          "chair.carver": 2464,
+          "boardGameSet": 960,
+          "sideboard": 3980,
+          "chair.spindle": 4656,
+          "larder": 924,
+          "utilitySink": 636,
+          "towelRail": 960,
+          "wc": 380,
+          "pedestalBasin": 808,
+          "shelvingUnit": 60832,
+          "toolWall": 526,
+          "sawhorses": 228,
+          "bed": 9024,
+          "luggageRack": 96,
+          "writingDesk": 872,
+          "bathtub": 1106,
+          "floorGlobe": 1064,
+          "lounger": 3340,
+          "well": 2332,
+          "golfTeeBall": 224,
+          "golfTray": 180,
+          "golfBag": 846
+        },
+        "renderer": "WebKit WebGL"
+      },
+      "clay": {
+        "types": [
+          "MeshLambertMaterial",
+          "MeshPhongMaterial"
+        ],
+        "replaced": 500,
+        "hidden": 248
+      }
+    },
+    {
+      "name": "globe-portrait",
+      "target": [
+        82.4,
+        0.9,
+        108.2
+      ],
+      "viewport": [
+        390,
+        844
+      ],
+      "pose": {
+        "x": 82.4,
+        "y": 0.15,
+        "z": 105.2,
+        "yaw": 0,
+        "pitch": -0.29145679447786704
+      },
+      "fov": 82,
+      "exposure": 1.15,
+      "room": "library",
+      "lamps": {},
+      "audit": [],
+      "metrics": {
+        "fps": 0,
+        "frame": {
+          "fps": 30,
+          "medianMs": 33.3,
+          "p95Ms": 1050,
+          "frames": 3
+        },
+        "calls": 29,
+        "triangles": 184072,
+        "geometries": 43,
+        "textures": 16,
+        "multiDraw": true,
+        "pos": {
+          "x": 82.4,
+          "y": 0.15,
+          "z": 105.2,
+          "yaw": 0,
+          "pitch": -0.29145679447786704
+        },
+        "target": null,
+        "label": null,
+        "actualQuality": "low",
+        "antialias": false,
+        "pixelRatio": 1,
+        "assetTris": {
+          "coatRail": 1656,
+          "hallPainting": 492,
+          "hallCommode": 580,
+          "table": 4512,
+          "logBasket": 480,
+          "vcp.table": 2076,
+          "chair.ladder": 13536,
+          "lectern": 1056,
+          "vcp.chair": 3852,
+          "vcp.globe": 4752,
+          "billiardTable": 2472,
+          "cueRack": 420,
+          "chair.upholstered": 5680,
+          "chair.carver": 2464,
+          "boardGameSet": 960,
+          "sideboard": 3980,
+          "chair.spindle": 4656,
+          "larder": 924,
+          "utilitySink": 636,
+          "towelRail": 960,
+          "wc": 380,
+          "pedestalBasin": 808,
+          "shelvingUnit": 60832,
+          "toolWall": 526,
+          "sawhorses": 228,
+          "bed": 9024,
+          "luggageRack": 96,
+          "writingDesk": 872,
+          "bathtub": 1106,
+          "floorGlobe": 1064,
+          "lounger": 3340,
+          "well": 2332,
+          "golfTeeBall": 224,
+          "golfTray": 180,
+          "golfBag": 846
+        },
+        "renderer": "WebKit WebGL"
+      },
+      "clay": {
+        "types": [
+          "MeshLambertMaterial",
+          "MeshPhongMaterial"
+        ],
+        "replaced": 500,
+        "hidden": 248
+      }
+    }
+  ],
+  "problems": []
+}
