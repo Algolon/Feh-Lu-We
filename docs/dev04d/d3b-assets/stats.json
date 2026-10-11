@@ -1,0 +1,949 @@
+{
+  "commit": "af73850+closeout",
+  "stats": {
+    "swallows/t01-front-standard": {
+      "tris": 3042,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 3078
+    },
+    "swallows/t01-front-neutral": {
+      "tris": 3042,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 3078
+    },
+    "swallows/t01-front-clay": {
+      "tris": 3042,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 3078
+    },
+    "swallows/t01-tq-standard": {
+      "tris": 3042,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 3078
+    },
+    "swallows/t01-tq-neutral": {
+      "tris": 3042,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 3078
+    },
+    "swallows/t01-tq-clay": {
+      "tris": 3042,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 3078
+    },
+    "swallows/t01-side-standard": {
+      "tris": 3042,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 3078
+    },
+    "swallows/t01-side-neutral": {
+      "tris": 3042,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 3078
+    },
+    "swallows/t01-side-clay": {
+      "tris": 3042,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 3078
+    },
+    "swallows/t01-detail-standard": {
+      "tris": 3042,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 3078
+    },
+    "swallows/prod-front-standard": {
+      "tris": 864,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 900
+    },
+    "swallows/t01-detail-clay": {
+      "tris": 3042,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 3078
+    },
+    "swallows/prod-front-clay": {
+      "tris": 864,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 900
+    },
+    "swallows/prod-tq-standard": {
+      "tris": 864,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 900
+    },
+    "swallows/t01-eye-walk": {
+      "tris": 3042,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 3078
+    },
+    "swallows/prod-eye-walk": {
+      "tris": 864,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 900
+    },
+    "swallows/t01-eye-close": {
+      "tris": 3042,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 3078
+    },
+    "swallows/prod-eye-close": {
+      "tris": 864,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 900
+    },
+    "swallows/t01-eye-void": {
+      "tris": 3042,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 3078
+    },
+    "swallows/prod-eye-void": {
+      "tris": 864,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 900
+    },
+    "swallows/t01-eye-walk-clay": {
+      "tris": 3042,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 3078
+    },
+    "medallion/t01-front-standard": {
+      "tris": 1972,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2008
+    },
+    "medallion/t01-front-neutral": {
+      "tris": 1972,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2008
+    },
+    "medallion/t01-front-clay": {
+      "tris": 1972,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2008
+    },
+    "medallion/t01-tq-standard": {
+      "tris": 1972,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2008
+    },
+    "medallion/t01-tq-neutral": {
+      "tris": 1972,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2008
+    },
+    "medallion/t01-tq-clay": {
+      "tris": 1972,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2008
+    },
+    "medallion/t01-side-standard": {
+      "tris": 1972,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2008
+    },
+    "medallion/t01-side-neutral": {
+      "tris": 1972,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2008
+    },
+    "medallion/t01-side-clay": {
+      "tris": 1972,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2008
+    },
+    "medallion/prod-front-standard": {
+      "tris": 1172,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 1208
+    },
+    "medallion/prod-front-clay": {
+      "tris": 1172,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 1208
+    },
+    "medallion/prod-tq-standard": {
+      "tris": 1172,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 1208
+    },
+    "medallion/ladder-x1-eye-door": {
+      "tris": 1972,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2008
+    },
+    "medallion/ladder-x1-eye-room": {
+      "tris": 1972,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2008
+    },
+    "medallion/ladder-x1-eye-close": {
+      "tris": 1972,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2008
+    },
+    "medallion/ladder-x1-eye-close-clay": {
+      "tris": 1972,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2008
+    },
+    "medallion/ladder-x1-front-standard": {
+      "tris": 1972,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2008
+    },
+    "medallion/ladder-x2-eye-door": {
+      "tris": 2468,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2504
+    },
+    "medallion/ladder-x2-eye-room": {
+      "tris": 2468,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2504
+    },
+    "medallion/ladder-x2-eye-close": {
+      "tris": 2468,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2504
+    },
+    "medallion/ladder-x2-eye-close-clay": {
+      "tris": 2468,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2504
+    },
+    "medallion/ladder-x2-front-standard": {
+      "tris": 2468,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2504
+    },
+    "medallion/ladder-x2.5-eye-door": {
+      "tris": 2468,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2504
+    },
+    "medallion/ladder-x2.5-eye-room": {
+      "tris": 2468,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2504
+    },
+    "medallion/ladder-x2.5-eye-close": {
+      "tris": 2468,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2504
+    },
+    "medallion/ladder-x2.5-eye-close-clay": {
+      "tris": 2468,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2504
+    },
+    "medallion/ladder-x2.5-front-standard": {
+      "tris": 2468,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2504
+    },
+    "medallion/ladder-x3-eye-door": {
+      "tris": 2468,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2504
+    },
+    "medallion/ladder-x3-eye-room": {
+      "tris": 2468,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2504
+    },
+    "medallion/ladder-x3-eye-close": {
+      "tris": 2468,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2504
+    },
+    "medallion/ladder-x3-eye-close-clay": {
+      "tris": 2468,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2504
+    },
+    "medallion/ladder-x3-front-standard": {
+      "tris": 2468,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 2504
+    },
+    "medallion/prod-eye-door": {
+      "tris": 1172,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 1208
+    },
+    "medallion/prod-eye-room": {
+      "tris": 1172,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 1208
+    },
+    "medallion/prod-eye-close": {
+      "tris": 1172,
+      "materials": [
+        "paint"
+      ],
+      "meshes": 1,
+      "frame": 1208
+    },
+    "moon/t01-front-standard": {
+      "tris": 1208,
+      "materials": [
+        "timber",
+        "paint"
+      ],
+      "meshes": 2,
+      "frame": 1268
+    },
+    "moon/t01-front-neutral": {
+      "tris": 1208,
+      "materials": [
+        "timber",
+        "paint"
+      ],
+      "meshes": 2,
+      "frame": 1268
+    },
+    "moon/t01-front-clay": {
+      "tris": 1208,
+      "materials": [
+        "timber",
+        "paint"
+      ],
+      "meshes": 2,
+      "frame": 1268
+    },
+    "moon/t01-tq-standard": {
+      "tris": 1208,
+      "materials": [
+        "timber",
+        "paint"
+      ],
+      "meshes": 2,
+      "frame": 1268
+    },
+    "moon/t01-tq-neutral": {
+      "tris": 1208,
+      "materials": [
+        "timber",
+        "paint"
+      ],
+      "meshes": 2,
+      "frame": 1268
+    },
+    "moon/t01-tq-clay": {
+      "tris": 1208,
+      "materials": [
+        "timber",
+        "paint"
+      ],
+      "meshes": 2,
+      "frame": 1268
+    },
+    "moon/t01-side-standard": {
+      "tris": 1208,
+      "materials": [
+        "timber",
+        "paint"
+      ],
+      "meshes": 2,
+      "frame": 1268
+    },
+    "moon/t01-side-neutral": {
+      "tris": 1208,
+      "materials": [
+        "timber",
+        "paint"
+      ],
+      "meshes": 2,
+      "frame": 1268
+    },
+    "moon/t01-side-clay": {
+      "tris": 1208,
+      "materials": [
+        "timber",
+        "paint"
+      ],
+      "meshes": 2,
+      "frame": 1268
+    },
+    "moon/prod-front-standard": {
+      "tris": 352,
+      "materials": [
+        "timber",
+        "paint"
+      ],
+      "meshes": 2,
+      "frame": 412
+    },
+    "moon/prod-front-clay": {
+      "tris": 352,
+      "materials": [
+        "timber",
+        "paint"
+      ],
+      "meshes": 2,
+      "frame": 412
+    },
+    "moon/prod-tq-standard": {
+      "tris": 352,
+      "materials": [
+        "timber",
+        "paint"
+      ],
+      "meshes": 2,
+      "frame": 412
+    },
+    "moon/t01-eye-close": {
+      "tris": 1208,
+      "materials": [
+        "timber",
+        "paint"
+      ],
+      "meshes": 2,
+      "frame": 1268
+    },
+    "moon/prod-eye-close": {
+      "tris": 352,
+      "materials": [
+        "timber",
+        "paint"
+      ],
+      "meshes": 2,
+      "frame": 412
+    },
+    "moon/t01-eye-room": {
+      "tris": 1208,
+      "materials": [
+        "timber",
+        "paint"
+      ],
+      "meshes": 2,
+      "frame": 1268
+    },
+    "moon/prod-eye-room": {
+      "tris": 352,
+      "materials": [
+        "timber",
+        "paint"
+      ],
+      "meshes": 2,
+      "frame": 412
+    },
+    "moon/t01-eye-approach": {
+      "tris": 1208,
+      "materials": [
+        "timber",
+        "paint"
+      ],
+      "meshes": 2,
+      "frame": 1268
+    },
+    "moon/prod-eye-approach": {
+      "tris": 352,
+      "materials": [
+        "timber",
+        "paint"
+      ],
+      "meshes": 2,
+      "frame": 412
+    },
+    "moon/t01-x1.4-eye-room": {
+      "tris": 1208,
+      "materials": [
+        "timber",
+        "paint"
+      ],
+      "meshes": 2,
+      "frame": 1268
+    },
+    "moon/t01-x1.8-eye-room": {
+      "tris": 1208,
+      "materials": [
+        "timber",
+        "paint"
+      ],
+      "meshes": 2,
+      "frame": 1268
+    },
+    "moon/t01-eye-room-clay": {
+      "tris": 1208,
+      "materials": [
+        "timber",
+        "paint"
+      ],
+      "meshes": 2,
+      "frame": 1268
+    },
+    "sloop/t01-front-standard": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
+    "sloop/t01-front-neutral": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
+    "sloop/t01-front-clay": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
+    "sloop/t01-side-standard": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
+    "sloop/t01-side-neutral": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
+    "sloop/t01-side-clay": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
+    "sloop/t01-tq-standard": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
+    "sloop/t01-tq-neutral": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
+    "sloop/t01-tq-clay": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
+    "sloop/prod-side-standard": {
+      "tris": 526,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 586
+    },
+    "sloop/prod-side-clay": {
+      "tris": 526,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 586
+    },
+    "sloop/prod-tq-standard": {
+      "tris": 526,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 586
+    },
+    "sloop/prod-tq-clay": {
+      "tris": 526,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 586
+    },
+    "sloop/t01-detail-standard": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
+    "sloop/t01-eye-close": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
+    "sloop/prod-eye-close": {
+      "tris": 526,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 586
+    },
+    "sloop/t01-eye-room": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
+    "sloop/prod-eye-room": {
+      "tris": 526,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 586
+    },
+    "sloop/t01-eye-approach": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
+    "sloop/prod-eye-approach": {
+      "tris": 526,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 586
+    },
+    "sloop/t01-eye-room-clay": {
+      "tris": 1334,
+      "materials": [
+        "timber",
+        "metal",
+        "paint"
+      ],
+      "meshes": 3,
+      "frame": 1394
+    },
+    "art2d/FLW-D2-008-room": {
+      "tris": 48,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 86
+    },
+    "art2d/FLW-D2-008-close": {
+      "tris": 48,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 86
+    },
+    "art2d/FLW-D2-023-room": {
+      "tris": 48,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 86
+    },
+    "art2d/FLW-D2-023-close": {
+      "tris": 48,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 86
+    },
+    "art2d/FLW-D2-009-room": {
+      "tris": 48,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 86
+    },
+    "art2d/FLW-D2-009-close": {
+      "tris": 48,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 86
+    },
+    "art2d/FLW-D2-027-room": {
+      "tris": 48,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 86
+    },
+    "art2d/FLW-D2-027-close": {
+      "tris": 48,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 86
+    },
+    "art2d/FLW-D2-017-room": {
+      "tris": 48,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 86
+    },
+    "art2d/FLW-D2-017-close": {
+      "tris": 48,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 86
+    },
+    "art2d/FLW-D2-030-room": {
+      "tris": 48,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 86
+    },
+    "art2d/FLW-D2-030-close": {
+      "tris": 48,
+      "materials": [
+        "timber"
+      ],
+      "meshes": 1,
+      "frame": 86
+    }
+  },
+  "problems": []
+}
