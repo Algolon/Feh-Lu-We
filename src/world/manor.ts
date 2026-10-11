@@ -27,7 +27,7 @@ import { addBeerCrate, addShoppingCrate, addOpenBook, addBook, PAPER, bottleGeoO
 import { forestMapTexture, drawManorLandscape } from './textures';
 import { buildHearth } from './hearth';
 import { registerArt, artFootprint } from './openings';
-import { ART, SLICE } from '../core/artflags';
+import { ART, SLICE, libraryCraft } from '../core/artflags';
 import { sliceHall, sliceLibraryTable, sliceUpstairs } from '../slice/world';
 import { livingRoomV2 } from './livingSample';
 import { ContactShadows } from './artkit';
@@ -36,6 +36,7 @@ import { drawSymbol } from '../content/symbols';
 import { EMBLEMS, SERVICE, CATALOG, CONSOLE_SOCKETS, ROUTE_LINES } from '../content/canon';
 import { addClue, has } from '../core/state';
 import { GF, CEIL, UF, UCEIL, TOP, BF, BCEIL, AF, S03, roofUnderside, ATTIC_NOOK, ATTIC_ROOF_WINDOW } from './layout';
+import { craftGlobe, craftTable, craftChair, craftGrounding } from './libraryCraft';
 import { buildMaquette } from './maquette';
 import { addKey, S3_BUILDERS } from './d2props';
 import { SALON_LAYOUT, SALON_SITES } from '../content/gallery';
@@ -660,7 +661,8 @@ function library(w: World, g: GameApi, c: Ctx) {
   // reading table with the three catalogue sockets (thread B) + its drawer (study key + archive card)
   const tx = 80.6, tz = 101.2;
   // DEV-04B: the reading table is the joinery table (top 0.81, aprons, tapered legs); its east apron is the drawer
-  table(c, tx, tz, GF, 1.1, 2.2, 0, '#5a3a22', 0.81, { openSide: 1 });
+  if (libraryCraft()) craftTable(c, tx, tz, GF);
+  else table(c, tx, tz, GF, 1.1, 2.2, 0, '#5a3a22', 0.81, { openSide: 1 });
   const deskDrawer = makeDrawer(w, g, { id: 'library.desk', x: tx + 0.36, y: GF + 0.68, z: tz, yaw: Math.PI / 2, w: 0.9, h: 0.12, d: 0.6, color: '#6b4426', unlock: 'lock.libraryDesk', lockedLabel: 'Lade (dicht)', onLocked: () => g.toast(SLICE ? 'De lade van de leestafel zit dicht. Er zit geen sleutelgat in.' : 'De lade van de leestafel zit dicht. Een kaartje op tafel: “Elk boek terug in het vak van zijn kamer.”') });
   if (SLICE) sliceLibraryTable(w, g, c, deskDrawer); // DEV-01 B01 v0.2 table + DS01 B (album, drying letter)
   else libraryCatalogue(w, g, c, tx, tz, deskDrawer);
@@ -760,8 +762,15 @@ function libraryRest(w: World, g: GameApi, c: Ctx, tx: number, tz: number) {
   place(lsw, 84.9, 1.35, 99.4, -Math.PI / 2);
   w.scene.add(lsw);
   makeLamp(w, g, { id: 'lamp.libraryChandelier', obj: lsw, glow: lch.glow, light: lch.light, flames: lch.flames, name: 'kroonluchter', defaultOn: true, intensity: 7, distance: 12, hit: [0.3, 0.4, 0.4], hitOffset: [0, 0.05, 0], patch: { y: GF + 0.03, r: 2.6 } });
-  armchair(c, 74.4, 105.4, GF, Math.PI / 2, '#7a3a3a', true); // DEV-04B: a wing reading chair
-  floorGlobe(c, 82.4, 108.2, GF, 0.6);
+  if (libraryCraft()) {
+    const ground = craftGrounding(w);
+    craftChair(c, ground.sh, 74.4, 105.4, GF);
+    craftGlobe(c, 82.4, 108.2, GF);
+    ground.finish();
+  } else {
+    armchair(c, 74.4, 105.4, GF, Math.PI / 2, '#7a3a3a', true);
+    floorGlobe(c, 82.4, 108.2, GF, 0.6);
+  }
   armchairSide(c, 74.4, 104.6);
 }
 

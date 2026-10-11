@@ -7,7 +7,7 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import type { World, GameApi } from '../interactions/world';
 import type { Ctx } from './arch';
 import type { HearthOpts } from './hearth';
-import { Asm, artMats, softBox, cushion, lathe, moulding, projectUV, bake, baseAO, ContactShadows, type ArtMats } from './artkit';
+import { Asm, artMats, softBox, cushion, lathe, moulding, projectUV, bake, baseAO, ContactShadows, deform, type ArtMats } from './artkit';
 import { v3, compound, box, getKit } from './kit';
 import { makeLamp, makeInspect, place } from '../interactions/props';
 import { bookshelf, plant, flwPainting } from './furniture';
@@ -46,11 +46,12 @@ const footGeo = () => lathe([[0, 0], [0.024, 0], [0.028, 0.012], [0.022, 0.05], 
  * seat cushions, a raked back with an arched top, loose back cushions and rolled arms with piped scroll fronts.
  * Origin = floor centre of the footprint, facing heading `yaw`.
  */
-export function upholstered(c: Ctx, sh: ContactShadows, x: number, z: number, y0: number, yaw: number, o: { width: number; depth?: number; seats: number; color: string; pillows?: string[]; shadowY?: number; wings?: boolean; lite?: boolean }) {
+export function upholstered(c: Ctx, sh: ContactShadows, x: number, z: number, y0: number, yaw: number, o: { width: number; depth?: number; seats: number; color: string; pillows?: string[]; shadowY?: number; wings?: boolean; lite?: boolean; craft?: boolean }) {
   // DEV-04B `lite`: the same build with fewer segments (the estate's other sofas / armchairs; the living room keeps full detail)
   const sg = o.lite ? 1 : 2, rs = o.lite ? 10 : 16;
   const M = artMats();
   const a = new Asm(c.b, c.chunk, x, y0, z, yaw);
+  if (o.craft) a.begin('vcp.chair');
   const W = o.width, D = o.depth ?? 0.86, armW = 0.15, footH = 0.09;
   const col = new THREE.Color(o.color);
   const dark = col.clone().multiplyScalar(0.72);
@@ -76,12 +77,12 @@ export function upholstered(c: Ctx, sh: ContactShadows, x: number, z: number, y0
   // on the rounded front-top edge of each cushion (45° point of the 4.5 cm edge radius)
   for (let i = 0; i < o.seats; i++) a.add(M.upholstery, dark, pipe, -innerW / 2 + seatW * (i + 0.5), seatY + seatH - 0.013, D / 2 - 0.02 - 0.013, { s: [seatW - 0.07, 1, 1] });
   // the outer back: arched top, raked back ~7°
-  const backH = 0.62, backT = 0.16;
-  const back = deformArch(bake(projectUV(softBox(W, backH, backT, 0.05), 0.25), baseAO(-backH / 2, 0.2, 0.8)), W / 2, backH / 2, 0.04);
+  const backH = o.craft ? 0.78 : 0.62, backT = 0.16;
+  const back = deformArch(bake(projectUV(softBox(W, backH, backT, 0.05, 2, o.craft ? 4 : 1), 0.25), baseAO(-backH / 2, 0.2, 0.8)), W / 2, backH / 2, o.craft ? 0.095 : 0.04);
   a.add(M.upholstery, col, back, 0, seatY + backH / 2 - 0.02, -(D / 2 - backT / 2), { rx: 0.12 });
   back.dispose();
   // loose back cushions, leaning further back
-  const bcH = 0.42, bcT = 0.14;
+  const bcH = o.craft ? 0.55 : 0.42, bcT = 0.14;
   const bc = bake(projectUV(cushion(seatW - 0.014, bcH, bcT, 0.05, 0.03, 'front', sg, sg * 2), 0.25), (p) => (p.y < -bcH / 2 + 0.05 ? 0.8 : 1));
   for (let i = 0; i < o.seats; i++) a.add(M.upholstery, col, bc, -innerW / 2 + seatW * (i + 0.5), seatY + seatH + bcH / 2 - 0.01, -(D / 2 - backT - bcT / 2 + 0.035), { rx: 0.2 });
   bc.dispose();
@@ -102,8 +103,15 @@ export function upholstered(c: Ctx, sh: ContactShadows, x: number, z: number, y0
   // DEV-04B wing back (reading chairs): an upholstered wing each side of the back, from the arm roll up to the
   // back's top, flaring a little outward; it overlaps the back and sits on the arm (carried, not floating)
   if (o.wings) {
-    const wing = bake(projectUV(cushion(0.1, 0.5, D * 0.48, 0.04, 0.015, 'top', sg, sg * 2), 0.25), baseAO(-0.25, 0.2, 0.82));
-    for (const sx of [-1, 1]) a.add(M.upholstery, col, wing, sx * (W / 2 - 0.06), footH + armH + 0.03 + 0.24, -(D / 2 - D * 0.24 - 0.02), { ry: sx * 0.12 });
+    const wing = bake(projectUV(cushion(0.1, 0.5, D * 0.48, 0.04, 0.015, 'top', sg, o.craft ? 4 : sg * 2), 0.25), baseAO(-0.25, 0.2, 0.82));
+    if (o.craft) deform(wing, p => {
+      const t = (p.y + 0.25) / 0.5;
+      // Curved ear: fullest at shoulder, tapering into the arm and rolling inward at the crest.
+      p.z *= 0.45 + 0.55 * Math.sin(Math.PI * t);
+      p.y *= 1.22;
+      p.z += 0.025 * t * t;
+    });
+    for (const sx of [-1, 1]) a.add(M.upholstery, col, wing, sx * (W / 2 - 0.06), footH + armH + 0.03 + (o.craft ? 0.285 : 0.24), -(D / 2 - D * 0.24 - 0.02), { ry: sx * 0.12 });
     wing.dispose();
   }
   // throw pillows (sofa only), tilted into the corners
@@ -115,6 +123,7 @@ export function upholstered(c: Ctx, sh: ContactShadows, x: number, z: number, y0
     });
     pg.dispose();
   }
+  if (o.craft) a.end();
   sh.add(x, o.shadowY ?? y0 + 0.004, z, W + 0.36, D + 0.36, yaw, 0.9);
 }
 

@@ -1,0 +1,683 @@
+{
+  "results": [
+    {
+      "name": "switch 0: finite geometry / connected construction",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "switch 0: low quality, no antialias",
+      "ok": true
+    },
+    {
+      "name": "switch 1: finite geometry / connected construction",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "switch 1: low quality, no antialias",
+      "ok": true
+    },
+    {
+      "name": "switch 1: pose, IDs, colliders and state preserved",
+      "ok": false
+    },
+    {
+      "name": "switch 2: finite geometry / connected construction",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "switch 2: low quality, no antialias",
+      "ok": true
+    },
+    {
+      "name": "switch 2: pose, IDs, colliders and state preserved",
+      "ok": false
+    },
+    {
+      "name": "switch 3: finite geometry / connected construction",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "switch 3: low quality, no antialias",
+      "ok": true
+    },
+    {
+      "name": "switch 3: pose, IDs, colliders and state preserved",
+      "ok": false
+    },
+    {
+      "name": "switch 4: finite geometry / connected construction",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "switch 4: low quality, no antialias",
+      "ok": true
+    },
+    {
+      "name": "switch 4: pose, IDs, colliders and state preserved",
+      "ok": false
+    },
+    {
+      "name": "switch 5: finite geometry / connected construction",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "switch 5: low quality, no antialias",
+      "ok": true
+    },
+    {
+      "name": "switch 5: pose, IDs, colliders and state preserved",
+      "ok": false
+    },
+    {
+      "name": "switch 6: finite geometry / connected construction",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "switch 6: low quality, no antialias",
+      "ok": true
+    },
+    {
+      "name": "switch 6: pose, IDs, colliders and state preserved",
+      "ok": false
+    },
+    {
+      "name": "base: repeated rebuild memory stabilises",
+      "ok": true,
+      "detail": [
+        [
+          59,
+          20
+        ],
+        [
+          59,
+          20
+        ],
+        [
+          59,
+          20
+        ]
+      ]
+    },
+    {
+      "name": "pilot: repeated rebuild memory stabilises",
+      "ok": true,
+      "detail": [
+        [
+          60,
+          20
+        ],
+        [
+          60,
+          20
+        ]
+      ]
+    },
+    {
+      "name": "pilot catalogue solved through UI",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "drawer": true
+      }
+    },
+    {
+      "name": "normal save/settings never accessed",
+      "ok": false,
+      "detail": [
+        [
+          "getItem",
+          "fehluwe.settings"
+        ]
+      ]
+    },
+    {
+      "name": "no browser/shader errors",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "snapshots": [
+    {
+      "variant": "base",
+      "pose": {
+        "x": 82.4,
+        "y": 0.15,
+        "z": 97.5,
+        "yaw": 0,
+        "pitch": 0
+      },
+      "state": "{\"flags\":{\"leftHome\":true},\"lit\":{},\"open\":{\"door.front\":true},\"inventory\":[\"invitation\",\"torch\",\"matches\",\"notebook\",\"frontKey\"]}",
+      "audit": [],
+      "tris": {
+        "coatRail": 1656,
+        "hallPainting": 492,
+        "hallCommode": 580,
+        "table": 4784,
+        "logBasket": 480,
+        "chair.ladder": 13536,
+        "lectern": 1056,
+        "floorGlobe": 2128,
+        "billiardTable": 2472,
+        "cueRack": 420,
+        "chair.upholstered": 5680,
+        "chair.carver": 2464,
+        "boardGameSet": 960,
+        "sideboard": 3980,
+        "chair.spindle": 4656,
+        "larder": 924,
+        "utilitySink": 636,
+        "towelRail": 960,
+        "wc": 380,
+        "pedestalBasin": 808,
+        "shelvingUnit": 60832,
+        "toolWall": 526,
+        "sawhorses": 228,
+        "bed": 9024,
+        "luggageRack": 96,
+        "writingDesk": 872,
+        "bathtub": 1106,
+        "lounger": 3340,
+        "well": 2332,
+        "golfTeeBall": 224,
+        "golfTray": 180,
+        "golfBag": 846
+      },
+      "finite": true,
+      "metrics": {
+        "fps": 0,
+        "frame": {
+          "fps": 0,
+          "medianMs": 6149.7,
+          "p95Ms": 6149.7,
+          "frames": 2
+        },
+        "calls": 60,
+        "triangles": 189038,
+        "geometries": 59,
+        "textures": 18,
+        "multiDraw": true,
+        "pos": {
+          "x": 82.4,
+          "y": 0.15,
+          "z": 97.5,
+          "yaw": 0,
+          "pitch": 0
+        },
+        "target": null,
+        "label": null
+      },
+      "settings": "low",
+      "antialias": false,
+      "colliderCount": 1985,
+      "collisionQueryCounter": 53,
+      "interactionCount": 130
+    },
+    {
+      "variant": "pilot",
+      "pose": {
+        "x": 82.4,
+        "y": 0.15,
+        "z": 97.5,
+        "yaw": 0,
+        "pitch": 0
+      },
+      "state": "{\"flags\":{\"leftHome\":true},\"lit\":{},\"open\":{\"door.front\":true},\"inventory\":[\"invitation\",\"torch\",\"matches\",\"notebook\",\"frontKey\"]}",
+      "audit": [],
+      "tris": {
+        "coatRail": 1656,
+        "hallPainting": 492,
+        "hallCommode": 580,
+        "table": 4512,
+        "logBasket": 480,
+        "vcp.table": 2076,
+        "chair.ladder": 13536,
+        "lectern": 1056,
+        "vcp.chair": 3852,
+        "vcp.globe": 4752,
+        "billiardTable": 2472,
+        "cueRack": 420,
+        "chair.upholstered": 5680,
+        "chair.carver": 2464,
+        "boardGameSet": 960,
+        "sideboard": 3980,
+        "chair.spindle": 4656,
+        "larder": 924,
+        "utilitySink": 636,
+        "towelRail": 960,
+        "wc": 380,
+        "pedestalBasin": 808,
+        "shelvingUnit": 60832,
+        "toolWall": 526,
+        "sawhorses": 228,
+        "bed": 9024,
+        "luggageRack": 96,
+        "writingDesk": 872,
+        "bathtub": 1106,
+        "floorGlobe": 1064,
+        "lounger": 3340,
+        "well": 2332,
+        "golfTeeBall": 224,
+        "golfTray": 180,
+        "golfBag": 846
+      },
+      "finite": true,
+      "metrics": {
+        "fps": 0,
+        "frame": {
+          "fps": 0,
+          "medianMs": 6149.7,
+          "p95Ms": 49898,
+          "frames": 8
+        },
+        "calls": 61,
+        "triangles": 195490,
+        "geometries": 60,
+        "textures": 20,
+        "multiDraw": true,
+        "pos": {
+          "x": 82.4,
+          "y": 0.15,
+          "z": 97.5,
+          "yaw": 0,
+          "pitch": 0
+        },
+        "target": null,
+        "label": null
+      },
+      "settings": "low",
+      "antialias": false,
+      "colliderCount": 1985,
+      "collisionQueryCounter": 31,
+      "interactionCount": 130
+    },
+    {
+      "variant": "base",
+      "pose": {
+        "x": 82.4,
+        "y": 0.15,
+        "z": 97.5,
+        "yaw": 0,
+        "pitch": 0
+      },
+      "state": "{\"flags\":{\"leftHome\":true},\"lit\":{},\"open\":{\"door.front\":true},\"inventory\":[\"invitation\",\"torch\",\"matches\",\"notebook\",\"frontKey\"]}",
+      "audit": [],
+      "tris": {
+        "coatRail": 1656,
+        "hallPainting": 492,
+        "hallCommode": 580,
+        "table": 4784,
+        "logBasket": 480,
+        "chair.ladder": 13536,
+        "lectern": 1056,
+        "floorGlobe": 2128,
+        "billiardTable": 2472,
+        "cueRack": 420,
+        "chair.upholstered": 5680,
+        "chair.carver": 2464,
+        "boardGameSet": 960,
+        "sideboard": 3980,
+        "chair.spindle": 4656,
+        "larder": 924,
+        "utilitySink": 636,
+        "towelRail": 960,
+        "wc": 380,
+        "pedestalBasin": 808,
+        "shelvingUnit": 60832,
+        "toolWall": 526,
+        "sawhorses": 228,
+        "bed": 9024,
+        "luggageRack": 96,
+        "writingDesk": 872,
+        "bathtub": 1106,
+        "lounger": 3340,
+        "well": 2332,
+        "golfTeeBall": 224,
+        "golfTray": 180,
+        "golfBag": 846
+      },
+      "finite": true,
+      "metrics": {
+        "fps": 0,
+        "frame": {
+          "fps": 0,
+          "medianMs": 3366.6,
+          "p95Ms": 49898,
+          "frames": 14
+        },
+        "calls": 60,
+        "triangles": 189038,
+        "geometries": 59,
+        "textures": 20,
+        "multiDraw": true,
+        "pos": {
+          "x": 82.4,
+          "y": 0.15,
+          "z": 97.5,
+          "yaw": 0,
+          "pitch": 0
+        },
+        "target": null,
+        "label": null
+      },
+      "settings": "low",
+      "antialias": false,
+      "colliderCount": 1985,
+      "collisionQueryCounter": 31,
+      "interactionCount": 130
+    },
+    {
+      "variant": "pilot",
+      "pose": {
+        "x": 82.4,
+        "y": 0.15,
+        "z": 97.5,
+        "yaw": 0,
+        "pitch": 0
+      },
+      "state": "{\"flags\":{\"leftHome\":true},\"lit\":{},\"open\":{\"door.front\":true},\"inventory\":[\"invitation\",\"torch\",\"matches\",\"notebook\",\"frontKey\"]}",
+      "audit": [],
+      "tris": {
+        "coatRail": 1656,
+        "hallPainting": 492,
+        "hallCommode": 580,
+        "table": 4512,
+        "logBasket": 480,
+        "vcp.table": 2076,
+        "chair.ladder": 13536,
+        "lectern": 1056,
+        "vcp.chair": 3852,
+        "vcp.globe": 4752,
+        "billiardTable": 2472,
+        "cueRack": 420,
+        "chair.upholstered": 5680,
+        "chair.carver": 2464,
+        "boardGameSet": 960,
+        "sideboard": 3980,
+        "chair.spindle": 4656,
+        "larder": 924,
+        "utilitySink": 636,
+        "towelRail": 960,
+        "wc": 380,
+        "pedestalBasin": 808,
+        "shelvingUnit": 60832,
+        "toolWall": 526,
+        "sawhorses": 228,
+        "bed": 9024,
+        "luggageRack": 96,
+        "writingDesk": 872,
+        "bathtub": 1106,
+        "floorGlobe": 1064,
+        "lounger": 3340,
+        "well": 2332,
+        "golfTeeBall": 224,
+        "golfTray": 180,
+        "golfBag": 846
+      },
+      "finite": true,
+      "metrics": {
+        "fps": 0,
+        "frame": {
+          "fps": 0,
+          "medianMs": 2949.8,
+          "p95Ms": 49898,
+          "frames": 19
+        },
+        "calls": 61,
+        "triangles": 195490,
+        "geometries": 60,
+        "textures": 20,
+        "multiDraw": true,
+        "pos": {
+          "x": 82.4,
+          "y": 0.15,
+          "z": 97.5,
+          "yaw": 0,
+          "pitch": 0
+        },
+        "target": null,
+        "label": null
+      },
+      "settings": "low",
+      "antialias": false,
+      "colliderCount": 1985,
+      "collisionQueryCounter": 31,
+      "interactionCount": 130
+    },
+    {
+      "variant": "base",
+      "pose": {
+        "x": 82.4,
+        "y": 0.15,
+        "z": 97.5,
+        "yaw": 0,
+        "pitch": 0
+      },
+      "state": "{\"flags\":{\"leftHome\":true},\"lit\":{},\"open\":{\"door.front\":true},\"inventory\":[\"invitation\",\"torch\",\"matches\",\"notebook\",\"frontKey\"]}",
+      "audit": [],
+      "tris": {
+        "coatRail": 1656,
+        "hallPainting": 492,
+        "hallCommode": 580,
+        "table": 4784,
+        "logBasket": 480,
+        "chair.ladder": 13536,
+        "lectern": 1056,
+        "floorGlobe": 2128,
+        "billiardTable": 2472,
+        "cueRack": 420,
+        "chair.upholstered": 5680,
+        "chair.carver": 2464,
+        "boardGameSet": 960,
+        "sideboard": 3980,
+        "chair.spindle": 4656,
+        "larder": 924,
+        "utilitySink": 636,
+        "towelRail": 960,
+        "wc": 380,
+        "pedestalBasin": 808,
+        "shelvingUnit": 60832,
+        "toolWall": 526,
+        "sawhorses": 228,
+        "bed": 9024,
+        "luggageRack": 96,
+        "writingDesk": 872,
+        "bathtub": 1106,
+        "lounger": 3340,
+        "well": 2332,
+        "golfTeeBall": 224,
+        "golfTray": 180,
+        "golfBag": 846
+      },
+      "finite": true,
+      "metrics": {
+        "fps": 0,
+        "frame": {
+          "fps": 0,
+          "medianMs": 3116.5,
+          "p95Ms": 30315.5,
+          "frames": 24
+        },
+        "calls": 60,
+        "triangles": 189038,
+        "geometries": 59,
+        "textures": 20,
+        "multiDraw": true,
+        "pos": {
+          "x": 82.4,
+          "y": 0.15,
+          "z": 97.5,
+          "yaw": 0,
+          "pitch": 0
+        },
+        "target": null,
+        "label": null
+      },
+      "settings": "low",
+      "antialias": false,
+      "colliderCount": 1985,
+      "collisionQueryCounter": 31,
+      "interactionCount": 130
+    },
+    {
+      "variant": "pilot",
+      "pose": {
+        "x": 82.4,
+        "y": 0.15,
+        "z": 97.5,
+        "yaw": 0,
+        "pitch": 0
+      },
+      "state": "{\"flags\":{\"leftHome\":true},\"lit\":{},\"open\":{\"door.front\":true},\"inventory\":[\"invitation\",\"torch\",\"matches\",\"notebook\",\"frontKey\"]}",
+      "audit": [],
+      "tris": {
+        "coatRail": 1656,
+        "hallPainting": 492,
+        "hallCommode": 580,
+        "table": 4512,
+        "logBasket": 480,
+        "vcp.table": 2076,
+        "chair.ladder": 13536,
+        "lectern": 1056,
+        "vcp.chair": 3852,
+        "vcp.globe": 4752,
+        "billiardTable": 2472,
+        "cueRack": 420,
+        "chair.upholstered": 5680,
+        "chair.carver": 2464,
+        "boardGameSet": 960,
+        "sideboard": 3980,
+        "chair.spindle": 4656,
+        "larder": 924,
+        "utilitySink": 636,
+        "towelRail": 960,
+        "wc": 380,
+        "pedestalBasin": 808,
+        "shelvingUnit": 60832,
+        "toolWall": 526,
+        "sawhorses": 228,
+        "bed": 9024,
+        "luggageRack": 96,
+        "writingDesk": 872,
+        "bathtub": 1106,
+        "floorGlobe": 1064,
+        "lounger": 3340,
+        "well": 2332,
+        "golfTeeBall": 224,
+        "golfTray": 180,
+        "golfBag": 846
+      },
+      "finite": true,
+      "metrics": {
+        "fps": 1,
+        "frame": {
+          "fps": 1,
+          "medianMs": 1733.3,
+          "p95Ms": 30315.5,
+          "frames": 32
+        },
+        "calls": 61,
+        "triangles": 195490,
+        "geometries": 60,
+        "textures": 20,
+        "multiDraw": true,
+        "pos": {
+          "x": 82.4,
+          "y": 0.15,
+          "z": 97.5,
+          "yaw": 0,
+          "pitch": 0
+        },
+        "target": null,
+        "label": null
+      },
+      "settings": "low",
+      "antialias": false,
+      "colliderCount": 1985,
+      "collisionQueryCounter": 31,
+      "interactionCount": 130
+    },
+    {
+      "variant": "base",
+      "pose": {
+        "x": 82.4,
+        "y": 0.15,
+        "z": 97.5,
+        "yaw": 0,
+        "pitch": 0
+      },
+      "state": "{\"flags\":{\"leftHome\":true},\"lit\":{},\"open\":{\"door.front\":true},\"inventory\":[\"invitation\",\"torch\",\"matches\",\"notebook\",\"frontKey\"]}",
+      "audit": [],
+      "tris": {
+        "coatRail": 1656,
+        "hallPainting": 492,
+        "hallCommode": 580,
+        "table": 4784,
+        "logBasket": 480,
+        "chair.ladder": 13536,
+        "lectern": 1056,
+        "floorGlobe": 2128,
+        "billiardTable": 2472,
+        "cueRack": 420,
+        "chair.upholstered": 5680,
+        "chair.carver": 2464,
+        "boardGameSet": 960,
+        "sideboard": 3980,
+        "chair.spindle": 4656,
+        "larder": 924,
+        "utilitySink": 636,
+        "towelRail": 960,
+        "wc": 380,
+        "pedestalBasin": 808,
+        "shelvingUnit": 60832,
+        "toolWall": 526,
+        "sawhorses": 228,
+        "bed": 9024,
+        "luggageRack": 96,
+        "writingDesk": 872,
+        "bathtub": 1106,
+        "lounger": 3340,
+        "well": 2332,
+        "golfTeeBall": 224,
+        "golfTray": 180,
+        "golfBag": 846
+      },
+      "finite": true,
+      "metrics": {
+        "fps": 1,
+        "frame": {
+          "fps": 1,
+          "medianMs": 1833.3,
+          "p95Ms": 30315.5,
+          "frames": 37
+        },
+        "calls": 60,
+        "triangles": 189038,
+        "geometries": 59,
+        "textures": 20,
+        "multiDraw": true,
+        "pos": {
+          "x": 82.4,
+          "y": 0.15,
+          "z": 97.5,
+          "yaw": 0,
+          "pitch": 0
+        },
+        "target": null,
+        "label": null
+      },
+      "settings": "low",
+      "antialias": false,
+      "colliderCount": 1985,
+      "collisionQueryCounter": 31,
+      "interactionCount": 130
+    }
+  ],
+  "errors": []
+}
