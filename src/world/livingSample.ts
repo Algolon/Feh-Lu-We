@@ -10,7 +10,7 @@ import type { HearthOpts } from './hearth';
 import { Asm, artMats, softBox, cushion, lathe, moulding, projectUV, bake, baseAO, ContactShadows, type ArtMats } from './artkit';
 import { v3, compound, box, getKit } from './kit';
 import { makeLamp, makeInspect, place } from '../interactions/props';
-import { bookshelf, plant, painting } from './furniture';
+import { bookshelf, plant, flwPainting } from './furniture';
 import { MANTEL, mantelSlots } from '../content/canon';
 import { GF, CEIL } from './layout';
 
@@ -603,7 +603,7 @@ export function livingRoomV2(w: World, g: GameApi, c: Ctx, sh: ContactShadows) {
   plant(c, 84.4, 80.9, GF, 1.2);
   sh.add(84.4, GF + 0.004, 80.9, 0.85, 0.85, 0, 0.6);
   // moved 0.75 m west: the original position overlapped the window at x 79 (now visible with its linings)
-  painting(c, 77.25, 2.1, 80.45, 0, 1.2, 0.85, 3);
+  flwPainting(c, 'FLW-D2-026', 77.25, 2.1, 80.45, 0); // DEV-04D D1 (was atlas #3; same art id)
   // memory photo (same id, clue, hitbox, pose)
   const photo = compound((b) => { box(b, k.M.paint, '#b8892f', 0, 0, 0, 0.22, 0.17, 0.03); box(b, k.M.glow, '#c8b8a0', 0, 0.02, 0.018, 0.17, 0.12, 0.005); });
   place(photo, 83.9, GF + 0.62, 92.4, Math.PI * 0.8);

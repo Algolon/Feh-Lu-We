@@ -19,6 +19,7 @@ import {
   table, roundTable, chair, sofa, armchair, bookshelf, counter, rug, plant, painting, crate, tableLamp, floorLamp, chandelier, wallSconce,
   staticLantern, staticSconce, bed2, bedside, wardrobe, curtains, desk, lectern, bathtub, ladder, telescope, canvasPanel, joinery,
   slatBench, blanketChest, gameBoxes, instrumentCase, workbench, farmhouseSink, stool,
+  flwPainting, wallMirror, salonWall,
 } from './furniture';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place } from '../interactions/props';
 import { sideboard, billiardTable, cueRack, shelvingUnit, toolWall, floorGlobe, logBasket, coatRail, pedestalBasin, towelRail, luggageRack, writingDesk, tabletop, larder, boardGameSet } from './dressing';
@@ -36,6 +37,8 @@ import { EMBLEMS, SERVICE, CATALOG, CONSOLE_SOCKETS, ROUTE_LINES } from '../cont
 import { addClue, has } from '../core/state';
 import { GF, CEIL, UF, UCEIL, TOP, BF, BCEIL, AF, S03, roofUnderside, ATTIC_NOOK, ATTIC_ROOF_WINDOW } from './layout';
 import { buildMaquette } from './maquette';
+import { addKey, S3_BUILDERS } from './d2props';
+import { SALON_LAYOUT, SALON_SITES } from '../content/gallery';
 import { placeSolved, slotContents, openBasement } from '../puzzles/rules';
 
 export { GF, CEIL, UF, UCEIL, TOP };
@@ -391,8 +394,11 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   plant(c, 91.6, 96.8, GF, 1.1);
   // DEV-04A: this landscape hung IN the Sterrenkamer doorway on the gallery wall (it floated in the opening when the door
   // opened); it now hangs on the free gallery wall between the Reiskamer and Sterrenkamer doors (wall-art contract)
-  painting(c, 85.12, 4.6, 86.2, Math.PI / 2, 1.2, 0.9, 1);
-  painting(c, 85.12, 2.0, 92.5, Math.PI / 2, 0.9, 0.7, 0);
+  // DEV-04D D1-R: an upper-gallery picture: centred in the walkway bay between the gallery corner (z 84) and the Sterrenkamer
+  // door (z 89.7), on the walkway hanging line UF + 1.6, plain moulded frame (the stair landscape keeps the hall's gilt)
+  flwPainting(c, 'FLW-D2-002', 85.12, UF + 1.6, 86.9, Math.PI / 2);
+  // DEV-04D D1-R: centred over the maquette presentation table (z 93.4–95.4), bottom ≈ 0.45 m above its top, lit by the sconce beside it
+  flwPainting(c, 'FLW-D2-007', 85.12, 1.95, 94.4, Math.PI / 2);
   // DEV-04B-R: a large framed painting above the stair — the manor across the lake at dusk (original, procedural) in a
   // gilt moulded frame. It replaces the woven hanging, which was a floor-rug mesh and stood out of the wall as a ledge
   // under an empty rod. Same wall, same centre; registered with its full frame for the DEV-04A wall-art contract.
@@ -444,8 +450,8 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   hallDrawer.slider.add(ledger);
   // DEV-01: picking the register up does not read it (pickup ≠ observation); it is read from the bag
   makePickup(w, g, { id: 'pk.ledger', item: 'ledger', obj: ledger, available: hallDrawer.isOpen, hit: [0.3, 0.12, 0.36], after: SLICE ? undefined : () => g.inspect('c.ledger') });
-  const shedKey = compound((b) => { box(b, k.M.paint, '#8a5a3a', 0, 0, 0, 0.05, 0.015, 0.15); box(b, k.M.wood, '#a8743f', 0, 0, 0.11, 0.08, 0.02, 0.07); });
-  shedKey.position.set(0.22, -0.08, 0);
+  const shedKey = compound((b) => addKey(b, 'shedKey')); // DEV-04D D2: FLW-K3-003 key-family model (was two boxes)
+  shedKey.position.set(0.22, -0.07, 0); // DEV-04D D2: on the drawer bottom (its top is at −0.07; the key sat 1 cm into it)
   hallDrawer.slider.add(shedKey);
   makePickup(w, g, { id: 'pk.shedKey', item: 'shedKey', obj: shedKey, available: hallDrawer.isOpen, hit: [0.3, 0.12, 0.3] });
   const gb = compound((b) => { box(b, k.M.paint, '#6a2f2a', 0, 0, 0, 0.3, 0.04, 0.22); box(b, k.M.paint, '#f2e8d2', 0, 0.04, 0, 0.28, 0.005, 0.2); });
@@ -550,7 +556,7 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   w.scene.add(plan);
   makeInspect(w, g, { id: 'inspect.hostingPlan', obj: plan, clue: 'c.hostingPlan', hit: [0.5, 0.2, 0.55], label: 'Lezen: tafelplan' });
   // DEV-04A: was hung across the north window's glass and curtain on the east wall; now on the free north wall (z 92)
-  painting(c, 104.8, 2.0, 91.92, Math.PI, 0.8, 0.6, 7);
+  flwPainting(c, 'FLW-D2-010', 104.8, 2.0, 91.92, Math.PI); // DEV-04D D1: Na het feest, larger than the old atlas #7
   const dch = chandelier(w, 101.3, CEIL, 86.2, 0.7, 0.9, c.chunk); // DEV-04C: owned by the dining batch (mWing)
   const dsw = compound((b) => box(b, k.M.paint, '#c9a44c', 0, 0, 0, 0.12, 0.18, 0.03));
   place(dsw, 95.09, 1.35, 90.4, Math.PI / 2);
@@ -601,7 +607,7 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
     a2.end({ gap: 0.02 }); }
   c.col.addBox(85.1, 85.85, 105.85, 106.75, 0, GF + 0.85);
   pedestalBasin(c, 87.6, 105.3, GF, -Math.PI / 2);
-  box(c.b, k.M.glow, '#cfe0e6', 87.9, GF + 1.2, 105.3, 0.02, 0.6, 0.45, { chunk: c.chunk, shadow: false });
+  wallMirror(c, 87.92, GF + 1.55, 105.3, -Math.PI / 2, 0.45, 0.6); // DEV-04D F1: framed tinted mirror (was a glowing panel)
   staticSconce(c, w, 87.88, 2.2, 104.5, -Math.PI / 2, 1.5, 3);
   c.chunk = 'mServ';
   // DEV-04B pantry: open shelving with what a pantry holds (preserves, tins, crates of produce), sacks on the floor
@@ -619,6 +625,7 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   workbench(c, 115.2, 96.5, GF, Math.PI / 2, 3.0, 0.7);
   // DEV-04B: the tool board is a tool wall — battens, pegs and the tools themselves (it was a board with six bars)
   toolWall(c, 115.53, 96.5, GF + 1.85, -Math.PI / 2, 2.8);
+  flwPainting(c, 'FLW-D2-044', 115.56, GF + 1.85, 98.55, -Math.PI / 2); // DEV-04D D1-R: pinned up 0.3 m beside the tool board, on its centre line
   tabletop(c, 115.15, 97.6, GF + 0.92, -Math.PI / 2, ['jug'], 5);
   shelvingUnit(c, 108.68, 98.3, GF, Math.PI / 2, 1.8, 0.45, 1.9, ['tools', 'tins', 'crates', 'empty'], '#6b4a2a', 73);
   { // two sawhorses carrying a plank
@@ -717,8 +724,9 @@ function libraryCatalogue(w: World, g: GameApi, c: Ctx, tx: number, tz: number, 
     label: () => (placeSolved(g.state, 'cat') ? null : 'Boeken en vakken bekijken'),
     run: () => { if (addClue(g.state, 'c.catalogDesk')) g.changed(); g.openPanel('catalog'); },
   });
-  const card = compound((b) => { box(b, k.M.paint, '#f5eedc', 0, 0, 0, 0.12, 0.004, 0.18); box(b, k.M.paint, '#c9a44c', 0.03, 0.006, 0.05, 0.03, 0.01, 0.1); });
-  card.position.set(0.05, -0.04, 0.1);
+  // DEV-04D D2: the archive card carries the FLW-K3-002 key-family model (was a brass box); the card stays the pickup object
+  const card = compound((b) => { box(b, k.M.paint, '#f5eedc', 0, 0, 0, 0.12, 0.004, 0.18); addKey(b, 'studyKey', 0.025, 0.004, 0.02, 0.2); });
+  card.position.set(0.05, -0.03, 0.1); // DEV-04D D2: on the drawer bottom (top at −0.03): the card lay 1 cm under it, unseen
   deskDrawer.slider.add(card);
   makePickup(w, g, { id: 'pk.studyKey', item: 'studyKey', obj: card, available: deskDrawer.isOpen, hit: [0.3, 0.12, 0.3], label: 'Pakken: messing sleutel en kaart', after: () => g.inspect('c.archiveCard') });
   // framed floor plan with the room emblems, on the east wall facing into the library
@@ -901,11 +909,13 @@ function kitchen(w: World, g: GameApi, c: Ctx) {
   });
   // ---- service hatch (dumbwaiter) beside the chart: opens when the plan is right → conservatory key
   const hz = 98.6;
-  boxMM(c.b, k.M.wood, '#4a2f1a', 95.08, 95.28, GF + 0.95, GF + 1.75, hz - 0.45, hz + 0.45, { chunk: c.chunk });
+  // DEV-04D D2: the hatch case is a real recess (sill, head, cheeks around the dark back panel); it was one solid block,
+  // so the key behind the hatch door sat inside the wood and was never seen
+  for (const [y0, y1, z0, z1] of [[GF + 0.95, GF + 1.02, hz - 0.45, hz + 0.45], [GF + 1.68, GF + 1.75, hz - 0.45, hz + 0.45], [GF + 1.02, GF + 1.68, hz - 0.45, hz - 0.36], [GF + 1.02, GF + 1.68, hz + 0.36, hz + 0.45]] as const) boxMM(c.b, k.M.wood, '#4a2f1a', 95.08, 95.28, y0, y1, z0, z1, { chunk: c.chunk });
   boxMM(c.b, k.M.paint, '#2a201a', 95.08, 95.1, GF + 1.02, GF + 1.68, hz - 0.36, hz + 0.36, { chunk: c.chunk });
   makeDoor(w, g, { id: 'kitchen.hatch', x: 95.32, z: hz - 0.36, dir: 'z+', width: 0.72, height: 0.66, y0: GF + 1.02, swing: -1, color: '#7a5232', unlock: 'lock.serviceHatch', lockedMsg: 'Een serveerluik met een klein slotje zonder sleutelgat. Het hoort bij het dienstrooster ernaast.', thickness: 0.04 });
-  const key = compound((b) => { box(b, k.M.paint, '#c9a44c', 0, 0, 0, 0.05, 0.015, 0.16); blob(b, k.M.glow, '#5fbf8f', 0, 0, 0.12, 0.04, 0.02, 0.05); });
-  place(key, 95.2, GF + 1.05, hz, 0.3);
+  const key = compound((b) => addKey(b, 'consKey')); // DEV-04D D2: FLW-K3-004 key-family model; the glass drop no longer glows
+  place(key, 95.19, GF + 1.02, hz, 0.3); // DEV-04D D2: lying on the sill (it hung 3 cm above it, inside the block)
   w.scene.add(key);
   makePickup(w, g, { id: 'pk.consKey', item: 'consKey', obj: key, available: () => !!g.state.open['kitchen.hatch'], hit: [0.3, 0.2, 0.3], after: () => g.inspect('c.consNote') });
   // ES.kitchenCrates: eight red shopping crates (two stacks of four, against the counter's west face); beer crates apart
@@ -989,6 +999,8 @@ function kitchenDressing(c: Ctx) {
   for (let i = 0; i < 7; i++) sh.add(M.ceramic, i % 3 ? '#efe9dc' : '#6f91a6', cg('plate', () => new THREE.CylinderGeometry(0.12, 0.12, 0.015, 14).rotateX(Math.PI / 2)), -1.5 + i * 0.12, 1.69, -0.05, { rx: -0.12 });
   for (let i = 0; i < 4; i++) sh.add(M.ceramic, ['#e6dcc4', '#b3813f', '#6f91a6', '#e6dcc4'][i], cg('jar', () => lathe([[0.001, 0], [0.05, 0], [0.055, 0.12], [0.04, 0.15], [0.042, 0.17], [0.001, 0.17]], 10)), 0.4 + i * 0.16, 1.57, 0);
   for (let i = 0; i < 3; i++) sh.add(M.ceramic, '#efe9dc', cg('bowl', () => lathe([[0.001, 0], [0.05, 0], [0.09, 0.05], [0.095, 0.07], [0.001, 0.02]], 12)), -0.9 + i * 0.22, 2.0, 0);
+  // DEV-04D D1: a still life on the east wall past the end of the shelves and the run (the service-chart wall stays clear)
+  flwPainting(c, 'FLW-D2-005', 107.56, GF + 1.75, 99.65, -Math.PI / 2); // D1-R: 1.0 × 1.25, centred between shelves (97.3) and door (102)
   // pot rack hung over the island on four rods, copper pans on hooks
   const pr = new Asm(c.b, c.chunk, 101, GF, 105.4, 0);
   pr.add(M.paint, '#2f2a24', bx(1.8, 0.03, 0.03), 0, 2.25, -0.25); pr.add(M.paint, '#2f2a24', bx(1.8, 0.03, 0.03), 0, 2.25, 0.25);
@@ -1053,18 +1065,22 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   // gallery + landing
   rug(c, 90, 99.7, UF + 0.01, 4.0, 2.6, 0, '#ffffff', 'kilim', true);
   plant(c, 85.6, 103.3, UF, 1.0);
-  painting(c, 90, UF + 1.7, 103.92, Math.PI, 1.1, 0.8, 2);
+  flwPainting(c, 'FLW-D2-028', 90, UF + 1.65, 103.92, Math.PI); // DEV-04D D1-R: the upstairs anchor on the hall axis, 1.6 m; top on the door-head line
   const ls = wallSconce(w, 93.7, UF + 1.9, 103.9, Math.PI); // DEV-04A: it hung in the rear-nook arch (x 91.4–92.6)
   makeLamp(w, g, { id: 'lamp.landing', ...ls, name: 'wandlamp', defaultOn: true, intensity: 4, distance: 7, hit: [0.4, 0.5, 0.4], patch: { y: UF + 0.03, r: 1.3 } });
-  painting(c, 85.12, UF + 1.6, 93, Math.PI / 2, 0.9, 0.7, 5);
+  // DEV-04D D1-R: the walkway's procedural placeholder (atlas #5, z 93) is retired; the bay right of the Sterrenkamer door
+  // stays empty until a later deliberate choice (owner decision D-1)
   // DEV-04B: the gallery bench is the joinery bench; the gallery walkway carries no rug (it only filled floor)
   slatBench(c, 93.2, 81.0, UF, 0, 1.4, '#6b4426');
+  S3_BUILDERS['FLW-S3-014'](c); // DEV-04D D2: carved swallows on the long gallery wall, between the windows
   // ---------------------------------------------------------------- Reiskamer (warm, travel)
   // DEV-03: headboard on the west wall beside its window (it stood 1.5 m off the wall with the bedside behind it)
   rug(c, 75.4, 84.9, R0 + 0.01, 2.2, 3.0, Math.PI / 2, '#f4e0cc', 'kilim', true);
   bed2(c, 73.5, 84.9, R0, Math.PI / 2, '#b5643c', '#7a4f2c', 1.6, { style: 'panel', throwColor: '#3f6f78', cushion: '#c9a25a' });
   for (const bz of [83.75, 86.05]) bedside(c, 72.65, bz, R0, Math.PI / 2, '#7a4f2c');
-  wardrobe(c, 81.6, 86.35, R0, Math.PI, 1.4, '#7a4f2c');
+  // DEV-04D D1-R: the traveller over the bed, on the view from the door, lit by the bedside lamp; bottom 0.155 m above the
+  // headboard capping (R0 + 1.20; the post finials stand outside the frame)
+  flwPainting(c, 'FLW-D2-022', 72.42, R0 + 1.92, 84.9, Math.PI / 2);  wardrobe(c, 81.6, 86.35, R0, Math.PI, 1.4, '#7a4f2c');
   curtains(c, 75.5, 80.45, R0 + 0.75, 0, 1.0, 1.9, '#c8643a');
   curtains(c, 82.5, 80.45, R0 + 0.75, 0, 1.0, 1.9, '#c8643a');
   canvasPanel(w, 78.6, R0 + 1.6, 86.68, Math.PI, 1.1, 0.75, (x, W, H) => { const gr = x.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, '#f6e2b8'); gr.addColorStop(1, '#e8d2a0'); x.fillStyle = gr; x.fillRect(0, 0, W, H); x.strokeStyle = '#7a5a3a'; x.lineWidth = 3; x.beginPath(); x.moveTo(0, H * 0.7); for (let i = 0; i <= 10; i++) x.lineTo((W * i) / 10, H * (0.55 + 0.12 * Math.sin(i * 1.3))); x.stroke(); x.beginPath(); x.arc(W * 0.75, H * 0.3, 26, 0, Math.PI * 2); x.stroke(); x.font = 'italic 22px Georgia'; x.fillStyle = '#7a5a3a'; if (!SLICE) x.fillText('onderweg', 20, H - 18); /* DEV-01R: no label-like words in clue rooms */ }, 256);
@@ -1073,7 +1089,8 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   luggageRack(c, 83.8, 84.4, R0, -Math.PI / 2);
   blanketChest(c, 75.05, 84.9, R0, Math.PI / 2, 1.0, '#6b4a2a');
   writingDesk(c, 79.0, 80.95, R0, 0, 1.1, 0.55, '#7a4f2c');
-  tabletop(c, 79.0, 80.95, R0 + 0.76, 0, ['open', 'stack'], 13);
+  tabletop(c, 78.78, 80.95, R0 + 0.76, 0, ['open'], 13); // DEV-04D D2: the book stack makes way for the model sloop
+  S3_BUILDERS['FLW-S3-015'](c); // DEV-04D D2: model sloop on the desk (not in the suitcase memory cluster)
   chair(c, 79.0, 81.65, R0, Math.PI, '#b5643c', true, 'carver', '#7a4f2c');
   const suitcase = compound((b) => {
     const M2 = artMats(), a2 = new Asm(b, 'main', 0, 0, 0, 0), leather = '#a8743f', lining = '#7a2e2a';
@@ -1102,9 +1119,11 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   rug(c, 75.6, 92.2, R0 + 0.01, 2.6, 3.0, 0, '#ffffff', 'oval');
   bed2(c, 73.5, 92.2, R0, Math.PI / 2, '#26344a', '#4a3a2a', 1.6, { style: 'upholstered', cushion: '#3b4f5d', throwColor: '#c9a25a' });
   for (const bz of [91.05, 93.35]) bedside(c, 72.65, bz, R0, Math.PI / 2, '#4a3a2a');
+  S3_BUILDERS['FLW-S3-016'](c); // DEV-04D D2: ceramic moon on the window-side bedside (the other carries the lamp)
   curtains(c, 72.45, 90.0, R0 + 0.75, Math.PI / 2, 1.0, 1.9, '#2f3f5f');
   canvasPanel(w, 78.6, R0 + 1.6, 93.9, Math.PI, 1.4, 0.95, (x, W, H) => { x.fillStyle = '#1c2a44'; x.fillRect(0, 0, W, H); for (let i = 0; i < 60; i++) { x.fillStyle = i % 5 ? '#f4ecd8' : '#e8c547'; x.beginPath(); x.arc((Math.sin(i * 12.9) * 0.5 + 0.5) * W, (Math.sin(i * 7.3) * 0.5 + 0.5) * H, i % 7 ? 2 : 4, 0, Math.PI * 2); x.fill(); } x.strokeStyle = 'rgba(244,236,216,.5)'; x.lineWidth = 1.5; x.beginPath(); x.moveTo(W * 0.2, H * 0.3); x.lineTo(W * 0.32, H * 0.42); x.lineTo(W * 0.45, H * 0.36); x.lineTo(W * 0.58, H * 0.5); x.stroke(); x.font = 'italic 20px Georgia'; x.fillStyle = '#f4ecd8'; if (!SLICE) x.fillText('sterrenkaart', 16, H - 14); /* DEV-01R */ }, 384);
-  telescope(c, 82.6, 91.4, R0, -1.71); // DEV-04A: aimed at the west window (z 90); the old tube faced into the room
+  telescope(c, 82.6, 91.4, R0, -1.71);
+  flwPainting(c, 'FLW-D2-029', 78.6, R0 + 1.6, 86.9, 0); // DEV-04D D1-R: centre of the south wall, facing the star map on its axis and line // DEV-04A: aimed at the west window (z 90); the old tube faced into the room
   table(c, 83.9, 93.0, R0, 0.6, 0.5, 0, '#4a3a2a', 0.7);
   const logbook = compound((b) => { addBook(new Asm(b, 'main', 0, 0, 0, Math.PI / 2), { size: 'tall', thick: 'medium', hard: true, design: 5 }, '#2f3f5f', 0, 0, 0, { flat: true, paper: PAPER.fresh }); });
   place(logbook, 83.9, R0 + 0.7, 93.0, 0.4);
@@ -1116,7 +1135,7 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   // ---------------------------------------------------------------- bathroom
   bathtub(c, 86.0, 107.6, R0, 0);
   pedestalBasin(c, 89.6, 105.0, R0, -Math.PI / 2); // DEV-04B: was a white box
-  box(c.b, k.M.glow, '#cfe0e6', 89.85, R0 + 1.2, 105.0, 0.02, 0.7, 0.5, { chunk: c.chunk, shadow: false });
+  wallMirror(c, 89.92, R0 + 1.55, 105.0, -Math.PI / 2, 0.5, 0.7); // DEV-04D F1: framed tinted mirror (was a glowing panel)
   towelRail(c, 85.5, 105.3, R0, Math.PI / 2, ['#6fae9a', '#f2ead8']);
   rug(c, 86.0, 105.9, R0 + 0.01, 1.2, 0.7, 0, '#e8f0f0', 'field');
   staticSconce(c, w, 89.85, R0 + 1.9, 106.8, -Math.PI / 2, 2.5, 4.5);
@@ -1143,6 +1162,7 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
     canvasPanel(w, 107.5, R0 + 1.6, z, -Math.PI / 2, 0.5, 0.65, (x, W, H) => { x.fillStyle = '#f2e8d2'; x.fillRect(0, 0, W, H); drawSymbol(x, ['blad', 'e.varen', 'blad', 'e.varen'][i], W * 0.15, H * 0.15, W * 0.7); }, 128, '#8a6a3a');
   }
   for (const [x, z] of [[106.9, 81.0], [102.0, 81.0], [106.9, 95.2]] as const) plant(c, x, z, R0, 1.0, '#c9774a');
+  S3_BUILDERS['FLW-S3-017'](c); // DEV-04D D2: terracotta medallion on the west wall, opposite the prints (not an emblem)
   const bl = tableLamp(w, 103.9, R0 + 0.76, 89.4);
   makeLamp(w, g, { id: 'lamp.botanic', ...bl, name: 'lamp', defaultOn: true, hit: [0.4, 0.7, 0.4], intensity: 4, distance: 7, patch: { y: R0 + 0.03, r: 1.2 } });
   // ---------------------------------------------------------------- north guest room (source id `storage`), linen, rear nooks
@@ -1151,7 +1171,7 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   bed2(c, 106.45, 102.6, R0, -Math.PI / 2, '#6f8a7a', '#7a5a3a', 1.6, { style: 'spindle', throwColor: '#c8b48a' });
   for (const bz of [101.35, 103.85]) bedside(c, 107.33, bz, R0, -Math.PI / 2, '#7a5a3a');
   blanketChest(c, 104.95, 102.6, R0, -Math.PI / 2, 1.1, '#7a5a3a');
-  painting(c, 107.58, R0 + 1.75, 102.6, -Math.PI / 2, 1.0, 0.6, 3);
+  flwPainting(c, 'FLW-D2-035', 107.58, R0 + 1.85, 102.6, -Math.PI / 2); // DEV-04D D1: replaces the duplicate of the living room's atlas #3
   wardrobe(c, 101.6, 106.25, R0, Math.PI, 1.4, '#7a5a3a');
   armchair(c, 100.0, 104.9, R0, Math.PI * 0.62, '#8a9a7a');
   rug(c, 104.5, 102.6, R0 + 0.01, 2.0, 2.8, 0, '#efe6d0', 'oval');
@@ -1166,7 +1186,8 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   plant(c, 90.7, 109.0, R0, 1.0);
   slatBench(c, 97.0, 109.1, R0, Math.PI, 1.4, '#6b4426');
   roundTable(c, 92.4, 108.9, R0, 0.26, '#5a3a22');
-  tabletop(c, 92.4, 108.9, R0 + 0.76, 0.2, ['stack'], 41);
+  tabletop(c, 92.3, 108.95, R0 + 0.76, 0.2, ['stack'], 41); // DEV-04D D2: the stack moves 10 cm west for the bird
+  S3_BUILDERS['FLW-S3-004'](c); // DEV-04D D2: carved songbird on the side table (owner K-B)
   staticSconce(c, w, 94.88, R0 + 1.9, 105.4, -Math.PI / 2, 2, 4); // rear nook
   if (SLICE) sliceUpstairs(w, g, c); // DEV-01 B01 clusters (U04/U05/U10) + DS01 C (drying rack in U04)
   c.chunk = base;
@@ -1186,6 +1207,8 @@ function study(w: World, g: GameApi, c: Ctx) {
   rug(c, 99.4, 93.2, R0 + 0.01, 1.8, 2.2, 0.2, '#ffffff', 'field');
   roundTable(c, 100.75, 94.5, R0, 0.26, '#5a3a22');
   tabletop(c, 100.75, 94.5, R0 + 0.76, 0.5, ['stack'], 63);
+  // DEV-04D2: the salon gallery wall (owner reference) over the reading corner, on the long east wall
+  for (const s of SALON_SITES) salonWall(c, SALON_LAYOUT, s.x, s.y, s.z, s.yaw);
   // desk under the front window; the drawer front faces north (into the room)
   const dkx = 98.2, dkz = 81.6;
   desk(c, dkx, dkz, R0, Math.PI, 1.8, 0.8);

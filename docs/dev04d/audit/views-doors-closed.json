@@ -1,0 +1,147 @@
+{
+  "commit": "6c5e5c6",
+  "rows": [
+    {
+      "name": "r-atticLanding-b",
+      "pose": {
+        "x": 98.1,
+        "y": 6.7,
+        "z": 104.69999999999999,
+        "yaw": -2.74135199655582,
+        "pitch": -0.08
+      },
+      "calls": 46,
+      "triangles": 101528,
+      "room": "atticStair",
+      "feetY": 3.35
+    },
+    {
+      "name": "r-rearNookEast-b",
+      "pose": {
+        "x": 98.1,
+        "y": 3.35,
+        "z": 108.69999999999999,
+        "yaw": -2.356194490192345,
+        "pitch": -0.08
+      },
+      "calls": 86,
+      "triangles": 142470,
+      "room": "rearNookEast",
+      "feetY": 3.35
+    },
+    {
+      "name": "r-study-b",
+      "pose": {
+        "x": 100.39999999999999,
+        "y": 3.35,
+        "z": 95.1,
+        "yaw": -2.8263779538390827,
+        "pitch": -0.08
+      },
+      "calls": 47,
+      "triangles": 129988,
+      "room": "study",
+      "feetY": 3.35
+    },
+    {
+      "name": "r-storage-b",
+      "pose": {
+        "x": 106.69999999999999,
+        "y": 3.35,
+        "z": 105.69999999999999,
+        "yaw": -2.310073374177834,
+        "pitch": -0.08
+      },
+      "calls": 43,
+      "triangles": 132460,
+      "room": "storage",
+      "feetY": 3.35
+    },
+    {
+      "name": "r-living-a",
+      "pose": {
+        "x": 73.30000000000001,
+        "y": 0.15,
+        "z": 81.30000000000001,
+        "yaw": 0.7411792190017954,
+        "pitch": -0.08
+      },
+      "calls": 131,
+      "triangles": 204946,
+      "room": "living",
+      "feetY": 0.15
+    },
+    {
+      "name": "r-dining-a",
+      "pose": {
+        "x": 95.9,
+        "y": 0.15,
+        "z": 81.30000000000001,
+        "yaw": 0.8339037756378319,
+        "pitch": -0.08
+      },
+      "calls": 76,
+      "triangles": 139058,
+      "room": "dining",
+      "feetY": 0.15
+    },
+    {
+      "name": "r-kitchen-a",
+      "pose": {
+        "x": 95.9,
+        "y": 0.15,
+        "z": 92.9,
+        "yaw": 0.5995962869690175,
+        "pitch": -0.08
+      },
+      "calls": 61,
+      "triangles": 139118,
+      "room": "kitchen",
+      "feetY": 0.15
+    },
+    {
+      "name": "r-kitchen-b",
+      "pose": {
+        "x": 106.69999999999999,
+        "y": 0.15,
+        "z": 108.69999999999999,
+        "yaw": -2.5419963666207757,
+        "pitch": -0.08
+      },
+      "calls": 128,
+      "triangles": 203040,
+      "room": "kitchen",
+      "feetY": 0.15
+    },
+    {
+      "name": "h01-game-table",
+      "pose": {
+        "x": 99.9,
+        "y": 0.15,
+        "z": 82.9,
+        "yaw": 0.7853981633974483,
+        "pitch": -0.62
+      },
+      "calls": 52,
+      "triangles": 130850,
+      "room": "dining",
+      "feetY": 0.15
+    },
+    {
+      "name": "h06-maquette",
+      "pose": {
+        "x": 86.75,
+        "y": 0.15,
+        "z": 94.4,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.42
+      },
+      "calls": 58,
+      "triangles": 178382,
+      "room": "hall",
+      "feetY": 0.15
+    }
+  ],
+  "problems": [],
+  "state": "DOORS=closed"
+}

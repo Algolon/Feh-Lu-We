@@ -8,6 +8,10 @@ import { upholstered } from './livingSample';
 import { bushModel, BARK_TINT, LEAF_TINT, woodMats } from './woodkit';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { paintingTexture } from './textures';
+import { ART, FRAME_RAIL, type FrameStyle } from '../content/art';
+import { frameBox, FINISH, type SalonFrame } from '../content/gallery';
+import FLW_ATLAS from './artAtlas.json';
+import FLW_ATLAS_URL from '../assets/art/flw-d2-atlas.webp';
 import type { World } from '../interactions/world';
 import type { Batcher } from './kit';
 import { makeFire, regionOwned } from './fire';
@@ -401,6 +405,138 @@ export function painting(c: Ctx, x: number, y: number, z: number, yaw: number, w
   for (const s2 of [-1, 1]) {
     a.add(idx % 3 === 1 ? M.timber : M.brass, fr, sb(w + 2 * fw, fw, 0.05, 0.012), 0, s2 * (h / 2 + fw / 2), 0.035);
     a.add(idx % 3 === 1 ? M.timber : M.brass, fr, sb(fw, h, 0.05, 0.012), s2 * (w / 2 + fw / 2), 0, 0.035);
+  }
+}
+
+// ---------------------------------------------------------------- DEV-04D D1: FLW-D2 artwork (one image atlas)
+let flwMat: THREE.MeshLambertMaterial | null = null;
+let flwReady: Promise<void> = Promise.resolve();
+/** Linear albedo gain of the FLW atlas material (see flwAtlas). */
+export const FLW_EXPOSURE = 1.35;
+/** The shared FLW-D2 atlas material. Until the image arrives the texture shows a dim neutral (no black flash). */
+function flwAtlas() {
+  if (flwMat) return flwMat;
+  const ph = document.createElement('canvas');
+  ph.width = ph.height = 4;
+  const px = ph.getContext('2d')!;
+  px.fillStyle = '#6e6250'; px.fillRect(0, 0, 4, 4);
+  const tex = new THREE.Texture<HTMLCanvasElement | HTMLImageElement>(ph);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.needsUpdate = true;
+  flwReady = new Promise((done) => {
+    const img = new Image();
+    img.onload = () => { tex.image = img; tex.needsUpdate = true; done(); };
+    img.onerror = () => done(); // keeps the neutral placeholder; the art suite reports the missing image
+    img.src = FLW_ATLAS_URL;
+  });
+  flwMat = new THREE.MeshLambertMaterial({ map: tex, vertexColors: true });
+  // exposure compensation (pixels untouched): the paintings are full-range images, the walls round them pale plaster;
+  // under ACES tone mapping a 1:1 albedo reads a stop under the wall. A linear albedo gain keeps them lit by the room
+  // (dark room → dark painting: no emission, no glow), only restoring the source's own exposure
+  flwMat.color.setScalar(FLW_EXPOSURE);
+  flwMat.userData.flwAtlas = true;
+  return flwMat;
+}
+/** Resolves when the FLW atlas image has loaded (evidence captures, e2e). */
+export const flwAtlasReady = () => flwReady;
+
+/** Rails of a frame family round a w × h canvas (local +z faces the room; the wall is behind z = 0). */
+function frameRails(a: Asm, M: ReturnType<typeof artMats>, f: FrameStyle, w: number, h: number) {
+  const fw = FRAME_RAIL[f.family];
+  const rail = (d: number, z: number, k: number, mat: THREE.Material, col: string) => {
+    for (const s2 of [-1, 1]) {
+      a.add(mat, col, sb(w + 2 * k, k, d, Math.min(0.01, k / 4)), 0, s2 * (h / 2 + k / 2), z);
+      a.add(mat, col, sb(k, h, d, Math.min(0.01, k / 4)), s2 * (w / 2 + k / 2), 0, z);
+    }
+  };
+  if (f.family === 'antique') {
+    // S3-044: a deep dark rail, a gilt bead standing proud along the sight edge, a linen slip behind the canvas
+    a.add(M.paint, '#e2d6bc', bx(w + 0.04, h + 0.04, 0.02), 0, 0, 0.03);
+    rail(0.07, 0.045, fw, M.timber, f.rail);
+    for (const s2 of [-1, 1]) {
+      a.add(M.brass, f.bead ?? '#b08a48', sb(w + 0.03, 0.016, 0.022, 0.006), 0, s2 * (h / 2 + 0.008), 0.068);
+      a.add(M.brass, f.bead ?? '#b08a48', sb(0.016, h, 0.022, 0.006), s2 * (w / 2 + 0.008), 0, 0.068);
+    }
+  } else if (f.family === 'simple') {
+    // S3-043: a flat moulded rail with a raised outer lip
+    a.add(M.paint, '#d8ccb2', bx(w + 0.02, h + 0.02, 0.02), 0, 0, 0.03);
+    rail(0.045, 0.035, fw, M.timber, f.rail);
+    for (const s2 of [-1, 1]) {
+      a.add(M.timber, f.rail, sb(w + 2 * fw, 0.016, 0.06, 0.006), 0, s2 * (h / 2 + fw - 0.008), 0.04);
+      a.add(M.timber, f.rail, sb(0.016, h + 2 * fw, 0.06, 0.006), s2 * (w / 2 + fw - 0.008), 0, 0.04);
+    }
+  } else {
+    // S3-045: a slim square print rail, no slip
+    a.add(M.paint, '#2a2622', bx(w, h, 0.012), 0, 0, 0.026);
+    rail(0.032, 0.032, fw, M.timber, f.rail);
+  }
+}
+
+/**
+ * A FLW-D2 artwork in its frame, hung on a wall at (x, y, z) facing plan heading `yaw`. The canvas is the atlas cell
+ * of `id` at the piece's own size (src/content/art.ts), so the source aspect is kept and nothing is cropped. Wall-art id
+ * `painting@x,z`, so a slot that held an atlas placeholder keeps its id.
+ */
+export function flwPainting(c: Ctx, id: string, x: number, y: number, z: number, yaw: number) {
+  const p = ART[id], cell = (FLW_ATLAS.items as Record<string, { uv: number[] }>)[id];
+  if (!p || !cell) throw new Error(`flwPainting: ${id} is not in the art table / atlas`);
+  const fw = FRAME_RAIL[p.frame.family];
+  registerArt(artFootprint(`painting@${x.toFixed(2)},${z.toFixed(2)}`, x, y, z, yaw, p.w + 2 * fw, p.h + 2 * fw)); // DEV-04A wall-art contract
+  const g = new THREE.PlaneGeometry(p.w, p.h);
+  const uv = g.attributes.uv as THREE.BufferAttribute, [u0, v0, u1, v1] = cell.uv;
+  for (let i = 0; i < uv.count; i++) uv.setXY(i, u0 + uv.getX(i) * (u1 - u0), v0 + uv.getY(i) * (v1 - v0));
+  const [fx, fz] = [Math.sin(yaw), Math.cos(yaw)], d = p.frame.family === 'print' ? 0.034 : 0.045;
+  c.b.add(flwAtlas(), g, planMatrix(x + fx * d, y, z + fz * d, yaw + Math.PI), '#ffffff', c.chunk, false, 0);
+  g.dispose();
+  const a = new Asm(c.b, c.chunk, x, y, z, yaw);
+  frameRails(a, artMats(), p.frame, p.w, p.h);
+}
+
+/**
+ * DEV-04D2: an asymmetrical salon gallery wall (src/content/gallery.ts) hung on a wall face at (x, y, z) facing `yaw`.
+ * Every frame: an atlas canvas (the one FLW material: no extra draw call), an optional off-white mat, and four slim
+ * square-section rails (black / off-white in paint, light wood in timber): ≈ 60 triangles a frame. Each frame registers
+ * its own footprint with the DEV-04A wall-art contract (`painting@x,z`; a registry key, not a gameplay id).
+ */
+export function salonWall(c: Ctx, layout: SalonFrame[], x: number, y: number, z: number, yaw: number) {
+  const M = artMats(), fx = Math.sin(yaw), fz = Math.cos(yaw), rx = -Math.cos(yaw), rz = Math.sin(yaw); // facing; viewer's right
+  for (const f of layout) {
+    const b = frameBox(f), cell = (FLW_ATLAS.items as Record<string, { uv: number[] }>)[f.id];
+    if (!cell) throw new Error(`salonWall: ${f.id} is not in the atlas`);
+    const px = x + rx * b.uc, pz = z + rz * b.uc, py = y + b.vc;
+    registerArt(artFootprint(`painting@${px.toFixed(2)},${pz.toFixed(2)}`, px, py, pz, yaw, b.w, b.h));
+    const g = new THREE.PlaneGeometry(f.cw, b.ch);
+    const uv = g.attributes.uv as THREE.BufferAttribute, [u0, v0, u1, v1] = cell.uv;
+    for (let i = 0; i < uv.count; i++) uv.setXY(i, u0 + uv.getX(i) * (u1 - u0), v0 + uv.getY(i) * (v1 - v0));
+    c.b.add(flwAtlas(), g, planMatrix(px + fx * 0.024, py, pz + fz * 0.024, yaw + Math.PI), '#ffffff', c.chunk, false, 0);
+    g.dispose();
+    const a = new Asm(c.b, c.chunk, px, py, pz, yaw), mat = f.finish === 'wood' ? M.timber : M.paint, col = FINISH[f.finish];
+    const W = b.w, H = b.h, r = f.rail, d = 0.03;
+    if (f.mat > 0) a.add(M.paint, '#efe9dc', bx(f.cw + 2 * f.mat, b.ch + 2 * f.mat, 0.004), 0, 0, 0.02);
+    else a.add(M.paint, '#2a2622', bx(f.cw, b.ch, 0.004), 0, 0, 0.02); // backing board behind the canvas
+    for (const s2 of [-1, 1]) {
+      a.add(mat, col, bx(W, r, d), 0, s2 * (H / 2 - r / 2), d / 2);
+      a.add(mat, col, bx(r, H - 2 * r, d), s2 * (W / 2 - r / 2), 0, d / 2);
+    }
+  }
+}
+
+/**
+ * DEV-04D F1: a framed wall mirror (bathroom, guest WC). Tinted, non-reflective glass read: a blue-grey pane with a
+ * soft lighter diagonal sheen and a darker lower edge, in a slim timber frame. Nothing glows (decor, not a light).
+ */
+export function wallMirror(c: Ctx, x: number, y: number, z: number, yaw: number, w: number, h: number, rail = '#6b4a30') {
+  const fw = 0.04;
+  registerArt(artFootprint(`mirror@${x.toFixed(2)},${z.toFixed(2)}`, x, y, z, yaw, w + 2 * fw, h + 2 * fw));
+  const M = artMats(), a = new Asm(c.b, c.chunk, x, y, z, yaw);
+  a.add(M.paint, '#7f9296', bx(w, h, 0.008), 0, 0, 0.022);
+  a.add(M.paint, '#76898d', bx(w, h * 0.18, 0.008), 0, -h * 0.41, 0.0235); // the lower edge reads a touch deeper
+  a.add(M.paint, '#8a9da0', bx(w * 0.22, h * 0.86, 0.006), -w * 0.1, h * 0.03, 0.0245, { rz: 0.42 }); // a faint sheen
+  for (const s2 of [-1, 1]) {
+    // painted rails (untextured paint material): the guest WC is batched into the wing chunk, whose textured-timber
+    // mesh would otherwise stretch its culling sphere across the hall (measured: +14 k triangles drawn from the living)
+    a.add(M.paint, rail, sb(w + 2 * fw, fw, 0.035, 0.008), 0, s2 * (h / 2 + fw / 2), 0.02);
+    a.add(M.paint, rail, sb(fw, h, 0.035, 0.008), s2 * (w / 2 + fw / 2), 0, 0.02);
   }
 }
 

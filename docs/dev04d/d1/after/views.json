@@ -1,0 +1,426 @@
+{
+  "commit": "d1",
+  "rows": [
+    {
+      "name": "d1-hall-002-room",
+      "pose": {
+        "x": 90.52000000000001,
+        "y": 0.15,
+        "z": 86.2,
+        "yaw": -1.5707963267948966,
+        "pitch": 0.42
+      },
+      "calls": 190,
+      "triangles": 484648,
+      "room": "hall",
+      "feetY": 0.15
+    },
+    {
+      "name": "d1-hall-002-close",
+      "pose": {
+        "x": 88.32000000000001,
+        "y": 0.15,
+        "z": 86.2,
+        "yaw": -1.5707963267948966,
+        "pitch": 0.672
+      },
+      "calls": 128,
+      "triangles": 472308,
+      "room": "hall",
+      "feetY": 0.15
+    },
+    {
+      "name": "d1-hall-007-room",
+      "pose": {
+        "x": 88.02000000000001,
+        "y": 0.15,
+        "z": 92.5,
+        "yaw": -1.5707963267948966,
+        "pitch": 0.06
+      },
+      "calls": 177,
+      "triangles": 536326,
+      "room": "hall",
+      "feetY": 0.15
+    },
+    {
+      "name": "d1-hall-007-close",
+      "pose": {
+        "x": 86.62,
+        "y": 0.15,
+        "z": 92.5,
+        "yaw": -1.5707963267948966,
+        "pitch": 0.096
+      },
+      "calls": 162,
+      "triangles": 503253,
+      "room": "hall",
+      "feetY": 0.15
+    },
+    {
+      "name": "d1-living-026-room",
+      "pose": {
+        "x": 77.25,
+        "y": 0.15,
+        "z": 83.35000000000001,
+        "yaw": 3.141592653589793,
+        "pitch": 0.06
+      },
+      "calls": 31,
+      "triangles": 109848,
+      "room": "living",
+      "feetY": 0.15
+    },
+    {
+      "name": "d1-living-026-close",
+      "pose": {
+        "x": 77.25,
+        "y": 0.15,
+        "z": 82.05,
+        "yaw": 3.141592653589793,
+        "pitch": 0.096
+      },
+      "calls": 30,
+      "triangles": 109842,
+      "room": "living",
+      "feetY": 0.15
+    },
+    {
+      "name": "d1-landing-028-room",
+      "pose": {
+        "x": 90,
+        "y": 3.35,
+        "z": 101.02,
+        "yaw": 0,
+        "pitch": 0.06
+      },
+      "calls": 81,
+      "triangles": 319604,
+      "room": "landing",
+      "feetY": 3.35
+    },
+    {
+      "name": "d1-landing-028-close",
+      "pose": {
+        "x": 90,
+        "y": 3.35,
+        "z": 102.32000000000001,
+        "yaw": 0,
+        "pitch": 0.096
+      },
+      "calls": 68,
+      "triangles": 313984,
+      "room": "landing",
+      "feetY": 3.35
+    },
+    {
+      "name": "d1-cottage-046-room",
+      "pose": {
+        "x": 27.9,
+        "y": 4.15,
+        "z": 162.82,
+        "yaw": 3.141592653589793,
+        "pitch": 0.06
+      },
+      "calls": 199,
+      "triangles": 397035,
+      "room": "cottageRoom",
+      "feetY": 4.15
+    },
+    {
+      "name": "d1-cottage-046-close",
+      "pose": {
+        "x": 27.9,
+        "y": 4.15,
+        "z": 161.52,
+        "yaw": 3.141592653589793,
+        "pitch": 0.096
+      },
+      "calls": 197,
+      "triangles": 382436,
+      "room": "cottageRoom",
+      "feetY": 4.15
+    },
+    {
+      "name": "d1-cottageEntry-045-room",
+      "pose": {
+        "x": 22.72,
+        "y": 4.15,
+        "z": 158.6,
+        "yaw": -1.5707963267948966,
+        "pitch": 0.06
+      },
+      "calls": 31,
+      "triangles": 104999,
+      "room": "cottageEntry",
+      "feetY": 4.15
+    },
+    {
+      "name": "d1-cottageEntry-045-close",
+      "pose": {
+        "x": 21.62,
+        "y": 4.15,
+        "z": 158.6,
+        "yaw": -1.5707963267948966,
+        "pitch": 0.096
+      },
+      "calls": 29,
+      "triangles": 102728,
+      "room": "cottageEntry",
+      "feetY": 4.15
+    },
+    {
+      "name": "d1-kitchen-005-room",
+      "pose": {
+        "x": 104.48,
+        "y": 0.15,
+        "z": 99,
+        "yaw": 1.5707963267948966,
+        "pitch": 0.06
+      },
+      "calls": 110,
+      "triangles": 281521,
+      "room": "kitchen",
+      "feetY": 0.15
+    },
+    {
+      "name": "d1-kitchen-005-close",
+      "pose": {
+        "x": 105.98,
+        "y": 0.15,
+        "z": 99,
+        "yaw": 1.5707963267948966,
+        "pitch": 0.096
+      },
+      "calls": 113,
+      "triangles": 279722,
+      "room": "kitchen",
+      "feetY": 0.15
+    },
+    {
+      "name": "d1-dining-010-room",
+      "pose": {
+        "x": 104.8,
+        "y": 0.15,
+        "z": 88.62,
+        "yaw": 0,
+        "pitch": 0.06
+      },
+      "calls": 195,
+      "triangles": 459983,
+      "room": "dining",
+      "feetY": 0.15
+    },
+    {
+      "name": "d1-dining-010-close",
+      "pose": {
+        "x": 104.8,
+        "y": 0.15,
+        "z": 90.12,
+        "yaw": 0,
+        "pitch": 0.096
+      },
+      "calls": 185,
+      "triangles": 455059,
+      "room": "dining",
+      "feetY": 0.15
+    },
+    {
+      "name": "d1-reis-022-room",
+      "pose": {
+        "x": 80.8,
+        "y": 3.35,
+        "z": 83.42,
+        "yaw": 3.141592653589793,
+        "pitch": 0.06
+      },
+      "calls": 31,
+      "triangles": 114970,
+      "room": "reis",
+      "feetY": 3.35
+    },
+    {
+      "name": "d1-reis-022-close",
+      "pose": {
+        "x": 80.8,
+        "y": 3.35,
+        "z": 82.02,
+        "yaw": 3.141592653589793,
+        "pitch": 0.096
+      },
+      "calls": 30,
+      "triangles": 99002,
+      "room": "reis",
+      "feetY": 3.35
+    },
+    {
+      "name": "d1-sterren-029-room",
+      "pose": {
+        "x": 82,
+        "y": 3.35,
+        "z": 89.92,
+        "yaw": 3.141592653589793,
+        "pitch": 0.06
+      },
+      "calls": 59,
+      "triangles": 165368,
+      "room": "sterren",
+      "feetY": 3.35
+    },
+    {
+      "name": "d1-sterren-029-close",
+      "pose": {
+        "x": 82,
+        "y": 3.35,
+        "z": 88.42,
+        "yaw": 3.141592653589793,
+        "pitch": 0.096
+      },
+      "calls": 52,
+      "triangles": 163994,
+      "room": "sterren",
+      "feetY": 3.35
+    },
+    {
+      "name": "d1-guest-035-room",
+      "pose": {
+        "x": 104.58,
+        "y": 3.35,
+        "z": 102.6,
+        "yaw": 1.5707963267948966,
+        "pitch": 0.06
+      },
+      "calls": 27,
+      "triangles": 86858,
+      "room": "storage",
+      "feetY": 3.35
+    },
+    {
+      "name": "d1-guest-035-close",
+      "pose": {
+        "x": 105.98,
+        "y": 3.35,
+        "z": 102.6,
+        "yaw": 1.5707963267948966,
+        "pitch": 0.096
+      },
+      "calls": 24,
+      "triangles": 86522,
+      "room": "storage",
+      "feetY": 3.35
+    },
+    {
+      "name": "d1-workshop-044-room",
+      "pose": {
+        "x": 112.58,
+        "y": 0.15,
+        "z": 99.7,
+        "yaw": 1.5707963267948966,
+        "pitch": 0.06
+      },
+      "calls": 95,
+      "triangles": 250218,
+      "room": "workshop",
+      "feetY": 0.15
+    },
+    {
+      "name": "d1-workshop-044-close",
+      "pose": {
+        "x": 114.08,
+        "y": 0.15,
+        "z": 99.7,
+        "yaw": 1.5707963267948966,
+        "pitch": 0.096
+      },
+      "calls": 92,
+      "triangles": 216166,
+      "room": "workshop",
+      "feetY": 0.15
+    },
+    {
+      "name": "d1-gathering-042-room",
+      "pose": {
+        "x": 58.6,
+        "y": -3.2,
+        "z": 53.62,
+        "yaw": 0,
+        "pitch": 0.06
+      },
+      "calls": 34,
+      "triangles": 25058,
+      "room": "gathering",
+      "feetY": -3.4
+    },
+    {
+      "name": "d1-gathering-042-close",
+      "pose": {
+        "x": 58.6,
+        "y": -3.2,
+        "z": 55.12,
+        "yaw": 0,
+        "pitch": 0.096
+      },
+      "calls": 33,
+      "triangles": 24998,
+      "room": "gathering",
+      "feetY": -3.4
+    },
+    {
+      "name": "d1-bath-mirror-room",
+      "pose": {
+        "x": 87.85,
+        "y": 3.35,
+        "z": 105,
+        "yaw": 1.5707963267948966,
+        "pitch": 0.06
+      },
+      "calls": 91,
+      "triangles": 329502,
+      "room": "bath",
+      "feetY": 3.35
+    },
+    {
+      "name": "d1-bath-mirror-close",
+      "pose": {
+        "x": 88.64999999999999,
+        "y": 3.35,
+        "z": 105,
+        "yaw": 1.5707963267948966,
+        "pitch": 0.096
+      },
+      "calls": 89,
+      "triangles": 226342,
+      "room": "bath",
+      "feetY": 3.35
+    },
+    {
+      "name": "d1-wc-mirror-room",
+      "pose": {
+        "x": 86,
+        "y": 0.15,
+        "z": 105.3,
+        "yaw": 1.5707963267948966,
+        "pitch": 0.06
+      },
+      "calls": 170,
+      "triangles": 380211,
+      "room": "guestWC",
+      "feetY": 0.15
+    },
+    {
+      "name": "d1-wc-mirror-close",
+      "pose": {
+        "x": 86.80000000000001,
+        "y": 0.15,
+        "z": 105.3,
+        "yaw": 1.5707963267948966,
+        "pitch": 0.096
+      },
+      "calls": 162,
+      "triangles": 376745,
+      "room": "guestWC",
+      "feetY": 0.15
+    }
+  ],
+  "problems": []
+}
