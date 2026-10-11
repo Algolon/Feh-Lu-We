@@ -39,6 +39,7 @@ import { GF, CEIL, UF, UCEIL, TOP, BF, BCEIL, AF, S03, roofUnderside, ATTIC_NOOK
 import { buildMaquette } from './maquette';
 import { addKey, presentKey, keyLiner, linerWhenOpen, hatchDish, LINER_TOP, HATCH_DISH_FLOOR, S3_BUILDERS } from './d2props';
 import { SALON_LAYOUT, SALON_SITES } from '../content/gallery';
+import { wainscot, refectoryTable, gamesCabinet, dartboard, servingConsole, chinaCabinet, wallCupboards, splashback, enamelPendant, pegRailClock, panelDoor } from './d3a';
 import { placeSolved, slotContents, openBasement } from '../puzzles/rules';
 
 export { GF, CEIL, UF, UCEIL, TOP };
@@ -522,7 +523,7 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   // DEV-04B: the dining set is one family — upholstered dining chairs down the sides, a carver at each head, the
   // lattice rug under the table (it marks the zone), turned brass candlesticks
   rug(c, 101.3, 86.2, GF + 0.01, 3.2, 6.4, 0, '#ffffff', 'lattice', true);
-  table(c, 101.3, 86.2, GF, 1.3, 4.6, 0, '#6b4426');
+  refectoryTable(c, 101.3, 86.2, GF, 1.3, 4.6, 0, '#6b4426'); // DEV-04D D3-a: turned legs, breadboard ends; same top datum (0.76)
   for (let i = 0; i < 5; i++) {
     const z = 84.2 + i * 1.0;
     chair(c, 100.25, z, GF, Math.PI / 2, '#8e4a36', true, 'upholstered');
@@ -567,6 +568,19 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   w.scene.add(dsw);
   makeLamp(w, g, { id: 'lamp.dining', obj: dsw, glow: dch.glow, light: dch.light, flames: dch.flames, name: 'kroonluchter', defaultOn: false, intensity: 7, distance: 10, hit: [0.3, 0.4, 0.4], hitOffset: [0, 0.05, 0], patch: { y: GF + 0.03, r: 2.2 } });
   for (const z of [83, 86.8, 90.4]) curtains(c, 107.55, z, GF + 0.85, -Math.PI / 2, 1.1, 2.0, '#3f5a6a');
+  // DEV-04D D3-a: the eet-/spelkamer as a designed room (docs/dev04d/DEV04D_D3_KICKOFF.md §5): a panelled wainscot ties
+  // the four walls together; the hosting side (china cabinet between the south windows, a serving console under D2-010
+  // by the kitchen arch) and the games corner (games cabinet, dartboard cabinet with chalk score doors, the party table)
+  // frame the refectory table. Wall pieces stand 4.5 cm off the wall: the wainscot's depth.
+  wainscot(c, GF, [
+    { axis: 'x', f: 80.422, dir: 1, a0: 95.08, a1: 107.58 }, { axis: 'z', f: 107.578, dir: -1, a0: 80.42, a1: 91.92 }, // exterior walls: on the 2.2 cm plaster skin
+    { axis: 'x', f: 91.92, dir: -1, a0: 95.08, a1: 99.85 }, { axis: 'x', f: 91.92, dir: -1, a0: 102.15, a1: 107.6 },
+    { axis: 'z', f: 95.08, dir: 1, a0: 80.4, a1: 84.1 }, { axis: 'z', f: 95.08, dir: 1, a0: 86.3, a1: 91.92 },
+  ]);
+  chinaCabinet(c, 99.75, 80.422 + 0.045 + 0.21, GF, 0);
+  servingConsole(c, 104.8, 91.92 - 0.045 - 0.21, GF, Math.PI);
+  gamesCabinet(c, 95.08 + 0.045 + 0.2, 89.4, GF, Math.PI / 2);
+  dartboard(c, 98.2, GF, 91.92, Math.PI);
 
   kitchen(w, g, c);
 
@@ -852,12 +866,29 @@ function kitchen(w: World, g: GameApi, c: Ctx) {
   // door and the window), the sink sits under the window, open shelves with crockery over the east run, a pot rack
   // over the island. Footprints of the runs, the island, the table and every interactable are unchanged.
   counter(c, 96.6, 109.25, GF, Math.PI, 2.6);
+  counter(c, 99.05, 109.25, GF, Math.PI, 2.3); // DEV-04D D3-a: the run continues to the back door (was a 2.3 m gap)
   counter(c, 101.95, 109.25, GF, Math.PI, 0.7);
   rangeCooker(c, 102.9, 109.25, GF);
   counter(c, 105.35, 109.25, GF, Math.PI, 3.7, undefined, undefined, { at: 0.35, w: 0.8 }); // sink cut-out at x 105
   counter(c, 107.25, 95.5, GF, -Math.PI / 2, 5.0);
   kitchenDressing(c);
-  table(c, 101.0, 100.0, GF, 1.2, 3.0, 0, '#8a5a33');
+  // DEV-04D D3-a: the fitted work wall (wall cupboards where the wall is free of the windows and the back door, a tiled
+  // splashback along the worktops; both keep the window / door margins of the wall-art contract), the eating zone (farmhouse table on a braided rug under two enamel pendants), a
+  // runner in the work aisle, and the peg rail and clock between the hatch and the dresser
+  for (const [x0, x1] of [[95.15, 96.69], [98.31, 100.31], [105.81, 107.55]] as const) wallCupboards(c, (x0 + x1) / 2, GF + 1.45, 109.578, Math.PI, x1 - x0);
+  for (const [x0, x1] of [[95.15, 96.69], [98.31, 100.31], [101.65, 102.22], [103.58, 104.23], [105.81, 107.2]] as const) splashback(c, (x0 + x1) / 2, GF + 0.98, 109.578, Math.PI, x1 - x0, 0.47); // on the north wall's plaster skin
+  // a glazed tile dado (1.0 m, 30 cm tiles, blue border) round the free walls: west (skipping the hatch recess), the
+  // arch wall, the east wall either side of the service door; the furniture in front of it stays where it was
+  for (const [ax, f, yaw, a0, a1] of [['z', 95.08, Math.PI / 2, 92.08, 98.1], ['z', 95.08, Math.PI / 2, 99.1, 109.6], ['x', 92.08, 0, 95.08, 99.85], ['x', 92.08, 0, 102.15, 107.578],
+    ['z', 107.578, -Math.PI / 2, 92.08, 101.85], ['z', 107.578, -Math.PI / 2, 103.15, 109.6]] as const) {
+    const m = (a0 + a1) / 2;
+    splashback(c, ax === 'z' ? f : m, GF, ax === 'z' ? m : f, yaw, a1 - a0, 1.0, 0.3);
+  }
+  rug(c, 101.0, 100.0, GF + 0.01, 3.0, 4.4, 0, '#ffffff', 'oval');
+  rug(c, 103.6, 107.75, GF + 0.01, 0.8, 3.6, Math.PI / 2, '#b8c6cc', 'runner'); // tinted towards the kitchen's blue-green
+  for (const z of [99.25, 100.75]) enamelPendant(c, 101.0, GF, z, CEIL, 1.95);
+  pegRailClock(c, 95.08, GF, 101.15, Math.PI / 2, 3.0);
+  refectoryTable(c, 101.0, 100.0, GF, 1.2, 3.0, 0, '#8a5a33');
   // DEV-04B: kitchen chairs are the Windsor (spindle) build of the chair family, not the dining room's chair again
   for (let i = 0; i < 3; i++) { chair(c, 100.0, 98.9 + i * 1.1, GF, Math.PI / 2, '#6f8a7a', true, 'spindle', '#7a5232'); chair(c, 102.0, 98.9 + i * 1.1, GF, -Math.PI / 2, '#6f8a7a', true, 'spindle', '#7a5232'); }
   kitchenIsland(c, 101, 105.4); // same footprint and collider as before; the drawer (centre, south face) is untouched
@@ -981,7 +1012,7 @@ function kitchenIsland(c: Ctx, x: number, z: number) {
   a.add(M.paint, gap, bx(2.6, 0.74, 1.0), 0, 0.47, 0);
   for (const sd of [-1, 1]) for (const px of [-0.85, -0.5, 0.5, 0.85]) {
     if (sd < 0 && Math.abs(px) < 0.6) continue; // south face: the centre is the drawer's
-    a.add(M.paint, body, sb(0.33, 0.66, 0.022, 0.004), px, 0.45, sd * -0.51);
+    panelDoor(a, M, M.paint, body, px, 0.45, -sd * 0.515, 0.33, 0.66, 0.055, sd > 0 ? -1 : 1); // D3-a: frame and panel
     a.add(M.brass, '#c9a44c', bx(0.012, 0.1, 0.02), px + 0.12 * Math.sign(px), 0.55, sd * -0.525);
   }
   a.add(M.paint, body, sb(0.66, 0.4, 0.022, 0.004), 0, 0.3, 0.51); // door under the drawer (south face)

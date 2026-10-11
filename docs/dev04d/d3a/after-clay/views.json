@@ -1,0 +1,244 @@
+{
+  "commit": null,
+  "rows": [
+    {
+      "name": "d3a-din-from-hall",
+      "pose": {
+        "x": 93.4,
+        "y": 0.15,
+        "z": 85.2,
+        "yaw": 1.5707963267948966,
+        "pitch": 0
+      },
+      "calls": 189,
+      "triangles": 457857,
+      "room": "hall",
+      "feetY": 0.15
+    },
+    {
+      "name": "d3a-din-entry",
+      "pose": {
+        "x": 95.8,
+        "y": 0.15,
+        "z": 84.6,
+        "yaw": 1.2217304763960306,
+        "pitch": -0.02
+      },
+      "calls": 152,
+      "triangles": 363570,
+      "room": "dining",
+      "feetY": 0.15
+    },
+    {
+      "name": "d3a-din-north",
+      "pose": {
+        "x": 101.3,
+        "y": 0.15,
+        "z": 81.1,
+        "yaw": 0,
+        "pitch": -0.02
+      },
+      "calls": 266,
+      "triangles": 508644,
+      "room": "dining",
+      "feetY": 0.15
+    },
+    {
+      "name": "d3a-din-south",
+      "pose": {
+        "x": 101.3,
+        "y": 0.15,
+        "z": 91.3,
+        "yaw": 3.141592653589793,
+        "pitch": -0.02
+      },
+      "calls": 148,
+      "triangles": 398908,
+      "room": "dining",
+      "feetY": 0.15
+    },
+    {
+      "name": "d3a-din-west",
+      "pose": {
+        "x": 106.6,
+        "y": 0.15,
+        "z": 89.6,
+        "yaw": -2.0943951023931953,
+        "pitch": -0.02
+      },
+      "calls": 238,
+      "triangles": 526496,
+      "room": "dining",
+      "feetY": 0.15
+    },
+    {
+      "name": "d3a-din-table",
+      "pose": {
+        "x": 99.2,
+        "y": 0.15,
+        "z": 83,
+        "yaw": 0.7853981633974483,
+        "pitch": -0.3
+      },
+      "calls": 158,
+      "triangles": 353305,
+      "room": "dining",
+      "feetY": 0.15
+    },
+    {
+      "name": "d3a-din-sideboard",
+      "pose": {
+        "x": 104.4,
+        "y": 0.15,
+        "z": 84.4,
+        "yaw": 1.2217304763960306,
+        "pitch": -0.08
+      },
+      "calls": 116,
+      "triangles": 300991,
+      "room": "dining",
+      "feetY": 0.15
+    },
+    {
+      "name": "d3a-din-games-corner",
+      "pose": {
+        "x": 99,
+        "y": 0.15,
+        "z": 87.5,
+        "yaw": -0.7853981633974483,
+        "pitch": -0.12
+      },
+      "calls": 248,
+      "triangles": 486181,
+      "room": "dining",
+      "feetY": 0.15
+    },
+    {
+      "name": "d3a-kit-through-arch",
+      "pose": {
+        "x": 101,
+        "y": 0.15,
+        "z": 89.8,
+        "yaw": 0,
+        "pitch": -0.02
+      },
+      "calls": 211,
+      "triangles": 465793,
+      "room": "dining",
+      "feetY": 0.15
+    },
+    {
+      "name": "d3a-kit-enter",
+      "pose": {
+        "x": 101,
+        "y": 0.15,
+        "z": 93,
+        "yaw": 0,
+        "pitch": -0.04
+      },
+      "calls": 182,
+      "triangles": 344593,
+      "room": "kitchen",
+      "feetY": 0.15
+    },
+    {
+      "name": "d3a-kit-north-end",
+      "pose": {
+        "x": 101,
+        "y": 0.15,
+        "z": 108.4,
+        "yaw": 3.141592653589793,
+        "pitch": -0.04
+      },
+      "calls": 232,
+      "triangles": 457291,
+      "room": "kitchen",
+      "feetY": 0.15
+    },
+    {
+      "name": "d3a-kit-west",
+      "pose": {
+        "x": 106.6,
+        "y": 0.15,
+        "z": 101.5,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.04
+      },
+      "calls": 245,
+      "triangles": 390701,
+      "room": "kitchen",
+      "feetY": 0.15
+    },
+    {
+      "name": "d3a-kit-east",
+      "pose": {
+        "x": 96.2,
+        "y": 0.15,
+        "z": 101,
+        "yaw": 1.5707963267948966,
+        "pitch": -0.04
+      },
+      "calls": 155,
+      "triangles": 293888,
+      "room": "kitchen",
+      "feetY": 0.15
+    },
+    {
+      "name": "d3a-kit-range",
+      "pose": {
+        "x": 101.2,
+        "y": 0.15,
+        "z": 106.6,
+        "yaw": 0.5235987755982988,
+        "pitch": -0.1
+      },
+      "calls": 105,
+      "triangles": 267668,
+      "room": "kitchen",
+      "feetY": 0.15
+    },
+    {
+      "name": "d3a-kit-sw",
+      "pose": {
+        "x": 96.2,
+        "y": 0.15,
+        "z": 93.5,
+        "yaw": 0.6108652381980153,
+        "pitch": -0.05
+      },
+      "calls": 203,
+      "triangles": 329220,
+      "room": "kitchen",
+      "feetY": 0.15
+    },
+    {
+      "name": "d3a-kit-island",
+      "pose": {
+        "x": 99,
+        "y": 0.15,
+        "z": 103,
+        "yaw": 0.6981317007977318,
+        "pitch": -0.25
+      },
+      "calls": 132,
+      "triangles": 304873,
+      "room": "kitchen",
+      "feetY": 0.15
+    },
+    {
+      "name": "d3a-kit-dresser",
+      "pose": {
+        "x": 98.4,
+        "y": 0.15,
+        "z": 104.2,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.05
+      },
+      "calls": 205,
+      "triangles": 399347,
+      "room": "kitchen",
+      "feetY": 0.15
+    }
+  ],
+  "problems": []
+}

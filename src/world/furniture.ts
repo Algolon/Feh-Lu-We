@@ -288,9 +288,14 @@ export function counter(c: Ctx, x: number, z: number, y0: number, yaw: number, w
   const n = Math.max(1, Math.round(w / 0.6)), uw = w / n;
   for (let i = 0; i < n; i++) {
     const ux = -w / 2 + uw * (i + 0.5), underSink = !!sink && ux + uw / 2 > s0 + 0.02 && ux - uw / 2 < s1 - 0.02;
-    a.add(M.paint, body, sb(uw - 0.008, 0.52, 0.022, 0.004), ux, 0.37, 0.27);
+    // DEV-04D D3-a: frame-and-panel doors (stiles and rails 6 mm proud of a recessed field), the island and the wall
+    // cupboards share the same door language; it was a flat slab
+    const dw = uw - 0.008, dh = 0.52, rl = 0.055;
+    a.add(M.paint, darker(body, 0.86), bx(dw - 0.02, dh - 0.02, 0.01), ux, 0.37, 0.276); // field inside the frame (no shared faces)
+    for (const sy of [-1, 1]) a.add(M.paint, body, bx(dw, rl, 0.022), ux, 0.37 + sy * (dh / 2 - rl / 2), 0.276);
+    for (const sx of [-1, 1]) a.add(M.paint, body, bx(rl, dh - 2 * rl, 0.022), ux + sx * (dw / 2 - rl / 2), 0.37, 0.276);
     if (underSink) continue; // the sink apron takes the drawer row's place
-    a.add(M.paint, body, sb(uw - 0.008, 0.16, 0.022, 0.004), ux, 0.735, 0.27);
+    a.add(M.paint, body, bx(uw - 0.008, 0.16, 0.022), ux, 0.735, 0.27); // D3-a: plain front (the softened edge never read)
     a.add(M.brass, '#c9a44c', bx(0.12, 0.012, 0.02), ux, 0.76, 0.29);
     a.add(M.brass, '#c9a44c', bx(0.012, 0.12, 0.02), ux + uw / 2 - 0.06, 0.52, 0.29);
   }
