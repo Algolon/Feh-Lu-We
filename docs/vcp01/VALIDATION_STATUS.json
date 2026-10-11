@@ -1,0 +1,41 @@
+{
+  "checked_at_utc": "2026-10-11T10:10:25Z",
+  "status": "blocked",
+  "production_sha": "f26e5637a677a49dcdd2eadca3b49224de364652",
+  "pilot_source_sha": "4c457bdd3c935627c0a3e3ca38f29433dbbc3cb4",
+  "browser": {
+    "status": "blocked_before_page_creation",
+    "executable": "/usr/bin/chromium",
+    "error": "third_party/crashpad/crashpad/util/linux/socket.cc:45 setsockopt: Operation not permitted (1)",
+    "exit_signal": "SIGTRAP"
+  },
+  "git_fetch": {
+    "status": "blocked",
+    "error": "Failed to connect to proxy port 8080 after 0 ms: Could not connect to server"
+  },
+  "cloud_http_policy": {
+    "mode": "unrestricted",
+    "state": "enforced",
+    "observations_current": true,
+    "spec_revision": "18",
+    "note": "HTTP policy does not establish permission for local browser sockets."
+  },
+  "four_leg_globe": {
+    "standard_captures": null,
+    "neutral_captures": null,
+    "clay_captures": null,
+    "renderer_metrics": null,
+    "frame_times": null,
+    "visual_score": null
+  },
+  "sequential_immutable_build_regression": "not_run_browser_preflight_blocked",
+  "production_reconciliation": "pending_git_transport_blocked",
+  "physical_android_validation": "pending",
+  "earlier_pedestal_evidence": "historical_only_not_evidence_for_four_leg_globe",
+  "full_access_requested": false,
+  "pr": {
+    "number": 9,
+    "draft": true,
+    "owner_visual_approval": "pending"
+  }
+}

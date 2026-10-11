@@ -19,6 +19,22 @@ Scores below are **the implementing agent's provisional judgement**, not indepen
 
 The code-first hypothesis is **partially supported**: the first renders show a clearer globe construction and modest furniture gains without lighting changes. The owner accepted the first globe's appearance but selected a different design for the library. Do not equate the updated geometry tests with demonstrated visual success of that replacement.
 
+## Resumed validation — 11 October 2026
+
+Production reverified through GitHub at `f26e5637a677a49dcdd2eadca3b49224de364652`; PR #9 remains a draft. A bounded browser preflight failed before page creation:
+
+```text
+third_party/crashpad/crashpad/util/linux/socket.cc:45
+setsockopt: Operation not permitted (1)
+process did exit: exitCode=null, signal=SIGTRAP
+```
+
+Git transport separately fails with `Failed to connect to proxy port 8080 after 0 ms: Could not connect to server`. The cloud HTTP policy reports unrestricted/enforced (revision 18), but that does not grant local socket permissions. No Full Access escalation was requested. No rendering or full regression pass is claimed for this retry. Existing unit/build results below are historical results, not reruns against reconciled production. [Machine-readable status](VALIDATION_STATUS.json) explicitly leaves new-model metrics null.
+
+The owner's assessment is **clear earlier-globe improvement, modest furniture/whole-library improvement**. The rubric above is dominated by the hero asset and must not be read as a one-point whole-room improvement. At player-eye distance, furniture gains remain incremental; close-up joinery cannot establish a materially better library composition. The replacement globe is unscored until its actual standard, neutral and clay renders are inspected. No contact sheets were regenerated using old frames.
+
+Resume with production reconciliation preserving both histories, then make one build and serve an immutable copy for sequential main E2E, DEV-04B, DEV-04C, VCP-01 and any added production suites. Do not rebuild or capture concurrently with tests. Record a build-file hash manifest before and after the run. New baseline/pilot captures must share the reconciled build, camera and settings; keep the untouched original baseline as historical provenance.
+
 ## Technical evidence and limits
 
 - Current source: typecheck and production build pass; **229 unit tests pass**, including finite normals/UVs, cap degeneracy, native sphere UVs, cached geometry, stand connectivity/footprint, table datum/drawer clearance and review storage flags.

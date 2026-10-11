@@ -6,6 +6,10 @@ The owner supplied a new library-globe reference, `81891.jpg`, after viewing the
 
 **The images below show the earlier pedestal study, not the newly requested four-leg globe.** New-model browser captures are pending because the resumed execution sandbox blocks browser sockets. Do not approve the new globe from these old images.
 
+Latest retry: **browser still blocked before page creation**; no new four-leg images or performance measurements exist. See [exact validation status](VALIDATION_STATUS.json). Production reconciliation and sequential regression remain pending.
+
+Owner assessment: the earlier globe improved clearly; furniture and the overall library improved only modestly. This remains a promising, incomplete pilot.
+
 For phone review of the completed earlier comparison:
 
 - [Globe: close-up, side and rear](pedestal-comparison/globe-standard.jpg)
