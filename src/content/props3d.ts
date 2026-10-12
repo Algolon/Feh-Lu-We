@@ -49,22 +49,24 @@ export interface Prop3D {
   y: number;
   z: number;
   yaw: number;
-  /** triangle budget (D2 brief) */
+  /** triangle budget (D2 brief; Track 01 owner-approved builds carry their own) */
   maxTris: number;
+  /** presentation scale of the model (D3-b1: the Track 01 builds are authored at s = 1) */
+  scale?: number;
 }
 
 const UF = 3.35, GF = 0.15, CF = 4.15;
 export const PROPS3D: Prop3D[] = [
   // rear nook side table (round table, top at +0.76), beside the book stack, looking towards the landing
   { id: 'FLW-S3-004', title: 'Houten vogelbeeld', basis: 'APPROVED_3D_REF', room: 'rearNook', mount: 'surface', x: 92.55, y: UF + 0.76, z: 108.84, yaw: Math.PI - 0.45, maxTris: 600 },
-  // front gallery: the long south wall between the windows, above the bench line (face z 80.422)
-  { id: 'FLW-S3-014', title: 'Gesneden zwaluwen', basis: 'OWNER_GROUP_A', room: 'frontGallery', mount: 'wall', x: 90.0, y: UF + 2.0, z: 80.422, yaw: 0, maxTris: 1500 }, // D2-R: ≈ 1.7 m group
+  // front gallery: the south wall pier between the windows, over the bench (face z 80.422)
+  { id: 'FLW-S3-014', title: 'Gesneden zwaluwen', basis: 'OWNER_GROUP_A', room: 'frontGallery', mount: 'wall', x: 90.0, y: UF + 1.72, z: 80.422, yaw: 0, maxTris: 3200, scale: 1.15 }, // D3-b1: Track 01 build ×1.15 (≈ 2.0 × 0.69 m), centred on the pier between the windows, over the gallery bench
   // Reiskamer writing desk (top at +0.76), east half; the open book keeps the west half
   { id: 'FLW-S3-015', title: 'Miniatuurzeilboot', basis: 'OWNER_GROUP_A', room: 'reis', mount: 'surface', x: 79.25, y: UF + 0.76, z: 80.92, yaw: Math.PI / 2, maxTris: 1500 },
   // Sterrenkamer: the free bedside (window side), facing into the room
   { id: 'FLW-S3-016', title: 'Keramische maanvorm', basis: 'OWNER_GROUP_A', room: 'sterren', mount: 'surface', x: 72.66, y: UF + 0.5775, z: 91.0, yaw: Math.PI / 2 - 0.35, maxTris: 600 },
-  // botanic room: the long west wall opposite the prints, on the table's axis (face x 101.38)
-  { id: 'FLW-S3-017', title: 'Terracotta bloemmedaillon', basis: 'OWNER_GROUP_A', room: 'botanic', mount: 'wall', x: 101.38, y: UF + 1.65, z: 88.5, yaw: Math.PI / 2, maxTris: 1500 }, // D2-R: Ø 0.58 m; interim spot until D3-b
+  // botanic room (D3-b1): the work-end pier of the south wall, facing the door down the room's length
+  { id: 'FLW-S3-017', title: 'Terracotta bloemmedaillon', basis: 'OWNER_GROUP_A', room: 'botanic', mount: 'wall', x: 103.25, y: UF + 1.93, z: 80.422, yaw: 0, maxTris: 2600, scale: 2.5 }, // D3-b1: Track 01 build ×2.5 (Ø ≈ 1.45 m) on the south pier between the windows, over the potting bench: the work end, facing the door
   // Portugal cottage room (D2-R): over the sideboard on the west wall, part of the plates / jug vignette
   { id: 'FLW-S3-030', title: 'Papier-maché wandmasker', basis: 'OWNER_GROUP_A', room: 'cottageRoom', mount: 'wall', x: 20.3, y: CF + 1.62, z: 161.0, yaw: Math.PI / 2, maxTris: 1500 }, // D2-R: over the sideboard (west wall face x 20.30), with the azulejo plates; clear of the window at z 162.3
   // Portugal terrace (D2-R): the façade pier east of the window, behind the game table and over the bench end

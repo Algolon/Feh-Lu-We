@@ -175,6 +175,17 @@ const D3ARCH = [
   ['out-through-door', 90, 0.15, 83.2, 180, 0.0],
 ].map(([n, x, y, z, yaw, pitch]) => [`d3arch-${n}`, { x, y, z, yaw: (yaw * Math.PI) / 180, pitch }]);
 
+// DEV-04D D3-b1 (SET=d3b1): study, botanic room, front gallery at player eye (phone viewport). Fixed poses: the doorway
+// approach, the room whole, each zone, the protected evidence / gameplay walls, and the gallery walk / close / void.
+const D3B1 = [
+  ['st-door', 98.2, 3.35, 97.4, 180, -0.04], ['st-centre', 98.2, 3.35, 93.6, 180, -0.1], ['st-north', 98.6, 3.35, 83.2, 10, -0.04],
+  ['st-centrepiece', 100.2, 3.35, 85.6, -35, -0.32], ['st-desk', 98.2, 3.35, 84.0, 180, -0.32], ['st-corner', 100.7, 3.35, 81.2, -28, -0.05],
+  ['bo-door', 104.5, 3.35, 97.4, 180, -0.02], ['bo-room', 104.6, 3.35, 95.2, 180, 0.02], ['bo-work', 103.6, 3.35, 85.0, 180, -0.08],
+  ['bo-plants', 105.6, 3.35, 89.0, -38, -0.06], ['bo-medallion', 103.3, 3.35, 86.6, 180, 0.16], ['bo-prints', 104.0, 3.35, 89.6, 90, 0.05],
+  ['ga-walk-w', 86.0, 3.35, 82.8, 112, 0.1], ['ga-walk-e', 94.2, 3.35, 82.9, -112, 0.1], ['ga-close', 90.0, 3.35, 82.9, 180, 0.14],
+  ['ga-void', 90.0, 3.35, 97.2, 180, 0.06],
+].map(([n, x, y, z, yaw, pitch]) => [`d3b1-${n}`, { x, y, z, yaw: (yaw * Math.PI) / 180, pitch }]);
+
 const ctx = await browser.newContext({ viewport: { width: +(process.env.VW ?? 1280), height: +(process.env.VH ?? 720) } });
 const page = await ctx.newPage();
 const problems = [];
@@ -228,12 +239,13 @@ else if (process.env.SET === 'd2r') views.push(...D2R, ...D2KEYS.map(([n, p]) =>
 else if (process.env.SET === 'd1r') views.push(...D1R);
 else if (process.env.SET === 'd3a') views.push(...D3A);
 else if (process.env.SET === 'd3arch') views.push(...D3ARCH);
+else if (process.env.SET === 'd3b1') views.push(...D3B1);
 else if (!process.env.ROOMS) views.push(...EXT);
 const sel = process.env.VIEWS ? new Set(process.env.VIEWS.split(',')) : null;
 const rows = [];
 for (const [name, pose] of views) {
   if (sel && !sel.has(name)) continue;
-  const m = await page.evaluate(async ({ p, open }) => {
+  const m = await page.evaluate(async ({ p, open, chunks }) => {
     const g = window.__game;
     if (open) { g.state.open[open] = true; g.world.syncAll(); for (let i = 0; i < 60; i++) g.tick(1 / 30); }
     const place = () => { g.player.setPose(p); if (!p.fly) g.player.y = g.world.col.supportHeight(p.x, p.z, p.y + 0.05, 0.42); };
@@ -242,10 +254,13 @@ for (const [name, pose] of views) {
     place();
     g.tick(1 / 30);
     await new Promise((r) => setTimeout(r, 200));
+    // CHUNKS=a,b: which of these batch chunks this frame actually draws (calls, triangles): the budget reach of a room
+    const want = chunks ? new Set(chunks) : null, drawn = {};
+    if (want) g.world.scene.traverse((o) => { if (o.isMesh && want.has(o.userData?.chunk)) o.onBeforeRender = () => { const d = (drawn[o.userData.chunk] ??= { calls: 0, triangles: 0 }); d.calls++; d.triangles += (o.geometry.index ? o.geometry.index.count : o.geometry.attributes.position.count) / 3; }; });
     g.renderer.render(g.world.scene, g.camera);
     const i = g.renderer.info.render;
-    return { calls: i.calls, triangles: i.triangles, room: g.world.hereRoom, feetY: +g.player.y.toFixed(2) };
-  }, { p: pose, open: OPEN_FOR[name] ?? null });
+    return { calls: i.calls, triangles: i.triangles, room: g.world.hereRoom, feetY: +g.player.y.toFixed(2), ...(want ? { chunks: drawn } : {}) };
+  }, { p: pose, open: OPEN_FOR[name] ?? null, chunks: process.env.CHUNKS ? process.env.CHUNKS.split(',') : null });
   await page.waitForTimeout(120);
   await page.screenshot({ path: `${OUT}/${name}.jpg`, quality: 72, type: 'jpeg' });
   rows.push({ name, pose, ...m });

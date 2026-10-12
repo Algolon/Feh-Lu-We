@@ -40,6 +40,7 @@ import { buildMaquette } from './maquette';
 import { addKey, presentKey, keyLiner, linerWhenOpen, hatchDish, LINER_TOP, HATCH_DISH_FLOOR, S3_BUILDERS } from './d2props';
 import { SALON_LAYOUT, SALON_SITES } from '../content/gallery';
 import { buildEntrance, entranceBay } from './entrance';
+import { planChest, pottingBench, plantStand, plantEtagere, pottedPlant } from './d3b';
 import { wainscot, refectoryTable, gamesCabinet, dartboard, servingConsole, chinaCabinet, wallCupboards, splashback, enamelPendant, pegRailClock, panelDoor } from './d3a';
 import { placeSolved, slotContents, openBasement } from '../puzzles/rules';
 
@@ -1110,8 +1111,10 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   // DEV-04D D1-R: the walkway's procedural placeholder (atlas #5, z 93) is retired; the bay right of the Sterrenkamer door
   // stays empty until a later deliberate choice (owner decision D-1)
   // DEV-04B: the gallery bench is the joinery bench; the gallery walkway carries no rug (it only filled floor)
-  slatBench(c, 93.2, 81.0, UF, 0, 1.4, '#6b4426');
-  S3_BUILDERS['FLW-S3-014'](c); // DEV-04D D2: carved swallows on the long gallery wall, between the windows
+  // DEV-04D D3-b1: the bench moves under the swallows (Track 01 ×1.15): one seat-and-sculpture composition on the pier
+  // between the windows, on the walking line; it stood alone by the east window
+  slatBench(c, 90.0, 81.0, UF, 0, 1.4, '#6b4426');
+  S3_BUILDERS['FLW-S3-014'](c);
   // ---------------------------------------------------------------- Reiskamer (warm, travel)
   // DEV-03: headboard on the west wall beside its window (it stood 1.5 m off the wall with the bedside behind it)
   rug(c, 75.4, 84.9, R0 + 0.01, 2.2, 3.0, Math.PI / 2, '#f4e0cc', 'kilim', true);
@@ -1200,8 +1203,22 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
     const z = [85.0, 89.0, 93.0, 94.6][i];
     canvasPanel(w, 107.5, R0 + 1.6, z, -Math.PI / 2, 0.5, 0.65, (x, W, H) => { x.fillStyle = '#f2e8d2'; x.fillRect(0, 0, W, H); drawSymbol(x, ['blad', 'e.varen', 'blad', 'e.varen'][i], W * 0.15, H * 0.15, W * 0.7); }, 128, '#8a6a3a');
   }
-  for (const [x, z] of [[106.9, 81.0], [102.0, 81.0], [106.9, 95.2]] as const) plant(c, x, z, R0, 1.0, '#c9774a');
-  S3_BUILDERS['FLW-S3-017'](c); // DEV-04D D2: terracotta medallion on the west wall, opposite the prints (not an emblem)
+  for (const [x, z] of [[106.9, 81.0], [106.9, 95.2]] as const) plant(c, x, z, R0, 1.0, '#c9774a');
+  // DEV-04D D3-b1: a two-ended room. Work end (south, facing the door down the room's length, daylight from both
+  // windows): a potting bench on the pier under the Track 01 medallion (×2.5). Display end (north-west, by the door): a
+  // stepped étagère against the west wall under D2-009, a tall and a low stand, a large floor plant, heights stepped
+  // and overlapping. The prints wall (east, evidence), the herbarium table and the slice route (x ≈ 102.7) stay clear.
+  pottingBench(c, 103.25, 80.75, R0, 0, 1.7, 0.6);
+  S3_BUILDERS['FLW-S3-017'](c);
+  const steps = plantEtagere(c, 101.62, 94.9, R0, Math.PI / 2, 0.95);
+  for (const [i, dz, r, leaf, tall] of [[0, -0.22, 0.075, '#4f7a34', 1], [0, 0.2, 0.09, '#5e8a3a', 0.9], [1, -0.12, 0.08, '#3f6a2e', 1.25], [1, 0.25, 0.065, '#6f9a44', 1], [2, 0.05, 0.085, '#4f7a34', 1.1]] as const)
+    pottedPlant(c, 101.62 + steps[i].lz, 94.9 + dz, R0 + steps[i].y, r, leaf, '#b8653e', tall);
+  plantStand(c, 102.25, 93.6, R0, 0.95, 0.17);
+  pottedPlant(c, 102.25, 93.6, R0 + 0.95, 0.11, '#3f6a2e', '#c9774a', 1.4);
+  plantStand(c, 102.7, 94.9, R0, 0.55, 0.15);
+  pottedPlant(c, 102.7, 94.9, R0 + 0.55, 0.12, '#5e8a3a', '#a8583a', 1.0);
+  plant(c, 102.3, 95.55, R0, 1.15, '#b8653e'); // clear of the étagère (dev03 spatial check)
+  flwPainting(c, 'FLW-D2-009', 101.42, R0 + 1.78, 94.9, Math.PI / 2); // D3-b1: Mot boven wilde bloemen over the plant stands (secondary wall)
   const bl = tableLamp(w, 103.9, R0 + 0.76, 89.4);
   makeLamp(w, g, { id: 'lamp.botanic', ...bl, name: 'lamp', defaultOn: true, hit: [0.4, 0.7, 0.4], intensity: 4, distance: 7, patch: { y: R0 + 0.03, r: 1.2 } });
   // ---------------------------------------------------------------- north guest room (source id `storage`), linen, rear nooks
@@ -1242,6 +1259,10 @@ function study(w: World, g: GameApi, c: Ctx) {
   bookshelf(c, 95.35, 92.5, R0, Math.PI / 2, 2.0, 2.2, 'navy');
   sideboard(c, 95.55, 89.5, R0, Math.PI / 2, 1.5, 0.45, 0.85, '#5a3a22');
   tabletop(c, 95.55, 89.5, R0 + 0.85, Math.PI / 2, ['stack', 'chart'], 61);
+  // DEV-04D D3-b1: a plan chest is the room's centre: it stands east of the door → desk line (x 98.2) on the long axis,
+  // drawers facing that line, maps out on its top; desk (south), bookcases (west), map (east) and the reading corner
+  // (north-east) now relate to it instead of to an empty floor
+  planChest(c, 99.2, 89.4, R0, Math.PI, 0.95, 1.7);
   armchair(c, 99.6, 93.6, R0, Math.PI * 0.85, '#7a3a3a', true);
   rug(c, 99.4, 93.2, R0 + 0.01, 1.8, 2.2, 0.2, '#ffffff', 'field');
   roundTable(c, 100.75, 94.5, R0, 0.26, '#5a3a22');

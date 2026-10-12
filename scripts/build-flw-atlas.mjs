@@ -17,6 +17,7 @@ const ITEMS = {
   'FLW-D2-002': 460, 'FLW-D2-026': 476, 'FLW-D2-028': 512, 'FLW-D2-010': 476, 'FLW-D2-042': 476,
   'FLW-D2-007': 320, 'FLW-D2-046': 408, 'FLW-D2-005': 425, 'FLW-D2-022': 340, 'FLW-D2-029': 408,
   'FLW-D2-035': 340, 'FLW-D2-044': 320, 'FLW-D2-045': 320,
+  'FLW-D2-009': 320, // D3-b1 (group B, owner READY_2D): botanic display end
 };
 const W = 2048, GUT = 4;
 const manifest = JSON.parse(readFileSync('docs/reference/flw/MANIFEST.json', 'utf8'));

@@ -349,14 +349,15 @@ export function swallowGroupGeometry(s = 1) {
     return g;
   });
 }
-/** FLW-S3-014 Track 01 candidate: the group centred on the anchor (wall face plane, facing `yaw`). */
-export function buildSwallows(bt: Batcher, chunk: string, x: number, y: number, z: number, yaw: number, s = 1) {
+/** FLW-S3-014: the group centred on the anchor (wall face plane, facing `yaw`). Placed in production by D3-b1 (`name` = the
+ * construction-audit id: the stable id in the world, `T01:…` in the review harness). */
+export function buildSwallows(bt: Batcher, chunk: string, x: number, y: number, z: number, yaw: number, s = 1, name = T01('FLW-S3-014')) {
   const M = artMats();
   let tris = 0;
   for (const g of swallowGroupGeometry(s)) {
     toLocal(g);
     projectUV(g, 0.25, 'x');
-    const a = new Asm(bt, chunk, x, y, z, yaw).begin(T01('FLW-S3-014'));
+    const a = new Asm(bt, chunk, x, y, z, yaw).begin(name);
     a.add(M.timber, '#ffffff', g, 0, 0, 0);
     a.end({ ground: false }); // each bird is one connected piece on its own dowel
     tris += g.attributes.position.count / 3;
@@ -456,9 +457,9 @@ export function medallionGeometry(s = 1) {
   return g;
 }
 /** FLW-S3-017 Track 01 candidate, centred on the anchor (wall face plane, facing `yaw`). Ø 0.58 m × s. */
-export function buildMedallion(bt: Batcher, chunk: string, x: number, y: number, z: number, yaw: number, s = 1) {
+export function buildMedallion(bt: Batcher, chunk: string, x: number, y: number, z: number, yaw: number, s = 1, name = T01('FLW-S3-017')) {
   const M = artMats(), g = toLocal(medallionGeometry(s));
-  const a = new Asm(bt, chunk, x, y, z, yaw).begin(T01('FLW-S3-017'));
+  const a = new Asm(bt, chunk, x, y, z, yaw).begin(name);
   a.add(M.paint, '#ffffff', g, 0, 0, 0);
   a.end({ ground: false });
   const tris = g.attributes.position.count / 3;
