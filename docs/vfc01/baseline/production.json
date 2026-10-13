@@ -1,0 +1,284 @@
+{
+  "source": "actual unchanged production Game/main entry",
+  "sha": "ae2a036e783400355c8d137f24e16c33bb1a8323",
+  "captureGeneration": "reconstructed fresh run",
+  "rows": [
+    {
+      "camera": "library-player",
+      "pose": {
+        "x": 83.8,
+        "y": 0.15,
+        "z": 95.2,
+        "yaw": -0.6981317007977318,
+        "pitch": 0.02
+      },
+      "image": "baseline/library-player.webp",
+      "drawCalls": 93,
+      "triangles": 286772,
+      "sourceTriangles": 735863,
+      "geometryAttributeBytes": 87421980,
+      "meshCount": 754,
+      "instancedCount": 43,
+      "materialCount": 132,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2
+      },
+      "textureCount": 76,
+      "textureBytes": 43994447,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 60,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 1
+      }
+    },
+    {
+      "camera": "library-medium",
+      "pose": {
+        "x": 83.8,
+        "y": 0.15,
+        "z": 106.7,
+        "yaw": -2.443460952792061,
+        "pitch": -0.04
+      },
+      "image": "baseline/library-medium.webp",
+      "drawCalls": 127,
+      "triangles": 328224,
+      "sourceTriangles": 735863,
+      "geometryAttributeBytes": 87421980,
+      "meshCount": 754,
+      "instancedCount": 43,
+      "materialCount": 132,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2
+      },
+      "textureCount": 76,
+      "textureBytes": 43994447,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 60,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 1
+      }
+    },
+    {
+      "camera": "library-craft",
+      "pose": {
+        "x": 79,
+        "y": 0.15,
+        "z": 101,
+        "yaw": -1.5707963267948966,
+        "pitch": 0.02
+      },
+      "image": "baseline/library-craft.webp",
+      "drawCalls": 45,
+      "triangles": 270956,
+      "sourceTriangles": 735863,
+      "geometryAttributeBytes": 87421980,
+      "meshCount": 754,
+      "instancedCount": 43,
+      "materialCount": 132,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2
+      },
+      "textureCount": 76,
+      "textureBytes": 43994447,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 60,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 1
+      }
+    },
+    {
+      "camera": "cottage-player",
+      "pose": {
+        "x": 19.4,
+        "y": 4.1,
+        "z": 152.5,
+        "yaw": 1.2566370614359172,
+        "pitch": 0.06
+      },
+      "image": "baseline/cottage-player.webp",
+      "drawCalls": 94,
+      "triangles": 199731,
+      "sourceTriangles": 735863,
+      "geometryAttributeBytes": 87421980,
+      "meshCount": 754,
+      "instancedCount": 43,
+      "materialCount": 132,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2
+      },
+      "textureCount": 76,
+      "textureBytes": 43994447,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 53,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 1
+      }
+    },
+    {
+      "camera": "cottage-medium",
+      "pose": {
+        "x": 25,
+        "y": 4.15,
+        "z": 146.8,
+        "yaw": 0,
+        "pitch": 0.1
+      },
+      "image": "baseline/cottage-medium.webp",
+      "drawCalls": 52,
+      "triangles": 122502,
+      "sourceTriangles": 735863,
+      "geometryAttributeBytes": 87421980,
+      "meshCount": 754,
+      "instancedCount": 43,
+      "materialCount": 132,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2
+      },
+      "textureCount": 76,
+      "textureBytes": 43994447,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 53,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 1
+      }
+    },
+    {
+      "camera": "cottage-craft",
+      "pose": {
+        "x": 25.6,
+        "y": 4.15,
+        "z": 153,
+        "yaw": 0.7853981633974483,
+        "pitch": -0.05
+      },
+      "image": "baseline/cottage-craft.webp",
+      "drawCalls": 58,
+      "triangles": 139449,
+      "sourceTriangles": 735863,
+      "geometryAttributeBytes": 87421980,
+      "meshCount": 754,
+      "instancedCount": 43,
+      "materialCount": 132,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2
+      },
+      "textureCount": 76,
+      "textureBytes": 43994447,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 53,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 1
+      }
+    }
+  ],
+  "errors": []
+}
