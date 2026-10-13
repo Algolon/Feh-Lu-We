@@ -8,7 +8,9 @@ const BASE = process.argv[2] ?? 'http://localhost:4173/Feh-Lu-We/';
 const OUT = process.env.E2E_OUT ?? 'scripts/out/ui-r02';
 mkdirSync(OUT, { recursive: true });
 const helpers = readFileSync(new URL('./e2e-helpers.js', import.meta.url), 'utf8');
-const browser = await chromium.launch({ executablePath: process.env.CHROME ?? chromium.executablePath(), args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
+// The headless-shell GPU compositor repeats some 2D layers in this sandbox. Software
+// composition avoids that capture artifact; the actual Three.js scene still uses WebGL/SwiftShader.
+const browser = await chromium.launch({ executablePath: process.env.CHROME ?? chromium.executablePath(), args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--disable-gpu-compositing'] });
 const results = [], captures = [];
 const log = (name, ok, detail) => { results.push({ name, ok: !!ok, detail }); console.log(`${ok ? 'PASS' : 'FAIL'} ${name}${detail ? ` — ${JSON.stringify(detail)}` : ''}`); };
 const profiles = [
@@ -63,10 +65,18 @@ for (const [name, viewport, touch] of profiles) {
     log(`${name}: HUD bounds and hit areas`, good(hud), hud);
     const idle = await page.evaluate(() => ({ disabled: document.querySelector('#action').disabled, hidden: getComputedStyle(document.querySelector('#action')).visibility === 'hidden', objective: document.querySelector('#objective').textContent }));
     log(`${name}: idle action quiet; progression still present`, idle.disabled && idle.hidden && !!idle.objective, idle);
+    const chrome = await page.evaluate(() => [...document.querySelectorAll('.hud-btn .wa-icon')].map(el => getComputedStyle(el).color));
+    const warm = color => { const rgb = color.match(/[\d.]+/g)?.map(Number); return rgb?.length >= 3 && rgb[0] > rgb[1] && rgb[1] > rgb[2]; };
+    log(`${name}: chrome icons use a warm metal color`, chrome.length >= 4 && chrome.every(warm), chrome);
     await click('#b-notes');
     await shot(page, `${name}-boslust-notebook-threads`);
     const notebook = await layout(page, true);
     log(`${name}: notebook bounds and hit areas`, good(notebook), notebook);
+    const book = await page.evaluate(() => {
+      const el = document.querySelector('.wa-notebook'), r = el.getBoundingClientRect();
+      return { width: r.width, height: r.height, marginX: Math.min(r.left, innerWidth - r.right), marginY: Math.min(r.top, innerHeight - r.bottom), clipped: getComputedStyle(el).overflow === 'hidden', icons: [...el.querySelectorAll('.wa-icon')].map(icon => getComputedStyle(icon).color) };
+    });
+    log(`${name}: bounded notebook leaves world margins and contains scrolling pages`, book.marginX >= 24 && book.marginY >= 24 && book.width <= viewport.width * .96 && book.height <= viewport.height * .84 && book.clipped && book.icons.length > 4 && book.icons.every(warm), book);
     const paused = await page.evaluate(() => ({ enabled: T.G().input.enabled, overlays: document.querySelectorAll('#overlay [role="dialog"]').length, inert: document.querySelector('#topbar-l').inert }));
     log(`${name}: one focused overlay disables world and background controls`, !paused.enabled && paused.overlays === 1 && paused.inert, paused);
     const before = await page.evaluate(() => JSON.stringify({ ...T.G().state, stats: undefined, player: undefined }));
@@ -147,7 +157,7 @@ for (const [name, viewport, touch] of profiles) {
     if (name === 'desktop') {
       await page.keyboard.press('n');
       await page.locator('[data-t="d"]').focus();
-      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('ArrowRight');
       log('desktop: notebook keyboard tabs update selection/focus', await page.evaluate(() => document.activeElement.dataset.t === 'a' && document.activeElement.getAttribute('aria-selected') === 'true'));
       await page.keyboard.press('End');
       await page.keyboard.press('Home');

@@ -176,14 +176,22 @@ export function icon(name: string, size = 26, label = ''): string {
 }
 
 /** Quiet line icons for interface chrome only. Item pictures keep their existing recognition vocabulary. */
-export function archiveIcon(name: 'menu' | 'hint' | 'notes' | 'bag' | 'action' | 'close', size = 24): string {
+export type ArchiveIconName = 'menu' | 'hint' | 'notes' | 'bag' | 'action' | 'close' | 'compass' | 'document' | 'leaf' | 'map' | 'table' | 'books' | 'trees';
+export function archiveIcon(name: ArchiveIconName, size = 24): string {
   const paths = {
-    menu: 'M8 5V19M16 5V19',
+    menu: 'M5 6H19M5 12H19M5 18H19',
     hint: 'M9 18H15M10 21H14M8.5 14.5C3.5 9 7 3 12 3C17 3 20.5 9 15.5 14.5L15 16H9Z',
     notes: 'M12 5C9 3 5 3 3 4V19C6 18 9 18 12 20C15 18 18 18 21 19V4C19 3 15 3 12 5ZM12 5V20',
     bag: 'M8 7V6A4 4 0 0 1 16 6V7M5 7H19L20 21H4ZM8 12V13M16 12V13',
     action: 'M9 12V5A1.5 1.5 0 0 1 12 5V11M12 9A1.5 1.5 0 0 1 15 9V12M15 10A1.5 1.5 0 0 1 18 10V13M18 12A1.5 1.5 0 0 1 21 12V16C21 20 18 22 14 22C11 22 9 20 7 18L4 14C3 12 5 11 6 12L9 15',
     close: 'M6 6L18 18M18 6L6 18',
+    compass: 'M12 2V4M12 20V22M2 12H4M20 12H22M21 12A9 9 0 1 1 3 12A9 9 0 1 1 21 12ZM15 8L13 13L8 16L10 11Z',
+    document: 'M6 3H14L19 8V21H6ZM14 3V8H19M9 12H16M9 16H16',
+    leaf: 'M5 20C5 9 11 4 20 3C21 13 15 20 7 18M3 22L15 9',
+    map: 'M3 5L9 3L15 5L21 3V19L15 21L9 19L3 21ZM9 3V19M15 5V21',
+    table: 'M7 3V8M4 3V7C4 10 10 10 10 7V3M7 10V21M18 3C15 6 15 10 18 11V21M18 3V11',
+    books: 'M3 6L15 3L21 6L9 9ZM3 6V11L9 14L21 10V6M3 14L9 17L21 13M3 14V19L9 22L21 18V13M9 9V14M9 17V22',
+    trees: 'M8 3L3 12H6L2 18H14L10 12H13ZM8 18V22M17 6L13 13H15L12 19H22L19 13H21ZM17 19V22',
   };
   return `<svg class="wa-icon" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${paths[name]}"/></svg>`;
 }

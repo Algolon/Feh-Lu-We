@@ -4,7 +4,7 @@ import { ITEMS } from '../content/items';
 import { CLUES, CLUE_GROUP, THREADS, type ClueDef } from '../content/clues';
 import { symbolSvg, SYMBOLS } from '../content/symbols';
 import { DIAGRAMS } from './diagrams';
-import { icon, itemIcon, archiveIcon } from './icons';
+import { itemIcon, archiveIcon, type ArchiveIconName } from './icons';
 import type { Settings } from '../core/state';
 import portraitArt from '../../assets/branding/concept-art-portrait.png';
 import landscapeArt from '../../assets/branding/concept-art-landscape.png';
@@ -103,7 +103,7 @@ export class UI {
 
   setHeld(name: string | null, itemId: string | null = null) {
     this.held.hidden = !name;
-    this.held.innerHTML = name ? `${itemIcon(itemId ?? '', 30)}<span>${esc(name)}</span>${icon('close', 18)}` : '';
+    this.held.innerHTML = name ? `${itemIcon(itemId ?? '', 30)}<span>${esc(name)}</span>${archiveIcon('close', 18)}` : '';
     this.held.setAttribute('aria-label', name ? `${name} in de hand — tik om los te laten` : '');
   }
 
@@ -159,7 +159,7 @@ export class UI {
     this.overlay.dataset.kind = kind;
     this.obscureHud(true);
     this.overlay.innerHTML = `<div class="modal${archive ? ' wa-notebook' : ''}" role="dialog" aria-modal="true" aria-label="${esc(title)}">
-      <header>${archive ? `<div class="wa-masthead"><span class="wa-eyebrow">Feh Lu We · veldarchief</span><h2>${esc(title)}</h2></div>` : `<h2>${esc(title)}</h2>`}<button class="btn close" data-close aria-label="Sluiten">${archive ? archiveIcon('close') : '✕'}</button></header>
+      <header>${archive ? `<div class="wa-masthead">${archiveIcon('leaf', 28)}<h2>${esc(title)}</h2></div>` : `<h2>${esc(title)}</h2>`}<button class="btn close" data-close aria-label="Sluiten">${archive ? archiveIcon('close') : '✕'}</button></header>
       <div class="body">${bodyHtml}</div></div>`;
     this.overlay.hidden = false;
     this.modalClose = onClose ?? null;
@@ -252,16 +252,27 @@ export class UI {
     const clues = o.clues.map((id) => CLUES[id]).filter(Boolean);
     const main = clues.filter((c) => !c.memory);
     const mem = clues.filter((c) => c.memory);
-    const body = this.modal('Notitieboek', `<div class="wa-archive-layout"><nav class="wa-index" aria-label="Rubrieken"><div class="tabs" role="tablist" aria-label="Notitieboek" aria-orientation="vertical"><button class="btn" id="nb-tab-d" role="tab" aria-controls="nb-panel" data-t="d">Draden</button><button class="btn" id="nb-tab-a" role="tab" aria-controls="nb-panel" data-t="a">Aanwijzingen <span class="wa-count">${main.length}</span></button><button class="btn" id="nb-tab-b" role="tab" aria-controls="nb-panel" data-t="b">Herinneringen <span class="wa-count">${mem.length}</span></button></div>${o.onMap ? `<button class="btn wa-map-link" data-t="m">${icon('map', 20)}Kaart <span aria-hidden="true">↗</span></button>` : ''}<p class="wa-index-note">Wat je onderweg bewaart.</p></nav><section class="wa-page" id="nb-panel" role="tabpanel" tabindex="0"><div class="wa-page-heading"><h3 id="nb-heading"></h3><span id="nb-count"></span></div><div id="nb"></div></section></div>`, undefined, 'notebook');
+    const body = this.modal('Notitieboek', `<div class="wa-archive-layout">
+      <nav class="wa-index" aria-label="Rubrieken">
+        <div class="tabs" role="tablist" aria-label="Notitieboek" aria-orientation="horizontal">
+          <button class="btn" id="nb-tab-d" role="tab" aria-controls="nb-panel" data-t="d">${archiveIcon('compass', 20)}<span class="wa-tab-label">Draden</span></button>
+          <button class="btn" id="nb-tab-a" role="tab" aria-controls="nb-panel" data-t="a">${archiveIcon('document', 20)}<span class="wa-tab-label">Aanwijzingen <span class="wa-count">(${main.length})</span></span></button>
+          <button class="btn" id="nb-tab-b" role="tab" aria-controls="nb-panel" data-t="b">${archiveIcon('leaf', 20)}<span class="wa-tab-label">Herinneringen <span class="wa-count">(${mem.length})</span></span></button>
+        </div>
+        ${o.onMap ? `<button class="btn wa-map-link" data-t="m">${archiveIcon('map', 20)}<span class="wa-tab-label">Kaart</span></button>` : ''}
+      </nav>
+      <section class="wa-page" id="nb-panel" role="tabpanel" tabindex="0"><div class="wa-page-heading" hidden><h3 id="nb-heading"></h3><span id="nb-count"></span></div><div id="nb"></div></section>
+    </div>`, undefined, 'notebook');
     const nb = $('#nb', body);
     const card = (c: ClueDef, open: boolean) => {
       const pz = CLUE_GROUP[c.id]?.puzzle;
       const done = pz && o.solved.has(pz) ? '<span class="badge">✓ opgelost</span>' : '';
       return `<details class="clue" data-clue="${esc(c.id)}" ${open ? 'open' : ''}><summary><h3>${esc(c.title)}</h3>${done}</summary>${this.clueHtml(c)}</details>`;
     };
+    const threadMarks: Record<string, ArchiveIconName> = { start: 'compass', A: 'table', B: 'books', C: 'trees', D: 'notes' };
     const showThreads = () => {
       nb.innerHTML = `<p class="muted">Het huis bewaart drie delen van de route. Je kunt ze in elke volgorde volgen. Kies er een om te volgen: de doelregel bovenin en de hints gaan dan over die draad.</p>` +
-        o.threads.map((t) => `<div class="thread ${t.done ? 'done' : ''} ${t.tracked ? 'tracked' : ''}"><div class="th-head"><b>${esc(t.title)}</b><span class="muted"> · ${esc(t.sub)}</span>${t.done ? '<span class="badge">✓ afgerond</span>' : ''}</div>` +
+        o.threads.map((t) => `<div class="thread ${t.done ? 'done' : ''} ${t.tracked ? 'tracked' : ''}"><div class="th-head"><span class="wa-thread-mark" aria-hidden="true">${archiveIcon(threadMarks[t.id] ?? 'compass', 24)}</span><b>${esc(t.title)}</b><span class="muted"> · ${esc(t.sub)}</span>${t.done ? '<span class="badge">✓ afgerond</span>' : ''}</div>` +
           `<div class="th-next">${t.done ? 'Klaar.' : t.started ? esc(t.next) : '<span class="muted">Nog niet begonnen.</span> ' + esc(t.next)}</div>` +
           (t.done ? '' : `<button class="btn ${t.tracked ? 'primary' : ''}" data-track="${t.id}" aria-pressed="${t.tracked}">${t.tracked ? '✓ Je volgt deze draad' : 'Volg deze draad'}</button>`) + `</div>`).join('') +
         `<div class="row" style="margin-top:6px"><button class="btn" data-track="auto">Automatisch kiezen</button></div>`;
