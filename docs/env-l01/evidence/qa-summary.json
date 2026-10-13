@@ -1,0 +1,43 @@
+{
+  "before": {
+    "index-CVJORpEp.js": "63619f678af3a4426a6f53a94d5b3834f64d9942867aa6644ea32983ef1ff4db"
+  },
+  "after": {
+    "index-CVJORpEp.js": "63619f678af3a4426a6f53a94d5b3834f64d9942867aa6644ea32983ef1ff4db"
+  },
+  "results": [
+    {
+      "name": "lighting review controls / save isolation",
+      "ok": true,
+      "review": {
+        "saveIntact": true,
+        "solved": [],
+        "preview": 1,
+        "room": "out",
+        "quality": "low",
+        "sun": 0,
+        "pool": 3,
+        "shaderFailures": 0,
+        "glError": 0,
+        "flagsBefore": "{\"leftHome\":true,\"visited.fork\":true}",
+        "flagsAfter": "{\"leftHome\":true,\"visited.fork\":true}"
+      },
+      "errors": []
+    },
+    {
+      "name": "e2e",
+      "exitCode": 1,
+      "ok": false
+    },
+    {
+      "name": "e2e-dev04c",
+      "exitCode": 0,
+      "ok": true
+    },
+    {
+      "name": "e2e-dev04d",
+      "exitCode": 0,
+      "ok": true
+    }
+  ]
+}

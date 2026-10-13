@@ -1,0 +1,3094 @@
+{
+  "mode": "prototype",
+  "commit": "de1ef37f49986a3303045c6c21fd090b73c3688d",
+  "browser": "141.0.7390.37",
+  "conditions": "SwiftShader WebGL2; DPR 1; FOV 68; 915x412 or 412x915; torch off; only front door open; stationary; reduced motion; 5 timed GPU-synchronized renders after 8 warmup frames. Not device FPS.",
+  "rows": [
+    {
+      "file": "boslust-low-landscape-0-normal.jpg",
+      "name": "boslust",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "room": "out",
+      "calls": 91,
+      "triangles": 226908,
+      "softwareMedianMs": 1049.3000000000466,
+      "hemi": 1.632,
+      "sun": 1.806,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 78,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.boslust.61.62",
+        "fixed.boslust.64.38",
+        "fixed.76.76.11.24"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "boslust-low-landscape-0.3333333333333333-normal.jpg",
+      "name": "boslust",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0.3333333333333333,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "room": "out",
+      "calls": 91,
+      "triangles": 226908,
+      "softwareMedianMs": 821.9000000001397,
+      "hemi": 1.488,
+      "sun": 2.064,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 78,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.boslust.61.62",
+        "fixed.boslust.64.38",
+        "fixed.76.76.11.24"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "boslust-low-landscape-0.6666666666666666-normal.jpg",
+      "name": "boslust",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0.6666666666666666,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "room": "out",
+      "calls": 91,
+      "triangles": 226908,
+      "softwareMedianMs": 892.6999999999534,
+      "hemi": 1.92,
+      "sun": 0,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 78,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.boslust.61.62",
+        "fixed.boslust.64.38",
+        "fixed.76.76.11.24"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "boslust-low-landscape-1-normal.jpg",
+      "name": "boslust",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 1,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "room": "out",
+      "calls": 91,
+      "triangles": 226908,
+      "softwareMedianMs": 841.6999999999534,
+      "hemi": 1.776,
+      "sun": 0,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 78,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.boslust.61.62",
+        "fixed.boslust.64.38",
+        "fixed.76.76.11.24"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "approach-low-landscape-0-normal.jpg",
+      "name": "approach",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 51.5,
+        "y": 0.0548701286315916,
+        "z": 7.6,
+        "yaw": 0.9599310885968813,
+        "pitch": 0.04
+      },
+      "camera": [
+        51.5,
+        1.7048701286315915,
+        -7.6
+      ],
+      "room": "out",
+      "calls": 90,
+      "triangles": 251632,
+      "softwareMedianMs": 516.0999999998603,
+      "hemi": 1.632,
+      "sun": 1.806,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 78,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.43.14.7.08",
+        "fixed.boslust.61.62",
+        "fixed.boslust.64.38"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "approach-low-landscape-0.3333333333333333-normal.jpg",
+      "name": "approach",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0.3333333333333333,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 51.5,
+        "y": 0.0548701286315916,
+        "z": 7.6,
+        "yaw": 0.9599310885968813,
+        "pitch": 0.04
+      },
+      "camera": [
+        51.5,
+        1.7048701286315915,
+        -7.6
+      ],
+      "room": "out",
+      "calls": 90,
+      "triangles": 251632,
+      "softwareMedianMs": 938.0999999998603,
+      "hemi": 1.488,
+      "sun": 2.064,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 78,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.43.14.7.08",
+        "fixed.boslust.61.62",
+        "fixed.boslust.64.38"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "approach-low-landscape-0.6666666666666666-normal.jpg",
+      "name": "approach",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0.6666666666666666,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 51.5,
+        "y": 0.0548701286315916,
+        "z": 7.6,
+        "yaw": 0.9599310885968813,
+        "pitch": 0.04
+      },
+      "camera": [
+        51.5,
+        1.7048701286315915,
+        -7.6
+      ],
+      "room": "out",
+      "calls": 90,
+      "triangles": 251632,
+      "softwareMedianMs": 457.10000000009313,
+      "hemi": 1.92,
+      "sun": 0,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 78,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.43.14.7.08",
+        "fixed.boslust.61.62",
+        "fixed.boslust.64.38"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "approach-low-landscape-1-normal.jpg",
+      "name": "approach",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 1,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 51.5,
+        "y": 0.0548701286315916,
+        "z": 7.6,
+        "yaw": 0.9599310885968813,
+        "pitch": 0.04
+      },
+      "camera": [
+        51.5,
+        1.7048701286315915,
+        -7.6
+      ],
+      "room": "out",
+      "calls": 90,
+      "triangles": 251632,
+      "softwareMedianMs": 631.6000000000931,
+      "hemi": 1.776,
+      "sun": 0,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 78,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.43.14.7.08",
+        "fixed.boslust.61.62",
+        "fixed.boslust.64.38"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "garden-low-landscape-0-normal.jpg",
+      "name": "garden",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "room": "out",
+      "calls": 58,
+      "triangles": 155894,
+      "softwareMedianMs": 256.69999999995343,
+      "hemi": 1.7,
+      "sun": 2.1,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 80,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.87.50.117.60",
+        "lamp.terrace.85.6",
+        "lamp.terrace.82.4"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "garden-low-landscape-0.3333333333333333-normal.jpg",
+      "name": "garden",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0.3333333333333333,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "room": "out",
+      "calls": 58,
+      "triangles": 155894,
+      "softwareMedianMs": 245.29999999981374,
+      "hemi": 1.55,
+      "sun": 2.4,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 80,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.87.50.117.60",
+        "lamp.terrace.85.6",
+        "lamp.terrace.82.4"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "garden-low-landscape-0.6666666666666666-normal.jpg",
+      "name": "garden",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0.6666666666666666,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "room": "out",
+      "calls": 58,
+      "triangles": 155894,
+      "softwareMedianMs": 200.9000000001397,
+      "hemi": 2,
+      "sun": 0,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 80,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.87.50.117.60",
+        "lamp.terrace.85.6",
+        "lamp.terrace.82.4"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "garden-low-landscape-1-normal.jpg",
+      "name": "garden",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 1,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "room": "out",
+      "calls": 58,
+      "triangles": 155894,
+      "softwareMedianMs": 215.19999999995343,
+      "hemi": 1.85,
+      "sun": 0,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 80,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.87.50.117.60",
+        "lamp.terrace.85.6",
+        "lamp.terrace.82.4"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "manor-low-landscape-0-normal.jpg",
+      "name": "manor",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "room": "out",
+      "calls": 128,
+      "triangles": 214482,
+      "softwareMedianMs": 899.3000000000466,
+      "hemi": 1.686462962962963,
+      "sun": 2.0414722222222226,
+      "fog": {
+        "near": 14.208333333333334,
+        "far": 152.45833333333334
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 88,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.88.60.79.36",
+        "fixed.91.40.79.36",
+        "fixed.65.09.59.22"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "manor-low-landscape-0.3333333333333333-normal.jpg",
+      "name": "manor",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0.3333333333333333,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "room": "out",
+      "calls": 128,
+      "triangles": 214482,
+      "softwareMedianMs": 600.9000000001397,
+      "hemi": 1.5376574074074074,
+      "sun": 2.333111111111111,
+      "fog": {
+        "near": 14.208333333333334,
+        "far": 152.45833333333334
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 88,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.88.60.79.36",
+        "fixed.91.40.79.36",
+        "fixed.65.09.59.22"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "manor-low-landscape-0.6666666666666666-normal.jpg",
+      "name": "manor",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0.6666666666666666,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "room": "out",
+      "calls": 128,
+      "triangles": 214482,
+      "softwareMedianMs": 759.3000000000466,
+      "hemi": 1.984074074074074,
+      "sun": 0,
+      "fog": {
+        "near": 14.208333333333334,
+        "far": 152.45833333333334
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 88,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.88.60.79.36",
+        "fixed.91.40.79.36",
+        "fixed.65.09.59.22"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "manor-low-landscape-1-normal.jpg",
+      "name": "manor",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 1,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "room": "out",
+      "calls": 128,
+      "triangles": 214482,
+      "softwareMedianMs": 306.89999999990687,
+      "hemi": 1.8352685185185187,
+      "sun": 0,
+      "fog": {
+        "near": 14.208333333333334,
+        "far": 152.45833333333334
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 88,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.88.60.79.36",
+        "fixed.91.40.79.36",
+        "fixed.65.09.59.22"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "woodland-low-landscape-0-normal.jpg",
+      "name": "woodland",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 120,
+        "y": 0.005897645279765107,
+        "z": 13.6,
+        "yaw": 1.4835298641951802,
+        "pitch": 0.02
+      },
+      "camera": [
+        120,
+        1.655897645279765,
+        -13.6
+      ],
+      "room": "out",
+      "calls": 35,
+      "triangles": 203432,
+      "softwareMedianMs": 864.6999999999534,
+      "hemi": 1.632,
+      "sun": 1.806,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 88,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.111.61.11.21",
+        "fixed.145.51.18.44",
+        "fixed.92.70.0.30"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "woodland-low-landscape-0.3333333333333333-normal.jpg",
+      "name": "woodland",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0.3333333333333333,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 120,
+        "y": 0.005897645279765107,
+        "z": 13.6,
+        "yaw": 1.4835298641951802,
+        "pitch": 0.02
+      },
+      "camera": [
+        120,
+        1.655897645279765,
+        -13.6
+      ],
+      "room": "out",
+      "calls": 35,
+      "triangles": 203432,
+      "softwareMedianMs": 753.1999999999534,
+      "hemi": 1.488,
+      "sun": 2.064,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 88,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.111.61.11.21",
+        "fixed.145.51.18.44",
+        "fixed.92.70.0.30"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "woodland-low-landscape-0.6666666666666666-normal.jpg",
+      "name": "woodland",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0.6666666666666666,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 120,
+        "y": 0.005897645279765107,
+        "z": 13.6,
+        "yaw": 1.4835298641951802,
+        "pitch": 0.02
+      },
+      "camera": [
+        120,
+        1.655897645279765,
+        -13.6
+      ],
+      "room": "out",
+      "calls": 35,
+      "triangles": 203432,
+      "softwareMedianMs": 918,
+      "hemi": 1.92,
+      "sun": 0,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 88,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.111.61.11.21",
+        "fixed.145.51.18.44",
+        "fixed.92.70.0.30"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "woodland-low-landscape-1-normal.jpg",
+      "name": "woodland",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 1,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 120,
+        "y": 0.005897645279765107,
+        "z": 13.6,
+        "yaw": 1.4835298641951802,
+        "pitch": 0.02
+      },
+      "camera": [
+        120,
+        1.655897645279765,
+        -13.6
+      ],
+      "room": "out",
+      "calls": 35,
+      "triangles": 203432,
+      "softwareMedianMs": 502.5,
+      "hemi": 1.776,
+      "sun": 0,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 88,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.111.61.11.21",
+        "fixed.145.51.18.44",
+        "fixed.92.70.0.30"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "hall-low-landscape-0-normal.jpg",
+      "name": "hall",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 84.6,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        90,
+        1.7999999999999998,
+        -84.6
+      ],
+      "room": "hall",
+      "calls": 110,
+      "triangles": 213506,
+      "softwareMedianMs": 274.10000000009313,
+      "hemi": 1.054,
+      "sun": 1.05,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 88,
+      "shaderFailures": [],
+      "pool": [
+        "lamp.hallChandelier",
+        "fixed.94.88.88.20",
+        "fixed.85.12.95.60"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "hall-low-landscape-0.3333333333333333-normal.jpg",
+      "name": "hall",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0.3333333333333333,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 84.6,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        90,
+        1.7999999999999998,
+        -84.6
+      ],
+      "room": "hall",
+      "calls": 110,
+      "triangles": 213506,
+      "softwareMedianMs": 358.30000000004657,
+      "hemi": 0.961,
+      "sun": 1.2,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 88,
+      "shaderFailures": [],
+      "pool": [
+        "lamp.hallChandelier",
+        "fixed.94.88.88.20",
+        "fixed.85.12.95.60"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "hall-low-landscape-0.6666666666666666-normal.jpg",
+      "name": "hall",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0.6666666666666666,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 84.6,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        90,
+        1.7999999999999998,
+        -84.6
+      ],
+      "room": "hall",
+      "calls": 110,
+      "triangles": 213506,
+      "softwareMedianMs": 357.80000000004657,
+      "hemi": 1.24,
+      "sun": 0,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 88,
+      "shaderFailures": [],
+      "pool": [
+        "lamp.hallChandelier",
+        "fixed.94.88.88.20",
+        "fixed.85.12.95.60"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "hall-low-landscape-1-normal.jpg",
+      "name": "hall",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 1,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 84.6,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        90,
+        1.7999999999999998,
+        -84.6
+      ],
+      "room": "hall",
+      "calls": 110,
+      "triangles": 213506,
+      "softwareMedianMs": 310.9000000001397,
+      "hemi": 1.147,
+      "sun": 0,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 88,
+      "shaderFailures": [],
+      "pool": [
+        "lamp.hallChandelier",
+        "fixed.94.88.88.20",
+        "fixed.85.12.95.60"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "living-low-landscape-0-normal.jpg",
+      "name": "living",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 83.4,
+        "y": 0.15,
+        "z": 87.2,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.06
+      },
+      "camera": [
+        83.4,
+        1.7999999999999998,
+        -87.2
+      ],
+      "room": "living",
+      "calls": 53,
+      "triangles": 175528,
+      "softwareMedianMs": 249.4000000001397,
+      "hemi": 1.054,
+      "sun": 1.05,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 88,
+      "shaderFailures": [],
+      "pool": [
+        "lamp.livingFloor",
+        "fixed.85.12.83.20",
+        "fire.living"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "living-low-landscape-0.3333333333333333-normal.jpg",
+      "name": "living",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0.3333333333333333,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 83.4,
+        "y": 0.15,
+        "z": 87.2,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.06
+      },
+      "camera": [
+        83.4,
+        1.7999999999999998,
+        -87.2
+      ],
+      "room": "living",
+      "calls": 53,
+      "triangles": 175528,
+      "softwareMedianMs": 248,
+      "hemi": 0.961,
+      "sun": 1.2,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 88,
+      "shaderFailures": [],
+      "pool": [
+        "lamp.livingFloor",
+        "fixed.85.12.83.20",
+        "fire.living"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "living-low-landscape-0.6666666666666666-normal.jpg",
+      "name": "living",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0.6666666666666666,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 83.4,
+        "y": 0.15,
+        "z": 87.2,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.06
+      },
+      "camera": [
+        83.4,
+        1.7999999999999998,
+        -87.2
+      ],
+      "room": "living",
+      "calls": 53,
+      "triangles": 175528,
+      "softwareMedianMs": 345.69999999995343,
+      "hemi": 1.24,
+      "sun": 0,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 88,
+      "shaderFailures": [],
+      "pool": [
+        "lamp.livingFloor",
+        "fixed.85.12.83.20",
+        "fire.living"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "living-low-landscape-1-normal.jpg",
+      "name": "living",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 1,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 83.4,
+        "y": 0.15,
+        "z": 87.2,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.06
+      },
+      "camera": [
+        83.4,
+        1.7999999999999998,
+        -87.2
+      ],
+      "room": "living",
+      "calls": 53,
+      "triangles": 175528,
+      "softwareMedianMs": 230.5,
+      "hemi": 1.147,
+      "sun": 0,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 88,
+      "shaderFailures": [],
+      "pool": [
+        "lamp.livingFloor",
+        "fixed.85.12.83.20",
+        "fire.living"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "darkroom-low-landscape-0-normal.jpg",
+      "name": "darkroom",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 83.6,
+        "y": 3.35,
+        "z": 88.4,
+        "yaw": -1.0471975511965976,
+        "pitch": -0.08
+      },
+      "camera": [
+        83.6,
+        5,
+        -88.4
+      ],
+      "room": "sterren",
+      "calls": 28,
+      "triangles": 80424,
+      "softwareMedianMs": 154.19999999995343,
+      "hemi": 1.054,
+      "sun": 1.05,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 88,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.88.60.79.36",
+        "fixed.91.40.79.36",
+        "fixed.95.00.110.25"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "darkroom-low-landscape-0.3333333333333333-normal.jpg",
+      "name": "darkroom",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0.3333333333333333,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 83.6,
+        "y": 3.35,
+        "z": 88.4,
+        "yaw": -1.0471975511965976,
+        "pitch": -0.08
+      },
+      "camera": [
+        83.6,
+        5,
+        -88.4
+      ],
+      "room": "sterren",
+      "calls": 28,
+      "triangles": 80424,
+      "softwareMedianMs": 179.19999999995343,
+      "hemi": 0.961,
+      "sun": 1.2,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 88,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.88.60.79.36",
+        "fixed.91.40.79.36",
+        "fixed.95.00.110.25"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "darkroom-low-landscape-0.6666666666666666-normal.jpg",
+      "name": "darkroom",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0.6666666666666666,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 83.6,
+        "y": 3.35,
+        "z": 88.4,
+        "yaw": -1.0471975511965976,
+        "pitch": -0.08
+      },
+      "camera": [
+        83.6,
+        5,
+        -88.4
+      ],
+      "room": "sterren",
+      "calls": 28,
+      "triangles": 80424,
+      "softwareMedianMs": 217.19999999995343,
+      "hemi": 1.24,
+      "sun": 0,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 88,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.88.60.79.36",
+        "fixed.91.40.79.36",
+        "fixed.95.00.110.25"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "darkroom-low-landscape-1-normal.jpg",
+      "name": "darkroom",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 1,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 83.6,
+        "y": 3.35,
+        "z": 88.4,
+        "yaw": -1.0471975511965976,
+        "pitch": -0.08
+      },
+      "camera": [
+        83.6,
+        5,
+        -88.4
+      ],
+      "room": "sterren",
+      "calls": 28,
+      "triangles": 80424,
+      "softwareMedianMs": 246.80000000004657,
+      "hemi": 1.147,
+      "sun": 0,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 88,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.88.60.79.36",
+        "fixed.91.40.79.36",
+        "fixed.95.00.110.25"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "boslust-high-landscape-0-normal.jpg",
+      "name": "boslust",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "room": "out",
+      "calls": 111,
+      "triangles": 368188,
+      "softwareMedianMs": 940.8999999999069,
+      "hemi": 1.632,
+      "sun": 1.806,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 91,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.boslust.61.62",
+        "fixed.boslust.64.38",
+        "fixed.76.76.11.24",
+        "fixed.43.14.7.08"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "boslust-high-landscape-0.3333333333333333-normal.jpg",
+      "name": "boslust",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0.3333333333333333,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "room": "out",
+      "calls": 112,
+      "triangles": 391678,
+      "softwareMedianMs": 1543.8999999999069,
+      "hemi": 1.488,
+      "sun": 2.064,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 91,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.boslust.61.62",
+        "fixed.boslust.64.38",
+        "fixed.76.76.11.24",
+        "fixed.43.14.7.08"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "boslust-high-landscape-0.6666666666666666-normal.jpg",
+      "name": "boslust",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0.6666666666666666,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "room": "out",
+      "calls": 92,
+      "triangles": 229773,
+      "softwareMedianMs": 978.8000000000466,
+      "hemi": 1.92,
+      "sun": 0,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 118,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.boslust.61.62",
+        "fixed.boslust.64.38",
+        "fixed.76.76.11.24",
+        "fixed.43.14.7.08"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "boslust-high-landscape-1-normal.jpg",
+      "name": "boslust",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 1,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "room": "out",
+      "calls": 92,
+      "triangles": 229773,
+      "softwareMedianMs": 867.4000000001397,
+      "hemi": 1.776,
+      "sun": 0,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 118,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.boslust.61.62",
+        "fixed.boslust.64.38",
+        "fixed.76.76.11.24",
+        "fixed.43.14.7.08"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "approach-high-landscape-0-normal.jpg",
+      "name": "approach",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 51.5,
+        "y": 0.0548701286315916,
+        "z": 7.6,
+        "yaw": 0.9599310885968813,
+        "pitch": 0.04
+      },
+      "camera": [
+        51.5,
+        1.7048701286315915,
+        -7.6
+      ],
+      "room": "out",
+      "calls": 110,
+      "triangles": 405520,
+      "softwareMedianMs": 1172.4000000001397,
+      "hemi": 1.632,
+      "sun": 1.806,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 121,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.43.14.7.08",
+        "fixed.boslust.61.62",
+        "fixed.boslust.64.38",
+        "fixed.76.76.11.24"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "approach-high-landscape-0.3333333333333333-normal.jpg",
+      "name": "approach",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0.3333333333333333,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 51.5,
+        "y": 0.0548701286315916,
+        "z": 7.6,
+        "yaw": 0.9599310885968813,
+        "pitch": 0.04
+      },
+      "camera": [
+        51.5,
+        1.7048701286315915,
+        -7.6
+      ],
+      "room": "out",
+      "calls": 111,
+      "triangles": 421973,
+      "softwareMedianMs": 604.8999999999069,
+      "hemi": 1.488,
+      "sun": 2.064,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 121,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.43.14.7.08",
+        "fixed.boslust.61.62",
+        "fixed.boslust.64.38",
+        "fixed.76.76.11.24"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "approach-high-landscape-0.6666666666666666-normal.jpg",
+      "name": "approach",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0.6666666666666666,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 51.5,
+        "y": 0.0548701286315916,
+        "z": 7.6,
+        "yaw": 0.9599310885968813,
+        "pitch": 0.04
+      },
+      "camera": [
+        51.5,
+        1.7048701286315915,
+        -7.6
+      ],
+      "room": "out",
+      "calls": 91,
+      "triangles": 252248,
+      "softwareMedianMs": 568.3999999999069,
+      "hemi": 1.92,
+      "sun": 0,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 121,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.43.14.7.08",
+        "fixed.boslust.61.62",
+        "fixed.boslust.64.38",
+        "fixed.76.76.11.24"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "approach-high-landscape-1-normal.jpg",
+      "name": "approach",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 1,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 51.5,
+        "y": 0.0548701286315916,
+        "z": 7.6,
+        "yaw": 0.9599310885968813,
+        "pitch": 0.04
+      },
+      "camera": [
+        51.5,
+        1.7048701286315915,
+        -7.6
+      ],
+      "room": "out",
+      "calls": 91,
+      "triangles": 252248,
+      "softwareMedianMs": 820.6999999999534,
+      "hemi": 1.776,
+      "sun": 0,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 121,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.43.14.7.08",
+        "fixed.boslust.61.62",
+        "fixed.boslust.64.38",
+        "fixed.76.76.11.24"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "garden-high-landscape-0-normal.jpg",
+      "name": "garden",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "room": "out",
+      "calls": 96,
+      "triangles": 238120,
+      "softwareMedianMs": 219.5999999998603,
+      "hemi": 1.7,
+      "sun": 2.1,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 121,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.87.50.117.60",
+        "lamp.terrace.85.6",
+        "lamp.terrace.82.4",
+        "fixed.95.00.110.25"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "garden-high-landscape-0.3333333333333333-normal.jpg",
+      "name": "garden",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0.3333333333333333,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "room": "out",
+      "calls": 96,
+      "triangles": 249257,
+      "softwareMedianMs": 205.89999999990687,
+      "hemi": 1.55,
+      "sun": 2.4,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 121,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.87.50.117.60",
+        "lamp.terrace.85.6",
+        "lamp.terrace.82.4",
+        "fixed.95.00.110.25"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "garden-high-landscape-0.6666666666666666-normal.jpg",
+      "name": "garden",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0.6666666666666666,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "room": "out",
+      "calls": 58,
+      "triangles": 155894,
+      "softwareMedianMs": 218.30000000004657,
+      "hemi": 2,
+      "sun": 0,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 123,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.87.50.117.60",
+        "lamp.terrace.85.6",
+        "lamp.terrace.82.4",
+        "fixed.95.00.110.25"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "garden-high-landscape-1-normal.jpg",
+      "name": "garden",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 1,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "room": "out",
+      "calls": 58,
+      "triangles": 155894,
+      "softwareMedianMs": 170.70000000018626,
+      "hemi": 1.85,
+      "sun": 0,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 123,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.87.50.117.60",
+        "lamp.terrace.85.6",
+        "lamp.terrace.82.4",
+        "fixed.95.00.110.25"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "manor-high-landscape-0-normal.jpg",
+      "name": "manor",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "room": "out",
+      "calls": 160,
+      "triangles": 364405,
+      "softwareMedianMs": 320.4000000001397,
+      "hemi": 1.686462962962963,
+      "sun": 2.0414722222222226,
+      "fog": {
+        "near": 14.208333333333334,
+        "far": 152.45833333333334
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 123,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.88.60.79.36",
+        "fixed.91.40.79.36",
+        "fixed.65.09.59.22",
+        "fixed.85.12.83.20"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "manor-high-landscape-0.3333333333333333-normal.jpg",
+      "name": "manor",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0.3333333333333333,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "room": "out",
+      "calls": 169,
+      "triangles": 390389,
+      "softwareMedianMs": 368.80000000004657,
+      "hemi": 1.5376574074074074,
+      "sun": 2.333111111111111,
+      "fog": {
+        "near": 14.208333333333334,
+        "far": 152.45833333333334
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 124,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.88.60.79.36",
+        "fixed.91.40.79.36",
+        "fixed.65.09.59.22",
+        "fixed.85.12.83.20"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "manor-high-landscape-0.6666666666666666-normal.jpg",
+      "name": "manor",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0.6666666666666666,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "room": "out",
+      "calls": 128,
+      "triangles": 214482,
+      "softwareMedianMs": 257.60000000009313,
+      "hemi": 1.984074074074074,
+      "sun": 0,
+      "fog": {
+        "near": 14.208333333333334,
+        "far": 152.45833333333334
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 132,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.88.60.79.36",
+        "fixed.91.40.79.36",
+        "fixed.65.09.59.22",
+        "fixed.85.12.83.20"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "manor-high-landscape-1-normal.jpg",
+      "name": "manor",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 1,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "room": "out",
+      "calls": 128,
+      "triangles": 214482,
+      "softwareMedianMs": 255.40000000037253,
+      "hemi": 1.8352685185185187,
+      "sun": 0,
+      "fog": {
+        "near": 14.208333333333334,
+        "far": 152.45833333333334
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 132,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.88.60.79.36",
+        "fixed.91.40.79.36",
+        "fixed.65.09.59.22",
+        "fixed.85.12.83.20"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "woodland-high-landscape-0-normal.jpg",
+      "name": "woodland",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 120,
+        "y": 0.005897645279765107,
+        "z": 13.6,
+        "yaw": 1.4835298641951802,
+        "pitch": 0.02
+      },
+      "camera": [
+        120,
+        1.655897645279765,
+        -13.6
+      ],
+      "room": "out",
+      "calls": 51,
+      "triangles": 389329,
+      "softwareMedianMs": 474.1999999997206,
+      "hemi": 1.632,
+      "sun": 1.806,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 132,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.111.61.11.21",
+        "fixed.145.51.18.44",
+        "fixed.92.70.0.30",
+        "fixed.87.30.0.30"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "woodland-high-landscape-0.3333333333333333-normal.jpg",
+      "name": "woodland",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0.3333333333333333,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 120,
+        "y": 0.005897645279765107,
+        "z": 13.6,
+        "yaw": 1.4835298641951802,
+        "pitch": 0.02
+      },
+      "camera": [
+        120,
+        1.655897645279765,
+        -13.6
+      ],
+      "room": "out",
+      "calls": 52,
+      "triangles": 414672,
+      "softwareMedianMs": 448.29999999981374,
+      "hemi": 1.488,
+      "sun": 2.064,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 132,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.111.61.11.21",
+        "fixed.145.51.18.44",
+        "fixed.92.70.0.30",
+        "fixed.87.30.0.30"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "woodland-high-landscape-0.6666666666666666-normal.jpg",
+      "name": "woodland",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0.6666666666666666,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 120,
+        "y": 0.005897645279765107,
+        "z": 13.6,
+        "yaw": 1.4835298641951802,
+        "pitch": 0.02
+      },
+      "camera": [
+        120,
+        1.655897645279765,
+        -13.6
+      ],
+      "room": "out",
+      "calls": 35,
+      "triangles": 203432,
+      "softwareMedianMs": 376.3000000002794,
+      "hemi": 1.92,
+      "sun": 0,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 132,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.111.61.11.21",
+        "fixed.145.51.18.44",
+        "fixed.92.70.0.30",
+        "fixed.87.30.0.30"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "woodland-high-landscape-1-normal.jpg",
+      "name": "woodland",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 1,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 120,
+        "y": 0.005897645279765107,
+        "z": 13.6,
+        "yaw": 1.4835298641951802,
+        "pitch": 0.02
+      },
+      "camera": [
+        120,
+        1.655897645279765,
+        -13.6
+      ],
+      "room": "out",
+      "calls": 35,
+      "triangles": 203432,
+      "softwareMedianMs": 339.10000000009313,
+      "hemi": 1.776,
+      "sun": 0,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 132,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.111.61.11.21",
+        "fixed.145.51.18.44",
+        "fixed.92.70.0.30",
+        "fixed.87.30.0.30"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "hall-high-landscape-0-normal.jpg",
+      "name": "hall",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 84.6,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        90,
+        1.7999999999999998,
+        -84.6
+      ],
+      "room": "hall",
+      "calls": 154,
+      "triangles": 383052,
+      "softwareMedianMs": 319.20000000018626,
+      "hemi": 1.054,
+      "sun": 1.05,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 132,
+      "shaderFailures": [],
+      "pool": [
+        "lamp.hallChandelier",
+        "fixed.94.88.88.20",
+        "fixed.85.12.83.20",
+        "fixed.85.12.95.60"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "hall-high-landscape-0.3333333333333333-normal.jpg",
+      "name": "hall",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0.3333333333333333,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 84.6,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        90,
+        1.7999999999999998,
+        -84.6
+      ],
+      "room": "hall",
+      "calls": 154,
+      "triangles": 383052,
+      "softwareMedianMs": 304.1999999997206,
+      "hemi": 0.961,
+      "sun": 1.2,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 132,
+      "shaderFailures": [],
+      "pool": [
+        "lamp.hallChandelier",
+        "fixed.94.88.88.20",
+        "fixed.85.12.83.20",
+        "fixed.85.12.95.60"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "hall-high-landscape-0.6666666666666666-normal.jpg",
+      "name": "hall",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0.6666666666666666,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 84.6,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        90,
+        1.7999999999999998,
+        -84.6
+      ],
+      "room": "hall",
+      "calls": 110,
+      "triangles": 213506,
+      "softwareMedianMs": 223.79999999981374,
+      "hemi": 1.24,
+      "sun": 0,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 132,
+      "shaderFailures": [],
+      "pool": [
+        "lamp.hallChandelier",
+        "fixed.94.88.88.20",
+        "fixed.85.12.83.20",
+        "fixed.85.12.95.60"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "hall-high-landscape-1-normal.jpg",
+      "name": "hall",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 1,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 84.6,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        90,
+        1.7999999999999998,
+        -84.6
+      ],
+      "room": "hall",
+      "calls": 110,
+      "triangles": 213506,
+      "softwareMedianMs": 257.1999999997206,
+      "hemi": 1.147,
+      "sun": 0,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 132,
+      "shaderFailures": [],
+      "pool": [
+        "lamp.hallChandelier",
+        "fixed.94.88.88.20",
+        "fixed.85.12.83.20",
+        "fixed.85.12.95.60"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "living-high-landscape-0-normal.jpg",
+      "name": "living",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 83.4,
+        "y": 0.15,
+        "z": 87.2,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.06
+      },
+      "camera": [
+        83.4,
+        1.7999999999999998,
+        -87.2
+      ],
+      "room": "living",
+      "calls": 97,
+      "triangles": 345074,
+      "softwareMedianMs": 225.70000000018626,
+      "hemi": 1.054,
+      "sun": 1.05,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 132,
+      "shaderFailures": [],
+      "pool": [
+        "lamp.livingFloor",
+        "fixed.85.12.83.20",
+        "lamp.hallChandelier",
+        "fire.living"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "living-high-landscape-0.3333333333333333-normal.jpg",
+      "name": "living",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0.3333333333333333,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 83.4,
+        "y": 0.15,
+        "z": 87.2,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.06
+      },
+      "camera": [
+        83.4,
+        1.7999999999999998,
+        -87.2
+      ],
+      "room": "living",
+      "calls": 97,
+      "triangles": 345074,
+      "softwareMedianMs": 218,
+      "hemi": 0.961,
+      "sun": 1.2,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 132,
+      "shaderFailures": [],
+      "pool": [
+        "lamp.livingFloor",
+        "fixed.85.12.83.20",
+        "lamp.hallChandelier",
+        "fire.living"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "living-high-landscape-0.6666666666666666-normal.jpg",
+      "name": "living",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0.6666666666666666,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 83.4,
+        "y": 0.15,
+        "z": 87.2,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.06
+      },
+      "camera": [
+        83.4,
+        1.7999999999999998,
+        -87.2
+      ],
+      "room": "living",
+      "calls": 53,
+      "triangles": 175528,
+      "softwareMedianMs": 182.29999999981374,
+      "hemi": 1.24,
+      "sun": 0,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 132,
+      "shaderFailures": [],
+      "pool": [
+        "lamp.livingFloor",
+        "fixed.85.12.83.20",
+        "lamp.hallChandelier",
+        "fire.living"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "living-high-landscape-1-normal.jpg",
+      "name": "living",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 1,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 83.4,
+        "y": 0.15,
+        "z": 87.2,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.06
+      },
+      "camera": [
+        83.4,
+        1.7999999999999998,
+        -87.2
+      ],
+      "room": "living",
+      "calls": 53,
+      "triangles": 175528,
+      "softwareMedianMs": 163.3000000002794,
+      "hemi": 1.147,
+      "sun": 0,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 132,
+      "shaderFailures": [],
+      "pool": [
+        "lamp.livingFloor",
+        "fixed.85.12.83.20",
+        "lamp.hallChandelier",
+        "fire.living"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "darkroom-high-landscape-0-normal.jpg",
+      "name": "darkroom",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 83.6,
+        "y": 3.35,
+        "z": 88.4,
+        "yaw": -1.0471975511965976,
+        "pitch": -0.08
+      },
+      "camera": [
+        83.6,
+        5,
+        -88.4
+      ],
+      "room": "sterren",
+      "calls": 39,
+      "triangles": 122928,
+      "softwareMedianMs": 165.10000000009313,
+      "hemi": 1.054,
+      "sun": 1.05,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 132,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.88.60.79.36",
+        "fixed.91.40.79.36",
+        "fixed.95.00.110.25",
+        "lamp.terrace.82.4"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "darkroom-high-landscape-0.3333333333333333-normal.jpg",
+      "name": "darkroom",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0.3333333333333333,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 83.6,
+        "y": 3.35,
+        "z": 88.4,
+        "yaw": -1.0471975511965976,
+        "pitch": -0.08
+      },
+      "camera": [
+        83.6,
+        5,
+        -88.4
+      ],
+      "room": "sterren",
+      "calls": 39,
+      "triangles": 122928,
+      "softwareMedianMs": 148.3000000002794,
+      "hemi": 0.961,
+      "sun": 1.2,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 132,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.88.60.79.36",
+        "fixed.91.40.79.36",
+        "fixed.95.00.110.25",
+        "lamp.terrace.82.4"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "darkroom-high-landscape-0.6666666666666666-normal.jpg",
+      "name": "darkroom",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 0.6666666666666666,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 83.6,
+        "y": 3.35,
+        "z": 88.4,
+        "yaw": -1.0471975511965976,
+        "pitch": -0.08
+      },
+      "camera": [
+        83.6,
+        5,
+        -88.4
+      ],
+      "room": "sterren",
+      "calls": 28,
+      "triangles": 80424,
+      "softwareMedianMs": 116.29999999981374,
+      "hemi": 1.24,
+      "sun": 0,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 132,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.88.60.79.36",
+        "fixed.91.40.79.36",
+        "fixed.95.00.110.25",
+        "lamp.terrace.82.4"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "darkroom-high-landscape-1-normal.jpg",
+      "name": "darkroom",
+      "quality": "high",
+      "portrait": false,
+      "dusk": 1,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 83.6,
+        "y": 3.35,
+        "z": 88.4,
+        "yaw": -1.0471975511965976,
+        "pitch": -0.08
+      },
+      "camera": [
+        83.6,
+        5,
+        -88.4
+      ],
+      "room": "sterren",
+      "calls": 28,
+      "triangles": 80424,
+      "softwareMedianMs": 119.70000000018626,
+      "hemi": 1.147,
+      "sun": 0,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 132,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.88.60.79.36",
+        "fixed.91.40.79.36",
+        "fixed.95.00.110.25",
+        "lamp.terrace.82.4"
+      ],
+      "lights": 4,
+      "glError": 0
+    },
+    {
+      "file": "boslust-low-portrait-0-normal.jpg",
+      "name": "boslust",
+      "quality": "low",
+      "portrait": true,
+      "dusk": 0,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "room": "out",
+      "calls": 73,
+      "triangles": 166577,
+      "softwareMedianMs": 210.20000000018626,
+      "hemi": 1.632,
+      "sun": 1.806,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 132,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.boslust.61.62",
+        "fixed.boslust.64.38",
+        "fixed.76.76.11.24"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "boslust-low-portrait-1-normal.jpg",
+      "name": "boslust",
+      "quality": "low",
+      "portrait": true,
+      "dusk": 1,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "room": "out",
+      "calls": 73,
+      "triangles": 166577,
+      "softwareMedianMs": 218,
+      "hemi": 1.776,
+      "sun": 0,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 132,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.boslust.61.62",
+        "fixed.boslust.64.38",
+        "fixed.76.76.11.24"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "garden-low-portrait-0-normal.jpg",
+      "name": "garden",
+      "quality": "low",
+      "portrait": true,
+      "dusk": 0,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "room": "out",
+      "calls": 39,
+      "triangles": 107185,
+      "softwareMedianMs": 103.89999999990687,
+      "hemi": 1.7,
+      "sun": 2.1,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 132,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.87.50.117.60",
+        "lamp.terrace.85.6",
+        "lamp.terrace.82.4"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "garden-low-portrait-1-normal.jpg",
+      "name": "garden",
+      "quality": "low",
+      "portrait": true,
+      "dusk": 1,
+      "variant": "normal",
+      "fallback": false,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "room": "out",
+      "calls": 39,
+      "triangles": 107185,
+      "softwareMedianMs": 94.89999999990687,
+      "hemi": 1.85,
+      "sun": 0,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": true,
+      "programs": 132,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.87.50.117.60",
+        "lamp.terrace.85.6",
+        "lamp.terrace.82.4"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "boslust-low-landscape-0-normal-fallback.jpg",
+      "name": "boslust",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0,
+      "variant": "normal",
+      "fallback": true,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "room": "out",
+      "calls": 147,
+      "triangles": 252696,
+      "softwareMedianMs": 383.70000000018626,
+      "hemi": 1.632,
+      "sun": 1.806,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": false,
+      "programs": 77,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.boslust.61.62",
+        "fixed.boslust.64.38",
+        "fixed.76.76.11.24"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "boslust-low-landscape-0.6666666666666666-normal-fallback.jpg",
+      "name": "boslust",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 0.6666666666666666,
+      "variant": "normal",
+      "fallback": true,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "room": "out",
+      "calls": 147,
+      "triangles": 252696,
+      "softwareMedianMs": 367.10000000009313,
+      "hemi": 1.92,
+      "sun": 0,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": false,
+      "programs": 77,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.boslust.61.62",
+        "fixed.boslust.64.38",
+        "fixed.76.76.11.24"
+      ],
+      "lights": 3,
+      "glError": 0
+    },
+    {
+      "file": "boslust-low-landscape-1-normal-fallback.jpg",
+      "name": "boslust",
+      "quality": "low",
+      "portrait": false,
+      "dusk": 1,
+      "variant": "normal",
+      "fallback": true,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "room": "out",
+      "calls": 147,
+      "triangles": 252696,
+      "softwareMedianMs": 382.1999999997206,
+      "hemi": 1.776,
+      "sun": 0,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "exposure": 1.15,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "multiDraw": false,
+      "programs": 77,
+      "shaderFailures": [],
+      "pool": [
+        "fixed.boslust.61.62",
+        "fixed.boslust.64.38",
+        "fixed.76.76.11.24"
+      ],
+      "lights": 3,
+      "glError": 0
+    }
+  ],
+  "problems": []
+}

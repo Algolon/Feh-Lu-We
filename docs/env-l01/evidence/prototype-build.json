@@ -1,0 +1,20 @@
+{
+  "sourceCommit": "de1ef37",
+  "buildLabel": "8f2eac9 + working tree (now committed unchanged as de1ef37)",
+  "bundleSHA256": {
+    "index-DH_t6y_z.js": "d377bf5ab29c38a9898821ab112b3fd860c59a05c407e4822f9fe3616afae154"
+  },
+  "sourceSHA256": {
+    "src/main.ts": "c092ef14a8cf2671d6253e6fb842488c6f5db03cc1b89b69ab5eafbaf7037594",
+    "src/core/game.ts": "e7ba9e06d9ae8adb7d66109078371e5fc642e96ef741a110f0c13c0eeb80b4ea",
+    "src/core/artflags.ts": "b5cc589a051def2ac7a575da1cf3a3dda09391e6ea49d3e4492ab825f256ae6d",
+    "src/ui/lightingReview.ts": "20411eb45dbd8d231cfdf441e5847094ac46588413d831aa84dc7ec0dffda223",
+    "src/world/env.ts": "7301e06a4edd15fff1158d8520cd028dfea97b5daf36f6979d693a5c680662c8",
+    "src/world/lightingPhases.ts": "41eda66d8d9b5a31edade3713f58329bc614306e2d0c3cdb52b22b0310184b19"
+  },
+  "note": "Capture build made before source commit; no runtime source edits after build. Final QA will rebuild de1ef37 and verify an immutable bundle.",
+  "remoteAuditCommit": "7cabd50566dd39167b59bcde520ac07d28a7e900",
+  "remotePrototypeCommit": "6d4df3619679706720dd734344c5c158ebf164d7",
+  "prototypeTreeSHA": "da4557bb021567ab6a66daaa6917c5b04156fa73",
+  "publication": "Git HTTPS push lacked credentials; authorized GitHub connector imported identical blobs/trees, with independently created commit metadata. No production ref touched."
+}
