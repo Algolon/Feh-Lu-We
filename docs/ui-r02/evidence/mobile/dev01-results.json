@@ -1,0 +1,37 @@
+[
+  {
+    "name": "mobile landscape: B01 panel opens from a tap, every button ≥ 44 px, no horizontal overflow, panel fits the screen",
+    "ok": true,
+    "detail": "{\"opened\":\"Leestafel\",\"small\":0,\"hOverflow\":false,\"fits\":true}"
+  },
+  {
+    "name": "mobile landscape: closing an overlay never clicks through to the world",
+    "ok": true,
+    "detail": "{\"open\":false}"
+  },
+  {
+    "name": "mobile landscape: notebook has no horizontal overflow",
+    "ok": true,
+    "detail": "{\"hOverflow\":false}"
+  },
+  {
+    "name": "mobile portrait: B01 panel opens from a tap, every button ≥ 44 px, no horizontal overflow, panel fits the screen",
+    "ok": true,
+    "detail": "{\"opened\":\"Leestafel\",\"small\":0,\"hOverflow\":false,\"fits\":true}"
+  },
+  {
+    "name": "mobile portrait: closing an overlay never clicks through to the world",
+    "ok": true,
+    "detail": "{\"open\":false}"
+  },
+  {
+    "name": "hints: none before a riddle is met; level 0 names the riddle and explains the three levels, without a next step",
+    "ok": true,
+    "detail": "HULP BIJ De leestafel met drie vakken en drie tekenbladen.\n\nDrie niveaus, elk alleen als je erom vraagt: 1 Aandacht · 2 Relatie · 3 Oplossing.\n\nHints zijn geen bewijs uit het huis en komen niet in je "
+  },
+  {
+    "name": "hints: levels 1 attention · 2 relation · 3 solution, labelled as Hint, never stored as observations",
+    "ok": true,
+    "detail": "[\"Hint 1 · Aandacht\",\"Hint 1 · Aandacht|Hint 2 · Relatie\",\"Hint 1 · Aandacht|Hint 2 · Relatie|Hint 3 · Oplossing\"]"
+  }
+]

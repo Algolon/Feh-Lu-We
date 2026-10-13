@@ -1,0 +1,28 @@
+{
+  "production_base": "ae2a036e783400355c8d137f24e16c33bb1a8323",
+  "tested_source_commit": "18c78489c682f11dad0080d0ea9002e89c40f231",
+  "original_lost_local_checkpoint": "eb50e8eefaa0f09e5d8ee4bce381b85eff535599",
+  "implementation_tree": "fcf287fdd0fb3f8ab3fd857ca76ee511f6f9e535",
+  "publication_verification": "Recovered GitHub source tree exactly equals the original last local checkpoint tree",
+  "source_sha256": {
+    "src/core/game.ts": "7f894d992929eae5ef15b37af0b21f2028474f93ef535b9968de3ecac8c572d3",
+    "src/player/input.ts": "c04fb4f4596d924dc0207022500e56d0aec3ab904c8bea2ddfc75e9f49535055",
+    "src/ui/ui.ts": "50a90eb0341b16c0a7c749cb5f4103c9f89e65806e5439c5f8947d6d32506fe3",
+    "src/ui/icons.ts": "1b2dbb4d3964ffdd7006613005e132a3e5e2f33bcb110980f09a9cd4379507d2",
+    "src/ui/woodland.css": "a7dfc5ac262c92da62671802b75012faf8a7ee393e9763a705f5de6bbe89a21e",
+    "scripts/e2e-ui-r02.mjs": "6994df181ccc8933c77180ee1a1ad0498788da594b35ef8704898b51dcb9daa9"
+  },
+  "bundle_sha256": {
+    "dist/assets/index-kM0iBQT1.js": "5fe80d7d8567cf838f1b0411352f9bc5965ebeb3e965a4dedc69a01781b250b9",
+    "dist/assets/index-eQwKeq2D.css": "bedabb8d6383f6678eadc2260fb4020755efde055353cf9550cab70a52f74fad"
+  },
+  "renderer": "Chromium headless shell 1194; actual Three.js WebGL via SwiftShader; software 2D composition",
+  "calculated_token_contrast": {
+    "hud_text_over_white_environment": 9.51,
+    "objective_text_at_translucent_edge_over_white_environment": 5.02,
+    "beige_gold_icon_over_white_environment": 7.8,
+    "notebook_ink_on_paper": 11.6,
+    "secondary_ink_on_darker_paper_edge": 4.77,
+    "active_tab_text_on_beige_gold": 7.47
+  }
+}

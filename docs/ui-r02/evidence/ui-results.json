@@ -1,0 +1,648 @@
+[
+  {
+    "name": "phone: HUD bounds and hit areas",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "phone: idle action quiet; progression still present",
+    "ok": true,
+    "detail": {
+      "disabled": true,
+      "hidden": true,
+      "objective": "Open de lade van de ladekast in de hal."
+    }
+  },
+  {
+    "name": "phone: notebook bounds and hit areas",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "phone: one focused overlay disables world and background controls",
+    "ok": true,
+    "detail": {
+      "enabled": false,
+      "overlays": 1,
+      "inert": true
+    }
+  },
+  {
+    "name": "phone: evidence shows recorded clues only; reading changes no progression",
+    "ok": true,
+    "detail": {
+      "recorded": [
+        "c.invitation",
+        "c.routeRestored",
+        "c.letterstrook"
+      ],
+      "rendered": [
+        "c.letterstrook",
+        "c.routeRestored",
+        "c.invitation"
+      ]
+    }
+  },
+  {
+    "name": "phone: evidence content has a working independent scroll",
+    "ok": true,
+    "detail": {
+      "top": 534,
+      "overflow": true,
+      "last": "Letterstrook\n  ABCDEFGHIJKLMNOPQRSTUVWXY"
+    }
+  },
+  {
+    "name": "phone: empty memories expose no undiscovered entries",
+    "ok": true
+  },
+  {
+    "name": "phone: map route keeps undiscovered levels hidden",
+    "ok": true,
+    "detail": {
+      "modal": "notebook-map",
+      "basement": false,
+      "underground": false,
+      "unknown": true
+    }
+  },
+  {
+    "name": "phone: map wraps without overflow",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "phone: map back returns to notebook",
+    "ok": true
+  },
+  {
+    "name": "phone: Escape resumes input and restores HUD",
+    "ok": true
+  },
+  {
+    "name": "phone: explicit contextual action uses real reticle target",
+    "ok": true,
+    "detail": {
+      "target": "inspect.boslust",
+      "action": "Bekijken: gravureE"
+    }
+  },
+  {
+    "name": "phone: action button opens clue and records observation",
+    "ok": true
+  },
+  {
+    "name": "phone: close does not click through",
+    "ok": true
+  },
+  {
+    "name": "phone: selection triggers visible feedback",
+    "ok": true
+  },
+  {
+    "name": "phone: one selected item; real short feedback remains accessible",
+    "ok": true,
+    "detail": {
+      "selected": "matches",
+      "chips": 1,
+      "feedback": "Lucifers in de hand. Richt op iets en gebruik de actieknop.",
+      "ariaStatus": true
+    }
+  },
+  {
+    "name": "phone: contextual/selected layout fits",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "phone: selected item deselects through same chip",
+    "ok": true
+  },
+  {
+    "name": "phone: inspected memory remains accessible, without solved badge",
+    "ok": true
+  },
+  {
+    "name": "phone: simulated asymmetric safe-area layout",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "phone: no browser/asset errors",
+    "ok": true,
+    "detail": []
+  },
+  {
+    "name": "small: HUD bounds and hit areas",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "small: idle action quiet; progression still present",
+    "ok": true,
+    "detail": {
+      "disabled": true,
+      "hidden": true,
+      "objective": "Open de lade van de ladekast in de hal."
+    }
+  },
+  {
+    "name": "small: notebook bounds and hit areas",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "small: one focused overlay disables world and background controls",
+    "ok": true,
+    "detail": {
+      "enabled": false,
+      "overlays": 1,
+      "inert": true
+    }
+  },
+  {
+    "name": "small: evidence shows recorded clues only; reading changes no progression",
+    "ok": true,
+    "detail": {
+      "recorded": [
+        "c.invitation",
+        "c.routeRestored",
+        "c.letterstrook"
+      ],
+      "rendered": [
+        "c.letterstrook",
+        "c.routeRestored",
+        "c.invitation"
+      ]
+    }
+  },
+  {
+    "name": "small: evidence content has a working independent scroll",
+    "ok": true,
+    "detail": {
+      "top": 610,
+      "overflow": true,
+      "last": "Letterstrook\n  ABCDEFGHIJKLMNOPQRSTUVWXY"
+    }
+  },
+  {
+    "name": "small: empty memories expose no undiscovered entries",
+    "ok": true
+  },
+  {
+    "name": "small: map route keeps undiscovered levels hidden",
+    "ok": true,
+    "detail": {
+      "modal": "notebook-map",
+      "basement": false,
+      "underground": false,
+      "unknown": true
+    }
+  },
+  {
+    "name": "small: map wraps without overflow",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "small: map back returns to notebook",
+    "ok": true
+  },
+  {
+    "name": "small: Escape resumes input and restores HUD",
+    "ok": true
+  },
+  {
+    "name": "small: explicit contextual action uses real reticle target",
+    "ok": true,
+    "detail": {
+      "target": "inspect.boslust",
+      "action": "Bekijken: gravureE"
+    }
+  },
+  {
+    "name": "small: action button opens clue and records observation",
+    "ok": true
+  },
+  {
+    "name": "small: close does not click through",
+    "ok": true
+  },
+  {
+    "name": "small: selection triggers visible feedback",
+    "ok": true
+  },
+  {
+    "name": "small: one selected item; real short feedback remains accessible",
+    "ok": true,
+    "detail": {
+      "selected": "matches",
+      "chips": 1,
+      "feedback": "Lucifers in de hand. Richt op iets en gebruik de actieknop.",
+      "ariaStatus": true
+    }
+  },
+  {
+    "name": "small: contextual/selected layout fits",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "small: selected item deselects through same chip",
+    "ok": true
+  },
+  {
+    "name": "small: home tutorial wraps without overlapping packing checklist; notebook remains discovery-gated",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false,
+      "objectiveBottom": 130,
+      "checklistTop": 138,
+      "items": 5,
+      "notebookAvailable": false
+    }
+  },
+  {
+    "name": "small: no browser/asset errors",
+    "ok": true,
+    "detail": []
+  },
+  {
+    "name": "desktop: HUD bounds and hit areas",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "desktop: idle action quiet; progression still present",
+    "ok": true,
+    "detail": {
+      "disabled": true,
+      "hidden": true,
+      "objective": "Open de lade van de ladekast in de hal."
+    }
+  },
+  {
+    "name": "desktop: notebook bounds and hit areas",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "desktop: one focused overlay disables world and background controls",
+    "ok": true,
+    "detail": {
+      "enabled": false,
+      "overlays": 1,
+      "inert": true
+    }
+  },
+  {
+    "name": "desktop: evidence shows recorded clues only; reading changes no progression",
+    "ok": true,
+    "detail": {
+      "recorded": [
+        "c.invitation",
+        "c.routeRestored",
+        "c.letterstrook"
+      ],
+      "rendered": [
+        "c.letterstrook",
+        "c.routeRestored",
+        "c.invitation"
+      ]
+    }
+  },
+  {
+    "name": "desktop: evidence content has a working independent scroll",
+    "ok": true,
+    "detail": {
+      "top": 221,
+      "overflow": true,
+      "last": "Letterstrook\n  ABCDEFGHIJKLMNOPQRSTUVWXY"
+    }
+  },
+  {
+    "name": "desktop: empty memories expose no undiscovered entries",
+    "ok": true
+  },
+  {
+    "name": "desktop: map route keeps undiscovered levels hidden",
+    "ok": true,
+    "detail": {
+      "modal": "notebook-map",
+      "basement": false,
+      "underground": false,
+      "unknown": true
+    }
+  },
+  {
+    "name": "desktop: map wraps without overflow",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "desktop: map back returns to notebook",
+    "ok": true
+  },
+  {
+    "name": "desktop: Escape resumes input and restores HUD",
+    "ok": true
+  },
+  {
+    "name": "desktop: explicit contextual action uses real reticle target",
+    "ok": true,
+    "detail": {
+      "target": "inspect.boslust",
+      "action": "Bekijken: gravureE"
+    }
+  },
+  {
+    "name": "desktop: action button opens clue and records observation",
+    "ok": true
+  },
+  {
+    "name": "desktop: close does not click through",
+    "ok": true
+  },
+  {
+    "name": "desktop: selection triggers visible feedback",
+    "ok": true
+  },
+  {
+    "name": "desktop: one selected item; real short feedback remains accessible",
+    "ok": true,
+    "detail": {
+      "selected": "matches",
+      "chips": 1,
+      "feedback": "Lucifers in de hand. Richt op iets en gebruik de actieknop.",
+      "ariaStatus": true
+    }
+  },
+  {
+    "name": "desktop: contextual/selected layout fits",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "desktop: selected item deselects through same chip",
+    "ok": true
+  },
+  {
+    "name": "desktop: notebook keyboard tabs update selection/focus",
+    "ok": true
+  },
+  {
+    "name": "desktop: Home/End/Space remain usable in notebook",
+    "ok": true
+  },
+  {
+    "name": "desktop: focus wraps inside overlay",
+    "ok": true
+  },
+  {
+    "name": "desktop: I opens original inventory",
+    "ok": true
+  },
+  {
+    "name": "desktop: H keeps original hint feature",
+    "ok": true
+  },
+  {
+    "name": "desktop: pause still uses its original panel",
+    "ok": true
+  },
+  {
+    "name": "desktop: no browser/asset errors",
+    "ok": true,
+    "detail": []
+  },
+  {
+    "name": "portrait: HUD bounds and hit areas",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "portrait: idle action quiet; progression still present",
+    "ok": true,
+    "detail": {
+      "disabled": true,
+      "hidden": true,
+      "objective": "Open de lade van de ladekast in de hal."
+    }
+  },
+  {
+    "name": "portrait: notebook bounds and hit areas",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "portrait: one focused overlay disables world and background controls",
+    "ok": true,
+    "detail": {
+      "enabled": false,
+      "overlays": 1,
+      "inert": true
+    }
+  },
+  {
+    "name": "portrait: evidence shows recorded clues only; reading changes no progression",
+    "ok": true,
+    "detail": {
+      "recorded": [
+        "c.invitation",
+        "c.routeRestored",
+        "c.letterstrook"
+      ],
+      "rendered": [
+        "c.letterstrook",
+        "c.routeRestored",
+        "c.invitation"
+      ]
+    }
+  },
+  {
+    "name": "portrait: evidence content has a working independent scroll",
+    "ok": true,
+    "detail": {
+      "top": 417,
+      "overflow": true,
+      "last": "Letterstrook\n  ABCDEFGHIJKLMNOPQRSTUVWXY"
+    }
+  },
+  {
+    "name": "portrait: empty memories expose no undiscovered entries",
+    "ok": true
+  },
+  {
+    "name": "portrait: map route keeps undiscovered levels hidden",
+    "ok": true,
+    "detail": {
+      "modal": "notebook-map",
+      "basement": false,
+      "underground": false,
+      "unknown": true
+    }
+  },
+  {
+    "name": "portrait: map wraps without overflow",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "portrait: map back returns to notebook",
+    "ok": true
+  },
+  {
+    "name": "portrait: Escape resumes input and restores HUD",
+    "ok": true
+  },
+  {
+    "name": "portrait: explicit contextual action uses real reticle target",
+    "ok": true,
+    "detail": {
+      "target": "inspect.boslust",
+      "action": "Bekijken: gravureE"
+    }
+  },
+  {
+    "name": "portrait: action button opens clue and records observation",
+    "ok": true
+  },
+  {
+    "name": "portrait: close does not click through",
+    "ok": true
+  },
+  {
+    "name": "portrait: selection triggers visible feedback",
+    "ok": true
+  },
+  {
+    "name": "portrait: one selected item; real short feedback remains accessible",
+    "ok": true,
+    "detail": {
+      "selected": "matches",
+      "chips": 1,
+      "feedback": "Lucifers in de hand. Richt op iets en gebruik de actieknop.",
+      "ariaStatus": true
+    }
+  },
+  {
+    "name": "portrait: contextual/selected layout fits",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "portrait: selected item deselects through same chip",
+    "ok": true
+  },
+  {
+    "name": "portrait: no browser/asset errors",
+    "ok": true,
+    "detail": []
+  }
+]

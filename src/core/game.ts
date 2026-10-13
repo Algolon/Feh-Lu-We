@@ -153,7 +153,9 @@ export class Game implements GameApi {
       notebook: () => this.openNotebook(),
       hint: () => this.openHint(),
       deselect: () => this.select(null),
+      run: () => this.input.toggleRun(),
     });
+    this.input.onRunChange = (running) => this.ui.setRunning(running);
     this.ui.onModalChange = (open) => {
       if (!open) this.modalClosedAt = performance.now();
       this.input.setEnabled(!open);

@@ -1,0 +1,28 @@
+{
+  "production_base": "ae2a036e783400355c8d137f24e16c33bb1a8323",
+  "tested_source_commit": "a91453a07f186c2d28000ec09d111c4bc8aafa03",
+  "implementation_tree": "dcb14e4299983113d2838757cea9ad8029a79b00",
+  "source_sha256": {
+    "src/ui/ui.ts": "6520cf25703d5fa0b6b94d49c1e5a148550890a18c96caf9023c1f864312ada8",
+    "src/ui/icons.ts": "aa5e161a23232866c12c75242c66d0884628a51df1710becfc8c3984b3f39d43",
+    "src/ui/woodland.css": "fb53c2439c588e4f79e7c7c3154924a43f90df9e0b84253ca586a16dbb275ce0",
+    "src/ui/style.css": "357b0fbdc715387fe880becac9780a216f75c8b93c7dfc51da28b6b140ba38ea",
+    "scripts/e2e-ui-r02.mjs": "57793b953c5f005e965b378b1b3d7943eab2fcec783d6cb1c39912cd437e51a5"
+  },
+  "bundle_sha256": {
+    "dist/assets/index-Spalgcd4.js": "408eb37fbda3d81fca6b13de5ca9ff9c3bcee854f9905aae7ee0089a1e9c343d",
+    "dist/assets/index-vMolsWfl.css": "57ce5b06a89cd7fcb1e40a6586536c56b775fce43756244d2928b22682918425"
+  },
+  "renderer": "Chromium headless shell 1194; Three.js WebGL via SwiftShader; software 2D composition for reliable captures",
+  "capture_note": "disable-gpu-compositing prevents sandbox compositor layer repetition; no production renderer or screenshot pixels were edited",
+  "token_contrast": {
+    "notebook_ink_on_paper": 11.6,
+    "secondary_ink_on_darker_paper_edge": 4.77,
+    "copper_icon_on_darker_paper_edge": 4.35,
+    "active_tab_ink_on_gold": 6.7,
+    "active_tab_icon_on_gold": 3.93,
+    "gold_hud_icon_on_conservative_light_backdrop": 6.01
+  },
+  "published_implementation_commit": "394a11567e53343fe7e22e57abfd7abe5890d201",
+  "publication_verification": "GitHub implementation tree equals the locally tested implementation tree"
+}

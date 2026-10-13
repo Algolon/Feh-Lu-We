@@ -1,3 +1,5 @@
+@import './woodland.css';
+
 :root {
   --ink: #2b2118;
   --paper: #f5ead2;
@@ -26,51 +28,6 @@ html, body {
 #zone-move { left: 0; width: 42%; }
 #zone-look { right: 0; width: 58%; }
 body.playing-off .zone { pointer-events: none; }
-
-#stick { position: absolute; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%;
-  border: 2px solid rgba(255, 236, 190, 0.45); background: rgba(30, 22, 14, 0.25); pointer-events: none; opacity: 0; transition: opacity .15s; }
-#stick.active { opacity: 1; }
-#stick-knob { position: absolute; left: 50%; top: 50%; width: 56px; height: 56px; border-radius: 50%;
-  background: rgba(255, 228, 170, 0.75); transform: translate(-50%, -50%); box-shadow: 0 2px 8px rgba(0,0,0,.4); }
-
-/* HUD */
-#hud { position: absolute; inset: 0; pointer-events: none; }
-#hud > * { pointer-events: auto; }
-.hud-btn { min-width: 52px; min-height: 52px; border-radius: 14px; border: 1px solid var(--hud-border);
-  background: var(--hud); color: var(--paper); font: inherit; font-size: 15px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  padding: 0 12px; cursor: pointer; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
-.hud-btn:active { transform: scale(0.96); }
-.hud-btn .ico { font-size: 22px; line-height: 1; }
-.hud-btn .lbl { font-size: 13px; }
-#topbar-l { position: absolute; top: calc(10px + var(--safe-t)); left: calc(10px + var(--safe-l)); display: flex; gap: 8px; }
-#topbar-r { position: absolute; top: calc(10px + var(--safe-t)); right: calc(10px + var(--safe-r)); display: flex; gap: 8px; }
-#objective { position: absolute; top: calc(70px + var(--safe-t)); left: calc(12px + var(--safe-l)); max-width: min(46vw, 360px);
-  font-size: 13px; color: var(--paper); text-shadow: 0 1px 3px #000; pointer-events: none; opacity: .9; }
-#checklist { position: absolute; top: calc(92px + var(--safe-t)); left: calc(12px + var(--safe-l)); background: var(--hud); border: 1px solid var(--hud-border);
-  border-radius: 12px; padding: 8px 12px; font-size: 13px; pointer-events: none; }
-#checklist ul { list-style: none; margin: 4px 0 0; padding: 0; }
-#checklist li { margin: 2px 0; }
-#checklist li.done { opacity: .6; text-decoration: line-through; }
-#reticle { position: absolute; left: 50%; top: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%;
-  border: 2px solid rgba(255,255,255,.7); pointer-events: none !important; transition: all .12s; }
-#reticle.on { width: 26px; height: 26px; margin: -13px 0 0 -13px; border-color: var(--amber-2); box-shadow: 0 0 10px rgba(240,195,95,.6); }
-#target-label { position: absolute; left: 50%; top: calc(50% + 26px); transform: translateX(-50%); font-size: 14px; color: #fff;
-  text-shadow: 0 1px 3px #000, 0 0 8px #000; pointer-events: none !important; white-space: nowrap; }
-#action { position: absolute; right: calc(18px + var(--safe-r)); bottom: calc(28px + var(--safe-b)); min-width: 110px; min-height: 72px;
-  border-radius: 36px; font-size: 17px; font-weight: bold; background: rgba(217, 164, 65, 0.92); color: var(--ink); border-color: #fff3; padding: 0 20px; }
-#action[disabled] { opacity: .35; background: var(--hud); color: var(--paper); }
-#action { gap: 8px; }
-#action .ic { flex: none; }
-#held { gap: 8px; padding: 0 10px; }
-#held { position: absolute; right: calc(18px + var(--safe-r)); bottom: calc(112px + var(--safe-b)); font-size: 13px; }
-#held[hidden] { display: none; }
-#toast { position: absolute; left: 50%; top: calc(64px + var(--safe-t)); transform: translateX(-50%); max-width: min(88vw, 560px);
-  background: rgba(245, 234, 210, 0.95); color: var(--ink); padding: 10px 16px; border-radius: 12px; font-size: 15px; line-height: 1.35;
-  box-shadow: 0 4px 16px rgba(0,0,0,.4); pointer-events: none !important; opacity: 0; transition: opacity .25s; text-align: center; }
-#toast.show { opacity: 1; }
-#fade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none !important; transition: opacity .6s; }
-#fade.on { opacity: 1; }
-@media (max-width: 520px) { .hud-btn .lbl { display: none; } #objective { top: calc(68px + var(--safe-t)); max-width: 60vw; } }
 
 /* Overlay / modal */
 #overlay { position: absolute; inset: 0; background: rgba(10, 8, 5, 0.6); display: flex; align-items: center; justify-content: center;
@@ -154,7 +111,7 @@ body.reduced-motion * { transition: none !important; animation: none !important;
 .ic { flex: none; }
 .inv button .e { color: #5a3a1a; }
 .niche .e { color: #5a3a1a; }
-#held .ic { color: var(--amber-2); }
+
 
 .clue summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; }
 .clue summary::-webkit-details-marker { display: none; }
