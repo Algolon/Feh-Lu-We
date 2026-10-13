@@ -142,9 +142,11 @@ for (const [name, viewport, touch] of profiles.filter(([name]) => !process.env.U
       await page.waitForFunction(() => !document.querySelector('.wa-index').hidden && !document.querySelector('.wa-page').hidden);
       const landscape = await layout(page, true);
       log('portrait: rotation reveals side categories and preserves selected evidence', good(landscape) && await page.evaluate(() => document.querySelector('[data-t="a"]').getAttribute('aria-selected') === 'true'), landscape);
+      await shot(page, 'portrait-rotated-evidence', 'Same portrait session rotated to landscape while reading recorded evidence.');
       await page.setViewportSize(viewport);
       await page.waitForFunction(() => document.querySelector('.wa-index').hidden && !document.querySelector('.wa-page').hidden);
-      log('portrait: rotation back restores reading pane and reachable back button', await page.evaluate(() => document.querySelector('#nb-heading').textContent === 'Aanwijzingen' && document.querySelector('[data-nb-index]').getClientRects().length > 0 && document.querySelector('#overlay').contains(document.activeElement)));
+      const restored = await page.evaluate(() => ({ heading: document.querySelector('#nb-heading').textContent, backVisible: document.querySelector('[data-nb-index]').getClientRects().length > 0, focusInside: document.querySelector('#overlay').contains(document.activeElement), focus: document.activeElement?.outerHTML.slice(0, 80) }));
+      log('portrait: rotation back restores reading pane and reachable back button', restored.heading === 'Aanwijzingen' && restored.backVisible && restored.focusInside, restored);
     }
     await category('b');
     log(`${name}: empty memories expose no undiscovered entries`, await page.locator('#nb .clue').count() === 0 && (await page.locator('#nb').innerText()).includes('Nog geen herinneringen'));

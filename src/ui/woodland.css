@@ -157,7 +157,7 @@
 .modal.wa-notebook .grp { font: 600 12px/1.6 var(--wa-serif); letter-spacing: .07em; text-transform: uppercase; color: var(--wa-muted); margin: 20px 0 4px; }
 .modal.wa-notebook .grp:first-child { margin-top: 0; }
 .modal.wa-notebook .clue { border-bottom: 1px solid var(--wa-rule); padding: 6px 0 12px; }
-.modal.wa-notebook .clue[open] { background: #fff7e780; padding: 6px 12px 14px; margin: 0 -12px 6px; border-radius: 4px; }
+.modal.wa-notebook .clue[open] { background: #fff7e780; padding: 6px 12px 14px; margin: 0 0 6px; border-radius: 4px; }
 .modal.wa-notebook .clue summary { min-height: var(--wa-hit); flex-wrap: wrap; }
 .modal.wa-notebook .clue h3 { font: 600 18px/1.4 var(--wa-serif); margin: 0; }
 .modal.wa-notebook .clue summary h3::before { color: var(--wa-copper); }

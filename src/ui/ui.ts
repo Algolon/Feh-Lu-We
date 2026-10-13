@@ -83,8 +83,8 @@ export class UI {
     tap(this.notebookBtn, h.notebook);
     tap($('#b-hint', this.hud), h.hint);
     tap(this.held, () => this.heldName ? h.deselect() : h.bag());
-    // A second thumb does not produce a native click while the joystick owns the first touch.
-    // Own its pointer directly; leave native keyboard/mouse activation intact.
+    // Own the second thumb's pointer independently of native click synthesis,
+    // so the joystick and sprint control can be used together. Keep keyboard/mouse activation.
     let runPointer: { id: number; x: number; y: number; moved: boolean } | null = null;
     let runTouchUntil = 0;
     this.resetRunGesture = () => { runPointer = null; runTouchUntil = performance.now() + 700; };
@@ -367,6 +367,10 @@ export class UI {
       if (index.hidden && index.contains(document.activeElement)) back.focus({ preventScroll: true });
       else if (page.hidden && page.contains(document.activeElement)) body.querySelector<HTMLButtonElement>(`[data-t="${activeTab}"]`)?.focus({ preventScroll: true });
       else if (heading.hidden && heading.contains(document.activeElement)) body.querySelector<HTMLButtonElement>(`[data-t="${activeTab}"]`)?.focus({ preventScroll: true });
+      // Hiding a focused control can synchronously return focus to body on rotation.
+      if (!this.overlay.contains(document.activeElement) || !(document.activeElement as HTMLElement)?.getClientRects().length) {
+        (compact && reading ? back : body.querySelector<HTMLButtonElement>(`[data-t="${activeTab}"]`))?.focus({ preventScroll: true });
+      }
     };
     const show = (t: string, open = true) => {
       if (!['d', 'a', 'b'].includes(t)) t = 'd';
