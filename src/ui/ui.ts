@@ -4,7 +4,7 @@ import { ITEMS } from '../content/items';
 import { CLUES, CLUE_GROUP, THREADS, type ClueDef } from '../content/clues';
 import { symbolSvg, SYMBOLS } from '../content/symbols';
 import { DIAGRAMS } from './diagrams';
-import { icon, itemIcon } from './icons';
+import { icon, itemIcon, archiveIcon } from './icons';
 import type { Settings } from '../core/state';
 import portraitArt from '../../assets/branding/concept-art-portrait.png';
 import landscapeArt from '../../assets/branding/concept-art-landscape.png';
@@ -46,19 +46,19 @@ export class UI {
   buildHud(h: HudHandlers) {
     this.hud.innerHTML = `
       <div id="topbar-l">
-        <button class="hud-btn" id="b-menu" aria-label="Pauze en instellingen">${icon('menu')}<span class="lbl">Pauze</span></button>
-        <button class="hud-btn" id="b-hint" aria-label="Hint">${icon('hint')}<span class="lbl">Hint</span></button>
+        <button class="hud-btn" id="b-menu" aria-label="Pauze en instellingen" title="Pauze · Esc">${archiveIcon('menu')}<span class="lbl">Pauze</span></button>
+        <button class="hud-btn" id="b-hint" aria-label="Hint" title="Hint · H">${archiveIcon('hint')}<span class="lbl">Hint</span></button>
       </div>
       <div id="topbar-r">
-        <button class="hud-btn" id="b-notes" aria-label="Notitieboek">${icon('notes')}<span class="lbl">Notities</span></button>
-        <button class="hud-btn" id="b-bag" aria-label="Tas">${icon('bag')}<span class="lbl">Tas</span></button>
+        <button class="hud-btn" id="b-notes" aria-label="Notitieboek" title="Notitieboek · N">${archiveIcon('notes')}<span class="lbl">Notities</span></button>
+        <button class="hud-btn" id="b-bag" aria-label="Tas" title="Tas · I">${archiveIcon('bag')}<span class="lbl">Tas</span></button>
       </div>
-      <div id="objective" aria-live="polite"></div>
-      <div id="checklist" hidden></div>
-      <div id="reticle"></div>
-      <div id="target-label"></div>
+      <div id="progress-cue"><div id="objective" aria-live="polite"></div><div id="checklist" hidden></div></div>
+      <div id="reticle" aria-hidden="true"></div>
+      <div id="target-label" class="wa-sr-only"></div>
+      <div id="move-cue" aria-hidden="true"><span>Lopen</span></div>
       <button class="hud-btn" id="held" hidden aria-label="Gekozen voorwerp, tik om los te laten"></button>
-      <button class="hud-btn" id="action" disabled aria-label="Actie">—</button>
+      <button class="hud-btn" id="action" disabled aria-label="Geen actie">${archiveIcon('action')}<span>Actie</span><kbd>E</kbd></button>
       <div id="toast" role="status" aria-live="polite"></div>
       <div id="fade"></div>`;
     this.actionBtn = $('#action', this.hud);
@@ -96,7 +96,7 @@ export class UI {
     const key = `${actionLabel ?? '—'}|${item ?? ''}`;
     if (this.actionKey !== key) {
       this.actionKey = key;
-      this.actionBtn.innerHTML = item && actionLabel ? `${itemIcon(item, 30)}<span>${esc(actionLabel)}</span>` : esc(actionLabel ?? '—');
+      this.actionBtn.innerHTML = `${item && actionLabel ? itemIcon(item, 28) : archiveIcon('action')}<span>${esc(actionLabel ?? 'Actie')}</span><kbd>E</kbd>`;
       this.actionBtn.setAttribute('aria-label', actionLabel ?? 'Geen actie');
     }
   }
@@ -135,6 +135,16 @@ export class UI {
   /** Kind of the open modal ('pause' counts as paused time for playtest timing). */
   modalKind: string | null = null;
   private returnFocus: HTMLElement | null = null;
+  /** Keep background controls out of the focus order; live action feedback stays accessible. */
+  private obscureHud(open: boolean) {
+    this.hud.classList.toggle('overlay-open', open);
+    for (const id of ['topbar-l', 'topbar-r', 'action', 'held', 'objective', 'checklist', 'target-label']) {
+      const el = this.hud.querySelector<HTMLElement>(`#${id}`);
+      if (!el) continue;
+      el.inert = open;
+      if (open) el.setAttribute('aria-hidden', 'true'); else el.removeAttribute('aria-hidden');
+    }
+  }
   /** Move keyboard focus into the open modal (first control after the close button, else the close button). */
   focusFirst() {
     const els = this.overlay.querySelectorAll<HTMLElement>('.body button, .body input, .body textarea, [data-close]');
@@ -145,16 +155,21 @@ export class UI {
     this.closeModal(true);
     if (!wasOpen) this.returnFocus = document.activeElement as HTMLElement | null;
     this.modalKind = kind;
-    this.overlay.innerHTML = `<div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}">
-      <header><h2>${esc(title)}</h2><button class="btn close" data-close aria-label="Sluiten">✕</button></header>
+    const archive = kind === 'notebook' || kind === 'notebook-map';
+    this.overlay.dataset.kind = kind;
+    this.obscureHud(true);
+    this.overlay.innerHTML = `<div class="modal${archive ? ' wa-notebook' : ''}" role="dialog" aria-modal="true" aria-label="${esc(title)}">
+      <header>${archive ? `<div class="wa-masthead"><span class="wa-eyebrow">Feh Lu We · veldarchief</span><h2>${esc(title)}</h2></div>` : `<h2>${esc(title)}</h2>`}<button class="btn close" data-close aria-label="Sluiten">${archive ? archiveIcon('close') : '✕'}</button></header>
       <div class="body">${bodyHtml}</div></div>`;
     this.overlay.hidden = false;
     this.modalClose = onClose ?? null;
     $('[data-close]', this.overlay).addEventListener('click', () => this.closeModal());
     this.overlay.onkeydown = (e) => {
       if (e.key === 'Escape') { e.stopPropagation(); this.closeModal(); }
+      // Notebook navigation/scroll keys belong to the focused research interface, not the world input.
+      if (archive) e.stopPropagation();
       if (e.key !== 'Tab') return;
-      const controls = [...this.overlay.querySelectorAll<HTMLElement>('button, input, textarea, select')].filter((el) => !el.hasAttribute('disabled'));
+      const controls = [...this.overlay.querySelectorAll<HTMLElement>('button, input, textarea, select, summary, [tabindex="0"]')].filter((el) => !el.hasAttribute('disabled') && el.tabIndex >= 0 && el.getClientRects().length > 0);
       const first = controls[0], last = controls[controls.length - 1];
       if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); }
       else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
@@ -173,6 +188,7 @@ export class UI {
     this.modalClose = null;
     cb?.(silent); // silent = replaced by another overlay (not a player dismissal)
     if (!silent) {
+      this.obscureHud(false);
       this.onModalChange(false);
       this.returnFocus?.focus?.({ preventScroll: true });
       this.returnFocus = null;
@@ -236,12 +252,12 @@ export class UI {
     const clues = o.clues.map((id) => CLUES[id]).filter(Boolean);
     const main = clues.filter((c) => !c.memory);
     const mem = clues.filter((c) => c.memory);
-    const body = this.modal('Notitieboek', `<div class="tabs" role="tablist"><button class="btn" data-t="d">Draden</button><button class="btn" data-t="a">Aanwijzingen (${main.length})</button><button class="btn" data-t="b">Herinneringen (${mem.length})</button>${o.onMap ? '<button class="btn" data-t="m">Kaart</button>' : ''}</div><div id="nb"></div>`);
+    const body = this.modal('Notitieboek', `<div class="wa-archive-layout"><nav class="wa-index" aria-label="Rubrieken"><div class="tabs" role="tablist" aria-label="Notitieboek" aria-orientation="vertical"><button class="btn" id="nb-tab-d" role="tab" aria-controls="nb-panel" data-t="d">Draden</button><button class="btn" id="nb-tab-a" role="tab" aria-controls="nb-panel" data-t="a">Aanwijzingen <span class="wa-count">${main.length}</span></button><button class="btn" id="nb-tab-b" role="tab" aria-controls="nb-panel" data-t="b">Herinneringen <span class="wa-count">${mem.length}</span></button></div>${o.onMap ? `<button class="btn wa-map-link" data-t="m">${icon('map', 20)}Kaart <span aria-hidden="true">↗</span></button>` : ''}<p class="wa-index-note">Wat je onderweg bewaart.</p></nav><section class="wa-page" id="nb-panel" role="tabpanel" tabindex="0"><div class="wa-page-heading"><h3 id="nb-heading"></h3><span id="nb-count"></span></div><div id="nb"></div></section></div>`, undefined, 'notebook');
     const nb = $('#nb', body);
     const card = (c: ClueDef, open: boolean) => {
       const pz = CLUE_GROUP[c.id]?.puzzle;
       const done = pz && o.solved.has(pz) ? '<span class="badge">✓ opgelost</span>' : '';
-      return `<details class="clue" ${open ? 'open' : ''}><summary><h3>${esc(c.title)}</h3>${done}</summary>${this.clueHtml(c)}</details>`;
+      return `<details class="clue" data-clue="${esc(c.id)}" ${open ? 'open' : ''}><summary><h3>${esc(c.title)}</h3>${done}</summary>${this.clueHtml(c)}</details>`;
     };
     const showThreads = () => {
       nb.innerHTML = `<p class="muted">Het huis bewaart drie delen van de route. Je kunt ze in elke volgorde volgen. Kies er een om te volgen: de doelregel bovenin en de hints gaan dan over die draad.</p>` +
@@ -270,20 +286,34 @@ export class UI {
     };
     const tabs = body.querySelectorAll<HTMLButtonElement>('.tabs .btn');
     const show = (t: string) => {
-      tabs.forEach((x) => x.classList.toggle('on', x.dataset.t === t));
+      if (!['d', 'a', 'b'].includes(t)) t = 'd';
+      tabs.forEach((x) => { const selected = x.dataset.t === t; x.classList.toggle('on', selected); x.setAttribute('aria-selected', String(selected)); x.tabIndex = selected ? 0 : -1; });
+      $('#nb-panel', body).setAttribute('aria-labelledby', `nb-tab-${t}`);
+      $('#nb-heading', body).textContent = t === 'd' ? 'Draden' : t === 'a' ? 'Aanwijzingen' : 'Herinneringen';
+      $('#nb-count', body).textContent = t === 'd' ? '' : `${t === 'a' ? main.length : mem.length} bewaard`;
+      $('#nb-panel', body).scrollTop = 0;
       if (t === 'd') showThreads(); else if (t === 'a') showMain(); else showMem();
     };
     show(o.tab ?? 'd');
-    tabs.forEach((b) => b.addEventListener('click', () => {
-      if (b.dataset.t === 'm') { o.onMap?.(); return; }
-      show(b.dataset.t!);
-    }));
+    tabs.forEach((b, i) => {
+      b.addEventListener('click', () => {
+        show(b.dataset.t!);
+      });
+      b.addEventListener('keydown', (e) => {
+        if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+        e.preventDefault(); e.stopPropagation();
+        const j = e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : (i + (e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? -1 : 1) + tabs.length) % tabs.length;
+        show(tabs[j].dataset.t!); tabs[j].focus();
+      });
+    });
+    body.querySelector('[data-t="m"]')?.addEventListener('click', () => o.onMap?.());
   }
 
   map(views: { id: string; label: string; svg: string }[], initial: string, onBack?: () => void, note = '') {
+    const kind = this.modalKind === 'notebook' ? 'notebook-map' : 'panel';
     const body = this.modal('Kaart', `${views.length > 1 ? `<div class="tabs" role="tablist">${views.map((v) => `<button class="btn" data-v="${v.id}">${esc(v.label)}</button>`).join('')}</div>` : ''}<div id="mapv"></div>` +
       (note ? `<p class="muted" style="text-align:center">${esc(note)}</p>` : '') +
-      (onBack ? '<div class="row center" style="margin-top:8px"><button class="btn" data-back>Terug</button></div>' : ''));
+      (onBack ? '<div class="row center" style="margin-top:8px"><button class="btn" data-back>Terug</button></div>' : ''), undefined, kind);
     const host = $('#mapv', body);
     const show = (id: string) => {
       const v = views.find((q) => q.id === id) ?? views[0];

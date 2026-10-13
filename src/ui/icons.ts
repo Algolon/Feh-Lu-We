@@ -175,6 +175,19 @@ export function icon(name: string, size = 26, label = ''): string {
   return render(ICONS[name] ?? ICONS.close, size, label);
 }
 
+/** Quiet line icons for interface chrome only. Item pictures keep their existing recognition vocabulary. */
+export function archiveIcon(name: 'menu' | 'hint' | 'notes' | 'bag' | 'action' | 'close', size = 24): string {
+  const paths = {
+    menu: 'M8 5V19M16 5V19',
+    hint: 'M9 18H15M10 21H14M8.5 14.5C3.5 9 7 3 12 3C17 3 20.5 9 15.5 14.5L15 16H9Z',
+    notes: 'M12 5C9 3 5 3 3 4V19C6 18 9 18 12 20C15 18 18 18 21 19V4C19 3 15 3 12 5ZM12 5V20',
+    bag: 'M8 7V6A4 4 0 0 1 16 6V7M5 7H19L20 21H4ZM8 12V13M16 12V13',
+    action: 'M9 12V5A1.5 1.5 0 0 1 12 5V11M12 9A1.5 1.5 0 0 1 15 9V12M15 10A1.5 1.5 0 0 1 18 10V13M18 12A1.5 1.5 0 0 1 21 12V16C21 20 18 22 14 22C11 22 9 20 7 18L4 14C3 12 5 11 6 12L9 15',
+    close: 'M6 6L18 18M18 6L6 18',
+  };
+  return `<svg class="wa-icon" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${paths[name]}"/></svg>`;
+}
+
 /** Each item has its own picture; unknown ids fall back to a neutral parcel (never another item's icon). */
 export function itemIcon(id: string, size = 40): string {
   const parts = ICONS[id] ?? [['M10 18 H54 V54 H10 Z', '#d8c8a0', INK, 2.5], ['M10 30 H54 M32 18 V54', 'none', '#8a6a3a', 2]];

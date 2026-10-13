@@ -11,6 +11,7 @@
     "build": "vite build",
     "preview": "vite preview --port 4173 --strictPort",
     "e2e": "node scripts/e2e.mjs",
+    "e2e:ui-r02": "node scripts/with-preview.mjs e2e-ui-r02.mjs",
     "e2e:dev01": "node scripts/e2e-dev01.mjs",
     "e2e:dev02": "node scripts/e2e-dev02.mjs",
     "e2e:dev03": "node scripts/e2e-dev03.mjs",
