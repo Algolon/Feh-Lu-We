@@ -12,7 +12,7 @@
         "yaw": -0.6981317007977318,
         "pitch": 0.02
       },
-      "image": "baseline/library-player.webp",
+      "image": "baseline/production-library-player.webp",
       "drawCalls": 93,
       "triangles": 286772,
       "sourceTriangles": 735863,
@@ -58,7 +58,7 @@
         "yaw": -2.443460952792061,
         "pitch": -0.04
       },
-      "image": "baseline/library-medium.webp",
+      "image": "baseline/production-library-medium.webp",
       "drawCalls": 127,
       "triangles": 328224,
       "sourceTriangles": 735863,
@@ -104,7 +104,7 @@
         "yaw": -1.5707963267948966,
         "pitch": 0.02
       },
-      "image": "baseline/library-craft.webp",
+      "image": "baseline/production-library-craft.webp",
       "drawCalls": 45,
       "triangles": 270956,
       "sourceTriangles": 735863,
@@ -150,7 +150,7 @@
         "yaw": 1.2566370614359172,
         "pitch": 0.06
       },
-      "image": "baseline/cottage-player.webp",
+      "image": "baseline/production-cottage-player.webp",
       "drawCalls": 94,
       "triangles": 199731,
       "sourceTriangles": 735863,
@@ -196,7 +196,7 @@
         "yaw": 0,
         "pitch": 0.1
       },
-      "image": "baseline/cottage-medium.webp",
+      "image": "baseline/production-cottage-medium.webp",
       "drawCalls": 52,
       "triangles": 122502,
       "sourceTriangles": 735863,
@@ -242,7 +242,7 @@
         "yaw": 0.7853981633974483,
         "pitch": -0.05
       },
-      "image": "baseline/cottage-craft.webp",
+      "image": "baseline/production-cottage-craft.webp",
       "drawCalls": 58,
       "triangles": 139449,
       "sourceTriangles": 735863,
