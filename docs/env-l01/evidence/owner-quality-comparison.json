@@ -1,0 +1,40 @@
+{
+  "source": "Owner follow-up 13 October 2026. Attachments inspected; original screenshots retained in conversation, not republished with phone bars.",
+  "conditions": "Visually very similar views; exact camera/build/state/reload history unknown. Same ROI as earlier black image, unsegmented and includes some sky. Not a device FPS or photometric test.",
+  "rows": [
+    {
+      "attachment": "01-1791896546517.jpeg",
+      "ownerQuality": "High (owner stated)",
+      "size": [
+        709,
+        1536
+      ],
+      "sha256": "cf961eddf73b24efb2f1aaf42a2ce03719bbe48bea5f8be9eea41be149442d43",
+      "roi": [
+        0,
+        410,
+        709,
+        1235
+      ],
+      "medianEncodedLuma": 32.114,
+      "nearBlack8Percent": 6.994400991580117
+    },
+    {
+      "attachment": "02-82065.jpg",
+      "ownerQuality": "Normal (owner stated; unchecked high-quality option expected, not independently verified)",
+      "size": [
+        709,
+        1536
+      ],
+      "sha256": "f25f3e14396fce9afa7ef7eb4654c8a70ba6d00156c075a62a39185cb5b0747f",
+      "roi": [
+        0,
+        410,
+        709,
+        1235
+      ],
+      "medianEncodedLuma": 50.870999999999995,
+      "nearBlack8Percent": 2.1915630209001153
+    }
+  ]
+}

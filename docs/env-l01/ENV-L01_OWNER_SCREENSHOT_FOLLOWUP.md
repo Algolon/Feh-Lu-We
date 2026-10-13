@@ -48,3 +48,16 @@ Latest diagnostic code: typecheck/build pass, **273 unit tests pass**. Browser U
 3. If/when the isolated branch is served for device review, capture normal/hemisphere-only/without-surface-shader frames and download a report. The current production URL does not yet contain the new lighting review or its report button.
 
 Keep root-cause repair and final integration blocked until device evidence narrows the fault. The four-phase art direction is accepted and should not be re-darkened to imitate the faulty screenshot.
+
+
+## Second owner comparison — High and Normal both readable
+
+Owner supplied `1791896546517.jpeg` (High, first image) and `82065.jpg` (Normal, second image), showing a visually very similar BOSLUST view. Both attachments were inspected. **OBSERVED:** High adds canopy/ground/stone shadows; Normal is brighter and flatter; both retain terrain, stonework, door, foliage and spatial form. The earlier scene-wide black appearance is absent in both. The door is open in these new views; the old view/camera and action sequence were different, so these are not a controlled reconstruction of the original failure.
+
+Same diagnostic ROI as above: High median encoded luma **32.11**, near-black **6.99%**; Normal median **50.87**, near-black **2.19%**, against the earlier image's 0 / 87.49%. [Provenance and metrics](evidence/owner-quality-comparison.json). ROI contains different subject pixels across the old/new views: this confirms the observed severity difference, not a photometric effect attributable only to quality.
+
+**Updated conclusion:** High by itself is not a sufficient cause; the owner's device can render readable High and Normal frames at this view. A permanent all-frame failure of the global-light/material path is weakened. An intermittent or state-dependent fault remains plausible, as do a camera/location-specific issue or a different cached build. No root-cause repair is claimed and no rendering code was changed based on these two frames.
+
+**Source observation:** a High↔Low change calls `applyQuality(true)` (`game.ts` pause callback). It changes DPR/shadow enablement/map size, marks scene materials for shader refresh when shadow state changes and rebuilds the 3/4-slot light pool. Therefore a visual recovery after a quality toggle would be confounded with program/light-pool refresh, not just shadow brightness. This is a reason to ask for the action sequence, not proof of a stale uniform or GPU context fault. Existing software context-loss/recovery checks passed earlier; they do not reproduce the owner's native session.
+
+**Next discriminating fact:** did the earlier black image clear after reloading/reopening the page, after changing quality without reloading, or simply after moving? Record that sequence before deciding between renderer initialization, shader/light-pool refresh and view/location dependence. There is no need to request another identical Normal-quality shot while both modes currently work. Approved phase palettes remain unchanged; PR stays draft, no merge or deployment.

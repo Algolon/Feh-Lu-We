@@ -64,3 +64,5 @@ No shader/NaN evidence, surface or batching failure found in these views. Unit s
 ## Owner follow-up
 
 Four-phase visual direction approved; severe-black screenshot now inspected. [Follow-up](ENV-L01_OWNER_SCREENSHOT_FOLLOWUP.md) distinguishes the visually confirmed symptom from an unconfirmed cause, documents nine new controlled tests and verified local JSON diagnostics. Latest diagnostic-only extension: 273 units, typecheck/build and targeted browser smoke pass. Earlier E2E provenance stays unchanged.
+
+Owner High/Normal comparison now demonstrates readable rendering on both settings at a visually similar BOSLUST view; this is a static device readability check, not FPS/thermal validation or reproduction of the old defect. No source changes in this evidence-only update.

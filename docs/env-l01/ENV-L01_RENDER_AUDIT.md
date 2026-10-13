@@ -43,3 +43,7 @@ Full Chromium failed before a page: `process_singleton_posix.cc:292 socket() fai
 2. Preserve production light values and assets while adding an isolated review of synchronized four-phase palettes. Keep exposure 1.15/ACES fixed; shift ambient sky/earth balance intentionally and retire direct sunlight at blue hour. Reuse the dome, one hemisphere, one directional and existing pool.
 3. In the prototype only, give the sky the world tone-mapping/output path; correlate horizon and haze. Keep clouds/moon/stars out of this minimum test.
 4. Review fixed-camera device renders before estate-wide tuning. See QA/review documents for budget exceptions and remaining gates.
+
+## New owner High/Normal evidence
+
+Both new device frames are readable; High shadows alone do not explain the old blackout. See [second comparison](ENV-L01_OWNER_SCREENSHOT_FOLLOWUP.md#second-owner-comparison--high-and-normal-both-readable). Root cause remains unconfirmed; action/reload history is the next discriminating evidence.
