@@ -44,10 +44,14 @@ async function layout(page, modal = false) {
 }
 const good = r => !r.small.length && !r.overflow.length && !r.outside.length && r.fits && !r.documentOverflow;
 
-for (const [name, viewport, touch] of profiles) {
+for (const [name, viewport, touch] of profiles.filter(([name]) => !process.env.UI_R02_ONLY || process.env.UI_R02_ONLY.split(',').includes(name))) {
   const context = await browser.newContext({ viewport, hasTouch: touch, isMobile: touch, deviceScaleFactor: 1 });
   const page = await context.newPage();
   const click = async selector => touch ? page.locator(selector).tap() : page.locator(selector).click();
+  const category = async t => {
+    if (!await page.locator(`[data-t="${t}"]`).isVisible()) await click('[data-nb-index]');
+    await click(`[data-t="${t}"]`);
+  };
   const problems = [];
   page.on('pageerror', e => problems.push(e.message));
   page.on('console', m => { if (m.type() === 'error') problems.push(m.text()); });
@@ -68,7 +72,48 @@ for (const [name, viewport, touch] of profiles) {
     const chrome = await page.evaluate(() => [...document.querySelectorAll('.hud-btn .wa-icon')].map(el => getComputedStyle(el).color));
     const warm = color => { const rgb = color.match(/[\d.]+/g)?.map(Number); return rgb?.length >= 3 && rgb[0] > rgb[1] && rgb[1] > rgb[2]; };
     log(`${name}: chrome icons use a warm metal color`, chrome.length >= 4 && chrome.every(warm), chrome);
+    const goal = await page.evaluate(() => {
+      const hint = document.querySelector('#b-hint').getBoundingClientRect(), objective = document.querySelector('#objective-row').getBoundingClientRect(), right = document.querySelector('#topbar-r').getBoundingClientRect();
+      return { beside: objective.left >= hint.right && Math.abs(objective.top - hint.top) < 2, clear: objective.right < right.left, marker: !!document.querySelector('#objective-row .wa-icon'), text: document.querySelector('#objective').textContent };
+    });
+    log(`${name}: marked objective sits beside hint without overlapping right controls`, goal.beside && goal.clear && goal.marker && !!goal.text, goal);
+    await click('#held');
+    log(`${name}: empty equipped-item button opens original inventory`, await page.locator('.inv').count() === 1);
+    await page.keyboard.press('Escape');
+    if (touch) {
+      const cdp = await context.newCDPSession(page);
+      const run = await page.locator('#b-run').boundingBox();
+      const left = { x: 70, y: viewport.height - 140, id: 71 }, thumb = { x: run.x + run.width / 2, y: run.y + run.height / 2, id: 72 };
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [left] });
+      left.y -= 30;
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [left] });
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [left, thumb] });
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [thumb] });
+      await page.waitForFunction(() => document.querySelector('#b-run').getAttribute('aria-pressed') === 'true');
+      const moving = await page.evaluate(() => { T.G().input.sample(); return { run: T.G().input.runAmt, forward: T.G().input.moveY, modal: T.modalOpen() }; });
+      log(`${name}: sprint shortcut works while another thumb holds movement`, moving.run === 1 && moving.forward > 0 && !moving.modal, moving);
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+      const released = await page.evaluate(() => { T.G().input.sample(); return { run: T.G().input.runAmt, x: T.G().input.moveX, y: T.G().input.moveY }; });
+      log(`${name}: sprint never moves player without movement input`, released.run === 1 && released.x === 0 && released.y === 0, released);
+      await page.evaluate(() => window.dispatchEvent(new Event('blur')));
+      log(`${name}: blur clears sprint and its pressed state`, await page.evaluate(() => T.G().input.runAmt === 0 && document.querySelector('#b-run').getAttribute('aria-pressed') === 'false'));
+      await click('#b-run');
+      await pose(page);
+      if (name === 'phone') await shot(page, 'phone-sprint-equipped-controls', 'Real run shortcut enabled; no movement input. Opening a modal resets the toggle.');
+    }
     await click('#b-notes');
+    if (name === 'portrait') {
+      await shot(page, 'portrait-notebook-categories');
+      log('portrait: notebook opens category index before reading', await page.evaluate(() => !document.querySelector('.wa-index').hidden && document.querySelector('.wa-page').hidden));
+      await category('d');
+      log('portrait: choosing category opens page and hides index', await page.evaluate(() => document.querySelector('.wa-index').hidden && !document.querySelector('.wa-page').hidden && document.querySelector('[data-nb-index]').getClientRects().length > 0));
+      await click('[data-nb-index]');
+      log('portrait: category back restores index without closing overlay', await page.evaluate(() => T.G().ui.modalKind === 'notebook' && !document.querySelector('.wa-index').hidden && document.querySelector('.wa-page').hidden));
+      await category('d');
+    } else if (touch) {
+      const side = await page.evaluate(() => { const i = document.querySelector('.wa-index').getBoundingClientRect(), p = document.querySelector('.wa-page').getBoundingClientRect(); return { left: i.right <= p.left + 1, top: Math.abs(i.top - p.top) < 2, contentHeight: p.height }; });
+      log(`${name}: mobile categories remain left of the reading page`, side.left && side.top && side.contentHeight > 190, side);
+    }
     await shot(page, `${name}-boslust-notebook-threads`);
     const notebook = await layout(page, true);
     log(`${name}: notebook bounds and hit areas`, good(notebook), notebook);
@@ -79,8 +124,9 @@ for (const [name, viewport, touch] of profiles) {
     log(`${name}: bounded notebook leaves world margins and contains scrolling pages`, book.marginX >= 24 && book.marginY >= 24 && book.width <= viewport.width * .96 && book.height <= viewport.height * .84 && book.clipped && book.icons.length > 4 && book.icons.every(warm), book);
     const paused = await page.evaluate(() => ({ enabled: T.G().input.enabled, overlays: document.querySelectorAll('#overlay [role="dialog"]').length, inert: document.querySelector('#topbar-l').inert }));
     log(`${name}: one focused overlay disables world and background controls`, !paused.enabled && paused.overlays === 1 && paused.inert, paused);
+    if (touch) log(`${name}: opening overlay resets sprint`, await page.evaluate(() => T.G().input.runAmt === 0 && document.querySelector('#b-run').getAttribute('aria-pressed') === 'false'));
     const before = await page.evaluate(() => JSON.stringify({ ...T.G().state, stats: undefined, player: undefined }));
-    await click('[data-t="a"]');
+    await category('a');
     await shot(page, `${name}-boslust-notebook-evidence`);
     const obs = await page.evaluate(() => ({ recorded: [...T.G().state.clues], rendered: [...new Set([...document.querySelectorAll('#nb [data-clue]')].map(el => el.dataset.clue))], changed: JSON.stringify({ ...T.G().state, stats: undefined, player: undefined }) }));
     log(`${name}: evidence shows recorded clues only; reading changes no progression`, obs.rendered.length > 0 && obs.rendered.every(id => obs.recorded.includes(id)) && obs.changed === before, { recorded: obs.recorded, rendered: obs.rendered });
@@ -89,9 +135,20 @@ for (const [name, viewport, touch] of profiles) {
       return { top: el.scrollTop, overflow: el.scrollHeight > el.clientHeight, last: el.querySelector('.clue:last-child')?.textContent.slice(0, 40) };
     });
     log(`${name}: evidence content has a working independent scroll`, !scroll.overflow || scroll.top > 0, scroll);
-    await click('[data-t="b"]');
+    if (name === 'portrait') {
+      const back = await page.locator('[data-nb-index]').boundingBox(), close = await page.locator('[data-close]').boundingBox(), readingPage = await page.locator('.wa-page').boundingBox();
+      log('portrait: category back stays visible while evidence scrolls', !!back && back.y >= close.y + close.height && back.y >= readingPage.y && back.y + back.height <= readingPage.y + readingPage.height, { back, close, readingPage });
+      await page.setViewportSize({ width: 852, height: 393 });
+      await page.waitForFunction(() => !document.querySelector('.wa-index').hidden && !document.querySelector('.wa-page').hidden);
+      const landscape = await layout(page, true);
+      log('portrait: rotation reveals side categories and preserves selected evidence', good(landscape) && await page.evaluate(() => document.querySelector('[data-t="a"]').getAttribute('aria-selected') === 'true'), landscape);
+      await page.setViewportSize(viewport);
+      await page.waitForFunction(() => document.querySelector('.wa-index').hidden && !document.querySelector('.wa-page').hidden);
+      log('portrait: rotation back restores reading pane and reachable back button', await page.evaluate(() => document.querySelector('#nb-heading').textContent === 'Aanwijzingen' && document.querySelector('[data-nb-index]').getClientRects().length > 0 && document.querySelector('#overlay').contains(document.activeElement)));
+    }
+    await category('b');
     log(`${name}: empty memories expose no undiscovered entries`, await page.locator('#nb .clue').count() === 0 && (await page.locator('#nb').innerText()).includes('Nog geen herinneringen'));
-    await click('[data-t="m"]');
+    await category('m');
     const map = await page.evaluate(() => ({ modal: T.G().ui.modalKind, basement: !!document.querySelector('[data-v="b"]'), underground: !!document.querySelector('[data-v="ug"]'), unknown: document.querySelector('#mapv').textContent.includes('?') }));
     await shot(page, `${name}-notebook-map`, 'Existing map route and discovery filters; map content unchanged.');
     log(`${name}: map route keeps undiscovered levels hidden`, map.modal === 'notebook-map' && !map.basement && !map.underground && map.unknown, map);
@@ -125,7 +182,7 @@ for (const [name, viewport, touch] of profiles) {
     log(`${name}: one selected item; real short feedback remains accessible`, held.selected === 'matches' && held.chips === 1 && /Lucifers in de hand/.test(held.feedback) && held.ariaStatus, held);
     const active = await layout(page); log(`${name}: contextual/selected layout fits`, good(active), active);
     await click('#held');
-    log(`${name}: selected item deselects through same chip`, await page.evaluate(() => T.G().selected === null && document.querySelector('#held').hidden));
+    log(`${name}: selected item deselects through same persistent item button`, await page.evaluate(() => T.G().selected === null && document.querySelector('#held').dataset.equipped === 'false' && !document.querySelector('#held').hidden));
 
     // Existing scene lighting only, forced phase for a reproducible dark-background contrast fixture.
     await pose(page);

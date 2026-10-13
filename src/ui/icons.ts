@@ -176,7 +176,7 @@ export function icon(name: string, size = 26, label = ''): string {
 }
 
 /** Quiet line icons for interface chrome only. Item pictures keep their existing recognition vocabulary. */
-export type ArchiveIconName = 'menu' | 'hint' | 'notes' | 'bag' | 'action' | 'close' | 'compass' | 'document' | 'leaf' | 'map' | 'table' | 'books' | 'trees';
+export type ArchiveIconName = 'menu' | 'hint' | 'notes' | 'bag' | 'action' | 'close' | 'compass' | 'document' | 'leaf' | 'map' | 'table' | 'books' | 'trees' | 'marker' | 'run' | 'back';
 export function archiveIcon(name: ArchiveIconName, size = 24): string {
   const paths = {
     menu: 'M5 6H19M5 12H19M5 18H19',
@@ -185,6 +185,9 @@ export function archiveIcon(name: ArchiveIconName, size = 24): string {
     bag: 'M8 7V6A4 4 0 0 1 16 6V7M5 7H19L20 21H4ZM8 12V13M16 12V13',
     action: 'M9 12V5A1.5 1.5 0 0 1 12 5V11M12 9A1.5 1.5 0 0 1 15 9V12M15 10A1.5 1.5 0 0 1 18 10V13M18 12A1.5 1.5 0 0 1 21 12V16C21 20 18 22 14 22C11 22 9 20 7 18L4 14C3 12 5 11 6 12L9 15',
     close: 'M6 6L18 18M18 6L6 18',
+    marker: 'M12 2L22 12L12 22L2 12ZM12 7L17 12L12 17L7 12Z',
+    run: 'M5 14L12 7L19 14M5 21L12 14L19 21',
+    back: 'M14 5L7 12L14 19M7 12H21',
     compass: 'M12 2V4M12 20V22M2 12H4M20 12H22M21 12A9 9 0 1 1 3 12A9 9 0 1 1 21 12ZM15 8L13 13L8 16L10 11Z',
     document: 'M6 3H14L19 8V21H6ZM14 3V8H19M9 12H16M9 16H16',
     leaf: 'M5 20C5 9 11 4 20 3C21 13 15 20 7 18M3 22L15 9',

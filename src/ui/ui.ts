@@ -20,6 +20,7 @@ export interface HudHandlers {
   notebook: () => void;
   hint: () => void;
   deselect: () => void;
+  run: () => void;
 }
 
 export class UI {
@@ -36,6 +37,9 @@ export class UI {
   private objective!: HTMLDivElement;
   private checklist!: HTMLDivElement;
   private held!: HTMLButtonElement;
+  private runBtn!: HTMLButtonElement;
+  private heldName: string | null = null;
+  private resetRunGesture: () => void = () => {};
   private fade!: HTMLDivElement;
   private notebookBtn!: HTMLButtonElement;
 
@@ -48,16 +52,16 @@ export class UI {
       <div id="topbar-l">
         <button class="hud-btn" id="b-menu" aria-label="Pauze en instellingen" title="Pauze · Esc">${archiveIcon('menu')}<span class="lbl">Pauze</span></button>
         <button class="hud-btn" id="b-hint" aria-label="Hint" title="Hint · H">${archiveIcon('hint')}<span class="lbl">Hint</span></button>
+        <div id="progress-cue"><div id="objective-row">${archiveIcon('marker', 20)}<div id="objective" aria-live="polite"></div></div><div id="checklist" hidden></div></div>
       </div>
       <div id="topbar-r">
         <button class="hud-btn" id="b-notes" aria-label="Notitieboek" title="Notitieboek · N">${archiveIcon('notes')}<span class="lbl">Notities</span></button>
         <button class="hud-btn" id="b-bag" aria-label="Tas" title="Tas · I">${archiveIcon('bag')}<span class="lbl">Tas</span></button>
       </div>
-      <div id="progress-cue"><div id="objective" aria-live="polite"></div><div id="checklist" hidden></div></div>
       <div id="reticle" aria-hidden="true"></div>
       <div id="target-label" class="wa-sr-only"></div>
       <div id="move-cue" aria-hidden="true"><span>Lopen</span></div>
-      <button class="hud-btn" id="held" hidden aria-label="Gekozen voorwerp, tik om los te laten"></button>
+      <div id="bottom-controls"><button class="hud-btn" id="held" aria-label="Geen voorwerp in de hand — open de tas">${archiveIcon('action')}</button><button class="hud-btn" id="b-run" aria-label="Rennen" aria-pressed="false" title="Rennen aan/uit">${archiveIcon('run', 26)}</button></div>
       <button class="hud-btn" id="action" disabled aria-label="Geen actie">${archiveIcon('action')}<span>Actie</span><kbd>E</kbd></button>
       <div id="toast" role="status" aria-live="polite"></div>
       <div id="fade"></div>`;
@@ -68,6 +72,8 @@ export class UI {
     this.objective = $('#objective', this.hud);
     this.checklist = $('#checklist', this.hud);
     this.held = $('#held', this.hud);
+    this.runBtn = $('#b-run', this.hud);
+    this.heldName = null;
     this.fade = $('#fade', this.hud);
     this.notebookBtn = $('#b-notes', this.hud);
     const tap = (el: HTMLElement, fn: () => void) => el.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); fn(); });
@@ -76,7 +82,37 @@ export class UI {
     tap($('#b-bag', this.hud), h.bag);
     tap(this.notebookBtn, h.notebook);
     tap($('#b-hint', this.hud), h.hint);
-    tap(this.held, h.deselect);
+    tap(this.held, () => this.heldName ? h.deselect() : h.bag());
+    // A second thumb does not produce a native click while the joystick owns the first touch.
+    // Own its pointer directly; leave native keyboard/mouse activation intact.
+    let runPointer: { id: number; x: number; y: number; moved: boolean } | null = null;
+    let runTouchUntil = 0;
+    this.resetRunGesture = () => { runPointer = null; runTouchUntil = performance.now() + 700; };
+    this.runBtn.addEventListener('pointerdown', e => {
+      if (!['touch', 'pen'].includes(e.pointerType) || runPointer) return;
+      e.preventDefault(); e.stopPropagation();
+      runPointer = { id: e.pointerId, x: e.clientX, y: e.clientY, moved: false };
+      this.runBtn.setPointerCapture(e.pointerId);
+    });
+    this.runBtn.addEventListener('pointermove', e => {
+      if (e.pointerId === runPointer?.id) runPointer.moved ||= Math.hypot(e.clientX - runPointer.x, e.clientY - runPointer.y) > 12;
+    });
+    this.runBtn.addEventListener('pointerup', e => {
+      if (e.pointerId !== runPointer?.id) return;
+      e.preventDefault(); e.stopPropagation();
+      const moved = runPointer.moved; runPointer = null; runTouchUntil = performance.now() + 700;
+      if (!moved) h.run();
+    });
+    for (const event of ['pointercancel', 'lostpointercapture']) this.runBtn.addEventListener(event, e => {
+      if ((e as PointerEvent).pointerId !== runPointer?.id) return;
+      runPointer = null; runTouchUntil = performance.now() + 700;
+      if (this.runBtn.getAttribute('aria-pressed') === 'true') h.run();
+    });
+    this.runBtn.addEventListener('click', e => {
+      e.preventDefault(); e.stopPropagation();
+      if (e.detail === 0 || performance.now() > runTouchUntil) h.run();
+    });
+    for (const b of [this.held, this.runBtn]) b.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') e.stopPropagation(); });
     this.overlay.addEventListener('click', (e) => {
       if (e.target === this.overlay) this.closeModal();
     });
@@ -102,9 +138,19 @@ export class UI {
   }
 
   setHeld(name: string | null, itemId: string | null = null) {
-    this.held.hidden = !name;
-    this.held.innerHTML = name ? `${itemIcon(itemId ?? '', 30)}<span>${esc(name)}</span>${archiveIcon('close', 18)}` : '';
-    this.held.setAttribute('aria-label', name ? `${name} in de hand — tik om los te laten` : '');
+    this.heldName = name;
+    this.held.dataset.equipped = String(!!name);
+    this.held.classList.toggle('equipped', !!name);
+    this.held.innerHTML = name ? `${itemIcon(itemId ?? '', 32)}<span class="wa-sr-only">${esc(name)}</span>` : archiveIcon('action');
+    this.held.setAttribute('aria-label', name ? `${name} in de hand — tik om los te laten` : 'Geen voorwerp in de hand — open de tas');
+    this.held.title = name ? `${name} · loslaten` : 'Voorwerp kiezen';
+  }
+
+  setRunning(running: boolean) {
+    if (!running) this.resetRunGesture();
+    this.runBtn.classList.toggle('on', running);
+    this.runBtn.setAttribute('aria-pressed', String(running));
+    this.runBtn.title = running ? 'Rennen uitzetten' : 'Rennen aanzetten';
   }
 
   toast(msg: string, ms = 3600) {
@@ -138,7 +184,7 @@ export class UI {
   /** Keep background controls out of the focus order; live action feedback stays accessible. */
   private obscureHud(open: boolean) {
     this.hud.classList.toggle('overlay-open', open);
-    for (const id of ['topbar-l', 'topbar-r', 'action', 'held', 'objective', 'checklist', 'target-label']) {
+    for (const id of ['topbar-l', 'topbar-r', 'bottom-controls', 'action', 'held', 'objective', 'checklist', 'target-label']) {
       const el = this.hud.querySelector<HTMLElement>(`#${id}`);
       if (!el) continue;
       el.inert = open;
@@ -147,7 +193,7 @@ export class UI {
   }
   /** Move keyboard focus into the open modal (first control after the close button, else the close button). */
   focusFirst() {
-    const els = this.overlay.querySelectorAll<HTMLElement>('.body button, .body input, .body textarea, [data-close]');
+    const els = [...this.overlay.querySelectorAll<HTMLElement>('.body button, .body input, .body textarea, [data-close]')].filter(el => el.getClientRects().length && el.tabIndex >= 0 && !el.hasAttribute('disabled'));
     (els[0] ?? null)?.focus({ preventScroll: true });
   }
   modal(title: string, bodyHtml: string, onClose?: (silent?: boolean) => void, kind = 'panel'): HTMLElement {
@@ -249,6 +295,11 @@ export class UI {
   }
 
   notebook(o: { clues: string[]; solved: Set<string>; threads: { id: string; title: string; sub: string; done: boolean; next: string; tracked: boolean; started: boolean }[]; onTrack: (id: string) => void; onMap?: () => void; tab?: string }) {
+    const portrait = matchMedia('(pointer: coarse) and (orientation: portrait), (max-width: 520px) and (orientation: portrait)');
+    const touch = matchMedia('(pointer: coarse)');
+    let syncLayout = () => {};
+    let reading = !!o.tab;
+    let activeTab = o.tab ?? 'd';
     const clues = o.clues.map((id) => CLUES[id]).filter(Boolean);
     const main = clues.filter((c) => !c.memory);
     const mem = clues.filter((c) => c.memory);
@@ -261,8 +312,8 @@ export class UI {
         </div>
         ${o.onMap ? `<button class="btn wa-map-link" data-t="m">${archiveIcon('map', 20)}<span class="wa-tab-label">Kaart</span></button>` : ''}
       </nav>
-      <section class="wa-page" id="nb-panel" role="tabpanel" tabindex="0"><div class="wa-page-heading" hidden><h3 id="nb-heading"></h3><span id="nb-count"></span></div><div id="nb"></div></section>
-    </div>`, undefined, 'notebook');
+      <section class="wa-page" id="nb-panel" role="tabpanel" tabindex="0"><div class="wa-page-heading" hidden><button class="btn wa-index-back" data-nb-index>${archiveIcon('back', 18)}<span>Categorieën</span></button><h3 id="nb-heading"></h3><span id="nb-count"></span></div><div id="nb"></div></section>
+    </div>`, () => { portrait.removeEventListener('change', syncLayout); touch.removeEventListener('change', syncLayout); }, 'notebook');
     const nb = $('#nb', body);
     const card = (c: ClueDef, open: boolean) => {
       const pz = CLUE_GROUP[c.id]?.puzzle;
@@ -296,16 +347,42 @@ export class UI {
       nb.innerHTML = mem.length ? [...mem].reverse().map((c) => card(c, true)).join('') : '<p class="muted">Nog geen herinneringen gevonden.</p>';
     };
     const tabs = body.querySelectorAll<HTMLButtonElement>('.tabs .btn');
-    const show = (t: string) => {
+    const index = $('.wa-index', body), page = $('#nb-panel', body), heading = $('.wa-page-heading', body), back = $<HTMLButtonElement>('[data-nb-index]', body);
+    syncLayout = () => {
+      const compact = portrait.matches;
+      page.hidden = compact && !reading;
+      index.hidden = compact && reading;
+      heading.hidden = !compact;
+      page.setAttribute('role', compact ? 'region' : 'tabpanel');
+      page.setAttribute('aria-labelledby', compact ? 'nb-heading' : `nb-tab-${activeTab}`);
+      const list = $('.tabs', body);
+      if (compact) { list.removeAttribute('role'); list.removeAttribute('aria-orientation'); }
+      else { list.setAttribute('role', 'tablist'); list.setAttribute('aria-orientation', touch.matches ? 'vertical' : 'horizontal'); }
+      tabs.forEach(x => {
+        const selected = x.dataset.t === activeTab;
+        x.classList.toggle('on', selected && (!compact || reading));
+        if (compact) { x.removeAttribute('role'); x.removeAttribute('aria-selected'); x.tabIndex = 0; }
+        else { x.setAttribute('role', 'tab'); x.setAttribute('aria-selected', String(selected)); x.tabIndex = selected ? 0 : -1; }
+      });
+      if (index.hidden && index.contains(document.activeElement)) back.focus({ preventScroll: true });
+      else if (page.hidden && page.contains(document.activeElement)) body.querySelector<HTMLButtonElement>(`[data-t="${activeTab}"]`)?.focus({ preventScroll: true });
+      else if (heading.hidden && heading.contains(document.activeElement)) body.querySelector<HTMLButtonElement>(`[data-t="${activeTab}"]`)?.focus({ preventScroll: true });
+    };
+    const show = (t: string, open = true) => {
       if (!['d', 'a', 'b'].includes(t)) t = 'd';
-      tabs.forEach((x) => { const selected = x.dataset.t === t; x.classList.toggle('on', selected); x.setAttribute('aria-selected', String(selected)); x.tabIndex = selected ? 0 : -1; });
-      $('#nb-panel', body).setAttribute('aria-labelledby', `nb-tab-${t}`);
+      activeTab = t;
+      if (open) reading = true;
       $('#nb-heading', body).textContent = t === 'd' ? 'Draden' : t === 'a' ? 'Aanwijzingen' : 'Herinneringen';
       $('#nb-count', body).textContent = t === 'd' ? '' : `${t === 'a' ? main.length : mem.length} bewaard`;
       $('#nb-panel', body).scrollTop = 0;
       if (t === 'd') showThreads(); else if (t === 'a') showMain(); else showMem();
+      syncLayout();
+      if (portrait.matches && open) back.focus({ preventScroll: true });
     };
-    show(o.tab ?? 'd');
+    show(activeTab, false);
+    portrait.addEventListener('change', syncLayout);
+    touch.addEventListener('change', syncLayout);
+    back.addEventListener('click', () => { reading = false; syncLayout(); body.querySelector<HTMLButtonElement>(`[data-t="${activeTab}"]`)?.focus({ preventScroll: true }); });
     tabs.forEach((b, i) => {
       b.addEventListener('click', () => {
         show(b.dataset.t!);
@@ -314,7 +391,8 @@ export class UI {
         if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
         e.preventDefault(); e.stopPropagation();
         const j = e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : (i + (e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? -1 : 1) + tabs.length) % tabs.length;
-        show(tabs[j].dataset.t!); tabs[j].focus();
+        if (!portrait.matches) show(tabs[j].dataset.t!);
+        tabs[j].focus();
       });
     });
     body.querySelector('[data-t="m"]')?.addEventListener('click', () => o.onMap?.());
