@@ -1,36 +1,28 @@
 # UI-R02 — Woodland Archive visual review
 
-This draft implements the normal-game exploration HUD and notebook on the verified production baseline. It is ready for a bounded visual review; final direction approval is still required. Inventory, pause/settings and puzzle interface expansion is deferred.
+The current revision implements the owner's notebook reference: a smaller bound notebook over the game, green cover edge, warm paper, horizontal tabs, copper notebook icons and gold HUD icons. Real content, counts, observations, selected items and navigation are preserved.
 
-**All images below come from the running Three.js game.** Caption sheets arrange actual captures at native size. No generated environment or concept image is used as implementation evidence.
+**These are actual browser screenshots of the running Three.js game.** No generated scene or concept image is used as implementation evidence.
 
-Start with the [production/pilot comparison](evidence/before-after.jpg), then examine the two primary phone captures at their actual 852 × 393 viewport:
+![Bound notebook at BOSLUST — 852 × 393 touch landscape](evidence/book/phone-boslust-notebook-threads.jpg)
 
-![Woodland Archive exploration — actual game](evidence/phone-exploration.jpg)
+![Gold exploration icons at BOSLUST — same camera and viewport](evidence/book/phone-boslust-exploration.jpg)
 
-![Woodland Archive notebook — actual game, same BOSLUST pose](evidence/phone-notebook.jpg)
-
-| Evidence | What to inspect |
+| Current evidence | What to review |
 | --- | --- |
-| [Before / after](evidence/before-after.jpg) | Same BOSLUST pose and viewport; same recorded clue set; quiet HUD and editorial notebook |
-| [Mobile interaction states](evidence/mobile-states.jpg) | Real contextual action, selected item/feedback, map and observed memory |
-| [Smaller landscape](evidence/small-landscape.jpg) | 640 × 360 exploration/notebook/action; tutorial message and packing checklist |
-| [Desktop](evidence/desktop.jpg) | 1440 × 900; labeled chrome and bounded notebook width |
-| [Bright / dark backgrounds](evidence/contrast.jpg) | Production garden and BOSLUST dusk fixture; lighting code unchanged |
-| [Portrait fallback](evidence/portrait.jpg) | 393 × 852; top index and scrollable evidence |
+| [Desktop notebook](evidence/book/desktop-boslust-notebook-threads.jpg) | Bounded book, visible environment, copper thread marks and gold active tab |
+| [Smaller landscape notebook](evidence/book/small-boslust-notebook-threads.jpg) | 640 × 360, wrapping tabs and independently scrolling page |
+| [Recorded evidence](evidence/book/phone-boslust-notebook-evidence.jpg) | Real clues, readable symbols and text |
+| [Contextual interaction](evidence/book/phone-context-action.jpg) | Explicit action and gold action icon |
+| [Selection and short feedback](evidence/book/phone-held-feedback.jpg) | One selected item, original item picture and real message |
+| [Notebook map](evidence/book/phone-notebook-map.jpg) | Existing discovery-filtered map and back route |
+| [Dark BOSLUST](evidence/book/phone-boslust-dark.jpg) / [bright garden](evidence/book/phone-garden-bright.jpg) | Gold chrome against the actual environment |
+| [Portrait fallback](evidence/book/portrait-boslust-notebook-threads.jpg) | Map on a second navigation row; page scrolling |
 
-[Audit, source limitations and design system](UI-R02_AUDIT_AND_DESIGN.md) · [QA report and reproduction](UI-R02_QA_REPORT.md) · [All UI checks](evidence/ui-results.json) · [Capture provenance](evidence/captures.json) · [Sheet/source mapping](evidence/sheets.json)
+[Current revision QA and reproduction](UI-R02_BOOK_REVISION.md) · [Architecture and design system](UI-R02_AUDIT_AND_DESIGN.md) · [Current UI results](evidence/book/ui-results.json) · [Capture provenance](evidence/book/captures.json)
 
-## What is preserved
+The actual production Draden content includes arrival and next-step guidance. This appearance change preserves that logic; it does not invent completed threads or copy the reference's example counts. Aanwijzingen and Herinneringen remain based on recorded observations. Illustrated item icons and puzzle symbols retain their original colors.
 
-Draden, Aanwijzingen, Herinneringen and the existing Kaart route retain their real content and state filters. Progression and optional hints stay available. Illustrated item icons, item selection, puzzle symbols, interactions, save behavior, touch gestures and keyboard commands use their existing game paths. One overlay blocks world input and obscured HUD controls; action feedback stays accessible.
+The initial editorial version and its full-game validation remain available in the [historical QA report](UI-R02_QA_REPORT.md) and [production/first-pilot comparison](evidence/before-after.jpg).
 
-The production Draden panel still contains its pre-existing next-step guidance. This appearance pilot does not silently rewrite it into the DEV-01 research model or add new quest-log logic.
-
-## Visual decision required
-
-Judge the HUD's quietness, the notebook hierarchy/material restraint and mobile readability. Does this feel sufficiently like W2 / Woodland Archive, and are the notebook size and icon treatment appropriate for Feh Lu We?
-
-The five newly supplied images were unavailable. The earlier recovered W2 library-scene references informed this pilot; the later BOSLUST concepts and the owner's original HUD-free scene still require direct comparison. Re-upload those references before claiming fidelity to that final concept set.
-
-Physical Android/iPhone checks remain necessary for font appearance, display contrast and thumb comfort. Emulated browser captures are not physical-phone performance evidence. No merge or production deployment is part of this review.
+Owner visual approval remains the next gate. Inventory, pause/settings and puzzle interface expansion are deferred. Physical Android/iPhone font appearance, contrast and thumb comfort still need review. Draft PR only; no merge or production deployment.

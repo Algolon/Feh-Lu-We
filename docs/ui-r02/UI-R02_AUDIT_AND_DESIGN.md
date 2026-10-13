@@ -10,6 +10,8 @@ Two earlier W2 images were recovered and visually inspected: `FLW_UI_R01_W2_Fiel
 
 All game images in this review are real browser captures of the verified repository world. No generated environment, lighting alteration, concept composite or new art asset is used as implementation evidence.
 
+**Owner revision, 13 October:** the notebook reference displayed directly in the conversation was visually inspected. The owner explicitly requested a more notebook-like, smaller panel and copper/gold icons. This supersedes the initial side-index presentation: a green bound cover, layered paper edge, restrained binding, leaf masthead, gold active tabs and circular thread marks are now implemented in native CSS/SVG. The screenshot's example counts and completed threads are not copied into game state. The unavailable original attachment file was not read; this revision uses the image visible in the conversation.
+
 ## Architecture found in production
 
 | Area | Existing implementation | Pilot decision |
@@ -41,15 +43,15 @@ The real interaction picker already provides explicit labels such as `Bekijken: 
 | Role | Rule |
 | --- | --- |
 | Quiet chrome | Forest `#27382d`, charcoal `#17221d`, HUD `rgba(18,28,23,.88)`, pale text `#f1ebdc` |
-| Investigation | Paper `#eee7d8`, raised paper `#f7f2e7`, ink `#26302a`, secondary ink `#5e655a` |
-| Accent | Brass `#b9a16a` only on notebook access, active contextual action and feedback rule |
-| Typography | System sans for chrome/navigation; installed Iowan/Palatino/Georgia serif stack for notebook headings/evidence; no font download |
-| Spacing | 4/8/12/16/24px rhythm; content measures up to 68ch |
-| Silhouette | 4px general corners, 6px action corner; one paper plane with ruled divisions, no fantasy frame or parchment texture |
+| Investigation | Notebook paper `#f3e8d0`, raised paper `#fbf3e1`, ink `#38281c`, secondary ink `#6c5741` |
+| Accent | Brass `#c7a065`, HUD icon gold `#dbb878`, notebook icon copper `#87552e`; gold active notebook tab |
+| Typography | System sans for HUD; installed Iowan/Palatino/Georgia serif stack for notebook tabs/headings/evidence; no font download |
+| Spacing | 4/8/12/16/24px rhythm; notebook content measures up to 76ch |
+| Silhouette | 4px HUD corners, 6px action corner; bounded green cover, paper edges and spine, 8px tab corners; native gradients, no downloaded texture |
 | Icons | Small current-color SVG chrome icons; existing full-color item icons and puzzle symbols remain unchanged |
 | Feedback | Existing live status/toast messages and timings; small dark strip, positioned away from active action/selected item |
 | Interaction | Minimum 48px button/summary targets; selected tab distinguished by fill, keyboard state and text; visible focus outlines |
-| Responsive | Touch toolbar uses icons; desktop keeps labels/E cue; landscape side index, portrait top index; safe-area tokens retained |
+| Responsive | Touch toolbar uses icons; desktop keeps labels/E cue; notebook tabs at top, portrait map wraps to another row; bounded panel with independently scrolling page; safe-area tokens retained |
 | Motion | Short opacity/size transitions; no idle pulse or glow; existing reduced-motion setting and OS preference retained |
 
 No external font, texture, UI library, WebGL mesh, draw call or postprocessing pass is added. CSS and JS payload changes are recorded in the QA report. Contrast calculations cover the intended token combinations, not a claim of a full accessibility certification.

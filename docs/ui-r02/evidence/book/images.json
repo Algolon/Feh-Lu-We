@@ -1,0 +1,74 @@
+[
+  {
+    "file": "desktop-boslust-notebook-threads.jpg",
+    "sha256": "8cf47e18ee6c06784579c3b2eac50cebfbcc808c107b99db1ec61283e6fbef11",
+    "processing": "unaltered browser screenshot",
+    "capture": "desktop-boslust-notebook-threads"
+  },
+  {
+    "file": "phone-boslust-dark.jpg",
+    "sha256": "5e1832a6aff1e3bda99cab49e821c2289c5b6bc301a50ab32923084876789d23",
+    "processing": "unaltered browser screenshot",
+    "capture": "phone-boslust-dark"
+  },
+  {
+    "file": "phone-boslust-exploration.jpg",
+    "sha256": "a6fd27fe56533f62049ee85addc6d7109e389873bb24ec557cb3e45c0ab90399",
+    "processing": "unaltered browser screenshot",
+    "capture": "phone-boslust-exploration"
+  },
+  {
+    "file": "phone-boslust-notebook-evidence.jpg",
+    "sha256": "77c9020664eabcddf689435979517582a5e3bc4c8098969f90348fd53a12be1e",
+    "processing": "unaltered browser screenshot",
+    "capture": "phone-boslust-notebook-evidence"
+  },
+  {
+    "file": "phone-boslust-notebook-threads.jpg",
+    "sha256": "7e27ef857e25e17f535286da0ebbe9318234aeaeca57ac5d96b2c0e4b3111672",
+    "processing": "unaltered browser screenshot",
+    "capture": "phone-boslust-notebook-threads"
+  },
+  {
+    "file": "phone-context-action.jpg",
+    "sha256": "66ea09d19fdcc62e30521a3bf75dd910a858d54d185fcb4db1a4cc68f0102ce8",
+    "processing": "unaltered browser screenshot",
+    "capture": "phone-context-action"
+  },
+  {
+    "file": "phone-garden-bright.jpg",
+    "sha256": "94926b1d5d576dc772f08f7cd8e25e4094bce464f4db1d4258c217fbc2205869",
+    "processing": "unaltered browser screenshot",
+    "capture": "phone-garden-bright"
+  },
+  {
+    "file": "phone-held-feedback.jpg",
+    "sha256": "8fe48c2356d4007d793131f689cbbdcf80037b563d02b3f4b59863de5689093c",
+    "processing": "unaltered browser screenshot",
+    "capture": "phone-held-feedback"
+  },
+  {
+    "file": "phone-notebook-map.jpg",
+    "sha256": "6c851ec43aba457163d323591d190f4c82e1ea89754ad21a5f48123eaf2c7b6c",
+    "processing": "unaltered browser screenshot",
+    "capture": "phone-notebook-map"
+  },
+  {
+    "file": "phone-notebook-memory.jpg",
+    "sha256": "7f886a9c76b23e352ab7270ca3c392f8b794c5502910a16aeb3b301a6be10e14",
+    "processing": "unaltered browser screenshot",
+    "capture": "phone-notebook-memory"
+  },
+  {
+    "file": "portrait-boslust-notebook-threads.jpg",
+    "sha256": "1209ff8b6cfc5287f5915a0b8eff753f794115771e12b811e5f554ace5877136",
+    "processing": "unaltered browser screenshot",
+    "capture": "portrait-boslust-notebook-threads"
+  },
+  {
+    "file": "small-boslust-notebook-threads.jpg",
+    "sha256": "7e9604d9b287f6ecd2c22d64f29da9a25b283386afec21d9587562076e9a14dc",
+    "processing": "unaltered browser screenshot",
+    "capture": "small-boslust-notebook-threads"
+  }
+]
