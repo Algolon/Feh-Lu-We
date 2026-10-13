@@ -18,7 +18,7 @@ Geometry pilots: Library stack, north case, reading table; cottage table, west/e
 
 - Same loaded V3 world: DPR 1 / 1.25 / 1.5 / 1.75, then revisit 1 for drift.
 - One constant-coverage opaque Lambert panel, one draw, same camera/light/DPR: approximately 250k / 350k / 500k / 700k camera triangles. Full rectangle coverage is retained; regular subdivisions slightly overshoot target counts. Library native >250k: explicitly unattainable.
-- Fresh contexts: Lambert/Phong/Standard, 512/1024 timber, normals off, anisotropy 1/4, flat/smooth beveled normals, AA, 1024² shadows, crop/bias, ACES/Neutral. V0 and V3 both captured under identical crisp renderer settings.
+- Fresh contexts: Lambert/Phong/Standard, 512/1024 timber, normals off, anisotropy 1/4, flat/smooth beveled normals, AA high-quality contexts (also four fixture pool lights rather than three), 1024² shadows, crop/bias, ACES/Neutral. V0 and V3 both captured under identical crisp renderer settings.
 - KTX2: recovered immutable ETC1S timber blob, compatible r186 loader/decoder, compared to a lossless WebP from its BC7 decoded round-trip. This measures format/delivery/storage behaviour; it cannot judge original encoding fidelity. UASTC rerun deferred.
 - 172 deterministic V3/V4 steps across large vegetation, hero fixture, cottage architecture and micro card, approach/retreat. Videos play at four presentation frames/s; this is **not gameplay FPS or a collision-walk recording**.
 
@@ -38,6 +38,8 @@ node scripts/vfc01-ktx.mjs
 node scripts/vfc01-lod.mjs
 node scripts/vfc01-run.mjs isolation
 node scripts/vfc01-phone-loop.mjs
+node scripts/vfc01-selected.mjs
+node scripts/vfc01-report.mjs
 ```
 
 Pillow and ffmpeg are required for lossless screenshots and video packaging. Each script uses an in-process Vite server + Chromium, avoiding shell network namespace assumptions. Run rendering/timing jobs **sequentially**, and do not edit lab source during capture (Vite HMR invalidates the session). JSON includes current-generation metadata and errors. Images are lossless WebP; PNG intermediates are archived outside Git.
@@ -51,3 +53,5 @@ Manual game entry `/Feh-Lu-We/vfc01.html`. URL controls: `v`, `camera`, `dpr`, `
 All changes are new VFC modules/entry/config, scripts/docs and small derived/decoder assets. Game entry, builders, puzzles, IDs, save schema, global materials, culling code and DEV-04D budgets are untouched. Review memory storage is selected **before dynamic import of Game/state**. Branch checkpoints protect the recovery; no merge or deployment.
 
 The scoped Batcher hook is restored in finally after building. Private field visibility adapters are lab-only and require typed production interfaces before adoption. Extra supports follow the same parent chunk visibility. The isolated build writes `dist-vfc01`; it is not committed. Normal production build copies experimental public assets on this branch even though it never imports the lab; do not deploy this branch or wholesale merge the experiment.
+
+Final corrections: neutral mode disables the fixture pool as well as light intensity updates; extra supports follow the actual `mLib`/cottage parent before drawing. Earlier first-frame captures were replaced. Broad timing controls used source 62e6ab7 and warm renders; their steady player submissions match the final matrix. The successful-family follow-up `selected=1` preserves production plaster/paint/fabric and is measured separately at DPR 1 and 1.25. The extra grounded front pose is identical across those comparisons, not a new zone or changed FOV.

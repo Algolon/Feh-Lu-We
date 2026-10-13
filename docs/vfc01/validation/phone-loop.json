@@ -1,0 +1,59 @@
+{
+  "method": "Control-flow check only, not physical phone FPS",
+  "rows": [
+    {
+      "phase": "start",
+      "counts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "phase": "camera-change",
+      "counts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "ok": true
+    },
+    {
+      "phase": "sample-warmup",
+      "counts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "ok": true
+    }
+  ]
+}

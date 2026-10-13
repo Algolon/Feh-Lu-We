@@ -1,6 +1,6 @@
 # VFC-01 — recovery checkpoint
 
-The initial calibration workspace was removed by automated workspace maintenance after local commit but before the GitHub tree/ref upload completed. This is a recovery checkpoint, not a completed evidence package.
+The initial calibration workspace was removed by automated workspace maintenance after local commit but before the GitHub tree/ref upload completed. This document preserves that recovery checkpoint. The completed reconstructed evidence package is now indexed in README.md; the initial lost run remains historical only.
 
 ## Provenance
 
@@ -31,3 +31,7 @@ Historical checks reported 267 unit tests, 18 DEV-04D browser cases, five-varian
 ## Recovery rule
 
 Rebuild only isolated VFC files from the same verified production base, recapture and remeasure the matrix, and commit/push checkpoints before large evidence uploads. Keep retained notes explicitly historical. Stop for owner review before any rollout.
+
+## Recovery completion
+
+The runtime, matrix, selected-family follow-up, format probe, deterministic sequences and reports were rebuilt and freshly captured. Independent source checkpoints were pushed before packaging the evidence. See README.md and EVIDENCE_MANIFEST.json for the current deliverable. Physical-phone validation remains pending; no production rollout occurred.

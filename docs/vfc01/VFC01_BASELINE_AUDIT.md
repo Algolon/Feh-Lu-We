@@ -16,7 +16,7 @@ Owner references inspected in the initial run were Made by Hand `82044.jpg` / `8
 
 `src/core/game.ts`: Three.js r186.1 WebGLRenderer, WebGL2 required, high-performance preference. Antialias is chosen at context creation from quality; changing quality later cannot change AA. ACESFilmicToneMapping, exposure 1.15; Neutral is an existing optional control. Output is Three's sRGB default. Low caps DPR at 1 and disables shadows; high caps at 1.5. Coarse pointer defaults low in `state.ts`.
 
-High uses PCFShadowMap, 1024² sun map on coarse pointer / 2048² desktop, shadow camera ±28m, near 1/far 160, bias −0.0006, normalBias 0.04. LightPool supplies three low/four high point lights, ranks fixtures using rooms/view/LOS and smoothly changes indoor contribution. The lab fixes three lights, tests AA in fresh contexts and explicitly enables 1024² sun shadows independently of quality.
+High uses PCFShadowMap, 1024² sun map on coarse pointer / 2048² desktop, shadow camera ±28m, near 1/far 160, bias −0.0006, normalBias 0.04. LightPool supplies three low/four high point lights, ranks fixtures using rooms/view/LOS and smoothly changes indoor contribution. The lab fixes three lights, tests AA in fresh high-quality contexts (four fixture pool lights) and explicitly enables 1024² sun shadows independently of quality. Thus the AA control includes a quality-context/light-pool change; matched V0/V3 crisp comparisons hold it constant.
 
 `env.ts`: shader sky dome, directional sun, hemisphere fill, linear fog and progress-driven afternoon/evening. Open haze 16–165m; woodland 7–102m; inside 40–220m. This experiment does not change the sky/dusk design or the separate ENV-L01 track.
 

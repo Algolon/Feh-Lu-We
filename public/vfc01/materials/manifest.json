@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-13",
+  "source": {
+    "site": "Poly Haven",
+    "title": "Wood Table 001",
+    "url": "https://polyhaven.com/a/wood_table_001",
+    "license": "CC0",
+    "licenseUrl": "https://polyhaven.com/license",
+    "originalDownloadDate": "2026-10-13",
+    "sourceSha256": "63ae5cd186197b40f18bc020fe2b652bb08df4d9fc6240c6cbf8a7e3bc32c096",
+    "modifications": "Initial run: 2048 source JPEG -> grayscale/exposure normalisation/reduced contrast/low-pass -> 1024 -> ETC1S BasisU q180 comp_level2/full mips. Raw source was removed by workspace maintenance. Exact immutable KTX blob recovered from GitHub SHA 68fbcb22b3485526a3e36663ff8efdca1d212957. Fresh derived lossless WebP is a BC7 decoded GPU round-trip; original encoding loss cannot be evaluated."
+  },
+  "files": [
+    {
+      "file": "timber-decoded.webp",
+      "bytes": 324630,
+      "sha256": "898f34d31bb5c644335f2cfc37576a8b4a490fa6998bb824725e2f3841fdde0f"
+    },
+    {
+      "file": "timber-etc1s.ktx2",
+      "bytes": 186190,
+      "sha256": "65acbf2a87ef54935ad7d04c9fc50935baece3a9042dc506e25132401b0da939"
+    }
+  ],
+  "runtimeSwatches": {
+    "source": "src/vfc01/materials.ts",
+    "families": [
+      "timber",
+      "plaster",
+      "limestone",
+      "tile",
+      "fabric",
+      "paint"
+    ],
+    "license": "Original authored procedural code; no external raster source",
+    "resolution": "timber 512/1024; other bases/data maps 512"
+  },
+  "decoder": {
+    "source": "installed Three r186.1 examples/jsm/libs/basis; compatible KTX2Loader",
+    "license": "Three integration: ../basis/THREE-LICENSE.txt; Basis Universal: ../basis/BASIS-LICENSE.txt (Apache 2.0)",
+    "files": [
+      "../basis/basis_transcoder.js",
+      "../basis/basis_transcoder.wasm"
+    ]
+  }
+}

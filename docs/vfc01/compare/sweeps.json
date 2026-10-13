@@ -1,0 +1,5406 @@
+{
+  "captureGeneration": "reconstructed fresh run",
+  "rows": [
+    {
+      "kind": "dpr",
+      "value": 1,
+      "camera": "library-player",
+      "image": "compare/sweeps/dpr-1-library-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 309.09999999962747,
+      "p95Ms": 422.19999999925494,
+      "minMs": 212.09999999962747,
+      "maxMs": 6365.800000000745,
+      "drawCalls": 104,
+      "triangles": 291924,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 66,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 104,
+      "cameraTriangles": 291924,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "dpr",
+      "value": 1,
+      "camera": "cottage-player",
+      "image": "compare/sweeps/dpr-1-cottage-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 280.5,
+      "p95Ms": 331,
+      "minMs": 225,
+      "maxMs": 4417.399999999441,
+      "drawCalls": 96,
+      "triangles": 201039,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 57,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 96,
+      "cameraTriangles": 201039,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    },
+    {
+      "kind": "dpr",
+      "value": 1.25,
+      "camera": "library-player",
+      "image": "compare/sweeps/dpr-1.25-library-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 364,
+      "p95Ms": 568.5,
+      "minMs": 259.09999999962747,
+      "maxMs": 4701.700000000186,
+      "drawCalls": 104,
+      "triangles": 291924,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 66,
+      "shadows": false,
+      "buffer": {
+        "width": 1143,
+        "height": 515,
+        "pixels": 588645
+      },
+      "dpr": 1.25,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 104,
+      "cameraTriangles": 291924,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "dpr",
+      "value": 1.25,
+      "camera": "cottage-player",
+      "image": "compare/sweeps/dpr-1.25-cottage-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 405.70000000018626,
+      "p95Ms": 566.2999999998137,
+      "minMs": 263.20000000018626,
+      "maxMs": 3804.399999999441,
+      "drawCalls": 96,
+      "triangles": 201039,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 57,
+      "shadows": false,
+      "buffer": {
+        "width": 1143,
+        "height": 515,
+        "pixels": 588645
+      },
+      "dpr": 1.25,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 96,
+      "cameraTriangles": 201039,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    },
+    {
+      "kind": "dpr",
+      "value": 1.5,
+      "camera": "library-player",
+      "image": "compare/sweeps/dpr-1.5-library-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 505.5,
+      "p95Ms": 666.5,
+      "minMs": 388.80000000074506,
+      "maxMs": 5491,
+      "drawCalls": 104,
+      "triangles": 291924,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 66,
+      "shadows": false,
+      "buffer": {
+        "width": 1372,
+        "height": 618,
+        "pixels": 847896
+      },
+      "dpr": 1.5,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 104,
+      "cameraTriangles": 291924,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "dpr",
+      "value": 1.5,
+      "camera": "cottage-player",
+      "image": "compare/sweeps/dpr-1.5-cottage-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 512.4000000003725,
+      "p95Ms": 674.1000000005588,
+      "minMs": 369.90000000037253,
+      "maxMs": 5075.299999999814,
+      "drawCalls": 96,
+      "triangles": 201039,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 57,
+      "shadows": false,
+      "buffer": {
+        "width": 1372,
+        "height": 618,
+        "pixels": 847896
+      },
+      "dpr": 1.5,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 96,
+      "cameraTriangles": 201039,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    },
+    {
+      "kind": "dpr",
+      "value": 1.75,
+      "camera": "library-player",
+      "image": "compare/sweeps/dpr-1.75-library-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 747.4000000003725,
+      "p95Ms": 1003.2000000001863,
+      "minMs": 574.5,
+      "maxMs": 7853.700000000186,
+      "drawCalls": 104,
+      "triangles": 291924,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 66,
+      "shadows": false,
+      "buffer": {
+        "width": 1601,
+        "height": 721,
+        "pixels": 1154321
+      },
+      "dpr": 1.75,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 104,
+      "cameraTriangles": 291924,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "dpr",
+      "value": 1.75,
+      "camera": "cottage-player",
+      "image": "compare/sweeps/dpr-1.75-cottage-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 695,
+      "p95Ms": 849.8999999994412,
+      "minMs": 522.6999999992549,
+      "maxMs": 7055.699999999255,
+      "drawCalls": 96,
+      "triangles": 201039,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 57,
+      "shadows": false,
+      "buffer": {
+        "width": 1601,
+        "height": 721,
+        "pixels": 1154321
+      },
+      "dpr": 1.75,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 96,
+      "cameraTriangles": 201039,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    },
+    {
+      "kind": "dpr",
+      "value": 1,
+      "camera": "library-player",
+      "image": "compare/sweeps/dpr-1-library-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 333.40000000037253,
+      "p95Ms": 451.80000000074506,
+      "minMs": 209.20000000018626,
+      "maxMs": 3464.2000000001863,
+      "drawCalls": 104,
+      "triangles": 291924,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 66,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 104,
+      "cameraTriangles": 291924,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "dpr",
+      "value": 1,
+      "camera": "cottage-player",
+      "image": "compare/sweeps/dpr-1-cottage-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 296.29999999981374,
+      "p95Ms": 386.40000000037253,
+      "minMs": 208.40000000037253,
+      "maxMs": 3141.2000000001863,
+      "drawCalls": 96,
+      "triangles": 201039,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 57,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 96,
+      "cameraTriangles": 201039,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    },
+    {
+      "kind": "triangles",
+      "value": 250000,
+      "camera": "library-player",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 317.40000000037253,
+      "p95Ms": 429.90000000037253,
+      "minMs": 215.59999999962747,
+      "maxMs": 4263.5,
+      "drawCalls": 105,
+      "triangles": 291928,
+      "sourceTriangles": 742611,
+      "geometryAttributeBytes": 88312404,
+      "meshCount": 769,
+      "instancedCount": 43,
+      "materialCount": 139,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 89,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 66,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 105,
+      "cameraTriangles": 291928,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "triangles",
+      "value": 350000,
+      "camera": "library-player",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 377.1000000005588,
+      "p95Ms": 484.79999999981374,
+      "minMs": 245.59999999962747,
+      "maxMs": 3889.2000000001863,
+      "drawCalls": 105,
+      "triangles": 350064,
+      "sourceTriangles": 800747,
+      "geometryAttributeBytes": 89602212,
+      "meshCount": 769,
+      "instancedCount": 43,
+      "materialCount": 139,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 89,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 66,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 105,
+      "cameraTriangles": 350064,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "triangles",
+      "value": 500000,
+      "camera": "library-player",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 406.8999999994412,
+      "p95Ms": 498.8999999994412,
+      "minMs": 276.59999999962747,
+      "maxMs": 4261.5,
+      "drawCalls": 105,
+      "triangles": 500582,
+      "sourceTriangles": 951265,
+      "geometryAttributeBytes": 94175316,
+      "meshCount": 769,
+      "instancedCount": 43,
+      "materialCount": 139,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 89,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 66,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 105,
+      "cameraTriangles": 500582,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "triangles",
+      "value": 700000,
+      "camera": "library-player",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 439.79999999981374,
+      "p95Ms": 564,
+      "minMs": 308.8999999994412,
+      "maxMs": 4947.200000000186,
+      "drawCalls": 105,
+      "triangles": 700532,
+      "sourceTriangles": 1151215,
+      "geometryAttributeBytes": 99782172,
+      "meshCount": 769,
+      "instancedCount": 43,
+      "materialCount": 139,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 89,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 66,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 105,
+      "cameraTriangles": 700532,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "triangles",
+      "value": 250000,
+      "camera": "cottage-player",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 312.40000000037253,
+      "p95Ms": 508.3999999994412,
+      "minMs": 252.09999999962747,
+      "maxMs": 5216.0999999996275,
+      "drawCalls": 97,
+      "triangles": 250023,
+      "sourceTriangles": 791591,
+      "geometryAttributeBytes": 89399884,
+      "meshCount": 769,
+      "instancedCount": 43,
+      "materialCount": 139,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 89,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 57,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 97,
+      "cameraTriangles": 250023,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    },
+    {
+      "kind": "triangles",
+      "value": 350000,
+      "camera": "cottage-player",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 364.6000000005588,
+      "p95Ms": 434.70000000018626,
+      "minMs": 229.19999999925494,
+      "maxMs": 4086.600000000559,
+      "drawCalls": 97,
+      "triangles": 350097,
+      "sourceTriangles": 891665,
+      "geometryAttributeBytes": 92503316,
+      "meshCount": 769,
+      "instancedCount": 43,
+      "materialCount": 139,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 89,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 57,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 97,
+      "cameraTriangles": 350097,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    },
+    {
+      "kind": "triangles",
+      "value": 500000,
+      "camera": "cottage-player",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 348.30000000074506,
+      "p95Ms": 454.40000000037253,
+      "minMs": 266.8999999994412,
+      "maxMs": 4304.300000000745,
+      "drawCalls": 97,
+      "triangles": 500577,
+      "sourceTriangles": 1042145,
+      "geometryAttributeBytes": 96724052,
+      "meshCount": 769,
+      "instancedCount": 43,
+      "materialCount": 139,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 89,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 57,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 97,
+      "cameraTriangles": 500577,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    },
+    {
+      "kind": "triangles",
+      "value": 700000,
+      "camera": "cottage-player",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 212.90000000037253,
+      "p95Ms": 297.09999999962747,
+      "minMs": 185.90000000037253,
+      "maxMs": 2717.600000000559,
+      "drawCalls": 97,
+      "triangles": 700039,
+      "sourceTriangles": 1241607,
+      "geometryAttributeBytes": 102316188,
+      "meshCount": 769,
+      "instancedCount": 43,
+      "materialCount": 139,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 89,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 57,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 97,
+      "cameraTriangles": 700039,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "baseline",
+      "params": {
+        "v": "V0"
+      },
+      "camera": "library-player",
+      "image": "compare/sweeps/baseline-library-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 297.70000000018626,
+      "p95Ms": 389.59999999962747,
+      "minMs": 186.1000000005588,
+      "maxMs": 4963.600000000559,
+      "drawCalls": 93,
+      "triangles": 286772,
+      "sourceTriangles": 735863,
+      "geometryAttributeBytes": 87421980,
+      "meshCount": 754,
+      "instancedCount": 43,
+      "materialCount": 132,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2
+      },
+      "textureCount": 76,
+      "textureBytes": 43994447,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 60,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 93,
+      "cameraTriangles": 286772,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 0,
+        "timber": 0,
+        "beveled": 0,
+        "objects": {},
+        "addedTriangles": 0
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "baseline",
+      "params": {
+        "v": "V0"
+      },
+      "camera": "cottage-player",
+      "image": "compare/sweeps/baseline-cottage-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 315.90000000037253,
+      "p95Ms": 409.5,
+      "minMs": 244.5,
+      "maxMs": 4202.200000000186,
+      "drawCalls": 94,
+      "triangles": 199731,
+      "sourceTriangles": 735863,
+      "geometryAttributeBytes": 87421980,
+      "meshCount": 754,
+      "instancedCount": 43,
+      "materialCount": 132,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2
+      },
+      "textureCount": 76,
+      "textureBytes": 43994447,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 53,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 94,
+      "cameraTriangles": 199731,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 0,
+        "timber": 0,
+        "beveled": 0,
+        "objects": {},
+        "addedTriangles": 0
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "material-lambert",
+      "params": {
+        "model": "lambert"
+      },
+      "camera": "library-player",
+      "image": "compare/sweeps/material-lambert-library-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 194.29999999981374,
+      "p95Ms": 325.90000000037253,
+      "minMs": 152.1000000005588,
+      "maxMs": 3345.4000000003725,
+      "drawCalls": 104,
+      "triangles": 291924,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 94,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2
+      },
+      "textureCount": 85,
+      "textureBytes": 60771660,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 66,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 104,
+      "cameraTriangles": 291924,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "material-lambert",
+      "params": {
+        "model": "lambert"
+      },
+      "camera": "cottage-player",
+      "image": "compare/sweeps/material-lambert-cottage-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 223,
+      "p95Ms": 454.09999999962747,
+      "minMs": 146.5,
+      "maxMs": 2601.7999999998137,
+      "drawCalls": 96,
+      "triangles": 201039,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 94,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2
+      },
+      "textureCount": 85,
+      "textureBytes": 60771660,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 57,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 96,
+      "cameraTriangles": 201039,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "material-phong",
+      "params": {
+        "model": "phong"
+      },
+      "camera": "library-player",
+      "image": "compare/sweeps/material-phong-library-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 217.5,
+      "p95Ms": 404.20000000018626,
+      "minMs": 167.20000000018626,
+      "maxMs": 3098,
+      "drawCalls": 104,
+      "triangles": 291924,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 8
+      },
+      "textureCount": 85,
+      "textureBytes": 60771660,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 66,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 104,
+      "cameraTriangles": 291924,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "material-phong",
+      "params": {
+        "model": "phong"
+      },
+      "camera": "cottage-player",
+      "image": "compare/sweeps/material-phong-cottage-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 200.3999999994412,
+      "p95Ms": 307,
+      "minMs": 165.59999999962747,
+      "maxMs": 2650.899999999441,
+      "drawCalls": 96,
+      "triangles": 201039,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 8
+      },
+      "textureCount": 85,
+      "textureBytes": 60771660,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 57,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 96,
+      "cameraTriangles": 201039,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "no-normal",
+      "params": {
+        "normal": "0"
+      },
+      "camera": "library-player",
+      "image": "compare/sweeps/no-normal-library-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 220.5,
+      "p95Ms": 294,
+      "minMs": 171.59999999962747,
+      "maxMs": 3592,
+      "drawCalls": 104,
+      "triangles": 291924,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 84,
+      "textureBytes": 59373559,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 66,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 104,
+      "cameraTriangles": 291924,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "no-normal",
+      "params": {
+        "normal": "0"
+      },
+      "camera": "cottage-player",
+      "image": "compare/sweeps/no-normal-cottage-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 197.30000000074506,
+      "p95Ms": 269.59999999962747,
+      "minMs": 164.5,
+      "maxMs": 3385.2000000001863,
+      "drawCalls": 96,
+      "triangles": 201039,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 84,
+      "textureBytes": 59373559,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 57,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 96,
+      "cameraTriangles": 201039,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "timber512",
+      "params": {
+        "tex": "512"
+      },
+      "camera": "library-player",
+      "image": "compare/sweeps/timber512-library-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 240.3999999994412,
+      "p95Ms": 437.6000000005588,
+      "minMs": 199.8999999994412,
+      "maxMs": 3371.2999999998137,
+      "drawCalls": 104,
+      "triangles": 291924,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 59373558,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 66,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 104,
+      "cameraTriangles": 291924,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "timber512",
+      "params": {
+        "tex": "512"
+      },
+      "camera": "cottage-player",
+      "image": "compare/sweeps/timber512-cottage-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 212.29999999981374,
+      "p95Ms": 246.6000000005588,
+      "minMs": 150.29999999981374,
+      "maxMs": 2706.2000000001863,
+      "drawCalls": 96,
+      "triangles": 201039,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 59373558,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 57,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 96,
+      "cameraTriangles": 201039,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "candidate",
+      "params": {
+        "tex": "512",
+        "normal": "0",
+        "model": "phong",
+        "dpr": "1.25"
+      },
+      "camera": "library-player",
+      "image": "compare/sweeps/candidate-library-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 365.6000000005588,
+      "p95Ms": 579.2000000001863,
+      "minMs": 246.59999999962747,
+      "maxMs": 5837.4000000003725,
+      "drawCalls": 104,
+      "triangles": 291924,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 8
+      },
+      "textureCount": 82,
+      "textureBytes": 52383053,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 66,
+      "shadows": false,
+      "buffer": {
+        "width": 1143,
+        "height": 515,
+        "pixels": 588645
+      },
+      "dpr": 1.25,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 104,
+      "cameraTriangles": 291924,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "candidate",
+      "params": {
+        "tex": "512",
+        "normal": "0",
+        "model": "phong",
+        "dpr": "1.25"
+      },
+      "camera": "cottage-player",
+      "image": "compare/sweeps/candidate-cottage-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 276.70000000018626,
+      "p95Ms": 384.5,
+      "minMs": 221.20000000018626,
+      "maxMs": 3739.5,
+      "drawCalls": 96,
+      "triangles": 201039,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 8
+      },
+      "textureCount": 82,
+      "textureBytes": 52383053,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 57,
+      "shadows": false,
+      "buffer": {
+        "width": 1143,
+        "height": 515,
+        "pixels": 588645
+      },
+      "dpr": 1.25,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 96,
+      "cameraTriangles": 201039,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "anisotropy1",
+      "params": {
+        "aniso": "1"
+      },
+      "camera": "library-player",
+      "image": "compare/sweeps/anisotropy1-library-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 179.8999999994412,
+      "p95Ms": 445.59999999962747,
+      "minMs": 149.5,
+      "maxMs": 7130.5999999996275,
+      "drawCalls": 104,
+      "triangles": 291924,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 66,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 104,
+      "cameraTriangles": 291924,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "anisotropy1",
+      "params": {
+        "aniso": "1"
+      },
+      "camera": "cottage-player",
+      "image": "compare/sweeps/anisotropy1-cottage-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 241.79999999981374,
+      "p95Ms": 393.5,
+      "minMs": 185.90000000037253,
+      "maxMs": 3447.399999999441,
+      "drawCalls": 96,
+      "triangles": 201039,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 57,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 96,
+      "cameraTriangles": 201039,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "flat-normals",
+      "params": {
+        "normals": "flat"
+      },
+      "camera": "library-player",
+      "image": "compare/sweeps/flat-normals-library-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 309.80000000074506,
+      "p95Ms": 459.59999999962747,
+      "minMs": 219.29999999981374,
+      "maxMs": 6089.200000000186,
+      "drawCalls": 104,
+      "triangles": 291924,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 66,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 104,
+      "cameraTriangles": 291924,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "flat-normals",
+      "params": {
+        "normals": "flat"
+      },
+      "camera": "cottage-player",
+      "image": "compare/sweeps/flat-normals-cottage-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 376.40000000037253,
+      "p95Ms": 605.7000000001863,
+      "minMs": 221.8999999994412,
+      "maxMs": 4555.200000000186,
+      "drawCalls": 96,
+      "triangles": 201039,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 57,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 96,
+      "cameraTriangles": 201039,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "MSAA",
+      "params": {
+        "aa": "1"
+      },
+      "camera": "library-player",
+      "image": "compare/sweeps/MSAA-library-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 891.5,
+      "p95Ms": 1277.6000000005588,
+      "minMs": 643.8000000007451,
+      "maxMs": 13184.699999999255,
+      "drawCalls": 104,
+      "triangles": 291924,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 66,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 104,
+      "cameraTriangles": 291924,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "MSAA",
+      "params": {
+        "aa": "1"
+      },
+      "camera": "cottage-player",
+      "image": "compare/sweeps/MSAA-cottage-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 1071,
+      "p95Ms": 1308,
+      "minMs": 567.5999999996275,
+      "maxMs": 10980.899999999441,
+      "drawCalls": 96,
+      "triangles": 201039,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 57,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 96,
+      "cameraTriangles": 201039,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "shadow",
+      "params": {
+        "shadow": "1"
+      },
+      "camera": "library-player",
+      "image": "compare/sweeps/shadow-library-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 656.4000000003725,
+      "p95Ms": 1166.3999999994412,
+      "minMs": 454,
+      "maxMs": 9713.799999999814,
+      "drawCalls": 168,
+      "triangles": 585092,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 66,
+      "shadows": true,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 104,
+      "cameraTriangles": 291924,
+      "shadowCalls": 64,
+      "shadowTriangles": 293168,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "shadow",
+      "params": {
+        "shadow": "1"
+      },
+      "camera": "cottage-player",
+      "image": "compare/sweeps/shadow-cottage-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 387.8999999994412,
+      "p95Ms": 605.2000000001863,
+      "minMs": 307.59999999962747,
+      "maxMs": 6167.800000000745,
+      "drawCalls": 115,
+      "triangles": 287286,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 57,
+      "shadows": true,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 96,
+      "cameraTriangles": 201039,
+      "shadowCalls": 19,
+      "shadowTriangles": 86247,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "crisp",
+      "params": {
+        "dpr": "1.5",
+        "aa": "1",
+        "shadow": "1"
+      },
+      "camera": "library-player",
+      "image": "compare/sweeps/crisp-library-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 1777.2000000001863,
+      "p95Ms": 2517.5999999996275,
+      "minMs": 1434.7000000001863,
+      "maxMs": 15496.899999999441,
+      "drawCalls": 168,
+      "triangles": 585092,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 66,
+      "shadows": true,
+      "buffer": {
+        "width": 1372,
+        "height": 618,
+        "pixels": 847896
+      },
+      "dpr": 1.5,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 104,
+      "cameraTriangles": 291924,
+      "shadowCalls": 64,
+      "shadowTriangles": 293168,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "crisp",
+      "params": {
+        "dpr": "1.5",
+        "aa": "1",
+        "shadow": "1"
+      },
+      "camera": "cottage-player",
+      "image": "compare/sweeps/crisp-cottage-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 1005.8000000007451,
+      "p95Ms": 1726.5999999996275,
+      "minMs": 788.7000000001863,
+      "maxMs": 12793.5,
+      "drawCalls": 115,
+      "triangles": 287286,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 57,
+      "shadows": true,
+      "buffer": {
+        "width": 1372,
+        "height": 618,
+        "pixels": 847896
+      },
+      "dpr": 1.5,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 96,
+      "cameraTriangles": 201039,
+      "shadowCalls": 19,
+      "shadowTriangles": 86247,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "baseline-crisp",
+      "params": {
+        "v": "V0",
+        "dpr": "1.5",
+        "aa": "1",
+        "shadow": "1"
+      },
+      "camera": "library-player",
+      "image": "compare/sweeps/baseline-crisp-library-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 1279.5,
+      "p95Ms": 2515.7999999998137,
+      "minMs": 802,
+      "maxMs": 13377.799999999814,
+      "drawCalls": 151,
+      "triangles": 574528,
+      "sourceTriangles": 735863,
+      "geometryAttributeBytes": 87421980,
+      "meshCount": 754,
+      "instancedCount": 43,
+      "materialCount": 132,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2
+      },
+      "textureCount": 76,
+      "textureBytes": 43994447,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 60,
+      "shadows": true,
+      "buffer": {
+        "width": 1372,
+        "height": 618,
+        "pixels": 847896
+      },
+      "dpr": 1.5,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 93,
+      "cameraTriangles": 286772,
+      "shadowCalls": 58,
+      "shadowTriangles": 287756,
+      "pilotStats": {
+        "affected": 0,
+        "timber": 0,
+        "beveled": 0,
+        "objects": {},
+        "addedTriangles": 0
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "baseline-crisp",
+      "params": {
+        "v": "V0",
+        "dpr": "1.5",
+        "aa": "1",
+        "shadow": "1"
+      },
+      "camera": "cottage-player",
+      "image": "compare/sweeps/baseline-crisp-cottage-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 1362,
+      "p95Ms": 2002.9000000003725,
+      "minMs": 896.1000000005588,
+      "maxMs": 14241.600000000559,
+      "drawCalls": 111,
+      "triangles": 284646,
+      "sourceTriangles": 735863,
+      "geometryAttributeBytes": 87421980,
+      "meshCount": 754,
+      "instancedCount": 43,
+      "materialCount": 132,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2
+      },
+      "textureCount": 76,
+      "textureBytes": 43994447,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 53,
+      "shadows": true,
+      "buffer": {
+        "width": 1372,
+        "height": 618,
+        "pixels": 847896
+      },
+      "dpr": 1.5,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 94,
+      "cameraTriangles": 199731,
+      "shadowCalls": 17,
+      "shadowTriangles": 84915,
+      "pilotStats": {
+        "affected": 0,
+        "timber": 0,
+        "beveled": 0,
+        "objects": {},
+        "addedTriangles": 0
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "cropped-shadow",
+      "params": {
+        "dpr": "1.5",
+        "aa": "1",
+        "shadow": "1",
+        "shadowextent": "12",
+        "bias": ".06"
+      },
+      "camera": "library-player",
+      "image": "compare/sweeps/cropped-shadow-library-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 1818.5,
+      "p95Ms": 2926.2000000001863,
+      "minMs": 1467.1000000005588,
+      "maxMs": 16438.699999999255,
+      "drawCalls": 165,
+      "triangles": 583172,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 66,
+      "shadows": true,
+      "buffer": {
+        "width": 1372,
+        "height": 618,
+        "pixels": 847896
+      },
+      "dpr": 1.5,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 104,
+      "cameraTriangles": 291924,
+      "shadowCalls": 61,
+      "shadowTriangles": 291248,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "cropped-shadow",
+      "params": {
+        "dpr": "1.5",
+        "aa": "1",
+        "shadow": "1",
+        "shadowextent": "12",
+        "bias": ".06"
+      },
+      "camera": "cottage-player",
+      "image": "compare/sweeps/cropped-shadow-cottage-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 1353.7999999998137,
+      "p95Ms": 1782.7000000001863,
+      "minMs": 808.0999999996275,
+      "maxMs": 24257.5,
+      "drawCalls": 113,
+      "triangles": 250377,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 57,
+      "shadows": true,
+      "buffer": {
+        "width": 1372,
+        "height": 618,
+        "pixels": 847896
+      },
+      "dpr": 1.5,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 96,
+      "cameraTriangles": 201039,
+      "shadowCalls": 17,
+      "shadowTriangles": 49338,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "neutral-tone",
+      "params": {
+        "tone": "neutral"
+      },
+      "camera": "library-player",
+      "image": "compare/sweeps/neutral-tone-library-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 323.59999999962747,
+      "p95Ms": 431.1000000005588,
+      "minMs": 245.6000000005588,
+      "maxMs": 4950,
+      "drawCalls": 104,
+      "triangles": 291924,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 66,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 104,
+      "cameraTriangles": 291924,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 81.89099843694666,
+          "projectedPx": 0.33564959373880426,
+          "on": false,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": false,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": false,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 0,
+            "mid": 1,
+            "far": 40,
+            "xfar": 925,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 3,
+            "xfarInView": 197
+          },
+          "bushes": {
+            "near": 0,
+            "mid": 0,
+            "far": 19,
+            "xfar": 9,
+            "nearInView": 0,
+            "midInView": 0,
+            "farInView": 0,
+            "xfarInView": 0
+          },
+          "plantsShown": 73
+        }
+      }
+    },
+    {
+      "kind": "renderer",
+      "value": "neutral-tone",
+      "params": {
+        "tone": "neutral"
+      },
+      "camera": "cottage-player",
+      "image": "compare/sweeps/neutral-tone-cottage-player.webp",
+      "method": "SwiftShader render + synchronous readPixels fence; not phone FPS",
+      "frames": 30,
+      "medianMs": 403.09999999962747,
+      "p95Ms": 616.2999999998137,
+      "minMs": 280.29999999981374,
+      "maxMs": 4217.800000000745,
+      "drawCalls": 96,
+      "triangles": 201039,
+      "sourceTriangles": 742607,
+      "geometryAttributeBytes": 88312188,
+      "meshCount": 768,
+      "instancedCount": 43,
+      "materialCount": 138,
+      "materialTypes": {
+        "ShaderMaterial": 3,
+        "MeshLambertMaterial": 88,
+        "MeshBasicMaterial": 39,
+        "MeshPhongMaterial": 2,
+        "MeshStandardMaterial": 6
+      },
+      "textureCount": 87,
+      "textureBytes": 63567862,
+      "alphaMeshProxy": 45,
+      "shadowCasterProxy": 57,
+      "shadows": false,
+      "buffer": {
+        "width": 915,
+        "height": 412,
+        "pixels": 376980
+      },
+      "dpr": 1,
+      "viewport": {
+        "width": 915,
+        "height": 412
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gameFrameStats": {
+        "fps": 0,
+        "medianMs": 0,
+        "p95Ms": 0,
+        "frames": 0
+      },
+      "cameraCalls": 96,
+      "cameraTriangles": 201039,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "pilotStats": {
+        "affected": 2235,
+        "timber": 825,
+        "beveled": 59,
+        "objects": {
+          "north-case": 18,
+          "stack": 32,
+          "reading-table": 3,
+          "post-west": 1,
+          "post-east": 1,
+          "terrace-table": 4
+        },
+        "addedTriangles": 1080
+      },
+      "visibility": {
+        "micro": {
+          "distance": 8.047398648010427,
+          "projectedPx": 3.4155982024106364,
+          "on": true,
+          "opacity": 1
+        },
+        "regions": [
+          {
+            "on": true,
+            "far": 75,
+            "rooms": [
+              "out",
+              "cottageEntry",
+              "cottageRoom"
+            ]
+          }
+        ],
+        "hero": {
+          "visible": true,
+          "position": [
+            29.4,
+            5.95,
+            -159.6
+          ]
+        },
+        "vegetation": {
+          "trees": {
+            "near": 5,
+            "mid": 28,
+            "far": 75,
+            "xfar": 313,
+            "nearInView": 0,
+            "midInView": 3,
+            "farInView": 19,
+            "xfarInView": 120
+          },
+          "bushes": {
+            "near": 3,
+            "mid": 8,
+            "far": 14,
+            "xfar": 3,
+            "nearInView": 0,
+            "midInView": 1,
+            "farInView": 3,
+            "xfarInView": 0
+          },
+          "plantsShown": 247
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "sourceRevision": "62e6ab7255508a7b85226c967f8af47f8b08ed60",
+  "revisionNote": "Recorded before final neutral-light and extra-support parent-visibility correction. Counts are actual for this probe revision. Selected-family follow-up is a separate current-source measurement."
+}

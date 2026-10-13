@@ -1,0 +1,21 @@
+# VFC-01 — Visual Fidelity Calibration
+
+Isolated research branch: `vfc01-visual-fidelity-calibration`. Verified production base: `ccr-75ef4113-kfkimm` at `ae2a036e783400355c8d137f24e16c33bb1a8323`. Exactly two zones: Library and Portugal cottage + terrace. ART-01 remains the direction.
+
+Start with [the offline evidence viewer](index.html) and [recommendation](VFC01_RECOMMENDATION.md). It presents a selected equal-DPR comparison before the DPR-1.25 candidate, all 90 main colour/clay/neutral frames, and eight deterministic approach/retreat videos. Frames retain 915×412 content; video encoding pads the width to 916. Video playback is four presentation frames/s, not measured gameplay FPS.
+
+| Report | Contents |
+|---|---|
+| [Baseline audit](VFC01_BASELINE_AUDIT.md) | Actual renderer, materials, batching, texture and visibility architecture |
+| [Experiment matrix](VFC01_EXPERIMENT_MATRIX.md) | Isolation, cameras, variants, controls, reproduction commands |
+| [Materials](VFC01_MATERIAL_REPORT.md) | Selected families, rejected plaster, UV scale, licensing and KTX2 limitations |
+| [Geometry](VFC01_GEOMETRY_REPORT.md) | Six objects, construction, edge/normal treatment and cost |
+| [Visibility/LOD](VFC01_VISIBILITY_LOD_REPORT.md) | Four classes, current bands, continuity and rejected/deferred transitions |
+| [Performance](VFC01_PERFORMANCE_REPORT.md) | Counts/bytes, DPR, triangle/shadow/material controls and timing limits |
+| [Recommendation](VFC01_RECOMMENDATION.md) | Explicit decisions and proposed standards for owner review |
+| [Phone protocol](VFC01_PHONE_PROTOCOL.md) | Compact real-device checklist and export instructions |
+| [Recovery history](VFC01_RECOVERY_STATUS.md) | Separates the lost initial run from freshly rebuilt evidence |
+
+Raw JSON: [main matrix](compare/matrix.json), [broad controls](compare/sweeps.json), [selected follow-up](compare/selected.json), [KTX2](compare/ktx.json), [LOD sequences](combined-lod/sequences.json). [Evidence manifest](EVIDENCE_MANIFEST.json) records hashes, dimensions and decoder checks. Broad controls/most LOD clips were captured on recovery revision 62e6ab7; final main, selected and small-card captures incorporate the documented final corrections. Counts and methods accompany each run; historical numbers are not substituted.
+
+Validation covers typecheck, both builds, 267 unit tests, save/ID/checkpoint isolation, phone-loop control flow and the existing DEV-04D browser suite. Physical-device results are [pending](phone-results/README.md). No production performance guarantee, merge or deployment is implied. Open the viewer directly or serve the repository locally; test the game using the isolated Vite entry as described in the phone protocol.

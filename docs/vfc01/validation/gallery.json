@@ -1,0 +1,475 @@
+{
+  "checks": [
+    {
+      "variant": "selected-equal",
+      "camera": "cottage-front",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "selected-equal",
+      "camera": "library-player",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "selected-equal",
+      "camera": "cottage-player",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "selected-crisp",
+      "camera": "cottage-front",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "selected-crisp",
+      "camera": "library-player",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "selected-crisp",
+      "camera": "cottage-player",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V1",
+      "camera": "library-player",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V1",
+      "camera": "library-player",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V1",
+      "camera": "library-player",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V1",
+      "camera": "library-medium",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V1",
+      "camera": "library-medium",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V1",
+      "camera": "library-medium",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V1",
+      "camera": "library-craft",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V1",
+      "camera": "library-craft",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V1",
+      "camera": "library-craft",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V1",
+      "camera": "cottage-player",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V1",
+      "camera": "cottage-player",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V1",
+      "camera": "cottage-player",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V1",
+      "camera": "cottage-medium",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V1",
+      "camera": "cottage-medium",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V1",
+      "camera": "cottage-medium",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V1",
+      "camera": "cottage-craft",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V1",
+      "camera": "cottage-craft",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V1",
+      "camera": "cottage-craft",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V2",
+      "camera": "library-player",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V2",
+      "camera": "library-player",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V2",
+      "camera": "library-player",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V2",
+      "camera": "library-medium",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V2",
+      "camera": "library-medium",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V2",
+      "camera": "library-medium",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V2",
+      "camera": "library-craft",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V2",
+      "camera": "library-craft",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V2",
+      "camera": "library-craft",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V2",
+      "camera": "cottage-player",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V2",
+      "camera": "cottage-player",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V2",
+      "camera": "cottage-player",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V2",
+      "camera": "cottage-medium",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V2",
+      "camera": "cottage-medium",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V2",
+      "camera": "cottage-medium",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V2",
+      "camera": "cottage-craft",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V2",
+      "camera": "cottage-craft",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V2",
+      "camera": "cottage-craft",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V3",
+      "camera": "library-player",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V3",
+      "camera": "library-player",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V3",
+      "camera": "library-player",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V3",
+      "camera": "library-medium",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V3",
+      "camera": "library-medium",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V3",
+      "camera": "library-medium",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V3",
+      "camera": "library-craft",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V3",
+      "camera": "library-craft",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V3",
+      "camera": "library-craft",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V3",
+      "camera": "cottage-player",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V3",
+      "camera": "cottage-player",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V3",
+      "camera": "cottage-player",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V3",
+      "camera": "cottage-medium",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V3",
+      "camera": "cottage-medium",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V3",
+      "camera": "cottage-medium",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V3",
+      "camera": "cottage-craft",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V3",
+      "camera": "cottage-craft",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V3",
+      "camera": "cottage-craft",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V4",
+      "camera": "library-player",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V4",
+      "camera": "library-player",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V4",
+      "camera": "library-player",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V4",
+      "camera": "library-medium",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V4",
+      "camera": "library-medium",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V4",
+      "camera": "library-medium",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V4",
+      "camera": "library-craft",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V4",
+      "camera": "library-craft",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V4",
+      "camera": "library-craft",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V4",
+      "camera": "cottage-player",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V4",
+      "camera": "cottage-player",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V4",
+      "camera": "cottage-player",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V4",
+      "camera": "cottage-medium",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V4",
+      "camera": "cottage-medium",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V4",
+      "camera": "cottage-medium",
+      "mode": "neutral",
+      "ok": true
+    },
+    {
+      "variant": "V4",
+      "camera": "cottage-craft",
+      "mode": "colour",
+      "ok": true
+    },
+    {
+      "variant": "V4",
+      "camera": "cottage-craft",
+      "mode": "clay",
+      "ok": true
+    },
+    {
+      "variant": "V4",
+      "camera": "cottage-craft",
+      "mode": "neutral",
+      "ok": true
+    }
+  ],
+  "linksVerified": 25,
+  "errors": [],
+  "videoValidation": "HTTP availability here; ffprobe and full decode in package.py. Headless browser H264 playback is not asserted."
+}

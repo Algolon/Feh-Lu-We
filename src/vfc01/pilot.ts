@@ -22,7 +22,7 @@ export function intercept(){const original=Batcher.prototype.add,k=getKit(),a=ar
  if(zone&&family&&[box.min,box.max].every(p=>zoneAt(p.x,p.y,-p.z)===zone)){
  const object=objects.find(o=>Math.abs(pos.x-o.x)+sz.x/2<=o.sx/2+.03&&Math.abs(-pos.z-o.z)+sz.z/2<=o.sz/2+.03&&box.min.y>=o.y-.05&&box.max.y<=o.y+o.h+.05);
  if(geometryPilot&&family==='timber'&&object&&(geo.index?geo.index.count:geo.attributes.position.count)===36){const b=geo.boundingBox!,s=b.getSize(new T.Vector3()),c=b.getCenter(new T.Vector3());g=softBox(s.x,s.y,s.z,Math.min(.012,Math.min(s.x,s.y,s.z)*.14),1,1).translate(c.x,c.y,c.z);g=uv(g,geo);if(q.get('normals')==='flat'){const ng=g.toNonIndexed();g.dispose();g=ng;g.computeVertexNormals();}changed=true;pilotStats.beveled++;pilotStats.objects[object.id]=(pilotStats.objects[object.id]??0)+1;}
- if(materialPilot){if(!changed)g=geo.clone();uv(g,undefined,family);changed=true;mat=pilotMaterial(family);pilotStats.affected++;if(family==='timber'){pilotStats.timber++;const tint=new T.Color(color);tint.multiplyScalar(1.05);color=tint;}}
+ if(materialPilot&&(!q.has('selected')||['timber','tile','limestone'].includes(family))){if(!changed)g=geo.clone();uv(g,undefined,family);changed=true;mat=pilotMaterial(family);pilotStats.affected++;if(family==='timber'){pilotStats.timber++;const tint=new T.Color(color);tint.multiplyScalar(1.05);color=tint;}}
  }
  original.call(this,mat,g,m,color,chunk,shadow,jitter);if(changed)g.dispose();};return()=>{Batcher.prototype.add=original;};}
 export function supports(scene:T.Scene){if(!geometryPilot)return;const b=new Batcher(),mat=materialPilot?pilotMaterial('timber'):getKit().M.wood;
