@@ -3,6 +3,7 @@ import { Game, TEST_HOOKS } from './core/game';
 import { UI } from './ui/ui';
 import { REVIEW } from './core/artflags';
 import { reviewState, showReviewStart, mountReviewBar } from './ui/review';
+import { lightingReviewState, showLightingStart, mountLightingReview } from './ui/lightingReview';
 import { showSliceStart } from './slice/start';
 import { ROUTE as SLICE_ROUTE } from './slice/placement';
 import { FOOTPRINTS, ROUTE_LINES } from './world/footprints';
@@ -55,7 +56,8 @@ function boot() {
     await new Promise((r) => setTimeout(r, 30)); // let the loading state paint before the synchronous build
     try {
       await game.start(fresh);
-      if (REVIEW && REVIEW !== 'dev01') mountReviewBar(game);
+      if (REVIEW === 'lighting') mountLightingReview(game);
+      else if (REVIEW && REVIEW !== 'dev01') mountReviewBar(game);
     } catch (e) {
       console.error(e);
       fail('Er ging iets mis bij het laden van de wereld. Herlaad de pagina; je bewaarde voortgang blijft staan.');
@@ -68,8 +70,9 @@ function boot() {
   }
   if (REVIEW) {
     // art-review mode: sandboxed state (never the player's save), its own start card and comparison bar
-    game.state = reviewState();
-    showReviewStart(() => begin(false));
+    game.state = REVIEW === 'lighting' ? lightingReviewState() : reviewState();
+    if (REVIEW === 'lighting') showLightingStart(() => begin(false));
+    else showReviewStart(() => begin(false));
     return;
   }
   game.ui.showStart({
