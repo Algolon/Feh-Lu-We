@@ -42,24 +42,26 @@ The real interaction picker already provides explicit labels such as `Bekijken: 
 
 | Role | Rule |
 | --- | --- |
-| Quiet chrome | Forest `#27382d`, charcoal `#17221d`, HUD `rgba(18,28,23,.88)`, pale text `#f1ebdc` |
+| Quiet chrome | Forest `#27382d`, charcoal `#1c241d`, HUD `rgba(24,28,21,.88)`, beige text `#f1e3c7` |
 | Investigation | Notebook paper `#f3e8d0`, raised paper `#fbf3e1`, ink `#38281c`, secondary ink `#6c5741` |
-| Accent | Brass `#c7a065`, HUD icon gold `#dbb878`, notebook icon copper `#87552e`; gold active notebook tab |
-| Typography | System sans for HUD; installed Iowan/Palatino/Georgia serif stack for notebook tabs/headings/evidence; no font download |
+| Accent | Brass `#bfa06b`, beige-gold icons `#e8cca0`, notebook copper `#805830`; muted beige-gold active tab |
+| Typography | Installed Iowan/Palatino/Georgia serif for HUD labels/objective and notebook; system sans for small feedback/checklist/E cue; no font download |
 | Spacing | 4/8/12/16/24px rhythm; notebook content measures up to 76ch |
-| Silhouette | 4px HUD corners, 6px action corner; bounded green cover, paper edges and spine, 8px tab corners; native gradients, no downloaded texture |
+| Silhouette | Round/pill HUD controls with thin gold lines; bounded green cover, paper edges/spine and 8px tabs; native gradients, no downloaded texture |
 | Icons | Small current-color SVG chrome icons; existing full-color item icons and puzzle symbols remain unchanged |
 | Feedback | Existing live status/toast messages and timings; small dark strip, positioned away from active action/selected item |
 | Interaction | Minimum 48px button/summary targets; selected tab distinguished by fill, keyboard state and text; visible focus outlines |
-| Responsive | Touch toolbar uses icons; desktop keeps labels/E cue; notebook tabs at top, portrait map wraps to another row; bounded panel with independently scrolling page; safe-area tokens retained |
+| Responsive | Mobile landscape has left categories; portrait category-to-page flow has sticky back; desktop keeps top tabs/labels/E cue; independent page scrolling and safe areas retained |
 | Motion | Short opacity/size transitions; no idle pulse or glow; existing reduced-motion setting and OS preference retained |
 
 No external font, texture, UI library, WebGL mesh, draw call or postprocessing pass is added. CSS and JS payload changes are recorded in the QA report. Contrast calculations cover the intended token combinations, not a claim of a full accessibility certification.
 
 ## Integration with other work
 
-Open PR #15 (ENV-L01) changes lighting/review/core/main/world files. Open PR #9 (craftsmanship) changes art flags/state/review/world files. Their changed-file lists were inspected. This pilot does not edit any of those files. The CSS change is an import in the existing UI stylesheet plus removal of the previous HUD block; all notebook rules are specialized under `.modal.wa-notebook` to avoid generic menu/puzzle overrides.
+Open PR #15 (ENV-L01) changes lighting/review/core/main/world files. Open PR #9 (craftsmanship) changes art flags/state/review/world files. Their changed-file lists were inspected. The owner-authorized sprint revision adds two startup wiring lines in `src/core/game.ts`; ENV-L01 edits a distinct update-loop hunk near line 683. No hunk overlap was found, and no world, lighting or geometry file is changed. The CSS change is an import in the existing UI stylesheet plus removal of the previous HUD block; all notebook rules are specialized under `.modal.wa-notebook` to avoid generic menu/puzzle overrides.
 
 DEV-04D content and geometry in the baseline remain untouched. Future environment commits can be rebased independently; rerun the real HUD contrast captures after integrating lighting. Review-toolbar placement remains the responsibility of each opt-in review tool, not a reason to rearrange the normal HUD. No branch belonging to another track is modified.
 
 Inventory, pause/settings and puzzle interface expansion is deferred until this slice has visual approval. No merge or deployment is authorized by this draft.
+
+Current mobile design uses left categories in landscape and category-to-page/back navigation in portrait, with a marked objective beside Hint and bottom-right sprint/item controls. Beige HUD text is `#f1e3c7`, gold icons `#e8cca0`, brass lines `#bfa06b`, and notebook copper `#805830`. Round HUD controls and muted beige-gold active notebook tabs supersede the earlier accent/silhouette table where different. See [current mobile QA](UI-R02_MOBILE_REVISION.md).

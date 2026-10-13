@@ -1,28 +1,29 @@
 # UI-R02 — Woodland Archive visual review
 
-The current revision implements the owner's notebook reference: a smaller bound notebook over the game, green cover edge, warm paper, horizontal tabs, copper notebook icons and gold HUD icons. Real content, counts, observations, selected items and navigation are preserved.
+Current mobile landscape categories sit to the left of the notebook page. Portrait opens a category index, then a reading pane with a persistent category-back button. Exploration uses beige-gold round controls, a marked objective beside Hint, and bottom-right sprint/item controls.
 
-**These are actual browser screenshots of the running Three.js game.** No generated scene or concept image is used as implementation evidence.
+**All images are actual browser screenshots of the running game.**
 
-![Bound notebook at BOSLUST — 852 × 393 touch landscape](evidence/book/phone-boslust-notebook-threads.jpg)
+![Mobile landscape notebook — left categories](evidence/mobile/phone-boslust-notebook-threads.jpg)
 
-![Gold exploration icons at BOSLUST — same camera and viewport](evidence/book/phone-boslust-exploration.jpg)
+![Beige-gold HUD — marked objective and sprint/item controls](evidence/mobile/phone-boslust-exploration.jpg)
 
-| Current evidence | What to review |
+| Current evidence | Review |
 | --- | --- |
-| [Desktop notebook](evidence/book/desktop-boslust-notebook-threads.jpg) | Bounded book, visible environment, copper thread marks and gold active tab |
-| [Smaller landscape notebook](evidence/book/small-boslust-notebook-threads.jpg) | 640 × 360, wrapping tabs and independently scrolling page |
-| [Recorded evidence](evidence/book/phone-boslust-notebook-evidence.jpg) | Real clues, readable symbols and text |
-| [Contextual interaction](evidence/book/phone-context-action.jpg) | Explicit action and gold action icon |
-| [Selection and short feedback](evidence/book/phone-held-feedback.jpg) | One selected item, original item picture and real message |
-| [Notebook map](evidence/book/phone-notebook-map.jpg) | Existing discovery-filtered map and back route |
-| [Dark BOSLUST](evidence/book/phone-boslust-dark.jpg) / [bright garden](evidence/book/phone-garden-bright.jpg) | Gold chrome against the actual environment |
-| [Portrait fallback](evidence/book/portrait-boslust-notebook-threads.jpg) | Map on a second navigation row; page scrolling |
+| [Portrait categories](evidence/mobile/portrait-notebook-categories.jpg) / [reading pane](evidence/mobile/portrait-boslust-notebook-threads.jpg) | Category choice, hidden index and back |
+| [Portrait evidence](evidence/mobile/portrait-boslust-notebook-evidence.jpg) / [rotated session](evidence/mobile/portrait-rotated-evidence.jpg) | Readability, scrolling and rotation |
+| [Selected item / feedback](evidence/mobile/phone-held-feedback.jpg) | Original item picture in the persistent control |
+| [Sprint state](evidence/mobile/phone-sprint-equipped-controls.jpg) | Visible pressed state; existing speed, no autonomous movement |
+| [Smaller landscape](evidence/mobile/small-boslust-notebook-threads.jpg) | 640 × 360 side index |
+| [Desktop](evidence/mobile/desktop-boslust-notebook-threads.jpg) | Retained top tabs and keyboard navigation |
+| [Recorded evidence](evidence/mobile/phone-boslust-notebook-evidence.jpg) | Real clue text and diagrams |
+| [Contextual action](evidence/mobile/phone-context-action.jpg) / [map](evidence/mobile/phone-notebook-map.jpg) | Original actions, discovery filters and back route |
+| [Dark BOSLUST](evidence/mobile/phone-boslust-dark.jpg) / [bright garden](evidence/mobile/phone-garden-bright.jpg) | Contrast over the actual world |
 
-[Current revision QA and reproduction](UI-R02_BOOK_REVISION.md) · [Architecture and design system](UI-R02_AUDIT_AND_DESIGN.md) · [Current UI results](evidence/book/ui-results.json) · [Capture provenance](evidence/book/captures.json)
+[Current QA and recovery report](UI-R02_MOBILE_REVISION.md) · [Architecture / design system](UI-R02_AUDIT_AND_DESIGN.md) · [UI checks](evidence/mobile/ui-results.json) · [Capture provenance](evidence/mobile/captures.json)
 
-The actual production Draden content includes arrival and next-step guidance. This appearance change preserves that logic; it does not invent completed threads or copy the reference's example counts. Aanwijzingen and Herinneringen remain based on recorded observations. Illustrated item icons and puzzle symbols retain their original colors.
+The empty item control opens the original inventory; selected items retain tap-to-deselect. Sprint resets on overlays, blur, hide and resize. Shift and analogue running remain. Real notebook records, counts and completion state are preserved.
 
-The initial editorial version and its full-game validation remain available in the [historical QA report](UI-R02_QA_REPORT.md) and [production/first-pilot comparison](evidence/before-after.jpg).
+[Historical top-tab book](UI-R02_BOOK_REVISION.md) · [Historical first pilot](UI-R02_QA_REPORT.md)
 
-Owner visual approval remains the next gate. Inventory, pause/settings and puzzle interface expansion are deferred. Physical Android/iPhone font appearance, contrast and thumb comfort still need review. Draft PR only; no merge or production deployment.
+Draft for visual review. Production is unchanged. Physical-device review remains pending; inventory, pause/settings and puzzle-interface expansion waits for approval.

@@ -1,0 +1,172 @@
+[
+  {
+    "name": "F01 saved-open doors are visually open after reload",
+    "ok": true,
+    "detail": "{\"library\":-1.6,\"front\":1.6}"
+  },
+  {
+    "name": "F02 upstairs bedroom objects not reachable through the ceiling",
+    "ok": true,
+    "detail": "[null,null,null]"
+  },
+  {
+    "name": "F03 selected key does not block opening an unlocked door",
+    "ok": true,
+    "detail": "{\"before\":false,\"after\":true,\"label\":\"Openen\"}"
+  },
+  {
+    "name": "F04 no stale delayed submission closes a newer modal",
+    "ok": true,
+    "detail": "{\"wrong\":0,\"modal\":\"Tas\"}"
+  },
+  {
+    "name": "B1 closing a door with the player in its swing path is refused",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "B2 no taking through closed glass/cabinet",
+    "ok": true,
+    "detail": "{\"closed\":\"cab.upper\"}"
+  },
+  {
+    "name": "F10 reduced motion holds flames steady but visible + UI transitions off",
+    "ok": true,
+    "detail": "{\"n\":14,\"motion\":0,\"visibleLit\":7,\"cls\":true}"
+  },
+  {
+    "name": "F12 unknown saved ids are dropped; inventory UI works",
+    "ok": true,
+    "detail": "{\"inv\":[\"invitation\",\"torch\",\"matches\",\"notebook\",\"frontKey\"],\"n\":5,\"slots\":{\"svc.tafel\":null}}"
+  },
+  {
+    "name": "F07 playtime counts panel reading as active and pause as paused",
+    "ok": true,
+    "detail": "{\"activeDuringPanel\":5850,\"pausedDuringPause\":4300,\"activeDuringPause\":0}"
+  },
+  {
+    "name": "B4 context loss pauses with a recovery dialog and resumes on restore",
+    "ok": true,
+    "detail": "{\"shown\":\"Beeld onderbroken\",\"after\":true,\"lost\":false}"
+  },
+  {
+    "name": "B4 repeated Start presses create one game loop",
+    "ok": true,
+    "detail": "rAF/s 5 (software-rendered)"
+  },
+  {
+    "name": "F05 stationary tap on the left side of the screen interacts",
+    "ok": true,
+    "detail": "tap at 270,192"
+  },
+  {
+    "name": "walkthrough tutorial → finale (A → B → C)",
+    "ok": true,
+    "detail": "70 steps, 31 clues, 6.2 min of simulated walking/acting in the estate (no reading time)"
+  },
+  {
+    "name": "walkthrough: no console errors / 404s",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "save: pickups survive reload and stay removed from the world",
+    "ok": true,
+    "detail": "[\"invitation\",\"torch\"]"
+  },
+  {
+    "name": "save: drawer state survives reload",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "save: position restored",
+    "ok": true,
+    "detail": "{\"x\":1.44,\"y\":0,\"z\":3.09}"
+  },
+  {
+    "name": "save: upstairs pose + puzzle flags restored",
+    "ok": true,
+    "detail": "y=3.35, objective=\"Pak het landgoedregister en de schuursleutel uit de lade in de hal.\""
+  },
+  {
+    "name": "save: invalid saved pose falls back to a checkpoint",
+    "ok": true,
+    "detail": "{\"x\":82.4,\"y\":0.15,\"z\":97.5}"
+  },
+  {
+    "name": "save: underground pose restored",
+    "ok": true,
+    "detail": "{\"x\":63,\"y\":-3.4,\"z\":30,\"room\":\"entry\"}"
+  },
+  {
+    "name": "save: v3 → v4 migration keeps tools, opens retained rewards, archives the old ending, offers the new chapter",
+    "ok": true,
+    "detail": "{\"title\":\"Het landgoed is veranderd\",\"inv\":[\"invitation\",\"torch\",\"matches\",\"notebook\",\"frontKey\"],\"pos\":{\"x\":90,\"y\":0,\"z\":3},\"stone\":true,\"archived\":true,\"finished\":false}"
+  },
+  {
+    "name": "save: corrupted save is ignored safely",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "save: restart sets progress aside (no blanket wipe) and offers to restore it",
+    "ok": true,
+    "detail": "{\"save\":null,\"backup\":true,\"cont\":false,\"restore\":true}"
+  },
+  {
+    "name": "save: restoring the set-aside progress continues the old game",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "touch: simultaneous joystick move + look drag",
+    "ok": true,
+    "detail": "moved 5.67 m, turned 25°"
+  },
+  {
+    "name": "touch: release stops movement",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "touch: touchcancel clears joystick (no stuck movement)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "touch: drag starting on an object looks around instead of picking it",
+    "ok": true,
+    "detail": "yaw Δ 38°"
+  },
+  {
+    "name": "touch: direct tap on a visible nearby object picks it up",
+    "ok": true,
+    "detail": "tap at 486,174; reticle target was pk.invitation"
+  },
+  {
+    "name": "touch: open overlay blocks movement and look",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "touch: inventory interaction (torch on via bag)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "touch: HUD buttons are at least 48 px",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "touch: pause and resume",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "touch: portrait resize keeps canvas + controls usable",
+    "ok": true,
+    "detail": "{\"w\":390,\"h\":844,\"aspect\":0.46208530805687204,\"btn\":true}"
+  }
+]

@@ -1,5 +1,7 @@
 # UI-R02 — Bound notebook revision
 
+**Historical revision.** Current mobile category navigation, sprint/item controls and beige-gold HUD are documented in [mobile revision QA](UI-R02_MOBILE_REVISION.md). Counts and hashes below describe the earlier top-tab book.
+
 The owner requested a more notebook-like panel, a visible world margin and copper/gold icons, based on the notebook image displayed in the conversation. This revision implements that direction in the real game, on the existing dedicated UI feature branch.
 
 ## Result and scope

@@ -1,6 +1,6 @@
 # UI-R02 — QA report
 
-**Historical first-pilot results.** The owner's bound-notebook/copper-icon revision is now the current implementation. See [current revision QA and screenshots](UI-R02_BOOK_REVISION.md). The counts, tokens and implementation hashes below describe the earlier editorial version; they are not a claim that its full E2E matrix was rerun for the revision.
+**Historical first-pilot results.** The owner's bound-notebook/copper-icon revision is now the current implementation. See [current revision QA and screenshots](UI-R02_MOBILE_REVISION.md). The counts, tokens and implementation hashes below describe the earlier editorial version; they are not a claim that its full E2E matrix was rerun for the revision.
 
 The bounded HUD/notebook pilot passes **85/85 focused UI browser checks**, **103/103 existing full-game E2E checks**, **267 unit tests**, typecheck and production build. The 70-step tutorial-to-finale route passes. Owner visual approval and direct comparison with the missing latest references remain open.
 
