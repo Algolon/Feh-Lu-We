@@ -1,6 +1,6 @@
 {
   "source": "Owner follow-up 13 October 2026. Attachments inspected; original screenshots retained in conversation, not republished with phone bars.",
-  "conditions": "Visually very similar views; exact camera/build/state/reload history unknown. Same ROI as earlier black image, unsegmented and includes some sky. Not a device FPS or photometric test.",
+  "conditions": "Visually very similar High/Normal views; exact camera/build/state unknown. Owner subsequently confirmed the old black image cleared after reloading. Same ROI as earlier black image, unsegmented and includes some sky. Not a device FPS or photometric test.",
   "rows": [
     {
       "attachment": "01-1791896546517.jpeg",
@@ -36,5 +36,12 @@
       "medianEncodedLuma": 50.870999999999995,
       "nearBlack8Percent": 2.1915630209001153
     }
-  ]
+  ],
+  "recoveryReport": {
+    "date": "2026-10-13",
+    "ownerReply": "Na herladen",
+    "meaning": "The earlier black appearance cleared after reloading.",
+    "evidenceType": "Owner-reported action sequence, not instrumented reproduction.",
+    "limits": "Reload resets renderer/program/light-pool state and may refresh assets; no individual root cause confirmed. Quality-toggle-only recovery not established."
+  }
 }

@@ -46,4 +46,4 @@ Full Chromium failed before a page: `process_singleton_posix.cc:292 socket() fai
 
 ## New owner High/Normal evidence
 
-Both new device frames are readable; High shadows alone do not explain the old blackout. See [second comparison](ENV-L01_OWNER_SCREENSHOT_FOLLOWUP.md#second-owner-comparison--high-and-normal-both-readable). Root cause remains unconfirmed; action/reload history is the next discriminating evidence.
+Both new device frames are readable; High shadows alone do not explain the old blackout. See [second comparison](ENV-L01_OWNER_SCREENSHOT_FOLLOWUP.md#second-owner-comparison--high-and-normal-both-readable). The owner confirms that the old black image cleared after reloading. This supports a transient session/render-state or stale-build hypothesis, but reload resets multiple components and does not identify the failed one. Root cause remains unconfirmed; capture runtime evidence before reload if the fault recurs.

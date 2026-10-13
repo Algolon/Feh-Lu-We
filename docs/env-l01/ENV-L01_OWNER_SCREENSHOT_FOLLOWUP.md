@@ -41,14 +41,13 @@ The report excludes the saved game, inventory, puzzle flags and personal storage
 
 Latest diagnostic code: typecheck/build pass, **273 unit tests pass**. Browser UI selections, surface restore, normal references and JSON download exercised in the nine captures; no console/page errors. Original full E2E 102/103, DEV-04C 22/22 and DEV-04D 18/18 remain results of the earlier committed prototype, not reruns of this addendum. No phase palette, ordinary game light value, save/progression logic or world geometry changed. The extra review diagnostics add about 1.42 kB gzip relative to the first prototype; no ordinary-frame shader work is added.
 
-## Smallest next step on the owner's phone
+## Device follow-up after recovery
 
-1. In the currently published game, select **Low** quality, reload and take a screenshot from the same spot. Keep the same save and torch state. Note whether High was selected for the supplied image and record the build from Pause.
-2. If the scene remains black on Low, compare the existing production `?multidraw=0` fallback at the same spot, with the same save; this is already available without merging ENV-L01.
-3. If/when the isolated branch is served for device review, capture normal/hemisphere-only/without-surface-shader frames and download a report. The current production URL does not yet contain the new lighting review or its report button.
+The owner now confirms that the black view cleared **after reloading** (13 October 2026; exact reply: “Na herladen”). A further identical Normal-quality screenshot is unnecessary while both modes are readable. If the fault recurs, the useful evidence is a screenshot and Pause build/quality **before** reloading, plus whether it started after resuming the tab, changing quality or entering an area. Do not clear the save or change puzzle flags.
+
+The isolated branch's normal/hemisphere-only/without-surface-shader comparisons and downloaded report remain available for device review when that branch is served. Current production does not contain these controls. Reloading creates fresh renderer/program/light-pool state and may also refresh cached assets; recovery alone cannot distinguish these mechanisms.
 
 Keep root-cause repair and final integration blocked until device evidence narrows the fault. The four-phase art direction is accepted and should not be re-darkened to imitate the faulty screenshot.
-
 
 ## Second owner comparison — High and Normal both readable
 
@@ -60,4 +59,4 @@ Same diagnostic ROI as above: High median encoded luma **32.11**, near-black **6
 
 **Source observation:** a High↔Low change calls `applyQuality(true)` (`game.ts` pause callback). It changes DPR/shadow enablement/map size, marks scene materials for shader refresh when shadow state changes and rebuilds the 3/4-slot light pool. Therefore a visual recovery after a quality toggle would be confounded with program/light-pool refresh, not just shadow brightness. This is a reason to ask for the action sequence, not proof of a stale uniform or GPU context fault. Existing software context-loss/recovery checks passed earlier; they do not reproduce the owner's native session.
 
-**Next discriminating fact:** did the earlier black image clear after reloading/reopening the page, after changing quality without reloading, or simply after moving? Record that sequence before deciding between renderer initialization, shader/light-pool refresh and view/location dependence. There is no need to request another identical Normal-quality shot while both modes currently work. Approved phase palettes remain unchanged; PR stays draft, no merge or deployment.
+**Owner-confirmed recovery:** the earlier black image cleared after reloading. This is reported device evidence, not an instrumented reproduction. It makes a transient session/render-state or stale-build problem more plausible than a consistently inadequate lighting palette; the exact mechanism remains **INFERRED**, not confirmed. Reload resets several systems together, and exact old/new camera/build/progress values remain unknown. The report does not establish whether a quality change without reload would also recover the scene. No rendering code, brightness or approved phase palette changed in response. PR stays draft; no merge or deployment.
