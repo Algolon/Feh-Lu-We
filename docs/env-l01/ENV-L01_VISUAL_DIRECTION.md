@@ -1,3 +1,5 @@
+> Owner review — 13 October 2026: all four atmospheres approved as a visual direction. Device defect diagnosis, physical Android QA, integration, merge and deployment remain separate gates.
+
 # ENV-L01 — four-phase direction
 
 ART-01 remains the authority: crafted European woodland manor, material identity and construction, lively earthy colours, clear silhouettes. No asset, layout, HUD or puzzle redesign. Prototype-only, owner approval pending.

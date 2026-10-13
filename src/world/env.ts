@@ -37,7 +37,7 @@ export interface Env {
   /** Sandbox review controls only. The normal game ignores them. */
   mode: 'baseline' | 'pilot';
   preview: number | null;
-  diagnostic: 'normal' | 'hemi' | 'sun' | 'no-fog' | 'no-shadows';
+  diagnostic: 'normal' | 'hemi' | 'sun' | 'practicals' | 'no-surfaces' | 'no-fog' | 'no-shadows';
   fixtureGain: number;
   /** `indoor` 0..1 (smoothed by the game) is used only by the art-refresh interior lighting treatment. */
   update(dusk: number, focus: THREE.Vector3, indoor?: number): void;
@@ -149,6 +149,7 @@ export function addEnvironment(w: World, lightingReview = REVIEW === 'lighting')
       if (lightingReview) {
         if (env.diagnostic === 'hemi') sun.intensity = 0;
         if (env.diagnostic === 'sun') hemi.intensity = 0;
+        if (env.diagnostic === 'practicals') { sun.intensity = 0; hemi.intensity = 0; }
         if (env.diagnostic === 'no-fog') { fog.near = 10000; fog.far = 20000; }
       }
       sun.castShadow = shadows && !(lightingReview && env.diagnostic === 'no-shadows') && (!pilot || sun.intensity > 0.001);

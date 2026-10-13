@@ -54,9 +54,13 @@ No shader/NaN evidence, surface or batching failure found in these views. Unit s
 
 ## Remaining gates and integration
 
-- Obtain owner's original black Android view and matched baseline/pilot/hemisphere-only device frames. Driver/precision/context-specific defect remains possible.
+- Original black Android view received and analysed; obtain matched baseline/pilot/hemisphere-only device frames and a render report. Driver/precision/context-specific defect remains possible.
 - Validate day/blue/dusk on the physical Samsung, landscape and portrait, normal and reduced motion, actual DPR; record FPS/frame pacing and thermal changes.
 - Review clues at intended distance and hidden areas visible through existing foliage gaps; no render occlusion/geometry rule was changed, but brighter fill can reveal what darkness alone concealed.
 - Do not promise basement-specific tuning: the representative darker room is Sterrenkamer; underground still uses the existing indoor classification.
 - Reconcile overlapping `artflags.ts` with VCP-01 PR #9; main/game/env/review additions with active DEV-04D/UI-R01. No older work copied over current production.
 - Owner approval before final calibration, expansion, merge or deploy. Nothing merged or deployed.
+
+## Owner follow-up
+
+Four-phase visual direction approved; severe-black screenshot now inspected. [Follow-up](ENV-L01_OWNER_SCREENSHOT_FOLLOWUP.md) distinguishes the visually confirmed symptom from an unconfirmed cause, documents nine new controlled tests and verified local JSON diagnostics. Latest diagnostic-only extension: 273 units, typecheck/build and targeted browser smoke pass. Earlier E2E provenance stays unchanged.

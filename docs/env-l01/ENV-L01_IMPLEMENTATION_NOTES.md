@@ -24,3 +24,7 @@ For real-device access, serve the preview to the owner's LAN using `--host 0.0.0
 Capture: `node scripts/env-l01-capture.mjs prototype /absolute/scratch/output`. Audit uses mode `audit` on a clean production build. CHROME can select an installed compatible Chromium. Each harness starts its own Vite preview in the same process namespace. Do not rebuild dist while a capture or suite is running.
 
 Rollback: exit review to use ordinary game; remove the ENV-L01 commit(s) to remove the prototype. No persistent state migration needed. Before integration, reconcile artflags/main/game/env with active DEV-04D, UI-R01 and old VCP-01 PR #9; do not copy its older state/review implementations wholesale.
+
+## Owner screenshot diagnosis extension
+
+`lightingDiagnostics.ts` collects/downloads read-only render evidence from the sandbox. `lightingReview.ts` adds reversible surface-shader isolation; `env.ts` adds practical-only reference mode. Ordinary lighting and approved palettes remain unchanged. See [follow-up](ENV-L01_OWNER_SCREENSHOT_FOLLOWUP.md). These controls are available only in the isolated branch until it is integrated.

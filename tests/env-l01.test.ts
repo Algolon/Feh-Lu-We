@@ -5,6 +5,14 @@ import { addEnvironment } from '../src/world/env';
 import { LIGHTING_PHASES, sampleLighting, type PhaseSample } from '../src/world/lightingPhases';
 const sampler = (): PhaseSample => ({ a: LIGHTING_PHASES[0], b: LIGHTING_PHASES[1], blend: 0 });
 describe('ENV-L01 render contracts', () => {
+  it('can isolate practical lights for device diagnosis and restores the global lights', () => {
+    const w = new World('estate'), e = addEnvironment(w, true), focus = new THREE.Vector3(63, 1.65, -11.5);
+    e.mode = 'baseline'; e.diagnostic = 'practicals'; e.update(0.85, focus);
+    expect(e.hemi.intensity).toBe(0); expect(e.sun.intensity).toBe(0);
+    e.diagnostic = 'normal'; e.update(0.85, focus);
+    expect(e.hemi.intensity).toBeGreaterThan(0); expect(e.sun.intensity).toBeGreaterThan(0);
+    w.dispose();
+  });
   it('keeps the normal game on production lighting even if review controls are set', () => {
     const w = new World('estate'), e = addEnvironment(w, false), focus = new THREE.Vector3(90, 1.65, -123);
     e.update(0.6, focus, 0);

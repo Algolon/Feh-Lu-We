@@ -1,3 +1,5 @@
+> Owner review — 13 October 2026: all four atmospheres approved as a visual direction. Device defect diagnosis, physical Android QA, integration, merge and deployment remain separate gates.
+
 # ENV-L01 — owner visual review
 
 **Prototype, not production.** Eight fixed poses, 63 original-production diagnostic frames + 71 four-phase pilot frames, eight same-world path-control frames and eight desktop-aspect frames, condensed into sheets rather than committing duplicate raw collections. All scenes are genuine Three.js screenshots; no image generation, repainting or colour editing. Sheets only resize/layout original pixels and add captions. Geometry, materials, front-door state and torch-off state are retained.
@@ -8,7 +10,7 @@
 
 ![Garden four phases](evidence/garden-four-phases.jpg)
 
-Read each four-up left-to-right, top-to-bottom: daylight, golden afternoon, blue hour, late dusk. Same exact player/camera pose within each set; no claim these match the absent owner Android screenshots.
+Read each four-up left-to-right, top-to-bottom: daylight, golden afternoon, blue hour, late dusk. Same exact player/camera pose within each set; no claim these match the owner Android screenshot, whose pose is unknown.
 
 ## Evidence index
 
@@ -42,6 +44,8 @@ Capture build was created with `8f2eac9 + working tree`, subsequently committed 
 2. Is late dusk comfortably navigable on the Samsung without the torch, including the deep woodland route?
 3. Does daylight retain the welcoming ART-01 identity, or feel too flat/green on low quality?
 4. Do interiors keep enough warmth and hierarchy, especially living hearth vs unlit darker room?
-5. Please supply the original severe-black Android screenshot and its build/quality/progress if known. In this branch's isolated review, capture BOSLUST/bospad at t=1 with **Production**, then **Vier fasen**, then **Hemisphere only**, same camera/orientation. This is the smallest useful device isolation step for the still-unconfirmed black-out.
+5. The original severe-black screenshot has been received; please supply its build/quality/progress if known. In this branch's isolated review, capture BOSLUST/bospad at t=1 with **Production**, then **Vier fasen**, then **Hemisphere only**, same camera/orientation. This is the smallest useful device isolation step for the still-unconfirmed black-out.
 
 Recommendation: use ENV-03 as the main evening anchor, retain the cool ground-bounce floor and local warm lamps, and review ENV-04 on-device before further darkening. Keep ACES/exposure 1.15. Do not merge, deploy or undertake final estate-wide calibration until the owner has reviewed these results and the device issue is narrowed.
+
+Owner image has now been inspected; direction accepted. [Screenshot follow-up and device diagnosis](ENV-L01_OWNER_SCREENSHOT_FOLLOWUP.md).
