@@ -29,7 +29,7 @@ Rollback: exit review to use ordinary game; remove the ENV-L01 commit(s) to remo
 
 `lightingDiagnostics.ts` collects/downloads read-only render evidence from the sandbox. `lightingReview.ts` adds reversible surface-shader isolation; `env.ts` adds practical-only reference mode. Ordinary lighting and approved palettes remain unchanged. See [follow-up](ENV-L01_OWNER_SCREENSHOT_FOLLOWUP.md). These controls are available only in the isolated branch until it is integrated.
 
-## Sky implementation continuation — 13 October 2026
+## Initial sky implementation continuation — 13 October 2026
 
 User explicitly requested further development/implementation of the skyboxes. Extended the existing single dome rather than creating four meshes. `skyShader.ts` contains the shared shader; `ENV_SKY_REVIEW` compiles cloud/disc detail only for the lighting review. Normal gameplay excludes those computations. In the review's baseline mode the legacy sky expression remains selected; pilot mode uses the refined disc, restrained aureole and six inexpensive soft elliptical lobes grouped into three thin cloud bands. No texture/noise octaves/raymarch/time uniform; one existing sky draw.
 
@@ -38,3 +38,9 @@ User explicitly requested further development/implementation of the skyboxes. Ex
 Reverified production/default `ccr-75ef4113-kfkimm` at `ae2a036e…`. Open UI-R02 PR #16 changes UI/CSS/icons, package/scripts and its docs; it has no direct file overlap with this continuation's sky/env/review files. Older VCP-01 PR #9 overlap with the initial ENV-L01 `artflags.ts` remains. No parallel branch was modified or imported; later unpushed edits cannot be excluded.
 
 The stale dependency symlink's target had disappeared between sessions. Replaced that dangling link with a local `npm ci` matching the existing lockfile; no dependency or manifest change. Capture script `env-l01-skycheck.mjs` uses the real game, same loaded geometry for paired toggles, and pins room blend for still comparisons to exclude doorway-smoothing history. Initial strict comparison failed before that control; it did not demonstrate cloud-dependent world light. Final successful evidence is indexed separately; older suites/captures retain their original provenance.
+
+## Cumulus revision from owner feedback
+
+Owner requested more pronounced clouds, using an attached reference. Changes `skyShader.ts`, cloud-only fields in `lightingPhases.ts` and the review checkbox label (now simply “Wolken”); UI behaviour, environment updater, physical global-light values and gameplay are unchanged from the preceding tested prototype. Replaced six soft lobes with 21 compact polynomial billows in three local directional groups. Each puff returns a field and analytic gradient; combined gradients model painted relief. Derivative-based edge width keeps silhouettes legible without a hard pixel stair-step. Broad sky-key shading avoids deep internal contrast; phase-tinted tops and undersides stay coherent at dusk.
+
+Same existing dome/pass. No texture/raymarch/noise octaves/weather clock/point light/geometry added. Normal-game cloud code remains compiled out. This changes pilot fragment work and cloud opacity, not world illumination. Exact new cloud parameters and trade-offs are in visual direction. The reference pixels were not copied into the public repo or runtime. Earlier soft-cloud sheets/results remain historical; new comparison and four-phase sheets are indexed separately. No parallel work imported; open PRs still #9/#15/#16, production remains `ae2a036e…` at check.

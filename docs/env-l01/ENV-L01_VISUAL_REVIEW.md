@@ -73,3 +73,15 @@ Sheets: `sky-detail-four-phases.jpg` looks upward from the garden to expose clou
 **Review decision:** recommend retaining the restrained cloud bands and clear-sky switch. Sky/fog/world palette remains as approved. Review the additional cloud shape and sun treatment separately: is it sufficiently painterly and natural, or should the optional clouds be lighter/clearer? Android frame pacing and the intermittent native defect remain outstanding. No final estate-wide tuning, merge or deployment performed.
 
 Latest source checks and regression provenance: 274 units and typecheck/build pass; main 102/103 (only F05), DEV-04C 22/22, DEV-04D 18/18. See [latest QA](ENV-L01_QA_REPORT.md#sky-continuation--latest-build-validation-13-october-2026). These software captures and suites do not certify physical Android performance or the intermittent native fault.
+
+## Current review — more pronounced cumulus
+
+Owner requested billowing forms closer to the supplied screenshot. Current clouds have rounder silhouettes, brighter upper faces and cool undersides. Palette/exposure/world lighting remain as approved. These are actual game captures; the reference itself is not treated as implementation evidence.
+
+![Previous soft bands versus current painted cumulus — exact same cameras](evidence/cumulus-before-after.jpg)
+
+![Current clouds across the four phases, Low](evidence/cumulus-four-phases.jpg)
+
+[Current 25-frame index / exact conditions / counters / source and bundle hashes](evidence/cumulus-measurements.json): same harness, fixed poses, Low and mobile High, portrait endpoints, garden/upward sky/BOSLUST/solar views/hall and cloud on/off. Earlier soft-cloud records retain their earlier build provenance. No root-cause repair claim or device-performance approval.
+
+Recommendation: use this more readable painted cumulus silhouette as the next cloud anchor; evaluate cloud scale and coverage on a phone before adding fine detail. Strong cloud forms and unchanged direct sunlight still use an artistic approximation, without cloud-shadow simulation. Native fine edge texture/scattering from the reference is not reproduced by this analytic shader.

@@ -56,7 +56,7 @@ export function mountLightingReview(game: Game) {
     <label>Systeem <select data-system><option value="pilot">Vier fasen</option><option value="baseline">Productie</option></select></label>
     <label>Locatie <select data-view>${Object.keys(LIGHTING_VIEWS).map(v => `<option>${v}</option>`).join('')}</select></label>
     <label>Kwaliteit <select data-quality><option value="low">Low</option><option value="high">High</option></select></label>
-    <label><input data-clouds type="checkbox" ${env.clouds ? 'checked' : ''}> Dunne wolken</label>
+    <label><input data-clouds type="checkbox" ${env.clouds ? 'checked' : ''}> Wolken</label>
     <label>Diagnose <select data-diagnostic><option value="normal">Normaal</option><option value="hemi">Hemisphere only</option><option value="sun">Directional only</option><option value="practicals">Alleen lokale lampen (test)</option><option value="no-surfaces">Zonder authored surface shader</option><option value="no-fog">Zonder mist</option><option value="no-shadows">Zonder schaduwen</option></select></label>
     <button data-report>Download renderdiagnose</button>
     <button data-progress>Volg puzzelvoortgang</button>
