@@ -5,6 +5,23 @@ import { addEnvironment } from '../src/world/env';
 import { LIGHTING_PHASES, sampleLighting, type PhaseSample } from '../src/world/lightingPhases';
 const sampler = (): PhaseSample => ({ a: LIGHTING_PHASES[0], b: LIGHTING_PHASES[1], blend: 0 });
 describe('ENV-L01 render contracts', () => {
+  it('isolates sky detail from gameplay lighting and uses the directional light position for the sun', () => {
+    for (const review of [false, true]) {
+      const w = new World('estate'), e = addEnvironment(w, review), focus = new THREE.Vector3(63, 1.65, -11.5);
+      const sky = w.scene.children.find(o => o instanceof THREE.Mesh && o.material instanceof THREE.ShaderMaterial) as THREE.Mesh<THREE.SphereGeometry, THREE.ShaderMaterial>;
+      for (const t of [0, 1 / 3, 2 / 3, 1]) {
+        e.clouds = true; e.update(t, focus);
+        const before = [e.hemi.intensity, e.sun.intensity, ...e.hemi.color.toArray(), ...(w.scene.fog as THREE.Fog).color.toArray()];
+        expect(sky.material.uniforms.uSunDir.value.distanceTo(e.sun.position.clone().sub(e.sun.target.position).normalize())).toBeLessThan(1e-12);
+        expect(sky.material.uniforms.uCloudOpacity.value).toBe(review ? LIGHTING_PHASES[Math.round(t * 3)].cloudOpacity : 0);
+        e.clouds = false; e.update(t, focus);
+        expect(sky.material.uniforms.uCloudOpacity.value).toBe(0);
+        expect([e.hemi.intensity, e.sun.intensity, ...e.hemi.color.toArray(), ...(w.scene.fog as THREE.Fog).color.toArray()]).toEqual(before);
+      }
+      expect(Boolean(sky.material.defines.ENV_SKY_REVIEW)).toBe(review);
+      w.dispose();
+    }
+  });
   it('can isolate practical lights for device diagnosis and restores the global lights', () => {
     const w = new World('estate'), e = addEnvironment(w, true), focus = new THREE.Vector3(63, 1.65, -11.5);
     e.mode = 'baseline'; e.diagnostic = 'practicals'; e.update(0.85, focus);
@@ -37,7 +54,7 @@ describe('ENV-L01 render contracts', () => {
     const w = new World('estate'), e = addEnvironment(w, true);
     const sky = w.scene.children.find(o => o instanceof THREE.Mesh && o.material instanceof THREE.ShaderMaterial) as THREE.Mesh<THREE.SphereGeometry, THREE.ShaderMaterial>;
     for (const indoor of [0, 0.5, 1]) for (const stop of [1 / 3, 2 / 3]) {
-      const values = (t: number) => { e.update(t, new THREE.Vector3(63, 1.65, -11.5), indoor); return [e.hemi.intensity, e.sun.intensity, ...e.hemi.color.toArray(), ...e.hemi.groundColor.toArray(), ...sky.material.uniforms.uHorizon.value.toArray()]; };
+      const values = (t: number) => { e.update(t, new THREE.Vector3(63, 1.65, -11.5), indoor); return [e.hemi.intensity, e.sun.intensity, ...e.hemi.color.toArray(), ...e.hemi.groundColor.toArray(), ...sky.material.uniforms.uHorizon.value.toArray(), sky.material.uniforms.uCloudOpacity.value, ...sky.material.uniforms.uCloudLight.value.toArray(), ...sky.material.uniforms.uCloudShade.value.toArray()]; };
       const a = values(stop - 1e-6), b = values(stop + 1e-6);
       expect(Math.max(...a.map((v, i) => Math.abs(v - b[i])))).toBeLessThan(0.0001);
     }

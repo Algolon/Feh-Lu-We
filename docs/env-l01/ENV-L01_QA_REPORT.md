@@ -1,6 +1,6 @@
 # ENV-L01 — QA and limits
 
-Reviewable prototype, **not a green production integration gate**. Severe owner Android black-out remains unreproduced; physical device validation and owner visual approval remain required.
+Reviewable prototype, **not a green production integration gate**. Severe owner Android black-out remains unreproduced; physical device validation and final integration review remain required; the four-phase direction is approved.
 
 ## Automated results
 
@@ -66,3 +66,17 @@ No shader/NaN evidence, surface or batching failure found in these views. Unit s
 Four-phase visual direction approved; severe-black screenshot now inspected. [Follow-up](ENV-L01_OWNER_SCREENSHOT_FOLLOWUP.md) distinguishes the visually confirmed symptom from an unconfirmed cause, documents nine new controlled tests and verified local JSON diagnostics. Latest diagnostic-only extension: 273 units, typecheck/build and targeted browser smoke pass. Earlier E2E provenance stays unchanged.
 
 Owner High/Normal comparison now demonstrates readable rendering on both settings at a visually similar BOSLUST view; this is a static device readability check, not FPS/thermal validation or reproduction of the old defect. No source changes in this evidence-only update.
+
+## Sky continuation — latest-build validation, 13 October 2026
+
+- Typecheck/build pass; **274 unit tests pass**. Cloud toggle isolation, sun-vector alignment, ordinary-game exclusion and phase-stop cloud continuity included.
+- **25 real game frames**: four-phase BOSLUST/garden/upward-sky Low; garden portrait day/dusk; BOSLUST mobile High day/dusk; day/golden solar views; cloud on/off garden, hall and baseline. No page/console error, shader diagnostic failure or GL error. Review save/backup/settings sentinels untouched, no puzzle solved. [Measurements and immutable build fingerprint](evidence/sky-detail-measurements.json).
+- All five paired on/off tests retain identical light values and geometry counters. Garden Low **58 / 155,894**; BOSLUST Low **91 / 226,908**. Mobile High BOSLUST day **110 / 365,323**, dusk **91 / 226,908**; sun shadow pass switches off at dusk. High is a secondary check, not a low-budget pass claim. No additional sky draw or geometry; six cloud lobes execute only in pilot review.
+- Latest JS gzip **422.55 kB**, versus previous diagnostic build **421.58 kB** (about +0.97 kB). Existing large-chunk warning remains. Normal-game sky detail is compiled out; pilot sky has additional fragment work over the existing full-screen dome. Counters alone cannot establish fragment/overdraw cost or thermal safety.
+- The first strict on/off assertion failed before the room blend was controlled; successive interior stills had history-dependent doorway smoothing as a confound. Initial per-frame values were not retained, so its specific delta cannot be retrospectively attributed. Harness now pins the classification blend for still comparisons; all final paired lighting/counter checks pass. No production smoothing or lighting changed to address the harness comparison.
+- Physical Android FPS, frame pacing and thermal validation remain unmeasured. Owner's readable High/Normal screenshots are historical production evidence, not these new cloud renders. Reload recovery narrows hypotheses but confirms no native root cause.
+- UI-R02 PR #16 currently has no direct file overlap with this continuation. Initial ENV-L01/VCP-01 PR #9 artflags overlap still needs integration; unpublished parallel work remains unknown. No merge/deployment.
+
+Latest immutable-build suites completed: **main 102/103**, **DEV-04C 22/22**, **DEV-04D 18/18**. The only main failure is F05 again; its earlier clean-production touch-timing diagnosis is documented above, but this run did not instrument event timing anew. Full tutorial→finale route (70 steps/31 clues), lamp/fire toggles and persistence, wall blocking, context recovery, low/high rendering and batching/fallback checks pass. The ordinary game still selects legacy lighting; full route success is not a completed playthrough under all pilot phases. Review controls/save isolation also pass. [Latest summary](evidence/sky-detail-qa-summary.json), [main](evidence/sky-detail-e2e-results.json), [DEV-04C](evidence/sky-detail-dev04c-results.json), [DEV-04D](evidence/sky-detail-dev04d-results.json). JS SHA256 stayed `194019147279a524fd3061f70a358e0a4bd64908e776671492a76e802e1aa770` throughout captures and suites.
+
+The DEV-04C run also records an existing **golfSpur 90 calls / 263,048 triangles** budget exception (the suite permits its known baseline exception). Keep this visible alongside the earlier approach/fallback exceptions; this sky pass changes no landscape geometry. Do not interpret a passing suite as every estate location meeting the 250k guide.

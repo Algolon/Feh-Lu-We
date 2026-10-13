@@ -13,7 +13,7 @@ Isolated opt-in prototype. Normal gameplay retains legacy lighting; nothing merg
 - `scripts/env-l01-capture.mjs`: actual WebGL captures, component isolation and GPU-synchronized SOFTWARE render timings.
 - `scripts/env-l01-qa.mjs`: build-hash guard, review controls/save isolation, existing suites sequentially under one server namespace.
 
-No new meshes, point lights, texture images, GLB, postprocessing, HDRI, clouds or volumetrics. Same dome topology. Zero additional draw calls expected on low; counters must establish that. High skips the negligible/zero sun shadow pass after sunset, so high/low differences diminish in the evening. This is intentional, not a downgrade of quality settings.
+No new meshes, point lights, texture images, GLB, postprocessing, HDRI or volumetrics. Thin procedural cloud detail was added after owner approval of the four-phase direction. Same dome topology. Zero additional draw calls expected on low; counters must establish that. High skips the negligible/zero sun shadow pass after sunset, so high/low differences diminish in the evening. This is intentional, not a downgrade of quality settings.
 
 ## Local review
 
@@ -28,3 +28,13 @@ Rollback: exit review to use ordinary game; remove the ENV-L01 commit(s) to remo
 ## Owner screenshot diagnosis extension
 
 `lightingDiagnostics.ts` collects/downloads read-only render evidence from the sandbox. `lightingReview.ts` adds reversible surface-shader isolation; `env.ts` adds practical-only reference mode. Ordinary lighting and approved palettes remain unchanged. See [follow-up](ENV-L01_OWNER_SCREENSHOT_FOLLOWUP.md). These controls are available only in the isolated branch until it is integrated.
+
+## Sky implementation continuation — 13 October 2026
+
+User explicitly requested further development/implementation of the skyboxes. Extended the existing single dome rather than creating four meshes. `skyShader.ts` contains the shared shader; `ENV_SKY_REVIEW` compiles cloud/disc detail only for the lighting review. Normal gameplay excludes those computations. In the review's baseline mode the legacy sky expression remains selected; pilot mode uses the refined disc, restrained aureole and six inexpensive soft elliptical lobes grouped into three thin cloud bands. No texture/noise octaves/raymarch/time uniform; one existing sky draw.
+
+`lightingPhases.ts` adds cloud colours/opacity to each existing palette. `env.ts` samples these with the same continuous phase as global light and fog; the displayed sun uses the existing directional light vector. `lightingReview.ts` exposes an optional cloud checkbox and `clouds=0` URL parameter. `lightingDiagnostics.ts` records that selection. Clouds default on in pilot review, are absent in baseline and ordinary gameplay, and do not alter world light, progression or saved state. No moon/stars added in this pass.
+
+Reverified production/default `ccr-75ef4113-kfkimm` at `ae2a036e…`. Open UI-R02 PR #16 changes UI/CSS/icons, package/scripts and its docs; it has no direct file overlap with this continuation's sky/env/review files. Older VCP-01 PR #9 overlap with the initial ENV-L01 `artflags.ts` remains. No parallel branch was modified or imported; later unpushed edits cannot be excluded.
+
+The stale dependency symlink's target had disappeared between sessions. Replaced that dangling link with a local `npm ci` matching the existing lockfile; no dependency or manifest change. Capture script `env-l01-skycheck.mjs` uses the real game, same loaded geometry for paired toggles, and pins room blend for still comparisons to exclude doorway-smoothing history. Initial strict comparison failed before that control; it did not demonstrate cloud-dependent world light. Final successful evidence is indexed separately; older suites/captures retain their original provenance.

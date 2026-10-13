@@ -38,7 +38,7 @@ export function lightingReport(game: Game) {
     userAgent: navigator.userAgent, quality: game.settings.quality, reducedMotion: game.settings.reducedMotion,
     devicePixelRatio: window.devicePixelRatio, renderPixelRatio: r.getPixelRatio(), buffer: r.getDrawingBufferSize(new THREE.Vector2()).toArray(),
     camera: { position: game.camera.position.toArray(), quaternion: game.camera.quaternion.toArray(), fov: game.camera.fov, aspect: game.camera.aspect },
-    review: { mode: env?.mode, preview: env?.preview, diagnostic: env?.diagnostic, progressDusk: game.audio.dusk }, art: { ...ART },
+    review: { mode: env?.mode, preview: env?.preview, clouds: env?.clouds, diagnostic: env?.diagnostic, progressDusk: game.audio.dusk }, art: { ...ART },
     exposure: r.toneMappingExposure, toneMapping: r.toneMapping, shadows: r.shadowMap.enabled,
     gl: { lost: gl.isContextLost(), error: gl.getError(), renderer: dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER),
       version: gl.getParameter(gl.VERSION), shadingLanguage: gl.getParameter(gl.SHADING_LANGUAGE_VERSION), highFloat: precision(gl.HIGH_FLOAT), mediumFloat: precision(gl.MEDIUM_FLOAT), multiDraw: !!gl.getExtension('WEBGL_multi_draw') },

@@ -5,6 +5,7 @@ import type { World } from '../interactions/world';
 import { ART, REVIEW } from '../core/artflags';
 import { woodWeight } from './boslustZone';
 import { LIGHTING_PHASES, sampleLighting, type PhaseSample } from './lightingPhases';
+import { SKY_FRAGMENT } from './skyShader';
 
 // DEV-04C ART-01.1 light hierarchy (warm shelter, cool woodland, atmospheric depth):
 //   - outdoors the sun stays warm while the sky fill is cooler and a little weaker, so shadow-facing planes go cool;
@@ -37,6 +38,7 @@ export interface Env {
   /** Sandbox review controls only. The normal game ignores them. */
   mode: 'baseline' | 'pilot';
   preview: number | null;
+  clouds: boolean;
   diagnostic: 'normal' | 'hemi' | 'sun' | 'practicals' | 'no-surfaces' | 'no-fog' | 'no-shadows';
   fixtureGain: number;
   /** `indoor` 0..1 (smoothed by the game) is used only by the art-refresh interior lighting treatment. */
@@ -52,24 +54,18 @@ export function addEnvironment(w: World, lightingReview = REVIEW === 'lighting')
     uSunCol: { value: A.sun.clone() },
     uGlow: { value: 1 },
     uPilot: { value: 0 },
+    uCloudLight: { value: new THREE.Color() },
+    uCloudShade: { value: new THREE.Color() },
+    uCloudOpacity: { value: 0 },
   };
   const skyMat = w.material(new THREE.ShaderMaterial({
     uniforms: uni,
     side: THREE.BackSide,
     depthWrite: false,
     fog: false,
+    defines: lightingReview ? { ENV_SKY_REVIEW: 1 } : {},
     vertexShader: `varying vec3 vDir; void main(){ vDir = normalize(position); vec4 p = projectionMatrix * modelViewMatrix * vec4(position,1.0); gl_Position = p.xyww; }`,
-    fragmentShader: `uniform vec3 uZenith; uniform vec3 uHorizon; uniform vec3 uSunDir; uniform vec3 uSunCol; uniform float uGlow; uniform float uPilot; varying vec3 vDir;
-      void main(){ vec3 d = normalize(vDir); float h = clamp(d.y*1.6+0.08,0.0,1.0);
-        vec3 c = mix(uHorizon, uZenith, pow(h,0.7));
-        float s = max(dot(d, normalize(uSunDir)),0.0);
-        c += uSunCol * uGlow * (pow(s,600.0)*1.5 + pow(s,12.0)*0.35);
-        gl_FragColor = vec4(c,1.0);
-        #ifdef TONE_MAPPING
-          if (uPilot > 0.5) gl_FragColor.rgb = toneMapping(gl_FragColor.rgb);
-        #endif
-        #include <colorspace_fragment>
-      }`,
+    fragmentShader: SKY_FRAGMENT,
   }));
   const sky = new THREE.Mesh(new THREE.SphereGeometry(400, 24, 12), skyMat);
   sky.frustumCulled = false;
@@ -94,7 +90,7 @@ export function addEnvironment(w: World, lightingReview = REVIEW === 'lighting')
   let shadows = false;
   const env: Env = {
     sun, hemi,
-    mode: lightingReview ? 'pilot' : 'baseline', preview: null, diagnostic: 'normal', fixtureGain: 1,
+    mode: lightingReview ? 'pilot' : 'baseline', preview: null, clouds: true, diagnostic: 'normal', fixtureGain: 1,
     update(dusk, focus, indoor = 0) {
       const pilot = lightingReview && env.mode === 'pilot';
       const value = lightingReview && env.preview !== null ? env.preview : dusk;
@@ -115,7 +111,7 @@ export function addEnvironment(w: World, lightingReview = REVIEW === 'lighting')
       const near = HAZE.open[0] + (HAZE.wood[0] - HAZE.open[0]) * kw, far = HAZE.open[1] + (HAZE.wood[1] - HAZE.open[1]) * kw;
       fog.near = near + (HAZE.inside[0] - near) * k; fog.far = far + (HAZE.inside[1] - far) * k;
       let elevation = 34 - 22 * t;
-      uni.uPilot.value = pilot ? 1 : 0; uni.uGlow.value = 1; env.fixtureGain = 1;
+      uni.uPilot.value = pilot ? 1 : 0; uni.uGlow.value = 1; uni.uCloudOpacity.value = 0; env.fixtureGain = 1;
       if (pilot) {
         const { a, b, blend: f } = sampleLighting(t, phase);
         const mix = (x: number, y: number) => THREE.MathUtils.lerp(x, y, f);
@@ -131,6 +127,9 @@ export function addEnvironment(w: World, lightingReview = REVIEW === 'lighting')
         uni.uHorizon.value.lerpColors(a.horizon, b.horizon, f).lerp(fog.color, 0.7);
         uni.uSunCol.value.lerpColors(a.sun, b.sun, f);
         uni.uGlow.value = mix(a.glow, b.glow) * visibleSun;
+        uni.uCloudLight.value.lerpColors(a.cloudLight, b.cloudLight, f);
+        uni.uCloudShade.value.lerpColors(a.cloudShade, b.cloudShade, f);
+        uni.uCloudOpacity.value = env.clouds ? mix(a.cloudOpacity, b.cloudOpacity) : 0;
         sun.color.lerpColors(a.sun, b.sun, f);
         sun.intensity = mix(a.direct, b.direct) * visibleSun * (1 - 0.5 * k) * (1 - 0.14 * woodland);
         hemi.color.lerpColors(a.sky, b.sky, f);

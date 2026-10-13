@@ -45,6 +45,7 @@ export function mountLightingReview(game: Game) {
   const surfaceDefines = new Map<THREE.Material, Record<string, unknown>>();
   env.preview = Number.isFinite(initial) ? Math.max(0, Math.min(1, initial)) : 0;
   env.mode = q.get('system') === 'baseline' ? 'baseline' : 'pilot';
+  env.clouds = q.get('clouds') !== '0';
   const bar = document.createElement('div'); bar.id = 'review-bar';
   bar.setAttribute('role', 'toolbar'); bar.setAttribute('aria-label', 'ENV-L01 lighting review');
   // Styling belongs to this dev-only panel; gameplay HUD/notebook CSS stays untouched.
@@ -55,13 +56,14 @@ export function mountLightingReview(game: Game) {
     <label>Systeem <select data-system><option value="pilot">Vier fasen</option><option value="baseline">Productie</option></select></label>
     <label>Locatie <select data-view>${Object.keys(LIGHTING_VIEWS).map(v => `<option>${v}</option>`).join('')}</select></label>
     <label>Kwaliteit <select data-quality><option value="low">Low</option><option value="high">High</option></select></label>
+    <label><input data-clouds type="checkbox" ${env.clouds ? 'checked' : ''}> Dunne wolken</label>
     <label>Diagnose <select data-diagnostic><option value="normal">Normaal</option><option value="hemi">Hemisphere only</option><option value="sun">Directional only</option><option value="practicals">Alleen lokale lampen (test)</option><option value="no-surfaces">Zonder authored surface shader</option><option value="no-fog">Zonder mist</option><option value="no-shadows">Zonder schaduwen</option></select></label>
     <button data-report>Download renderdiagnose</button>
     <button data-progress>Volg puzzelvoortgang</button>
     <a href="${location.pathname}" style="color:white">Verlaat review</a>
     <span class="info" data-info></span></div>`;
   document.getElementById('app')!.appendChild(bar);
-  const slider = bar.querySelector<HTMLInputElement>('input')!, controls = bar.querySelector<HTMLElement>('[data-controls]')!;
+  const slider = bar.querySelector<HTMLInputElement>('input[type="range"]')!, controls = bar.querySelector<HTMLElement>('[data-controls]')!;
   const system = bar.querySelector<HTMLSelectElement>('[data-system]')!, quality = bar.querySelector<HTMLSelectElement>('[data-quality]')!;
   system.value = env.mode; quality.value = game.settings.quality;
   const info = () => { bar.querySelector('[data-info]')!.textContent = `${env.mode} · ${env.preview === null ? 'voortgang' : env.preview.toFixed(3)} · ${vegPathLabel()} · ${BUILD}`; };
@@ -74,6 +76,7 @@ export function mountLightingReview(game: Game) {
     if (b?.hasAttribute('data-report')) downloadLightingReport(game);
   });
   slider.addEventListener('input', () => setPhase(Number(slider.value)));
+  bar.querySelector<HTMLInputElement>('[data-clouds]')!.addEventListener('change', e => { env.clouds = (e.target as HTMLInputElement).checked; });
   system.addEventListener('change', () => { env.mode = system.value === 'baseline' ? 'baseline' : 'pilot'; info(); });
   quality.addEventListener('change', () => { game.settings.quality = quality.value === 'high' ? 'high' : 'low'; game.applyQuality(true); });
   bar.querySelector<HTMLSelectElement>('[data-diagnostic]')!.addEventListener('change', e => {

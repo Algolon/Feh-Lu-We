@@ -49,3 +49,27 @@ Capture build was created with `8f2eac9 + working tree`, subsequently committed 
 Recommendation: use ENV-03 as the main evening anchor, retain the cool ground-bounce floor and local warm lamps, and review ENV-04 on-device before further darkening. Keep ACES/exposure 1.15. Do not merge, deploy or undertake final estate-wide calibration until the owner has reviewed these results and the device issue is narrowed.
 
 Owner image has now been inspected; direction accepted. [Screenshot follow-up and device diagnosis](ENV-L01_OWNER_SCREENSHOT_FOLLOWUP.md).
+
+## Sky detail continuation — 13 October 2026
+
+Owner requested further sky development after approving the four atmospheres. **25 new real game frames**, separate from the earlier 159, use one existing sky dome, optional thin clouds and refined sun presentation. Same exact camera/geometry within each four-phase set. This does not reproduce or repair the Android blackout, which the owner reports cleared after reload.
+
+![Sky detail — four phases, Low](evidence/sky-detail-four-phases.jpg)
+
+![Open garden — four phases with sky detail, Low](evidence/sky-detail-garden.jpg)
+
+![BOSLUST — four phases with sky detail, Low](evidence/sky-detail-boslust.jpg)
+
+![Cloud toggle, sun direction and Low/High controls](evidence/sky-detail-controls.jpg)
+
+### Capture conditions and index
+
+[Exact per-frame poses, lighting, fog, counters, shader/GL diagnostics and bundle fingerprints](evidence/sky-detail-measurements.json). Chromium headless shell 141, ANGLE SwiftShader WebGL2, coarse pointer/touch browser, DPR1. Landscape 915×412 / FOV68; portrait 412×915 / FOV82. Torch off; review state with front door open. Three timings after four warmup renders are software timings, not Android performance. Fixed room blend for still comparisons; no saved puzzle flags changed. The two portrait endpoint frames and entrance-hall/cloud-off regression are indexed in that JSON; raw frames are scratch capture outputs, not a duplicate repository collection.
+
+Sheets: `sky-detail-four-phases.jpg` looks upward from the garden to expose cloud form; `sky-detail-garden.jpg` and `sky-detail-boslust.jpg` keep the initial representative viewpoints; `sky-detail-controls.jpg` shows paired day cloud on/off, the actual day/golden sun directions and Low/High daytime BOSLUST.
+
+**Observed:** distinct cool evening gradients retain path, foliage and stone readability. Clouds are soft elongated bands, strongest in day/golden, subtle in late dusk; no fantasy glow or moon. Baseline cloud toggles produce identical JPEG frames. Pilot garden toggles leave the bottom 30% foreground pixels identical at both endpoints, while the sky changes. Entrance-hall JPEG differences are small but nonzero; successive capture ticks also advance existing animated practicals, so do not claim pixel-identical indoor renders. Global light/counter pairs are equal.
+
+**Review decision:** recommend retaining the restrained cloud bands and clear-sky switch. Sky/fog/world palette remains as approved. Review the additional cloud shape and sun treatment separately: is it sufficiently painterly and natural, or should the optional clouds be lighter/clearer? Android frame pacing and the intermittent native defect remain outstanding. No final estate-wide tuning, merge or deployment performed.
+
+Latest source checks and regression provenance: 274 units and typecheck/build pass; main 102/103 (only F05), DEV-04C 22/22, DEV-04D 18/18. See [latest QA](ENV-L01_QA_REPORT.md#sky-continuation--latest-build-validation-13-october-2026). These software captures and suites do not certify physical Android performance or the intermittent native fault.

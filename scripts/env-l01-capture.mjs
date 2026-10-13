@@ -93,7 +93,7 @@ async function capture(name, quality, portrait, dusk, variant = 'normal', fallba
   const file = `${name}-${quality}-${portrait ? 'portrait' : 'landscape'}-${dusk}-${variant}${fallback ? '-fallback' : ''}.jpg`;
   await page.screenshot({ path: `${OUT}/${file}`, type: 'jpeg', quality: 86 });
   rows.push({ file, name, quality, portrait, dusk, variant, fallback, ...m });
-  writeFileSync(`${OUT}/measurements.json`, JSON.stringify({ mode: MODE, commit: execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(), browser: browser.version(), conditions: 'SwiftShader WebGL2; DPR 1; FOV 68; 915x412 or 412x915; torch off; only front door open; stationary; reduced motion; 5 timed GPU-synchronized renders after 8 warmup frames. Not device FPS.', rows, problems }, null, 2));
+  writeFileSync(`${OUT}/measurements.json`, JSON.stringify({ mode: MODE, commit: execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(), browser: browser.version(), conditions: 'SwiftShader WebGL2; DPR 1; FOV 68 landscape / 82 portrait; 915x412 or 412x915; torch off; only front door open; stationary; reduced motion; 5 timed GPU-synchronized renders after 8 warmup frames. Not device FPS.', rows, problems }, null, 2));
   console.log(file, m.calls, m.triangles, m.shaderFailures.length);
 }
 try {
