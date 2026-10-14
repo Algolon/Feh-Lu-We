@@ -1,5 +1,5 @@
 {
-  "generation": "fresh reconstructed run",
+  "generation": "Recovery package; recovered original media and explicitly reproduced captures",
   "baselineProductionHead": "ae2a036e783400355c8d137f24e16c33bb1a8323",
   "frameContent": [
     915,
@@ -9,57 +9,67 @@
   "selectedFrames": 9,
   "lodSteps": 172,
   "videos": 8,
-  "validation": "All raster files fully decoded; videos ffprobe and full ffmpeg decode passed; hashes describe packaged files. Source screenshot conversion asserted exact decoded pixel equality where captured. Contact sheet labels outside unchanged frame pixels. No physical-device claim.",
+  "validation": "Current files decoded/hashed by scripts/vfc01-integrity.py. Missing files remain an explicit failed completion gate. Original validations and timings are retained separately; no new phone performance claim.",
   "files": [
     {
       "path": "README.md",
-      "bytes": 2723,
-      "sha256": "cb2c75720914f13f5f992ae5f37d95ea0011a198b491f283884d95fad5f0b2da"
+      "bytes": 3083,
+      "sha256": "eaaa0271ab01f45d4c3d6998614d24bd40552784a6476fa7a292379dc9c0d1e8",
+      "availability": "retained or updated document"
     },
     {
       "path": "VFC01_BASELINE_AUDIT.md",
       "bytes": 7408,
-      "sha256": "bd618ac894a968f42a60865adb9d6961b36e4daa1e221cf22c864a0dcf48116a"
+      "sha256": "bd618ac894a968f42a60865adb9d6961b36e4daa1e221cf22c864a0dcf48116a",
+      "availability": "retained or updated document"
     },
     {
       "path": "VFC01_EXPERIMENT_MATRIX.md",
       "bytes": 5472,
-      "sha256": "fb5068e5fa88f81019367a24787f5cd1f72b6add56e06778f14157051d8ddf5f"
+      "sha256": "fb5068e5fa88f81019367a24787f5cd1f72b6add56e06778f14157051d8ddf5f",
+      "availability": "retained or updated document"
     },
     {
       "path": "VFC01_GEOMETRY_REPORT.md",
       "bytes": 4689,
-      "sha256": "4bfcfdc7ca3724ff1fb46d5c7e932adb216de067eb27744765d448df4d71651c"
+      "sha256": "4bfcfdc7ca3724ff1fb46d5c7e932adb216de067eb27744765d448df4d71651c",
+      "availability": "retained or updated document"
     },
     {
       "path": "VFC01_MATERIAL_REPORT.md",
       "bytes": 7947,
-      "sha256": "f7969fdf7e5aa46ab9f0c807e52263358513651b11643a11bd6744ee7044b0d3"
+      "sha256": "f7969fdf7e5aa46ab9f0c807e52263358513651b11643a11bd6744ee7044b0d3",
+      "availability": "retained or updated document"
     },
     {
       "path": "VFC01_PERFORMANCE_REPORT.md",
       "bytes": 10173,
-      "sha256": "0f8f09883ea6f3d96e6c3d29886432f0480a82c765c469ae9e004b5789440aaf"
+      "sha256": "0f8f09883ea6f3d96e6c3d29886432f0480a82c765c469ae9e004b5789440aaf",
+      "availability": "retained or updated document"
     },
     {
       "path": "VFC01_PHONE_PROTOCOL.md",
       "bytes": 5125,
-      "sha256": "4066f8a52b1a8acff8de52c9536708d6aeda7ddddbb0648956f983457d196962"
+      "sha256": "4066f8a52b1a8acff8de52c9536708d6aeda7ddddbb0648956f983457d196962",
+      "availability": "retained or updated document"
     },
     {
       "path": "VFC01_RECOMMENDATION.md",
       "bytes": 11288,
-      "sha256": "9d69847121e0192a733b718ae0a392bf834ca36a1f28abde7df4d024631e5287"
+      "sha256": "9d69847121e0192a733b718ae0a392bf834ca36a1f28abde7df4d024631e5287",
+      "availability": "retained or updated document"
     },
     {
       "path": "VFC01_RECOVERY_STATUS.md",
-      "bytes": 4243,
-      "sha256": "fa422d29312cf088ac731650689b2adde0caec5e94f1329b28600fd10267154d"
+      "bytes": 4545,
+      "sha256": "e867dac520faad589f38f0ff0828753acacb36afb8d8a3f720d0e1562fed88cf",
+      "availability": "retained or updated document"
     },
     {
       "path": "VFC01_VISIBILITY_LOD_REPORT.md",
       "bytes": 5428,
-      "sha256": "2f516ea9c3e4638c55249c089497d752360b4390dc9e8a0c3a998ac5c9c5d0b6"
+      "sha256": "2f516ea9c3e4638c55249c089497d752360b4390dc9e8a0c3a998ac5c9c5d0b6",
+      "availability": "retained or updated document"
     },
     {
       "path": "baseline/cottage-craft.webp",
@@ -67,7 +77,8 @@
       "sha256": "ff110d223d59e27ed5566ec7933bceaccfe485533f8c4b6d8493236ef6d7c558",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "353f70d8d21c11252c4fcaa98e4acd962b248c517269b09e7b3b459a59020655"
+      "decodedPixelSha256": "9da0f63584ea04c5e623f3b06b538a780757c12545e360b038d1424f65e4be35",
+      "availability": "committed original media"
     },
     {
       "path": "baseline/cottage-medium.webp",
@@ -75,7 +86,8 @@
       "sha256": "411b3155a72952c182fe7fd4559e1c1656ed25fadece5e5bbf9fc64240feab61",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "83fc40d661b76878c49765cd144d66c87b444ffc126ba798db96c5bcdab5ad55"
+      "decodedPixelSha256": "8aec89aad5254258fa25811dd7c81010fc59cc926903b0bf7c54f4cc3cb2fee8",
+      "availability": "committed original media"
     },
     {
       "path": "baseline/cottage-player.webp",
@@ -83,7 +95,8 @@
       "sha256": "a7c2f14372005f52ec69b8e1b822fd82c0fb6e7313e1101300add29350e7dc36",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "5171dd8fc85a290514fecf2a0cd6a9369c56ee10dd33d11764e56995cdb961c4"
+      "decodedPixelSha256": "9557c1ad39c3fae630c9d635116ca2e864ced3f091f5af0fce8ea64ff6d36b91",
+      "availability": "committed original media"
     },
     {
       "path": "baseline/library-craft.webp",
@@ -91,7 +104,8 @@
       "sha256": "75438c22e7e50ddc0d6ce4472e6ab395b03d2e2e7d6aad7841f65aa6b20957ad",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "5941cf1ac94979434024fb0f1efd5638a6413dde53891e636c9884f01c97d778"
+      "decodedPixelSha256": "949d0bbaec4cf91566873a6d20505a8a15455ea17912b1c14c73bcc413d6350d",
+      "availability": "committed original media"
     },
     {
       "path": "baseline/library-medium.webp",
@@ -99,7 +113,8 @@
       "sha256": "dda313088d89340d737913bafa4f36c40e24edf9ad2de208522cf0f086cbe14f",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "96dc6b57bc231e6fe3014b70b7b42b0bce3d84309d323e5e934d4a33dd58b943"
+      "decodedPixelSha256": "3c9dfc6053f43fe45bb0d008c612deb56853e803cc50b1f72c1c17826123c45d",
+      "availability": "committed original media"
     },
     {
       "path": "baseline/library-player.webp",
@@ -107,7 +122,8 @@
       "sha256": "7a746126f320c5bc102dca8d2b078e400f75efb7a031a531f08e42397fcfd553",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "826d14b5cdac968215073934977a877944f756038e86926a0521772d2fb776af"
+      "decodedPixelSha256": "aa53c1aaad48fa82b49baaadd94eb16dfbd5d549728149c7e20ce60234c4419a",
+      "availability": "committed original media"
     },
     {
       "path": "baseline/production-cottage-craft.webp",
@@ -115,7 +131,8 @@
       "sha256": "ff110d223d59e27ed5566ec7933bceaccfe485533f8c4b6d8493236ef6d7c558",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "353f70d8d21c11252c4fcaa98e4acd962b248c517269b09e7b3b459a59020655"
+      "decodedPixelSha256": "9da0f63584ea04c5e623f3b06b538a780757c12545e360b038d1424f65e4be35",
+      "availability": "committed original media"
     },
     {
       "path": "baseline/production-cottage-medium.webp",
@@ -123,7 +140,8 @@
       "sha256": "2857d33edbdf7d66c0ebeb9ae08e48b10179bb15b7c6107c77eeb0f58bc7a9cb",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "2aa635c07590ea38db5c85807a096639b0e7f20217368f3641b17261aa9e4de6"
+      "decodedPixelSha256": "f139951444ca0d1cd0aea2d3f5156538b3821133d1d4a38889153cb62e602a58",
+      "availability": "committed original media"
     },
     {
       "path": "baseline/production-cottage-player.webp",
@@ -131,7 +149,8 @@
       "sha256": "ce15698fd3fad2305eac3b6f12b17fca8d35a56b644dd6a3a4fe052778d2e6d7",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "61765dc817cd265b5f89685a906ef2ea4b840dbad7fef89e14b87febb3486af9"
+      "decodedPixelSha256": "630baa93fe2c6f37201340859f5262c3d7b7ef7d3ed5207f476d23758b366f28",
+      "availability": "committed original media"
     },
     {
       "path": "baseline/production-library-craft.webp",
@@ -139,7 +158,8 @@
       "sha256": "556ac47d9d33306b553d949a3d29f6612e1f408eb54fc2bf372295f78636d1e3",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "92311876136a52a3b22246ca39329845a9473129c734d0e35a749d39d4ec74cb"
+      "decodedPixelSha256": "826e3727c40c1757317fdc974b2cb9bcbf59158ff73aadbae07fd64236bdf06b",
+      "availability": "committed original media"
     },
     {
       "path": "baseline/production-library-medium.webp",
@@ -147,7 +167,8 @@
       "sha256": "dda313088d89340d737913bafa4f36c40e24edf9ad2de208522cf0f086cbe14f",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "96dc6b57bc231e6fe3014b70b7b42b0bce3d84309d323e5e934d4a33dd58b943"
+      "decodedPixelSha256": "3c9dfc6053f43fe45bb0d008c612deb56853e803cc50b1f72c1c17826123c45d",
+      "availability": "committed original media"
     },
     {
       "path": "baseline/production-library-player.webp",
@@ -155,12 +176,14 @@
       "sha256": "7a746126f320c5bc102dca8d2b078e400f75efb7a031a531f08e42397fcfd553",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "826d14b5cdac968215073934977a877944f756038e86926a0521772d2fb776af"
+      "decodedPixelSha256": "aa53c1aaad48fa82b49baaadd94eb16dfbd5d549728149c7e20ce60234c4419a",
+      "availability": "committed original media"
     },
     {
       "path": "baseline/production.json",
       "bytes": 7178,
-      "sha256": "a9cea78d14fdc505cd1b6b2c05cf3e6a71d0ff5c320d93aa4162bc1cd1a92c88"
+      "sha256": "a9cea78d14fdc505cd1b6b2c05cf3e6a71d0ff5c320d93aa4162bc1cd1a92c88",
+      "availability": "retained or updated document"
     },
     {
       "path": "clay/V0-cottage-craft.webp",
@@ -168,7 +191,8 @@
       "sha256": "83ce2645d577f1791a1eb612bed33d1059fb4300fa4abbd4104c625fc38be55e",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "ce9780b8617e8f8715d69d41536e63aa79965d9f336a874e7171428e8aaad606"
+      "decodedPixelSha256": "ce9780b8617e8f8715d69d41536e63aa79965d9f336a874e7171428e8aaad606",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V0-cottage-medium.webp",
@@ -176,7 +200,8 @@
       "sha256": "a9f517f37e15606a399b484a3b35620a8e5ac1f67eb4e8aa1bfbff17bd2c550a",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "a0beb08bd3fd1a47aed2c61533a064efc173bd52fe2eb850515fef4661061c9b"
+      "decodedPixelSha256": "a0beb08bd3fd1a47aed2c61533a064efc173bd52fe2eb850515fef4661061c9b",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V0-cottage-player.webp",
@@ -184,7 +209,8 @@
       "sha256": "f70a3852bd2ac354ff57526cb9a8f282a42a4d22577a7603de9ed70cc52fb857",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "1ff9583d7ed0ee3ce8a982dfa97c1d905694cb7ed6922d61e05dfd742b70b2b7"
+      "decodedPixelSha256": "1ff9583d7ed0ee3ce8a982dfa97c1d905694cb7ed6922d61e05dfd742b70b2b7",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V0-library-craft.webp",
@@ -192,7 +218,8 @@
       "sha256": "6f9a9cfa8141b20f2e2f4fc2fc503306c6ec2a6854f0e8dec7afc5db1231553e",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "1b3286c6c2475ed5c9c7ffac969f4c6eabad59cdd59cb0856b1b5eb35d75b960"
+      "decodedPixelSha256": "1b3286c6c2475ed5c9c7ffac969f4c6eabad59cdd59cb0856b1b5eb35d75b960",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V0-library-medium.webp",
@@ -200,7 +227,8 @@
       "sha256": "3fb919c4c7373c545179cb1d2687911467ec1b4ce9d477c716875976e348c1a2",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "3751766340fffeedb1e7514c3a067a5db12389d719afa852d84119cfe0bf9495"
+      "decodedPixelSha256": "3751766340fffeedb1e7514c3a067a5db12389d719afa852d84119cfe0bf9495",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V0-library-player.webp",
@@ -208,7 +236,8 @@
       "sha256": "efe116b0542edeb20edacb8c71ac660ffee897e911bf3de9b065e80b335b9c19",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "b51699b4bb931d64cc81027303271b03c616c6dfad2f0065998d60a1b3885a4c"
+      "decodedPixelSha256": "b51699b4bb931d64cc81027303271b03c616c6dfad2f0065998d60a1b3885a4c",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V1-cottage-craft.webp",
@@ -216,7 +245,8 @@
       "sha256": "83ce2645d577f1791a1eb612bed33d1059fb4300fa4abbd4104c625fc38be55e",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "ce9780b8617e8f8715d69d41536e63aa79965d9f336a874e7171428e8aaad606"
+      "decodedPixelSha256": "ce9780b8617e8f8715d69d41536e63aa79965d9f336a874e7171428e8aaad606",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V1-cottage-medium.webp",
@@ -224,7 +254,8 @@
       "sha256": "a9f517f37e15606a399b484a3b35620a8e5ac1f67eb4e8aa1bfbff17bd2c550a",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "a0beb08bd3fd1a47aed2c61533a064efc173bd52fe2eb850515fef4661061c9b"
+      "decodedPixelSha256": "a0beb08bd3fd1a47aed2c61533a064efc173bd52fe2eb850515fef4661061c9b",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V1-cottage-player.webp",
@@ -232,7 +263,8 @@
       "sha256": "f70a3852bd2ac354ff57526cb9a8f282a42a4d22577a7603de9ed70cc52fb857",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "1ff9583d7ed0ee3ce8a982dfa97c1d905694cb7ed6922d61e05dfd742b70b2b7"
+      "decodedPixelSha256": "1ff9583d7ed0ee3ce8a982dfa97c1d905694cb7ed6922d61e05dfd742b70b2b7",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V1-library-craft.webp",
@@ -240,7 +272,8 @@
       "sha256": "6f9a9cfa8141b20f2e2f4fc2fc503306c6ec2a6854f0e8dec7afc5db1231553e",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "1b3286c6c2475ed5c9c7ffac969f4c6eabad59cdd59cb0856b1b5eb35d75b960"
+      "decodedPixelSha256": "1b3286c6c2475ed5c9c7ffac969f4c6eabad59cdd59cb0856b1b5eb35d75b960",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V1-library-medium.webp",
@@ -248,7 +281,8 @@
       "sha256": "3fb919c4c7373c545179cb1d2687911467ec1b4ce9d477c716875976e348c1a2",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "3751766340fffeedb1e7514c3a067a5db12389d719afa852d84119cfe0bf9495"
+      "decodedPixelSha256": "3751766340fffeedb1e7514c3a067a5db12389d719afa852d84119cfe0bf9495",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V1-library-player.webp",
@@ -256,7 +290,8 @@
       "sha256": "efe116b0542edeb20edacb8c71ac660ffee897e911bf3de9b065e80b335b9c19",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "b51699b4bb931d64cc81027303271b03c616c6dfad2f0065998d60a1b3885a4c"
+      "decodedPixelSha256": "b51699b4bb931d64cc81027303271b03c616c6dfad2f0065998d60a1b3885a4c",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V2-cottage-craft.webp",
@@ -264,7 +299,8 @@
       "sha256": "0d84f208d08e157e64369d877851c87957230ea89d03ce98633a95ad6756375d",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "11116183756d753b5584f4a1c16517441e97c7cf9cb2836351cb57bfe8d94481"
+      "decodedPixelSha256": "11116183756d753b5584f4a1c16517441e97c7cf9cb2836351cb57bfe8d94481",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V2-cottage-medium.webp",
@@ -272,7 +308,8 @@
       "sha256": "ee444ccf9bbd83f4326510aa5d14d727710f20abdd96ac8865865171041d84fd",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "ddd80cc4f84fdc86edc3578610f2567eef73a4a0930189f14801c5e6351d08f2"
+      "decodedPixelSha256": "ddd80cc4f84fdc86edc3578610f2567eef73a4a0930189f14801c5e6351d08f2",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V2-cottage-player.webp",
@@ -280,7 +317,8 @@
       "sha256": "ff78176190c89841eaffe6b291dac7296c2ed52455fcde2daffb5d9830207037",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "56116bb261598e00fb161004c34b983a9b0f2efd5f20ffde3f90bb3061514e28"
+      "decodedPixelSha256": "56116bb261598e00fb161004c34b983a9b0f2efd5f20ffde3f90bb3061514e28",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V2-library-craft.webp",
@@ -288,7 +326,8 @@
       "sha256": "7306c931bbf0b6f3e377684c60eed12094b192a612b90cc244619ed2af3c9471",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "38bc239b63d7e6400025bb0117188943ed11f11774a15ebfe6b014e6cf4f9436"
+      "decodedPixelSha256": "38bc239b63d7e6400025bb0117188943ed11f11774a15ebfe6b014e6cf4f9436",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V2-library-medium.webp",
@@ -296,7 +335,8 @@
       "sha256": "934c885193805e0e5c8a0ca9b2a79167ad48d829810f28d644ddb92818a4fc48",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "6862a5f760beadf1afcac9905790f96258aa68f99c4e6241d6df0cdde49d2bac"
+      "decodedPixelSha256": "6862a5f760beadf1afcac9905790f96258aa68f99c4e6241d6df0cdde49d2bac",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V2-library-player.webp",
@@ -304,7 +344,8 @@
       "sha256": "9aee4c6ffbc30177467d33f854916c0f0c4f0c1b470f2cda91dbb5bc8bca5939",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "3eea855e0256d2a87851b997e2c30983bedfcadda87745aad5d8dc31d809dd47"
+      "decodedPixelSha256": "3eea855e0256d2a87851b997e2c30983bedfcadda87745aad5d8dc31d809dd47",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V3-cottage-craft.webp",
@@ -312,7 +353,8 @@
       "sha256": "0d84f208d08e157e64369d877851c87957230ea89d03ce98633a95ad6756375d",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "11116183756d753b5584f4a1c16517441e97c7cf9cb2836351cb57bfe8d94481"
+      "decodedPixelSha256": "11116183756d753b5584f4a1c16517441e97c7cf9cb2836351cb57bfe8d94481",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V3-cottage-medium.webp",
@@ -320,7 +362,8 @@
       "sha256": "ee444ccf9bbd83f4326510aa5d14d727710f20abdd96ac8865865171041d84fd",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "ddd80cc4f84fdc86edc3578610f2567eef73a4a0930189f14801c5e6351d08f2"
+      "decodedPixelSha256": "ddd80cc4f84fdc86edc3578610f2567eef73a4a0930189f14801c5e6351d08f2",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V3-cottage-player.webp",
@@ -328,7 +371,8 @@
       "sha256": "ff78176190c89841eaffe6b291dac7296c2ed52455fcde2daffb5d9830207037",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "56116bb261598e00fb161004c34b983a9b0f2efd5f20ffde3f90bb3061514e28"
+      "decodedPixelSha256": "56116bb261598e00fb161004c34b983a9b0f2efd5f20ffde3f90bb3061514e28",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V3-library-craft.webp",
@@ -336,7 +380,8 @@
       "sha256": "7306c931bbf0b6f3e377684c60eed12094b192a612b90cc244619ed2af3c9471",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "38bc239b63d7e6400025bb0117188943ed11f11774a15ebfe6b014e6cf4f9436"
+      "decodedPixelSha256": "38bc239b63d7e6400025bb0117188943ed11f11774a15ebfe6b014e6cf4f9436",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V3-library-medium.webp",
@@ -344,7 +389,8 @@
       "sha256": "934c885193805e0e5c8a0ca9b2a79167ad48d829810f28d644ddb92818a4fc48",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "6862a5f760beadf1afcac9905790f96258aa68f99c4e6241d6df0cdde49d2bac"
+      "decodedPixelSha256": "6862a5f760beadf1afcac9905790f96258aa68f99c4e6241d6df0cdde49d2bac",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V3-library-player.webp",
@@ -352,7 +398,8 @@
       "sha256": "9aee4c6ffbc30177467d33f854916c0f0c4f0c1b470f2cda91dbb5bc8bca5939",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "3eea855e0256d2a87851b997e2c30983bedfcadda87745aad5d8dc31d809dd47"
+      "decodedPixelSha256": "3eea855e0256d2a87851b997e2c30983bedfcadda87745aad5d8dc31d809dd47",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V4-cottage-craft.webp",
@@ -360,7 +407,8 @@
       "sha256": "0d84f208d08e157e64369d877851c87957230ea89d03ce98633a95ad6756375d",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "11116183756d753b5584f4a1c16517441e97c7cf9cb2836351cb57bfe8d94481"
+      "decodedPixelSha256": "11116183756d753b5584f4a1c16517441e97c7cf9cb2836351cb57bfe8d94481",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V4-cottage-medium.webp",
@@ -368,7 +416,8 @@
       "sha256": "ee444ccf9bbd83f4326510aa5d14d727710f20abdd96ac8865865171041d84fd",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "ddd80cc4f84fdc86edc3578610f2567eef73a4a0930189f14801c5e6351d08f2"
+      "decodedPixelSha256": "ddd80cc4f84fdc86edc3578610f2567eef73a4a0930189f14801c5e6351d08f2",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V4-cottage-player.webp",
@@ -376,7 +425,8 @@
       "sha256": "ff78176190c89841eaffe6b291dac7296c2ed52455fcde2daffb5d9830207037",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "56116bb261598e00fb161004c34b983a9b0f2efd5f20ffde3f90bb3061514e28"
+      "decodedPixelSha256": "56116bb261598e00fb161004c34b983a9b0f2efd5f20ffde3f90bb3061514e28",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V4-library-craft.webp",
@@ -384,7 +434,8 @@
       "sha256": "7306c931bbf0b6f3e377684c60eed12094b192a612b90cc244619ed2af3c9471",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "38bc239b63d7e6400025bb0117188943ed11f11774a15ebfe6b014e6cf4f9436"
+      "decodedPixelSha256": "38bc239b63d7e6400025bb0117188943ed11f11774a15ebfe6b014e6cf4f9436",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V4-library-medium.webp",
@@ -392,7 +443,8 @@
       "sha256": "934c885193805e0e5c8a0ca9b2a79167ad48d829810f28d644ddb92818a4fc48",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "6862a5f760beadf1afcac9905790f96258aa68f99c4e6241d6df0cdde49d2bac"
+      "decodedPixelSha256": "6862a5f760beadf1afcac9905790f96258aa68f99c4e6241d6df0cdde49d2bac",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "clay/V4-library-player.webp",
@@ -400,7 +452,8 @@
       "sha256": "9aee4c6ffbc30177467d33f854916c0f0c4f0c1b470f2cda91dbb5bc8bca5939",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "3eea855e0256d2a87851b997e2c30983bedfcadda87745aad5d8dc31d809dd47"
+      "decodedPixelSha256": "3eea855e0256d2a87851b997e2c30983bedfcadda87745aad5d8dc31d809dd47",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined/cottage-craft.webp",
@@ -408,7 +461,8 @@
       "sha256": "0196f4d44c317ea172e51873cece14efad91db3d08a676a0dffd841325b456d4",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "524845be2b17562644fc558d1e524b13ea227c442b1bf49073a405fbc4f88aca"
+      "decodedPixelSha256": "524845be2b17562644fc558d1e524b13ea227c442b1bf49073a405fbc4f88aca",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined/cottage-medium.webp",
@@ -416,7 +470,8 @@
       "sha256": "2c60224a32bfddebc55a924f1fefafa225c0c0f8fc6e64b42c4e98455725cc83",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "82b48cc84cb685b3e04b347b3a19126fe4e6033d5f22d068b736b2cae5370fd8"
+      "decodedPixelSha256": "82b48cc84cb685b3e04b347b3a19126fe4e6033d5f22d068b736b2cae5370fd8",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined/cottage-player.webp",
@@ -424,7 +479,8 @@
       "sha256": "0ae45b563be4e7b8c6c019b4dc111dcf46049ca0afe6690ef1d70f420a1509b2",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "8476467a6410b6d29cec381242e0a13fd12e4442964312d80892f605137967bd"
+      "decodedPixelSha256": "8476467a6410b6d29cec381242e0a13fd12e4442964312d80892f605137967bd",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined/library-craft.webp",
@@ -432,7 +488,8 @@
       "sha256": "b9d900d73c934e2fa5ad5efdca1d00ee77ca014b6057a3de3f956b693d8c7e93",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "a0bdb81005141cc3d4380f24a2dffd8605fb101973c6ce2d77d46d94c10d0469"
+      "decodedPixelSha256": "a0bdb81005141cc3d4380f24a2dffd8605fb101973c6ce2d77d46d94c10d0469",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined/library-medium.webp",
@@ -440,7 +497,8 @@
       "sha256": "8b9ad4cd99d9db1a5237b8f2ccaa30d7c1d374b17174eefd748fd0bc57ef4938",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "86e21ace7c68158abf87fabbc621b09936c45fe7cc001e63b845e47ee5ae552f"
+      "decodedPixelSha256": "86e21ace7c68158abf87fabbc621b09936c45fe7cc001e63b845e47ee5ae552f",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined/library-player.webp",
@@ -448,7 +506,8 @@
       "sha256": "bccf28c6acf85b18d8fff068b2ab08d2ee1c7e2772c9e73c17bee879e300b793",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "922b2bd591cd4e2200f6296269206aad14b63c84cdb85cbc4cc903561a4bfa17"
+      "decodedPixelSha256": "922b2bd591cd4e2200f6296269206aad14b63c84cdb85cbc4cc903561a4bfa17",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V3-architecture-0.webp",
@@ -456,7 +515,8 @@
       "sha256": "5c8dabf8f8c36e97ed3704d251829c89aa55ed6d7deff79d02cdf3ca34df9eeb",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "bb5a8aa6b66fa2c6d7712da65b045dac0f9a63b834faae437f23ad64997d8e87"
+      "decodedPixelSha256": "bb5a8aa6b66fa2c6d7712da65b045dac0f9a63b834faae437f23ad64997d8e87",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V3-architecture-14.webp",
@@ -464,7 +524,8 @@
       "sha256": "675f7471b633ff9af6baa8a569f965033b7f7452234bdecefbe0940de7110158",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "95883e1f98193beea40de80ee286a7756f100a962a3776cbe39b9d0379dc66fa"
+      "decodedPixelSha256": "95883e1f98193beea40de80ee286a7756f100a962a3776cbe39b9d0379dc66fa",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V3-architecture-7.webp",
@@ -472,7 +533,8 @@
       "sha256": "4e08ce963647d7955c426ed0eab4b4ea38b3ec811d28353dff62ad710a4e3c4d",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "e608686a4f7b41766c47b973f771ba3f35dbeb70334b8e6488bb4b4f2151e4c3"
+      "decodedPixelSha256": "e608686a4f7b41766c47b973f771ba3f35dbeb70334b8e6488bb4b4f2151e4c3",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V3-architecture.mp4",
@@ -482,7 +544,8 @@
       "width": 916,
       "height": 412,
       "r_frame_rate": "4/1",
-      "nb_frames": "15"
+      "nb_frames": "15",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V3-hero-0.webp",
@@ -490,7 +553,8 @@
       "sha256": "5b66927fa9691a8df9862479087636f9363ef91a2522354d0183b737ab8f9cc6",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "55ee275b895b181b9ec31daf59002385a1ad529338acbaed5ed5ec048d0ace82"
+      "decodedPixelSha256": "55ee275b895b181b9ec31daf59002385a1ad529338acbaed5ed5ec048d0ace82",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V3-hero-10.webp",
@@ -498,7 +562,8 @@
       "sha256": "0fc07717e11d84d9c031aa0f238198a650c7be507ca81e0c0e565012a4a7af45",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "720b00382f07a46807d608bf390a194b7bd30d8bd15836bd91865121eff7c00c"
+      "decodedPixelSha256": "720b00382f07a46807d608bf390a194b7bd30d8bd15836bd91865121eff7c00c",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V3-hero-20.webp",
@@ -506,7 +571,8 @@
       "sha256": "604f5fd459245d9cbf4134fdecc18f5e81d82d5b254c24afad89f7c5d491715a",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "98ab524c64c29efdacb03b3830c7b15fcff0ec9c2c851e5fcf7516b61a7ab455"
+      "decodedPixelSha256": "98ab524c64c29efdacb03b3830c7b15fcff0ec9c2c851e5fcf7516b61a7ab455",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V3-hero.mp4",
@@ -516,7 +582,8 @@
       "width": 916,
       "height": 412,
       "r_frame_rate": "4/1",
-      "nb_frames": "21"
+      "nb_frames": "21",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V3-small-0.webp",
@@ -524,7 +591,8 @@
       "sha256": "00cc15c6589715833576511a270da71b049e8bacf5b0f6dc196a8a25929834ab",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "8c30c0597f0e80e328d166fe204cfff15b4b8f2b8ccddfd4e9124048d0d8827a"
+      "decodedPixelSha256": "8c30c0597f0e80e328d166fe204cfff15b4b8f2b8ccddfd4e9124048d0d8827a",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V3-small-11.webp",
@@ -532,7 +600,8 @@
       "sha256": "cbd67e74ab0cf41a88c885983e46c86769e9ce2bd0a19f649f07b07b01d780a5",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "c8aae7eb26a612719603af4564350a6b82693468c0363002606ed2dc8ad2e2c5"
+      "decodedPixelSha256": "c8aae7eb26a612719603af4564350a6b82693468c0363002606ed2dc8ad2e2c5",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V3-small-22.webp",
@@ -540,7 +609,8 @@
       "sha256": "998f84ada61d191001e5d5da0f9cc8b446db168c07f267c17718a1399b959764",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "d54f48a75f3b9764f68402651e33375166a014185ef3e2645e7c1ff3796f3cfd"
+      "decodedPixelSha256": "d54f48a75f3b9764f68402651e33375166a014185ef3e2645e7c1ff3796f3cfd",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V3-small.mp4",
@@ -550,7 +620,8 @@
       "width": 916,
       "height": 412,
       "r_frame_rate": "4/1",
-      "nb_frames": "23"
+      "nb_frames": "23",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V3-vegetation-0.webp",
@@ -558,7 +629,8 @@
       "sha256": "a5d7f80e5f42b2e0bd64c53d30f260503b713e7d3c634b0762f5a219f0e241ac",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "a18db782ecda74d45cf923eb25aa6fffc4b35f250e2ea6b7f05025b6a9bd23f8"
+      "decodedPixelSha256": "a18db782ecda74d45cf923eb25aa6fffc4b35f250e2ea6b7f05025b6a9bd23f8",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V3-vegetation-13.webp",
@@ -566,7 +638,8 @@
       "sha256": "e9a4effc35eb9b7c0ab003132fca13336a7e9c265207b8ef567274a05f94d3b4",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "f3a9c9065f6abc0d0746389dcf43ffbe7ab97794bfaafc4cf61ca30ab5e6d878"
+      "decodedPixelSha256": "f3a9c9065f6abc0d0746389dcf43ffbe7ab97794bfaafc4cf61ca30ab5e6d878",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V3-vegetation-26.webp",
@@ -574,7 +647,8 @@
       "sha256": "0c0ca7e02cad13a66cbb87da81b2eed1a38cf6599f83230f54d65a18869de4c5",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "3928564ff38790038389a663d0bcd1a53bba563ceedff4a80e1e8a3747980eca"
+      "decodedPixelSha256": "3928564ff38790038389a663d0bcd1a53bba563ceedff4a80e1e8a3747980eca",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V3-vegetation.mp4",
@@ -584,7 +658,8 @@
       "width": 916,
       "height": 412,
       "r_frame_rate": "4/1",
-      "nb_frames": "27"
+      "nb_frames": "27",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V4-architecture-0.webp",
@@ -592,7 +667,8 @@
       "sha256": "98138a1e1dd7217ae54fcbc57d8c25e98d0a63f343ac3c1159290b48d9ade458",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "aa2d54ede8912ffdb85694f5db72ec8d105612c6d6c9e610779241e62d66e756"
+      "decodedPixelSha256": "aa2d54ede8912ffdb85694f5db72ec8d105612c6d6c9e610779241e62d66e756",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V4-architecture-14.webp",
@@ -600,7 +676,8 @@
       "sha256": "3cc16550d033167287f1e7711f1b3115e94ca26748397afa04715b7fd648a980",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "408cbb2fc0c93059048c9ba1fbd23fa7b85cc87d0d1a3acd64020f2d5921dbd7"
+      "decodedPixelSha256": "408cbb2fc0c93059048c9ba1fbd23fa7b85cc87d0d1a3acd64020f2d5921dbd7",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V4-architecture-7.webp",
@@ -608,7 +685,8 @@
       "sha256": "f1a831b6babb4a978fa8c8ad6f479528a15b844a66c4964ecf4e010e784f9cdc",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "fc01e3207b50a7914932ce45a88d1e0f780fddff312c14028ab1b779693c63b3"
+      "decodedPixelSha256": "fc01e3207b50a7914932ce45a88d1e0f780fddff312c14028ab1b779693c63b3",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V4-architecture.mp4",
@@ -618,7 +696,8 @@
       "width": 916,
       "height": 412,
       "r_frame_rate": "4/1",
-      "nb_frames": "15"
+      "nb_frames": "15",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V4-hero-0.webp",
@@ -626,7 +705,8 @@
       "sha256": "5b66927fa9691a8df9862479087636f9363ef91a2522354d0183b737ab8f9cc6",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "55ee275b895b181b9ec31daf59002385a1ad529338acbaed5ed5ec048d0ace82"
+      "decodedPixelSha256": "55ee275b895b181b9ec31daf59002385a1ad529338acbaed5ed5ec048d0ace82",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V4-hero-10.webp",
@@ -634,7 +714,8 @@
       "sha256": "0fc07717e11d84d9c031aa0f238198a650c7be507ca81e0c0e565012a4a7af45",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "720b00382f07a46807d608bf390a194b7bd30d8bd15836bd91865121eff7c00c"
+      "decodedPixelSha256": "720b00382f07a46807d608bf390a194b7bd30d8bd15836bd91865121eff7c00c",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V4-hero-20.webp",
@@ -642,7 +723,8 @@
       "sha256": "604f5fd459245d9cbf4134fdecc18f5e81d82d5b254c24afad89f7c5d491715a",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "98ab524c64c29efdacb03b3830c7b15fcff0ec9c2c851e5fcf7516b61a7ab455"
+      "decodedPixelSha256": "98ab524c64c29efdacb03b3830c7b15fcff0ec9c2c851e5fcf7516b61a7ab455",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V4-hero.mp4",
@@ -652,7 +734,8 @@
       "width": 916,
       "height": 412,
       "r_frame_rate": "4/1",
-      "nb_frames": "21"
+      "nb_frames": "21",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V4-small-0.webp",
@@ -660,7 +743,8 @@
       "sha256": "e697c2b5a53724a9b1e2d2850bc47c6318db9ae723402a37758ba29c0acec5c2",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "fb0d64c29378d6099394fb2a5e361982a0b284809296f13b75cc198e301649ae"
+      "decodedPixelSha256": "fb0d64c29378d6099394fb2a5e361982a0b284809296f13b75cc198e301649ae",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V4-small-11.webp",
@@ -668,7 +752,8 @@
       "sha256": "cbd67e74ab0cf41a88c885983e46c86769e9ce2bd0a19f649f07b07b01d780a5",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "c8aae7eb26a612719603af4564350a6b82693468c0363002606ed2dc8ad2e2c5"
+      "decodedPixelSha256": "c8aae7eb26a612719603af4564350a6b82693468c0363002606ed2dc8ad2e2c5",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V4-small-22.webp",
@@ -676,7 +761,8 @@
       "sha256": "2e3da4b63ff1565da0d6dd3c9ad4ea710905716a666266d35a8bcb635cb8d765",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "9e04540f1cec426a8aed995cb1061ecb2d5019b23696ef536b387f81b6b71b56"
+      "decodedPixelSha256": "9e04540f1cec426a8aed995cb1061ecb2d5019b23696ef536b387f81b6b71b56",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V4-small.mp4",
@@ -686,7 +772,8 @@
       "width": 916,
       "height": 412,
       "r_frame_rate": "4/1",
-      "nb_frames": "23"
+      "nb_frames": "23",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V4-vegetation-0.webp",
@@ -694,7 +781,8 @@
       "sha256": "a5d7f80e5f42b2e0bd64c53d30f260503b713e7d3c634b0762f5a219f0e241ac",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "a18db782ecda74d45cf923eb25aa6fffc4b35f250e2ea6b7f05025b6a9bd23f8"
+      "decodedPixelSha256": "a18db782ecda74d45cf923eb25aa6fffc4b35f250e2ea6b7f05025b6a9bd23f8",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V4-vegetation-13.webp",
@@ -702,7 +790,8 @@
       "sha256": "e9a4effc35eb9b7c0ab003132fca13336a7e9c265207b8ef567274a05f94d3b4",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "f3a9c9065f6abc0d0746389dcf43ffbe7ab97794bfaafc4cf61ca30ab5e6d878"
+      "decodedPixelSha256": "f3a9c9065f6abc0d0746389dcf43ffbe7ab97794bfaafc4cf61ca30ab5e6d878",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V4-vegetation-26.webp",
@@ -710,7 +799,8 @@
       "sha256": "0c0ca7e02cad13a66cbb87da81b2eed1a38cf6599f83230f54d65a18869de4c5",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "3928564ff38790038389a663d0bcd1a53bba563ceedff4a80e1e8a3747980eca"
+      "decodedPixelSha256": "3928564ff38790038389a663d0bcd1a53bba563ceedff4a80e1e8a3747980eca",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/V4-vegetation.mp4",
@@ -720,7 +810,8 @@
       "width": 916,
       "height": 412,
       "r_frame_rate": "4/1",
-      "nb_frames": "27"
+      "nb_frames": "27",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/cottage-craft.webp",
@@ -728,7 +819,8 @@
       "sha256": "0196f4d44c317ea172e51873cece14efad91db3d08a676a0dffd841325b456d4",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "524845be2b17562644fc558d1e524b13ea227c442b1bf49073a405fbc4f88aca"
+      "decodedPixelSha256": "524845be2b17562644fc558d1e524b13ea227c442b1bf49073a405fbc4f88aca",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/cottage-medium.webp",
@@ -736,7 +828,8 @@
       "sha256": "2c60224a32bfddebc55a924f1fefafa225c0c0f8fc6e64b42c4e98455725cc83",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "82b48cc84cb685b3e04b347b3a19126fe4e6033d5f22d068b736b2cae5370fd8"
+      "decodedPixelSha256": "82b48cc84cb685b3e04b347b3a19126fe4e6033d5f22d068b736b2cae5370fd8",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/cottage-player.webp",
@@ -744,7 +837,8 @@
       "sha256": "0ae45b563be4e7b8c6c019b4dc111dcf46049ca0afe6690ef1d70f420a1509b2",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "8476467a6410b6d29cec381242e0a13fd12e4442964312d80892f605137967bd"
+      "decodedPixelSha256": "8476467a6410b6d29cec381242e0a13fd12e4442964312d80892f605137967bd",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/library-craft.webp",
@@ -752,7 +846,8 @@
       "sha256": "b9d900d73c934e2fa5ad5efdca1d00ee77ca014b6057a3de3f956b693d8c7e93",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "a0bdb81005141cc3d4380f24a2dffd8605fb101973c6ce2d77d46d94c10d0469"
+      "decodedPixelSha256": "a0bdb81005141cc3d4380f24a2dffd8605fb101973c6ce2d77d46d94c10d0469",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/library-medium.webp",
@@ -760,7 +855,8 @@
       "sha256": "8b9ad4cd99d9db1a5237b8f2ccaa30d7c1d374b17174eefd748fd0bc57ef4938",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "86e21ace7c68158abf87fabbc621b09936c45fe7cc001e63b845e47ee5ae552f"
+      "decodedPixelSha256": "86e21ace7c68158abf87fabbc621b09936c45fe7cc001e63b845e47ee5ae552f",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/library-player.webp",
@@ -768,12 +864,14 @@
       "sha256": "bccf28c6acf85b18d8fff068b2ab08d2ee1c7e2772c9e73c17bee879e300b793",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "922b2bd591cd4e2200f6296269206aad14b63c84cdb85cbc4cc903561a4bfa17"
+      "decodedPixelSha256": "922b2bd591cd4e2200f6296269206aad14b63c84cdb85cbc4cc903561a4bfa17",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "combined-lod/sequences.json",
       "bytes": 504279,
-      "sha256": "76f49db873407b257a0dc0476e5131abcd49ff4f60f2035dbee0d418de3fce19"
+      "sha256": "76f49db873407b257a0dc0476e5131abcd49ff4f60f2035dbee0d418de3fce19",
+      "availability": "retained or updated document"
     },
     {
       "path": "compare/VFC01_cottage_front_equal_DPR.png",
@@ -781,7 +879,8 @@
       "sha256": "f37af7a8b2f4677e7426c49427c6115781872b53b8be1e26f9883136b6a846d5",
       "width": 915,
       "height": 892,
-      "decodedPixelSha256": "2695072c324a2ca54c161d9cc3f4d0589b0bcc29ae9142a85795bf2ca4342474"
+      "decodedPixelSha256": "2695072c324a2ca54c161d9cc3f4d0589b0bcc29ae9142a85795bf2ca4342474",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/baseline-cottage-front.webp",
@@ -789,7 +888,14 @@
       "sha256": "a4806595d0c520a513c06c61ca6202c4670ec9009492bb57c539f9bd3e56fea2",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "8cc325f4e37ba84f92d3354459be25d5f86357604fe88f51440e3a7d4316cf6d"
+      "decodedPixelSha256": "de67447ce553b3ed8e093af1026e91aff630af28bcd23bb1db6486a25c36e8e5",
+      "availability": "reproduced",
+      "originalSha256": "a4806595d0c520a513c06c61ca6202c4670ec9009492bb57c539f9bd3e56fea2",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "compare/baseline-cottage-player.webp",
@@ -797,7 +903,14 @@
       "sha256": "a7c2f14372005f52ec69b8e1b822fd82c0fb6e7313e1101300add29350e7dc36",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "5171dd8fc85a290514fecf2a0cd6a9369c56ee10dd33d11764e56995cdb961c4"
+      "decodedPixelSha256": "9557c1ad39c3fae630c9d635116ca2e864ced3f091f5af0fce8ea64ff6d36b91",
+      "availability": "reproduced",
+      "originalSha256": "a7c2f14372005f52ec69b8e1b822fd82c0fb6e7313e1101300add29350e7dc36",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "compare/baseline-library-player.webp",
@@ -805,7 +918,14 @@
       "sha256": "7a746126f320c5bc102dca8d2b078e400f75efb7a031a531f08e42397fcfd553",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "826d14b5cdac968215073934977a877944f756038e86926a0521772d2fb776af"
+      "decodedPixelSha256": "aa53c1aaad48fa82b49baaadd94eb16dfbd5d549728149c7e20ce60234c4419a",
+      "availability": "reproduced",
+      "originalSha256": "7a746126f320c5bc102dca8d2b078e400f75efb7a031a531f08e42397fcfd553",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "compare/ktx-etc1s-cottage-player.webp",
@@ -813,7 +933,8 @@
       "sha256": "7da1c1f8ece9d4bd45ec6292c786a8b0db6a57397d90d7bba12eaf6357e520e5",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "2c010a496cf908b6db5b07067f143cac83842cacae9f2c5ff80e4b6612efc05a"
+      "decodedPixelSha256": "2c010a496cf908b6db5b07067f143cac83842cacae9f2c5ff80e4b6612efc05a",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/ktx-etc1s-library-player.webp",
@@ -821,7 +942,8 @@
       "sha256": "a5e58000df4609ec4f9251e3a9f1ab9fb6d273093d659075c09588161176b955",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "2eb870ee09db62943671b5a985b8bb02f40fd3ee7bc9424cc39d2de1ec8af409"
+      "decodedPixelSha256": "2eb870ee09db62943671b5a985b8bb02f40fd3ee7bc9424cc39d2de1ec8af409",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/ktx-webp-cottage-player.webp",
@@ -829,7 +951,8 @@
       "sha256": "adc6b09769c7e147a2b60ba2f9feb04c2e6c21fda011a9ad7bdde5a4b4776338",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "1e5e81d7932108f5b61e4e7d5eb4aae0d442f5ee2224f5d80296106f263d011b"
+      "decodedPixelSha256": "1e5e81d7932108f5b61e4e7d5eb4aae0d442f5ee2224f5d80296106f263d011b",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/ktx-webp-library-player.webp",
@@ -837,17 +960,20 @@
       "sha256": "f7ad9773cca437e11e23a1bf38aac658f6f5caf3d71526748d0d5ac04e10e448",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "792192be361b0a13c5753184f723ff1c299ba5fe332b4327bb9ce20d58b34d3e"
+      "decodedPixelSha256": "792192be361b0a13c5753184f723ff1c299ba5fe332b4327bb9ce20d58b34d3e",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/ktx.json",
       "bytes": 11403,
-      "sha256": "94733eed78f362547a83863fe7fd0e7b2f852951761635e3f316c049c8a48d96"
+      "sha256": "94733eed78f362547a83863fe7fd0e7b2f852951761635e3f316c049c8a48d96",
+      "availability": "retained or updated document"
     },
     {
       "path": "compare/matrix.json",
       "bytes": 226856,
-      "sha256": "55aac3dd06ad89aa60390b113ea6d37443f290b267e1e963b225ec25b9ffeb2f"
+      "sha256": "55aac3dd06ad89aa60390b113ea6d37443f290b267e1e963b225ec25b9ffeb2f",
+      "availability": "retained or updated document"
     },
     {
       "path": "compare/selected-crisp-cottage-front.webp",
@@ -855,7 +981,8 @@
       "sha256": "3e09a77b29e3526cabf38b65126e1763ec549540228f10b7e4fef330bfa75f40",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "7a6f40080b469fad0ea80a6184a6126454953e37f4ec58f0cfcedc55ff8b75fa"
+      "decodedPixelSha256": "7a6f40080b469fad0ea80a6184a6126454953e37f4ec58f0cfcedc55ff8b75fa",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/selected-crisp-cottage-player.webp",
@@ -863,7 +990,8 @@
       "sha256": "4bf1295848569c583f5c094469b81748d65e0e15095cc8d6867b49c771afb66b",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "7d984c802b9b109ed37916b825f240e5725da78e25141563692fffc2aa902e31"
+      "decodedPixelSha256": "7d984c802b9b109ed37916b825f240e5725da78e25141563692fffc2aa902e31",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/selected-crisp-library-player.webp",
@@ -871,7 +999,8 @@
       "sha256": "02e4215f5b38aa819c70cd5d6c981af77667baec6ab59b0be74660522ecfbb0d",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "7eebd34978b52ef3f768b59c2b56ea5c8d0c11beb9f371b654e2f20ff393d253"
+      "decodedPixelSha256": "7eebd34978b52ef3f768b59c2b56ea5c8d0c11beb9f371b654e2f20ff393d253",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/selected-equal-cottage-front.webp",
@@ -879,7 +1008,8 @@
       "sha256": "96fb6e837ed5cea83dd33f4b08a77458d9e87bde469a227cfad192fabf4d3eae",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "6562b3041db43510fc1d55cd347c5386c89525ed67ce6158b73be1be1aa2794e"
+      "decodedPixelSha256": "6562b3041db43510fc1d55cd347c5386c89525ed67ce6158b73be1be1aa2794e",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/selected-equal-cottage-player.webp",
@@ -887,7 +1017,8 @@
       "sha256": "50c4f2bc5c2da3fe090d903ca779ab6cc6f218dcc06007f1463b16a7b622f934",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "6c8fa5faf74050e5c19f80eb443b36a0594f7aa15710c3701a10ea7c2b6a0a45"
+      "decodedPixelSha256": "6c8fa5faf74050e5c19f80eb443b36a0594f7aa15710c3701a10ea7c2b6a0a45",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/selected-equal-library-player.webp",
@@ -895,12 +1026,20 @@
       "sha256": "b57b7acb25200e034b629cf47eb2f563045933c1d05480ca3aa84e7ca64e96f7",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "62aaae6167d541541b95d7cbfaca3f9bd064ad032149cf86e147648a87990089"
+      "decodedPixelSha256": "3945d60afee67686ca08275ad3482cc92b3e54d7eb5cfc1b640239ee027437a0",
+      "availability": "reproduced",
+      "originalSha256": "b57b7acb25200e034b629cf47eb2f563045933c1d05480ca3aa84e7ca64e96f7",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "compare/selected.json",
       "bytes": 26876,
-      "sha256": "239ba162a5a37dc69650f3cb5ee4ddb1b75998cb22e067607f6d3b08544ec931"
+      "sha256": "239ba162a5a37dc69650f3cb5ee4ddb1b75998cb22e067607f6d3b08544ec931",
+      "availability": "retained or updated document"
     },
     {
       "path": "compare/sweeps/MSAA-cottage-player.webp",
@@ -908,7 +1047,8 @@
       "sha256": "86cf904dfef0bda1f641c3c098d41ea7d660e70d16594e91c7271f8500ac7a27",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "72546204af5507119f7d1f09567c62de764e4153dc38979abed58e7c9ce237c0"
+      "decodedPixelSha256": "72546204af5507119f7d1f09567c62de764e4153dc38979abed58e7c9ce237c0",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/MSAA-library-player.webp",
@@ -916,7 +1056,8 @@
       "sha256": "6b39347766830f2fd507ff44e3b488833d890c7c7b46866429e1f078e14b727f",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "9dd6b9411c6202fe95aba673b04f04ebf82abe9e2e424e7704d780c7e7ba91fb"
+      "decodedPixelSha256": "9dd6b9411c6202fe95aba673b04f04ebf82abe9e2e424e7704d780c7e7ba91fb",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/anisotropy1-cottage-player.webp",
@@ -924,7 +1065,8 @@
       "sha256": "de01a1e5642146f3f0fd4269e18d548ffef4f539350c18d8a71f67f02834ec3f",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "38c06c47218a080fdfd5db340c189154309e399a68126f0f0487cfab41b4b443"
+      "decodedPixelSha256": "38c06c47218a080fdfd5db340c189154309e399a68126f0f0487cfab41b4b443",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/anisotropy1-library-player.webp",
@@ -932,7 +1074,8 @@
       "sha256": "0ca840c8b92e6d340a05875702dd66f5f5af0d8c76db5c7e8bf811f7b5de9951",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "9015ec463d3b9977b331424d31418432193eae25e2c5eb4a573da95e526c1d12"
+      "decodedPixelSha256": "9015ec463d3b9977b331424d31418432193eae25e2c5eb4a573da95e526c1d12",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/baseline-cottage-player.webp",
@@ -940,7 +1083,8 @@
       "sha256": "a7c2f14372005f52ec69b8e1b822fd82c0fb6e7313e1101300add29350e7dc36",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "5171dd8fc85a290514fecf2a0cd6a9369c56ee10dd33d11764e56995cdb961c4"
+      "decodedPixelSha256": "5171dd8fc85a290514fecf2a0cd6a9369c56ee10dd33d11764e56995cdb961c4",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/baseline-crisp-cottage-player.webp",
@@ -948,7 +1092,8 @@
       "sha256": "84612370d470a65a5039b1cc503fbeed9715d4dc4104c622df833f2a5113e3f5",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "619a77602314ecf2e63c4874be59656448dcffb602cbdfe561214d5b2df18b27"
+      "decodedPixelSha256": "619a77602314ecf2e63c4874be59656448dcffb602cbdfe561214d5b2df18b27",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/baseline-crisp-library-player.webp",
@@ -956,7 +1101,8 @@
       "sha256": "9cd2de910e19d8a8ea504aa3e0b7bf1f5b1cd5ee22c923ae9377097ee22e269d",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "baa22b8c8ff10c0acef29d3f2cd09ecc52269fa17ccf6ba098ec84980828bd7a"
+      "decodedPixelSha256": "baa22b8c8ff10c0acef29d3f2cd09ecc52269fa17ccf6ba098ec84980828bd7a",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/baseline-library-player.webp",
@@ -964,7 +1110,8 @@
       "sha256": "7a746126f320c5bc102dca8d2b078e400f75efb7a031a531f08e42397fcfd553",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "826d14b5cdac968215073934977a877944f756038e86926a0521772d2fb776af"
+      "decodedPixelSha256": "826d14b5cdac968215073934977a877944f756038e86926a0521772d2fb776af",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/candidate-cottage-player.webp",
@@ -972,7 +1119,8 @@
       "sha256": "a86154a00c99db3981646ffbc32bb693611c17c2c9e78167788705840446ee7d",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "6af66375bf10c7c66a2a8aac43893bb5025c4348bfb4d607744cfe7a48132078"
+      "decodedPixelSha256": "6af66375bf10c7c66a2a8aac43893bb5025c4348bfb4d607744cfe7a48132078",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/candidate-library-player.webp",
@@ -980,7 +1128,8 @@
       "sha256": "f905298b6e88cbf6db56edb17af8f67191b82687d02dd9c32e1f0e6228f216d2",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "a7b6c2aac02cba315a1769fb5f8fb7290700a132e11ebf71014649fa6d4116c8"
+      "decodedPixelSha256": "a7b6c2aac02cba315a1769fb5f8fb7290700a132e11ebf71014649fa6d4116c8",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/crisp-cottage-player.webp",
@@ -988,7 +1137,8 @@
       "sha256": "7cf99e49d818c1e7b26d9c5361e210920589650f24520677ea4e1ed74417b78a",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "a48b6dd6990b5a22343440baf80ca200eb03ce9ab9d3a651ad221c22520717d6"
+      "decodedPixelSha256": "a48b6dd6990b5a22343440baf80ca200eb03ce9ab9d3a651ad221c22520717d6",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/crisp-library-player.webp",
@@ -996,7 +1146,8 @@
       "sha256": "d4012c1e71168a52b3dc9a3e761302919f65d3324c0d597a01540f6b994cb7e2",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "147f463a53b7eff3af5d7af2a0f2f8abf63b5be69e381a6fee39813205054bdf"
+      "decodedPixelSha256": "147f463a53b7eff3af5d7af2a0f2f8abf63b5be69e381a6fee39813205054bdf",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/cropped-shadow-cottage-player.webp",
@@ -1004,7 +1155,8 @@
       "sha256": "04e13ef8a684b62c2f0f81c3a62076c66eb04d582bf1752c4ac6fe6259da7eec",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "d34971209bd3f7567b018ed3c80791e53680af8ba3ee7539ee6a744f6fd67c3d"
+      "decodedPixelSha256": "d34971209bd3f7567b018ed3c80791e53680af8ba3ee7539ee6a744f6fd67c3d",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/cropped-shadow-library-player.webp",
@@ -1012,7 +1164,8 @@
       "sha256": "30a01d4b576c41a728242b5fe2f54010cb07d52cd53bffd19ed38dcd0c4c2460",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "3461c93b95c93f0283d806c8784d9de74a42de8fbe50a187e77d8d4da7614603"
+      "decodedPixelSha256": "3461c93b95c93f0283d806c8784d9de74a42de8fbe50a187e77d8d4da7614603",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/dpr-1-cottage-player.webp",
@@ -1020,7 +1173,8 @@
       "sha256": "00b740c307f164bbe9f4062f1d4ed74810bdede70714f7a2f0a86656e921612f",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "1806b25cc41c83bf3db3ce73c04e0278f4f6e9bd91536194ce9f1aef139e7fd4"
+      "decodedPixelSha256": "1806b25cc41c83bf3db3ce73c04e0278f4f6e9bd91536194ce9f1aef139e7fd4",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/dpr-1-library-player.webp",
@@ -1028,7 +1182,8 @@
       "sha256": "63d1fdd382a3e84a6381efb9339afc8cd98b63f00f354f52706608caeea80df7",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "123f337e6a01a3dba9dd6a29e5fd7d7ad2f7f3f04384696fb3d0928fd7673ab8"
+      "decodedPixelSha256": "123f337e6a01a3dba9dd6a29e5fd7d7ad2f7f3f04384696fb3d0928fd7673ab8",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/dpr-1.25-cottage-player.webp",
@@ -1036,7 +1191,8 @@
       "sha256": "aa9da14fae4da62d0c2a49459e3ee261ce32e5ac7da71699997f2bb0fc43166c",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "a56730b65ca24c045f43e955a67efbb4264a7ed2e10c4193a700c07460bf0059"
+      "decodedPixelSha256": "a56730b65ca24c045f43e955a67efbb4264a7ed2e10c4193a700c07460bf0059",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/dpr-1.25-library-player.webp",
@@ -1044,7 +1200,8 @@
       "sha256": "fd65b34b470659f7e37efd41a9c46f98204b1288239b8fe51eb9747dde5bab7b",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "a3b0f5ca259f7bbfd814c7e2d7a0a2f0504e8954ca3b6ddfff11f4ecf8fd4274"
+      "decodedPixelSha256": "a3b0f5ca259f7bbfd814c7e2d7a0a2f0504e8954ca3b6ddfff11f4ecf8fd4274",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/dpr-1.5-cottage-player.webp",
@@ -1052,7 +1209,8 @@
       "sha256": "77945e3979abd64b5ca84bcf2502bdc8a2f16ec8c3e13428f31348933e0d6b38",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "30906bf4de2e17284ddcc61631863faccb7e3a482f87ae4e7ca00918ac07f23a"
+      "decodedPixelSha256": "30906bf4de2e17284ddcc61631863faccb7e3a482f87ae4e7ca00918ac07f23a",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/dpr-1.5-library-player.webp",
@@ -1060,7 +1218,8 @@
       "sha256": "d27bfbcf002999e1abc2e297fc70fd0c254cd889d83b29a18e5299044a846eb3",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "6cdef465ed03fbdc8e1067b2065a6c8be9f5361c015c0e34bbd0da664d682354"
+      "decodedPixelSha256": "6cdef465ed03fbdc8e1067b2065a6c8be9f5361c015c0e34bbd0da664d682354",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/dpr-1.75-cottage-player.webp",
@@ -1068,7 +1227,8 @@
       "sha256": "3bc073c6a665ea0b3ce4421a33235e34f5a368ee9e228471b5bc2089d95fa4ad",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "9c78aadfb6f9083a11afffe640aae6ec9c3f1681a2efda0984243d104cb7d398"
+      "decodedPixelSha256": "9c78aadfb6f9083a11afffe640aae6ec9c3f1681a2efda0984243d104cb7d398",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/dpr-1.75-library-player.webp",
@@ -1076,7 +1236,8 @@
       "sha256": "c8b9a8f8ba49a7be64cc6a79cdfe4ee9db1238ed2de0bf6ff82f80c88e9b6b64",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "e142d6f07ded0b9dcd53ffd3d5a44f19d203cba25005584f50d7ec4a4ec4a277"
+      "decodedPixelSha256": "e142d6f07ded0b9dcd53ffd3d5a44f19d203cba25005584f50d7ec4a4ec4a277",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/flat-normals-cottage-player.webp",
@@ -1084,7 +1245,8 @@
       "sha256": "cf7cc6ca3116ab8cab6f7fe56129044f4d6a962200e9e77dc9dcb6c19fade420",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "9b107b4f62ef3e9bbec4158c995a8ff1b94bc0acf46e925ab137fba0d5687fae"
+      "decodedPixelSha256": "9b107b4f62ef3e9bbec4158c995a8ff1b94bc0acf46e925ab137fba0d5687fae",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/flat-normals-library-player.webp",
@@ -1092,7 +1254,8 @@
       "sha256": "f79dc36192d9b37015da38bb0f4ccc2f09136bdbfe4a3cdc404c292e8f8b4e09",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "344b54242fee24202901a956a4da6c567abf367bc2209a50c247a7996e931065"
+      "decodedPixelSha256": "344b54242fee24202901a956a4da6c567abf367bc2209a50c247a7996e931065",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/material-lambert-cottage-player.webp",
@@ -1100,7 +1263,8 @@
       "sha256": "b6374dd5ec19d6e100491db7298f0a8a2f9bb573e5d1cedfd1efbb51dd294f97",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "b5e855d274ac6e2b4c469e694806bb0694e392acc8630fca7c2299a88b5f1919"
+      "decodedPixelSha256": "b5e855d274ac6e2b4c469e694806bb0694e392acc8630fca7c2299a88b5f1919",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/material-lambert-library-player.webp",
@@ -1108,7 +1272,8 @@
       "sha256": "24e6cc302cc1827349b5582d872dbd41bc8be9159ea10495aed0af1cc3845bab",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "0f4a62ebfbd9fd93a5053fa80ad4f083f3d5f59361b253c4bdd3547e218a2a94"
+      "decodedPixelSha256": "0f4a62ebfbd9fd93a5053fa80ad4f083f3d5f59361b253c4bdd3547e218a2a94",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/material-phong-cottage-player.webp",
@@ -1116,7 +1281,8 @@
       "sha256": "dbb9f510470fd0482dbe9bd9dac422972d8cfcb3e7a81f6a8f987eb636e2f4f6",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "297199eeca6e69159026e59225ff041e5ad2387d4dd3afb6f9f2054f36e79429"
+      "decodedPixelSha256": "297199eeca6e69159026e59225ff041e5ad2387d4dd3afb6f9f2054f36e79429",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/material-phong-library-player.webp",
@@ -1124,7 +1290,8 @@
       "sha256": "643fb022abd873080043becd9c2cf7802853defd7e65b2606d0c22d0048b9776",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "282e955a10dd3a7ee1cd7522196bee911068ee4d8448f1034649aa6f58e6379a"
+      "decodedPixelSha256": "282e955a10dd3a7ee1cd7522196bee911068ee4d8448f1034649aa6f58e6379a",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/neutral-tone-cottage-player.webp",
@@ -1132,7 +1299,8 @@
       "sha256": "93ae8e7947710b822d79597a2cf68a8b70084bdf7ab56a921ddaef5f453fe14d",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "ff7819d641c31ace3f4e07f5f16619604651d003418032482096a3dc56a29499"
+      "decodedPixelSha256": "ff7819d641c31ace3f4e07f5f16619604651d003418032482096a3dc56a29499",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/neutral-tone-library-player.webp",
@@ -1140,7 +1308,8 @@
       "sha256": "069577102570d1b32a15f50695745595e12f34c731089d374c51282793ca1e0c",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "82337490aa70451aa896c611c0130aa2f776c165984a9c47bec2e71f1ac14980"
+      "decodedPixelSha256": "82337490aa70451aa896c611c0130aa2f776c165984a9c47bec2e71f1ac14980",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/no-normal-cottage-player.webp",
@@ -1148,7 +1317,8 @@
       "sha256": "419d32682cb2ea19035d6638a82f234b3b9cd55092219ac80338f490fb95c1b3",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "c593ef94dadd25737923c18dec8b47920b4a1424099014d75d73f603fa7fe9cc"
+      "decodedPixelSha256": "c593ef94dadd25737923c18dec8b47920b4a1424099014d75d73f603fa7fe9cc",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/no-normal-library-player.webp",
@@ -1156,7 +1326,8 @@
       "sha256": "ae45c18f160fd72f8467f08a4093169bb8eabf0d24e927d8c2c4c16595af0a02",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "4b7b9cef889bcf4ec0c976bf3b407c7df09ec9edfe73c48a969918aca8b2f26b"
+      "decodedPixelSha256": "4b7b9cef889bcf4ec0c976bf3b407c7df09ec9edfe73c48a969918aca8b2f26b",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/shadow-cottage-player.webp",
@@ -1164,7 +1335,8 @@
       "sha256": "aea3f2fff96d6765628761eca786b08256d496d5fcf7d08ac9415d88a308a8d3",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "c973cf526cf1e35032d67be83e5793b80613fa72012e20f9813b750702a9383b"
+      "decodedPixelSha256": "c973cf526cf1e35032d67be83e5793b80613fa72012e20f9813b750702a9383b",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/shadow-library-player.webp",
@@ -1172,7 +1344,8 @@
       "sha256": "98d108235227f640b78dbaaecd886aa4671556311ef83427034701c7abb00f20",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "95ad60f36fc6717d87077fff2ac258d66517816c2eddb328777024258fdc621e"
+      "decodedPixelSha256": "95ad60f36fc6717d87077fff2ac258d66517816c2eddb328777024258fdc621e",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/timber512-cottage-player.webp",
@@ -1180,7 +1353,8 @@
       "sha256": "18ae06a031a3cd8944031bb405fd49503ee7c2ae710b44b28624a74e8a6bacb4",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "6c8050f6b2ec6ebb4b44e96c671128c3be17dd133e13d9bfae5169d37a12d43c"
+      "decodedPixelSha256": "6c8050f6b2ec6ebb4b44e96c671128c3be17dd133e13d9bfae5169d37a12d43c",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps/timber512-library-player.webp",
@@ -1188,12 +1362,14 @@
       "sha256": "a288ff4e80d4fd258671a9375f2812f0bfc3af3aff86e1c354a0cd6e4e808fbd",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "396cd5fb3a279385897ab0634b7419b3b2671ac741b7199452c9cb08d235a0c4"
+      "decodedPixelSha256": "396cd5fb3a279385897ab0634b7419b3b2671ac741b7199452c9cb08d235a0c4",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "compare/sweeps.json",
       "bytes": 134070,
-      "sha256": "3b3c88cdcf7aac3301bd29dad65c2d4fd8ca50ec3d3707f53e7da2316dccb474"
+      "sha256": "3b3c88cdcf7aac3301bd29dad65c2d4fd8ca50ec3d3707f53e7da2316dccb474",
+      "availability": "retained or updated document"
     },
     {
       "path": "geometry-only/cottage-craft.webp",
@@ -1201,7 +1377,8 @@
       "sha256": "69615011d0fe3dfed1c7a013f5a47d02357b3d84e5ab327880e52796960b2182",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "681d4984cbd40b8d9d4c7bd6307a1e9f2718ddefa8ec60c4d168423f05e0415a"
+      "decodedPixelSha256": "681d4984cbd40b8d9d4c7bd6307a1e9f2718ddefa8ec60c4d168423f05e0415a",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "geometry-only/cottage-medium.webp",
@@ -1209,7 +1386,8 @@
       "sha256": "6fa4af768cea4c1f3580fda283f200f7d6d4c336dd538392fe21eaa5dbf7be11",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "4b76e2d1eaeb799bd6bcbddb4043a26690d6ef51d6b1c7ea4841a5a3f71f7ad0"
+      "decodedPixelSha256": "4b76e2d1eaeb799bd6bcbddb4043a26690d6ef51d6b1c7ea4841a5a3f71f7ad0",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "geometry-only/cottage-player.webp",
@@ -1217,7 +1395,8 @@
       "sha256": "31833085127e01f6e383fa9cbe12df082d4da4a6c44d9b498ea9d3cd277b7f43",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "adea691fcf6cdf94906dea1a89c373b397fdd3a14baaa56fb4141d5d6b5d1b64"
+      "decodedPixelSha256": "adea691fcf6cdf94906dea1a89c373b397fdd3a14baaa56fb4141d5d6b5d1b64",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "geometry-only/library-craft.webp",
@@ -1225,7 +1404,8 @@
       "sha256": "512124b12fb68f266f23917721da371ca9c924019c0f5f36ffcbdd15bd1541ad",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "96c2b9bc6d46dba15ea498f5b4aadb3a4c4499247fbf0162ad62303debcd509d"
+      "decodedPixelSha256": "96c2b9bc6d46dba15ea498f5b4aadb3a4c4499247fbf0162ad62303debcd509d",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "geometry-only/library-medium.webp",
@@ -1233,7 +1413,8 @@
       "sha256": "dadeed0459decd863930a0f5de81e037d373854001f950bc7a7907b27d89fece",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "fd98ad535166a27adee74b0670d31625a109320dc82a16cfcf0d91df6cd8b62b"
+      "decodedPixelSha256": "fd98ad535166a27adee74b0670d31625a109320dc82a16cfcf0d91df6cd8b62b",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "geometry-only/library-player.webp",
@@ -1241,12 +1422,14 @@
       "sha256": "ddf376d2932575762ce1b05244f0c20b4224ee8f8a9baa6054c9a65507768e86",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "df27c8a19d3a1ae41ec0cf73acfba8b056dc33b1f19b04926b1563e67d305b5a"
+      "decodedPixelSha256": "df27c8a19d3a1ae41ec0cf73acfba8b056dc33b1f19b04926b1563e67d305b5a",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "index.html",
-      "bytes": 152034,
-      "sha256": "a4ef40fc787b994a6b8d54860a973078c83f0b0f4ec0432d0e125929f624d2cb"
+      "bytes": 154511,
+      "sha256": "68e32200fc4120fc0d62b6d690bb760fbabafc3fd1888fb49c2e7e79df60120e",
+      "availability": "retained or updated document"
     },
     {
       "path": "material-only/cottage-craft.webp",
@@ -1254,7 +1437,8 @@
       "sha256": "737bd770816d53a5787573e330e1a8f763fe0f01ddf186466f5a8119ba478593",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "6108d10a91e9ef26ebeb1133af786ed3be4ebe975e139cdff0080141ba9b68ac"
+      "decodedPixelSha256": "6108d10a91e9ef26ebeb1133af786ed3be4ebe975e139cdff0080141ba9b68ac",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "material-only/cottage-medium.webp",
@@ -1262,7 +1446,8 @@
       "sha256": "c8df48e4cf41cc1a143e958404860503c8fe2537d45664eaf918c5aec50b359d",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "b5175dfade965a18b4c2dd25032b96aed7f618012dc2c6f8c34a2656b4d6fa75"
+      "decodedPixelSha256": "b5175dfade965a18b4c2dd25032b96aed7f618012dc2c6f8c34a2656b4d6fa75",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "material-only/cottage-player.webp",
@@ -1270,7 +1455,8 @@
       "sha256": "244f8d3252cf4a56f543b7f4b30b13cb417d4b83f8f8111c13f776933c6bd097",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "bef511d21892900a0865ded35350d6e5c6f2532ceb1aa138a908d56510fe44fe"
+      "decodedPixelSha256": "bef511d21892900a0865ded35350d6e5c6f2532ceb1aa138a908d56510fe44fe",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "material-only/library-craft.webp",
@@ -1278,7 +1464,8 @@
       "sha256": "980d22a3a61d722d5e72035afc70bcd4a0f5baf80ae2f2b27b7f89e2f87ea669",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "3bb1d8bf371f754b0af128395d29362a91b255cdb383873dfaa4aae70c41f5f7"
+      "decodedPixelSha256": "3bb1d8bf371f754b0af128395d29362a91b255cdb383873dfaa4aae70c41f5f7",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "material-only/library-medium.webp",
@@ -1286,7 +1473,8 @@
       "sha256": "03ef77a95b8bdff3efae4d91d88e7a4339b9528a47a32e4418ea1ef295d6e1df",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "606eef844d78cbadd00c85d1ea5ccc800e5e2e84034b70899edfc502390810d9"
+      "decodedPixelSha256": "606eef844d78cbadd00c85d1ea5ccc800e5e2e84034b70899edfc502390810d9",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "material-only/library-player.webp",
@@ -1294,7 +1482,8 @@
       "sha256": "33a4d890dde7c11cffa87a44c61cbce804005faf7ccaad976ca155178c938c77",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "2552e2e36f82321ccd8d95a682cce821dc8f6d25a0a1f21717f0be757aa0bb1c"
+      "decodedPixelSha256": "2552e2e36f82321ccd8d95a682cce821dc8f6d25a0a1f21717f0be757aa0bb1c",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V0-cottage-craft.webp",
@@ -1302,7 +1491,8 @@
       "sha256": "581774deaf40b553f65e7d3aeb1aef8bbca620f571371fff9bcf17e1d50a3c1d",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "613112396a863ed386f21e11a4ce9e596836b34f01d2bf8d088ca9d61c225fc5"
+      "decodedPixelSha256": "613112396a863ed386f21e11a4ce9e596836b34f01d2bf8d088ca9d61c225fc5",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V0-cottage-medium.webp",
@@ -1310,7 +1500,8 @@
       "sha256": "0d7c79b07856ada4253e397deb8a3044fef0507a1a1f8b9027d10736bcf6dba5",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "0bb3d817453c6edf890aa3cdf7c93460040c1526f3dbf3f1dafd4d3dbf00b771"
+      "decodedPixelSha256": "0bb3d817453c6edf890aa3cdf7c93460040c1526f3dbf3f1dafd4d3dbf00b771",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V0-cottage-player.webp",
@@ -1318,7 +1509,8 @@
       "sha256": "6661994e8aae67d49cba2a676fdf34b65c49d6e2b3de1f0122084520b76e7739",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "55cc29d8925eb26c0a0d24f468f06c7c089c81ebda3cbac4847783967b24339b"
+      "decodedPixelSha256": "55cc29d8925eb26c0a0d24f468f06c7c089c81ebda3cbac4847783967b24339b",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V0-library-craft.webp",
@@ -1326,7 +1518,8 @@
       "sha256": "2d894d72f08629b5cd3c1f253d866da793d38c15ac8bfaf153e149779096a231",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "59c2f0e9e723df10aceb6e39d6686d86d9dacdcc24181bb8bc86e75eb1a77e47"
+      "decodedPixelSha256": "59c2f0e9e723df10aceb6e39d6686d86d9dacdcc24181bb8bc86e75eb1a77e47",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V0-library-medium.webp",
@@ -1334,7 +1527,8 @@
       "sha256": "ad342e980ffc6c4d5d2d694f92b5b3dfe3705725b0e9a884800e7f49312bdcfb",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "2fc3f2dc2fe3a76728402d7d96204ffa0d61ac96bdf4541aaacceec2be4ebcbd"
+      "decodedPixelSha256": "2fc3f2dc2fe3a76728402d7d96204ffa0d61ac96bdf4541aaacceec2be4ebcbd",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V0-library-player.webp",
@@ -1342,7 +1536,8 @@
       "sha256": "b024d124f98d035d91431c8c23bc215652197e8f02ec6b04a21b368eef8590ca",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "909c2eee05dee3ccb4a6ae160d1378312015c2d7e060a93e7ee2ab35fc3317d3"
+      "decodedPixelSha256": "909c2eee05dee3ccb4a6ae160d1378312015c2d7e060a93e7ee2ab35fc3317d3",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V1-cottage-craft.webp",
@@ -1350,7 +1545,8 @@
       "sha256": "2cd23316f0836df3f9112ebd26c3dc55188859780eb91a8dc92383dc8e356460",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "e548fa3873a930cd1dccbfd63c42f259f23d05fe3df8f562766ade3c5c8c062d"
+      "decodedPixelSha256": "e548fa3873a930cd1dccbfd63c42f259f23d05fe3df8f562766ade3c5c8c062d",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V1-cottage-medium.webp",
@@ -1358,7 +1554,8 @@
       "sha256": "9df2ae6ad25be4ecad0bf6002ec8e948acc2bb201cfa2959409871dede7f6567",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "5a5695823cb0c0c595b8832cfb0d6735853e14a819ff2e6e579046658ee6647c"
+      "decodedPixelSha256": "5a5695823cb0c0c595b8832cfb0d6735853e14a819ff2e6e579046658ee6647c",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V1-cottage-player.webp",
@@ -1366,7 +1563,8 @@
       "sha256": "8bae45d5e55c3cdf2c39a07b311bc40f2918bc573e8b663b31e996ada24822e5",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "2cfcf54149815a736aa812950cba30973cb51a5cbab64e7366ed3fa66ee572b7"
+      "decodedPixelSha256": "2cfcf54149815a736aa812950cba30973cb51a5cbab64e7366ed3fa66ee572b7",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V1-library-craft.webp",
@@ -1374,7 +1572,8 @@
       "sha256": "a73fafd92ae9b65533d1ba5a163de8b0f65bcf316563c32eebc42478dd7de35c",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "ae91cb3251dcf96670ab52f504ad5ff141f38c58bbc5b4ec988e6425d1631ff4"
+      "decodedPixelSha256": "ae91cb3251dcf96670ab52f504ad5ff141f38c58bbc5b4ec988e6425d1631ff4",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V1-library-medium.webp",
@@ -1382,7 +1581,8 @@
       "sha256": "84d99857e3368c4c37e66015ff01907b17f3df5f1d80241437d5d5365e375fe1",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "b93f54ff77b7460b113c8722b07ea071b4dde57c324baede02a01b21b76bc892"
+      "decodedPixelSha256": "b93f54ff77b7460b113c8722b07ea071b4dde57c324baede02a01b21b76bc892",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V1-library-player.webp",
@@ -1390,7 +1590,8 @@
       "sha256": "c3b6116c1d1f37fd83be37843f1d04c766999c828b6ca5d5ca9c9bb1ff3ec37d",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "d4579e2f99b17f13ace57bde4c2b13587362267b53a2acc70c7974074d6275b1"
+      "decodedPixelSha256": "d4579e2f99b17f13ace57bde4c2b13587362267b53a2acc70c7974074d6275b1",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V2-cottage-craft.webp",
@@ -1398,7 +1599,8 @@
       "sha256": "5c7a7fac6bbd248c32035ce8f2a3c5ed683fc1b9008585395c2d8d8621bcce8f",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "b7d2c8d55a93413f2fe835ed31e10fe1fd1f5c53b62a807106250738498ede27"
+      "decodedPixelSha256": "b7d2c8d55a93413f2fe835ed31e10fe1fd1f5c53b62a807106250738498ede27",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V2-cottage-medium.webp",
@@ -1406,7 +1608,8 @@
       "sha256": "dd4161469e139160f08773d7bb2a0a0ca4c027ca8308bfd750ad66071ee2749b",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "59b978f690a8a0580b0fc6f6b464873fd8c9f7b18840f2228a7cf282a4d3e019"
+      "decodedPixelSha256": "59b978f690a8a0580b0fc6f6b464873fd8c9f7b18840f2228a7cf282a4d3e019",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V2-cottage-player.webp",
@@ -1414,7 +1617,8 @@
       "sha256": "86f3f11c4559d1e04427a57439a19ee892adc5e16be94dad72bfc8893e4fc5c8",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "b50242c01115d40834a912e5505e6536be6a79c8575c28565eed14bbc4218618"
+      "decodedPixelSha256": "b50242c01115d40834a912e5505e6536be6a79c8575c28565eed14bbc4218618",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V2-library-craft.webp",
@@ -1422,7 +1626,8 @@
       "sha256": "a04a1c77ac80661460bab7bb39ffefed6c3063a824003b82bf3d54dbf7160c58",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "983d7c8c1fdb1d868545183f43b5cc009a452a68cc97c0dd37e58a97d56e4c9e"
+      "decodedPixelSha256": "983d7c8c1fdb1d868545183f43b5cc009a452a68cc97c0dd37e58a97d56e4c9e",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V2-library-medium.webp",
@@ -1430,7 +1635,8 @@
       "sha256": "8ed63b90ac0839e2232b8eb8bca55d623e76df3235242c65e353f269370ba36c",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "6caf3b162f1a2e092903ed37d9cb4c497ebb9419b0f1b4b958d9f5d7c38afd93"
+      "decodedPixelSha256": "6caf3b162f1a2e092903ed37d9cb4c497ebb9419b0f1b4b958d9f5d7c38afd93",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V2-library-player.webp",
@@ -1438,7 +1644,8 @@
       "sha256": "a90c63085d34e78187ce7caf807c1fdd3e3af930060304a5fbe721eddf3ed10f",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "2b2f976d56e2b4c4be8feb0fbc7ae9001feac4bc89eb2fd2240ae9d44ae3b65c"
+      "decodedPixelSha256": "2b2f976d56e2b4c4be8feb0fbc7ae9001feac4bc89eb2fd2240ae9d44ae3b65c",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V3-cottage-craft.webp",
@@ -1446,7 +1653,8 @@
       "sha256": "e8cfaf873747016dfc089aecc2e8c8db5e5ead40bf802078a1abf58e58a7867f",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "5297a926fa42c9b594296760bac65915e29ce30774c87a8a0d1126f7ddf0dea0"
+      "decodedPixelSha256": "5297a926fa42c9b594296760bac65915e29ce30774c87a8a0d1126f7ddf0dea0",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V3-cottage-medium.webp",
@@ -1454,7 +1662,8 @@
       "sha256": "a378ab53012214711132bfdd7a96cf0b9190585d5dd951b956d2b865f4c1dd7d",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "440673e3c9ab118ce4cc6e5c1e2a0167a9c28d77bbc8b521d529cc294865f16e"
+      "decodedPixelSha256": "440673e3c9ab118ce4cc6e5c1e2a0167a9c28d77bbc8b521d529cc294865f16e",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V3-cottage-player.webp",
@@ -1462,7 +1671,8 @@
       "sha256": "98b3c108e0f3d33149540edbee5d0f04a306559fa85abab45b508438a6089118",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "3a322a7f94bdb08103643763bba91d3fd548abd5b1cd094d20d8ff93ecaa953f"
+      "decodedPixelSha256": "3a322a7f94bdb08103643763bba91d3fd548abd5b1cd094d20d8ff93ecaa953f",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V3-library-craft.webp",
@@ -1470,7 +1680,8 @@
       "sha256": "032a7f2fc515ea4372702adf343c740dc0c4ee8784cc12b7199e396a8204c51f",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "da775fded5d644d8f9b66750f811df296da55502febe001e728c99650eeb5cee"
+      "decodedPixelSha256": "da775fded5d644d8f9b66750f811df296da55502febe001e728c99650eeb5cee",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V3-library-medium.webp",
@@ -1478,7 +1689,8 @@
       "sha256": "98b3c108e0f3d33149540edbee5d0f04a306559fa85abab45b508438a6089118",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "3a322a7f94bdb08103643763bba91d3fd548abd5b1cd094d20d8ff93ecaa953f"
+      "decodedPixelSha256": "3a322a7f94bdb08103643763bba91d3fd548abd5b1cd094d20d8ff93ecaa953f",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V3-library-player.webp",
@@ -1486,7 +1698,8 @@
       "sha256": "5d84f30f67b0710e6633bd2ab4cb9da3f8a1521ab25dfd846e2a504c86038375",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "44661ebaad5ca2d07291f814ea850921b42ff80787d13bd693682b679ce67051"
+      "decodedPixelSha256": "44661ebaad5ca2d07291f814ea850921b42ff80787d13bd693682b679ce67051",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V4-cottage-craft.webp",
@@ -1494,7 +1707,8 @@
       "sha256": "e8cfaf873747016dfc089aecc2e8c8db5e5ead40bf802078a1abf58e58a7867f",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "5297a926fa42c9b594296760bac65915e29ce30774c87a8a0d1126f7ddf0dea0"
+      "decodedPixelSha256": "5297a926fa42c9b594296760bac65915e29ce30774c87a8a0d1126f7ddf0dea0",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V4-cottage-medium.webp",
@@ -1502,7 +1716,8 @@
       "sha256": "a378ab53012214711132bfdd7a96cf0b9190585d5dd951b956d2b865f4c1dd7d",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "440673e3c9ab118ce4cc6e5c1e2a0167a9c28d77bbc8b521d529cc294865f16e"
+      "decodedPixelSha256": "440673e3c9ab118ce4cc6e5c1e2a0167a9c28d77bbc8b521d529cc294865f16e",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V4-cottage-player.webp",
@@ -1510,7 +1725,8 @@
       "sha256": "958e5da850b78299477734091712338be6e52702bcafd50d4d8a841f5fd1209e",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "b4a64e56c3598213f7818afafb149fc278a764c5be17f02ecea78a97effe67f0"
+      "decodedPixelSha256": "b4a64e56c3598213f7818afafb149fc278a764c5be17f02ecea78a97effe67f0",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V4-library-craft.webp",
@@ -1518,7 +1734,8 @@
       "sha256": "032a7f2fc515ea4372702adf343c740dc0c4ee8784cc12b7199e396a8204c51f",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "da775fded5d644d8f9b66750f811df296da55502febe001e728c99650eeb5cee"
+      "decodedPixelSha256": "da775fded5d644d8f9b66750f811df296da55502febe001e728c99650eeb5cee",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V4-library-medium.webp",
@@ -1526,7 +1743,8 @@
       "sha256": "98b3c108e0f3d33149540edbee5d0f04a306559fa85abab45b508438a6089118",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "3a322a7f94bdb08103643763bba91d3fd548abd5b1cd094d20d8ff93ecaa953f"
+      "decodedPixelSha256": "3a322a7f94bdb08103643763bba91d3fd548abd5b1cd094d20d8ff93ecaa953f",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "neutral/V4-library-player.webp",
@@ -1534,37 +1752,44 @@
       "sha256": "5d84f30f67b0710e6633bd2ab4cb9da3f8a1521ab25dfd846e2a504c86038375",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "44661ebaad5ca2d07291f814ea850921b42ff80787d13bd693682b679ce67051"
+      "decodedPixelSha256": "44661ebaad5ca2d07291f814ea850921b42ff80787d13bd693682b679ce67051",
+      "availability": "missing; reproducible from committed scripts/source, not recovered"
     },
     {
       "path": "phone-results/README.md",
       "bytes": 236,
-      "sha256": "21f3a174ca131e9b43826f296b97557b31034a948558b4c1b0d36e61bd65591e"
+      "sha256": "21f3a174ca131e9b43826f296b97557b31034a948558b4c1b0d36e61bd65591e",
+      "availability": "retained or updated document"
     },
     {
       "path": "validation/README.md",
       "bytes": 1133,
-      "sha256": "63193932383d10c690f3b26eacca54ee1204ff2e13059c77021c913e0a09d3a8"
+      "sha256": "63193932383d10c690f3b26eacca54ee1204ff2e13059c77021c913e0a09d3a8",
+      "availability": "retained or updated document"
     },
     {
       "path": "validation/dev04d-browser.json",
       "bytes": 4903,
-      "sha256": "c90148a3563437d1947d15ff253b1ac43a213cbbc0f05264583d273cf83f7920"
+      "sha256": "c90148a3563437d1947d15ff253b1ac43a213cbbc0f05264583d273cf83f7920",
+      "availability": "retained or updated document"
     },
     {
       "path": "validation/gallery.json",
       "bytes": 8874,
-      "sha256": "0808e48be50f3366ad4375758e566a8eb0d1edfa75a86970ee22c4b379a5640a"
+      "sha256": "0808e48be50f3366ad4375758e566a8eb0d1edfa75a86970ee22c4b379a5640a",
+      "availability": "retained or updated document"
     },
     {
       "path": "validation/isolation.json",
       "bytes": 19910,
-      "sha256": "6530b12c58d5a501ecd25ee0599788dca22259409dc1a11d989fd4f9e0a3306c"
+      "sha256": "6530b12c58d5a501ecd25ee0599788dca22259409dc1a11d989fd4f9e0a3306c",
+      "availability": "retained or updated document"
     },
     {
       "path": "validation/phone-loop.json",
       "bytes": 733,
-      "sha256": "a58277ba9f2e31522a0625bfe9f2b0a832e39bc2818916a7afa3100488dbe9c4"
+      "sha256": "a58277ba9f2e31522a0625bfe9f2b0a832e39bc2818916a7afa3100488dbe9c4",
+      "availability": "retained or updated document"
     }
   ]
 }

@@ -1,8 +1,6 @@
 {
-  "checkedAt": "2026-10-14",
-  "checkedHead": "870fa9eb0db6101db0fe80b28b17f044e6cd3db5",
-  "state": "BLOCKED_MISSING_SOURCE_BYTES",
-  "scope": "Availability at checkedHead; original EVIDENCE_MANIFEST.json remains the historical expected package inventory.",
+  "checkedHead": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+  "state": "PARTIAL_RECOVERY",
   "verifiedPresent": [
     "README.md",
     "VFC01_BASELINE_AUDIT.md",
@@ -28,8 +26,12 @@
     "baseline/production-library-player.webp",
     "baseline/production.json",
     "combined-lod/sequences.json",
+    "compare/baseline-cottage-front.webp",
+    "compare/baseline-cottage-player.webp",
+    "compare/baseline-library-player.webp",
     "compare/ktx.json",
     "compare/matrix.json",
+    "compare/selected-equal-library-player.webp",
     "compare/selected.json",
     "compare/sweeps.json",
     "index.html",
@@ -116,9 +118,6 @@
     "combined-lod/library-medium.webp",
     "combined-lod/library-player.webp",
     "compare/VFC01_cottage_front_equal_DPR.png",
-    "compare/baseline-cottage-front.webp",
-    "compare/baseline-cottage-player.webp",
-    "compare/baseline-library-player.webp",
     "compare/ktx-etc1s-cottage-player.webp",
     "compare/ktx-etc1s-library-player.webp",
     "compare/ktx-webp-cottage-player.webp",
@@ -128,7 +127,6 @@
     "compare/selected-crisp-library-player.webp",
     "compare/selected-equal-cottage-front.webp",
     "compare/selected-equal-cottage-player.webp",
-    "compare/selected-equal-library-player.webp",
     "compare/sweeps/MSAA-cottage-player.webp",
     "compare/sweeps/MSAA-library-player.webp",
     "compare/sweeps/anisotropy1-cottage-player.webp",
@@ -208,8 +206,14 @@
     "neutral/V4-library-medium.webp",
     "neutral/V4-library-player.webp"
   ],
-  "missingBytes": 38290438,
-  "hashMismatches": [],
-  "videosAvailable": 0,
-  "videosExpected": 8
+  "summary": {
+    "expected": 201,
+    "present": 39,
+    "missing": 162,
+    "reproduced": 4,
+    "originalMedia": 12,
+    "unresolvedViewerReferences": 105,
+    "failures": []
+  },
+  "classification": "Missing files are reproducible in a working Chromium/WebGL2 environment; the original binary bytes remain unavailable."
 }

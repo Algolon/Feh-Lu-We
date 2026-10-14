@@ -49,3 +49,13 @@ Recover the original selected frames and eight MP4s, or the prior upload ledger 
 6. Upload the remaining matrix evidence in small batches after the selected comparisons and videos are durable.
 
 Review can assess reports and retained baseline evidence now; the experimental visual conclusions still lack their original remote evidence. Physical-phone validation remains pending.
+
+## Continuation — 14 October 2026
+
+Started from `6d06ce7`, preserving its parent `870fa9e`. The earlier recovery checkout survived and was clean; a separate checkout of the same existing branch isolates this continuation. Production remains `6b2b82d`; no production/parallel source is incorporated. The 112 locally unreachable blobs were checked against missing-file sizes/SHA-256 values: no original-media match. Conversation retrieval yielded no path/blob ledger.
+
+Full Chromium fails before page creation because the environment denies its process-singleton Unix socket. A bounded alternative, matching Playwright Chromium 141 Headless Shell, successfully created WebGL2. Missing selected images can therefore be reproduced from the unchanged source tree `f73b44f6aec2f19ec32310d3e02dfa0e89c70c08`. The first reproduced Library baseline has exactly identical decoded pixels to the retained baseline. Count/configuration checks guard each capture; timing records are unchanged. `RECOVERY_CAPTURES.json` distinguishes each new reproduction and its source commit. `EVIDENCE_MANIFEST_ORIGINAL.json` preserves the original file checksums.
+
+Ordinary Git reads/fetches work; a dry-run push failed because no GitHub username/credential is available. Use bounded authenticated connector batches, immediately attach blobs through tree/commit/ref with an expected HEAD, then verify the remote tree and sizes before another batch. No Base64 conversion is repeated for an asset.
+
+Reproduction command: `VFC_BROWSER_PATH=/path/to/headless_shell node scripts/vfc01-recover.mjs selected`. Tasks `matrix`, `sweeps`, and `video V3:vegetation` reproduce only missing paths; video uses the exact previously recorded poses/order. Each job should run under an explicit timeout. `python3 scripts/vfc01-integrity.py` enforces complete expected evidence; `--allow-incomplete` is an inventory mode, not a relaxed completion gate.
