@@ -1,3 +1,4 @@
+import { lowViewWithinBudget, cameraRegressionWithinBudget } from './performance-budget.mjs';
 // DEV-04C atmosphere, authored surfaces & interactive setpieces: browser suite against the production build
 // (npm run build && npm run preview). Usage: node scripts/e2e-dev04c.mjs [baseUrl]   (E2E_OUT=dir for results)
 // Behaviour checks, no pixel snapshots:
@@ -298,17 +299,18 @@ try {
     livingRoom: [83.4, 0.15, 87.2, -90 * D, -0.06], 'entrance hall': [90, 0.15, 83, 0, 0.1], copaRoom: [118, 0.15, 99, 30 * D, -0.05], 'Copacabana bar': [127, 0.15, 107, 25 * D, 0.1], 'Portugal cottage': [25, 4.15, 158.6, 0, -0.12], lakeApproach: [64, 0, 121.5, -22 * D, 0], lakeShore: [80, 0, 136.4, -70 * D, -0.04], woodlandRoute: [120, 0, 13.6, 85 * D, 0.02], boslustCalibration: [51.5, 0, 7.6, 55 * D, 0.04], campfire: [26, 0, 21.5, -125 * D, -0.25],
     wickerUnlit: [176.4, 1.2, 59.9, 145 * D, 0.12, { 'wicker.candles': false }], wickerLit: [176.4, 1.2, 59.9, 145 * D, 0.12, { 'wicker.candles': true }], wickerBurning: [176.4, 1.2, 59.9, 145 * D, 0.12, { burning: true }], wickerPathBurning: [158, 1.0, 47, 1.08, 0, { burning: true }],
   }, { 'door.front': true });
-  const guide = (b) => b.calls <= 150 && b.triangles <= 250000;
+  const guide = (b) => lowViewWithinBudget(b);
   const rows = [], over = [];
   for (const [set, M, ref] of [['A', A, before?.A ?? {}], ['C', C, { ...(before?.B ?? {}), ...(before?.C ?? {}) }]]) for (const [k, b] of Object.entries(M)) {
     const b0 = ref[k] ?? ref[{ wickerUnlit: 'wickerUnlit', wickerLit: 'wickerUnlit', wickerBurning: 'wickerUnlit', wickerPathBurning: 'wickerPathBurning' }[k]] ?? null;
     rows.push({ set, k, ...b, before: b0 });
-    // rule: a view inside the guide stays inside; a view already over it (golfSpur) may not grow by more than 2 % / +2 calls
-    const ok = b0 && !guide(b0) ? b.triangles <= b0.triangles * 1.02 && b.calls <= b0.calls + 2 : guide(b);
+    // PB01: camera ceiling plus independent 2% regression guard; original draw-call exceptions retained.
+    const callsOK = b0 && b0.calls > 150 ? b.calls <= b0.calls + 2 : b.calls <= 150;
+    const ok = callsOK && (b0 ? cameraRegressionWithinBudget(b.triangles, b0.triangles, 1.02) : guide(b));
     if (!ok) over.push(`${k} ${b.calls}/${b.triangles} (before ${b0 ? `${b0.calls}/${b0.triangles}` : 'n/a'})`);
   }
   writeFileSync(`${OUT}/budget.json`, JSON.stringify(rows, null, 2));
-  log(`render budgets (low): every view inside the mobile guide stays inside; golfSpur not materially worse (${rows.length} views)`, over.length === 0, over.join(' | ') || rows.filter((r) => /wicker|golfSpur|lake|living|hall/.test(r.k)).map((r) => `${r.k} ${r.calls}/${r.triangles}`).join(', '));
+  log(`render budgets (low): every view inside the provisional PB01 mobile budget stays inside; golfSpur not materially worse (${rows.length} views)`, over.length === 0, over.join(' | ') || rows.filter((r) => /wicker|golfSpur|lake|living|hall/.test(r.k)).map((r) => `${r.k} ${r.calls}/${r.triangles}`).join(', '));
 } catch (e) {
   log('suite crashed', false, String(e?.stack ?? e).slice(0, 500));
 }

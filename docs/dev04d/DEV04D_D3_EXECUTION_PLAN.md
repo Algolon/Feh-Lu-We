@@ -1,3 +1,5 @@
+> **FLW-PB01 budget authority (14 October 2026):** [PERFORMANCE_BUDGET.md](../PERFORMANCE_BUDGET.md) supersedes every historical 250k camera-triangle limit and “previously under 250k must remain under” rule in this document. Current ceiling: **750,000 submitted camera triangles per view**, provisional; device validation pending. Historical measurements/results remain unchanged. Draw-call limits, functional assertions and local batch delta limits remain in force; explained geometry growth requires an explicit regression review, not automatic rejection at 250k.
+
 # DEV-04D D3: execution plan (recalibrated after D3-0)
 This plan follows the D3-0 audit (`DEV04D_D3_CRAFTSMANSHIP_AUDIT.md`). The D3 sequence itself is unchanged: **D3-a → D3-f**.
 What changes:

@@ -1,3 +1,4 @@
+import { cameraRegressionWithinBudget } from './performance-budget.mjs';
 // DEV-04A visual correctness & spatial cohesion: browser suite against the production build (npm run build && npm run preview).
 // Usage: node scripts/e2e-dev04a.mjs [baseUrl]   (E2E_OUT=dir for results)
 // Generic contracts over the WHOLE estate where they can be checked robustly (no pixel comparisons):
@@ -385,11 +386,11 @@ try {
   // ---------------------------------------------------------------- 8. render budget at representative views
   const budget = await measureBudget();
   const cmp = Object.fromEntries(Object.entries(budget).map(([k, b]) => { const b0 = baseline.budget?.[k]; return [k, { ...b, before: b0 ?? null }]; }));
-  // within the mobile guide (≤ 150 calls / ≤ 250 k triangles at low) wherever the pre-DEV-04A build was; never a material
+  // within the provisional PB01 mobile budget (≤ 150 calls / ≤ PB01 camera triangles at low) wherever the pre-DEV-04A build was; never a material
   // regression against it (calls + 6, triangles + 8 %: the corrections add real geometry - plinth returns, a sink bowl,
-  // stairs, a roof window, hedges - but must not move a view across the guide)
-  const okB = Object.values(cmp).every((b) => b.before && b.calls <= Math.max(150, b.before.calls) + 6 && b.triangles <= Math.max(250000, b.before.triangles) * 1.08 && (b.before.calls > 150 || b.calls <= 150) && (b.before.triangles > 250000 || b.triangles <= 250000));
-  log('render budget (low, standard door state): every DEV-04A view stays within the mobile guide where it was, no material regression vs the pre-DEV-04A build', okB, JSON.stringify(cmp));
+  // stairs, a roof window, hedges). PB01 separates baseline growth from the absolute ceiling.
+  const okB = Object.values(cmp).every((b) => b.before && b.calls <= Math.max(150, b.before.calls) + 6 && cameraRegressionWithinBudget(b.triangles, b.before.triangles, 1.08) && (b.before.calls > 150 || b.calls <= 150));
+  log('render budget (low, standard door state): every DEV-04A view stays within the provisional PB01 mobile budget where it was, no material regression vs the pre-DEV-04A build', okB, JSON.stringify(cmp));
 
   // ---------------------------------------------------------------- 9. legacy saves: poses on surfaces that changed still load onto valid support
   const legacy = [];

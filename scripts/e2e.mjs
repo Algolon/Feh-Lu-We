@@ -1,3 +1,4 @@
+import { lowViewWithinBudget } from './performance-budget.mjs';
 // End-to-end checks against the production build served under /Feh-Lu-We/.
 // Usage: npm run build && npm run preview (in another shell) && node scripts/e2e.mjs [baseUrl]
 // Uses the locally installed Chromium (software WebGL via SwiftShader); FPS numbers here are NOT device numbers.
@@ -557,7 +558,7 @@ async function metrics() {
     await page.screenshot({ path: `${OUT}/view-${name.replace(/\W+/g, '_')}.png` });
   }
   for (const r of rows) {
-    log(`render low (phone default): ${r.name}`, r.low.calls <= 150 && r.low.triangles <= 250000, `${r.low.calls} calls, ${r.low.triangles} tris`);
+    log(`render low (phone default): ${r.name}`, lowViewWithinBudget(r.low), `${r.low.calls} calls, ${r.low.triangles} tris`);
     log(`render high (desktop, +shadows): ${r.name}`, r.high.calls <= 150 * 1.8 && r.high.triangles <= 450000, `${r.high.calls} calls, ${r.high.triangles} tris`);
   }
   writeFileSync(`${OUT}/metrics.json`, JSON.stringify(rows, null, 2));
