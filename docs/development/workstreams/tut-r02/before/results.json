@@ -1,0 +1,235 @@
+{
+  "phase": "before",
+  "captures": [
+    {
+      "file": "table-portrait.jpg",
+      "calls": 23,
+      "triangles": 15607,
+      "textures": 6,
+      "geometries": 23,
+      "pose": {
+        "x": 3.05,
+        "y": 0,
+        "z": 2.05,
+        "yaw": 0.7853981633974483,
+        "pitch": -0.5370733537784346
+      }
+    },
+    {
+      "file": "window-portrait.jpg",
+      "calls": 11,
+      "triangles": 8346,
+      "textures": 7,
+      "geometries": 24,
+      "pose": {
+        "x": 3,
+        "y": 0,
+        "z": 2,
+        "yaw": 3.141592653589793,
+        "pitch": -0.02499479361892007
+      }
+    },
+    {
+      "file": "room-portrait.jpg",
+      "calls": 29,
+      "triangles": 16199,
+      "textures": 7,
+      "geometries": 32,
+      "pose": {
+        "x": 6.6,
+        "y": 0,
+        "z": 3,
+        "yaw": -1.6233793884058385,
+        "pitch": -0.10473303933139493
+      }
+    },
+    {
+      "file": "entrance-portrait.jpg",
+      "calls": 11,
+      "triangles": 8402,
+      "textures": 7,
+      "geometries": 32,
+      "pose": {
+        "x": 5.9,
+        "y": 0,
+        "z": 4.15,
+        "yaw": 1.4297635762106058,
+        "pitch": -0.36219962067219635
+      }
+    },
+    {
+      "file": "boots-portrait.jpg",
+      "calls": 11,
+      "triangles": 8402,
+      "textures": 7,
+      "geometries": 32,
+      "pose": {
+        "x": 6.8,
+        "y": 0,
+        "z": 3.65,
+        "yaw": 1.2277723863741934,
+        "pitch": -1.1080600387180743
+      }
+    },
+    {
+      "file": "calendar-portrait.jpg",
+      "calls": 10,
+      "triangles": 8354,
+      "textures": 7,
+      "geometries": 32,
+      "pose": {
+        "x": 6.15,
+        "y": 0,
+        "z": 4.7,
+        "yaw": 0.530015251423793,
+        "pitch": -0.006740517916371678
+      }
+    },
+    {
+      "file": "lamp-portrait.jpg",
+      "calls": 15,
+      "triangles": 11158,
+      "textures": 7,
+      "geometries": 32,
+      "pose": {
+        "x": 1.35,
+        "y": 0,
+        "z": 3.3,
+        "yaw": -0.9738852729456412,
+        "pitch": -0.3608762092443226
+      }
+    },
+    {
+      "file": "drawer-portrait.jpg",
+      "calls": 15,
+      "triangles": 11210,
+      "textures": 7,
+      "geometries": 33,
+      "pose": {
+        "x": 1.3,
+        "y": 0,
+        "z": 3.2,
+        "yaw": -1.5707963267948966,
+        "pitch": -1.0819439724671487
+      }
+    },
+    {
+      "file": "table-landscape.jpg",
+      "calls": 24,
+      "triangles": 15679,
+      "textures": 7,
+      "geometries": 33,
+      "pose": {
+        "x": 3.05,
+        "y": 0,
+        "z": 2.05,
+        "yaw": 0.7853981633974483,
+        "pitch": -0.5370733537784346
+      }
+    },
+    {
+      "file": "window-landscape.jpg",
+      "calls": 12,
+      "triangles": 12308,
+      "textures": 7,
+      "geometries": 34,
+      "pose": {
+        "x": 3,
+        "y": 0,
+        "z": 2,
+        "yaw": 3.141592653589793,
+        "pitch": -0.02499479361892007
+      }
+    },
+    {
+      "file": "room-landscape.jpg",
+      "calls": 30,
+      "triangles": 20161,
+      "textures": 7,
+      "geometries": 34,
+      "pose": {
+        "x": 6.6,
+        "y": 0,
+        "z": 3,
+        "yaw": -1.6233793884058385,
+        "pitch": -0.10473303933139493
+      }
+    },
+    {
+      "file": "entrance-landscape.jpg",
+      "calls": 12,
+      "triangles": 8426,
+      "textures": 7,
+      "geometries": 34,
+      "pose": {
+        "x": 5.9,
+        "y": 0,
+        "z": 4.15,
+        "yaw": 1.4297635762106058,
+        "pitch": -0.36219962067219635
+      }
+    },
+    {
+      "file": "boots-landscape.jpg",
+      "calls": 11,
+      "triangles": 8402,
+      "textures": 7,
+      "geometries": 34,
+      "pose": {
+        "x": 6.8,
+        "y": 0,
+        "z": 3.65,
+        "yaw": 1.2277723863741934,
+        "pitch": -1.1080600387180743
+      }
+    },
+    {
+      "file": "calendar-landscape.jpg",
+      "calls": 10,
+      "triangles": 8354,
+      "textures": 7,
+      "geometries": 34,
+      "pose": {
+        "x": 6.15,
+        "y": 0,
+        "z": 4.7,
+        "yaw": 0.530015251423793,
+        "pitch": -0.006740517916371678
+      }
+    },
+    {
+      "file": "lamp-landscape.jpg",
+      "calls": 17,
+      "triangles": 11242,
+      "textures": 7,
+      "geometries": 34,
+      "pose": {
+        "x": 1.35,
+        "y": 0,
+        "z": 3.3,
+        "yaw": -0.9738852729456412,
+        "pitch": -0.3608762092443226
+      }
+    },
+    {
+      "file": "drawer-landscape.jpg",
+      "calls": 18,
+      "triangles": 11282,
+      "textures": 7,
+      "geometries": 34,
+      "pose": {
+        "x": 1.3,
+        "y": 0,
+        "z": 3.2,
+        "yaw": -1.5707963267948966,
+        "pitch": -1.0819439724671487
+      }
+    }
+  ],
+  "checks": [],
+  "errors": [],
+  "baselineCommit": "5ca306da6a32f33b4c93c90ace3556e2787c67d4",
+  "renderer": "Chromium headless shell / SwiftShader",
+  "physicalPhoneValidated": false,
+  "source": "production baseline"
+}

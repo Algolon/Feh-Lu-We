@@ -3,18 +3,18 @@
 import * as THREE from 'three';
 import { World, type GameApi } from '../interactions/world';
 import { makeCtx, wall, floor, ceiling } from './arch';
-import { box, cyl, blob, compound, v3 } from './kit';
-import { table as _t, roundTable, chair, bookshelf, armchair, rug, plant, flwPainting, joinery, tableLamp, floorLamp, part } from './furniture';
+import { box, compound, v3 } from './kit';
+import { roundTable, chair, bookshelf, armchair, rug, flwPainting, joinery, part } from './furniture';
 import { makeFire } from './fire';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place, lightableItemLabel } from '../interactions/props';
 import type { SceneExtras } from '../core/game';
 import { has } from '../core/state';
 import { tutorialMissing } from '../puzzles/rules';
 import { beginOpenings } from './openings';
-import { Asm, artMats } from './artkit';
+import { Asm, artMats, ContactShadows } from './artkit';
 import { homeTorch, homeMatches, homeNotebook, homeInvitation, homeTravelCase } from './homeProps';
 import { addKey, presentKey, keyLiner, linerWhenOpen, LINER_TOP } from './d2props';
-void _t;
+import { homeCoatStand, homeBoots, homeCandle, homeLamp, homeCalendar, homePottedPlant } from './homeDressing';
 
 export function buildHome(g: GameApi): { world: World; extras: SceneExtras } {
   const w = new World('home');
@@ -34,7 +34,8 @@ export function buildHome(g: GameApi): { world: World; extras: SceneExtras } {
   // shell
   floor(c, 0, 8, 0, 6, 0, k.M.wood, '#b88a5a', 0.2, true, 2.2);
   ceiling(c, 0, 8, 0, 6, 2.8);
-  for (let x = 0.5; x < 8; x += 1.5) box(c.b, k.M.wood, '#6b4426', x, 2.62, 3, 0.18, 0.18, 6, { chunk: 'home' }); // beams
+  const trim = new Asm(c.b, 'home', 0, 0, 0, 0);
+  for (let x = 0.5; x < 8; x += 1.5) trim.add(artMats().timber, '#6b4426', joinery.sb(0.18, 0.18, 6, 0.008), x, 2.71, 3); // softened timber edges
   const wallOpts = { t: 0.2, mat: k.M.plaster, color: '#f0e3c8' };
   wall(c, 'x', -0.1, -0.2, 8.2, 0, 2.8, { ...wallOpts, windows: [{ at: 3, side: 1, sill: 0.9 }] });
   wall(c, 'x', 6.1, -0.2, 8.2, 0, 2.8, { ...wallOpts, windows: [{ at: 2.5, side: -1, sill: 0.9 }, { at: 5.2, side: -1, sill: 0.9 }] });
@@ -61,17 +62,13 @@ export function buildHome(g: GameApi): { world: World; extras: SceneExtras } {
   chair(c, 2.9, 3, 0, Math.PI / 2, '#5f7a45');
   bookshelf(c, 5.6, 0.25, 0, 0, 1.6, 2.1);
   armchair(c, 1.2, 5.1, 0, Math.PI * 0.85, '#7a3a3a');
-  plant(c, 7.5, 5.5, 0, 1.2);
-  plant(c, 0.5, 0.5, 0, 0.9);
+  homePottedPlant(c, 7.5, 5.5, 1.2);
+  homePottedPlant(c, 0.5, 0.5, 0.9);
   flwPainting(c, 'FLW-D2-007', 0.04, 1.75, 1.6, Math.PI / 2);
   flwPainting(c, 'FLW-D2-002', 1.25, 1.7, 0.04, 0); // solid wall, clear of the window at x=3
-  // coat rack + boots by the door
-  cyl(c.b, k.M.wood, '#5a3a22', 7.55, 0, 4.7, 0.04, 0.05, 1.8, 6, { chunk: 'home' });
-  box(c.b, k.M.paint, '#3f5a35', 7.62, 0.9, 4.5, 0.12, 0.8, 0.3, { chunk: 'home' });
-  box(c.b, k.M.paint, '#2f3a4a', 7.62, 0.85, 4.9, 0.12, 0.85, 0.3, { chunk: 'home' });
-  box(c.b, k.M.paint, '#6b4426', 7.5, 0, 4.0, 0.3, 0.25, 0.14, { chunk: 'home' });
-  box(c.b, k.M.paint, '#6b4426', 7.5, 0, 3.75, 0.3, 0.25, 0.14, { chunk: 'home' });
-  w.col.addCircle(7.55, 4.6, 0.3, 0, 2);
+  // TUT-R02: recognisable clothing / footwear, supported by the same compact entrance footprint.
+  homeCoatStand(c);
+  homeBoots(c);
 
   // dressoir (sideboard) against the west wall, facing east, with a working drawer
   const dx = 0.32, dz = 3.2;
@@ -102,9 +99,9 @@ export function buildHome(g: GameApi): { world: World; extras: SceneExtras } {
   makePickup(w, g, { id: 'pk.frontKey', item: 'frontKey', obj: key, available: drawer.isOpen, hit: [0.3, 0.12, 0.3] });
 
   // lamps
-  const tl = tableLamp(w, 0.32, 0.91, 4.0);
+  const tl = homeLamp(w, 0.32, 0.915, 4.0, false);
   makeLamp(w, g, { id: 'home.tablelamp', ...tl, name: 'lamp', hit: [0.4, 0.75, 0.4], intensity: 5, distance: 7 });
-  const fl = floorLamp(w, 1.8, 0, 5.4);
+  const fl = homeLamp(w, 1.8, 0, 5.4, true);
   makeLamp(w, g, { id: 'home.floorlamp', ...fl, name: 'staande lamp', defaultOn: true, hit: [0.5, 1.9, 0.5], intensity: 5, distance: 8 });
 
   // items on the table
@@ -136,12 +133,7 @@ export function buildHome(g: GameApi): { world: World; extras: SceneExtras } {
   const bag = homeTravelCase();
   place(bag, 3.72, y, 3.43, 0.2);
   w.scene.add(bag);
-  const candle = compound((b) => {
-    cyl(b, k.M.paint, '#b8892f', 0, 0, 0, 0.06, 0.07, 0.02, 10);
-    cyl(b, k.M.paint, '#f3ead0', 0, 0.02, 0, 0.025, 0.025, 0.14, 8);
-    blob(b, k.M.paint, '#fbf6e6', 0.018, 0.13, 0, 0.008, 0.025, 0.008); // wax drip
-    cyl(b, k.M.paint, '#2b2118', 0, 0.16, 0, 0.003, 0.003, 0.016, 4); // wick
-  });
+  const candle = homeCandle();
   place(candle, 4.42, y, 3.4);
   w.scene.add(candle);
   const fl2 = makeFire(w, { kind: 'candle', x: 4.42, y: y + 0.172, z: 3.4, s: 1.1 });
@@ -164,10 +156,7 @@ export function buildHome(g: GameApi): { world: World; extras: SceneExtras } {
   });
 
   // calendar memory
-  const cal = compound((b) => {
-    box(b, k.M.paint, '#f3ead8', 0, 0, 0, 0.4, 0.5, 0.02);
-    box(b, k.M.paint, '#c4553d', 0, 0.42, 0, 0.4, 0.08, 0.025);
-  });
+  const cal = homeCalendar(w);
   place(cal, 6.9, 1.4, 5.98, Math.PI);
   w.scene.add(cal);
   makeInspect(w, g, { id: 'home.calendar', obj: cal, clue: 'mem.home.calendar', hit: [0.5, 0.6, 0.2], hitOffset: [0, 0.25, 0] });
@@ -195,6 +184,20 @@ export function buildHome(g: GameApi): { world: World; extras: SceneExtras } {
   part(c, k.M.paint, '#5a3a22', 8.1, 3, 0, 0, 2.2, 0, 0.3, 0.12, 1.3);
 
   c.b.build(w.scene);
+  // One instanced contact layer grounds the existing shaped furniture and new entrance props.
+  // Neutral static occlusion only; no baked lamp light or global lighting change.
+  const contacts = new ContactShadows();
+  contacts.add(7.55, 0.002, 4.6, 0.84, 0.84, 0, 0.32);
+  contacts.add(7.5, 0.002, 3.9, 0.54, 0.62, -Math.PI / 2, 0.34);
+  contacts.add(4, 0.024, 3, 0.87, 0.87, 0, 0.28);
+  contacts.add(4, 0.024, 4.1, 0.85, 0.84, Math.PI, 0.25);
+  contacts.add(2.9, 0.024, 3, 0.85, 0.84, Math.PI / 2, 0.25);
+  contacts.add(1.2, 0.002, 5.1, 1.12, 1.2, Math.PI * 0.85, 0.3);
+  contacts.add(5.6, 0.002, 0.25, 1.8, 0.76, 0, 0.25);
+  contacts.add(7.5, 0.002, 5.5, 0.62, 0.62, 0, 0.3);
+  contacts.add(0.5, 0.002, 0.5, 0.5, 0.5, 0, 0.3);
+  contacts.add(1.8, 0.002, 5.4, 0.64, 0.64, 0, 0.3);
+  contacts.build(w.scene, 'home', '#514538');
   w.spawn = { x: 2.2, y: 0, z: 1.6, yaw: 0.9, pitch: -0.15 };
   w.checkpoints.push({ name: 'start', pose: w.spawn }, { name: 'door', pose: { x: 7, y: 0, z: 3, yaw: Math.PI / 2, pitch: 0 } });
 
