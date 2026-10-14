@@ -1,5 +1,7 @@
 # ENV-L01 — QA and limits
 
+> Current status — 14 October 2026: owner-approved cumulus and four-phase lighting are enabled in normal estate gameplay on this isolated branch. Earlier opt-in/baseline statements below describe historical prototype stages. See [release and recovery assessment](ENV-L01_RELEASE_ASSESSMENT.md). Nothing merged or deployed by ENV-L01.
+
 Reviewable prototype, **not a green production integration gate**. Severe owner Android black-out remains unreproduced; physical device validation and final integration review remain required; the four-phase direction is approved.
 
 ## Automated results
@@ -88,3 +90,7 @@ Owner requested stronger billowing cloud forms. Latest typecheck/build and **274
 The preceding full E2E results (102/103, 22/22, 18/18) remain explicitly those of the preceding sky implementation; they were not rerun for this cloud-only GLSL/palette revision. No new complete-route or native-device pass claimed. Shader cost increases from six simple lobes to 21 polynomial lobes with analytic gradients/three surface normals. Geometry/call budgets alone cannot validate that cost; optional clouds remain a device review gate. Gzip **422.92 kB**, about +0.37 kB over preceding sky build. Physical Android FPS/thermal/overdraw remain unmeasured. No merge/deployment; native blackout root cause remains unconfirmed.
 
 Final cumulus matrix: **25/25 captures without page/console, shader diagnostic or GL errors**; all five cloud on/off pairs retain identical world-light values and geometry counters. Save/backup/settings sentinels untouched; no solved puzzle flags. Day/dusk garden before/after bottom-30%-ROI JPEG pixels are identical (unsegmented diagnostic, not a photometric claim). Baseline cloud toggles also retain equal counters/light. Low garden **58 / 155,894**, BOSLUST **91 / 226,908**; High daytime **110 / 365,323**, dusk **91 / 226,908**. Final JS hash stayed `f63e2edadb6729a330a102383e853ba08178f2ef97bf75457446cf4bf0537fad` through the targeted matrix. Ordinary full-suite results remain at their preceding build, as stated above.
+
+## Activation/recovery checkpoint — 14 October 2026
+
+Normal-game activation is reconstructed and checked with typecheck/build/275 units. Supplementary activation E2E/capture files were lost in automatic workspace maintenance. Earlier DEV-04D timeout and successful targeted repeat are session observations, not newly preserved pass evidence. Assertions/timeouts remain unchanged. See [release assessment](ENV-L01_RELEASE_ASSESSMENT.md) for exact provenance, unresolved validation and production/UI-R02 integration requirements.

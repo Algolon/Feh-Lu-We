@@ -1,5 +1,7 @@
 # ENV-L01 — render audit
 
+> Current status — 14 October 2026: owner-approved cumulus and four-phase lighting are enabled in normal estate gameplay on this isolated branch. Earlier opt-in/baseline statements below describe historical prototype stages. See [release and recovery assessment](ENV-L01_RELEASE_ASSESSMENT.md). Nothing merged or deployed by ENV-L01.
+
 Status: desktop/software renderer audit complete; owner Android failure NOT reproduced or diagnosed. No defect repair claim.
 
 ## Provenance and isolation

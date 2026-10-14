@@ -1,5 +1,7 @@
 > Owner review — 13 October 2026: all four atmospheres approved as a visual direction. Device defect diagnosis, physical Android QA, integration, merge and deployment remain separate gates.
 
+> Current status — 14 October 2026: owner-approved cumulus and four-phase lighting are enabled in normal estate gameplay on this isolated branch. Earlier opt-in/baseline statements below describe historical prototype stages. See [release and recovery assessment](ENV-L01_RELEASE_ASSESSMENT.md). Nothing merged or deployed by ENV-L01.
+
 # ENV-L01 — four-phase direction
 
 ART-01 remains the authority: crafted European woodland manor, material identity and construction, lively earthy colours, clear silhouettes. No asset, layout, HUD or puzzle redesign. Prototype-only; the four-phase direction is approved, additional sky detail still needs visual review.

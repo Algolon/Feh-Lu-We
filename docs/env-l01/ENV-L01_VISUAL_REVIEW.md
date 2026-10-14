@@ -1,5 +1,7 @@
 > Owner review — 13 October 2026: all four atmospheres approved as a visual direction. Device defect diagnosis, physical Android QA, integration, merge and deployment remain separate gates.
 
+> Current status — 14 October 2026: owner-approved cumulus and four-phase lighting are enabled in normal estate gameplay on this isolated branch. Earlier opt-in/baseline statements below describe historical prototype stages. See [release and recovery assessment](ENV-L01_RELEASE_ASSESSMENT.md). Nothing merged or deployed by ENV-L01.
+
 # ENV-L01 — owner visual review
 
 **Prototype, not production.** Eight fixed poses, 63 original-production diagnostic frames + 71 four-phase pilot frames, eight same-world path-control frames and eight desktop-aspect frames, condensed into sheets rather than committing duplicate raw collections. All scenes are genuine Three.js screenshots; no image generation, repainting or colour editing. Sheets only resize/layout original pixels and add captions. Geometry, materials, front-door state and torch-off state are retained.

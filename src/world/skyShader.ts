@@ -1,8 +1,8 @@
-// One procedural dome. Detail compiles only in the ENV-L01 review, never ordinary gameplay.
+// One procedural dome for normal gameplay and review. Legacy presentation remains a review comparison.
 export const SKY_FRAGMENT = `
 uniform vec3 uZenith; uniform vec3 uHorizon; uniform vec3 uSunDir; uniform vec3 uSunCol;
 uniform float uGlow; uniform float uPilot;
-#ifdef ENV_SKY_REVIEW
+#ifdef ENV_SKY_DETAIL
 uniform vec3 uCloudLight; uniform vec3 uCloudShade; uniform float uCloudOpacity;
 // Painted cumulus relief: compact polynomial lobes and their analytic gradients.
 // No texture sampling, noise octaves, raymarch or animation clock.
@@ -47,7 +47,7 @@ void main() {
   float h = clamp(d.y * 1.6 + 0.08, 0.0, 1.0);
   vec3 c = mix(uHorizon, uZenith, pow(h, 0.7));
   float s = max(dot(d, normalize(uSunDir)), 0.0);
-  #ifdef ENV_SKY_REVIEW
+  #ifdef ENV_SKY_DETAIL
   if (uPilot > 0.5) {
     float cloud = 0.0;
     if (uCloudOpacity > 0.0) {

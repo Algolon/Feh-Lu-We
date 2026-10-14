@@ -7,6 +7,8 @@ import { chromium } from 'playwright-core';
 const OUT = process.argv[2] ?? 'scripts/out/env-l01-qa'; mkdirSync(OUT,{recursive:true});
 const CHROME = process.env.CHROME ?? '/root/.cache/ms-playwright/chromium_headless_shell-1194/chrome-linux/headless_shell';
 const bundle = () => Object.fromEntries(readdirSync('dist/assets').filter(f=>f.endsWith('.js')).map(f=>[f,createHash('sha256').update(readFileSync(`dist/assets/${f}`)).digest('hex')]));
+const suites = process.argv[3]?.split(',') ?? ['e2e','e2e-dev04c','e2e-dev04d'];
+if (suites.some(name => !['e2e','e2e-dev04c','e2e-dev04d'].includes(name))) throw new Error('Unknown suite');
 const before = bundle(), results = [];
 const server = await preview({ preview: { host:'127.0.0.1',port:4188,strictPort:true } });
 const BASE = 'http://127.0.0.1:4188/Feh-Lu-We/';
@@ -37,7 +39,7 @@ try {
   results.push({name:'lighting review controls / save isolation',ok:review.saveIntact && !review.solved.length && review.preview===1 && review.quality==='low' && review.sun===0 && review.pool===3 && !review.shaderFailures && !review.glError && !errors.length,review,errors});
   console.log(JSON.stringify(results.at(-1)));
   await browser.close();
-  for (const name of ['e2e','e2e-dev04c','e2e-dev04d']) {
+  for (const name of suites) {
     const dir = `${OUT}/${name}`;mkdirSync(dir,{recursive:true});
     const log = [];
     const exitCode = await new Promise(resolve=>{

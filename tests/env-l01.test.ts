@@ -5,6 +5,17 @@ import { addEnvironment } from '../src/world/env';
 import { LIGHTING_PHASES, sampleLighting, type PhaseSample } from '../src/world/lightingPhases';
 const sampler = (): PhaseSample => ({ a: LIGHTING_PHASES[0], b: LIGHTING_PHASES[1], blend: 0 });
 describe('ENV-L01 render contracts', () => {
+  it('keeps woodland haze nearer, darker and cooler than open terrain across the approved phases', () => {
+    const w = new World('estate'), e = addEnvironment(w, false), fog = w.scene.fog as THREE.Fog;
+    for (const t of [0, 1 / 3, 2 / 3, 1]) {
+      e.update(t, new THREE.Vector3(90, 1.65, -123), 0);
+      const open = { near: fog.near, far: fog.far, cool: fog.color.b - fog.color.r, hemi: e.hemi.intensity };
+      e.update(t, new THREE.Vector3(120, 1.65, -13.6), 0);
+      expect(fog.near).toBeLessThan(open.near); expect(fog.far).toBeLessThan(open.far);
+      expect(fog.color.b - fog.color.r).toBeGreaterThan(open.cool); expect(e.hemi.intensity).toBeLessThan(open.hemi);
+    }
+    w.dispose();
+  });
   it('isolates sky detail from gameplay lighting and uses the directional light position for the sun', () => {
     for (const review of [false, true]) {
       const w = new World('estate'), e = addEnvironment(w, review), focus = new THREE.Vector3(63, 1.65, -11.5);
@@ -13,12 +24,12 @@ describe('ENV-L01 render contracts', () => {
         e.clouds = true; e.update(t, focus);
         const before = [e.hemi.intensity, e.sun.intensity, ...e.hemi.color.toArray(), ...(w.scene.fog as THREE.Fog).color.toArray()];
         expect(sky.material.uniforms.uSunDir.value.distanceTo(e.sun.position.clone().sub(e.sun.target.position).normalize())).toBeLessThan(1e-12);
-        expect(sky.material.uniforms.uCloudOpacity.value).toBe(review ? LIGHTING_PHASES[Math.round(t * 3)].cloudOpacity : 0);
+        expect(sky.material.uniforms.uCloudOpacity.value).toBe(LIGHTING_PHASES[Math.round(t * 3)].cloudOpacity);
         e.clouds = false; e.update(t, focus);
         expect(sky.material.uniforms.uCloudOpacity.value).toBe(0);
         expect([e.hemi.intensity, e.sun.intensity, ...e.hemi.color.toArray(), ...(w.scene.fog as THREE.Fog).color.toArray()]).toEqual(before);
       }
-      expect(Boolean(sky.material.defines.ENV_SKY_REVIEW)).toBe(review);
+      expect(Boolean(sky.material.defines.ENV_SKY_DETAIL)).toBe(true);
       w.dispose();
     }
   });
@@ -30,13 +41,15 @@ describe('ENV-L01 render contracts', () => {
     expect(e.hemi.intensity).toBeGreaterThan(0); expect(e.sun.intensity).toBeGreaterThan(0);
     w.dispose();
   });
-  it('keeps the normal game on production lighting even if review controls are set', () => {
+  it('uses approved phases in normal gameplay and ignores review controls', () => {
     const w = new World('estate'), e = addEnvironment(w, false), focus = new THREE.Vector3(90, 1.65, -123);
     e.update(0.6, focus, 0);
     const before = [e.hemi.intensity, e.sun.intensity, e.hemi.color.toArray(), e.sun.color.toArray(), (w.scene.fog as THREE.Fog).color.toArray()];
-    e.preview = 1; e.mode = 'pilot'; e.diagnostic = 'sun'; e.update(0.6, focus, 0);
+    e.preview = 1; e.mode = 'baseline'; e.diagnostic = 'sun'; e.update(0.6, focus, 0);
     expect([e.hemi.intensity, e.sun.intensity, e.hemi.color.toArray(), e.sun.color.toArray(), (w.scene.fog as THREE.Fog).color.toArray()]).toEqual(before);
-    expect(e.fixtureGain).toBe(1); w.dispose();
+    expect(e.mode).toBe('baseline');
+    e.update(1, focus, 0); expect(e.fixtureGain).toBe(1.12); expect(e.sun.intensity).toBe(0);
+    w.dispose();
   });
   it('has finite ordered haze and bounded light over every phase, location and indoor blend', () => {
     const w = new World('estate'), e = addEnvironment(w, true);

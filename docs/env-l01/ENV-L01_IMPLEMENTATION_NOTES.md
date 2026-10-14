@@ -1,5 +1,7 @@
 # ENV-L01 — implementation notes
 
+> Current status — 14 October 2026: owner-approved cumulus and four-phase lighting are enabled in normal estate gameplay on this isolated branch. Earlier opt-in/baseline statements below describe historical prototype stages. See [release and recovery assessment](ENV-L01_RELEASE_ASSESSMENT.md). Nothing merged or deployed by ENV-L01.
+
 Isolated opt-in prototype. Normal gameplay retains legacy lighting; nothing merged or deployed.
 
 ## Files and boundaries

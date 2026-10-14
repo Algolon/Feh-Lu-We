@@ -40,10 +40,11 @@ export function lightingReport(game: Game) {
     camera: { position: game.camera.position.toArray(), quaternion: game.camera.quaternion.toArray(), fov: game.camera.fov, aspect: game.camera.aspect },
     review: { mode: env?.mode, preview: env?.preview, clouds: env?.clouds, diagnostic: env?.diagnostic, progressDusk: game.audio.dusk }, art: { ...ART },
     exposure: r.toneMappingExposure, toneMapping: r.toneMapping, shadows: r.shadowMap.enabled,
+    frame: game.frameStats(), counters: { calls: r.info.render.calls, triangles: r.info.render.triangles },
     gl: { lost: gl.isContextLost(), error: gl.getError(), renderer: dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER),
       version: gl.getParameter(gl.VERSION), shadingLanguage: gl.getParameter(gl.SHADING_LANGUAGE_VERSION), highFloat: precision(gl.HIGH_FLOAT), mediumFloat: precision(gl.MEDIUM_FLOAT), multiDraw: !!gl.getExtension('WEBGL_multi_draw') },
     sceneLights: lights, programs,
-    note: 'Programs include cached/unused variants. A scene light value alone does not prove its contribution reached a drawn fragment. The GL error field samples and clears the current error flag. No save/puzzle data collected.' };
+    note: 'Frame stats are wall-time over the last up to 240 real frames, not isolated GPU cost; warm up at one pose before comparison. Programs include cached/unused variants. A scene light value alone does not prove its contribution reached a drawn fragment. The GL error field samples and clears the current error flag. No save/puzzle data collected.' };
 }
 export function downloadLightingReport(game: Game) {
   const uri = URL.createObjectURL(new Blob([JSON.stringify(lightingReport(game), null, 2)], { type: 'application/json' }));
