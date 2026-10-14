@@ -1,0 +1,290 @@
+[
+  {
+    "file": "before-after.jpg",
+    "sha256": "5ce46d9ba75ac647e474af6c869a2cd0b9c7e47b27fc6acb1089643edb0f320a",
+    "tiles": [
+      {
+        "source": "boslust-exploration.jpg",
+        "sha256": "47cbb474dba61a9283903492029a326b620e17a22a75292f20e34390f7604d77",
+        "title": "Production baseline \u00b7 BOSLUST \u00b7 852 \u00d7 393",
+        "position": [
+          0,
+          34
+        ],
+        "size": [
+          852,
+          393
+        ]
+      },
+      {
+        "source": "phone-boslust-exploration.jpg",
+        "sha256": "ac55e63cb5159869cf719982179f0dfcfcd2fceb176557afe90137a51092bda3",
+        "title": "Woodland Archive pilot \u00b7 same pose / viewport",
+        "position": [
+          852,
+          34
+        ],
+        "size": [
+          852,
+          393
+        ]
+      },
+      {
+        "source": "boslust-notebook-evidence.jpg",
+        "sha256": "5a9f6b70346c9837cdabe851c9b13c0cb785e89bd188e247cef44b5d9759545d",
+        "title": "Production notebook \u00b7 Aanwijzingen \u00b7 same recorded clues",
+        "position": [
+          0,
+          461
+        ],
+        "size": [
+          852,
+          393
+        ]
+      },
+      {
+        "source": "phone-boslust-notebook-evidence.jpg",
+        "sha256": "7679767ec76a67ffa76eb6c1bc0d927ee4d08a789e74b2e55f6b3da62aa1e119",
+        "title": "Pilot notebook \u00b7 Aanwijzingen \u00b7 same recorded clues",
+        "position": [
+          852,
+          461
+        ],
+        "size": [
+          852,
+          393
+        ]
+      }
+    ],
+    "processing": "native-size arrangement; caption bands; JPEG encoding only"
+  },
+  {
+    "file": "mobile-states.jpg",
+    "sha256": "01433a10274a18125ca9d05f3eba83bfaf13c7c8e8144875d0eb3d44700e6008",
+    "tiles": [
+      {
+        "source": "phone-context-action.jpg",
+        "sha256": "6c0218598223d52add2b2d4ab7f714685dd8ca2cbd3bc680bfa0de8c78b4ce6b",
+        "title": "Real reticle action \u00b7 Bekijken: gravure",
+        "position": [
+          0,
+          34
+        ],
+        "size": [
+          852,
+          393
+        ]
+      },
+      {
+        "source": "phone-held-feedback.jpg",
+        "sha256": "99e07e21aa5373b87193bfcf2dd79296ebe76cd70cd0c51b3adc5ddc999193a2",
+        "title": "Selected item + real message \u00b7 capture hold 12 s",
+        "position": [
+          852,
+          34
+        ],
+        "size": [
+          852,
+          393
+        ]
+      },
+      {
+        "source": "phone-notebook-map.jpg",
+        "sha256": "d5c719898075a66e826535ef5a561887136d7da2d23d52cf7fc2c0c908daee0d",
+        "title": "Existing map / discovery filters \u00b7 notebook route",
+        "position": [
+          0,
+          461
+        ],
+        "size": [
+          852,
+          393
+        ]
+      },
+      {
+        "source": "phone-notebook-memory.jpg",
+        "sha256": "eeea572895aea39077d27f775ab5a42b19190091cdc1e8a7504b44d3ad482233",
+        "title": "Recorded lake-bench memory \u00b7 real inspect action",
+        "position": [
+          852,
+          461
+        ],
+        "size": [
+          852,
+          393
+        ]
+      }
+    ],
+    "processing": "native-size arrangement; caption bands; JPEG encoding only"
+  },
+  {
+    "file": "small-landscape.jpg",
+    "sha256": "267ed3b1d3a662d4616e24259100a047ecc099e2d77734b4de88e304c9dc5cb5",
+    "tiles": [
+      {
+        "source": "small-boslust-exploration.jpg",
+        "sha256": "01fd037da209c8c5d67ca311b03b883d343579759d2cce5053e754bc17d1df82",
+        "title": "Smaller landscape \u00b7 640 \u00d7 360",
+        "position": [
+          0,
+          34
+        ],
+        "size": [
+          640,
+          360
+        ]
+      },
+      {
+        "source": "small-home-tutorial.jpg",
+        "sha256": "135135b7facc520a6021f6e27b9b80baaf37a58e5c1fc8316d2bf8150368da4c",
+        "title": "Tutorial layout fixture \u00b7 coaching + checklist",
+        "position": [
+          640,
+          34
+        ],
+        "size": [
+          640,
+          360
+        ]
+      },
+      {
+        "source": "small-boslust-notebook-evidence.jpg",
+        "sha256": "859704332b9f99effa54228128517893fd8d4e8f233a695b17ba73adc1a6e3ba",
+        "title": "Notebook \u00b7 independent content scroll",
+        "position": [
+          0,
+          428
+        ],
+        "size": [
+          640,
+          360
+        ]
+      },
+      {
+        "source": "small-context-action.jpg",
+        "sha256": "81d76ce82e5c2107b6510d9c220b0ab1dbad263864ecad2d187e25ebfe0bea57",
+        "title": "Actual contextual action \u00b7 640 \u00d7 360",
+        "position": [
+          640,
+          428
+        ],
+        "size": [
+          640,
+          360
+        ]
+      }
+    ],
+    "processing": "native-size arrangement; caption bands; JPEG encoding only"
+  },
+  {
+    "file": "desktop.jpg",
+    "sha256": "48e2f05906d16901be4837bd60c8129c49e0975b68ff676dc3bb56a7b818966d",
+    "tiles": [
+      {
+        "source": "desktop-boslust-exploration.jpg",
+        "sha256": "6922b93d368c00a85cd2be6e74b7f453e6c913082628198d4711697bf96b81aa",
+        "title": "Desktop \u00b7 1440 \u00d7 900 \u00b7 normal exploration",
+        "position": [
+          0,
+          34
+        ],
+        "size": [
+          1440,
+          900
+        ]
+      },
+      {
+        "source": "desktop-boslust-notebook-evidence.jpg",
+        "sha256": "7de00b97700b3e9f24771e3f5caea3ad2ae4dbfb7b8ae769e230f4ba836503f3",
+        "title": "Desktop notebook \u00b7 same BOSLUST pose",
+        "position": [
+          0,
+          968
+        ],
+        "size": [
+          1440,
+          900
+        ]
+      }
+    ],
+    "processing": "native-size arrangement; caption bands; JPEG encoding only"
+  },
+  {
+    "file": "contrast.jpg",
+    "sha256": "ee203280d9a97a47d1d4a14c02949a0cd427b157dc58cdb9f2f0f4625ddd3132",
+    "tiles": [
+      {
+        "source": "phone-boslust-dark.jpg",
+        "sha256": "e33585118b8ae84d469ea1b20cc1b2e40ec01d347dbbccd72143fc92bfb606b6",
+        "title": "Actual world \u00b7 dusk fixture initially .95 \u00b7 lighting unchanged",
+        "position": [
+          0,
+          34
+        ],
+        "size": [
+          852,
+          393
+        ]
+      },
+      {
+        "source": "phone-garden-bright.jpg",
+        "sha256": "d9bde575afd8c1ffb316b5d38422652b0c77783ec961724a1991e208502522a2",
+        "title": "Actual world \u00b7 bright garden \u00b7 production start phase",
+        "position": [
+          852,
+          34
+        ],
+        "size": [
+          852,
+          393
+        ]
+      }
+    ],
+    "processing": "native-size arrangement; caption bands; JPEG encoding only"
+  },
+  {
+    "file": "portrait.jpg",
+    "sha256": "dfbb76a7bfb2d3b011f68556a3cb0f486c0acdb3239678bcdefa08cde4cb143e",
+    "tiles": [
+      {
+        "source": "portrait-boslust-exploration.jpg",
+        "sha256": "69245592b65020a0ec92d33dcc6329cf5a60cba9d0ed96c8ee65c483e98b2c71",
+        "title": "Portrait fallback \u00b7 393 \u00d7 852",
+        "position": [
+          0,
+          34
+        ],
+        "size": [
+          393,
+          852
+        ]
+      },
+      {
+        "source": "portrait-boslust-notebook-evidence.jpg",
+        "sha256": "60e5a09dcb1c58bea6e0c0f20db832b908f0c6295394c72a1d911bc507dd69e2",
+        "title": "Portrait notebook \u00b7 stacked index",
+        "position": [
+          393,
+          34
+        ],
+        "size": [
+          393,
+          852
+        ]
+      }
+    ],
+    "processing": "native-size arrangement; caption bands; JPEG encoding only"
+  },
+  {
+    "file": "phone-exploration.jpg",
+    "source": "phone-boslust-exploration.jpg",
+    "sha256": "ac55e63cb5159869cf719982179f0dfcfcd2fceb176557afe90137a51092bda3",
+    "processing": "unaltered browser screenshot"
+  },
+  {
+    "file": "phone-notebook.jpg",
+    "source": "phone-boslust-notebook-evidence.jpg",
+    "sha256": "7679767ec76a67ffa76eb6c1bc0d927ee4d08a789e74b2e55f6b3da62aa1e119",
+    "processing": "unaltered browser screenshot"
+  }
+]

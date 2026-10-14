@@ -1,0 +1,25 @@
+{
+  "tested_source_commit": "db389275f151d201bd62491ddc7d078b41ba42b3",
+  "base": "ae2a036e783400355c8d137f24e16c33bb1a8323",
+  "source_sha256": {
+    "package.json": "f3662ef11818ecb31fa8396f7f4f53d96f68c554b0fa291edef8dee8988a3a69",
+    "src/ui/ui.ts": "076b4db2b1ac48cdd0eb1e582195e5926de26d74a5c3a3b94658febc60d53c71",
+    "src/ui/icons.ts": "1111e1d7fbf1a9d87621974d34e765f461a9fbd494eff30b63e92925ac40c684",
+    "src/ui/style.css": "357b0fbdc715387fe880becac9780a216f75c8b93c7dfc51da28b6b140ba38ea",
+    "src/ui/woodland.css": "b5464234b71a767b2dd37f290fbffd16b8a515385b370d65d7a8233ae2398fb1"
+  },
+  "bundle_sha256": {
+    "dist/assets/index-BebsVbHG.js": "ce0d50afc47284d5906f7a268fe59f253dda053fbc14d57b232e8664a41198d9",
+    "dist/assets/index-CB6_90Fy.css": "7c1adfd64cd49facfb81e6406831ae1dcd460819e9c844f23fa2b1aa361fe6e5"
+  },
+  "calculated_token_contrast": {
+    "hud_text_on_white_environment": 10.28,
+    "notebook_ink_on_paper": 11.09,
+    "notebook_secondary_on_paper": 4.89,
+    "selected_tab_text_on_forest": 10.45
+  },
+  "renderer": "Chromium headless shell 1194 / SwiftShader; emulated viewports, no physical-device FPS claim",
+  "published_implementation_commit": "a4aa4a77c9956e9804f2919fbe8119d335dc3fe8",
+  "implementation_tree": "ecf5e01c784e8f3c193408018f55366faba75769",
+  "publication_verification": "GitHub-created implementation tree exactly equals locally tested implementation commit tree"
+}

@@ -1,0 +1,235 @@
+{
+  "ok": true,
+  "conditions": "Actual normal game, software WebGL2/SwiftShader, coarse pointer, 915x412/412x733 DPR1; temporary controller dusk values, no completed puzzle flags changed. Not full E2E or physical Android performance.",
+  "before": {
+    "index-DoPC7ona.js": "a6c2192fb5f1fbe488415b7a5b1ac93e3bdd49221db1544db6af7b57ac4ecc8d",
+    "index-DyANIy-p.js": "50a23590f450061d55f26ca918e6ff054667fbeca1d55c1bb7d9c8dff822f30c"
+  },
+  "after": {
+    "index-DoPC7ona.js": "a6c2192fb5f1fbe488415b7a5b1ac93e3bdd49221db1544db6af7b57ac4ecc8d",
+    "index-DyANIy-p.js": "50a23590f450061d55f26ca918e6ff054667fbeca1d55c1bb7d9c8dff822f30c"
+  },
+  "rows": [
+    {
+      "location": "boslust",
+      "file": null,
+      "t": 0,
+      "hemi": 1.632,
+      "sun": 1.806,
+      "cloud": 0.86,
+      "pilot": 1,
+      "fixture": 1,
+      "calls": 91,
+      "triangles": 226908,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "flags": "{\"leftHome\":true,\"visited.fork\":true}",
+      "failures": 0,
+      "gl": 0,
+      "quality": "low",
+      "runControl": false,
+      "reviewPanel": false
+    },
+    {
+      "location": "boslust",
+      "file": null,
+      "t": 0.3333333333333333,
+      "hemi": 1.488,
+      "sun": 2.064,
+      "cloud": 0.84,
+      "pilot": 1,
+      "fixture": 1,
+      "calls": 91,
+      "triangles": 226908,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "flags": "{\"leftHome\":true,\"visited.fork\":true}",
+      "failures": 0,
+      "gl": 0,
+      "quality": "low",
+      "runControl": false,
+      "reviewPanel": false
+    },
+    {
+      "location": "boslust",
+      "file": null,
+      "t": 0.6666666666666666,
+      "hemi": 1.92,
+      "sun": 0,
+      "cloud": 0.56,
+      "pilot": 1,
+      "fixture": 1.06,
+      "calls": 91,
+      "triangles": 226908,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "flags": "{\"leftHome\":true,\"visited.fork\":true}",
+      "failures": 0,
+      "gl": 0,
+      "quality": "low",
+      "runControl": false,
+      "reviewPanel": false
+    },
+    {
+      "location": "boslust",
+      "file": null,
+      "t": 1,
+      "hemi": 1.776,
+      "sun": 0,
+      "cloud": 0.34,
+      "pilot": 1,
+      "fixture": 1.12,
+      "calls": 91,
+      "triangles": 226908,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "flags": "{\"leftHome\":true,\"visited.fork\":true}",
+      "failures": 0,
+      "gl": 0,
+      "quality": "low",
+      "runControl": false,
+      "reviewPanel": false
+    },
+    {
+      "location": "garden",
+      "file": null,
+      "t": 0,
+      "hemi": 1.7,
+      "sun": 2.1,
+      "cloud": 0.86,
+      "pilot": 1,
+      "fixture": 1,
+      "calls": 31,
+      "triangles": 139686,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "flags": "{\"leftHome\":true,\"visited.fork\":true}",
+      "failures": 0,
+      "gl": 0,
+      "quality": "low",
+      "runControl": false,
+      "reviewPanel": false
+    },
+    {
+      "location": "garden",
+      "file": null,
+      "t": 0.3333333333333333,
+      "hemi": 1.55,
+      "sun": 2.4,
+      "cloud": 0.84,
+      "pilot": 1,
+      "fixture": 1,
+      "calls": 31,
+      "triangles": 139686,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "flags": "{\"leftHome\":true,\"visited.fork\":true}",
+      "failures": 0,
+      "gl": 0,
+      "quality": "low",
+      "runControl": false,
+      "reviewPanel": false
+    },
+    {
+      "location": "garden",
+      "file": null,
+      "t": 0.6666666666666666,
+      "hemi": 2,
+      "sun": 0,
+      "cloud": 0.56,
+      "pilot": 1,
+      "fixture": 1.06,
+      "calls": 31,
+      "triangles": 139686,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "flags": "{\"leftHome\":true,\"visited.fork\":true}",
+      "failures": 0,
+      "gl": 0,
+      "quality": "low",
+      "runControl": false,
+      "reviewPanel": false
+    },
+    {
+      "location": "garden",
+      "file": null,
+      "t": 1,
+      "hemi": 1.85,
+      "sun": 0,
+      "cloud": 0.34,
+      "pilot": 1,
+      "fixture": 1.12,
+      "calls": 31,
+      "triangles": 139686,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "flags": "{\"leftHome\":true,\"visited.fork\":true}",
+      "failures": 0,
+      "gl": 0,
+      "quality": "low",
+      "runControl": false,
+      "reviewPanel": false
+    }
+  ],
+  "cloudCheck": {
+    "same": true,
+    "opacity": 0,
+    "flagsSame": true
+  },
+  "portrait": {
+    "aspect": 0.5620736698499318,
+    "gl": 0,
+    "failures": 0
+  },
+  "errors": [],
+  "productionIntegrated": "6b2b82d95fc761390b9275c94ee363f37a25f6bf",
+  "sourceSHA256": {
+    "src/core/game.ts": "c72f6277516fc3e056a9c26762eaf5b12a4ed57e3eb983684004459f1d4a98c9",
+    "src/world/env.ts": "203e777cb4b00904bde81c40aa5048fe8b920b79d40278197d6313f0a793ea84",
+    "src/world/skyShader.ts": "79ec43318ffb7b5f6288f3cd4f2c320bb2940e08c243752db234b3b96b505850",
+    "src/world/lightingPhases.ts": "e5606120a61483dbad1efe47f9a1e26b0a788333fbda5bb6e3aa8faa7447f539",
+    "src/ui/lightingDiagnostics.ts": "b3c3e5430f6231a5789c3e785da54de0b78d64969eb89e8f4fd6bc3830d2f1b3",
+    "src/ui/ui.ts": "50a90eb0341b16c0a7c749cb5f4103c9f89e65806e5439c5f8947d6d32506fe3",
+    "src/player/input.ts": "c04fb4f4596d924dc0207022500e56d0aec3ab904c8bea2ddfc75e9f49535055"
+  }
+}

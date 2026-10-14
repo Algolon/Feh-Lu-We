@@ -94,3 +94,7 @@ Final cumulus matrix: **25/25 captures without page/console, shader diagnostic o
 ## Activation/recovery checkpoint — 14 October 2026
 
 Normal-game activation is reconstructed and checked with typecheck/build/275 units. Supplementary activation E2E/capture files were lost in automatic workspace maintenance. Earlier DEV-04D timeout and successful targeted repeat are session observations, not newly preserved pass evidence. Assertions/timeouts remain unchanged. See [release assessment](ENV-L01_RELEASE_ASSESSMENT.md) for exact provenance, unresolved validation and production/UI-R02 integration requirements.
+
+## Combined UI-R02 release candidate — 14 October 2026
+
+Owner explicitly authorised merge/deploy for live testing. Production `6b2b82d` integrated without conflicts; both run-control wiring and ENV fixture/review changes retained. Typecheck/build/275 units pass. Fresh bounded normal-game software WebGL smoke passes eight phases, guards, cosmetic parity and High/portrait checks: [JSON](evidence/release-integration-smoke.json). Screenshot capture timed out at the compositor; no fresh capture pass claimed. Full E2E/home-timeout and native Android FPS/heat/readability remain qualified as described in the release assessment. No test criteria loosened.

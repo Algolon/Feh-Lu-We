@@ -1,0 +1,854 @@
+[
+  {
+    "name": "phone-boslust-exploration",
+    "note": "",
+    "viewport": {
+      "width": 852,
+      "height": 393
+    },
+    "sha256": "ac55e63cb5159869cf719982179f0dfcfcd2fceb176557afe90137a51092bda3",
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.031019038536392998,
+    "modal": null,
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ]
+  },
+  {
+    "name": "phone-boslust-notebook-threads",
+    "note": "",
+    "viewport": {
+      "width": 852,
+      "height": 393
+    },
+    "sha256": "d4b118fc889c996f046fde7795d7be33aa9a3630aad39ffa2ea2275c2fa95cee",
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.051754207044471215,
+    "modal": "notebook",
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ]
+  },
+  {
+    "name": "phone-boslust-notebook-evidence",
+    "note": "",
+    "viewport": {
+      "width": 852,
+      "height": 393
+    },
+    "sha256": "7679767ec76a67ffa76eb6c1bc0d927ee4d08a789e74b2e55f6b3da62aa1e119",
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.06131122557886783,
+    "modal": "notebook",
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ]
+  },
+  {
+    "name": "phone-notebook-map",
+    "note": "Existing map route and discovery filters; map content unchanged.",
+    "viewport": {
+      "width": 852,
+      "height": 393
+    },
+    "sha256": "d5c719898075a66e826535ef5a561887136d7da2d23d52cf7fc2c0c908daee0d",
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.0663389159821537,
+    "modal": "notebook-map",
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ]
+  },
+  {
+    "name": "phone-context-action",
+    "note": "",
+    "viewport": {
+      "width": 852,
+      "height": 393
+    },
+    "sha256": "6c0218598223d52add2b2d4ab7f714685dd8ca2cbd3bc680bfa0de8c78b4ce6b",
+    "pose": {
+      "x": 61.4,
+      "y": 0,
+      "z": 16.4,
+      "yaw": -0.39252765593279976,
+      "pitch": -0.029416515895444185
+    },
+    "dusk": 0.06849455669128413,
+    "modal": null,
+    "target": "inspect.boslust",
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ]
+  },
+  {
+    "name": "phone-held-feedback",
+    "note": "Real inventory selection and its existing toast; capture hold extended to 12 s, normal game 3.6 s; inventory skin unchanged.",
+    "viewport": {
+      "width": 852,
+      "height": 393
+    },
+    "sha256": "99e07e21aa5373b87193bfcf2dd79296ebe76cd70cd0c51b3adc5ddc999193a2",
+    "pose": {
+      "x": 61.4,
+      "y": 0,
+      "z": 16.4,
+      "yaw": -0.39252765593279976,
+      "pitch": -0.029416515895444185
+    },
+    "dusk": 0.0700309179122304,
+    "modal": null,
+    "target": "inspect.boslust",
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook",
+      "c.boslust"
+    ]
+  },
+  {
+    "name": "phone-boslust-dark",
+    "note": "Dusk set to .95 in capture fixture; production lighting code unchanged.",
+    "viewport": {
+      "width": 852,
+      "height": 393
+    },
+    "sha256": "e33585118b8ae84d469ea1b20cc1b2e40ec01d347dbbccd72143fc92bfb606b6",
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.6031327505702938,
+    "modal": null,
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook",
+      "c.boslust"
+    ]
+  },
+  {
+    "name": "phone-garden-bright",
+    "note": "Actual production garden at start phase.",
+    "viewport": {
+      "width": 852,
+      "height": 393
+    },
+    "sha256": "d9bde575afd8c1ffb316b5d38422652b0c77783ec961724a1991e208502522a2",
+    "pose": {
+      "x": 90,
+      "y": 0,
+      "z": 122,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.031089397922696334,
+    "modal": null,
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook",
+      "c.boslust"
+    ]
+  },
+  {
+    "name": "phone-notebook-memory",
+    "note": "The lake-bench memento was recorded via its real inspect action.",
+    "viewport": {
+      "width": 852,
+      "height": 393
+    },
+    "sha256": "eeea572895aea39077d27f775ab5a42b19190091cdc1e8a7504b44d3ad482233",
+    "pose": {
+      "x": 78.35000000000001,
+      "y": 0,
+      "z": 138.5,
+      "yaw": 0,
+      "pitch": -0.6615374841836313
+    },
+    "dusk": 0.050523459609669835,
+    "modal": "notebook",
+    "target": "mem.pond.bench",
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook",
+      "c.boslust",
+      "mem.pond.bench"
+    ]
+  },
+  {
+    "name": "phone-safe-area-notebook",
+    "note": "",
+    "viewport": {
+      "width": 852,
+      "height": 393
+    },
+    "sha256": "a4ab4c712e73c6b6cc58d295dbf58a90881bfb724b998da35fcabeb11aae3132",
+    "pose": {
+      "x": 78.35000000000001,
+      "y": 0,
+      "z": 138.5,
+      "yaw": 0,
+      "pitch": -0.6615374841836313
+    },
+    "dusk": 0.058641421241885296,
+    "modal": "notebook",
+    "target": "mem.pond.bench",
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook",
+      "c.boslust",
+      "mem.pond.bench"
+    ]
+  },
+  {
+    "name": "small-boslust-exploration",
+    "note": "",
+    "viewport": {
+      "width": 640,
+      "height": 360
+    },
+    "sha256": "01fd037da209c8c5d67ca311b03b883d343579759d2cce5053e754bc17d1df82",
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.02330806213112916,
+    "modal": null,
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ]
+  },
+  {
+    "name": "small-boslust-notebook-threads",
+    "note": "",
+    "viewport": {
+      "width": 640,
+      "height": 360
+    },
+    "sha256": "48e76adc325649a4828e8a701e2b0fe1fc75dd1e47934efab3528abe01440f3f",
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.0466177212127093,
+    "modal": "notebook",
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ]
+  },
+  {
+    "name": "small-boslust-notebook-evidence",
+    "note": "",
+    "viewport": {
+      "width": 640,
+      "height": 360
+    },
+    "sha256": "859704332b9f99effa54228128517893fd8d4e8f233a695b17ba73adc1a6e3ba",
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.05765859513892594,
+    "modal": "notebook",
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ]
+  },
+  {
+    "name": "small-notebook-map",
+    "note": "Existing map route and discovery filters; map content unchanged.",
+    "viewport": {
+      "width": 640,
+      "height": 360
+    },
+    "sha256": "ebf212650fbff4e6cef57916d7766899b6feaa382c1660f0fe043d7561f12714",
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.06467579388699747,
+    "modal": "notebook-map",
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ]
+  },
+  {
+    "name": "small-context-action",
+    "note": "",
+    "viewport": {
+      "width": 640,
+      "height": 360
+    },
+    "sha256": "81d76ce82e5c2107b6510d9c220b0ab1dbad263864ecad2d187e25ebfe0bea57",
+    "pose": {
+      "x": 61.4,
+      "y": 0,
+      "z": 16.4,
+      "yaw": -0.39252765593279976,
+      "pitch": -0.029416515895444185
+    },
+    "dusk": 0.06778832225344207,
+    "modal": null,
+    "target": "inspect.boslust",
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ]
+  },
+  {
+    "name": "small-held-feedback",
+    "note": "Real inventory selection and its existing toast; capture hold extended to 12 s, normal game 3.6 s; inventory skin unchanged.",
+    "viewport": {
+      "width": 640,
+      "height": 360
+    },
+    "sha256": "7f354910462e3f07b786e27313b4512eb587ca3f43ad60eb3336732a63c2845d",
+    "pose": {
+      "x": 61.4,
+      "y": 0,
+      "z": 16.4,
+      "yaw": -0.39252765593279976,
+      "pitch": -0.029416515895444185
+    },
+    "dusk": 0.06967734767481727,
+    "modal": null,
+    "target": "inspect.boslust",
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook",
+      "c.boslust"
+    ]
+  },
+  {
+    "name": "small-boslust-dark",
+    "note": "Dusk set to .95 in capture fixture; production lighting code unchanged.",
+    "viewport": {
+      "width": 640,
+      "height": 360
+    },
+    "sha256": "6dcf594395197cd5e3bb2f38f5e9492828d8d6a1a9fc70795f209409dac57923",
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.6032423943523166,
+    "modal": null,
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook",
+      "c.boslust"
+    ]
+  },
+  {
+    "name": "small-garden-bright",
+    "note": "Actual production garden at start phase.",
+    "viewport": {
+      "width": 640,
+      "height": 360
+    },
+    "sha256": "a091ca3e20c62ede9c3b85e2a4f76b8b8c95df5bcfb039b12d6c498345458045",
+    "pose": {
+      "x": 90,
+      "y": 0,
+      "z": 122,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.032852314085940186,
+    "modal": null,
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook",
+      "c.boslust"
+    ]
+  },
+  {
+    "name": "small-home-tutorial",
+    "note": "Real invitation coaching text/checklist; learned-look/movement flags supplied as layout fixture.",
+    "viewport": {
+      "width": 640,
+      "height": 360
+    },
+    "sha256": "135135b7facc520a6021f6e27b9b80baaf37a58e5c1fc8316d2bf8150368da4c",
+    "pose": {
+      "x": 2.2,
+      "y": 0,
+      "z": 1.6,
+      "yaw": 0.9,
+      "pitch": -0.15
+    },
+    "dusk": 0,
+    "modal": null,
+    "target": null,
+    "clues": []
+  },
+  {
+    "name": "desktop-boslust-exploration",
+    "note": "",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "sha256": "6922b93d368c00a85cd2be6e74b7f453e6c913082628198d4711697bf96b81aa",
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.021124718552190568,
+    "modal": null,
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ]
+  },
+  {
+    "name": "desktop-boslust-notebook-threads",
+    "note": "",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "sha256": "e0c6c1824c252c727975813ad421570d5f02a284a04c15dcd8232bb5c0642d1f",
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.038864394343010554,
+    "modal": "notebook",
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ]
+  },
+  {
+    "name": "desktop-boslust-notebook-evidence",
+    "note": "",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "sha256": "7de00b97700b3e9f24771e3f5caea3ad2ae4dbfb7b8ae769e230f4ba836503f3",
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.050379842461359375,
+    "modal": "notebook",
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ]
+  },
+  {
+    "name": "desktop-notebook-map",
+    "note": "Existing map route and discovery filters; map content unchanged.",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "sha256": "5f5af20e9392c9822aa32524f6224bade0d65d91dbd4e1c2c65b188a37fed2ef",
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.05813933602932917,
+    "modal": "notebook-map",
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ]
+  },
+  {
+    "name": "desktop-context-action",
+    "note": "",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "sha256": "d9b4783d42ca49a450026a9327e11e45674a20e8e7d6037e98e911c44b37c15a",
+    "pose": {
+      "x": 61.4,
+      "y": 0,
+      "z": 16.4,
+      "yaw": -0.39252765593279976,
+      "pitch": -0.029416515895444185
+    },
+    "dusk": 0.06294967425151746,
+    "modal": null,
+    "target": "inspect.boslust",
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ]
+  },
+  {
+    "name": "desktop-held-feedback",
+    "note": "Real inventory selection and its existing toast; capture hold extended to 12 s, normal game 3.6 s; inventory skin unchanged.",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "sha256": "833f905b04cf090475446ce024c8a9918441bd24faaf53805e15141cb41a4590",
+    "pose": {
+      "x": 61.4,
+      "y": 0,
+      "z": 16.4,
+      "yaw": -0.39252765593279976,
+      "pitch": -0.029416515895444185
+    },
+    "dusk": 0.06645672330460106,
+    "modal": null,
+    "target": "inspect.boslust",
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook",
+      "c.boslust"
+    ]
+  },
+  {
+    "name": "desktop-boslust-dark",
+    "note": "Dusk set to .95 in capture fixture; production lighting code unchanged.",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "sha256": "851ac82d76eb443b3177e3c09e5669551005105e0a3adbdf582cac3d96f62725",
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.6688359032520339,
+    "modal": null,
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook",
+      "c.boslust"
+    ]
+  },
+  {
+    "name": "desktop-garden-bright",
+    "note": "Actual production garden at start phase.",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "sha256": "5597527a8078f735bcd5aa4e663934be802c66207dfe49fe79a7b6f6e954aefc",
+    "pose": {
+      "x": 90,
+      "y": 0,
+      "z": 122,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.02385953956937973,
+    "modal": null,
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook",
+      "c.boslust"
+    ]
+  },
+  {
+    "name": "portrait-boslust-exploration",
+    "note": "",
+    "viewport": {
+      "width": 393,
+      "height": 852
+    },
+    "sha256": "69245592b65020a0ec92d33dcc6329cf5a60cba9d0ed96c8ee65c483e98b2c71",
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.028111835489809424,
+    "modal": null,
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ]
+  },
+  {
+    "name": "portrait-boslust-notebook-threads",
+    "note": "",
+    "viewport": {
+      "width": 393,
+      "height": 852
+    },
+    "sha256": "71a1de1a2733d6aa28a2a26b7ab22c00dc77cc30633402d8ebaa4e20f7eb8a87",
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.04940257636432025,
+    "modal": "notebook",
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ]
+  },
+  {
+    "name": "portrait-boslust-notebook-evidence",
+    "note": "",
+    "viewport": {
+      "width": 393,
+      "height": 852
+    },
+    "sha256": "60e5a09dcb1c58bea6e0c0f20db832b908f0c6295394c72a1d911bc507dd69e2",
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.05991695192108368,
+    "modal": "notebook",
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ]
+  },
+  {
+    "name": "portrait-notebook-map",
+    "note": "Existing map route and discovery filters; map content unchanged.",
+    "viewport": {
+      "width": 393,
+      "height": 852
+    },
+    "sha256": "2ca1159bd75a6bf80b5dccdb774a7472596dfc75013aa88b9f04792e1a41ca0e",
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.0658354114418586,
+    "modal": "notebook-map",
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ]
+  },
+  {
+    "name": "portrait-context-action",
+    "note": "",
+    "viewport": {
+      "width": 393,
+      "height": 852
+    },
+    "sha256": "0758df3433711e328c4104a731402b12751244d0c4230f0209690fd02d6d356a",
+    "pose": {
+      "x": 61.4,
+      "y": 0,
+      "z": 16.4,
+      "yaw": -0.39252765593279976,
+      "pitch": -0.029416515895444185
+    },
+    "dusk": 0.06844812601731749,
+    "modal": null,
+    "target": "inspect.boslust",
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ]
+  },
+  {
+    "name": "portrait-held-feedback",
+    "note": "Real inventory selection and its existing toast; capture hold extended to 12 s, normal game 3.6 s; inventory skin unchanged.",
+    "viewport": {
+      "width": 393,
+      "height": 852
+    },
+    "sha256": "900cd3995a1866e8f91c8568b0fa21dad74798a77d09dc77484d69268384fd2b",
+    "pose": {
+      "x": 61.4,
+      "y": 0,
+      "z": 16.4,
+      "yaw": -0.39252765593279976,
+      "pitch": -0.029416515895444185
+    },
+    "dusk": 0.07000284101521281,
+    "modal": null,
+    "target": "inspect.boslust",
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook",
+      "c.boslust"
+    ]
+  },
+  {
+    "name": "portrait-boslust-dark",
+    "note": "Dusk set to .95 in capture fixture; production lighting code unchanged.",
+    "viewport": {
+      "width": 393,
+      "height": 852
+    },
+    "sha256": "e41761e8f3fede4550e5b436a49a3367bb5e8a4c88ea02316f066af3728d6ead",
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.5616341569727619,
+    "modal": null,
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook",
+      "c.boslust"
+    ]
+  },
+  {
+    "name": "portrait-garden-bright",
+    "note": "Actual production garden at start phase.",
+    "viewport": {
+      "width": 393,
+      "height": 852
+    },
+    "sha256": "84ee5922e8d4c38d5c65bb1a1f29e9f5515606820c62bdf7340c7d68c011ce7d",
+    "pose": {
+      "x": 90,
+      "y": 0,
+      "z": 122,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.03363682539861822,
+    "modal": null,
+    "target": null,
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook",
+      "c.boslust"
+    ]
+  }
+]

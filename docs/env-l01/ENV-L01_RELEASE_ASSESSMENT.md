@@ -1,5 +1,16 @@
 # ENV-L01 — activation, recovery and release assessment
 
+> Update — owner explicitly authorised merge and deployment for live testing on 14 October 2026. Production UI-R02 `6b2b82d` has now been integrated into this existing ENV branch without conflicts. Earlier pending-integration/no-authorisation statements below are historical. Native Android QA and the undiagnosed blackout remain post-deployment observations, accepted as outstanding by the owner's instruction; they are not claimed to have passed.
+
+## Authorised release candidate
+
+Combined UI-R02 + ENV: typecheck, 275/275 units, build and script syntax pass. Gzip JS 425.70 kB (includes current production UI). A fresh bounded actual-game WebGL2/SwiftShader smoke passes eight BOSLUST/garden phase checks, normal-mode guard, cloud-off lighting/puzzle-flag parity and High/portrait renderer checks; no page/console/GL/shader diagnostic errors. [Results/source fingerprints](evidence/release-integration-smoke.json). It starts the normal game via its real continue control with a disposable arrival-only save; no completed puzzle flags are set. Phase values are transient controller inputs. It does not replace a full walkthrough, UI interaction suite or phone test.
+
+Fresh screenshot capture timed out after 30 seconds at the browser screenshot/compositor stage. The bounded retry made no screenshots and completed the same phase/light checks. The fresh browser executable was restored after the earlier workspace recovery. Historical approved sheets remain the visual review evidence; no new successful screenshot capture is claimed.
+
+The original DEV-04D home timeout and F05 software touch timing qualification remain open. No assertions/input thresholds/save logic were altered. No full failing suite was repeated. Deployment uses the repository's existing default-branch Pages workflow after merge; verify its success and served bundle before calling this live.
+
+
 Owner approved the painted cumulus and requested normal-game implementation and a release assessment. This branch enables that presentation; nothing merged or deployed by ENV-L01.
 
 ## Safe checkpoint and recovery — 14 October 2026

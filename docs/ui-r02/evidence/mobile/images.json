@@ -1,0 +1,98 @@
+[
+  {
+    "file": "desktop-boslust-notebook-threads.jpg",
+    "sha256": "0fb59d0ddca56b3b383d1b1a115b20542f65c045398726bb647603d69eaca457",
+    "capture": "desktop-boslust-notebook-threads",
+    "processing": "unaltered browser screenshot"
+  },
+  {
+    "file": "phone-boslust-dark.jpg",
+    "sha256": "65f8fa9ced9cf89fbc6c2b3c4651c2e8b7a1eea64a7e892106c9a09a69b5a7d5",
+    "capture": "phone-boslust-dark",
+    "processing": "unaltered browser screenshot"
+  },
+  {
+    "file": "phone-boslust-exploration.jpg",
+    "sha256": "a4e8c41c26ccee846daf6f3628e7dbe781bf4f3e25169f412545adf094ec5ec5",
+    "capture": "phone-boslust-exploration",
+    "processing": "unaltered browser screenshot"
+  },
+  {
+    "file": "phone-boslust-notebook-evidence.jpg",
+    "sha256": "1615265855d0e4c07e4549581bd88721983f0dcb4495eef0ae78be0c2e8e0463",
+    "capture": "phone-boslust-notebook-evidence",
+    "processing": "unaltered browser screenshot"
+  },
+  {
+    "file": "phone-boslust-notebook-threads.jpg",
+    "sha256": "e6eb12a980972a9029867f2ece956de7813030d124cbd6b6fe3005c4753c17f9",
+    "capture": "phone-boslust-notebook-threads",
+    "processing": "unaltered browser screenshot"
+  },
+  {
+    "file": "phone-context-action.jpg",
+    "sha256": "bda729d98ad142ef91d2dff6423f1121c7693d3dac6adae43207b161d64eea80",
+    "capture": "phone-context-action",
+    "processing": "unaltered browser screenshot"
+  },
+  {
+    "file": "phone-garden-bright.jpg",
+    "sha256": "e167d69e86d3a3c0feae78fc3dadc89c93b4df4fe1e328c9fe84873146dc3285",
+    "capture": "phone-garden-bright",
+    "processing": "unaltered browser screenshot"
+  },
+  {
+    "file": "phone-held-feedback.jpg",
+    "sha256": "a0cf41c3ef3e7d55795773251a7cd19bc1689508a04b870de4c95d9e50397835",
+    "capture": "phone-held-feedback",
+    "processing": "unaltered browser screenshot"
+  },
+  {
+    "file": "phone-notebook-map.jpg",
+    "sha256": "69b3c6efc812fe44030d4621daab317d9a198426a3663934232fe9a87324c018",
+    "capture": "phone-notebook-map",
+    "processing": "unaltered browser screenshot"
+  },
+  {
+    "file": "phone-sprint-equipped-controls.jpg",
+    "sha256": "f129c08397bd01cd1bf9dbb7cb26a4ab462066307622199fc168e118eeebe70d",
+    "capture": "phone-sprint-equipped-controls",
+    "processing": "unaltered browser screenshot"
+  },
+  {
+    "file": "portrait-boslust-notebook-evidence.jpg",
+    "sha256": "046e457813a43b351fd17a05cc2d964036eaae4a4247c7a6f1c5ece28166aeb6",
+    "capture": "portrait-boslust-notebook-evidence",
+    "processing": "unaltered browser screenshot"
+  },
+  {
+    "file": "portrait-boslust-notebook-threads.jpg",
+    "sha256": "379204d528fa73b5f76bcfeaee61f337c8e5d196c578ff7df61d0b012aedb720",
+    "capture": "portrait-boslust-notebook-threads",
+    "processing": "unaltered browser screenshot"
+  },
+  {
+    "file": "portrait-notebook-categories.jpg",
+    "sha256": "7d601be934b33e7ef3f715e49e32cc274556503e23893793ee76d7559b132379",
+    "capture": "portrait-notebook-categories",
+    "processing": "unaltered browser screenshot"
+  },
+  {
+    "file": "portrait-rotated-evidence.jpg",
+    "sha256": "164edf2dfd5a13b857b7e643dd086069b9bb61818e990ff8990a0364cca7e88e",
+    "capture": "portrait-rotated-evidence",
+    "processing": "unaltered browser screenshot"
+  },
+  {
+    "file": "small-boslust-notebook-threads.jpg",
+    "sha256": "2ec19e70187e6ebf200a1d361f7eeb1f9fabe041ab187461d56cf4ef83d61ba9",
+    "capture": "small-boslust-notebook-threads",
+    "processing": "unaltered browser screenshot"
+  },
+  {
+    "file": "small-home-tutorial.jpg",
+    "sha256": "df4564856db59ce1df93d029e3431b88973a43c0134dd9a86b4f7b6fdf05a368",
+    "capture": "small-home-tutorial",
+    "processing": "unaltered browser screenshot"
+  }
+]

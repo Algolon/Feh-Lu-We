@@ -4,7 +4,7 @@ import { ITEMS } from '../content/items';
 import { CLUES, CLUE_GROUP, THREADS, type ClueDef } from '../content/clues';
 import { symbolSvg, SYMBOLS } from '../content/symbols';
 import { DIAGRAMS } from './diagrams';
-import { icon, itemIcon } from './icons';
+import { itemIcon, archiveIcon, type ArchiveIconName } from './icons';
 import type { Settings } from '../core/state';
 import portraitArt from '../../assets/branding/concept-art-portrait.png';
 import landscapeArt from '../../assets/branding/concept-art-landscape.png';
@@ -20,6 +20,7 @@ export interface HudHandlers {
   notebook: () => void;
   hint: () => void;
   deselect: () => void;
+  run: () => void;
 }
 
 export class UI {
@@ -36,6 +37,9 @@ export class UI {
   private objective!: HTMLDivElement;
   private checklist!: HTMLDivElement;
   private held!: HTMLButtonElement;
+  private runBtn!: HTMLButtonElement;
+  private heldName: string | null = null;
+  private resetRunGesture: () => void = () => {};
   private fade!: HTMLDivElement;
   private notebookBtn!: HTMLButtonElement;
 
@@ -46,19 +50,19 @@ export class UI {
   buildHud(h: HudHandlers) {
     this.hud.innerHTML = `
       <div id="topbar-l">
-        <button class="hud-btn" id="b-menu" aria-label="Pauze en instellingen">${icon('menu')}<span class="lbl">Pauze</span></button>
-        <button class="hud-btn" id="b-hint" aria-label="Hint">${icon('hint')}<span class="lbl">Hint</span></button>
+        <button class="hud-btn" id="b-menu" aria-label="Pauze en instellingen" title="Pauze · Esc">${archiveIcon('menu')}<span class="lbl">Pauze</span></button>
+        <button class="hud-btn" id="b-hint" aria-label="Hint" title="Hint · H">${archiveIcon('hint')}<span class="lbl">Hint</span></button>
+        <div id="progress-cue"><div id="objective-row">${archiveIcon('marker', 20)}<div id="objective" aria-live="polite"></div></div><div id="checklist" hidden></div></div>
       </div>
       <div id="topbar-r">
-        <button class="hud-btn" id="b-notes" aria-label="Notitieboek">${icon('notes')}<span class="lbl">Notities</span></button>
-        <button class="hud-btn" id="b-bag" aria-label="Tas">${icon('bag')}<span class="lbl">Tas</span></button>
+        <button class="hud-btn" id="b-notes" aria-label="Notitieboek" title="Notitieboek · N">${archiveIcon('notes')}<span class="lbl">Notities</span></button>
+        <button class="hud-btn" id="b-bag" aria-label="Tas" title="Tas · I">${archiveIcon('bag')}<span class="lbl">Tas</span></button>
       </div>
-      <div id="objective" aria-live="polite"></div>
-      <div id="checklist" hidden></div>
-      <div id="reticle"></div>
-      <div id="target-label"></div>
-      <button class="hud-btn" id="held" hidden aria-label="Gekozen voorwerp, tik om los te laten"></button>
-      <button class="hud-btn" id="action" disabled aria-label="Actie">—</button>
+      <div id="reticle" aria-hidden="true"></div>
+      <div id="target-label" class="wa-sr-only"></div>
+      <div id="move-cue" aria-hidden="true"><span>Lopen</span></div>
+      <div id="bottom-controls"><button class="hud-btn" id="held" aria-label="Geen voorwerp in de hand — open de tas">${archiveIcon('action')}</button><button class="hud-btn" id="b-run" aria-label="Rennen" aria-pressed="false" title="Rennen aan/uit">${archiveIcon('run', 26)}</button></div>
+      <button class="hud-btn" id="action" disabled aria-label="Geen actie">${archiveIcon('action')}<span>Actie</span><kbd>E</kbd></button>
       <div id="toast" role="status" aria-live="polite"></div>
       <div id="fade"></div>`;
     this.actionBtn = $('#action', this.hud);
@@ -68,6 +72,8 @@ export class UI {
     this.objective = $('#objective', this.hud);
     this.checklist = $('#checklist', this.hud);
     this.held = $('#held', this.hud);
+    this.runBtn = $('#b-run', this.hud);
+    this.heldName = null;
     this.fade = $('#fade', this.hud);
     this.notebookBtn = $('#b-notes', this.hud);
     const tap = (el: HTMLElement, fn: () => void) => el.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); fn(); });
@@ -76,7 +82,37 @@ export class UI {
     tap($('#b-bag', this.hud), h.bag);
     tap(this.notebookBtn, h.notebook);
     tap($('#b-hint', this.hud), h.hint);
-    tap(this.held, h.deselect);
+    tap(this.held, () => this.heldName ? h.deselect() : h.bag());
+    // Own the second thumb's pointer independently of native click synthesis,
+    // so the joystick and sprint control can be used together. Keep keyboard/mouse activation.
+    let runPointer: { id: number; x: number; y: number; moved: boolean } | null = null;
+    let runTouchUntil = 0;
+    this.resetRunGesture = () => { runPointer = null; runTouchUntil = performance.now() + 700; };
+    this.runBtn.addEventListener('pointerdown', e => {
+      if (!['touch', 'pen'].includes(e.pointerType) || runPointer) return;
+      e.preventDefault(); e.stopPropagation();
+      runPointer = { id: e.pointerId, x: e.clientX, y: e.clientY, moved: false };
+      this.runBtn.setPointerCapture(e.pointerId);
+    });
+    this.runBtn.addEventListener('pointermove', e => {
+      if (e.pointerId === runPointer?.id) runPointer.moved ||= Math.hypot(e.clientX - runPointer.x, e.clientY - runPointer.y) > 12;
+    });
+    this.runBtn.addEventListener('pointerup', e => {
+      if (e.pointerId !== runPointer?.id) return;
+      e.preventDefault(); e.stopPropagation();
+      const moved = runPointer.moved; runPointer = null; runTouchUntil = performance.now() + 700;
+      if (!moved) h.run();
+    });
+    for (const event of ['pointercancel', 'lostpointercapture']) this.runBtn.addEventListener(event, e => {
+      if ((e as PointerEvent).pointerId !== runPointer?.id) return;
+      runPointer = null; runTouchUntil = performance.now() + 700;
+      if (this.runBtn.getAttribute('aria-pressed') === 'true') h.run();
+    });
+    this.runBtn.addEventListener('click', e => {
+      e.preventDefault(); e.stopPropagation();
+      if (e.detail === 0 || performance.now() > runTouchUntil) h.run();
+    });
+    for (const b of [this.held, this.runBtn]) b.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') e.stopPropagation(); });
     this.overlay.addEventListener('click', (e) => {
       if (e.target === this.overlay) this.closeModal();
     });
@@ -96,15 +132,25 @@ export class UI {
     const key = `${actionLabel ?? '—'}|${item ?? ''}`;
     if (this.actionKey !== key) {
       this.actionKey = key;
-      this.actionBtn.innerHTML = item && actionLabel ? `${itemIcon(item, 30)}<span>${esc(actionLabel)}</span>` : esc(actionLabel ?? '—');
+      this.actionBtn.innerHTML = `${item && actionLabel ? itemIcon(item, 28) : archiveIcon('action')}<span>${esc(actionLabel ?? 'Actie')}</span><kbd>E</kbd>`;
       this.actionBtn.setAttribute('aria-label', actionLabel ?? 'Geen actie');
     }
   }
 
   setHeld(name: string | null, itemId: string | null = null) {
-    this.held.hidden = !name;
-    this.held.innerHTML = name ? `${itemIcon(itemId ?? '', 30)}<span>${esc(name)}</span>${icon('close', 18)}` : '';
-    this.held.setAttribute('aria-label', name ? `${name} in de hand — tik om los te laten` : '');
+    this.heldName = name;
+    this.held.dataset.equipped = String(!!name);
+    this.held.classList.toggle('equipped', !!name);
+    this.held.innerHTML = name ? `${itemIcon(itemId ?? '', 32)}<span class="wa-sr-only">${esc(name)}</span>` : archiveIcon('action');
+    this.held.setAttribute('aria-label', name ? `${name} in de hand — tik om los te laten` : 'Geen voorwerp in de hand — open de tas');
+    this.held.title = name ? `${name} · loslaten` : 'Voorwerp kiezen';
+  }
+
+  setRunning(running: boolean) {
+    if (!running) this.resetRunGesture();
+    this.runBtn.classList.toggle('on', running);
+    this.runBtn.setAttribute('aria-pressed', String(running));
+    this.runBtn.title = running ? 'Rennen uitzetten' : 'Rennen aanzetten';
   }
 
   toast(msg: string, ms = 3600) {
@@ -135,9 +181,19 @@ export class UI {
   /** Kind of the open modal ('pause' counts as paused time for playtest timing). */
   modalKind: string | null = null;
   private returnFocus: HTMLElement | null = null;
+  /** Keep background controls out of the focus order; live action feedback stays accessible. */
+  private obscureHud(open: boolean) {
+    this.hud.classList.toggle('overlay-open', open);
+    for (const id of ['topbar-l', 'topbar-r', 'bottom-controls', 'action', 'held', 'objective', 'checklist', 'target-label']) {
+      const el = this.hud.querySelector<HTMLElement>(`#${id}`);
+      if (!el) continue;
+      el.inert = open;
+      if (open) el.setAttribute('aria-hidden', 'true'); else el.removeAttribute('aria-hidden');
+    }
+  }
   /** Move keyboard focus into the open modal (first control after the close button, else the close button). */
   focusFirst() {
-    const els = this.overlay.querySelectorAll<HTMLElement>('.body button, .body input, .body textarea, [data-close]');
+    const els = [...this.overlay.querySelectorAll<HTMLElement>('.body button, .body input, .body textarea, [data-close]')].filter(el => el.getClientRects().length && el.tabIndex >= 0 && !el.hasAttribute('disabled'));
     (els[0] ?? null)?.focus({ preventScroll: true });
   }
   modal(title: string, bodyHtml: string, onClose?: (silent?: boolean) => void, kind = 'panel'): HTMLElement {
@@ -145,16 +201,21 @@ export class UI {
     this.closeModal(true);
     if (!wasOpen) this.returnFocus = document.activeElement as HTMLElement | null;
     this.modalKind = kind;
-    this.overlay.innerHTML = `<div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}">
-      <header><h2>${esc(title)}</h2><button class="btn close" data-close aria-label="Sluiten">✕</button></header>
+    const archive = kind === 'notebook' || kind === 'notebook-map';
+    this.overlay.dataset.kind = kind;
+    this.obscureHud(true);
+    this.overlay.innerHTML = `<div class="modal${archive ? ' wa-notebook' : ''}" role="dialog" aria-modal="true" aria-label="${esc(title)}">
+      <header>${archive ? `<div class="wa-masthead">${archiveIcon('leaf', 28)}<h2>${esc(title)}</h2></div>` : `<h2>${esc(title)}</h2>`}<button class="btn close" data-close aria-label="Sluiten">${archive ? archiveIcon('close') : '✕'}</button></header>
       <div class="body">${bodyHtml}</div></div>`;
     this.overlay.hidden = false;
     this.modalClose = onClose ?? null;
     $('[data-close]', this.overlay).addEventListener('click', () => this.closeModal());
     this.overlay.onkeydown = (e) => {
       if (e.key === 'Escape') { e.stopPropagation(); this.closeModal(); }
+      // Notebook navigation/scroll keys belong to the focused research interface, not the world input.
+      if (archive) e.stopPropagation();
       if (e.key !== 'Tab') return;
-      const controls = [...this.overlay.querySelectorAll<HTMLElement>('button, input, textarea, select')].filter((el) => !el.hasAttribute('disabled'));
+      const controls = [...this.overlay.querySelectorAll<HTMLElement>('button, input, textarea, select, summary, [tabindex="0"]')].filter((el) => !el.hasAttribute('disabled') && el.tabIndex >= 0 && el.getClientRects().length > 0);
       const first = controls[0], last = controls[controls.length - 1];
       if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); }
       else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
@@ -173,6 +234,7 @@ export class UI {
     this.modalClose = null;
     cb?.(silent); // silent = replaced by another overlay (not a player dismissal)
     if (!silent) {
+      this.obscureHud(false);
       this.onModalChange(false);
       this.returnFocus?.focus?.({ preventScroll: true });
       this.returnFocus = null;
@@ -233,19 +295,35 @@ export class UI {
   }
 
   notebook(o: { clues: string[]; solved: Set<string>; threads: { id: string; title: string; sub: string; done: boolean; next: string; tracked: boolean; started: boolean }[]; onTrack: (id: string) => void; onMap?: () => void; tab?: string }) {
+    const portrait = matchMedia('(pointer: coarse) and (orientation: portrait), (max-width: 520px) and (orientation: portrait)');
+    const touch = matchMedia('(pointer: coarse)');
+    let syncLayout = () => {};
+    let reading = !!o.tab;
+    let activeTab = o.tab ?? 'd';
     const clues = o.clues.map((id) => CLUES[id]).filter(Boolean);
     const main = clues.filter((c) => !c.memory);
     const mem = clues.filter((c) => c.memory);
-    const body = this.modal('Notitieboek', `<div class="tabs" role="tablist"><button class="btn" data-t="d">Draden</button><button class="btn" data-t="a">Aanwijzingen (${main.length})</button><button class="btn" data-t="b">Herinneringen (${mem.length})</button>${o.onMap ? '<button class="btn" data-t="m">Kaart</button>' : ''}</div><div id="nb"></div>`);
+    const body = this.modal('Notitieboek', `<div class="wa-archive-layout">
+      <nav class="wa-index" aria-label="Rubrieken">
+        <div class="tabs" role="tablist" aria-label="Notitieboek" aria-orientation="horizontal">
+          <button class="btn" id="nb-tab-d" role="tab" aria-controls="nb-panel" data-t="d">${archiveIcon('compass', 20)}<span class="wa-tab-label">Draden</span></button>
+          <button class="btn" id="nb-tab-a" role="tab" aria-controls="nb-panel" data-t="a">${archiveIcon('document', 20)}<span class="wa-tab-label">Aanwijzingen <span class="wa-count">(${main.length})</span></span></button>
+          <button class="btn" id="nb-tab-b" role="tab" aria-controls="nb-panel" data-t="b">${archiveIcon('leaf', 20)}<span class="wa-tab-label">Herinneringen <span class="wa-count">(${mem.length})</span></span></button>
+        </div>
+        ${o.onMap ? `<button class="btn wa-map-link" data-t="m">${archiveIcon('map', 20)}<span class="wa-tab-label">Kaart</span></button>` : ''}
+      </nav>
+      <section class="wa-page" id="nb-panel" role="tabpanel" tabindex="0"><div class="wa-page-heading" hidden><button class="btn wa-index-back" data-nb-index>${archiveIcon('back', 18)}<span>Categorieën</span></button><h3 id="nb-heading"></h3><span id="nb-count"></span></div><div id="nb"></div></section>
+    </div>`, () => { portrait.removeEventListener('change', syncLayout); touch.removeEventListener('change', syncLayout); }, 'notebook');
     const nb = $('#nb', body);
     const card = (c: ClueDef, open: boolean) => {
       const pz = CLUE_GROUP[c.id]?.puzzle;
       const done = pz && o.solved.has(pz) ? '<span class="badge">✓ opgelost</span>' : '';
-      return `<details class="clue" ${open ? 'open' : ''}><summary><h3>${esc(c.title)}</h3>${done}</summary>${this.clueHtml(c)}</details>`;
+      return `<details class="clue" data-clue="${esc(c.id)}" ${open ? 'open' : ''}><summary><h3>${esc(c.title)}</h3>${done}</summary>${this.clueHtml(c)}</details>`;
     };
+    const threadMarks: Record<string, ArchiveIconName> = { start: 'compass', A: 'table', B: 'books', C: 'trees', D: 'notes' };
     const showThreads = () => {
       nb.innerHTML = `<p class="muted">Het huis bewaart drie delen van de route. Je kunt ze in elke volgorde volgen. Kies er een om te volgen: de doelregel bovenin en de hints gaan dan over die draad.</p>` +
-        o.threads.map((t) => `<div class="thread ${t.done ? 'done' : ''} ${t.tracked ? 'tracked' : ''}"><div class="th-head"><b>${esc(t.title)}</b><span class="muted"> · ${esc(t.sub)}</span>${t.done ? '<span class="badge">✓ afgerond</span>' : ''}</div>` +
+        o.threads.map((t) => `<div class="thread ${t.done ? 'done' : ''} ${t.tracked ? 'tracked' : ''}"><div class="th-head"><span class="wa-thread-mark" aria-hidden="true">${archiveIcon(threadMarks[t.id] ?? 'compass', 24)}</span><b>${esc(t.title)}</b><span class="muted"> · ${esc(t.sub)}</span>${t.done ? '<span class="badge">✓ afgerond</span>' : ''}</div>` +
           `<div class="th-next">${t.done ? 'Klaar.' : t.started ? esc(t.next) : '<span class="muted">Nog niet begonnen.</span> ' + esc(t.next)}</div>` +
           (t.done ? '' : `<button class="btn ${t.tracked ? 'primary' : ''}" data-track="${t.id}" aria-pressed="${t.tracked}">${t.tracked ? '✓ Je volgt deze draad' : 'Volg deze draad'}</button>`) + `</div>`).join('') +
         `<div class="row" style="margin-top:6px"><button class="btn" data-track="auto">Automatisch kiezen</button></div>`;
@@ -269,21 +347,66 @@ export class UI {
       nb.innerHTML = mem.length ? [...mem].reverse().map((c) => card(c, true)).join('') : '<p class="muted">Nog geen herinneringen gevonden.</p>';
     };
     const tabs = body.querySelectorAll<HTMLButtonElement>('.tabs .btn');
-    const show = (t: string) => {
-      tabs.forEach((x) => x.classList.toggle('on', x.dataset.t === t));
-      if (t === 'd') showThreads(); else if (t === 'a') showMain(); else showMem();
+    const index = $('.wa-index', body), page = $('#nb-panel', body), heading = $('.wa-page-heading', body), back = $<HTMLButtonElement>('[data-nb-index]', body);
+    syncLayout = () => {
+      const compact = portrait.matches;
+      page.hidden = compact && !reading;
+      index.hidden = compact && reading;
+      heading.hidden = !compact;
+      page.setAttribute('role', compact ? 'region' : 'tabpanel');
+      page.setAttribute('aria-labelledby', compact ? 'nb-heading' : `nb-tab-${activeTab}`);
+      const list = $('.tabs', body);
+      if (compact) { list.removeAttribute('role'); list.removeAttribute('aria-orientation'); }
+      else { list.setAttribute('role', 'tablist'); list.setAttribute('aria-orientation', touch.matches ? 'vertical' : 'horizontal'); }
+      tabs.forEach(x => {
+        const selected = x.dataset.t === activeTab;
+        x.classList.toggle('on', selected && (!compact || reading));
+        if (compact) { x.removeAttribute('role'); x.removeAttribute('aria-selected'); x.tabIndex = 0; }
+        else { x.setAttribute('role', 'tab'); x.setAttribute('aria-selected', String(selected)); x.tabIndex = selected ? 0 : -1; }
+      });
+      if (index.hidden && index.contains(document.activeElement)) back.focus({ preventScroll: true });
+      else if (page.hidden && page.contains(document.activeElement)) body.querySelector<HTMLButtonElement>(`[data-t="${activeTab}"]`)?.focus({ preventScroll: true });
+      else if (heading.hidden && heading.contains(document.activeElement)) body.querySelector<HTMLButtonElement>(`[data-t="${activeTab}"]`)?.focus({ preventScroll: true });
+      // Hiding a focused control can synchronously return focus to body on rotation.
+      if (!this.overlay.contains(document.activeElement) || !(document.activeElement as HTMLElement)?.getClientRects().length) {
+        (compact && reading ? back : body.querySelector<HTMLButtonElement>(`[data-t="${activeTab}"]`))?.focus({ preventScroll: true });
+      }
     };
-    show(o.tab ?? 'd');
-    tabs.forEach((b) => b.addEventListener('click', () => {
-      if (b.dataset.t === 'm') { o.onMap?.(); return; }
-      show(b.dataset.t!);
-    }));
+    const show = (t: string, open = true) => {
+      if (!['d', 'a', 'b'].includes(t)) t = 'd';
+      activeTab = t;
+      if (open) reading = true;
+      $('#nb-heading', body).textContent = t === 'd' ? 'Draden' : t === 'a' ? 'Aanwijzingen' : 'Herinneringen';
+      $('#nb-count', body).textContent = t === 'd' ? '' : `${t === 'a' ? main.length : mem.length} bewaard`;
+      $('#nb-panel', body).scrollTop = 0;
+      if (t === 'd') showThreads(); else if (t === 'a') showMain(); else showMem();
+      syncLayout();
+      if (portrait.matches && open) back.focus({ preventScroll: true });
+    };
+    show(activeTab, false);
+    portrait.addEventListener('change', syncLayout);
+    touch.addEventListener('change', syncLayout);
+    back.addEventListener('click', () => { reading = false; syncLayout(); body.querySelector<HTMLButtonElement>(`[data-t="${activeTab}"]`)?.focus({ preventScroll: true }); });
+    tabs.forEach((b, i) => {
+      b.addEventListener('click', () => {
+        show(b.dataset.t!);
+      });
+      b.addEventListener('keydown', (e) => {
+        if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+        e.preventDefault(); e.stopPropagation();
+        const j = e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : (i + (e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? -1 : 1) + tabs.length) % tabs.length;
+        if (!portrait.matches) show(tabs[j].dataset.t!);
+        tabs[j].focus();
+      });
+    });
+    body.querySelector('[data-t="m"]')?.addEventListener('click', () => o.onMap?.());
   }
 
   map(views: { id: string; label: string; svg: string }[], initial: string, onBack?: () => void, note = '') {
+    const kind = this.modalKind === 'notebook' ? 'notebook-map' : 'panel';
     const body = this.modal('Kaart', `${views.length > 1 ? `<div class="tabs" role="tablist">${views.map((v) => `<button class="btn" data-v="${v.id}">${esc(v.label)}</button>`).join('')}</div>` : ''}<div id="mapv"></div>` +
       (note ? `<p class="muted" style="text-align:center">${esc(note)}</p>` : '') +
-      (onBack ? '<div class="row center" style="margin-top:8px"><button class="btn" data-back>Terug</button></div>' : ''));
+      (onBack ? '<div class="row center" style="margin-top:8px"><button class="btn" data-back>Terug</button></div>' : ''), undefined, kind);
     const host = $('#mapv', body);
     const show = (id: string) => {
       const v = views.find((q) => q.id === id) ?? views[0];

@@ -15,7 +15,9 @@ export class Input {
   onTap: ((clientX: number, clientY: number) => void) | null = null;
   onAction: (() => void) | null = null;
   onKey: ((key: string) => void) | null = null;
+  onRunChange: ((running: boolean) => void) | null = null;
   pointerLocked = false;
+  private touchRunning = false;
 
   private keys = new Set<string>();
   private stickId: number | null = null;
@@ -75,6 +77,9 @@ export class Input {
   /** Clear all active input so movement can never remain stuck. */
   clear() {
     this.keys.clear();
+    this.touchRunning = false;
+    this.runAmt = this.moveX = this.moveY = 0;
+    this.onRunChange?.(false);
     this.stickId = null;
     this.stickVec.x = this.stickVec.y = 0;
     this.lookId = null;
@@ -86,6 +91,12 @@ export class Input {
   setEnabled(on: boolean) {
     this.enabled = on;
     if (!on) this.clear();
+  }
+
+  /** Touch shortcut for the existing running speed; never moves the player by itself. */
+  toggleRun() {
+    this.touchRunning = this.enabled && !this.touchRunning;
+    this.onRunChange?.(this.touchRunning);
   }
 
   requestPointerLock() {
@@ -186,6 +197,7 @@ export class Input {
   /** Called once per frame. Computes the analogue move vector (deadzone + curve). */
   sample() {
     let x = 0, y = 0;
+    this.runAmt = 0;
     if (this.enabled) {
       if (this.keys.has('KeyW') || this.keys.has('ArrowUp')) y += 1;
       if (this.keys.has('KeyS') || this.keys.has('ArrowDown')) y -= 1;
@@ -193,7 +205,7 @@ export class Input {
       if (this.keys.has('KeyA') || this.keys.has('ArrowLeft')) x -= 1;
       const kl = Math.hypot(x, y);
       if (kl > 1) { x /= kl; y /= kl; }
-      this.runAmt = this.keys.has('ShiftLeft') || this.keys.has('ShiftRight') ? 1 : 0;
+      this.runAmt = this.touchRunning || this.keys.has('ShiftLeft') || this.keys.has('ShiftRight') ? 1 : 0;
       if (this.stickId !== null) {
         const sx = this.stickVec.x, sy = -this.stickVec.y;
         const m = Math.hypot(sx, sy);
@@ -204,7 +216,7 @@ export class Input {
           const walk = Math.min(1, mm / 0.8);
           x = (sx / m) * walk;
           y = (sy / m) * walk;
-          this.runAmt = Math.max(0, (mm - 0.8) / 0.2);
+          this.runAmt = Math.max(this.runAmt, (mm - 0.8) / 0.2);
         }
       }
     }
