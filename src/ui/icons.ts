@@ -178,6 +178,9 @@ export function icon(name: string, size = 26, label = ''): string {
 /** Quiet line icons for interface chrome only. Item pictures keep their existing recognition vocabulary. */
 export type ArchiveIconName = 'menu' | 'hint' | 'notes' | 'bag' | 'action' | 'close' | 'compass' | 'document' | 'leaf' | 'map' | 'table' | 'books' | 'trees' | 'marker' | 'run' | 'back';
 export function archiveIcon(name: ArchiveIconName, size = 24): string {
+  const svg = (body: string) => `<svg class="wa-icon" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${body}</svg>`;
+  if (name === 'notes') return svg('<path d="M5 2H19V22H5ZM7.5 2V22M17 4V20"/><path d="M9.5 5H15.5V9H9.5Z" fill="currentColor" stroke="none"/>');
+  if (name === 'bag') return svg('<path d="M9 5V4C9 1.5 15 1.5 15 4V5"/><path d="M6 7H18C19 7 20 8 20 10V20C20 21 19 22 18 22H6C5 22 4 21 4 20V10C4 8 5 7 6 7Z" fill="currentColor" stroke="none"/><path d="M5 11C7 14 17 14 19 11M11 12V15H13V12M8 17H16" stroke="var(--wa-charcoal, #1c241d)"/>');
   const paths = {
     menu: 'M5 6H19M5 12H19M5 18H19',
     hint: 'M9 18H15M10 21H14M8.5 14.5C3.5 9 7 3 12 3C17 3 20.5 9 15.5 14.5L15 16H9Z',
@@ -196,7 +199,7 @@ export function archiveIcon(name: ArchiveIconName, size = 24): string {
     books: 'M3 6L15 3L21 6L9 9ZM3 6V11L9 14L21 10V6M3 14L9 17L21 13M3 14V19L9 22L21 18V13M9 9V14M9 17V22',
     trees: 'M8 3L3 12H6L2 18H14L10 12H13ZM8 18V22M17 6L13 13H15L12 19H22L19 13H21ZM17 19V22',
   };
-  return `<svg class="wa-icon" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${paths[name]}"/></svg>`;
+  return svg(`<path d="${paths[name]}"/>`);
 }
 
 /** Each item has its own picture; unknown ids fall back to a neutral parcel (never another item's icon). */

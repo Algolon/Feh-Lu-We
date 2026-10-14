@@ -11,7 +11,7 @@ const helpers = readFileSync(new URL('./e2e-helpers.js', import.meta.url), 'utf8
 // The headless-shell GPU compositor repeats some 2D layers in this sandbox. Software
 // composition avoids that capture artifact; the actual Three.js scene still uses WebGL/SwiftShader.
 const browser = await chromium.launch({ executablePath: process.env.CHROME ?? chromium.executablePath(), args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--disable-gpu-compositing'] });
-const results = [], captures = [];
+const results = [], captures = [], diagnostics = [];
 const log = (name, ok, detail) => { results.push({ name, ok: !!ok, detail }); console.log(`${ok ? 'PASS' : 'FAIL'} ${name}${detail ? ` — ${JSON.stringify(detail)}` : ''}`); };
 const profiles = [
   ['phone', { width: 852, height: 393 }, true],
@@ -77,8 +77,24 @@ for (const [name, viewport, touch] of profiles.filter(([name]) => !process.env.U
       return { beside: objective.left >= hint.right && Math.abs(objective.top - hint.top) < 2, clear: objective.right < right.left, marker: !!document.querySelector('#objective-row .wa-icon'), text: document.querySelector('#objective').textContent };
     });
     log(`${name}: marked objective sits beside hint without overlapping right controls`, goal.beside && goal.clear && goal.marker && !!goal.text, goal);
-    await click('#held');
-    log(`${name}: empty equipped-item button opens original inventory`, await page.locator('.inv').count() === 1);
+    const progress = await page.evaluate(() => ({
+      background: getComputedStyle(document.querySelector('#objective-row')).backgroundImage,
+      textVisible: !!document.querySelector('#objective').getClientRects().length,
+      triggerVisible: !!document.querySelector('#b-objective').getClientRects().length,
+      fontSize: getComputedStyle(document.querySelector('#objective')).fontSize,
+      state: JSON.stringify({ flags: T.G().state.flags, clues: T.G().state.clues, inventory: T.G().state.inventory }),
+    }));
+    log(`${name}: objective has no backing and portrait uses its marker only`, progress.background === 'none' && progress.triggerVisible && progress.textVisible === (name !== 'portrait') && progress.fontSize === '13px', progress);
+    await click('#b-objective');
+    const focusedProgress = await layout(page, true);
+    const readProgress = await page.evaluate(() => ({ text: document.querySelector('.wa-objective-detail').textContent, kind: T.G().ui.modalKind, enabled: T.G().input.enabled, state: JSON.stringify({ flags: T.G().state.flags, clues: T.G().state.clues, inventory: T.G().state.inventory }) }));
+    await shot(page, `${name}-objective-on-demand`, 'Actual progression text; no new information or state edits.');
+    log(`${name}: on-demand objective is readable in one focused overlay without changing records`, good(focusedProgress) && readProgress.kind === 'objective' && !readProgress.enabled && readProgress.text === goal.text && readProgress.state === progress.state, focusedProgress);
+    await page.keyboard.press('Escape');
+    log(`${name}: objective dismissal returns focus and world input`, await page.evaluate(() => T.G().input.enabled && document.activeElement.id === 'b-objective'));
+    log(`${name}: empty hands do not duplicate the inventory shortcut`, !await page.locator('#held').isVisible());
+    await click('#b-bag');
+    log(`${name}: bag opens original inventory`, await page.locator('.inv').count() === 1);
     await page.keyboard.press('Escape');
     if (touch) {
       const cdp = await context.newCDPSession(page);
@@ -97,6 +113,19 @@ for (const [name, viewport, touch] of profiles.filter(([name]) => !process.env.U
       log(`${name}: sprint never moves player without movement input`, released.run === 1 && released.x === 0 && released.y === 0, released);
       await page.evaluate(() => window.dispatchEvent(new Event('blur')));
       log(`${name}: blur clears sprint and its pressed state`, await page.evaluate(() => T.G().input.runAmt === 0 && document.querySelector('#b-run').getAttribute('aria-pressed') === 'false'));
+      if (name === 'phone') {
+        const diagnostic = await page.evaluate(() => {
+          const input = T.G().input;
+          try {
+            input.stickId = 999; input.stickVec.x = 0; input.stickVec.y = -1;
+            input.sample(); const withoutButton = { run: input.runAmt, movement: input.moveY };
+            input.toggleRun(); input.sample();
+            return { withoutButton, withButton: { run: input.runAmt, movement: input.moveY } };
+          } finally { input.clear(); }
+        });
+        diagnostics.push({ name: 'Existing full-stick auto-jog masks the sprint shortcut', fixture: 'Full joystick input through the actual Input.sample method; input cleared afterwards. Movement/speed redesign remains pending.', ...diagnostic });
+        console.log('DIAGNOSTIC full joystick sprint overlap — ' + JSON.stringify(diagnostic));
+      }
       await click('#b-run');
       await pose(page);
       if (name === 'phone') await shot(page, 'phone-sprint-equipped-controls', 'Real run shortcut enabled; no movement input. Opening a modal resets the toggle.');
@@ -229,7 +258,7 @@ for (const [name, viewport, touch] of profiles.filter(([name]) => !process.env.U
       await page.keyboard.press('h'); log('desktop: H keeps original hint feature', await page.locator('#overlay [role="dialog"]').count() === 1); await page.keyboard.press('Escape');
       await page.keyboard.press('Escape'); log('desktop: pause still uses its original panel', await page.evaluate(() => T.G().ui.modalKind === 'pause' && !document.querySelector('.wa-notebook'))); await page.keyboard.press('Escape');
     }
-    if (name === 'small') {
+    if (name === 'small' || name === 'portrait') {
       await page.goto(BASE + '?autotest=1'); await click('[data-new]');
       await page.waitForFunction(() => window.__game?.world?.id === 'home');
       await page.evaluate(helpers);
@@ -241,8 +270,16 @@ for (const [name, viewport, touch] of profiles.filter(([name]) => !process.env.U
         const a = document.querySelector('#objective').getBoundingClientRect(), b = document.querySelector('#checklist').getBoundingClientRect();
         return { objectiveBottom: a.bottom, checklistTop: b.top, items: document.querySelectorAll('#checklist li').length, notebookAvailable: getComputedStyle(document.querySelector('#b-notes')).display !== 'none' };
       });
-      await shot(page, 'small-home-tutorial', 'Real invitation coaching text/checklist; learned-look/movement flags supplied as layout fixture.');
-      log('small: home tutorial wraps without overlapping packing checklist; notebook remains discovery-gated', good(home) && flow.checklistTop >= flow.objectiveBottom + 7 && flow.items === 5 && !flow.notebookAvailable, { ...home, ...flow });
+      await shot(page, `${name}-home-tutorial`, 'Real invitation coaching text/checklist; learned-look/movement flags supplied as layout fixture.');
+      if (name === 'small') log('small: home tutorial wraps without overlapping packing checklist; notebook remains discovery-gated', good(home) && flow.checklistTop >= flow.objectiveBottom + 7 && flow.items === 5 && !flow.notebookAvailable, { ...home, ...flow });
+      else {
+        log('portrait: home checklist stays off the exploration HUD; notebook remains discovery-gated', good(home) && flow.items === 5 && !flow.notebookAvailable && !await page.locator('#checklist').isVisible(), home);
+        await click('#b-objective');
+        const preparation = await layout(page, true);
+        await shot(page, 'portrait-home-preparation');
+        log('portrait: all five packing requirements remain readable on demand', good(preparation) && await page.locator('.wa-preparation li').count() === 5, preparation);
+        await page.keyboard.press('Escape');
+      }
     }
     log(`${name}: no browser/asset errors`, problems.length === 0, problems);
   } catch (e) { log(`${name}: suite completion`, false, e.message); }
@@ -250,6 +287,7 @@ for (const [name, viewport, touch] of profiles.filter(([name]) => !process.env.U
 }
 writeFileSync(`${OUT}/results.json`, JSON.stringify(results, null, 2));
 writeFileSync(`${OUT}/captures.json`, JSON.stringify(captures, null, 2));
+writeFileSync(`${OUT}/diagnostics.json`, JSON.stringify(diagnostics, null, 2));
 await browser.close();
 console.log(`${results.filter(r => r.ok).length}/${results.length} UI-R02 checks passed; ${captures.length} actual screenshots.`);
 process.exitCode = results.some(r => !r.ok) ? 1 : 0;

@@ -30,12 +30,12 @@
 #topbar-r { right: calc(12px + var(--safe-r)); }
 #progress-cue { flex: 1; min-width: 0; max-width: 440px; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
 #objective-row {
-  display: flex; align-items: flex-start; gap: 8px; padding: 6px 8px;
-  background: linear-gradient(90deg, var(--wa-hud), rgb(24 28 21 / 70%)); border-radius: 4px;
+  display: flex; align-items: center; gap: 4px; min-height: var(--wa-hit);
 }
 #objective-row:has(#objective:empty) { display: none; }
-#objective-row > .wa-icon { color: var(--wa-gold); margin-top: 1px; }
-#objective { min-width: 0; color: var(--wa-light); font: 14px/1.45 var(--wa-serif); overflow-wrap: anywhere; }
+#b-objective { width: var(--wa-hit); padding: 0; background: transparent; border-color: transparent; box-shadow: none; }
+#b-objective .wa-icon { filter: drop-shadow(0 1px 2px #142016); }
+#objective { min-width: 0; color: var(--wa-light); font: 13px/1.45 var(--wa-serif); overflow-wrap: anywhere; text-shadow: -1px 0 1px #142016, 1px 0 1px #142016, 0 -1px 1px #142016, 0 1px 2px #142016; }
 #checklist { background: var(--wa-hud); color: var(--wa-light); border-left: 1px solid var(--wa-brass); padding: 8px 12px; font: 12px/1.4 var(--wa-sans); }
 #checklist[hidden] { display: none; }
 #checklist ul { list-style: none; margin: 4px 0 0; padding: 0; }
@@ -50,6 +50,7 @@
 #action kbd { display: none; color: var(--wa-light); font: 12px var(--wa-sans); border: 1px solid var(--wa-hud-line); border-radius: 4px; padding: 3px 6px; }
 #bottom-controls { position: absolute; right: calc(18px + var(--safe-r)); bottom: calc(18px + var(--safe-b)); display: flex; gap: 10px; }
 #held, #b-run { width: 56px; height: 56px; padding: 8px; }
+#held:not(.equipped) { display: none; }
 #held.equipped { border: 2px solid var(--wa-gold); background: rgb(39 56 45 / 92%); }
 #b-run { display: none; }
 #b-run.on { background: #e8cca0; color: #342c1d; }
@@ -59,6 +60,7 @@
 #fade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none !important; transition: opacity .6s; }
 #fade.on { opacity: 1; }
 #hud.overlay-open :is(#topbar-l, #topbar-r, #bottom-controls, #action, #reticle, #move-cue) { visibility: hidden; }
+#hud.overlay-open #toast { visibility: hidden; }
 #stick { position: absolute; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%; border: 1px solid var(--wa-brass); background: rgb(24 28 21 / 38%); pointer-events: none; opacity: 0; transition: opacity .12s; }
 #stick.active { opacity: 1; }
 #stick-knob { position: absolute; left: 50%; top: 50%; width: 48px; height: 48px; border-radius: 50%; background: rgb(232 204 160 / 65%); border: 1px solid var(--wa-light); transform: translate(-50%, -50%); box-shadow: 0 1px 4px #0005; }
@@ -78,8 +80,28 @@
 }
 @media (max-width: 520px) and (orientation: portrait) {
   #action { bottom: calc(94px + var(--safe-b)); max-width: calc(100vw - 32px - var(--safe-l) - var(--safe-r)); }
-  #hud:has(#action:not([disabled])) #toast { bottom: calc(170px + var(--safe-b)); max-width: 80vw; }
+  #toast { bottom: calc(94px + var(--safe-b)); width: max-content; max-width: calc(100vw - 32px - var(--safe-l) - var(--safe-r)); }
+  #hud:has(#action:not([disabled])) #toast { bottom: calc(170px + var(--safe-b)); }
 }
+@media (pointer: coarse) and (orientation: portrait), (max-width: 520px) and (orientation: portrait) {
+  #objective, #checklist { display: none; }
+  #progress-cue { flex: none; }
+  #objective-row { gap: 0; }
+}
+
+/* Focused, on-demand progression panel. Reuses the existing single-overlay/focus plumbing. */
+#overlay[data-kind='objective'] { align-items: flex-start; padding: calc(72px + var(--safe-t)) calc(16px + var(--safe-r)) calc(16px + var(--safe-b)) calc(16px + var(--safe-l)); background: rgb(12 20 16 / 20%); }
+#overlay[data-kind='objective'] .modal { width: min(380px, 100%); max-height: 100%; color: var(--wa-light); background: var(--wa-charcoal); border: 1px solid var(--wa-brass); border-radius: 8px; }
+#overlay[data-kind='objective'] header { padding: 10px 12px; gap: 12px; border-color: var(--wa-hud-line); }
+#overlay[data-kind='objective'] h2 { font: 500 19px/1.3 var(--wa-serif); }
+#overlay[data-kind='objective'] .close { background: transparent; color: var(--wa-light); border-color: var(--wa-brass); min-width: 48px; min-height: 48px; }
+#overlay[data-kind='objective'] .body { padding: 16px; }
+.wa-objective-detail { margin: 0; font: 16px/1.5 var(--wa-serif); overflow-wrap: anywhere; }
+.wa-preparation { margin-top: 16px; border-top: 1px solid var(--wa-hud-line); padding-top: 12px; font: 14px/1.5 var(--wa-sans); }
+.wa-preparation[hidden] { display: none; }
+.wa-preparation ul { list-style: none; margin: 8px 0 0; padding: 0; }
+.wa-preparation li { margin: 4px 0; }
+.wa-preparation .done { color: #d3c7ad; text-decoration: line-through; }
 
 /* Owner revision: a bounded, bound notebook. The world remains visible around its cover. */
 #overlay[data-kind='notebook'], #overlay[data-kind='notebook-map'] { background: rgb(12 20 16 / 38%); }
