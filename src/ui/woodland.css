@@ -299,8 +299,8 @@
  * landscape objective when the compass is visible; keep tutorial/opt-out unchanged.
  * The compass remains non-interactive and uses no extra HUD buttons. */
 #hud:has(#wa-compass:not([hidden])) #progress-cue {
-  /* Highest readable placement below the 38px compass. */
-  margin-top: 28px;
+  /* Keep the visible direction ticks ~8–10px above the centered objective content. */
+  margin-top: 22px;
 }
 
 @media (orientation: portrait) {
@@ -328,9 +328,6 @@
     /* Inherit the same type, color and text shadow as landscape. No backing. */
   }
   #checklist { display: none; }
-}
-@media (orientation: landscape) and (max-height: 400px) {
-  #hud:has(#wa-compass:not([hidden])) #progress-cue { margin-top: 26px; }
 }
 @media (max-width: 360px) and (orientation: portrait) {
   #wa-compass { width: 80px; }
