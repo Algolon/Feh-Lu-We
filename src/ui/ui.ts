@@ -5,6 +5,7 @@ import { CLUES, CLUE_GROUP, THREADS, type ClueDef } from '../content/clues';
 import { symbolSvg, SYMBOLS } from '../content/symbols';
 import { DIAGRAMS } from './diagrams';
 import { itemIcon, archiveIcon, type ArchiveIconName } from './icons';
+import { CompassHud } from './compass';
 import type { Settings } from '../core/state';
 import portraitArt from '../../assets/branding/concept-art-portrait.png';
 import landscapeArt from '../../assets/branding/concept-art-landscape.png';
@@ -42,6 +43,7 @@ export class UI {
   private resetRunGesture: () => void = () => {};
   private fade!: HTMLDivElement;
   private notebookBtn!: HTMLButtonElement;
+  private compass: CompassHud | null = null;
 
   get modalOpen() {
     return !this.overlay.hidden;
@@ -65,6 +67,7 @@ export class UI {
       <button class="hud-btn" id="action" disabled aria-label="Geen actie">${archiveIcon('action')}<span>Actie</span><kbd>E</kbd></button>
       <div id="toast" role="status" aria-live="polite"></div>
       <div id="fade"></div>`;
+    this.compass = new CompassHud(this.hud);
     this.actionBtn = $('#action', this.hud);
     this.reticle = $('#reticle', this.hud);
     this.label = $('#target-label', this.hud);
@@ -118,6 +121,10 @@ export class UI {
       if (e.target === this.overlay) this.closeModal();
     });
 
+  }
+
+  setCompass(yaw: number, enabled: boolean, reducedMotion: boolean) {
+    this.compass?.update(yaw, enabled, reducedMotion);
   }
 
   setNotebookEnabled(on: boolean) {
@@ -547,6 +554,7 @@ export class UI {
       <label class="set">Joystickgevoeligheid <input type="range" min="0.5" max="1.5" step="0.05" value="${s.moveSensitivity}" data-k="moveSensitivity"></label>
       <label class="set">Hoge kwaliteit (schaduwen, scherper beeld) <input type="checkbox" ${s.quality === 'high' ? 'checked' : ''} data-k="quality"></label>
       <label class="set">Minder beweging <input type="checkbox" ${s.reducedMotion ? 'checked' : ''} data-k="reducedMotion"></label>
+      <label class="set">Kompas tonen <input type="checkbox" ${s.showCompass ? 'checked' : ''} data-k="showCompass"></label>
       <label class="set">Kijkrichting omkeren <input type="checkbox" ${s.invertY ? 'checked' : ''} data-k="invertY"></label>
       <label class="set">Geluid uit <input type="checkbox" ${s.muted ? 'checked' : ''} data-k="muted"></label>
       <p class="muted">${h.startScreen ? 'Speel liefst liggend (landschap). Geluid gaat aan zodra je begint.' : `Speeltijd tot nu toe: ${h.playMinutes} min.`} Voortgang wordt automatisch bewaard op dit apparaat. Versie: ${esc(h.build)}</p>
