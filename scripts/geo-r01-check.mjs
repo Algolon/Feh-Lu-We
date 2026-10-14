@@ -18,7 +18,7 @@ const cases = [
   ['corridor-closed-east',114.5,102.5,Math.PI/2,false,false],
   ['kitchen-closed-east',106,102.5,Math.PI/2,false,false],
   ['corridor-closed-west',110,102.5,-Math.PI/2,false,false],
-  ['wing-floor-gap',108.2,103.5,Math.PI/2,true,true,-.7],
+  ['wing-floor-gap',108.75,103.5,-Math.PI/2,true,true,-1.25],
   ['wing-wall-gap',108.2,102.5,Math.PI,true,true],
   ['wing-join-up',108.25,102.5,Math.PI/2,true,true,.8],
   ['kitchen-dining',101,93,Math.PI,true,true],

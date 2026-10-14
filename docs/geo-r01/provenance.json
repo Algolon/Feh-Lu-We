@@ -1,0 +1,31 @@
+{
+  "baseline_commit": "fe74db0b471d7816d840e6c223b92950adf5639f",
+  "capture_script_sha256": "6aa0024c2949517da5606b808f2d9c0f7333b3e5ef5c4ffd9d9f78a413c399c6",
+  "video": {
+    "file": "82159.mp4",
+    "sha256": "f66b08e76f7746931e631ec9308098e7ad1e0251d1bdf01e7aa3c6cb9a123f77",
+    "duration_seconds": 34.416822,
+    "missing": "82158.mp4 was not delivered; not inspected"
+  },
+  "baseline_dist": {
+    "index-D3-sdVd1.js": "907a42e31c08146cc19ef8f5881f4a951f50738931438b37ffc54597c4faea44"
+  },
+  "final_dist": {
+    "index-BSa5M0K3.js": "7495b6ec306b40540b795b007e9f120c9e255922152fe62099d6f63e833a594c",
+    "index-CW3Nzmsy.js": "0b0347b84d7337e26c54ef5f2f916fe071111a4153b86088b0fe42d98db28b90"
+  },
+  "physical_device_validated": false,
+  "baseline_expected_failures": [
+    "324 lateral/turn/pitch threshold samples remain indoors with structure",
+    "wing floor/ceiling join: 18 paired front-face ray probes",
+    "partition joins: 12 two-sided rays plus collision occlusion",
+    "service-threshold-west: interior structure retained",
+    "cons-closed-west: interior structure retained",
+    "wing-wall-gap: interior structure retained"
+  ],
+  "final_focused_checks": {
+    "passed": 48,
+    "failed": 0
+  },
+  "pb01_ref": "e298649515e80af914da2f3f6fbf51f0ba11f809"
+}

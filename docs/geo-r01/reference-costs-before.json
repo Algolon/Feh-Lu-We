@@ -1,0 +1,58 @@
+{
+  "atticNook": {
+    "calls": 41,
+    "triangles": 106020
+  },
+  "atticCommon": {
+    "calls": 39,
+    "triangles": 108298
+  },
+  "conservatoryInside": {
+    "calls": 74,
+    "triangles": 128668
+  },
+  "conservatoryDoorDeck": {
+    "calls": 140,
+    "triangles": 206548
+  },
+  "wellnessDeck": {
+    "calls": 65,
+    "triangles": 156535
+  },
+  "saunaAccess": {
+    "calls": 145,
+    "triangles": 226184
+  },
+  "wickermanClearing": {
+    "calls": 31,
+    "triangles": 160593
+  },
+  "wickermanPath": {
+    "calls": 35,
+    "triangles": 211057
+  },
+  "frontForecourt": {
+    "calls": 134,
+    "triangles": 207234
+  },
+  "arrivalCourt": {
+    "calls": 128,
+    "triangles": 203776
+  },
+  "portugalTerrace": {
+    "calls": 31,
+    "triangles": 93007
+  },
+  "portugalApproach": {
+    "calls": 33,
+    "triangles": 120623
+  },
+  "golfVicinity": {
+    "calls": 55,
+    "triangles": 198999
+  },
+  "golfSpur": {
+    "calls": 90,
+    "triangles": 263048
+  }
+}

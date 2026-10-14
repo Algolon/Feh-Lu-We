@@ -1,0 +1,1351 @@
+{
+  "conditions": "Normal gameplay renderer; Chromium SwiftShader, low quality, 412x820 DPR1, fixed poses; not physical phone performance.",
+  "rows": [
+    {
+      "name": "service-threshold-east",
+      "pose": {
+        "x": 107.9,
+        "y": 0.15,
+        "z": 102.5,
+        "yaw": 1.5707963267948966,
+        "pitch": 0
+      },
+      "here": "corridor",
+      "visible": [
+        "corridor",
+        "kitchen",
+        "cons",
+        "dining",
+        "out",
+        "hall"
+      ],
+      "mIn": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "calls": 118,
+      "triangles": 252423,
+      "floor": {
+        "distance": 0.838,
+        "chunk": "manor",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "ceiling": {
+        "distance": 0.296,
+        "chunk": "manor",
+        "normal": [
+          0,
+          -0.9999999999999999,
+          0
+        ]
+      },
+      "rawFloor": {
+        "distance": 0.838,
+        "chunk": "manor",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "rawCeiling": {
+        "distance": 0.296,
+        "chunk": "manor",
+        "normal": [
+          0,
+          -0.9999999999999999,
+          0
+        ]
+      },
+      "gl": 0
+    },
+    {
+      "name": "service-threshold-west",
+      "pose": {
+        "x": 107.9,
+        "y": 0.15,
+        "z": 102.5,
+        "yaw": -1.5707963267948966,
+        "pitch": 0
+      },
+      "here": "corridor",
+      "visible": [
+        "corridor",
+        "kitchen",
+        "dining",
+        "hall"
+      ],
+      "mIn": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "calls": 72,
+      "triangles": 200900,
+      "floor": {
+        "distance": 0.838,
+        "chunk": "manor",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "ceiling": {
+        "distance": 0.296,
+        "chunk": "manor",
+        "normal": [
+          0,
+          -0.9999999999999999,
+          0
+        ]
+      },
+      "rawFloor": {
+        "distance": 0.838,
+        "chunk": "manor",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "rawCeiling": {
+        "distance": 0.296,
+        "chunk": "manor",
+        "normal": [
+          0,
+          -0.9999999999999999,
+          0
+        ]
+      },
+      "gl": 0
+    },
+    {
+      "name": "corridor-west",
+      "pose": {
+        "x": 110,
+        "y": 0.15,
+        "z": 102.5,
+        "yaw": -1.5707963267948966,
+        "pitch": 0
+      },
+      "here": "corridor",
+      "visible": [
+        "corridor",
+        "kitchen",
+        "dining",
+        "hall"
+      ],
+      "mIn": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "calls": 75,
+      "triangles": 201696,
+      "floor": {
+        "distance": 0.85,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "ceiling": {
+        "distance": 1.55,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "rawFloor": {
+        "distance": 0.85,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "rawCeiling": {
+        "distance": 1.55,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "gl": 0
+    },
+    {
+      "name": "kitchen-east",
+      "pose": {
+        "x": 106,
+        "y": 0.15,
+        "z": 102.5,
+        "yaw": 1.5707963267948966,
+        "pitch": 0
+      },
+      "here": "kitchen",
+      "visible": [
+        "kitchen",
+        "dining",
+        "corridor",
+        "hall",
+        "cons",
+        "vestibule",
+        "living",
+        "lobby",
+        "landing",
+        "frontGallery",
+        "walkway",
+        "out"
+      ],
+      "mIn": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "calls": 122,
+      "triangles": 250458,
+      "floor": {
+        "distance": 0.85,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "ceiling": {
+        "distance": 1.15,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "rawFloor": {
+        "distance": 0.85,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "rawCeiling": {
+        "distance": 1.15,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "gl": 0
+    },
+    {
+      "name": "cons-threshold-west",
+      "pose": {
+        "x": 115.8,
+        "y": 0.15,
+        "z": 102.5,
+        "yaw": -1.5707963267948966,
+        "pitch": 0
+      },
+      "here": "corridor",
+      "visible": [
+        "corridor",
+        "kitchen",
+        "cons",
+        "dining",
+        "out",
+        "hall"
+      ],
+      "mIn": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "calls": 147,
+      "triangles": 331722,
+      "floor": {
+        "distance": 0.838,
+        "chunk": "manor",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "ceiling": {
+        "distance": 0.346,
+        "chunk": "manor",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "rawFloor": {
+        "distance": 0.838,
+        "chunk": "manor",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "rawCeiling": {
+        "distance": 0.346,
+        "chunk": "manor",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "gl": 0
+    },
+    {
+      "name": "cons-threshold-east",
+      "pose": {
+        "x": 115.8,
+        "y": 0.15,
+        "z": 102.5,
+        "yaw": 1.5707963267948966,
+        "pitch": 0
+      },
+      "here": "corridor",
+      "visible": [
+        "corridor",
+        "kitchen",
+        "cons",
+        "dining",
+        "out",
+        "hall"
+      ],
+      "mIn": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "calls": 98,
+      "triangles": 193608,
+      "floor": {
+        "distance": 0.838,
+        "chunk": "manor",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "ceiling": {
+        "distance": 0.346,
+        "chunk": "manor",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "rawFloor": {
+        "distance": 0.838,
+        "chunk": "manor",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "rawCeiling": {
+        "distance": 0.346,
+        "chunk": "manor",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "gl": 0
+    },
+    {
+      "name": "cons-closed-west",
+      "pose": {
+        "x": 117,
+        "y": 0.15,
+        "z": 102.5,
+        "yaw": -1.5707963267948966,
+        "pitch": 0
+      },
+      "here": "cons",
+      "visible": [
+        "cons",
+        "corridor",
+        "out"
+      ],
+      "mIn": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "calls": 109,
+      "triangles": 273366,
+      "floor": {
+        "distance": 0.85,
+        "chunk": "cons",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "ceiling": null,
+      "rawFloor": {
+        "distance": 0.85,
+        "chunk": "cons",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "rawCeiling": null,
+      "gl": 0
+    },
+    {
+      "name": "corridor-closed-east",
+      "pose": {
+        "x": 114.5,
+        "y": 0.15,
+        "z": 102.5,
+        "yaw": 1.5707963267948966,
+        "pitch": 0
+      },
+      "here": "corridor",
+      "visible": [
+        "corridor",
+        "cons",
+        "out"
+      ],
+      "mIn": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "calls": 102,
+      "triangles": 226113,
+      "floor": {
+        "distance": 0.85,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "ceiling": {
+        "distance": 1.55,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "rawFloor": {
+        "distance": 0.85,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "rawCeiling": {
+        "distance": 1.55,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "gl": 0
+    },
+    {
+      "name": "kitchen-closed-east",
+      "pose": {
+        "x": 106,
+        "y": 0.15,
+        "z": 102.5,
+        "yaw": 1.5707963267948966,
+        "pitch": 0
+      },
+      "here": "kitchen",
+      "visible": [
+        "kitchen",
+        "dining",
+        "hall",
+        "vestibule",
+        "living",
+        "lobby",
+        "landing",
+        "frontGallery",
+        "walkway"
+      ],
+      "mIn": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "calls": 23,
+      "triangles": 96072,
+      "floor": {
+        "distance": 0.85,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "ceiling": {
+        "distance": 1.15,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "rawFloor": {
+        "distance": 0.85,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "rawCeiling": {
+        "distance": 1.15,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "gl": 0
+    },
+    {
+      "name": "corridor-closed-west",
+      "pose": {
+        "x": 110,
+        "y": 0.15,
+        "z": 102.5,
+        "yaw": -1.5707963267948966,
+        "pitch": 0
+      },
+      "here": "corridor",
+      "visible": [
+        "corridor"
+      ],
+      "mIn": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "calls": 35,
+      "triangles": 141520,
+      "floor": {
+        "distance": 0.85,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "ceiling": {
+        "distance": 1.55,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "rawFloor": {
+        "distance": 0.85,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "rawCeiling": {
+        "distance": 1.55,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "gl": 0
+    },
+    {
+      "name": "wing-floor-gap",
+      "pose": {
+        "x": 108.75,
+        "y": 0.15,
+        "z": 103.5,
+        "yaw": -1.5707963267948966,
+        "pitch": -1.25
+      },
+      "here": "corridor",
+      "visible": [
+        "corridor",
+        "kitchen",
+        "dining",
+        "hall"
+      ],
+      "mIn": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "calls": 36,
+      "triangles": 152388,
+      "floor": {
+        "distance": 0.85,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "ceiling": {
+        "distance": 1.55,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "rawFloor": {
+        "distance": 0.85,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "rawCeiling": {
+        "distance": 1.55,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "gl": 0
+    },
+    {
+      "name": "wing-wall-gap",
+      "pose": {
+        "x": 108.2,
+        "y": 0.15,
+        "z": 102.5,
+        "yaw": 3.141592653589793,
+        "pitch": 0
+      },
+      "here": "corridor",
+      "visible": [
+        "corridor",
+        "kitchen",
+        "dining",
+        "hall"
+      ],
+      "mIn": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "calls": 42,
+      "triangles": 130884,
+      "floor": {
+        "distance": 0.838,
+        "chunk": "manor",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "ceiling": {
+        "distance": 1.55,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "rawFloor": {
+        "distance": 0.838,
+        "chunk": "manor",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "rawCeiling": {
+        "distance": 1.55,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "gl": 0
+    },
+    {
+      "name": "wing-join-up",
+      "pose": {
+        "x": 108.25,
+        "y": 0.15,
+        "z": 102.5,
+        "yaw": 1.5707963267948966,
+        "pitch": 0.8
+      },
+      "here": "corridor",
+      "visible": [
+        "corridor",
+        "kitchen",
+        "cons",
+        "dining",
+        "out",
+        "hall"
+      ],
+      "mIn": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "calls": 86,
+      "triangles": 237843,
+      "floor": {
+        "distance": 0.838,
+        "chunk": "manor",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "ceiling": {
+        "distance": 1.55,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "rawFloor": {
+        "distance": 0.838,
+        "chunk": "manor",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "rawCeiling": {
+        "distance": 1.55,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "gl": 0
+    },
+    {
+      "name": "kitchen-dining",
+      "pose": {
+        "x": 101,
+        "y": 0.15,
+        "z": 93,
+        "yaw": 3.141592653589793,
+        "pitch": 0
+      },
+      "here": "kitchen",
+      "visible": [
+        "kitchen",
+        "dining",
+        "corridor",
+        "hall",
+        "vestibule",
+        "living",
+        "lobby",
+        "landing",
+        "frontGallery",
+        "walkway"
+      ],
+      "mIn": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "calls": 39,
+      "triangles": 134380,
+      "floor": {
+        "distance": 0.85,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "ceiling": {
+        "distance": 1.15,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "rawFloor": {
+        "distance": 0.85,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "rawCeiling": {
+        "distance": 1.15,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "gl": 0
+    },
+    {
+      "name": "dining-kitchen",
+      "pose": {
+        "x": 101,
+        "y": 0.15,
+        "z": 90,
+        "yaw": 0,
+        "pitch": 0
+      },
+      "here": "dining",
+      "visible": [
+        "dining",
+        "hall",
+        "kitchen",
+        "vestibule",
+        "living",
+        "lobby",
+        "landing",
+        "frontGallery",
+        "walkway",
+        "corridor",
+        "ucorr",
+        "rearNook"
+      ],
+      "mIn": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "calls": 57,
+      "triangles": 179148,
+      "floor": {
+        "distance": 0.85,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "ceiling": {
+        "distance": 1.15,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "rawFloor": {
+        "distance": 0.85,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "rawCeiling": {
+        "distance": 1.15,
+        "chunk": "mIn",
+        "normal": [
+          0,
+          -1,
+          0
+        ]
+      },
+      "gl": 0
+    },
+    {
+      "name": "garden-kitchen",
+      "pose": {
+        "x": 101,
+        "y": 0.15,
+        "z": 111,
+        "yaw": 3.141592653589793,
+        "pitch": 0
+      },
+      "here": "out",
+      "visible": [
+        "out",
+        "kitchen",
+        "cons",
+        "dining",
+        "corridor"
+      ],
+      "mIn": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "calls": 102,
+      "triangles": 264202,
+      "floor": {
+        "distance": 0.85,
+        "chunk": "garden",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "ceiling": null,
+      "rawFloor": {
+        "distance": 0.85,
+        "chunk": "garden",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "rawCeiling": null,
+      "gl": 0
+    },
+    {
+      "name": "garden-cons",
+      "pose": {
+        "x": 132,
+        "y": 0.15,
+        "z": 106,
+        "yaw": -1.5707963267948966,
+        "pitch": 0
+      },
+      "here": "out",
+      "visible": [
+        "out",
+        "cons",
+        "corridor"
+      ],
+      "mIn": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "calls": 122,
+      "triangles": 263021,
+      "floor": {
+        "distance": 0.85,
+        "chunk": "garden",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "ceiling": null,
+      "rawFloor": {
+        "distance": 0.85,
+        "chunk": "garden",
+        "normal": [
+          0,
+          1,
+          0
+        ]
+      },
+      "rawCeiling": null,
+      "gl": 0
+    }
+  ],
+  "checks": [
+    {
+      "name": "324 lateral/turn/pitch threshold samples remain indoors with structure",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "wing floor/ceiling join: 18 paired front-face ray probes",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "partition joins: 12 two-sided rays plus collision occlusion",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "door.service: open traverse both directions",
+      "ok": true,
+      "detail": {
+        "x": 106.21,
+        "y": 0.15,
+        "z": 102.5
+      }
+    },
+    {
+      "name": "door.service: leaf collider closed before traversal",
+      "ok": true
+    },
+    {
+      "name": "door.service: closed collision",
+      "ok": true,
+      "detail": {
+        "x": 107.42,
+        "y": 0.15,
+        "z": 102.5
+      }
+    },
+    {
+      "name": "door.consWest: open traverse both directions",
+      "ok": true,
+      "detail": {
+        "x": 114.71,
+        "y": 0.15,
+        "z": 102.5
+      }
+    },
+    {
+      "name": "door.consWest: leaf collider closed before traversal",
+      "ok": true
+    },
+    {
+      "name": "door.consWest: closed collision",
+      "ok": true,
+      "detail": {
+        "x": 115.42,
+        "y": 0.15,
+        "z": 102.5
+      }
+    },
+    {
+      "name": "door.kitchenBack: open traverse both directions",
+      "ok": true,
+      "detail": {
+        "x": 101,
+        "y": 0.15,
+        "z": 108.71
+      }
+    },
+    {
+      "name": "door.kitchenBack: leaf collider closed before traversal",
+      "ok": true
+    },
+    {
+      "name": "door.kitchenBack: closed collision",
+      "ok": true,
+      "detail": {
+        "x": 101,
+        "y": 0.15,
+        "z": 109.42
+      }
+    },
+    {
+      "name": "door.consEast: open traverse both directions",
+      "ok": true,
+      "detail": {
+        "x": 129.21,
+        "y": 0.15,
+        "z": 106
+      }
+    },
+    {
+      "name": "door.consEast: leaf collider closed before traversal",
+      "ok": true
+    },
+    {
+      "name": "door.consEast: closed collision",
+      "ok": true,
+      "detail": {
+        "x": 129.63,
+        "y": 0.15,
+        "z": 106
+      }
+    },
+    {
+      "name": "camera near plane remains inside capsule radius",
+      "ok": true,
+      "detail": {
+        "near": 0.08,
+        "radius": 0.3
+      }
+    },
+    {
+      "name": "service-threshold-east: interior structure retained",
+      "ok": true
+    },
+    {
+      "name": "service-threshold-east: WebGL error",
+      "ok": true
+    },
+    {
+      "name": "service-threshold-west: interior structure retained",
+      "ok": true
+    },
+    {
+      "name": "service-threshold-west: WebGL error",
+      "ok": true
+    },
+    {
+      "name": "corridor-west: interior structure retained",
+      "ok": true
+    },
+    {
+      "name": "corridor-west: WebGL error",
+      "ok": true
+    },
+    {
+      "name": "kitchen-east: interior structure retained",
+      "ok": true
+    },
+    {
+      "name": "kitchen-east: WebGL error",
+      "ok": true
+    },
+    {
+      "name": "cons-threshold-west: interior structure retained",
+      "ok": true
+    },
+    {
+      "name": "cons-threshold-west: WebGL error",
+      "ok": true
+    },
+    {
+      "name": "cons-threshold-east: interior structure retained",
+      "ok": true
+    },
+    {
+      "name": "cons-threshold-east: WebGL error",
+      "ok": true
+    },
+    {
+      "name": "cons-closed-west: interior structure retained",
+      "ok": true
+    },
+    {
+      "name": "cons-closed-west: WebGL error",
+      "ok": true
+    },
+    {
+      "name": "corridor-closed-east: interior structure retained",
+      "ok": true
+    },
+    {
+      "name": "corridor-closed-east: WebGL error",
+      "ok": true
+    },
+    {
+      "name": "kitchen-closed-east: interior structure retained",
+      "ok": true
+    },
+    {
+      "name": "kitchen-closed-east: WebGL error",
+      "ok": true
+    },
+    {
+      "name": "corridor-closed-west: interior structure retained",
+      "ok": true
+    },
+    {
+      "name": "corridor-closed-west: WebGL error",
+      "ok": true
+    },
+    {
+      "name": "wing-floor-gap: interior structure retained",
+      "ok": true
+    },
+    {
+      "name": "wing-floor-gap: WebGL error",
+      "ok": true
+    },
+    {
+      "name": "wing-wall-gap: interior structure retained",
+      "ok": true
+    },
+    {
+      "name": "wing-wall-gap: WebGL error",
+      "ok": true
+    },
+    {
+      "name": "wing-join-up: interior structure retained",
+      "ok": true
+    },
+    {
+      "name": "wing-join-up: WebGL error",
+      "ok": true
+    },
+    {
+      "name": "kitchen-dining: interior structure retained",
+      "ok": true
+    },
+    {
+      "name": "kitchen-dining: WebGL error",
+      "ok": true
+    },
+    {
+      "name": "dining-kitchen: interior structure retained",
+      "ok": true
+    },
+    {
+      "name": "dining-kitchen: WebGL error",
+      "ok": true
+    },
+    {
+      "name": "garden-kitchen: WebGL error",
+      "ok": true
+    },
+    {
+      "name": "garden-cons: WebGL error",
+      "ok": true
+    }
+  ],
+  "errors": []
+}
