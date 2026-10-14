@@ -4,6 +4,8 @@ Isolated research branch: `vfc01-visual-fidelity-calibration`. Verified producti
 
 **VFC-01 — RESEARCH COMPLETE / PARTIAL EVIDENCE / OWNER REVIEW PENDING.** The owner closed this research iteration on 14 October 2026. At verified evidence HEAD `106f68c`, **130/201 expected files are present and 71 missing**: seven MP4s, 24 LOD keyframes and 40 supporting images. All 90 main frames and nine selected frames are available, plus the committed V3 vegetation video. See [formal closeout](VFC01_CLOSEOUT.md), [bounded next work packages](VFC01_NEXT_WORK_PACKAGES.md) and [actual availability](UPLOAD_AVAILABILITY.json). Historical recovery records remain provenance; no production adoption or complete-media acceptance is implied.
 
+**Owner Decision 01 — Portugal A/B reviewed:** [decision record](VFC01_OWNER_VISUAL_DECISIONS.md). **REJECT** the evaluated selected candidate and floor treatment; **DEFER** dedicated geometry investment; other materials **NO DECISION**. Documentation only; no implementation or supplementary investigation authorized. Library, DPR and other rendering scopes remain undecided.
+
 [The offline evidence viewer](index.html) marks unavailable assets explicitly and exposes [the available V3 vegetation video](combined-lod/V3-vegetation.mp4). `EVIDENCE_MANIFEST_ORIGINAL.json` and `RECOVERY_CAPTURES.json` preserve expected-package and reproduction provenance. GitHub shows HTML source; open the viewer from a checkout or local server. [The recommendation](VFC01_RECOMMENDATION.md) is retained, but its experimental visual evidence is incomplete. Frames retain 915×412 content; video encoding pads the width to 916. Video playback is four presentation frames/s, not measured gameplay FPS.
 
 | Report | Contents |
