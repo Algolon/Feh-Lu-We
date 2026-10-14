@@ -1,3 +1,5 @@
+> **FLW-PB01 budget authority (14 October 2026):** [PERFORMANCE_BUDGET.md](../PERFORMANCE_BUDGET.md) supersedes every historical 250k camera-triangle limit and “previously under 250k must remain under” rule in this document. Current ceiling: **750,000 submitted camera triangles per view**, provisional; device validation pending. Historical measurements/results remain unchanged. Draw-call limits, functional assertions and local batch delta limits remain in force; explained geometry growth requires an explicit regression review, not automatic rejection at 250k.
+
 # DEV-04D D3: execution plan (recalibrated after D3-0)
 This plan follows the D3-0 audit (`DEV04D_D3_CRAFTSMANSHIP_AUDIT.md`). The D3 sequence itself is unchanged: **D3-a → D3-f**.
 What changes:
@@ -39,7 +41,7 @@ What changes:
 | G1 player-eye | The targeted object or zone reads at the approach pose on a 915 × 412 viewport: hero objects ≥ 60 px on their main axis; identity pieces recognisable without being close. |
 | G2 composition | The room has defined zones (the six room-audit questions answered); no object island; identity pieces relate to an axis, an entrance or furniture. |
 | G3 construction | `Asm` audit clean; neutral / clay view shows a credible support chain. |
-| G4 budget | Per room batch: **≤ +2 calls, ≤ +12 k tris** (doors closed, low); the mobile guide holds everywhere (≤ 150 / ≤ 250 k). Rooms with less headroom get stricter local caps (§6). |
+| G4 budget | Per room batch: **≤ +2 calls, ≤ +12 k tris** (doors closed, low); the provisional PB01 guide holds everywhere (≤ 150 calls / ≤ 750,000 camera tris). Rooms with less headroom get stricter local caps (§6). |
 | G5 regression | typecheck, unit, `e2e:dev04a/b/c/d`. Add dev01–03 + full `e2e` whenever a pickup, door or puzzle object is touched. |
 | G6 owner | Phone review of the deployed build for each merged batch. |
 
@@ -182,7 +184,7 @@ and D3-a would otherwise inherit an unresolved quality debt.
 - **Headroom:** large (the cottage views ≥ +80 calls).
 
 ## 6. Performance strategy
-- **Guide unchanged:** ≤ 150 calls / ≤ 250 k tris per budget view (low, doors closed).
+- **PB01 guide:** ≤ 150 calls / ≤ 750,000 camera tris per view (low, doors closed; provisional).
 - **Per batch:** ≤ +2 calls / ≤ +12 k tris per room.
 - **Local caps** where headroom is thin:
   - library ≤ 0 tris net;

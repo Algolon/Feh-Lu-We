@@ -1,0 +1,424 @@
+{
+  "status": "DEVICE VALIDATION PENDING",
+  "policy": {
+    "status": "PROVISIONAL DEVELOPMENT BUDGET",
+    "deviceValidation": "PENDING",
+    "cameraTrianglesPerView": 750000,
+    "lowDrawCalls": 150,
+    "targetFps": 30
+  },
+  "build": "e298649515e80af914da2f3f6fbf51f0ba11f809",
+  "productionBase": "fe74db0b471d7816d840e6c223b92950adf5639f",
+  "scope": "unchanged production runtime; 8 short movement/turn samples per view, software counting only; no hardware FPS/thermal/capacity conclusion",
+  "errors": [],
+  "results": [
+    {
+      "name": "busy-interior-library",
+      "samples": [
+        {
+          "cameraCalls": 61,
+          "cameraTriangles": 211400,
+          "pos": {
+            "x": 82.68740266666667,
+            "y": 0.15,
+            "z": 97.5,
+            "yaw": -0.8875000000000001,
+            "pitch": 0.05
+          }
+        },
+        {
+          "cameraCalls": 62,
+          "cameraTriangles": 213410,
+          "pos": {
+            "x": 83.02509475942281,
+            "y": 0.15,
+            "z": 97.5,
+            "yaw": -0.8625,
+            "pitch": 0.05
+          }
+        },
+        {
+          "cameraCalls": 62,
+          "cameraTriangles": 213410,
+          "pos": {
+            "x": 83.2182522920374,
+            "y": 0.15,
+            "z": 97.5,
+            "yaw": -0.8375,
+            "pitch": 0.05
+          }
+        },
+        {
+          "cameraCalls": 62,
+          "cameraTriangles": 211330,
+          "pos": {
+            "x": 83.25474266274217,
+            "y": 0.15,
+            "z": 97.5,
+            "yaw": -0.8125,
+            "pitch": 0.05
+          }
+        },
+        {
+          "cameraCalls": 59,
+          "cameraTriangles": 211244,
+          "pos": {
+            "x": 82.97206914811885,
+            "y": 0.15,
+            "z": 97.5,
+            "yaw": -0.7875000000000001,
+            "pitch": 0.05
+          }
+        },
+        {
+          "cameraCalls": 57,
+          "cameraTriangles": 194964,
+          "pos": {
+            "x": 82.56406399395699,
+            "y": 0.15,
+            "z": 97.5,
+            "yaw": -0.7625000000000001,
+            "pitch": 0.05
+          }
+        },
+        {
+          "cameraCalls": 57,
+          "cameraTriangles": 194964,
+          "pos": {
+            "x": 82.13981585931094,
+            "y": 0.15,
+            "z": 97.5,
+            "yaw": -0.7375,
+            "pitch": 0.05
+          }
+        },
+        {
+          "cameraCalls": 56,
+          "cameraTriangles": 194948,
+          "pos": {
+            "x": 81.77812010103045,
+            "y": 0.15,
+            "z": 97.5,
+            "yaw": -0.7125,
+            "pitch": 0.05
+          }
+        }
+      ],
+      "first": {
+        "x": 82.4,
+        "y": 0.15,
+        "z": 97.5,
+        "yaw": -0.8,
+        "pitch": 0.05
+      },
+      "last": {
+        "x": 81.77812010103045,
+        "y": 0.15,
+        "z": 97.5,
+        "yaw": -0.7125,
+        "pitch": 0.05
+      },
+      "quality": "low",
+      "shadowPasses": 0,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "dpr": 1,
+      "cssViewport": [
+        915,
+        412
+      ],
+      "buffer": [
+        915,
+        412
+      ],
+      "memory": {
+        "geometries": 143,
+        "textures": 40,
+        "estimatedGeometryAttributeBytes": 87421980,
+        "omissions": "instance/driver/target/texture byte storage; object counts are not VRAM bytes"
+      },
+      "multiDraw": true,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadowsEnabled": false,
+      "maxCalls": 62,
+      "minTriangles": 194948,
+      "maxTriangles": 213410,
+      "budgetPass": true
+    },
+    {
+      "name": "forest-shed-area",
+      "samples": [
+        {
+          "cameraCalls": 42,
+          "cameraTriangles": 168662,
+          "pos": {
+            "x": 50.28740266666667,
+            "y": 0,
+            "z": 44,
+            "yaw": -2.2875,
+            "pitch": 0
+          }
+        },
+        {
+          "cameraCalls": 42,
+          "cameraTriangles": 170395,
+          "pos": {
+            "x": 50.62509475942282,
+            "y": 0,
+            "z": 44,
+            "yaw": -2.2625,
+            "pitch": 0
+          }
+        },
+        {
+          "cameraCalls": 40,
+          "cameraTriangles": 168105,
+          "pos": {
+            "x": 50.81825229203741,
+            "y": 0,
+            "z": 44,
+            "yaw": -2.2375000000000003,
+            "pitch": 0
+          }
+        },
+        {
+          "cameraCalls": 38,
+          "cameraTriangles": 159331,
+          "pos": {
+            "x": 50.85474266274218,
+            "y": 0,
+            "z": 44,
+            "yaw": -2.2125000000000004,
+            "pitch": 0
+          }
+        },
+        {
+          "cameraCalls": 37,
+          "cameraTriangles": 158745,
+          "pos": {
+            "x": 50.57206914811886,
+            "y": 0,
+            "z": 44,
+            "yaw": -2.1875,
+            "pitch": 0
+          }
+        },
+        {
+          "cameraCalls": 37,
+          "cameraTriangles": 161200,
+          "pos": {
+            "x": 50.16406399395701,
+            "y": 0,
+            "z": 44,
+            "yaw": -2.1625,
+            "pitch": 0
+          }
+        },
+        {
+          "cameraCalls": 37,
+          "cameraTriangles": 161117,
+          "pos": {
+            "x": 49.739815859310966,
+            "y": 0,
+            "z": 44,
+            "yaw": -2.1375,
+            "pitch": 0
+          }
+        },
+        {
+          "cameraCalls": 36,
+          "cameraTriangles": 157749,
+          "pos": {
+            "x": 49.378120101030476,
+            "y": 0,
+            "z": 44,
+            "yaw": -2.1125000000000003,
+            "pitch": 0
+          }
+        }
+      ],
+      "first": {
+        "x": 50,
+        "y": 0,
+        "z": 44,
+        "yaw": -2.2,
+        "pitch": 0
+      },
+      "last": {
+        "x": 49.378120101030476,
+        "y": 0,
+        "z": 44,
+        "yaw": -2.1125000000000003,
+        "pitch": 0
+      },
+      "quality": "low",
+      "shadowPasses": 0,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "dpr": 1,
+      "cssViewport": [
+        915,
+        412
+      ],
+      "buffer": [
+        915,
+        412
+      ],
+      "memory": {
+        "geometries": 153,
+        "textures": 41,
+        "estimatedGeometryAttributeBytes": 87421980,
+        "omissions": "instance/driver/target/texture byte storage; object counts are not VRAM bytes"
+      },
+      "multiDraw": true,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadowsEnabled": false,
+      "maxCalls": 42,
+      "minTriangles": 157749,
+      "maxTriangles": 170395,
+      "budgetPass": true
+    },
+    {
+      "name": "long-garden-manor-conservatory",
+      "samples": [
+        {
+          "cameraCalls": 136,
+          "cameraTriangles": 207591,
+          "pos": {
+            "x": 92.28740266666667,
+            "y": 0,
+            "z": 136,
+            "yaw": 2.739933388230814,
+            "pitch": 0
+          }
+        },
+        {
+          "cameraCalls": 136,
+          "cameraTriangles": 208778,
+          "pos": {
+            "x": 92.62509475942281,
+            "y": 0,
+            "z": 136,
+            "yaw": 2.764933388230814,
+            "pitch": 0
+          }
+        },
+        {
+          "cameraCalls": 138,
+          "cameraTriangles": 209831,
+          "pos": {
+            "x": 92.8182522920374,
+            "y": 0,
+            "z": 136,
+            "yaw": 2.7899333882308137,
+            "pitch": 0
+          }
+        },
+        {
+          "cameraCalls": 138,
+          "cameraTriangles": 210365,
+          "pos": {
+            "x": 92.85474266274217,
+            "y": 0,
+            "z": 136,
+            "yaw": 2.8149333882308136,
+            "pitch": 0
+          }
+        },
+        {
+          "cameraCalls": 138,
+          "cameraTriangles": 211103,
+          "pos": {
+            "x": 92.57206914811884,
+            "y": 0,
+            "z": 136,
+            "yaw": 2.839933388230814,
+            "pitch": 0
+          }
+        },
+        {
+          "cameraCalls": 139,
+          "cameraTriangles": 213048,
+          "pos": {
+            "x": 92.16406399395699,
+            "y": 0,
+            "z": 136,
+            "yaw": 2.864933388230814,
+            "pitch": 0
+          }
+        },
+        {
+          "cameraCalls": 138,
+          "cameraTriangles": 214918,
+          "pos": {
+            "x": 91.73981585931094,
+            "y": 0,
+            "z": 136,
+            "yaw": 2.889933388230814,
+            "pitch": 0
+          }
+        },
+        {
+          "cameraCalls": 135,
+          "cameraTriangles": 215441,
+          "pos": {
+            "x": 91.37812010103045,
+            "y": 0,
+            "z": 136,
+            "yaw": 2.9149333882308137,
+            "pitch": 0
+          }
+        }
+      ],
+      "first": {
+        "x": 92,
+        "y": 0,
+        "z": 136,
+        "yaw": 2.827433388230814,
+        "pitch": 0
+      },
+      "last": {
+        "x": 91.37812010103045,
+        "y": 0,
+        "z": 136,
+        "yaw": 2.9149333882308137,
+        "pitch": 0
+      },
+      "quality": "low",
+      "shadowPasses": 0,
+      "shadowCalls": 0,
+      "shadowTriangles": 0,
+      "dpr": 1,
+      "cssViewport": [
+        915,
+        412
+      ],
+      "buffer": [
+        915,
+        412
+      ],
+      "memory": {
+        "geometries": 194,
+        "textures": 48,
+        "estimatedGeometryAttributeBytes": 87421980,
+        "omissions": "instance/driver/target/texture byte storage; object counts are not VRAM bytes"
+      },
+      "multiDraw": true,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadowsEnabled": false,
+      "maxCalls": 139,
+      "minTriangles": 207591,
+      "maxTriangles": 215441,
+      "budgetPass": true
+    }
+  ]
+}

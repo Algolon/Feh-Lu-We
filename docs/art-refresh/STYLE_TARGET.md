@@ -1,3 +1,5 @@
+> **FLW-PB01 budget authority (14 October 2026):** [PERFORMANCE_BUDGET.md](../PERFORMANCE_BUDGET.md) supersedes every historical 250k camera-triangle limit and “previously under 250k must remain under” rule in this document. Current ceiling: **750,000 submitted camera triangles per view**, provisional; device validation pending. Historical measurements/results remain unchanged. Draw-call limits, functional assertions and local batch delta limits remain in force; explained geometry growth requires an explicit regression review, not automatic rejection at 250k.
+
 # Feh Lu We — art refresh, step 1: style target
 
 **Status:** planning document plus baseline evidence. Nothing in the game has been changed by this step.
@@ -886,7 +888,7 @@ written down. Mass replacement across the estate only begins after both samples 
 **Performance**
 Measure at phone quality for poses 01–04, two runs each:
 - Draw calls ≤ baseline + 8.
-- Triangles ≤ baseline + 60 k, with ≤ 250 k absolute.
+- Camera triangles ≤ baseline + 60 k for this sample, with ≤ 750,000 absolute (PB01, provisional; incremental allowance remains separately reviewed).
 - JS gzip growth ≤ 25 KB.
 - No new textures larger than 512².
 - An owner phone check with `?debug=1` for FPS.
@@ -951,7 +953,7 @@ Measure at phone quality for poses 01–04, two runs each:
 - No foliage within 1.2 m of the path centreline or in front of the door, tablet or lock.
 
 **Performance**
-- Pose 15 must come **down** to ≤ 150 calls, from 154. Poses 13, 14 and 11 must stay ≤ 150 calls and ≤ 250 k
+- Pose 15 must come **down** to ≤ 150 calls, from 154. Poses 13, 14 and 11 must stay ≤ 150 calls and ≤ 750,000 camera triangles (PB01)
   triangles.
 - To make room, merge the per-block cut walls and moss into the area batch, and instance the verge stones.
 - Two runs each.

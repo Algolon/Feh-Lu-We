@@ -1,3 +1,5 @@
+> **FLW-PB01 budget authority (14 October 2026):** [PERFORMANCE_BUDGET.md](../PERFORMANCE_BUDGET.md) supersedes every historical 250k camera-triangle limit and “previously under 250k must remain under” rule in this document. Current ceiling: **750,000 submitted camera triangles per view**, provisional; device validation pending. Historical measurements/results remain unchanged. Draw-call limits, functional assertions and local batch delta limits remain in force; explained geometry growth requires an explicit regression review, not automatic rejection at 250k.
+
 # DEV-04D D3 kick-off: status, carry-forward, D3-a plan
 Date: 11 Oct 2026. This document is phase 1 of the owner's D3 brief and was written before any D3-a code.
 
@@ -213,7 +215,7 @@ Achieved with composition, casework and architectural dressing, not with more sm
 - **Caps for D3-a:**
   - kitchen ≤ +1 call and ≤ +10 k tris;
   - dining ≤ +2 calls and ≤ +12 k tris;
-  - no view over 150 calls / 250 k.
+  - no view over 150 calls / 750,000 camera triangles (PB01, provisional).
 - Materials: the existing timber / paint / brass / ceramic / stone / wood families already batched in the `mWing` chunk.
   - No new material or texture; the rugs use the existing rug atlas.
 

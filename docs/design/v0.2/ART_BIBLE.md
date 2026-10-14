@@ -1,3 +1,5 @@
+> **FLW-PB01 budget authority (14 October 2026):** [PERFORMANCE_BUDGET.md](../../PERFORMANCE_BUDGET.md) supersedes every historical 250k camera-triangle limit and “previously under 250k must remain under” rule in this document. Current ceiling: **750,000 submitted camera triangles per view**, provisional; device validation pending. Historical measurements/results remain unchanged. Draw-call limits, functional assertions and local batch delta limits remain in force; explained geometry growth requires an explicit regression review, not automatic rejection at 250k.
+
 # Feh Lu We — ART_BIBLE v0.1
 
 Datum: 6 oktober 2026. Status: **ontwerpvoorstel voor één sample; geen stijlgate en geen opdracht voor brede uitrol**.
@@ -283,7 +285,7 @@ Voor buitencoherentie: leg bestaande consolidation poses 13 fork, 15 doorway en 
 
 Gerapporteerd, niet hier opnieuw gemeten: interior max circa 228k triangles; meerdere doorzichten zitten boven 150 calls, oplopend tot 203. Exterior revision 2 meldt ≤142 calls/≤248.7k triangles op multi-draw; fallback 160–175 calls bij meerdere views. Dat is weinig marge. Software-rendering en geslaagde regression checks bewijzen geen echte telefoon-FPS.
 
-De eerste verfijning is bij voorkeur kostenneutraal ten opzichte van de bestaande interior sample: geen extra light slots of shadowmaps, geen algemene nieuwe materiaaltypen, geen stijging in drukste view zonder beschreven trade-off. Guide blijft 150 calls/250k triangles; reeds bestaande overschrijdingen afzonderlijk rapporteren, niet wegmiddelen of verzwijgen.
+De eerste verfijning is bij voorkeur kostenneutraal ten opzichte van de bestaande interior sample: geen extra light slots of shadowmaps, geen algemene nieuwe materiaaltypen, geen stijging in drukste view zonder beschreven trade-off. Guide volgt FLW-PB01: 150 calls/750k camera triangles (PROVISIONAL); reeds bestaande overschrijdingen afzonderlijk rapporteren, niet wegmiddelen of verzwijgen.
 
 Meet calls, triangles, geometry/texturebuffers, compressed payload, starttijd en frametimes. Beide vegetationpaden blijven relevant, zelfs als deze sample vooral binnen ligt en buiten door deuren zichtbaar is. Rapporteer median/p95/p99 waar beschikbaar en hitches bij draaien; vergelijk in dezelfde sessie, zelfde quality en apparaat. Een bestaand profileringsscript heeft voorkeur boven nieuwe testinfra.
 

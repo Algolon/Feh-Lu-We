@@ -1,3 +1,5 @@
+> **FLW-PB01 budget authority (14 October 2026):** [PERFORMANCE_BUDGET.md](../PERFORMANCE_BUDGET.md) supersedes every historical 250k camera-triangle limit and “previously under 250k must remain under” rule in this document. Current ceiling: **750,000 submitted camera triangles per view**, provisional; device validation pending. Historical measurements/results remain unchanged. Draw-call limits, functional assertions and local batch delta limits remain in force; explained geometry growth requires an explicit regression review, not automatic rejection at 250k.
+
 # DEV-04D — Reference Implementation & Estate-Wide Curation · Master plan (D0)
 
 Status update (11 Oct 2026, D3 started):
@@ -51,7 +53,7 @@ Invariants carried into D:
 | Checkpoints | **21** |
 | Estate | 200 × 180 m |
 | Puzzles, notebook, ART-01 / 01.1, light systems | authoritative; reference art never changes puzzle text, evidence placement or mechanics |
-| Mobile guide | ≈ 150 draw calls / 250 k triangles at low quality; `golfSpur` the known exception |
+| Mobile guide | PB01: 150 draw calls / 750,000 submitted camera triangles at low quality (provisional); historical `golfSpur` call-delta guard retained |
 | Accepted exception | two full-`e2e` touch-tap timing failures (C-R §7); input timing untouched |
 | Stable ids vs. art ids | gameplay / save ids (`frontKey` …) never change; FLW ids live in a lookup |
 
@@ -157,7 +159,7 @@ slotting in as soon as the owner approves group A (they touch disjoint walls and
 
 ## 7. Mobile / performance strategy
 
-- Guide unchanged (≤ 150 calls / ≤ 250 k tris at low quality per budget view; `golfSpur` not worse).
+- Current guide: PB01 (≤ 150 calls / ≤ 750,000 camera tris at low quality per view; regression deltas reviewed separately).
 - Doors-closed headroom is tight in living and kitchen (≈ 20 calls / ≈ 45 k tris). Per room batch: **≤ +2 draw calls,
   ≤ +12 k triangles**, everything in the room's existing chunk. Paintings add **0** calls (atlas). Keys add 0 (merged).
 - **Texture budget for D1: ≤ 12 MB GPU** in total (one 2048 × 1024 RGBA atlas with mips ≈ 11 MB). If group A pushes past one

@@ -8,7 +8,7 @@
 // clearings (BOSLUST, the fire, the well, the shed, the wickerman and the golf tee are found, not seen from afar),
 // fallen dead wood and mossy boulders.
 //
-// Render budget (phone guide ≤ 150 calls / 250 k triangles at "low"): every tree and bush of the estate in ONE
+// Render budget (phone guide ≤ 150 calls / PB01 camera triangles (docs/PERFORMANCE_BUDGET.md) at "low"): every tree and bush of the estate in ONE
 // multi-draw batch (LOD by distance with hysteresis, per-instance frustum culling, trees drawn to 115 m, bushes to
 // 50 m); every plant and litter leaf in one range-faded batch (shown within 11–24 m); stones and boulders in one;
 // dead wood in one; contact decals in one instanced mesh. Five draw calls for all vegetation (instanced fallback: one

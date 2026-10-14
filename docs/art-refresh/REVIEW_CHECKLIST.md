@@ -1,3 +1,5 @@
+> **FLW-PB01 budget authority (14 October 2026):** [PERFORMANCE_BUDGET.md](../PERFORMANCE_BUDGET.md) supersedes every historical 250k camera-triangle limit and “previously under 250k must remain under” rule in this document. Current ceiling: **750,000 submitted camera triangles per view**, provisional; device validation pending. Historical measurements/results remain unchanged. Draw-call limits, functional assertions and local batch delta limits remain in force; explained geometry growth requires an explicit regression review, not automatic rejection at 250k.
+
 # Art refresh — review checklist (the gate)
 
 This checklist is used for every visual sample and, later, for every area rollout. Its job is to stop an
@@ -117,7 +119,7 @@ Each line is **Pass / Fail / n.a.** An optional 1–5 score per section can be n
 - [ ] Draw calls at every sample pose are within the sample's stated budget, measured settled over ≥ 30 frames,
   two runs agreeing. Budgets are engineering guides: an overrun is acceptable only with a measured, explained
   trade-off, and never replaces the device frame-time check below.
-- [ ] Triangles are within the sample budget and ≤ 250 k.
+- [ ] Camera triangles are within the PB01 ceiling (750,000); report and explain sample-budget deltas separately.
 - [ ] JS gzip growth is within the sample budget. Any model or texture downloads are listed with sizes.
 - [ ] No new per-frame CPU work proportional to object count (e.g. per-object decal updates).
 - [ ] Where a sample relies on an optional GPU capability (e.g. `WEBGL_multi_draw` for batched vegetation), the
