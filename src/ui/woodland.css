@@ -242,3 +242,54 @@
 }
 .modal.wa-notebook [hidden] { display: none !important; }
 @media (prefers-reduced-motion: reduce) { .hud-btn, #stick, #reticle, #toast { transition: none; } }
+
+
+/* UI-COMPASS — bearing-only, passive overlay. Deliberately beneath the top action row. */
+#wa-compass {
+  position: absolute; z-index: 2;
+  left: 50%; top: calc(64px + var(--safe-t));
+  width: 220px; height: 38px; transform: translateX(-50%);
+  color: var(--wa-gold); opacity: .46;
+  pointer-events: none !important; user-select: none;
+  transition: opacity 220ms ease;
+}
+#wa-compass[hidden] { display: none !important; }
+#wa-compass.turning { opacity: .86; }
+#wa-compass.no-motion { opacity: .63; transition: none; }
+.wa-compass-viewport {
+  position: absolute; inset: 0; overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 20%, #000 80%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 20%, #000 80%, transparent);
+}
+.wa-compass-track { position: absolute; top: 0; left: 50%; width: 0; height: 100%; }
+.wa-compass-tick { position: absolute; top: 0; height: 100%; width: 0; transform: translateX(-50%); }
+.wa-compass-label {
+  position: absolute; top: 8px; left: 0; transform: translateX(-50%);
+  white-space: nowrap; color: var(--wa-light);
+  font: 500 11px/1.25 var(--wa-serif);
+  text-shadow: 0 1px 3px #111b15, 0 0 4px #111b15;
+}
+.wa-compass-mark {
+  position: absolute; left: 0; top: 29px;
+  height: 3px; border-left: 1px solid currentColor; opacity: .45;
+}
+.wa-compass-mark.major { top: 26px; height: 6px; opacity: .8; }
+.wa-compass-center {
+  position: absolute; left: 50%; top: 1px; transform: translateX(-50%);
+  width: 0; height: 0; border-left: 3px solid transparent;
+  border-right: 3px solid transparent; border-top: 5px solid var(--wa-brass);
+  filter: drop-shadow(0 1px 1px #121c16);
+}
+#hud.overlay-open #wa-compass { visibility: hidden; }
+@media (orientation: portrait) {
+  #wa-compass { top: calc(70px + var(--safe-t)); width: 100px; height: 33px; }
+  .wa-compass-label { top: 7px; font-size: 10px; }
+  .wa-compass-mark { top: 27px; height: 2px; }
+  .wa-compass-mark.major { top: 24px; height: 5px; }
+}
+@media (max-height: 400px) and (orientation: landscape) {
+  #wa-compass { top: calc(58px + var(--safe-t)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #wa-compass { transition: none; }
+}
