@@ -12,7 +12,7 @@
         "dpr": "1"
       },
       "camera": "library-player",
-      "method": "Original placement/warm-up, viewport 915\u00d7412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "method": "Original placement/warm-up, viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
       "observed": {
         "cameraCalls": 93,
         "cameraTriangles": 286772,
@@ -32,7 +32,7 @@
         "dpr": "1"
       },
       "camera": "cottage-player",
-      "method": "Original placement/warm-up, viewport 915\u00d7412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "method": "Original placement/warm-up, viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
       "observed": {
         "cameraCalls": 94,
         "cameraTriangles": 199731,
@@ -59,7 +59,7 @@
         "yaw": 0,
         "pitch": 0.02
       },
-      "method": "Original placement/warm-up, viewport 915\u00d7412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "method": "Original placement/warm-up, viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
       "observed": {
         "cameraCalls": 51,
         "cameraTriangles": 116664,
@@ -83,7 +83,7 @@
         "dpr": "1"
       },
       "camera": "library-player",
-      "method": "Original placement/warm-up, viewport 915\u00d7412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "method": "Original placement/warm-up, viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
       "observed": {
         "cameraCalls": 97,
         "cameraTriangles": 291936,
@@ -107,7 +107,7 @@
         "dpr": "1"
       },
       "camera": "cottage-player",
-      "method": "Original placement/warm-up, viewport 915\u00d7412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "method": "Original placement/warm-up, viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
       "observed": {
         "cameraCalls": 94,
         "cameraTriangles": 201039,
@@ -138,7 +138,7 @@
         "yaw": 0,
         "pitch": 0.02
       },
-      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915\u00d7412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
       "observed": {
         "cameraCalls": 52,
         "cameraTriangles": 117996,
@@ -162,7 +162,7 @@
         "dpr": "1.25"
       },
       "camera": "library-player",
-      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915\u00d7412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
       "observed": {
         "cameraCalls": 97,
         "cameraTriangles": 291936,
@@ -186,7 +186,7 @@
         "dpr": "1.25"
       },
       "camera": "cottage-player",
-      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915\u00d7412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
       "observed": {
         "cameraCalls": 94,
         "cameraTriangles": 201039,
@@ -217,7 +217,7 @@
         "yaw": 0,
         "pitch": 0.02
       },
-      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915\u00d7412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
       "observed": {
         "cameraCalls": 52,
         "cameraTriangles": 117996,
@@ -233,6 +233,1686 @@
       "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
       "capturedAt": "2026-10-14T05:59:05.283353+00:00",
       "method": "Contact sheet recreated using the original packaging layout, labels outside unscaled RGB frames; inputs are explicitly reproduced recovery images."
+    },
+    {
+      "path": "clay/V0-library-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:00:36.735Z",
+      "params": {
+        "v": "V0",
+        "mode": "clay"
+      },
+      "camera": "library-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 93,
+        "cameraTriangles": 286772,
+        "sourceTriangles": 735863,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V0-library-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:00:39.259Z",
+      "params": {
+        "v": "V0",
+        "mode": "clay"
+      },
+      "camera": "library-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 127,
+        "cameraTriangles": 328224,
+        "sourceTriangles": 735863,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V0-library-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:00:41.810Z",
+      "params": {
+        "v": "V0",
+        "mode": "clay"
+      },
+      "camera": "library-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 45,
+        "cameraTriangles": 270956,
+        "sourceTriangles": 735863,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V0-cottage-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:00:49.045Z",
+      "params": {
+        "v": "V0",
+        "mode": "clay"
+      },
+      "camera": "cottage-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 94,
+        "cameraTriangles": 199731,
+        "sourceTriangles": 735863,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V0-cottage-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:00:53.008Z",
+      "params": {
+        "v": "V0",
+        "mode": "clay"
+      },
+      "camera": "cottage-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 52,
+        "cameraTriangles": 122502,
+        "sourceTriangles": 735863,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V0-cottage-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:00:54.672Z",
+      "params": {
+        "v": "V0",
+        "mode": "clay"
+      },
+      "camera": "cottage-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 58,
+        "cameraTriangles": 139449,
+        "sourceTriangles": 735863,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "material-only/library-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:01:40.729Z",
+      "params": {
+        "v": "V1",
+        "mode": "colour"
+      },
+      "camera": "library-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 103,
+        "cameraTriangles": 286512,
+        "sourceTriangles": 735863,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "material-only/library-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:01:44.224Z",
+      "params": {
+        "v": "V1",
+        "mode": "colour"
+      },
+      "camera": "library-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 137,
+        "cameraTriangles": 325608,
+        "sourceTriangles": 735863,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "material-only/library-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:01:46.442Z",
+      "params": {
+        "v": "V1",
+        "mode": "colour"
+      },
+      "camera": "library-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 49,
+        "cameraTriangles": 260084,
+        "sourceTriangles": 735863,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "material-only/cottage-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:01:53.768Z",
+      "params": {
+        "v": "V1",
+        "mode": "colour"
+      },
+      "camera": "cottage-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 95,
+        "cameraTriangles": 199707,
+        "sourceTriangles": 735863,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "material-only/cottage-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:01:57.079Z",
+      "params": {
+        "v": "V1",
+        "mode": "colour"
+      },
+      "camera": "cottage-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 52,
+        "cameraTriangles": 122502,
+        "sourceTriangles": 735863,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "material-only/cottage-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:02:04.436Z",
+      "params": {
+        "v": "V1",
+        "mode": "colour"
+      },
+      "camera": "cottage-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 57,
+        "cameraTriangles": 139425,
+        "sourceTriangles": 735863,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V1-library-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:02:42.318Z",
+      "params": {
+        "v": "V1",
+        "mode": "clay"
+      },
+      "camera": "library-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 103,
+        "cameraTriangles": 286512,
+        "sourceTriangles": 735863,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V1-library-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:02:44.018Z",
+      "params": {
+        "v": "V1",
+        "mode": "clay"
+      },
+      "camera": "library-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 137,
+        "cameraTriangles": 325608,
+        "sourceTriangles": 735863,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V1-library-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:02:45.774Z",
+      "params": {
+        "v": "V1",
+        "mode": "clay"
+      },
+      "camera": "library-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 49,
+        "cameraTriangles": 260084,
+        "sourceTriangles": 735863,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V1-cottage-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:02:48.570Z",
+      "params": {
+        "v": "V1",
+        "mode": "clay"
+      },
+      "camera": "cottage-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 95,
+        "cameraTriangles": 199707,
+        "sourceTriangles": 735863,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V1-cottage-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:02:49.954Z",
+      "params": {
+        "v": "V1",
+        "mode": "clay"
+      },
+      "camera": "cottage-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 52,
+        "cameraTriangles": 122502,
+        "sourceTriangles": 735863,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V1-cottage-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:02:51.563Z",
+      "params": {
+        "v": "V1",
+        "mode": "clay"
+      },
+      "camera": "cottage-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 57,
+        "cameraTriangles": 139425,
+        "sourceTriangles": 735863,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V0-library-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:03:25.313Z",
+      "params": {
+        "v": "V0",
+        "mode": "neutral"
+      },
+      "camera": "library-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 93,
+        "cameraTriangles": 286772,
+        "sourceTriangles": 735863,
+        "textureBytes": 43994447,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V0-library-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:03:27.901Z",
+      "params": {
+        "v": "V0",
+        "mode": "neutral"
+      },
+      "camera": "library-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 127,
+        "cameraTriangles": 328224,
+        "sourceTriangles": 735863,
+        "textureBytes": 43994447,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V0-library-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:03:29.719Z",
+      "params": {
+        "v": "V0",
+        "mode": "neutral"
+      },
+      "camera": "library-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 45,
+        "cameraTriangles": 270956,
+        "sourceTriangles": 735863,
+        "textureBytes": 43994447,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V0-cottage-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:03:34.712Z",
+      "params": {
+        "v": "V0",
+        "mode": "neutral"
+      },
+      "camera": "cottage-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 94,
+        "cameraTriangles": 199731,
+        "sourceTriangles": 735863,
+        "textureBytes": 43994447,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V0-cottage-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:03:36.840Z",
+      "params": {
+        "v": "V0",
+        "mode": "neutral"
+      },
+      "camera": "cottage-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 52,
+        "cameraTriangles": 122502,
+        "sourceTriangles": 735863,
+        "textureBytes": 43994447,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V0-cottage-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:03:39.483Z",
+      "params": {
+        "v": "V0",
+        "mode": "neutral"
+      },
+      "camera": "cottage-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 58,
+        "cameraTriangles": 139449,
+        "sourceTriangles": 735863,
+        "textureBytes": 43994447,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V1-library-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:04:34.392Z",
+      "params": {
+        "v": "V1",
+        "mode": "neutral"
+      },
+      "camera": "library-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 103,
+        "cameraTriangles": 286512,
+        "sourceTriangles": 735863,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V1-library-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:04:37.118Z",
+      "params": {
+        "v": "V1",
+        "mode": "neutral"
+      },
+      "camera": "library-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 137,
+        "cameraTriangles": 325608,
+        "sourceTriangles": 735863,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V1-library-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:04:39.539Z",
+      "params": {
+        "v": "V1",
+        "mode": "neutral"
+      },
+      "camera": "library-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 49,
+        "cameraTriangles": 260084,
+        "sourceTriangles": 735863,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V1-cottage-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:04:45.375Z",
+      "params": {
+        "v": "V1",
+        "mode": "neutral"
+      },
+      "camera": "cottage-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 95,
+        "cameraTriangles": 199707,
+        "sourceTriangles": 735863,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V1-cottage-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:04:47.639Z",
+      "params": {
+        "v": "V1",
+        "mode": "neutral"
+      },
+      "camera": "cottage-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 52,
+        "cameraTriangles": 122502,
+        "sourceTriangles": 735863,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V1-cottage-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:04:50.354Z",
+      "params": {
+        "v": "V1",
+        "mode": "neutral"
+      },
+      "camera": "cottage-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 57,
+        "cameraTriangles": 139425,
+        "sourceTriangles": 735863,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V2-library-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:05:38.564Z",
+      "params": {
+        "v": "V2",
+        "mode": "neutral"
+      },
+      "camera": "library-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 94,
+        "cameraTriangles": 292184,
+        "sourceTriangles": 742607,
+        "textureBytes": 43994447,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V2-library-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:05:42.820Z",
+      "params": {
+        "v": "V2",
+        "mode": "neutral"
+      },
+      "camera": "library-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 128,
+        "cameraTriangles": 333636,
+        "sourceTriangles": 742607,
+        "textureBytes": 43994447,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V2-library-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:05:45.062Z",
+      "params": {
+        "v": "V2",
+        "mode": "neutral"
+      },
+      "camera": "library-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 45,
+        "cameraTriangles": 276044,
+        "sourceTriangles": 742607,
+        "textureBytes": 43994447,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V2-cottage-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:05:52.576Z",
+      "params": {
+        "v": "V2",
+        "mode": "neutral"
+      },
+      "camera": "cottage-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 95,
+        "cameraTriangles": 201063,
+        "sourceTriangles": 742607,
+        "textureBytes": 43994447,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V2-cottage-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:05:54.850Z",
+      "params": {
+        "v": "V2",
+        "mode": "neutral"
+      },
+      "camera": "cottage-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 53,
+        "cameraTriangles": 123834,
+        "sourceTriangles": 742607,
+        "textureBytes": 43994447,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V2-cottage-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:05:57.921Z",
+      "params": {
+        "v": "V2",
+        "mode": "neutral"
+      },
+      "camera": "cottage-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 59,
+        "cameraTriangles": 140781,
+        "sourceTriangles": 742607,
+        "textureBytes": 43994447,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V3-library-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:06:42.122Z",
+      "params": {
+        "v": "V3",
+        "mode": "neutral"
+      },
+      "camera": "library-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 104,
+        "cameraTriangles": 291924,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V3-library-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:06:45.655Z",
+      "params": {
+        "v": "V3",
+        "mode": "neutral"
+      },
+      "camera": "library-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 138,
+        "cameraTriangles": 331020,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V3-library-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:06:48.317Z",
+      "params": {
+        "v": "V3",
+        "mode": "neutral"
+      },
+      "camera": "library-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 49,
+        "cameraTriangles": 265172,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V3-cottage-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:06:56.185Z",
+      "params": {
+        "v": "V3",
+        "mode": "neutral"
+      },
+      "camera": "cottage-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 96,
+        "cameraTriangles": 201039,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V3-cottage-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:06:59.575Z",
+      "params": {
+        "v": "V3",
+        "mode": "neutral"
+      },
+      "camera": "cottage-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 53,
+        "cameraTriangles": 123834,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V3-cottage-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:07:02.817Z",
+      "params": {
+        "v": "V3",
+        "mode": "neutral"
+      },
+      "camera": "cottage-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 58,
+        "cameraTriangles": 140757,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V4-library-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:07:39.838Z",
+      "params": {
+        "v": "V4",
+        "mode": "neutral"
+      },
+      "camera": "library-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 104,
+        "cameraTriangles": 291924,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V4-library-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:07:43.394Z",
+      "params": {
+        "v": "V4",
+        "mode": "neutral"
+      },
+      "camera": "library-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 138,
+        "cameraTriangles": 331020,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V4-library-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:07:45.405Z",
+      "params": {
+        "v": "V4",
+        "mode": "neutral"
+      },
+      "camera": "library-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 49,
+        "cameraTriangles": 265172,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V4-cottage-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:07:51.685Z",
+      "params": {
+        "v": "V4",
+        "mode": "neutral"
+      },
+      "camera": "cottage-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 97,
+        "cameraTriangles": 201099,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V4-cottage-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:07:54.101Z",
+      "params": {
+        "v": "V4",
+        "mode": "neutral"
+      },
+      "camera": "cottage-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 53,
+        "cameraTriangles": 123834,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "neutral/V4-cottage-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:07:56.482Z",
+      "params": {
+        "v": "V4",
+        "mode": "neutral"
+      },
+      "camera": "cottage-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 58,
+        "cameraTriangles": 140757,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "geometry-only/library-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:08:32.875Z",
+      "params": {
+        "v": "V2",
+        "mode": "colour"
+      },
+      "camera": "library-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 94,
+        "cameraTriangles": 292184,
+        "sourceTriangles": 742607,
+        "textureBytes": 43994447,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "geometry-only/library-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:08:36.342Z",
+      "params": {
+        "v": "V2",
+        "mode": "colour"
+      },
+      "camera": "library-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 128,
+        "cameraTriangles": 333636,
+        "sourceTriangles": 742607,
+        "textureBytes": 43994447,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "geometry-only/library-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:08:40.267Z",
+      "params": {
+        "v": "V2",
+        "mode": "colour"
+      },
+      "camera": "library-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 45,
+        "cameraTriangles": 276044,
+        "sourceTriangles": 742607,
+        "textureBytes": 43994447,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "geometry-only/cottage-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:08:47.652Z",
+      "params": {
+        "v": "V2",
+        "mode": "colour"
+      },
+      "camera": "cottage-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 95,
+        "cameraTriangles": 201063,
+        "sourceTriangles": 742607,
+        "textureBytes": 43994447,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "geometry-only/cottage-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:08:52.941Z",
+      "params": {
+        "v": "V2",
+        "mode": "colour"
+      },
+      "camera": "cottage-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 53,
+        "cameraTriangles": 123834,
+        "sourceTriangles": 742607,
+        "textureBytes": 43994447,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "geometry-only/cottage-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:09:00.489Z",
+      "params": {
+        "v": "V2",
+        "mode": "colour"
+      },
+      "camera": "cottage-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 59,
+        "cameraTriangles": 140781,
+        "sourceTriangles": 742607,
+        "textureBytes": 43994447,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V2-library-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:09:33.436Z",
+      "params": {
+        "v": "V2",
+        "mode": "clay"
+      },
+      "camera": "library-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 94,
+        "cameraTriangles": 292184,
+        "sourceTriangles": 742607,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V2-library-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:09:35.568Z",
+      "params": {
+        "v": "V2",
+        "mode": "clay"
+      },
+      "camera": "library-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 128,
+        "cameraTriangles": 333636,
+        "sourceTriangles": 742607,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V2-library-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:09:37.217Z",
+      "params": {
+        "v": "V2",
+        "mode": "clay"
+      },
+      "camera": "library-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 45,
+        "cameraTriangles": 276044,
+        "sourceTriangles": 742607,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V2-cottage-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:09:40.967Z",
+      "params": {
+        "v": "V2",
+        "mode": "clay"
+      },
+      "camera": "cottage-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 95,
+        "cameraTriangles": 201063,
+        "sourceTriangles": 742607,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V2-cottage-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:11:01.039Z",
+      "params": {
+        "v": "V2",
+        "mode": "clay"
+      },
+      "camera": "cottage-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 53,
+        "cameraTriangles": 123834,
+        "sourceTriangles": 742607,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V2-cottage-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:11:02.979Z",
+      "params": {
+        "v": "V2",
+        "mode": "clay"
+      },
+      "camera": "cottage-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 59,
+        "cameraTriangles": 140781,
+        "sourceTriangles": 742607,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "combined/library-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:11:58.146Z",
+      "params": {
+        "v": "V3",
+        "mode": "colour"
+      },
+      "camera": "library-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 104,
+        "cameraTriangles": 291924,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "combined/library-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:12:04.549Z",
+      "params": {
+        "v": "V3",
+        "mode": "colour"
+      },
+      "camera": "library-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 138,
+        "cameraTriangles": 331020,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "combined/library-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:12:09.594Z",
+      "params": {
+        "v": "V3",
+        "mode": "colour"
+      },
+      "camera": "library-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 49,
+        "cameraTriangles": 265172,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "combined/cottage-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:12:18.147Z",
+      "params": {
+        "v": "V3",
+        "mode": "colour"
+      },
+      "camera": "cottage-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 96,
+        "cameraTriangles": 201039,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "combined/cottage-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:12:23.031Z",
+      "params": {
+        "v": "V3",
+        "mode": "colour"
+      },
+      "camera": "cottage-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 53,
+        "cameraTriangles": 123834,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "combined/cottage-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:12:26.719Z",
+      "params": {
+        "v": "V3",
+        "mode": "colour"
+      },
+      "camera": "cottage-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 58,
+        "cameraTriangles": 140757,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V3-library-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:13:28.400Z",
+      "params": {
+        "v": "V3",
+        "mode": "clay"
+      },
+      "camera": "library-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 104,
+        "cameraTriangles": 291924,
+        "sourceTriangles": 742607,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V3-library-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:13:31.623Z",
+      "params": {
+        "v": "V3",
+        "mode": "clay"
+      },
+      "camera": "library-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 138,
+        "cameraTriangles": 331020,
+        "sourceTriangles": 742607,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V3-library-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:13:33.820Z",
+      "params": {
+        "v": "V3",
+        "mode": "clay"
+      },
+      "camera": "library-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 49,
+        "cameraTriangles": 265172,
+        "sourceTriangles": 742607,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V3-cottage-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:13:37.517Z",
+      "params": {
+        "v": "V3",
+        "mode": "clay"
+      },
+      "camera": "cottage-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 96,
+        "cameraTriangles": 201039,
+        "sourceTriangles": 742607,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V3-cottage-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:13:40.236Z",
+      "params": {
+        "v": "V3",
+        "mode": "clay"
+      },
+      "camera": "cottage-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 53,
+        "cameraTriangles": 123834,
+        "sourceTriangles": 742607,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V3-cottage-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:13:44.040Z",
+      "params": {
+        "v": "V3",
+        "mode": "clay"
+      },
+      "camera": "cottage-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 58,
+        "cameraTriangles": 140757,
+        "sourceTriangles": 742607,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "combined-lod/library-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:14:24.198Z",
+      "params": {
+        "v": "V4",
+        "mode": "colour"
+      },
+      "camera": "library-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 104,
+        "cameraTriangles": 291924,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "combined-lod/library-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:14:28.553Z",
+      "params": {
+        "v": "V4",
+        "mode": "colour"
+      },
+      "camera": "library-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 138,
+        "cameraTriangles": 331020,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "combined-lod/library-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:14:31.645Z",
+      "params": {
+        "v": "V4",
+        "mode": "colour"
+      },
+      "camera": "library-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 49,
+        "cameraTriangles": 265172,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "combined-lod/cottage-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:14:38.693Z",
+      "params": {
+        "v": "V4",
+        "mode": "colour"
+      },
+      "camera": "cottage-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 97,
+        "cameraTriangles": 201099,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "combined-lod/cottage-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:14:45.494Z",
+      "params": {
+        "v": "V4",
+        "mode": "colour"
+      },
+      "camera": "cottage-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 53,
+        "cameraTriangles": 123834,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "combined-lod/cottage-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:14:50.675Z",
+      "params": {
+        "v": "V4",
+        "mode": "colour"
+      },
+      "camera": "cottage-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 58,
+        "cameraTriangles": 140757,
+        "sourceTriangles": 742607,
+        "textureBytes": 63567862,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V4-library-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:15:32.468Z",
+      "params": {
+        "v": "V4",
+        "mode": "clay"
+      },
+      "camera": "library-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 104,
+        "cameraTriangles": 291924,
+        "sourceTriangles": 742607,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V4-library-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:15:35.272Z",
+      "params": {
+        "v": "V4",
+        "mode": "clay"
+      },
+      "camera": "library-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 138,
+        "cameraTriangles": 331020,
+        "sourceTriangles": 742607,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V4-library-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:15:37.499Z",
+      "params": {
+        "v": "V4",
+        "mode": "clay"
+      },
+      "camera": "library-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 49,
+        "cameraTriangles": 265172,
+        "sourceTriangles": 742607,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V4-cottage-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:15:42.356Z",
+      "params": {
+        "v": "V4",
+        "mode": "clay"
+      },
+      "camera": "cottage-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 97,
+        "cameraTriangles": 201099,
+        "sourceTriangles": 742607,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V4-cottage-medium.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:15:44.404Z",
+      "params": {
+        "v": "V4",
+        "mode": "clay"
+      },
+      "camera": "cottage-medium",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 53,
+        "cameraTriangles": 123834,
+        "sourceTriangles": 742607,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "clay/V4-cottage-craft.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T06:15:47.020Z",
+      "params": {
+        "v": "V4",
+        "mode": "clay"
+      },
+      "camera": "cottage-craft",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 58,
+        "cameraTriangles": 140757,
+        "sourceTriangles": 742607,
+        "textureBytes": 1529171,
+        "dpr": 1
+      },
+      "differences": {}
     }
   ]
 }

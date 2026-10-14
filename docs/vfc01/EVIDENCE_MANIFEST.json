@@ -13,9 +13,9 @@
   "files": [
     {
       "path": "README.md",
-      "bytes": 3291,
-      "sha256": "588b3c448d4c26fbeca004e62722f2b35afda392c2648df3db64bab1d8d29bde",
-      "gitBlobSha": "5390453c2f25653b202b79381a56b3dbd43b636e",
+      "bytes": 3353,
+      "sha256": "57721bf4d336e4b1d95c6edabdb84e7073bc8caecbdc9bfa2bf7067b65766f2e",
+      "gitBlobSha": "2d70258bd4b7e55cf36d7022547921b039a5bece",
       "availability": "retained or updated document"
     },
     {
@@ -214,8 +214,15 @@
       "sha256": "83ce2645d577f1791a1eb612bed33d1059fb4300fa4abbd4104c625fc38be55e",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "ce9780b8617e8f8715d69d41536e63aa79965d9f336a874e7171428e8aaad606",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "15230123e0abdfe314388ba54964b999c0540af0051fa7729b9d977591bd1481",
+      "gitBlobSha": "1808676b83343b20d9ce4bf138e422261235e745",
+      "availability": "reproduced",
+      "originalSha256": "83ce2645d577f1791a1eb612bed33d1059fb4300fa4abbd4104c625fc38be55e",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V0-cottage-medium.webp",
@@ -223,8 +230,15 @@
       "sha256": "a9f517f37e15606a399b484a3b35620a8e5ac1f67eb4e8aa1bfbff17bd2c550a",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "a0beb08bd3fd1a47aed2c61533a064efc173bd52fe2eb850515fef4661061c9b",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "0f40ca7dde913e32a585fd55e6df64d769d2efe5d6b1d9abc1415c97b7399be6",
+      "gitBlobSha": "15efc5ed183759f94d382fab0ca69eb4eb7e3bbb",
+      "availability": "reproduced",
+      "originalSha256": "a9f517f37e15606a399b484a3b35620a8e5ac1f67eb4e8aa1bfbff17bd2c550a",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V0-cottage-player.webp",
@@ -232,8 +246,15 @@
       "sha256": "f70a3852bd2ac354ff57526cb9a8f282a42a4d22577a7603de9ed70cc52fb857",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "1ff9583d7ed0ee3ce8a982dfa97c1d905694cb7ed6922d61e05dfd742b70b2b7",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "41814cab411270d136a8592a9d2616b643a87916c33506f5f9a4baf8763c3f42",
+      "gitBlobSha": "1fb8daa0838318a08c1097ec671baca126054241",
+      "availability": "reproduced",
+      "originalSha256": "f70a3852bd2ac354ff57526cb9a8f282a42a4d22577a7603de9ed70cc52fb857",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V0-library-craft.webp",
@@ -241,8 +262,15 @@
       "sha256": "6f9a9cfa8141b20f2e2f4fc2fc503306c6ec2a6854f0e8dec7afc5db1231553e",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "1b3286c6c2475ed5c9c7ffac969f4c6eabad59cdd59cb0856b1b5eb35d75b960",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "a1370180afe2e0b17173eaf779ff466926ae3a14db378b1fc7279af33f19f11e",
+      "gitBlobSha": "d339e19c11f2762143c8770230226bb9c57a6b71",
+      "availability": "reproduced",
+      "originalSha256": "6f9a9cfa8141b20f2e2f4fc2fc503306c6ec2a6854f0e8dec7afc5db1231553e",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V0-library-medium.webp",
@@ -250,8 +278,15 @@
       "sha256": "3fb919c4c7373c545179cb1d2687911467ec1b4ce9d477c716875976e348c1a2",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "3751766340fffeedb1e7514c3a067a5db12389d719afa852d84119cfe0bf9495",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "7762a4dd97062a77625714637bcceaf133c38c3a20cb664c668024d1766d51cb",
+      "gitBlobSha": "570adf02c068c84b9fb864804a4696296d66940c",
+      "availability": "reproduced",
+      "originalSha256": "3fb919c4c7373c545179cb1d2687911467ec1b4ce9d477c716875976e348c1a2",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V0-library-player.webp",
@@ -259,8 +294,15 @@
       "sha256": "efe116b0542edeb20edacb8c71ac660ffee897e911bf3de9b065e80b335b9c19",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "b51699b4bb931d64cc81027303271b03c616c6dfad2f0065998d60a1b3885a4c",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "23c716069f07235b19d74a6f8e7cf0108756f169cdbc31ffa98e50d7aa8ac6c6",
+      "gitBlobSha": "1090d4dca878f2c7a3e1deb64d0a25b97de1d486",
+      "availability": "reproduced",
+      "originalSha256": "efe116b0542edeb20edacb8c71ac660ffee897e911bf3de9b065e80b335b9c19",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V1-cottage-craft.webp",
@@ -268,8 +310,15 @@
       "sha256": "83ce2645d577f1791a1eb612bed33d1059fb4300fa4abbd4104c625fc38be55e",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "ce9780b8617e8f8715d69d41536e63aa79965d9f336a874e7171428e8aaad606",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "15230123e0abdfe314388ba54964b999c0540af0051fa7729b9d977591bd1481",
+      "gitBlobSha": "1808676b83343b20d9ce4bf138e422261235e745",
+      "availability": "reproduced",
+      "originalSha256": "83ce2645d577f1791a1eb612bed33d1059fb4300fa4abbd4104c625fc38be55e",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V1-cottage-medium.webp",
@@ -277,8 +326,15 @@
       "sha256": "a9f517f37e15606a399b484a3b35620a8e5ac1f67eb4e8aa1bfbff17bd2c550a",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "a0beb08bd3fd1a47aed2c61533a064efc173bd52fe2eb850515fef4661061c9b",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "0f40ca7dde913e32a585fd55e6df64d769d2efe5d6b1d9abc1415c97b7399be6",
+      "gitBlobSha": "15efc5ed183759f94d382fab0ca69eb4eb7e3bbb",
+      "availability": "reproduced",
+      "originalSha256": "a9f517f37e15606a399b484a3b35620a8e5ac1f67eb4e8aa1bfbff17bd2c550a",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V1-cottage-player.webp",
@@ -286,8 +342,15 @@
       "sha256": "f70a3852bd2ac354ff57526cb9a8f282a42a4d22577a7603de9ed70cc52fb857",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "1ff9583d7ed0ee3ce8a982dfa97c1d905694cb7ed6922d61e05dfd742b70b2b7",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "41814cab411270d136a8592a9d2616b643a87916c33506f5f9a4baf8763c3f42",
+      "gitBlobSha": "1fb8daa0838318a08c1097ec671baca126054241",
+      "availability": "reproduced",
+      "originalSha256": "f70a3852bd2ac354ff57526cb9a8f282a42a4d22577a7603de9ed70cc52fb857",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V1-library-craft.webp",
@@ -295,8 +358,15 @@
       "sha256": "6f9a9cfa8141b20f2e2f4fc2fc503306c6ec2a6854f0e8dec7afc5db1231553e",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "1b3286c6c2475ed5c9c7ffac969f4c6eabad59cdd59cb0856b1b5eb35d75b960",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "a1370180afe2e0b17173eaf779ff466926ae3a14db378b1fc7279af33f19f11e",
+      "gitBlobSha": "d339e19c11f2762143c8770230226bb9c57a6b71",
+      "availability": "reproduced",
+      "originalSha256": "6f9a9cfa8141b20f2e2f4fc2fc503306c6ec2a6854f0e8dec7afc5db1231553e",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V1-library-medium.webp",
@@ -304,8 +374,15 @@
       "sha256": "3fb919c4c7373c545179cb1d2687911467ec1b4ce9d477c716875976e348c1a2",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "3751766340fffeedb1e7514c3a067a5db12389d719afa852d84119cfe0bf9495",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "7762a4dd97062a77625714637bcceaf133c38c3a20cb664c668024d1766d51cb",
+      "gitBlobSha": "570adf02c068c84b9fb864804a4696296d66940c",
+      "availability": "reproduced",
+      "originalSha256": "3fb919c4c7373c545179cb1d2687911467ec1b4ce9d477c716875976e348c1a2",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V1-library-player.webp",
@@ -313,8 +390,15 @@
       "sha256": "efe116b0542edeb20edacb8c71ac660ffee897e911bf3de9b065e80b335b9c19",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "b51699b4bb931d64cc81027303271b03c616c6dfad2f0065998d60a1b3885a4c",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "23c716069f07235b19d74a6f8e7cf0108756f169cdbc31ffa98e50d7aa8ac6c6",
+      "gitBlobSha": "1090d4dca878f2c7a3e1deb64d0a25b97de1d486",
+      "availability": "reproduced",
+      "originalSha256": "efe116b0542edeb20edacb8c71ac660ffee897e911bf3de9b065e80b335b9c19",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V2-cottage-craft.webp",
@@ -322,8 +406,15 @@
       "sha256": "0d84f208d08e157e64369d877851c87957230ea89d03ce98633a95ad6756375d",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "11116183756d753b5584f4a1c16517441e97c7cf9cb2836351cb57bfe8d94481",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "bd5c697039b62de0f8f53ff17bddaac7418c62752db229a2e62817383820dd1e",
+      "gitBlobSha": "d836e3f225d02f64356b14fb8ec41463c10a63c4",
+      "availability": "reproduced",
+      "originalSha256": "0d84f208d08e157e64369d877851c87957230ea89d03ce98633a95ad6756375d",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V2-cottage-medium.webp",
@@ -331,8 +422,15 @@
       "sha256": "ee444ccf9bbd83f4326510aa5d14d727710f20abdd96ac8865865171041d84fd",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "ddd80cc4f84fdc86edc3578610f2567eef73a4a0930189f14801c5e6351d08f2",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "c16d7c8b9c867dcbfbbab40da1f2b9d19322e23931c9d15a5667d81959483e54",
+      "gitBlobSha": "596d8891aaad750101853421623d1dbf28dc64df",
+      "availability": "reproduced",
+      "originalSha256": "ee444ccf9bbd83f4326510aa5d14d727710f20abdd96ac8865865171041d84fd",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V2-cottage-player.webp",
@@ -340,8 +438,15 @@
       "sha256": "ff78176190c89841eaffe6b291dac7296c2ed52455fcde2daffb5d9830207037",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "56116bb261598e00fb161004c34b983a9b0f2efd5f20ffde3f90bb3061514e28",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "f53ebf9640d6dd3373365b12ca0e4f66bebe07e71731a72d953add53879a7a0b",
+      "gitBlobSha": "5d8a2a8c803320fbdcbc7562880ec01f6d13d4ea",
+      "availability": "reproduced",
+      "originalSha256": "ff78176190c89841eaffe6b291dac7296c2ed52455fcde2daffb5d9830207037",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V2-library-craft.webp",
@@ -349,8 +454,15 @@
       "sha256": "7306c931bbf0b6f3e377684c60eed12094b192a612b90cc244619ed2af3c9471",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "38bc239b63d7e6400025bb0117188943ed11f11774a15ebfe6b014e6cf4f9436",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "a97f802dbdf8c8e5c8f8ea645b6fa16dd7f72295a9920dd63c05e6e5cea9e563",
+      "gitBlobSha": "54213b2a9b58c8224baaedd1ab132da9ad002c47",
+      "availability": "reproduced",
+      "originalSha256": "7306c931bbf0b6f3e377684c60eed12094b192a612b90cc244619ed2af3c9471",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V2-library-medium.webp",
@@ -358,8 +470,15 @@
       "sha256": "934c885193805e0e5c8a0ca9b2a79167ad48d829810f28d644ddb92818a4fc48",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "6862a5f760beadf1afcac9905790f96258aa68f99c4e6241d6df0cdde49d2bac",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "e954921f06f8ee7b887717ddf34704a13219388b4460d14533586cd589a2f1c6",
+      "gitBlobSha": "e5cfcc8b0df520f5e0b194fbdc784d8f5ff6e34b",
+      "availability": "reproduced",
+      "originalSha256": "934c885193805e0e5c8a0ca9b2a79167ad48d829810f28d644ddb92818a4fc48",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V2-library-player.webp",
@@ -367,8 +486,15 @@
       "sha256": "9aee4c6ffbc30177467d33f854916c0f0c4f0c1b470f2cda91dbb5bc8bca5939",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "3eea855e0256d2a87851b997e2c30983bedfcadda87745aad5d8dc31d809dd47",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "c6c688f7f3d112f17a8166f221e97b858d52060f4877b42978646edb970ae392",
+      "gitBlobSha": "62e5b1d11269c5c4d3d90cde1c2c69fd80af7f13",
+      "availability": "reproduced",
+      "originalSha256": "9aee4c6ffbc30177467d33f854916c0f0c4f0c1b470f2cda91dbb5bc8bca5939",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V3-cottage-craft.webp",
@@ -376,8 +502,15 @@
       "sha256": "0d84f208d08e157e64369d877851c87957230ea89d03ce98633a95ad6756375d",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "11116183756d753b5584f4a1c16517441e97c7cf9cb2836351cb57bfe8d94481",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "bd5c697039b62de0f8f53ff17bddaac7418c62752db229a2e62817383820dd1e",
+      "gitBlobSha": "d836e3f225d02f64356b14fb8ec41463c10a63c4",
+      "availability": "reproduced",
+      "originalSha256": "0d84f208d08e157e64369d877851c87957230ea89d03ce98633a95ad6756375d",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V3-cottage-medium.webp",
@@ -385,8 +518,15 @@
       "sha256": "ee444ccf9bbd83f4326510aa5d14d727710f20abdd96ac8865865171041d84fd",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "ddd80cc4f84fdc86edc3578610f2567eef73a4a0930189f14801c5e6351d08f2",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "c16d7c8b9c867dcbfbbab40da1f2b9d19322e23931c9d15a5667d81959483e54",
+      "gitBlobSha": "596d8891aaad750101853421623d1dbf28dc64df",
+      "availability": "reproduced",
+      "originalSha256": "ee444ccf9bbd83f4326510aa5d14d727710f20abdd96ac8865865171041d84fd",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V3-cottage-player.webp",
@@ -394,8 +534,15 @@
       "sha256": "ff78176190c89841eaffe6b291dac7296c2ed52455fcde2daffb5d9830207037",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "56116bb261598e00fb161004c34b983a9b0f2efd5f20ffde3f90bb3061514e28",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "f53ebf9640d6dd3373365b12ca0e4f66bebe07e71731a72d953add53879a7a0b",
+      "gitBlobSha": "5d8a2a8c803320fbdcbc7562880ec01f6d13d4ea",
+      "availability": "reproduced",
+      "originalSha256": "ff78176190c89841eaffe6b291dac7296c2ed52455fcde2daffb5d9830207037",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V3-library-craft.webp",
@@ -403,8 +550,15 @@
       "sha256": "7306c931bbf0b6f3e377684c60eed12094b192a612b90cc244619ed2af3c9471",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "38bc239b63d7e6400025bb0117188943ed11f11774a15ebfe6b014e6cf4f9436",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "a97f802dbdf8c8e5c8f8ea645b6fa16dd7f72295a9920dd63c05e6e5cea9e563",
+      "gitBlobSha": "54213b2a9b58c8224baaedd1ab132da9ad002c47",
+      "availability": "reproduced",
+      "originalSha256": "7306c931bbf0b6f3e377684c60eed12094b192a612b90cc244619ed2af3c9471",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V3-library-medium.webp",
@@ -412,8 +566,15 @@
       "sha256": "934c885193805e0e5c8a0ca9b2a79167ad48d829810f28d644ddb92818a4fc48",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "6862a5f760beadf1afcac9905790f96258aa68f99c4e6241d6df0cdde49d2bac",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "e954921f06f8ee7b887717ddf34704a13219388b4460d14533586cd589a2f1c6",
+      "gitBlobSha": "e5cfcc8b0df520f5e0b194fbdc784d8f5ff6e34b",
+      "availability": "reproduced",
+      "originalSha256": "934c885193805e0e5c8a0ca9b2a79167ad48d829810f28d644ddb92818a4fc48",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V3-library-player.webp",
@@ -421,8 +582,15 @@
       "sha256": "9aee4c6ffbc30177467d33f854916c0f0c4f0c1b470f2cda91dbb5bc8bca5939",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "3eea855e0256d2a87851b997e2c30983bedfcadda87745aad5d8dc31d809dd47",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "c6c688f7f3d112f17a8166f221e97b858d52060f4877b42978646edb970ae392",
+      "gitBlobSha": "62e5b1d11269c5c4d3d90cde1c2c69fd80af7f13",
+      "availability": "reproduced",
+      "originalSha256": "9aee4c6ffbc30177467d33f854916c0f0c4f0c1b470f2cda91dbb5bc8bca5939",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V4-cottage-craft.webp",
@@ -430,8 +598,15 @@
       "sha256": "0d84f208d08e157e64369d877851c87957230ea89d03ce98633a95ad6756375d",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "11116183756d753b5584f4a1c16517441e97c7cf9cb2836351cb57bfe8d94481",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "bd5c697039b62de0f8f53ff17bddaac7418c62752db229a2e62817383820dd1e",
+      "gitBlobSha": "d836e3f225d02f64356b14fb8ec41463c10a63c4",
+      "availability": "reproduced",
+      "originalSha256": "0d84f208d08e157e64369d877851c87957230ea89d03ce98633a95ad6756375d",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V4-cottage-medium.webp",
@@ -439,8 +614,15 @@
       "sha256": "ee444ccf9bbd83f4326510aa5d14d727710f20abdd96ac8865865171041d84fd",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "ddd80cc4f84fdc86edc3578610f2567eef73a4a0930189f14801c5e6351d08f2",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "c16d7c8b9c867dcbfbbab40da1f2b9d19322e23931c9d15a5667d81959483e54",
+      "gitBlobSha": "596d8891aaad750101853421623d1dbf28dc64df",
+      "availability": "reproduced",
+      "originalSha256": "ee444ccf9bbd83f4326510aa5d14d727710f20abdd96ac8865865171041d84fd",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V4-cottage-player.webp",
@@ -448,8 +630,15 @@
       "sha256": "ff78176190c89841eaffe6b291dac7296c2ed52455fcde2daffb5d9830207037",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "56116bb261598e00fb161004c34b983a9b0f2efd5f20ffde3f90bb3061514e28",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "f53ebf9640d6dd3373365b12ca0e4f66bebe07e71731a72d953add53879a7a0b",
+      "gitBlobSha": "5d8a2a8c803320fbdcbc7562880ec01f6d13d4ea",
+      "availability": "reproduced",
+      "originalSha256": "ff78176190c89841eaffe6b291dac7296c2ed52455fcde2daffb5d9830207037",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V4-library-craft.webp",
@@ -457,8 +646,15 @@
       "sha256": "7306c931bbf0b6f3e377684c60eed12094b192a612b90cc244619ed2af3c9471",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "38bc239b63d7e6400025bb0117188943ed11f11774a15ebfe6b014e6cf4f9436",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "a97f802dbdf8c8e5c8f8ea645b6fa16dd7f72295a9920dd63c05e6e5cea9e563",
+      "gitBlobSha": "54213b2a9b58c8224baaedd1ab132da9ad002c47",
+      "availability": "reproduced",
+      "originalSha256": "7306c931bbf0b6f3e377684c60eed12094b192a612b90cc244619ed2af3c9471",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V4-library-medium.webp",
@@ -466,8 +662,15 @@
       "sha256": "934c885193805e0e5c8a0ca9b2a79167ad48d829810f28d644ddb92818a4fc48",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "6862a5f760beadf1afcac9905790f96258aa68f99c4e6241d6df0cdde49d2bac",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "e954921f06f8ee7b887717ddf34704a13219388b4460d14533586cd589a2f1c6",
+      "gitBlobSha": "e5cfcc8b0df520f5e0b194fbdc784d8f5ff6e34b",
+      "availability": "reproduced",
+      "originalSha256": "934c885193805e0e5c8a0ca9b2a79167ad48d829810f28d644ddb92818a4fc48",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "clay/V4-library-player.webp",
@@ -475,8 +678,15 @@
       "sha256": "9aee4c6ffbc30177467d33f854916c0f0c4f0c1b470f2cda91dbb5bc8bca5939",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "3eea855e0256d2a87851b997e2c30983bedfcadda87745aad5d8dc31d809dd47",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "c6c688f7f3d112f17a8166f221e97b858d52060f4877b42978646edb970ae392",
+      "gitBlobSha": "62e5b1d11269c5c4d3d90cde1c2c69fd80af7f13",
+      "availability": "reproduced",
+      "originalSha256": "9aee4c6ffbc30177467d33f854916c0f0c4f0c1b470f2cda91dbb5bc8bca5939",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "combined/cottage-craft.webp",
@@ -484,8 +694,15 @@
       "sha256": "0196f4d44c317ea172e51873cece14efad91db3d08a676a0dffd841325b456d4",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "524845be2b17562644fc558d1e524b13ea227c442b1bf49073a405fbc4f88aca",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "9ceb12bb624af7d8ddf845f50eaaa7e32d45d5a7273e13d2f4f05511b3d4728f",
+      "gitBlobSha": "dd028d63ee5ed626b1d0a9c917bbbb6124118db1",
+      "availability": "reproduced",
+      "originalSha256": "0196f4d44c317ea172e51873cece14efad91db3d08a676a0dffd841325b456d4",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "combined/cottage-medium.webp",
@@ -493,8 +710,15 @@
       "sha256": "2c60224a32bfddebc55a924f1fefafa225c0c0f8fc6e64b42c4e98455725cc83",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "82b48cc84cb685b3e04b347b3a19126fe4e6033d5f22d068b736b2cae5370fd8",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "bbb1a98f006435555173c1db9d0c6309afe8ec2234ae7cc2358832c0c6e4a984",
+      "gitBlobSha": "b08093e1a97c872539f31829c3a3aef04c7349ff",
+      "availability": "reproduced",
+      "originalSha256": "2c60224a32bfddebc55a924f1fefafa225c0c0f8fc6e64b42c4e98455725cc83",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "combined/cottage-player.webp",
@@ -502,8 +726,15 @@
       "sha256": "0ae45b563be4e7b8c6c019b4dc111dcf46049ca0afe6690ef1d70f420a1509b2",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "8476467a6410b6d29cec381242e0a13fd12e4442964312d80892f605137967bd",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "c81a88282470a5b49336dc01f8e6a854779d861607607b65b9801ec17d673574",
+      "gitBlobSha": "af14e7b347db09517d53ad4843cb5762a546a2ae",
+      "availability": "reproduced",
+      "originalSha256": "0ae45b563be4e7b8c6c019b4dc111dcf46049ca0afe6690ef1d70f420a1509b2",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "combined/library-craft.webp",
@@ -511,8 +742,15 @@
       "sha256": "b9d900d73c934e2fa5ad5efdca1d00ee77ca014b6057a3de3f956b693d8c7e93",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "a0bdb81005141cc3d4380f24a2dffd8605fb101973c6ce2d77d46d94c10d0469",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "112b790cfb3e9bfa6fa8b3e62b0c78282e2f8769eda77c7915ac7b36efce7034",
+      "gitBlobSha": "0c84c92759f2f9164634a4dfcfba614fb069dd7a",
+      "availability": "reproduced",
+      "originalSha256": "b9d900d73c934e2fa5ad5efdca1d00ee77ca014b6057a3de3f956b693d8c7e93",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "combined/library-medium.webp",
@@ -520,8 +758,15 @@
       "sha256": "8b9ad4cd99d9db1a5237b8f2ccaa30d7c1d374b17174eefd748fd0bc57ef4938",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "86e21ace7c68158abf87fabbc621b09936c45fe7cc001e63b845e47ee5ae552f",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "3ce52241193dc6463dbbd41f283f78e8d23c9f9eda6b68cf421669779b72e29d",
+      "gitBlobSha": "ee4b00e59894b8c6df3134fc5eff6b288c94d7fb",
+      "availability": "reproduced",
+      "originalSha256": "8b9ad4cd99d9db1a5237b8f2ccaa30d7c1d374b17174eefd748fd0bc57ef4938",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "combined/library-player.webp",
@@ -529,8 +774,15 @@
       "sha256": "bccf28c6acf85b18d8fff068b2ab08d2ee1c7e2772c9e73c17bee879e300b793",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "922b2bd591cd4e2200f6296269206aad14b63c84cdb85cbc4cc903561a4bfa17",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "b13948322e5a4a11ace15382a841232f1cb9beda2469872c0fb3f25b417fbfcf",
+      "gitBlobSha": "756132419fb1b55a78ab904c92ca6c85283a693d",
+      "availability": "reproduced",
+      "originalSha256": "bccf28c6acf85b18d8fff068b2ab08d2ee1c7e2772c9e73c17bee879e300b793",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "combined-lod/V3-architecture-0.webp",
@@ -842,8 +1094,15 @@
       "sha256": "0196f4d44c317ea172e51873cece14efad91db3d08a676a0dffd841325b456d4",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "524845be2b17562644fc558d1e524b13ea227c442b1bf49073a405fbc4f88aca",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "9ceb12bb624af7d8ddf845f50eaaa7e32d45d5a7273e13d2f4f05511b3d4728f",
+      "gitBlobSha": "dd028d63ee5ed626b1d0a9c917bbbb6124118db1",
+      "availability": "reproduced",
+      "originalSha256": "0196f4d44c317ea172e51873cece14efad91db3d08a676a0dffd841325b456d4",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "combined-lod/cottage-medium.webp",
@@ -851,8 +1110,15 @@
       "sha256": "2c60224a32bfddebc55a924f1fefafa225c0c0f8fc6e64b42c4e98455725cc83",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "82b48cc84cb685b3e04b347b3a19126fe4e6033d5f22d068b736b2cae5370fd8",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "bbb1a98f006435555173c1db9d0c6309afe8ec2234ae7cc2358832c0c6e4a984",
+      "gitBlobSha": "b08093e1a97c872539f31829c3a3aef04c7349ff",
+      "availability": "reproduced",
+      "originalSha256": "2c60224a32bfddebc55a924f1fefafa225c0c0f8fc6e64b42c4e98455725cc83",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "combined-lod/cottage-player.webp",
@@ -860,8 +1126,15 @@
       "sha256": "0ae45b563be4e7b8c6c019b4dc111dcf46049ca0afe6690ef1d70f420a1509b2",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "8476467a6410b6d29cec381242e0a13fd12e4442964312d80892f605137967bd",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "c81a88282470a5b49336dc01f8e6a854779d861607607b65b9801ec17d673574",
+      "gitBlobSha": "af14e7b347db09517d53ad4843cb5762a546a2ae",
+      "availability": "reproduced",
+      "originalSha256": "0ae45b563be4e7b8c6c019b4dc111dcf46049ca0afe6690ef1d70f420a1509b2",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "combined-lod/library-craft.webp",
@@ -869,8 +1142,15 @@
       "sha256": "b9d900d73c934e2fa5ad5efdca1d00ee77ca014b6057a3de3f956b693d8c7e93",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "a0bdb81005141cc3d4380f24a2dffd8605fb101973c6ce2d77d46d94c10d0469",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "112b790cfb3e9bfa6fa8b3e62b0c78282e2f8769eda77c7915ac7b36efce7034",
+      "gitBlobSha": "0c84c92759f2f9164634a4dfcfba614fb069dd7a",
+      "availability": "reproduced",
+      "originalSha256": "b9d900d73c934e2fa5ad5efdca1d00ee77ca014b6057a3de3f956b693d8c7e93",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "combined-lod/library-medium.webp",
@@ -878,8 +1158,15 @@
       "sha256": "8b9ad4cd99d9db1a5237b8f2ccaa30d7c1d374b17174eefd748fd0bc57ef4938",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "86e21ace7c68158abf87fabbc621b09936c45fe7cc001e63b845e47ee5ae552f",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "3ce52241193dc6463dbbd41f283f78e8d23c9f9eda6b68cf421669779b72e29d",
+      "gitBlobSha": "ee4b00e59894b8c6df3134fc5eff6b288c94d7fb",
+      "availability": "reproduced",
+      "originalSha256": "8b9ad4cd99d9db1a5237b8f2ccaa30d7c1d374b17174eefd748fd0bc57ef4938",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "combined-lod/library-player.webp",
@@ -887,8 +1174,15 @@
       "sha256": "bccf28c6acf85b18d8fff068b2ab08d2ee1c7e2772c9e73c17bee879e300b793",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "922b2bd591cd4e2200f6296269206aad14b63c84cdb85cbc4cc903561a4bfa17",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "b13948322e5a4a11ace15382a841232f1cb9beda2469872c0fb3f25b417fbfcf",
+      "gitBlobSha": "756132419fb1b55a78ab904c92ca6c85283a693d",
+      "availability": "reproduced",
+      "originalSha256": "bccf28c6acf85b18d8fff068b2ab08d2ee1c7e2772c9e73c17bee879e300b793",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "combined-lod/sequences.json",
@@ -1451,8 +1745,15 @@
       "sha256": "69615011d0fe3dfed1c7a013f5a47d02357b3d84e5ab327880e52796960b2182",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "681d4984cbd40b8d9d4c7bd6307a1e9f2718ddefa8ec60c4d168423f05e0415a",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "d9bbb37f77eefeddcf259bf76c515ccec6a40e6c96244587169b30aba40ec15f",
+      "gitBlobSha": "04f0f16e1fd8ae6d48996b56471162195f1243cb",
+      "availability": "reproduced",
+      "originalSha256": "69615011d0fe3dfed1c7a013f5a47d02357b3d84e5ab327880e52796960b2182",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "geometry-only/cottage-medium.webp",
@@ -1460,8 +1761,15 @@
       "sha256": "6fa4af768cea4c1f3580fda283f200f7d6d4c336dd538392fe21eaa5dbf7be11",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "4b76e2d1eaeb799bd6bcbddb4043a26690d6ef51d6b1c7ea4841a5a3f71f7ad0",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "853012df041f18a3935df4c436106201e60876e169f5f97e06787d2ca436a98b",
+      "gitBlobSha": "f15dd1b2ea52773649ddb1c2f1a604da329fd933",
+      "availability": "reproduced",
+      "originalSha256": "6fa4af768cea4c1f3580fda283f200f7d6d4c336dd538392fe21eaa5dbf7be11",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "geometry-only/cottage-player.webp",
@@ -1469,8 +1777,15 @@
       "sha256": "31833085127e01f6e383fa9cbe12df082d4da4a6c44d9b498ea9d3cd277b7f43",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "adea691fcf6cdf94906dea1a89c373b397fdd3a14baaa56fb4141d5d6b5d1b64",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "1d41126045de3a39644b3ab4b5c1c50f2b4aa76cc3bff0c3d94c2d34c7147c29",
+      "gitBlobSha": "a57eba4a101d9facae411e8b198373bd7f1d1a2f",
+      "availability": "reproduced",
+      "originalSha256": "31833085127e01f6e383fa9cbe12df082d4da4a6c44d9b498ea9d3cd277b7f43",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "geometry-only/library-craft.webp",
@@ -1478,8 +1793,15 @@
       "sha256": "512124b12fb68f266f23917721da371ca9c924019c0f5f36ffcbdd15bd1541ad",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "96c2b9bc6d46dba15ea498f5b4aadb3a4c4499247fbf0162ad62303debcd509d",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "c04553e96b635564f091f7a1e786b77bbf63afae4c03fbcd1f31604af332c769",
+      "gitBlobSha": "4a5d940d4dfe4cca7f0a51726246e6f3ae70c7fe",
+      "availability": "reproduced",
+      "originalSha256": "512124b12fb68f266f23917721da371ca9c924019c0f5f36ffcbdd15bd1541ad",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "geometry-only/library-medium.webp",
@@ -1487,8 +1809,15 @@
       "sha256": "dadeed0459decd863930a0f5de81e037d373854001f950bc7a7907b27d89fece",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "fd98ad535166a27adee74b0670d31625a109320dc82a16cfcf0d91df6cd8b62b",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "61c07b1ed3c9ab4a58e3324c78190468c31c936687eb9fb6e1f3cd240535a5ab",
+      "gitBlobSha": "d7590e9387e7ac7755920761ec69d0c2438805ce",
+      "availability": "reproduced",
+      "originalSha256": "dadeed0459decd863930a0f5de81e037d373854001f950bc7a7907b27d89fece",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "geometry-only/library-player.webp",
@@ -1496,14 +1825,21 @@
       "sha256": "ddf376d2932575762ce1b05244f0c20b4224ee8f8a9baa6054c9a65507768e86",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "df27c8a19d3a1ae41ec0cf73acfba8b056dc33b1f19b04926b1563e67d305b5a",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "1c00daf2844ca7a54f90dd98c049caf3eec9b1db7fa071652bdad2925a3a2c8b",
+      "gitBlobSha": "f54456e371ebcced689b1310582d420fd396b0d9",
+      "availability": "reproduced",
+      "originalSha256": "ddf376d2932575762ce1b05244f0c20b4224ee8f8a9baa6054c9a65507768e86",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "index.html",
-      "bytes": 155407,
-      "sha256": "0ea826332bbaddeed14b74ab79151fb80f9424e97611677ba6d05b14405e03d0",
-      "gitBlobSha": "29d1d5c7e0ddc0c2e23d6e3cba71de75b6405d6b",
+      "bytes": 158803,
+      "sha256": "e0408cbf4633aea5fd9a99fa50edb2e4d6092eca8ceafc6024088f32a83984d6",
+      "gitBlobSha": "ed083445993efff70f10d285a94236eab1730932",
       "availability": "retained or updated document"
     },
     {
@@ -1512,8 +1848,15 @@
       "sha256": "737bd770816d53a5787573e330e1a8f763fe0f01ddf186466f5a8119ba478593",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "6108d10a91e9ef26ebeb1133af786ed3be4ebe975e139cdff0080141ba9b68ac",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "5025a72dda360323f9d90afccf73a144aa4fc17c809ccb5e222796c54ca4bdd4",
+      "gitBlobSha": "da8d14503df3c4a4ce50b7bb62b57808007a1c3b",
+      "availability": "reproduced",
+      "originalSha256": "737bd770816d53a5787573e330e1a8f763fe0f01ddf186466f5a8119ba478593",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "material-only/cottage-medium.webp",
@@ -1521,8 +1864,15 @@
       "sha256": "c8df48e4cf41cc1a143e958404860503c8fe2537d45664eaf918c5aec50b359d",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "b5175dfade965a18b4c2dd25032b96aed7f618012dc2c6f8c34a2656b4d6fa75",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "2f5e41eef78712bf43e50c809deea4c597cdf22836a83e9d203acb7983bb28ff",
+      "gitBlobSha": "7f0a8c3a3dfc52f1af15707a7d5d5080c4f40d1c",
+      "availability": "reproduced",
+      "originalSha256": "c8df48e4cf41cc1a143e958404860503c8fe2537d45664eaf918c5aec50b359d",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "material-only/cottage-player.webp",
@@ -1530,8 +1880,15 @@
       "sha256": "244f8d3252cf4a56f543b7f4b30b13cb417d4b83f8f8111c13f776933c6bd097",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "bef511d21892900a0865ded35350d6e5c6f2532ceb1aa138a908d56510fe44fe",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "692b9027ae1868153c1c95714f98069caf656555a0847bf30656e191ac60e075",
+      "gitBlobSha": "6fccf9496da8b22e22f8defa58cc15081bc3037f",
+      "availability": "reproduced",
+      "originalSha256": "244f8d3252cf4a56f543b7f4b30b13cb417d4b83f8f8111c13f776933c6bd097",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "material-only/library-craft.webp",
@@ -1539,8 +1896,15 @@
       "sha256": "980d22a3a61d722d5e72035afc70bcd4a0f5baf80ae2f2b27b7f89e2f87ea669",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "3bb1d8bf371f754b0af128395d29362a91b255cdb383873dfaa4aae70c41f5f7",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "2ba13b4eb7949fe64686e9e022661c4fd7c3c9ef8c2b10ec0079ee38e5983a8c",
+      "gitBlobSha": "883753c15bb714f11621ea0cde3e84cf7afdb35a",
+      "availability": "reproduced",
+      "originalSha256": "980d22a3a61d722d5e72035afc70bcd4a0f5baf80ae2f2b27b7f89e2f87ea669",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "material-only/library-medium.webp",
@@ -1548,8 +1912,15 @@
       "sha256": "03ef77a95b8bdff3efae4d91d88e7a4339b9528a47a32e4418ea1ef295d6e1df",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "606eef844d78cbadd00c85d1ea5ccc800e5e2e84034b70899edfc502390810d9",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "23ca8a81ff7b8bce71fbf699ca4ad849428484afb2d3a7652286af6c247c472e",
+      "gitBlobSha": "36e2fb01b73c36cfe6020862f263084c67bddd7c",
+      "availability": "reproduced",
+      "originalSha256": "03ef77a95b8bdff3efae4d91d88e7a4339b9528a47a32e4418ea1ef295d6e1df",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "material-only/library-player.webp",
@@ -1557,8 +1928,15 @@
       "sha256": "33a4d890dde7c11cffa87a44c61cbce804005faf7ccaad976ca155178c938c77",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "2552e2e36f82321ccd8d95a682cce821dc8f6d25a0a1f21717f0be757aa0bb1c",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "c5b39c44f9318cbe0561b782bc1a942ee6d586b8a33d667bcb48ea5e13f237d6",
+      "gitBlobSha": "5b8a2eaa7361de575f4c63563816b5ae6b8c53f1",
+      "availability": "reproduced",
+      "originalSha256": "33a4d890dde7c11cffa87a44c61cbce804005faf7ccaad976ca155178c938c77",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V0-cottage-craft.webp",
@@ -1566,8 +1944,15 @@
       "sha256": "581774deaf40b553f65e7d3aeb1aef8bbca620f571371fff9bcf17e1d50a3c1d",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "613112396a863ed386f21e11a4ce9e596836b34f01d2bf8d088ca9d61c225fc5",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "cb0e4c63d93f41e72cd3edb9b4dcb71e2c07a0c29f654dda53b86969464181e1",
+      "gitBlobSha": "daead7ebdb199b23bd4ed055252f4f75c052c358",
+      "availability": "reproduced",
+      "originalSha256": "581774deaf40b553f65e7d3aeb1aef8bbca620f571371fff9bcf17e1d50a3c1d",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V0-cottage-medium.webp",
@@ -1575,8 +1960,15 @@
       "sha256": "0d7c79b07856ada4253e397deb8a3044fef0507a1a1f8b9027d10736bcf6dba5",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "0bb3d817453c6edf890aa3cdf7c93460040c1526f3dbf3f1dafd4d3dbf00b771",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "fd37a038444362b609580f2834afcaa947581f62770626eb2f48edb11e0e5f38",
+      "gitBlobSha": "c3c80113741485b8e79f159d52ccf3e260a8bee5",
+      "availability": "reproduced",
+      "originalSha256": "0d7c79b07856ada4253e397deb8a3044fef0507a1a1f8b9027d10736bcf6dba5",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V0-cottage-player.webp",
@@ -1584,8 +1976,15 @@
       "sha256": "6661994e8aae67d49cba2a676fdf34b65c49d6e2b3de1f0122084520b76e7739",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "55cc29d8925eb26c0a0d24f468f06c7c089c81ebda3cbac4847783967b24339b",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "07921a720f1aad928a80f5684f1abe80788a62ef51bb23b3bcc43dc91ac8513e",
+      "gitBlobSha": "dbec7ddb0b9b476df82ea17bdf4326448f8e3a56",
+      "availability": "reproduced",
+      "originalSha256": "6661994e8aae67d49cba2a676fdf34b65c49d6e2b3de1f0122084520b76e7739",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V0-library-craft.webp",
@@ -1593,8 +1992,15 @@
       "sha256": "2d894d72f08629b5cd3c1f253d866da793d38c15ac8bfaf153e149779096a231",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "59c2f0e9e723df10aceb6e39d6686d86d9dacdcc24181bb8bc86e75eb1a77e47",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "55dd1e041884cbbd880b16e80648de45bb35309c06e01a1fa9f57b6d68e7cfa6",
+      "gitBlobSha": "4e364fb587b0740652cb9e3224ef7a4816832240",
+      "availability": "reproduced",
+      "originalSha256": "2d894d72f08629b5cd3c1f253d866da793d38c15ac8bfaf153e149779096a231",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V0-library-medium.webp",
@@ -1602,8 +2008,15 @@
       "sha256": "ad342e980ffc6c4d5d2d694f92b5b3dfe3705725b0e9a884800e7f49312bdcfb",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "2fc3f2dc2fe3a76728402d7d96204ffa0d61ac96bdf4541aaacceec2be4ebcbd",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "47199670be56525c0c850582d9348b96235c507e67b501c2cfdd075b9537cba5",
+      "gitBlobSha": "162bceb04b101e179eee66c692722e05a9c17ca0",
+      "availability": "reproduced",
+      "originalSha256": "ad342e980ffc6c4d5d2d694f92b5b3dfe3705725b0e9a884800e7f49312bdcfb",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V0-library-player.webp",
@@ -1611,8 +2024,15 @@
       "sha256": "b024d124f98d035d91431c8c23bc215652197e8f02ec6b04a21b368eef8590ca",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "909c2eee05dee3ccb4a6ae160d1378312015c2d7e060a93e7ee2ab35fc3317d3",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "190256b2972a3cb8c33a2ae727b2531a858fc77b84c2efb8316cae99cb83dd05",
+      "gitBlobSha": "0b9a860bf6013632818187886a77ee156c763ea9",
+      "availability": "reproduced",
+      "originalSha256": "b024d124f98d035d91431c8c23bc215652197e8f02ec6b04a21b368eef8590ca",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V1-cottage-craft.webp",
@@ -1620,8 +2040,15 @@
       "sha256": "2cd23316f0836df3f9112ebd26c3dc55188859780eb91a8dc92383dc8e356460",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "e548fa3873a930cd1dccbfd63c42f259f23d05fe3df8f562766ade3c5c8c062d",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "0dfe31e08a259183e2a1e4f6cb4f0a126faf93584b95f603bf583eaf0fe49237",
+      "gitBlobSha": "d4caa9114315e26881f633a3e79c3ac4f5c2f8c2",
+      "availability": "reproduced",
+      "originalSha256": "2cd23316f0836df3f9112ebd26c3dc55188859780eb91a8dc92383dc8e356460",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V1-cottage-medium.webp",
@@ -1629,8 +2056,15 @@
       "sha256": "9df2ae6ad25be4ecad0bf6002ec8e948acc2bb201cfa2959409871dede7f6567",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "5a5695823cb0c0c595b8832cfb0d6735853e14a819ff2e6e579046658ee6647c",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "314af55fc50ab006866e62745758debbced749d26882e4d5d868d8513086f72c",
+      "gitBlobSha": "4dfe46f5d6d010968794f846e4fe3edba1f95c51",
+      "availability": "reproduced",
+      "originalSha256": "9df2ae6ad25be4ecad0bf6002ec8e948acc2bb201cfa2959409871dede7f6567",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V1-cottage-player.webp",
@@ -1638,8 +2072,15 @@
       "sha256": "8bae45d5e55c3cdf2c39a07b311bc40f2918bc573e8b663b31e996ada24822e5",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "2cfcf54149815a736aa812950cba30973cb51a5cbab64e7366ed3fa66ee572b7",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "3777fa1f58495c05ce1915ae7cf908171aedc89d9ddb32c7ef3edc25b0b44267",
+      "gitBlobSha": "e1aebe21bd27f82fb9ff13031d46daa340741c4a",
+      "availability": "reproduced",
+      "originalSha256": "8bae45d5e55c3cdf2c39a07b311bc40f2918bc573e8b663b31e996ada24822e5",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V1-library-craft.webp",
@@ -1647,8 +2088,15 @@
       "sha256": "a73fafd92ae9b65533d1ba5a163de8b0f65bcf316563c32eebc42478dd7de35c",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "ae91cb3251dcf96670ab52f504ad5ff141f38c58bbc5b4ec988e6425d1631ff4",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "b3b377164854a64d77a0fe45fb52672d11f21ec8a29cf8b7d295f7399b5543b1",
+      "gitBlobSha": "e1dac32d69e61017846dff0a276b310383dcc5b8",
+      "availability": "reproduced",
+      "originalSha256": "a73fafd92ae9b65533d1ba5a163de8b0f65bcf316563c32eebc42478dd7de35c",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V1-library-medium.webp",
@@ -1656,8 +2104,15 @@
       "sha256": "84d99857e3368c4c37e66015ff01907b17f3df5f1d80241437d5d5365e375fe1",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "b93f54ff77b7460b113c8722b07ea071b4dde57c324baede02a01b21b76bc892",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "e9d80d7712b0618ea95f156bc2dc94cf84dd7729ae47e8f311082833966f1dca",
+      "gitBlobSha": "d540bbafb8e6cf5536bd09acf8f11a4e39b2f303",
+      "availability": "reproduced",
+      "originalSha256": "84d99857e3368c4c37e66015ff01907b17f3df5f1d80241437d5d5365e375fe1",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V1-library-player.webp",
@@ -1665,8 +2120,15 @@
       "sha256": "c3b6116c1d1f37fd83be37843f1d04c766999c828b6ca5d5ca9c9bb1ff3ec37d",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "d4579e2f99b17f13ace57bde4c2b13587362267b53a2acc70c7974074d6275b1",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "871698e6ba70f4c83d6a742166ff7dfc5dc4fcc1f470a925ecab8a5fea75e166",
+      "gitBlobSha": "bda5eed325eb14867d6135fef670704fc264a9f7",
+      "availability": "reproduced",
+      "originalSha256": "c3b6116c1d1f37fd83be37843f1d04c766999c828b6ca5d5ca9c9bb1ff3ec37d",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V2-cottage-craft.webp",
@@ -1674,8 +2136,15 @@
       "sha256": "5c7a7fac6bbd248c32035ce8f2a3c5ed683fc1b9008585395c2d8d8621bcce8f",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "b7d2c8d55a93413f2fe835ed31e10fe1fd1f5c53b62a807106250738498ede27",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "862f00dc82e577254dce1529d26a83b75982ab9721d647c05bd1f212007e95d5",
+      "gitBlobSha": "f13d4119076a150eda8912131a94d8a473cc88d7",
+      "availability": "reproduced",
+      "originalSha256": "5c7a7fac6bbd248c32035ce8f2a3c5ed683fc1b9008585395c2d8d8621bcce8f",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V2-cottage-medium.webp",
@@ -1683,8 +2152,15 @@
       "sha256": "dd4161469e139160f08773d7bb2a0a0ca4c027ca8308bfd750ad66071ee2749b",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "59b978f690a8a0580b0fc6f6b464873fd8c9f7b18840f2228a7cf282a4d3e019",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "1d8256190abdfb4e8fb313298a121aebcafabba65e7e0c5e88bbf5184245fdc0",
+      "gitBlobSha": "d603c5d0f6bf427ee62131f1efa83af73ec3e35d",
+      "availability": "reproduced",
+      "originalSha256": "dd4161469e139160f08773d7bb2a0a0ca4c027ca8308bfd750ad66071ee2749b",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V2-cottage-player.webp",
@@ -1692,8 +2168,15 @@
       "sha256": "86f3f11c4559d1e04427a57439a19ee892adc5e16be94dad72bfc8893e4fc5c8",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "b50242c01115d40834a912e5505e6536be6a79c8575c28565eed14bbc4218618",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "6ad14aa04b7bc2b1c43ddab331ac1005fc64ec6702fd3890250bf447384aab7f",
+      "gitBlobSha": "6103265907575b64d120b92bc6cecc49f710bb09",
+      "availability": "reproduced",
+      "originalSha256": "86f3f11c4559d1e04427a57439a19ee892adc5e16be94dad72bfc8893e4fc5c8",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V2-library-craft.webp",
@@ -1701,8 +2184,15 @@
       "sha256": "a04a1c77ac80661460bab7bb39ffefed6c3063a824003b82bf3d54dbf7160c58",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "983d7c8c1fdb1d868545183f43b5cc009a452a68cc97c0dd37e58a97d56e4c9e",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "e942c304af6f7de7d988e609510398e692cc6fd734f5e019f882c9f1c76baeb7",
+      "gitBlobSha": "52c5bf883f40a44b43f2dd1998043990bdbe6f16",
+      "availability": "reproduced",
+      "originalSha256": "a04a1c77ac80661460bab7bb39ffefed6c3063a824003b82bf3d54dbf7160c58",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V2-library-medium.webp",
@@ -1710,8 +2200,15 @@
       "sha256": "8ed63b90ac0839e2232b8eb8bca55d623e76df3235242c65e353f269370ba36c",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "6caf3b162f1a2e092903ed37d9cb4c497ebb9419b0f1b4b958d9f5d7c38afd93",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "790384d05b76b3549064d9434502f619afb1835f51a4d5479d81ebe80f7e1818",
+      "gitBlobSha": "2255a89736e2396d37def218ca7007067eeb0d00",
+      "availability": "reproduced",
+      "originalSha256": "8ed63b90ac0839e2232b8eb8bca55d623e76df3235242c65e353f269370ba36c",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V2-library-player.webp",
@@ -1719,8 +2216,15 @@
       "sha256": "a90c63085d34e78187ce7caf807c1fdd3e3af930060304a5fbe721eddf3ed10f",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "2b2f976d56e2b4c4be8feb0fbc7ae9001feac4bc89eb2fd2240ae9d44ae3b65c",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "634f4350b7e08f0c0d51a3c791ffb5b0aceaf0c97023536c6a58efa34f5d3a01",
+      "gitBlobSha": "01708f09905356909627d573a51f86e7b4597281",
+      "availability": "reproduced",
+      "originalSha256": "a90c63085d34e78187ce7caf807c1fdd3e3af930060304a5fbe721eddf3ed10f",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V3-cottage-craft.webp",
@@ -1728,8 +2232,15 @@
       "sha256": "e8cfaf873747016dfc089aecc2e8c8db5e5ead40bf802078a1abf58e58a7867f",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "5297a926fa42c9b594296760bac65915e29ce30774c87a8a0d1126f7ddf0dea0",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "ca2781016577a801cf7b7e313cbdfbc47e09a463a4e520c25e5eb5e74b5b96e7",
+      "gitBlobSha": "386b4e296ed822d075790065db9694bbe559a32e",
+      "availability": "reproduced",
+      "originalSha256": "e8cfaf873747016dfc089aecc2e8c8db5e5ead40bf802078a1abf58e58a7867f",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V3-cottage-medium.webp",
@@ -1737,17 +2248,31 @@
       "sha256": "a378ab53012214711132bfdd7a96cf0b9190585d5dd951b956d2b865f4c1dd7d",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "440673e3c9ab118ce4cc6e5c1e2a0167a9c28d77bbc8b521d529cc294865f16e",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "5b901ab13f79d50eecc127683cce661592c86c14a3d6f2af9fefc037523c65c4",
+      "gitBlobSha": "d38191991959a178e8481eef4054726c858ad7ac",
+      "availability": "reproduced",
+      "originalSha256": "a378ab53012214711132bfdd7a96cf0b9190585d5dd951b956d2b865f4c1dd7d",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V3-cottage-player.webp",
-      "bytes": 192462,
-      "sha256": "98b3c108e0f3d33149540edbee5d0f04a306559fa85abab45b508438a6089118",
+      "bytes": 203944,
+      "sha256": "958e5da850b78299477734091712338be6e52702bcafd50d4d8a841f5fd1209e",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "3a322a7f94bdb08103643763bba91d3fd548abd5b1cd094d20d8ff93ecaa953f",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "325b182afdd8ecadfdb30c3a42c91c366db2948e72e56b65c070a835a446a77a",
+      "gitBlobSha": "fedb0fc2c60fb818f6155d4a2bdff93b50eaa518",
+      "availability": "reproduced",
+      "originalSha256": "98b3c108e0f3d33149540edbee5d0f04a306559fa85abab45b508438a6089118",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V3-library-craft.webp",
@@ -1755,8 +2280,15 @@
       "sha256": "032a7f2fc515ea4372702adf343c740dc0c4ee8784cc12b7199e396a8204c51f",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "da775fded5d644d8f9b66750f811df296da55502febe001e728c99650eeb5cee",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "83b65b5351a9a08acfdd2ed3edb27c152eaf3a355c6c2fe1cf38ab3545b2fdbe",
+      "gitBlobSha": "6a600992eb7ff0dc5cba2826618f8650f0ae3e23",
+      "availability": "reproduced",
+      "originalSha256": "032a7f2fc515ea4372702adf343c740dc0c4ee8784cc12b7199e396a8204c51f",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V3-library-medium.webp",
@@ -1764,8 +2296,15 @@
       "sha256": "98b3c108e0f3d33149540edbee5d0f04a306559fa85abab45b508438a6089118",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "3a322a7f94bdb08103643763bba91d3fd548abd5b1cd094d20d8ff93ecaa953f",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "fa9acc2e5690d15fa168705768e8981e9f289437b299f3064782e9278be712c9",
+      "gitBlobSha": "a1da5b94a3504e8073203138dfe8e4700410ceb6",
+      "availability": "reproduced",
+      "originalSha256": "98b3c108e0f3d33149540edbee5d0f04a306559fa85abab45b508438a6089118",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V3-library-player.webp",
@@ -1773,8 +2312,15 @@
       "sha256": "5d84f30f67b0710e6633bd2ab4cb9da3f8a1521ab25dfd846e2a504c86038375",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "44661ebaad5ca2d07291f814ea850921b42ff80787d13bd693682b679ce67051",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "c85f31859eb48d678330c363d5d2a5151b34ff4833683d1448f2c788808bfa89",
+      "gitBlobSha": "a4b748f2d3de6ac2c3ece4ba09da2c54e116f512",
+      "availability": "reproduced",
+      "originalSha256": "5d84f30f67b0710e6633bd2ab4cb9da3f8a1521ab25dfd846e2a504c86038375",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V4-cottage-craft.webp",
@@ -1782,8 +2328,15 @@
       "sha256": "e8cfaf873747016dfc089aecc2e8c8db5e5ead40bf802078a1abf58e58a7867f",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "5297a926fa42c9b594296760bac65915e29ce30774c87a8a0d1126f7ddf0dea0",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "ca2781016577a801cf7b7e313cbdfbc47e09a463a4e520c25e5eb5e74b5b96e7",
+      "gitBlobSha": "386b4e296ed822d075790065db9694bbe559a32e",
+      "availability": "reproduced",
+      "originalSha256": "e8cfaf873747016dfc089aecc2e8c8db5e5ead40bf802078a1abf58e58a7867f",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V4-cottage-medium.webp",
@@ -1791,8 +2344,15 @@
       "sha256": "a378ab53012214711132bfdd7a96cf0b9190585d5dd951b956d2b865f4c1dd7d",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "440673e3c9ab118ce4cc6e5c1e2a0167a9c28d77bbc8b521d529cc294865f16e",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "5b901ab13f79d50eecc127683cce661592c86c14a3d6f2af9fefc037523c65c4",
+      "gitBlobSha": "d38191991959a178e8481eef4054726c858ad7ac",
+      "availability": "reproduced",
+      "originalSha256": "a378ab53012214711132bfdd7a96cf0b9190585d5dd951b956d2b865f4c1dd7d",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V4-cottage-player.webp",
@@ -1800,8 +2360,15 @@
       "sha256": "958e5da850b78299477734091712338be6e52702bcafd50d4d8a841f5fd1209e",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "b4a64e56c3598213f7818afafb149fc278a764c5be17f02ecea78a97effe67f0",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "325b182afdd8ecadfdb30c3a42c91c366db2948e72e56b65c070a835a446a77a",
+      "gitBlobSha": "fedb0fc2c60fb818f6155d4a2bdff93b50eaa518",
+      "availability": "reproduced",
+      "originalSha256": "958e5da850b78299477734091712338be6e52702bcafd50d4d8a841f5fd1209e",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V4-library-craft.webp",
@@ -1809,8 +2376,15 @@
       "sha256": "032a7f2fc515ea4372702adf343c740dc0c4ee8784cc12b7199e396a8204c51f",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "da775fded5d644d8f9b66750f811df296da55502febe001e728c99650eeb5cee",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "83b65b5351a9a08acfdd2ed3edb27c152eaf3a355c6c2fe1cf38ab3545b2fdbe",
+      "gitBlobSha": "6a600992eb7ff0dc5cba2826618f8650f0ae3e23",
+      "availability": "reproduced",
+      "originalSha256": "032a7f2fc515ea4372702adf343c740dc0c4ee8784cc12b7199e396a8204c51f",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V4-library-medium.webp",
@@ -1818,8 +2392,15 @@
       "sha256": "98b3c108e0f3d33149540edbee5d0f04a306559fa85abab45b508438a6089118",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "3a322a7f94bdb08103643763bba91d3fd548abd5b1cd094d20d8ff93ecaa953f",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "fa9acc2e5690d15fa168705768e8981e9f289437b299f3064782e9278be712c9",
+      "gitBlobSha": "a1da5b94a3504e8073203138dfe8e4700410ceb6",
+      "availability": "reproduced",
+      "originalSha256": "98b3c108e0f3d33149540edbee5d0f04a306559fa85abab45b508438a6089118",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "neutral/V4-library-player.webp",
@@ -1827,8 +2408,15 @@
       "sha256": "5d84f30f67b0710e6633bd2ab4cb9da3f8a1521ab25dfd846e2a504c86038375",
       "width": 915,
       "height": 412,
-      "decodedPixelSha256": "44661ebaad5ca2d07291f814ea850921b42ff80787d13bd693682b679ce67051",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "decodedPixelSha256": "c85f31859eb48d678330c363d5d2a5151b34ff4833683d1448f2c788808bfa89",
+      "gitBlobSha": "a4b748f2d3de6ac2c3ece4ba09da2c54e116f512",
+      "availability": "reproduced",
+      "originalSha256": "5d84f30f67b0710e6633bd2ab4cb9da3f8a1521ab25dfd846e2a504c86038375",
+      "provenance": {
+        "record": "RECOVERY_CAPTURES.json",
+        "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+        "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08"
+      }
     },
     {
       "path": "phone-results/README.md",
