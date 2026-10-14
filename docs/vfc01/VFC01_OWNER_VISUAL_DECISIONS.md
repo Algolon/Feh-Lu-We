@@ -1,5 +1,7 @@
 # VFC-01 — owner visual decisions
 
+**Current owner review:** Decision 02 below covers Portugal A/B, Library C and Geometry vs Materials D. **OWNER APPROVED — NO IMPLEMENTATION AUTHORIZED** means approval of the rejection/deferral findings, not approval of the experimental candidate. Decision 01 is retained unchanged below as history. DPR, dynamic LOD and real-device performance remain undecided.
+
 ## Owner Decision 01 — Portugal Cottage & Terrace
 
 - Date: 14 October 2026.
@@ -94,3 +96,54 @@ This owner decision supersedes preliminary agent adoption/testing recommendation
 VFC-01 remains **RESEARCH COMPLETE / PARTIAL EVIDENCE / OWNER REVIEW PENDING** overall: Portugal A/B is now reviewed, while the remaining review scopes are undecided. Evidence completeness is unchanged (130/201 expected files present; 71 missing). This new decision document is outside the original 201-file evidence inventory.
 
 Only this decision record, its index reference and necessary current-manifest bookkeeping are authorized by this documentation step. No follow-up package starts automatically.
+
+---
+
+## Owner Decision 02 — Geometry & Materials
+
+- Date: 14 October 2026.
+- Decision source: the owner's explicit VFC-R01 Owner Decision 02 in this session.
+- Status: **OWNER APPROVED — NO IMPLEMENTATION AUTHORIZED**.
+- Scope: Portugal A/B, Library C and Geometry vs Materials D.
+- Reviewed evidence checkpoint: `631cca1f087a79b1b87cec6e59fd0c3a3d54aaa5`; Decision 01 documentation checkpoint: `155e0d0034d1ab0bcc7d82738ae141a76e6f2e5f`.
+- Original calibration baseline: `ae2a036e783400355c8d137f24e16c33bb1a8323`; research evidence is separate from current production.
+
+Evidence: the Portugal images linked in Decision 01; [Library baseline](compare/baseline-library-player.webp) and [selected equal-DPR](compare/selected-equal-library-player.webp); [V1 materials](material-only/cottage-player.webp), [V2 geometry](geometry-only/cottage-player.webp), [V3 combined](combined/cottage-player.webp), [V0 clay](clay/V0-cottage-player.webp), [V2 clay](clay/V2-cottage-player.webp) and neutral controls in the [review index](README.md).
+
+### Overall decision
+
+**REJECT** the evaluated VFC geometry/material candidates as production upgrades.
+
+The perceptual improvement at normal gameplay distance is insufficient to justify further dedicated development investment.
+
+### Specific decisions
+
+- **Portugal A/B: REJECT** the evaluated candidate. Constructional plausibility improves, but overall visual quality improves insufficiently.
+- **Library C: REJECT** the evaluated candidate. No meaningful visual improvement is noticeable to the owner.
+- **Geometry refinement: DEFER** further investment in retroactive detailing of existing assets.
+- **Material treatment: REJECT** the tested broad material package as a production upgrade. Individual unassessed techniques remain undecided.
+- **Portugal terrace floor: REJECT** the VFC treatment explicitly. Preserve the existing production appearance and its material/colour identity.
+- **Construction coherence and UV/material orientation: RETAIN AS DESIGN LEARNINGS**, without authorizing implementation.
+- **Broad bevel, PBR and normal-map adoption: NOT JUSTIFIED** by current evidence.
+
+### Strategic implication
+
+Future visual development must prioritize demonstrable improvement in overall scene quality, perceptual readability and ART-01 coherence over additional geometric or material complexity.
+
+Technical refinement alone is not sufficient evidence of player-facing value.
+
+### Approval boundary
+
+This decision authorizes documentation of the findings only.
+
+No source changes, new experiments, production adoption, merge or deployment are authorized.
+
+DPR, dynamic LOD and real-device performance remain separate, undecided topics.
+
+### Relationship to prior records
+
+Decision 02 extends Decision 01 to Library C and Geometry vs Materials D. It retains the Portugal rejection, floor constraint and deferred geometry investment. Rejection of the broad material package does not decide every individual unassessed technique; retained design learnings do not become approved implementation standards.
+
+For these evaluated candidates, this owner decision supersedes preliminary agent recommendations in the historical reports. Reports, experiments, measurements and media remain preserved. No E01/E02/M01/D01 package or production work is started by this record.
+
+The research closeout remains **RESEARCH COMPLETE / PARTIAL EVIDENCE / OWNER REVIEW PENDING** overall, with A/B/C/D now reviewed and the separate remaining topics undecided. Original expected evidence completeness remains 130/201 present and 71 missing; this decision record is outside that inventory.
