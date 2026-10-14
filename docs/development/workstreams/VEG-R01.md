@@ -27,3 +27,7 @@
 - GEO conservatory costs are inherited, not charged to VEG. Record paired increments and new overshoots separately.
 - Finish matched moving captures, camera/instance consistency, relative budget assessment and recommendation; if no candidate clears the acceptance gates, retain baseline and report the blocker.
 - Commit/push only this branch; no merge or deployment authorized.
+
+## Recovery checkpoint — 14 October 2026
+
+Remote `5a6df26` and old local `b484ebc` have identical trees. Recovered additional uncommitted moving captures for all four profiles on both renderer paths, tests and packaging scripts without changing the original worktree. Independent working copy resumes the existing remote branch. Production inspected at `5af9779` (PB01/TUT-R01/SKY-C01 integrated). Fresh typecheck, 286 units and build pass. Default remains baseline; evidence assessment and current-production compatibility verification continue. See `docs/veg-r01/recovery/checkpoint.json`. No merge/deploy.
