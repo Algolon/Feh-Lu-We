@@ -1,0 +1,163 @@
+{
+  "conditions": "Software WebGL2; low/high coarse pointer; 412x733 DPR1; dusk 0.85; torch off. Pose inferred from visible BOSLUST lantern/lock; NOT matched to owner camera. Practical-only deliberately zeros both globals as a hypothesis demonstration, NOT a reproduced native fault.",
+  "bundleSHA256": {
+    "index-BTjYMRwu.js": "cd33cd7b1584507d772a37d4add13f19893243b3c3c318beb870aeed7523859e",
+    "index-knM8LFKd.js": "6ae5905b544dae8087f957245380f17079f8cf7cb0514cf9c474345cd771c70d"
+  },
+  "rows": [
+    {
+      "file": "owner-nearby-baseline-normal-low.jpg",
+      "system": "baseline",
+      "diag": "normal",
+      "quality": "low",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 13.5,
+        "yaw": 0.5759586531581288,
+        "pitch": 0
+      },
+      "hemi": 1.1066399999999998,
+      "sun": 1.5240712499999998,
+      "calls": 77,
+      "triangles": 171491
+    },
+    {
+      "file": "owner-nearby-baseline-normal-high.jpg",
+      "system": "baseline",
+      "diag": "normal",
+      "quality": "high",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 13.5,
+        "yaw": 0.5759586531581288,
+        "pitch": 0
+      },
+      "hemi": 1.1066399999999998,
+      "sun": 1.5240712499999998,
+      "calls": 97,
+      "triangles": 348050
+    },
+    {
+      "file": "owner-nearby-baseline-practicals-low.jpg",
+      "system": "baseline",
+      "diag": "practicals",
+      "quality": "low",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 13.5,
+        "yaw": 0.5759586531581288,
+        "pitch": 0
+      },
+      "hemi": 0,
+      "sun": 0,
+      "calls": 77,
+      "triangles": 171491
+    },
+    {
+      "file": "owner-nearby-baseline-sun-low.jpg",
+      "system": "baseline",
+      "diag": "sun",
+      "quality": "low",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 13.5,
+        "yaw": 0.5759586531581288,
+        "pitch": 0
+      },
+      "hemi": 0,
+      "sun": 1.5240712499999998,
+      "calls": 77,
+      "triangles": 171491
+    },
+    {
+      "file": "owner-nearby-baseline-sun-high.jpg",
+      "system": "baseline",
+      "diag": "sun",
+      "quality": "high",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 13.5,
+        "yaw": 0.5759586531581288,
+        "pitch": 0
+      },
+      "hemi": 0,
+      "sun": 1.5240712499999998,
+      "calls": 97,
+      "triangles": 348050
+    },
+    {
+      "file": "owner-nearby-baseline-hemi-low.jpg",
+      "system": "baseline",
+      "diag": "hemi",
+      "quality": "low",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 13.5,
+        "yaw": 0.5759586531581288,
+        "pitch": 0
+      },
+      "hemi": 1.1066399999999998,
+      "sun": 0,
+      "calls": 77,
+      "triangles": 171491
+    },
+    {
+      "file": "owner-nearby-baseline-no-surfaces-low.jpg",
+      "system": "baseline",
+      "diag": "no-surfaces",
+      "quality": "low",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 13.5,
+        "yaw": 0.5759586531581288,
+        "pitch": 0
+      },
+      "hemi": 1.1066399999999998,
+      "sun": 1.5240712499999998,
+      "calls": 77,
+      "triangles": 171491
+    },
+    {
+      "file": "owner-nearby-baseline-normal-low.jpg",
+      "system": "baseline",
+      "diag": "normal",
+      "quality": "low",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 13.5,
+        "yaw": 0.5759586531581288,
+        "pitch": 0
+      },
+      "hemi": 1.1066399999999998,
+      "sun": 1.5240712499999998,
+      "calls": 77,
+      "triangles": 171491
+    },
+    {
+      "file": "owner-nearby-pilot-normal-low.jpg",
+      "system": "pilot",
+      "diag": "normal",
+      "quality": "low",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 13.5,
+        "yaw": 0.5759586531581288,
+        "pitch": 0
+      },
+      "hemi": 1.837236,
+      "sun": 0,
+      "calls": 77,
+      "triangles": 171491
+    }
+  ],
+  "errors": []
+}

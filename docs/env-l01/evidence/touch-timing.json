@@ -1,0 +1,63 @@
+{
+  "note": "Existing F05 projects the target immediately after simulated camera movement. A prior explicit matrix-update comparison produced identical coordinates, rejecting a stale-projection explanation. This run measures pointer duration against the existing 350 ms tap limit; no input changes.",
+  "rows": [
+    {
+      "name": "production-ae2a036",
+      "corrected": false,
+      "coords": {
+        "stale": {
+          "x": 269.7795162012275,
+          "y": 191.82988804915965
+        },
+        "current": {
+          "x": 269.7795162012275,
+          "y": 191.82988804915965
+        }
+      },
+      "taken": false,
+      "events": [
+        {
+          "type": "pointerdown",
+          "at": 1570.7999999998137,
+          "x": 269.7795104980469,
+          "y": 191.82989501953125
+        },
+        {
+          "type": "pointerup",
+          "at": 2396.5999999996275,
+          "x": 269.7795104980469,
+          "y": 191.82989501953125
+        }
+      ]
+    },
+    {
+      "name": "prototype-normal-game",
+      "corrected": false,
+      "coords": {
+        "stale": {
+          "x": 269.7795162012275,
+          "y": 191.82988804915965
+        },
+        "current": {
+          "x": 269.7795162012275,
+          "y": 191.82988804915965
+        }
+      },
+      "taken": true,
+      "events": [
+        {
+          "type": "pointerdown",
+          "at": 1117.3999999999069,
+          "x": 269.7795104980469,
+          "y": 191.82989501953125
+        },
+        {
+          "type": "pointerup",
+          "at": 1234.2000000001863,
+          "x": 269.7795104980469,
+          "y": 191.82989501953125
+        }
+      ]
+    }
+  ]
+}

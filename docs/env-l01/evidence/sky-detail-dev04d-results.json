@@ -1,0 +1,95 @@
+{
+  "base": "http://127.0.0.1:4188/Feh-Lu-We/",
+  "results": [
+    {
+      "name": "FLW-D2 atlas: one shared material, the 2048 × 960 image loaded (sRGB)",
+      "ok": true,
+      "detail": "{\"materials\":1,\"meshes\":8,\"chunks\":[\"mHall\",\"mLiv\",\"mWing\",\"mServ\",\"mUp\",\"mUpE\",\"cottageIn\",\"ug\"],\"w\":2048,\"h\":960,\"srgb\":\"srgb\"}"
+    },
+    {
+      "name": "all 13 D1 paintings and 2 mirrors are hung in their bound slots",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "D1-R: the walkway placeholder is retired and no moved piece is left in its old slot",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "wall-art contract (no art in a door, window or door sweep) and construction audits clean",
+      "ok": true,
+      "detail": "{\"conflicts\":[],\"support\":[],\"asset\":[]}"
+    },
+    {
+      "name": "evidence / identity panels untouched (11 present) and no D1 piece within 0.3 m of one on the same wall",
+      "ok": true,
+      "detail": "{\"present\":11,\"clash\":[]}"
+    },
+    {
+      "name": "each canvas is unobstructed (the centre ray hits the art), seated 1.5–10 cm proud of its wall, and framed",
+      "ok": true,
+      "detail": "[\"85.12,86.90 0.085\",\"85.12,94.40 0.085\",\"77.25,80.45 0.073\",\"90.00,103.92 0.045\",\"25.00,164.68 0.065\",\"107.56,99.65 0.063\",\"104.80,91.92 0.045\",\"72.42,84.90 0.043\",\"78.60,86.90 0.054\",\"107.58,102.60 0.043\",\"58.60,56.83 0.065\",\"115.56,98.55 0.052\",\"29.68,160.90 0.065\"]"
+    },
+    {
+      "name": "bathroom + guest-WC mirrors: framed tinted glass, not an emissive panel, on the wall",
+      "ok": true,
+      "detail": "[{\"id\":\"mirror@87.92,105.30\",\"type\":\"MeshLambertMaterial\",\"emissive\":false,\"d\":0.027},{\"id\":\"mirror@89.92,105.00\",\"type\":\"MeshLambertMaterial\",\"emissive\":false,\"d\":0.027}]"
+    },
+    {
+      "name": "ids: 130 interactables / doors, 21 checkpoints, save keys and version 4 unchanged (D1 adds no interactable)",
+      "ok": true,
+      "detail": "{\"n\":130,\"undocumented\":[]}"
+    },
+    {
+      "name": "render budgets (low, doors closed): all 13 D1 views inside the mobile guide",
+      "ok": true,
+      "detail": "FLW-D2-002 hall 73/200446, FLW-D2-007 hall 62/197226, FLW-D2-026 living 32/114540, FLW-D2-028 landing 52/151102, FLW-D2-046 cottageRoom 30/100916, FLW-D2-005 kitchen 28/100884, FLW-D2-010 dining 81/164170, FLW-D2-022 reis 23/75222, FLW-D2-029 sterren 27/80662, FLW-D2-035 storage 24/91218, FLW-D2-042 gathering 18/12834, FLW-D2-044 workshop 25/121698, FLW-D2-045 cottageRoom 84/176106"
+    },
+    {
+      "name": "the art atlas costs one merged mesh per room chunk (never one per painting)",
+      "ok": true,
+      "detail": "8 meshes for 13 paintings in 8 chunks; max chunks with art in one view 4"
+    },
+    {
+      "name": "D2 keys: pickup ids kept, offered only when the container is open, targeted from a standing pose, seated on their support (±4 mm)",
+      "ok": true,
+      "detail": "[\"pk.shedKey seat 0\",\"pk.studyKey seat 0\",\"pk.consKey seat 0\"]"
+    },
+    {
+      "name": "D2 S3: all 9 pieces built, audited and within budget; each rests on its support or sits flush on its wall (≤ 6 mm)",
+      "ok": true,
+      "detail": "[\"S3-004 332t gap 0\",\"S3-014 3042t gap 0\",\"S3-015 526t gap 0\",\"S3-016 352t gap 0\",\"S3-017 2468t gap 0\",\"S3-030 1496t gap 0\",\"S3-031 492t gap 0\",\"S3-033 532t gap 0\",\"S3-037 694t gap 0\"]"
+    },
+    {
+      "name": "D2 key family (estate): shed, study and conservatory key models, each ≈ 200–450 triangles",
+      "ok": true,
+      "detail": "{\"key:shedKey\":312,\"key:studyKey\":380,\"key:consKey\":448}"
+    },
+    {
+      "name": "D2 wall pieces: 4 registered with the wall-art contract (no door / window / sweep conflict) and clear of the evidence panels",
+      "ok": true,
+      "detail": "{\"reliefs\":[\"relief@90.00,80.42\",\"relief@103.25,80.42\",\"relief@20.30,161.00\",\"relief@29.35,157.00\"],\"relClash\":[]}"
+    },
+    {
+      "name": "D2 paths: the lake bench memory is still reached and targeted past the heron; the grill front and the gas bottle stay reachable past the fire screen",
+      "ok": true,
+      "detail": "{\"bench\":\"mem.pond.bench\",\"bbq\":\"ok\"}"
+    },
+    {
+      "name": "D2 salon wall: all 15 frames registered with the wall-art contract (no conflicts), each canvas unobstructed and seated 1.5–5 cm off the wall",
+      "ok": true,
+      "detail": "\"15 ok\""
+    },
+    {
+      "name": "D2 front key (home world): pk.frontKey offered only with the drawer open, targeted, seated (±4 mm), ≈ 200–450 triangles",
+      "ok": true,
+      "detail": "{\"closedLabel\":null,\"openLabel\":\"Pakken: Sleutel van het landhuis\",\"target\":\"pk.frontKey\",\"seat\":0,\"tris\":444}"
+    },
+    {
+      "name": "no page errors / contract warnings",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}

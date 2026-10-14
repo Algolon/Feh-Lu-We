@@ -1,0 +1,261 @@
+{
+  "definition": "Bottom 55% of JPEG; encoded sRGB weighted luma (not physical luminance). Near-black <=8/255. Contains objects/shadows/background, not segmentation or a perceptual acceptance test.",
+  "rows": [
+    {
+      "name": "boslust",
+      "quality": "low",
+      "dusk": 0,
+      "encodedLumaMedian": 67.9444,
+      "encodedLumaP05": 21.438,
+      "nearBlackPercent": 0.25372523530969404
+    },
+    {
+      "name": "boslust",
+      "quality": "low",
+      "dusk": 1,
+      "encodedLumaMedian": 30.049799999999998,
+      "encodedLumaP05": 11.6062,
+      "nearBlackPercent": 1.5599046724922365
+    },
+    {
+      "name": "approach",
+      "quality": "low",
+      "dusk": 0,
+      "encodedLumaMedian": 59.89699999999999,
+      "encodedLumaP05": 25.6848,
+      "nearBlackPercent": 0.935942803495342
+    },
+    {
+      "name": "approach",
+      "quality": "low",
+      "dusk": 1,
+      "encodedLumaMedian": 23.9066,
+      "encodedLumaP05": 10.2058,
+      "nearBlackPercent": 3.6190751305938713
+    },
+    {
+      "name": "garden",
+      "quality": "low",
+      "dusk": 0,
+      "encodedLumaMedian": 97.5038,
+      "encodedLumaP05": 78.40079999999999,
+      "nearBlackPercent": 0.6504417322645097
+    },
+    {
+      "name": "garden",
+      "quality": "low",
+      "dusk": 1,
+      "encodedLumaMedian": 36.068999999999996,
+      "encodedLumaP05": 28.4092,
+      "nearBlackPercent": 1.2329987241520426
+    },
+    {
+      "name": "manor",
+      "quality": "low",
+      "dusk": 0,
+      "encodedLumaMedian": 123.737,
+      "encodedLumaP05": 48.16268000000001,
+      "nearBlackPercent": 0.716400664403842
+    },
+    {
+      "name": "manor",
+      "quality": "low",
+      "dusk": 1,
+      "encodedLumaMedian": 52.534,
+      "encodedLumaP05": 20.9524,
+      "nearBlackPercent": 1.6046797140174767
+    },
+    {
+      "name": "woodland",
+      "quality": "low",
+      "dusk": 0,
+      "encodedLumaMedian": 59.4666,
+      "encodedLumaP05": 22.350200000000005,
+      "nearBlackPercent": 1.0235670783081776
+    },
+    {
+      "name": "woodland",
+      "quality": "low",
+      "dusk": 1,
+      "encodedLumaMedian": 23.6362,
+      "encodedLumaP05": 8.2768,
+      "nearBlackPercent": 4.79766977203245
+    },
+    {
+      "name": "hall",
+      "quality": "low",
+      "dusk": 0,
+      "encodedLumaMedian": 140.33360000000002,
+      "encodedLumaP05": 17.92284,
+      "nearBlackPercent": 2.229604487133194
+    },
+    {
+      "name": "hall",
+      "quality": "low",
+      "dusk": 1,
+      "encodedLumaMedian": 110.5398,
+      "encodedLumaP05": 9.8464,
+      "nearBlackPercent": 4.05767795671746
+    },
+    {
+      "name": "living",
+      "quality": "low",
+      "dusk": 0,
+      "encodedLumaMedian": 66.397,
+      "encodedLumaP05": 9.4514,
+      "nearBlackPercent": 3.6826268024361473
+    },
+    {
+      "name": "living",
+      "quality": "low",
+      "dusk": 1,
+      "encodedLumaMedian": 33.8658,
+      "encodedLumaP05": 5.6824,
+      "nearBlackPercent": 5.903083700440528
+    },
+    {
+      "name": "darkroom",
+      "quality": "low",
+      "dusk": 0,
+      "encodedLumaMedian": 45.5494,
+      "encodedLumaP05": 33.1282,
+      "nearBlackPercent": 2.2320117474302497
+    },
+    {
+      "name": "darkroom",
+      "quality": "low",
+      "dusk": 1,
+      "encodedLumaMedian": 19.656,
+      "encodedLumaP05": 13.1626,
+      "nearBlackPercent": 3.2218771815796443
+    },
+    {
+      "name": "boslust",
+      "quality": "high",
+      "dusk": 0,
+      "encodedLumaMedian": 39.78059999999999,
+      "encodedLumaP05": 16.945999999999998,
+      "nearBlackPercent": 0.944127488505332
+    },
+    {
+      "name": "boslust",
+      "quality": "high",
+      "dusk": 1,
+      "encodedLumaMedian": 20.9238,
+      "encodedLumaP05": 6.421280000000005,
+      "nearBlackPercent": 7.049421053898558
+    },
+    {
+      "name": "approach",
+      "quality": "high",
+      "dusk": 0,
+      "encodedLumaMedian": 34.066599999999994,
+      "encodedLumaP05": 10.408,
+      "nearBlackPercent": 2.303266652223105
+    },
+    {
+      "name": "approach",
+      "quality": "high",
+      "dusk": 1,
+      "encodedLumaMedian": 15.8516,
+      "encodedLumaP05": 3.9238,
+      "nearBlackPercent": 13.597169061890662
+    },
+    {
+      "name": "garden",
+      "quality": "high",
+      "dusk": 0,
+      "encodedLumaMedian": 97.3594,
+      "encodedLumaP05": 58.012879999999996,
+      "nearBlackPercent": 0.6581449652150887
+    },
+    {
+      "name": "garden",
+      "quality": "high",
+      "dusk": 1,
+      "encodedLumaMedian": 35.9246,
+      "encodedLumaP05": 24.936600000000002,
+      "nearBlackPercent": 1.2652560121325918
+    },
+    {
+      "name": "manor",
+      "quality": "high",
+      "dusk": 0,
+      "encodedLumaMedian": 122.5926,
+      "encodedLumaP05": 44.08236,
+      "nearBlackPercent": 0.8199128571772466
+    },
+    {
+      "name": "manor",
+      "quality": "high",
+      "dusk": 1,
+      "encodedLumaMedian": 41.846399999999996,
+      "encodedLumaP05": 17.95384,
+      "nearBlackPercent": 2.5685467369586674
+    },
+    {
+      "name": "woodland",
+      "quality": "high",
+      "dusk": 0,
+      "encodedLumaMedian": 31.133599999999998,
+      "encodedLumaP05": 12.4264,
+      "nearBlackPercent": 1.7828169759996146
+    },
+    {
+      "name": "woodland",
+      "quality": "high",
+      "dusk": 1,
+      "encodedLumaMedian": 15.905399999999998,
+      "encodedLumaP05": 5.4974,
+      "nearBlackPercent": 14.386750439325006
+    },
+    {
+      "name": "hall",
+      "quality": "high",
+      "dusk": 0,
+      "encodedLumaMedian": 128.9072,
+      "encodedLumaP05": 12.756,
+      "nearBlackPercent": 3.4101249368094173
+    },
+    {
+      "name": "hall",
+      "quality": "high",
+      "dusk": 1,
+      "encodedLumaMedian": 100.553,
+      "encodedLumaP05": 5.7598,
+      "nearBlackPercent": 6.817842613321778
+    },
+    {
+      "name": "living",
+      "quality": "high",
+      "dusk": 0,
+      "encodedLumaMedian": 41.8658,
+      "encodedLumaP05": 7.441000000000001,
+      "nearBlackPercent": 5.152981391877904
+    },
+    {
+      "name": "living",
+      "quality": "high",
+      "dusk": 1,
+      "encodedLumaMedian": 30.300199999999997,
+      "encodedLumaP05": 5.122,
+      "nearBlackPercent": 6.4707156784863145
+    },
+    {
+      "name": "darkroom",
+      "quality": "high",
+      "dusk": 0,
+      "encodedLumaMedian": 42.699,
+      "encodedLumaP05": 19.236,
+      "nearBlackPercent": 2.8405671505259864
+    },
+    {
+      "name": "darkroom",
+      "quality": "high",
+      "dusk": 1,
+      "encodedLumaMedian": 16.312199999999997,
+      "encodedLumaP05": 10.533999999999999,
+      "nearBlackPercent": 3.5752629931874536
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "source": "Owner attachment 82052.jpg, received 13 October 2026. Original retained in the conversation; phone/browser bars not republished to public GitHub.",
+  "sha256": "e22d812407d8a7d3164b1256728e1c965e7a1986b710aacbce245d096686b707",
+  "size": [
+    709,
+    1536
+  ],
+  "roi": [
+    0,
+    410,
+    709,
+    1235
+  ],
+  "encodedLumaMedian": 0.0,
+  "nearBlack8Percent": 87.49207163311536,
+  "note": "ROI excludes top HUD text and lower joystick but includes some sky/objects. Unsegmented encoded-JPEG metric, not physical luminance. Camera, actual quality, build and GPU not known. Not photometrically comparable to unmatched desktop poses."
+}

@@ -1,0 +1,149 @@
+{
+  "conditions": "915x412 DPR1 low, same scene/pose/LOD history, baseline and pilot toggled without rebuild. Software timing is not phone FPS.",
+  "rows": [
+    {
+      "file": "paired-multidraw-baseline-0.jpg",
+      "fallback": false,
+      "mode": "baseline",
+      "t": 0,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "calls": 91,
+      "triangles": 226908,
+      "softwareMedianMs": 905.6000000000931,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "file": "paired-multidraw-baseline-1.jpg",
+      "fallback": false,
+      "mode": "baseline",
+      "t": 1,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "calls": 91,
+      "triangles": 226908,
+      "softwareMedianMs": 766.7999999998137,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "file": "paired-multidraw-pilot-0.jpg",
+      "fallback": false,
+      "mode": "pilot",
+      "t": 0,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "calls": 91,
+      "triangles": 226908,
+      "softwareMedianMs": 570.6000000000931,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "file": "paired-multidraw-pilot-1.jpg",
+      "fallback": false,
+      "mode": "pilot",
+      "t": 1,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "calls": 91,
+      "triangles": 226908,
+      "softwareMedianMs": 470.60000000009313,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "file": "paired-fallback-baseline-0.jpg",
+      "fallback": true,
+      "mode": "baseline",
+      "t": 0,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "calls": 147,
+      "triangles": 252696,
+      "softwareMedianMs": 475.89999999990687,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "file": "paired-fallback-baseline-1.jpg",
+      "fallback": true,
+      "mode": "baseline",
+      "t": 1,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "calls": 147,
+      "triangles": 252696,
+      "softwareMedianMs": 653.3000000002794,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "file": "paired-fallback-pilot-0.jpg",
+      "fallback": true,
+      "mode": "pilot",
+      "t": 0,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "calls": 147,
+      "triangles": 252696,
+      "softwareMedianMs": 557.3000000002794,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "file": "paired-fallback-pilot-1.jpg",
+      "fallback": true,
+      "mode": "pilot",
+      "t": 1,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "calls": 147,
+      "triangles": 252696,
+      "softwareMedianMs": 823.3999999999069,
+      "glError": 0,
+      "shaderFailures": 0
+    }
+  ]
+}

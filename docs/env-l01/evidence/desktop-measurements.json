@@ -1,0 +1,148 @@
+{
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "quality": "low",
+  "DPR": 1,
+  "conditions": "Both systems in the prototype review; baseline uses unchanged production light path. Same camera, different aspect from the 915x412 phone matrix.",
+  "rows": [
+    {
+      "file": "desktop-boslust-baseline-0.jpg",
+      "name": "boslust",
+      "mode": "baseline",
+      "t": 0,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "calls": 87,
+      "triangles": 211852,
+      "shaderFailures": 0,
+      "glError": 0
+    },
+    {
+      "file": "desktop-boslust-baseline-1.jpg",
+      "name": "boslust",
+      "mode": "baseline",
+      "t": 1,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "calls": 87,
+      "triangles": 211852,
+      "shaderFailures": 0,
+      "glError": 0
+    },
+    {
+      "file": "desktop-boslust-pilot-0.jpg",
+      "name": "boslust",
+      "mode": "pilot",
+      "t": 0,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "calls": 87,
+      "triangles": 211852,
+      "shaderFailures": 0,
+      "glError": 0
+    },
+    {
+      "file": "desktop-boslust-pilot-1.jpg",
+      "name": "boslust",
+      "mode": "pilot",
+      "t": 1,
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "calls": 87,
+      "triangles": 211852,
+      "shaderFailures": 0,
+      "glError": 0
+    },
+    {
+      "file": "desktop-garden-baseline-0.jpg",
+      "name": "garden",
+      "mode": "baseline",
+      "t": 0,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "calls": 51,
+      "triangles": 142825,
+      "shaderFailures": 0,
+      "glError": 0
+    },
+    {
+      "file": "desktop-garden-baseline-1.jpg",
+      "name": "garden",
+      "mode": "baseline",
+      "t": 1,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "calls": 51,
+      "triangles": 142825,
+      "shaderFailures": 0,
+      "glError": 0
+    },
+    {
+      "file": "desktop-garden-pilot-0.jpg",
+      "name": "garden",
+      "mode": "pilot",
+      "t": 0,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "calls": 51,
+      "triangles": 142825,
+      "shaderFailures": 0,
+      "glError": 0
+    },
+    {
+      "file": "desktop-garden-pilot-1.jpg",
+      "name": "garden",
+      "mode": "pilot",
+      "t": 1,
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "calls": 51,
+      "triangles": 142825,
+      "shaderFailures": 0,
+      "glError": 0
+    }
+  ],
+  "errors": []
+}
