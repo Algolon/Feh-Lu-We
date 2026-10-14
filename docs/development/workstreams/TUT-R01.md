@@ -2,7 +2,7 @@
 
 - Branch: `tut-r01-start-room`
 - Production baseline: `fe74db0b471d7816d840e6c223b92950adf5639f`
-- State: IMPLEMENTED AND VALIDATED — owner visual review and remote publication pending.
+- State: REMOTE VERIFIED / DRAFT PR — implementation and targeted validation complete; owner visual review pending.
 - Scope: home/tutorial table props, drawer presentation, wall art and window/wainscot fit.
 - Approval gate: owner visual review before production merge/deployment (FLW-PDI-01 §7).
 
@@ -56,7 +56,7 @@ Visual inspection: flashlight head/barrel are connected and recognisable from th
 
 ## Next safe action
 
-Owner explicitly authorized push to `Algolon/Feh-Lu-We` and draft-PR creation on 14 October 2026, requesting a parallel-work conflict check first. Publish this existing branch, verify the remote HEAD and review paths, then wait for owner visual approval before merge/deployment. Do not recreate the implementation or start another branch.
+Owner visual review of [draft PR #19](https://github.com/Algolon/Feh-Lu-We/pull/19) is the next action. Reverify production and parallel refs immediately before a later approved merge/deployment. Do not recreate the implementation or start another branch.
 
 ## Pre-publication integration check — 14 October 2026
 
@@ -69,3 +69,13 @@ Owner explicitly authorized push to `Algolon/Feh-Lu-We` and draft-PR creation on
 - ENV-L01 and the older Claude branch are behind production; no new ahead changes appeared in their comparisons.
 - No featurebranch was merged/rebased into TUT-R01, no production write, no other local checkout edit. These checks establish compatibility of the inspected refs, not a guarantee against future edits or combined runtime validation.
 - Review entry: [matched before/after images](tut-r01/README.md).
+
+## Publication completed — 14 October 2026
+
+- Owner approved publishing the branch and matched review images after the conflict check.
+- CLI push then failed because it had no GitHub credentials; the authenticated connector completed publication to the same authorized repository. No force-push or other branch write.
+- Verified remote implementation checkpoint: `165bebb90416aea2be060a57b98cb4891704f24e`. Its tree `a13b74629a59d7f10ddf8a31c15df75d0c49a3a7` exactly matches preserved local commit `3064fc31f93ff97ce28b7b8263b9b3fcfa3ac723`; commit metadata differs.
+- Git fetch retrieved that checkpoint and all review files. Working tree was clean.
+- [Draft PR #19](https://github.com/Algolon/Feh-Lu-We/pull/19) is open; GitHub confirmed `mergeable: true`, `mergeable_state: clean`.
+- Production remained `fe74db0b471d7816d840e6c223b92950adf5639f`. No merge or deployment.
+- This final documentation-only follow-up updates the status; implementation/test evidence remains the validated tree above.
