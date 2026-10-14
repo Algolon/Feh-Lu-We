@@ -1,8 +1,8 @@
 """Package completed real-render sequences; preserve bulky capture intermediates outside the git deliverable."""
-import json, subprocess, shutil, statistics
+import json, subprocess, shutil, statistics, os, tempfile
 from pathlib import Path
 root=Path('docs/veg-r01/comparison'); out=Path('docs/veg-r01/videos');out.mkdir(exist_ok=True)
-scratch=Path('/workspace/scratch/47734c84c42f/veg-intermediates');scratch.mkdir(exist_ok=True)
+scratch=Path(os.environ.get('VEG_INTERMEDIATES', str(Path(tempfile.gettempdir())/'veg-r01-intermediates')));scratch.mkdir(parents=True,exist_ok=True)
 routes=['boslust','dense','garden-edge','treeline']
 for directory in sorted(root.iterdir()):
  if not (directory/'results.json').exists() or (directory/'moving-summary.json').exists():continue

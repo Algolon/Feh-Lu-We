@@ -214,8 +214,9 @@ const LODS: Lod[] = ['near', 'mid', 'far', 'xfar'];
  * variant has a near, mid and far geometry, each bark + foliage merged on the tree-atlas material, the bark's
  * vertex colours pre-multiplied by bark ÷ leaf tint so that one instance colour (the leaf tint) serves both.
  * Near < 16 m, mid < 26 m, far < 48 m, xfar beyond (3 m hysteresis each way); trees drawn to 115 m, bushes to
- * 50 m. All LODs are emitted from one skeleton with the same cluster layout, so a switch coarsens the surface but
- * keeps the silhouette. DEV-03: one TreeBatches serves the whole estate (forest, masses, garden, outer ring).
+ * 50 m. A shared skeleton preserves identity, but reduced clusters and topology can change the outline.
+ * VEG-R01 profiles vary tree bands/geometry; baseline retains the legacy thresholds above.
+ * DEV-03: one TreeBatches serves the whole estate (forest, masses, garden, outer ring).
  */
 export class TreeBatches {
   private geos: THREE.BufferGeometry[] = [];

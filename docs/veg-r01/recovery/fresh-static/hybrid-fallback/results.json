@@ -1,0 +1,140 @@
+{
+  "profile": "hybrid",
+  "path": "fallback",
+  "views": [
+    {
+      "name": "boslust",
+      "cpuSubmitMs": 4.5,
+      "calls": 140,
+      "triangles": 301408,
+      "room": "out"
+    },
+    {
+      "name": "dense",
+      "cpuSubmitMs": 3.200000001117587,
+      "calls": 117,
+      "triangles": 268126,
+      "room": "out"
+    },
+    {
+      "name": "garden-edge",
+      "cpuSubmitMs": 0.900000000372529,
+      "calls": 53,
+      "triangles": 141929,
+      "room": "out"
+    },
+    {
+      "name": "treeline",
+      "cpuSubmitMs": 1.3999999985098839,
+      "calls": 109,
+      "triangles": 268165,
+      "room": "out"
+    },
+    {
+      "name": "forest-busy",
+      "cpuSubmitMs": 2,
+      "calls": 143,
+      "triangles": 301233,
+      "room": "out"
+    },
+    {
+      "name": "cons-deck",
+      "cpuSubmitMs": 3.600000001490116,
+      "calls": 182,
+      "triangles": 337897,
+      "room": "out"
+    },
+    {
+      "name": "cons-corridor",
+      "cpuSubmitMs": 4.200000001117587,
+      "calls": 199,
+      "triangles": 414577,
+      "room": "corridor"
+    },
+    {
+      "name": "service",
+      "cpuSubmitMs": 2.699999999254942,
+      "calls": 101,
+      "triangles": 208832,
+      "room": "corridor"
+    },
+    {
+      "name": "distant",
+      "cpuSubmitMs": 1.300000000745058,
+      "calls": 80,
+      "triangles": 187589,
+      "room": "out"
+    },
+    {
+      "name": "woodland-east",
+      "cpuSubmitMs": 2,
+      "calls": 101,
+      "triangles": 252750,
+      "room": "out"
+    }
+  ],
+  "memory": {
+    "geometryBytes": 87353670,
+    "instanceBytes": 300276,
+    "batchTextureBytes": 0,
+    "geometries": 326,
+    "textures": 41,
+    "path": "instanced",
+    "profile": {
+      "id": "hybrid",
+      "distances": [
+        22,
+        36,
+        62
+      ],
+      "hysteresis": 3,
+      "continuous": "outline"
+    },
+    "treeCount": {
+      "trees": 1735,
+      "plants": 11693,
+      "rocks": 232,
+      "logs": 36,
+      "boulders": 49,
+      "saplings": 353,
+      "screenBushes": 126
+    },
+    "fov": 68,
+    "dpr": 1,
+    "buffer": [
+      768,
+      432
+    ],
+    "shadows": false
+  },
+  "shadow": {
+    "cameraNoShadows": {
+      "cpuSubmitMs": 4,
+      "calls": 137,
+      "triangles": 297276
+    },
+    "cameraWithShadows": {
+      "calls": 141,
+      "triangles": 333368
+    },
+    "combined": {
+      "cpuSubmitMs": 5.900000000372529,
+      "calls": 198,
+      "triangles": 565850
+    },
+    "shadowCalls": 57,
+    "shadowTriangles": 232482,
+    "map": [
+      1024,
+      1024
+    ],
+    "conditions": "High-quality 1024px mobile sun shadow control. Shadow renderer counters sampled around its actual pass; camera=combined-minus-shadow, including any conservative fallback superset. Not a mobile-low gate."
+  },
+  "pacing": null,
+  "errors": [],
+  "moving": [],
+  "omittedForReviewPackaging": [
+    "Repeated full-world tree inventory",
+    "Static per-view diagnostic tree sample and LOD distribution; submitted counters retained"
+  ]
+}

@@ -31,3 +31,7 @@
 ## Recovery checkpoint — 14 October 2026
 
 Remote `5a6df26` and old local `b484ebc` have identical trees. Recovered additional uncommitted moving captures for all four profiles on both renderer paths, tests and packaging scripts without changing the original worktree. Independent working copy resumes the existing remote branch. Production inspected at `5af9779` (PB01/TUT-R01/SKY-C01 integrated). Fresh typecheck, 286 units and build pass. Default remains baseline; evidence assessment and current-production compatibility verification continue. See `docs/veg-r01/recovery/checkpoint.json`. No merge/deploy.
+
+## Evidence milestone — recovery session
+
+All four variants × both renderer paths are verified: 192 inherited static views, 3,200 matching moving samples; fresh first-ten-view counters reproduce exactly. Software rAF samples and regenerated geometric silhouette masks completed. Hybrid is preferred experimentally; baseline remains default because all candidates exceed independent relative budget guards and physical-device validation is pending. Matched video exports, measurements and assessment are saved with this checkpoint. Temporary current-production integration passes typecheck/build/289 units; DEV-04A browser run has 17 passes, one budget failure and one final navigation timeout. Additional integrated movement and the broader browser run remain in progress. No merge/deploy.

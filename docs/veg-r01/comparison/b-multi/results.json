@@ -1,0 +1,250 @@
+{
+  "profile": "b",
+  "path": "multi",
+  "views": [
+    {
+      "name": "boslust",
+      "cpuSubmitMs": 4.7000000001862645,
+      "calls": 89,
+      "triangles": 368432,
+      "room": "out"
+    },
+    {
+      "name": "dense",
+      "cpuSubmitMs": 2.2999999998137355,
+      "calls": 57,
+      "triangles": 360067,
+      "room": "out"
+    },
+    {
+      "name": "garden-edge",
+      "cpuSubmitMs": 1.1999999997206032,
+      "calls": 26,
+      "triangles": 169824,
+      "room": "out"
+    },
+    {
+      "name": "treeline",
+      "cpuSubmitMs": 2.8999999999068677,
+      "calls": 58,
+      "triangles": 345804,
+      "room": "out"
+    },
+    {
+      "name": "forest-busy",
+      "cpuSubmitMs": 2.7000000001862645,
+      "calls": 92,
+      "triangles": 368597,
+      "room": "out"
+    },
+    {
+      "name": "cons-deck",
+      "cpuSubmitMs": 3.8999999999068677,
+      "calls": 170,
+      "triangles": 335625,
+      "room": "out"
+    },
+    {
+      "name": "cons-corridor",
+      "cpuSubmitMs": 4,
+      "calls": 186,
+      "triangles": 409867,
+      "room": "corridor"
+    },
+    {
+      "name": "service",
+      "cpuSubmitMs": 1.5,
+      "calls": 101,
+      "triangles": 208832,
+      "room": "corridor"
+    },
+    {
+      "name": "distant",
+      "cpuSubmitMs": 1.7000000001862645,
+      "calls": 53,
+      "triangles": 222598,
+      "room": "out"
+    },
+    {
+      "name": "woodland-east",
+      "cpuSubmitMs": 2.1000000000931323,
+      "calls": 37,
+      "triangles": 345095,
+      "room": "out"
+    },
+    {
+      "name": "atticNook",
+      "cpuSubmitMs": 1,
+      "calls": 41,
+      "triangles": 106020,
+      "room": "atticLookout"
+    },
+    {
+      "name": "atticCommon",
+      "cpuSubmitMs": 0.7000000001862645,
+      "calls": 39,
+      "triangles": 108298,
+      "room": "atticCommon"
+    },
+    {
+      "name": "conservatoryInside",
+      "cpuSubmitMs": 2.2000000001862645,
+      "calls": 74,
+      "triangles": 185970,
+      "room": "cons"
+    },
+    {
+      "name": "conservatoryDoorDeck",
+      "cpuSubmitMs": 3.1000000000931323,
+      "calls": 170,
+      "triangles": 338098,
+      "room": "out"
+    },
+    {
+      "name": "wellnessDeck",
+      "cpuSubmitMs": 1.2999999998137355,
+      "calls": 65,
+      "triangles": 252613,
+      "room": "out"
+    },
+    {
+      "name": "saunaAccess",
+      "cpuSubmitMs": 2.7000000001862645,
+      "calls": 175,
+      "triangles": 393584,
+      "room": "out"
+    },
+    {
+      "name": "wickermanClearing",
+      "cpuSubmitMs": 1.3999999999068677,
+      "calls": 31,
+      "triangles": 273311,
+      "room": "out"
+    },
+    {
+      "name": "wickermanPath",
+      "cpuSubmitMs": 1.8000000002793968,
+      "calls": 35,
+      "triangles": 324736,
+      "room": "out"
+    },
+    {
+      "name": "frontForecourt",
+      "cpuSubmitMs": 1.7000000001862645,
+      "calls": 155,
+      "triangles": 298007,
+      "room": "out"
+    },
+    {
+      "name": "arrivalCourt",
+      "cpuSubmitMs": 1.8999999999068677,
+      "calls": 150,
+      "triangles": 291143,
+      "room": "out"
+    },
+    {
+      "name": "portugalTerrace",
+      "cpuSubmitMs": 1.1000000000931323,
+      "calls": 31,
+      "triangles": 154809,
+      "room": "out"
+    },
+    {
+      "name": "portugalApproach",
+      "cpuSubmitMs": 1.2999999998137355,
+      "calls": 33,
+      "triangles": 202084,
+      "room": "out"
+    },
+    {
+      "name": "golfVicinity",
+      "cpuSubmitMs": 1.8999999999068677,
+      "calls": 55,
+      "triangles": 330809,
+      "room": "out"
+    },
+    {
+      "name": "golfSpur",
+      "cpuSubmitMs": 1.7000000001862645,
+      "calls": 90,
+      "triangles": 354770,
+      "room": "out"
+    }
+  ],
+  "memory": {
+    "geometryBytes": 87785230,
+    "instanceBytes": 207860,
+    "batchTextureBytes": 1184724,
+    "geometries": 310,
+    "textures": 56,
+    "path": "multi-draw",
+    "profile": {
+      "id": "b",
+      "distances": [
+        28,
+        50,
+        80
+      ],
+      "hysteresis": 3,
+      "continuous": true
+    },
+    "treeCount": {
+      "trees": 1735,
+      "plants": 11693,
+      "rocks": 232,
+      "logs": 36,
+      "boulders": 49,
+      "saplings": 353,
+      "screenBushes": 126
+    },
+    "fov": 68,
+    "dpr": 1,
+    "buffer": [
+      768,
+      432
+    ],
+    "shadows": false
+  },
+  "shadow": {
+    "camera": {
+      "cpuSubmitMs": 2.7999999998137355,
+      "calls": 89,
+      "triangles": 371805
+    },
+    "combined": {
+      "cpuSubmitMs": 5.2999999998137355,
+      "calls": 108,
+      "triangles": 689842
+    },
+    "shadowCalls": 19,
+    "shadowTriangles": 318037,
+    "map": [
+      1024,
+      1024
+    ],
+    "conditions": "High-quality 1024px mobile sun shadow control; camera and combined passes measured separately. Not a mobile-low gate."
+  },
+  "errors": [],
+  "moving": [
+    {
+      "name": "boslust",
+      "frames": 100
+    },
+    {
+      "name": "dense",
+      "frames": 100
+    },
+    {
+      "name": "garden-edge",
+      "frames": 100
+    },
+    {
+      "name": "treeline",
+      "frames": 100
+    }
+  ],
+  "omittedForReviewPackaging": [
+    "Repeated full-world tree inventory",
+    "Static per-view diagnostic tree sample and LOD distribution; submitted counters retained"
+  ]
+}
