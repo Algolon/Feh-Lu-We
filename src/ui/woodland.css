@@ -33,7 +33,7 @@
   display: flex; align-items: center; gap: 4px; min-height: var(--wa-hit);
 }
 #objective-row:has(#objective:empty) { display: none; }
-#b-objective { width: var(--wa-hit); padding: 0; background: transparent; border-color: transparent; box-shadow: none; }
+#b-objective { width: var(--wa-hit); padding: 0; background: transparent; border-color: transparent; box-shadow: none; pointer-events: auto; }
 #b-objective .wa-icon { filter: drop-shadow(0 1px 2px #142016); }
 #objective { min-width: 0; color: var(--wa-light); font: 13px/1.45 var(--wa-serif); overflow-wrap: anywhere; text-shadow: -1px 0 1px #142016, 1px 0 1px #142016, 0 -1px 1px #142016, 0 1px 2px #142016; }
 #checklist { background: var(--wa-hud); color: var(--wa-light); border-left: 1px solid var(--wa-brass); padding: 8px 12px; font: 12px/1.4 var(--wa-sans); }
