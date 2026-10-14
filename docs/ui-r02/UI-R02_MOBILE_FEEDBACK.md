@@ -1,5 +1,59 @@
 # UI-R02 — mobile playtest feedback, 14 October 2026
 
+## Recovery completion — current review checkpoint, 14 October
+
+**HUD complete; owner review pending. No additional runtime redesign was needed.** The four existing feedback commits were recovered intact from `cf932d7`. Their three UI runtime hashes and two test-script hashes match the historical provenance exactly. The isolated recovery checkout had no pre-existing local edits, local-only commits or leftover browser processes. No work from another checkout or branch was modified. FLW-PDI-01 v0.1 was read from the supplied project source and applied under this task's explicit instructions.
+
+Production `5a6c37a` (ENV-L01) is now a parent of the existing feature branch through integration commit `aa71411ac30a25aa926e024c0a77207b4c67151c`. Integration was conflict-free. UI runtime files remain byte-for-byte identical to `cf932d7`; environment, game-loop and startup files remain identical to production. No VFC/DEV experimental branch was imported. The CLI lacked push credentials; the authenticated GitHub connector published the identical integration tree with both original parents, without a forced ref update. The local build commit has different metadata but the same tree; see provenance. PR #17 stays draft. Production was not changed.
+
+### Original feedback reconciled
+
+The supplied local PNG and both original MP4 files were inspected again through extracted frames spanning the full recordings, with original durations 76.276s and 34.158s. Attachment hashes are preserved in the new provenance. The PNG is the intended visual reference. In video 1, roughly 32–44s shows inventory scrolling and **Lezen** below the item grid: reading already exists for some documents but is poorly discoverable. Roughly 52–72s shows torch lighting, followed by a selected matches icon with the light still on. Video 2 shows the running indicator on at roughly 6–12s with the stick extended, then the portrait objective column after roughly 18s and the long inventory at roughly 30s. Video alone cannot establish movement speed; source and the preserved input diagnostic establish the full-stick auto-run conflict.
+
+| Owner complaint | Verified status |
+| --- | --- |
+| Dominant landscape objective / opaque strip | Resolved by existing 13px unbacked serif text and small marker; visually reviewed against bright sky and late-dusk woodland. |
+| Portrait text column | Resolved by marker-only exploration and bounded on-demand reading panel; five packing requirements retained. |
+| Unclear notebook/backpack icons | Existing revised icons preserved, including warm chrome and coloured item pictures. |
+| Duplicate empty-hand inventory button | Hidden when nothing is selected; actual selected item remains visible and deselects as before. |
+| Feedback covering reading | Existing suppression verified with a focused objective; portrait sizing preserved. |
+| Inventory action discovery, inappropriate equip, direct reading | Still open by design; requires owner-approved inventory work. Current screenshots explicitly show the existing layout. |
+| Torch control / running perception | Existing behavior preserved; decisions below remain unapproved. |
+
+### New validation and limits
+
+- **Passed on the combined source:** TypeScript, production build, 275 unit tests across 23 files; [44/44 existing focused checks](evidence/recovery/focused-results.json); [16/16 bounded active-render checks](evidence/recovery/normal-results.json).
+- The active-render reproduction exercises portrait evidence scrolling → landscape → portrait → memory tab, and desktop evidence → memory tab, using native taps/clicks and the original 30-second interaction limit. Both complete, with existing map/back navigation and unchanged observation records. **The historical timeout is not reproduced; its cause is not established.**
+- **Not rerun:** the full broader suite, whose historical result remains 105/107. This targeted pass does not turn that result into a full pass. Physical-device testing and sustained gameplay/performance validation were not performed.
+- One browser installation restored the known 1194 headless shell. The installer’s initial mirror returned an invalid archive; its fallback succeeded. No repeated installation/launch investigation was needed. Focused and active-render suites ran sequentially with 180s/300s process caps. No assertions or acceptance thresholds were weakened.
+- Existing build chunk-size warning remains. Source/bundle hashes, actual fixture conditions, logs and image hashes are in [recovery provenance](evidence/recovery/build-provenance.json) and [image metadata](evidence/recovery/images.json).
+
+### Current combined visual review
+
+These are **unedited real browser captures of UI-R02 + ENV-L01**, with the WebGL loop active. They use the established isolated BOSLUST review fixture, camera placement and a held cosmetic phase input for consistent bright/dark comparisons. They are not physical-device screenshots or evidence of a completed playthrough. No clues were invented to populate the views. Runtime content matches the integration commit; later recovery additions are tests and documentation only.
+
+![Combined landscape HUD](evidence/recovery/phone-landscape.jpg)
+
+[Portrait marker](evidence/recovery/portrait-marker.jpg) · [Expanded objective](evidence/recovery/portrait-objective.jpg) · [640×360 landscape](evidence/recovery/small-landscape.jpg) · [Desktop](evidence/recovery/desktop-landscape.jpg)
+
+[Existing inventory with actions scrolled into view](evidence/recovery/phone-inventory.jpg) · [Selected matches and feedback](evidence/recovery/phone-selected-item.jpg) · [Bright garden](evidence/recovery/phone-garden-bright.jpg) · [Late-dusk BOSLUST](evidence/recovery/phone-boslust-dark.jpg)
+
+[Portrait memory tab after rotation](evidence/recovery/portrait-memory-tab.jpg) · [Desktop memory tab](evidence/recovery/desktop-memory-tab.jpg)
+
+### Decisions for owner approval — no implementation included
+
+**Inventory:** recommend capability-specific actions and a visible detail action area. Documents use Read/Inspect, keys work automatically without equip, tools equip only when selection changes a real world interaction, notebook opens the archive. Keep one contextual world action, one selected puzzle tool, and only owned items. Portrait follows list → detail → reading → same detail/back, preserving scroll and selection. Group labels help scanning, but each item's actual capabilities must determine its actions: a readable puzzle object must retain any existing puzzle function. Do not introduce separate mandatory category screens for this small inventory.
+
+**Torch decision:** recommend keeping carried light independent of puzzle-tool selection, as the current game and original recording already allow. A small, separately identifiable light on/off shortcut appears only after obtaining the torch, with clear active state; it does not open inventory or occupy the puzzle-tool slot. This avoids extinguishing light when selecting matches, but adds a HUD control and uses a carried-light abstraction. The alternative is a strictly equipped torch with an on/off button only while held; changing to another tool would then lose light unless a separate exception is designed. This is an explicit owner choice, not an approved extension of the completed HUD.
+
+**Movement:** recommend an explicit mobile Jog toggle and desktop Shift, removing automatic jogging at full stick. Keep walk 3.2 initially and trial jog 4.2, with no stamina/tier/cooldown. Compared with current full-stick speed 5.0, default full-stick walking becomes 36% slower and the proposed jog 16% slower. Jog is 31.25% faster than walk. This creates a perceptible choice but also lengthens estate traversal; do not additionally lower walking speed before an outdoor/indoor owner playtest. Retain existing reset behavior on modal/blur/hide/rotation. Final speed choice remains a trial decision, not a measured optimum.
+
+The grouping, torch and speed recommendations are game-specific design judgments. XAG 114 supports explicit action purpose and meaningful grouping; XAG 112 supports predictable navigation. Those guidelines do not prescribe these categories, torch semantics or numerical speeds.
+
+**Review gate:** approve the HUD separately from (1) capability-based inventory/navigation, (2) independent carried-light shortcut versus strict one-hand torch, and (3) explicit jog with trial 3.2/4.2 speeds. No inventory behavior change, movement redesign, production merge or deployment is authorized by this checkpoint.
+
+## Historical implementation and evidence — before ENV-L01 integration
+
 Base: production `6b2b82d95fc761390b9275c94ee363f37a25f6bf`, verified before editing. Branch: `ui-r02-mobile-feedback`. PR #16 was already merged; this is a separate, bounded follow-up. ENV-L01 #15 and VCP-01 #9 remain separate. No world, input, movement, puzzle, item-state or save file is changed.
 
 ## Evidence and findings

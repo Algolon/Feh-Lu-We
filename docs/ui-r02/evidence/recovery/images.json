@@ -1,0 +1,321 @@
+[
+  {
+    "name": "phone-landscape",
+    "note": "",
+    "viewport": {
+      "width": 852,
+      "height": 393
+    },
+    "running": true,
+    "frame": 8,
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.014330890328759078,
+    "phaseInput": 0,
+    "pilot": 1,
+    "modal": null,
+    "selected": null,
+    "quality": "low",
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ],
+    "sha256": "8693bf117e847cf608e23810b956d15b125e93817ac1109dfb83810580f2aa5a"
+  },
+  {
+    "name": "small-landscape",
+    "note": "",
+    "viewport": {
+      "width": 640,
+      "height": 360
+    },
+    "running": true,
+    "frame": 16,
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.026549918836491354,
+    "phaseInput": 0,
+    "pilot": 1,
+    "modal": null,
+    "selected": null,
+    "quality": "low",
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ],
+    "sha256": "12e10339c8c0e85c8b56e11ea4b4084c6ab73e3a9e77b29b857cbb320de70f3e"
+  },
+  {
+    "name": "phone-inventory",
+    "note": "Existing inventory and action layout; redesign is not implemented. Six owned items from the established BOSLUST fixture.",
+    "viewport": {
+      "width": 852,
+      "height": 393
+    },
+    "running": true,
+    "frame": 60,
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.05924029137420798,
+    "phaseInput": 0,
+    "pilot": 1,
+    "modal": "panel",
+    "selected": null,
+    "quality": "low",
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ],
+    "sha256": "9d0ceec5ba63a837703984c153652c8527872bf33ff7285cfb354365809ac7f0"
+  },
+  {
+    "name": "phone-selected-item",
+    "note": "",
+    "viewport": {
+      "width": 852,
+      "height": 393
+    },
+    "running": true,
+    "frame": 82,
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.06490168272915842,
+    "phaseInput": 0,
+    "pilot": 1,
+    "modal": null,
+    "selected": "matches",
+    "quality": "low",
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ],
+    "sha256": "3d5e3cdff5acbc9a270ffb67f0bd417b455e3ee5375767f54c698c5b1295e640"
+  },
+  {
+    "name": "phone-boslust-dark",
+    "note": "Phase input held at 1 in this capture fixture; active game loop, no future progress granted.",
+    "viewport": {
+      "width": 852,
+      "height": 393
+    },
+    "running": true,
+    "frame": 126,
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.06928047488457989,
+    "phaseInput": 1,
+    "pilot": 1,
+    "modal": null,
+    "selected": null,
+    "quality": "low",
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ],
+    "sha256": "e45bb397a4be8632662f306a19bb7704cff41b681f8d4706cede7d5d628461a6"
+  },
+  {
+    "name": "phone-garden-bright",
+    "note": "Phase input 0; actual ENV-L01 sky and world.",
+    "viewport": {
+      "width": 852,
+      "height": 393
+    },
+    "running": true,
+    "frame": 135,
+    "pose": {
+      "x": 90,
+      "y": 0,
+      "z": 122,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.0696528021108968,
+    "phaseInput": 0,
+    "pilot": 1,
+    "modal": null,
+    "selected": null,
+    "quality": "low",
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ],
+    "sha256": "6a1468b76bc15c5abd6ce4e3baffae61bc87d7b5eace164c735e8063f60cadb9"
+  },
+  {
+    "name": "portrait-marker",
+    "note": "",
+    "viewport": {
+      "width": 393,
+      "height": 852
+    },
+    "running": true,
+    "frame": 144,
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.06991246741109267,
+    "phaseInput": 0,
+    "pilot": 1,
+    "modal": null,
+    "selected": null,
+    "quality": "low",
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ],
+    "sha256": "b8522ad28e22c07575b3de0bca81ed03f5d5d9b11f2b0c9dfadb77e431426178"
+  },
+  {
+    "name": "portrait-objective",
+    "note": "",
+    "viewport": {
+      "width": 393,
+      "height": 852
+    },
+    "running": true,
+    "frame": 164,
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.0703325406787966,
+    "phaseInput": 0,
+    "pilot": 1,
+    "modal": "objective",
+    "selected": null,
+    "quality": "low",
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ],
+    "sha256": "ea1e6279e0f95c8e4fd4afcd558611ef7ea641b3ff743dbc80e7836d9fe5d203"
+  },
+  {
+    "name": "portrait-memory-tab",
+    "note": "",
+    "viewport": {
+      "width": 393,
+      "height": 852
+    },
+    "running": true,
+    "frame": 250,
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.07079666498362988,
+    "phaseInput": 0,
+    "pilot": 1,
+    "modal": "notebook",
+    "selected": null,
+    "quality": "low",
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ],
+    "sha256": "f433903a71412486a06bad2bfddaabdbc75fdf9946093dbf0a89d4b9a5ae24e5"
+  },
+  {
+    "name": "desktop-landscape",
+    "note": "",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "running": true,
+    "frame": 7,
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.011831149650862498,
+    "phaseInput": 0,
+    "pilot": 1,
+    "modal": null,
+    "selected": null,
+    "quality": "high",
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ],
+    "sha256": "42acffa404afb7369d248b57c7527551e11a7ed222ae769470204b379bc3fbb3"
+  },
+  {
+    "name": "desktop-memory-tab",
+    "note": "",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "running": true,
+    "frame": 52,
+    "pose": {
+      "x": 63,
+      "y": 0,
+      "z": 11.5,
+      "yaw": 0,
+      "pitch": 0.05
+    },
+    "dusk": 0.055850424835505216,
+    "phaseInput": 0,
+    "pilot": 1,
+    "modal": "notebook",
+    "selected": null,
+    "quality": "high",
+    "clues": [
+      "c.invitation",
+      "c.routeRestored",
+      "c.letterstrook"
+    ],
+    "sha256": "4118f9445e82fb013bc1812b24577a7956906abeea0d03d94de9c7d3ff786196"
+  }
+]

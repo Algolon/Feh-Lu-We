@@ -1,0 +1,68 @@
+{
+  "date_utc": "2026-10-14",
+  "production_base": "5a6c37a8a93fb02ad84fccdcfedd18ec8a2ac61e",
+  "previous_feedback_head": "cf932d7a0f03e7fef7997b244ef51dcdb50c4856",
+  "canonical_remote_integration_commit": "aa71411ac30a25aa926e024c0a77207b4c67151c",
+  "local_build_commit": "d3e2faa147be03692a82c210a015d3716dac441e",
+  "identical_integration_tree": "51e2121383b9776306e1d10138a293235501793a",
+  "commit_identity_note": "CLI push lacked credentials. Authenticated GitHub connector created the same merge tree and both original parents. Commit metadata differs; git diff of the two integration commits is empty. Runtime files were not edited in recovery. Recovery harness was added after build and does not enter the game bundle.",
+  "source_sha256": {
+    "src/ui/ui.ts": "7eaff85c872b69f603110491b74e06f8b02c56cc5bd823e29e11956f64857738",
+    "src/ui/icons.ts": "bf586beef9d5cb84c92ab85d1717585d87f6b8d57145df14e49d8831cb13b94e",
+    "src/ui/woodland.css": "890310f66422d68b9f100a61c58d5b7ec805f72f5a1c2ecb3587dee3a6f64403",
+    "src/core/game.ts": "c72f6277516fc3e056a9c26762eaf5b12a4ed57e3eb983684004459f1d4a98c9",
+    "src/main.ts": "c092ef14a8cf2671d6253e6fb842488c6f5db03cc1b89b69ab5eafbaf7037594",
+    "src/core/artflags.ts": "b5cc589a051def2ac7a575da1cf3a3dda09391e6ea49d3e4492ab825f256ae6d",
+    "src/world/env.ts": "203e777cb4b00904bde81c40aa5048fe8b920b79d40278197d6313f0a793ea84",
+    "src/world/lightingPhases.ts": "e5606120a61483dbad1efe47f9a1e26b0a788333fbda5bb6e3aa8faa7447f539",
+    "src/world/skyShader.ts": "79ec43318ffb7b5f6288f3cd4f2c320bb2940e08c243752db234b3b96b505850",
+    "scripts/e2e-ui-r02.mjs": "99abb5061aed28435f272c93c443618e43cf42c8eef418c761f843c518933a95",
+    "scripts/e2e-ui-r02-feedback.mjs": "1f52dd3d3f3b4645ad86998ce4744a69bcb0bdb998931bc7c615ff3e3d81702a",
+    "scripts/e2e-ui-r02-recovery.mjs": "af5e359f30033c90f3eff88019f6f5302a742e407d373155ac6dca511556de4b",
+    "package-lock.json": "476a8acb0f5338970048b1c6204da61f40ad1b08923dab2c5d3e856aa8a88a74"
+  },
+  "bundle_sha256": {
+    "dist/assets/index-De8xgVbj.css": "068206942f12369a5f4a55461111d9fb6a03e68dcb8f8376b8bc2b736afa03b6",
+    "dist/assets/index-BIJn1gXS.js": "41c6323fa0456cf0729c6cd36c0779d17faf95cda541e7ef9f37abe9211a8616"
+  },
+  "validation": {
+    "typecheck": "passed",
+    "unit_tests": {
+      "passed": 275,
+      "files": 23
+    },
+    "build": "passed; existing >1200kB chunk warning retained",
+    "focused_ui": {
+      "passed": 44,
+      "total": 44,
+      "world_loop": "stopped after real-world startup; DOM/input validation only"
+    },
+    "normal_render_recovery": {
+      "passed": 16,
+      "total": 16,
+      "world_loop": "active throughout; explicit advancing frame assertion for touch and desktop"
+    },
+    "historical_broad": {
+      "passed": 105,
+      "total": 107,
+      "rerun": false,
+      "note": "Two memory-tab timeout routes pass the narrower new active-render reproduction. Original timeout cause remains unproven; broad suite remains incomplete."
+    },
+    "physical_device": "not performed"
+  },
+  "capture_conditions": "Chromium headless shell 141.0.7390.37 / Playwright 1.56.1 / SwiftShader / DPR1. Established review=boslust fixture, native taps/clicks. Camera placement and held cosmetic phase input (0 or 1) are capture fixtures; normal world loop and ENV-L01 shading remain active. No puzzle progress created for phase captures. No image pixels edited. Inventory is the existing six-item review fixture, not the original recording inventory. No real Android/GPU performance claim.",
+  "original_attachments": {
+    "82102.mp4": {
+      "sha256": "29b1f8020b1ddb91782ffe6a5bbbfd6f15eb4d37066906383f37475e0039fd80",
+      "bytes": 83469754
+    },
+    "82103.mp4": {
+      "sha256": "9593d5bf08855f3f40d8d0f49d5070410f3ca210011d2d55f6bdb8728eff3bf1",
+      "bytes": 43952709
+    },
+    "01-82104.png": {
+      "sha256": "16953a0fcddda3db68ac1f62635d05f6754fd646caf4b07bb17c964fef96af0d",
+      "bytes": 453047
+    }
+  }
+}

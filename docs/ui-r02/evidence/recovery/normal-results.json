@@ -1,0 +1,70 @@
+{
+  "results": [
+    {
+      "name": "touch: normal animation advances with ENV-L01",
+      "ok": true
+    },
+    {
+      "name": "touch: inventory selection retains meaningful equipped control",
+      "ok": true
+    },
+    {
+      "name": "touch: feedback cannot cover focused objective",
+      "ok": true
+    },
+    {
+      "name": "touch: deselect hides duplicate hand control",
+      "ok": true
+    },
+    {
+      "name": "portrait: outside dismissal restores input and marker focus",
+      "ok": true
+    },
+    {
+      "name": "portrait: rotation preserves evidence selection",
+      "ok": true
+    },
+    {
+      "name": "portrait: normal-render memory tab after evidence/rotation",
+      "ok": true
+    },
+    {
+      "name": "portrait: existing map opens",
+      "ok": true
+    },
+    {
+      "name": "portrait: notebook returns world input without changing records",
+      "ok": true
+    },
+    {
+      "name": "portrait: no WebGL program errors",
+      "ok": true
+    },
+    {
+      "name": "desktop: normal animation advances with ENV-L01",
+      "ok": true
+    },
+    {
+      "name": "desktop: normal-render memory tab after evidence/rotation",
+      "ok": true
+    },
+    {
+      "name": "desktop: existing map opens",
+      "ok": true
+    },
+    {
+      "name": "desktop: notebook returns world input without changing records",
+      "ok": true
+    },
+    {
+      "name": "desktop: no WebGL program errors",
+      "ok": true
+    },
+    {
+      "name": "no page or asset errors",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "errors": []
+}
