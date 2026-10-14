@@ -247,7 +247,7 @@
 /* UI-COMPASS — bearing-only, passive overlay. Deliberately beneath the top action row. */
 #wa-compass {
   position: absolute; z-index: 2;
-  left: 50%; top: calc(64px + var(--safe-t));
+  left: 50%; top: calc(6px + var(--safe-t));
   width: 220px; height: 38px; transform: translateX(-50%);
   color: var(--wa-gold); opacity: .46;
   pointer-events: none !important; user-select: none;
@@ -266,7 +266,8 @@
 .wa-compass-label {
   position: absolute; top: 8px; left: 0; transform: translateX(-50%);
   white-space: nowrap; color: var(--wa-light);
-  font: 500 11px/1.25 var(--wa-serif);
+  font: 500 11px/1.25 var(--wa-sans);
+  letter-spacing: .065em;
   text-shadow: 0 1px 3px #111b15, 0 0 4px #111b15;
 }
 .wa-compass-mark {
@@ -282,14 +283,65 @@
 }
 #hud.overlay-open #wa-compass { visibility: hidden; }
 @media (orientation: portrait) {
-  #wa-compass { top: calc(70px + var(--safe-t)); width: 100px; height: 33px; }
+  #wa-compass { top: calc(16px + var(--safe-t)); width: 100px; height: 33px; }
   .wa-compass-label { top: 7px; font-size: 10px; }
   .wa-compass-mark { top: 27px; height: 2px; }
   .wa-compass-mark.major { top: 24px; height: 5px; }
 }
 @media (max-height: 400px) and (orientation: landscape) {
-  #wa-compass { top: calc(58px + var(--safe-t)); }
+  #wa-compass { top: calc(3px + var(--safe-t)); }
 }
 @media (prefers-reduced-motion: reduce) {
   #wa-compass { transition: none; }
+}
+
+/* UI-COMPASS-R02: bearing first, objective second. Only move the existing
+ * landscape objective when the compass is visible; keep tutorial/opt-out unchanged.
+ * The compass remains non-interactive and uses no extra HUD buttons. */
+#hud:has(#wa-compass:not([hidden])) #progress-cue {
+  margin-top: 40px;
+}
+
+@media (orientation: portrait) {
+  /* Two icon controls remain in the top row. The microcompass has its own
+   * centered slot between them and the notes/bag controls. */
+  #progress-cue {
+    position: absolute;
+    left: 0;
+    top: 64px;
+    width: min(274px, calc(100vw - 24px - var(--safe-l) - var(--safe-r)));
+    max-width: none;
+    flex: none;
+    margin-top: 0;
+  }
+  #hud:has(#wa-compass:not([hidden])) #progress-cue { margin-top: 0; }
+  #objective-row { gap: 7px; align-items: center; min-height: 48px; }
+  #b-objective {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    padding: 0;
+    border: 1px solid rgb(191 160 107 / 75%);
+    background: rgb(24 28 21 / 70%);
+    box-shadow: 0 2px 6px #0003;
+  }
+  /* Give the player their bearing and the next task at a glance. Truncate
+   * only the HUD preview: the objective button still opens the entire text. */
+  #objective {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    max-height: 42px;
+    font: 500 12px/1.4 var(--wa-serif);
+    padding: 4px 7px;
+    border-radius: 6px;
+    background: rgb(24 28 21 / 55%);
+  }
+  #checklist { display: none; }
+}
+@media (max-width: 360px) and (orientation: portrait) {
+  #wa-compass { width: 80px; }
+  .wa-compass-label { font-size: 9px; letter-spacing: .02em; }
 }
