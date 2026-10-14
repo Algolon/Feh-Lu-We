@@ -1,0 +1,18 @@
+PASS  F01 saved-open doors are visually open after reload — {"library":-1.6,"front":1.6}
+PASS  F02 upstairs bedroom objects not reachable through the ceiling — [null,null,null]
+PASS  F03 selected key does not block opening an unlocked door — {"before":false,"after":true,"label":"Openen"}
+PASS  F04 no stale delayed submission closes a newer modal — {"wrong":0,"modal":"Tas"}
+PASS  B1 closing a door with the player in its swing path is refused
+PASS  B2 no taking through closed glass/cabinet — {"closed":"cab.upper"}
+PASS  F10 reduced motion holds flames steady but visible + UI transitions off — {"n":14,"motion":0,"visibleLit":7,"cls":true}
+PASS  F12 unknown saved ids are dropped; inventory UI works — {"inv":["invitation","torch","matches","notebook","frontKey"],"n":5,"slots":{"svc.tafel":null}}
+PASS  F07 playtime counts panel reading as active and pause as paused — {"activeDuringPanel":5100,"pausedDuringPause":7833,"activeDuringPause":0}
+PASS  B4 context loss pauses with a recovery dialog and resumes on restore — {"shown":"Beeld onderbroken","after":true,"lost":false}
+PASS  B4 repeated Start presses create one game loop — rAF/s 0 (software-rendered)
+PASS  F05 stationary tap on the left side of the screen interacts — tap at 276,212
+PASS  L1 seen from the hall, the living room keeps real light and its hearth flame stays visible (open arch) — {"room":"hall","assigned":["lamp.hallChandelier","fixed.94.88.88.20","fixed.85.12.95.60","lamp.livingFloor"],"livingLit":true,"flameVisible":true,"defaultLit":true}
+PASS  L2 looking away and back does not toggle or reorder lights — {"before":"lamp.hallChandelier,fixed.94.88.88.20,fixed.85.12.95.60,lamp.livingFloor","changes":0}
+PASS  L3 crossing the threshold changes nothing abruptly (smooth light, flame always visible) — {"room":"living","maxJump":1.93,"slotChanges":1,"hiddenFrames":0}
+PASS  L4 closed door blocks the neighbouring room light; open door lets it through — {"room":"lobby","closed":false,"open":true}
+PASS  L5 fixture glow follows logical state, not light-slot ownership — {"assigned":false,"lit":true,"glow":"ffd27a"}
+PASS  L6 decorative candles burn; a doused fireplace stays doused after reload — {"diningCandles":true,"livingAfterReload":false}

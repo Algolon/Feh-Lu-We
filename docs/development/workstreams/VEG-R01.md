@@ -1,37 +1,33 @@
-# VEG-R01 — Vegetation LOD Quality & Continuity
+# VEG-R01 — recovery and completion
 
-- Branch: `veg-r01-vegetation-lod` (isolated worktree).
-- Immutable parent: GEO-R01 `142bd7c7c30f258ccc239c844edee6d3a9f4d81b`; compare VEG-only changes against that commit.
-- State: IN PROGRESS — baseline/A/B probes complete; hybrid and moving evidence next.
-- FLW-PDI-01 v0.1 applied from the owner's project source read in this session. No repository AGENTS.md was found.
-- Source video `82158.mp4` was not delivered and has not been inspected; independent normal-game routes are used.
-- Production remains `fe74db0`; GEO/VFC/PB01 worktrees and branches are not modified.
+- State: **COMPLETE — comparison and conservative decision; device/full-browser validation remains incomplete.**
+- Branch: `veg-r01-vegetation-lod`; no existing PR found.
+- Baseline: GEO-R01 `142bd7c`. Remote recovery: `5a6df26`; recovery checkpoint `95a7216`; durable evidence checkpoint `f3f60f6`.
+- Default: **baseline retained**. Preferred experiment: **Hybrid**, not approved for activation/merge.
+- Motion/browser evidence uses production `5af9779` (PB01, TUT-R01, SKY-C01). Final production tip `3a12a69` adds TUT-R02 `ab8541a`; its home-scene files are disjoint. Latest temporary integration also passes typecheck/build and 289/289 units.
 
-## Confirmed mechanisms
+## Confirmed complete
 
-- Tree-origin distance bands 16/26/48 m plus symmetric 3 m hysteresis mean approach upgrades near 13/23/45 m; initial state is xfar. This is not screen-size selection.
-- Mid foliage changes sphere topology and drops fillers/secondary branches; far/xfar drop clusters. Broadleaf xfar retains about six outline clusters, enlarges some survivors, and removes all branches. Same procedural seed does not imply same rendered crown outline.
-- Legacy trees use separate 26/42/105 m rules; current woodland uses TreeBatches, bushes retain existing ranges, ground plants already shrink near their cutoff.
-- Fallback packing replaced growing scene roots, losing World.roomRegion references, and could set region-hidden meshes visible. Candidate paths preserve roots and regionOff; explicit baseline selector retains old behavior for comparison.
+Recovered original work without editing the original worktrees. Old local `b484ebc` and remote `5a6df26` have identical trees. Retained A/B/Hybrid prototypes and the baseline selector; preserved eight moving review videos, measurements, source hashes and reproducible assessment scripts. Corrected a misleading shared-skeleton/silhouette comment. No new visual variant or budget relaxation was introduced during recovery.
 
-## Checkpoint validation
+192 inherited static views / 3,200 matched moving samples verified across all variants and both paths. Fresh 80 static samples reproduce counts exactly. Geometric outline diagnostics regenerated. Eight software rAF probes completed, with explicit non-device limitations. Additional temporary production+VEG replay completes 40 static views / 1,600 moving samples; paired renderer paths agree and camera trajectories match. Different pre-route view history is documented.
 
-- Typecheck, build and 285 unit tests passed (including selection/hysteresis, near-model identity, finite geometry and fallback region/growth regression).
-- First static comparison: `docs/veg-r01/probe/` (A 24/42/70, B 28/50/80 with mid/far continuity geometry). Normal screenshots, counters, geometry/instance estimates, separate high-shadow control.
-- Hybrid under evaluation: 22/36/62, cheaper mid, identical far/xfar geometry (one fewer transition and fewer fallback geometry groups).
-- Default remains baseline until selection. Prototypes selectable with `?veglod=baseline|a|b|hybrid`; fallback via `&multidraw=0`.
+## Decision
 
-## Policy and next action
+Hybrid removes far/xfar geometry changes and has 146 diagnostic changes versus baseline 234, but moving triangle growth is median +29.7%, maximum +38.5%. All candidates exceed independent relative review guards. All sampled candidates fit PB01 750k, but inherited draw-call overshoots remain; A/B add a new static fallback crossing at BOSLUST. Retain baseline because no candidate clears all acceptance requirements. Measured counts, visual judgments and assumptions are separated in `docs/veg-r01/REPORT.md`.
 
-- Read PB01 at `faf5c5d0cb24a5338a4591afbd16ef63b4d3bb8c`: provisional 750k mobile-low camera triangles, unchanged 150 calls, device validation pending; relative guards remain independent. No policy or test limits changed.
-- GEO conservatory costs are inherited, not charged to VEG. Record paired increments and new overshoots separately.
-- Finish matched moving captures, camera/instance consistency, relative budget assessment and recommendation; if no candidate clears the acceptance gates, retain baseline and report the blocker.
-- Commit/push only this branch; no merge or deployment authorized.
+## Validation
 
-## Recovery checkpoint — 14 October 2026
+- Branch typecheck/build and 286/286 units pass; temporary production integration typecheck/build and 289/289 units pass. Existing bundle warning retained.
+- DEV-04A browser: 17/19; inherited budget failure and final navigation timeout.
+- BOSLUST browser: 13/14; navigation timeout leaves later sample subchecks unverified.
+- Optional broad browser run stopped after 18 completed passing checks; no complete-suite or walkthrough pass claimed.
+- Actual normal-game replay/static matrix: no page errors; WebGL2 fallback without multi-draw exercised; current paired moving triangle parity holds.
+- Physical Samsung FPS, sustained pacing, heat and near-ceiling capacity: **NOT TESTED**. SwiftShader timings are not mobile performance claims.
+- Detailed evidence and limitations: `docs/veg-r01/recovery/CLOSEOUT.json`.
 
-Remote `5a6df26` and old local `b484ebc` have identical trees. Recovered additional uncommitted moving captures for all four profiles on both renderer paths, tests and packaging scripts without changing the original worktree. Independent working copy resumes the existing remote branch. Production inspected at `5af9779` (PB01/TUT-R01/SKY-C01 integrated). Fresh typecheck, 286 units and build pass. Default remains baseline; evidence assessment and current-production compatibility verification continue. See `docs/veg-r01/recovery/checkpoint.json`. No merge/deploy.
+## Dependencies and next safe action
 
-## Evidence milestone — recovery session
+No text conflicts with final production `3a12a69`; PB01's shared comment and VEG diagnostics coexist. Temporary compatibility worktree only; no production changes. GEO-R01 remains an inherited integration dependency requiring its own review. Other work packages were not modified. No force-push, production merge or deployment.
 
-All four variants × both renderer paths are verified: 192 inherited static views, 3,200 matching moving samples; fresh first-ten-view counters reproduce exactly. Software rAF samples and regenerated geometric silhouette masks completed. Hybrid is preferred experimentally; baseline remains default because all candidates exceed independent relative budget guards and physical-device validation is pending. Matched video exports, measurements and assessment are saved with this checkpoint. Temporary current-production integration passes typecheck/build/289 units; DEV-04A browser run has 17 passes, one budget failure and one final navigation timeout. Additional integrated movement and the broader browser run remain in progress. No merge/deploy.
+**Not merge-ready for activation.** Review Hybrid evidence, validate on the physical Samsung, separately review relative geometry growth and inherited call/budget failures, then seek the owner's separate merge/deploy authorization. Baseline remains the safe selected behavior while those gates are unresolved.

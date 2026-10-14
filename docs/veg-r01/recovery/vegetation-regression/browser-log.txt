@@ -1,0 +1,16 @@
+PASS  boslust sample: zone collision identical to the original (trees, stumps, cut walls, headwall, signpost, stair) — 160 colliders
+PASS  boslust sample: same interactables in the zone — 15: boslust.lock, door.boslust, door.gathering, door.shed, inspect.boslust, inspect.fork, inspect.plateDiagram, inspect.toolboard, pk.journal, pk.kindling, plate.boek, plate.boom, plate.tafel, plates.lever, shed.drawer
+PASS  boslust sample: every original light kept; only the two fixed entrance lanterns added — {"added":["fixed.boslust.61.62 61.62 2.2 17.78 1.35 5.5","fixed.boslust.64.38 64.38 2.2 17.78 1.35 5.5"],"removed":[]}
+PASS  boslust sample: old vegetation left outside the zone is unchanged (subset of base; trees moved to the woodland kit) — 1024/7879 instances
+PASS  boslust sample: reticle targets the same objects from the same poses — {"base":["inspect.fork","inspect.boslust","boslust.lock","door.boslust","inspect.fork"],"sample":["inspect.fork","inspect.boslust","boslust.lock","door.boslust","inspect.fork"]}
+PASS  boslust sample: fork clue, inscription, cover, cipher 2413, door and stair work by walking — {"fork":true,"inscription":true,"cover":true,"open":true,"under":true}
+PASS  boslust sample: save restores underground and on the approach (sample world rebuilt) — {"sv":{"x":63.00001797647681,"y":-3.4,"z":29.794076312666203,"yaw":0.432585410138943,"pitch":-0.2858695845973646},"back1":{"pose":{"x":63.00001797647681,"y":-3.4,"z":29.794076312666203,"yaw":0.432585410138943,"pitch":-0.2858695845973646},"open":true,"trees":1},"back2":{"x":60.5,"y":0,"z":9.6,"yaw":0.432585410138943,"pitch":-0.2858695845973646}}
+PASS  boslust sample: entrance lanterns lit from the cut mouth and the door; trees and understory drawn at every pose — {"fork":{"lanterns":2,"trees":357,"near":9,"under":110},"cutMouth":{"lanterns":2,"trees":292,"near":4,"under":41},"door":{"lanterns":2,"trees":280,"near":3,"under":46},"reverse":{"lanterns":2,"trees":120,"near":10,"under":104}}
+PASS  boslust sample: reduced motion keeps the entrance lanterns steady and lit — {"a":2,"on":true,"flicker":[0,0]}
+PASS  boslust sample: stumps inside a tree's base are treated (nurse/absorbed) and the drawing covers their unchanged collider — 4 in this layout [{"at":[56.48,55.06],"tree":"oak.1","treatment":"absorbed","collider":true,"covered":true},{"at":[146.75,57.42],"tree":"oak.1","treatment":"absorbed","collider":true,"covered":true},{"at":[175.72,7.68],"tree":"oak.2","treatment":"absorbed","collider":true,"covered":true},{"at":[109.22,57.62],"tree":"oak.1","treatment":"nurse","collider":true,"covered":true}]
+FAIL  boslust sample checks — page.goto: Timeout 30000ms exceeded.
+PASS  review=boslust: starts at the fork with the sample, bar toggles old/new at the same pose, temporary progress opens the cover — {"r1":{"pose":{"x":53.2,"y":0.15829448699951162,"z":6.8,"yaw":0.75,"pitch":-0.03},"trees":1,"bar":true,"strip":true},"r2":{"trees":0,"pose":{"x":53.2,"y":0.15829448699951162,"z":6.8,"yaw":0.75,"pitch":-0.03}},"r3":{"cover":true}}
+PASS  review=boslust: the player's own save, backup and settings are untouched (sandboxed state)
+PASS  review=boslust: normal entry afterwards still offers "Verder spelen", no review bar — {"bar":false,"cont":true}
+
+13/14 checks passed

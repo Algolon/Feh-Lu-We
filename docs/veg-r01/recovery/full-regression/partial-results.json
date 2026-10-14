@@ -1,0 +1,8 @@
+{
+  "state": "INTERRUPTED",
+  "exitCode": 130,
+  "completedPasses": 18,
+  "completedFailures": 0,
+  "reason": "Stopped the optional broad suite to release concurrent software-render load; no full-suite success claimed. Last completed check L6.",
+  "remainingSuites": "Unverified"
+}

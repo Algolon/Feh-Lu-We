@@ -31,6 +31,7 @@ for profile in PROFILES:
         j = read(directory/'results.json')
         moving = read(directory/'moving-summary.json')['routes']
         assert not j['errors'], (profile, path, j['errors'])
+        assert j['memory']['path'] == {'multi':'multi-draw','fallback':'instanced'}[path]
         frames = [f for route in moving.values() for f in route['frames']]
         assert len(frames) == 400
         assert j['memory']['shadows'] is False
@@ -76,6 +77,29 @@ for profile in PROFILES:
     result['profiles'][profile]=paths
 result['decision'] = 'Retain baseline default. Hybrid is preferred experimental candidate; activation/merge not ready: relative review guards exceeded, inherited call overshoots, device validation pending.'
 (ROOT/'assessment.json').write_text(json.dumps(result,indent=2)+'\n')
+
+integrated = ROOT/'recovery'/'integrated-moving'
+if all((integrated/f'{p}-{path}'/'results.json').exists() for p in ['baseline','hybrid'] for path in ['multi','fallback']):
+    replay = {'production':'5af9779', 'temporaryIntegrationTree':'0b378e1a8c3510e29fec246cbe651ee8d8309331',
+              'conditions':'Unpublished production+VEG combination. Same routes/settings, but ten static warm-up views rather than the recovered 24; early LOD history can differ. Software CPU times excluded from performance conclusions.', 'profiles':{}}
+    for profile in ['baseline','hybrid']:
+        for path in ['multi','fallback']:
+            directory=integrated/f'{profile}-{path}';j=read(directory/'results.json')
+            old=read(ROOT/'comparison'/directory.name/'results.json')
+            assert not j['errors']
+            assert [(v['name'],v['calls'],v['triangles']) for v in j['views']] == [(v['name'],v['calls'],v['triangles']) for v in old['views'][:10]]
+            routes={};oldroutes=read(ROOT/'comparison'/directory.name/'moving-summary.json')['routes']
+            for name,before in oldroutes.items():
+                frames=read(directory/f'{name}-frames.json')
+                # The sibling path is compared explicitly below; keep diagnostics independent of serialization order.
+                sibling=integrated/f"{profile}-{'fallback' if path=='multi' else 'multi'}"/f'{name}-frames.json'
+                other=read(sibling)
+                assert len(frames)==100
+                assert [f['pose']for f in frames]==[f['pose']for f in before['frames']]
+                assert [(f['pose'],f['triangles'])for f in frames]==[(f['pose'],f['triangles'])for f in other]
+                routes[name]={'cameraTriangles':stats([f['triangles']for f in frames]),'drawCalls':stats([f['calls']for f in frames]),'cameraPosesMatchRecovered':True,'multiDrawFallbackCameraParity':True,'maxTriangleDifferenceFromRecoveredHistory':max(abs(f['triangles']-b['triangles'])for f,b in zip(frames,before['frames']))}
+            replay['profiles'][directory.name]={'freshStaticCountsMatchRecovered':True,'routes':routes,'pageErrors':j['errors']}
+    (integrated/'summary.json').write_text(json.dumps(replay,indent=2)+'\n')
 
 if len(sys.argv)>1:
     from PIL import Image, ImageDraw, ImageChops

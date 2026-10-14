@@ -5,7 +5,10 @@ root=Path('docs/veg-r01/comparison'); out=Path('docs/veg-r01/videos');out.mkdir(
 scratch=Path(os.environ.get('VEG_INTERMEDIATES', str(Path(tempfile.gettempdir())/'veg-r01-intermediates')));scratch.mkdir(parents=True,exist_ok=True)
 routes=['boslust','dense','garden-edge','treeline']
 for directory in sorted(root.iterdir()):
- if not (directory/'results.json').exists() or (directory/'moving-summary.json').exists():continue
+ if not (directory/'results.json').exists():continue
+ if not all((directory/(n+'-frames.json')).exists() for n in routes):
+  if (directory/'moving-summary.json').exists():continue
+  raise RuntimeError('Incomplete raw frame set '+directory.name)
  frames={n:json.loads((directory/(n+'-frames.json')).read_text()) for n in routes}
  if any(len(v)!=100 for v in frames.values()):raise RuntimeError('Incomplete sequence '+directory.name)
  video=out/(directory.name+'.mp4');cmd=['ffmpeg','-v','error','-y']

@@ -1,0 +1,82 @@
+{
+  "state": "COMPLETE_COMPARISON_BASELINE_RETAINED",
+  "branch": "veg-r01-vegetation-lod",
+  "preferredExperimentalVariant": "hybrid",
+  "defaultVariant": "baseline",
+  "mergeReady": false,
+  "productionMerge": false,
+  "deployment": false,
+  "inheritedStaticViews": 192,
+  "inheritedMovingSamples": 3200,
+  "freshReproducedStaticViews": 80,
+  "additionalIntegratedStaticViews": 40,
+  "additionalIntegratedMovingSamples": 1600,
+  "typecheck": "PASS branch and temporary integration",
+  "build": "PASS branch and temporary integration; existing large-bundle warning",
+  "unitTests": {
+    "branch": {
+      "passed": 286,
+      "total": 286
+    },
+    "integration": {
+      "passed": 289,
+      "total": 289
+    }
+  },
+  "browser": {
+    "DEV04A": {
+      "passed": 17,
+      "total": 19,
+      "issues": [
+        "Existing inherited render budget failures",
+        "Final legacy-save navigation timed out; cause unestablished"
+      ]
+    },
+    "boslustSample": {
+      "passed": 13,
+      "total": 14,
+      "issues": [
+        "Navigation timed out before later sample subchecks; cause unestablished"
+      ]
+    },
+    "broaderOptionalSuite": {
+      "state": "PARTIAL_STOPPED",
+      "completedPasses": 18,
+      "completedFailures": 0,
+      "fullPassClaimed": false
+    },
+    "normalGameMotion": {
+      "completedCombinations": 4,
+      "samples": 1600,
+      "pageErrors": 0,
+      "cameraPosesMatchRecovered": true,
+      "multiDrawFallbackTriangleParity": true
+    }
+  },
+  "deviceValidation": "PENDING: no physical Samsung/browser/thermal evidence",
+  "budgetDecision": "All candidate sampled counts <750k; inherited 150-call failures and new relative growth remain unresolved; no budgets or allowances changed.",
+  "dependencies": [
+    "Inherited GEO-R01 changes require their own integration review",
+    "No text conflicts with final production 3a12a69; TUT-R02 runtime files are disjoint",
+    "No existing PR found for this branch"
+  ],
+  "nextSafeAction": "Review evidence; validate preferred Hybrid on physical Samsung and separately review relative cost/inherited call failures before activation. Separate authorization required for merge/deploy.",
+  "finalProductionConflictCheck": "No text conflicts with 3a12a692793b3f9cf3914d5235cd3f0fba5f61b6",
+  "branchCheckpointBeforeCloseout": "f3f60f6c785d02683c8d5aba4e65fc03d758caa9",
+  "finalProductionTip": "3a12a692793b3f9cf3914d5235cd3f0fba5f61b6",
+  "latestProductionCompatibility": {
+    "temporaryCommit": "f86e388",
+    "temporaryTree": "f213a3a71044c8a2052e1d20b4f9b0192c3c08f2",
+    "typecheck": "PASS",
+    "build": "PASS",
+    "unitTests": {
+      "passed": 289,
+      "total": 289
+    },
+    "browserReplay": "Not repeated; existing replay explicitly uses 5af9779",
+    "newRuntimeFiles": [
+      "src/world/home.ts",
+      "src/world/homeDressing.ts"
+    ]
+  }
+}
