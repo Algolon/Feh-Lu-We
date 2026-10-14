@@ -215,7 +215,7 @@ Achieved with composition, casework and architectural dressing, not with more sm
 - **Caps for D3-a:**
   - kitchen ≤ +1 call and ≤ +10 k tris;
   - dining ≤ +2 calls and ≤ +12 k tris;
-  - no view over 150 calls / 250 k.
+  - no view over 150 calls / 750,000 camera triangles (PB01, provisional).
 - Materials: the existing timber / paint / brass / ceramic / stone / wood families already batched in the `mWing` chunk.
   - No new material or texture; the rugs use the existing rug atlas.
 

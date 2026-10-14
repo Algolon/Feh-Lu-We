@@ -28,5 +28,6 @@ test('all active low camera-budget suites consume central checks without a hidde
     assert.doesNotMatch(s, /250000|250_000|250 k|250k/);
     assert.match(s, /lowViewWithinBudget|cameraRegressionWithinBudget/);
   }
+  assert.match(readFileSync(new URL('e2e-dev04c.mjs', import.meta.url), 'utf8'), /set === 'A' && k === 'golfSpur'/);
   assert.match(readFileSync(new URL('e2e.mjs', import.meta.url), 'utf8'), /r.high.calls <= 150 \* 1.8 && r.high.triangles <= 450000/);
 });

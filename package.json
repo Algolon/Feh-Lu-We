@@ -8,6 +8,7 @@
     "dev": "vite",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:budget": "node --test scripts/check-performance-budget.test.mjs",
     "build": "vite build",
     "preview": "vite preview --port 4173 --strictPort",
     "e2e": "node scripts/e2e.mjs",
