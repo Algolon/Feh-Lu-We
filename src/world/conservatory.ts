@@ -165,10 +165,10 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
       const s = gaps.some(([, ge]) => Math.abs(ge - s0) < 1e-6) ? s0 + 0.01 : s0, e = gaps.some(([gs]) => Math.abs(gs - e0) < 1e-6) ? e0 - 0.01 : e0;
       if (axis === 'x') {
         boxMM(glass, k.M.glass, '#ffffff', s, e, 0.08, H - 0.08, f - 0.015, f + 0.015, { chunk: 'glass' });
-        w.col.addBox(s, e, f - 0.08, f + 0.08, 0, H, { occludes: true });
+        w.visualPassThrough.add(w.col.addBox(s, e, f - 0.08, f + 0.08, 0, H, { occludes: true }));
       } else {
         boxMM(glass, k.M.glass, '#ffffff', f - 0.015, f + 0.015, 0.08, H - 0.08, s, e, { chunk: 'glass' });
-        w.col.addBox(f - 0.08, f + 0.08, s, e, 0, H, { occludes: true });
+        w.visualPassThrough.add(w.col.addBox(f - 0.08, f + 0.08, s, e, 0, H, { occludes: true }));
       }
     }
   };

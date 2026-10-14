@@ -78,7 +78,9 @@ describe('DEV-02 rooms and portals', () => {
       expect(r, d.id).toBeTruthy();
       // DEV-04A: the attic lookout became the observation nook and uses the roof volume east to X 103.6 (v0.2: 101)
       const x1 = d.id === 'atticLookout' ? 103.6 : d.bounds.x1;
-      expect([r!.x0, r!.x1, r!.z0, r!.z1]).toEqual([d.bounds.x0, x1, d.bounds.z0, d.bounds.z1]);
+      // GEO-R01: fill the 40 cm gap to the existing manor wall; no wall or room partition moved.
+      const x0 = ['corridor', 'workshop', 'pantry'].includes(d.id) ? 108 : d.bounds.x0;
+      expect([r!.x0, r!.x1, r!.z0, r!.z1]).toEqual([x0, x1, d.bounds.z0, d.bounds.z1]);
     }
     expect(ROOMS.length).toBe(P.rooms.length); // 49
   });
