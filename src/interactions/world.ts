@@ -164,7 +164,9 @@ export class World {
    * turn reaches the doorway only after the outdoors is back). In the
    * living room this saved ~150 k triangles of forest drawn behind solid walls.
    */
-  exteriorDoors: { door: string; x: number; y: number; z: number; r: number }[] = [];
+  exteriorDoors: { door: string; x: number; y: number; z: number; r: number; seeThrough?: boolean }[] = [];
+  /** Glass still blocks movement and picking; only visibility rays may pass through it. */
+  readonly visualPassThrough = new Set<Collider>();
   private interiorThroughDoor = true;
   /**
    * DEV-03: while inside with the outdoors visible only through doorways, the plan-angle windows through them (eye
@@ -176,18 +178,19 @@ export class World {
   private collectWindows = false;
   private windowsTmp: { x: number; z: number; dx: number; dz: number; cos: number }[] = [];
   private windowsKey = '';
-  private outdoorInView(eye: THREE.Vector3, cam?: THREE.PerspectiveCamera, maxDist = Infinity, all = false) {
+  private outdoorInView(eye: THREE.Vector3, cam?: THREE.PerspectiveCamera, maxDist = Infinity, all = false, onlyDoor?: string) {
     if ((!cam && !all) || !this.exteriorDoors.length) return true;
     const fwd = cam ? cam.getWorldDirection(tmpFwd) : tmpFwd.set(0, 0, -1);
     const half = cam ? Math.atan(Math.tan(THREE.MathUtils.degToRad(cam.fov / 2)) * cam.aspect) + THREE.MathUtils.degToRad(32) : Math.PI;
     for (const d of this.exteriorDoors) {
-      if (d.door && !this.isOpen(d.door)) continue; // '' = a glass wall (always see-through)
+      if (onlyDoor && d.door !== onlyDoor) continue;
+      if (d.door && !d.seeThrough && !this.isOpen(d.door)) continue; // '' = a glass wall (always see-through)
       tmpTo.set(d.x - eye.x, d.y - eye.y, -d.z - eye.z);
       const dist = tmpTo.length();
       if (dist > maxDist) continue;
       if (this.collectWindows) { // inside: every open doorway in line of sight contributes a window (no early exit)
         let seen = false;
-        for (const [ox, oz] of DOOR_SAMPLES) if (!this.col.segmentBlocked(eye.x, eye.y, -eye.z, d.x + ox, d.y, d.z + oz)) { seen = true; break; }
+        for (const [ox, oz] of DOOR_SAMPLES) if (!this.col.segmentBlocked(eye.x, eye.y, -eye.z, d.x + ox, d.y, d.z + oz, this.visualPassThrough)) { seen = true; break; }
         if (seen) {
           const px = d.x - eye.x, pz = d.z + eye.z, pd = Math.hypot(px, pz) || 1;
           this.windowsTmp.push({ x: eye.x, z: -eye.z, dx: px / pd, dz: pz / pd, cos: Math.cos(Math.min(Math.PI / 2, Math.atan2(d.r + 0.6, pd) + 0.12)) });
@@ -197,7 +200,7 @@ export class World {
       const ang = Math.acos(THREE.MathUtils.clamp(tmpTo.dot(fwd) / dist, -1, 1)) - Math.asin(Math.min(1, d.r / dist));
       if (ang >= half) continue;
       // in the cone: is any part of the doorway in line of sight (walls and closed doors occlude)?
-      for (const [ox, oz] of DOOR_SAMPLES) if (!this.col.segmentBlocked(eye.x, eye.y, -eye.z, d.x + ox, d.y, d.z + oz)) return true;
+      for (const [ox, oz] of DOOR_SAMPLES) if (!this.col.segmentBlocked(eye.x, eye.y, -eye.z, d.x + ox, d.y, d.z + oz, this.visualPassThrough)) return true;
     }
     return false;
   }
@@ -205,7 +208,10 @@ export class World {
     if (this.rooms) {
       this.hereRoom = this.rooms.roomAt(eye.x, eye.y - 0.8, -eye.z);
       // outdoors, an open door shows only the first rooms behind it (windows are opaque panes)
-      this.visibleRooms = this.rooms.visible(this.hereRoom, this.isOpen, this.hereRoom === 'out' ? 2 : 3);
+      // Closed glass adds a visual path only if that particular aperture can be seen from outside.
+      // Otherwise the global 'out' node would pull the service wing into views behind opaque manor walls.
+      this.visibleRooms = this.rooms.visible(this.hereRoom, this.isOpen, this.hereRoom === 'out' ? 2 : 3,
+        this.hereRoom === 'out' ? (door) => this.outdoorInView(eye, cam, 22, false, door) : undefined);
       // the outdoors and the glass Copacabana Room (whose walls show the outdoors) count as one view: from inside the
       // house they are drawn only while an open doorway to them is in (a generous cone round) the view
       if (this.hereRoom !== 'out' && this.hereRoom !== 'cons' && (this.visibleRooms.has('out') || this.visibleRooms.has('cons')) && !this.outdoorInView(eye, cam, 26)) {
@@ -304,6 +310,7 @@ export class World {
     this.scene.clear();
     this.updaters.length = 0;
     this.syncers.length = 0;
+    this.visualPassThrough.clear();
   }
 }
 

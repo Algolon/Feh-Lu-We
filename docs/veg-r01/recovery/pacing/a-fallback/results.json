@@ -1,0 +1,113 @@
+{
+  "profile": "a",
+  "path": "fallback",
+  "views": [],
+  "memory": {
+    "geometryBytes": 87421980,
+    "instanceBytes": 276564,
+    "batchTextureBytes": 0,
+    "geometries": 152,
+    "textures": 19,
+    "path": "instanced",
+    "profile": {
+      "id": "a",
+      "distances": [
+        24,
+        42,
+        70
+      ],
+      "hysteresis": 3,
+      "continuous": false
+    },
+    "treeCount": {
+      "trees": 1735,
+      "plants": 11693,
+      "rocks": 232,
+      "logs": 36,
+      "boulders": 49,
+      "saplings": 353,
+      "screenBushes": 126
+    },
+    "fov": 68,
+    "dpr": 1,
+    "buffer": [
+      768,
+      432
+    ],
+    "shadows": false
+  },
+  "shadow": {
+    "cameraNoShadows": {
+      "cpuSubmitMs": 4.400000000372529,
+      "calls": 152,
+      "triangles": 282256
+    },
+    "cameraWithShadows": {
+      "calls": 155,
+      "triangles": 321730
+    },
+    "combined": {
+      "cpuSubmitMs": 7.5,
+      "calls": 226,
+      "triangles": 542574
+    },
+    "shadowCalls": 71,
+    "shadowTriangles": 220844,
+    "map": [
+      1024,
+      1024
+    ],
+    "conditions": "High-quality 1024px mobile sun shadow control. Shadow renderer counters sampled around its actual pass; camera=combined-minus-shadow, including any conservative fallback superset. Not a mobile-low gate."
+  },
+  "pacing": {
+    "intervalsMs": [
+      16.699999999999818,
+      16.700000000000728,
+      16.599999999999454,
+      16.800000000000182,
+      49.899999999999636,
+      83.40000000000055,
+      16.599999999999454,
+      16.700000000000728,
+      16.699999999999818,
+      16.699999999999818,
+      16.600000000000364,
+      16.599999999999454,
+      16.699999999999818,
+      1416.6000000000004,
+      16.699999999999818,
+      16.600000000000364,
+      233.30000000000018,
+      16.699999999999818,
+      300,
+      266.6999999999998,
+      200,
+      233.30000000000018,
+      266.6999999999998,
+      249.89999999999964,
+      216.8000000000011,
+      449.89999999999964,
+      233.29999999999927,
+      233.39999999999964,
+      216.60000000000036,
+      233.3000000000011,
+      233.29999999999927,
+      16.700000000000728,
+      200,
+      233.39999999999964,
+      566.5,
+      200.10000000000036,
+      66.59999999999854,
+      400,
+      233.40000000000146,
+      233.29999999999927
+    ],
+    "conditions": "Actual game rAF intervals after 8 warm-up frames; SwiftShader, fixed BOSLUST view, low, 768x432 DPR1. Software environment indicators only; not Samsung capacity."
+  },
+  "errors": [],
+  "moving": [],
+  "omittedForReviewPackaging": [
+    "Repeated full-world tree inventory",
+    "Static per-view diagnostic tree sample and LOD distribution; submitted counters retained"
+  ]
+}

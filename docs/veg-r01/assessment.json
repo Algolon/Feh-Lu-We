@@ -1,0 +1,2150 @@
+{
+  "conditions": "Recovered actual-game low-quality 768x432 DPR1, shadows off; matched 30Hz simulation/10Hz captured samples. Counts are submitted geometry, timings are SwiftShader only.",
+  "policySource": "production 5af9779 scripts/performance-budget.mjs and docs/PERFORMANCE_BUDGET.md",
+  "cameraCeiling": 750000,
+  "callGuide": 150,
+  "deviceValidated": false,
+  "profiles": {
+    "baseline": {
+      "multi": {
+        "views": 24,
+        "movingSamples": 400,
+        "cameraTriangles": {
+          "min": 88670,
+          "median": 207278.5,
+          "p95": 247658,
+          "p99": 270240,
+          "max": 371959
+        },
+        "drawCalls": {
+          "min": 16,
+          "median": 55.0,
+          "p95": 89,
+          "p99": 150,
+          "max": 186
+        },
+        "movingRelativeGrowthPercent": {
+          "min": 0.0,
+          "median": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "samplesAbove750k": 0,
+        "samplesAbove150Calls": 5,
+        "newCallOvershootsStatic": [],
+        "movingSamplesAbove8Percent": 0,
+        "movingSamplesAbove2Percent": 0,
+        "geometryChangesWithin90m": 234,
+        "staticReference": [
+          {
+            "name": "boslust",
+            "triangles": 236765,
+            "baselineTriangles": 236765,
+            "growthPercent": 0.0,
+            "calls": 89,
+            "baselineCalls": 89
+          },
+          {
+            "name": "dense",
+            "triangles": 209413,
+            "baselineTriangles": 209413,
+            "growthPercent": 0.0,
+            "calls": 57,
+            "baselineCalls": 57
+          },
+          {
+            "name": "garden-edge",
+            "triangles": 111160,
+            "baselineTriangles": 111160,
+            "growthPercent": 0.0,
+            "calls": 26,
+            "baselineCalls": 26
+          },
+          {
+            "name": "treeline",
+            "triangles": 207264,
+            "baselineTriangles": 207264,
+            "growthPercent": 0.0,
+            "calls": 58,
+            "baselineCalls": 58
+          },
+          {
+            "name": "forest-busy",
+            "triangles": 241183,
+            "baselineTriangles": 241183,
+            "growthPercent": 0.0,
+            "calls": 92,
+            "baselineCalls": 92
+          },
+          {
+            "name": "cons-deck",
+            "triangles": 307740,
+            "baselineTriangles": 307740,
+            "growthPercent": 0.0,
+            "calls": 170,
+            "baselineCalls": 170
+          },
+          {
+            "name": "cons-corridor",
+            "triangles": 371959,
+            "baselineTriangles": 371959,
+            "growthPercent": 0.0,
+            "calls": 186,
+            "baselineCalls": 186
+          },
+          {
+            "name": "service",
+            "triangles": 208832,
+            "baselineTriangles": 208832,
+            "growthPercent": 0.0,
+            "calls": 101,
+            "baselineCalls": 101
+          },
+          {
+            "name": "distant",
+            "triangles": 145039,
+            "baselineTriangles": 145039,
+            "growthPercent": 0.0,
+            "calls": 53,
+            "baselineCalls": 53
+          },
+          {
+            "name": "woodland-east",
+            "triangles": 205280,
+            "baselineTriangles": 205280,
+            "growthPercent": 0.0,
+            "calls": 37,
+            "baselineCalls": 37
+          },
+          {
+            "name": "atticNook",
+            "triangles": 106020,
+            "baselineTriangles": 106020,
+            "growthPercent": 0.0,
+            "calls": 41,
+            "baselineCalls": 41
+          },
+          {
+            "name": "atticCommon",
+            "triangles": 108298,
+            "baselineTriangles": 108298,
+            "growthPercent": 0.0,
+            "calls": 39,
+            "baselineCalls": 39
+          },
+          {
+            "name": "conservatoryInside",
+            "triangles": 128668,
+            "baselineTriangles": 128668,
+            "growthPercent": 0.0,
+            "calls": 74,
+            "baselineCalls": 74
+          },
+          {
+            "name": "conservatoryDoorDeck",
+            "triangles": 307740,
+            "baselineTriangles": 307740,
+            "growthPercent": 0.0,
+            "calls": 170,
+            "baselineCalls": 170
+          },
+          {
+            "name": "wellnessDeck",
+            "triangles": 156535,
+            "baselineTriangles": 156535,
+            "growthPercent": 0.0,
+            "calls": 65,
+            "baselineCalls": 65
+          },
+          {
+            "name": "saunaAccess",
+            "triangles": 327376,
+            "baselineTriangles": 327376,
+            "growthPercent": 0.0,
+            "calls": 175,
+            "baselineCalls": 175
+          },
+          {
+            "name": "wickermanClearing",
+            "triangles": 160593,
+            "baselineTriangles": 160593,
+            "growthPercent": 0.0,
+            "calls": 31,
+            "baselineCalls": 31
+          },
+          {
+            "name": "wickermanPath",
+            "triangles": 211057,
+            "baselineTriangles": 211057,
+            "growthPercent": 0.0,
+            "calls": 35,
+            "baselineCalls": 35
+          },
+          {
+            "name": "frontForecourt",
+            "triangles": 273746,
+            "baselineTriangles": 273746,
+            "growthPercent": 0.0,
+            "calls": 155,
+            "baselineCalls": 155
+          },
+          {
+            "name": "arrivalCourt",
+            "triangles": 270240,
+            "baselineTriangles": 270240,
+            "growthPercent": 0.0,
+            "calls": 150,
+            "baselineCalls": 150
+          },
+          {
+            "name": "portugalTerrace",
+            "triangles": 93007,
+            "baselineTriangles": 93007,
+            "growthPercent": 0.0,
+            "calls": 31,
+            "baselineCalls": 31
+          },
+          {
+            "name": "portugalApproach",
+            "triangles": 120623,
+            "baselineTriangles": 120623,
+            "growthPercent": 0.0,
+            "calls": 33,
+            "baselineCalls": 33
+          },
+          {
+            "name": "golfVicinity",
+            "triangles": 198999,
+            "baselineTriangles": 198999,
+            "growthPercent": 0.0,
+            "calls": 55,
+            "baselineCalls": 55
+          },
+          {
+            "name": "golfSpur",
+            "triangles": 263048,
+            "baselineTriangles": 263048,
+            "growthPercent": 0.0,
+            "calls": 90,
+            "baselineCalls": 90
+          }
+        ],
+        "memoryEstimates": {
+          "geometryBytes": 87421980,
+          "instanceBytes": 207860,
+          "batchTextureBytes": 1184724,
+          "geometries": 310,
+          "textures": 56
+        },
+        "shadowControl": {
+          "cameraNoShadows": {
+            "cpuSubmitMs": 3.5,
+            "calls": 89,
+            "triangles": 232688
+          },
+          "cameraWithShadows": {
+            "calls": 89,
+            "triangles": 232688
+          },
+          "combined": {
+            "cpuSubmitMs": 4.700000001117587,
+            "calls": 108,
+            "triangles": 374392
+          },
+          "shadowCalls": 19,
+          "shadowTriangles": 141704,
+          "map": [
+            1024,
+            1024
+          ],
+          "conditions": "High-quality 1024px mobile sun shadow control. Shadow renderer counters sampled around its actual pass; camera=combined-minus-shadow, including any conservative fallback superset. Not a mobile-low gate."
+        },
+        "freshStaticCountsReproduced": true,
+        "softwareFrameIntervalsMs": {
+          "min": 16.699999999999818,
+          "median": 166.5999999999999,
+          "p95": 216.69999999999982,
+          "p99": 400.10000000000036,
+          "max": 1383.1999999999998,
+          "over50ms": 29,
+          "over100ms": 24,
+          "samples": 40
+        }
+      },
+      "fallback": {
+        "views": 24,
+        "movingSamples": 400,
+        "cameraTriangles": {
+          "min": 88670,
+          "median": 207278.5,
+          "p95": 247658,
+          "p99": 270240,
+          "max": 371959
+        },
+        "drawCalls": {
+          "min": 49,
+          "median": 117.0,
+          "p95": 147,
+          "p99": 165,
+          "max": 203
+        },
+        "movingRelativeGrowthPercent": {
+          "min": 0.0,
+          "median": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "samplesAbove750k": 0,
+        "samplesAbove150Calls": 16,
+        "newCallOvershootsStatic": [],
+        "movingSamplesAbove8Percent": 0,
+        "movingSamplesAbove2Percent": 0,
+        "geometryChangesWithin90m": 234,
+        "staticReference": [
+          {
+            "name": "boslust",
+            "triangles": 236765,
+            "baselineTriangles": 236765,
+            "growthPercent": 0.0,
+            "calls": 142,
+            "baselineCalls": 142
+          },
+          {
+            "name": "dense",
+            "triangles": 209413,
+            "baselineTriangles": 209413,
+            "growthPercent": 0.0,
+            "calls": 127,
+            "baselineCalls": 127
+          },
+          {
+            "name": "garden-edge",
+            "triangles": 111160,
+            "baselineTriangles": 111160,
+            "growthPercent": 0.0,
+            "calls": 59,
+            "baselineCalls": 59
+          },
+          {
+            "name": "treeline",
+            "triangles": 207264,
+            "baselineTriangles": 207264,
+            "growthPercent": 0.0,
+            "calls": 112,
+            "baselineCalls": 112
+          },
+          {
+            "name": "forest-busy",
+            "triangles": 241183,
+            "baselineTriangles": 241183,
+            "growthPercent": 0.0,
+            "calls": 152,
+            "baselineCalls": 152
+          },
+          {
+            "name": "cons-deck",
+            "triangles": 307740,
+            "baselineTriangles": 307740,
+            "growthPercent": 0.0,
+            "calls": 182,
+            "baselineCalls": 182
+          },
+          {
+            "name": "cons-corridor",
+            "triangles": 371959,
+            "baselineTriangles": 371959,
+            "growthPercent": 0.0,
+            "calls": 199,
+            "baselineCalls": 199
+          },
+          {
+            "name": "service",
+            "triangles": 247774,
+            "baselineTriangles": 247774,
+            "growthPercent": 0.0,
+            "calls": 116,
+            "baselineCalls": 116
+          },
+          {
+            "name": "distant",
+            "triangles": 145039,
+            "baselineTriangles": 145039,
+            "growthPercent": 0.0,
+            "calls": 85,
+            "baselineCalls": 85
+          },
+          {
+            "name": "woodland-east",
+            "triangles": 205280,
+            "baselineTriangles": 205280,
+            "growthPercent": 0.0,
+            "calls": 110,
+            "baselineCalls": 110
+          },
+          {
+            "name": "atticNook",
+            "triangles": 143661,
+            "baselineTriangles": 143661,
+            "growthPercent": 0.0,
+            "calls": 56,
+            "baselineCalls": 56
+          },
+          {
+            "name": "atticCommon",
+            "triangles": 156040,
+            "baselineTriangles": 156040,
+            "growthPercent": 0.0,
+            "calls": 58,
+            "baselineCalls": 58
+          },
+          {
+            "name": "conservatoryInside",
+            "triangles": 128668,
+            "baselineTriangles": 128668,
+            "growthPercent": 0.0,
+            "calls": 97,
+            "baselineCalls": 97
+          },
+          {
+            "name": "conservatoryDoorDeck",
+            "triangles": 307740,
+            "baselineTriangles": 307740,
+            "growthPercent": 0.0,
+            "calls": 182,
+            "baselineCalls": 182
+          },
+          {
+            "name": "wellnessDeck",
+            "triangles": 156535,
+            "baselineTriangles": 156535,
+            "growthPercent": 0.0,
+            "calls": 101,
+            "baselineCalls": 101
+          },
+          {
+            "name": "saunaAccess",
+            "triangles": 327376,
+            "baselineTriangles": 327376,
+            "growthPercent": 0.0,
+            "calls": 203,
+            "baselineCalls": 203
+          },
+          {
+            "name": "wickermanClearing",
+            "triangles": 160593,
+            "baselineTriangles": 160593,
+            "growthPercent": 0.0,
+            "calls": 92,
+            "baselineCalls": 92
+          },
+          {
+            "name": "wickermanPath",
+            "triangles": 211057,
+            "baselineTriangles": 211057,
+            "growthPercent": 0.0,
+            "calls": 110,
+            "baselineCalls": 110
+          },
+          {
+            "name": "frontForecourt",
+            "triangles": 273746,
+            "baselineTriangles": 273746,
+            "growthPercent": 0.0,
+            "calls": 169,
+            "baselineCalls": 169
+          },
+          {
+            "name": "arrivalCourt",
+            "triangles": 270240,
+            "baselineTriangles": 270240,
+            "growthPercent": 0.0,
+            "calls": 165,
+            "baselineCalls": 165
+          },
+          {
+            "name": "portugalTerrace",
+            "triangles": 93007,
+            "baselineTriangles": 93007,
+            "growthPercent": 0.0,
+            "calls": 70,
+            "baselineCalls": 70
+          },
+          {
+            "name": "portugalApproach",
+            "triangles": 120623,
+            "baselineTriangles": 120623,
+            "growthPercent": 0.0,
+            "calls": 80,
+            "baselineCalls": 80
+          },
+          {
+            "name": "golfVicinity",
+            "triangles": 198999,
+            "baselineTriangles": 198999,
+            "growthPercent": 0.0,
+            "calls": 127,
+            "baselineCalls": 127
+          },
+          {
+            "name": "golfSpur",
+            "triangles": 263048,
+            "baselineTriangles": 263048,
+            "growthPercent": 0.0,
+            "calls": 161,
+            "baselineCalls": 161
+          }
+        ],
+        "memoryEstimates": {
+          "geometryBytes": 87421980,
+          "instanceBytes": 312436,
+          "batchTextureBytes": 0,
+          "geometries": 395,
+          "textures": 44
+        },
+        "shadowControl": {
+          "cameraNoShadows": {
+            "cpuSubmitMs": 3.599999999627471,
+            "calls": 142,
+            "triangles": 232688
+          },
+          "cameraWithShadows": {
+            "calls": 148,
+            "triangles": 258158
+          },
+          "combined": {
+            "cpuSubmitMs": 4.699999999254942,
+            "calls": 212,
+            "triangles": 415430
+          },
+          "shadowCalls": 64,
+          "shadowTriangles": 157272,
+          "map": [
+            1024,
+            1024
+          ],
+          "conditions": "High-quality 1024px mobile sun shadow control. Shadow renderer counters sampled around its actual pass; camera=combined-minus-shadow, including any conservative fallback superset. Not a mobile-low gate."
+        },
+        "freshStaticCountsReproduced": true,
+        "softwareFrameIntervalsMs": {
+          "min": 16.599999999999454,
+          "median": 158.25,
+          "p95": 349.89999999999964,
+          "p99": 433.3000000000011,
+          "max": 1233.2000000000007,
+          "over50ms": 25,
+          "over100ms": 21,
+          "samples": 40
+        }
+      }
+    },
+    "a": {
+      "multi": {
+        "views": 24,
+        "movingSamples": 400,
+        "cameraTriangles": {
+          "min": 106020,
+          "median": 258175.0,
+          "p95": 308840,
+          "p99": 317689,
+          "max": 375338
+        },
+        "drawCalls": {
+          "min": 16,
+          "median": 55.0,
+          "p95": 89,
+          "p99": 150,
+          "max": 186
+        },
+        "movingRelativeGrowthPercent": {
+          "min": 13.007,
+          "median": 23.96,
+          "p95": 28.108,
+          "p99": 30.949,
+          "max": 31.306
+        },
+        "samplesAbove750k": 0,
+        "samplesAbove150Calls": 5,
+        "newCallOvershootsStatic": [],
+        "movingSamplesAbove8Percent": 400,
+        "movingSamplesAbove2Percent": 400,
+        "geometryChangesWithin90m": 385,
+        "staticReference": [
+          {
+            "name": "boslust",
+            "triangles": 282256,
+            "baselineTriangles": 236765,
+            "growthPercent": 19.214,
+            "calls": 89,
+            "baselineCalls": 89
+          },
+          {
+            "name": "dense",
+            "triangles": 276758,
+            "baselineTriangles": 209413,
+            "growthPercent": 32.159,
+            "calls": 57,
+            "baselineCalls": 57
+          },
+          {
+            "name": "garden-edge",
+            "triangles": 127945,
+            "baselineTriangles": 111160,
+            "growthPercent": 15.1,
+            "calls": 26,
+            "baselineCalls": 26
+          },
+          {
+            "name": "treeline",
+            "triangles": 249625,
+            "baselineTriangles": 207264,
+            "growthPercent": 20.438,
+            "calls": 58,
+            "baselineCalls": 58
+          },
+          {
+            "name": "forest-busy",
+            "triangles": 282515,
+            "baselineTriangles": 241183,
+            "growthPercent": 17.137,
+            "calls": 92,
+            "baselineCalls": 92
+          },
+          {
+            "name": "cons-deck",
+            "triangles": 309362,
+            "baselineTriangles": 307740,
+            "growthPercent": 0.527,
+            "calls": 170,
+            "baselineCalls": 170
+          },
+          {
+            "name": "cons-corridor",
+            "triangles": 375338,
+            "baselineTriangles": 371959,
+            "growthPercent": 0.908,
+            "calls": 186,
+            "baselineCalls": 186
+          },
+          {
+            "name": "service",
+            "triangles": 208832,
+            "baselineTriangles": 208832,
+            "growthPercent": 0.0,
+            "calls": 101,
+            "baselineCalls": 101
+          },
+          {
+            "name": "distant",
+            "triangles": 162220,
+            "baselineTriangles": 145039,
+            "growthPercent": 11.846,
+            "calls": 53,
+            "baselineCalls": 53
+          },
+          {
+            "name": "woodland-east",
+            "triangles": 258186,
+            "baselineTriangles": 205280,
+            "growthPercent": 25.773,
+            "calls": 37,
+            "baselineCalls": 37
+          },
+          {
+            "name": "atticNook",
+            "triangles": 106020,
+            "baselineTriangles": 106020,
+            "growthPercent": 0.0,
+            "calls": 41,
+            "baselineCalls": 41
+          },
+          {
+            "name": "atticCommon",
+            "triangles": 108298,
+            "baselineTriangles": 108298,
+            "growthPercent": 0.0,
+            "calls": 39,
+            "baselineCalls": 39
+          },
+          {
+            "name": "conservatoryInside",
+            "triangles": 143537,
+            "baselineTriangles": 128668,
+            "growthPercent": 11.556,
+            "calls": 74,
+            "baselineCalls": 74
+          },
+          {
+            "name": "conservatoryDoorDeck",
+            "triangles": 310309,
+            "baselineTriangles": 307740,
+            "growthPercent": 0.835,
+            "calls": 170,
+            "baselineCalls": 170
+          },
+          {
+            "name": "wellnessDeck",
+            "triangles": 179163,
+            "baselineTriangles": 156535,
+            "growthPercent": 14.456,
+            "calls": 65,
+            "baselineCalls": 65
+          },
+          {
+            "name": "saunaAccess",
+            "triangles": 336480,
+            "baselineTriangles": 327376,
+            "growthPercent": 2.781,
+            "calls": 175,
+            "baselineCalls": 175
+          },
+          {
+            "name": "wickermanClearing",
+            "triangles": 210409,
+            "baselineTriangles": 160593,
+            "growthPercent": 31.02,
+            "calls": 31,
+            "baselineCalls": 31
+          },
+          {
+            "name": "wickermanPath",
+            "triangles": 261130,
+            "baselineTriangles": 211057,
+            "growthPercent": 23.725,
+            "calls": 35,
+            "baselineCalls": 35
+          },
+          {
+            "name": "frontForecourt",
+            "triangles": 274505,
+            "baselineTriangles": 273746,
+            "growthPercent": 0.277,
+            "calls": 155,
+            "baselineCalls": 155
+          },
+          {
+            "name": "arrivalCourt",
+            "triangles": 271423,
+            "baselineTriangles": 270240,
+            "growthPercent": 0.438,
+            "calls": 150,
+            "baselineCalls": 150
+          },
+          {
+            "name": "portugalTerrace",
+            "triangles": 111952,
+            "baselineTriangles": 93007,
+            "growthPercent": 20.369,
+            "calls": 31,
+            "baselineCalls": 31
+          },
+          {
+            "name": "portugalApproach",
+            "triangles": 150934,
+            "baselineTriangles": 120623,
+            "growthPercent": 25.129,
+            "calls": 33,
+            "baselineCalls": 33
+          },
+          {
+            "name": "golfVicinity",
+            "triangles": 250214,
+            "baselineTriangles": 198999,
+            "growthPercent": 25.736,
+            "calls": 55,
+            "baselineCalls": 55
+          },
+          {
+            "name": "golfSpur",
+            "triangles": 297987,
+            "baselineTriangles": 263048,
+            "growthPercent": 13.282,
+            "calls": 90,
+            "baselineCalls": 90
+          }
+        ],
+        "memoryEstimates": {
+          "geometryBytes": 87421980,
+          "instanceBytes": 207860,
+          "batchTextureBytes": 1184724,
+          "geometries": 310,
+          "textures": 56
+        },
+        "shadowControl": {
+          "cameraNoShadows": {
+            "cpuSubmitMs": 3.599999999627471,
+            "calls": 89,
+            "triangles": 273125
+          },
+          "cameraWithShadows": {
+            "calls": 89,
+            "triangles": 273125
+          },
+          "combined": {
+            "cpuSubmitMs": 6.799999998882413,
+            "calls": 108,
+            "triangles": 479867
+          },
+          "shadowCalls": 19,
+          "shadowTriangles": 206742,
+          "map": [
+            1024,
+            1024
+          ],
+          "conditions": "High-quality 1024px mobile sun shadow control. Shadow renderer counters sampled around its actual pass; camera=combined-minus-shadow, including any conservative fallback superset. Not a mobile-low gate."
+        },
+        "freshStaticCountsReproduced": true,
+        "softwareFrameIntervalsMs": {
+          "min": 16.599999999999454,
+          "median": 183.29999999999973,
+          "p95": 383.3000000000002,
+          "p99": 400,
+          "max": 1083.3999999999996,
+          "over50ms": 22,
+          "over100ms": 22,
+          "samples": 40
+        }
+      },
+      "fallback": {
+        "views": 24,
+        "movingSamples": 400,
+        "cameraTriangles": {
+          "min": 106020,
+          "median": 258175.0,
+          "p95": 308840,
+          "p99": 317689,
+          "max": 375338
+        },
+        "drawCalls": {
+          "min": 39,
+          "median": 124.0,
+          "p95": 155,
+          "p99": 168,
+          "max": 208
+        },
+        "movingRelativeGrowthPercent": {
+          "min": 13.007,
+          "median": 23.96,
+          "p95": 28.108,
+          "p99": 30.949,
+          "max": 31.306
+        },
+        "samplesAbove750k": 0,
+        "samplesAbove150Calls": 53,
+        "newCallOvershootsStatic": [
+          "boslust"
+        ],
+        "movingSamplesAbove8Percent": 400,
+        "movingSamplesAbove2Percent": 400,
+        "geometryChangesWithin90m": 385,
+        "staticReference": [
+          {
+            "name": "boslust",
+            "triangles": 282256,
+            "baselineTriangles": 236765,
+            "growthPercent": 19.214,
+            "calls": 152,
+            "baselineCalls": 142
+          },
+          {
+            "name": "dense",
+            "triangles": 276758,
+            "baselineTriangles": 209413,
+            "growthPercent": 32.159,
+            "calls": 132,
+            "baselineCalls": 127
+          },
+          {
+            "name": "garden-edge",
+            "triangles": 127945,
+            "baselineTriangles": 111160,
+            "growthPercent": 15.1,
+            "calls": 69,
+            "baselineCalls": 59
+          },
+          {
+            "name": "treeline",
+            "triangles": 249625,
+            "baselineTriangles": 207264,
+            "growthPercent": 20.438,
+            "calls": 122,
+            "baselineCalls": 112
+          },
+          {
+            "name": "forest-busy",
+            "triangles": 282515,
+            "baselineTriangles": 241183,
+            "growthPercent": 17.137,
+            "calls": 158,
+            "baselineCalls": 152
+          },
+          {
+            "name": "cons-deck",
+            "triangles": 309362,
+            "baselineTriangles": 307740,
+            "growthPercent": 0.527,
+            "calls": 187,
+            "baselineCalls": 182
+          },
+          {
+            "name": "cons-corridor",
+            "triangles": 375338,
+            "baselineTriangles": 371959,
+            "growthPercent": 0.908,
+            "calls": 207,
+            "baselineCalls": 199
+          },
+          {
+            "name": "service",
+            "triangles": 208832,
+            "baselineTriangles": 247774,
+            "growthPercent": -15.717,
+            "calls": 101,
+            "baselineCalls": 116
+          },
+          {
+            "name": "distant",
+            "triangles": 162220,
+            "baselineTriangles": 145039,
+            "growthPercent": 11.846,
+            "calls": 95,
+            "baselineCalls": 85
+          },
+          {
+            "name": "woodland-east",
+            "triangles": 258186,
+            "baselineTriangles": 205280,
+            "growthPercent": 25.773,
+            "calls": 111,
+            "baselineCalls": 110
+          },
+          {
+            "name": "atticNook",
+            "triangles": 106020,
+            "baselineTriangles": 143661,
+            "growthPercent": -26.201,
+            "calls": 41,
+            "baselineCalls": 56
+          },
+          {
+            "name": "atticCommon",
+            "triangles": 108298,
+            "baselineTriangles": 156040,
+            "growthPercent": -30.596,
+            "calls": 39,
+            "baselineCalls": 58
+          },
+          {
+            "name": "conservatoryInside",
+            "triangles": 143537,
+            "baselineTriangles": 128668,
+            "growthPercent": 11.556,
+            "calls": 109,
+            "baselineCalls": 97
+          },
+          {
+            "name": "conservatoryDoorDeck",
+            "triangles": 310309,
+            "baselineTriangles": 307740,
+            "growthPercent": 0.835,
+            "calls": 190,
+            "baselineCalls": 182
+          },
+          {
+            "name": "wellnessDeck",
+            "triangles": 179163,
+            "baselineTriangles": 156535,
+            "growthPercent": 14.456,
+            "calls": 108,
+            "baselineCalls": 101
+          },
+          {
+            "name": "saunaAccess",
+            "triangles": 336480,
+            "baselineTriangles": 327376,
+            "growthPercent": 2.781,
+            "calls": 208,
+            "baselineCalls": 203
+          },
+          {
+            "name": "wickermanClearing",
+            "triangles": 210409,
+            "baselineTriangles": 160593,
+            "growthPercent": 31.02,
+            "calls": 97,
+            "baselineCalls": 92
+          },
+          {
+            "name": "wickermanPath",
+            "triangles": 261130,
+            "baselineTriangles": 211057,
+            "growthPercent": 23.725,
+            "calls": 114,
+            "baselineCalls": 110
+          },
+          {
+            "name": "frontForecourt",
+            "triangles": 274505,
+            "baselineTriangles": 273746,
+            "growthPercent": 0.277,
+            "calls": 172,
+            "baselineCalls": 169
+          },
+          {
+            "name": "arrivalCourt",
+            "triangles": 271423,
+            "baselineTriangles": 270240,
+            "growthPercent": 0.438,
+            "calls": 168,
+            "baselineCalls": 165
+          },
+          {
+            "name": "portugalTerrace",
+            "triangles": 111952,
+            "baselineTriangles": 93007,
+            "growthPercent": 20.369,
+            "calls": 75,
+            "baselineCalls": 70
+          },
+          {
+            "name": "portugalApproach",
+            "triangles": 150934,
+            "baselineTriangles": 120623,
+            "growthPercent": 25.129,
+            "calls": 87,
+            "baselineCalls": 80
+          },
+          {
+            "name": "golfVicinity",
+            "triangles": 250214,
+            "baselineTriangles": 198999,
+            "growthPercent": 25.736,
+            "calls": 134,
+            "baselineCalls": 127
+          },
+          {
+            "name": "golfSpur",
+            "triangles": 297987,
+            "baselineTriangles": 263048,
+            "growthPercent": 13.282,
+            "calls": 163,
+            "baselineCalls": 161
+          }
+        ],
+        "memoryEstimates": {
+          "geometryBytes": 87421980,
+          "instanceBytes": 312436,
+          "batchTextureBytes": 0,
+          "geometries": 395,
+          "textures": 44
+        },
+        "shadowControl": {
+          "cameraNoShadows": {
+            "cpuSubmitMs": 3.700000001117587,
+            "calls": 152,
+            "triangles": 273125
+          },
+          "cameraWithShadows": {
+            "calls": 155,
+            "triangles": 312119
+          },
+          "combined": {
+            "cpuSubmitMs": 6.099999999627471,
+            "calls": 226,
+            "triangles": 523352
+          },
+          "shadowCalls": 71,
+          "shadowTriangles": 211233,
+          "map": [
+            1024,
+            1024
+          ],
+          "conditions": "High-quality 1024px mobile sun shadow control. Shadow renderer counters sampled around its actual pass; camera=combined-minus-shadow, including any conservative fallback superset. Not a mobile-low gate."
+        },
+        "freshStaticCountsReproduced": true,
+        "softwareFrameIntervalsMs": {
+          "min": 16.599999999999454,
+          "median": 200.05000000000018,
+          "p95": 449.89999999999964,
+          "p99": 566.5,
+          "max": 1416.6000000000004,
+          "over50ms": 24,
+          "over100ms": 22,
+          "samples": 40
+        }
+      }
+    },
+    "b": {
+      "multi": {
+        "views": 24,
+        "movingSamples": 400,
+        "cameraTriangles": {
+          "min": 106020,
+          "median": 344490.5,
+          "p95": 399366,
+          "p99": 417998,
+          "max": 418514
+        },
+        "drawCalls": {
+          "min": 16,
+          "median": 55.0,
+          "p95": 89,
+          "p99": 150,
+          "max": 186
+        },
+        "movingRelativeGrowthPercent": {
+          "min": 49.447,
+          "median": 66.126,
+          "p95": 75.13,
+          "p99": 87.933,
+          "max": 90.777
+        },
+        "samplesAbove750k": 0,
+        "samplesAbove150Calls": 5,
+        "newCallOvershootsStatic": [],
+        "movingSamplesAbove8Percent": 400,
+        "movingSamplesAbove2Percent": 400,
+        "geometryChangesWithin90m": 394,
+        "staticReference": [
+          {
+            "name": "boslust",
+            "triangles": 368432,
+            "baselineTriangles": 236765,
+            "growthPercent": 55.611,
+            "calls": 89,
+            "baselineCalls": 89
+          },
+          {
+            "name": "dense",
+            "triangles": 360067,
+            "baselineTriangles": 209413,
+            "growthPercent": 71.941,
+            "calls": 57,
+            "baselineCalls": 57
+          },
+          {
+            "name": "garden-edge",
+            "triangles": 169824,
+            "baselineTriangles": 111160,
+            "growthPercent": 52.774,
+            "calls": 26,
+            "baselineCalls": 26
+          },
+          {
+            "name": "treeline",
+            "triangles": 345804,
+            "baselineTriangles": 207264,
+            "growthPercent": 66.842,
+            "calls": 58,
+            "baselineCalls": 58
+          },
+          {
+            "name": "forest-busy",
+            "triangles": 368597,
+            "baselineTriangles": 241183,
+            "growthPercent": 52.829,
+            "calls": 92,
+            "baselineCalls": 92
+          },
+          {
+            "name": "cons-deck",
+            "triangles": 335625,
+            "baselineTriangles": 307740,
+            "growthPercent": 9.061,
+            "calls": 170,
+            "baselineCalls": 170
+          },
+          {
+            "name": "cons-corridor",
+            "triangles": 409867,
+            "baselineTriangles": 371959,
+            "growthPercent": 10.191,
+            "calls": 186,
+            "baselineCalls": 186
+          },
+          {
+            "name": "service",
+            "triangles": 208832,
+            "baselineTriangles": 208832,
+            "growthPercent": 0.0,
+            "calls": 101,
+            "baselineCalls": 101
+          },
+          {
+            "name": "distant",
+            "triangles": 222598,
+            "baselineTriangles": 145039,
+            "growthPercent": 53.475,
+            "calls": 53,
+            "baselineCalls": 53
+          },
+          {
+            "name": "woodland-east",
+            "triangles": 345095,
+            "baselineTriangles": 205280,
+            "growthPercent": 68.109,
+            "calls": 37,
+            "baselineCalls": 37
+          },
+          {
+            "name": "atticNook",
+            "triangles": 106020,
+            "baselineTriangles": 106020,
+            "growthPercent": 0.0,
+            "calls": 41,
+            "baselineCalls": 41
+          },
+          {
+            "name": "atticCommon",
+            "triangles": 108298,
+            "baselineTriangles": 108298,
+            "growthPercent": 0.0,
+            "calls": 39,
+            "baselineCalls": 39
+          },
+          {
+            "name": "conservatoryInside",
+            "triangles": 185970,
+            "baselineTriangles": 128668,
+            "growthPercent": 44.535,
+            "calls": 74,
+            "baselineCalls": 74
+          },
+          {
+            "name": "conservatoryDoorDeck",
+            "triangles": 338098,
+            "baselineTriangles": 307740,
+            "growthPercent": 9.865,
+            "calls": 170,
+            "baselineCalls": 170
+          },
+          {
+            "name": "wellnessDeck",
+            "triangles": 252613,
+            "baselineTriangles": 156535,
+            "growthPercent": 61.378,
+            "calls": 65,
+            "baselineCalls": 65
+          },
+          {
+            "name": "saunaAccess",
+            "triangles": 393584,
+            "baselineTriangles": 327376,
+            "growthPercent": 20.224,
+            "calls": 175,
+            "baselineCalls": 175
+          },
+          {
+            "name": "wickermanClearing",
+            "triangles": 273311,
+            "baselineTriangles": 160593,
+            "growthPercent": 70.189,
+            "calls": 31,
+            "baselineCalls": 31
+          },
+          {
+            "name": "wickermanPath",
+            "triangles": 324736,
+            "baselineTriangles": 211057,
+            "growthPercent": 53.862,
+            "calls": 35,
+            "baselineCalls": 35
+          },
+          {
+            "name": "frontForecourt",
+            "triangles": 298007,
+            "baselineTriangles": 273746,
+            "growthPercent": 8.863,
+            "calls": 155,
+            "baselineCalls": 155
+          },
+          {
+            "name": "arrivalCourt",
+            "triangles": 291143,
+            "baselineTriangles": 270240,
+            "growthPercent": 7.735,
+            "calls": 150,
+            "baselineCalls": 150
+          },
+          {
+            "name": "portugalTerrace",
+            "triangles": 154809,
+            "baselineTriangles": 93007,
+            "growthPercent": 66.449,
+            "calls": 31,
+            "baselineCalls": 31
+          },
+          {
+            "name": "portugalApproach",
+            "triangles": 202084,
+            "baselineTriangles": 120623,
+            "growthPercent": 67.534,
+            "calls": 33,
+            "baselineCalls": 33
+          },
+          {
+            "name": "golfVicinity",
+            "triangles": 330809,
+            "baselineTriangles": 198999,
+            "growthPercent": 66.237,
+            "calls": 55,
+            "baselineCalls": 55
+          },
+          {
+            "name": "golfSpur",
+            "triangles": 354770,
+            "baselineTriangles": 263048,
+            "growthPercent": 34.869,
+            "calls": 90,
+            "baselineCalls": 90
+          }
+        ],
+        "memoryEstimates": {
+          "geometryBytes": 87785230,
+          "instanceBytes": 207860,
+          "batchTextureBytes": 1184724,
+          "geometries": 310,
+          "textures": 56
+        },
+        "shadowControl": {
+          "cameraNoShadows": {
+            "cpuSubmitMs": 4.5,
+            "calls": 89,
+            "triangles": 350281
+          },
+          "cameraWithShadows": {
+            "calls": 89,
+            "triangles": 350281
+          },
+          "combined": {
+            "cpuSubmitMs": 5.300000000745058,
+            "calls": 108,
+            "triangles": 662872
+          },
+          "shadowCalls": 19,
+          "shadowTriangles": 312591,
+          "map": [
+            1024,
+            1024
+          ],
+          "conditions": "High-quality 1024px mobile sun shadow control. Shadow renderer counters sampled around its actual pass; camera=combined-minus-shadow, including any conservative fallback superset. Not a mobile-low gate."
+        },
+        "freshStaticCountsReproduced": true,
+        "softwareFrameIntervalsMs": {
+          "min": 16.599999999999454,
+          "median": 233.25,
+          "p95": 283.3000000000002,
+          "p99": 300,
+          "max": 1033.3000000000002,
+          "over50ms": 22,
+          "over100ms": 22,
+          "samples": 40
+        }
+      },
+      "fallback": {
+        "views": 24,
+        "movingSamples": 400,
+        "cameraTriangles": {
+          "min": 106020,
+          "median": 344490.5,
+          "p95": 399366,
+          "p99": 417998,
+          "max": 418514
+        },
+        "drawCalls": {
+          "min": 39,
+          "median": 124.0,
+          "p95": 157,
+          "p99": 171,
+          "max": 216
+        },
+        "movingRelativeGrowthPercent": {
+          "min": 49.447,
+          "median": 66.126,
+          "p95": 75.13,
+          "p99": 87.933,
+          "max": 90.777
+        },
+        "samplesAbove750k": 0,
+        "samplesAbove150Calls": 59,
+        "newCallOvershootsStatic": [
+          "boslust"
+        ],
+        "movingSamplesAbove8Percent": 400,
+        "movingSamplesAbove2Percent": 400,
+        "geometryChangesWithin90m": 394,
+        "staticReference": [
+          {
+            "name": "boslust",
+            "triangles": 368432,
+            "baselineTriangles": 236765,
+            "growthPercent": 55.611,
+            "calls": 152,
+            "baselineCalls": 142
+          },
+          {
+            "name": "dense",
+            "triangles": 360067,
+            "baselineTriangles": 209413,
+            "growthPercent": 71.941,
+            "calls": 128,
+            "baselineCalls": 127
+          },
+          {
+            "name": "garden-edge",
+            "triangles": 169824,
+            "baselineTriangles": 111160,
+            "growthPercent": 52.774,
+            "calls": 70,
+            "baselineCalls": 59
+          },
+          {
+            "name": "treeline",
+            "triangles": 345804,
+            "baselineTriangles": 207264,
+            "growthPercent": 66.842,
+            "calls": 125,
+            "baselineCalls": 112
+          },
+          {
+            "name": "forest-busy",
+            "triangles": 368597,
+            "baselineTriangles": 241183,
+            "growthPercent": 52.829,
+            "calls": 160,
+            "baselineCalls": 152
+          },
+          {
+            "name": "cons-deck",
+            "triangles": 335625,
+            "baselineTriangles": 307740,
+            "growthPercent": 9.061,
+            "calls": 190,
+            "baselineCalls": 182
+          },
+          {
+            "name": "cons-corridor",
+            "triangles": 409867,
+            "baselineTriangles": 371959,
+            "growthPercent": 10.191,
+            "calls": 211,
+            "baselineCalls": 199
+          },
+          {
+            "name": "service",
+            "triangles": 208832,
+            "baselineTriangles": 247774,
+            "growthPercent": -15.717,
+            "calls": 101,
+            "baselineCalls": 116
+          },
+          {
+            "name": "distant",
+            "triangles": 222598,
+            "baselineTriangles": 145039,
+            "growthPercent": 53.475,
+            "calls": 97,
+            "baselineCalls": 85
+          },
+          {
+            "name": "woodland-east",
+            "triangles": 345095,
+            "baselineTriangles": 205280,
+            "growthPercent": 68.109,
+            "calls": 111,
+            "baselineCalls": 110
+          },
+          {
+            "name": "atticNook",
+            "triangles": 106020,
+            "baselineTriangles": 143661,
+            "growthPercent": -26.201,
+            "calls": 41,
+            "baselineCalls": 56
+          },
+          {
+            "name": "atticCommon",
+            "triangles": 108298,
+            "baselineTriangles": 156040,
+            "growthPercent": -30.596,
+            "calls": 39,
+            "baselineCalls": 58
+          },
+          {
+            "name": "conservatoryInside",
+            "triangles": 185970,
+            "baselineTriangles": 128668,
+            "growthPercent": 44.535,
+            "calls": 113,
+            "baselineCalls": 97
+          },
+          {
+            "name": "conservatoryDoorDeck",
+            "triangles": 338098,
+            "baselineTriangles": 307740,
+            "growthPercent": 9.865,
+            "calls": 191,
+            "baselineCalls": 182
+          },
+          {
+            "name": "wellnessDeck",
+            "triangles": 252613,
+            "baselineTriangles": 156535,
+            "growthPercent": 61.378,
+            "calls": 114,
+            "baselineCalls": 101
+          },
+          {
+            "name": "saunaAccess",
+            "triangles": 393584,
+            "baselineTriangles": 327376,
+            "growthPercent": 20.224,
+            "calls": 216,
+            "baselineCalls": 203
+          },
+          {
+            "name": "wickermanClearing",
+            "triangles": 273311,
+            "baselineTriangles": 160593,
+            "growthPercent": 70.189,
+            "calls": 93,
+            "baselineCalls": 92
+          },
+          {
+            "name": "wickermanPath",
+            "triangles": 324736,
+            "baselineTriangles": 211057,
+            "growthPercent": 53.862,
+            "calls": 113,
+            "baselineCalls": 110
+          },
+          {
+            "name": "frontForecourt",
+            "triangles": 298007,
+            "baselineTriangles": 273746,
+            "growthPercent": 8.863,
+            "calls": 174,
+            "baselineCalls": 169
+          },
+          {
+            "name": "arrivalCourt",
+            "triangles": 291143,
+            "baselineTriangles": 270240,
+            "growthPercent": 7.735,
+            "calls": 171,
+            "baselineCalls": 165
+          },
+          {
+            "name": "portugalTerrace",
+            "triangles": 154809,
+            "baselineTriangles": 93007,
+            "growthPercent": 66.449,
+            "calls": 75,
+            "baselineCalls": 70
+          },
+          {
+            "name": "portugalApproach",
+            "triangles": 202084,
+            "baselineTriangles": 120623,
+            "growthPercent": 67.534,
+            "calls": 89,
+            "baselineCalls": 80
+          },
+          {
+            "name": "golfVicinity",
+            "triangles": 330809,
+            "baselineTriangles": 198999,
+            "growthPercent": 66.237,
+            "calls": 134,
+            "baselineCalls": 127
+          },
+          {
+            "name": "golfSpur",
+            "triangles": 354770,
+            "baselineTriangles": 263048,
+            "growthPercent": 34.869,
+            "calls": 163,
+            "baselineCalls": 161
+          }
+        ],
+        "memoryEstimates": {
+          "geometryBytes": 87785230,
+          "instanceBytes": 308788,
+          "batchTextureBytes": 0,
+          "geometries": 395,
+          "textures": 44
+        },
+        "shadowControl": {
+          "cameraNoShadows": {
+            "cpuSubmitMs": 3.300000000745058,
+            "calls": 152,
+            "triangles": 350281
+          },
+          "cameraWithShadows": {
+            "calls": 156,
+            "triangles": 400943
+          },
+          "combined": {
+            "cpuSubmitMs": 4.900000000372529,
+            "calls": 228,
+            "triangles": 701000
+          },
+          "shadowCalls": 72,
+          "shadowTriangles": 300057,
+          "map": [
+            1024,
+            1024
+          ],
+          "conditions": "High-quality 1024px mobile sun shadow control. Shadow renderer counters sampled around its actual pass; camera=combined-minus-shadow, including any conservative fallback superset. Not a mobile-low gate."
+        },
+        "freshStaticCountsReproduced": true,
+        "softwareFrameIntervalsMs": {
+          "min": 16.599999999999454,
+          "median": 233.29999999999973,
+          "p95": 300.09999999999945,
+          "p99": 516.5,
+          "max": 1116.5999999999995,
+          "over50ms": 22,
+          "over100ms": 22,
+          "samples": 40
+        }
+      }
+    },
+    "hybrid": {
+      "multi": {
+        "views": 24,
+        "movingSamples": 400,
+        "cameraTriangles": {
+          "min": 106020,
+          "median": 267243.5,
+          "p95": 314463,
+          "p99": 319870,
+          "max": 414577
+        },
+        "drawCalls": {
+          "min": 16,
+          "median": 55.0,
+          "p95": 89,
+          "p99": 150,
+          "max": 186
+        },
+        "movingRelativeGrowthPercent": {
+          "min": 21.744,
+          "median": 29.723,
+          "p95": 33.895,
+          "p99": 37.524,
+          "max": 38.512
+        },
+        "samplesAbove750k": 0,
+        "samplesAbove150Calls": 5,
+        "newCallOvershootsStatic": [],
+        "movingSamplesAbove8Percent": 400,
+        "movingSamplesAbove2Percent": 400,
+        "geometryChangesWithin90m": 146,
+        "staticReference": [
+          {
+            "name": "boslust",
+            "triangles": 301408,
+            "baselineTriangles": 236765,
+            "growthPercent": 27.303,
+            "calls": 89,
+            "baselineCalls": 89
+          },
+          {
+            "name": "dense",
+            "triangles": 268126,
+            "baselineTriangles": 209413,
+            "growthPercent": 28.037,
+            "calls": 57,
+            "baselineCalls": 57
+          },
+          {
+            "name": "garden-edge",
+            "triangles": 141929,
+            "baselineTriangles": 111160,
+            "growthPercent": 27.68,
+            "calls": 26,
+            "baselineCalls": 26
+          },
+          {
+            "name": "treeline",
+            "triangles": 268165,
+            "baselineTriangles": 207264,
+            "growthPercent": 29.383,
+            "calls": 58,
+            "baselineCalls": 58
+          },
+          {
+            "name": "forest-busy",
+            "triangles": 301233,
+            "baselineTriangles": 241183,
+            "growthPercent": 24.898,
+            "calls": 92,
+            "baselineCalls": 92
+          },
+          {
+            "name": "cons-deck",
+            "triangles": 337897,
+            "baselineTriangles": 307740,
+            "growthPercent": 9.8,
+            "calls": 170,
+            "baselineCalls": 170
+          },
+          {
+            "name": "cons-corridor",
+            "triangles": 414577,
+            "baselineTriangles": 371959,
+            "growthPercent": 11.458,
+            "calls": 186,
+            "baselineCalls": 186
+          },
+          {
+            "name": "service",
+            "triangles": 208832,
+            "baselineTriangles": 208832,
+            "growthPercent": 0.0,
+            "calls": 101,
+            "baselineCalls": 101
+          },
+          {
+            "name": "distant",
+            "triangles": 187589,
+            "baselineTriangles": 145039,
+            "growthPercent": 29.337,
+            "calls": 53,
+            "baselineCalls": 53
+          },
+          {
+            "name": "woodland-east",
+            "triangles": 252750,
+            "baselineTriangles": 205280,
+            "growthPercent": 23.125,
+            "calls": 37,
+            "baselineCalls": 37
+          },
+          {
+            "name": "atticNook",
+            "triangles": 106020,
+            "baselineTriangles": 106020,
+            "growthPercent": 0.0,
+            "calls": 41,
+            "baselineCalls": 41
+          },
+          {
+            "name": "atticCommon",
+            "triangles": 108298,
+            "baselineTriangles": 108298,
+            "growthPercent": 0.0,
+            "calls": 39,
+            "baselineCalls": 39
+          },
+          {
+            "name": "conservatoryInside",
+            "triangles": 174346,
+            "baselineTriangles": 128668,
+            "growthPercent": 35.501,
+            "calls": 74,
+            "baselineCalls": 74
+          },
+          {
+            "name": "conservatoryDoorDeck",
+            "triangles": 337897,
+            "baselineTriangles": 307740,
+            "growthPercent": 9.8,
+            "calls": 170,
+            "baselineCalls": 170
+          },
+          {
+            "name": "wellnessDeck",
+            "triangles": 215969,
+            "baselineTriangles": 156535,
+            "growthPercent": 37.969,
+            "calls": 65,
+            "baselineCalls": 65
+          },
+          {
+            "name": "saunaAccess",
+            "triangles": 379564,
+            "baselineTriangles": 327376,
+            "growthPercent": 15.941,
+            "calls": 175,
+            "baselineCalls": 175
+          },
+          {
+            "name": "wickermanClearing",
+            "triangles": 205030,
+            "baselineTriangles": 160593,
+            "growthPercent": 27.671,
+            "calls": 31,
+            "baselineCalls": 31
+          },
+          {
+            "name": "wickermanPath",
+            "triangles": 258929,
+            "baselineTriangles": 211057,
+            "growthPercent": 22.682,
+            "calls": 35,
+            "baselineCalls": 35
+          },
+          {
+            "name": "frontForecourt",
+            "triangles": 299238,
+            "baselineTriangles": 273746,
+            "growthPercent": 9.312,
+            "calls": 155,
+            "baselineCalls": 155
+          },
+          {
+            "name": "arrivalCourt",
+            "triangles": 290672,
+            "baselineTriangles": 270240,
+            "growthPercent": 7.561,
+            "calls": 150,
+            "baselineCalls": 150
+          },
+          {
+            "name": "portugalTerrace",
+            "triangles": 112683,
+            "baselineTriangles": 93007,
+            "growthPercent": 21.155,
+            "calls": 31,
+            "baselineCalls": 31
+          },
+          {
+            "name": "portugalApproach",
+            "triangles": 149901,
+            "baselineTriangles": 120623,
+            "growthPercent": 24.272,
+            "calls": 33,
+            "baselineCalls": 33
+          },
+          {
+            "name": "golfVicinity",
+            "triangles": 252054,
+            "baselineTriangles": 198999,
+            "growthPercent": 26.661,
+            "calls": 55,
+            "baselineCalls": 55
+          },
+          {
+            "name": "golfSpur",
+            "triangles": 325699,
+            "baselineTriangles": 263048,
+            "growthPercent": 23.817,
+            "calls": 90,
+            "baselineCalls": 90
+          }
+        ],
+        "memoryEstimates": {
+          "geometryBytes": 87353670,
+          "instanceBytes": 207860,
+          "batchTextureBytes": 1184724,
+          "geometries": 310,
+          "textures": 56
+        },
+        "shadowControl": {
+          "cameraNoShadows": {
+            "cpuSubmitMs": 3.300000000745058,
+            "calls": 89,
+            "triangles": 297276
+          },
+          "cameraWithShadows": {
+            "calls": 89,
+            "triangles": 297276
+          },
+          "combined": {
+            "cpuSubmitMs": 4.100000001490116,
+            "calls": 108,
+            "triangles": 480513
+          },
+          "shadowCalls": 19,
+          "shadowTriangles": 183237,
+          "map": [
+            1024,
+            1024
+          ],
+          "conditions": "High-quality 1024px mobile sun shadow control. Shadow renderer counters sampled around its actual pass; camera=combined-minus-shadow, including any conservative fallback superset. Not a mobile-low gate."
+        },
+        "freshStaticCountsReproduced": true,
+        "softwareFrameIntervalsMs": {
+          "min": 16.599999999999454,
+          "median": 199.9000000000001,
+          "p95": 366.6999999999998,
+          "p99": 450,
+          "max": 950,
+          "over50ms": 23,
+          "over100ms": 23,
+          "samples": 40
+        }
+      },
+      "fallback": {
+        "views": 24,
+        "movingSamples": 400,
+        "cameraTriangles": {
+          "min": 106020,
+          "median": 267243.5,
+          "p95": 314463,
+          "p99": 319870,
+          "max": 414577
+        },
+        "drawCalls": {
+          "min": 39,
+          "median": 111.0,
+          "p95": 142,
+          "p99": 164,
+          "max": 199
+        },
+        "movingRelativeGrowthPercent": {
+          "min": 21.744,
+          "median": 29.723,
+          "p95": 33.895,
+          "p99": 37.524,
+          "max": 38.512
+        },
+        "samplesAbove750k": 0,
+        "samplesAbove150Calls": 6,
+        "newCallOvershootsStatic": [],
+        "movingSamplesAbove8Percent": 400,
+        "movingSamplesAbove2Percent": 400,
+        "geometryChangesWithin90m": 146,
+        "staticReference": [
+          {
+            "name": "boslust",
+            "triangles": 301408,
+            "baselineTriangles": 236765,
+            "growthPercent": 27.303,
+            "calls": 140,
+            "baselineCalls": 142
+          },
+          {
+            "name": "dense",
+            "triangles": 268126,
+            "baselineTriangles": 209413,
+            "growthPercent": 28.037,
+            "calls": 117,
+            "baselineCalls": 127
+          },
+          {
+            "name": "garden-edge",
+            "triangles": 141929,
+            "baselineTriangles": 111160,
+            "growthPercent": 27.68,
+            "calls": 53,
+            "baselineCalls": 59
+          },
+          {
+            "name": "treeline",
+            "triangles": 268165,
+            "baselineTriangles": 207264,
+            "growthPercent": 29.383,
+            "calls": 109,
+            "baselineCalls": 112
+          },
+          {
+            "name": "forest-busy",
+            "triangles": 301233,
+            "baselineTriangles": 241183,
+            "growthPercent": 24.898,
+            "calls": 143,
+            "baselineCalls": 152
+          },
+          {
+            "name": "cons-deck",
+            "triangles": 337897,
+            "baselineTriangles": 307740,
+            "growthPercent": 9.8,
+            "calls": 182,
+            "baselineCalls": 182
+          },
+          {
+            "name": "cons-corridor",
+            "triangles": 414577,
+            "baselineTriangles": 371959,
+            "growthPercent": 11.458,
+            "calls": 199,
+            "baselineCalls": 199
+          },
+          {
+            "name": "service",
+            "triangles": 208832,
+            "baselineTriangles": 247774,
+            "growthPercent": -15.717,
+            "calls": 101,
+            "baselineCalls": 116
+          },
+          {
+            "name": "distant",
+            "triangles": 187589,
+            "baselineTriangles": 145039,
+            "growthPercent": 29.337,
+            "calls": 80,
+            "baselineCalls": 85
+          },
+          {
+            "name": "woodland-east",
+            "triangles": 252750,
+            "baselineTriangles": 205280,
+            "growthPercent": 23.125,
+            "calls": 101,
+            "baselineCalls": 110
+          },
+          {
+            "name": "atticNook",
+            "triangles": 106020,
+            "baselineTriangles": 143661,
+            "growthPercent": -26.201,
+            "calls": 41,
+            "baselineCalls": 56
+          },
+          {
+            "name": "atticCommon",
+            "triangles": 108298,
+            "baselineTriangles": 156040,
+            "growthPercent": -30.596,
+            "calls": 39,
+            "baselineCalls": 58
+          },
+          {
+            "name": "conservatoryInside",
+            "triangles": 174346,
+            "baselineTriangles": 128668,
+            "growthPercent": 35.501,
+            "calls": 94,
+            "baselineCalls": 97
+          },
+          {
+            "name": "conservatoryDoorDeck",
+            "triangles": 337897,
+            "baselineTriangles": 307740,
+            "growthPercent": 9.8,
+            "calls": 182,
+            "baselineCalls": 182
+          },
+          {
+            "name": "wellnessDeck",
+            "triangles": 215969,
+            "baselineTriangles": 156535,
+            "growthPercent": 37.969,
+            "calls": 92,
+            "baselineCalls": 101
+          },
+          {
+            "name": "saunaAccess",
+            "triangles": 379564,
+            "baselineTriangles": 327376,
+            "growthPercent": 15.941,
+            "calls": 195,
+            "baselineCalls": 203
+          },
+          {
+            "name": "wickermanClearing",
+            "triangles": 205030,
+            "baselineTriangles": 160593,
+            "growthPercent": 27.671,
+            "calls": 89,
+            "baselineCalls": 92
+          },
+          {
+            "name": "wickermanPath",
+            "triangles": 258929,
+            "baselineTriangles": 211057,
+            "growthPercent": 22.682,
+            "calls": 101,
+            "baselineCalls": 110
+          },
+          {
+            "name": "frontForecourt",
+            "triangles": 299238,
+            "baselineTriangles": 273746,
+            "growthPercent": 9.312,
+            "calls": 169,
+            "baselineCalls": 169
+          },
+          {
+            "name": "arrivalCourt",
+            "triangles": 290672,
+            "baselineTriangles": 270240,
+            "growthPercent": 7.561,
+            "calls": 164,
+            "baselineCalls": 165
+          },
+          {
+            "name": "portugalTerrace",
+            "triangles": 112683,
+            "baselineTriangles": 93007,
+            "growthPercent": 21.155,
+            "calls": 67,
+            "baselineCalls": 70
+          },
+          {
+            "name": "portugalApproach",
+            "triangles": 149901,
+            "baselineTriangles": 120623,
+            "growthPercent": 24.272,
+            "calls": 76,
+            "baselineCalls": 80
+          },
+          {
+            "name": "golfVicinity",
+            "triangles": 252054,
+            "baselineTriangles": 198999,
+            "growthPercent": 26.661,
+            "calls": 119,
+            "baselineCalls": 127
+          },
+          {
+            "name": "golfSpur",
+            "triangles": 325699,
+            "baselineTriangles": 263048,
+            "growthPercent": 23.817,
+            "calls": 147,
+            "baselineCalls": 161
+          }
+        ],
+        "memoryEstimates": {
+          "geometryBytes": 87353670,
+          "instanceBytes": 304532,
+          "batchTextureBytes": 0,
+          "geometries": 383,
+          "textures": 44
+        },
+        "shadowControl": {
+          "cameraNoShadows": {
+            "cpuSubmitMs": 4,
+            "calls": 137,
+            "triangles": 297276
+          },
+          "cameraWithShadows": {
+            "calls": 141,
+            "triangles": 333368
+          },
+          "combined": {
+            "cpuSubmitMs": 5.900000000372529,
+            "calls": 198,
+            "triangles": 565850
+          },
+          "shadowCalls": 57,
+          "shadowTriangles": 232482,
+          "map": [
+            1024,
+            1024
+          ],
+          "conditions": "High-quality 1024px mobile sun shadow control. Shadow renderer counters sampled around its actual pass; camera=combined-minus-shadow, including any conservative fallback superset. Not a mobile-low gate."
+        },
+        "freshStaticCountsReproduced": true,
+        "softwareFrameIntervalsMs": {
+          "min": 16.599999999999454,
+          "median": 208.25,
+          "p95": 450,
+          "p99": 466.6999999999998,
+          "max": 1149.8999999999996,
+          "over50ms": 23,
+          "over100ms": 22,
+          "samples": 40
+        }
+      }
+    }
+  },
+  "decision": "Retain baseline default. Hybrid is preferred experimental candidate; activation/merge not ready: relative review guards exceeded, inherited call overshoots, device validation pending."
+}

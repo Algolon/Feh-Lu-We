@@ -111,6 +111,10 @@ export function makeDoor(w: World, g: GameApi, o: DoorOpts) {
     return { pv, pbase, phb, pcol, sweep, k: o.pair.swing / o.swing };
   })() : null;
   if (pair) { cx = (cx + o.pair!.x + (DIRS[o.pair!.dir][0] * o.width) / 2) / 2; cz = (cz + o.pair!.z + (DIRS[o.pair!.dir][1] * o.width) / 2) / 2; }
+  if (o.style === 'glass') {
+    w.visualPassThrough.add(collider);
+    if (pair) w.visualPassThrough.add(pair.pcol);
+  }
   const lockId = o.key ? o.lockId ?? `lock.${o.id}` : o.unlock;
   let angle = 0, target = 0, first = true;
   const isLocked = () => !!lockId && !g.state.unlocked.includes(lockId);

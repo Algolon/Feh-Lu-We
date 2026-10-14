@@ -211,9 +211,9 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   floor(c, 72.4, 85, 94, 109.6, GF, k.M.wood, '#8a5a34', 0.2, false, 2.2); // library
   floor(c, 95, 107.6, 80.4, 92, GF, k.M.wood, '#a8754a', 0.2, false, 2.2); // dining
   floor(c, 95, 107.6, 92, 109.6, GF, k.M.tile, '#e6d2b0', 0.2, false, 1.2); // kitchen
-  floor(c, 108.4, 115.6, 92.4, 109.6, GF, k.M.tile, '#d8c8a8', 0.2, false, 1.2); // wing
+  floor(c, 108, 115.6, 92.4, 109.6, GF, k.M.tile, '#d8c8a8', 0.2, false, 1.2); // wing: meet the existing manor wall face at X108
   // walkable regions (the basement stair opening is left out)
-  for (const [x0, x1, z0, z1] of [[72.4, 92, 80.4, 109.6], [92, 95, 80.4, 99.6], [92, 95, 104.8, 109.6], [95, 107.6, 80.4, 109.6], [108.4, 115.6, 92.4, 109.6], [107.4, 108.6, 101.9, 103.1], [111.3, 112.7, 91.6, 92.6], [115.4, 116.4, 101.7, 103.3]] as const) w.col.addFloor(x0, x1, z0, z1, GF);
+  for (const [x0, x1, z0, z1] of [[72.4, 92, 80.4, 109.6], [92, 95, 80.4, 99.6], [92, 95, 104.8, 109.6], [95, 107.6, 80.4, 109.6], [108, 115.6, 92.4, 109.6], [107.4, 108.6, 101.9, 103.1], [111.3, 112.7, 91.6, 92.6], [115.4, 116.4, 101.7, 103.3]] as const) w.col.addFloor(x0, x1, z0, z1, GF);
   // ---------------------------------------------------------------- slabs between storeys (walk above, occlude interaction)
   const slab = (x0: number, x1: number, z0: number, z1: number) => {
     boxMM(c.b, k.M.wood, '#8a5a34', x0, x1, CEIL, UF, z0, z1, { uv: 2.2, chunk: c.chunk });
@@ -235,7 +235,7 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   }
   // upper ceiling with the S03 stairwell left open (X 95–99 / Z 99.8–105.6; the upper landing covers Z 98.6–99.8)
   for (const [x0, x1, z0, z1] of [[72.4, 107.6, 80.4, 99.8], [72.4, 95, 99.8, 109.6], [99, 107.6, 99.8, 109.6], [95, 99, 105.6, 109.6]] as const) ceiling(c, x0, x1, z0, z1, UCEIL, '#efe4cc');
-  ceiling(c, 108.4, 115.6, 92.4, 109.6, CEIL + 0.4, '#efe4cc');
+  ceiling(c, 108, 115.6, 92.4, 109.6, CEIL + 0.4, '#efe4cc');
 
   // ---------------------------------------------------------------- ground-floor partitions
   const P = { t: 0.16, mat: k.M.plaster, color: '#f3e9d4', uv: 2.4 };
@@ -256,8 +256,8 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   wall(c, 'x', 98, 92, 95, BF, CEIL, P);
   wall(c, 'x', 104.8, 92, 95, GF, CEIL, P);
   // service wing partitions
-  wall(c, 'x', 101, 108.4, 115.6, GF, CEIL + 0.4, { ...P, openings: [{ at: 112, w: 1.0, h: 2.3 }] }); // workshop | corridor
-  wall(c, 'x', 104, 108.4, 115.6, GF, CEIL + 0.4, { ...P, openings: [{ at: 112, w: 1.0, h: 2.3 }, { at: 114.45, w: 1.1, h: 2.3 }] }); // corridor | pantry, utility
+  wall(c, 'x', 101, 108, 115.6, GF, CEIL + 0.4, { ...P, openings: [{ at: 112, w: 1.0, h: 2.3 }] }); // workshop | corridor
+  wall(c, 'x', 104, 108, 115.6, GF, CEIL + 0.4, { ...P, openings: [{ at: 112, w: 1.0, h: 2.3 }, { at: 114.45, w: 1.1, h: 2.3 }] }); // corridor | pantry, utility
   wall(c, 'z', 113.3, 104, 109.6, GF, CEIL + 0.4, P); // pantry | utility (v0.2: pantry X 108.4–113.3, utility 113.3–115.6)
   // wainscot in the hall
   for (const [f, a0, a1] of [[85.09, 84.2, 86.9], [94.91, 86.3, 89.0]] as const) box(c.b, k.M.wood, '#6b4426', f, GF, (a0 + a1) / 2, 0.04, 1.0, a1 - a0, { chunk: c.chunk, uv: 1 });

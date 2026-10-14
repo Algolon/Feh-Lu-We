@@ -1,0 +1,335 @@
+{
+  "production": "5af9779",
+  "temporaryIntegrationTree": "0b378e1a8c3510e29fec246cbe651ee8d8309331",
+  "conditions": "Unpublished production+VEG combination. Same routes/settings, but ten static warm-up views rather than the recovered 24; early LOD history can differ. Software CPU times excluded from performance conclusions.",
+  "profiles": {
+    "baseline-multi": {
+      "freshStaticCountsMatchRecovered": true,
+      "routes": {
+        "boslust": {
+          "cameraTriangles": {
+            "min": 178087,
+            "median": 233373.5,
+            "p95": 246756,
+            "p99": 246756,
+            "max": 248367
+          },
+          "drawCalls": {
+            "min": 45,
+            "median": 84.5,
+            "p95": 91,
+            "p99": 92,
+            "max": 92
+          },
+          "cameraPosesMatchRecovered": true,
+          "multiDrawFallbackCameraParity": true,
+          "maxTriangleDifferenceFromRecoveredHistory": 3724
+        },
+        "dense": {
+          "cameraTriangles": {
+            "min": 197171,
+            "median": 220332.5,
+            "p95": 248893,
+            "p99": 248893,
+            "max": 248893
+          },
+          "drawCalls": {
+            "min": 45,
+            "median": 53.0,
+            "p95": 57,
+            "p99": 57,
+            "max": 57
+          },
+          "cameraPosesMatchRecovered": true,
+          "multiDrawFallbackCameraParity": true,
+          "maxTriangleDifferenceFromRecoveredHistory": 595
+        },
+        "garden-edge": {
+          "cameraTriangles": {
+            "min": 88670,
+            "median": 95006.0,
+            "p95": 118758,
+            "p99": 123449,
+            "max": 124117
+          },
+          "drawCalls": {
+            "min": 16,
+            "median": 19.5,
+            "p95": 29,
+            "p99": 35,
+            "max": 38
+          },
+          "cameraPosesMatchRecovered": true,
+          "multiDrawFallbackCameraParity": true,
+          "maxTriangleDifferenceFromRecoveredHistory": 0
+        },
+        "treeline": {
+          "cameraTriangles": {
+            "min": 171894,
+            "median": 193486.5,
+            "p95": 219351,
+            "p99": 223216,
+            "max": 224522
+          },
+          "drawCalls": {
+            "min": 48,
+            "median": 55.0,
+            "p95": 58,
+            "p99": 58,
+            "max": 58
+          },
+          "cameraPosesMatchRecovered": true,
+          "multiDrawFallbackCameraParity": true,
+          "maxTriangleDifferenceFromRecoveredHistory": 0
+        }
+      },
+      "pageErrors": []
+    },
+    "baseline-fallback": {
+      "freshStaticCountsMatchRecovered": true,
+      "routes": {
+        "boslust": {
+          "cameraTriangles": {
+            "min": 178087,
+            "median": 233373.5,
+            "p95": 246756,
+            "p99": 246756,
+            "max": 248367
+          },
+          "drawCalls": {
+            "min": 100,
+            "median": 139.5,
+            "p95": 150,
+            "p99": 153,
+            "max": 153
+          },
+          "cameraPosesMatchRecovered": true,
+          "multiDrawFallbackCameraParity": true,
+          "maxTriangleDifferenceFromRecoveredHistory": 3724
+        },
+        "dense": {
+          "cameraTriangles": {
+            "min": 197171,
+            "median": 220332.5,
+            "p95": 248893,
+            "p99": 248893,
+            "max": 248893
+          },
+          "drawCalls": {
+            "min": 114,
+            "median": 125.0,
+            "p95": 132,
+            "p99": 134,
+            "max": 134
+          },
+          "cameraPosesMatchRecovered": true,
+          "multiDrawFallbackCameraParity": true,
+          "maxTriangleDifferenceFromRecoveredHistory": 595
+        },
+        "garden-edge": {
+          "cameraTriangles": {
+            "min": 88670,
+            "median": 95006.0,
+            "p95": 118758,
+            "p99": 123449,
+            "max": 124117
+          },
+          "drawCalls": {
+            "min": 49,
+            "median": 54.5,
+            "p95": 64,
+            "p99": 66,
+            "max": 66
+          },
+          "cameraPosesMatchRecovered": true,
+          "multiDrawFallbackCameraParity": true,
+          "maxTriangleDifferenceFromRecoveredHistory": 0
+        },
+        "treeline": {
+          "cameraTriangles": {
+            "min": 171894,
+            "median": 193486.5,
+            "p95": 219351,
+            "p99": 223216,
+            "max": 224522
+          },
+          "drawCalls": {
+            "min": 101,
+            "median": 111.0,
+            "p95": 117,
+            "p99": 117,
+            "max": 117
+          },
+          "cameraPosesMatchRecovered": true,
+          "multiDrawFallbackCameraParity": true,
+          "maxTriangleDifferenceFromRecoveredHistory": 0
+        }
+      },
+      "pageErrors": []
+    },
+    "hybrid-multi": {
+      "freshStaticCountsMatchRecovered": true,
+      "routes": {
+        "boslust": {
+          "cameraTriangles": {
+            "min": 234233,
+            "median": 294924.0,
+            "p95": 314053,
+            "p99": 314053,
+            "max": 315553
+          },
+          "drawCalls": {
+            "min": 45,
+            "median": 84.5,
+            "p95": 91,
+            "p99": 92,
+            "max": 92
+          },
+          "cameraPosesMatchRecovered": true,
+          "multiDrawFallbackCameraParity": true,
+          "maxTriangleDifferenceFromRecoveredHistory": 2441
+        },
+        "dense": {
+          "cameraTriangles": {
+            "min": 254633,
+            "median": 281956.0,
+            "p95": 317877,
+            "p99": 318037,
+            "max": 319870
+          },
+          "drawCalls": {
+            "min": 45,
+            "median": 53.0,
+            "p95": 57,
+            "p99": 57,
+            "max": 57
+          },
+          "cameraPosesMatchRecovered": true,
+          "multiDrawFallbackCameraParity": true,
+          "maxTriangleDifferenceFromRecoveredHistory": 0
+        },
+        "garden-edge": {
+          "cameraTriangles": {
+            "min": 116080,
+            "median": 125256.5,
+            "p95": 158265,
+            "p99": 169772,
+            "max": 170783
+          },
+          "drawCalls": {
+            "min": 16,
+            "median": 19.5,
+            "p95": 29,
+            "p99": 35,
+            "max": 38
+          },
+          "cameraPosesMatchRecovered": true,
+          "multiDrawFallbackCameraParity": true,
+          "maxTriangleDifferenceFromRecoveredHistory": 0
+        },
+        "treeline": {
+          "cameraTriangles": {
+            "min": 226787,
+            "median": 255797.0,
+            "p95": 287614,
+            "p99": 294120,
+            "max": 296853
+          },
+          "drawCalls": {
+            "min": 48,
+            "median": 55.0,
+            "p95": 58,
+            "p99": 58,
+            "max": 58
+          },
+          "cameraPosesMatchRecovered": true,
+          "multiDrawFallbackCameraParity": true,
+          "maxTriangleDifferenceFromRecoveredHistory": 0
+        }
+      },
+      "pageErrors": []
+    },
+    "hybrid-fallback": {
+      "freshStaticCountsMatchRecovered": true,
+      "routes": {
+        "boslust": {
+          "cameraTriangles": {
+            "min": 234233,
+            "median": 294924.0,
+            "p95": 314053,
+            "p99": 314053,
+            "max": 315553
+          },
+          "drawCalls": {
+            "min": 97,
+            "median": 134.0,
+            "p95": 144,
+            "p99": 146,
+            "max": 147
+          },
+          "cameraPosesMatchRecovered": true,
+          "multiDrawFallbackCameraParity": true,
+          "maxTriangleDifferenceFromRecoveredHistory": 2441
+        },
+        "dense": {
+          "cameraTriangles": {
+            "min": 254633,
+            "median": 281956.0,
+            "p95": 317877,
+            "p99": 318037,
+            "max": 319870
+          },
+          "drawCalls": {
+            "min": 104,
+            "median": 114.0,
+            "p95": 120,
+            "p99": 122,
+            "max": 122
+          },
+          "cameraPosesMatchRecovered": true,
+          "multiDrawFallbackCameraParity": true,
+          "maxTriangleDifferenceFromRecoveredHistory": 0
+        },
+        "garden-edge": {
+          "cameraTriangles": {
+            "min": 116080,
+            "median": 125256.5,
+            "p95": 158265,
+            "p99": 169772,
+            "max": 170783
+          },
+          "drawCalls": {
+            "min": 45,
+            "median": 49.5,
+            "p95": 60,
+            "p99": 61,
+            "max": 62
+          },
+          "cameraPosesMatchRecovered": true,
+          "multiDrawFallbackCameraParity": true,
+          "maxTriangleDifferenceFromRecoveredHistory": 0
+        },
+        "treeline": {
+          "cameraTriangles": {
+            "min": 226787,
+            "median": 255797.0,
+            "p95": 287614,
+            "p99": 294120,
+            "max": 296853
+          },
+          "drawCalls": {
+            "min": 97,
+            "median": 105.5,
+            "p95": 113,
+            "p99": 113,
+            "max": 113
+          },
+          "cameraPosesMatchRecovered": true,
+          "multiDrawFallbackCameraParity": true,
+          "maxTriangleDifferenceFromRecoveredHistory": 0
+        }
+      },
+      "pageErrors": []
+    }
+  }
+}

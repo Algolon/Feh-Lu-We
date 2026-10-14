@@ -1,0 +1,79 @@
+{
+  "conditions": "Latest production 3a12a69 + VEG, Hybrid default; URL has no veglod selector. Low 768x432 DPR1; no device performance claim.",
+  "cases": [
+    {
+      "path": "multi",
+      "profile": {
+        "id": "hybrid",
+        "distances": [
+          22,
+          36,
+          62
+        ],
+        "hysteresis": 3,
+        "continuous": "outline"
+      },
+      "views": [
+        {
+          "name": "boslust",
+          "cpuSubmitMs": 3.700000001117587,
+          "calls": 89,
+          "triangles": 301408,
+          "room": "out"
+        },
+        {
+          "name": "dense",
+          "cpuSubmitMs": 2.900000000372529,
+          "calls": 57,
+          "triangles": 268126,
+          "room": "out"
+        },
+        {
+          "name": "cons-deck",
+          "cpuSubmitMs": 5.900000000372529,
+          "calls": 170,
+          "triangles": 337897,
+          "room": "out"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "path": "fallback",
+      "profile": {
+        "id": "hybrid",
+        "distances": [
+          22,
+          36,
+          62
+        ],
+        "hysteresis": 3,
+        "continuous": "outline"
+      },
+      "views": [
+        {
+          "name": "boslust",
+          "cpuSubmitMs": 4.399999998509884,
+          "calls": 140,
+          "triangles": 301408,
+          "room": "out"
+        },
+        {
+          "name": "dense",
+          "cpuSubmitMs": 2.400000000372529,
+          "calls": 117,
+          "triangles": 268126,
+          "room": "out"
+        },
+        {
+          "name": "cons-deck",
+          "cpuSubmitMs": 4.600000001490116,
+          "calls": 182,
+          "triangles": 337897,
+          "room": "out"
+        }
+      ],
+      "errors": []
+    }
+  ]
+}

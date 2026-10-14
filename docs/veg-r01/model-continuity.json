@@ -1,0 +1,3505 @@
+{
+  "conditions": "Fresh 256px binary triangle masks; four orthographic bearings, per-bearing baseline near frame with 6px padding. A shares baseline geometry. Diagnostic outline overlap only; no colour/normals/perceptual metric. Hybrid xfar uses the actual far geometry alias.",
+  "summary": {
+    "baseline": {
+      "near-mid": {
+        "meanIoU": 0.8668,
+        "minIoU": 0.745
+      },
+      "mid-far": {
+        "meanIoU": 0.8228,
+        "minIoU": 0.5812
+      },
+      "far-xfar": {
+        "meanIoU": 0.5254,
+        "minIoU": 0.2976
+      }
+    },
+    "b": {
+      "near-mid": {
+        "meanIoU": 0.9688,
+        "minIoU": 0.8696
+      },
+      "mid-far": {
+        "meanIoU": 0.7585,
+        "minIoU": 0.5556
+      },
+      "far-xfar": {
+        "meanIoU": 0.9525,
+        "minIoU": 0.7536
+      }
+    },
+    "hybrid": {
+      "near-mid": {
+        "meanIoU": 0.8668,
+        "minIoU": 0.745
+      },
+      "mid-far": {
+        "meanIoU": 0.831,
+        "minIoU": 0.6571
+      },
+      "far-xfar": {
+        "meanIoU": 1.0,
+        "minIoU": 1.0
+      }
+    }
+  },
+  "pairs": [
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9166
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8381
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.7844
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 0,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9867
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 0,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7966
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 0,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9166
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8204
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.893
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.899
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.6848
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 1,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9781
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 1,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8534
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 1,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.893
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.896
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9314
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8643
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.6962
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 2,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 2,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8341
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 2,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9314
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8496
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9078
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8821
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.7204
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 3,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9976
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 3,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8158
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 3,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9078
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8681
+    },
+    {
+      "species": "oak",
+      "variant": 0,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9548
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9049
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.7684
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 0,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 0,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8843
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 0,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9548
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8917
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9175
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9171
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.8114
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 1,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9923
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 1,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8708
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 1,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9175
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9065
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9469
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8922
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.7659
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 2,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9902
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 2,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8683
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 2,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9469
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8766
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9286
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9282
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.7842
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 3,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 3,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8863
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 3,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9286
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9204
+    },
+    {
+      "species": "oak",
+      "variant": 1,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9414
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8095
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.4748
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 0,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9979
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 0,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7789
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 0,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9414
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7961
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8925
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7989
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.5328
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 1,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9935
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 1,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7451
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 1,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8925
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8026
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.948
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8373
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.4539
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 2,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9992
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 2,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8009
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 2,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.948
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.819
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9161
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7909
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.5076
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 3,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9971
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 3,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7575
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 3,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9161
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7869
+    },
+    {
+      "species": "oak",
+      "variant": 2,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9355
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8372
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.4969
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 0,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9997
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 0,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7463
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 0,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9355
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7842
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8876
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8221
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.4283
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 1,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9993
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 1,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7341
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 1,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8876
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8085
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9417
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8167
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.4425
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 2,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.995
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 2,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7459
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 2,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9417
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7597
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8929
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8193
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.4374
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 3,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 3,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7381
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 3,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8929
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8059
+    },
+    {
+      "species": "beech",
+      "variant": 0,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9358
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8043
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.56
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 0,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.986
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 0,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7467
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 0,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9358
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7672
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8796
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8478
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.4685
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 1,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9827
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 1,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7468
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 1,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8796
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8168
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.943
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8644
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.5259
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 2,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9961
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 2,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8118
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 2,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.943
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8328
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9159
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8354
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.6489
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 3,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9949
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 3,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7942
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 3,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9159
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8309
+    },
+    {
+      "species": "beech",
+      "variant": 1,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9486
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8901
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.544
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 0,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 0,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8184
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 0,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9486
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8452
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8854
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7327
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.5961
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 1,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 1,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6597
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 1,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8854
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7241
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9251
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7637
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.5378
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 2,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 2,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6767
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 2,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9251
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7032
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9036
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8115
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.4507
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 3,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 3,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.754
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 3,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9036
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8071
+    },
+    {
+      "species": "beech",
+      "variant": 2,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.814
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.5812
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.2996
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 0,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9681
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 0,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.5558
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 0,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.814
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6571
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8541
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6152
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.3152
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 1,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9644
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 1,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6088
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 1,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8541
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6829
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8107
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6215
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.3085
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 2,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9733
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 2,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.5849
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 2,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8107
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7007
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8659
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6239
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.2976
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 3,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9704
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 3,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6224
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 3,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8659
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6948
+    },
+    {
+      "species": "birch",
+      "variant": 0,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8123
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6905
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.3681
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 0,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9652
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 0,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6384
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 0,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8123
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7569
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8413
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6996
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.3531
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 1,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9605
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 1,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6795
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 1,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8413
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7712
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.7955
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6708
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.3696
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 2,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9428
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 2,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6229
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 2,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.7955
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7371
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8642
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6819
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.4193
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 3,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9781
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 3,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6638
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 3,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8642
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7424
+    },
+    {
+      "species": "birch",
+      "variant": 1,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8152
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6236
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.3952
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 0,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9684
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 0,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.5866
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 0,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8152
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6966
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8387
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6148
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.3598
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 1,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9573
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 1,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6085
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 1,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8387
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6949
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.7884
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.5989
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.4182
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 2,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9625
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 2,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.5556
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 2,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.7884
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.678
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8494
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6342
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.3872
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 3,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9619
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 3,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.6463
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 3,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8494
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.7268
+    },
+    {
+      "species": "birch",
+      "variant": 2,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8251
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9758
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.6028
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 0,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9475
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 0,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8511
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 0,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.7711
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8251
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9758
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8405
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.983
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.5486
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 1,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9767
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 1,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8501
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 1,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.8155
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8405
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.983
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.7895
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9804
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.4756
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 2,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9286
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 2,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8352
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 2,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.7536
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.7895
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9804
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8073
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.989
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.5499
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 3,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9399
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 3,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8483
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 3,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.7655
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8073
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.989
+    },
+    {
+      "species": "pine",
+      "variant": 0,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.7723
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9585
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.4831
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 0,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.902
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 0,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.826
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 0,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.7874
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.7723
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9585
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.7783
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9702
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.4961
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 1,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.897
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 1,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8535
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 1,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.784
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.7783
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9702
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.7721
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9543
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.5676
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 2,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.885
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 2,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8537
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 2,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.7964
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.7721
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9543
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.745
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9678
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.4787
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 3,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8696
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 3,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8348
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 3,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.809
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.745
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9678
+    },
+    {
+      "species": "pine",
+      "variant": 1,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8465
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9633
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 0,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.629
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 0,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.959
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 0,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8605
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 0,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.8484
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.8465
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9633
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 0,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.7786
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9688
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 1,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.6387
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 1,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.886
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 1,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8653
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 1,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.8365
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.7786
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9688
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 1,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.795
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9504
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 2,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.6581
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 2,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9246
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 2,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8288
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 2,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.8829
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.795
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9504
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 2,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.817
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9684
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 3,
+      "profile": "baseline",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.6761
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 3,
+      "profile": "b",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.9288
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 3,
+      "profile": "b",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.8606
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 3,
+      "profile": "b",
+      "transition": "far-xfar",
+      "silhouetteIoU": 0.8706
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "near-mid",
+      "silhouetteIoU": 0.817
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "mid-far",
+      "silhouetteIoU": 0.9684
+    },
+    {
+      "species": "pine",
+      "variant": 2,
+      "angle": 3,
+      "profile": "hybrid",
+      "transition": "far-xfar",
+      "silhouetteIoU": 1.0
+    }
+  ]
+}

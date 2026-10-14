@@ -17,11 +17,14 @@ export interface RoomDef {
  * 'window' portals are one-way for lighting: from inside you see outdoor lamps; from outside, lit
  * windows read warm through their emissive glass instead of real lights (no lamp leaks outward).
  */
-export interface PortalDef { a: string; b: string; kind: 'door' | 'arch' | 'window' | 'stair' | 'glass'; door?: string }
+export interface PortalDef { a: string; b: string; kind: 'door' | 'arch' | 'window' | 'stair' | 'glass'; door?: string; seeThrough?: boolean }
+
+/** Walkable wall-depth openings absent from room rectangles. They retain an existing room identity. */
+export interface RoomThreshold { room: string; x0: number; x1: number; z0: number; z1: number; y0: number; y1: number }
 
 export class RoomGraph {
   private byId = new Map<string, RoomDef>();
-  constructor(readonly rooms: RoomDef[], readonly portals: PortalDef[]) {
+  constructor(readonly rooms: RoomDef[], readonly portals: PortalDef[], readonly thresholds: RoomThreshold[] = []) {
     for (const r of rooms) this.byId.set(r.id, r);
   }
   get(id: string) { return this.byId.get(id); }
@@ -29,6 +32,7 @@ export class RoomGraph {
   /** First room containing the point (rooms listed most-specific first), else 'out'. */
   roomAt(x: number, y: number, z: number): string {
     for (const r of this.rooms) if (x >= r.x0 && x <= r.x1 && z >= r.z0 && z <= r.z1 && y >= r.y0 && y <= r.y1) return r.id;
+    for (const t of this.thresholds) if (x >= t.x0 && x <= t.x1 && z >= t.z0 && z <= t.z1 && y >= t.y0 && y <= t.y1) return t.room;
     return 'out';
   }
 
@@ -51,13 +55,13 @@ export class RoomGraph {
    * Rooms whose CONTENTS can be seen from `here`, up to `depth` portal steps. Windows are glowing panes
    * (opaque); glass walls, open doors, arches and stairs are see-through. Used to hide whole rooms.
    */
-  visible(here: string, isOpen: (door: string) => boolean, depth = 2): Set<string> {
+  visible(here: string, isOpen: (door: string) => boolean, depth = 2, closedGlassInView: (door: string) => boolean = () => true): Set<string> {
     const seen = new Set<string>([here]);
     let frontier = [here];
     for (let d = 0; d < depth; d++) {
       const next: string[] = [];
       for (const r of frontier) for (const p of this.portals) {
-        if (p.kind === 'window' || (p.door && !isOpen(p.door))) continue;
+        if (p.kind === 'window' || (p.door && !isOpen(p.door) && (!p.seeThrough || !closedGlassInView(p.door)))) continue;
         const o = p.a === r ? p.b : p.b === r ? p.a : null;
         if (o && !seen.has(o)) { seen.add(o); next.push(o); }
       }

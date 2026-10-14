@@ -1,0 +1,197 @@
+{
+  "policy_ref": "e298649515e80af914da2f3f6fbf51f0ba11f809",
+  "status": "PROVISIONAL DEVELOPMENT BUDGET",
+  "deviceValidated": false,
+  "cameraTrianglesPerView": 750000,
+  "lowDrawCalls": 150,
+  "focused": {
+    "service-threshold-east": {
+      "triangles": 252423,
+      "calls": 118,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "service-threshold-west": {
+      "triangles": 200900,
+      "calls": 72,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "corridor-west": {
+      "triangles": 201696,
+      "calls": 75,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "kitchen-east": {
+      "triangles": 250458,
+      "calls": 122,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "cons-threshold-west": {
+      "triangles": 331722,
+      "calls": 147,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "cons-threshold-east": {
+      "triangles": 193608,
+      "calls": 98,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "cons-closed-west": {
+      "triangles": 273366,
+      "calls": 109,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "corridor-closed-east": {
+      "triangles": 226113,
+      "calls": 102,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "kitchen-closed-east": {
+      "triangles": 96072,
+      "calls": 23,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "corridor-closed-west": {
+      "triangles": 141520,
+      "calls": 35,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "wing-floor-gap": {
+      "triangles": 152388,
+      "calls": 36,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "wing-wall-gap": {
+      "triangles": 130884,
+      "calls": 42,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "wing-join-up": {
+      "triangles": 237843,
+      "calls": 86,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "kitchen-dining": {
+      "triangles": 134380,
+      "calls": 39,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "dining-kitchen": {
+      "triangles": 179148,
+      "calls": 57,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "garden-kitchen": {
+      "triangles": 264202,
+      "calls": 102,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "garden-cons": {
+      "triangles": 263021,
+      "calls": 122,
+      "trianglesWithin": true,
+      "callsWithin": true
+    }
+  },
+  "reference": {
+    "atticNook": {
+      "calls": 41,
+      "triangles": 106020,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "atticCommon": {
+      "calls": 39,
+      "triangles": 108298,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "conservatoryInside": {
+      "calls": 74,
+      "triangles": 128668,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "conservatoryDoorDeck": {
+      "calls": 170,
+      "triangles": 307740,
+      "trianglesWithin": true,
+      "callsWithin": false
+    },
+    "wellnessDeck": {
+      "calls": 65,
+      "triangles": 156535,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "saunaAccess": {
+      "calls": 145,
+      "triangles": 226184,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "wickermanClearing": {
+      "calls": 31,
+      "triangles": 160593,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "wickermanPath": {
+      "calls": 35,
+      "triangles": 211057,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "frontForecourt": {
+      "calls": 134,
+      "triangles": 207234,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "arrivalCourt": {
+      "calls": 128,
+      "triangles": 203776,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "portugalTerrace": {
+      "calls": 31,
+      "triangles": 93007,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "portugalApproach": {
+      "calls": 33,
+      "triangles": 120623,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "golfVicinity": {
+      "calls": 55,
+      "triangles": 198999,
+      "trianglesWithin": true,
+      "callsWithin": true
+    },
+    "golfSpur": {
+      "calls": 90,
+      "triangles": 263048,
+      "trianglesWithin": true,
+      "callsWithin": true
+    }
+  }
+}

@@ -21,6 +21,23 @@ function setup() {
 const at = (x: number, z: number) => new THREE.Matrix4().makeTranslation(x, 0, z);
 
 describe('instanced fallback (vegbatch)', () => {
+  it('keeps transforms and colours across geometry switches, and culls using the replacement geometry bounds',()=>{
+    const {b,frame,meshes}=setup();
+    const id=b.addInstance(0,at(0,-20),new THREE.Color(.2,.4,.6));frame();
+    b.setGeometryAt(id,1);b.setMatrixAt(id,at(2,-18));frame();
+    const m=meshes().find(m=>m.count>0)!;const transform=new THREE.Matrix4(),colour=new THREE.Color();m.getMatrixAt(0,transform);m.getColorAt(0,colour);
+    expect(new THREE.Vector3().setFromMatrixPosition(transform).toArray()).toEqual([2,0,-18]);expect(colour.r).toBeCloseTo(.2);expect(colour.g).toBeCloseTo(.4);expect(colour.b).toBeCloseTo(.6);
+    b.setMatrixAt(id,at(2000,-18));frame();expect(meshes().reduce((s,m)=>s+m.count,0)).toBe(0);
+  });
+  it('keeps region ownership across growth and camera turns, restoring only when the region is visible',()=>{
+    const {b,cam,frame,meshes}=setup();
+    const root=meshes()[0];root.userData.regionOff=true;
+    for(let i=0;i<40;i++)b.addInstance(0,at((i%8)-4,-20-Math.floor(i/8)),new THREE.Color(1,1,1));
+    frame();expect(meshes()[0]).toBe(root);expect(root.instanceMatrix.count).toBeGreaterThanOrEqual(40);expect(root.visible).toBe(false);
+    cam.rotation.y=.1;frame();expect(root.visible).toBe(false);
+    root.userData.regionOff=false;frame();expect(root.visible).toBe(true);
+    root.userData.regionOff=true;frame();expect(root.visible).toBe(false);
+  });
   it('packs exactly the instances in the view frustum, per geometry, and follows the camera', () => {
     const { b, cam, frame, meshes } = setup();
     for (let i = 0; i < 10; i++) b.addInstance(i % 2, at(-20 + i * 4, -30), new THREE.Color(1, 1, 1)); // ahead (camera looks down −z)

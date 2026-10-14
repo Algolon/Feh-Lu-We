@@ -161,7 +161,7 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
       if (!it) continue;
       it.hit[0].updateWorldMatrix(true, false);
       const v = it.hit[0].getWorldPosition(new THREE.Vector3());
-      w.exteriorDoors.push({ door: p.door, x: v.x, y: v.y, z: -v.z, r: 0.9 });
+      w.exteriorDoors.push({ door: p.door, x: v.x, y: v.y, z: -v.z, r: 0.9, seeThrough: p.seeThrough });
     } else if (p.kind === 'glass') {
       // a glass room shows the outdoors: its doors from the house count as exterior openings
       const glassRoom = p.a === 'out' ? p.b : p.a;
@@ -171,7 +171,7 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
         if (!it) continue;
         it.hit[0].updateWorldMatrix(true, false);
         const v = it.hit[0].getWorldPosition(new THREE.Vector3());
-        w.exteriorDoors.push({ door: q.door, x: v.x, y: v.y, z: -v.z, r: 0.9 });
+        w.exteriorDoors.push({ door: q.door, x: v.x, y: v.y, z: -v.z, r: 0.9, seeThrough: q.seeThrough });
       }
     }
   }

@@ -3,7 +3,7 @@
 // utility, the linen, the rear nooks, the attic stair and the four attic rooms (new floor 'a'). Classification order
 // is most-specific first: attic before the attic stair, the attic stair and the split north rooms before the broad
 // upper rooms, the guest WC before the billiard room; utility and pantry do not overlap.
-import { RoomGraph, type RoomDef, type PortalDef } from './rooms';
+import { RoomGraph, type RoomDef, type PortalDef, type RoomThreshold } from './rooms';
 import { SHED, COTTAGE, COTTAGE_FLOOR, SAUNA, ATTIC_NOOK } from './layout';
 
 const R = (id: string, name: string, floor: RoomDef['floor'], x0: number, x1: number, z0: number, z1: number, y0: number, y1: number, map = true): RoomDef => ({ id, name, floor, x0, x1, z0, z1, y0, y1, map });
@@ -42,9 +42,10 @@ export const ROOMS: RoomDef[] = [
   R('library', 'Bibliotheek', 'g', 72.4, 85, 94, 109.6, G0, U1),
   R('dining', 'Eetkamer', 'g', 95, 107.6, 80.4, 92, G0, G1),
   R('kitchen', 'Keuken', 'g', 95, 107.6, 92, 109.6, G0, G1),
-  R('corridor', 'Dienstgang', 'g', 108.4, 115.6, 101, 104, G0, G1),
-  R('workshop', 'Werkplaats', 'g', 108.4, 115.6, 92.4, 101, G0, G1),
-  R('pantry', 'Provisiekamer', 'g', 108.4, 113.3, 104, 109.6, G0, G1),
+  // The west face is the manor's exterior at X108; X108.4 left an uncovered 40 cm strip.
+  R('corridor', 'Dienstgang', 'g', 108, 115.6, 101, 104, G0, G1),
+  R('workshop', 'Werkplaats', 'g', 108, 115.6, 92.4, 101, G0, G1),
+  R('pantry', 'Provisiekamer', 'g', 108, 113.3, 104, 109.6, G0, G1),
   R('utility', 'Bijkeuken', 'g', 113.3, 115.6, 104, 109.6, G0, G1),
   R('cons', 'Serre', 'g', 116, 130, 94, 112, -3, 6.5),
   // ---------------------------------------------------------------- manor basement
@@ -68,7 +69,13 @@ export const ROOMS: RoomDef[] = [
   R('cottageRoom', 'Huisje · zaal', 'x', COTTAGE.x0 + 0.3, COTTAGE.x1 - 0.3, COTTAGE.z0 + 3, COTTAGE.z1 - 0.3, COTTAGE_FLOOR - 0.2, COTTAGE_FLOOR + 3.1, false),
 ];
 
-const P = (a: string, b: string, kind: PortalDef['kind'], door?: string): PortalDef => ({ a, b, kind, door });
+// Only the actual doorway footprints, not inflated rooms or an outdoor catch-all.
+export const ROOM_THRESHOLDS: RoomThreshold[] = [
+  { room: 'corridor', x0: 107.6, x1: 108, z0: 102, z1: 103, y0: G0, y1: 2.3 },
+  { room: 'corridor', x0: 115.6, x1: 116, z0: 101.85, z1: 103.15, y0: G0, y1: 2.35 },
+];
+
+const P = (a: string, b: string, kind: PortalDef['kind'], door?: string, seeThrough = false): PortalDef => ({ a, b, kind, door, seeThrough });
 export const PORTALS: PortalDef[] = [
   P('vestibule', 'out', 'door', 'door.front'), P('vestibule', 'hall', 'arch'),
   P('hall', 'living', 'arch'), P('hall', 'dining', 'arch'), P('hall', 'lobby', 'arch'), P('hall', 'landing', 'stair'),
@@ -77,9 +84,9 @@ export const PORTALS: PortalDef[] = [
   P('bstair', 'bLobby', 'arch'),
   P('living', 'library', 'door', 'door.livLib'), P('dining', 'kitchen', 'arch'),
   P('kitchen', 'corridor', 'door', 'door.service'), P('corridor', 'workshop', 'door', 'door.workshop'), P('corridor', 'pantry', 'door', 'door.pantry'),
-  P('corridor', 'cons', 'door', 'door.consWest'), P('workshop', 'out', 'door', 'door.workshopOut'),
+  P('corridor', 'cons', 'door', 'door.consWest', true), P('workshop', 'out', 'door', 'door.workshopOut'),
   P('billiard', 'out', 'door', 'door.billiardOut'), P('kitchen', 'out', 'door', 'door.kitchenBack'),
-  P('cons', 'out', 'door', 'door.consEast'), P('cons', 'out', 'glass'),
+  P('cons', 'out', 'door', 'door.consEast', true), P('cons', 'out', 'glass'),
   P('frontGallery', 'walkway', 'arch'), P('walkway', 'landing', 'arch'),
   P('frontGallery', 'reis', 'door', 'door.reis'), P('walkway', 'sterren', 'door', 'door.sterren'),
   P('landing', 'libGallery', 'door', 'door.libGallery'), P('libGallery', 'library', 'arch'),
@@ -108,5 +115,5 @@ export const SOURCE_ROOM_IDS = ['frontGallery', 'walkway', 'landing', 'libGaller
   'bLobby', 'archive', 'boiler', 'route', 'tunnel2', 'tunnel', 'hut', 'descent', 'entry', 'passage', 'gathering', 'sauna', 'shed', 'cottageEntry', 'cottageRoom'];
 
 export function estateRooms() {
-  return new RoomGraph(ROOMS, PORTALS);
+  return new RoomGraph(ROOMS, PORTALS, ROOM_THRESHOLDS);
 }

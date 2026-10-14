@@ -1,0 +1,27 @@
+{
+  "remoteCheckpoint": "5a6df26",
+  "localEquivalentCheckpoint": "b484ebc",
+  "treesIdentical": true,
+  "baseline": "142bd7c",
+  "productionInspected": "5af9779",
+  "recoveredFrom": "/workspace/scratch/47734c84c42f/veg-r01",
+  "validation": "Fresh typecheck/build and 286 unit tests pass; inherited evidence verification in progress",
+  "sha256": {
+    "src/world/boslustSample.ts": "ddc91ddfafeac853cfc0fdbcf1af0ad4bafe4743fd39f72fba153fbe4d4435b5",
+    "src/world/woodkit.ts": "93545aedba0c69c26b07310d7fcb5ee98dafdb611247f8a4e5cc963cb5bc362e",
+    "src/world/vegbatch.ts": "28898d284e917d21b4a109067c01beac7100bcd01a9daa907dc73b38ad4ae1f2",
+    "src/world/vegetationLod.ts": "0d4b18af4904e722189dc26bee127a303d7d43c910f64546df0b2477845c2d63",
+    "src/world/estateWoods.ts": "8cd6ae6a6aea29272847b0e4048be985d4c03b07e9e34d6fbe686a520ac5fdc0",
+    "scripts/veg-r01-compare.mjs": "0a60a757778df49b5a08836a9970641bde5cf748a1dcec06fdf6fc499aa80f3f"
+  },
+  "videos": {
+    "hybrid-multi.mp4": "272ed13eb34c6a38af8a8702698ab759cd5f09c693744cca5240ff5dcf9230bd",
+    "b-multi.mp4": "1d27d5ada3aa41bb777d812b9d7a980adc7d172225854335d8258d3fbf9a20ea",
+    "a-fallback.mp4": "883352baceaeedeaba1066df1839e863c73e8c3d4beffe021e3dadeadba61053",
+    "baseline-multi.mp4": "c1e3ac92b6776cf802ee1cdc1695a5960ad47f0456378cd00cb4f8b0d74c3d7d",
+    "baseline-fallback.mp4": "c589bea26f040ffa4e840f8c3a003e0b1b4421f5fa1956531ec4ebcf35f39859",
+    "b-fallback.mp4": "bb40e71341edda31306ac58d4b560b3d1931fa07f2354893041db89732a0e863",
+    "a-multi.mp4": "5ec256aa5c9849d99462a3860b8873b952e0daf1a9ebaf2b51d4316bc3a53115",
+    "hybrid-fallback.mp4": "188d17474877a684b4eec10f9422e0616e1a104c0c2e579281880cb25a172897"
+  }
+}

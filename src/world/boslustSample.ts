@@ -6,6 +6,7 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { makeVegBatch, onFrame, type VegBatch } from './vegbatch';
+import { TREE_LOD_PROFILE, selectTreeLod } from './vegetationLod';
 import type { World, GameApi } from '../interactions/world';
 import type { Ctx } from './arch';
 import { Batcher, compound, getKit, v3 } from './kit';
@@ -213,8 +214,9 @@ const LODS: Lod[] = ['near', 'mid', 'far', 'xfar'];
  * variant has a near, mid and far geometry, each bark + foliage merged on the tree-atlas material, the bark's
  * vertex colours pre-multiplied by bark ÷ leaf tint so that one instance colour (the leaf tint) serves both.
  * Near < 16 m, mid < 26 m, far < 48 m, xfar beyond (3 m hysteresis each way); trees drawn to 115 m, bushes to
- * 50 m. All LODs are emitted from one skeleton with the same cluster layout, so a switch coarsens the surface but
- * keeps the silhouette. DEV-03: one TreeBatches serves the whole estate (forest, masses, garden, outer ring).
+ * 50 m. A shared skeleton preserves identity, but reduced clusters and topology can change the outline.
+ * VEG-R01 profiles vary tree bands/geometry; baseline retains the legacy thresholds above.
+ * DEV-03: one TreeBatches serves the whole estate (forest, masses, garden, outer ring).
  */
 export class TreeBatches {
   private geos: THREE.BufferGeometry[] = [];
@@ -231,7 +233,11 @@ export class TreeBatches {
     if (!this.keys.has(key)) {
       const b = new THREE.Color(BARK_TINT[s.species]), l = new THREE.Color(LEAF_TINT[s.species]);
       const ratio = new THREE.Color(b.r / l.r, b.g / l.g, b.b / l.b);
-      if (s.kind === 'tree') this.keys.set(key, LODS.map((lod) => this.geos.push(mergeModel(treeModel(s.species, s.v, lod), ratio)) - 1));
+      if (s.kind === 'tree') {
+        const ids = LODS.slice(0, TREE_LOD_PROFILE.continuous === 'outline' ? 3 : 4).map((lod) => this.geos.push(mergeModel(treeModel(s.species, s.v, lod, TREE_LOD_PROFILE.continuous), ratio)) - 1);
+        if (ids.length === 3) ids.push(ids[2]); // identical far geometry removes one whole switch and fallback draw group
+        this.keys.set(key, ids);
+      }
       else { // bushes: near and far only (one geometry serves mid and far: fewer groups in the instanced fallback)
         const near = this.geos.push(mergeModel(bushModel(s.species, s.v, 'near'), ratio)) - 1, far = this.geos.push(mergeModel(bushModel(s.species, s.v, 'far'), ratio)) - 1;
         this.keys.set(key, [near, far, far, far]);
@@ -245,7 +251,7 @@ export class TreeBatches {
   }
   get size() { return this.items.length; }
   build(w: World) {
-    this.batch = makeVegBatch(w, this.geos, this.items.length, woodMats().tree, { castShadow: true, tag: { artTrees: true, vegPart: 'trees' } });
+    this.batch = makeVegBatch(w, this.geos, this.items.length, woodMats().tree, { castShadow: true, tag: { artTrees: true, vegPart: 'trees' }, preserveRegions: TREE_LOD_PROFILE.id !== 'baseline' });
     for (const it of this.items) {
       const g = this.keys.get(it.key)!;
       it.id = this.batch.addInstance(g[3], it.m, it.c);
@@ -272,8 +278,8 @@ export class TreeBatches {
         for (const q of wins) { const px = it.p.x - q.x, pz = -it.p.z - q.z, pd = Math.hypot(px, pz) || 1; if ((px * q.dx + pz * q.dz) / pd > q.cos - it.r / pd) { vis = true; break; } }
       }
       // the LOD whose band holds d, with 3 m hysteresis: a tree keeps its current LOD until 3 m past a boundary
-      let lod = 0;
-      while (lod < this.lodDist.length && d >= this.lodDist[lod] + (it.lod <= lod ? 3 : -3)) lod++;
+      const profile = TREE_LOD_PROFILE;
+      const lod = selectTreeLod(d, it.lod, it.bush || profile.id === 'baseline' ? this.lodDist : profile.distances, it.bush ? 3 : profile.hysteresis);
       if (lod !== it.lod) { b.setGeometryAt(it.id, this.keys.get(it.key)![lod]); it.lod = lod; }
       if (vis !== it.vis) { b.setVisibleAt(it.id, vis); it.vis = vis; }
     }
@@ -286,6 +292,12 @@ export class TreeBatches {
   }
   /** Diagnostics: every tree and bush (species.variant, plan position). */
   list() { return this.items.map((it) => ({ key: it.key, bush: it.bush, x: +it.p.x.toFixed(2), z: +(-it.p.z).toFixed(2) })); }
+  /** On-demand transition evidence; never allocated by the normal render loop. */
+  snapshot() {
+    return this.items.map((it, index) => ({ index, key: it.key, bush: it.bush, x: it.p.x, y: it.p.y, z: -it.p.z,
+      distance: +it.p.distanceTo(camPos).toFixed(3), level: it.lod, visible: it.vis, geometry: this.keys.get(it.key)![it.lod],
+      triangles: (this.geos[this.keys.get(it.key)![it.lod]].index?.count ?? this.geos[this.keys.get(it.key)![it.lod]].attributes.position.count) / 3 }));
+  }
   /** Diagnostics: per kind × LOD, how many are in range, and how many of those intersect the view. */
   stats() {
     const z = () => ({ near: 0, mid: 0, far: 0, xfar: 0, nearInView: 0, midInView: 0, farInView: 0, xfarInView: 0 });
@@ -349,7 +361,7 @@ export class PlantBatch {
   counts() { return Object.fromEntries(this.count); }
   build(w: World) {
     if (!this.items.length) return;
-    this.batch = makeVegBatch(w, this.geos, this.items.length, this.material ?? woodMats().flat, { sortObjects: false, tag: this.tag });
+    this.batch = makeVegBatch(w, this.geos, this.items.length, this.material ?? woodMats().flat, { sortObjects: false, tag: this.tag, preserveRegions: TREE_LOD_PROFILE.id !== 'baseline' });
     for (const it of this.items) { it.id = this.batch.addInstance(it.geo, it.m, it.c); this.batch.setVisibleAt(it.id, false); }
     onFrame(w, (cam) => this.update(cam));
   }

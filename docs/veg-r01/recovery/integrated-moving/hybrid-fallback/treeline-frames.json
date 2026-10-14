@@ -1,0 +1,1402 @@
+[
+  {
+    "i": 0,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.80544,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 1.799999998882413,
+    "calls": 107,
+    "triangles": 254657
+  },
+  {
+    "i": 1,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.51253504,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.199999999254942,
+    "calls": 108,
+    "triangles": 258973
+  },
+  {
+    "i": 2,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.19838756864,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.5,
+    "calls": 108,
+    "triangles": 258475
+  },
+  {
+    "i": 3,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 64.87965171482624,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.600000001490116,
+    "calls": 108,
+    "triangles": 259540
+  },
+  {
+    "i": 4,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 64.55992477040246,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 14.800000000745058,
+    "calls": 107,
+    "triangles": 259225
+  },
+  {
+    "i": 5,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 64.23998375040694,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3,
+    "calls": 104,
+    "triangles": 255943
+  },
+  {
+    "i": 6,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 63.9199964900879,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.599999999627471,
+    "calls": 103,
+    "triangles": 249052
+  },
+  {
+    "i": 7,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 63.59999924185899,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.599999999627471,
+    "calls": 103,
+    "triangles": 249247
+  },
+  {
+    "i": 8,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 63.27999983624154,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 4,
+    "calls": 104,
+    "triangles": 248782
+  },
+  {
+    "i": 9,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 62.95999996462817,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 14.399999998509884,
+    "calls": 105,
+    "triangles": 247436
+  },
+  {
+    "i": 10,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 62.63999999235968,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.099999999627471,
+    "calls": 105,
+    "triangles": 245992
+  },
+  {
+    "i": 11,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 62.31999999834968,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 4,
+    "calls": 105,
+    "triangles": 246218
+  },
+  {
+    "i": 12,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 61.99999999964352,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 5275.300000000745,
+    "calls": 104,
+    "triangles": 246795
+  },
+  {
+    "i": 13,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 61.679999999923,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.200000001117587,
+    "calls": 104,
+    "triangles": 247745
+  },
+  {
+    "i": 14,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 61.359999999983366,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.099999999627471,
+    "calls": 105,
+    "triangles": 248217
+  },
+  {
+    "i": 15,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 61.039999999996404,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 4,
+    "calls": 105,
+    "triangles": 248393
+  },
+  {
+    "i": 16,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 60.719999999999224,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.900000000372529,
+    "calls": 106,
+    "triangles": 246764
+  },
+  {
+    "i": 17,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 60.399999999999835,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 10.699999999254942,
+    "calls": 106,
+    "triangles": 247889
+  },
+  {
+    "i": 18,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 60.07999999999997,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 5.299999998882413,
+    "calls": 106,
+    "triangles": 246334
+  },
+  {
+    "i": 19,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 59.76,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.299999998882413,
+    "calls": 108,
+    "triangles": 247662
+  },
+  {
+    "i": 20,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 59.44000000000001,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 4.299999998882413,
+    "calls": 106,
+    "triangles": 247713
+  },
+  {
+    "i": 21,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 59.120000000000005,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 5.099999999627471,
+    "calls": 106,
+    "triangles": 246670
+  },
+  {
+    "i": 22,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 58.8,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.199999999254942,
+    "calls": 106,
+    "triangles": 244747
+  },
+  {
+    "i": 23,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 58.47999999999999,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.400000000372529,
+    "calls": 105,
+    "triangles": 242168
+  },
+  {
+    "i": 24,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 58.15999999999998,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 6.5,
+    "calls": 104,
+    "triangles": 238775
+  },
+  {
+    "i": 25,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 57.839999999999975,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.5,
+    "calls": 103,
+    "triangles": 238626
+  },
+  {
+    "i": 26,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 57.51999999999997,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 4.699999999254942,
+    "calls": 104,
+    "triangles": 237527
+  },
+  {
+    "i": 27,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 57.19999999999996,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 4.599999999627471,
+    "calls": 104,
+    "triangles": 237210
+  },
+  {
+    "i": 28,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 56.87999999999995,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 6.300000000745058,
+    "calls": 104,
+    "triangles": 233150
+  },
+  {
+    "i": 29,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 56.56931081481477,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 6.199999999254942,
+    "calls": 103,
+    "triangles": 231884
+  },
+  {
+    "i": 30,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 56.33135270305463,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 2.5,
+    "calls": 103,
+    "triangles": 230482
+  },
+  {
+    "i": 31,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 56.192373812309896,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 6.900000000372529,
+    "calls": 102,
+    "triangles": 226787
+  },
+  {
+    "i": 32,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 56.15712620500698,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.700000001117587,
+    "calls": 102,
+    "triangles": 226787
+  },
+  {
+    "i": 33,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 56.14951272182955,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 2.800000000745058,
+    "calls": 102,
+    "triangles": 226787
+  },
+  {
+    "i": 34,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 56.14786820946322,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.699999999254942,
+    "calls": 102,
+    "triangles": 226787
+  },
+  {
+    "i": 35,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 56.147512994792095,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 2.899999998509884,
+    "calls": 102,
+    "triangles": 226787
+  },
+  {
+    "i": 36,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 56.14747384868548,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3,
+    "calls": 102,
+    "triangles": 226787
+  },
+  {
+    "i": 37,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 56.14747384868548,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.099999999627471,
+    "calls": 102,
+    "triangles": 226787
+  },
+  {
+    "i": 38,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 56.14747384868548,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 2.699999999254942,
+    "calls": 102,
+    "triangles": 226787
+  },
+  {
+    "i": 39,
+    "phase": "approach",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 56.14747384868548,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 2.900000000372529,
+    "calls": 102,
+    "triangles": 226787
+  },
+  {
+    "i": 40,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 56.34203384868548,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.699999999254942,
+    "calls": 103,
+    "triangles": 231403
+  },
+  {
+    "i": 41,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 56.63493880868548,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 4,
+    "calls": 104,
+    "triangles": 231682
+  },
+  {
+    "i": 42,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 56.94908628004548,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 2.900000000372529,
+    "calls": 104,
+    "triangles": 233150
+  },
+  {
+    "i": 43,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 57.267822133859234,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 8.400000000372529,
+    "calls": 104,
+    "triangles": 237335
+  },
+  {
+    "i": 44,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 57.587549078283004,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 4.299999998882413,
+    "calls": 104,
+    "triangles": 238912
+  },
+  {
+    "i": 45,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 57.90749009827854,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.700000001117587,
+    "calls": 104,
+    "triangles": 240808
+  },
+  {
+    "i": 46,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 58.227477358597575,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 2.900000000372529,
+    "calls": 105,
+    "triangles": 242241
+  },
+  {
+    "i": 47,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 58.54747460682648,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.400000000372529,
+    "calls": 106,
+    "triangles": 246651
+  },
+  {
+    "i": 48,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 58.867474012443935,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.299999998882413,
+    "calls": 107,
+    "triangles": 248213
+  },
+  {
+    "i": 49,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 59.187473884057304,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 5.900000000372529,
+    "calls": 107,
+    "triangles": 250501
+  },
+  {
+    "i": 50,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 59.507473856325795,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.399999998509884,
+    "calls": 107,
+    "triangles": 251246
+  },
+  {
+    "i": 51,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 59.82747385033579,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3,
+    "calls": 108,
+    "triangles": 253064
+  },
+  {
+    "i": 52,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 60.14747384904195,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.300000000745058,
+    "calls": 108,
+    "triangles": 254096
+  },
+  {
+    "i": 53,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 60.467473848762474,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 4.800000000745058,
+    "calls": 108,
+    "triangles": 255651
+  },
+  {
+    "i": 54,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 60.787473848702106,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.900000000372529,
+    "calls": 110,
+    "triangles": 258066
+  },
+  {
+    "i": 55,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 61.10747384868907,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.900000000372529,
+    "calls": 107,
+    "triangles": 258487
+  },
+  {
+    "i": 56,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 61.42747384868625,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 4.399999998509884,
+    "calls": 108,
+    "triangles": 259326
+  },
+  {
+    "i": 57,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 61.74747384868564,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 5.399999998509884,
+    "calls": 108,
+    "triangles": 259709
+  },
+  {
+    "i": 58,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 62.0674738486855,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.099999999627471,
+    "calls": 108,
+    "triangles": 260365
+  },
+  {
+    "i": 59,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 62.387473848685474,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.300000000745058,
+    "calls": 108,
+    "triangles": 261745
+  },
+  {
+    "i": 60,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 62.70747384868546,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 12,
+    "calls": 108,
+    "triangles": 263872
+  },
+  {
+    "i": 61,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 63.02747384868547,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.400000000372529,
+    "calls": 108,
+    "triangles": 264700
+  },
+  {
+    "i": 62,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 63.347473848685475,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 5.099999999627471,
+    "calls": 107,
+    "triangles": 265268
+  },
+  {
+    "i": 63,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 63.66747384868548,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 4.200000001117587,
+    "calls": 107,
+    "triangles": 267774
+  },
+  {
+    "i": 64,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 63.98747384868549,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 4.5,
+    "calls": 107,
+    "triangles": 267810
+  },
+  {
+    "i": 65,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 64.30747384868549,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 4.800000000745058,
+    "calls": 108,
+    "triangles": 274536
+  },
+  {
+    "i": 66,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 64.6274738486855,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 4,
+    "calls": 111,
+    "triangles": 277036
+  },
+  {
+    "i": 67,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 64.9474738486855,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 4.5,
+    "calls": 112,
+    "triangles": 277247
+  },
+  {
+    "i": 68,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.26747384868551,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 4.399999998509884,
+    "calls": 112,
+    "triangles": 276702
+  },
+  {
+    "i": 69,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.55168346763881,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 8.099999999627471,
+    "calls": 112,
+    "triangles": 277675
+  },
+  {
+    "i": 70,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.74761180610442,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.300000000745058,
+    "calls": 112,
+    "triangles": 277034
+  },
+  {
+    "i": 71,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.83923914891503,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.300000000745058,
+    "calls": 113,
+    "triangles": 287614
+  },
+  {
+    "i": 72,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.85903065496211,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.5,
+    "calls": 113,
+    "triangles": 287614
+  },
+  {
+    "i": 73,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86330562026828,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.700000001117587,
+    "calls": 113,
+    "triangles": 287614
+  },
+  {
+    "i": 74,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86422901277442,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.699999999254942,
+    "calls": 113,
+    "triangles": 287614
+  },
+  {
+    "i": 75,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 2.5,
+    "calls": 113,
+    "triangles": 287614
+  },
+  {
+    "i": 76,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.400000000372529,
+    "calls": 113,
+    "triangles": 287614
+  },
+  {
+    "i": 77,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.399999998509884,
+    "calls": 113,
+    "triangles": 287614
+  },
+  {
+    "i": 78,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.699999999254942,
+    "calls": 113,
+    "triangles": 287614
+  },
+  {
+    "i": 79,
+    "phase": "retreat",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 2.600000001490116,
+    "calls": 113,
+    "triangles": 287614
+  },
+  {
+    "i": 80,
+    "phase": "turn",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.300000000745058,
+    "calls": 113,
+    "triangles": 287614
+  },
+  {
+    "i": 81,
+    "phase": "turn",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -2.3402404246362534,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 4.399999998509884,
+    "calls": 105,
+    "triangles": 278133
+  },
+  {
+    "i": 82,
+    "phase": "turn",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -2.1086298298482657,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.200000001117587,
+    "calls": 103,
+    "triangles": 279287
+  },
+  {
+    "i": 83,
+    "phase": "turn",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -1.930266817389977,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 4.200000001117587,
+    "calls": 105,
+    "triangles": 287027
+  },
+  {
+    "i": 84,
+    "phase": "turn",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -1.8244797872485359,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.800000000745058,
+    "calls": 104,
+    "triangles": 294120
+  },
+  {
+    "i": 85,
+    "phase": "turn",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -1.8027324055946643,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 4.199999999254942,
+    "calls": 104,
+    "triangles": 293630
+  },
+  {
+    "i": 86,
+    "phase": "turn",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -1.867381338675954,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.799999998882413,
+    "calls": 105,
+    "triangles": 296853
+  },
+  {
+    "i": 87,
+    "phase": "turn",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -2.0114208714614947,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.5,
+    "calls": 105,
+    "triangles": 285103
+  },
+  {
+    "i": 88,
+    "phase": "turn",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -2.219242085570341,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 2.299999998882413,
+    "calls": 101,
+    "triangles": 274936
+  },
+  {
+    "i": 89,
+    "phase": "turn",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -2.468324327775413,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 4.300000000745058,
+    "calls": 107,
+    "triangles": 280511
+  },
+  {
+    "i": 90,
+    "phase": "turn",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -2.731675672224587,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.799999998882413,
+    "calls": 111,
+    "triangles": 274319
+  },
+  {
+    "i": 91,
+    "phase": "turn",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -2.9807579144296588,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.699999999254942,
+    "calls": 102,
+    "triangles": 256595
+  },
+  {
+    "i": 92,
+    "phase": "turn",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -3.188579128538505,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.599999999627471,
+    "calls": 99,
+    "triangles": 262820
+  },
+  {
+    "i": 93,
+    "phase": "turn",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -3.332618661324046,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.599999999627471,
+    "calls": 98,
+    "triangles": 257911
+  },
+  {
+    "i": 94,
+    "phase": "turn",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -3.397267594405336,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 5.399999998509884,
+    "calls": 97,
+    "triangles": 259734
+  },
+  {
+    "i": 95,
+    "phase": "turn",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -3.3755202127514643,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.099999999627471,
+    "calls": 97,
+    "triangles": 259972
+  },
+  {
+    "i": 96,
+    "phase": "turn",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -3.269733182610023,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.599999999627471,
+    "calls": 97,
+    "triangles": 255345
+  },
+  {
+    "i": 97,
+    "phase": "turn",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -3.0913701701517344,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 2.799999998882413,
+    "calls": 99,
+    "triangles": 262488
+  },
+  {
+    "i": 98,
+    "phase": "turn",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -2.8597595753637473,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 3.5,
+    "calls": 107,
+    "triangles": 264025
+  },
+  {
+    "i": 99,
+    "phase": "turn",
+    "pose": {
+      "x": 88,
+      "y": 0,
+      "z": 65.86442846555575,
+      "yaw": -2.6,
+      "pitch": 0.12
+    },
+    "cpuSubmitMs": 4,
+    "calls": 113,
+    "triangles": 287614
+  }
+]

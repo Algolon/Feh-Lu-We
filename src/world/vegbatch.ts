@@ -44,7 +44,7 @@ export interface VegBatch {
   setVisibleAt(i: number, v: boolean): void;
   setMatrixAt(i: number, m: THREE.Matrix4): void;
 }
-export interface VegBatchOpts { castShadow?: boolean; sortObjects?: boolean; tag: Record<string, unknown> }
+export interface VegBatchOpts { castShadow?: boolean; sortObjects?: boolean; tag: Record<string, unknown>; preserveRegions?: boolean }
 
 export function makeVegBatch(w: World, geos: THREE.BufferGeometry[], maxInstances: number, material: THREE.Material, o: VegBatchOpts): VegBatch {
   // a BatchedMesh needs all its geometries indexed or all non-indexed (DEV-03 batches mix kit pieces)
@@ -152,6 +152,8 @@ class InstancedVeg implements VegBatch {
    * draws a superset of what multi-draw draws per camera, never less.
    */
   private sync(camera: THREE.Camera, renderer: THREE.WebGLRenderer) {
+    // World region culling owns root visibility; fallback packing must never turn a hidden region back on.
+    if (this.o.preserveRegions !== false) for (const g of this.groups) g.mesh.visible = !g.mesh.userData.regionOff && g.drawn.length > 0;
     const sun = this.shadowSun(renderer);
     if (sun) sunDir.copy(tmpA.setFromMatrixPosition(sun.target.matrixWorld)).sub(tmpB.setFromMatrixPosition(sun.matrixWorld)).normalize();
     const sunChanged = !!sun && sunDir.distanceTo(this.lastSun) > 0.01;
@@ -177,14 +179,20 @@ class InstancedVeg implements VegBatch {
       g.dirty = false;
       g.drawn = list;
       if (list.length > g.mesh.instanceMatrix.count) { // grow (rare: the first frames)
-        const old = g.mesh, cap = Math.max(8, 1 << Math.ceil(Math.log2(list.length)));
-        old.removeFromParent(); old.dispose(); this.objects.splice(this.objects.indexOf(old), 1);
-        g.mesh = this.makeMesh(g.geo, cap);
+        const cap = Math.max(8, 1 << Math.ceil(Math.log2(list.length)));
+        if (this.o.preserveRegions === false) {
+          const old = g.mesh;old.removeFromParent();old.dispose();this.objects.splice(this.objects.indexOf(old),1);g.mesh=this.makeMesh(g.geo,cap);
+        } else {
+          // Keep the scene object registered with World.roomRegion; replace only its GPU instance buffers.
+          g.mesh.dispose();
+          g.mesh.instanceMatrix = new THREE.InstancedBufferAttribute(new Float32Array(cap * 16), 16).setUsage(THREE.DynamicDrawUsage);
+          g.mesh.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(cap * 3), 3).setUsage(THREE.DynamicDrawUsage);
+        }
       }
       const mesh = g.mesh;
       list.forEach((i, k) => { mesh.setMatrixAt(k, this.inst[i].m); if (mesh.instanceColor) mesh.setColorAt(k, this.inst[i].c); });
       mesh.count = list.length;
-      mesh.visible = list.length > 0;
+      mesh.visible = list.length > 0 && (this.o.preserveRegions === false || !mesh.userData.regionOff);
       if (list.length) {
         mesh.instanceMatrix.clearUpdateRanges(); mesh.instanceMatrix.addUpdateRange(0, list.length * 16); mesh.instanceMatrix.needsUpdate = true;
         if (mesh.instanceColor) { mesh.instanceColor.clearUpdateRanges(); mesh.instanceColor.addUpdateRange(0, list.length * 3); mesh.instanceColor.needsUpdate = true; }
