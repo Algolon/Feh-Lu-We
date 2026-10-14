@@ -2,7 +2,9 @@
 
 Isolated research branch: `vfc01-visual-fidelity-calibration`. Verified production base: `ccr-75ef4113-kfkimm` at `ae2a036e783400355c8d137f24e16c33bb1a8323`. Exactly two zones: Library and Portugal cottage + terrace. ART-01 remains the direction.
 
-Start with [the offline evidence viewer](index.html) and [recommendation](VFC01_RECOMMENDATION.md). It presents a selected equal-DPR comparison before the DPR-1.25 candidate, all 90 main colour/clay/neutral frames, and eight deterministic approach/retreat videos. Frames retain 915×412 content; video encoding pads the width to 916. Video playback is four presentation frames/s, not measured gameplay FPS.
+**Upload status, 14 October 2026: BLOCKED.** The branch contains 12 baseline WebPs, the viewer, reports and telemetry. Selected before/after images, other experimental frames and all eight videos are missing. See [verified upload recovery](VFC01_UPLOAD_RECOVERY.md) and [actual availability](UPLOAD_AVAILABILITY.json). The original evidence manifest describes the expected package, not completed remote delivery.
+
+[The offline evidence viewer](index.html) now marks unavailable comparisons and videos explicitly. [The recommendation](VFC01_RECOMMENDATION.md) is retained, but its experimental visual evidence is incomplete. Frames retain 915×412 content; video encoding pads the width to 916. Video playback is four presentation frames/s, not measured gameplay FPS.
 
 | Report | Contents |
 |---|---|

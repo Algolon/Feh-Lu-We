@@ -1,5 +1,7 @@
 # VFC-01 — recovery checkpoint
 
+**Superseding delivery status (14 October 2026): BLOCKED.** Earlier completion statements below describe local reconstruction, not a complete remote upload. Only 12 baseline images are reachable on the branch; 166 manifest files are missing. See [current verified recovery](VFC01_UPLOAD_RECOVERY.md).
+
 The initial calibration workspace was removed by automated workspace maintenance after local commit but before the GitHub tree/ref upload completed. This document preserves that recovery checkpoint. The completed reconstructed evidence package is now indexed in README.md; the initial lost run remains historical only.
 
 ## Provenance
