@@ -53,37 +53,51 @@ export function homeCoatStand(c: Ctx) {
     const g = sb(0.095, 0.062, 0.34, 0.014);
     a.add(M.timber, dk, g, Math.sin(t) * 0.13, 0.031, Math.cos(t) * 0.13, { ry: t });
   }
-  for (const x of [-0.22, 0.22]) {
+  for (const x of [-0.36, 0.36]) {
     rail(a, M.timber, oak, [0, 1.68, 0], [x, 1.79, 0.055], 0.021);
     a.add(M.timber, oak, cg('homePegBall', () => new THREE.SphereGeometry(0.029, 12, 8)), x, 1.79, 0.055);
   }
   for (const z of [-0.19, 0.19]) rail(a, M.timber, oak, [0, 1.65, 0], [0, 1.74, z], 0.018);
-  // Both coats face the room, separated in depth so their collars and sleeve shapes stay visible.
-  coat(c, 7.455, 4.38, -Math.PI / 2, '#65705a', false);
-  coat(c, 7.455, 4.82, -Math.PI / 2, '#3e5666', true);
+  // 72 cm between hanger centres; each unified garment is <64 cm wide including bevels.
+  // Leave actual air between the coats rather than hiding interpenetration with draw order.
+  coat(c, 7.455, 4.24, -Math.PI / 2, '#65705a', false);
+  coat(c, 7.455, 4.96, -Math.PI / 2, '#3e5666', true);
   c.col.addCircle(7.55, 4.6, 0.3, 0, 2); // original footprint
 }
 
 function coat(c: Ctx, x: number, z: number, yaw: number, color: string, short: boolean) {
   const M = artMats(), a = new Asm(c.b, c.chunk, x, 0, z, yaw), hem = short ? 1.03 : 0.9;
-  a.add(M.upholstery, color, cg(`homeCoatBody${hem}`, () => loft([
-    [hem, 0.19, 0.065, 0], [hem + 0.13, 0.2, 0.071, 0.005], [1.32, 0.18, 0.075, 0],
-    [1.5, 0.214, 0.078, 0], [1.59, 0.205, 0.06, -0.01], [1.66, 0.067, 0.048, -0.01],
-  ])), 0, 0, 0);
+  // One bevelled garment contour includes torso, shoulders and both drooping sleeves.
+  // No overlapping sleeve tubes or separate shoulder caps: the shoulder is a continuous surface.
+  a.add(M.upholstery, color, cg(`homeCoatUnified${hem}`, () => {
+    const s = new THREE.Shape();
+    s.moveTo(-0.172, hem);
+    s.quadraticCurveTo(-0.195, hem + 0.16, -0.17, 1.33);
+    s.lineTo(-0.176, 1.4);
+    s.quadraticCurveTo(-0.205, 1.26, -0.228, 1.065);
+    s.quadraticCurveTo(-0.262, 1.048, -0.292, 1.075);
+    s.quadraticCurveTo(-0.305, 1.29, -0.29, 1.45);
+    s.quadraticCurveTo(-0.285, 1.535, -0.195, 1.592);
+    s.lineTo(-0.064, 1.65); s.quadraticCurveTo(0, 1.622, 0.064, 1.65);
+    s.lineTo(0.195, 1.592);
+    s.quadraticCurveTo(0.285, 1.535, 0.29, 1.45);
+    s.quadraticCurveTo(0.305, 1.29, 0.292, 1.075);
+    s.quadraticCurveTo(0.262, 1.048, 0.228, 1.065);
+    s.quadraticCurveTo(0.205, 1.26, 0.176, 1.4);
+    s.lineTo(0.17, 1.33); s.quadraticCurveTo(0.195, hem + 0.16, 0.172, hem);
+    s.quadraticCurveTo(0, hem - 0.012, -0.172, hem);
+    const g = new THREE.ExtrudeGeometry(s, { depth: 0.088, bevelEnabled: true, bevelSize: 0.018, bevelThickness: 0.018, bevelSegments: 3, curveSegments: 7 });
+    g.translate(0, 0, -0.044);
+    return projectUV(g, 1, 'y');
+  }), 0, 0, 0);
   for (const side of [-1, 1]) {
-    const curve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(side * 0.17, 1.55, 0), new THREE.Vector3(side * 0.255, 1.46, -0.015),
-      new THREE.Vector3(side * 0.3, 1.23, -0.025), new THREE.Vector3(side * 0.29, 1.07, -0.06),
-    ]);
-    const sleeve = cg(`homeCoatSleeve${side}`, () => new THREE.TubeGeometry(curve, 9, 0.062, 12, false));
-    a.add(M.upholstery, color, sleeve, 0, 0, 0);
-    a.add(M.upholstery, '#303d3c', sb(0.12, 0.045, 0.12, 0.016), side * 0.29, 1.075, 0.06);
-    a.add(M.upholstery, '#c1b49a', sb(0.05, 0.108, 0.021, 0.008), side * 0.055, 1.615, 0.049, { rz: side * -0.38 });
-    a.add(M.upholstery, color, sb(0.115, 0.10, 0.014, 0.007), side * 0.115, hem + 0.24, 0.074);
-    a.add(M.upholstery, '#455144', sb(0.12, 0.02, 0.016, 0.004), side * 0.115, hem + 0.287, 0.078);
+    a.add(M.upholstery, '#303d3c', sb(0.065, 0.028, 0.132, 0.012), side * 0.26, 1.057, 0);
+    a.add(M.upholstery, '#c1b49a', sb(0.05, 0.108, 0.021, 0.008), side * 0.055, 1.615, 0.076, { rz: side * -0.38 });
+    a.add(M.upholstery, color, sb(0.10, 0.10, 0.014, 0.007), side * 0.106, hem + 0.24, 0.062);
+    a.add(M.upholstery, '#455144', sb(0.105, 0.02, 0.016, 0.004), side * 0.106, hem + 0.287, 0.067);
   }
-  a.add(M.paint, '#38413a', bx(0.012, 1.58 - hem, 0.006), 0, (1.58 + hem) / 2, 0.078);
-  for (const y of [hem + 0.12, hem + 0.27, hem + 0.42]) a.add(M.brass, brass, cg('homeCoatButton', () => new THREE.SphereGeometry(0.009, 8, 6)), 0.015, y, 0.082);
+  a.add(M.paint, '#38413a', bx(0.012, 1.58 - hem, 0.006), 0, (1.58 + hem) / 2, 0.063);
+  for (const y of [hem + 0.12, hem + 0.27, hem + 0.42]) a.add(M.brass, brass, cg('homeCoatButton', () => new THREE.SphereGeometry(0.009, 8, 6)), 0.015, y, 0.068);
   // Hanger sits inside the shoulder line; hook reaches the stand's corresponding peg.
   rail(a, M.timber, '#b49368', [-0.17, 1.59, -0.04], [0, 1.69, -0.04], 0.009);
   rail(a, M.timber, '#b49368', [0, 1.69, -0.04], [0.17, 1.59, -0.04], 0.009);

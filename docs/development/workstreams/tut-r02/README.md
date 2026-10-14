@@ -12,6 +12,15 @@ These images are not physical-phone FPS validation. [Scope, asset-by-asset decis
 | --- | --- |
 | ![Before entrance](before/entrance-portrait.jpg) | ![After entrance](after/entrance-portrait.jpg) |
 
+## Correctie na feedback op de jassen
+
+Meer ruimte tussen de kledingstukken; romp, schouders en mouwen zijn één doorlopende vorm.
+Extra detailcamera's, zonder bijbehorende baseline-opname.
+
+![Jassen recht van voren](after/coat-front-portrait.jpg)
+
+![Doorlopende schoudervorm onder een hoek](after/coat-shoulder-landscape.jpg)
+
 ## Schoenvorm
 
 | Before | After |

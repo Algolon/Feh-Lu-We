@@ -4,7 +4,7 @@
     {
       "file": "table-portrait.jpg",
       "calls": 27,
-      "triangles": 26607,
+      "triangles": 28167,
       "textures": 7,
       "geometries": 27,
       "pose": {
@@ -18,7 +18,7 @@
     {
       "file": "window-portrait.jpg",
       "calls": 12,
-      "triangles": 18504,
+      "triangles": 20064,
       "textures": 8,
       "geometries": 28,
       "pose": {
@@ -32,7 +32,7 @@
     {
       "file": "room-portrait.jpg",
       "calls": 32,
-      "triangles": 27213,
+      "triangles": 28773,
       "textures": 8,
       "geometries": 38,
       "pose": {
@@ -46,7 +46,7 @@
     {
       "file": "entrance-portrait.jpg",
       "calls": 13,
-      "triangles": 20128,
+      "triangles": 21688,
       "textures": 8,
       "geometries": 38,
       "pose": {
@@ -58,9 +58,37 @@
       }
     },
     {
+      "file": "coat-front-portrait.jpg",
+      "calls": 13,
+      "triangles": 21688,
+      "textures": 8,
+      "geometries": 38,
+      "pose": {
+        "x": 5.55,
+        "y": 0,
+        "z": 4.6,
+        "yaw": 1.5707963267948966,
+        "pitch": -0.21703939815825815
+      }
+    },
+    {
+      "file": "coat-shoulder-portrait.jpg",
+      "calls": 13,
+      "triangles": 21688,
+      "textures": 8,
+      "geometries": 38,
+      "pose": {
+        "x": 6.1,
+        "y": 0,
+        "z": 3.6,
+        "yaw": 1.1295330381333808,
+        "pitch": -0.07327331723493553
+      }
+    },
+    {
       "file": "boots-portrait.jpg",
       "calls": 13,
-      "triangles": 20128,
+      "triangles": 21688,
       "textures": 8,
       "geometries": 38,
       "pose": {
@@ -73,8 +101,8 @@
     },
     {
       "file": "calendar-portrait.jpg",
-      "calls": 13,
-      "triangles": 19306,
+      "calls": 14,
+      "triangles": 22434,
       "textures": 8,
       "geometries": 38,
       "pose": {
@@ -88,7 +116,7 @@
     {
       "file": "lamp-portrait.jpg",
       "calls": 17,
-      "triangles": 20840,
+      "triangles": 22400,
       "textures": 8,
       "geometries": 38,
       "pose": {
@@ -102,7 +130,7 @@
     {
       "file": "drawer-portrait.jpg",
       "calls": 15,
-      "triangles": 19112,
+      "triangles": 20672,
       "textures": 8,
       "geometries": 39,
       "pose": {
@@ -116,7 +144,7 @@
     {
       "file": "table-landscape.jpg",
       "calls": 28,
-      "triangles": 27143,
+      "triangles": 28703,
       "textures": 8,
       "geometries": 39,
       "pose": {
@@ -130,7 +158,7 @@
     {
       "file": "window-landscape.jpg",
       "calls": 13,
-      "triangles": 22466,
+      "triangles": 24026,
       "textures": 8,
       "geometries": 40,
       "pose": {
@@ -144,7 +172,7 @@
     {
       "file": "room-landscape.jpg",
       "calls": 35,
-      "triangles": 32231,
+      "triangles": 33791,
       "textures": 8,
       "geometries": 42,
       "pose": {
@@ -158,7 +186,7 @@
     {
       "file": "entrance-landscape.jpg",
       "calls": 15,
-      "triangles": 20346,
+      "triangles": 21906,
       "textures": 8,
       "geometries": 42,
       "pose": {
@@ -170,9 +198,37 @@
       }
     },
     {
+      "file": "coat-front-landscape.jpg",
+      "calls": 16,
+      "triangles": 22506,
+      "textures": 8,
+      "geometries": 42,
+      "pose": {
+        "x": 5.55,
+        "y": 0,
+        "z": 4.6,
+        "yaw": 1.5707963267948966,
+        "pitch": -0.21703939815825815
+      }
+    },
+    {
+      "file": "coat-shoulder-landscape.jpg",
+      "calls": 16,
+      "triangles": 22506,
+      "textures": 8,
+      "geometries": 42,
+      "pose": {
+        "x": 6.1,
+        "y": 0,
+        "z": 3.6,
+        "yaw": 1.1295330381333808,
+        "pitch": -0.07327331723493553
+      }
+    },
+    {
       "file": "boots-landscape.jpg",
       "calls": 13,
-      "triangles": 20128,
+      "triangles": 21688,
       "textures": 8,
       "geometries": 42,
       "pose": {
@@ -186,7 +242,7 @@
     {
       "file": "calendar-landscape.jpg",
       "calls": 14,
-      "triangles": 20874,
+      "triangles": 22434,
       "textures": 8,
       "geometries": 42,
       "pose": {
@@ -200,7 +256,7 @@
     {
       "file": "lamp-landscape.jpg",
       "calls": 20,
-      "triangles": 21548,
+      "triangles": 23108,
       "textures": 8,
       "geometries": 42,
       "pose": {
@@ -214,7 +270,7 @@
     {
       "file": "drawer-landscape.jpg",
       "calls": 20,
-      "triangles": 20964,
+      "triangles": 22524,
       "textures": 8,
       "geometries": 42,
       "pose": {
@@ -238,7 +294,6 @@
   ],
   "errors": [],
   "baselineCommit": "5ca306da6a32f33b4c93c90ace3556e2787c67d4",
-  "renderer": "Chromium headless shell / SwiftShader",
-  "physicalPhoneValidated": false,
-  "source": "runtime files at dec33d3"
+  "revision": "owner feedback: separated coats and unified shoulder/sleeve contour",
+  "physicalPhonePerformanceValidated": false
 }

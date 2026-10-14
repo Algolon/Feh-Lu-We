@@ -3,7 +3,7 @@
 - Branch: `tut-r02-home-scene`
 - Base: current production `5ca306da6a32f33b4c93c90ace3556e2787c67d4` (TUT-R01 + PB01 merged).
 - Scope: the remaining weak asset families throughout the home/tutorial scene, with the owner-supplied entrance screenshot as the primary defect evidence.
-- State: IMPLEMENTED AND VALIDATED — prepared for draft PR and owner visual review.
+- State: IMPLEMENTED AND VALIDATED — draft PR #20; coat correction ready for owner visual review.
 - Gate: owner visual review before a new production merge/deployment.
 
 ## Current implementation
@@ -33,35 +33,35 @@
 
 ## Final validation and render comparison
 
-- Final typecheck and production build passed (existing large-chunk warning); 275 existing unit tests passed on the final implementation.
+- Final typecheck and production build passed (existing large-chunk warning); 275 existing unit tests passed on the complete scene implementation before the coat-feedback revision.
 - Eight final browser checks passed after all geometry revisions: wall-art clearance; original calendar memory; lamp toggling; all four pickups; candle lighting/extinguishing; key-gated departure; drawer open/close/reopen and key pickup; exit to estate. No page or HTTP errors.
-- All 16 final captures inspected across portrait/landscape; corrected rectangular soles and flat shade presentation after the first inspection.
-- Eight fixed cameras × two viewport shapes, 709×1260 and 1260×709 at DPR 1, same lighting, quality and item state. Baseline completed before code edits.
+- Original 16 scene captures inspected across portrait/landscape. Coat-feedback revision adds four front/shoulder detail captures; front portrait and angled landscape inspected after the final collar correction.
+- Eight matched baseline cameras plus two new coat-detail cameras × two viewport shapes, 709×1260 and 1260×709 at DPR 1, same lighting, quality and item state. Baseline completed before code edits.
 - Reproduce with `node scripts/tut-r02-review.mjs before|after`; use `REVIEW_ROOT` to point at the baseline checkout.
 - Before/after evidence: [review index](tut-r02/README.md).
 
 | View | Calls before → after | Triangles before → after |
 | --- | ---: | ---: |
-| table-portrait | 23 → 27 | 15,607 → 26,607 |
-| window-portrait | 11 → 12 | 8,346 → 18,504 |
-| room-portrait | 29 → 32 | 16,199 → 27,213 |
-| entrance-portrait | 11 → 13 | 8,402 → 20,128 |
-| boots-portrait | 11 → 13 | 8,402 → 20,128 |
-| calendar-portrait | 10 → 13 | 8,354 → 19,306 |
-| lamp-portrait | 15 → 17 | 11,158 → 20,840 |
-| drawer-portrait | 15 → 15 | 11,210 → 19,112 |
-| table-landscape | 24 → 28 | 15,679 → 27,143 |
-| window-landscape | 12 → 13 | 12,308 → 22,466 |
-| room-landscape | 30 → 35 | 20,161 → 32,231 |
-| entrance-landscape | 12 → 15 | 8,426 → 20,346 |
-| boots-landscape | 11 → 13 | 8,402 → 20,128 |
-| calendar-landscape | 10 → 14 | 8,354 → 20,874 |
-| lamp-landscape | 17 → 20 | 11,242 → 21,548 |
-| drawer-landscape | 18 → 20 | 11,282 → 20,964 |
+| table-portrait | 23 → 27 | 15,607 → 28,167 |
+| window-portrait | 11 → 12 | 8,346 → 20,064 |
+| room-portrait | 29 → 32 | 16,199 → 28,773 |
+| entrance-portrait | 11 → 13 | 8,402 → 21,688 |
+| boots-portrait | 11 → 13 | 8,402 → 21,688 |
+| calendar-portrait | 10 → 14 | 8,354 → 22,434 |
+| lamp-portrait | 15 → 17 | 11,158 → 22,400 |
+| drawer-portrait | 15 → 15 | 11,210 → 20,672 |
+| table-landscape | 24 → 28 | 15,679 → 28,703 |
+| window-landscape | 12 → 13 | 12,308 → 24,026 |
+| room-landscape | 30 → 35 | 20,161 → 33,791 |
+| entrance-landscape | 12 → 15 | 8,426 → 21,906 |
+| boots-landscape | 11 → 13 | 8,402 → 21,688 |
+| calendar-landscape | 10 → 14 | 8,354 → 22,434 |
+| lamp-landscape | 17 → 20 | 11,242 → 23,108 |
+| drawer-landscape | 18 → 20 | 11,282 → 22,524 |
 
-Max revised view: 35 calls / 32,231 triangles. Max matched increase: +5 calls / +12,520 triangles. This home slice is comfortably under the existing call guide and current PB01 750k provisional ceiling; that does not establish physical-phone performance. No global budget or baseline allowance was changed.
+Max revised view: 35 calls / 33,791 triangles. Max matched increase: +5 calls / +14,080 triangles. This home slice is comfortably under the existing call guide and current PB01 750k provisional ceiling; that does not establish physical-phone performance. No global budget or baseline allowance was changed.
 
-Revised JS gzip: 430.84 KB; previously recorded R01 build: 427.33 KB. The approximately 3.51 KB difference is a cross-build reference, not a new paired baseline build. One new 384×480 runtime canvas calendar texture; no externally downloaded asset, imagegen replacement or new dependency. Most new geometry is merged into the existing home/shared-material batches; contact occlusion is one instanced layer.
+Revised JS gzip: 430.90 KB; previously recorded R01 build: 427.33 KB. The approximately 3.57 KB difference is a cross-build reference, not a new paired baseline build. One new 384×480 runtime canvas calendar texture; no externally downloaded asset, imagegen replacement or new dependency. Most new geometry is merged into the existing home/shared-material batches; contact occlusion is one instanced layer.
 
 ## Isolation and contracts
 
@@ -73,10 +73,19 @@ Rendering uses Chromium headless shell/SwiftShader. Captures/counters prove rend
 
 ## Next safe action
 
-Publish this isolated featurebranch and draft PR after the latest production/parallel check. The owner reviews the concrete rendered result before a new production merge/deployment. Preserve the first local checkpoint dec33d3 and this final follow-up; do not restart on the merged R01 branch.
+Update existing isolated featurebranch and draft PR #20 with the coat-feedback correction. The owner reviews the concrete rendered result before a new production merge/deployment. Preserve the first local checkpoint dec33d3 and this final follow-up; do not restart on the merged R01 branch.
 
 ## Pre-publication integration check
 
 Production reverified at `5ca306d`; this branch contains that integrated TUT-R01/PB01 baseline. Current SKY-C01 `3d978223`, VEG-R01 `5a6df261` and GEO-R01 `142bd7c7` have zero changed-file overlap with this workstream. The previous VFC/VCP branches have no home file changes in their inspected workstreams. No other branch/checkouts modified. Current inspected refs may change later; repeat integration checks before a future approved merge.
 
 CLI Git push credentials were unavailable in the preceding R01 work. Publish the equivalent final tree through the authenticated GitHub connector, verify the tree against local HEAD and record the remote checkpoint in the draft PR. No forced ref update or production write is part of this task.
+
+
+## Owner coat-feedback correction — 2026-10-14
+
+The first revision placed the hangers too close together and built sleeves as separate tube volumes. The revised hangers are 72 cm apart with a visible gap between garments. Each coat now uses one bevelled continuous contour for body, shoulders and drooping sleeves; collars, cuffs and pockets remain sewn-detail volumes. The shoulders no longer have intersecting sleeve caps.
+
+All eight browser interaction checks passed again with no page/HTTP errors; final typecheck/build passed. The evidence now contains 20 captures (16 matched scene views plus four new coat detail views). Rendering max is 35 calls / 33,791 triangles. Unit tests from the complete-scene checkpoint remain the prior validation, not a claimed rerun for this visual correction.
+
+Production advanced independently to SKY-C01 merge 5af9779. Its changes have no home-dressing file overlap; it is preserved. This correction updates only TUT-R02, and does not deploy. Previous durable remote checkpoint: 9b253806 (tree 925d755a). Next action: owner visual review of PR #20 before any production merge/deployment.
