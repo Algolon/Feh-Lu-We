@@ -1,5 +1,7 @@
 # VFC-01 — recovery checkpoint
 
+**C01 superseding status (14 October 2026): RESEARCH COMPLETE / PARTIAL EVIDENCE / OWNER REVIEW PENDING.** Verified evidence HEAD `106f68c`: 130/201 present, 71 missing (7 MP4s, 24 LOD keyframes, 40 supporting images). See [closeout](VFC01_CLOSEOUT.md) and [next work packages](VFC01_NEXT_WORK_PACKAGES.md). The record below is historical; its earlier counts/status are not current delivery claims.
+
 **Superseding delivery status (14 October 2026): BLOCKED.** Earlier completion statements below describe local reconstruction, not a complete remote upload. Only 12 baseline images are reachable on the branch; 166 manifest files are missing. See [current verified recovery](VFC01_UPLOAD_RECOVERY.md).
 
 The initial calibration workspace was removed by automated workspace maintenance after local commit but before the GitHub tree/ref upload completed. This document preserves that recovery checkpoint. The completed reconstructed evidence package is now indexed in README.md; the initial lost run remains historical only.

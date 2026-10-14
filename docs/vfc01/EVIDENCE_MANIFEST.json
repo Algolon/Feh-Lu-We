@@ -9,13 +9,13 @@
   "selectedFrames": 9,
   "lodSteps": 172,
   "videos": 8,
-  "validation": "Current files decoded/hashed by scripts/vfc01-integrity.py. Missing files remain an explicit failed completion gate. Original validations and timings are retained separately; no new phone performance claim.",
+  "validation": "Earlier recovery decodes/checksums and expected binary metadata are retained. C01 verifies remote paths/sizes/Git blob SHAs only, plus changed UTF-8 document hashes. No new binary SHA-256/decode or phone validation. Missing evidence remains an explicit failed completion gate.",
   "files": [
     {
       "path": "README.md",
-      "bytes": 3353,
-      "sha256": "57721bf4d336e4b1d95c6edabdb84e7073bc8caecbdc9bfa2bf7067b65766f2e",
-      "gitBlobSha": "2d70258bd4b7e55cf36d7022547921b039a5bece",
+      "bytes": 3570,
+      "sha256": "dd9bc913f33340305b7ac43d709d8dd90d5101c8596500a28ea73444cdf7c4d0",
+      "gitBlobSha": "79d0c10a7ce152e154c0b3063f254868b1c0477b",
       "availability": "retained or updated document"
     },
     {
@@ -69,16 +69,16 @@
     },
     {
       "path": "VFC01_RECOVERY_STATUS.md",
-      "bytes": 4545,
-      "sha256": "e867dac520faad589f38f0ff0828753acacb36afb8d8a3f720d0e1562fed88cf",
-      "gitBlobSha": "7fba1b0d35ab054f8cf85e72a637d549e4bf4e95",
+      "bytes": 4945,
+      "sha256": "489d760b2341ee6e2b091d96ef45ad4b0826a02fdff648a9b4e51bf291cca352",
+      "gitBlobSha": "2ffec5095140bce725472b2dd3dc668136c3dc36",
       "availability": "retained or updated document"
     },
     {
       "path": "VFC01_VISIBILITY_LOD_REPORT.md",
-      "bytes": 5428,
-      "sha256": "2f516ea9c3e4638c55249c089497d752360b4390dc9e8a0c3a998ac5c9c5d0b6",
-      "gitBlobSha": "79c4865ebd6afb6fbf0a77b83609541b468d4a9f",
+      "bytes": 5792,
+      "sha256": "369b8d38233e83162b8f76aeb0128e7a1f27b624632fc455ea79b380b47b0810",
+      "gitBlobSha": "bdd652ac6fd88289983d767da6e7c1139d35e1b3",
       "availability": "retained or updated document"
     },
     {
@@ -934,7 +934,8 @@
       "height": 412,
       "r_frame_rate": "4/1",
       "nb_frames": "27",
-      "availability": "missing; reproducible from committed scripts/source, not recovered"
+      "availability": "remote-committed; path/size/Git blob SHA verified at 106f68c; binary checksum/decode and capture provenance not reverified by C01",
+      "gitBlobSha": "acdfca49a7b90d327869817dbc3272026695afeb"
     },
     {
       "path": "combined-lod/V4-architecture-0.webp",
@@ -1837,9 +1838,9 @@
     },
     {
       "path": "index.html",
-      "bytes": 158803,
-      "sha256": "e0408cbf4633aea5fd9a99fa50edb2e4d6092eca8ceafc6024088f32a83984d6",
-      "gitBlobSha": "ed083445993efff70f10d285a94236eab1730932",
+      "bytes": 158574,
+      "sha256": "187304568d10199180f6645717a7c4756b6d7d2812e6022c75ecf800452d8fa7",
+      "gitBlobSha": "01b0a6f84482b2e36eef5eac5646971d6f61aa09",
       "availability": "retained or updated document"
     },
     {
@@ -2427,9 +2428,9 @@
     },
     {
       "path": "validation/README.md",
-      "bytes": 1133,
-      "sha256": "63193932383d10c690f3b26eacca54ee1204ff2e13059c77021c913e0a09d3a8",
-      "gitBlobSha": "b1c0c2ab71665784af0fee1279b831c9c60bdc5e",
+      "bytes": 1438,
+      "sha256": "729702b372de52d86a0c9ef4b31197f8654171f1e7589200533bc86390472860",
+      "gitBlobSha": "c4f54551080fdb1869ea0f4171279a09f717b0ff",
       "availability": "retained or updated document"
     },
     {

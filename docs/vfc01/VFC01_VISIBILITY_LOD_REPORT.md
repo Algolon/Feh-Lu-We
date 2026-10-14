@@ -1,5 +1,7 @@
 # VFC-01 — visibility and LOD
 
+**Evidence availability at C01:** the sequence descriptions below retain the reconstructed research record, not a complete remote media delivery. Only V3 vegetation MP4 is committed; seven MP4s and all 24 keyframes remain missing. Proposed decision labels below are research recommendations, not owner approval. See [closeout and limitations](VFC01_CLOSEOUT.md).
+
 Fresh evidence: **172 deterministic approach/retreat steps**, eight videos, exact boundary keyframes. Same camera/FOV/DPR between V3 and V4. Video plays at four presentation frames/s, not gameplay FPS. Fixed-height unobstructed rays are not collision-walk recordings.
 
 ## Production paths

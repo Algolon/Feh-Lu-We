@@ -1,5 +1,7 @@
 # VFC-01 validation
 
+**Historical run validation, not a C01 rerun or complete remote package.** C01 verifies paths/sizes/Git blob SHAs and viewer references only. Seven MP4s and 24 keyframes remain missing; original full-decode statements below refer to the earlier local packaging run. See [closeout](../VFC01_CLOSEOUT.md).
+
 Current reconstructed source: typecheck and both production/isolated builds passed; 267 unit tests in 22 files passed. Existing production files remain byte-identical to the verified base.
 
 - `dev04d-browser.json`: 18/18 existing DEV-04D cases against the production preview build. An initial attempt timed out on second-page navigation after the preceding checks passed; a wrapper increased only the navigation timeout from 30 to 180 seconds and the rerun completed. No original suite or assertion was modified.

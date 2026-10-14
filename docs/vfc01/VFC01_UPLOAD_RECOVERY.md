@@ -1,5 +1,7 @@
 # VFC-01 — verified upload recovery
 
+**C01 superseding status (14 October 2026): RESEARCH COMPLETE / PARTIAL EVIDENCE / OWNER REVIEW PENDING.** Verified evidence HEAD `106f68c`: 130/201 present, 71 missing (7 MP4s, 24 LOD keyframes, 40 supporting images). See [closeout](VFC01_CLOSEOUT.md) and [next work packages](VFC01_NEXT_WORK_PACKAGES.md). The record below is historical; its earlier counts/status are not current delivery claims.
+
 Checked 14 October 2026. State: **BLOCKED — missing original evidence bytes**.
 
 ## Verified checkpoint

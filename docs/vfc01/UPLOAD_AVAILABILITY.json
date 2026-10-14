@@ -1,6 +1,6 @@
 {
-  "checkedHead": "6d06ce79115a59607c5d6579325dfb13f7c18367",
-  "state": "PARTIAL_RECOVERY",
+  "checkedHead": "106f68cf261bd2585fc783a7c683e22b04a459e4",
+  "state": "RESEARCH_COMPLETE_PARTIAL_EVIDENCE_OWNER_REVIEW_PENDING",
   "verifiedPresent": [
     "README.md",
     "VFC01_BASELINE_AUDIT.md",
@@ -55,12 +55,7 @@
     "clay/V4-library-craft.webp",
     "clay/V4-library-medium.webp",
     "clay/V4-library-player.webp",
-    "combined/cottage-craft.webp",
-    "combined/cottage-medium.webp",
-    "combined/cottage-player.webp",
-    "combined/library-craft.webp",
-    "combined/library-medium.webp",
-    "combined/library-player.webp",
+    "combined-lod/V3-vegetation.mp4",
     "combined-lod/cottage-craft.webp",
     "combined-lod/cottage-medium.webp",
     "combined-lod/cottage-player.webp",
@@ -68,6 +63,12 @@
     "combined-lod/library-medium.webp",
     "combined-lod/library-player.webp",
     "combined-lod/sequences.json",
+    "combined/cottage-craft.webp",
+    "combined/cottage-medium.webp",
+    "combined/cottage-player.webp",
+    "combined/library-craft.webp",
+    "combined/library-medium.webp",
+    "combined/library-player.webp",
     "compare/VFC01_cottage_front_equal_DPR.png",
     "compare/baseline-cottage-front.webp",
     "compare/baseline-cottage-player.webp",
@@ -148,7 +149,6 @@
     "combined-lod/V3-vegetation-0.webp",
     "combined-lod/V3-vegetation-13.webp",
     "combined-lod/V3-vegetation-26.webp",
-    "combined-lod/V3-vegetation.mp4",
     "combined-lod/V4-architecture-0.webp",
     "combined-lod/V4-architecture-14.webp",
     "combined-lod/V4-architecture-7.webp",
@@ -208,12 +208,23 @@
   ],
   "summary": {
     "expected": 201,
-    "present": 129,
-    "missing": 72,
+    "present": 130,
+    "missing": 71,
     "reproduced": 94,
-    "originalMedia": 12,
-    "unresolvedViewerReferences": 16,
+    "originalMedia": 13,
+    "unresolvedViewerReferences": 15,
     "failures": []
   },
-  "classification": "Missing files are reproducible in a working Chromium/WebGL2 environment; the original binary bytes remain unavailable."
+  "classification": "Research iteration closed; expected evidence remains incomplete. Missing files are not waived. Current original manifest and recovery provenance preserved. See VFC01_CLOSEOUT.md.",
+  "verification": {
+    "method": "Remote non-truncated Git tree path/size/blob-SHA audit; no media download or decode",
+    "mainFramesPresent": 90,
+    "selectedFramesPresent": 9,
+    "missingMp4": 7,
+    "missingLodKeyframes": 24,
+    "missingSupplementaryImages": 40,
+    "unresolvedViewerReferencesMeaning": "Static missing video/poster references, guarded and explicitly unavailable at runtime; not untracked evidence paths",
+    "videoCaptureProvenance": "V3 vegetation is committed but has no RECOVERY_CAPTURES entry; reconcile in E01-C",
+    "originalMediaMeaning": "13 committed media files without a recovery-capture entry; category inherited from inventory, not a new assertion of capture provenance"
+  }
 }
