@@ -17,7 +17,7 @@
     "dist/assets/index-UqRtUR2H.css": "0224b3ceda6075ff2ad8f8c1a73c2ff4c7fa490fa8543849336e7786c414bc8a"
   },
   "build_timing": "Build created after all runtime changes, before the final CSS checkpoint commit; embedded build label refers to the earlier local checkpoint. Runtime hashes identify the tested implementation.",
-  "renderer": "Chromium headless shell 1194; actual Three.js WebGL/SwiftShader. Focused DOM suite stops the animation loop after normal world startup and renders the real scene once per viewport. Contrast gallery images come from the normal-render broader run.",
+  "renderer": "Chromium headless shell 1194; actual Three.js WebGL/SwiftShader. All seven delivered gallery images come from the normal-render wider run. Focused tests stop the world loop for DOM/input checks; their UI-only snapshots can have cleared WebGL buffers and are not visual evidence.",
   "focused": {
     "passed": 44,
     "total": 44

@@ -7,7 +7,9 @@
     },
     "fixture": "Actual WebGL world rendered at the camera pose; animation loop stopped for focused UI checks.",
     "source_path": "scripts/out/ui-r02-feedback-focused-final/phone-exploration.jpg",
-    "scene_note": "Actual BOSLUST scene from the existing review fixture."
+    "scene_note": "Not visual evidence: a WebGL buffer can clear after the world animation loop is stopped.",
+    "ui_only": true,
+    "delivered_in_gallery": false
   },
   {
     "name": "small-exploration",
@@ -17,7 +19,9 @@
     },
     "fixture": "Actual WebGL world rendered at the camera pose; animation loop stopped for focused UI checks.",
     "source_path": "scripts/out/ui-r02-feedback-focused-final/small-exploration.jpg",
-    "scene_note": "Actual BOSLUST scene from the existing review fixture."
+    "scene_note": "Not visual evidence: a WebGL buffer can clear after the world animation loop is stopped.",
+    "ui_only": true,
+    "delivered_in_gallery": false
   },
   {
     "name": "portrait-exploration",
@@ -27,7 +31,9 @@
     },
     "fixture": "Actual WebGL world rendered at the camera pose; animation loop stopped for focused UI checks.",
     "source_path": "scripts/out/ui-r02-feedback-focused-final/portrait-exploration.jpg",
-    "scene_note": "Actual BOSLUST scene from the existing review fixture."
+    "scene_note": "Not visual evidence: a WebGL buffer can clear after the world animation loop is stopped.",
+    "ui_only": true,
+    "delivered_in_gallery": false
   },
   {
     "name": "portrait-objective",
@@ -37,7 +43,9 @@
     },
     "fixture": "Actual WebGL world rendered at the camera pose; animation loop stopped for focused UI checks.",
     "source_path": "scripts/out/ui-r02-feedback-focused-final/portrait-objective.jpg",
-    "scene_note": "Actual BOSLUST scene from the existing review fixture."
+    "scene_note": "Not visual evidence: a WebGL buffer can clear after the world animation loop is stopped.",
+    "ui_only": true,
+    "delivered_in_gallery": false
   },
   {
     "name": "portrait-packing",
@@ -47,7 +55,9 @@
     },
     "fixture": "Actual WebGL world rendered at the camera pose; animation loop stopped for focused UI checks.",
     "source_path": "scripts/out/ui-r02-feedback-focused-final/portrait-packing.jpg",
-    "scene_note": "The packing screenshot uses a UI-only checklist fixture; it is not part of the delivered gallery."
+    "scene_note": "Not visual evidence: a WebGL buffer can clear after the world animation loop is stopped.",
+    "ui_only": true,
+    "delivered_in_gallery": false
   },
   {
     "name": "desktop-exploration",
@@ -57,6 +67,8 @@
     },
     "fixture": "Actual WebGL world rendered at the camera pose; animation loop stopped for focused UI checks.",
     "source_path": "scripts/out/ui-r02-feedback-focused-final/desktop-exploration.jpg",
-    "scene_note": "Actual BOSLUST scene from the existing review fixture."
+    "scene_note": "Not visual evidence: a WebGL buffer can clear after the world animation loop is stopped.",
+    "ui_only": true,
+    "delivered_in_gallery": false
   }
 ]
