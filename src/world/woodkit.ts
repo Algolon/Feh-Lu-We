@@ -240,9 +240,9 @@ function extremes(ks: Cluster[]) {
 function dropFillers(ks: Cluster[]) { const keep = extremes(ks); return ks.filter((k) => !k.sat || keep.has(k)); }
 /** Far LOD: the outline clusters plus the largest others, n in all; the inner ones a little larger, so the crown
  * keeps its mass and outline with fewer parts. */
-function largest(ks: Cluster[], n: number) {
+function largest(ks: Cluster[], n: number, inflate = true) {
   if (ks.length <= n) return ks;
-  const keep = extremes(ks), f = Math.cbrt(ks.length / n);
+  const keep = extremes(ks), f = inflate ? Math.cbrt(ks.length / n) : 1;
   const rest = ks.filter((k) => !keep.has(k)).sort((a, b) => b.r[0] * b.r[1] * b.r[2] - a.r[0] * a.r[1] * a.r[2]).slice(0, Math.max(0, n - keep.size));
   return [...keep, ...rest.map((k) => ({ ...k, r: k.r.map((x) => x * f) as P3 }))];
 }
@@ -396,20 +396,20 @@ function growBroadleaf(sp: Broadleaf): Skeleton {
   return { trunk: { path: trunkPath, radius, lobes }, branches, clusters };
 }
 
-function emitBroadleaf(sp: Broadleaf, sk: Skeleton, lod: Lod): Model {
+function emitBroadleaf(sp: Broadleaf, sk: Skeleton, lod: Lod, continuous: boolean | 'outline' = false): Model {
   const near = lod === 'near', xfar = lod === 'xfar', far = lod === 'far' || xfar;
   const girth = THREE.MathUtils.clamp(sp.trunk[0] / 0.45, 0.6, 1); // slim trunks need fewer sides
   const wood: THREE.BufferGeometry[] = [flaredTrunk(sk.trunk.path, sk.trunk.radius, sk.trunk.lobes, sp.flare, 1.25, xfar ? 5 : Math.round((near ? 20 : far ? 6 : 9) * girth), near ? 11 : far ? 3 : 4, sp.vScale)];
   for (const b of sk.branches) {
     if (!near && b.level === 2) continue; // mid/far: limbs only; side branches are hidden in the foliage at that distance
-    if (xfar) continue; // xfar: trunk and crown masses only
+    if (xfar && !continuous) continue; // continuity prototype retains the primary branch skeleton
     wood.push(taperTube(b.pts, b.r, { radial: near ? (b.level === 1 ? 6 : 3) : far ? 3 : 4, rows: near ? (b.level === 1 ? 4 : 3) : far ? 1 : 2, vScale: 1.2 }));
   }
   const crownC = sk.clusters.reduce((s, k) => s.add(k.c), new THREE.Vector3()).divideScalar(sk.clusters.length);
   const crownR = Math.max(...sk.clusters.map((k) => k.c.distanceTo(crownC) + Math.max(...k.r)));
   let ks = near ? sk.clusters : dropFillers(sk.clusters); // mid/far: the small filler clumps are dropped
-  if (far) ks = largest(ks, xfar ? 6 : 14);
-  const leaves = cullBuried(ks.map((k) => clusterGeo(k, lod, crownC, crownR)), ks);
+  if (far) ks = largest(ks, continuous ? 14 : xfar ? 6 : 14, !continuous);
+  const leaves = cullBuried(ks.map((k) => clusterGeo(k, continuous === true && lod === 'mid' ? 'near' : lod, crownC, crownR)), ks);
   const woodG = mergeParts(wood.map((g) => barkCol(paint(g, (p) => sp.barkK(p.y)), sp.bark)));
   return { wood: woodG, leaves: mergeParts(leaves.map((g) => foliageUV(g, 1.4))) };
 }
@@ -468,7 +468,7 @@ export function birchModel(variant: number, lod: Lod): Model { return broadleaf(
  * ragged, tilted needle clumps; the top rounds off rather than tapering to a spire. Three layouts.
  */
 const pineLobes = (rnd: (a: number, b: number) => number) => [0, 1, 2, 3].map((i) => ({ a: i * 1.57 + rnd(-0.4, 0.4), w: rnd(0.5, 1) }));
-export function pineModel(lod: Lod, variant = 0): Model {
+export function pineModel(lod: Lod, variant = 0, continuous: boolean | 'outline' = false): Model {
   const v = variant % 3, r = mulberry32(733 + v * 211), near = lod === 'near', xfar = lod === 'xfar', far = lod === 'far' || xfar;
   const rnd = (a: number, b: number) => a + r() * (b - a);
   const T = [12.2, 11.0, 13.4][v], bend = [[0.45, -0.25], [-0.3, 0.2], [0.75, 0.4]][v], light = [0.6, 2.4, 4.1][v];
@@ -490,7 +490,7 @@ export function pineModel(lod: Lod, variant = 0): Model {
       const S = vec(axis(y + rnd(-0.25, 0.25)));
       const d = new THREE.Vector3(Math.cos(el) * Math.cos(a), Math.sin(el), Math.cos(el) * Math.sin(a));
       const E = S.clone().addScaledVector(d, L), M = S.clone().lerp(E, 0.5).add(new THREE.Vector3(0, -0.12 + f * 0.2, 0));
-      if (!xfar) wood.push(taperTube([[S.x, S.y, S.z], [M.x, M.y, M.z], [E.x, E.y, E.z]], [0.1 - f * 0.03, 0.06, 0.025], { radial: near ? 5 : 3, rows: near ? 4 : far ? 1 : 2, vScale: 1.2 }));
+      if (!xfar || continuous) wood.push(taperTube([[S.x, S.y, S.z], [M.x, M.y, M.z], [E.x, E.y, E.z]], [0.1 - f * 0.03, 0.06, 0.025], { radial: near ? 5 : 3, rows: near ? 4 : far ? 1 : 2, vScale: 1.2 }));
       // two or three ragged clumps along the end of the branch, tilted with it, at different heights
       const m = 2 + Math.floor(r() * 2.5);
       for (let q = 0; q < m; q++) {
@@ -515,8 +515,8 @@ export function pineModel(lod: Lod, variant = 0): Model {
   }), BARK.fissured)));
   const centre = clusters.reduce((s, k) => s.add(k.c), new THREE.Vector3()).divideScalar(clusters.length);
   const cr = Math.max(...clusters.map((k) => k.c.distanceTo(centre) + k.r[0]));
-  const ks = near ? clusters : xfar ? largest(dropFillers(clusters), 8) : dropFillers(clusters);
-  const leaves = cullBuried(ks.map((k) => clusterGeo(k, lod, centre, cr, 0.4, 0.75)), ks); // high crown, seen from 6 m+ below
+  const ks = near ? clusters : xfar ? largest(dropFillers(clusters), continuous ? 14 : 8, !continuous) : dropFillers(clusters);
+  const leaves = cullBuried(ks.map((k) => clusterGeo(k, continuous === true && lod === 'mid' ? 'near' : lod, centre, cr, 0.4, 0.75)), ks); // high crown, seen from 6 m+ below
   return { wood: woodG, leaves: mergeParts(leaves.map((g) => foliageUV(g, 1.2))) };
 }
 
@@ -546,7 +546,12 @@ export function trunkAt(species: TreeSpecies, variant: number, y: number, a: num
   return { r: r || 0.3, cx, cz };
 }
 
-export function treeModel(species: TreeSpecies, variant: number, lod: Lod): Model {
+export function treeModel(species: TreeSpecies, variant: number, lod: Lod, continuous: boolean | 'outline' = false): Model {
+  if (continuous && species !== 'pine') {
+    const sp = (species === 'oak' ? OAKS : species === 'beech' ? BEECHES : BIRCHES)[variant % 3];
+    return emitBroadleaf(sp, growBroadleaf(sp), lod, continuous);
+  }
+  if (continuous) return pineModel(lod, variant, continuous);
   return species === 'oak' ? oakModel(variant, lod) : species === 'beech' ? beechModel(variant, lod) : species === 'birch' ? birchModel(variant, lod) : pineModel(lod, variant);
 }
 

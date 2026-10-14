@@ -23,6 +23,7 @@ import { TreeBatches, PlantBatch, BOSLUST_SITE, DECAL, WOOD, stumpsV2, contactAt
 import { inZone } from './boslustZone';
 import { woodMats, rockModel, litterLeafModel, logModel, LEAF_TINT, type TreeSpecies, type PlantKind } from './woodkit';
 import { CAPS } from '../core/caps';
+import { TREE_LOD_PROFILE } from './vegetationLod';
 import { ESTATE, WOODS, CLEARINGS, HILL_CUT, DRIVEWAY, WICKERMAN, GOLF_TEE, type Rect } from './layout';
 import { FOREST_PATHS, terrainHeight } from './terrain';
 import { ROUTE_LINES, vegetationClear, inWickermanClearing } from './footprints';
@@ -209,6 +210,8 @@ export class EstateWoods {
     w.scene.userData.vegStats = () => ({ ...tb.stats(), plantsShown: pb.shown });
     w.scene.userData.vegLodAt = (x: number, z: number) => tb.lodAt(x, z);
     w.scene.userData.vegList = () => tb.list();
+    w.scene.userData.vegSnapshot = () => tb.snapshot();
+    w.scene.userData.vegProfile = TREE_LOD_PROFILE;
     w.scene.userData.vegPlan = { trees: [...plans.flatMap((p) => p.trees), ...extraTrees], bushes: [...plans.flatMap((p) => p.bushes), ...extraBushes], stumps: plans.flatMap((p) => p.stumps), zone: plans[0] };
     w.scene.userData.woodCounts = { trees: tb.size, plants: pb.size, rocks: rb.size, logs, boulders: rocks, saplings: extraTrees.length, screenBushes: extraBushes.length };
     return w.scene.userData.woodCounts as Record<string, number>;
