@@ -1,0 +1,1118 @@
+{
+  "before": {
+    "index-bDrtxq-M.js": "194019147279a524fd3061f70a358e0a4bd64908e776671492a76e802e1aa770"
+  },
+  "after": {
+    "index-bDrtxq-M.js": "194019147279a524fd3061f70a358e0a4bd64908e776671492a76e802e1aa770"
+  },
+  "browser": "141.0.7390.37",
+  "conditions": "Real Three.js game, ANGLE SwiftShader WebGL2. DPR1; 915x412 FOV68 / 412x915 FOV82; coarse pointer; torch off; same-world paired cloud toggles. Three GPU-synchronized timings after four warmup renders; not physical Android FPS.",
+  "rows": [
+    {
+      "file": "boslust-0-clouds-low-landscape-pilot.jpg",
+      "name": "boslust",
+      "t": 0,
+      "clouds": true,
+      "quality": "low",
+      "portrait": false,
+      "system": "pilot",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 68,
+      "room": "out",
+      "calls": 91,
+      "triangles": 226908,
+      "sun": 1.806,
+      "hemi": 1.632,
+      "shadowPass": false,
+      "cloudOpacity": 0.48,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "softwareTimesMs": [
+        3694.5999999999767,
+        196,
+        210.80000000004657
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "boslust-1-clouds-low-landscape-pilot.jpg",
+      "name": "boslust",
+      "t": 0.3333333333333333,
+      "clouds": true,
+      "quality": "low",
+      "portrait": false,
+      "system": "pilot",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 68,
+      "room": "out",
+      "calls": 91,
+      "triangles": 226908,
+      "sun": 2.064,
+      "hemi": 1.488,
+      "shadowPass": false,
+      "cloudOpacity": 0.44,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "softwareTimesMs": [
+        965.5,
+        259.5999999999767,
+        217.79999999993015
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "boslust-2-clouds-low-landscape-pilot.jpg",
+      "name": "boslust",
+      "t": 0.6666666666666666,
+      "clouds": true,
+      "quality": "low",
+      "portrait": false,
+      "system": "pilot",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 68,
+      "room": "out",
+      "calls": 91,
+      "triangles": 226908,
+      "sun": 0,
+      "hemi": 1.92,
+      "shadowPass": false,
+      "cloudOpacity": 0.3,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "softwareTimesMs": [
+        1066.7999999999302,
+        187.5,
+        196.19999999995343
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "boslust-3-clouds-low-landscape-pilot.jpg",
+      "name": "boslust",
+      "t": 1,
+      "clouds": true,
+      "quality": "low",
+      "portrait": false,
+      "system": "pilot",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 68,
+      "room": "out",
+      "calls": 91,
+      "triangles": 226908,
+      "sun": 0,
+      "hemi": 1.776,
+      "shadowPass": false,
+      "cloudOpacity": 0.18,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "softwareTimesMs": [
+        904.6999999999534,
+        172,
+        188.5
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "garden-0-clouds-low-landscape-pilot.jpg",
+      "name": "garden",
+      "t": 0,
+      "clouds": true,
+      "quality": "low",
+      "portrait": false,
+      "system": "pilot",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "room": "out",
+      "calls": 58,
+      "triangles": 155894,
+      "sun": 2.1,
+      "hemi": 1.7,
+      "shadowPass": false,
+      "cloudOpacity": 0.48,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "softwareTimesMs": [
+        508.30000000004657,
+        87.59999999997672,
+        85.69999999995343
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "garden-1-clouds-low-landscape-pilot.jpg",
+      "name": "garden",
+      "t": 0.3333333333333333,
+      "clouds": true,
+      "quality": "low",
+      "portrait": false,
+      "system": "pilot",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "room": "out",
+      "calls": 58,
+      "triangles": 155894,
+      "sun": 2.4,
+      "hemi": 1.55,
+      "shadowPass": false,
+      "cloudOpacity": 0.44,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "softwareTimesMs": [
+        438.9000000000233,
+        91.59999999997672,
+        89.80000000004657
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "garden-2-clouds-low-landscape-pilot.jpg",
+      "name": "garden",
+      "t": 0.6666666666666666,
+      "clouds": true,
+      "quality": "low",
+      "portrait": false,
+      "system": "pilot",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "room": "out",
+      "calls": 58,
+      "triangles": 155894,
+      "sun": 0,
+      "hemi": 2,
+      "shadowPass": false,
+      "cloudOpacity": 0.3,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "softwareTimesMs": [
+        451.19999999995343,
+        91.30000000004657,
+        90.79999999993015
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "garden-3-clouds-low-landscape-pilot.jpg",
+      "name": "garden",
+      "t": 1,
+      "clouds": true,
+      "quality": "low",
+      "portrait": false,
+      "system": "pilot",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "room": "out",
+      "calls": 58,
+      "triangles": 155894,
+      "sun": 0,
+      "hemi": 1.85,
+      "shadowPass": false,
+      "cloudOpacity": 0.18,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "softwareTimesMs": [
+        427.69999999995343,
+        92.69999999995343,
+        80.40000000002328
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "sky-0-clouds-low-landscape-pilot.jpg",
+      "name": "sky",
+      "t": 0,
+      "clouds": true,
+      "quality": "low",
+      "portrait": false,
+      "system": "pilot",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": 0.5
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "room": "out",
+      "calls": 56,
+      "triangles": 166229,
+      "sun": 2.1,
+      "hemi": 1.7,
+      "shadowPass": false,
+      "cloudOpacity": 0.48,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "softwareTimesMs": [
+        378,
+        77.40000000002328,
+        77.90000000002328
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "sky-1-clouds-low-landscape-pilot.jpg",
+      "name": "sky",
+      "t": 0.3333333333333333,
+      "clouds": true,
+      "quality": "low",
+      "portrait": false,
+      "system": "pilot",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": 0.5
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "room": "out",
+      "calls": 56,
+      "triangles": 166229,
+      "sun": 2.4,
+      "hemi": 1.55,
+      "shadowPass": false,
+      "cloudOpacity": 0.44,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "softwareTimesMs": [
+        384,
+        83.19999999995343,
+        81.80000000004657
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "sky-2-clouds-low-landscape-pilot.jpg",
+      "name": "sky",
+      "t": 0.6666666666666666,
+      "clouds": true,
+      "quality": "low",
+      "portrait": false,
+      "system": "pilot",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": 0.5
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "room": "out",
+      "calls": 56,
+      "triangles": 166229,
+      "sun": 0,
+      "hemi": 2,
+      "shadowPass": false,
+      "cloudOpacity": 0.3,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "softwareTimesMs": [
+        391.5999999999767,
+        74.70000000006985,
+        88.19999999995343
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "sky-3-clouds-low-landscape-pilot.jpg",
+      "name": "sky",
+      "t": 1,
+      "clouds": true,
+      "quality": "low",
+      "portrait": false,
+      "system": "pilot",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": 0.5
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "room": "out",
+      "calls": 56,
+      "triangles": 166229,
+      "sun": 0,
+      "hemi": 1.85,
+      "shadowPass": false,
+      "cloudOpacity": 0.18,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "softwareTimesMs": [
+        386.89999999990687,
+        81.5,
+        73.80000000004657
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "garden-0-clear-low-landscape-pilot.jpg",
+      "name": "garden",
+      "t": 0,
+      "clouds": false,
+      "quality": "low",
+      "portrait": false,
+      "system": "pilot",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "room": "out",
+      "calls": 58,
+      "triangles": 155894,
+      "sun": 2.1,
+      "hemi": 1.7,
+      "shadowPass": false,
+      "cloudOpacity": 0,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "softwareTimesMs": [
+        452.69999999995343,
+        95.79999999993015,
+        91.90000000002328
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "garden-0-clouds-low-portrait-pilot.jpg",
+      "name": "garden",
+      "t": 0,
+      "clouds": true,
+      "quality": "low",
+      "portrait": true,
+      "system": "pilot",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "room": "out",
+      "calls": 39,
+      "triangles": 107185,
+      "sun": 2.1,
+      "hemi": 1.7,
+      "shadowPass": false,
+      "cloudOpacity": 0.48,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "softwareTimesMs": [
+        368.30000000004657,
+        71.30000000004657,
+        76.69999999995343
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "boslust-0-clouds-high-landscape-pilot.jpg",
+      "name": "boslust",
+      "t": 0,
+      "clouds": true,
+      "quality": "high",
+      "portrait": false,
+      "system": "pilot",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 68,
+      "room": "out",
+      "calls": 110,
+      "triangles": 365323,
+      "sun": 1.806,
+      "hemi": 1.632,
+      "shadowPass": true,
+      "cloudOpacity": 0.48,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "softwareTimesMs": [
+        2017.7000000000698,
+        224.19999999995343,
+        230.20000000006985
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "garden-3-clear-low-landscape-pilot.jpg",
+      "name": "garden",
+      "t": 1,
+      "clouds": false,
+      "quality": "low",
+      "portrait": false,
+      "system": "pilot",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "room": "out",
+      "calls": 58,
+      "triangles": 155894,
+      "sun": 0,
+      "hemi": 1.85,
+      "shadowPass": false,
+      "cloudOpacity": 0,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "softwareTimesMs": [
+        444.4000000000233,
+        86.59999999997672,
+        92.80000000004657
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "garden-3-clouds-low-portrait-pilot.jpg",
+      "name": "garden",
+      "t": 1,
+      "clouds": true,
+      "quality": "low",
+      "portrait": true,
+      "system": "pilot",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "room": "out",
+      "calls": 39,
+      "triangles": 107185,
+      "sun": 0,
+      "hemi": 1.85,
+      "shadowPass": false,
+      "cloudOpacity": 0.18,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "softwareTimesMs": [
+        319.5,
+        65,
+        74.90000000002328
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "boslust-3-clouds-high-landscape-pilot.jpg",
+      "name": "boslust",
+      "t": 1,
+      "clouds": true,
+      "quality": "high",
+      "portrait": false,
+      "system": "pilot",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 68,
+      "room": "out",
+      "calls": 91,
+      "triangles": 226908,
+      "sun": 0,
+      "hemi": 1.776,
+      "shadowPass": false,
+      "cloudOpacity": 0.18,
+      "fog": {
+        "near": 7,
+        "far": 102
+      },
+      "softwareTimesMs": [
+        1847.0999999999767,
+        200.09999999997672,
+        189.90000000002328
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "sun-0-clouds-low-landscape-pilot.jpg",
+      "name": "sun",
+      "t": 0,
+      "clouds": true,
+      "quality": "low",
+      "portrait": false,
+      "system": "pilot",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 4.276056667386107,
+        "pitch": 0.8203047484373349
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "room": "out",
+      "calls": 60,
+      "triangles": 131272,
+      "sun": 2.1,
+      "hemi": 1.7,
+      "shadowPass": false,
+      "cloudOpacity": 0.48,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "softwareTimesMs": [
+        157.29999999993015,
+        32,
+        33.20000000006985
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "sun-0-clear-low-landscape-pilot.jpg",
+      "name": "sun",
+      "t": 0,
+      "clouds": false,
+      "quality": "low",
+      "portrait": false,
+      "system": "pilot",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 4.276056667386107,
+        "pitch": 0.8203047484373349
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "room": "out",
+      "calls": 60,
+      "triangles": 131272,
+      "sun": 2.1,
+      "hemi": 1.7,
+      "shadowPass": false,
+      "cloudOpacity": 0,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "softwareTimesMs": [
+        157.09999999997672,
+        31.199999999953434,
+        31.199999999953434
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "afternoonSun-1-clouds-low-landscape-pilot.jpg",
+      "name": "afternoonSun",
+      "t": 0.3333333333333333,
+      "clouds": true,
+      "quality": "low",
+      "portrait": false,
+      "system": "pilot",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 4.276056667386107,
+        "pitch": 0.41887902047863906
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "room": "out",
+      "calls": 86,
+      "triangles": 209267,
+      "sun": 2.4,
+      "hemi": 1.55,
+      "shadowPass": false,
+      "cloudOpacity": 0.44,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "softwareTimesMs": [
+        611.3000000000466,
+        104.5,
+        101.40000000002328
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "hall-3-clouds-low-landscape-pilot.jpg",
+      "name": "hall",
+      "t": 1,
+      "clouds": true,
+      "quality": "low",
+      "portrait": false,
+      "system": "pilot",
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 84.6,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        90,
+        1.7999999999999998,
+        -84.6
+      ],
+      "fov": 68,
+      "room": "hall",
+      "calls": 110,
+      "triangles": 213506,
+      "sun": 0,
+      "hemi": 1.147,
+      "shadowPass": false,
+      "cloudOpacity": 0.18,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "softwareTimesMs": [
+        1731.8000000000466,
+        221.59999999997672,
+        237.19999999995343
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "hall-3-clear-low-landscape-pilot.jpg",
+      "name": "hall",
+      "t": 1,
+      "clouds": false,
+      "quality": "low",
+      "portrait": false,
+      "system": "pilot",
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 84.6,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "camera": [
+        90,
+        1.7999999999999998,
+        -84.6
+      ],
+      "fov": 68,
+      "room": "hall",
+      "calls": 110,
+      "triangles": 213506,
+      "sun": 0,
+      "hemi": 1.147,
+      "shadowPass": false,
+      "cloudOpacity": 0,
+      "fog": {
+        "near": 40,
+        "far": 220
+      },
+      "softwareTimesMs": [
+        1491.1999999999534,
+        265.9000000000233,
+        174
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "garden-3-clear-low-landscape-baseline.jpg",
+      "name": "garden",
+      "t": 1,
+      "clouds": false,
+      "quality": "low",
+      "portrait": false,
+      "system": "baseline",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "room": "out",
+      "calls": 58,
+      "triangles": 155894,
+      "sun": 1.4999999999999998,
+      "hemi": 1.1,
+      "shadowPass": false,
+      "cloudOpacity": 0,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "softwareTimesMs": [
+        459,
+        92.59999999997672,
+        96.09999999997672
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    },
+    {
+      "file": "garden-3-clouds-low-landscape-baseline.jpg",
+      "name": "garden",
+      "t": 1,
+      "clouds": true,
+      "quality": "low",
+      "portrait": false,
+      "system": "baseline",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": -0.03
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "room": "out",
+      "calls": 58,
+      "triangles": 155894,
+      "sun": 1.4999999999999998,
+      "hemi": 1.1,
+      "shadowPass": false,
+      "cloudOpacity": 0,
+      "fog": {
+        "near": 16,
+        "far": 165
+      },
+      "softwareTimesMs": [
+        455.89999999990687,
+        85.30000000004657,
+        90.80000000004657
+      ],
+      "glError": 0,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "shaderFailures": 0
+    }
+  ],
+  "pairs": [
+    {
+      "off": "garden-0-clear-low-landscape-pilot.jpg",
+      "on": "garden-0-clouds-low-landscape-pilot.jpg",
+      "sameCounters": true,
+      "sameLight": true
+    },
+    {
+      "off": "garden-3-clear-low-landscape-pilot.jpg",
+      "on": "garden-3-clouds-low-landscape-pilot.jpg",
+      "sameCounters": true,
+      "sameLight": true
+    },
+    {
+      "off": "sun-0-clear-low-landscape-pilot.jpg",
+      "on": "sun-0-clouds-low-landscape-pilot.jpg",
+      "sameCounters": true,
+      "sameLight": true
+    },
+    {
+      "off": "hall-3-clear-low-landscape-pilot.jpg",
+      "on": "hall-3-clouds-low-landscape-pilot.jpg",
+      "sameCounters": true,
+      "sameLight": true
+    },
+    {
+      "off": "garden-3-clear-low-landscape-baseline.jpg",
+      "on": "garden-3-clouds-low-landscape-baseline.jpg",
+      "sameCounters": true,
+      "sameLight": true
+    }
+  ],
+  "isolation": {
+    "saveIntact": true,
+    "solved": []
+  },
+  "errors": [],
+  "pixelComparisons": [
+    {
+      "off": "garden-0-clear-low-landscape-pilot.jpg",
+      "on": "garden-0-clouds-low-landscape-pilot.jpg",
+      "allFrameMeanAbsRGB8": 1.0970882628609828,
+      "bottom30PercentMeanAbsRGB8": 0.0,
+      "note": "Encoded JPEG pixel difference; not photometric luminance. Bottom ROI is unsegmented."
+    },
+    {
+      "off": "garden-3-clear-low-landscape-pilot.jpg",
+      "on": "garden-3-clouds-low-landscape-pilot.jpg",
+      "allFrameMeanAbsRGB8": 0.6925513289829699,
+      "bottom30PercentMeanAbsRGB8": 0.0,
+      "note": "Encoded JPEG pixel difference; not photometric luminance. Bottom ROI is unsegmented."
+    },
+    {
+      "off": "sun-0-clear-low-landscape-pilot.jpg",
+      "on": "sun-0-clouds-low-landscape-pilot.jpg",
+      "allFrameMeanAbsRGB8": 2.2045740711266735,
+      "bottom30PercentMeanAbsRGB8": 0.9921117574475586,
+      "note": "Encoded JPEG pixel difference; not photometric luminance. Bottom ROI is unsegmented."
+    },
+    {
+      "off": "hall-3-clear-low-landscape-pilot.jpg",
+      "on": "hall-3-clouds-low-landscape-pilot.jpg",
+      "allFrameMeanAbsRGB8": 0.11633685252975401,
+      "bottom30PercentMeanAbsRGB8": 0.12585345789999414,
+      "note": "Encoded JPEG pixel difference; not photometric luminance. Bottom ROI is unsegmented."
+    },
+    {
+      "off": "garden-3-clear-low-landscape-baseline.jpg",
+      "on": "garden-3-clouds-low-landscape-baseline.jpg",
+      "allFrameMeanAbsRGB8": 0.0,
+      "bottom30PercentMeanAbsRGB8": 0.0,
+      "note": "Encoded JPEG pixel difference; not photometric luminance. Bottom ROI is unsegmented."
+    }
+  ],
+  "runtimeSourceSHA256": {
+    "src/world/env.ts": "381ba1b4f430b71a3fd47d8de418a3114344242e9a6b0c8e74da262d707aa383",
+    "src/world/lightingPhases.ts": "741bebbcfc7dd4b3714eaeab3d0d673769f1d9b4936c8204fd663aa0fe1149b2",
+    "src/world/skyShader.ts": "14310f035a308fdc263a711e0db1140392c3f00db16da238b0550768e55e0a0a",
+    "src/ui/lightingReview.ts": "0c2a7a21c576ae47ec51ad1078863173fe368decd147eb2572bd0c678cba1302",
+    "src/ui/lightingDiagnostics.ts": "fbfac383dce5cb58cedf63a03e0af674f35158f1a5414784a9276741c4ad2c5a"
+  }
+}

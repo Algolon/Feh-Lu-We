@@ -685,6 +685,7 @@ export class Game implements GameApi {
     this.indoor += ((w.hereRoom !== 'out' ? 1 : 0) - this.indoor) * Math.min(1, dt * 2.5);
     if (this.pool) this.pool.gain = ART.light === 'sample' ? 1 + 0.7 * this.indoor : 1; // DEV-04C: interiors lean on their fixtures (env pulls back sun + fill)
     this.extras.env?.update(this.dusk, this.camera.position, this.indoor);
+    if (this.pool) this.pool.gain *= this.extras.env?.fixtureGain ?? 1; // ENV-L01: phase-based outdoor practical contrast
     this.audio.dusk = this.dusk;
     this.torch.intensity = this.state.lit.torch ? 30 : 0;
     // pick reticle target

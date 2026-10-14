@@ -20,7 +20,7 @@ const q = typeof location !== 'undefined' ? new URLSearchParams(location.search)
 const pick = <T extends string>(v: string | null, ok: readonly T[], d: T): T => (ok as readonly string[]).includes(v ?? '') ? (v as T) : d;
 
 /** Art-review mode: isolated state (see state.ts `storage`), review bar, direct start in the room under review. */
-export const REVIEW: 'living' | 'boslust' | 'dev01' | null = pick(q.get('review'), ['living', 'boslust', 'dev01'] as const, '' as never) || null;
+export const REVIEW: 'living' | 'boslust' | 'dev01' | 'lighting' | null = pick(q.get('review'), ['living', 'boslust', 'dev01', 'lighting'] as const, '' as never) || null;
 /** DEV-01 slice review build (?review=dev01): B01 v0.2, DS01, notebook v0.2. The normal game never sets it. */
 export const SLICE = REVIEW === 'dev01';
 

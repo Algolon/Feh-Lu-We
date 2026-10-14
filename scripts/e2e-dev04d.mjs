@@ -255,6 +255,11 @@ try {
     await p2.goto(BASE + '?autotest=1');
     await p2.evaluate(() => localStorage.setItem('fehluwe.save', JSON.stringify({ version: 4, scene: 'home', inventory: ['invitation', 'torch'], flags: {} })));
     await p2.reload(); await p2.click('[data-cont]');
+    await p2.waitForFunction(() => !!window.__game?.world, null, { timeout: 120000 });
+    const diagnosis = await p2.evaluate(() => ({ world: window.__game.world.id, scene: window.__game.state.scene,
+      storedScene: JSON.parse(localStorage.getItem('fehluwe.save') || '{}').scene }));
+    console.log('Home load diagnosis', JSON.stringify(diagnosis));
+    writeFileSync(`${OUT}/home-load-diagnosis.json`, JSON.stringify(diagnosis, null, 2));
     await p2.waitForFunction(() => window.__game?.world?.id === 'home', null, { timeout: 120000 });
     await p2.evaluate(helpers);
     const r = await p2.evaluate(() => {

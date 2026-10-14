@@ -1,0 +1,65 @@
+{
+  "note": "Existing F05 projects the target immediately after simulated camera movement. Explicit camera matrix update is a harness-only diagnostic, not an input implementation change.",
+  "rows": [
+    {
+      "name": "production-ae2a036",
+      "corrected": false,
+      "coords": {
+        "stale": {
+          "x": 269.7795162012275,
+          "y": 191.82988804915965
+        },
+        "current": {
+          "x": 269.7795162012275,
+          "y": 191.82988804915965
+        }
+      },
+      "taken": false
+    },
+    {
+      "name": "production-ae2a036",
+      "corrected": true,
+      "coords": {
+        "stale": {
+          "x": 269.7795162012275,
+          "y": 191.82988804915965
+        },
+        "current": {
+          "x": 269.7795162012275,
+          "y": 191.82988804915965
+        }
+      },
+      "taken": false
+    },
+    {
+      "name": "prototype-normal-game",
+      "corrected": false,
+      "coords": {
+        "stale": {
+          "x": 269.7795162012275,
+          "y": 191.82988804915965
+        },
+        "current": {
+          "x": 269.7795162012275,
+          "y": 191.82988804915965
+        }
+      },
+      "taken": false
+    },
+    {
+      "name": "prototype-normal-game",
+      "corrected": true,
+      "coords": {
+        "stale": {
+          "x": 269.7795162012275,
+          "y": 191.82988804915965
+        },
+        "current": {
+          "x": 269.7795162012275,
+          "y": 191.82988804915965
+        }
+      },
+      "taken": true
+    }
+  ]
+}
