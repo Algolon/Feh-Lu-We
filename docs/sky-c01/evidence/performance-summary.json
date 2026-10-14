@@ -1,0 +1,56 @@
+[
+  {
+    "scope": "scene",
+    "variant": "production",
+    "n": 21,
+    "medianMs": 111.29999999981374,
+    "p95Ms": 115.40000000037253,
+    "minMs": 95,
+    "maxMs": 118.89999999990687
+  },
+  {
+    "scope": "scene",
+    "variant": "procedural",
+    "n": 21,
+    "medianMs": 129.5,
+    "p95Ms": 149.3000000002794,
+    "minMs": 112.8000000002794,
+    "maxMs": 159.39999999990687
+  },
+  {
+    "scope": "scene",
+    "variant": "masks",
+    "n": 21,
+    "medianMs": 113.10000000009313,
+    "p95Ms": 129,
+    "minMs": 101.20000000018626,
+    "maxMs": 130.60000000009313
+  },
+  {
+    "scope": "sky-only",
+    "variant": "production",
+    "n": 21,
+    "medianMs": 12.399999999906868,
+    "p95Ms": 14.200000000186265,
+    "minMs": 11.100000000093132,
+    "maxMs": 14.600000000093132
+  },
+  {
+    "scope": "sky-only",
+    "variant": "procedural",
+    "n": 21,
+    "medianMs": 32.8000000002794,
+    "p95Ms": 36.700000000186265,
+    "minMs": 27,
+    "maxMs": 40.700000000186265
+  },
+  {
+    "scope": "sky-only",
+    "variant": "masks",
+    "n": 21,
+    "medianMs": 13.699999999720603,
+    "p95Ms": 31.5,
+    "minMs": 11.5,
+    "maxMs": 80
+  }
+]

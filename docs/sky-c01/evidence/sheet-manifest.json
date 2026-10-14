@@ -1,0 +1,1487 @@
+[
+  {
+    "rawFile": "sky-0-landscape-low-production.jpg",
+    "rawSHA256": "023aaf1fbeb084ddb2b1b59830eb13e4438b02e40fac510acfa5f904dbf6bea2",
+    "sheet": "sky-landscape.jpg",
+    "rectangle": [
+      20,
+      139,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "sky-0-landscape-low-procedural.jpg",
+    "rawSHA256": "4dd32dcfce639d0f96e05649111ffbcccfedb5df6a8115d85e54cfa4b0c02104",
+    "sheet": "sky-landscape.jpg",
+    "rectangle": [
+      470,
+      139,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "sky-0-landscape-low-masks.jpg",
+    "rawSHA256": "f699209430c5e7f05b5f98b82c41156b49ffd2d78e445d1f9c1cca2834b7e0f8",
+    "sheet": "sky-landscape.jpg",
+    "rectangle": [
+      920,
+      139,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "sky-1-landscape-low-production.jpg",
+    "rawSHA256": "0c9c84d05694f8268b767f8baa1f75623bfa89b238d44282f390367ae12cc810",
+    "sheet": "sky-landscape.jpg",
+    "rectangle": [
+      20,
+      378,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "sky-1-landscape-low-procedural.jpg",
+    "rawSHA256": "9667aba85831ab64439843ae2ec722c07506741155528d0a1a3e43cfe9b10703",
+    "sheet": "sky-landscape.jpg",
+    "rectangle": [
+      470,
+      378,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "sky-1-landscape-low-masks.jpg",
+    "rawSHA256": "b9f123683867b5044f9e720d4f07b4487f55dbed0a949b4f50172dd4de27c992",
+    "sheet": "sky-landscape.jpg",
+    "rectangle": [
+      920,
+      378,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "sky-2-landscape-low-production.jpg",
+    "rawSHA256": "70bd21713b81560c883847f2777271f32d34c3dc70d2a321a4b12f4a9ffa81fd",
+    "sheet": "sky-landscape.jpg",
+    "rectangle": [
+      20,
+      617,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "sky-2-landscape-low-procedural.jpg",
+    "rawSHA256": "235e626be123836356d6d353ce2cb9e13b1f1e412a38f8e1d88b6af97eb446e7",
+    "sheet": "sky-landscape.jpg",
+    "rectangle": [
+      470,
+      617,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "sky-2-landscape-low-masks.jpg",
+    "rawSHA256": "233d0a04cfe2acff557b2bd4a673fe8edb06b458ebf43ec7336cde26b6877b26",
+    "sheet": "sky-landscape.jpg",
+    "rectangle": [
+      920,
+      617,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "sky-3-landscape-low-production.jpg",
+    "rawSHA256": "71fc192ca5814c49d82259b1344360887af71515fbc3629dea2f76e2c1bed893",
+    "sheet": "sky-landscape.jpg",
+    "rectangle": [
+      20,
+      856,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "sky-3-landscape-low-procedural.jpg",
+    "rawSHA256": "0e360dd5ba9e52496999f640f855cfe2c8a20cd4adb59081ec99426e0029f88d",
+    "sheet": "sky-landscape.jpg",
+    "rectangle": [
+      470,
+      856,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "sky-3-landscape-low-masks.jpg",
+    "rawSHA256": "e93a571ea41a98c63171f58b64aa19bcb39069eeb8feff14161abf2bcc6fed9a",
+    "sheet": "sky-landscape.jpg",
+    "rectangle": [
+      920,
+      856,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "sky-0-portrait-low-production.jpg",
+    "rawSHA256": "e1413b3a9dba8a7f9e0c8db37389b530bc99c292f9fe5e00e51108c8e5b354f2",
+    "sheet": "sky-portrait.jpg",
+    "rectangle": [
+      20,
+      139,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "sky-0-portrait-low-procedural.jpg",
+    "rawSHA256": "4072646b3bdc7c90562fb5f67bf3c9c318ee2c69699fd92e0de39a741994edc4",
+    "sheet": "sky-portrait.jpg",
+    "rectangle": [
+      280,
+      139,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "sky-0-portrait-low-masks.jpg",
+    "rawSHA256": "2a59999663c4864434d0042044c09994b92ece806209d1c5b99c1971685f9e6c",
+    "sheet": "sky-portrait.jpg",
+    "rectangle": [
+      540,
+      139,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "sky-1-portrait-low-production.jpg",
+    "rawSHA256": "c6ebfe4a1251e71268093c2f6d956347bb19d5dab243a851450f0a691c1ba5cb",
+    "sheet": "sky-portrait.jpg",
+    "rectangle": [
+      20,
+      717,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "sky-1-portrait-low-procedural.jpg",
+    "rawSHA256": "a7a2400689a27e6dfde2c7994fefad1d1528279f262126ca046423530d5166ac",
+    "sheet": "sky-portrait.jpg",
+    "rectangle": [
+      280,
+      717,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "sky-1-portrait-low-masks.jpg",
+    "rawSHA256": "9971e1d18ee00d54f54c3fe8ea2ba088822d7b7afae2c2f29f548be19024a0c3",
+    "sheet": "sky-portrait.jpg",
+    "rectangle": [
+      540,
+      717,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "sky-2-portrait-low-production.jpg",
+    "rawSHA256": "dc9b3123375d1800e37ebd76e640ab198bf3f41d060459f86a94166a8a49a476",
+    "sheet": "sky-portrait.jpg",
+    "rectangle": [
+      20,
+      1295,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "sky-2-portrait-low-procedural.jpg",
+    "rawSHA256": "3d1a653ce744edff4f24c80069eddb1494dd5963d956fc854125d4633fa4f93d",
+    "sheet": "sky-portrait.jpg",
+    "rectangle": [
+      280,
+      1295,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "sky-2-portrait-low-masks.jpg",
+    "rawSHA256": "55619cf1884e685fabe3e9126b75bf558eeccdaa22bdb7ca9e459774c453071c",
+    "sheet": "sky-portrait.jpg",
+    "rectangle": [
+      540,
+      1295,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "sky-3-portrait-low-production.jpg",
+    "rawSHA256": "cf55e3f25a4a0f1abd781064031bd1340a3f06e68c8868b8f3335ce0b61ec868",
+    "sheet": "sky-portrait.jpg",
+    "rectangle": [
+      20,
+      1873,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "sky-3-portrait-low-procedural.jpg",
+    "rawSHA256": "d93e0674ff813487a92636ac0e718d50d49414d56e1167d722eafc71000f6e3b",
+    "sheet": "sky-portrait.jpg",
+    "rectangle": [
+      280,
+      1873,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "sky-3-portrait-low-masks.jpg",
+    "rawSHA256": "a627d654f5da75dba2b1f79267622794a79d8caf2602726c0113852c8252f7d9",
+    "sheet": "sky-portrait.jpg",
+    "rectangle": [
+      540,
+      1873,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "garden-0-landscape-low-production.jpg",
+    "rawSHA256": "7abb3a0b27543c69e000f136acbd565858fb769645f6715f800ebc4e14763b68",
+    "sheet": "garden-landscape.jpg",
+    "rectangle": [
+      20,
+      139,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "garden-0-landscape-low-procedural.jpg",
+    "rawSHA256": "dc21b27cf2ce79bab2855b1901c870a0abb5f8298007f5cf5bd458a43b5be61f",
+    "sheet": "garden-landscape.jpg",
+    "rectangle": [
+      470,
+      139,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "garden-0-landscape-low-masks.jpg",
+    "rawSHA256": "2abb5db9d781d66da7e68ac5150d518637b5dcea5d0f7feb1345bfaffb634d5b",
+    "sheet": "garden-landscape.jpg",
+    "rectangle": [
+      920,
+      139,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "garden-1-landscape-low-production.jpg",
+    "rawSHA256": "757ec5d05839c2e037837c1fa79264f8763575356e7b537fd484be6bc8fde5a2",
+    "sheet": "garden-landscape.jpg",
+    "rectangle": [
+      20,
+      378,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "garden-1-landscape-low-procedural.jpg",
+    "rawSHA256": "df0f242675366594b5aafcbc005522dd7029ba84031383fbba2a5098d6b0af31",
+    "sheet": "garden-landscape.jpg",
+    "rectangle": [
+      470,
+      378,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "garden-1-landscape-low-masks.jpg",
+    "rawSHA256": "3c2b5df99b5de22d8869e31aa8747a97e1ed59107e69cbb5ae51afd60770c025",
+    "sheet": "garden-landscape.jpg",
+    "rectangle": [
+      920,
+      378,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "garden-2-landscape-low-production.jpg",
+    "rawSHA256": "5df9e016b76911419947fa1b68e25560079fed14dde4a8126a42e70c98062684",
+    "sheet": "garden-landscape.jpg",
+    "rectangle": [
+      20,
+      617,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "garden-2-landscape-low-procedural.jpg",
+    "rawSHA256": "5d647078db161a1e79d3e7fed0a032d1bd5ee1c0ee244b6938e13d7a4301e45d",
+    "sheet": "garden-landscape.jpg",
+    "rectangle": [
+      470,
+      617,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "garden-2-landscape-low-masks.jpg",
+    "rawSHA256": "8abb2075e07f3ab6242ce1431bcd56a9bfab32563d7ec202052d408b49690742",
+    "sheet": "garden-landscape.jpg",
+    "rectangle": [
+      920,
+      617,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "garden-3-landscape-low-production.jpg",
+    "rawSHA256": "3dfe6818a1c8dfee5e554db5ab85b380eaf8255ccd874a99cf713f06ab0aa724",
+    "sheet": "garden-landscape.jpg",
+    "rectangle": [
+      20,
+      856,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "garden-3-landscape-low-procedural.jpg",
+    "rawSHA256": "96e9a18cd8c4bbb4d5ad0e541b1b540512d02c7d5ba57c5709fe0de9b423d6f7",
+    "sheet": "garden-landscape.jpg",
+    "rectangle": [
+      470,
+      856,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "garden-3-landscape-low-masks.jpg",
+    "rawSHA256": "0dcb7abd889c3f67c62f12ec3202a2a2614e29a8798b5eef35ea126db532000a",
+    "sheet": "garden-landscape.jpg",
+    "rectangle": [
+      920,
+      856,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "garden-0-portrait-low-production.jpg",
+    "rawSHA256": "f5b944d312d341eb134ef16eac82ce0effbd93f9a54c4ebf9022539f18e74197",
+    "sheet": "garden-portrait.jpg",
+    "rectangle": [
+      20,
+      139,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "garden-0-portrait-low-procedural.jpg",
+    "rawSHA256": "5ed297531608eeeaf8cd6811c9630424e394233af466343dd11a2b41d87572b8",
+    "sheet": "garden-portrait.jpg",
+    "rectangle": [
+      280,
+      139,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "garden-0-portrait-low-masks.jpg",
+    "rawSHA256": "3c821f52f4c48bcde41a93cdca04d85dbb5fbd0540dc9d3dd639deb7b22706ba",
+    "sheet": "garden-portrait.jpg",
+    "rectangle": [
+      540,
+      139,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "garden-1-portrait-low-production.jpg",
+    "rawSHA256": "ad37edfa80e88c38a085430b3429014b3fb7cab96cc637ee4aa691e63079d77e",
+    "sheet": "garden-portrait.jpg",
+    "rectangle": [
+      20,
+      717,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "garden-1-portrait-low-procedural.jpg",
+    "rawSHA256": "3621b6f83e6d750e7a7509c785e173efcc35598469fc06a087757a087925ede3",
+    "sheet": "garden-portrait.jpg",
+    "rectangle": [
+      280,
+      717,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "garden-1-portrait-low-masks.jpg",
+    "rawSHA256": "548b3e3a9845a85c2499161aade44729afc8f95c1b1a9a8ce3baab0224b80c5f",
+    "sheet": "garden-portrait.jpg",
+    "rectangle": [
+      540,
+      717,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "garden-2-portrait-low-production.jpg",
+    "rawSHA256": "4cdac1b4947f15e4b884e680031b30a1603e006ece1ade792a53d6798b340bfa",
+    "sheet": "garden-portrait.jpg",
+    "rectangle": [
+      20,
+      1295,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "garden-2-portrait-low-procedural.jpg",
+    "rawSHA256": "9e6b15c951b990df1ed90c9a64efe4de32e5beb31f98ca989840e9a5a1b9eb4e",
+    "sheet": "garden-portrait.jpg",
+    "rectangle": [
+      280,
+      1295,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "garden-2-portrait-low-masks.jpg",
+    "rawSHA256": "435090af237408908cc632ce9e49c135f5fb954941e85f9927708acf95d88d0f",
+    "sheet": "garden-portrait.jpg",
+    "rectangle": [
+      540,
+      1295,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "garden-3-portrait-low-production.jpg",
+    "rawSHA256": "b12680e4c585cc937852f7511b07a96e3b5cce2d3b0d82daec49afd149f088b7",
+    "sheet": "garden-portrait.jpg",
+    "rectangle": [
+      20,
+      1873,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "garden-3-portrait-low-procedural.jpg",
+    "rawSHA256": "014d89ca64cdcfb8f0cb037d2665070cd7b211bc2434bc20cb0783c91ddd9034",
+    "sheet": "garden-portrait.jpg",
+    "rectangle": [
+      280,
+      1873,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "garden-3-portrait-low-masks.jpg",
+    "rawSHA256": "7e0a5c949d78f42be31c96e405ef63a8d82c1b1a1adf7f6848c4f128a172c451",
+    "sheet": "garden-portrait.jpg",
+    "rectangle": [
+      540,
+      1873,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "arrival-0-landscape-low-production.jpg",
+    "rawSHA256": "20f2aa448e783de6ce599a7ff0dbc299eec18579d3b6c524b6200c45774c1dc4",
+    "sheet": "arrival-landscape.jpg",
+    "rectangle": [
+      20,
+      139,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-0-landscape-low-procedural.jpg",
+    "rawSHA256": "070a89855ceed403688638576f37c6bbde894c9ef671caed4e79bfc50245ad66",
+    "sheet": "arrival-landscape.jpg",
+    "rectangle": [
+      470,
+      139,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-0-landscape-low-masks.jpg",
+    "rawSHA256": "e11f48f4565d6426949239106e77eb9c7c0047eee4640ca544b4bee0bf6f4e68",
+    "sheet": "arrival-landscape.jpg",
+    "rectangle": [
+      920,
+      139,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-1-landscape-low-production.jpg",
+    "rawSHA256": "4ae3cfaf6cee9c7ae40a4dc6f595558e7979fe76d86528274afd907c2b43e51d",
+    "sheet": "arrival-landscape.jpg",
+    "rectangle": [
+      20,
+      378,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-1-landscape-low-procedural.jpg",
+    "rawSHA256": "a91452783ac365aa4e5f6a55a7446846a4fa89a2f9b96dbca63a462927f987c8",
+    "sheet": "arrival-landscape.jpg",
+    "rectangle": [
+      470,
+      378,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-1-landscape-low-masks.jpg",
+    "rawSHA256": "658f0d9fa1ff13ea913af376c4d4efe90d1564df89f2292558df27250ad1a4bb",
+    "sheet": "arrival-landscape.jpg",
+    "rectangle": [
+      920,
+      378,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-2-landscape-low-production.jpg",
+    "rawSHA256": "043e55e44fde0f79984d0fa218ad865ec998bcd944b00b7703063d1e153fb7f5",
+    "sheet": "arrival-landscape.jpg",
+    "rectangle": [
+      20,
+      617,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-2-landscape-low-procedural.jpg",
+    "rawSHA256": "d78d94b58940729b2c7b559ae348ed99b63d7b2874f6ad1a0e8ea3c13655f155",
+    "sheet": "arrival-landscape.jpg",
+    "rectangle": [
+      470,
+      617,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-2-landscape-low-masks.jpg",
+    "rawSHA256": "0c36470eb2412eb35bf674e2b0512bfb25844683979f4ae4a16dab1999816ef4",
+    "sheet": "arrival-landscape.jpg",
+    "rectangle": [
+      920,
+      617,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-3-landscape-low-production.jpg",
+    "rawSHA256": "5ee8b974205e829af8042dac2b3d097022e6d29d3f6a3a1f4b79ff081ad66557",
+    "sheet": "arrival-landscape.jpg",
+    "rectangle": [
+      20,
+      856,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-3-landscape-low-procedural.jpg",
+    "rawSHA256": "5d003f7c976cd017261cae125b6a3fdacd650814af2d554229b037b77096a213",
+    "sheet": "arrival-landscape.jpg",
+    "rectangle": [
+      470,
+      856,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-3-landscape-low-masks.jpg",
+    "rawSHA256": "6af2e557d6297287fc19d841eecd000a8516f8759dc189395499f345e9e83d66",
+    "sheet": "arrival-landscape.jpg",
+    "rectangle": [
+      920,
+      856,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-0-portrait-low-production.jpg",
+    "rawSHA256": "b68a5ba8f5d38b9199dab73b843e0dc7f41f67d02276a3e0985aa6db985add1b",
+    "sheet": "arrival-portrait.jpg",
+    "rectangle": [
+      20,
+      139,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "arrival-0-portrait-low-procedural.jpg",
+    "rawSHA256": "dd82dd44bdeb302db71a2a94784ba48c3bff6c69c9595632f98951e3fcf7b9c9",
+    "sheet": "arrival-portrait.jpg",
+    "rectangle": [
+      280,
+      139,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "arrival-0-portrait-low-masks.jpg",
+    "rawSHA256": "5b5bc34fbcfda630eb9d67bdd25c30b35c2440c3720f2f425e67cde350e3f9ed",
+    "sheet": "arrival-portrait.jpg",
+    "rectangle": [
+      540,
+      139,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "arrival-1-portrait-low-production.jpg",
+    "rawSHA256": "a58c9aef96af192e2f97ed99c9fb04d10f1b7c65130af924b2c1ab07dad363b3",
+    "sheet": "arrival-portrait.jpg",
+    "rectangle": [
+      20,
+      717,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "arrival-1-portrait-low-procedural.jpg",
+    "rawSHA256": "549782672bc07e1c92db2aa55ce327bf7ddaef86345ae470fa20f05399b9ab4e",
+    "sheet": "arrival-portrait.jpg",
+    "rectangle": [
+      280,
+      717,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "arrival-1-portrait-low-masks.jpg",
+    "rawSHA256": "8b64f322b0b08dc4594848b7159632c69e1ebe798060cb7fd0a288d944fad27c",
+    "sheet": "arrival-portrait.jpg",
+    "rectangle": [
+      540,
+      717,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "arrival-2-portrait-low-production.jpg",
+    "rawSHA256": "408338f8d83d5e2bb69165d5f4b28fcb6b4933b09542ff7bcd1f60ecd07d8c18",
+    "sheet": "arrival-portrait.jpg",
+    "rectangle": [
+      20,
+      1295,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "arrival-2-portrait-low-procedural.jpg",
+    "rawSHA256": "2782320609d721442dc52c4791bcddb15c49fb2a61405c6a472b96d052fbd031",
+    "sheet": "arrival-portrait.jpg",
+    "rectangle": [
+      280,
+      1295,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "arrival-2-portrait-low-masks.jpg",
+    "rawSHA256": "b50b147cf115cdfaa9a79c7e0932982c5b3ce606f1e8cf43b4ce1882850aa8bb",
+    "sheet": "arrival-portrait.jpg",
+    "rectangle": [
+      540,
+      1295,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "arrival-3-portrait-low-production.jpg",
+    "rawSHA256": "a75dc5b729f2426306532e4a6a2eb30f322bb062921184daf4f343e9c9116d28",
+    "sheet": "arrival-portrait.jpg",
+    "rectangle": [
+      20,
+      1873,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "arrival-3-portrait-low-procedural.jpg",
+    "rawSHA256": "574999bf90abbaa0f31686d92b1dd9bd86a6df37c54e41e36796790b9fe959b5",
+    "sheet": "arrival-portrait.jpg",
+    "rectangle": [
+      280,
+      1873,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "arrival-3-portrait-low-masks.jpg",
+    "rawSHA256": "8c9c2824fa6f1eed0ea3df5773481b4169e618154ca975392a24b827b58ac90b",
+    "sheet": "arrival-portrait.jpg",
+    "rectangle": [
+      540,
+      1873,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "woodland-0-landscape-low-production.jpg",
+    "rawSHA256": "6eca8b3cb4d617a9a3a4ce9a4260ddb7e316cd3ca8b2b4c1df7c869017cc6909",
+    "sheet": "woodland-landscape.jpg",
+    "rectangle": [
+      20,
+      139,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "woodland-0-landscape-low-procedural.jpg",
+    "rawSHA256": "64a78a61eb7b2c71595be5c8229e72b2120bf8bc18f29cf2ae5081d1b3126de5",
+    "sheet": "woodland-landscape.jpg",
+    "rectangle": [
+      470,
+      139,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "woodland-0-landscape-low-masks.jpg",
+    "rawSHA256": "2c1a36599c527613bd1e2033704c99079113de8543dac7c00109251d904f46ee",
+    "sheet": "woodland-landscape.jpg",
+    "rectangle": [
+      920,
+      139,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "woodland-1-landscape-low-production.jpg",
+    "rawSHA256": "4151c3c3205e39429fcf4559fc1dc64206793aca1613235a267e8d774b175718",
+    "sheet": "woodland-landscape.jpg",
+    "rectangle": [
+      20,
+      378,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "woodland-1-landscape-low-procedural.jpg",
+    "rawSHA256": "3123c41bc718334baa44db5d7d9368dadf36fe8670d2e599d2587fe39fb31d85",
+    "sheet": "woodland-landscape.jpg",
+    "rectangle": [
+      470,
+      378,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "woodland-1-landscape-low-masks.jpg",
+    "rawSHA256": "3860d09fda36790eb96f7ddc9edd309b7ed41557cf0b0669e817d6064a921c12",
+    "sheet": "woodland-landscape.jpg",
+    "rectangle": [
+      920,
+      378,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "woodland-2-landscape-low-production.jpg",
+    "rawSHA256": "94273aa3a663baad0f33168f8ef4264f01d1e15b712251da15fe4b1314dae0eb",
+    "sheet": "woodland-landscape.jpg",
+    "rectangle": [
+      20,
+      617,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "woodland-2-landscape-low-procedural.jpg",
+    "rawSHA256": "a60d5d0a4ca9c6ce7ba6b230649bbf29deb02448e9214b446bdadaca26318fc5",
+    "sheet": "woodland-landscape.jpg",
+    "rectangle": [
+      470,
+      617,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "woodland-2-landscape-low-masks.jpg",
+    "rawSHA256": "84df54ce0b1d20c09c69474df40830c41b1931e213abe9875a069d5d796bbd20",
+    "sheet": "woodland-landscape.jpg",
+    "rectangle": [
+      920,
+      617,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "woodland-3-landscape-low-production.jpg",
+    "rawSHA256": "b9d2d828cc7a951859334a5ade8e9b45a6cfcb6939c8610ccca855c4d01a8e5d",
+    "sheet": "woodland-landscape.jpg",
+    "rectangle": [
+      20,
+      856,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "woodland-3-landscape-low-procedural.jpg",
+    "rawSHA256": "ed6423f80aa24044770ffdfb872c33468e0e01d5f23d6e0c341edfeac5e26b1c",
+    "sheet": "woodland-landscape.jpg",
+    "rectangle": [
+      470,
+      856,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "woodland-3-landscape-low-masks.jpg",
+    "rawSHA256": "4bfe303150ee4c1731f7eca74d8dc79b8c272212360cc05e742de1570b377384",
+    "sheet": "woodland-landscape.jpg",
+    "rectangle": [
+      920,
+      856,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "woodland-0-portrait-low-production.jpg",
+    "rawSHA256": "6ca32cc4d194607a7f92b17dd97b15a14b8d8b6e7a4adf1aa53b085f8aca34e0",
+    "sheet": "woodland-portrait.jpg",
+    "rectangle": [
+      20,
+      139,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "woodland-0-portrait-low-procedural.jpg",
+    "rawSHA256": "1448fe5c78133066ac7d7165c6394ef1632425ee1eab117efd0da10eaca2e2e5",
+    "sheet": "woodland-portrait.jpg",
+    "rectangle": [
+      280,
+      139,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "woodland-0-portrait-low-masks.jpg",
+    "rawSHA256": "9d03b6bb6061c1edc284d507725a2469b438f9a748d08fe802be5f39b541acd1",
+    "sheet": "woodland-portrait.jpg",
+    "rectangle": [
+      540,
+      139,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "woodland-1-portrait-low-production.jpg",
+    "rawSHA256": "7e6246dbc79948350499f667b33011884ee0329d4b33b1feaa345f4898d84adb",
+    "sheet": "woodland-portrait.jpg",
+    "rectangle": [
+      20,
+      717,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "woodland-1-portrait-low-procedural.jpg",
+    "rawSHA256": "8086c6fc759f2ae85528dbc671e1d7ee7c9bee58a1743b6d340b7d635384324b",
+    "sheet": "woodland-portrait.jpg",
+    "rectangle": [
+      280,
+      717,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "woodland-1-portrait-low-masks.jpg",
+    "rawSHA256": "7c551ab070611b9b7947a9b47ab87ab84d01f5b7cbab441dc30f8b4e5b1357c1",
+    "sheet": "woodland-portrait.jpg",
+    "rectangle": [
+      540,
+      717,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "woodland-2-portrait-low-production.jpg",
+    "rawSHA256": "993fd3fe17ac31fee4edf8ba8ea29a71b23fc2c11c9dc9bd13f2aa0f5cefbc1d",
+    "sheet": "woodland-portrait.jpg",
+    "rectangle": [
+      20,
+      1295,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "woodland-2-portrait-low-procedural.jpg",
+    "rawSHA256": "6955a7c6fb6d6c0d458b498d887f73d6c6cab61a331d94bde75ca9dd766f2737",
+    "sheet": "woodland-portrait.jpg",
+    "rectangle": [
+      280,
+      1295,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "woodland-2-portrait-low-masks.jpg",
+    "rawSHA256": "17753a6d4f68452ae5b3341febb0088aad58e788eb02cb8b4bef38b0a2b51b8f",
+    "sheet": "woodland-portrait.jpg",
+    "rectangle": [
+      540,
+      1295,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "woodland-3-portrait-low-production.jpg",
+    "rawSHA256": "f66c3f784f222f492b119afd8bf9407a4c354353f782261c7acf42ae528c590b",
+    "sheet": "woodland-portrait.jpg",
+    "rectangle": [
+      20,
+      1873,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "woodland-3-portrait-low-procedural.jpg",
+    "rawSHA256": "069cf0ba00cb4c2212d86426f7a80974f01fb8d17439f15e110b7911aa62be74",
+    "sheet": "woodland-portrait.jpg",
+    "rectangle": [
+      280,
+      1873,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "woodland-3-portrait-low-masks.jpg",
+    "rawSHA256": "639c245d329be5629da37cad456f94ac1923c04f48f749962c265f8e6065fbad",
+    "sheet": "woodland-portrait.jpg",
+    "rectangle": [
+      540,
+      1873,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "arrival-0-landscape-low-production.jpg",
+    "rawSHA256": "20f2aa448e783de6ce599a7ff0dbc299eec18579d3b6c524b6200c45774c1dc4",
+    "sheet": "comparison.jpg",
+    "rectangle": [
+      20,
+      140,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-0-landscape-low-procedural.jpg",
+    "rawSHA256": "070a89855ceed403688638576f37c6bbde894c9ef671caed4e79bfc50245ad66",
+    "sheet": "comparison.jpg",
+    "rectangle": [
+      470,
+      140,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-0-landscape-low-masks.jpg",
+    "rawSHA256": "e11f48f4565d6426949239106e77eb9c7c0047eee4640ca544b4bee0bf6f4e68",
+    "sheet": "comparison.jpg",
+    "rectangle": [
+      920,
+      140,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-0-portrait-low-production.jpg",
+    "rawSHA256": "b68a5ba8f5d38b9199dab73b843e0dc7f41f67d02276a3e0985aa6db985add1b",
+    "sheet": "comparison.jpg",
+    "rectangle": [
+      115,
+      380,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "arrival-0-portrait-low-procedural.jpg",
+    "rawSHA256": "dd82dd44bdeb302db71a2a94784ba48c3bff6c69c9595632f98951e3fcf7b9c9",
+    "sheet": "comparison.jpg",
+    "rectangle": [
+      565,
+      380,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "arrival-0-portrait-low-masks.jpg",
+    "rawSHA256": "5b5bc34fbcfda630eb9d67bdd25c30b35c2440c3720f2f425e67cde350e3f9ed",
+    "sheet": "comparison.jpg",
+    "rectangle": [
+      1015,
+      380,
+      240,
+      533
+    ]
+  },
+  {
+    "rawFile": "woodland-3-landscape-low-production.jpg",
+    "rawSHA256": "b9d2d828cc7a951859334a5ade8e9b45a6cfcb6939c8610ccca855c4d01a8e5d",
+    "sheet": "comparison.jpg",
+    "rectangle": [
+      20,
+      960,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "woodland-3-landscape-low-procedural.jpg",
+    "rawSHA256": "ed6423f80aa24044770ffdfb872c33468e0e01d5f23d6e0c341edfeac5e26b1c",
+    "sheet": "comparison.jpg",
+    "rectangle": [
+      470,
+      960,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "woodland-3-landscape-low-masks.jpg",
+    "rawSHA256": "4bfe303150ee4c1731f7eca74d8dc79b8c272212360cc05e742de1570b377384",
+    "sheet": "comparison.jpg",
+    "rectangle": [
+      920,
+      960,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "turn-0-0-landscape-low-production.jpg",
+    "rawSHA256": "5a83879a99c2f288baa575ccc3f259afcdb5c48d6ffe4f2fe4e42b79cfead8e6",
+    "sheet": "turns.jpg",
+    "rectangle": [
+      20,
+      139,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "turn-0-0-landscape-low-procedural.jpg",
+    "rawSHA256": "1457bf926634776dbb2b4900d059b2c1f1c81880ab01008a82f7bdf0c6a6ff8b",
+    "sheet": "turns.jpg",
+    "rectangle": [
+      470,
+      139,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "turn-0-0-landscape-low-masks.jpg",
+    "rawSHA256": "4e8bb46b45387cd55f695d167272f5169316f591fa56759a7636b42dc500f8af",
+    "sheet": "turns.jpg",
+    "rectangle": [
+      920,
+      139,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "turn-90-0-landscape-low-production.jpg",
+    "rawSHA256": "d55737c36c2762dba7081bed7a0bb92e48d51fc2fc0cff73d4b182f61198ddc8",
+    "sheet": "turns.jpg",
+    "rectangle": [
+      20,
+      378,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "turn-90-0-landscape-low-procedural.jpg",
+    "rawSHA256": "21d3435679fa62219c8730754fc4160dd2282c5215cd1447e65a74fef793e802",
+    "sheet": "turns.jpg",
+    "rectangle": [
+      470,
+      378,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "turn-90-0-landscape-low-masks.jpg",
+    "rawSHA256": "bd7c6591c9f642862810c8647ee58daaeaa21eb85e957eb54cf3714dabd3eb47",
+    "sheet": "turns.jpg",
+    "rectangle": [
+      920,
+      378,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "turn-180-0-landscape-low-production.jpg",
+    "rawSHA256": "4dfe42adba7e6f92bc6aed5fc054024c445a7c256b52b2b1c11f9a0911e3cf2c",
+    "sheet": "turns.jpg",
+    "rectangle": [
+      20,
+      617,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "turn-180-0-landscape-low-procedural.jpg",
+    "rawSHA256": "68ad0eb1f0d3cfd95261190d3bdbf8488060a05f033f8145a8ba538938c5e837",
+    "sheet": "turns.jpg",
+    "rectangle": [
+      470,
+      617,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "turn-180-0-landscape-low-masks.jpg",
+    "rawSHA256": "eced519f174080de2c97d8cae764dfc5875529b218491f4db1c0c1bcaf021f07",
+    "sheet": "turns.jpg",
+    "rectangle": [
+      920,
+      617,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "turn-270-0-landscape-low-production.jpg",
+    "rawSHA256": "2e98923724b8680a61c5eff2034981cc811bc0f73e97f9bc5ee9d6e2280adc7b",
+    "sheet": "turns.jpg",
+    "rectangle": [
+      20,
+      856,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "turn-270-0-landscape-low-procedural.jpg",
+    "rawSHA256": "3bc04bdbe5c884c25a60d3d99645f9ae10b01201272d3e2c9b55016f5cac73b7",
+    "sheet": "turns.jpg",
+    "rectangle": [
+      470,
+      856,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "turn-270-0-landscape-low-masks.jpg",
+    "rawSHA256": "4289fdaccd677985e291efa6dada176e5625905c88d109fedb0b30fffa7ee166",
+    "sheet": "turns.jpg",
+    "rectangle": [
+      920,
+      856,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "turn-359.9-0-landscape-low-production.jpg",
+    "rawSHA256": "27f884e72d359454ee099b067a62ef1ea7b50cffab1443a34d58e7be13c55bb1",
+    "sheet": "seam.jpg",
+    "rectangle": [
+      20,
+      139,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "turn-359.9-0-landscape-low-procedural.jpg",
+    "rawSHA256": "d8bc837d73975360a798b82325d43dbf3c3eac217fd9f75be28ffb0a20356cf5",
+    "sheet": "seam.jpg",
+    "rectangle": [
+      470,
+      139,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "turn-359.9-0-landscape-low-masks.jpg",
+    "rawSHA256": "8562768fe7a949e33bddcfb6e246bc3dd230379a7b94471580cb865718479d43",
+    "sheet": "seam.jpg",
+    "rectangle": [
+      920,
+      139,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "turn-0.1-0-landscape-low-production.jpg",
+    "rawSHA256": "b1fe3090190b1f01f1acba8a1226aca694b3164c58867644f66d44ee337a4387",
+    "sheet": "seam.jpg",
+    "rectangle": [
+      20,
+      378,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "turn-0.1-0-landscape-low-procedural.jpg",
+    "rawSHA256": "823f937ef4d600c57d4cbd94d18a29d4576131b2b0f659c82066cdf91354dfb2",
+    "sheet": "seam.jpg",
+    "rectangle": [
+      470,
+      378,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "turn-0.1-0-landscape-low-masks.jpg",
+    "rawSHA256": "77739f3ab7182d04d9c7b804ff51b285527f8dcc685e552ba6b66ca399271c22",
+    "sheet": "seam.jpg",
+    "rectangle": [
+      920,
+      378,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-0-landscape-low-production.jpg",
+    "rawSHA256": "20f2aa448e783de6ce599a7ff0dbc299eec18579d3b6c524b6200c45774c1dc4",
+    "sheet": "quality.jpg",
+    "rectangle": [
+      20,
+      139,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-0-landscape-low-procedural.jpg",
+    "rawSHA256": "070a89855ceed403688638576f37c6bbde894c9ef671caed4e79bfc50245ad66",
+    "sheet": "quality.jpg",
+    "rectangle": [
+      470,
+      139,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-0-landscape-low-masks.jpg",
+    "rawSHA256": "e11f48f4565d6426949239106e77eb9c7c0047eee4640ca544b4bee0bf6f4e68",
+    "sheet": "quality.jpg",
+    "rectangle": [
+      920,
+      139,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-0-landscape-high-production.jpg",
+    "rawSHA256": "1a864489094ad06b2a753f95ce4c1ebd1d0631e53aeabd0c22c24250820441af",
+    "sheet": "quality.jpg",
+    "rectangle": [
+      20,
+      378,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-0-landscape-high-procedural.jpg",
+    "rawSHA256": "d4f6cb1347a4784dd3f561016682f9f7f2d8869312dbe092f9824b7213ca7da2",
+    "sheet": "quality.jpg",
+    "rectangle": [
+      470,
+      378,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-0-landscape-high-masks.jpg",
+    "rawSHA256": "3bf2363a2ba41c908a82d467fc3dce266dd4f5788b4486505b60ec489dcb15ef",
+    "sheet": "quality.jpg",
+    "rectangle": [
+      920,
+      378,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-3-landscape-low-production.jpg",
+    "rawSHA256": "5ee8b974205e829af8042dac2b3d097022e6d29d3f6a3a1f4b79ff081ad66557",
+    "sheet": "quality.jpg",
+    "rectangle": [
+      20,
+      617,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-3-landscape-low-procedural.jpg",
+    "rawSHA256": "5d003f7c976cd017261cae125b6a3fdacd650814af2d554229b037b77096a213",
+    "sheet": "quality.jpg",
+    "rectangle": [
+      470,
+      617,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-3-landscape-low-masks.jpg",
+    "rawSHA256": "6af2e557d6297287fc19d841eecd000a8516f8759dc189395499f345e9e83d66",
+    "sheet": "quality.jpg",
+    "rectangle": [
+      920,
+      617,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-3-landscape-high-production.jpg",
+    "rawSHA256": "936e43ced13df710750eba717655b2f9f74d65dcc7e8c46f0b478dd888c6c1af",
+    "sheet": "quality.jpg",
+    "rectangle": [
+      20,
+      856,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-3-landscape-high-procedural.jpg",
+    "rawSHA256": "e525f549e2bf8909abad8ecd57008468b958b9530f1976f3922ada933d550ad4",
+    "sheet": "quality.jpg",
+    "rectangle": [
+      470,
+      856,
+      430,
+      194
+    ]
+  },
+  {
+    "rawFile": "arrival-3-landscape-high-masks.jpg",
+    "rawSHA256": "01b4169be029f570a135d57e1485671b436003b6f16c234962de1f9f009ef9a2",
+    "sheet": "quality.jpg",
+    "rectangle": [
+      920,
+      856,
+      430,
+      194
+    ]
+  }
+]

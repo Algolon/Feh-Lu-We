@@ -7,6 +7,7 @@ import { createHash } from 'node:crypto';
 const out=process.argv[2]; if(!out)throw Error('Explicit evidence output directory required');
 mkdirSync(out,{recursive:true});
 const quick=process.env.QUICK==='1';
+const turnsOnly=process.env.TURNS_ONLY==='1';
 const poses={
   sky:{x:90,y:0,z:123,yaw:116*Math.PI/180,pitch:.80},
   garden:{x:90,y:0,z:123,yaw:Math.PI,pitch:.22},
@@ -58,18 +59,18 @@ try {
     delete data.jpeg;rows.push({file:save?file:null,name,t,variant,quality,layout,...data});
     console.log(file,data.calls,data.triangles);
   }
-  for(const layout of quick?['landscape']:['landscape','portrait']){
+  for(const layout of turnsOnly?[]:quick?['landscape']:['landscape','portrait']){
     await page.setViewportSize(layout==='portrait'?{width:412,height:915}:{width:915,height:412});
     for(const name of quick?['sky','arrival']:Object.keys(poses))for(const t of quick?[0]:[0,1/3,2/3,1])for(const variant of ['production','procedural','masks'])await frame(name,t,variant,'low',layout);
   }
   const performance=[];
   if(!quick){
     await page.setViewportSize({width:915,height:412});
-    for(const t of [0,1])for(const variant of ['production','procedural','masks'])await frame('arrival',t,variant,'high','landscape');
+    if(!turnsOnly)for(const t of [0,1])for(const variant of ['production','procedural','masks'])await frame('arrival',t,variant,'high','landscape');
     // Wide turn: check across azimuth +/-pi and the north seam, no equirectangular repeat.
-    for(const yaw of [0,90,180,270,359.9,.1])for(const variant of ['production','procedural','masks'])await frame('turn',0,variant,'low','landscape',{...poses.sky,yaw:yaw*Math.PI/180,pitch:.55});
+    for(const yaw of [0,90,180,270,359.9,.1])for(const variant of ['production','procedural','masks'])await frame('turn-'+yaw,0,variant,'low','landscape',{...poses.sky,yaw:yaw*Math.PI/180,pitch:.55});
     // Balanced rotated ordering reduces a simple time/order bias. Full-scene and isolated sky cost.
-    for(const scope of ['scene','sky-only'])for(let round=0;round<3;round++)for(const variant of [['production','procedural','masks'],['masks','production','procedural'],['procedural','masks','production']][round]){
+    if(!turnsOnly)for(const scope of ['scene','sky-only'])for(let round=0;round<3;round++)for(const variant of [['production','procedural','masks'],['masks','production','procedural'],['procedural','masks','production']][round]){
       const p=await page.evaluate(({scope,variant,pose})=>{
         const g=window.__game,e=g.extras.env;g.settings.quality='low';g.applyQuality(true);g.player.setPose(pose);e.preview=0;e.cloudVariant=variant;
         for(let i=0;i<30;i++)g.tick(1/30);e.update(0,g.camera.position,0);

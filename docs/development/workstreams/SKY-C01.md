@@ -1,24 +1,24 @@
-# SKY-C01 — organic stylized cloud comparison
+# SKY-C01 — owner-review handover
 - Branch: `sky-c01-organic-clouds`
-- Baseline: `fe74db0b471d7816d840e6c223b92950adf5639f` (default `ccr-75ef4113-kfkimm`). Live served bundle confirms `fe74db0 · 2026-10-14`, index-D3-sdVd1.js SHA256 907a42e31c08146cc19ef8f5881f4a951f50738931438b37ffc54597c4faea44.
-- State: PARTIAL — A/B implemented, preliminary actual-game renders successful; full matrix/measurement/decision pending.
-- Approved scope: prototype + owner review only; no merge/deploy/production selection.
+- State: COMPLETE FOR OWNER REVIEW. No merge, deploy or final production selection.
+- Baseline: `fe74db0b471d7816d840e6c223b92950adf5639f`, verified live bundle build marker and source SHA256.
+- Last verified source checkpoint: remote `331ac62190405a6b5dd8ec6d813b150c2eca2cee`, Git tree `e6ceaf489aab1190113074414fb3f58115625dc9`, content-equivalent to rendered local `3934f95` retained on `sky-c01-local-provenance`.
+- This final evidence/report increment preserves that cloud implementation; branch history supplies its exact commit.
 
-## Confirmed
-- Production shader preserved; normal gameplay ignores candidates and allocates no mask texture.
-- A: eight authored analytic profiles, bounded contour warp, broad plane shading.
-- B: eight original drawn/interpolated masks in 1024×512 RGB atlas, reused phase palette and common placement/shading.
-- Review selector: `?review=lighting&sky=production|procedural|masks`. ENV four-phase controls unchanged.
-- Typecheck/build and 11 targeted SKY-C01/ENV unit tests pass. Six preliminary real in-engine canvas captures passed with identical matched geometry/light counters and save sentinels.
-- Full Chromium fails due AF_UNIX socket restriction; headless_shell succeeds. Use CHROME below; no further browser diagnosis needed.
+## Completed
+- A: eight analytic profiles, bounded warp and broad shaded planes.
+- B: eight original authored masks in one atlas, same placement/compositing/phase inputs.
+- Ordinary gameplay retains production shader, ignores candidate controls and never loads atlas.
+- 120 valid matched game captures covering four views, four phases, two mobile layouts, High and turns/seam; twelve compact sheets cover all captures.
+- All source/bundle fingerprints, raw-to-sheet hashes, pose/settings and software timing samples recorded.
+- Typecheck/build pass; 278/278 units; 17/17 SKY browser contracts; 12/12 existing walkthrough/save checks.
+- Consolidated direction/comparison/performance/decision/handover: [REPORT.md](../../sky-c01/REPORT.md).
 
-## Next executable step
-Commit/push this increment; rebuild against that commit and capture full evidence with:
-`CHROME=/root/.cache/ms-playwright/chromium_headless_shell-1194/chrome-linux/headless_shell node scripts/sky-c01-capture.mjs docs/sky-c01/evidence`
-Then consolidate direction, comparison, QA, decision and handover in `docs/sky-c01/REPORT.md`.
+## Recommendation / gates
+B is the preferred continuation basis for silhouette control and lower software cost. A/B artistic difference is modest; both are flatter than the sculptural reference. Owner chooses A, B or targeted broadening/rounding of B's taller crowns. Physical Samsung frame pacing/thermal QA remains unverified. Merge/deploy require separate authorization.
+
+## Resume / reproduce
+Read report and branch HEAD; inspect git status/remotes before editing. Capture with compatible `headless_shell`, not full Chromium (AF_UNIX start blocked); scripts start their own preview server. Do not rebuild dist during capture. Report lists exact commands and known test-harness qualifications.
 
 ## Parallel safety
-Other local worktrees GEO-R01/TUT-R01/PB01 left untouched. Their inspected changes do not overlap cloud implementation; ENV branch differs from production primarily by later UI integration. SKY owns cloudPrototypes.ts, env.ts candidate-only additions, lightingReview.ts review-only additions. Reconcile these with any future ENV edits at integration. PB01 proposes 750k camera triangles but is not part of baseline; no 250k veto applied to clouds. No world geometry change.
-
-## Gate
-Physical Samsung GPU pacing/thermal performance and final artistic selection require owner review. Normal game remains baseline on this branch.
+GEO-R01/TUT-R01/PB01 worktrees untouched. No puzzle, save, UI flow, world geometry, phase palette, dependency or game-loop edit. Future ENV overlap: env.ts review-only candidate selection and lightingReview.ts dev-only selector. No 250k triangle veto imposed. Original local source and authenticated remote checkpoint use identical trees; no force-push/reset. Other branch heads or uncommitted parallel changes are not incorporated.
