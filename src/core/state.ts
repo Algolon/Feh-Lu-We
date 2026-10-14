@@ -77,6 +77,7 @@ export interface Settings {
   reducedMotion: boolean;
   muted: boolean;
   invertY: boolean;
+  showCompass: boolean;
 }
 
 export function defaultState(now = Date.now()): GameState {
@@ -114,6 +115,7 @@ export function defaultSettings(coarsePointer = false): Settings {
     reducedMotion: false,
     muted: false,
     invertY: false,
+    showCompass: true,
   };
 }
 
@@ -299,6 +301,7 @@ export function parseSettings(text: string | null, coarse: boolean): Settings {
       reducedMotion: r.reducedMotion === true,
       muted: r.muted === true,
       invertY: r.invertY === true,
+      showCompass: r.showCompass !== false,
     };
   } catch {
     return d;
