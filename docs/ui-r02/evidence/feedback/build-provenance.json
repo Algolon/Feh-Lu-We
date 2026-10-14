@@ -1,0 +1,31 @@
+{
+  "production_base": "6b2b82d95fc761390b9275c94ee363f37a25f6bf",
+  "runtime_source_commit": "bf03e5ae00de5c23a0dc2d9836a669554c20d06d",
+  "runtime_source_sha256": {
+    "src/ui/ui.ts": "7eaff85c872b69f603110491b74e06f8b02c56cc5bd823e29e11956f64857738",
+    "src/ui/icons.ts": "bf586beef9d5cb84c92ab85d1717585d87f6b8d57145df14e49d8831cb13b94e",
+    "src/ui/woodland.css": "890310f66422d68b9f100a61c58d5b7ec805f72f5a1c2ecb3587dee3a6f64403"
+  },
+  "test_script_sha256": {
+    "scripts/e2e-ui-r02.mjs": "99abb5061aed28435f272c93c443618e43cf42c8eef418c761f843c518933a95",
+    "scripts/e2e-ui-r02-feedback.mjs": "1f52dd3d3f3b4645ad86998ce4744a69bcb0bdb998931bc7c615ff3e3d81702a"
+  },
+  "bundle_sha256": {
+    "dist/assets/index-MP30ANZB.js": "d796bc812c8967d39fa622b1c3e635ce81e74dcb5cfe38c25950e444128f1d26",
+    "dist/assets/index-De8xgVbj.css": "068206942f12369a5f4a55461111d9fb6a03e68dcb8f8376b8bc2b736afa03b6",
+    "dist/assets/index-Dx-nGeQj.js": "3a10708a4938d2b2f321fe93047d90170872106bb6c74e5eaa42a11ae495e2cb",
+    "dist/assets/index-UqRtUR2H.css": "0224b3ceda6075ff2ad8f8c1a73c2ff4c7fa490fa8543849336e7786c414bc8a"
+  },
+  "build_timing": "Build created after all runtime changes, before the final CSS checkpoint commit; embedded build label refers to the earlier local checkpoint. Runtime hashes identify the tested implementation.",
+  "renderer": "Chromium headless shell 1194; actual Three.js WebGL/SwiftShader. Focused DOM suite stops the animation loop after normal world startup and renders the real scene once per viewport. Contrast gallery images come from the normal-render broader run.",
+  "focused": {
+    "passed": 44,
+    "total": 44
+  },
+  "broader_attempt": {
+    "passed": 105,
+    "total": 107,
+    "open": "Desktop and portrait memory-tab operations timed out; root cause unproven. Do not claim the complete wider suite passed."
+  },
+  "pixels_edited": false
+}

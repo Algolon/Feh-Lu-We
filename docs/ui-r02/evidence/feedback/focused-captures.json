@@ -1,0 +1,62 @@
+[
+  {
+    "name": "phone-exploration",
+    "viewport": {
+      "width": 852,
+      "height": 393
+    },
+    "fixture": "Actual WebGL world rendered at the camera pose; animation loop stopped for focused UI checks.",
+    "source_path": "scripts/out/ui-r02-feedback-focused-final/phone-exploration.jpg",
+    "scene_note": "Actual BOSLUST scene from the existing review fixture."
+  },
+  {
+    "name": "small-exploration",
+    "viewport": {
+      "width": 640,
+      "height": 360
+    },
+    "fixture": "Actual WebGL world rendered at the camera pose; animation loop stopped for focused UI checks.",
+    "source_path": "scripts/out/ui-r02-feedback-focused-final/small-exploration.jpg",
+    "scene_note": "Actual BOSLUST scene from the existing review fixture."
+  },
+  {
+    "name": "portrait-exploration",
+    "viewport": {
+      "width": 393,
+      "height": 852
+    },
+    "fixture": "Actual WebGL world rendered at the camera pose; animation loop stopped for focused UI checks.",
+    "source_path": "scripts/out/ui-r02-feedback-focused-final/portrait-exploration.jpg",
+    "scene_note": "Actual BOSLUST scene from the existing review fixture."
+  },
+  {
+    "name": "portrait-objective",
+    "viewport": {
+      "width": 393,
+      "height": 852
+    },
+    "fixture": "Actual WebGL world rendered at the camera pose; animation loop stopped for focused UI checks.",
+    "source_path": "scripts/out/ui-r02-feedback-focused-final/portrait-objective.jpg",
+    "scene_note": "Actual BOSLUST scene from the existing review fixture."
+  },
+  {
+    "name": "portrait-packing",
+    "viewport": {
+      "width": 393,
+      "height": 852
+    },
+    "fixture": "Actual WebGL world rendered at the camera pose; animation loop stopped for focused UI checks.",
+    "source_path": "scripts/out/ui-r02-feedback-focused-final/portrait-packing.jpg",
+    "scene_note": "The packing screenshot uses a UI-only checklist fixture; it is not part of the delivered gallery."
+  },
+  {
+    "name": "desktop-exploration",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "fixture": "Actual WebGL world rendered at the camera pose; animation loop stopped for focused UI checks.",
+    "source_path": "scripts/out/ui-r02-feedback-focused-final/desktop-exploration.jpg",
+    "scene_note": "Actual BOSLUST scene from the existing review fixture."
+  }
+]

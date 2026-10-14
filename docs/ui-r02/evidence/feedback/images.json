@@ -1,0 +1,51 @@
+[
+  {
+    "path": "docs/ui-r02/evidence/feedback/phone-exploration.jpg",
+    "source_path": "scripts/out/ui-r02-feedback-focused-final/phone-exploration.jpg",
+    "size": 97303,
+    "sha256": "ca971f2ddaa6d6b3c03ac7950599345436ef7c0cbc3f6ca38a9cdf518b9add72",
+    "git_sha": "b3522f3c2f6bdd2d545ea08a1eef7e639e708abb"
+  },
+  {
+    "path": "docs/ui-r02/evidence/feedback/small-exploration.jpg",
+    "source_path": "scripts/out/ui-r02-feedback-focused-final/small-exploration.jpg",
+    "size": 71757,
+    "sha256": "40ff123b3528333379f67246299863f5f28350a083a5d230273395290dcfdbd5",
+    "git_sha": "2b7ab9d936efb6e8b9b93e52c4f45ae52777b5b2"
+  },
+  {
+    "path": "docs/ui-r02/evidence/feedback/desktop-exploration.jpg",
+    "source_path": "scripts/out/ui-r02-feedback-focused-final/desktop-exploration.jpg",
+    "size": 228269,
+    "sha256": "b759533436c627cb2a420f2a7aef39a103cdb28f56fbc89af09930838e0aaf46",
+    "git_sha": "5098edce976dd90adf9636276313be13631cccf5"
+  },
+  {
+    "path": "docs/ui-r02/evidence/feedback/portrait-exploration.jpg",
+    "source_path": "scripts/out/ui-r02-feedback-focused-final/portrait-exploration.jpg",
+    "size": 12148,
+    "sha256": "dd6a29318d2fa3d12d7bff8e1bfcbef19d8b97e43d646c2bd1f58a00129c067f",
+    "git_sha": "d8433b9e9ce752c459b44c79cded4a0d29fd4a9b"
+  },
+  {
+    "path": "docs/ui-r02/evidence/feedback/portrait-objective.jpg",
+    "source_path": "scripts/out/ui-r02-feedback-focused-final/portrait-objective.jpg",
+    "size": 14010,
+    "sha256": "5b15dbe12ce1bda7d948882a3460500bb71a6c9b1c5ab093a2a33659c998854a",
+    "git_sha": "9385b2327ec5d4c452144f666826b452ea9c1057"
+  },
+  {
+    "path": "docs/ui-r02/evidence/feedback/phone-boslust-dark.jpg",
+    "source_path": "scripts/out/ui-r02-feedback-final/phone-boslust-dark.jpg",
+    "size": 84384,
+    "sha256": "9731713d07e64c80d72b4bed49067412cc780a3412dae1c9cb974b6abc5d8296",
+    "git_sha": "135d0fc6758b2670a8a397bcb4ca349016d70971"
+  },
+  {
+    "path": "docs/ui-r02/evidence/feedback/phone-garden-bright.jpg",
+    "source_path": "scripts/out/ui-r02-feedback-final/phone-garden-bright.jpg",
+    "size": 88178,
+    "sha256": "de72ce77b44d01221e4438d5265b596c468b78c2a4c6b832660809e563944aae",
+    "git_sha": "c52f0b6461e14d55ee62395c64a11dd1045a701b"
+  }
+]

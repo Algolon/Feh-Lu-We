@@ -1,0 +1,949 @@
+[
+  {
+    "name": "phone: HUD bounds and hit areas",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "phone: idle action quiet; progression still present",
+    "ok": true,
+    "detail": {
+      "disabled": true,
+      "hidden": true,
+      "objective": "Open de lade van de ladekast in de hal."
+    }
+  },
+  {
+    "name": "phone: chrome icons use a warm metal color",
+    "ok": true,
+    "detail": [
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)"
+    ]
+  },
+  {
+    "name": "phone: marked objective sits beside hint without overlapping right controls",
+    "ok": true,
+    "detail": {
+      "beside": true,
+      "clear": true,
+      "marker": true,
+      "text": "Open de lade van de ladekast in de hal."
+    }
+  },
+  {
+    "name": "phone: objective has no backing and portrait uses its marker only",
+    "ok": true,
+    "detail": {
+      "background": "none",
+      "textVisible": true,
+      "triggerVisible": true,
+      "fontSize": "13px",
+      "state": "{\"flags\":{\"leftHome\":true,\"routeRestored\":true,\"visited.fork\":true},\"clues\":[\"c.invitation\",\"c.routeRestored\",\"c.letterstrook\"],\"inventory\":[\"invitation\",\"torch\",\"matches\",\"notebook\",\"frontKey\",\"cipherStrip\"]}"
+    }
+  },
+  {
+    "name": "phone: on-demand objective is readable in one focused overlay without changing records",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "phone: objective dismissal returns focus and world input",
+    "ok": true
+  },
+  {
+    "name": "phone: empty hands do not duplicate the inventory shortcut",
+    "ok": true
+  },
+  {
+    "name": "phone: bag opens original inventory",
+    "ok": true
+  },
+  {
+    "name": "phone: sprint shortcut works while another thumb holds movement",
+    "ok": true,
+    "detail": {
+      "run": 1,
+      "forward": 0.5232558139534883,
+      "modal": false
+    }
+  },
+  {
+    "name": "phone: sprint never moves player without movement input",
+    "ok": true,
+    "detail": {
+      "run": 1,
+      "x": 0,
+      "y": 0
+    }
+  },
+  {
+    "name": "phone: blur clears sprint and its pressed state",
+    "ok": true
+  },
+  {
+    "name": "phone: mobile categories remain left of the reading page",
+    "ok": true,
+    "detail": {
+      "left": true,
+      "top": true,
+      "contentHeight": 225.578125
+    }
+  },
+  {
+    "name": "phone: notebook bounds and hit areas",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "phone: bounded notebook leaves world margins and contains scrolling pages",
+    "ok": true,
+    "detail": {
+      "width": 745.1875,
+      "height": 302.578125,
+      "marginX": 53.40625,
+      "marginY": 45.203125,
+      "clipped": true,
+      "icons": [
+        "rgb(166, 126, 61)",
+        "rgb(128, 88, 48)",
+        "rgb(101, 64, 31)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)"
+      ]
+    }
+  },
+  {
+    "name": "phone: one focused overlay disables world and background controls",
+    "ok": true,
+    "detail": {
+      "enabled": false,
+      "overlays": 1,
+      "inert": true
+    }
+  },
+  {
+    "name": "phone: opening overlay resets sprint",
+    "ok": true
+  },
+  {
+    "name": "phone: evidence shows recorded clues only; reading changes no progression",
+    "ok": true,
+    "detail": {
+      "recorded": [
+        "c.invitation",
+        "c.routeRestored",
+        "c.letterstrook"
+      ],
+      "rendered": [
+        "c.letterstrook",
+        "c.routeRestored",
+        "c.invitation"
+      ]
+    }
+  },
+  {
+    "name": "phone: evidence content has a working independent scroll",
+    "ok": true,
+    "detail": {
+      "top": 562,
+      "overflow": true,
+      "last": "Letterstrook\n  ABCDEFGHIJKLMNOPQRSTUVWXY"
+    }
+  },
+  {
+    "name": "phone: empty memories expose no undiscovered entries",
+    "ok": true
+  },
+  {
+    "name": "phone: map route keeps undiscovered levels hidden",
+    "ok": true,
+    "detail": {
+      "modal": "notebook-map",
+      "basement": false,
+      "underground": false,
+      "unknown": true
+    }
+  },
+  {
+    "name": "phone: map wraps without overflow",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "phone: map back returns to notebook",
+    "ok": true
+  },
+  {
+    "name": "phone: Escape resumes input and restores HUD",
+    "ok": true
+  },
+  {
+    "name": "phone: explicit contextual action uses real reticle target",
+    "ok": true,
+    "detail": {
+      "target": "inspect.boslust",
+      "action": "Bekijken: gravureE"
+    }
+  },
+  {
+    "name": "phone: action button opens clue and records observation",
+    "ok": true
+  },
+  {
+    "name": "phone: close does not click through",
+    "ok": true
+  },
+  {
+    "name": "phone: selection triggers visible feedback",
+    "ok": true
+  },
+  {
+    "name": "phone: one selected item; real short feedback remains accessible",
+    "ok": true,
+    "detail": {
+      "selected": "matches",
+      "chips": 1,
+      "feedback": "Lucifers in de hand. Richt op iets en gebruik de actieknop.",
+      "ariaStatus": true
+    }
+  },
+  {
+    "name": "phone: contextual/selected layout fits",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "phone: selected item deselects through same persistent item button",
+    "ok": true
+  },
+  {
+    "name": "phone: inspected memory remains accessible, without solved badge",
+    "ok": true
+  },
+  {
+    "name": "phone: simulated asymmetric safe-area layout",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "phone: no browser/asset errors",
+    "ok": true,
+    "detail": []
+  },
+  {
+    "name": "small: HUD bounds and hit areas",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "small: idle action quiet; progression still present",
+    "ok": true,
+    "detail": {
+      "disabled": true,
+      "hidden": true,
+      "objective": "Open de lade van de ladekast in de hal."
+    }
+  },
+  {
+    "name": "small: chrome icons use a warm metal color",
+    "ok": true,
+    "detail": [
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)"
+    ]
+  },
+  {
+    "name": "small: marked objective sits beside hint without overlapping right controls",
+    "ok": true,
+    "detail": {
+      "beside": true,
+      "clear": true,
+      "marker": true,
+      "text": "Open de lade van de ladekast in de hal."
+    }
+  },
+  {
+    "name": "small: objective has no backing and portrait uses its marker only",
+    "ok": true,
+    "detail": {
+      "background": "none",
+      "textVisible": true,
+      "triggerVisible": true,
+      "fontSize": "13px",
+      "state": "{\"flags\":{\"leftHome\":true,\"routeRestored\":true,\"visited.fork\":true},\"clues\":[\"c.invitation\",\"c.routeRestored\",\"c.letterstrook\"],\"inventory\":[\"invitation\",\"torch\",\"matches\",\"notebook\",\"frontKey\",\"cipherStrip\"]}"
+    }
+  },
+  {
+    "name": "small: on-demand objective is readable in one focused overlay without changing records",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "small: objective dismissal returns focus and world input",
+    "ok": true
+  },
+  {
+    "name": "small: empty hands do not duplicate the inventory shortcut",
+    "ok": true
+  },
+  {
+    "name": "small: bag opens original inventory",
+    "ok": true
+  },
+  {
+    "name": "small: sprint shortcut works while another thumb holds movement",
+    "ok": true,
+    "detail": {
+      "run": 1,
+      "forward": 0.5232558139534883,
+      "modal": false
+    }
+  },
+  {
+    "name": "small: sprint never moves player without movement input",
+    "ok": true,
+    "detail": {
+      "run": 1,
+      "x": 0,
+      "y": 0
+    }
+  },
+  {
+    "name": "small: blur clears sprint and its pressed state",
+    "ok": true
+  },
+  {
+    "name": "small: mobile categories remain left of the reading page",
+    "ok": true,
+    "detail": {
+      "left": true,
+      "top": true,
+      "contentHeight": 198.515625
+    }
+  },
+  {
+    "name": "small: notebook bounds and hit areas",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "small: bounded notebook leaves world margins and contains scrolling pages",
+    "ok": true,
+    "detail": {
+      "width": 579.03125,
+      "height": 275.515625,
+      "marginX": 30.484375,
+      "marginY": 42.234375,
+      "clipped": true,
+      "icons": [
+        "rgb(166, 126, 61)",
+        "rgb(128, 88, 48)",
+        "rgb(101, 64, 31)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)"
+      ]
+    }
+  },
+  {
+    "name": "small: one focused overlay disables world and background controls",
+    "ok": true,
+    "detail": {
+      "enabled": false,
+      "overlays": 1,
+      "inert": true
+    }
+  },
+  {
+    "name": "small: opening overlay resets sprint",
+    "ok": true
+  },
+  {
+    "name": "small: evidence shows recorded clues only; reading changes no progression",
+    "ok": true,
+    "detail": {
+      "recorded": [
+        "c.invitation",
+        "c.routeRestored",
+        "c.letterstrook"
+      ],
+      "rendered": [
+        "c.letterstrook",
+        "c.routeRestored",
+        "c.invitation"
+      ]
+    }
+  },
+  {
+    "name": "small: evidence content has a working independent scroll",
+    "ok": true,
+    "detail": {
+      "top": 677,
+      "overflow": true,
+      "last": "Letterstrook\n  ABCDEFGHIJKLMNOPQRSTUVWXY"
+    }
+  },
+  {
+    "name": "small: empty memories expose no undiscovered entries",
+    "ok": true
+  },
+  {
+    "name": "small: map route keeps undiscovered levels hidden",
+    "ok": true,
+    "detail": {
+      "modal": "notebook-map",
+      "basement": false,
+      "underground": false,
+      "unknown": true
+    }
+  },
+  {
+    "name": "small: map wraps without overflow",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "small: map back returns to notebook",
+    "ok": true
+  },
+  {
+    "name": "small: Escape resumes input and restores HUD",
+    "ok": true
+  },
+  {
+    "name": "small: explicit contextual action uses real reticle target",
+    "ok": true,
+    "detail": {
+      "target": "inspect.boslust",
+      "action": "Bekijken: gravureE"
+    }
+  },
+  {
+    "name": "small: action button opens clue and records observation",
+    "ok": true
+  },
+  {
+    "name": "small: close does not click through",
+    "ok": true
+  },
+  {
+    "name": "small: selection triggers visible feedback",
+    "ok": true
+  },
+  {
+    "name": "small: one selected item; real short feedback remains accessible",
+    "ok": true,
+    "detail": {
+      "selected": "matches",
+      "chips": 1,
+      "feedback": "Lucifers in de hand. Richt op iets en gebruik de actieknop.",
+      "ariaStatus": true
+    }
+  },
+  {
+    "name": "small: contextual/selected layout fits",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "small: selected item deselects through same persistent item button",
+    "ok": true
+  },
+  {
+    "name": "small: home tutorial wraps without overlapping packing checklist; notebook remains discovery-gated",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false,
+      "objectiveBottom": 50.84375,
+      "checklistTop": 64,
+      "items": 5,
+      "notebookAvailable": false
+    }
+  },
+  {
+    "name": "small: no browser/asset errors",
+    "ok": true,
+    "detail": []
+  },
+  {
+    "name": "desktop: HUD bounds and hit areas",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "desktop: idle action quiet; progression still present",
+    "ok": true,
+    "detail": {
+      "disabled": true,
+      "hidden": true,
+      "objective": "Open de lade van de ladekast in de hal."
+    }
+  },
+  {
+    "name": "desktop: chrome icons use a warm metal color",
+    "ok": true,
+    "detail": [
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)"
+    ]
+  },
+  {
+    "name": "desktop: marked objective sits beside hint without overlapping right controls",
+    "ok": true,
+    "detail": {
+      "beside": true,
+      "clear": true,
+      "marker": true,
+      "text": "Open de lade van de ladekast in de hal."
+    }
+  },
+  {
+    "name": "desktop: objective has no backing and portrait uses its marker only",
+    "ok": true,
+    "detail": {
+      "background": "none",
+      "textVisible": true,
+      "triggerVisible": true,
+      "fontSize": "13px",
+      "state": "{\"flags\":{\"leftHome\":true,\"routeRestored\":true,\"visited.fork\":true},\"clues\":[\"c.invitation\",\"c.routeRestored\",\"c.letterstrook\"],\"inventory\":[\"invitation\",\"torch\",\"matches\",\"notebook\",\"frontKey\",\"cipherStrip\"]}"
+    }
+  },
+  {
+    "name": "desktop: on-demand objective is readable in one focused overlay without changing records",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "desktop: objective dismissal returns focus and world input",
+    "ok": true
+  },
+  {
+    "name": "desktop: empty hands do not duplicate the inventory shortcut",
+    "ok": true
+  },
+  {
+    "name": "desktop: bag opens original inventory",
+    "ok": true
+  },
+  {
+    "name": "desktop: notebook bounds and hit areas",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "desktop: bounded notebook leaves world margins and contains scrolling pages",
+    "ok": true,
+    "detail": {
+      "width": 1000,
+      "height": 700,
+      "marginX": 220,
+      "marginY": 100,
+      "clipped": true,
+      "icons": [
+        "rgb(166, 126, 61)",
+        "rgb(128, 88, 48)",
+        "rgb(101, 64, 31)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)"
+      ]
+    }
+  },
+  {
+    "name": "desktop: one focused overlay disables world and background controls",
+    "ok": true,
+    "detail": {
+      "enabled": false,
+      "overlays": 1,
+      "inert": true
+    }
+  },
+  {
+    "name": "desktop: evidence shows recorded clues only; reading changes no progression",
+    "ok": true,
+    "detail": {
+      "recorded": [
+        "c.invitation",
+        "c.routeRestored",
+        "c.letterstrook"
+      ],
+      "rendered": [
+        "c.letterstrook",
+        "c.routeRestored",
+        "c.invitation"
+      ]
+    }
+  },
+  {
+    "name": "desktop: evidence content has a working independent scroll",
+    "ok": true,
+    "detail": {
+      "top": 237,
+      "overflow": true,
+      "last": "Letterstrook\n  ABCDEFGHIJKLMNOPQRSTUVWXY"
+    }
+  },
+  {
+    "name": "desktop: suite completion",
+    "ok": false,
+    "detail": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-t=\"b\"]')\u001b[22m\n\u001b[2m    - locator resolved to <button role=\"tab\" data-t=\"b\" class=\"btn\" id=\"nb-tab-b\" tabindex=\"-1\" aria-selected=\"false\" aria-controls=\"nb-panel\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n"
+  },
+  {
+    "name": "portrait: HUD bounds and hit areas",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "portrait: idle action quiet; progression still present",
+    "ok": true,
+    "detail": {
+      "disabled": true,
+      "hidden": true,
+      "objective": "Open de lade van de ladekast in de hal."
+    }
+  },
+  {
+    "name": "portrait: chrome icons use a warm metal color",
+    "ok": true,
+    "detail": [
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)",
+      "rgb(232, 204, 160)"
+    ]
+  },
+  {
+    "name": "portrait: marked objective sits beside hint without overlapping right controls",
+    "ok": true,
+    "detail": {
+      "beside": true,
+      "clear": true,
+      "marker": true,
+      "text": "Open de lade van de ladekast in de hal."
+    }
+  },
+  {
+    "name": "portrait: objective has no backing and portrait uses its marker only",
+    "ok": true,
+    "detail": {
+      "background": "none",
+      "textVisible": false,
+      "triggerVisible": true,
+      "fontSize": "13px",
+      "state": "{\"flags\":{\"leftHome\":true,\"routeRestored\":true,\"visited.fork\":true},\"clues\":[\"c.invitation\",\"c.routeRestored\",\"c.letterstrook\"],\"inventory\":[\"invitation\",\"torch\",\"matches\",\"notebook\",\"frontKey\",\"cipherStrip\"]}"
+    }
+  },
+  {
+    "name": "portrait: on-demand objective is readable in one focused overlay without changing records",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "portrait: objective dismissal returns focus and world input",
+    "ok": true
+  },
+  {
+    "name": "portrait: empty hands do not duplicate the inventory shortcut",
+    "ok": true
+  },
+  {
+    "name": "portrait: bag opens original inventory",
+    "ok": true
+  },
+  {
+    "name": "portrait: sprint shortcut works while another thumb holds movement",
+    "ok": true,
+    "detail": {
+      "run": 1,
+      "forward": 0.5232558139534883,
+      "modal": false
+    }
+  },
+  {
+    "name": "portrait: sprint never moves player without movement input",
+    "ok": true,
+    "detail": {
+      "run": 1,
+      "x": 0,
+      "y": 0
+    }
+  },
+  {
+    "name": "portrait: blur clears sprint and its pressed state",
+    "ok": true
+  },
+  {
+    "name": "portrait: notebook opens category index before reading",
+    "ok": true
+  },
+  {
+    "name": "portrait: choosing category opens page and hides index",
+    "ok": true
+  },
+  {
+    "name": "portrait: category back restores index without closing overlay",
+    "ok": true
+  },
+  {
+    "name": "portrait: notebook bounds and hit areas",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "portrait: bounded notebook leaves world margins and contains scrolling pages",
+    "ok": true,
+    "detail": {
+      "width": 339.46875,
+      "height": 678.953125,
+      "marginX": 26.765625,
+      "marginY": 86.515625,
+      "clipped": true,
+      "icons": [
+        "rgb(166, 126, 61)",
+        "rgb(128, 88, 48)",
+        "rgb(101, 64, 31)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)",
+        "rgb(128, 88, 48)"
+      ]
+    }
+  },
+  {
+    "name": "portrait: one focused overlay disables world and background controls",
+    "ok": true,
+    "detail": {
+      "enabled": false,
+      "overlays": 1,
+      "inert": true
+    }
+  },
+  {
+    "name": "portrait: opening overlay resets sprint",
+    "ok": true
+  },
+  {
+    "name": "portrait: evidence shows recorded clues only; reading changes no progression",
+    "ok": true,
+    "detail": {
+      "recorded": [
+        "c.invitation",
+        "c.routeRestored",
+        "c.letterstrook"
+      ],
+      "rendered": [
+        "c.letterstrook",
+        "c.routeRestored",
+        "c.invitation"
+      ]
+    }
+  },
+  {
+    "name": "portrait: evidence content has a working independent scroll",
+    "ok": true,
+    "detail": {
+      "top": 494,
+      "overflow": true,
+      "last": "Letterstrook\n  ABCDEFGHIJKLMNOPQRSTUVWXY"
+    }
+  },
+  {
+    "name": "portrait: category back stays visible while evidence scrolls",
+    "ok": true,
+    "detail": {
+      "back": {
+        "x": 68.765625,
+        "y": 187.515625,
+        "width": 139.125,
+        "height": 48
+      },
+      "close": {
+        "x": 292.234375,
+        "y": 108.515625,
+        "width": 48,
+        "height": 48
+      },
+      "readingPage": {
+        "x": 52.765625,
+        "y": 167.515625,
+        "width": 301.46875,
+        "height": 585.953125
+      }
+    }
+  },
+  {
+    "name": "portrait: rotation reveals side categories and preserves selected evidence",
+    "ok": true,
+    "detail": {
+      "small": [],
+      "overflow": [],
+      "outside": [],
+      "fits": true,
+      "documentOverflow": false
+    }
+  },
+  {
+    "name": "portrait: rotation back restores reading pane and reachable back button",
+    "ok": true,
+    "detail": {
+      "heading": "Aanwijzingen",
+      "backVisible": true,
+      "focusInside": true,
+      "focus": "<button class=\"btn wa-index-back\" data-nb-index=\"\"><svg class=\"wa-icon\" width=\"1"
+    }
+  },
+  {
+    "name": "portrait: suite completion",
+    "ok": false,
+    "detail": "locator.tap: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-t=\"b\"]')\u001b[22m\n\u001b[2m    - locator resolved to <button data-t=\"b\" class=\"btn\" tabindex=\"0\" id=\"nb-tab-b\" aria-controls=\"nb-panel\">…</button>\u001b[22m\n\u001b[2m  - attempting tap action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - performing tap action\u001b[22m\n"
+  }
+]

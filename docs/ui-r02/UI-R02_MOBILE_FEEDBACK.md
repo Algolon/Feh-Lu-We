@@ -50,6 +50,22 @@ The grouping/action proposal is game-specific design judgment. Microsoft XAG 114
 
 FLW-PDI-01 was read from its existing project source. The copy is marked proposed/draft, not automatically active; task-specific approval and isolation rules remain authoritative.
 
-Validation: TypeScript, build and 267 unit tests passed. Browser matrix is running. Standard Chromium initially failed before opening a page on the sandbox's forbidden process-singleton socket; the same headless shell used for the previous successful UI QA was restored. No assertions were removed to bypass the launch failure.
+Validation: TypeScript, build and **267 unit tests passed**. The focused HUD/navigation suite passed **44/44 checks** across 852 × 393, 640 × 360, 393 × 852 touch and 1440 × 900 desktop. Native pointer actions, focus/escape, target sizes, overflow, records, item selection and memory-tab activation were checked. It loads the real game, then stops the animation loop and renders the actual world once per viewport to limit redundant software-GPU work. This is UI validation, not a new gameplay walkthrough or speed benchmark. The packing probe supplies five real labels with fixture status bits only to the UI; it does not alter game progression and is excluded from the delivered gallery.
+
+The wider normal-render UI attempt passed **105/107** executed checks; desktop and portrait memory-tab operations timed out. The exact cause is unproven. The same native memory-tab actions pass when background rendering is stopped, suggesting a timing/resource factor rather than demonstrating a production regression. Full normal-render regression completion and physical-device review remain open. No assertions or timeout criteria were weakened. Earlier overlapping runner output was discarded; the reported runs use separate directories.
+
+Standard Chromium initially failed before opening a page on the sandbox's forbidden process-singleton socket; the prior successful headless shell was restored. A marker hit-test failure was fixed by explicitly enabling pointer events inside the otherwise passive HUD cue.
+
+Reproduce focused checks: `E2E_OUT=scripts/out/ui-r02-feedback-focused node scripts/with-preview.mjs e2e-ui-r02-feedback.mjs`. The broad UI script retains all four profiles and the updated empty-hand contract. Runtime/test/bundle hashes and fixture limits are in [provenance](evidence/feedback/build-provenance.json); [focused results](evidence/feedback/focused-results.json), [wider attempt](evidence/feedback/broader-attempt-results.json) and [sprint diagnosis](evidence/feedback/diagnostics.json) are preserved.
+
+## Actual browser review images
+
+![Landscape objective without backing](evidence/feedback/phone-exploration.jpg)
+
+![Portrait marker without the text column](evidence/feedback/portrait-exploration.jpg)
+
+![On-demand reading panel](evidence/feedback/portrait-objective.jpg)
+
+[Smaller landscape](evidence/feedback/small-exploration.jpg) · [Desktop](evidence/feedback/desktop-exploration.jpg) · [Dark BOSLUST](evidence/feedback/phone-boslust-dark.jpg) · [Bright garden](evidence/feedback/phone-garden-bright.jpg). All seven JPGs are unedited browser captures of the actual WebGL world and DOM interface. The first five use the focused rendering fixture; the contrast pair uses the normal-render wider run.
 
 Inventory and speed changes await a design decision. This follow-up remains draft for visual review; no merge or deployment is included.
