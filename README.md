@@ -1,5 +1,7 @@
 # Feh Lu We
 
+Mobile development budget: [FLW-PB01](docs/PERFORMANCE_BUDGET.md) — **750,000 submitted camera triangles per view**, provisional; device validation pending. Draw-call guide remains 150.
+
 A mobile-first, first-person, stylised 3D puzzle-exploration game celebrating a friends group's Veluwe
 Weekends. You pack at home, arrive early at a fictional estate and follow three threads of clues — at the table,
 in the margins, off the paths — through a two-storey manor, a glass pool conservatory and sauna, a lawn with

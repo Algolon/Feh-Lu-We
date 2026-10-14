@@ -1,10 +1,10 @@
 # SKY-C01 — owner review, recommendation and implementation handover
 
-**Status: READY FOR OWNER REVIEW. No merge, deployment or final selection.**
+**Update — owner selected A and requested normal-game implementation on 14 October 2026. A is now enabled on the SKY branch. See [activation and validation](ACTIVATION.md). This comparison below records the preceding prototype/recommendation stage; its earlier B recommendation and pending selection are superseded. No production merge/deployment.**
 
 ![Current production / A / B, matched game renders](evidence/comparison.jpg)
 
-## Decision
+## Initial recommendation (superseded by owner selection of A)
 
 Recommend **B, authored masks with the existing phase-driven shader**, as the continuation basis. Both candidates materially improve silhouette variety and remove the production shader's circular depressions. The visible A/B difference is modest; B is preferred for precise outline editing and its lower measured software fragment cost, not because the screenshots establish a decisive artistic victory.
 

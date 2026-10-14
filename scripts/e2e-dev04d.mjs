@@ -1,3 +1,4 @@
+import { lowViewWithinBudget } from './performance-budget.mjs';
 // DEV-04D browser suite against the production build (npm run build && npm run preview).
 // Usage: node scripts/e2e-dev04d.mjs [baseUrl]   (E2E_OUT=dir for results). Behaviour checks, no pixel snapshots.
 // D1 (wall art):
@@ -8,7 +9,7 @@
 //   4. each canvas is visible (nothing in front of it), seated on its wall (no floating, nothing sunk) and framed;
 //   5. the bathroom and guest-WC mirrors are framed, non-emissive (no glowing panel left);
 //   6. ids / checkpoints / save keys / save version unchanged (D1 adds no interactable);
-//   7. render budgets (low quality, doors closed) of every D1 view inside the mobile guide; the art adds ≤ 1 draw call.
+//   7. render budgets (low quality, doors closed) of every D1 view inside the provisional PB01 mobile budget; the art adds ≤ 1 draw call.
 // D2 (FLW 3D pieces and the key family):
 //   8. keys: the four pickups keep their ids / items, lie on their container floor (seated, not floating, not sunk),
 //      are offered only when the container is open and are targeted by the reticle from a standing pose;
@@ -162,8 +163,8 @@ try {
     return rows;
   }, { SLOTS });
   writeFileSync(`${OUT}/budget.json`, JSON.stringify(budget, null, 2));
-  const over = budget.filter((b) => b.calls > 150 || b.triangles > 250000);
-  log(`render budgets (low, doors closed): all ${budget.length} D1 views inside the mobile guide`, over.length === 0, (over.length ? over : budget).map((b) => `${b.view} ${b.room} ${b.calls}/${b.triangles}`).join(', '));
+  const over = budget.filter((b) => !lowViewWithinBudget(b));
+  log(`render budgets (low, doors closed): all ${budget.length} D1 views inside the provisional PB01 mobile budget`, over.length === 0, (over.length ? over : budget).map((b) => `${b.view} ${b.room} ${b.calls}/${b.triangles}`).join(', '));
   // batching contract: the atlas is ONE material; each room chunk merges all its paintings into one mesh (as every
   // shared material does), so the art costs at most one draw call per chunk in view, never one per painting
   log('the art atlas costs one merged mesh per room chunk (never one per painting)', atlas.meshes === atlas.chunks.length && atlas.meshes < Object.keys(SLOTS).length, `${atlas.meshes} meshes for ${SLOTS.length} paintings in ${atlas.chunks.length} chunks; max chunks with art in one view ${Math.max(...budget.map((b) => b.artMeshesVisible))}`);

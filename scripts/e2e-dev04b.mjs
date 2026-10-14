@@ -1,3 +1,4 @@
+import { lowViewWithinBudget } from './performance-budget.mjs';
 // DEV-04B visual grammar & asset convergence: browser suite against the production build (npm run build && npm run preview).
 // Usage: node scripts/e2e-dev04b.mjs [baseUrl]   (E2E_OUT=dir for results)
 // Generic contracts over the whole estate (no pixel comparisons):
@@ -7,7 +8,7 @@
 //   - every room-culled batch is drawn in the rooms its geometry stands in (a piece batched with the wrong area is
 //     invisible from inside its own room — the class of bug the service-wing split once caused in the guest WC);
 //   - the DEV-04C hooks are in place: the Wickerman candle positions are published, the bar sign keeps its art id;
-//   - canonical ids, checkpoints and the save schema are unchanged; the DEV-04B hero views stay inside the mobile guide.
+//   - canonical ids, checkpoints and the save schema are unchanged; the DEV-04B hero views stay inside the provisional PB01 mobile budget.
 import { chromium } from 'playwright-core';
 import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 
@@ -27,7 +28,7 @@ const E = (page, fn, arg) => page.evaluate(fn, arg);
 
 // families converged in DEV-04B (Asm.begin names): each must be built at least once through the construction audit
 const FAMILIES = ['bed', 'chair.ladder', 'chair.upholstered', 'chair.carver', 'chair.spindle', 'table', 'lounger', 'sideboard', 'shelvingUnit', 'billiardTable', 'cueRack', 'coatRail', 'logBasket', 'floorGlobe', 'writingDesk', 'larder', 'boardGameSet', 'well', 'golfBag', 'golfTray', 'hallCommode', 'wc', 'utilitySink', 'pedestalBasin', 'bathtub', 'lectern'];
-// hero / room views of DEV-04B (low quality, standard door state): within 150 calls / 250 k triangles
+// hero / room views of DEV-04B (low quality, standard door state): within 150 calls / PB01 camera triangles
 const HERO_VIEWS = { campfire: [26.0, 0, 21.5, -2.182], well: [146.6, 0, 41.6, -2.356], wickermanFigure: [180.0, 1.2, 59.6, 3.142], golfChute: [63.0, 0, 54.2, 3.142], library: [83.2, 0.15, 99.2, -1.71], dining: [96.4, 0.15, 83.0, 1.047], atticObservatory: [97.0, 6.65, 96.8, 2.094], atticCommon: [86.0, 6.65, 97.5, 0.0], copaBar: [127.0, 0.15, 107.0, 0.436], cottage: [25.0, 4.15, 158.6, 0.0] };
 
 const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
@@ -121,7 +122,7 @@ try {
     }
     return out;
   }, HERO_VIEWS);
-  log('DEV-04B hero / room views within the mobile guide at low (≤ 150 calls, ≤ 250 k triangles)', Object.values(budget).every((b) => b.calls <= 150 && b.triangles <= 250000), JSON.stringify(budget));
+  log('DEV-04B hero / room views within the provisional PB01 mobile budget at low (≤ 150 calls, ≤ PB01 camera triangles)', Object.values(budget).every((b) => lowViewWithinBudget(b)), JSON.stringify(budget));
 } catch (e) {
   log('suite crashed', false, String(e?.stack ?? e).slice(0, 500));
 }

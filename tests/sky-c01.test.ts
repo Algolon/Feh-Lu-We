@@ -6,9 +6,10 @@ import { SKY_FRAGMENT } from '../src/world/skyShader';
 import { cloudFragment, CLOUD_VARIANTS } from '../src/world/cloudPrototypes';
 const sky = (w: World) => (w.scene.children.find(o => (o as THREE.Mesh).material instanceof THREE.ShaderMaterial) as THREE.Mesh<THREE.SphereGeometry, THREE.ShaderMaterial>).material;
 describe('SKY-C01 isolation and approved environment contracts', () => {
-  it('ignores candidate selection outside review and does not allocate an atlas', () => {
+  it('uses owner-approved A outside review, ignores candidate overrides and does not allocate an atlas', () => {
     const w = new World('estate'), e = addEnvironment(w, false);
-    for (const v of CLOUD_VARIANTS) { e.cloudVariant=v; e.update(.6,new THREE.Vector3()); expect(sky(w).fragmentShader).toBe(SKY_FRAGMENT); expect(sky(w).uniforms.uCloudAtlas.value).toBe(null); }
+    expect(sky(w).fragmentShader).toBe(cloudFragment('procedural'));
+    for (const v of CLOUD_VARIANTS) { e.cloudVariant=v; e.update(.6,new THREE.Vector3()); expect(sky(w).fragmentShader).toBe(cloudFragment('procedural')); expect(sky(w).uniforms.uCloudAtlas.value).toBe(null); }
     w.dispose();
   });
   it('uses identical global light, haze and cloud palette for every candidate throughout all phases', () => {

@@ -4,19 +4,21 @@ import * as THREE from 'three';
 import { World, type GameApi } from '../interactions/world';
 import { makeCtx, wall, floor, ceiling } from './arch';
 import { box, cyl, blob, compound, v3 } from './kit';
-import { table as _t, roundTable, chair, bookshelf, armchair, rug, plant, painting, tableLamp, floorLamp, part } from './furniture';
+import { table as _t, roundTable, chair, bookshelf, armchair, rug, plant, flwPainting, joinery, tableLamp, floorLamp, part } from './furniture';
 import { makeFire } from './fire';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place, lightableItemLabel } from '../interactions/props';
 import type { SceneExtras } from '../core/game';
 import { has } from '../core/state';
 import { tutorialMissing } from '../puzzles/rules';
 import { beginOpenings } from './openings';
+import { Asm, artMats } from './artkit';
+import { homeTorch, homeMatches, homeNotebook, homeInvitation, homeTravelCase } from './homeProps';
 import { addKey, presentKey, keyLiner, linerWhenOpen, LINER_TOP } from './d2props';
 void _t;
 
 export function buildHome(g: GameApi): { world: World; extras: SceneExtras } {
   const w = new World('home');
-  beginOpenings(); // own opening / wall-art registry (never mixed into the estate's)
+  w.scene.userData.openings = beginOpenings(); // home participates in the same wall-art checks as the estate
   w.ambience = 'home';
   w.col.bounds = { minX: 0.3, maxX: 7.7, minZ: 0.3, maxZ: 5.7 };
   const c = makeCtx(w.col, 'home');
@@ -40,8 +42,16 @@ export function buildHome(g: GameApi): { world: World; extras: SceneExtras } {
   wall(c, 'z', 8.1, 0, 6, 0, 2.8, { ...wallOpts, openings: [{ at: 3, w: 1.05, h: 2.2 }] });
   // wainscot
   for (const [ax, f, a0, a1] of [['x', 0.02, 0, 8], ['x', 5.98, 0, 8], ['z', 0.02, 0, 6]] as const) {
-    if (ax === 'x') box(c.b, k.M.wood, '#7a5232', (a0 + a1) / 2, 0, f, a1 - a0, 0.9, 0.04, { chunk: 'home', uv: 1 });
-    else box(c.b, k.M.wood, '#7a5232', f, 0, (a0 + a1) / 2, 0.04, 0.9, a1 - a0, { chunk: 'home', uv: 1 });
+    if (ax === 'x') box(c.b, k.M.wood, '#7a5232', (a0 + a1) / 2, 0, f, a1 - a0, 0.78, 0.04, { chunk: 'home', uv: 1 });
+    else box(c.b, k.M.wood, '#7a5232', f, 0, (a0 + a1) / 2, 0.04, 0.78, a1 - a0, { chunk: 'home', uv: 1 });
+  }
+
+  // The panel cap ends below the sill (0.79); it never covers the bottom of the glass.
+  for (const z of [0.025, 5.975]) box(c.b, k.M.paint, '#6c4c32', 4, 0.76, z, 8, 0.025, 0.05, { chunk: 'home' });
+  box(c.b, k.M.paint, '#6c4c32', 0.025, 0.76, 3, 0.05, 0.025, 6, { chunk: 'home' });
+  // Complete the lower sash locally; shared estate window construction belongs to GEO-R01.
+  for (const [x, z] of [[3, 0.025], [2.5, 5.975], [5.2, 5.975]]) {
+    box(c.b, k.M.paint, '#e2d6bc', x, 0.835, z, 1.1, 0.065, 0.044, { chunk: 'home', jitter: 0 });
   }
 
   // furniture
@@ -53,8 +63,8 @@ export function buildHome(g: GameApi): { world: World; extras: SceneExtras } {
   armchair(c, 1.2, 5.1, 0, Math.PI * 0.85, '#7a3a3a');
   plant(c, 7.5, 5.5, 0, 1.2);
   plant(c, 0.5, 0.5, 0, 0.9);
-  painting(c, 0.04, 1.75, 1.6, Math.PI / 2, 0.8, 0.6, 2);
-  painting(c, 3.0, 1.7, 0.04, 0, 1.0, 0.7, 5);
+  flwPainting(c, 'FLW-D2-007', 0.04, 1.75, 1.6, Math.PI / 2);
+  flwPainting(c, 'FLW-D2-002', 1.25, 1.7, 0.04, 0); // solid wall, clear of the window at x=3
   // coat rack + boots by the door
   cyl(c.b, k.M.wood, '#5a3a22', 7.55, 0, 4.7, 0.04, 0.05, 1.8, 6, { chunk: 'home' });
   box(c.b, k.M.paint, '#3f5a35', 7.62, 0.9, 4.5, 0.12, 0.8, 0.3, { chunk: 'home' });
@@ -65,17 +75,29 @@ export function buildHome(g: GameApi): { world: World; extras: SceneExtras } {
 
   // dressoir (sideboard) against the west wall, facing east, with a working drawer
   const dx = 0.32, dz = 3.2;
-  box(c.b, k.M.wood, '#6b4426', dx, 0, dz, 0.5, 0.86, 1.8, { chunk: 'home', uv: 1 });
-  box(c.b, k.M.wood, '#5a3a22', dx, 0.86, dz, 0.56, 0.05, 1.9, { chunk: 'home', uv: 1 });
-  for (const zz of [dz - 0.6, dz + 0.6]) box(c.b, k.M.paint, '#5a3a22', dx + 0.26, 0.1, zz, 0.02, 0.5, 0.5, { chunk: 'home' });
+  // Built cabinet: lower cupboard, end panels, back and top. The upper drawer cavity is empty.
+  const M = artMats(), cabinet = new Asm(c.b, 'home', dx, 0, dz, Math.PI / 2);
+  const { sb, bx } = joinery;
+  cabinet.add(M.timber, '#6b4426', sb(1.8, 0.56, 0.5, 0.008), 0, 0.32, 0);
+  cabinet.add(M.timber, '#4e3320', sb(1.9, 0.055, 0.56, 0.009), 0, 0.8875, 0);
+  cabinet.add(M.timber, '#4e3320', sb(1.84, 0.07, 0.53, 0.008), 0, 0.035, 0);
+  cabinet.add(M.timber, '#6b4426', bx(1.8, 0.26, 0.035), 0, 0.73, -0.232);
+  for (const x of [-0.875, 0.875]) cabinet.add(M.timber, '#6b4426', sb(0.05, 0.26, 0.5, 0.004), x, 0.73, 0);
+  for (const x of [-0.62, 0.62]) {
+    cabinet.add(M.timber, '#765438', sb(0.52, 0.25, 0.04, 0.005), x, 0.73, 0.23);
+    cabinet.add(M.timber, '#543b29', sb(0.48, 0.4, 0.028, 0.005), x, 0.31, 0.26);
+  }
+  cabinet.add(M.timber, '#493426', bx(1.7, 0.025, 0.44), 0, 0.62, 0); // cavity floor
   w.col.addBox(0.05, 0.6, dz - 0.95, dz + 0.95, 0, 0.92);
-  const drawer = makeDrawer(w, g, { id: 'home.drawer', x: dx + 0.03, y: 0.73, z: dz, yaw: Math.PI / 2, w: 0.7, h: 0.18, d: 0.42, color: '#7a5232' });
+  const drawer = makeDrawer(w, g, { id: 'home.drawer', x: dx + 0.03, y: 0.73, z: dz, yaw: Math.PI / 2, w: 0.7, h: 0.18, d: 0.42, travel: 0.46, color: '#7a5232' });
   const key = presentKey(compound((b) => addKey(b, 'frontKey'))); // DEV-04D D2: FLW-K3-001 key-family model; D2-R: ×1.7 presentation
   const felt = keyLiner('felt'); // D2-R: on a green felt liner (contrast for the brass key and red tag)
   felt.position.set(0, -0.06, 0);
+  felt.rotation.y = Math.PI / 2;
   drawer.slider.add(felt);
   linerWhenOpen(w, felt, drawer.isOpen);
   key.position.set(0, -0.06 + LINER_TOP.felt, 0);
+  key.rotation.y = Math.PI / 2; // long silhouette across the tray, clear of the front lip
   drawer.slider.add(key);
   makePickup(w, g, { id: 'pk.frontKey', item: 'frontKey', obj: key, available: drawer.isOpen, hit: [0.3, 0.12, 0.3] });
 
@@ -87,47 +109,32 @@ export function buildHome(g: GameApi): { world: World; extras: SceneExtras } {
 
   // items on the table
   const y = 0.76;
-  const env = compound((b) => {
-    box(b, k.M.paint, '#f3ead8', 0, 0, 0, 0.26, 0.012, 0.18);
-    cyl(b, k.M.paint, '#9a2a2a', 0.02, 0.012, -0.02, 0.03, 0.03, 0.01, 10);
-  });
+  const env = homeInvitation();
   place(env, 3.75, y, 3.2, 0.3);
   w.scene.add(env);
-  makePickup(w, g, { id: 'pk.invitation', item: 'invitation', obj: env, after: () => g.inspect('c.invitation') });
+  makePickup(w, g, { id: 'pk.invitation', item: 'invitation', obj: env, hit: [0.29, 0.08, 0.21], after: () => g.inspect('c.invitation') });
 
-  const torch = compound((b) => {
-    cyl(b, k.M.paint, '#2b2b2b', 0, 0, 0, 0.035, 0.035, 0.22, 10, { rx: Math.PI / 2 });
-    cyl(b, k.M.paint, '#c9c9c9', 0, 0, 0.13, 0.05, 0.04, 0.05, 10, { rx: Math.PI / 2 });
-  });
-  place(torch, 4.3, y + 0.04, 3.05, 1.2);
+  const torch = homeTorch();
+  place(torch, 4.3, y, 3.05, -2.0);
   w.scene.add(torch);
-  makePickup(w, g, { id: 'pk.torch', item: 'torch', obj: torch, after: () => g.toast('Zaklamp ingepakt. Aan/uit via de Tas-knop (of F).') });
+  makePickup(w, g, { id: 'pk.torch', item: 'torch', obj: torch, hit: [0.16, 0.15, 0.38], after: () => g.toast('Zaklamp ingepakt. Aan/uit via de Tas-knop (of F).') });
 
-  const matches = compound((b) => {
-    box(b, k.M.paint, '#e6dcc0', 0, 0, 0, 0.1, 0.03, 0.06);
-    box(b, k.M.paint, '#3f6a3a', 0, 0.03, 0, 0.07, 0.003, 0.04);
-  });
+  const matches = homeMatches();
   place(matches, 4.12, y, 2.72, 0.4);
   w.scene.add(matches);
   makePickup(w, g, {
-    id: 'pk.matches', item: 'matches', obj: matches,
+    id: 'pk.matches', item: 'matches', obj: matches, hit: [0.18, 0.09, 0.12],
     after: () => g.toast('Lucifers ingepakt. Probeer ze eens: kies ze in je tas en gebruik ze op de kaars.'),
   });
 
-  const nb = compound((b) => {
-    box(b, k.M.paint, '#4a2f2a', 0, 0, 0, 0.18, 0.025, 0.24);
-    box(b, k.M.paint, '#efe6d0', 0.005, 0.005, 0, 0.17, 0.022, 0.23);
-  });
+  const nb = homeNotebook();
   place(nb, 3.82, y, 2.8, -0.2);
   w.scene.add(nb);
-  makePickup(w, g, { id: 'pk.notebook', item: 'notebook', obj: nb, after: () => g.toast('Notitieboek ingepakt. Alles wat je bekijkt, wordt erin bewaard (knop Notities).') });
+  makePickup(w, g, { id: 'pk.notebook', item: 'notebook', obj: nb, hit: [0.23, 0.10, 0.29], after: () => g.toast('Notitieboek ingepakt. Alles wat je bekijkt, wordt erin bewaard (knop Notities).') });
 
   // bag (decor) and candle (optional item-use lesson)
-  const bag = compound((b) => {
-    box(b, k.M.paint, '#4f5f3a', 0, 0, 0, 0.42, 0.26, 0.24);
-    box(b, k.M.paint, '#7a5232', 0, 0.26, 0, 0.36, 0.03, 0.04);
-  });
-  place(bag, 3.55, y, 3.45, 0.4);
+  const bag = homeTravelCase();
+  place(bag, 3.72, y, 3.43, 0.2);
   w.scene.add(bag);
   const candle = compound((b) => {
     cyl(b, k.M.paint, '#b8892f', 0, 0, 0, 0.06, 0.07, 0.02, 10);

@@ -1,0 +1,22 @@
+{
+  "priorSkyCheckpoint": "39cc57ad2ec2050bfba16857470eaf927436e663",
+  "integratedProductionBaseline": "5ca306da6a32f33b4c93c90ace3556e2787c67d4",
+  "buildMarker": "39cc57a (build created from activation working tree; file hashes below bind tested source)",
+  "sourceSHA256": {
+    "src/world/env.ts": "b3baaa2779432a975f1f65d3413906c54fe5d83dd30c9f83e948cde22251854b",
+    "src/world/cloudPrototypes.ts": "965b09f51d785c41cc4264bd1441958d4619e4dc851bb840670e791955b5bfea",
+    "src/world/skyShader.ts": "79ec43318ffb7b5f6288f3cd4f2c320bb2940e08c243752db234b3b96b505850",
+    "src/world/lightingPhases.ts": "e5606120a61483dbad1efe47f9a1e26b0a788333fbda5bb6e3aa8faa7447f539",
+    "src/ui/lightingReview.ts": "04eba8df15b85a8670317550ec41f2f1219bb030c1a40713c13be2808f42c731",
+    "src/world/home.ts": "23648957687954a06217cd757c57008822fc90c21852859509ba2ab309048ae5",
+    "src/world/homeProps.ts": "79a5348e4be2ff08b12662f05e9d564e3be3554dd37dd0998911f5b489bbfeed",
+    "src/world/estateWoods.ts": "f93b04972f113d4f24ec629a7411a64fed1d97b58c0425b1e888ac402439b41c"
+  },
+  "cloudGeometryChanged": false,
+  "approvedPhasePaletteChanged": false,
+  "runtimeEffectOfPB01Integration": "No runtime rendering change; estateWoods comment plus documented budget/test guards.",
+  "buildAssetsSHA256": {
+    "index-lJyWkVXc.js": "9c785af1a83cdc4f72a9a60852da62e6b50ca8d73a456f43380c6cdfd4d672b8"
+  },
+  "validated": "278 unit tests, 18 browser checks, 12 selected gameplay/save checks, 4 PB01 budget checks"
+}

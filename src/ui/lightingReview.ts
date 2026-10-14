@@ -48,7 +48,7 @@ export function mountLightingReview(game: Game) {
   env.mode = q.get('system') === 'baseline' ? 'baseline' : 'pilot';
   env.clouds = q.get('clouds') !== '0';
   const requestedCloud = q.get('sky');
-  env.cloudVariant = CLOUD_VARIANTS.includes(requestedCloud as CloudVariant) ? requestedCloud as CloudVariant : 'production';
+  env.cloudVariant = CLOUD_VARIANTS.includes(requestedCloud as CloudVariant) ? requestedCloud as CloudVariant : 'procedural';
   const bar = document.createElement('div'); bar.id = 'review-bar';
   bar.setAttribute('role', 'toolbar'); bar.setAttribute('aria-label', 'ENV-L01 lighting review');
   // Styling belongs to this dev-only panel; gameplay HUD/notebook CSS stays untouched.
@@ -60,7 +60,7 @@ export function mountLightingReview(game: Game) {
     <label>Locatie <select data-view>${Object.keys(LIGHTING_VIEWS).map(v => `<option>${v}</option>`).join('')}</select></label>
     <label>Kwaliteit <select data-quality><option value="low">Low</option><option value="high">High</option></select></label>
     <label><input data-clouds type="checkbox" ${env.clouds ? 'checked' : ''}> Wolken</label>
-    <label>SKY-C01 <select data-sky><option value="production">Huidige wolken</option><option value="procedural">A · Procedureel</option><option value="masks">B · Getekende maskers</option></select></label>
+    <label>SKY-C01 <select data-sky><option value="production">Vorige wolken · ENV-L01</option><option value="procedural">A · Procedureel (gekozen)</option><option value="masks">B · Getekende maskers</option></select></label>
     <label>Diagnose <select data-diagnostic><option value="normal">Normaal</option><option value="hemi">Hemisphere only</option><option value="sun">Directional only</option><option value="practicals">Alleen lokale lampen (test)</option><option value="no-surfaces">Zonder authored surface shader</option><option value="no-fog">Zonder mist</option><option value="no-shadows">Zonder schaduwen</option></select></label>
     <button data-report>Download renderdiagnose</button>
     <button data-progress>Volg puzzelvoortgang</button>

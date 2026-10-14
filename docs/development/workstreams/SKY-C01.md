@@ -1,6 +1,9 @@
 # SKY-C01 — owner-review handover
 - Branch: `sky-c01-organic-clouds`
-- State: COMPLETE FOR OWNER REVIEW. No merge, deploy or final production selection.
+- State: A SELECTED BY OWNER AND IMPLEMENTED IN NORMAL GAMEPLAY ON FEATURE BRANCH. No production merge/deploy.
+- Activation baseline: published TUT-R01 + PB01 `5ca306da6a32f33b4c93c90ace3556e2787c67d4`; no SKY file overlap.
+- Current activation/validation: [ACTIVATION.md](../../sky-c01/ACTIVATION.md), 278 units / 18 browser checks / 12 walkthrough-save checks / 4 budget checks passed.
+- Historical comparison/source checkpoints and B recommendation below are retained as pre-selection records; superseded by owner selection of A.
 - Baseline: `fe74db0b471d7816d840e6c223b92950adf5639f`, verified live bundle build marker and source SHA256.
 - Last verified source checkpoint: remote `331ac62190405a6b5dd8ec6d813b150c2eca2cee`, Git tree `e6ceaf489aab1190113074414fb3f58115625dc9`, content-equivalent to rendered local `3934f95` retained on `sky-c01-local-provenance`.
 - This final evidence/report increment preserves that cloud implementation; branch history supplies its exact commit.
