@@ -1,0 +1,30 @@
+START touch
+PASS touch: normal animation advances with ENV-L01
+CAPTURE phone-landscape
+CAPTURE small-landscape
+CAPTURE phone-inventory
+PASS touch: inventory selection retains meaningful equipped control
+CAPTURE phone-selected-item
+PASS touch: feedback cannot cover focused objective
+PASS touch: deselect hides duplicate hand control
+CAPTURE phone-boslust-dark
+CAPTURE phone-garden-bright
+CAPTURE portrait-marker
+CAPTURE portrait-objective
+PASS portrait: outside dismissal restores input and marker focus
+PASS portrait: rotation preserves evidence selection
+PASS portrait: normal-render memory tab after evidence/rotation
+CAPTURE portrait-memory-tab
+PASS portrait: existing map opens
+PASS portrait: notebook returns world input without changing records
+PASS portrait: no WebGL program errors
+START desktop
+PASS desktop: normal animation advances with ENV-L01
+CAPTURE desktop-landscape
+PASS desktop: normal-render memory tab after evidence/rotation
+CAPTURE desktop-memory-tab
+PASS desktop: existing map opens
+PASS desktop: notebook returns world input without changing records
+PASS desktop: no WebGL program errors
+PASS no page or asset errors
+16/16 recovery checks passed

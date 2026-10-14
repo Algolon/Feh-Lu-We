@@ -1,0 +1,221 @@
+[
+  {
+    "path": "docs/ui-r02/evidence/feedback/phone-exploration.jpg",
+    "source_path": "scripts/out/ui-r02-feedback-final/phone-boslust-exploration.jpg",
+    "size": 96008,
+    "sha256": "4d15cc016d89e5a65cdad2cf856dd0e1b99357bdd76bedea5f270231291d2c95",
+    "git_sha": "7769ea54eef3a15c950e37873ab51472bbf5d729",
+    "capture": {
+      "name": "phone-boslust-exploration",
+      "note": "",
+      "viewport": {
+        "width": 852,
+        "height": 393
+      },
+      "sha256": "4d15cc016d89e5a65cdad2cf856dd0e1b99357bdd76bedea5f270231291d2c95",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "dusk": 0.026857109711085462,
+      "modal": null,
+      "target": null,
+      "clues": [
+        "c.invitation",
+        "c.routeRestored",
+        "c.letterstrook"
+      ]
+    }
+  },
+  {
+    "path": "docs/ui-r02/evidence/feedback/small-exploration.jpg",
+    "source_path": "scripts/out/ui-r02-feedback-final/small-boslust-exploration.jpg",
+    "size": 70490,
+    "sha256": "9905f6be62da98765212142cdeabb7e542f8f5d85a211394d0c41e49e4d2e8e4",
+    "git_sha": "1280069af42acb5aec1dafb040ce67e8b7111b83",
+    "capture": {
+      "name": "small-boslust-exploration",
+      "note": "",
+      "viewport": {
+        "width": 640,
+        "height": 360
+      },
+      "sha256": "9905f6be62da98765212142cdeabb7e542f8f5d85a211394d0c41e49e4d2e8e4",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "dusk": 0.026857109711085462,
+      "modal": null,
+      "target": null,
+      "clues": [
+        "c.invitation",
+        "c.routeRestored",
+        "c.letterstrook"
+      ]
+    }
+  },
+  {
+    "path": "docs/ui-r02/evidence/feedback/desktop-exploration.jpg",
+    "source_path": "scripts/out/ui-r02-feedback-final/desktop-boslust-exploration.jpg",
+    "size": 225253,
+    "sha256": "22cc4d8b59e9cecc0f3813a90bf172064c3e75c33f74875c23360f5ef076479c",
+    "git_sha": "3f89fd8f3b7ed2dc73a3cefbcd3dff630cfd5b17",
+    "capture": {
+      "name": "desktop-boslust-exploration",
+      "note": "",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "sha256": "22cc4d8b59e9cecc0f3813a90bf172064c3e75c33f74875c23360f5ef076479c",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "dusk": 0.02549702032070666,
+      "modal": null,
+      "target": null,
+      "clues": [
+        "c.invitation",
+        "c.routeRestored",
+        "c.letterstrook"
+      ]
+    }
+  },
+  {
+    "path": "docs/ui-r02/evidence/feedback/portrait-exploration.jpg",
+    "source_path": "scripts/out/ui-r02-feedback-final/portrait-boslust-exploration.jpg",
+    "size": 73072,
+    "sha256": "5a28f531dda298f2d2d4ee7bd9e2dd0828c3f0c47702172f4e8facd69aceb68a",
+    "git_sha": "e3595b9afe5e12f4363cf98064aaf580560ab09a",
+    "capture": {
+      "name": "portrait-boslust-exploration",
+      "note": "",
+      "viewport": {
+        "width": 393,
+        "height": 852
+      },
+      "sha256": "5a28f531dda298f2d2d4ee7bd9e2dd0828c3f0c47702172f4e8facd69aceb68a",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "dusk": 0.026857109711085462,
+      "modal": null,
+      "target": null,
+      "clues": [
+        "c.invitation",
+        "c.routeRestored",
+        "c.letterstrook"
+      ]
+    }
+  },
+  {
+    "path": "docs/ui-r02/evidence/feedback/portrait-objective.jpg",
+    "source_path": "scripts/out/ui-r02-feedback-final/portrait-objective-on-demand.jpg",
+    "size": 56715,
+    "sha256": "64a37cad49f3845c608f363ab39ee4c72a3fb5846bcca00188f9625dd5eebf31",
+    "git_sha": "2f07ebd530582b94194942be73c9e7e5ec31217d",
+    "capture": {
+      "name": "portrait-objective-on-demand",
+      "note": "Actual progression text; no new information or state edits.",
+      "viewport": {
+        "width": 393,
+        "height": 852
+      },
+      "sha256": "64a37cad49f3845c608f363ab39ee4c72a3fb5846bcca00188f9625dd5eebf31",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "dusk": 0.05151121410732798,
+      "modal": "objective",
+      "target": null,
+      "clues": [
+        "c.invitation",
+        "c.routeRestored",
+        "c.letterstrook"
+      ]
+    }
+  },
+  {
+    "path": "docs/ui-r02/evidence/feedback/phone-boslust-dark.jpg",
+    "source_path": "scripts/out/ui-r02-feedback-final/phone-boslust-dark.jpg",
+    "size": 84384,
+    "sha256": "9731713d07e64c80d72b4bed49067412cc780a3412dae1c9cb974b6abc5d8296",
+    "git_sha": "135d0fc6758b2670a8a397bcb4ca349016d70971",
+    "capture": {
+      "name": "phone-boslust-dark",
+      "note": "Dusk set to .95 in capture fixture; production lighting code unchanged.",
+      "viewport": {
+        "width": 852,
+        "height": 393
+      },
+      "sha256": "9731713d07e64c80d72b4bed49067412cc780a3412dae1c9cb974b6abc5d8296",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "dusk": 0.7670489211744456,
+      "modal": null,
+      "target": null,
+      "clues": [
+        "c.invitation",
+        "c.routeRestored",
+        "c.letterstrook",
+        "c.boslust"
+      ]
+    }
+  },
+  {
+    "path": "docs/ui-r02/evidence/feedback/phone-garden-bright.jpg",
+    "source_path": "scripts/out/ui-r02-feedback-final/phone-garden-bright.jpg",
+    "size": 88178,
+    "sha256": "de72ce77b44d01221e4438d5265b596c468b78c2a4c6b832660809e563944aae",
+    "git_sha": "c52f0b6461e14d55ee62395c64a11dd1045a701b",
+    "capture": {
+      "name": "phone-garden-bright",
+      "note": "Actual production garden at start phase.",
+      "viewport": {
+        "width": 852,
+        "height": 393
+      },
+      "sha256": "de72ce77b44d01221e4438d5265b596c468b78c2a4c6b832660809e563944aae",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 122,
+        "yaw": 0,
+        "pitch": 0.05
+      },
+      "dusk": 0.01474013431295936,
+      "modal": null,
+      "target": null,
+      "clues": [
+        "c.invitation",
+        "c.routeRestored",
+        "c.letterstrook",
+        "c.boslust"
+      ]
+    }
+  }
+]

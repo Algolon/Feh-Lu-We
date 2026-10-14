@@ -1,0 +1,248 @@
+[
+  {
+    "name": "phone: unbacked smaller objective / portrait marker",
+    "ok": true,
+    "detail": {
+      "background": "none",
+      "font": "13px",
+      "visible": true,
+      "beside": true,
+      "clear": true
+    }
+  },
+  {
+    "name": "phone: empty hand shortcut hidden",
+    "ok": true
+  },
+  {
+    "name": "phone: HUD targets and overflow",
+    "ok": true,
+    "detail": {
+      "fits": true,
+      "overflow": false,
+      "small": false
+    }
+  },
+  {
+    "name": "phone: focused readable objective",
+    "ok": true,
+    "detail": {
+      "fits": true,
+      "overflow": false,
+      "small": false
+    }
+  },
+  {
+    "name": "phone: keyboard focus stays in the one-control dialog",
+    "ok": true
+  },
+  {
+    "name": "phone: dismissal restores focus / input / unchanged records",
+    "ok": true
+  },
+  {
+    "name": "phone: single bag entry still opens inventory",
+    "ok": true
+  },
+  {
+    "name": "phone: native memory-tab activation works independently of background rendering",
+    "ok": true
+  },
+  {
+    "name": "phone: notebook reading returns input without changing records",
+    "ok": true
+  },
+  {
+    "name": "small: unbacked smaller objective / portrait marker",
+    "ok": true,
+    "detail": {
+      "background": "none",
+      "font": "13px",
+      "visible": true,
+      "beside": true,
+      "clear": true
+    }
+  },
+  {
+    "name": "small: empty hand shortcut hidden",
+    "ok": true
+  },
+  {
+    "name": "small: HUD targets and overflow",
+    "ok": true,
+    "detail": {
+      "fits": true,
+      "overflow": false,
+      "small": false
+    }
+  },
+  {
+    "name": "small: focused readable objective",
+    "ok": true,
+    "detail": {
+      "fits": true,
+      "overflow": false,
+      "small": false
+    }
+  },
+  {
+    "name": "small: keyboard focus stays in the one-control dialog",
+    "ok": true
+  },
+  {
+    "name": "small: dismissal restores focus / input / unchanged records",
+    "ok": true
+  },
+  {
+    "name": "small: single bag entry still opens inventory",
+    "ok": true
+  },
+  {
+    "name": "small: native memory-tab activation works independently of background rendering",
+    "ok": true
+  },
+  {
+    "name": "small: notebook reading returns input without changing records",
+    "ok": true
+  },
+  {
+    "name": "portrait: unbacked smaller objective / portrait marker",
+    "ok": true,
+    "detail": {
+      "background": "none",
+      "font": "13px",
+      "visible": false,
+      "beside": true,
+      "clear": true
+    }
+  },
+  {
+    "name": "portrait: empty hand shortcut hidden",
+    "ok": true
+  },
+  {
+    "name": "portrait: HUD targets and overflow",
+    "ok": true,
+    "detail": {
+      "fits": true,
+      "overflow": false,
+      "small": false
+    }
+  },
+  {
+    "name": "portrait: focused readable objective",
+    "ok": true,
+    "detail": {
+      "fits": true,
+      "overflow": false,
+      "small": false
+    }
+  },
+  {
+    "name": "portrait: keyboard focus stays in the one-control dialog",
+    "ok": true
+  },
+  {
+    "name": "portrait: dismissal restores focus / input / unchanged records",
+    "ok": true
+  },
+  {
+    "name": "portrait: single bag entry still opens inventory",
+    "ok": true
+  },
+  {
+    "name": "portrait: native memory-tab activation works independently of background rendering",
+    "ok": true
+  },
+  {
+    "name": "portrait: notebook reading returns input without changing records",
+    "ok": true
+  },
+  {
+    "name": "touch: meaningful selected item remains visible",
+    "ok": true
+  },
+  {
+    "name": "touch: deselect remains available",
+    "ok": true
+  },
+  {
+    "name": "portrait: packing checklist is absent from HUD",
+    "ok": true
+  },
+  {
+    "name": "portrait: all packing requirements remain accessible",
+    "ok": true
+  },
+  {
+    "name": "touch: no page or asset errors",
+    "ok": true,
+    "detail": []
+  },
+  {
+    "name": "desktop: unbacked smaller objective / portrait marker",
+    "ok": true,
+    "detail": {
+      "background": "none",
+      "font": "13px",
+      "visible": true,
+      "beside": true,
+      "clear": true
+    }
+  },
+  {
+    "name": "desktop: empty hand shortcut hidden",
+    "ok": true
+  },
+  {
+    "name": "desktop: HUD targets and overflow",
+    "ok": true,
+    "detail": {
+      "fits": true,
+      "overflow": false,
+      "small": false
+    }
+  },
+  {
+    "name": "desktop: focused readable objective",
+    "ok": true,
+    "detail": {
+      "fits": true,
+      "overflow": false,
+      "small": false
+    }
+  },
+  {
+    "name": "desktop: keyboard focus stays in the one-control dialog",
+    "ok": true
+  },
+  {
+    "name": "desktop: dismissal restores focus / input / unchanged records",
+    "ok": true
+  },
+  {
+    "name": "desktop: single bag entry still opens inventory",
+    "ok": true
+  },
+  {
+    "name": "desktop: native memory-tab activation works independently of background rendering",
+    "ok": true
+  },
+  {
+    "name": "desktop: notebook reading returns input without changing records",
+    "ok": true
+  },
+  {
+    "name": "desktop: meaningful selected item remains visible",
+    "ok": true
+  },
+  {
+    "name": "desktop: deselect remains available",
+    "ok": true
+  },
+  {
+    "name": "desktop: no page or asset errors",
+    "ok": true,
+    "detail": []
+  }
+]

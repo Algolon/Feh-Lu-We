@@ -52,7 +52,7 @@ export class UI {
       <div id="topbar-l">
         <button class="hud-btn" id="b-menu" aria-label="Pauze en instellingen" title="Pauze · Esc">${archiveIcon('menu')}<span class="lbl">Pauze</span></button>
         <button class="hud-btn" id="b-hint" aria-label="Hint" title="Hint · H">${archiveIcon('hint')}<span class="lbl">Hint</span></button>
-        <div id="progress-cue"><div id="objective-row">${archiveIcon('marker', 20)}<div id="objective" aria-live="polite"></div></div><div id="checklist" hidden></div></div>
+        <div id="progress-cue"><div id="objective-row"><button class="hud-btn objective-trigger" id="b-objective" aria-label="Huidige draad en voorbereiding bekijken" aria-haspopup="dialog" title="Huidige draad bekijken">${archiveIcon('marker', 20)}</button><div id="objective" aria-live="polite"></div></div><div id="checklist" hidden></div></div>
       </div>
       <div id="topbar-r">
         <button class="hud-btn" id="b-notes" aria-label="Notitieboek" title="Notitieboek · N">${archiveIcon('notes')}<span class="lbl">Notities</span></button>
@@ -82,6 +82,7 @@ export class UI {
     tap($('#b-bag', this.hud), h.bag);
     tap(this.notebookBtn, h.notebook);
     tap($('#b-hint', this.hud), h.hint);
+    tap($('#b-objective', this.hud), () => this.openObjective());
     tap(this.held, () => this.heldName ? h.deselect() : h.bag());
     // Own the second thumb's pointer independently of native click synthesis,
     // so the joystick and sprint control can be used together. Keep keyboard/mouse activation.
@@ -162,11 +163,22 @@ export class UI {
 
   setObjective(text: string) {
     this.objective.textContent = text;
+    if (this.modalKind === 'objective') $('.wa-objective-detail', this.overlay).textContent = text;
+  }
+
+  /** On-demand reading keeps portrait exploration quiet without hiding progression. */
+  private openObjective() {
+    this.modal('Huidige draad', `<p class="wa-objective-detail">${esc(this.objective.textContent ?? '')}</p><div class="wa-preparation"${this.checklist.hidden ? ' hidden' : ''}>${this.checklist.hidden ? '' : this.checklist.innerHTML}</div>`, undefined, 'objective');
   }
 
   setChecklist(items: { name: string; done: boolean }[] | null) {
     this.checklist.hidden = !items;
     if (items) this.checklist.innerHTML = `<b>Inpakken</b><ul>${items.map((i) => `<li class="${i.done ? 'done' : ''}">${i.done ? '☑' : '☐'} ${esc(i.name)}</li>`).join('')}</ul>`;
+    if (this.modalKind === 'objective') {
+      const preparation = $('.wa-preparation', this.overlay);
+      preparation.hidden = !items;
+      preparation.innerHTML = items ? this.checklist.innerHTML : '';
+    }
   }
 
   async fadeOut() {
@@ -213,7 +225,7 @@ export class UI {
     this.overlay.onkeydown = (e) => {
       if (e.key === 'Escape') { e.stopPropagation(); this.closeModal(); }
       // Notebook navigation/scroll keys belong to the focused research interface, not the world input.
-      if (archive) e.stopPropagation();
+      if (archive || kind === 'objective') e.stopPropagation();
       if (e.key !== 'Tab') return;
       const controls = [...this.overlay.querySelectorAll<HTMLElement>('button, input, textarea, select, summary, [tabindex="0"]')].filter((el) => !el.hasAttribute('disabled') && el.tabIndex >= 0 && el.getClientRects().length > 0);
       const first = controls[0], last = controls[controls.length - 1];

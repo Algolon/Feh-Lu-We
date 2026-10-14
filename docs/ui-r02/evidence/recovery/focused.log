@@ -1,0 +1,45 @@
+PASS phone: unbacked smaller objective / portrait marker
+PASS phone: empty hand shortcut hidden
+PASS phone: HUD targets and overflow
+PASS phone: focused readable objective
+PASS phone: keyboard focus stays in the one-control dialog
+PASS phone: dismissal restores focus / input / unchanged records
+PASS phone: single bag entry still opens inventory
+PASS phone: native memory-tab activation works independently of background rendering
+PASS phone: notebook reading returns input without changing records
+PASS small: unbacked smaller objective / portrait marker
+PASS small: empty hand shortcut hidden
+PASS small: HUD targets and overflow
+PASS small: focused readable objective
+PASS small: keyboard focus stays in the one-control dialog
+PASS small: dismissal restores focus / input / unchanged records
+PASS small: single bag entry still opens inventory
+PASS small: native memory-tab activation works independently of background rendering
+PASS small: notebook reading returns input without changing records
+PASS portrait: unbacked smaller objective / portrait marker
+PASS portrait: empty hand shortcut hidden
+PASS portrait: HUD targets and overflow
+PASS portrait: focused readable objective
+PASS portrait: keyboard focus stays in the one-control dialog
+PASS portrait: dismissal restores focus / input / unchanged records
+PASS portrait: single bag entry still opens inventory
+PASS portrait: native memory-tab activation works independently of background rendering
+PASS portrait: notebook reading returns input without changing records
+PASS touch: meaningful selected item remains visible
+PASS touch: deselect remains available
+PASS portrait: packing checklist is absent from HUD
+PASS portrait: all packing requirements remain accessible
+PASS touch: no page or asset errors
+PASS desktop: unbacked smaller objective / portrait marker
+PASS desktop: empty hand shortcut hidden
+PASS desktop: HUD targets and overflow
+PASS desktop: focused readable objective
+PASS desktop: keyboard focus stays in the one-control dialog
+PASS desktop: dismissal restores focus / input / unchanged records
+PASS desktop: single bag entry still opens inventory
+PASS desktop: native memory-tab activation works independently of background rendering
+PASS desktop: notebook reading returns input without changing records
+PASS desktop: meaningful selected item remains visible
+PASS desktop: deselect remains available
+PASS desktop: no page or asset errors
+44/44 focused UI checks passed
