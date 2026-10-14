@@ -1,0 +1,7301 @@
+{
+  "sourceSHA": "3934f9536b2641ee45f85e91d5a60bb7ff233c62",
+  "start": {
+    "index-BdgQt9oh.js": "782ea88bce61d4616f65673e5989aa93e768ebc9be282c36e2a36c15602eff84",
+    "sky-c01-cloud-atlas-Cddpw5eC.png": "083fa77ff7d3b4abd27fabe1c0552d8305b5e83e4efc10ef1983623d4c16285f"
+  },
+  "end": {
+    "index-BdgQt9oh.js": "782ea88bce61d4616f65673e5989aa93e768ebc9be282c36e2a36c15602eff84",
+    "sky-c01-cloud-atlas-Cddpw5eC.png": "083fa77ff7d3b4abd27fabe1c0552d8305b5e83e4efc10ef1983623d4c16285f"
+  },
+  "browser": "141.0.7390.37",
+  "conditions": "Three.js game canvas JPEG; WebGL2 ANGLE SwiftShader. DPR1 touch/mobile viewport 915x412 or 412x915; Low cap1, High cap1.5. Fixed poses/phase/room blend; settled same-world LOD. Timings GPU-synchronized software wall times, NOT Samsung FPS. 5 warmup + 7 samples per round, 3 rotated rounds.",
+  "rows": [
+    {
+      "file": "sky-0-landscape-low-production.jpg",
+      "name": "sky",
+      "t": 0,
+      "variant": "production",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 63,
+      "triangles": 135101,
+      "textures": 33,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "sky-0-landscape-low-procedural.jpg",
+      "name": "sky",
+      "t": 0,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 63,
+      "triangles": 135101,
+      "textures": 33,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "sky-0-landscape-low-masks.jpg",
+      "name": "sky",
+      "t": 0,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 63,
+      "triangles": 135101,
+      "textures": 34,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "sky-1-landscape-low-production.jpg",
+      "name": "sky",
+      "t": 0.3333333333333333,
+      "variant": "production",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 63,
+      "triangles": 135101,
+      "textures": 34,
+      "light": {
+        "sun": 2.4,
+        "hemi": 1.55,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5840784178830671,
+          0.6938717612856897,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.6514056374127929,
+          0.5840784178830671,
+          0.4735314961384573
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "sky-1-landscape-low-procedural.jpg",
+      "name": "sky",
+      "t": 0.3333333333333333,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 63,
+      "triangles": 135101,
+      "textures": 34,
+      "light": {
+        "sun": 2.4,
+        "hemi": 1.55,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5840784178830671,
+          0.6938717612856897,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.6514056374127929,
+          0.5840784178830671,
+          0.4735314961384573
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "sky-1-landscape-low-masks.jpg",
+      "name": "sky",
+      "t": 0.3333333333333333,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 63,
+      "triangles": 135101,
+      "textures": 34,
+      "light": {
+        "sun": 2.4,
+        "hemi": 1.55,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5840784178830671,
+          0.6938717612856897,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.6514056374127929,
+          0.5840784178830671,
+          0.4735314961384573
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "sky-2-landscape-low-production.jpg",
+      "name": "sky",
+      "t": 0.6666666666666666,
+      "variant": "production",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 63,
+      "triangles": 135101,
+      "textures": 34,
+      "light": {
+        "sun": 0,
+        "hemi": 2,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.34670405634441115
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "sky-2-landscape-low-procedural.jpg",
+      "name": "sky",
+      "t": 0.6666666666666666,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 63,
+      "triangles": 135101,
+      "textures": 34,
+      "light": {
+        "sun": 0,
+        "hemi": 2,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.34670405634441115
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "sky-2-landscape-low-masks.jpg",
+      "name": "sky",
+      "t": 0.6666666666666666,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 63,
+      "triangles": 135101,
+      "textures": 34,
+      "light": {
+        "sun": 0,
+        "hemi": 2,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.34670405634441115
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "sky-3-landscape-low-production.jpg",
+      "name": "sky",
+      "t": 1,
+      "variant": "production",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 63,
+      "triangles": 135101,
+      "textures": 34,
+      "light": {
+        "sun": 0,
+        "hemi": 1.85,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.28314874041918053
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "sky-3-landscape-low-procedural.jpg",
+      "name": "sky",
+      "t": 1,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 63,
+      "triangles": 135101,
+      "textures": 34,
+      "light": {
+        "sun": 0,
+        "hemi": 1.85,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.28314874041918053
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "sky-3-landscape-low-masks.jpg",
+      "name": "sky",
+      "t": 1,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 63,
+      "triangles": 135101,
+      "textures": 34,
+      "light": {
+        "sun": 0,
+        "hemi": 1.85,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.28314874041918053
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "garden-0-landscape-low-production.jpg",
+      "name": "garden",
+      "t": 0,
+      "variant": "production",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 105,
+      "triangles": 209727,
+      "textures": 38,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "garden-0-landscape-low-procedural.jpg",
+      "name": "garden",
+      "t": 0,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 105,
+      "triangles": 209727,
+      "textures": 38,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "garden-0-landscape-low-masks.jpg",
+      "name": "garden",
+      "t": 0,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 105,
+      "triangles": 209727,
+      "textures": 38,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "garden-1-landscape-low-production.jpg",
+      "name": "garden",
+      "t": 0.3333333333333333,
+      "variant": "production",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 105,
+      "triangles": 209727,
+      "textures": 38,
+      "light": {
+        "sun": 2.4,
+        "hemi": 1.55,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5840784178830671,
+          0.6938717612856897,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.6514056374127929,
+          0.5840784178830671,
+          0.4735314961384573
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "garden-1-landscape-low-procedural.jpg",
+      "name": "garden",
+      "t": 0.3333333333333333,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 105,
+      "triangles": 209727,
+      "textures": 38,
+      "light": {
+        "sun": 2.4,
+        "hemi": 1.55,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5840784178830671,
+          0.6938717612856897,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.6514056374127929,
+          0.5840784178830671,
+          0.4735314961384573
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "garden-1-landscape-low-masks.jpg",
+      "name": "garden",
+      "t": 0.3333333333333333,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 105,
+      "triangles": 209727,
+      "textures": 38,
+      "light": {
+        "sun": 2.4,
+        "hemi": 1.55,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5840784178830671,
+          0.6938717612856897,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.6514056374127929,
+          0.5840784178830671,
+          0.4735314961384573
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "garden-2-landscape-low-production.jpg",
+      "name": "garden",
+      "t": 0.6666666666666666,
+      "variant": "production",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 105,
+      "triangles": 209727,
+      "textures": 38,
+      "light": {
+        "sun": 0,
+        "hemi": 2,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.34670405634441115
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "garden-2-landscape-low-procedural.jpg",
+      "name": "garden",
+      "t": 0.6666666666666666,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 105,
+      "triangles": 209727,
+      "textures": 38,
+      "light": {
+        "sun": 0,
+        "hemi": 2,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.34670405634441115
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "garden-2-landscape-low-masks.jpg",
+      "name": "garden",
+      "t": 0.6666666666666666,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 105,
+      "triangles": 209727,
+      "textures": 38,
+      "light": {
+        "sun": 0,
+        "hemi": 2,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.34670405634441115
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "garden-3-landscape-low-production.jpg",
+      "name": "garden",
+      "t": 1,
+      "variant": "production",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 105,
+      "triangles": 209727,
+      "textures": 38,
+      "light": {
+        "sun": 0,
+        "hemi": 1.85,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.28314874041918053
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "garden-3-landscape-low-procedural.jpg",
+      "name": "garden",
+      "t": 1,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 105,
+      "triangles": 209727,
+      "textures": 38,
+      "light": {
+        "sun": 0,
+        "hemi": 1.85,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.28314874041918053
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "garden-3-landscape-low-masks.jpg",
+      "name": "garden",
+      "t": 1,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 105,
+      "triangles": 209727,
+      "textures": 38,
+      "light": {
+        "sun": 0,
+        "hemi": 1.85,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.28314874041918053
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "arrival-0-landscape-low-production.jpg",
+      "name": "arrival",
+      "t": 0,
+      "variant": "production",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 128,
+      "triangles": 211858,
+      "textures": 41,
+      "light": {
+        "sun": 2.0414722222222226,
+        "hemi": 1.686462962962963,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6402515509707811,
+          0.7272805213472602,
+          0.8195878606998335
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.5010688316955079,
+          0.6013558042028664,
+          0.5596860535832917
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "arrival-0-landscape-low-procedural.jpg",
+      "name": "arrival",
+      "t": 0,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 128,
+      "triangles": 211858,
+      "textures": 41,
+      "light": {
+        "sun": 2.0414722222222226,
+        "hemi": 1.686462962962963,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6402515509707811,
+          0.7272805213472602,
+          0.8195878606998335
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.5010688316955079,
+          0.6013558042028664,
+          0.5596860535832917
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "arrival-0-landscape-low-masks.jpg",
+      "name": "arrival",
+      "t": 0,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 128,
+      "triangles": 211858,
+      "textures": 41,
+      "light": {
+        "sun": 2.0414722222222226,
+        "hemi": 1.686462962962963,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6402515509707811,
+          0.7272805213472602,
+          0.8195878606998335
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.5010688316955079,
+          0.6013558042028664,
+          0.5596860535832917
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "arrival-1-landscape-low-production.jpg",
+      "name": "arrival",
+      "t": 0.3333333333333333,
+      "variant": "production",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 128,
+      "triangles": 211858,
+      "textures": 41,
+      "light": {
+        "sun": 2.333111111111111,
+        "hemi": 1.5376574074074074,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5816539357483677,
+          0.6917841301095938,
+          0.8195878606998335
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.633662634538734,
+          0.576779290875588,
+          0.47002931751000876
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "arrival-1-landscape-low-procedural.jpg",
+      "name": "arrival",
+      "t": 0.3333333333333333,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 128,
+      "triangles": 211858,
+      "textures": 41,
+      "light": {
+        "sun": 2.333111111111111,
+        "hemi": 1.5376574074074074,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5816539357483677,
+          0.6917841301095938,
+          0.8195878606998335
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.633662634538734,
+          0.576779290875588,
+          0.47002931751000876
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "arrival-1-landscape-low-masks.jpg",
+      "name": "arrival",
+      "t": 0.3333333333333333,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 128,
+      "triangles": 211858,
+      "textures": 41,
+      "light": {
+        "sun": 2.333111111111111,
+        "hemi": 1.5376574074074074,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5816539357483677,
+          0.6917841301095938,
+          0.8195878606998335
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.633662634538734,
+          0.576779290875588,
+          0.47002931751000876
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "arrival-2-landscape-low-production.jpg",
+      "name": "arrival",
+      "t": 0.6666666666666666,
+      "variant": "production",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 128,
+      "triangles": 211858,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.984074074074074,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.3494910933814482
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "arrival-2-landscape-low-procedural.jpg",
+      "name": "arrival",
+      "t": 0.6666666666666666,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 128,
+      "triangles": 211858,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.984074074074074,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.3494910933814482
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "arrival-2-landscape-low-masks.jpg",
+      "name": "arrival",
+      "t": 0.6666666666666666,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 128,
+      "triangles": 211858,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.984074074074074,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.3494910933814482
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "arrival-3-landscape-low-production.jpg",
+      "name": "arrival",
+      "t": 1,
+      "variant": "production",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 128,
+      "triangles": 211858,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.8352685185185187,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.28593577745621757
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "arrival-3-landscape-low-procedural.jpg",
+      "name": "arrival",
+      "t": 1,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 128,
+      "triangles": 211858,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.8352685185185187,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.28593577745621757
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "arrival-3-landscape-low-masks.jpg",
+      "name": "arrival",
+      "t": 1,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 128,
+      "triangles": 211858,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.8352685185185187,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.28593577745621757
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "woodland-0-landscape-low-production.jpg",
+      "name": "woodland",
+      "t": 0,
+      "variant": "production",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 87,
+      "triangles": 227344,
+      "textures": 41,
+      "light": {
+        "sun": 1.806,
+        "hemi": 1.632,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.623240698372425,
+          0.7144856878221478,
+          0.806721916308658
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.46963718930013887,
+          0.5645841851020806,
+          0.5394673741508856
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "woodland-0-landscape-low-procedural.jpg",
+      "name": "woodland",
+      "t": 0,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 87,
+      "triangles": 227344,
+      "textures": 41,
+      "light": {
+        "sun": 1.806,
+        "hemi": 1.632,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.623240698372425,
+          0.7144856878221478,
+          0.806721916308658
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.46963718930013887,
+          0.5645841851020806,
+          0.5394673741508856
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "woodland-0-landscape-low-masks.jpg",
+      "name": "woodland",
+      "t": 0,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 87,
+      "triangles": 227344,
+      "textures": 41,
+      "light": {
+        "sun": 1.806,
+        "hemi": 1.632,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.623240698372425,
+          0.7144856878221478,
+          0.806721916308658
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.46963718930013887,
+          0.5645841851020806,
+          0.5394673741508856
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "woodland-1-landscape-low-production.jpg",
+      "name": "woodland",
+      "t": 0.3333333333333333,
+      "variant": "production",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 87,
+      "triangles": 227344,
+      "textures": 41,
+      "light": {
+        "sun": 2.064,
+        "hemi": 1.488,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5718996239041114,
+          0.6833850558429757,
+          0.806721916308658
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.5622779950686829,
+          0.5474130357059627,
+          0.4559391569815994
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "woodland-1-landscape-low-procedural.jpg",
+      "name": "woodland",
+      "t": 0.3333333333333333,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 87,
+      "triangles": 227344,
+      "textures": 41,
+      "light": {
+        "sun": 2.064,
+        "hemi": 1.488,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5718996239041114,
+          0.6833850558429757,
+          0.806721916308658
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.5622779950686829,
+          0.5474130357059627,
+          0.4559391569815994
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "woodland-1-landscape-low-masks.jpg",
+      "name": "woodland",
+      "t": 0.3333333333333333,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 87,
+      "triangles": 227344,
+      "textures": 41,
+      "light": {
+        "sun": 2.064,
+        "hemi": 1.488,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5718996239041114,
+          0.6833850558429757,
+          0.806721916308658
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.5622779950686829,
+          0.5474130357059627,
+          0.4559391569815994
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "woodland-2-landscape-low-production.jpg",
+      "name": "woodland",
+      "t": 0.6666666666666666,
+      "variant": "production",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 87,
+      "triangles": 227344,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.92,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.36070405634441116
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "woodland-2-landscape-low-procedural.jpg",
+      "name": "woodland",
+      "t": 0.6666666666666666,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 87,
+      "triangles": 227344,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.92,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.36070405634441116
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "woodland-2-landscape-low-masks.jpg",
+      "name": "woodland",
+      "t": 0.6666666666666666,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 87,
+      "triangles": 227344,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.92,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.36070405634441116
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "woodland-3-landscape-low-production.jpg",
+      "name": "woodland",
+      "t": 1,
+      "variant": "production",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 87,
+      "triangles": 227344,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.776,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.2971487404191805
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "woodland-3-landscape-low-procedural.jpg",
+      "name": "woodland",
+      "t": 1,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 87,
+      "triangles": 227344,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.776,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.2971487404191805
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "woodland-3-landscape-low-masks.jpg",
+      "name": "woodland",
+      "t": 1,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 87,
+      "triangles": 227344,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.776,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.2971487404191805
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "sky-0-portrait-low-production.jpg",
+      "name": "sky",
+      "t": 0,
+      "variant": "production",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 57,
+      "triangles": 133260,
+      "textures": 41,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "sky-0-portrait-low-procedural.jpg",
+      "name": "sky",
+      "t": 0,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 57,
+      "triangles": 133260,
+      "textures": 41,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "sky-0-portrait-low-masks.jpg",
+      "name": "sky",
+      "t": 0,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 57,
+      "triangles": 133260,
+      "textures": 41,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "sky-1-portrait-low-production.jpg",
+      "name": "sky",
+      "t": 0.3333333333333333,
+      "variant": "production",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 57,
+      "triangles": 133260,
+      "textures": 41,
+      "light": {
+        "sun": 2.4,
+        "hemi": 1.55,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5840784178830671,
+          0.6938717612856897,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.6514056374127929,
+          0.5840784178830671,
+          0.4735314961384573
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "sky-1-portrait-low-procedural.jpg",
+      "name": "sky",
+      "t": 0.3333333333333333,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 57,
+      "triangles": 133260,
+      "textures": 41,
+      "light": {
+        "sun": 2.4,
+        "hemi": 1.55,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5840784178830671,
+          0.6938717612856897,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.6514056374127929,
+          0.5840784178830671,
+          0.4735314961384573
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "sky-1-portrait-low-masks.jpg",
+      "name": "sky",
+      "t": 0.3333333333333333,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 57,
+      "triangles": 133260,
+      "textures": 41,
+      "light": {
+        "sun": 2.4,
+        "hemi": 1.55,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5840784178830671,
+          0.6938717612856897,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.6514056374127929,
+          0.5840784178830671,
+          0.4735314961384573
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "sky-2-portrait-low-production.jpg",
+      "name": "sky",
+      "t": 0.6666666666666666,
+      "variant": "production",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 57,
+      "triangles": 133260,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 2,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.34670405634441115
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "sky-2-portrait-low-procedural.jpg",
+      "name": "sky",
+      "t": 0.6666666666666666,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 57,
+      "triangles": 133260,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 2,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.34670405634441115
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "sky-2-portrait-low-masks.jpg",
+      "name": "sky",
+      "t": 0.6666666666666666,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 57,
+      "triangles": 133260,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 2,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.34670405634441115
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "sky-3-portrait-low-production.jpg",
+      "name": "sky",
+      "t": 1,
+      "variant": "production",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 57,
+      "triangles": 133260,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.85,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.28314874041918053
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "sky-3-portrait-low-procedural.jpg",
+      "name": "sky",
+      "t": 1,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 57,
+      "triangles": 133260,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.85,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.28314874041918053
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "sky-3-portrait-low-masks.jpg",
+      "name": "sky",
+      "t": 1,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 2.0245819323134224,
+        "pitch": 0.8
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 57,
+      "triangles": 133260,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.85,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.28314874041918053
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "garden-0-portrait-low-production.jpg",
+      "name": "garden",
+      "t": 0,
+      "variant": "production",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 64,
+      "triangles": 151940,
+      "textures": 41,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "garden-0-portrait-low-procedural.jpg",
+      "name": "garden",
+      "t": 0,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 64,
+      "triangles": 151940,
+      "textures": 41,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "garden-0-portrait-low-masks.jpg",
+      "name": "garden",
+      "t": 0,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 64,
+      "triangles": 151940,
+      "textures": 41,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "garden-1-portrait-low-production.jpg",
+      "name": "garden",
+      "t": 0.3333333333333333,
+      "variant": "production",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 64,
+      "triangles": 151940,
+      "textures": 41,
+      "light": {
+        "sun": 2.4,
+        "hemi": 1.55,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5840784178830671,
+          0.6938717612856897,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.6514056374127929,
+          0.5840784178830671,
+          0.4735314961384573
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "garden-1-portrait-low-procedural.jpg",
+      "name": "garden",
+      "t": 0.3333333333333333,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 64,
+      "triangles": 151940,
+      "textures": 41,
+      "light": {
+        "sun": 2.4,
+        "hemi": 1.55,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5840784178830671,
+          0.6938717612856897,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.6514056374127929,
+          0.5840784178830671,
+          0.4735314961384573
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "garden-1-portrait-low-masks.jpg",
+      "name": "garden",
+      "t": 0.3333333333333333,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 64,
+      "triangles": 151940,
+      "textures": 41,
+      "light": {
+        "sun": 2.4,
+        "hemi": 1.55,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5840784178830671,
+          0.6938717612856897,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.6514056374127929,
+          0.5840784178830671,
+          0.4735314961384573
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "garden-2-portrait-low-production.jpg",
+      "name": "garden",
+      "t": 0.6666666666666666,
+      "variant": "production",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 64,
+      "triangles": 151940,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 2,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.34670405634441115
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "garden-2-portrait-low-procedural.jpg",
+      "name": "garden",
+      "t": 0.6666666666666666,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 64,
+      "triangles": 151940,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 2,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.34670405634441115
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "garden-2-portrait-low-masks.jpg",
+      "name": "garden",
+      "t": 0.6666666666666666,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 64,
+      "triangles": 151940,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 2,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.34670405634441115
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "garden-3-portrait-low-production.jpg",
+      "name": "garden",
+      "t": 1,
+      "variant": "production",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 64,
+      "triangles": 151940,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.85,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.28314874041918053
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "garden-3-portrait-low-procedural.jpg",
+      "name": "garden",
+      "t": 1,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 64,
+      "triangles": 151940,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.85,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.28314874041918053
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "garden-3-portrait-low-masks.jpg",
+      "name": "garden",
+      "t": 1,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 64,
+      "triangles": 151940,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.85,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.28314874041918053
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "arrival-0-portrait-low-production.jpg",
+      "name": "arrival",
+      "t": 0,
+      "variant": "production",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 92,
+      "triangles": 177414,
+      "textures": 41,
+      "light": {
+        "sun": 2.0414722222222226,
+        "hemi": 1.686462962962963,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6402515509707811,
+          0.7272805213472602,
+          0.8195878606998335
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.5010688316955079,
+          0.6013558042028664,
+          0.5596860535832917
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "arrival-0-portrait-low-procedural.jpg",
+      "name": "arrival",
+      "t": 0,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 92,
+      "triangles": 177414,
+      "textures": 41,
+      "light": {
+        "sun": 2.0414722222222226,
+        "hemi": 1.686462962962963,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6402515509707811,
+          0.7272805213472602,
+          0.8195878606998335
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.5010688316955079,
+          0.6013558042028664,
+          0.5596860535832917
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "arrival-0-portrait-low-masks.jpg",
+      "name": "arrival",
+      "t": 0,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 92,
+      "triangles": 177414,
+      "textures": 41,
+      "light": {
+        "sun": 2.0414722222222226,
+        "hemi": 1.686462962962963,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6402515509707811,
+          0.7272805213472602,
+          0.8195878606998335
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.5010688316955079,
+          0.6013558042028664,
+          0.5596860535832917
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "arrival-1-portrait-low-production.jpg",
+      "name": "arrival",
+      "t": 0.3333333333333333,
+      "variant": "production",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 92,
+      "triangles": 177414,
+      "textures": 41,
+      "light": {
+        "sun": 2.333111111111111,
+        "hemi": 1.5376574074074074,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5816539357483677,
+          0.6917841301095938,
+          0.8195878606998335
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.633662634538734,
+          0.576779290875588,
+          0.47002931751000876
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "arrival-1-portrait-low-procedural.jpg",
+      "name": "arrival",
+      "t": 0.3333333333333333,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 92,
+      "triangles": 177414,
+      "textures": 41,
+      "light": {
+        "sun": 2.333111111111111,
+        "hemi": 1.5376574074074074,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5816539357483677,
+          0.6917841301095938,
+          0.8195878606998335
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.633662634538734,
+          0.576779290875588,
+          0.47002931751000876
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "arrival-1-portrait-low-masks.jpg",
+      "name": "arrival",
+      "t": 0.3333333333333333,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 92,
+      "triangles": 177414,
+      "textures": 41,
+      "light": {
+        "sun": 2.333111111111111,
+        "hemi": 1.5376574074074074,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5816539357483677,
+          0.6917841301095938,
+          0.8195878606998335
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.633662634538734,
+          0.576779290875588,
+          0.47002931751000876
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "arrival-2-portrait-low-production.jpg",
+      "name": "arrival",
+      "t": 0.6666666666666666,
+      "variant": "production",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 92,
+      "triangles": 177414,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.984074074074074,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.3494910933814482
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "arrival-2-portrait-low-procedural.jpg",
+      "name": "arrival",
+      "t": 0.6666666666666666,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 92,
+      "triangles": 177414,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.984074074074074,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.3494910933814482
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "arrival-2-portrait-low-masks.jpg",
+      "name": "arrival",
+      "t": 0.6666666666666666,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 92,
+      "triangles": 177414,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.984074074074074,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.3494910933814482
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "arrival-3-portrait-low-production.jpg",
+      "name": "arrival",
+      "t": 1,
+      "variant": "production",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 92,
+      "triangles": 177414,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.8352685185185187,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.28593577745621757
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "arrival-3-portrait-low-procedural.jpg",
+      "name": "arrival",
+      "t": 1,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 92,
+      "triangles": 177414,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.8352685185185187,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.28593577745621757
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "arrival-3-portrait-low-masks.jpg",
+      "name": "arrival",
+      "t": 1,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 92,
+      "triangles": 177414,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.8352685185185187,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.28593577745621757
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "woodland-0-portrait-low-production.jpg",
+      "name": "woodland",
+      "t": 0,
+      "variant": "production",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 73,
+      "triangles": 166315,
+      "textures": 41,
+      "light": {
+        "sun": 1.806,
+        "hemi": 1.632,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.623240698372425,
+          0.7144856878221478,
+          0.806721916308658
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.46963718930013887,
+          0.5645841851020806,
+          0.5394673741508856
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "woodland-0-portrait-low-procedural.jpg",
+      "name": "woodland",
+      "t": 0,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 73,
+      "triangles": 166315,
+      "textures": 41,
+      "light": {
+        "sun": 1.806,
+        "hemi": 1.632,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.623240698372425,
+          0.7144856878221478,
+          0.806721916308658
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.46963718930013887,
+          0.5645841851020806,
+          0.5394673741508856
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "woodland-0-portrait-low-masks.jpg",
+      "name": "woodland",
+      "t": 0,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 73,
+      "triangles": 166315,
+      "textures": 41,
+      "light": {
+        "sun": 1.806,
+        "hemi": 1.632,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.623240698372425,
+          0.7144856878221478,
+          0.806721916308658
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.46963718930013887,
+          0.5645841851020806,
+          0.5394673741508856
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "woodland-1-portrait-low-production.jpg",
+      "name": "woodland",
+      "t": 0.3333333333333333,
+      "variant": "production",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 73,
+      "triangles": 166315,
+      "textures": 41,
+      "light": {
+        "sun": 2.064,
+        "hemi": 1.488,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5718996239041114,
+          0.6833850558429757,
+          0.806721916308658
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.5622779950686829,
+          0.5474130357059627,
+          0.4559391569815994
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "woodland-1-portrait-low-procedural.jpg",
+      "name": "woodland",
+      "t": 0.3333333333333333,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 73,
+      "triangles": 166315,
+      "textures": 41,
+      "light": {
+        "sun": 2.064,
+        "hemi": 1.488,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5718996239041114,
+          0.6833850558429757,
+          0.806721916308658
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.5622779950686829,
+          0.5474130357059627,
+          0.4559391569815994
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "woodland-1-portrait-low-masks.jpg",
+      "name": "woodland",
+      "t": 0.3333333333333333,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 73,
+      "triangles": 166315,
+      "textures": 41,
+      "light": {
+        "sun": 2.064,
+        "hemi": 1.488,
+        "sunColor": [
+          1,
+          0.76052450467022,
+          0.45641102317066595
+        ],
+        "hemiColor": [
+          0.5718996239041114,
+          0.6833850558429757,
+          0.806721916308658
+        ],
+        "earth": [
+          0.21586050010324417,
+          0.16202937562896222,
+          0.10461648408208657
+        ],
+        "fog": [
+          0.5622779950686829,
+          0.5474130357059627,
+          0.4559391569815994
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.84
+    },
+    {
+      "file": "woodland-2-portrait-low-production.jpg",
+      "name": "woodland",
+      "t": 0.6666666666666666,
+      "variant": "production",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 73,
+      "triangles": 166315,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.92,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.36070405634441116
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "woodland-2-portrait-low-procedural.jpg",
+      "name": "woodland",
+      "t": 0.6666666666666666,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 73,
+      "triangles": 166315,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.92,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.36070405634441116
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "woodland-2-portrait-low-masks.jpg",
+      "name": "woodland",
+      "t": 0.6666666666666666,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 73,
+      "triangles": 166315,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.92,
+        "sunColor": [
+          0.4910208498384856,
+          0.6104955708001716,
+          0.7230551289161951
+        ],
+        "hemiColor": [
+          0.508881320845802,
+          0.6172065624120635,
+          0.7454042095350284
+        ],
+        "earth": [
+          0.21952619971859377,
+          0.28314874041918053,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.23455058215026167,
+          0.3005437944049895,
+          0.36070405634441116
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1.06,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.56
+    },
+    {
+      "file": "woodland-3-portrait-low-production.jpg",
+      "name": "woodland",
+      "t": 1,
+      "variant": "production",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 73,
+      "triangles": 166315,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.776,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.2971487404191805
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "woodland-3-portrait-low-procedural.jpg",
+      "name": "woodland",
+      "t": 1,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 73,
+      "triangles": 166315,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.776,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.2971487404191805
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "woodland-3-portrait-low-masks.jpg",
+      "name": "woodland",
+      "t": 1,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "portrait",
+      "pose": {
+        "x": 63,
+        "y": 0,
+        "z": 11.5,
+        "yaw": 0,
+        "pitch": 0.3
+      },
+      "camera": [
+        63,
+        1.65,
+        -11.5
+      ],
+      "fov": 82,
+      "aspect": 0.45027322404371584,
+      "pixelRatio": 1,
+      "calls": 73,
+      "triangles": 166315,
+      "textures": 41,
+      "light": {
+        "sun": 0,
+        "hemi": 1.776,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.2971487404191805
+        ],
+        "near": 7,
+        "far": 102,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "arrival-0-landscape-high-production.jpg",
+      "name": "arrival",
+      "t": 0,
+      "variant": "production",
+      "quality": "high",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 160,
+      "triangles": 362317,
+      "textures": 43,
+      "light": {
+        "sun": 2.0414722222222226,
+        "hemi": 1.686462962962963,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6402515509707811,
+          0.7272805213472602,
+          0.8195878606998335
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.5010688316955079,
+          0.6013558042028664,
+          0.5596860535832917
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "arrival-0-landscape-high-procedural.jpg",
+      "name": "arrival",
+      "t": 0,
+      "variant": "procedural",
+      "quality": "high",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 160,
+      "triangles": 362317,
+      "textures": 43,
+      "light": {
+        "sun": 2.0414722222222226,
+        "hemi": 1.686462962962963,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6402515509707811,
+          0.7272805213472602,
+          0.8195878606998335
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.5010688316955079,
+          0.6013558042028664,
+          0.5596860535832917
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "arrival-0-landscape-high-masks.jpg",
+      "name": "arrival",
+      "t": 0,
+      "variant": "masks",
+      "quality": "high",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 160,
+      "triangles": 362317,
+      "textures": 43,
+      "light": {
+        "sun": 2.0414722222222226,
+        "hemi": 1.686462962962963,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6402515509707811,
+          0.7272805213472602,
+          0.8195878606998335
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.5010688316955079,
+          0.6013558042028664,
+          0.5596860535832917
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "arrival-3-landscape-high-production.jpg",
+      "name": "arrival",
+      "t": 1,
+      "variant": "production",
+      "quality": "high",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 128,
+      "triangles": 211858,
+      "textures": 43,
+      "light": {
+        "sun": 0,
+        "hemi": 1.8352685185185187,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.28593577745621757
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "arrival-3-landscape-high-procedural.jpg",
+      "name": "arrival",
+      "t": 1,
+      "variant": "procedural",
+      "quality": "high",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 128,
+      "triangles": 211858,
+      "textures": 43,
+      "light": {
+        "sun": 0,
+        "hemi": 1.8352685185185187,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.28593577745621757
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "arrival-3-landscape-high-masks.jpg",
+      "name": "arrival",
+      "t": 1,
+      "variant": "masks",
+      "quality": "high",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 60,
+        "yaw": 0,
+        "pitch": 0.22
+      },
+      "camera": [
+        90,
+        1.65,
+        -60
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 128,
+      "triangles": 211858,
+      "textures": 43,
+      "light": {
+        "sun": 0,
+        "hemi": 1.8352685185185187,
+        "sunColor": [
+          0.3967552307153359,
+          0.5209955731953768,
+          0.6795424696265424
+        ],
+        "hemiColor": [
+          0.4178850708380236,
+          0.5457244613615395,
+          0.7083757798856457
+        ],
+        "earth": [
+          0.1844749944900301,
+          0.2541520943200296,
+          0.36130677977297226
+        ],
+        "fog": [
+          0.14126329113044458,
+          0.21223075740342198,
+          0.28593577745621757
+        ],
+        "near": 14.208333333333334,
+        "far": 152.45833333333334,
+        "fixture": 1.12,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.34
+    },
+    {
+      "file": "turn-0-0-landscape-low-production.jpg",
+      "name": "turn-0",
+      "t": 0,
+      "variant": "production",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": 0.55
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 54,
+      "triangles": 157529,
+      "textures": 36,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "turn-0-0-landscape-low-procedural.jpg",
+      "name": "turn-0",
+      "t": 0,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": 0.55
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 54,
+      "triangles": 157529,
+      "textures": 36,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "turn-0-0-landscape-low-masks.jpg",
+      "name": "turn-0",
+      "t": 0,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0,
+        "pitch": 0.55
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 54,
+      "triangles": 157529,
+      "textures": 37,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "turn-90-0-landscape-low-production.jpg",
+      "name": "turn-90",
+      "t": 0,
+      "variant": "production",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 1.5707963267948966,
+        "pitch": 0.55
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 92,
+      "triangles": 184465,
+      "textures": 41,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "turn-90-0-landscape-low-procedural.jpg",
+      "name": "turn-90",
+      "t": 0,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 1.5707963267948966,
+        "pitch": 0.55
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 92,
+      "triangles": 184465,
+      "textures": 41,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "turn-90-0-landscape-low-masks.jpg",
+      "name": "turn-90",
+      "t": 0,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 1.5707963267948966,
+        "pitch": 0.55
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 92,
+      "triangles": 184465,
+      "textures": 41,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "turn-180-0-landscape-low-production.jpg",
+      "name": "turn-180",
+      "t": 0,
+      "variant": "production",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.55
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 95,
+      "triangles": 205361,
+      "textures": 43,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "turn-180-0-landscape-low-procedural.jpg",
+      "name": "turn-180",
+      "t": 0,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.55
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 95,
+      "triangles": 205361,
+      "textures": 43,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "turn-180-0-landscape-low-masks.jpg",
+      "name": "turn-180",
+      "t": 0,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 3.141592653589793,
+        "pitch": 0.55
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 95,
+      "triangles": 205361,
+      "textures": 43,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "turn-270-0-landscape-low-production.jpg",
+      "name": "turn-270",
+      "t": 0,
+      "variant": "production",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 4.71238898038469,
+        "pitch": 0.55
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 70,
+      "triangles": 187179,
+      "textures": 44,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "turn-270-0-landscape-low-procedural.jpg",
+      "name": "turn-270",
+      "t": 0,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 4.71238898038469,
+        "pitch": 0.55
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 70,
+      "triangles": 187179,
+      "textures": 44,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "turn-270-0-landscape-low-masks.jpg",
+      "name": "turn-270",
+      "t": 0,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 4.71238898038469,
+        "pitch": 0.55
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 70,
+      "triangles": 187179,
+      "textures": 44,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "turn-359.9-0-landscape-low-production.jpg",
+      "name": "turn-359.9",
+      "t": 0,
+      "variant": "production",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 6.281439977927592,
+        "pitch": 0.55
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 54,
+      "triangles": 157529,
+      "textures": 44,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "turn-359.9-0-landscape-low-procedural.jpg",
+      "name": "turn-359.9",
+      "t": 0,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 6.281439977927592,
+        "pitch": 0.55
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 54,
+      "triangles": 157529,
+      "textures": 44,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "turn-359.9-0-landscape-low-masks.jpg",
+      "name": "turn-359.9",
+      "t": 0,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 6.281439977927592,
+        "pitch": 0.55
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 54,
+      "triangles": 157529,
+      "textures": 44,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "turn-0.1-0-landscape-low-production.jpg",
+      "name": "turn-0.1",
+      "t": 0,
+      "variant": "production",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0.0017453292519943296,
+        "pitch": 0.55
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 53,
+      "triangles": 155997,
+      "textures": 44,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "turn-0.1-0-landscape-low-procedural.jpg",
+      "name": "turn-0.1",
+      "t": 0,
+      "variant": "procedural",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0.0017453292519943296,
+        "pitch": 0.55
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 53,
+      "triangles": 155997,
+      "textures": 44,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    },
+    {
+      "file": "turn-0.1-0-landscape-low-masks.jpg",
+      "name": "turn-0.1",
+      "t": 0,
+      "variant": "masks",
+      "quality": "low",
+      "layout": "landscape",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 123,
+        "yaw": 0.0017453292519943296,
+        "pitch": 0.55
+      },
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "fov": 68,
+      "aspect": 2.220873786407767,
+      "pixelRatio": 1,
+      "calls": 53,
+      "triangles": 155997,
+      "textures": 44,
+      "light": {
+        "sun": 2.1,
+        "hemi": 1.7,
+        "sunColor": [
+          1,
+          0.8713671191959567,
+          0.6724431569510133
+        ],
+        "hemiColor": [
+          0.6444796819634361,
+          0.7304607400847158,
+          0.8227857543924378
+        ],
+        "earth": [
+          0.25818285291079235,
+          0.21586050010324417,
+          0.13563332964548108
+        ],
+        "fog": [
+          0.508881320845802,
+          0.6104955708001716,
+          0.5647115056965487
+        ],
+        "near": 16,
+        "far": 165,
+        "fixture": 1,
+        "exposure": 1.15
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "glError": 0,
+      "shaderFailures": 0,
+      "opacity": 0.86
+    }
+  ],
+  "performance": [
+    {
+      "scope": "scene",
+      "variant": "production",
+      "round": 0,
+      "times": [
+        109.39999999990687,
+        109.20000000018626,
+        108,
+        100.60000000009313,
+        105.89999999990687,
+        118.89999999990687,
+        113.5
+      ],
+      "calls": 128,
+      "triangles": 211858,
+      "glError": 0
+    },
+    {
+      "scope": "scene",
+      "variant": "procedural",
+      "round": 0,
+      "times": [
+        131.70000000018626,
+        133.70000000018626,
+        139.79999999981374,
+        129.5,
+        137,
+        136.60000000009313,
+        136.79999999981374
+      ],
+      "calls": 128,
+      "triangles": 211858,
+      "glError": 0
+    },
+    {
+      "scope": "scene",
+      "variant": "masks",
+      "round": 0,
+      "times": [
+        111.29999999981374,
+        112.39999999990687,
+        112,
+        130.60000000009313,
+        114.20000000018626,
+        120.39999999990687,
+        107.79999999981374
+      ],
+      "calls": 128,
+      "triangles": 211858,
+      "glError": 0
+    },
+    {
+      "scope": "scene",
+      "variant": "masks",
+      "round": 1,
+      "times": [
+        114.89999999990687,
+        113.10000000009313,
+        116.6999999997206,
+        110.5,
+        110.3000000002794,
+        127.09999999962747,
+        115.70000000018626
+      ],
+      "calls": 128,
+      "triangles": 211858,
+      "glError": 0
+    },
+    {
+      "scope": "scene",
+      "variant": "production",
+      "round": 1,
+      "times": [
+        111.60000000009313,
+        113.70000000018626,
+        109.1999999997206,
+        112.3000000002794,
+        114.59999999962747,
+        115.40000000037253,
+        111.29999999981374
+      ],
+      "calls": 128,
+      "triangles": 211858,
+      "glError": 0
+    },
+    {
+      "scope": "scene",
+      "variant": "procedural",
+      "round": 1,
+      "times": [
+        126.60000000009313,
+        121.60000000009313,
+        133.39999999990687,
+        128.89999999990687,
+        119.10000000009313,
+        149.3000000002794,
+        159.39999999990687
+      ],
+      "calls": 128,
+      "triangles": 211858,
+      "glError": 0
+    },
+    {
+      "scope": "scene",
+      "variant": "procedural",
+      "round": 2,
+      "times": [
+        118.09999999962747,
+        125,
+        112.8000000002794,
+        124,
+        140.29999999981374,
+        113.20000000018626,
+        126.79999999981374
+      ],
+      "calls": 128,
+      "triangles": 211858,
+      "glError": 0
+    },
+    {
+      "scope": "scene",
+      "variant": "masks",
+      "round": 2,
+      "times": [
+        108.89999999990687,
+        109.20000000018626,
+        129,
+        114.89999999990687,
+        120.1999999997206,
+        109.10000000009313,
+        101.20000000018626
+      ],
+      "calls": 128,
+      "triangles": 211858,
+      "glError": 0
+    },
+    {
+      "scope": "scene",
+      "variant": "production",
+      "round": 2,
+      "times": [
+        96.10000000009313,
+        95,
+        107.79999999981374,
+        112.8000000002794,
+        112.5,
+        110,
+        111.6999999997206
+      ],
+      "calls": 128,
+      "triangles": 211858,
+      "glError": 0
+    },
+    {
+      "scope": "sky-only",
+      "variant": "production",
+      "round": 0,
+      "times": [
+        12.200000000186265,
+        14,
+        12.700000000186265,
+        12.5,
+        12.399999999906868,
+        11.899999999906868,
+        11.100000000093132
+      ],
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0
+    },
+    {
+      "scope": "sky-only",
+      "variant": "procedural",
+      "round": 0,
+      "times": [
+        29.700000000186265,
+        27,
+        32.09999999962747,
+        32.8000000002794,
+        33,
+        30.600000000093132,
+        28.199999999720603
+      ],
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0
+    },
+    {
+      "scope": "sky-only",
+      "variant": "masks",
+      "round": 0,
+      "times": [
+        11.900000000372529,
+        11.5,
+        12.5,
+        12.199999999720603,
+        12,
+        12.5,
+        13.899999999906868
+      ],
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0
+    },
+    {
+      "scope": "sky-only",
+      "variant": "masks",
+      "round": 1,
+      "times": [
+        16.200000000186265,
+        31.5,
+        80,
+        17.899999999906868,
+        14.200000000186265,
+        13.099999999627471,
+        13.700000000186265
+      ],
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0
+    },
+    {
+      "scope": "sky-only",
+      "variant": "production",
+      "round": 1,
+      "times": [
+        11.699999999720603,
+        11.900000000372529,
+        11.699999999720603,
+        11.5,
+        14.200000000186265,
+        13.299999999813735,
+        11.700000000186265
+      ],
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0
+    },
+    {
+      "scope": "sky-only",
+      "variant": "procedural",
+      "round": 1,
+      "times": [
+        35.09999999962747,
+        33,
+        34.40000000037253,
+        34.59999999962747,
+        32.3000000002794,
+        36.1999999997206,
+        36.700000000186265
+      ],
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0
+    },
+    {
+      "scope": "sky-only",
+      "variant": "procedural",
+      "round": 2,
+      "times": [
+        28.899999999906868,
+        40.700000000186265,
+        33.299999999813735,
+        32.3000000002794,
+        34.6999999997206,
+        32.700000000186265,
+        30.299999999813735
+      ],
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0
+    },
+    {
+      "scope": "sky-only",
+      "variant": "masks",
+      "round": 2,
+      "times": [
+        13.100000000093132,
+        15.5,
+        12.899999999906868,
+        13.700000000186265,
+        11.899999999906868,
+        14.600000000093132,
+        13.699999999720603
+      ],
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0
+    },
+    {
+      "scope": "sky-only",
+      "variant": "production",
+      "round": 2,
+      "times": [
+        13.699999999720603,
+        11.399999999906868,
+        11.600000000093132,
+        14.600000000093132,
+        13.200000000186265,
+        13.699999999720603,
+        12.399999999906868
+      ],
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0
+    }
+  ],
+  "isolation": {
+    "saveIntact": true,
+    "stateIntact": true,
+    "flags": {
+      "leftHome": true,
+      "visited.fork": true,
+      "visited.lanterns": true
+    }
+  },
+  "errors": [],
+  "turnCaptureBuild": {
+    "index-BdgQt9oh.js": "782ea88bce61d4616f65673e5989aa93e768ebc9be282c36e2a36c15602eff84",
+    "sky-c01-cloud-atlas-Cddpw5eC.png": "083fa77ff7d3b4abd27fabe1c0552d8305b5e83e4efc10ef1983623d4c16285f"
+  },
+  "turnCaptureSourceSHA": "331ac62190405a6b5dd8ec6d813b150c2eca2cee",
+  "remoteSourceEquivalentSHA": "331ac62190405a6b5dd8ec6d813b150c2eca2cee",
+  "sourceTree": "e6ceaf489aab1190113074414fb3f58115625dc9",
+  "correction": "Original turn capture reused filenames. Corrected harness recaptured only six orientations under unique names; overwritten files omitted. No shader or build change."
+}

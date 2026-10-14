@@ -1,0 +1,17 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> feh-lu-we@0.1.0 test
+> vitest run
+
+
+ RUN  v5.0.3 /workspace/scratch/05b35b0eacfc/sky-c01
+
+
+ Test Files  24 passed (24)
+      Tests  278 passed (278)
+   Start at  19:35:30
+   Duration  2.03s (tests 45%, transform 35%, import 19%, worker 1%)
+
+  Transform  transforming modules took 3.32s · 35% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns

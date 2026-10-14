@@ -1,0 +1,213 @@
+{
+  "build": {
+    "index-BdgQt9oh.js": "782ea88bce61d4616f65673e5989aa93e768ebc9be282c36e2a36c15602eff84"
+  },
+  "browser": "141.0.7390.37",
+  "checks": [
+    {
+      "name": "UI selector / cloud off production",
+      "ok": true,
+      "details": {
+        "hash": "c6b8666540bdcc30d462d5c32f79acfad04c688c721640bca07ec3bd43a2a1e7"
+      }
+    },
+    {
+      "name": "UI cloud on changes sky production",
+      "ok": true,
+      "details": {
+        "hash": "456de56e06d23761af1d532b1bec7251107a9c699281288632e7f3050f560e7c"
+      }
+    },
+    {
+      "name": "UI selector / cloud off procedural",
+      "ok": true,
+      "details": {
+        "hash": "c6b8666540bdcc30d462d5c32f79acfad04c688c721640bca07ec3bd43a2a1e7"
+      }
+    },
+    {
+      "name": "UI cloud on changes sky procedural",
+      "ok": true,
+      "details": {
+        "hash": "812488b6246185d54082b77a57674045df17222930269fc3df73ffa07c19206a"
+      }
+    },
+    {
+      "name": "UI selector / cloud off masks",
+      "ok": true,
+      "details": {
+        "hash": "c6b8666540bdcc30d462d5c32f79acfad04c688c721640bca07ec3bd43a2a1e7"
+      }
+    },
+    {
+      "name": "UI cloud on changes sky masks",
+      "ok": true,
+      "details": {
+        "hash": "321c897713307d0941ff9f4f319c4f7129ebddbb7dfdaf93e8efcb346c97dc86"
+      }
+    },
+    {
+      "name": "Cloud-off framebuffer equal across all variants",
+      "ok": true,
+      "details": [
+        "c6b8666540bdcc30d462d5c32f79acfad04c688c721640bca07ec3bd43a2a1e7",
+        "c6b8666540bdcc30d462d5c32f79acfad04c688c721640bca07ec3bd43a2a1e7",
+        "c6b8666540bdcc30d462d5c32f79acfad04c688c721640bca07ec3bd43a2a1e7"
+      ]
+    },
+    {
+      "name": "122 continuous phase samples compile/render",
+      "ok": true,
+      "details": {
+        "samples": 122
+      }
+    },
+    {
+      "name": "Deterministic reload procedural",
+      "ok": true,
+      "details": {
+        "variant": "procedural",
+        "before": "812488b6246185d54082b77a57674045df17222930269fc3df73ffa07c19206a",
+        "after": "812488b6246185d54082b77a57674045df17222930269fc3df73ffa07c19206a"
+      }
+    },
+    {
+      "name": "Deterministic reload masks",
+      "ok": true,
+      "details": {
+        "variant": "masks",
+        "before": "321c897713307d0941ff9f4f319c4f7129ebddbb7dfdaf93e8efcb346c97dc86",
+        "after": "321c897713307d0941ff9f4f319c4f7129ebddbb7dfdaf93e8efcb346c97dc86"
+      }
+    },
+    {
+      "name": "No solved puzzle flags added by cloud/phase controls",
+      "ok": true,
+      "details": {}
+    },
+    {
+      "name": "Actual review save preserves normal save and backup",
+      "ok": true,
+      "details": {}
+    },
+    {
+      "name": "Normal tutorial entry and no mask request/review panel",
+      "ok": true,
+      "details": {
+        "atlasRequests": 0
+      }
+    },
+    {
+      "name": "Normal estate phases ignore SKY/ENV overrides and allocate no atlas",
+      "ok": true,
+      "details": {
+        "rows": [
+          {
+            "t": 0,
+            "hemi": 1.632,
+            "sun": 1.806,
+            "pilot": 1,
+            "atlas": false,
+            "productionShader": true,
+            "gl": 0,
+            "failures": 0
+          },
+          {
+            "t": 0.3333333333333333,
+            "hemi": 1.488,
+            "sun": 2.064,
+            "pilot": 1,
+            "atlas": false,
+            "productionShader": true,
+            "gl": 0,
+            "failures": 0
+          },
+          {
+            "t": 0.6666666666666666,
+            "hemi": 1.92,
+            "sun": 0,
+            "pilot": 1,
+            "atlas": false,
+            "productionShader": true,
+            "gl": 0,
+            "failures": 0
+          },
+          {
+            "t": 1,
+            "hemi": 1.776,
+            "sun": 0,
+            "pilot": 1,
+            "atlas": false,
+            "productionShader": true,
+            "gl": 0,
+            "failures": 0
+          },
+          {
+            "t": 0,
+            "hemi": 1.7,
+            "sun": 2.1,
+            "pilot": 1,
+            "atlas": false,
+            "productionShader": true,
+            "gl": 0,
+            "failures": 0
+          },
+          {
+            "t": 0.3333333333333333,
+            "hemi": 1.55,
+            "sun": 2.4,
+            "pilot": 1,
+            "atlas": false,
+            "productionShader": true,
+            "gl": 0,
+            "failures": 0
+          },
+          {
+            "t": 0.6666666666666666,
+            "hemi": 2,
+            "sun": 0,
+            "pilot": 1,
+            "atlas": false,
+            "productionShader": true,
+            "gl": 0,
+            "failures": 0
+          },
+          {
+            "t": 1,
+            "hemi": 1.85,
+            "sun": 0,
+            "pilot": 1,
+            "atlas": false,
+            "productionShader": true,
+            "gl": 0,
+            "failures": 0
+          }
+        ],
+        "off": 0,
+        "flagsIntact": true,
+        "lightIntact": true
+      }
+    },
+    {
+      "name": "Normal cosmetic cloud toggle preserves flags/light",
+      "ok": true,
+      "details": {}
+    },
+    {
+      "name": "Normal High portrait compiles after resize settles",
+      "ok": true,
+      "details": {
+        "aspect": 0.5620736698499318,
+        "gl": 0,
+        "failures": 0
+      }
+    },
+    {
+      "name": "No browser errors",
+      "ok": true,
+      "details": []
+    }
+  ],
+  "errors": [],
+  "conditions": "Actual game UI selectors and WebGL2 SwiftShader; sky-only deterministic framebuffer checks. Normal tutorial started separately with sky=masks query. Not physical Android or complete walkthrough."
+}
