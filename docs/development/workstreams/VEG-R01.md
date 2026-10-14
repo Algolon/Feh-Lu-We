@@ -31,3 +31,7 @@ Hybrid removes far/xfar geometry changes and has 146 diagnostic changes versus b
 No text conflicts with final production `3a12a69`; PB01's shared comment and VEG diagnostics coexist. Temporary compatibility worktree only; no production changes. GEO-R01 remains an inherited integration dependency requiring its own review. Other work packages were not modified. No force-push, production merge or deployment.
 
 The owner subsequently authorized **merge and deployment for live testing** after receiving the comparison, costs and limitations. Hybrid default passes latest-production typecheck/build/289 units and six bounded normal-render checks across both renderer paths. Physical Samsung and wider browser validation are still pending; this activation does not relax budget assertions.
+
+## Publication
+
+Owner-authorized Hybrid activation merged through PR #22 as `7d17d97`. GitHub Pages build and deploy completed successfully (run 38622704698); the live JavaScript build label and fingerprint were verified. Publication evidence is under `docs/veg-r01/activation/`. Physical-device validation remains pending.

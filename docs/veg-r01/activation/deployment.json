@@ -1,0 +1,20 @@
+{
+  "merge": "7d17d972b1e84e5153d6c652f1969c4cebb2340c",
+  "pullRequest": "https://github.com/Algolon/Feh-Lu-We/pull/22",
+  "workflowRun": "https://github.com/Algolon/Feh-Lu-We/actions/runs/38622704698",
+  "jobs": [
+    {
+      "name": "build",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "deploy",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "publishedAsset": "https://algolon.github.io/Feh-Lu-We/assets/index-pi95ADZS.js",
+  "assetSha256": "e79736df19220281acbaf06363ac6e263792c9b0c950de6bc2765bb57e1bed42",
+  "mergeBuildLabelFound": true
+}

@@ -1,0 +1,21 @@
+{
+  "merge": "7d17d972b1e84e5153d6c652f1969c4cebb2340c",
+  "workflowRun": 38622704698,
+  "conditions": "Published HTTPS assets via configured environment proxy, WebGL2 SwiftShader; default selector omitted; isolated disposable browser save. Not a physical Samsung test.",
+  "results": [
+    {
+      "profile": "hybrid",
+      "path": "multi-draw",
+      "glError": 0,
+      "asset": "https://algolon.github.io/Feh-Lu-We/assets/index-pi95ADZS.js",
+      "errors": []
+    },
+    {
+      "profile": "hybrid",
+      "path": "instanced",
+      "glError": 0,
+      "asset": "https://algolon.github.io/Feh-Lu-We/assets/index-pi95ADZS.js",
+      "errors": []
+    }
+  ]
+}
