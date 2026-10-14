@@ -6,6 +6,7 @@ import { ART, REVIEW } from '../core/artflags';
 import { woodWeight } from './boslustZone';
 import { LIGHTING_PHASES, sampleLighting, type PhaseSample } from './lightingPhases';
 import { SKY_FRAGMENT } from './skyShader';
+import { cloudFragment, CLOUD_VARIANTS, type CloudVariant } from './cloudPrototypes';
 
 // DEV-04C ART-01.1 light hierarchy (warm shelter, cool woodland, atmospheric depth):
 //   - outdoors the sun stays warm while the sky fill is cooler and a little weaker, so shadow-facing planes go cool;
@@ -40,6 +41,8 @@ export interface Env {
   preview: number | null;
   /** Cosmetic cloud switch; never changes world lighting or saved progress. */
   clouds: boolean;
+  /** SKY-C01 sandbox only; normal gameplay always uses production clouds. */
+  cloudVariant: CloudVariant;
   diagnostic: 'normal' | 'hemi' | 'sun' | 'practicals' | 'no-surfaces' | 'no-fog' | 'no-shadows';
   fixtureGain: number;
   /** `indoor` 0..1 (smoothed by the game) is used only by the art-refresh interior lighting treatment. */
@@ -58,6 +61,7 @@ export function addEnvironment(w: World, lightingReview = REVIEW === 'lighting')
     uCloudLight: { value: new THREE.Color() },
     uCloudShade: { value: new THREE.Color() },
     uCloudOpacity: { value: 0 },
+    uCloudAtlas: { value: null as THREE.Texture | null },
   };
   const skyMat = w.material(new THREE.ShaderMaterial({
     uniforms: uni,
@@ -89,12 +93,28 @@ export function addEnvironment(w: World, lightingReview = REVIEW === 'lighting')
   const phase: PhaseSample = { a: LIGHTING_PHASES[0], b: LIGHTING_PHASES[1], blend: 0 };
   const skyFill = new THREE.Color(), earthFill = new THREE.Color(), woodFog = new THREE.Color();
   let shadows = false;
+  let compiledClouds: CloudVariant = 'production';
+  let cloudAtlas: THREE.Texture | null = null;
   const env: Env = {
     sun, hemi,
     mode: 'pilot', preview: null,
     clouds: typeof location === 'undefined' || new URLSearchParams(location.search).get('clouds') !== '0',
+    cloudVariant: 'production',
     diagnostic: 'normal', fixtureGain: 1,
     update(dusk, focus, indoor = 0) {
+      const requested = lightingReview && CLOUD_VARIANTS.includes(env.cloudVariant) ? env.cloudVariant : 'production';
+      if (requested !== compiledClouds) {
+        if (requested === 'masks' && !cloudAtlas && typeof document !== 'undefined') {
+          cloudAtlas = w.texture(new THREE.TextureLoader().load(new URL('../assets/sky-c01-cloud-atlas.png', import.meta.url).href));
+          cloudAtlas.colorSpace = THREE.NoColorSpace; // RGB are coverage/height/paint planes, not colour.
+          cloudAtlas.wrapS = cloudAtlas.wrapT = THREE.ClampToEdgeWrapping;
+          cloudAtlas.minFilter = THREE.LinearMipmapLinearFilter; cloudAtlas.magFilter = THREE.LinearFilter;
+          cloudAtlas.generateMipmaps = true;
+          uni.uCloudAtlas.value = cloudAtlas;
+        }
+        skyMat.fragmentShader = cloudFragment(requested); skyMat.needsUpdate = true;
+        compiledClouds = requested;
+      }
       // Approved four-phase presentation is the ordinary game. Baseline remains review-only.
       const pilot = !lightingReview || env.mode === 'pilot';
       const value = lightingReview && env.preview !== null ? env.preview : dusk;
