@@ -12,7 +12,7 @@
         "dpr": "1"
       },
       "camera": "library-player",
-      "method": "Original placement/warm-up, viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "method": "Original placement/warm-up, viewport 915\u00d7412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
       "observed": {
         "cameraCalls": 93,
         "cameraTriangles": 286772,
@@ -32,7 +32,7 @@
         "dpr": "1"
       },
       "camera": "cottage-player",
-      "method": "Original placement/warm-up, viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "method": "Original placement/warm-up, viewport 915\u00d7412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
       "observed": {
         "cameraCalls": 94,
         "cameraTriangles": 199731,
@@ -59,7 +59,7 @@
         "yaw": 0,
         "pitch": 0.02
       },
-      "method": "Original placement/warm-up, viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "method": "Original placement/warm-up, viewport 915\u00d7412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
       "observed": {
         "cameraCalls": 51,
         "cameraTriangles": 116664,
@@ -83,7 +83,7 @@
         "dpr": "1"
       },
       "camera": "library-player",
-      "method": "Original placement/warm-up, viewport 915×412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "method": "Original placement/warm-up, viewport 915\u00d7412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
       "observed": {
         "cameraCalls": 97,
         "cameraTriangles": 291936,
@@ -92,6 +92,147 @@
         "dpr": 1
       },
       "differences": {}
+    },
+    {
+      "path": "compare/selected-equal-cottage-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T05:51:59.739Z",
+      "params": {
+        "v": "V3",
+        "selected": "1",
+        "tex": "512",
+        "model": "phong",
+        "normal": "0",
+        "dpr": "1"
+      },
+      "camera": "cottage-player",
+      "method": "Original placement/warm-up, viewport 915\u00d7412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 94,
+        "cameraTriangles": 201039,
+        "sourceTriangles": 742607,
+        "textureBytes": 48188750,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "compare/selected-equal-cottage-front.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T05:56:47.198Z",
+      "params": {
+        "v": "V3",
+        "selected": "1",
+        "tex": "512",
+        "model": "phong",
+        "normal": "0",
+        "dpr": "1"
+      },
+      "camera": "cottage-front",
+      "pose": {
+        "x": 25,
+        "z": 150,
+        "y": 4,
+        "yaw": 0,
+        "pitch": 0.02
+      },
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915\u00d7412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 52,
+        "cameraTriangles": 117996,
+        "sourceTriangles": 742607,
+        "textureBytes": 48188750,
+        "dpr": 1
+      },
+      "differences": {}
+    },
+    {
+      "path": "compare/selected-crisp-library-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T05:57:41.754Z",
+      "params": {
+        "v": "V3",
+        "selected": "1",
+        "tex": "512",
+        "model": "phong",
+        "normal": "0",
+        "dpr": "1.25"
+      },
+      "camera": "library-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915\u00d7412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 97,
+        "cameraTriangles": 291936,
+        "sourceTriangles": 742607,
+        "textureBytes": 48188750,
+        "dpr": 1.25
+      },
+      "differences": {}
+    },
+    {
+      "path": "compare/selected-crisp-cottage-player.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T05:58:02.116Z",
+      "params": {
+        "v": "V3",
+        "selected": "1",
+        "tex": "512",
+        "model": "phong",
+        "normal": "0",
+        "dpr": "1.25"
+      },
+      "camera": "cottage-player",
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915\u00d7412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 94,
+        "cameraTriangles": 201039,
+        "sourceTriangles": 742607,
+        "textureBytes": 48188750,
+        "dpr": 1.25
+      },
+      "differences": {}
+    },
+    {
+      "path": "compare/selected-crisp-cottage-front.webp",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T05:58:12.815Z",
+      "params": {
+        "v": "V3",
+        "selected": "1",
+        "tex": "512",
+        "model": "phong",
+        "normal": "0",
+        "dpr": "1.25"
+      },
+      "camera": "cottage-front",
+      "pose": {
+        "x": 25,
+        "z": 150,
+        "y": 4,
+        "yaw": 0,
+        "pitch": 0.02
+      },
+      "method": "Original placement/light warm-up; eight extra static renders without timing fences (no animation ticks); viewport 915\u00d7412, FOV 70; lossless WebP from CSS screenshot. SwiftShader; not physical-phone evidence.",
+      "observed": {
+        "cameraCalls": 52,
+        "cameraTriangles": 117996,
+        "sourceTriangles": 742607,
+        "textureBytes": 48188750,
+        "dpr": 1.25
+      },
+      "differences": {}
+    },
+    {
+      "path": "compare/VFC01_cottage_front_equal_DPR.png",
+      "sourceRevision": "6d06ce79115a59607c5d6579325dfb13f7c18367",
+      "sourceTree": "f73b44f6aec2f19ec32310d3e02dfa0e89c70c08",
+      "capturedAt": "2026-10-14T05:59:05.283353+00:00",
+      "method": "Contact sheet recreated using the original packaging layout, labels outside unscaled RGB frames; inputs are explicitly reproduced recovery images."
     }
   ]
 }

@@ -2,7 +2,7 @@
 
 Isolated research branch: `vfc01-visual-fidelity-calibration`. Verified production base: `ccr-75ef4113-kfkimm` at `ae2a036e783400355c8d137f24e16c33bb1a8323`. Exactly two zones: Library and Portugal cottage + terrace. ART-01 remains the direction.
 
-**Upload status, 14 October 2026: BLOCKED.** The branch contains 12 baseline WebPs, the viewer, reports and telemetry. Selected before/after images, other experimental frames and all eight videos are missing. See [verified upload recovery](VFC01_UPLOAD_RECOVERY.md) and [actual availability](UPLOAD_AVAILABILITY.json). The original evidence manifest describes the expected package, not completed remote delivery.
+**Recovery status, 14 October 2026: IN PROGRESS.** Original source, reports, telemetry and 12 baseline frames are retained. Selected comparisons are being reproduced from unchanged VFC code with verified settings/counts. Other matrix evidence and eight videos remain pending. See [verified upload recovery](VFC01_UPLOAD_RECOVERY.md) and [actual availability](UPLOAD_AVAILABILITY.json). The active manifest records current hashes and explicit missing paths; `EVIDENCE_MANIFEST_ORIGINAL.json` preserves the original expected-package hashes. `RECOVERY_CAPTURES.json` records reproduced media and its actual source revision.
 
 [The offline evidence viewer](index.html) now marks unavailable comparisons and videos explicitly. [The recommendation](VFC01_RECOMMENDATION.md) is retained, but its experimental visual evidence is incomplete. Frames retain 915×412 content; video encoding pads the width to 916. Video playback is four presentation frames/s, not measured gameplay FPS.
 

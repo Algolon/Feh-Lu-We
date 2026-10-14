@@ -38,7 +38,7 @@ for expected in original['files']:
         changed.append(rel)
     if not args.refresh and sha != current_by_path[rel]['sha256']:
         failures.append(f'file checksum mismatch: {rel}')
-    row.update(bytes=len(data), sha256=sha)
+    row.update(bytes=len(data), sha256=sha, gitBlobSha=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest())
     row['availability'] = 'reproduced' if rel in captures else 'committed original media' if p.suffix in ['.webp', '.mp4', '.png'] else 'retained or updated document'
     if rel in captures:
         row['originalSha256'] = expected['sha256']
@@ -51,6 +51,10 @@ for expected in original['files']:
                 failures.append(f'image dimensions differ: {rel}')
     if p.suffix == '.mp4':
         subprocess.run(['ffmpeg', '-v', 'error', '-i', str(p), '-f', 'null', '-'], check=True, timeout=60)
+        probe=json.loads(subprocess.check_output(['ffprobe','-v','error','-select_streams','v:0','-show_entries','stream=codec_name,width,height,r_frame_rate,nb_frames','-of','json',str(p)],text=True,timeout=30))['streams'][0]
+        for key in ['codec_name','width','height','r_frame_rate','nb_frames']:
+            if probe[key] != expected[key]: failures.append(f'video {key} differs: {rel}')
+        row.update(probe)
     rows.append(row)
 
 html = (base / 'index.html').read_text()
