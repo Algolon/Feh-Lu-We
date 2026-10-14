@@ -665,6 +665,8 @@ export class Game implements GameApi {
       this.movedLastTick = Math.abs(this.player.x - px) + Math.abs(this.player.z - pz) > 1e-4;
     }
     this.player.applyCamera(this.camera);
+    // Direction-only HUD; the tutorial stays uncluttered, and the compass is opt-out.
+    this.ui.setCompass(this.player.yaw, this.settings.showCompass && w.id === 'estate', this.settings.reducedMotion);
     this.cullTimer -= dt;
     if (this.cullTimer <= 0) {
       this.cullTimer = 0.12; // DEV-03: indoor outdoor-view test (World.outdoorInView) needs a quick cadence
