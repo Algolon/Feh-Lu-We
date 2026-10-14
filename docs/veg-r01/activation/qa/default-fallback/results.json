@@ -1,0 +1,87 @@
+{
+  "profile": "default",
+  "path": "fallback",
+  "views": [
+    {
+      "name": "boslust",
+      "cpuSubmitMs": 4.399999998509884,
+      "calls": 140,
+      "triangles": 301408,
+      "room": "out"
+    },
+    {
+      "name": "dense",
+      "cpuSubmitMs": 2.400000000372529,
+      "calls": 117,
+      "triangles": 268126,
+      "room": "out"
+    },
+    {
+      "name": "cons-deck",
+      "cpuSubmitMs": 4.600000001490116,
+      "calls": 182,
+      "triangles": 337897,
+      "room": "out"
+    }
+  ],
+  "memory": {
+    "geometryBytes": 87353670,
+    "instanceBytes": 288724,
+    "batchTextureBytes": 0,
+    "geometries": 246,
+    "textures": 35,
+    "path": "instanced",
+    "profile": {
+      "id": "hybrid",
+      "distances": [
+        22,
+        36,
+        62
+      ],
+      "hysteresis": 3,
+      "continuous": "outline"
+    },
+    "treeCount": {
+      "trees": 1735,
+      "plants": 11693,
+      "rocks": 232,
+      "logs": 36,
+      "boulders": 49,
+      "saplings": 353,
+      "screenBushes": 126
+    },
+    "fov": 68,
+    "dpr": 1,
+    "buffer": [
+      768,
+      432
+    ],
+    "shadows": false
+  },
+  "shadow": {
+    "cameraNoShadows": {
+      "cpuSubmitMs": 2.900000000372529,
+      "calls": 137,
+      "triangles": 297276
+    },
+    "cameraWithShadows": {
+      "calls": 141,
+      "triangles": 333137
+    },
+    "combined": {
+      "cpuSubmitMs": 4.5,
+      "calls": 198,
+      "triangles": 565388
+    },
+    "shadowCalls": 57,
+    "shadowTriangles": 232251,
+    "map": [
+      1024,
+      1024
+    ],
+    "conditions": "High-quality 1024px mobile sun shadow control. Shadow renderer counters sampled around its actual pass; camera=combined-minus-shadow, including any conservative fallback superset. Not a mobile-low gate."
+  },
+  "pacing": null,
+  "errors": [],
+  "moving": []
+}

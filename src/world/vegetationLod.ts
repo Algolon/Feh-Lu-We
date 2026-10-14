@@ -11,7 +11,7 @@ export const TREE_LOD_PROFILES: Record<string, TreeLodProfile> = {
   b: { id: 'b', distances: [28, 50, 80], hysteresis: 3, continuous: true },
   hybrid: { id: 'hybrid', distances: [22, 36, 62], hysteresis: 3, continuous: 'outline' },
 };
-export const DEFAULT_TREE_LOD = 'baseline'; // retained until the measured comparison selects a winner
+export const DEFAULT_TREE_LOD = 'hybrid'; // Owner-authorized live test, 14 October 2026; baseline remains selectable.
 export function treeLodProfile(name: string | null = null): TreeLodProfile {
   return TREE_LOD_PROFILES[name ?? DEFAULT_TREE_LOD] ?? TREE_LOD_PROFILES[DEFAULT_TREE_LOD];
 }

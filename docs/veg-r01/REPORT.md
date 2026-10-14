@@ -1,5 +1,7 @@
 # VEG-R01 — recovery, comparison and implementation decision
 
+**Activation update:** the owner subsequently authorized merge/deploy and Hybrid was selected as the ordinary-game default for live testing. See `ACTIVATION.md`. The conservative decision and limitations below describe the preceding comparison checkpoint.
+
 14 October 2026. **Decision: retain baseline as the ordinary-game default. Hybrid is the preferred experimental candidate, not approved for activation or merge.** No production merge or deployment occurred.
 
 ## Recovery and isolation

@@ -12,6 +12,7 @@ const poses=[
  ['distant',90,128,1.1,.12],['woodland-east',150,45,1.4,.12],
 ];
 if(process.env.REFERENCE==='1')poses.push(...Object.entries({atticNook:[96.4,94.2,1.08,6.65],atticCommon:[86,97.5,0,6.65],conservatoryInside:[126.3,106,1.57,.15],conservatoryDoorDeck:[137,106,-1.57,.15],wellnessDeck:[132,114,2.27,.15],saunaAccess:[137.6,112.4,-2.44,.15],wickermanClearing:[176.4,59.9,2.53,1.2],wickermanPath:[158,47,1.08,1],frontForecourt:[90,66,0,0],arrivalCourt:[88,62,.07,0],portugalTerrace:[25,152.8,.35,4.15],portugalApproach:[16.6,146.8,.44,4],golfVicinity:[66,57,-2.62,0],golfSpur:[56,47.6,1.22,0]}).map(([n,[x,z,yaw,y]])=>[n,x,z,yaw,.05,y]));
+if(process.env.VIEWS){const wanted=process.env.VIEWS.split(',');for(let i=poses.length-1;i>=0;i--)if(!wanted.includes(poses[i][0]))poses.splice(i,1);}
 if(process.env.PACEONLY==='1')poses.length=0;
 const routes=[['boslust',[52.6,6.4],[60.5,10.5],.9],['dense',[71,62],[62.5,55],-2.25],['garden-edge',[124,132],[134,137],1.05],['treeline',[88,66],[88,56],-2.6]];
 let browser;const results=[];
@@ -21,7 +22,7 @@ try{
   const dir=`${OUT}/${profile}-${path}`;mkdirSync(dir,{recursive:true});
   const page=await browser.newPage({viewport:{width:768,height:432},deviceScaleFactor:1,isMobile:true,hasTouch:true});
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto(`http://127.0.0.1:4197/Feh-Lu-We/?autotest=1&veglod=${profile}${path==='fallback'?'&multidraw=0':''}`,{waitUntil:'domcontentloaded'});
+  await page.goto(`http://127.0.0.1:4197/Feh-Lu-We/?autotest=1${profile==='default'?'':`&veglod=${profile}`}${path==='fallback'?'&multidraw=0':''}`,{waitUntil:'domcontentloaded'});
   await page.evaluate(()=>{
    localStorage.setItem('fehluwe.settings',JSON.stringify({quality:'low',reducedMotion:true}));
    localStorage.setItem('fehluwe.save',JSON.stringify({version:4,scene:'estate',inventory:['frontKey','consKey'],flags:{leftHome:true},unlocked:['lock.door.front','lock.door.consWest'],open:{'door.front':true,'door.consEast':true,'door.consWest':true,'door.service':true,'door.atticStair':true}}));

@@ -1,9 +1,9 @@
 # VEG-R01 — recovery and completion
 
-- State: **COMPLETE — comparison and conservative decision; device/full-browser validation remains incomplete.**
+- State: **COMPLETE comparison; owner-authorized Hybrid activation for live testing. Device/full-browser limitations remain documented.**
 - Branch: `veg-r01-vegetation-lod`; no existing PR found.
 - Baseline: GEO-R01 `142bd7c`. Remote recovery: `5a6df26`; recovery checkpoint `95a7216`; durable evidence checkpoint `f3f60f6`.
-- Default: **baseline retained**. Preferred experiment: **Hybrid**, not approved for activation/merge.
+- Default: **Hybrid**, activated following the owner's explicit merge/deploy instruction. Baseline remains selectable. See `docs/veg-r01/ACTIVATION.md`.
 - Motion/browser evidence uses production `5af9779` (PB01, TUT-R01, SKY-C01). Final production tip `3a12a69` adds TUT-R02 `ab8541a`; its home-scene files are disjoint. Latest temporary integration also passes typecheck/build and 289/289 units.
 
 ## Confirmed complete
@@ -30,4 +30,4 @@ Hybrid removes far/xfar geometry changes and has 146 diagnostic changes versus b
 
 No text conflicts with final production `3a12a69`; PB01's shared comment and VEG diagnostics coexist. Temporary compatibility worktree only; no production changes. GEO-R01 remains an inherited integration dependency requiring its own review. Other work packages were not modified. No force-push, production merge or deployment.
 
-**Not merge-ready for activation.** Review Hybrid evidence, validate on the physical Samsung, separately review relative geometry growth and inherited call/budget failures, then seek the owner's separate merge/deploy authorization. Baseline remains the safe selected behavior while those gates are unresolved.
+The owner subsequently authorized **merge and deployment for live testing** after receiving the comparison, costs and limitations. Hybrid default passes latest-production typecheck/build/289 units and six bounded normal-render checks across both renderer paths. Physical Samsung and wider browser validation are still pending; this activation does not relax budget assertions.
