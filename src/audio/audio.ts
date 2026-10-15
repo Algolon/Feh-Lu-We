@@ -1,9 +1,12 @@
-// All sound is synthesised with WebAudio at runtime: no audio files, no licensing questions.
+// Most sound is synthesized in Web Audio; the user-authorized Bong Rippie sound is bundled as an MP3 in public/audio.
 // The context is created/resumed only from the Start button (user gesture), and suspended when hidden.
 
 import { renderOutdoorFootstep, type FootstepSurface, type OutdoorFootstepSurface } from './footsteps';
 
 type SfxName = string;
+
+/** Self-hosted, unmodified sound from the user's authorized Myinstants reference. */
+export const BONG_RIPPIE_ASSET = 'audio/bong-rippie.mp3';
 // R05: denser, louder water glugs while the breath remains a quiet supporting layer.
 export const BONG_HIT_BUBBLES = [0.25, 0.35, 0.47, 0.57, 0.69, 0.77, 0.90, 1.00, 1.12, 1.23, 1.31, 1.44, 1.55, 1.68, 1.80, 1.91, 2.02] as const;
 export const BONG_HIT_WATER_LEVEL = 0.145;
@@ -13,6 +16,8 @@ export class Audio {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
   private noiseBuf: AudioBuffer | null = null;
+  private bongRippieClip: AudioBuffer | null = null;
+  private bongRippieLoading: Promise<void> | null = null;
   private loops: Record<string, { gain: GainNode; target: number }> = {};
   private muted = false;
   private nextAmbient = 8;
@@ -51,6 +56,9 @@ export class Audio {
         this.startLoops();
       }
       if (this.ctx.state !== 'running') await this.ctx.resume();
+      // Preload only after the Start gesture has unlocked Web Audio. The MP3 is
+      // self-hosted by GitHub Pages and cached/decoded once for repeat hits.
+      this.preloadBongRippie();
     } catch {
       /* audio is optional */
     }
@@ -201,7 +209,7 @@ export class Audio {
       case 'crank': for (let i = 0; i < 8; i++) this.noise(0.04, 'bandpass', 1800, 6, 0.12, i * 0.11); break;
       case 'steam': this.noise(1.5, 'highpass', 3000, 0.5, 0.15, 0, 0.2); break;
       case 'water': this.noise(0.5, 'lowpass', 700, 1, 0.1, 0, 0.1); break;
-      case 'bongHit': this.bongHit(); break;
+      case 'bongHit': void this.playBongRippie(); break;
       case 'electric-zap': {
         // Audible "bzzz—bzz": one short pitched buzz for each synchronized lightning pulse.
         const v = Number.isFinite(gain) ? Math.max(0, Math.min(1, gain)) : 0;
@@ -212,7 +220,39 @@ export class Audio {
     }
   }
 
-  /** R05: the water is the foreground, not a quiet series of synth beeps.
+  /** Decode the bundled original MP3 exactly once, independent of Myinstants uptime. */
+  private preloadBongRippie() {
+    if (this.bongRippieLoading || !this.ctx) return;
+    const ctx = this.ctx;
+    const url = `${import.meta.env.BASE_URL}${BONG_RIPPIE_ASSET}`;
+    this.bongRippieLoading = (async () => {
+      const response = await fetch(url, { cache: 'force-cache' });
+      if (!response.ok) throw new Error(`Bong audio HTTP ${response.status}`);
+      const bytes = await response.arrayBuffer();
+      this.bongRippieClip = await ctx.decodeAudioData(bytes);
+    })().catch(error => {
+      console.warn('Could not load the bundled Bong Rippie sample; using sound fallback.', error);
+    });
+  }
+
+  /** Normal path: play the exact sample, full duration, no oscillator layers. */
+  private async playBongRippie() {
+    if (!this.ready || this.muted || !this.ctx) return;
+    if (!this.bongRippieLoading) this.preloadBongRippie();
+    if (this.bongRippieLoading && !this.bongRippieClip) await this.bongRippieLoading;
+    if (!this.ready || this.muted || !this.ctx) return;
+    if (!this.bongRippieClip) {
+      // Graceful audio-only fallback for an unsupported browser codec.
+      this.bongHit();
+      return;
+    }
+    const source = this.ctx.createBufferSource();
+    source.buffer = this.bongRippieClip;
+    source.connect(this.master!);
+    source.start();
+  }
+
+  /** R05 fallback: the water is the foreground, not a quiet series of synth beeps.
    * Irregular downward-pitched "glugs" sit in a bed of lower wet turbulence,
    * with an occasional coarse splash. No new sound file or engine loops.
    */
