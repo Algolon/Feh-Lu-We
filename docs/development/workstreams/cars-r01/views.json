@@ -1,0 +1,65 @@
+{
+  "rows": [
+    {
+      "name": "rear-three-quarter",
+      "pose": {
+        "x": 80,
+        "y": 0,
+        "z": 70,
+        "yaw": -0.86,
+        "pitch": -0.12
+      },
+      "low": {
+        "calls": 51,
+        "triangles": 214758
+      },
+      "high": {
+        "calls": 81,
+        "triangles": 397582
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "estate-side",
+      "pose": {
+        "x": 107,
+        "y": 0,
+        "z": 74.9,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.14
+      },
+      "low": {
+        "calls": 96,
+        "triangles": 309276
+      },
+      "high": {
+        "calls": 130,
+        "triangles": 464080
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "front-three-quarter",
+      "pose": {
+        "x": 79,
+        "y": 0,
+        "z": 79.3,
+        "yaw": -2.3,
+        "pitch": -0.16
+      },
+      "low": {
+        "calls": 57,
+        "triangles": 297955
+      },
+      "high": {
+        "calls": 93,
+        "triangles": 451682
+      },
+      "room": "out",
+      "feetY": 0
+    }
+  ],
+  "problems": []
+}
