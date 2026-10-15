@@ -7,9 +7,11 @@
 // light direction, so they stay right under any sun angle.
 import * as THREE from 'three';
 import { surface } from './surfaces';
+import { softBox } from './artkit';
 import { ConvexGeometry } from 'three/examples/jsm/geometries/ConvexGeometry.js';
 import { mergeGeometries, mergeVertices, toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { mulberry32, type Rng } from '../core/rng';
+import { NATURE_STYLE, FULL_NATURE, foliageSprays, foliageAtlas, SPRAY_SAMPLE } from './foliageStyle';
 
 // ------------------------------------------------------------------------------------------------ primitives
 /**
@@ -460,6 +462,18 @@ const BIRCHES: Broadleaf[] = [0, 1, 2].map((v) => ({
 }));
 export function birchModel(variant: number, lod: Lod): Model { return broadleaf(BIRCHES[variant % 3], lod); }
 
+/** VEG-R02: family-specific foliage on the compatible existing trunk and branch skeleton. */
+export function referenceTreeModel(species: TreeSpecies, variant: number, lod: Lod, continuous: boolean | 'outline' = 'outline'): Model {
+  if (species === 'pine') return pineModel(lod, variant, continuous, true);
+  const sp = (species === 'oak' ? OAKS : species === 'beech' ? BEECHES : BIRCHES)[variant % 3], sk = growBroadleaf(sp);
+  const model = emitBroadleaf(sp, sk, lod, continuous);
+  model.leaves.dispose(); model.leaves = foliageSprays(sk.clusters, lod, species);
+  return model;
+}
+export function birchReferenceModel(variant: number, lod: Lod, continuous: boolean | 'outline' = 'outline'): Model {
+  return referenceTreeModel('birch', variant, lod, continuous);
+}
+
 // ------------------------------------------------------------------------------------------------ Scots pine
 /**
  * Scots pine (the Veluwe tree): a tall trunk with a gentle bend, bare for more than half its height, grey-brown and
@@ -468,7 +482,7 @@ export function birchModel(variant: number, lod: Lod): Model { return broadleaf(
  * ragged, tilted needle clumps; the top rounds off rather than tapering to a spire. Three layouts.
  */
 const pineLobes = (rnd: (a: number, b: number) => number) => [0, 1, 2, 3].map((i) => ({ a: i * 1.57 + rnd(-0.4, 0.4), w: rnd(0.5, 1) }));
-export function pineModel(lod: Lod, variant = 0, continuous: boolean | 'outline' = false): Model {
+export function pineModel(lod: Lod, variant = 0, continuous: boolean | 'outline' = false, reference = false): Model {
   const v = variant % 3, r = mulberry32(733 + v * 211), near = lod === 'near', xfar = lod === 'xfar', far = lod === 'far' || xfar;
   const rnd = (a: number, b: number) => a + r() * (b - a);
   const T = [12.2, 11.0, 13.4][v], bend = [[0.45, -0.25], [-0.3, 0.2], [0.75, 0.4]][v], light = [0.6, 2.4, 4.1][v];
@@ -515,6 +529,7 @@ export function pineModel(lod: Lod, variant = 0, continuous: boolean | 'outline'
   }), BARK.fissured)));
   const centre = clusters.reduce((s, k) => s.add(k.c), new THREE.Vector3()).divideScalar(clusters.length);
   const cr = Math.max(...clusters.map((k) => k.c.distanceTo(centre) + k.r[0]));
+  if (reference) return { wood: woodG, leaves: foliageSprays(clusters, lod, 'pine') };
   const ks = near ? clusters : xfar ? largest(dropFillers(clusters), continuous ? 14 : 8, !continuous) : dropFillers(clusters);
   const leaves = cullBuried(ks.map((k) => clusterGeo(k, continuous === true && lod === 'mid' ? 'near' : lod, centre, cr, 0.4, 0.75)), ks); // high crown, seen from 6 m+ below
   return { wood: woodG, leaves: mergeParts(leaves.map((g) => foliageUV(g, 1.2))) };
@@ -577,7 +592,7 @@ export function trunkFootprint(species: TreeSpecies, variant: number): (bearing:
  * loose vase and arching over at the tips, some with a side shoot; small, rounded leaf clumps alternate along each
  * stem from knee height, with gaps between the stems. Three layouts.
  */
-export function hazelModel(variant: number, lod: Lod): Model {
+export function hazelModel(variant: number, lod: Lod, reference = false): Model {
   const v = variant % 3, r = mulberry32(8101 + v * 59), near = lod === 'near', far = lod === 'far';
   const rnd = (a: number, b: number) => a + r() * (b - a);
   const n = [8, 9, 7][v], Hh = [2.0, 2.4, 1.7][v];
@@ -608,6 +623,7 @@ export function hazelModel(variant: number, lod: Lod): Model {
     if (h > Hh * 0.8 && r() < 0.5) stem(curve.getPointAt(0.4), a + rnd(-0.9, 0.9), lean + 0.4, h * 0.45, 0.02, 1, 0.9, v * 31 + i * 3.7 + 20); // side shoot
   }
   const centre = new THREE.Vector3(0, Hh * 0.55, 0);
+  if (reference) return { wood: mergeParts(wood.map(g => barkCol(paint(g, .85), BARK.smooth))), leaves: foliageSprays(clusters, lod, 'hazel') };
   const ks = far ? largest(clusters, 10) : clusters;
   const leaves = cullBuried(ks.map((k) => clusterGeo(k, lod, centre, Hh, 0.4)), ks);
   return { wood: mergeParts(wood.map((g) => barkCol(paint(g, 0.85), BARK.smooth))), leaves: mergeParts(leaves.map((g) => foliageUV(g, 0.9))) };
@@ -617,7 +633,7 @@ export function hazelModel(variant: number, lod: Lod): Model {
  * glossy clumps (lighter, warmer tops, so it reads as leaves catching light rather than a dark blob), with a few
  * berry clusters. Three layouts (height, fullness).
  */
-export function hollyModel(variant: number, lod: Lod): Model {
+export function hollyModel(variant: number, lod: Lod, reference = false): Model {
   const v = variant % 3, r = mulberry32(9203 + v * 71), near = lod === 'near';
   const rnd = (a: number, b: number) => a + r() * (b - a);
   const Hh = [1.6, 2.0, 1.3][v], n = 10 + v * 2;
@@ -632,7 +648,7 @@ export function hollyModel(variant: number, lod: Lod): Model {
   }
   const centre = new THREE.Vector3(0, Hh * 0.5, 0);
   const ks = lod === 'far' ? largest(clusters, 8) : clusters;
-  const leafGeos = cullBuried(ks.map((k) => clusterGeo(k, lod, centre, Hh * 0.6, 0.35)), ks);
+  const leafGeos = reference ? [] as THREE.BufferGeometry[] : cullBuried(ks.map((k) => clusterGeo(k, lod, centre, Hh * 0.6, 0.35)), ks);
   // glossy holly: tops markedly lighter than the shaded sides (vertex colour), so the form reads in value
   for (const g of leafGeos) {
     const c = g.attributes.color as THREE.BufferAttribute, nn = g.attributes.normal as THREE.BufferAttribute;
@@ -653,10 +669,16 @@ export function hollyModel(variant: number, lod: Lod): Model {
       }
     }
   }
-  return { wood: mergeParts(wood.map((g) => barkCol(paint(g, 0.8), BARK.smooth))), leaves: mergeParts(leafGeos.map((g) => foliageUV(g, 0.7))) };
+  const leafParts = leafGeos.map(g => foliageUV(g, .7));
+  if (reference) leafParts.push(foliageSprays(clusters, lod, 'holly'));
+  return { wood: mergeParts(wood.map((g) => barkCol(paint(g, 0.8), BARK.smooth))), leaves: mergeParts(leafParts) };
 }
 export function bushModel(species: BushSpecies, variant: number, lod: Lod): Model {
   return species === 'hazel' ? hazelModel(variant, lod) : hollyModel(variant, lod);
+}
+
+export function referenceBushModel(species: BushSpecies, variant: number, lod: Lod): Model {
+  return species === 'hazel' ? hazelModel(variant, lod, true) : hollyModel(variant, lod, true);
 }
 
 // ------------------------------------------------------------------------------------------------ rocks
@@ -892,6 +914,93 @@ export function plantModel(kind: PlantKind, variant: number): THREE.BufferGeomet
   return kind === 'fern' ? fernModel(variant) : kind === 'grass' ? grassModel(variant) : kind === 'bilberry' ? bilberryModel(variant) : kind === 'foxglove' ? foxgloveModel(variant) : kind === 'lily' ? lilyModel(variant) : anemoneModel(variant);
 }
 
+/** VEG-R02 understory: authored broad shapes with a dark stool, curved midribs and lighter growing tips.
+ * All variants stay vertex-coloured and share the existing range-faded plant batch, without alpha overdraw.
+ */
+export function referencePlantModel(kind: PlantKind, variant: number): THREE.BufferGeometry {
+  const v = variant % PLANT_VARIANTS[kind], r = mulberry32(4201 + v * 71 + Object.keys(PLANT_VARIANTS).indexOf(kind) * 417), t = new Tris();
+  const green = C('#3c6235'), light = C('#88a856'), dark = C('#294b30');
+  const blade = (p: THREE.Vector3, d: THREE.Vector3, L: number, W: number, rise: number, a = green, b = light) => {
+    const s=V(-d.z,0,d.x), mid=p.clone().addScaledVector(d,L*.48).add(V(0,rise,0)), tip=p.clone().addScaledVector(d,L).add(V(0,rise*.48,0));
+    t.tri(p,mid.clone().addScaledVector(s,W),tip,a,b,b);
+    t.tri(p,tip,mid.clone().addScaledVector(s,-W),a,b,mix(a,b,.65));
+  };
+  if (kind === 'fern') {
+    const n=[7,9,6][v], length=[.70,.85,.55][v];
+    for(let f=0;f<n;f++){
+      const a=f/n*Math.PI*2+r()*.3, d=V(Math.cos(a),0,Math.sin(a)), side=V(-d.z,0,d.x), L=length*(.8+r()*.3);
+      const at=(u:number)=>d.clone().multiplyScalar(L*u).add(V(0,Math.sin(u*Math.PI*.85)*(.42+r()*0.01)-u*u*.08,0));
+      // Sample the arch once; foliage construction never changes another model's random stream.
+      const pts=Array.from({length:7},(_,i)=>at(i/6));stem(t,pts,.005,dark,light);
+      // A continuous folded frond keeps the plant readable at player height; the pinnae cut its edge.
+      leafShape(t,V(0,0,0),d,L,.075,.38,dark,light,4);
+      for(let k=1;k<6;k++)for(const sign of [-1,1]){
+        const u=k/6,p=pts[k], span=L*.25*Math.sin(u*Math.PI)*(.95-u*.2);
+        const outward=side.clone().multiplyScalar(sign).addScaledVector(d,.3).normalize();
+        blade(p,outward,span,.035*(1-u*.65),-.025,green,mix(green,light,.4+u*.6));
+      }
+      blade(pts[5],d,L*.17,.023,.025,green,light);
+    }
+  } else if(kind==='grass') {
+    const n=[9,11,8,7][v], H=[.34,.65,.44,.46][v], width=[.022,.016,.024,.045][v];
+    for(let i=0;i<n;i++){
+      const a=i*2.39996+r()*.5,d=V(Math.cos(a),0,Math.sin(a)),s=V(-d.z,0,d.x), h=H*(.65+r()*.55),lean=(v===3?.38:.22)*(.6+r());
+      const base=d.clone().multiplyScalar(.02+r()*.06);
+      const at=(u:number,w:number)=>base.clone().addScaledVector(d,lean*u*u).add(V(0,h*u*(1-(v===3?.25:.08)*u),0)).addScaledVector(s,w*width*(1-u));
+      for(let k=0;k<3;k++){
+        const u=k/3,z=(k+1)/3,c0=mix(dark,light,u),c1=mix(dark,light,z);
+        t.quad(at(u,-1),at(u,1),at(z,1),at(z,-1),c0,c1);
+      }
+    }
+    if(v===2)for(let i=0;i<3;i++){
+      const a=i*2.2,d=V(Math.cos(a),0,Math.sin(a)),top=d.clone().multiplyScalar(.12).add(V(0,.65+i*.06,0));
+      stem(t,[V(0,0,0),top.clone().multiplyScalar(.5),top],.004,green,C('#a6a270'));
+      for(let k=0;k<4;k++)blade(top.clone().add(V(0,-k*.04,0)),d.clone().applyAxisAngle(UP,k*1.8),.06,.013,-.02,C('#9c9560'),C('#c6b97a'));
+    }
+  } else if(kind==='bilberry') {
+    for(let i=0;i<6+v;i++){
+      const a=i*2.39996+r()*.4,d=V(Math.cos(a),0,Math.sin(a)),h=(.28+v*.025)*(.8+r()*.35),end=d.clone().multiplyScalar(.13).add(V(0,h,0));
+      stem(t,[V(0,0,0),end.clone().multiplyScalar(.5),end],.005,C('#486448'),green);
+      for(let k=0;k<4;k++){
+        const p=end.clone().multiplyScalar(.36+k*.18),dir=d.clone().applyAxisAngle(UP,k%2?1.2:-1.2);
+        blade(p,dir,.085,.035,.025,C('#365d43'),C('#7ba06a'));
+      }
+      if(v&&i%2===0)bell(t,end.clone().add(V(0,-.02,0)),V(0,-1,0),.032,.018,C('#26394d'),C('#566583'),5);
+    }
+  } else if(kind==='foxglove') {
+    for(let i=0;i<5;i++){const a=i*1.256+r()*.2;leafShape(t,V(0,.015,0),V(Math.cos(a),0,Math.sin(a)),.28+r()*.08,.065,.065,dark,light,3);}
+    const spikes=v===2?2:1;
+    for(let j=0;j<spikes;j++){
+      const h=(v===1?1.2:1.0)-j*.25,end=V(.08+j*.11,h,.04),base=V(j*.06,0,0);
+      stem(t,[base,V(.015,h*.5,0),end],.009,green,light);
+      for(let k=0;k<10;k++){
+        const u=.38+k*.058,p=base.clone().lerp(end,u),a=.2+(k%2)*.65+j*2,dir=V(Math.cos(a),-.7,Math.sin(a));
+        bell(t,p,dir,.105*(1-k*.045),.042*(1-k*.035),C('#854e88'),C('#dc9dce'),6);
+      }
+    }
+  } else if(kind==='lily') {
+    for(let i=0;i<(v===1?3:2);i++){const a=i*2.6+r()*.3;leafShape(t,V(0,0,0),V(Math.cos(a),0,Math.sin(a)),.33,.065,.055,C('#315b3b'),C('#83aa63'),3,.7);}
+    const d=V(Math.cos(v),0,Math.sin(v)),pts=[V(0,0,0),d.clone().multiplyScalar(.02).add(V(0,.24,0)),d.clone().multiplyScalar(.13).add(V(0,.29,0)),d.clone().multiplyScalar(.22).add(V(0,.22,0))];
+    stem(t,pts,.004,green,light);
+    for(let k=0;k<5+v;k++){
+      const u=.4+k/(5+v)*.6,i=Math.min(2,Math.floor(u*3)),p=pts[i].clone().lerp(pts[i+1],u*3-i);
+      bell(t,p,V(0,-1,0),.028,.018,C('#d3ddca'),C('#fff7e7'),6);
+    }
+  } else {
+    for(let i=0;i<[2,3,5][v];i++){
+      const a=i*2.39996+r(),base=V(Math.cos(a)*i*.025,0,Math.sin(a)*i*.025),h=.15+r()*.06,top=base.clone().add(V(.01,h,0));
+      stem(t,[base,top],.004,green,light);
+      for(let k=0;k<3;k++)blade(base.clone().add(V(0,h*.5,0)),V(Math.cos(a+k*2.1),0,Math.sin(a+k*2.1)),.075,.035,.012,green,light);
+      for(let k=0;k<6;k++){
+        const d=V(Math.cos(a+k*Math.PI/3),0,Math.sin(a+k*Math.PI/3));
+        blade(top,d,.048,.022,.017,C('#e0cc65'),v===2?C('#f0dfe9'):C('#fff7e9'));
+      }
+      bell(t,top.clone().add(V(0,.008,0)),UP,.01,.014,C('#c2a142'),C('#f0d074'),6);
+    }
+  }
+  return t.build(kind==='grass'?.6:.45);
+}
+
 /**
  * DEV-04B timber family: a fallen / cut log as ONE CLOSED solid (no open tube ends, no hollow branch stub). Fissured
  * bark body, slightly bent, tapering; both ends are sawn faces built on the body's own end ring (shared vertices, so
@@ -900,13 +1009,23 @@ export function plantModel(kind: PlantKind, variant: number): THREE.BufferGeomet
  * baked (keepColor): bark darker toward the ground, pale end grain.
  * DEV-03 had the same silhouette but an open-ended stub and separate end discs that could gap from the body.
  */
-export function logModel(seed: number, len = 3, rad = 0.22, o: { stub?: boolean; radial?: number } = {}): THREE.BufferGeometry {
+export function logModel(seed: number, len = 3, rad = 0.22, o: { stub?: boolean; radial?: number; reference?: boolean } = {}): THREE.BufferGeometry {
+  const reference = o.reference ?? FULL_NATURE;
   const r = mulberry32(seed);
   const bend = (r() - 0.5) * 0.3, sag = rad * 0.25, radial = o.radial ?? 7;
   // built upright like a trunk (the tube's frames give outward-facing triangles along +y), then laid along +x
   const pts: P3[] = [0, 0.33, 0.66, 1].map((t) => [sag * Math.sin(t * Math.PI), t * len, bend * Math.sin(t * Math.PI) * len * 0.15]);
   const rr = [rad, rad * (0.95 + r() * 0.03), rad * (0.86 + r() * 0.04), rad * 0.78];
   const body = taperTube(pts, rr, { radial, rows: 4, vScale: 1.2 });
+  if (reference) {
+    // Broad uneven bark ridges, with shared seam vertices. Caps use these very rings and remain watertight.
+    const p=body.attributes.position;
+    for(let i=0;i<p.count;i++){
+      const row=Math.floor(i/(radial+1)),j=i%(radial+1),a=(j===radial?0:j)/radial*Math.PI*2;
+      const factor=1+.045*Math.sin(a*3+seed)+.025*Math.cos(a*5+row*.9);
+      p.setXYZ(i,p.getX(i)*factor,p.getY(i),p.getZ(i)*factor);
+    }
+  }
   const parts: THREE.BufferGeometry[] = [body];
   if (o.stub !== false && len > 0.8) {
     const sp: P3[] = [[-rad * 0.6, len * 0.4, 0], [-rad * 1.9, len * 0.47, rad * 0.7]];
@@ -920,7 +1039,11 @@ export function logModel(seed: number, len = 3, rad = 0.22, o: { stub?: boolean;
     for (let t = 0; t < ix.length; t += 3) { const a = ix[t + 1]; ix[t + 1] = ix[t + 2]; ix[t + 2] = a; }
     g.computeVertexNormals();
   }
-  paint(body, (p) => { const k = 0.62 + 0.38 * THREE.MathUtils.smoothstep(p.y, 0, rad * 1.4); return [k, k * 0.97, k * 0.92]; });
+  paint(body, (p) => {
+    const k = 0.62 + 0.38 * THREE.MathUtils.smoothstep(p.y, 0, rad * 1.4);
+    const moss=reference?THREE.MathUtils.smoothstep(p.y,rad*.8,rad*1.6)*Math.max(0,Math.sin(p.x*3.3+seed))*.65:0;
+    return [k*(1-moss*.38),k*(.97+moss*.1),k*(.92-moss*.43)];
+  });
   barkCol(body, BARK.fissured);
   for (const g of parts.slice(1)) if (!g.attributes.color) { paint(g, 0.85); barkCol(g, BARK.fissured); }
   const g = mergeParts(parts);
@@ -940,16 +1063,16 @@ function capRing(tube: THREE.BufferGeometry, which: 'start' | 'end', radial: num
   const ring: THREE.Vector3[] = [];
   for (let j = 0; j < radial; j++) ring.push(new THREE.Vector3().fromBufferAttribute(p, i0 + j));
   const c = ring.reduce((a, v) => a.add(v), new THREE.Vector3()).multiplyScalar(1 / radial);
-  const levels = [1, 0.84, 0.4, 0]; // rim (bark edge) → sapwood → heart → centre
-  const shade = [0.78, 1.28, 1.08, 0.92];
+  const levels = FULL_NATURE ? [1,.88,.83,.69,.65,.46,.42,0] : [1, 0.84, 0.4, 0];
+  const shade = FULL_NATURE ? [.68,1.30,1.27,.91,1.2,1.12,.86,1.04] : [0.78, 1.28, 1.08, 0.92];
   const pos: number[] = [], col: number[] = [], uv: number[] = [];
   const at = (j: number, l: number) => c.clone().lerp(ring[j % radial], levels[l]);
   const put = (v: THREE.Vector3, l: number) => { pos.push(v.x, v.y, v.z); col.push(shade[l], shade[l] * 0.96, shade[l] * 0.86); uv.push((BARK.smooth + 0.35 + 0.2 * levels[l]) / ATLAS_COLS, 0.4); };
-  for (let l = 0; l < 3; l++) for (let j = 0; j < radial; j++) {
+  for (let l = 0; l < levels.length - 1; l++) for (let j = 0; j < radial; j++) {
     const a0 = at(j, l), a1 = at(j + 1, l), b0 = at(j, l + 1), b1 = at(j + 1, l + 1);
     // wound against the tube's own ring edges (each rim edge then pairs with the body's: a closed solid)
     const quad: [THREE.Vector3, number][][] = which === 'start' ? [[[a0, l], [a1, l], [b0, l + 1]], [[a1, l], [b1, l + 1], [b0, l + 1]]] : [[[a0, l], [b0, l + 1], [a1, l]], [[a1, l], [b0, l + 1], [b1, l + 1]]];
-    for (const tri of quad) { if (l === 2 && tri.filter(([, q]) => q === 3).length > 1) continue; for (const [v, q] of tri) put(v, q); }
+    for (const tri of quad) { if (l === levels.length-2 && tri.filter(([, q]) => q === levels.length-1).length > 1) continue; for (const [v, q] of tri) put(v, q); }
   }
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
@@ -959,13 +1082,57 @@ function capRing(tube: THREE.BufferGeometry, which: 'start' | 'end', radial: num
   return g;
 }
 
+/** Flared, irregular stump with closed sawn faces, bark rim and growth rings; same unit collision fit. */
+export function referenceStumpModel(): THREE.BufferGeometry {
+  const radial=12,body=taperTube([[0,-.25,0],[0,.3,0],[.02,.9,-.01]],[1.18,1.03,.94],{radial,rows:5,lobes:4,flare:.35,vScale:1});
+  const p=body.attributes.position;
+  for(let i=0;i<p.count;i++){
+    const row=Math.floor(i/(radial+1)),j=i%(radial+1),a=(j===radial?0:j)*Math.PI*2/radial;
+    p.setY(i,p.getY(i)+(row===5?.035*Math.sin(a*3)+.02*Math.sin(a*5):0));
+  }
+  paint(body,p=>{const k=.65+.35*THREE.MathUtils.smoothstep(p.y,0,.6);return[k,k*.95,k*.82];});barkCol(body,BARK.fissured);
+  const parts=[body,capRing(body,'start',radial),capRing(body,'end',radial)];
+  for(const g of parts){const a=g.index!.array;for(let i=0;i<a.length;i+=3){const q=a[i+1];a[i+1]=a[i+2];a[i+2]=q;}g.computeVertexNormals();}
+  const result=mergeParts(parts);result.userData.keepColor=true;return result;
+}
+
+/** Twigs reuse the closed log construction and the same bark, in small forked silhouettes. */
+export function referenceBranchModel(variant=0): THREE.BufferGeometry {
+  const v=variant%3;return logModel(5101+v*17,[.75,1.05,1.35][v],.035+v*.008,{radial:5,reference:true});
+}
+
+export function referenceCypressModel(): THREE.BufferGeometry {
+  const clusters: Cluster[]=[];
+  for(let i=0;i<7;i++){
+    const y=.11+i*.12,s=(1-y)*.8+.08;
+    clusters.push({c:V(Math.sin(i*2.4)*.05,y,Math.cos(i*2.4)*.05),r:[s,.105,s],seed:82+i*3.4,val:.85+i*.035,amp:0,flat:1});
+  }
+  return foliageSprays(clusters,'near','cypress');
+}
+
+export function referenceHedgeModel(len: number): THREE.BufferGeometry {
+  const core=foliageUV(paint(softBox(len,.69,.60,.12,2,3).translate(0,.345,0),p=>{
+    const k=.58+.34*THREE.MathUtils.clamp(p.y/.69,0,1);return[k,k,k*.9];
+  }),.6);
+  const clusters: Cluster[]=[];
+  const n=Math.ceil(len/.55);
+  for(let i=0;i<n;i++)clusters.push({c:V(-len/2+(i+.5)*len/n,.49+Math.sin(i*1.7)*.025,0),r:[len/n*.4,.30,.35],seed:18+i*1.1,val:.88+i%3*.04,amp:0,flat:1});
+  const result=mergeParts([core,foliageSprays(clusters,'mid','hedge')]);result.userData.keepColor=true;return result;
+}
+
+export function referenceTopiaryModel(): THREE.BufferGeometry {
+  const clusters: Cluster[]=[{c:V(0,.5,0),r:[.45,.38,.45],seed:123,val:1,amp:0,flat:1}];
+  for(let i=0;i<5;i++){const a=i*1.256;clusters.push({c:V(Math.cos(a)*.25,.36,Math.sin(a)*.25),r:[.27,.28,.27],seed:180+i,val:.88+i*.025,amp:0,flat:1});}
+  return foliageSprays(clusters,'near','hedge');
+}
+
 /**
  * DEV-04B split firewood: a closed wedge (a sector of a log, ~110°) along local +x from 0 to `len`, outer radius
  * `rad`: bark on the curved face, pale split wood on the two flat faces, end grain on the ends. Its lowest point is
  * at y 0 when it lies on a flat face (stacked woodpiles: alternate `flip`).
  */
 export function splitLogModel(seed: number, len = 0.42, rad = 0.12): THREE.BufferGeometry {
-  const r = mulberry32(seed), ang = 1.7 + r() * 0.5, seg = 4;
+  const r = mulberry32(seed), ang = 1.7 + r() * 0.5, seg = FULL_NATURE ? 6 : 4;
   const sh = new THREE.Shape();
   sh.moveTo(0, 0);
   for (let i = 0; i <= seg; i++) { const a = (ang * i) / seg, k = 1 + (r() - 0.5) * 0.08; sh.lineTo(Math.cos(a) * rad * k, Math.sin(a) * rad * k); }
@@ -985,7 +1152,8 @@ export function splitLogModel(seed: number, len = 0.42, rad = 0.12): THREE.Buffe
     // bark: the curved face (far from the apex axis and not an end); end grain: faces along x; split faces: the rest
     const kind = Math.abs(nx) > 0.9 ? 'end' : radial > rad * 0.8 ? 'bark' : 'split';
     for (let q = 0; q < 3; q++) {
-      const i = t + q, k = kind === 'bark' ? 0.72 : kind === 'end' ? 1.25 : 1.15;
+      const i = t + q, base = kind === 'bark' ? (FULL_NATURE ? .65 : .72) : kind === 'end' ? 1.25 : 1.15;
+      const k = base * (FULL_NATURE && kind !== 'bark' ? .95 + .05 * Math.sin(pos.getX(i)*17 + pos.getZ(i)*45 + seed) : 1);
       col.set([k, k * 0.96, k * (kind === 'bark' ? 0.9 : 0.84)], i * 3);
       if (kind === 'bark') uv.set([(BARK.fissured + GUT + 0.5 * (1 - 2 * GUT)) / ATLAS_COLS + (pos.getZ(i) / rad) * 0.03, pos.getX(i) / 1.2], i * 2);
       else uv.set([(BARK.smooth + 0.4 + (kind === 'end' ? 0.1 : 0)) / ATLAS_COLS, pos.getX(i) * 0.5], i * 2);
@@ -1004,6 +1172,12 @@ export function splitLogModel(seed: number, len = 0.42, rad = 0.12): THREE.Buffe
 
 /** A fallen leaf lying flat (instanced by the hundred as litter). */
 export function litterLeafModel(): THREE.BufferGeometry {
+  if (FULL_NATURE) {
+    const t = new Tris();
+    leafShape(t,V(-.055,0,0),V(1,0,0),.11,.031,.009,C('#898579'),C('#d9c8a1'),2);
+    stem(t,[V(-.07,.001,0),V(-.01,.011,0),V(.055,.005,0)],.0015,C('#685e49'),C('#a99a77'));
+    return t.build(.8);
+  }
   const s = new THREE.Shape();
   s.moveTo(0, -0.05); s.quadraticCurveTo(0.035, 0, 0, 0.05); s.quadraticCurveTo(-0.035, 0, 0, -0.05);
   const g = new THREE.ShapeGeometry(s, 2).rotateX(-Math.PI / 2);
@@ -1040,6 +1214,14 @@ export function woodMats(): WoodMats {
       x.stroke();
     }
     for (let i = 0; i < 120; i++) { x.fillStyle = grey(0.92 + r() * 0.08, 0.35); x.fillRect(r() * 128, r() * 256, 6 + r() * 10, 2 + r() * 3); }
+    if (FULL_NATURE) {
+      // Fewer broad authored fissures and occasional knots read at walking distance, unlike tiny noise.
+      for(let i=0;i<9;i++){
+        const cx=7+i*14;x.strokeStyle=grey(.43,.65);x.lineWidth=1.8;x.beginPath();
+        for(let y=-5;y<262;y+=18){const xx=cx+Math.sin(y*.028+i)*3.5;if(y<0)x.moveTo(xx,y);else x.lineTo(xx,y);}x.stroke();
+      }
+      for(const [px,py]of [[33,70],[94,192]]){x.strokeStyle=grey(.53,.7);x.lineWidth=2;x.beginPath();x.ellipse(px,py,5,13,.12,0,Math.PI*2);x.stroke();}
+    }
     // 1: smooth (beech, hazel) — soft mottling and faint horizontal lenticels
     x.fillStyle = grey(0.9); x.fillRect(128, 0, 128, 256);
     for (let i = 0; i < 70; i++) { x.fillStyle = grey(0.8 + r() * 0.16, 0.35); x.beginPath(); x.ellipse(128 + r() * 128, r() * 256, 6 + r() * 14, 4 + r() * 10, 0, 0, Math.PI * 2); x.fill(); }
@@ -1067,12 +1249,15 @@ export function woodMats(): WoodMats {
   }, 83);
   const lam = (o: THREE.MeshLambertMaterialParameters) => new THREE.MeshLambertMaterial({ vertexColors: true, ...o });
   const tree = lam({ map: atlas });
+  const sprays = NATURE_STYLE !== 'baseline' ? foliageAtlas() : null;
   // foliage UVs (u ≥ LEAF_U) repeat inside the leaf column; gradients from the unwrapped UV keep mip selection
   // continuous across the wrap (no seams); bark UVs are sampled as usual
   tree.onBeforeCompile = (sh) => {
+    if (sprays) { sh.uniforms.flwSprays = { value: sprays }; sh.fragmentShader = 'uniform sampler2D flwSprays;\n' + sh.fragmentShader; }
     sh.fragmentShader = sh.fragmentShader.replace('#include <map_fragment>', `#ifdef USE_MAP
   vec2 tUv = vMapUv;
   vec4 sampledDiffuseColor;
+  ${sprays ? `if (tUv.x > 127.0) { ${SPRAY_SAMPLE} sampledDiffuseColor = texture2D(flwSprays, flwAtlasUv); if (sampledDiffuseColor.a < 0.4) discard; } else` : ''}
   if (tUv.x > ${(LEAF_U / 2).toFixed(1)}) {
     vec2 lUv = vec2(fract(tUv.x), tUv.y * 0.5);
     vec2 aUv = vec2((3.0 + ${GUT.toFixed(2)} + lUv.x * ${(1 - 2 * GUT).toFixed(2)}) * 0.25, lUv.y);
@@ -1084,7 +1269,17 @@ export function woodMats(): WoodMats {
   diffuseColor *= sampledDiffuseColor;
 #endif`);
   };
-  tree.customProgramCacheKey = () => 'woodkit-tree-atlas';
+  tree.customProgramCacheKey = () => sprays ? 'woodkit-tree-atlas-sprays-r02' : 'woodkit-tree-atlas';
+  if (sprays) {
+    const depth = new THREE.MeshDepthMaterial({ map: atlas, depthPacking: THREE.RGBADepthPacking });
+    depth.onBeforeCompile = sh => {
+      sh.uniforms.flwSprays = { value: sprays };
+      sh.fragmentShader = 'uniform sampler2D flwSprays;\n' + sh.fragmentShader;
+      sh.fragmentShader = sh.fragmentShader.replace('#include <map_fragment>', `if (vMapUv.x > 127.0) { vec2 tUv = vMapUv; ${SPRAY_SAMPLE} if (texture2D(flwSprays, flwAtlasUv).a < 0.4) discard; }`);
+    };
+    depth.customProgramCacheKey = () => 'woodkit-sprays-shadow-r02';
+    tree.userData.vegetationDepth = depth;
+  }
   wm = { tree: surface(tree, 'tree'), rock: surface(lam({ map: strata }), 'stone'), flat: surface(lam({}), 'foliage') }; // DEV-04C authored surfaces
   return wm;
 }

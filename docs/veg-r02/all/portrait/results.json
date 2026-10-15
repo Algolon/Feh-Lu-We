@@ -1,0 +1,85 @@
+{
+  "results": [
+    {
+      "style": "woodland-r02",
+      "path": "multi",
+      "name": "dense",
+      "calls": 48,
+      "triangles": 230876,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "style": "woodland-r02",
+      "path": "multi",
+      "name": "boslust",
+      "calls": 75,
+      "triangles": 265698,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "style": "woodland-r02",
+      "path": "multi",
+      "name": "forecourt",
+      "calls": 68,
+      "triangles": 219082,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "style": "woodland-r02",
+      "path": "multi",
+      "name": "forecourt-high",
+      "calls": 105,
+      "triangles": 418544,
+      "shadows": true,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "style": "woodland-r02",
+      "path": "fallback",
+      "name": "dense",
+      "calls": 94,
+      "triangles": 230876,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "style": "woodland-r02",
+      "path": "fallback",
+      "name": "boslust",
+      "calls": 113,
+      "triangles": 265698,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "style": "woodland-r02",
+      "path": "fallback",
+      "name": "forecourt",
+      "calls": 81,
+      "triangles": 219082,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "style": "woodland-r02",
+      "path": "fallback",
+      "name": "forecourt-high",
+      "calls": 133,
+      "triangles": 396952,
+      "shadows": true,
+      "glError": 0,
+      "shaderFailures": 0
+    }
+  ],
+  "errors": []
+}

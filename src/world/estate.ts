@@ -6,6 +6,8 @@
 // Layout constants live in layout.ts, keepouts in footprints.ts, ground in terrain.ts.
 import * as THREE from 'three';
 import { surface } from './surfaces';
+import { FULL_NATURE } from './foliageStyle';
+import { referenceHedgeModel, referenceTopiaryModel, woodMats } from './woodkit';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { World, type GameApi } from '../interactions/world';
 import type { SceneExtras } from '../core/game';
@@ -541,13 +543,14 @@ function buildGarden(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods: Estat
   if (woods) {
     // forecourt planter: a clipped box ball in the middle, a ring of foxgloves and anemones (planted in the soil)
     const k2 = c.k;
-    blob(c.b, k2.M.foliage, '#3f5f34', SITES.forecourt.x, 0.95, SITES.forecourt.z, 0.75, 0.6, 0.75, { chunk: c.chunk });
+    if (FULL_NATURE) geo(c.b, woodMats().tree, '#4d713c', referenceTopiaryModel(), SITES.forecourt.x, .45, SITES.forecourt.z, { chunk: c.chunk, s: [1.25,1.1,1.25] });
+    else blob(c.b, k2.M.foliage, '#3f5f34', SITES.forecourt.x, 0.95, SITES.forecourt.z, 0.75, 0.6, 0.75, { chunk: c.chunk });
     for (let i = 0; i < 14; i++) { const a = (i / 14) * Math.PI * 2, d = 1.25 + (i % 2) * 0.15; woods.addPlant(i % 3 ? 'anemone' : 'foxglove', i, SITES.forecourt.x + Math.cos(a) * d, SITES.forecourt.z + Math.sin(a) * d, 0.9, 0.45); }
     // clipped box hedges along the manor front (two runs, the approach to the porch open), on a low collider
     // one clipped piece per run (DEV-03 budget: 16 short pieces cost 9.4 k triangles in the forecourt view; one
     // piece per run with the same wavy clipped top costs ~2 k)
     for (const [x0, x1] of [[72.6, 84.9], [95.1, 107.4]] as const) {
-      geo(c.b, k2.M.foliage, '#3f5f34', hedgeGeo(x1 - x0), (x0 + x1) / 2, 0, 79.2, { chunk: c.chunk });
+      geo(c.b, FULL_NATURE ? woodMats().tree : k2.M.foliage, '#3f5f34', FULL_NATURE ? referenceHedgeModel(x1 - x0) : hedgeGeo(x1 - x0), (x0 + x1) / 2, 0, 79.2, { chunk: c.chunk });
       w.col.addBox(x0, x1, 78.85, 79.55, 0, 0.75);
     }
   } else {

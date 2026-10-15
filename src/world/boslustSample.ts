@@ -11,7 +11,8 @@ import type { World, GameApi } from '../interactions/world';
 import type { Ctx } from './arch';
 import { Batcher, compound, getKit, v3 } from './kit';
 import { Asm, artMats, softBox, projectUV, bake, baseAO, ContactShadows } from './artkit';
-import { lump as lumpGeo, treeModel, bushModel, plantModel, rockModel, woodMats, taperTube, PLANT_VARIANTS, BARK_TINT, LEAF_TINT, type Model, type Lod, type TreeSpecies, type BushSpecies, type PlantKind } from './woodkit';
+import { lump as lumpGeo, treeModel, birchReferenceModel, referenceTreeModel, bushModel, referenceBushModel, plantModel, referencePlantModel, referenceStumpModel, rockModel, woodMats, taperTube, PLANT_VARIANTS, BARK_TINT, LEAF_TINT, type Model, type Lod, type TreeSpecies, type BushSpecies, type PlantKind } from './woodkit';
+import { NATURE_STYLE, FULL_NATURE } from './foliageStyle';
 import type { WoodlandSite, PlacedStump } from './woodlandPlan';
 import { mulberry32 } from '../core/rng';
 import { FOREST_PATHS, terrainHeight, gridHeight, hillHeight } from './terrain';
@@ -209,6 +210,7 @@ const camPos = new THREE.Vector3();
 type Spec = { kind: 'tree'; species: TreeSpecies; v: number } | { kind: 'bush'; species: BushSpecies; v: number };
 interface TreeItem { key: string; bush: boolean; m: THREE.Matrix4; p: THREE.Vector3; c: THREE.Color; lod: number; vis: boolean; id: number; r: number }
 const LODS: Lod[] = ['near', 'mid', 'far', 'xfar'];
+const BIRCH_R02 = NATURE_STYLE === 'birch-r02';
 /**
  * Trees and bushes of every species and variant in ONE batch (one draw call with multi-draw). Each species ×
  * variant has a near, mid and far geometry, each bark + foliage merged on the tree-atlas material, the bark's
@@ -234,12 +236,13 @@ export class TreeBatches {
       const b = new THREE.Color(BARK_TINT[s.species]), l = new THREE.Color(LEAF_TINT[s.species]);
       const ratio = new THREE.Color(b.r / l.r, b.g / l.g, b.b / l.b);
       if (s.kind === 'tree') {
-        const ids = LODS.slice(0, TREE_LOD_PROFILE.continuous === 'outline' ? 3 : 4).map((lod) => this.geos.push(mergeModel(treeModel(s.species, s.v, lod, TREE_LOD_PROFILE.continuous), ratio)) - 1);
+        const ids = LODS.slice(0, TREE_LOD_PROFILE.continuous === 'outline' ? 3 : 4).map((lod) => this.geos.push(mergeModel(
+          FULL_NATURE ? referenceTreeModel(s.species, s.v, lod, TREE_LOD_PROFILE.continuous) : BIRCH_R02 && s.species === 'birch' ? birchReferenceModel(s.v, lod, TREE_LOD_PROFILE.continuous) : treeModel(s.species, s.v, lod, TREE_LOD_PROFILE.continuous), ratio)) - 1);
         if (ids.length === 3) ids.push(ids[2]); // identical far geometry removes one whole switch and fallback draw group
         this.keys.set(key, ids);
       }
       else { // bushes: near and far only (one geometry serves mid and far: fewer groups in the instanced fallback)
-        const near = this.geos.push(mergeModel(bushModel(s.species, s.v, 'near'), ratio)) - 1, far = this.geos.push(mergeModel(bushModel(s.species, s.v, 'far'), ratio)) - 1;
+        const near = this.geos.push(mergeModel((FULL_NATURE ? referenceBushModel : bushModel)(s.species, s.v, 'near'), ratio)) - 1, far = this.geos.push(mergeModel((FULL_NATURE ? referenceBushModel : bushModel)(s.species, s.v, 'far'), ratio)) - 1;
         this.keys.set(key, [near, far, far, far]);
       }
     }
@@ -349,7 +352,7 @@ export class PlantBatch {
   /** DEV-03: any material and tag (the same range-faded batch draws litter, verge stones and dead wood). */
   constructor(private fade = 4, private material?: THREE.Material, private tag: Record<string, unknown> = { understory: true, vegPart: 'plants' }) {}
   add(kind: PlantKind, v: number, m: THREE.Matrix4, c: THREE.ColorRepresentation, show = PLANT_SHOW[kind]) {
-    this.addGeo(`${kind}.${v % PLANT_VARIANTS[kind]}`, () => plantModel(kind, v), m, c, show, kind);
+    this.addGeo(`${kind}.${v % PLANT_VARIANTS[kind]}`, () => (FULL_NATURE ? referencePlantModel : plantModel)(kind, v), m, c, show, kind);
   }
   /** Any geometry, shared by `key` (made once by `make`), shown within `show` metres. */
   addGeo(key: string, make: () => THREE.BufferGeometry, m: THREE.Matrix4, c: THREE.ColorRepresentation, show: number, kind = key) {
@@ -423,8 +426,8 @@ export const DECAL: Record<TreeSpecies, number> = { oak: 3.6, beech: 3.2, birch:
 export function stumpsV2(c: Ctx, list: PlacedStump[]) {
   const A = artMats(), M = woodMats();
   const r = mulberry32(77);
-  const body = taperTube([[0, -0.25, 0], [0, 0.35, 0], [0.02, 0.9, 0.01]], [1.18, 0.98, 0.94], { radial: 10, rows: 5, lobes: 4, flare: 0.35, vScale: 1.0 });
-  bake(body, (p) => 0.7 + 0.3 * THREE.MathUtils.smoothstep(p.y, -0.1, 0.6));
+  const body = FULL_NATURE ? referenceStumpModel() : taperTube([[0, -0.25, 0], [0, 0.35, 0], [0.02, 0.9, 0.01]], [1.18, 0.98, 0.94], { radial: 10, rows: 5, lobes: 4, flare: 0.35, vScale: 1.0 });
+  if (!FULL_NATURE) bake(body, (p) => 0.7 + 0.3 * THREE.MathUtils.smoothstep(p.y, -0.1, 0.6));
   const top = new THREE.CircleGeometry(0.97, 12).rotateX(-Math.PI / 2).translate(0.02, 0.9, -0.01);
   const uv = top.attributes.uv as THREE.BufferAttribute;
   for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i) * 0.25 + 0.2, uv.getY(i) * 0.25 + 0.2);
@@ -435,13 +438,13 @@ export function stumpsV2(c: Ctx, list: PlacedStump[]) {
     // grows out of — darker wood, its top rounded over by a moss cap (no saw cut round the trunk); same height
     const sc: [number, number, number] = [t.vr, t.s, t.vr];
     if (t.treatment === 'nurse') {
-      c.b.add(A.timber, body, mat(t.vx, t.y - 0.05, t.vz, yaw, [t.vr, t.s * 0.82, t.vr]), new THREE.Color('#4f3e30').multiplyScalar(k), c.chunk, true, 0);
+      c.b.add(FULL_NATURE ? M.tree : A.timber, body, mat(t.vx, t.y - 0.05, t.vz, yaw, [t.vr, t.s * 0.82, t.vr]), new THREE.Color('#4f3e30').multiplyScalar(k), c.chunk, true, 0);
       const cap = lumpGeo(t.vx, t.y - 0.05 + t.s * 0.74, -t.vz, t.vr * 1.02, t.s * 0.28, t.vr * 1.02, Math.round(t.vx * 7), 1, new THREE.Vector3(t.vx, t.y - 0.3, -t.vz), t.vr * 2, 0.3, 0.22);
       c.b.add(M.flat, cap, new THREE.Matrix4(), new THREE.Color('#5d6f34').multiplyScalar(0.9 * k), c.chunk, false, 0); // same group as the litter and turf
       cap.dispose();
     } else {
-      c.b.add(A.timber, body, mat(t.vx, t.y - 0.05, t.vz, yaw, sc), new THREE.Color('#6e5440').multiplyScalar(k), c.chunk, true, 0);
-      c.b.add(A.timber, top, mat(t.vx, t.y - 0.05, t.vz, yaw, sc), '#b08a62', c.chunk, true, 0);
+      c.b.add(FULL_NATURE ? M.tree : A.timber, body, mat(t.vx, t.y - 0.05, t.vz, yaw, sc), new THREE.Color('#6e5440').multiplyScalar(k), c.chunk, true, 0);
+      if (!FULL_NATURE) c.b.add(A.timber, top, mat(t.vx, t.y - 0.05, t.vz, yaw, sc), '#b08a62', c.chunk, true, 0);
     }
     ground(t.vx, t.vz, t.vr * 3.2, 0.5, yaw);
   }

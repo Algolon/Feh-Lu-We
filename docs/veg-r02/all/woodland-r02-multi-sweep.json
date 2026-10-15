@@ -1,0 +1,887 @@
+[
+  {
+    "distance": 10,
+    "calls": 13,
+    "triangles": 144742,
+    "trees": [
+      {
+        "index": 4,
+        "key": "pine.2",
+        "bush": false,
+        "x": 67.78370744083078,
+        "y": 2.16970310648078,
+        "z": 43.41372854216024,
+        "distance": 113.684,
+        "level": 3,
+        "visible": true,
+        "geometry": 14,
+        "triangles": 484
+      },
+      {
+        "index": 11,
+        "key": "oak.1",
+        "bush": false,
+        "x": 78.19357756394893,
+        "y": 0.6155378282669929,
+        "z": 39.83287860592827,
+        "distance": 113.652,
+        "level": 3,
+        "visible": true,
+        "geometry": 11,
+        "triangles": 306
+      },
+      {
+        "index": 24,
+        "key": "birch.2",
+        "bush": false,
+        "x": 73.82264599185439,
+        "y": 0.6539441270937029,
+        "z": 43.564182869251816,
+        "distance": 111.441,
+        "level": 3,
+        "visible": true,
+        "geometry": 29,
+        "triangles": 452
+      },
+      {
+        "index": 36,
+        "key": "pine.2",
+        "bush": false,
+        "x": 83.56498271469027,
+        "y": 0.4771214478675722,
+        "z": 42.459801360592245,
+        "distance": 109.699,
+        "level": 3,
+        "visible": true,
+        "geometry": 14,
+        "triangles": 484
+      }
+    ]
+  },
+  {
+    "distance": 16,
+    "calls": 18,
+    "triangles": 163950,
+    "trees": [
+      {
+        "index": 3,
+        "key": "oak.1",
+        "bush": false,
+        "x": 72.4240675373003,
+        "y": 4.223560496906486,
+        "z": 35.30595424873754,
+        "distance": 114.025,
+        "level": 3,
+        "visible": true,
+        "geometry": 11,
+        "triangles": 306
+      },
+      {
+        "index": 4,
+        "key": "pine.2",
+        "bush": false,
+        "x": 67.78370744083078,
+        "y": 2.16970310648078,
+        "z": 43.41372854216024,
+        "distance": 108.141,
+        "level": 3,
+        "visible": true,
+        "geometry": 14,
+        "triangles": 484
+      },
+      {
+        "index": 11,
+        "key": "oak.1",
+        "bush": false,
+        "x": 78.19357756394893,
+        "y": 0.6155378282669929,
+        "z": 39.83287860592827,
+        "distance": 107.885,
+        "level": 3,
+        "visible": true,
+        "geometry": 11,
+        "triangles": 306
+      },
+      {
+        "index": 17,
+        "key": "oak.2",
+        "bush": false,
+        "x": 56.333412717469045,
+        "y": 0.5904941126635974,
+        "z": 44.961759795527904,
+        "distance": 111.804,
+        "level": 3,
+        "visible": true,
+        "geometry": 17,
+        "triangles": 420
+      }
+    ]
+  },
+  {
+    "distance": 22,
+    "calls": 20,
+    "triangles": 164642,
+    "trees": [
+      {
+        "index": 1,
+        "key": "pine.1",
+        "bush": false,
+        "x": 64.32564094550908,
+        "y": 7.406490200746643,
+        "z": 33.05261758575216,
+        "distance": 113.652,
+        "level": 3,
+        "visible": true,
+        "geometry": 5,
+        "triangles": 556
+      },
+      {
+        "index": 3,
+        "key": "oak.1",
+        "bush": false,
+        "x": 72.4240675373003,
+        "y": 4.223560496906486,
+        "z": 35.30595424873754,
+        "distance": 108.387,
+        "level": 3,
+        "visible": true,
+        "geometry": 11,
+        "triangles": 306
+      },
+      {
+        "index": 4,
+        "key": "pine.2",
+        "bush": false,
+        "x": 67.78370744083078,
+        "y": 2.16970310648078,
+        "z": 43.41372854216024,
+        "distance": 102.656,
+        "level": 3,
+        "visible": true,
+        "geometry": 14,
+        "triangles": 484
+      },
+      {
+        "index": 7,
+        "key": "oak.1",
+        "bush": false,
+        "x": 79.18409129064531,
+        "y": 0.8644349892128509,
+        "z": 31.956288612261414,
+        "distance": 109.388,
+        "level": 3,
+        "visible": true,
+        "geometry": 11,
+        "triangles": 306
+      }
+    ]
+  },
+  {
+    "distance": 25,
+    "calls": 22,
+    "triangles": 184750,
+    "trees": [
+      {
+        "index": 1,
+        "key": "pine.1",
+        "bush": false,
+        "x": 64.32564094550908,
+        "y": 7.406490200746643,
+        "z": 33.05261758575216,
+        "distance": 110.911,
+        "level": 3,
+        "visible": true,
+        "geometry": 5,
+        "triangles": 556
+      },
+      {
+        "index": 3,
+        "key": "oak.1",
+        "bush": false,
+        "x": 72.4240675373003,
+        "y": 4.223560496906486,
+        "z": 35.30595424873754,
+        "distance": 105.58,
+        "level": 3,
+        "visible": true,
+        "geometry": 11,
+        "triangles": 306
+      },
+      {
+        "index": 4,
+        "key": "pine.2",
+        "bush": false,
+        "x": 67.78370744083078,
+        "y": 2.16970310648078,
+        "z": 43.41372854216024,
+        "distance": 99.936,
+        "level": 3,
+        "visible": true,
+        "geometry": 14,
+        "triangles": 484
+      },
+      {
+        "index": 5,
+        "key": "pine.1",
+        "bush": false,
+        "x": 59.533234841562816,
+        "y": 7.118463208529685,
+        "z": 33.043201740458606,
+        "distance": 112.986,
+        "level": 3,
+        "visible": true,
+        "geometry": 5,
+        "triangles": 556
+      }
+    ]
+  },
+  {
+    "distance": 32,
+    "calls": 26,
+    "triangles": 181118,
+    "trees": [
+      {
+        "index": 1,
+        "key": "pine.1",
+        "bush": false,
+        "x": 64.32564094550908,
+        "y": 7.406490200746643,
+        "z": 33.05261758575216,
+        "distance": 104.597,
+        "level": 3,
+        "visible": true,
+        "geometry": 5,
+        "triangles": 556
+      },
+      {
+        "index": 3,
+        "key": "oak.1",
+        "bush": false,
+        "x": 72.4240675373003,
+        "y": 4.223560496906486,
+        "z": 35.30595424873754,
+        "distance": 99.085,
+        "level": 3,
+        "visible": true,
+        "geometry": 11,
+        "triangles": 306
+      },
+      {
+        "index": 4,
+        "key": "pine.2",
+        "bush": false,
+        "x": 67.78370744083078,
+        "y": 2.16970310648078,
+        "z": 43.41372854216024,
+        "distance": 93.655,
+        "level": 3,
+        "visible": true,
+        "geometry": 14,
+        "triangles": 484
+      },
+      {
+        "index": 5,
+        "key": "pine.1",
+        "bush": false,
+        "x": 59.533234841562816,
+        "y": 7.118463208529685,
+        "z": 33.043201740458606,
+        "distance": 106.794,
+        "level": 3,
+        "visible": true,
+        "geometry": 5,
+        "triangles": 556
+      }
+    ]
+  },
+  {
+    "distance": 36,
+    "calls": 30,
+    "triangles": 222246,
+    "trees": [
+      {
+        "index": 1,
+        "key": "pine.1",
+        "bush": false,
+        "x": 64.32564094550908,
+        "y": 7.406490200746643,
+        "z": 33.05261758575216,
+        "distance": 101.042,
+        "level": 3,
+        "visible": true,
+        "geometry": 5,
+        "triangles": 556
+      },
+      {
+        "index": 3,
+        "key": "oak.1",
+        "bush": false,
+        "x": 72.4240675373003,
+        "y": 4.223560496906486,
+        "z": 35.30595424873754,
+        "distance": 95.411,
+        "level": 3,
+        "visible": true,
+        "geometry": 11,
+        "triangles": 306
+      },
+      {
+        "index": 4,
+        "key": "pine.2",
+        "bush": false,
+        "x": 67.78370744083078,
+        "y": 2.16970310648078,
+        "z": 43.41372854216024,
+        "distance": 90.114,
+        "level": 3,
+        "visible": true,
+        "geometry": 14,
+        "triangles": 484
+      },
+      {
+        "index": 5,
+        "key": "pine.1",
+        "bush": false,
+        "x": 59.533234841562816,
+        "y": 7.118463208529685,
+        "z": 33.043201740458606,
+        "distance": 103.313,
+        "level": 3,
+        "visible": true,
+        "geometry": 5,
+        "triangles": 556
+      }
+    ]
+  },
+  {
+    "distance": 40,
+    "calls": 32,
+    "triangles": 223058,
+    "trees": [
+      {
+        "index": 1,
+        "key": "pine.1",
+        "bush": false,
+        "x": 64.32564094550908,
+        "y": 7.406490200746643,
+        "z": 33.05261758575216,
+        "distance": 97.515,
+        "level": 3,
+        "visible": true,
+        "geometry": 5,
+        "triangles": 556
+      },
+      {
+        "index": 3,
+        "key": "oak.1",
+        "bush": false,
+        "x": 72.4240675373003,
+        "y": 4.223560496906486,
+        "z": 35.30595424873754,
+        "distance": 91.762,
+        "level": 3,
+        "visible": true,
+        "geometry": 11,
+        "triangles": 306
+      },
+      {
+        "index": 4,
+        "key": "pine.2",
+        "bush": false,
+        "x": 67.78370744083078,
+        "y": 2.16970310648078,
+        "z": 43.41372854216024,
+        "distance": 86.613,
+        "level": 3,
+        "visible": true,
+        "geometry": 14,
+        "triangles": 484
+      },
+      {
+        "index": 5,
+        "key": "pine.1",
+        "bush": false,
+        "x": 59.533234841562816,
+        "y": 7.118463208529685,
+        "z": 33.043201740458606,
+        "distance": 99.866,
+        "level": 3,
+        "visible": true,
+        "geometry": 5,
+        "triangles": 556
+      }
+    ]
+  },
+  {
+    "distance": 55,
+    "calls": 37,
+    "triangles": 140148,
+    "trees": [
+      {
+        "index": 0,
+        "key": "birch.1",
+        "bush": false,
+        "x": 53.950503001920886,
+        "y": 0.25945549022402253,
+        "z": 5.574122584238649,
+        "distance": 113.317,
+        "level": 3,
+        "visible": true,
+        "geometry": 2,
+        "triangles": 416
+      },
+      {
+        "index": 1,
+        "key": "pine.1",
+        "bush": false,
+        "x": 64.32564094550908,
+        "y": 7.406490200746643,
+        "z": 33.05261758575216,
+        "distance": 84.635,
+        "level": 3,
+        "visible": true,
+        "geometry": 5,
+        "triangles": 556
+      },
+      {
+        "index": 2,
+        "key": "oak.0",
+        "bush": false,
+        "x": 42.599272560887044,
+        "y": 0.41303794929615856,
+        "z": 22.69697811808437,
+        "distance": 105.753,
+        "level": 3,
+        "visible": true,
+        "geometry": 8,
+        "triangles": 366
+      },
+      {
+        "index": 3,
+        "key": "oak.1",
+        "bush": false,
+        "x": 72.4240675373003,
+        "y": 4.223560496906486,
+        "z": 35.30595424873754,
+        "distance": 78.368,
+        "level": 3,
+        "visible": true,
+        "geometry": 11,
+        "triangles": 306
+      }
+    ]
+  },
+  {
+    "distance": 70,
+    "calls": 123,
+    "triangles": 284254,
+    "trees": [
+      {
+        "index": 0,
+        "key": "birch.1",
+        "bush": false,
+        "x": 53.950503001920886,
+        "y": 0.25945549022402253,
+        "z": 5.574122584238649,
+        "distance": 100.597,
+        "level": 3,
+        "visible": true,
+        "geometry": 2,
+        "triangles": 416
+      },
+      {
+        "index": 1,
+        "key": "pine.1",
+        "bush": false,
+        "x": 64.32564094550908,
+        "y": 7.406490200746643,
+        "z": 33.05261758575216,
+        "distance": 72.585,
+        "level": 3,
+        "visible": true,
+        "geometry": 5,
+        "triangles": 556
+      },
+      {
+        "index": 2,
+        "key": "oak.0",
+        "bush": false,
+        "x": 42.599272560887044,
+        "y": 0.41303794929615856,
+        "z": 22.69697811808437,
+        "distance": 94.744,
+        "level": 3,
+        "visible": true,
+        "geometry": 8,
+        "triangles": 366
+      },
+      {
+        "index": 3,
+        "key": "oak.1",
+        "bush": false,
+        "x": 72.4240675373003,
+        "y": 4.223560496906486,
+        "z": 35.30595424873754,
+        "distance": 65.679,
+        "level": 3,
+        "visible": true,
+        "geometry": 11,
+        "triangles": 306
+      }
+    ]
+  },
+  {
+    "distance": 90,
+    "calls": 116,
+    "triangles": 277767,
+    "trees": [
+      {
+        "index": 0,
+        "key": "birch.1",
+        "bush": false,
+        "x": 53.950503001920886,
+        "y": 0.25945549022402253,
+        "z": 5.574122584238649,
+        "distance": 84.807,
+        "level": 3,
+        "visible": true,
+        "geometry": 2,
+        "triangles": 416
+      },
+      {
+        "index": 1,
+        "key": "pine.1",
+        "bush": false,
+        "x": 64.32564094550908,
+        "y": 7.406490200746643,
+        "z": 33.05261758575216,
+        "distance": 58.653,
+        "level": 2,
+        "visible": true,
+        "geometry": 5,
+        "triangles": 556
+      },
+      {
+        "index": 2,
+        "key": "oak.0",
+        "bush": false,
+        "x": 42.599272560887044,
+        "y": 0.41303794929615856,
+        "z": 22.69697811808437,
+        "distance": 82.06,
+        "level": 3,
+        "visible": true,
+        "geometry": 8,
+        "triangles": 366
+      },
+      {
+        "index": 3,
+        "key": "oak.1",
+        "bush": false,
+        "x": 72.4240675373003,
+        "y": 4.223560496906486,
+        "z": 35.30595424873754,
+        "distance": 50.75,
+        "level": 2,
+        "visible": true,
+        "geometry": 11,
+        "triangles": 306
+      }
+    ]
+  },
+  {
+    "distance": 70,
+    "calls": 123,
+    "triangles": 284254,
+    "trees": [
+      {
+        "index": 0,
+        "key": "birch.1",
+        "bush": false,
+        "x": 53.950503001920886,
+        "y": 0.25945549022402253,
+        "z": 5.574122584238649,
+        "distance": 100.597,
+        "level": 3,
+        "visible": true,
+        "geometry": 2,
+        "triangles": 416
+      },
+      {
+        "index": 1,
+        "key": "pine.1",
+        "bush": false,
+        "x": 64.32564094550908,
+        "y": 7.406490200746643,
+        "z": 33.05261758575216,
+        "distance": 72.585,
+        "level": 3,
+        "visible": true,
+        "geometry": 5,
+        "triangles": 556
+      },
+      {
+        "index": 2,
+        "key": "oak.0",
+        "bush": false,
+        "x": 42.599272560887044,
+        "y": 0.41303794929615856,
+        "z": 22.69697811808437,
+        "distance": 94.744,
+        "level": 3,
+        "visible": true,
+        "geometry": 8,
+        "triangles": 366
+      },
+      {
+        "index": 3,
+        "key": "oak.1",
+        "bush": false,
+        "x": 72.4240675373003,
+        "y": 4.223560496906486,
+        "z": 35.30595424873754,
+        "distance": 65.679,
+        "level": 3,
+        "visible": true,
+        "geometry": 11,
+        "triangles": 306
+      }
+    ]
+  },
+  {
+    "distance": 40,
+    "calls": 32,
+    "triangles": 222050,
+    "trees": [
+      {
+        "index": 1,
+        "key": "pine.1",
+        "bush": false,
+        "x": 64.32564094550908,
+        "y": 7.406490200746643,
+        "z": 33.05261758575216,
+        "distance": 97.515,
+        "level": 3,
+        "visible": true,
+        "geometry": 5,
+        "triangles": 556
+      },
+      {
+        "index": 3,
+        "key": "oak.1",
+        "bush": false,
+        "x": 72.4240675373003,
+        "y": 4.223560496906486,
+        "z": 35.30595424873754,
+        "distance": 91.762,
+        "level": 3,
+        "visible": true,
+        "geometry": 11,
+        "triangles": 306
+      },
+      {
+        "index": 4,
+        "key": "pine.2",
+        "bush": false,
+        "x": 67.78370744083078,
+        "y": 2.16970310648078,
+        "z": 43.41372854216024,
+        "distance": 86.613,
+        "level": 3,
+        "visible": true,
+        "geometry": 14,
+        "triangles": 484
+      },
+      {
+        "index": 5,
+        "key": "pine.1",
+        "bush": false,
+        "x": 59.533234841562816,
+        "y": 7.118463208529685,
+        "z": 33.043201740458606,
+        "distance": 99.866,
+        "level": 3,
+        "visible": true,
+        "geometry": 5,
+        "triangles": 556
+      }
+    ]
+  },
+  {
+    "distance": 25,
+    "calls": 22,
+    "triangles": 175106,
+    "trees": [
+      {
+        "index": 1,
+        "key": "pine.1",
+        "bush": false,
+        "x": 64.32564094550908,
+        "y": 7.406490200746643,
+        "z": 33.05261758575216,
+        "distance": 110.911,
+        "level": 3,
+        "visible": true,
+        "geometry": 5,
+        "triangles": 556
+      },
+      {
+        "index": 3,
+        "key": "oak.1",
+        "bush": false,
+        "x": 72.4240675373003,
+        "y": 4.223560496906486,
+        "z": 35.30595424873754,
+        "distance": 105.58,
+        "level": 3,
+        "visible": true,
+        "geometry": 11,
+        "triangles": 306
+      },
+      {
+        "index": 4,
+        "key": "pine.2",
+        "bush": false,
+        "x": 67.78370744083078,
+        "y": 2.16970310648078,
+        "z": 43.41372854216024,
+        "distance": 99.936,
+        "level": 3,
+        "visible": true,
+        "geometry": 14,
+        "triangles": 484
+      },
+      {
+        "index": 5,
+        "key": "pine.1",
+        "bush": false,
+        "x": 59.533234841562816,
+        "y": 7.118463208529685,
+        "z": 33.043201740458606,
+        "distance": 112.986,
+        "level": 3,
+        "visible": true,
+        "geometry": 5,
+        "triangles": 556
+      }
+    ]
+  },
+  {
+    "distance": 16,
+    "calls": 18,
+    "triangles": 148280,
+    "trees": [
+      {
+        "index": 3,
+        "key": "oak.1",
+        "bush": false,
+        "x": 72.4240675373003,
+        "y": 4.223560496906486,
+        "z": 35.30595424873754,
+        "distance": 114.025,
+        "level": 3,
+        "visible": true,
+        "geometry": 11,
+        "triangles": 306
+      },
+      {
+        "index": 4,
+        "key": "pine.2",
+        "bush": false,
+        "x": 67.78370744083078,
+        "y": 2.16970310648078,
+        "z": 43.41372854216024,
+        "distance": 108.141,
+        "level": 3,
+        "visible": true,
+        "geometry": 14,
+        "triangles": 484
+      },
+      {
+        "index": 11,
+        "key": "oak.1",
+        "bush": false,
+        "x": 78.19357756394893,
+        "y": 0.6155378282669929,
+        "z": 39.83287860592827,
+        "distance": 107.885,
+        "level": 3,
+        "visible": true,
+        "geometry": 11,
+        "triangles": 306
+      },
+      {
+        "index": 17,
+        "key": "oak.2",
+        "bush": false,
+        "x": 56.333412717469045,
+        "y": 0.5904941126635974,
+        "z": 44.961759795527904,
+        "distance": 111.804,
+        "level": 3,
+        "visible": true,
+        "geometry": 17,
+        "triangles": 420
+      }
+    ]
+  },
+  {
+    "distance": 10,
+    "calls": 13,
+    "triangles": 144742,
+    "trees": [
+      {
+        "index": 4,
+        "key": "pine.2",
+        "bush": false,
+        "x": 67.78370744083078,
+        "y": 2.16970310648078,
+        "z": 43.41372854216024,
+        "distance": 113.684,
+        "level": 3,
+        "visible": true,
+        "geometry": 14,
+        "triangles": 484
+      },
+      {
+        "index": 11,
+        "key": "oak.1",
+        "bush": false,
+        "x": 78.19357756394893,
+        "y": 0.6155378282669929,
+        "z": 39.83287860592827,
+        "distance": 113.652,
+        "level": 3,
+        "visible": true,
+        "geometry": 11,
+        "triangles": 306
+      },
+      {
+        "index": 24,
+        "key": "birch.2",
+        "bush": false,
+        "x": 73.82264599185439,
+        "y": 0.6539441270937029,
+        "z": 43.564182869251816,
+        "distance": 111.441,
+        "level": 3,
+        "visible": true,
+        "geometry": 29,
+        "triangles": 452
+      },
+      {
+        "index": 36,
+        "key": "pine.2",
+        "bush": false,
+        "x": 83.56498271469027,
+        "y": 0.4771214478675722,
+        "z": 42.459801360592245,
+        "distance": 109.699,
+        "level": 3,
+        "visible": true,
+        "geometry": 14,
+        "triangles": 484
+      }
+    ]
+  }
+]

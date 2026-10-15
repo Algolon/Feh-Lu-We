@@ -1,0 +1,556 @@
+[
+  {
+    "kind": "tree",
+    "family": "oak",
+    "style": "baseline",
+    "v": 0,
+    "wood": 896,
+    "leaves": 1335
+  },
+  {
+    "kind": "tree",
+    "family": "oak",
+    "style": "baseline",
+    "v": 1,
+    "wood": 860,
+    "leaves": 954
+  },
+  {
+    "kind": "tree",
+    "family": "oak",
+    "style": "baseline",
+    "v": 2,
+    "wood": 1016,
+    "leaves": 1721
+  },
+  {
+    "kind": "tree",
+    "family": "oak",
+    "style": "reference",
+    "v": 0,
+    "wood": 896,
+    "leaves": 384
+  },
+  {
+    "kind": "tree",
+    "family": "oak",
+    "style": "reference",
+    "v": 1,
+    "wood": 860,
+    "leaves": 304
+  },
+  {
+    "kind": "tree",
+    "family": "oak",
+    "style": "reference",
+    "v": 2,
+    "wood": 1016,
+    "leaves": 448
+  },
+  {
+    "kind": "tree",
+    "family": "beech",
+    "style": "baseline",
+    "v": 0,
+    "wood": 996,
+    "leaves": 1239
+  },
+  {
+    "kind": "tree",
+    "family": "beech",
+    "style": "baseline",
+    "v": 1,
+    "wood": 1062,
+    "leaves": 1433
+  },
+  {
+    "kind": "tree",
+    "family": "beech",
+    "style": "baseline",
+    "v": 2,
+    "wood": 1044,
+    "leaves": 1379
+  },
+  {
+    "kind": "tree",
+    "family": "beech",
+    "style": "reference",
+    "v": 0,
+    "wood": 996,
+    "leaves": 384
+  },
+  {
+    "kind": "tree",
+    "family": "beech",
+    "style": "reference",
+    "v": 1,
+    "wood": 1062,
+    "leaves": 416
+  },
+  {
+    "kind": "tree",
+    "family": "beech",
+    "style": "reference",
+    "v": 2,
+    "wood": 1044,
+    "leaves": 368
+  },
+  {
+    "kind": "tree",
+    "family": "birch",
+    "style": "baseline",
+    "v": 0,
+    "wood": 966,
+    "leaves": 948
+  },
+  {
+    "kind": "tree",
+    "family": "birch",
+    "style": "baseline",
+    "v": 1,
+    "wood": 864,
+    "leaves": 851
+  },
+  {
+    "kind": "tree",
+    "family": "birch",
+    "style": "baseline",
+    "v": 2,
+    "wood": 960,
+    "leaves": 868
+  },
+  {
+    "kind": "tree",
+    "family": "birch",
+    "style": "reference",
+    "v": 0,
+    "wood": 966,
+    "leaves": 640
+  },
+  {
+    "kind": "tree",
+    "family": "birch",
+    "style": "reference",
+    "v": 1,
+    "wood": 864,
+    "leaves": 560
+  },
+  {
+    "kind": "tree",
+    "family": "birch",
+    "style": "reference",
+    "v": 2,
+    "wood": 960,
+    "leaves": 600
+  },
+  {
+    "kind": "tree",
+    "family": "pine",
+    "style": "baseline",
+    "v": 0,
+    "wood": 880,
+    "leaves": 1341
+  },
+  {
+    "kind": "tree",
+    "family": "pine",
+    "style": "baseline",
+    "v": 1,
+    "wood": 880,
+    "leaves": 1505
+  },
+  {
+    "kind": "tree",
+    "family": "pine",
+    "style": "baseline",
+    "v": 2,
+    "wood": 800,
+    "leaves": 1147
+  },
+  {
+    "kind": "tree",
+    "family": "pine",
+    "style": "reference",
+    "v": 0,
+    "wood": 880,
+    "leaves": 560
+  },
+  {
+    "kind": "tree",
+    "family": "pine",
+    "style": "reference",
+    "v": 1,
+    "wood": 880,
+    "leaves": 592
+  },
+  {
+    "kind": "tree",
+    "family": "pine",
+    "style": "reference",
+    "v": 2,
+    "wood": 800,
+    "leaves": 512
+  },
+  {
+    "kind": "bush",
+    "family": "hazel",
+    "style": "baseline",
+    "v": 0,
+    "wood": 400,
+    "leaves": 644
+  },
+  {
+    "kind": "bush",
+    "family": "hazel",
+    "style": "baseline",
+    "v": 1,
+    "wood": 480,
+    "leaves": 688
+  },
+  {
+    "kind": "bush",
+    "family": "hazel",
+    "style": "baseline",
+    "v": 2,
+    "wood": 280,
+    "leaves": 451
+  },
+  {
+    "kind": "bush",
+    "family": "hazel",
+    "style": "reference",
+    "v": 0,
+    "wood": 400,
+    "leaves": 384
+  },
+  {
+    "kind": "bush",
+    "family": "hazel",
+    "style": "reference",
+    "v": 1,
+    "wood": 480,
+    "leaves": 416
+  },
+  {
+    "kind": "bush",
+    "family": "hazel",
+    "style": "reference",
+    "v": 2,
+    "wood": 280,
+    "leaves": 272
+  },
+  {
+    "kind": "bush",
+    "family": "holly",
+    "style": "baseline",
+    "v": 0,
+    "wood": 120,
+    "leaves": 640
+  },
+  {
+    "kind": "bush",
+    "family": "holly",
+    "style": "baseline",
+    "v": 1,
+    "wood": 132,
+    "leaves": 710
+  },
+  {
+    "kind": "bush",
+    "family": "holly",
+    "style": "baseline",
+    "v": 2,
+    "wood": 156,
+    "leaves": 604
+  },
+  {
+    "kind": "bush",
+    "family": "holly",
+    "style": "reference",
+    "v": 0,
+    "wood": 120,
+    "leaves": 520
+  },
+  {
+    "kind": "bush",
+    "family": "holly",
+    "style": "reference",
+    "v": 1,
+    "wood": 132,
+    "leaves": 552
+  },
+  {
+    "kind": "bush",
+    "family": "holly",
+    "style": "reference",
+    "v": 2,
+    "wood": 156,
+    "leaves": 584
+  },
+  {
+    "kind": "plant",
+    "family": "fern",
+    "style": "baseline",
+    "v": 0,
+    "plant": 180
+  },
+  {
+    "kind": "plant",
+    "family": "fern",
+    "style": "baseline",
+    "v": 1,
+    "plant": 260
+  },
+  {
+    "kind": "plant",
+    "family": "fern",
+    "style": "baseline",
+    "v": 2,
+    "plant": 140
+  },
+  {
+    "kind": "plant",
+    "family": "fern",
+    "style": "reference",
+    "v": 0,
+    "plant": 868
+  },
+  {
+    "kind": "plant",
+    "family": "fern",
+    "style": "reference",
+    "v": 1,
+    "plant": 1116
+  },
+  {
+    "kind": "plant",
+    "family": "fern",
+    "style": "reference",
+    "v": 2,
+    "plant": 744
+  },
+  {
+    "kind": "plant",
+    "family": "grass",
+    "style": "baseline",
+    "v": 0,
+    "plant": 104
+  },
+  {
+    "kind": "plant",
+    "family": "grass",
+    "style": "baseline",
+    "v": 1,
+    "plant": 160
+  },
+  {
+    "kind": "plant",
+    "family": "grass",
+    "style": "baseline",
+    "v": 2,
+    "plant": 280
+  },
+  {
+    "kind": "plant",
+    "family": "grass",
+    "style": "baseline",
+    "v": 3,
+    "plant": 72
+  },
+  {
+    "kind": "plant",
+    "family": "grass",
+    "style": "reference",
+    "v": 0,
+    "plant": 108
+  },
+  {
+    "kind": "plant",
+    "family": "grass",
+    "style": "reference",
+    "v": 1,
+    "plant": 132
+  },
+  {
+    "kind": "plant",
+    "family": "grass",
+    "style": "reference",
+    "v": 2,
+    "plant": 192
+  },
+  {
+    "kind": "plant",
+    "family": "grass",
+    "style": "reference",
+    "v": 3,
+    "plant": 84
+  },
+  {
+    "kind": "plant",
+    "family": "bilberry",
+    "style": "baseline",
+    "v": 0,
+    "plant": 288
+  },
+  {
+    "kind": "plant",
+    "family": "bilberry",
+    "style": "baseline",
+    "v": 1,
+    "plant": 416
+  },
+  {
+    "kind": "plant",
+    "family": "bilberry",
+    "style": "baseline",
+    "v": 2,
+    "plant": 520
+  },
+  {
+    "kind": "plant",
+    "family": "bilberry",
+    "style": "reference",
+    "v": 0,
+    "plant": 192
+  },
+  {
+    "kind": "plant",
+    "family": "bilberry",
+    "style": "reference",
+    "v": 1,
+    "plant": 264
+  },
+  {
+    "kind": "plant",
+    "family": "bilberry",
+    "style": "reference",
+    "v": 2,
+    "plant": 296
+  },
+  {
+    "kind": "plant",
+    "family": "foxglove",
+    "style": "baseline",
+    "v": 0,
+    "plant": 372
+  },
+  {
+    "kind": "plant",
+    "family": "foxglove",
+    "style": "baseline",
+    "v": 1,
+    "plant": 372
+  },
+  {
+    "kind": "plant",
+    "family": "foxglove",
+    "style": "baseline",
+    "v": 2,
+    "plant": 520
+  },
+  {
+    "kind": "plant",
+    "family": "foxglove",
+    "style": "reference",
+    "v": 0,
+    "plant": 256
+  },
+  {
+    "kind": "plant",
+    "family": "foxglove",
+    "style": "reference",
+    "v": 1,
+    "plant": 256
+  },
+  {
+    "kind": "plant",
+    "family": "foxglove",
+    "style": "reference",
+    "v": 2,
+    "plant": 392
+  },
+  {
+    "kind": "plant",
+    "family": "lily",
+    "style": "baseline",
+    "v": 0,
+    "plant": 138
+  },
+  {
+    "kind": "plant",
+    "family": "lily",
+    "style": "baseline",
+    "v": 1,
+    "plant": 190
+  },
+  {
+    "kind": "plant",
+    "family": "lily",
+    "style": "baseline",
+    "v": 2,
+    "plant": 128
+  },
+  {
+    "kind": "plant",
+    "family": "lily",
+    "style": "reference",
+    "v": 0,
+    "plant": 132
+  },
+  {
+    "kind": "plant",
+    "family": "lily",
+    "style": "reference",
+    "v": 1,
+    "plant": 168
+  },
+  {
+    "kind": "plant",
+    "family": "lily",
+    "style": "reference",
+    "v": 2,
+    "plant": 156
+  },
+  {
+    "kind": "plant",
+    "family": "anemone",
+    "style": "baseline",
+    "v": 0,
+    "plant": 44
+  },
+  {
+    "kind": "plant",
+    "family": "anemone",
+    "style": "baseline",
+    "v": 1,
+    "plant": 132
+  },
+  {
+    "kind": "plant",
+    "family": "anemone",
+    "style": "baseline",
+    "v": 2,
+    "plant": 220
+  },
+  {
+    "kind": "plant",
+    "family": "anemone",
+    "style": "reference",
+    "v": 0,
+    "plant": 112
+  },
+  {
+    "kind": "plant",
+    "family": "anemone",
+    "style": "reference",
+    "v": 1,
+    "plant": 168
+  },
+  {
+    "kind": "plant",
+    "family": "anemone",
+    "style": "reference",
+    "v": 2,
+    "plant": 280
+  }
+]
