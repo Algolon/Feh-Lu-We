@@ -1,7 +1,9 @@
-// Most sound is synthesized in Web Audio; the user-authorized Bong Rippie sound is bundled as an MP3 in public/audio.
+// Most sounds are WebAudio-generated; outdoor footfalls use edited, embedded field recordings;
+// the user-authorized bong hit also plays its own bundled MP3.
 // The context is created/resumed only from the Start button (user gesture), and suspended when hidden.
 
 import { renderOutdoorFootstep, type FootstepSurface, type OutdoorFootstepSurface } from './footsteps';
+import { FIELD_FOOTSTEPS_MP3, FIELD_FOOTSTEP_CLIPS } from './fieldFootsteps';
 
 type SfxName = string;
 
@@ -44,20 +46,17 @@ export class Audio {
         const d = this.noiseBuf.getChannelData(0);
         let last = 0;
         for (let i = 0; i < len; i++) { const w = Math.random() * 2 - 1; last = last * 0.6 + w * 0.4; d[i] = last; }
-        // Seven small variants per material, built once after the Start gesture; no file I/O on mobile.
-        for (const surface of ['grass', 'dirt'] as const) {
-          this.outdoorBuffers[surface] = Array.from({ length: 7 }, (_, v) => {
-            const pcm = renderOutdoorFootstep(surface, v, this.ctx!.sampleRate);
-            const buffer = this.ctx!.createBuffer(1, pcm.length, this.ctx!.sampleRate);
-            buffer.getChannelData(0).set(pcm); // same PCM copy; accepts ArrayBufferLike source on current TypeScript
-            return buffer;
-          });
-        }
         this.startLoops();
       }
       if (this.ctx.state !== 'running') await this.ctx.resume();
       // Preload only after the Start gesture has unlocked Web Audio. The MP3 is
       // self-hosted by GitHub Pages and cached/decoded once for repeat hits.
+      // Decode the compact, bundled field-recording bank once. No network/CDN dependency, nor
+      // decoding on each step. The backup sound only runs if browser MP3 decoding fails.
+      if (!this.fieldStepBank && !this.fieldStepLoading) {
+        this.fieldStepLoading = this.loadFieldSteps().finally(() => { this.fieldStepLoading = null; });
+      }
+      if (this.fieldStepLoading) await this.fieldStepLoading;
       this.preloadBongRippie();
     } catch {
       /* audio is optional */
@@ -107,23 +106,58 @@ export class Audio {
   }
 
   private lastStep = -1;
+  private fieldStepBank: AudioBuffer | null = null;
+  private fieldStepLoading: Promise<void> | null = null;
+  private async loadFieldSteps(): Promise<void> {
+    try {
+      const raw = atob(FIELD_FOOTSTEPS_MP3);
+      const bytes = new Uint8Array(raw.length);
+      for (let i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+      this.fieldStepBank = await this.ctx!.decodeAudioData(bytes.buffer);
+    } catch {
+      // On an unsupported / failed decoder keep movement audible; do not affect other SFX.
+      for (const surface of ['grass', 'dirt'] as const) {
+        this.outdoorBuffers[surface] = Array.from({ length: 4 }, (_, v) => {
+          const pcm = renderOutdoorFootstep(surface, v, this.ctx!.sampleRate);
+          const buffer = this.ctx!.createBuffer(1, pcm.length, this.ctx!.sampleRate);
+          buffer.getChannelData(0).set(pcm);
+          return buffer;
+        });
+      }
+    }
+  }
   private readonly outdoorBuffers: Record<OutdoorFootstepSurface, AudioBuffer[]> = { grass: [], dirt: [] };
   private readonly lastOutdoor: Record<OutdoorFootstepSurface, number> = { grass: -1, dirt: -1 };
 
   private outdoorStep(surface: OutdoorFootstepSurface, gain: number, foot: 0 | 1) {
     const pool = this.outdoorBuffers[surface];
-    if (!pool.length) return;
-    let index = Math.floor(Math.random() * pool.length);
-    if (index === this.lastOutdoor[surface]) index = (index + 1) % pool.length;
+    const clips = FIELD_FOOTSTEP_CLIPS[surface];
+    const count = this.fieldStepBank ? clips.length : pool.length;
+    if (!count) return;
+    let index = Math.floor(Math.random() * count);
+    if (count > 1 && index === this.lastOutdoor[surface]) index = (index + 1) % count;
     this.lastOutdoor[surface] = index;
     const c = this.ctx!;
     const src = c.createBufferSource();
-    src.buffer = pool[index];
-    src.playbackRate.value = (foot ? 0.972 : 1.02) * (0.965 + Math.random() * 0.07);
+    src.buffer = this.fieldStepBank ?? pool[index];
+    const pitch = (foot ? 0.986 : 1.014) * (0.98 + Math.random() * 0.04);
+    src.playbackRate.value = pitch;
+    const vol = Math.max(0, Math.min(1.2, gain)) * (this.fieldStepBank ? (surface === 'grass' ? 0.33 : 0.31) : 0.5)
+      * (0.93 + Math.random() * 0.14);
     const volume = c.createGain();
-    volume.gain.value = Math.max(0, Math.min(1.2, gain)) * (surface === 'grass' ? 0.62 : 0.55) * (0.9 + Math.random() * 0.18);
     src.connect(volume).connect(this.master!);
-    src.start();
+    if (this.fieldStepBank) {
+      const [offset, duration] = clips[index];
+      const t = c.currentTime, audible = duration / pitch;
+      volume.gain.setValueAtTime(0.0001, t);
+      volume.gain.linearRampToValueAtTime(vol, t + 0.01);
+      volume.gain.setValueAtTime(vol, t + Math.max(0.02, audible - 0.055));
+      volume.gain.linearRampToValueAtTime(0.0001, t + audible);
+      src.start(t, offset, duration);
+    } else {
+      volume.gain.value = vol;
+      src.start();
+    }
   }
 
   /**
