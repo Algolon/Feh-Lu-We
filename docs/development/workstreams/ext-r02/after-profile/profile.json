@@ -1,0 +1,3988 @@
+{
+  "rows": [
+    {
+      "name": "garden",
+      "metrics": {
+        "frame": 3,
+        "calls": 108,
+        "triangles": 441472,
+        "points": 0,
+        "lines": 0
+      },
+      "drawn": [
+        {
+          "uuid": "d18e3be6-0725-4003-91f9-580d3c28bb10",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "f00ab4f1-939c-4fa3-a2b4-0923077b5f03",
+          "matType": "ShaderMaterial",
+          "transparent": false,
+          "triangles": 528,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "18b90b1a-3234-40be-9927-d6082065b126",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "4f03fd2d-482e-46da-bd4b-31488c4664d4",
+          "matType": "MeshPhongMaterial",
+          "transparent": false,
+          "triangles": 5632,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "c5c21a75-8f61-4693-be18-40b93a64fd37",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "manor",
+            "static": true
+          },
+          "mat": "e85b3a93-bcf7-4516-914b-740d5419c0b1",
+          "matType": "MeshLambertMaterial",
+          "surface": "paint",
+          "transparent": false,
+          "triangles": 34848,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "605a12d3-f629-44fe-b9bc-bd50cf431d46",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "static": true,
+            "noCull": true,
+            "opaqueAggregate": true
+          },
+          "mat": "e85b3a93-bcf7-4516-914b-740d5419c0b1",
+          "matType": "MeshLambertMaterial",
+          "surface": "paint",
+          "transparent": false,
+          "triangles": 44365,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "a9fbcdfe-b1c8-4061-a8a8-3deb9a1b0747",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "paths",
+            "static": true
+          },
+          "mat": "e85b3a93-bcf7-4516-914b-740d5419c0b1",
+          "matType": "MeshLambertMaterial",
+          "surface": "paint",
+          "transparent": false,
+          "triangles": 9616,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "aa1cb979-bab9-4285-8c41-201a04d9a91d",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mIn",
+            "static": true,
+            "regionOff": false,
+            "cast0": false
+          },
+          "mat": "650e498e-ec36-4a49-8e2f-cf60d4749e43",
+          "matType": "MeshLambertMaterial",
+          "map": "82fb95fa-bab9-4b3a-a4e5-2512eda3aadf",
+          "surface": "plaster",
+          "transparent": false,
+          "triangles": 984,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "71bac652-3688-44da-960b-6e032f6f5f4e",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "manor",
+            "static": true
+          },
+          "mat": "650e498e-ec36-4a49-8e2f-cf60d4749e43",
+          "matType": "MeshLambertMaterial",
+          "map": "82fb95fa-bab9-4b3a-a4e5-2512eda3aadf",
+          "surface": "plaster",
+          "transparent": false,
+          "triangles": 276,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "265f960c-64e5-4b6e-b68a-6f5963c12986",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mIn",
+            "static": true,
+            "regionOff": false,
+            "cast0": false
+          },
+          "mat": "650e498e-ec36-4a49-8e2f-cf60d4749e43",
+          "matType": "MeshLambertMaterial",
+          "map": "82fb95fa-bab9-4b3a-a4e5-2512eda3aadf",
+          "surface": "plaster",
+          "transparent": false,
+          "triangles": 60,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "65be1a55-4ecd-4e01-909e-c85cf6e3eaa6",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "garden",
+            "static": true
+          },
+          "mat": "b9c175fe-a248-40ec-8561-6dd1c6b6ca5e",
+          "matType": "MeshLambertMaterial",
+          "map": "3f3045f2-3f58-4c0d-99d7-aa337b8d4883",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 160,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "000e51c5-2749-4c28-94e4-5dc776d5ee54",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "b9c175fe-a248-40ec-8561-6dd1c6b6ca5e",
+          "matType": "MeshLambertMaterial",
+          "map": "3f3045f2-3f58-4c0d-99d7-aa337b8d4883",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 96,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "60614861-b5b9-44aa-8571-100908a442a7",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "cons",
+            "static": true
+          },
+          "mat": "b9c175fe-a248-40ec-8561-6dd1c6b6ca5e",
+          "matType": "MeshLambertMaterial",
+          "map": "3f3045f2-3f58-4c0d-99d7-aa337b8d4883",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 84,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "4764e96a-294d-4b7f-a996-0c21a020370e",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "manor",
+            "static": true
+          },
+          "mat": "b9c175fe-a248-40ec-8561-6dd1c6b6ca5e",
+          "matType": "MeshLambertMaterial",
+          "map": "3f3045f2-3f58-4c0d-99d7-aa337b8d4883",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 1560,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "50870ad5-e348-45b7-9506-5648f2401086",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "ground",
+            "static": true
+          },
+          "mat": "b9c175fe-a248-40ec-8561-6dd1c6b6ca5e",
+          "matType": "MeshLambertMaterial",
+          "map": "3f3045f2-3f58-4c0d-99d7-aa337b8d4883",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 480,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "31a77ba8-1f84-40a6-a7e0-e83ad9506df1",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "main",
+            "static": true
+          },
+          "mat": "b9c175fe-a248-40ec-8561-6dd1c6b6ca5e",
+          "matType": "MeshLambertMaterial",
+          "map": "3f3045f2-3f58-4c0d-99d7-aa337b8d4883",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 72,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "b6441675-4efc-42b1-a4e0-bb96e90b77d2",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "forest",
+            "static": true
+          },
+          "mat": "b9c175fe-a248-40ec-8561-6dd1c6b6ca5e",
+          "matType": "MeshLambertMaterial",
+          "map": "3f3045f2-3f58-4c0d-99d7-aa337b8d4883",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 336,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "6679c7f9-5583-466d-ac9e-7ca2aad88a9a",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "wall",
+            "static": true
+          },
+          "mat": "b9c175fe-a248-40ec-8561-6dd1c6b6ca5e",
+          "matType": "MeshLambertMaterial",
+          "map": "3f3045f2-3f58-4c0d-99d7-aa337b8d4883",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 96,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "18112f16-7303-42bc-ab8a-a6bc5365eda9",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mIn",
+            "static": true,
+            "regionOff": false,
+            "cast0": false
+          },
+          "mat": "e2c7e77e-e684-4953-9a26-d320bf274dac",
+          "matType": "MeshLambertMaterial",
+          "map": "60f85443-8d15-4308-bec1-ead4a9861c88",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 14304,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "5a065c60-de35-4bf4-b21c-d2adccf07e3f",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "fence",
+            "static": true
+          },
+          "mat": "e2c7e77e-e684-4953-9a26-d320bf274dac",
+          "matType": "MeshLambertMaterial",
+          "map": "60f85443-8d15-4308-bec1-ead4a9861c88",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 8100,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "e77624a7-cdb2-4fa1-939c-5f2f0df71e08",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "static": true,
+            "noCull": true,
+            "opaqueAggregate": true
+          },
+          "mat": "e2c7e77e-e684-4953-9a26-d320bf274dac",
+          "matType": "MeshLambertMaterial",
+          "map": "60f85443-8d15-4308-bec1-ead4a9861c88",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 14032,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "edc88e29-f060-4a77-8fd7-2d96545a26cb",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "cons",
+            "static": true
+          },
+          "mat": "6cb07b8f-e0ac-4753-b740-7ba001f212f2",
+          "matType": "MeshLambertMaterial",
+          "map": "502c72bf-439a-4573-af0c-c5d4c490dfc5",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 48,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "9e40f72c-a76e-4d67-ada6-4f7c8d24d25c",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mIn",
+            "static": true,
+            "regionOff": false,
+            "cast0": false
+          },
+          "mat": "6cb07b8f-e0ac-4753-b740-7ba001f212f2",
+          "matType": "MeshLambertMaterial",
+          "map": "502c72bf-439a-4573-af0c-c5d4c490dfc5",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 48,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "38f01aa3-1330-49e3-b297-c9b9a161fb8b",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "manor",
+            "static": true
+          },
+          "mat": "c62c1f31-c559-4421-8e7a-7d37d5147b7c",
+          "matType": "MeshLambertMaterial",
+          "map": "aee8a000-e626-45a7-b993-671b8840a7f8",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 132,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "9be81ba7-f6cb-4570-9ecf-1e388987ba8c",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "forest",
+            "static": true
+          },
+          "mat": "c62c1f31-c559-4421-8e7a-7d37d5147b7c",
+          "matType": "MeshLambertMaterial",
+          "map": "aee8a000-e626-45a7-b993-671b8840a7f8",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 8,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "63f2f764-c9db-44dd-a7e9-920aa5ba7384",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "noCull": true,
+            "region": "outdoor"
+          },
+          "mat": "dad4e9fb-53b8-4d41-a46f-cc483a2bb394",
+          "matType": "MeshLambertMaterial",
+          "map": "304e0535-78d1-4405-b339-01cad2cb2e26",
+          "surface": "ground",
+          "transparent": false,
+          "triangles": 27516,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "4537ba28-6b14-4bf1-9ef9-1d165501f04c",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "noCull": true,
+            "region": "outdoor"
+          },
+          "mat": "dad4e9fb-53b8-4d41-a46f-cc483a2bb394",
+          "matType": "MeshLambertMaterial",
+          "map": "304e0535-78d1-4405-b339-01cad2cb2e26",
+          "surface": "ground",
+          "transparent": false,
+          "triangles": 288,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "bdafc69f-6c23-4171-9636-4b850cf10272",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "paths",
+            "static": true
+          },
+          "mat": "d018e2b4-0211-4da1-8838-467145e94772",
+          "matType": "MeshLambertMaterial",
+          "map": "dc2cd958-940f-4eca-97a1-193ef5fa378e",
+          "surface": "ground",
+          "transparent": false,
+          "triangles": 2976,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "3a186f8a-5dd5-4e18-98ad-443e3866923a",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "forest",
+            "static": true
+          },
+          "mat": "d018e2b4-0211-4da1-8838-467145e94772",
+          "matType": "MeshLambertMaterial",
+          "map": "dc2cd958-940f-4eca-97a1-193ef5fa378e",
+          "surface": "ground",
+          "transparent": false,
+          "triangles": 12,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "15e7b2d1-e99d-400c-af35-bb0a1bc0b10b",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "garden",
+            "static": true
+          },
+          "mat": "07fadb00-8ed4-4d35-9157-6edcb30039b0",
+          "matType": "MeshLambertMaterial",
+          "map": "2323485b-8b93-4b29-97fa-9f797aeaec6d",
+          "surface": "foliage",
+          "transparent": false,
+          "triangles": 2024,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "79a7e85f-3b67-4b8e-92cc-65b82456dd24",
+          "name": "grass|gr2_3",
+          "type": "Mesh",
+          "ud": {
+            "veg": "small",
+            "region": "outdoor"
+          },
+          "mat": "07fadb00-8ed4-4d35-9157-6edcb30039b0",
+          "matType": "MeshLambertMaterial",
+          "map": "2323485b-8b93-4b29-97fa-9f797aeaec6d",
+          "surface": "foliage",
+          "transparent": false,
+          "triangles": 30,
+          "instances": 87,
+          "shadow": false
+        },
+        {
+          "uuid": "75f1cccc-835a-41bc-a03c-0a2081449add",
+          "name": "grass|gr2_2",
+          "type": "Mesh",
+          "ud": {
+            "veg": "small",
+            "region": "outdoor"
+          },
+          "mat": "07fadb00-8ed4-4d35-9157-6edcb30039b0",
+          "matType": "MeshLambertMaterial",
+          "map": "2323485b-8b93-4b29-97fa-9f797aeaec6d",
+          "surface": "foliage",
+          "transparent": false,
+          "triangles": 30,
+          "instances": 7,
+          "shadow": false
+        },
+        {
+          "uuid": "156708a5-61c4-44bc-8c13-c2bf04748901",
+          "name": "grass|gr3_2",
+          "type": "Mesh",
+          "ud": {
+            "veg": "small",
+            "region": "outdoor"
+          },
+          "mat": "07fadb00-8ed4-4d35-9157-6edcb30039b0",
+          "matType": "MeshLambertMaterial",
+          "map": "2323485b-8b93-4b29-97fa-9f797aeaec6d",
+          "surface": "foliage",
+          "transparent": false,
+          "triangles": 30,
+          "instances": 78,
+          "shadow": false
+        },
+        {
+          "uuid": "27eeabd4-7eba-4186-bff5-07adc908cd4f",
+          "name": "grass|gr1_2",
+          "type": "Mesh",
+          "ud": {
+            "veg": "small",
+            "region": "outdoor"
+          },
+          "mat": "07fadb00-8ed4-4d35-9157-6edcb30039b0",
+          "matType": "MeshLambertMaterial",
+          "map": "2323485b-8b93-4b29-97fa-9f797aeaec6d",
+          "surface": "foliage",
+          "transparent": false,
+          "triangles": 30,
+          "instances": 96,
+          "shadow": false
+        },
+        {
+          "uuid": "dddd6979-cab9-4292-98cc-d7c7ef303022",
+          "name": "cone|garden",
+          "type": "Mesh",
+          "ud": {
+            "veg": "all",
+            "region": "outdoor"
+          },
+          "mat": "07fadb00-8ed4-4d35-9157-6edcb30039b0",
+          "matType": "MeshLambertMaterial",
+          "map": "2323485b-8b93-4b29-97fa-9f797aeaec6d",
+          "surface": "foliage",
+          "transparent": false,
+          "triangles": 16,
+          "instances": 5,
+          "shadow": true
+        },
+        {
+          "uuid": "8e7a5dba-0282-4166-96ed-9f17b39fc8a8",
+          "name": "grass|gr1_1",
+          "type": "Mesh",
+          "ud": {
+            "veg": "small",
+            "region": "outdoor"
+          },
+          "mat": "07fadb00-8ed4-4d35-9157-6edcb30039b0",
+          "matType": "MeshLambertMaterial",
+          "map": "2323485b-8b93-4b29-97fa-9f797aeaec6d",
+          "surface": "foliage",
+          "transparent": false,
+          "triangles": 30,
+          "instances": 20,
+          "shadow": false
+        },
+        {
+          "uuid": "af3abe6e-797f-4037-b9e4-e364f5900c29",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "main",
+            "static": true
+          },
+          "mat": "39cc5671-5ce7-486f-9012-9016de8f0496",
+          "matType": "MeshLambertMaterial",
+          "map": "41ac46a1-8386-47a4-8d99-2da2226d7297",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 84,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "53c49e56-aa75-41af-82ac-cc9872c8a90e",
+          "name": "trunk|garden",
+          "type": "Mesh",
+          "ud": {
+            "veg": "all",
+            "region": "outdoor"
+          },
+          "mat": "39cc5671-5ce7-486f-9012-9016de8f0496",
+          "matType": "MeshLambertMaterial",
+          "map": "41ac46a1-8386-47a4-8d99-2da2226d7297",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 28,
+          "instances": 5,
+          "shadow": true
+        },
+        {
+          "uuid": "18b7ccb1-32e3-456a-a111-fc0b5d8942ce",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "static": true,
+            "noCull": true,
+            "opaqueAggregate": true
+          },
+          "mat": "5a7ac75f-5a3f-4239-8344-4a44f84e8a01",
+          "matType": "MeshBasicMaterial",
+          "transparent": false,
+          "triangles": 3590,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "4e820cf5-c9d9-48f1-b0ad-6bbc96f8bc06",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "cons",
+            "static": true
+          },
+          "mat": "c1cf91a4-5121-410d-89cd-e30da9da7655",
+          "matType": "MeshLambertMaterial",
+          "map": "b3d4c962-52ae-428f-b422-bff7c104de18",
+          "transparent": false,
+          "triangles": 60,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "f0dacd1a-9c7c-49f3-b648-5592c0dd7381",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "3b8e3145-83c6-4d51-a129-a885c3d5f935",
+          "matType": "MeshLambertMaterial",
+          "map": "3cf88272-ea62-47a1-a40f-216162db5271",
+          "surface": "fabric",
+          "transparent": false,
+          "triangles": 12,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "08103714-8243-4985-8d46-d7b7a3c3c9e0",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "manor",
+            "static": true
+          },
+          "mat": "2c3c277d-a4b8-4f02-b0d0-3367f15c8a1d",
+          "matType": "MeshLambertMaterial",
+          "map": "c3308edd-726f-41b5-96e5-3183c35dead4",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 452,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "f0dfe64c-29b1-46ce-9fda-068d818af003",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "paths",
+            "static": true
+          },
+          "mat": "1f5dcdc4-8b2f-479c-b415-c1a27307bb87",
+          "matType": "MeshLambertMaterial",
+          "map": "7131f3c3-4a01-4c7b-9c3d-5d367c57bcf3",
+          "surface": "ground",
+          "transparent": false,
+          "triangles": 532,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "8edb99e7-74fb-46b5-93bd-9998c19a564d",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "paths",
+            "static": true
+          },
+          "mat": "1f5dcdc4-8b2f-479c-b415-c1a27307bb87",
+          "matType": "MeshLambertMaterial",
+          "map": "7131f3c3-4a01-4c7b-9c3d-5d367c57bcf3",
+          "surface": "ground",
+          "transparent": false,
+          "triangles": 240,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "54759cbb-1fbc-4f97-9ba2-5701faa4bbeb",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mIn",
+            "static": true,
+            "regionOff": false,
+            "cast0": false
+          },
+          "mat": "8d8c720f-8b79-4349-a0b5-5496000849df",
+          "matType": "MeshLambertMaterial",
+          "map": "518b3c07-e743-49f8-83bb-6a5e0ac69aa3",
+          "transparent": false,
+          "triangles": 16,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "48d7c694-7b0b-445b-8f95-00671af2ce31",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mWing",
+            "static": true,
+            "regionOff": false,
+            "cast0": false
+          },
+          "mat": "6009e8ab-2577-4032-8b1f-cd5f93afcca7",
+          "matType": "MeshLambertMaterial",
+          "map": "59fdf1ea-c937-4f48-9c22-09ec6f8fb613",
+          "surface": "paint",
+          "transparent": false,
+          "triangles": 784,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "e8f6f3ac-ea07-4bb9-a567-c586c28b76de",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "static": true,
+            "noCull": true,
+            "opaqueAggregate": true
+          },
+          "mat": "6009e8ab-2577-4032-8b1f-cd5f93afcca7",
+          "matType": "MeshLambertMaterial",
+          "map": "59fdf1ea-c937-4f48-9c22-09ec6f8fb613",
+          "surface": "paint",
+          "transparent": false,
+          "triangles": 68,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "597a0b05-4306-4def-ba1a-acd7270bc6ac",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "garden",
+            "static": true
+          },
+          "mat": "ddf66559-c5c5-4ee1-893f-5c1c042469ff",
+          "matType": "MeshLambertMaterial",
+          "map": "e38c353c-c4c9-46c9-9207-833c24c3d667",
+          "surface": "fabric",
+          "transparent": false,
+          "triangles": 2052,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "e5e221bc-91b9-4202-8a9d-f53b604f0289",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "cons",
+            "static": true
+          },
+          "mat": "ddf66559-c5c5-4ee1-893f-5c1c042469ff",
+          "matType": "MeshLambertMaterial",
+          "map": "e38c353c-c4c9-46c9-9207-833c24c3d667",
+          "surface": "fabric",
+          "transparent": false,
+          "triangles": 1196,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "2b3d67f4-6d20-4a03-a46d-9025d0d4d24e",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mWing",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "ddf66559-c5c5-4ee1-893f-5c1c042469ff",
+          "matType": "MeshLambertMaterial",
+          "map": "e38c353c-c4c9-46c9-9207-833c24c3d667",
+          "surface": "fabric",
+          "transparent": false,
+          "triangles": 4440,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "1d201c3b-2f36-42cd-bf06-24d6e7f337ef",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "ddf66559-c5c5-4ee1-893f-5c1c042469ff",
+          "matType": "MeshLambertMaterial",
+          "map": "e38c353c-c4c9-46c9-9207-833c24c3d667",
+          "surface": "fabric",
+          "transparent": false,
+          "triangles": 2880,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "c0f45a9e-6356-4734-b341-59132cc8c231",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mHall",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "ddf66559-c5c5-4ee1-893f-5c1c042469ff",
+          "matType": "MeshLambertMaterial",
+          "map": "e38c353c-c4c9-46c9-9207-833c24c3d667",
+          "surface": "fabric",
+          "transparent": false,
+          "triangles": 432,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "fbb5d1a9-bf52-46e3-b61d-50d1cd1f8cd4",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "garden",
+            "static": true
+          },
+          "mat": "3dbc4db4-5ade-4a1e-9273-65439faef612",
+          "matType": "MeshLambertMaterial",
+          "map": "4b843fc5-c617-46d9-aca5-18aa3298cb6a",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 3916,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "ddba0c20-cd93-4440-b0ac-63585de46537",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "cons",
+            "static": true
+          },
+          "mat": "3dbc4db4-5ade-4a1e-9273-65439faef612",
+          "matType": "MeshLambertMaterial",
+          "map": "4b843fc5-c617-46d9-aca5-18aa3298cb6a",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 1456,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "0f57dc2f-58c1-4cfc-bb5d-910d09d0c4f4",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mWing",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "3dbc4db4-5ade-4a1e-9273-65439faef612",
+          "matType": "MeshLambertMaterial",
+          "map": "4b843fc5-c617-46d9-aca5-18aa3298cb6a",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 17268,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "7206d73a-b61f-490a-9ab4-561d9c9f23d9",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mHall",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "3dbc4db4-5ade-4a1e-9273-65439faef612",
+          "matType": "MeshLambertMaterial",
+          "map": "4b843fc5-c617-46d9-aca5-18aa3298cb6a",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 2732,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "367d9a0e-cf53-4b17-ac60-950fdcdd24f6",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "3dbc4db4-5ade-4a1e-9273-65439faef612",
+          "matType": "MeshLambertMaterial",
+          "map": "4b843fc5-c617-46d9-aca5-18aa3298cb6a",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 2914,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "5aa9d9d6-a69a-43bb-ba80-1b306dbcc5bc",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "forest",
+            "static": true
+          },
+          "mat": "3dbc4db4-5ade-4a1e-9273-65439faef612",
+          "matType": "MeshLambertMaterial",
+          "map": "4b843fc5-c617-46d9-aca5-18aa3298cb6a",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 7644,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "e413597e-9493-4920-b8a0-73028cdbd3e4",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mWing",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "eac0d825-7b11-4515-9373-11b9345444b6",
+          "matType": "MeshLambertMaterial",
+          "map": "7c6951ef-c6e7-431e-9249-f318c1fb80e7",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 828,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "7da7b8c6-c4ab-4d73-885f-311199cfd1af",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "forest",
+            "static": true
+          },
+          "mat": "eac0d825-7b11-4515-9373-11b9345444b6",
+          "matType": "MeshLambertMaterial",
+          "map": "7c6951ef-c6e7-431e-9249-f318c1fb80e7",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 200,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "8d9ebd2e-a5e4-4c66-a711-4e9c08287cfe",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mWing",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "b9d8eb53-88ce-4ea1-91a8-5a9a9760f970",
+          "matType": "MeshLambertMaterial",
+          "surface": "paint",
+          "transparent": false,
+          "triangles": 17800,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "b9e3eec1-e145-4c27-be6f-a219c9f06c5a",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "b9d8eb53-88ce-4ea1-91a8-5a9a9760f970",
+          "matType": "MeshLambertMaterial",
+          "surface": "paint",
+          "transparent": false,
+          "triangles": 34322,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "8a2e20bd-5ff1-49b0-8a1a-1e284c594f3e",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "static": true,
+            "noCull": true,
+            "opaqueAggregate": true
+          },
+          "mat": "b9d8eb53-88ce-4ea1-91a8-5a9a9760f970",
+          "matType": "MeshLambertMaterial",
+          "surface": "paint",
+          "transparent": false,
+          "triangles": 38032,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "06df3064-9759-48b1-ab00-8da3b3b117c8",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mWing",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "104fc462-5626-4939-bd77-8ec4ab3ae8ab",
+          "matType": "MeshPhongMaterial",
+          "surface": "metal",
+          "transparent": false,
+          "triangles": 7360,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "fdb009b3-516a-4336-999a-0589b43da265",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "static": true,
+            "noCull": true,
+            "opaqueAggregate": true
+          },
+          "mat": "104fc462-5626-4939-bd77-8ec4ab3ae8ab",
+          "matType": "MeshPhongMaterial",
+          "surface": "metal",
+          "transparent": false,
+          "triangles": 16548,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "c8f52624-1831-4658-a67c-7e2fce545610",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "1e19dee0-36b7-45d0-98d0-6b7c9a631661",
+          "matType": "MeshPhongMaterial",
+          "surface": "metal",
+          "transparent": false,
+          "triangles": 3928,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "f395377d-d42a-4ee5-9cfd-1f56e8ee1bc7",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mWing",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "1e19dee0-36b7-45d0-98d0-6b7c9a631661",
+          "matType": "MeshPhongMaterial",
+          "surface": "metal",
+          "transparent": false,
+          "triangles": 14008,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "78683c3e-c5dc-414f-b4ea-9d2b754737df",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "garden",
+            "static": true
+          },
+          "mat": "c909ca7f-4926-4a63-beb3-ecc3237842b2",
+          "matType": "MeshLambertMaterial",
+          "map": "9cd4ad07-351d-4774-bc3b-d7add793f532",
+          "surface": "tree",
+          "transparent": false,
+          "triangles": 4536,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "b8a5fc5e-6a57-451d-af09-9ebb15608cad",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "cons",
+            "static": true
+          },
+          "mat": "c909ca7f-4926-4a63-beb3-ecc3237842b2",
+          "matType": "MeshLambertMaterial",
+          "map": "9cd4ad07-351d-4774-bc3b-d7add793f532",
+          "surface": "tree",
+          "transparent": false,
+          "triangles": 4020,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "ba25f8fe-a031-4dd2-aa7d-2a996788b878",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "region": "outdoor",
+            "vegPath": "multi-draw",
+            "deadWood": true
+          },
+          "mat": "c909ca7f-4926-4a63-beb3-ecc3237842b2",
+          "matType": "MeshLambertMaterial",
+          "map": "9cd4ad07-351d-4774-bc3b-d7add793f532",
+          "surface": "tree",
+          "transparent": false,
+          "triangles": 784,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "6f1b448d-00d0-481b-90f2-c6bec3d5e044",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mWing",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "c909ca7f-4926-4a63-beb3-ecc3237842b2",
+          "matType": "MeshLambertMaterial",
+          "map": "9cd4ad07-351d-4774-bc3b-d7add793f532",
+          "surface": "tree",
+          "transparent": false,
+          "triangles": 842,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "5fb19bc1-a2ff-41c5-90be-786c7b6dea17",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mHall",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "c909ca7f-4926-4a63-beb3-ecc3237842b2",
+          "matType": "MeshLambertMaterial",
+          "map": "9cd4ad07-351d-4774-bc3b-d7add793f532",
+          "surface": "tree",
+          "transparent": false,
+          "triangles": 3178,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "77af085a-3599-4730-8208-b16bc78c4d38",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "region": "outdoor",
+            "vegPath": "multi-draw",
+            "artTrees": true,
+            "vegPart": "trees"
+          },
+          "mat": "c909ca7f-4926-4a63-beb3-ecc3237842b2",
+          "matType": "MeshLambertMaterial",
+          "map": "9cd4ad07-351d-4774-bc3b-d7add793f532",
+          "surface": "tree",
+          "transparent": false,
+          "triangles": 44424,
+          "instances": 1,
+          "shadow": true
+        },
+        {
+          "uuid": "b8227e10-6364-4f78-bc30-8556c700534d",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "forest",
+            "static": true
+          },
+          "mat": "c909ca7f-4926-4a63-beb3-ecc3237842b2",
+          "matType": "MeshLambertMaterial",
+          "map": "9cd4ad07-351d-4774-bc3b-d7add793f532",
+          "surface": "tree",
+          "transparent": false,
+          "triangles": 280,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "f4ec05b1-a425-4c66-9d49-69196add23ca",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "region": "outdoor",
+            "vegPath": "multi-draw",
+            "forestRocks": true
+          },
+          "mat": "8c8bc7b7-eb94-4f73-8404-2c8656104ade",
+          "matType": "MeshLambertMaterial",
+          "map": "6a97bb1b-5f93-4690-8a0a-768e0194be1e",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 116,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "12667478-4ee0-4e8e-bc41-44687cb4efd8",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "forest",
+            "static": true
+          },
+          "mat": "8c8bc7b7-eb94-4f73-8404-2c8656104ade",
+          "matType": "MeshLambertMaterial",
+          "map": "6a97bb1b-5f93-4690-8a0a-768e0194be1e",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 8454,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "1508da66-32fc-4e0d-b685-83903f539502",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "region": "outdoor",
+            "vegPath": "multi-draw",
+            "understory": true,
+            "vegPart": "plants"
+          },
+          "mat": "2bccbd4d-1247-411a-8f40-387f8f29b1ad",
+          "matType": "MeshLambertMaterial",
+          "surface": "foliage",
+          "transparent": false,
+          "triangles": 4540,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "40caadf4-be28-4806-ac20-41a48bbd0767",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "forest",
+            "static": true
+          },
+          "mat": "2bccbd4d-1247-411a-8f40-387f8f29b1ad",
+          "matType": "MeshLambertMaterial",
+          "surface": "foliage",
+          "transparent": false,
+          "triangles": 1280,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "19dc62c3-667a-4c7c-a2a8-30ee45853430",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "static": true,
+            "noCull": true,
+            "opaqueAggregate": true
+          },
+          "mat": "9b6ce213-e740-40fa-8146-60896ae9c6c6",
+          "matType": "MeshLambertMaterial",
+          "map": "8e463118-05fb-4c76-ad25-f298a7c9cd3a",
+          "transparent": false,
+          "triangles": 24,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "91ec5267-bf60-445a-80ab-0a9d9ff35c08",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "13dfa902-19dd-4526-a0d0-36342c00de04",
+          "matType": "MeshLambertMaterial",
+          "map": "559d4cda-5f5a-47a8-8d2f-92d416acff77",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "95276849-781a-4ce0-b466-32b33c44424d",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "cast0": false
+          },
+          "mat": "03b5763b-254c-412a-88f2-df75fdbb2aa1",
+          "matType": "MeshBasicMaterial",
+          "transparent": false,
+          "triangles": 756,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "ab103fde-102a-4a18-882f-1422f39dafc0",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "cast0": false
+          },
+          "mat": "03b5763b-254c-412a-88f2-df75fdbb2aa1",
+          "matType": "MeshBasicMaterial",
+          "transparent": false,
+          "triangles": 378,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "ca542a5c-c56b-4094-86fa-efebc59cfa1c",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "e33c0242-b5aa-4823-b30c-7b1b988db9f4",
+          "matType": "MeshLambertMaterial",
+          "map": "6fbae617-ec91-46fb-8ac7-8429e2c07ba3",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "9a09bb36-a648-4f04-a3ad-9fa3d73c1ccb",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "54d0d836-1c3a-4713-be43-f69ad0213361",
+          "matType": "MeshLambertMaterial",
+          "map": "5134df6e-17cc-46c3-bfc7-c772b8010d6d",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "1d6568f1-a318-4533-b702-74991d7e78a4",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "0cd92c29-d063-47de-b3d6-21ed407d4593",
+          "matType": "MeshLambertMaterial",
+          "map": "5e4f5859-888e-43a9-b341-3c49a9ffa035",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "d1943af2-ae1d-4b60-9f2f-d53ddb1745b0",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "8ebd2d88-6462-484e-b010-e3dea9dfd445",
+          "matType": "MeshLambertMaterial",
+          "map": "0495881e-813b-4449-9662-9b1cca608530",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "ed544161-a40f-4d89-88ab-020c5cc9ec2b",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "poolMosaic": "cirkel"
+          },
+          "mat": "da1a6d67-6a1a-4d90-8bf9-861273f292b8",
+          "matType": "MeshLambertMaterial",
+          "map": "d66d6f62-fce7-459a-9f1d-d0577ec93b72",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "ca328dce-6efc-4fcb-a2da-fe14b6cdfd04",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "884d520f-ea5e-4854-84a1-0299ffdf3332",
+          "matType": "MeshBasicMaterial",
+          "transparent": false,
+          "triangles": 12,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "5b0f038e-d3f1-4866-a232-1bd994716a75",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "21c91ee2-cb6e-45d2-a2fc-7f21e4913d01",
+          "matType": "MeshBasicMaterial",
+          "transparent": false,
+          "triangles": 12,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "5a85e6c6-1da7-4f58-a4fe-0f8cf78c5faf",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "noCull": true,
+            "region": "outdoor"
+          },
+          "mat": "ad17db8d-489a-4ae5-9e79-fde79c740e4c",
+          "matType": "MeshLambertMaterial",
+          "surface": "ground",
+          "transparent": false,
+          "triangles": 8,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "2feaabb4-5ccb-43bc-976d-b8c436201b63",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "1f078913-98b4-4a8b-a7d0-f98bc6cc0363",
+          "matType": "MeshPhongMaterial",
+          "transparent": true,
+          "triangles": 60,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "270e891b-8a02-4289-84c1-9550124015d0",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "main",
+            "static": true
+          },
+          "mat": "11147588-b58c-4c45-a870-68b96dc63ecb",
+          "matType": "MeshLambertMaterial",
+          "transparent": true,
+          "triangles": 12,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "e5b1924e-167b-448d-8ff1-68444bff9e6c",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "main",
+            "static": true
+          },
+          "mat": "11147588-b58c-4c45-a870-68b96dc63ecb",
+          "matType": "MeshLambertMaterial",
+          "transparent": true,
+          "triangles": 12,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "a168f88a-232c-42d1-a207-deea92782072",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "main",
+            "static": true
+          },
+          "mat": "11147588-b58c-4c45-a870-68b96dc63ecb",
+          "matType": "MeshLambertMaterial",
+          "transparent": true,
+          "triangles": 12,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "d4a8ce02-b773-48e2-ae93-8f7769934d21",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "region": "outdoor",
+            "contactShadows": true
+          },
+          "mat": "8edce914-910e-45e6-8ca5-62541c63963c",
+          "matType": "ShaderMaterial",
+          "transparent": true,
+          "triangles": 2,
+          "instances": 1631,
+          "shadow": false
+        },
+        {
+          "uuid": "745f95cf-2859-409b-8a87-68d133d733d0",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "region": "outdoor",
+            "pathVerge": true
+          },
+          "mat": "19e1529c-fd17-4e1f-ac86-6cb5d4905cc0",
+          "matType": "MeshLambertMaterial",
+          "map": "dc2cd958-940f-4eca-97a1-193ef5fa378e",
+          "transparent": true,
+          "triangles": 3270,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "e4b5c17f-7e94-45e7-b5ff-650212efdc6c",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "noCull": true,
+            "lightPatches": true
+          },
+          "mat": "7af453b4-a302-49c9-aea8-3c2a88ae88a7",
+          "matType": "MeshBasicMaterial",
+          "map": "42e28acc-a73b-413a-b45c-cfac3118d68e",
+          "transparent": true,
+          "triangles": 2,
+          "instances": 3,
+          "shadow": false
+        },
+        {
+          "uuid": "f8834d1c-6acb-4962-ac55-50c81f45a025",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "noCull": true,
+            "lightPatches": true
+          },
+          "mat": "679dadd1-63de-4f44-bc2d-272b48cf13cb",
+          "matType": "MeshBasicMaterial",
+          "map": "5b735b92-3570-4d84-8416-5c544617b473",
+          "transparent": true,
+          "triangles": 2,
+          "instances": 15,
+          "shadow": false
+        },
+        {
+          "uuid": "e543513f-2f65-4d3b-85c0-6b264d5f78bb",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "ed66d540-5158-4548-803f-cac82593c012",
+          "matType": "MeshLambertMaterial",
+          "map": "96730bbf-875a-4cce-8352-39103859a442",
+          "transparent": true,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "1959a7d9-319d-4fdc-9f8b-ae95295583dc",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "glass",
+            "static": true
+          },
+          "mat": "11147588-b58c-4c45-a870-68b96dc63ecb",
+          "matType": "MeshLambertMaterial",
+          "transparent": true,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "6dc8d494-306b-4609-a92d-3769afc2c437",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "glass",
+            "static": true
+          },
+          "mat": "11147588-b58c-4c45-a870-68b96dc63ecb",
+          "matType": "MeshLambertMaterial",
+          "transparent": true,
+          "triangles": 96,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "735091f6-c2d1-46a0-b6f8-b12d3f0b5012",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "cast0": false
+          },
+          "mat": "73002383-b5b1-4631-9586-11b91731bb03",
+          "matType": "MeshBasicMaterial",
+          "transparent": true,
+          "triangles": 378,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "647f46d4-26e7-440c-b48a-3f8238d0a392",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "cast0": false
+          },
+          "mat": "73002383-b5b1-4631-9586-11b91731bb03",
+          "matType": "MeshBasicMaterial",
+          "transparent": true,
+          "triangles": 756,
+          "instances": 1,
+          "shadow": false
+        }
+      ],
+      "room": "out"
+    },
+    {
+      "name": "conservatory",
+      "metrics": {
+        "frame": 22,
+        "calls": 144,
+        "triangles": 449088,
+        "points": 0,
+        "lines": 0
+      },
+      "drawn": [
+        {
+          "uuid": "d18e3be6-0725-4003-91f9-580d3c28bb10",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "f00ab4f1-939c-4fa3-a2b4-0923077b5f03",
+          "matType": "ShaderMaterial",
+          "transparent": false,
+          "triangles": 528,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "18b90b1a-3234-40be-9927-d6082065b126",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "4f03fd2d-482e-46da-bd4b-31488c4664d4",
+          "matType": "MeshPhongMaterial",
+          "transparent": false,
+          "triangles": 5632,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "a9fbcdfe-b1c8-4061-a8a8-3deb9a1b0747",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "paths",
+            "static": true
+          },
+          "mat": "e85b3a93-bcf7-4516-914b-740d5419c0b1",
+          "matType": "MeshLambertMaterial",
+          "surface": "paint",
+          "transparent": false,
+          "triangles": 9616,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "605a12d3-f629-44fe-b9bc-bd50cf431d46",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "static": true,
+            "noCull": true,
+            "opaqueAggregate": true
+          },
+          "mat": "e85b3a93-bcf7-4516-914b-740d5419c0b1",
+          "matType": "MeshLambertMaterial",
+          "surface": "paint",
+          "transparent": false,
+          "triangles": 44365,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "c5c21a75-8f61-4693-be18-40b93a64fd37",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "manor",
+            "static": true
+          },
+          "mat": "e85b3a93-bcf7-4516-914b-740d5419c0b1",
+          "matType": "MeshLambertMaterial",
+          "surface": "paint",
+          "transparent": false,
+          "triangles": 34848,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "71bac652-3688-44da-960b-6e032f6f5f4e",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "manor",
+            "static": true
+          },
+          "mat": "650e498e-ec36-4a49-8e2f-cf60d4749e43",
+          "matType": "MeshLambertMaterial",
+          "map": "82fb95fa-bab9-4b3a-a4e5-2512eda3aadf",
+          "surface": "plaster",
+          "transparent": false,
+          "triangles": 276,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "265f960c-64e5-4b6e-b68a-6f5963c12986",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mIn",
+            "static": true,
+            "regionOff": false,
+            "cast0": false
+          },
+          "mat": "650e498e-ec36-4a49-8e2f-cf60d4749e43",
+          "matType": "MeshLambertMaterial",
+          "map": "82fb95fa-bab9-4b3a-a4e5-2512eda3aadf",
+          "surface": "plaster",
+          "transparent": false,
+          "triangles": 60,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "aa1cb979-bab9-4285-8c41-201a04d9a91d",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mIn",
+            "static": true,
+            "regionOff": false,
+            "cast0": false
+          },
+          "mat": "650e498e-ec36-4a49-8e2f-cf60d4749e43",
+          "matType": "MeshLambertMaterial",
+          "map": "82fb95fa-bab9-4b3a-a4e5-2512eda3aadf",
+          "surface": "plaster",
+          "transparent": false,
+          "triangles": 984,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "cef3e7ab-c314-44a0-91a7-9482e26d08d3",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mLiv",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "650e498e-ec36-4a49-8e2f-cf60d4749e43",
+          "matType": "MeshLambertMaterial",
+          "map": "82fb95fa-bab9-4b3a-a4e5-2512eda3aadf",
+          "surface": "plaster",
+          "transparent": false,
+          "triangles": 1836,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "6679c7f9-5583-466d-ac9e-7ca2aad88a9a",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "wall",
+            "static": true
+          },
+          "mat": "b9c175fe-a248-40ec-8561-6dd1c6b6ca5e",
+          "matType": "MeshLambertMaterial",
+          "map": "3f3045f2-3f58-4c0d-99d7-aa337b8d4883",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 96,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "60614861-b5b9-44aa-8571-100908a442a7",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "cons",
+            "static": true
+          },
+          "mat": "b9c175fe-a248-40ec-8561-6dd1c6b6ca5e",
+          "matType": "MeshLambertMaterial",
+          "map": "3f3045f2-3f58-4c0d-99d7-aa337b8d4883",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 84,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "4764e96a-294d-4b7f-a996-0c21a020370e",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "manor",
+            "static": true
+          },
+          "mat": "b9c175fe-a248-40ec-8561-6dd1c6b6ca5e",
+          "matType": "MeshLambertMaterial",
+          "map": "3f3045f2-3f58-4c0d-99d7-aa337b8d4883",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 1560,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "000e51c5-2749-4c28-94e4-5dc776d5ee54",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "b9c175fe-a248-40ec-8561-6dd1c6b6ca5e",
+          "matType": "MeshLambertMaterial",
+          "map": "3f3045f2-3f58-4c0d-99d7-aa337b8d4883",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 96,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "65be1a55-4ecd-4e01-909e-c85cf6e3eaa6",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "garden",
+            "static": true
+          },
+          "mat": "b9c175fe-a248-40ec-8561-6dd1c6b6ca5e",
+          "matType": "MeshLambertMaterial",
+          "map": "3f3045f2-3f58-4c0d-99d7-aa337b8d4883",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 160,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "e77624a7-cdb2-4fa1-939c-5f2f0df71e08",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "static": true,
+            "noCull": true,
+            "opaqueAggregate": true
+          },
+          "mat": "e2c7e77e-e684-4953-9a26-d320bf274dac",
+          "matType": "MeshLambertMaterial",
+          "map": "60f85443-8d15-4308-bec1-ead4a9861c88",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 14032,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "5a065c60-de35-4bf4-b21c-d2adccf07e3f",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "fence",
+            "static": true
+          },
+          "mat": "e2c7e77e-e684-4953-9a26-d320bf274dac",
+          "matType": "MeshLambertMaterial",
+          "map": "60f85443-8d15-4308-bec1-ead4a9861c88",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 8100,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "18112f16-7303-42bc-ab8a-a6bc5365eda9",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mIn",
+            "static": true,
+            "regionOff": false,
+            "cast0": false
+          },
+          "mat": "e2c7e77e-e684-4953-9a26-d320bf274dac",
+          "matType": "MeshLambertMaterial",
+          "map": "60f85443-8d15-4308-bec1-ead4a9861c88",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 14304,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "edc88e29-f060-4a77-8fd7-2d96545a26cb",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "cons",
+            "static": true
+          },
+          "mat": "6cb07b8f-e0ac-4753-b740-7ba001f212f2",
+          "matType": "MeshLambertMaterial",
+          "map": "502c72bf-439a-4573-af0c-c5d4c490dfc5",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 48,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "9e40f72c-a76e-4d67-ada6-4f7c8d24d25c",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mIn",
+            "static": true,
+            "regionOff": false,
+            "cast0": false
+          },
+          "mat": "6cb07b8f-e0ac-4753-b740-7ba001f212f2",
+          "matType": "MeshLambertMaterial",
+          "map": "502c72bf-439a-4573-af0c-c5d4c490dfc5",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 48,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "38f01aa3-1330-49e3-b297-c9b9a161fb8b",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "manor",
+            "static": true
+          },
+          "mat": "c62c1f31-c559-4421-8e7a-7d37d5147b7c",
+          "matType": "MeshLambertMaterial",
+          "map": "aee8a000-e626-45a7-b993-671b8840a7f8",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 132,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "63f2f764-c9db-44dd-a7e9-920aa5ba7384",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "noCull": true,
+            "region": "outdoor"
+          },
+          "mat": "dad4e9fb-53b8-4d41-a46f-cc483a2bb394",
+          "matType": "MeshLambertMaterial",
+          "map": "304e0535-78d1-4405-b339-01cad2cb2e26",
+          "surface": "ground",
+          "transparent": false,
+          "triangles": 27516,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "bdafc69f-6c23-4171-9636-4b850cf10272",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "paths",
+            "static": true
+          },
+          "mat": "d018e2b4-0211-4da1-8838-467145e94772",
+          "matType": "MeshLambertMaterial",
+          "map": "dc2cd958-940f-4eca-97a1-193ef5fa378e",
+          "surface": "ground",
+          "transparent": false,
+          "triangles": 2976,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "112e01af-091a-4c60-b273-8b767444f22c",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "d018e2b4-0211-4da1-8838-467145e94772",
+          "matType": "MeshLambertMaterial",
+          "map": "dc2cd958-940f-4eca-97a1-193ef5fa378e",
+          "surface": "ground",
+          "transparent": false,
+          "triangles": 12,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "15e7b2d1-e99d-400c-af35-bb0a1bc0b10b",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "garden",
+            "static": true
+          },
+          "mat": "07fadb00-8ed4-4d35-9157-6edcb30039b0",
+          "matType": "MeshLambertMaterial",
+          "map": "2323485b-8b93-4b29-97fa-9f797aeaec6d",
+          "surface": "foliage",
+          "transparent": false,
+          "triangles": 2024,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "156708a5-61c4-44bc-8c13-c2bf04748901",
+          "name": "grass|gr3_2",
+          "type": "Mesh",
+          "ud": {
+            "veg": "small",
+            "region": "outdoor"
+          },
+          "mat": "07fadb00-8ed4-4d35-9157-6edcb30039b0",
+          "matType": "MeshLambertMaterial",
+          "map": "2323485b-8b93-4b29-97fa-9f797aeaec6d",
+          "surface": "foliage",
+          "transparent": false,
+          "triangles": 30,
+          "instances": 78,
+          "shadow": false
+        },
+        {
+          "uuid": "3d949f83-f263-4e5e-bc27-d863e00979cd",
+          "name": "grass|gr3_3",
+          "type": "Mesh",
+          "ud": {
+            "veg": "small",
+            "region": "outdoor"
+          },
+          "mat": "07fadb00-8ed4-4d35-9157-6edcb30039b0",
+          "matType": "MeshLambertMaterial",
+          "map": "2323485b-8b93-4b29-97fa-9f797aeaec6d",
+          "surface": "foliage",
+          "transparent": false,
+          "triangles": 30,
+          "instances": 95,
+          "shadow": false
+        },
+        {
+          "uuid": "dddd6979-cab9-4292-98cc-d7c7ef303022",
+          "name": "cone|garden",
+          "type": "Mesh",
+          "ud": {
+            "veg": "all",
+            "region": "outdoor"
+          },
+          "mat": "07fadb00-8ed4-4d35-9157-6edcb30039b0",
+          "matType": "MeshLambertMaterial",
+          "map": "2323485b-8b93-4b29-97fa-9f797aeaec6d",
+          "surface": "foliage",
+          "transparent": false,
+          "triangles": 16,
+          "instances": 5,
+          "shadow": true
+        },
+        {
+          "uuid": "75f1cccc-835a-41bc-a03c-0a2081449add",
+          "name": "grass|gr2_2",
+          "type": "Mesh",
+          "ud": {
+            "veg": "small",
+            "region": "outdoor"
+          },
+          "mat": "07fadb00-8ed4-4d35-9157-6edcb30039b0",
+          "matType": "MeshLambertMaterial",
+          "map": "2323485b-8b93-4b29-97fa-9f797aeaec6d",
+          "surface": "foliage",
+          "transparent": false,
+          "triangles": 30,
+          "instances": 7,
+          "shadow": false
+        },
+        {
+          "uuid": "79a7e85f-3b67-4b8e-92cc-65b82456dd24",
+          "name": "grass|gr2_3",
+          "type": "Mesh",
+          "ud": {
+            "veg": "small",
+            "region": "outdoor"
+          },
+          "mat": "07fadb00-8ed4-4d35-9157-6edcb30039b0",
+          "matType": "MeshLambertMaterial",
+          "map": "2323485b-8b93-4b29-97fa-9f797aeaec6d",
+          "surface": "foliage",
+          "transparent": false,
+          "triangles": 30,
+          "instances": 87,
+          "shadow": false
+        },
+        {
+          "uuid": "27eeabd4-7eba-4186-bff5-07adc908cd4f",
+          "name": "grass|gr1_2",
+          "type": "Mesh",
+          "ud": {
+            "veg": "small",
+            "region": "outdoor"
+          },
+          "mat": "07fadb00-8ed4-4d35-9157-6edcb30039b0",
+          "matType": "MeshLambertMaterial",
+          "map": "2323485b-8b93-4b29-97fa-9f797aeaec6d",
+          "surface": "foliage",
+          "transparent": false,
+          "triangles": 30,
+          "instances": 96,
+          "shadow": false
+        },
+        {
+          "uuid": "53d7ccd1-8fcb-41e2-83db-c0f224a1bb82",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mLiv",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "39cc5671-5ce7-486f-9012-9016de8f0496",
+          "matType": "MeshLambertMaterial",
+          "map": "41ac46a1-8386-47a4-8d99-2da2226d7297",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 108,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "53c49e56-aa75-41af-82ac-cc9872c8a90e",
+          "name": "trunk|garden",
+          "type": "Mesh",
+          "ud": {
+            "veg": "all",
+            "region": "outdoor"
+          },
+          "mat": "39cc5671-5ce7-486f-9012-9016de8f0496",
+          "matType": "MeshLambertMaterial",
+          "map": "41ac46a1-8386-47a4-8d99-2da2226d7297",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 28,
+          "instances": 5,
+          "shadow": true
+        },
+        {
+          "uuid": "18b7ccb1-32e3-456a-a111-fc0b5d8942ce",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "static": true,
+            "noCull": true,
+            "opaqueAggregate": true
+          },
+          "mat": "5a7ac75f-5a3f-4239-8344-4a44f84e8a01",
+          "matType": "MeshBasicMaterial",
+          "transparent": false,
+          "triangles": 3590,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "4e820cf5-c9d9-48f1-b0ad-6bbc96f8bc06",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "cons",
+            "static": true
+          },
+          "mat": "c1cf91a4-5121-410d-89cd-e30da9da7655",
+          "matType": "MeshLambertMaterial",
+          "map": "b3d4c962-52ae-428f-b422-bff7c104de18",
+          "transparent": false,
+          "triangles": 60,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "f0dacd1a-9c7c-49f3-b648-5592c0dd7381",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "3b8e3145-83c6-4d51-a129-a885c3d5f935",
+          "matType": "MeshLambertMaterial",
+          "map": "3cf88272-ea62-47a1-a40f-216162db5271",
+          "surface": "fabric",
+          "transparent": false,
+          "triangles": 12,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "08103714-8243-4985-8d46-d7b7a3c3c9e0",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "manor",
+            "static": true
+          },
+          "mat": "2c3c277d-a4b8-4f02-b0d0-3367f15c8a1d",
+          "matType": "MeshLambertMaterial",
+          "map": "c3308edd-726f-41b5-96e5-3183c35dead4",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 452,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "f0dfe64c-29b1-46ce-9fda-068d818af003",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "paths",
+            "static": true
+          },
+          "mat": "1f5dcdc4-8b2f-479c-b415-c1a27307bb87",
+          "matType": "MeshLambertMaterial",
+          "map": "7131f3c3-4a01-4c7b-9c3d-5d367c57bcf3",
+          "surface": "ground",
+          "transparent": false,
+          "triangles": 532,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "54759cbb-1fbc-4f97-9ba2-5701faa4bbeb",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mIn",
+            "static": true,
+            "regionOff": false,
+            "cast0": false
+          },
+          "mat": "8d8c720f-8b79-4349-a0b5-5496000849df",
+          "matType": "MeshLambertMaterial",
+          "map": "518b3c07-e743-49f8-83bb-6a5e0ac69aa3",
+          "transparent": false,
+          "triangles": 16,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "48d7c694-7b0b-445b-8f95-00671af2ce31",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mWing",
+            "static": true,
+            "regionOff": false,
+            "cast0": false
+          },
+          "mat": "6009e8ab-2577-4032-8b1f-cd5f93afcca7",
+          "matType": "MeshLambertMaterial",
+          "map": "59fdf1ea-c937-4f48-9c22-09ec6f8fb613",
+          "surface": "paint",
+          "transparent": false,
+          "triangles": 784,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "e8f6f3ac-ea07-4bb9-a567-c586c28b76de",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "static": true,
+            "noCull": true,
+            "opaqueAggregate": true
+          },
+          "mat": "6009e8ab-2577-4032-8b1f-cd5f93afcca7",
+          "matType": "MeshLambertMaterial",
+          "map": "59fdf1ea-c937-4f48-9c22-09ec6f8fb613",
+          "surface": "paint",
+          "transparent": false,
+          "triangles": 68,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "cae74c53-3f45-4375-8725-e4c215a9443c",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mLiv",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "6009e8ab-2577-4032-8b1f-cd5f93afcca7",
+          "matType": "MeshLambertMaterial",
+          "map": "59fdf1ea-c937-4f48-9c22-09ec6f8fb613",
+          "surface": "paint",
+          "transparent": false,
+          "triangles": 3414,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "e5e221bc-91b9-4202-8a9d-f53b604f0289",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "cons",
+            "static": true
+          },
+          "mat": "ddf66559-c5c5-4ee1-893f-5c1c042469ff",
+          "matType": "MeshLambertMaterial",
+          "map": "e38c353c-c4c9-46c9-9207-833c24c3d667",
+          "surface": "fabric",
+          "transparent": false,
+          "triangles": 1196,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "2b3d67f4-6d20-4a03-a46d-9025d0d4d24e",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mWing",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "ddf66559-c5c5-4ee1-893f-5c1c042469ff",
+          "matType": "MeshLambertMaterial",
+          "map": "e38c353c-c4c9-46c9-9207-833c24c3d667",
+          "surface": "fabric",
+          "transparent": false,
+          "triangles": 4440,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "3f6646f6-939e-43d9-8833-4a8b4605d0f1",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mServ",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "ddf66559-c5c5-4ee1-893f-5c1c042469ff",
+          "matType": "MeshLambertMaterial",
+          "map": "e38c353c-c4c9-46c9-9207-833c24c3d667",
+          "surface": "fabric",
+          "transparent": false,
+          "triangles": 7896,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "597a0b05-4306-4def-ba1a-acd7270bc6ac",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "garden",
+            "static": true
+          },
+          "mat": "ddf66559-c5c5-4ee1-893f-5c1c042469ff",
+          "matType": "MeshLambertMaterial",
+          "map": "e38c353c-c4c9-46c9-9207-833c24c3d667",
+          "surface": "fabric",
+          "transparent": false,
+          "triangles": 2052,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "1eaef7a3-80d0-41bc-86c7-b2bc53588e29",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mLiv",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "ddf66559-c5c5-4ee1-893f-5c1c042469ff",
+          "matType": "MeshLambertMaterial",
+          "map": "e38c353c-c4c9-46c9-9207-833c24c3d667",
+          "surface": "fabric",
+          "transparent": false,
+          "triangles": 15968,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "1d201c3b-2f36-42cd-bf06-24d6e7f337ef",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "ddf66559-c5c5-4ee1-893f-5c1c042469ff",
+          "matType": "MeshLambertMaterial",
+          "map": "e38c353c-c4c9-46c9-9207-833c24c3d667",
+          "surface": "fabric",
+          "transparent": false,
+          "triangles": 2880,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "5aa9d9d6-a69a-43bb-ba80-1b306dbcc5bc",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "forest",
+            "static": true
+          },
+          "mat": "3dbc4db4-5ade-4a1e-9273-65439faef612",
+          "matType": "MeshLambertMaterial",
+          "map": "4b843fc5-c617-46d9-aca5-18aa3298cb6a",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 7644,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "ddba0c20-cd93-4440-b0ac-63585de46537",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "cons",
+            "static": true
+          },
+          "mat": "3dbc4db4-5ade-4a1e-9273-65439faef612",
+          "matType": "MeshLambertMaterial",
+          "map": "4b843fc5-c617-46d9-aca5-18aa3298cb6a",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 1456,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "5d11692b-2e52-48a4-8728-5dab2e8a0118",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mServ",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "3dbc4db4-5ade-4a1e-9273-65439faef612",
+          "matType": "MeshLambertMaterial",
+          "map": "4b843fc5-c617-46d9-aca5-18aa3298cb6a",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 4056,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "0f57dc2f-58c1-4cfc-bb5d-910d09d0c4f4",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mWing",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "3dbc4db4-5ade-4a1e-9273-65439faef612",
+          "matType": "MeshLambertMaterial",
+          "map": "4b843fc5-c617-46d9-aca5-18aa3298cb6a",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 17268,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "fbb5d1a9-bf52-46e3-b61d-50d1cd1f8cd4",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "garden",
+            "static": true
+          },
+          "mat": "3dbc4db4-5ade-4a1e-9273-65439faef612",
+          "matType": "MeshLambertMaterial",
+          "map": "4b843fc5-c617-46d9-aca5-18aa3298cb6a",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 3916,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "7206d73a-b61f-490a-9ab4-561d9c9f23d9",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mHall",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "3dbc4db4-5ade-4a1e-9273-65439faef612",
+          "matType": "MeshLambertMaterial",
+          "map": "4b843fc5-c617-46d9-aca5-18aa3298cb6a",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 2732,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "367d9a0e-cf53-4b17-ac60-950fdcdd24f6",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "3dbc4db4-5ade-4a1e-9273-65439faef612",
+          "matType": "MeshLambertMaterial",
+          "map": "4b843fc5-c617-46d9-aca5-18aa3298cb6a",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 2914,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "d07d6236-e43c-47da-8a0a-b2e90e022034",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mLiv",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "3dbc4db4-5ade-4a1e-9273-65439faef612",
+          "matType": "MeshLambertMaterial",
+          "map": "4b843fc5-c617-46d9-aca5-18aa3298cb6a",
+          "surface": "timber",
+          "transparent": false,
+          "triangles": 14444,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "e413597e-9493-4920-b8a0-73028cdbd3e4",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mWing",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "eac0d825-7b11-4515-9373-11b9345444b6",
+          "matType": "MeshLambertMaterial",
+          "map": "7c6951ef-c6e7-431e-9249-f318c1fb80e7",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 828,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "bd64eaec-176f-4899-a4a3-0d8719187e12",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mLiv",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "eac0d825-7b11-4515-9373-11b9345444b6",
+          "matType": "MeshLambertMaterial",
+          "map": "7c6951ef-c6e7-431e-9249-f318c1fb80e7",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 2080,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "d0f8a41d-146b-4bca-a83d-6e43ecb7ae7f",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mServ",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "b9d8eb53-88ce-4ea1-91a8-5a9a9760f970",
+          "matType": "MeshLambertMaterial",
+          "surface": "paint",
+          "transparent": false,
+          "triangles": 11106,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "8a2e20bd-5ff1-49b0-8a1a-1e284c594f3e",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "static": true,
+            "noCull": true,
+            "opaqueAggregate": true
+          },
+          "mat": "b9d8eb53-88ce-4ea1-91a8-5a9a9760f970",
+          "matType": "MeshLambertMaterial",
+          "surface": "paint",
+          "transparent": false,
+          "triangles": 38032,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "b9e3eec1-e145-4c27-be6f-a219c9f06c5a",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "b9d8eb53-88ce-4ea1-91a8-5a9a9760f970",
+          "matType": "MeshLambertMaterial",
+          "surface": "paint",
+          "transparent": false,
+          "triangles": 34322,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "8d9ebd2e-a5e4-4c66-a711-4e9c08287cfe",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mWing",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "b9d8eb53-88ce-4ea1-91a8-5a9a9760f970",
+          "matType": "MeshLambertMaterial",
+          "surface": "paint",
+          "transparent": false,
+          "triangles": 17800,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "06df3064-9759-48b1-ab00-8da3b3b117c8",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mWing",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "104fc462-5626-4939-bd77-8ec4ab3ae8ab",
+          "matType": "MeshPhongMaterial",
+          "surface": "metal",
+          "transparent": false,
+          "triangles": 7360,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "fdb009b3-516a-4336-999a-0589b43da265",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "static": true,
+            "noCull": true,
+            "opaqueAggregate": true
+          },
+          "mat": "104fc462-5626-4939-bd77-8ec4ab3ae8ab",
+          "matType": "MeshPhongMaterial",
+          "surface": "metal",
+          "transparent": false,
+          "triangles": 16548,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "b564efea-c34a-40fa-b69c-2c2b671e9fe5",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mServ",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "1e19dee0-36b7-45d0-98d0-6b7c9a631661",
+          "matType": "MeshPhongMaterial",
+          "surface": "metal",
+          "transparent": false,
+          "triangles": 8020,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "f395377d-d42a-4ee5-9cfd-1f56e8ee1bc7",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mWing",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "1e19dee0-36b7-45d0-98d0-6b7c9a631661",
+          "matType": "MeshPhongMaterial",
+          "surface": "metal",
+          "transparent": false,
+          "triangles": 14008,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "4ac6ba1a-a2ae-4266-a155-65ccbc288ff4",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mLiv",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "1e19dee0-36b7-45d0-98d0-6b7c9a631661",
+          "matType": "MeshPhongMaterial",
+          "surface": "metal",
+          "transparent": false,
+          "triangles": 2140,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "c8f52624-1831-4658-a67c-7e2fce545610",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "1e19dee0-36b7-45d0-98d0-6b7c9a631661",
+          "matType": "MeshPhongMaterial",
+          "surface": "metal",
+          "transparent": false,
+          "triangles": 3928,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "8f3e34aa-3e13-442c-ac9f-685002401f7d",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "1e19dee0-36b7-45d0-98d0-6b7c9a631661",
+          "matType": "MeshPhongMaterial",
+          "surface": "metal",
+          "transparent": false,
+          "triangles": 936,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "8e3595b8-8eb3-400f-a5c9-9025ce46194d",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mLiv",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "f9bb2efe-b939-485f-8d4a-a1e60a3099bc",
+          "matType": "MeshLambertMaterial",
+          "map": "606cef2d-d7e4-4827-bd34-7d7434c27549",
+          "surface": "fabric",
+          "transparent": false,
+          "triangles": 12,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "b8a5fc5e-6a57-451d-af09-9ebb15608cad",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "cons",
+            "static": true
+          },
+          "mat": "c909ca7f-4926-4a63-beb3-ecc3237842b2",
+          "matType": "MeshLambertMaterial",
+          "map": "9cd4ad07-351d-4774-bc3b-d7add793f532",
+          "surface": "tree",
+          "transparent": false,
+          "triangles": 4020,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "77af085a-3599-4730-8208-b16bc78c4d38",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "region": "outdoor",
+            "vegPath": "multi-draw",
+            "artTrees": true,
+            "vegPart": "trees"
+          },
+          "mat": "c909ca7f-4926-4a63-beb3-ecc3237842b2",
+          "matType": "MeshLambertMaterial",
+          "map": "9cd4ad07-351d-4774-bc3b-d7add793f532",
+          "surface": "tree",
+          "transparent": false,
+          "triangles": 44424,
+          "instances": 1,
+          "shadow": true
+        },
+        {
+          "uuid": "6f1b448d-00d0-481b-90f2-c6bec3d5e044",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mWing",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "c909ca7f-4926-4a63-beb3-ecc3237842b2",
+          "matType": "MeshLambertMaterial",
+          "map": "9cd4ad07-351d-4774-bc3b-d7add793f532",
+          "surface": "tree",
+          "transparent": false,
+          "triangles": 842,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "ba25f8fe-a031-4dd2-aa7d-2a996788b878",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "region": "outdoor",
+            "vegPath": "multi-draw",
+            "deadWood": true
+          },
+          "mat": "c909ca7f-4926-4a63-beb3-ecc3237842b2",
+          "matType": "MeshLambertMaterial",
+          "map": "9cd4ad07-351d-4774-bc3b-d7add793f532",
+          "surface": "tree",
+          "transparent": false,
+          "triangles": 784,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "5fb19bc1-a2ff-41c5-90be-786c7b6dea17",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "mHall",
+            "static": true,
+            "regionOff": false,
+            "cast0": true
+          },
+          "mat": "c909ca7f-4926-4a63-beb3-ecc3237842b2",
+          "matType": "MeshLambertMaterial",
+          "map": "9cd4ad07-351d-4774-bc3b-d7add793f532",
+          "surface": "tree",
+          "transparent": false,
+          "triangles": 3178,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "78683c3e-c5dc-414f-b4ea-9d2b754737df",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "garden",
+            "static": true
+          },
+          "mat": "c909ca7f-4926-4a63-beb3-ecc3237842b2",
+          "matType": "MeshLambertMaterial",
+          "map": "9cd4ad07-351d-4774-bc3b-d7add793f532",
+          "surface": "tree",
+          "transparent": false,
+          "triangles": 4536,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "f4ec05b1-a425-4c66-9d49-69196add23ca",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "region": "outdoor",
+            "vegPath": "multi-draw",
+            "forestRocks": true
+          },
+          "mat": "8c8bc7b7-eb94-4f73-8404-2c8656104ade",
+          "matType": "MeshLambertMaterial",
+          "map": "6a97bb1b-5f93-4690-8a0a-768e0194be1e",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 116,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "eb74ce37-01e4-4271-830b-5c8484da08b7",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "8c8bc7b7-eb94-4f73-8404-2c8656104ade",
+          "matType": "MeshLambertMaterial",
+          "map": "6a97bb1b-5f93-4690-8a0a-768e0194be1e",
+          "surface": "stone",
+          "transparent": false,
+          "triangles": 416,
+          "instances": 1,
+          "shadow": true,
+          "static": true
+        },
+        {
+          "uuid": "1508da66-32fc-4e0d-b685-83903f539502",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "region": "outdoor",
+            "vegPath": "multi-draw",
+            "understory": true,
+            "vegPart": "plants"
+          },
+          "mat": "2bccbd4d-1247-411a-8f40-387f8f29b1ad",
+          "matType": "MeshLambertMaterial",
+          "surface": "foliage",
+          "transparent": false,
+          "triangles": 4540,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "19dc62c3-667a-4c7c-a2a8-30ee45853430",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "static": true,
+            "noCull": true,
+            "opaqueAggregate": true
+          },
+          "mat": "9b6ce213-e740-40fa-8146-60896ae9c6c6",
+          "matType": "MeshLambertMaterial",
+          "map": "8e463118-05fb-4c76-ad25-f298a7c9cd3a",
+          "transparent": false,
+          "triangles": 24,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "91ec5267-bf60-445a-80ab-0a9d9ff35c08",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "13dfa902-19dd-4526-a0d0-36342c00de04",
+          "matType": "MeshLambertMaterial",
+          "map": "559d4cda-5f5a-47a8-8d2f-92d416acff77",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "95276849-781a-4ce0-b466-32b33c44424d",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "cast0": false
+          },
+          "mat": "03b5763b-254c-412a-88f2-df75fdbb2aa1",
+          "matType": "MeshBasicMaterial",
+          "transparent": false,
+          "triangles": 756,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "c5673cac-38bf-45c1-acb2-6f3bea30288f",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "cast0": false
+          },
+          "mat": "03b5763b-254c-412a-88f2-df75fdbb2aa1",
+          "matType": "MeshBasicMaterial",
+          "transparent": false,
+          "triangles": 756,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "188e0b48-e0e1-4d6f-9ce2-1c693ad85d1b",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "cast0": false
+          },
+          "mat": "4fecf71c-3540-4ed1-bcba-46932a2dc6d7",
+          "matType": "MeshBasicMaterial",
+          "transparent": false,
+          "triangles": 320,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "fcdb9618-51ba-4391-8f93-ba4ee403e92d",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "419e93ff-7602-44fd-8b5c-5947374080a1",
+          "matType": "MeshBasicMaterial",
+          "transparent": false,
+          "triangles": 40,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "ca542a5c-c56b-4094-86fa-efebc59cfa1c",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "e33c0242-b5aa-4823-b30c-7b1b988db9f4",
+          "matType": "MeshLambertMaterial",
+          "map": "6fbae617-ec91-46fb-8ac7-8429e2c07ba3",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "9a09bb36-a648-4f04-a3ad-9fa3d73c1ccb",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "54d0d836-1c3a-4713-be43-f69ad0213361",
+          "matType": "MeshLambertMaterial",
+          "map": "5134df6e-17cc-46c3-bfc7-c772b8010d6d",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "1d6568f1-a318-4533-b702-74991d7e78a4",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "0cd92c29-d063-47de-b3d6-21ed407d4593",
+          "matType": "MeshLambertMaterial",
+          "map": "5e4f5859-888e-43a9-b341-3c49a9ffa035",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "d1943af2-ae1d-4b60-9f2f-d53ddb1745b0",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "8ebd2d88-6462-484e-b010-e3dea9dfd445",
+          "matType": "MeshLambertMaterial",
+          "map": "0495881e-813b-4449-9662-9b1cca608530",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "70b8230e-c387-4df8-8651-f9550162e1ac",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "poolDepthMarker": "2,0 m"
+          },
+          "mat": "44a217cd-950b-4432-bb1b-6422097c1e14",
+          "matType": "MeshLambertMaterial",
+          "map": "a6482965-fb47-4a7a-9a75-34d2a7de94fc",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "a96d7334-ae26-43c1-8ef8-f2f2b42b30e9",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "bbd056b6-0411-411c-9275-e423682d958b",
+          "matType": "MeshLambertMaterial",
+          "map": "cdd0f3a1-adf8-41a4-9fe9-c5d5266c1d62",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "dcaa2111-296a-4211-a5f9-b59340299722",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "06019d76-f5ab-4bb5-b344-97b9470c252f",
+          "matType": "MeshLambertMaterial",
+          "map": "b0c683f0-7e69-4ec4-9d75-079bff13bc5f",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "dabc959b-60ec-4822-a3f4-fd8b153d1923",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "811ae9bc-041d-4d1c-97cd-ef0bfce26169",
+          "matType": "MeshLambertMaterial",
+          "map": "bf30faf6-3355-4f43-af7c-c7a2d41d3d0b",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "3bd9421c-d2e2-4d08-8816-8b50527598f1",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "a0298cc9-c9d7-4a89-aea0-8a5799750112",
+          "matType": "MeshLambertMaterial",
+          "map": "c0fcad02-d779-4080-ad27-0114883aebd0",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "dcaa2111-296a-4211-a5f9-b59340299722",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "509779ed-54b1-4155-a00b-1e28fc247703",
+          "matType": "MeshLambertMaterial",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "dcaa2111-296a-4211-a5f9-b59340299722",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "509779ed-54b1-4155-a00b-1e28fc247703",
+          "matType": "MeshLambertMaterial",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "dcaa2111-296a-4211-a5f9-b59340299722",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "509779ed-54b1-4155-a00b-1e28fc247703",
+          "matType": "MeshLambertMaterial",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "dcaa2111-296a-4211-a5f9-b59340299722",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "509779ed-54b1-4155-a00b-1e28fc247703",
+          "matType": "MeshLambertMaterial",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "dcaa2111-296a-4211-a5f9-b59340299722",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "509779ed-54b1-4155-a00b-1e28fc247703",
+          "matType": "MeshLambertMaterial",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "a96d7334-ae26-43c1-8ef8-f2f2b42b30e9",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "509779ed-54b1-4155-a00b-1e28fc247703",
+          "matType": "MeshLambertMaterial",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "a96d7334-ae26-43c1-8ef8-f2f2b42b30e9",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "509779ed-54b1-4155-a00b-1e28fc247703",
+          "matType": "MeshLambertMaterial",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "a96d7334-ae26-43c1-8ef8-f2f2b42b30e9",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "509779ed-54b1-4155-a00b-1e28fc247703",
+          "matType": "MeshLambertMaterial",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "a96d7334-ae26-43c1-8ef8-f2f2b42b30e9",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "509779ed-54b1-4155-a00b-1e28fc247703",
+          "matType": "MeshLambertMaterial",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "a96d7334-ae26-43c1-8ef8-f2f2b42b30e9",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "509779ed-54b1-4155-a00b-1e28fc247703",
+          "matType": "MeshLambertMaterial",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "3bd9421c-d2e2-4d08-8816-8b50527598f1",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "509779ed-54b1-4155-a00b-1e28fc247703",
+          "matType": "MeshLambertMaterial",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "3bd9421c-d2e2-4d08-8816-8b50527598f1",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "509779ed-54b1-4155-a00b-1e28fc247703",
+          "matType": "MeshLambertMaterial",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "3bd9421c-d2e2-4d08-8816-8b50527598f1",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "509779ed-54b1-4155-a00b-1e28fc247703",
+          "matType": "MeshLambertMaterial",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "3bd9421c-d2e2-4d08-8816-8b50527598f1",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "509779ed-54b1-4155-a00b-1e28fc247703",
+          "matType": "MeshLambertMaterial",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "3bd9421c-d2e2-4d08-8816-8b50527598f1",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "509779ed-54b1-4155-a00b-1e28fc247703",
+          "matType": "MeshLambertMaterial",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "dabc959b-60ec-4822-a3f4-fd8b153d1923",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "509779ed-54b1-4155-a00b-1e28fc247703",
+          "matType": "MeshLambertMaterial",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "dabc959b-60ec-4822-a3f4-fd8b153d1923",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "509779ed-54b1-4155-a00b-1e28fc247703",
+          "matType": "MeshLambertMaterial",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "dabc959b-60ec-4822-a3f4-fd8b153d1923",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "509779ed-54b1-4155-a00b-1e28fc247703",
+          "matType": "MeshLambertMaterial",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "dabc959b-60ec-4822-a3f4-fd8b153d1923",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "509779ed-54b1-4155-a00b-1e28fc247703",
+          "matType": "MeshLambertMaterial",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "dabc959b-60ec-4822-a3f4-fd8b153d1923",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "509779ed-54b1-4155-a00b-1e28fc247703",
+          "matType": "MeshLambertMaterial",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "4914a208-b7de-40ab-bf4c-2de350cd79e0",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "47bab3fa-d749-4cda-a5a5-4ed3ec2946ff",
+          "matType": "MeshLambertMaterial",
+          "map": "e0d5e7db-85b0-429a-8df3-b8a6189950b0",
+          "transparent": false,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "5a85e6c6-1da7-4f58-a4fe-0f8cf78c5faf",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "noCull": true,
+            "region": "outdoor"
+          },
+          "mat": "ad17db8d-489a-4ae5-9e79-fde79c740e4c",
+          "matType": "MeshLambertMaterial",
+          "surface": "ground",
+          "transparent": false,
+          "triangles": 8,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "e3ab8ea6-9092-40d0-ac69-cb80f2057ea9",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "44a2b680-9cbf-46df-af28-ae48e9d226e2",
+          "matType": "ShaderMaterial",
+          "transparent": true,
+          "triangles": 308,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "afa0170a-6805-4685-86fb-ad2c83932368",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "11147588-b58c-4c45-a870-68b96dc63ecb",
+          "matType": "MeshLambertMaterial",
+          "transparent": true,
+          "triangles": 600,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "250962d8-9fa5-4113-beaf-be34899339e2",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "ac2040a6-a354-43b5-9367-789af2bb70d6",
+          "matType": "MeshPhongMaterial",
+          "transparent": true,
+          "triangles": 178,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "ff5baaaa-8563-4e6a-b737-071b5678e35a",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "3ffdeeec-5e8e-4c98-984b-4d98d7f6656b",
+          "matType": "ShaderMaterial",
+          "transparent": true,
+          "triangles": 276,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "e5b1924e-167b-448d-8ff1-68444bff9e6c",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "main",
+            "static": true
+          },
+          "mat": "11147588-b58c-4c45-a870-68b96dc63ecb",
+          "matType": "MeshLambertMaterial",
+          "transparent": true,
+          "triangles": 12,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "a168f88a-232c-42d1-a207-deea92782072",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "main",
+            "static": true
+          },
+          "mat": "11147588-b58c-4c45-a870-68b96dc63ecb",
+          "matType": "MeshLambertMaterial",
+          "transparent": true,
+          "triangles": 12,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "2feaabb4-5ccb-43bc-976d-b8c436201b63",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "grounds",
+            "static": true
+          },
+          "mat": "1f078913-98b4-4a8b-a7d0-f98bc6cc0363",
+          "matType": "MeshPhongMaterial",
+          "transparent": true,
+          "triangles": 60,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "270e891b-8a02-4289-84c1-9550124015d0",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "main",
+            "static": true
+          },
+          "mat": "11147588-b58c-4c45-a870-68b96dc63ecb",
+          "matType": "MeshLambertMaterial",
+          "transparent": true,
+          "triangles": 12,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "e4f760b6-a9cc-4053-8b51-462083d21a32",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "main",
+            "static": true
+          },
+          "mat": "11147588-b58c-4c45-a870-68b96dc63ecb",
+          "matType": "MeshLambertMaterial",
+          "transparent": true,
+          "triangles": 12,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "e2617afd-a334-4cb4-bf93-0d495da57f52",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "region": "mLiv",
+            "contactShadows": true,
+            "regionOff": false,
+            "cast0": false
+          },
+          "mat": "c2b7ef86-70b1-4ce4-aa58-f717d189041b",
+          "matType": "ShaderMaterial",
+          "transparent": true,
+          "triangles": 2,
+          "instances": 10,
+          "shadow": false
+        },
+        {
+          "uuid": "d4a8ce02-b773-48e2-ae93-8f7769934d21",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "region": "outdoor",
+            "contactShadows": true
+          },
+          "mat": "8edce914-910e-45e6-8ca5-62541c63963c",
+          "matType": "ShaderMaterial",
+          "transparent": true,
+          "triangles": 2,
+          "instances": 1631,
+          "shadow": false
+        },
+        {
+          "uuid": "f8834d1c-6acb-4962-ac55-50c81f45a025",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "noCull": true,
+            "lightPatches": true
+          },
+          "mat": "679dadd1-63de-4f44-bc2d-272b48cf13cb",
+          "matType": "MeshBasicMaterial",
+          "map": "5b735b92-3570-4d84-8416-5c544617b473",
+          "transparent": true,
+          "triangles": 2,
+          "instances": 15,
+          "shadow": false
+        },
+        {
+          "uuid": "e4b5c17f-7e94-45e7-b5ff-650212efdc6c",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "noCull": true,
+            "lightPatches": true
+          },
+          "mat": "7af453b4-a302-49c9-aea8-3c2a88ae88a7",
+          "matType": "MeshBasicMaterial",
+          "map": "42e28acc-a73b-413a-b45c-cfac3118d68e",
+          "transparent": true,
+          "triangles": 2,
+          "instances": 3,
+          "shadow": false
+        },
+        {
+          "uuid": "745f95cf-2859-409b-8a87-68d133d733d0",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "region": "outdoor",
+            "pathVerge": true
+          },
+          "mat": "19e1529c-fd17-4e1f-ac86-6cb5d4905cc0",
+          "matType": "MeshLambertMaterial",
+          "map": "dc2cd958-940f-4eca-97a1-193ef5fa378e",
+          "transparent": true,
+          "triangles": 3270,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "1a07fe8d-cd7a-47e6-8b73-3aed2cf8dc1d",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "region": "outdoor",
+            "noCull": true
+          },
+          "mat": "327a49ee-c6b6-46e8-94be-3f0cd071500c",
+          "matType": "MeshLambertMaterial",
+          "transparent": true,
+          "triangles": 480,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "e543513f-2f65-4d3b-85c0-6b264d5f78bb",
+          "name": "",
+          "type": "Mesh",
+          "ud": {},
+          "mat": "ed66d540-5158-4548-803f-cac82593c012",
+          "matType": "MeshLambertMaterial",
+          "map": "96730bbf-875a-4cce-8352-39103859a442",
+          "transparent": true,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "6dc8d494-306b-4609-a92d-3769afc2c437",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "glass",
+            "static": true
+          },
+          "mat": "11147588-b58c-4c45-a870-68b96dc63ecb",
+          "matType": "MeshLambertMaterial",
+          "transparent": true,
+          "triangles": 96,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "1959a7d9-319d-4fdc-9f8b-ae95295583dc",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "chunk": "glass",
+            "static": true
+          },
+          "mat": "11147588-b58c-4c45-a870-68b96dc63ecb",
+          "matType": "MeshLambertMaterial",
+          "transparent": true,
+          "triangles": 2,
+          "instances": 1,
+          "shadow": false,
+          "static": true
+        },
+        {
+          "uuid": "1ec058ff-12e4-461f-a5c5-ea72cc92db0b",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "cast0": false
+          },
+          "mat": "73002383-b5b1-4631-9586-11b91731bb03",
+          "matType": "MeshBasicMaterial",
+          "transparent": true,
+          "triangles": 826,
+          "instances": 1,
+          "shadow": false
+        },
+        {
+          "uuid": "647f46d4-26e7-440c-b48a-3f8238d0a392",
+          "name": "",
+          "type": "Mesh",
+          "ud": {
+            "cast0": false
+          },
+          "mat": "73002383-b5b1-4631-9586-11b91731bb03",
+          "matType": "MeshBasicMaterial",
+          "transparent": true,
+          "triangles": 756,
+          "instances": 1,
+          "shadow": false
+        }
+      ],
+      "room": "cons"
+    }
+  ],
+  "errors": []
+}

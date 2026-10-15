@@ -25,6 +25,8 @@ import { terrainHeight } from './terrain';
 import { FIRE_UNIFORMS } from './fire';
 import { S3_BUILDERS } from './d2props';
 import { parkedCar } from './cars';
+import { EXTERIOR_STUDY } from './exteriorStudy';
+import { arrivalGravel } from './arrivalStudy';
 import { buildGravityBong } from './gravityBong';
 import { buildHandpan, addHandpanPlay } from './handpan';
 
@@ -59,11 +61,14 @@ export function buildGrounds(w: World, g: GameApi, c: Ctx, veg: Vegetation, wood
 function arrival(w: World, c: Ctx) {
   const k = c.k;
   // ONE gravel surface made of non-overlapping rectangles (no coplanar disc/plane overlap, audit VD-04)
-  const parts: Rect[] = ARRIVAL_GRAVEL; // strip X 69.5–108 / Z 66–72, court south of it (the drive ends at Z 62), bays, porch approach
-  const geos = parts.map((r) => new THREE.PlaneGeometry(r.x1 - r.x0, r.z1 - r.z0).rotateX(-Math.PI / 2).translate((r.x0 + r.x1) / 2, 0.03, -(r.z0 + r.z1) / 2));
-  for (const g0 of geos) { c.b.add(k.M.dirt, g0, new THREE.Matrix4(), '#d4cfc2', 'paths', false, 0); g0.dispose(); }
-  // bay lines (raised a little, never coplanar)
-  for (const x of [69.5, 72.3, 75.1, 77.9, 101, 103.8, 106.6]) boxMM(c.b, k.M.paint, '#f2ead8', x - 0.04, x + 0.04, 0.03, 0.045, 72.2, 77.4, { chunk: 'paths', shadow: false });
+  if (EXTERIOR_STUDY) arrivalGravel(c);
+  else {
+    const parts: Rect[] = ARRIVAL_GRAVEL; // strip X 69.5–108 / Z 66–72, court south of it (the drive ends at Z 62), bays, porch approach
+    const geos = parts.map((r) => new THREE.PlaneGeometry(r.x1 - r.x0, r.z1 - r.z0).rotateX(-Math.PI / 2).translate((r.x0 + r.x1) / 2, 0.03, -(r.z0 + r.z1) / 2));
+    for (const g0 of geos) { c.b.add(k.M.dirt, g0, new THREE.Matrix4(), '#d4cfc2', 'paths', false, 0); g0.dispose(); }
+    // bay lines (raised a little, never coplanar)
+    for (const x of [69.5, 72.3, 75.1, 77.9, 101, 103.8, 106.6]) boxMM(c.b, k.M.paint, '#f2ead8', x - 0.04, x + 0.04, 0.03, 0.045, 72.2, 77.4, { chunk: 'paths', shadow: false });
+  }
   // cars: stable positions, nose to the house; the fifth bay stays free
   for (const p of PARKING) if (p.car) car(w, c, p.id, (p.x0 + p.x1) / 2, (p.z0 + p.z1) / 2 + 0.15, p.color);
 }

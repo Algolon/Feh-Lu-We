@@ -1,0 +1,500 @@
+{
+  "rows": [
+    {
+      "variant": "base",
+      "name": "arrival",
+      "room": "out",
+      "costs": [
+        {
+          "calls": 99,
+          "triangles": 212706
+        },
+        {
+          "calls": 99,
+          "triangles": 212706
+        },
+        {
+          "calls": 99,
+          "triangles": 212706
+        },
+        {
+          "calls": 99,
+          "triangles": 212706
+        }
+      ],
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadows": false
+    },
+    {
+      "variant": "base",
+      "name": "facade-court",
+      "room": "out",
+      "costs": [
+        {
+          "calls": 122,
+          "triangles": 262229
+        },
+        {
+          "calls": 122,
+          "triangles": 262229
+        },
+        {
+          "calls": 122,
+          "triangles": 262229
+        },
+        {
+          "calls": 122,
+          "triangles": 262229
+        }
+      ],
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadows": false
+    },
+    {
+      "variant": "base",
+      "name": "window-near",
+      "room": "out",
+      "costs": [
+        {
+          "calls": 62,
+          "triangles": 218453
+        },
+        {
+          "calls": 62,
+          "triangles": 218453
+        },
+        {
+          "calls": 62,
+          "triangles": 218453
+        },
+        {
+          "calls": 62,
+          "triangles": 218453
+        }
+      ],
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadows": false
+    },
+    {
+      "variant": "base",
+      "name": "corner",
+      "room": "out",
+      "costs": [
+        {
+          "calls": 101,
+          "triangles": 222070
+        },
+        {
+          "calls": 101,
+          "triangles": 222070
+        },
+        {
+          "calls": 101,
+          "triangles": 222070
+        },
+        {
+          "calls": 101,
+          "triangles": 222070
+        }
+      ],
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadows": false
+    },
+    {
+      "variant": "base",
+      "name": "west-return",
+      "room": "out",
+      "costs": [
+        {
+          "calls": 105,
+          "triangles": 266030
+        },
+        {
+          "calls": 105,
+          "triangles": 266030
+        },
+        {
+          "calls": 105,
+          "triangles": 266030
+        },
+        {
+          "calls": 105,
+          "triangles": 266030
+        }
+      ],
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadows": false
+    },
+    {
+      "variant": "base",
+      "name": "paving",
+      "room": "out",
+      "costs": [
+        {
+          "calls": 73,
+          "triangles": 319466
+        },
+        {
+          "calls": 73,
+          "triangles": 319466
+        },
+        {
+          "calls": 73,
+          "triangles": 319466
+        },
+        {
+          "calls": 73,
+          "triangles": 319466
+        }
+      ],
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadows": false
+    },
+    {
+      "variant": "base",
+      "name": "driveway",
+      "room": "out",
+      "costs": [
+        {
+          "calls": 96,
+          "triangles": 243063
+        },
+        {
+          "calls": 96,
+          "triangles": 243063
+        },
+        {
+          "calls": 96,
+          "triangles": 243063
+        },
+        {
+          "calls": 96,
+          "triangles": 243063
+        }
+      ],
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadows": false
+    },
+    {
+      "variant": "base",
+      "name": "phone-landscape",
+      "costs": [
+        {
+          "calls": 89,
+          "triangles": 210731
+        }
+      ]
+    },
+    {
+      "variant": "study",
+      "name": "arrival",
+      "room": "out",
+      "costs": [
+        {
+          "calls": 101,
+          "triangles": 224342
+        },
+        {
+          "calls": 101,
+          "triangles": 224342
+        },
+        {
+          "calls": 101,
+          "triangles": 224342
+        },
+        {
+          "calls": 101,
+          "triangles": 224342
+        }
+      ],
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadows": false
+    },
+    {
+      "variant": "study",
+      "name": "facade-court",
+      "room": "out",
+      "costs": [
+        {
+          "calls": 123,
+          "triangles": 273625
+        },
+        {
+          "calls": 123,
+          "triangles": 273625
+        },
+        {
+          "calls": 123,
+          "triangles": 273625
+        },
+        {
+          "calls": 123,
+          "triangles": 273625
+        }
+      ],
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadows": false
+    },
+    {
+      "variant": "study",
+      "name": "window-near",
+      "room": "out",
+      "costs": [
+        {
+          "calls": 63,
+          "triangles": 229849
+        },
+        {
+          "calls": 63,
+          "triangles": 229849
+        },
+        {
+          "calls": 63,
+          "triangles": 229849
+        },
+        {
+          "calls": 63,
+          "triangles": 229849
+        }
+      ],
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadows": false
+    },
+    {
+      "variant": "study",
+      "name": "corner",
+      "room": "out",
+      "costs": [
+        {
+          "calls": 102,
+          "triangles": 233466
+        },
+        {
+          "calls": 102,
+          "triangles": 233466
+        },
+        {
+          "calls": 102,
+          "triangles": 233466
+        },
+        {
+          "calls": 102,
+          "triangles": 233466
+        }
+      ],
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadows": false
+    },
+    {
+      "variant": "study",
+      "name": "west-return",
+      "room": "out",
+      "costs": [
+        {
+          "calls": 107,
+          "triangles": 277666
+        },
+        {
+          "calls": 107,
+          "triangles": 277666
+        },
+        {
+          "calls": 107,
+          "triangles": 277666
+        },
+        {
+          "calls": 107,
+          "triangles": 277666
+        }
+      ],
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadows": false
+    },
+    {
+      "variant": "study",
+      "name": "paving",
+      "room": "out",
+      "costs": [
+        {
+          "calls": 75,
+          "triangles": 331102
+        },
+        {
+          "calls": 75,
+          "triangles": 331102
+        },
+        {
+          "calls": 75,
+          "triangles": 331102
+        },
+        {
+          "calls": 75,
+          "triangles": 331102
+        }
+      ],
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadows": false
+    },
+    {
+      "variant": "study",
+      "name": "driveway",
+      "room": "out",
+      "costs": [
+        {
+          "calls": 98,
+          "triangles": 254699
+        },
+        {
+          "calls": 98,
+          "triangles": 254699
+        },
+        {
+          "calls": 98,
+          "triangles": 254699
+        },
+        {
+          "calls": 98,
+          "triangles": 254699
+        }
+      ],
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadows": false
+    },
+    {
+      "variant": "study",
+      "name": "phone-landscape",
+      "costs": [
+        {
+          "calls": 90,
+          "triangles": 222127
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "validation": {
+    "interactionIdsUnchanged": true,
+    "supportHeightsUnchanged": true,
+    "openingContractsUnchanged": true,
+    "highShadersOk": true,
+    "approachWalkPassed": true,
+    "renderBudgetPassed": true
+  },
+  "routes": {
+    "base": [
+      {
+        "x": 94.4,
+        "z": 66,
+        "reached": true,
+        "pose": {
+          "x": 94.19860040573604,
+          "y": 0,
+          "z": 65.81690945976005,
+          "yaw": 0,
+          "pitch": 0
+        }
+      },
+      {
+        "x": 94.4,
+        "z": 74,
+        "reached": true,
+        "pose": {
+          "x": 94.3951372725338,
+          "y": 0,
+          "z": 73.70436704029873,
+          "yaw": 0,
+          "pitch": 0
+        }
+      },
+      {
+        "x": 90,
+        "z": 77.3,
+        "reached": true,
+        "pose": {
+          "x": 90.21071585407229,
+          "y": 0,
+          "z": 77.13245113226462,
+          "yaw": 0,
+          "pitch": 0
+        }
+      },
+      {
+        "x": 90,
+        "z": 81.5,
+        "reached": true,
+        "pose": {
+          "x": 90.00817776945217,
+          "y": 0.15,
+          "z": 81.24313694427562,
+          "yaw": 0,
+          "pitch": 0
+        }
+      }
+    ],
+    "study": [
+      {
+        "x": 94.4,
+        "z": 66,
+        "reached": true,
+        "pose": {
+          "x": 94.19860040573604,
+          "y": 0,
+          "z": 65.81690945976005,
+          "yaw": 0,
+          "pitch": 0
+        }
+      },
+      {
+        "x": 94.4,
+        "z": 74,
+        "reached": true,
+        "pose": {
+          "x": 94.3951372725338,
+          "y": 0,
+          "z": 73.70436704029873,
+          "yaw": 0,
+          "pitch": 0
+        }
+      },
+      {
+        "x": 90,
+        "z": 77.3,
+        "reached": true,
+        "pose": {
+          "x": 90.21071585407229,
+          "y": 0,
+          "z": 77.13245113226462,
+          "yaw": 0,
+          "pitch": 0
+        }
+      },
+      {
+        "x": 90,
+        "z": 81.5,
+        "reached": true,
+        "pose": {
+          "x": 90.00817776945217,
+          "y": 0.15,
+          "z": 81.24313694427562,
+          "yaw": 0,
+          "pitch": 0
+        }
+      }
+    ]
+  },
+  "scope": "Local bounded facade and whole arrival/drive surface study; low-quality software rendering, physical mobile validation pending"
+}
