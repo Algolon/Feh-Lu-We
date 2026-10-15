@@ -60,13 +60,13 @@ function quad(c:Ctx,points:number[][],col:string) {
   g.setAttribute('position',new THREE.Float32BufferAttribute(both,3));g.computeVertexNormals();
   c.b.add(c.k.M.paint,g,new THREE.Matrix4(),col,c.chunk,true,0);g.dispose();
 }
-export function roofFlashing(c:Ctx,x0:number,x1:number,z0:number,z1:number,width=.18) {
+export function roofFlashing(c:Ctx,x0:number,x1:number,z0:number,z1:number,width=.18,upstand=.22) {
   const corners=[[x0,z0],[x1,z0],[x1,z1],[x0,z1]];
   for(let i=0;i<4;i++){
     const a=corners[i],b=corners[(i+1)%4],dx=b[0]-a[0],dz=b[1]-a[1],L=Math.hypot(dx,dz),nx=dz/L,nz=-dx/L;
     const at=(p:number[],out:number,up:number)=>[p[0]+nx*out,roofY(p[0]+nx*out,p[1]+nz*out)+up,p[1]+nz*out];
     quad(c,[at(a,0,.035),at(b,0,.035),at(b,width,.035),at(a,width,.035)],'#74817b');
-    quad(c,[at(a,0,.035),at(a,0,.22),at(b,0,.22),at(b,0,.035)],'#889089');
+    quad(c,[at(a,0,.035),at(a,0,upstand),at(b,0,upstand),at(b,0,.035)],'#889089');
   }
 }
 export function finishedChimney(c:Ctx,x:number,z:number,mat:THREE.Material) {

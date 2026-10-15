@@ -33,6 +33,13 @@ export function exteriorMats() {
           x.beginPath();x.roundRect(px+1.5,py+1.5,bw-3,61,2+r()*2);x.fill();
           x.strokeStyle='rgba(238,229,204,.23)';x.lineWidth=1.5;
           x.beginPath();x.moveTo(px+7,py+4);x.lineTo(px+bw-9,py+4);x.stroke();
+          x.save();x.beginPath();x.roundRect(px+3,py+3,bw-6,58,3);x.clip();
+          for(let k=0;k<5;k++){
+            const len=12+r()*(bw*.45),xx=px+6+r()*Math.max(1,bw-len-12),yy=py+9+r()*42;
+            x.fillStyle=k%2?'rgba(111,124,111,.095)':'rgba(244,229,192,.14)';
+            x.fillRect(xx,yy,len,2+r()*5);
+          }
+          x.restore();
         }
         at+=bw;
       }

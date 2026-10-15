@@ -158,7 +158,7 @@ function shell(w: World, c: Ctx) {
     // with the plaster in the Reis- and Sterrenkamer, study and guest room ceilings; it now starts inside the ceiling slab
     box(c.b, stone.mat, EXTERIOR_STUDY ? '#ffffff' : '#efe2c4', dx, TOP - 0.15, dz, sx, top - TOP + 0.15, sz, { chunk: c.chunk, uv: 1.5 });
     gableRoof(c, dx, dz, 2.6, 2.1, top, 0.8, alongX, k.M.slate, '#9e9a94', '#5a4636', EXTERIOR_STUDY && ROOF_DETAIL);
-    if(EXTERIOR_STUDY && EXTERIOR_FINISH)roofFlashing(c,dx-sx/2,dx+sx/2,dz-sz/2,dz+sz/2,.13);
+    if(EXTERIOR_STUDY && EXTERIOR_FINISH)roofFlashing(c,dx-sx/2,dx+sx/2,dz-sz/2,dz+sz/2,.13,.06);
     // the dormer window: framed glass in a dressed surround (same grammar as the facade)
     const wx = dx + fx * (alongX ? 0.9 : 0), wz = dz + fz * (alongX ? 0 : 0.9);
     if (alongX) windowAt(c, 'z', wx + fx * 0.3, fx as 1 | -1, wz, TOP + 0.12, 0.8, 1.05, true, { kind: EXTERIOR_STUDY ? 'manor' : 'plain' });

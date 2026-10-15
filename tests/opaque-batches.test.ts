@@ -4,7 +4,7 @@ import {installOpaqueBatches} from '../src/world/opaqueBatches';
 import type {World} from '../src/interactions/world';
 function fixture(){
  const scene=new THREE.Scene(),mat=new THREE.MeshLambertMaterial({vertexColors:true}),meshes:THREE.Mesh[]=[];
- for(let i=0;i<4;i++){const m=new THREE.Mesh(new THREE.BoxGeometry(.5,.5,.5),mat);m.position.x=(i-1.5)*.7;scene.add(m);meshes.push(m);}
+ for(let i=0;i<4;i++){const m=new THREE.Mesh(new THREE.BoxGeometry(.5,.5,.5),mat);m.geometry.setAttribute('color',new THREE.Float32BufferAttribute(new Float32Array(m.geometry.attributes.position.count*3).fill(1),3));m.position.x=(i-1.5)*.7;scene.add(m);meshes.push(m);}
  const camera=new THREE.PerspectiveCamera(70,1,.1,30);camera.position.z=5;camera.updateMatrixWorld();camera.updateProjectionMatrix();
  installOpaqueBatches({scene} as unknown as World);
  const renderer={shadowMap:{enabled:false}} as THREE.WebGLRenderer;

@@ -4,7 +4,7 @@
 import * as THREE from 'three';
 import type { World } from '../interactions/world';
 import { onFrame } from './vegbatch';
-interface Source { mesh:THREE.Mesh; geometry:THREE.BufferGeometry; offset:number; count:number; indices:number[]; matrix:THREE.Matrix4; version:string; flip:boolean }
+interface Source { mesh:THREE.Mesh; geometry:THREE.BufferGeometry; offset:number; count:number; indices:number[]; matrix:THREE.Matrix4; version:string; flip:boolean; depth:number }
 interface Batch { mesh:THREE.Mesh; sources:Source[]; positions:THREE.BufferAttribute; normals:THREE.BufferAttribute; last:string }
 const LIMIT=350_000, MAX_SOURCE=24_000;
 const allowed=new Set(['position','normal','uv','color']);
@@ -18,7 +18,8 @@ export function installOpaqueBatches(w:World) {
     if(!['MeshLambertMaterial','MeshPhongMaterial','MeshBasicMaterial','MeshStandardMaterial'].includes(mat.type)||mat.transparent||!mat.depthWrite||m.userData.hit)return;
     if(m.onBeforeRender!==THREE.Object3D.prototype.onBeforeRender||Object.keys(g.attributes).some(k=>!allowed.has(k))||g.drawRange.start!==0||g.drawRange.count!==Infinity)return;
     const n=g.attributes.position?.count;if(!n||n>MAX_SOURCE||!g.attributes.normal)return;
-    const key=[mat.uuid,m.renderOrder,m.receiveShadow,m.layers.mask].join('|');
+    let groupOrder=0;for(let p=m.parent;p;p=p.parent)if(p instanceof THREE.Group){groupOrder=p.renderOrder;break;}if(groupOrder!==0)return;
+    const key=[mat.uuid,m.renderOrder,m.receiveShadow,m.layers.mask,(mat as THREE.MeshLambertMaterial).vertexColors?!!g.attributes.color:false].join('|');
     const list=grouped.get(key)??[];list.push(m);grouped.set(key,list);
   });
   const batches:Batch[]=[];
@@ -32,11 +33,12 @@ export function installOpaqueBatches(w:World) {
     const g=new THREE.BufferGeometry(),pos=new THREE.Float32BufferAttribute(n*3,3),norm=new THREE.Float32BufferAttribute(n*3,3),uv=new THREE.Float32BufferAttribute(n*2,2),color=new THREE.Float32BufferAttribute(n*3,3);
     pos.setUsage(THREE.DynamicDrawUsage);norm.setUsage(THREE.DynamicDrawUsage);
     g.setAttribute('position',pos);g.setAttribute('normal',norm);g.setAttribute('uv',uv);g.setAttribute('color',color);
+    if((selected[0].material as THREE.MeshLambertMaterial).vertexColors&&!selected[0].geometry.attributes.color)g.deleteAttribute('color');
     const sources:Source[]=[];let offset=0,indexCount=0;
     for(const m of selected) {
       const src=m.geometry,p=src.attributes.position;
       const indices=src.index?Array.from(src.index.array):Array.from({length:p.count},(_,i)=>i);
-      sources.push({mesh:m,geometry:src,offset,count:p.count,indices,matrix:new THREE.Matrix4().set(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),version:'',flip:false});
+      sources.push({mesh:m,geometry:src,offset,count:p.count,indices,matrix:new THREE.Matrix4().set(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),version:'',flip:false,depth:0});
       for(let i=0;i<p.count;i++){
         uv.setXY(offset+i,src.attributes.uv?.getX(i)??0,src.attributes.uv?.getY(i)??0);
         color.setXYZ(offset+i,src.attributes.color?.getX(i)??1,src.attributes.color?.getY(i)??1,src.attributes.color?.getZ(i)??1);
@@ -64,7 +66,7 @@ export function installOpaqueBatches(w:World) {
         const s=batch.sources[si],m=s.mesh;let on=true;for(let p:THREE.Object3D|null=m;p;p=p.parent)if(!p.visible){on=false;break;}
         if(!on||!m.layers.test(camera.layers)||(m.frustumCulled&&!frustum.intersectsObject(m)))continue;
         const src=m.geometry,p=src.attributes.position,n=src.attributes.normal;
-        if(src!==s.geometry||p.count!==s.count||m.material!==batch.mesh.material||(src.index?.count??p.count)!==s.indices.length)continue; // a replaced/LOD geometry keeps its normal renderer path
+        if(((m.material as THREE.MeshLambertMaterial).vertexColors&&!!src.attributes.color!==!!batch.mesh.geometry.attributes.color)||src!==s.geometry||p.count!==s.count||m.material!==batch.mesh.material||(src.index?.count??p.count)!==s.indices.length)continue; // a replaced/LOD geometry keeps its normal renderer path
         const ver=(a:THREE.BufferAttribute|THREE.InterleavedBufferAttribute|undefined)=>!a?'':((a as THREE.BufferAttribute).version??(a as THREE.InterleavedBufferAttribute).data.version);
         const version=[ver(p),ver(n),ver(src.attributes.uv),ver(src.attributes.color),src.index?.version??0].join('|');
         if(!s.matrix.equals(m.matrixWorld)||s.version!==version){
@@ -73,13 +75,15 @@ export function installOpaqueBatches(w:World) {
             v.fromBufferAttribute(p as THREE.BufferAttribute,i).applyMatrix4(m.matrixWorld);batch.positions.setXYZ(s.offset+i,v.x,v.y,v.z);
             v.fromBufferAttribute(n as THREE.BufferAttribute,i).applyMatrix3(normal).normalize();batch.normals.setXYZ(s.offset+i,v.x,v.y,v.z);
             (batch.mesh.geometry.attributes.uv as THREE.BufferAttribute).setXY(s.offset+i,src.attributes.uv?.getX(i)??0,src.attributes.uv?.getY(i)??0);
-            (batch.mesh.geometry.attributes.color as THREE.BufferAttribute).setXYZ(s.offset+i,src.attributes.color?.getX(i)??1,src.attributes.color?.getY(i)??1,src.attributes.color?.getZ(i)??1);
+            (batch.mesh.geometry.attributes.color as THREE.BufferAttribute|undefined)?.setXYZ(s.offset+i,src.attributes.color?.getX(i)??1,src.attributes.color?.getY(i)??1,src.attributes.color?.getZ(i)??1);
           }
           batch.positions.addUpdateRange(s.offset*3,s.count*3);batch.normals.addUpdateRange(s.offset*3,s.count*3);changed=true;
         }
+        if(!m.geometry.boundingSphere)m.geometry.computeBoundingSphere();v.copy(m.geometry.boundingSphere!.center).applyMatrix4(m.matrixWorld).applyMatrix4(pv);s.depth=v.z;
         visible.push(si);hidden.push(m);
       }
-      if(changed){batch.positions.needsUpdate=true;batch.normals.needsUpdate=true;batch.mesh.geometry.attributes.uv.needsUpdate=true;batch.mesh.geometry.attributes.color.needsUpdate=true;}
+      if(changed){batch.positions.needsUpdate=true;batch.normals.needsUpdate=true;batch.mesh.geometry.attributes.uv.needsUpdate=true;if(batch.mesh.geometry.attributes.color)batch.mesh.geometry.attributes.color.needsUpdate=true;}
+      visible.sort((a,b)=>batch.sources[a].depth-batch.sources[b].depth||batch.sources[a].mesh.id-batch.sources[b].mesh.id);
       const key=visible.join(',');
       if(batch.last!==key||changed){
         const index=batch.mesh.geometry.index!;let at=0;

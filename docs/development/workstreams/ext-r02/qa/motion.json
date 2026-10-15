@@ -1,0 +1,140 @@
+{
+  "samples": [
+    {
+      "i": 0,
+      "angle": 1.34,
+      "native": {
+        "calls": 84,
+        "triangles": 259715
+      },
+      "packed": {
+        "calls": 63,
+        "triangles": 259715
+      },
+      "pixelMismatchFraction": 0,
+      "samePick": true
+    },
+    {
+      "i": 1,
+      "angle": 1.08,
+      "native": {
+        "calls": 112,
+        "triangles": 270883
+      },
+      "packed": {
+        "calls": 83,
+        "triangles": 270883
+      },
+      "pixelMismatchFraction": 0,
+      "samePick": true
+    },
+    {
+      "i": 2,
+      "angle": 0.8200000000000001,
+      "native": {
+        "calls": 112,
+        "triangles": 270883
+      },
+      "packed": {
+        "calls": 83,
+        "triangles": 270883
+      },
+      "pixelMismatchFraction": 0,
+      "samePick": true
+    },
+    {
+      "i": 3,
+      "angle": 0.56,
+      "native": {
+        "calls": 112,
+        "triangles": 270883
+      },
+      "packed": {
+        "calls": 83,
+        "triangles": 270883
+      },
+      "pixelMismatchFraction": 0,
+      "samePick": true
+    },
+    {
+      "i": 4,
+      "angle": 0.30000000000000004,
+      "native": {
+        "calls": 112,
+        "triangles": 270883
+      },
+      "packed": {
+        "calls": 83,
+        "triangles": 270883
+      },
+      "pixelMismatchFraction": 0,
+      "samePick": true
+    },
+    {
+      "i": 5,
+      "angle": 0.040000000000000036,
+      "native": {
+        "calls": 112,
+        "triangles": 270883
+      },
+      "packed": {
+        "calls": 83,
+        "triangles": 270883
+      },
+      "pixelMismatchFraction": 0,
+      "samePick": true
+    }
+  ],
+  "route": [
+    {
+      "x": 118.5,
+      "z": 99.5,
+      "reached": true,
+      "pose": {
+        "x": 118.5,
+        "y": 0.15,
+        "z": 99.2031774069089,
+        "yaw": 0,
+        "pitch": 0
+      }
+    },
+    {
+      "x": 118.5,
+      "z": 103,
+      "reached": true,
+      "pose": {
+        "x": 118.5,
+        "y": 0.15,
+        "z": 102.73002568943497,
+        "yaw": 0,
+        "pitch": 0
+      }
+    },
+    {
+      "x": 118.5,
+      "z": 109.8,
+      "reached": true,
+      "pose": {
+        "x": 118.5,
+        "y": 0.15,
+        "z": 109.54297834776867,
+        "yaw": 0,
+        "pitch": 0
+      }
+    },
+    {
+      "x": 121,
+      "z": 110.4,
+      "reached": true,
+      "pose": {
+        "x": 120.75036874331637,
+        "y": 0.15,
+        "z": 110.32398070570667,
+        "yaw": 0,
+        "pitch": 0
+      }
+    }
+  ],
+  "glError": 0,
+  "moved": true
+}
