@@ -25,9 +25,9 @@ const nurseryViews=process.env.NURSERY?await page.evaluate(()=>{
 }):[];
 if(process.env.NURSERY)views.push(...nurseryViews);
 if(process.env.EXPANSION)views.push(
- ['south-tree',184,151,Math.PI*.62,-.04],['east-fence',194,158,.15,-.02],
- ['north-fence',185,175,-Math.PI*.45,-.06],['northwest-birch',165,173,Math.PI*.55,-.05],
- ['west-trees',165,162,.6,.02]);
+ ['south-tree',184,151,Math.PI*.62,-.04],['east-fence',190,161,1.45,-.02],
+ ['north-fence',181,170,0,-.06],['northwest-birch',167,171,-.76,-.05],
+ ['west-trees',169,162,-1.55,.02]);
 const rows=[];
 if(process.env.EXPANSION){
  const baseline=JSON.parse(readFileSync('docs/mushroom-grove/r04-tree-survey.json','utf8'));
@@ -41,7 +41,7 @@ if(process.env.EXPANSION){
  if(!survey.retained||survey.treeOverlaps)throw new Error('expanded grove altered/overlapped existing trees');
  rows.push({expansionSurvey:survey});console.log('expansion',survey);
 }
-for(const quality of (process.env.QUALITY?[process.env.QUALITY]:['low','high']))for(const [name,x,z,yaw,pitch] of views.filter(v=>!process.env.CHECKS&&!process.env.CLIP&&!process.env.BENCH&&!process.env.FLOW&&(!process.env.VIEW||v[0]===process.env.VIEW))){
+for(const quality of (process.env.QUALITY?[process.env.QUALITY]:['low','high']))for(const [name,x,z,yaw,pitch] of views.filter(v=>!process.env.CHECKS&&!process.env.CLIP&&!process.env.BENCH&&!process.env.FLOW&&(!process.env.VIEWSET||process.env.VIEWSET.split(',').includes(v[0]))&&(!process.env.PERIMETER||['south-tree','east-fence','north-fence','northwest-birch','west-trees'].includes(v[0]))&&(!process.env.VIEW||v[0]===process.env.VIEW))){
  const result=await page.evaluate(async ({x,z,yaw,pitch,quality,physical})=>{
   const g=window.__game;g.settings.quality=quality;g.applyQuality(true);
   const y=g.world.col.ground(x,z);g.player.setPose({x,y,z,yaw,pitch});

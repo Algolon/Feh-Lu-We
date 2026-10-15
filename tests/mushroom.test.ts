@@ -42,6 +42,7 @@ describe('optional mushroom experience',()=>{
   const list=mushroomPlacements(),extra=list.filter(p=>p.expansion),adults=extra.filter(p=>p.zone==='grove');
   expect(adults).toHaveLength(24);
   expect(adults.filter(p=>p.scale>=1.5)).toHaveLength(6);
+  for(const p of adults){expect(Math.hypot(p.x-181,p.z-162)).toBeGreaterThan(2.5+p.scale*1.15);if(p.scale>=1.5)expect(Math.hypot(p.x-MUSHROOM.x,p.z-MUSHROOM.z)).toBeGreaterThan(12);}
   for(const p of extra) {
    expect(mushroomAreaDistance(p.x,p.z)).toBeGreaterThan(.4);
    expect(project(p.x,p.z,MUSHROOM.approach).d).toBeGreaterThan(1.5);

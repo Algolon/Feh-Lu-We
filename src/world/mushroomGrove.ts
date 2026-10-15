@@ -61,7 +61,9 @@ export function mushroomPlacements(trees:readonly {x:number;z:number}[]=MUSHROOM
   // Real surveyed woodland trunks are supplied by the built estate. Nothing is felled.
   const scatter=mulberry32(44017),added:MushroomPlacement[]=[];
   const allowed=(x:number,z:number,scale:number)=>mushroomAreaDistance(x,z)>.6+scale*.65
-    &&project(x,z,MUSHROOM.approach).d>1.65+scale*.5
+    &&(scale<1.5||Math.hypot(x-MUSHROOM.x,z-MUSHROOM.z)>12)
+    &&Math.hypot(x-181,z-162)>2.5+scale*1.15
+    &&project(x,z,MUSHROOM.approach).d>1.65+scale*1.1
     &&trees.every(t=>Math.hypot(x-t.x,z-t.z)>1.05+scale*.55)
     &&out.filter(p=>p.zone!=='young').every(p=>Math.hypot(x-p.x,z-p.z)>1.2+(scale+p.scale)*.65);
   for(let attempt=0;attempt<2400&&added.length<24;attempt++) {
