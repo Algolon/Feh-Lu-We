@@ -5,8 +5,9 @@ import { terrainHeight } from './terrain';
 import { pointAt, polylineLength, project } from './geom2d';
 import { mushroomModel, mushroomYoungModel, MUSHROOM_SPECIES } from './mushroomModels';
 import { mulberry32 } from '../core/rng';
-export interface MushroomPlacement { x:number; z:number; scale:number; species:number; yaw:number; zone:'approach'|'grove'|'young'; colony?:number; glow?:number; lean?:number }
-export function mushroomPlacements(): MushroomPlacement[] {
+import { mushroomAreaDistance } from './mushroomField';
+export interface MushroomPlacement { x:number; z:number; scale:number; species:number; yaw:number; zone:'approach'|'grove'|'young'; colony?:number; glow?:number; lean?:number; expansion?:boolean; lightGeometry?:boolean }
+export function mushroomPlacements(trees:readonly {x:number;z:number}[]=MUSHROOM.landmarks): MushroomPlacement[] {
   const r=mulberry32(8193), out:MushroomPlacement[]=[];
   const L=polylineLength(MUSHROOM.approach);
   for(let i=0;i<10;i++) {
@@ -56,6 +57,29 @@ export function mushroomPlacements(): MushroomPlacement[] {
     const a=-.08+i*.4,d=i%3===0?6.8:11.6+sprout()*.8;
     group(MUSHROOM.x+Math.cos(a)*d,MUSHROOM.z+Math.sin(a)*d,3+i%3,.75,.30+sprout()*.12,(i+2)%4);
   }
+  // Seeded irregular scatter across the whole new footprint, not a new concentric ring.
+  // Real surveyed woodland trunks are supplied by the built estate. Nothing is felled.
+  const scatter=mulberry32(44017),added:MushroomPlacement[]=[];
+  const allowed=(x:number,z:number,scale:number)=>mushroomAreaDistance(x,z)>.6+scale*.65
+    &&project(x,z,MUSHROOM.approach).d>1.65+scale*.5
+    &&trees.every(t=>Math.hypot(x-t.x,z-t.z)>1.05+scale*.55)
+    &&out.filter(p=>p.zone!=='young').every(p=>Math.hypot(x-p.x,z-p.z)>1.2+(scale+p.scale)*.65);
+  for(let attempt=0;attempt<2400&&added.length<24;attempt++) {
+    const x=161+scatter()*37.5,z=149+scatter()*29.5;
+    const scale=added.length%4===0?1.5+scatter()*.65:.55+scatter()*.65;
+    // Slow density field produces concentrated pockets and uneven negative space.
+    if(scatter()>.66+.2*Math.sin(x*.31+z*.17)||!allowed(x,z,scale))continue;
+    const p:MushroomPlacement={x,z,scale,species:Math.floor(scatter()*4),yaw:scatter()*6.28,zone:'grove',expansion:true,lightGeometry:scale<1.5};
+    out.push(p);added.push(p);
+  }
+  for(const p of added) {
+    const id=colony++,count=p.scale>=1.5?4:2;
+    for(let j=0;j<count;j++) {
+      const a=scatter()*6.28,d=.55+scatter()*1.1,x=p.x+Math.cos(a)*d,z=p.z+Math.sin(a)*d;
+      if(mushroomAreaDistance(x,z)<.5||project(x,z,MUSHROOM.approach).d<1.5||trees.some(t=>Math.hypot(x-t.x,z-t.z)<.75))continue;
+      out.push({x,z,scale:.22+scatter()*.3,species:(p.species+j%2)%4,yaw:scatter()*6.28,zone:'young',colony:id,glow:.6+scatter()*.75,lean:(scatter()-.5)*.22,expansion:true});
+    }
+  }
   return out;
 }
 export function buildMushroomGrove(w:World,g:GameApi) {
@@ -69,9 +93,10 @@ export function buildMushroomGrove(w:World,g:GameApi) {
     s.fragmentShader='uniform float grovePulse; varying float vGroveGlow;\n'+s.fragmentShader;
     s.fragmentShader=s.fragmentShader.replace('#include <opaque_fragment>','outgoingLight += vColor.rgb * vGroveGlow * grovePulse;\n#include <opaque_fragment>');
   };
-  const list=mushroomPlacements(), dummy=new T.Object3D();
+  const trees=(w.scene.userData.vegPlan?.trees??[]) as {x:number;z:number}[];
+  const list=mushroomPlacements(trees), dummy=new T.Object3D();
   for(let k=0;k<4;k++) for(const layer of ['young','small','hero'] as const) {
-    const ps=list.filter(p=>p.species===k&&(layer==='young'?p.zone==='young':p.zone!=='young'&&((p.scale>.8)===(layer==='hero'))));
+    const ps=list.filter(p=>p.species===k&&(layer==='young'?p.zone==='young':p.zone!=='young'&&((p.scale>.8&&!p.lightGeometry)===(layer==='hero'))));
     const geo=layer==='young'?mushroomYoungModel(k):mushroomModel(k,layer==='hero');
     const mesh=new T.InstancedMesh(geo,mat,ps.length),emission:number[]=[];
     mesh.name=MUSHROOM_SPECIES[k]+'-'+layer;mesh.castShadow=false;mesh.receiveShadow=true;
@@ -119,7 +144,7 @@ export function buildMushroomGrove(w:World,g:GameApi) {
   const lg=new T.BufferGeometry();lg.setAttribute('position',new T.Float32BufferAttribute(lv,3));lg.setAttribute('color',new T.Float32BufferAttribute(lc,3));lg.setAttribute('glow',new T.Float32BufferAttribute(le,1));lg.computeVertexNormals();root.add(new T.Mesh(lg,mat));
   // One point draw for drifting spores, soft circular fragments, limited overdraw.
   const r=mulberry32(812),positions:number[]=[],phase:number[]=[];
-  for(let i=0;i<64;i++){const a=r()*6.28,d=Math.sqrt(r())*(MUSHROOM.radius+2),x=MUSHROOM.x+Math.cos(a)*d,z=MUSHROOM.z+Math.sin(a)*d;positions.push(x,terrainHeight(x,z)+0.25+r()*(i%2===0?.65:3.5),z);phase.push(r()*6.28);}
+  for(let i=0;i<64;i++){let x:number,z:number;do{x=162+r()*35;z=150+r()*27;}while(mushroomAreaDistance(x,z)<.5);positions.push(x,terrainHeight(x,z)+0.25+r()*(i%2===0?.65:3.5),z);phase.push(r()*6.28);}
   const pg=new T.BufferGeometry();pg.setAttribute('position',new T.Float32BufferAttribute(positions,3));pg.setAttribute('phase',new T.Float32BufferAttribute(phase,1));
   const uniforms={t:{value:0},motion:{value:1},strength:{value:1}};
   const pm=w.material(new T.ShaderMaterial({uniforms,transparent:true,depthWrite:false,blending:T.AdditiveBlending,

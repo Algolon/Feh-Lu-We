@@ -1,4 +1,5 @@
 import * as T from 'three';
+export const MUSHROOM_VISION_SPEED=1.2;
 /** One camera-only pass. Scene lights/fog/time remain owned by the environment.
  * No render target or extra draw outside the field. Depth fog preserves nearby path silhouettes.
  * No history buffer: trails deliberately omitted for mobile cost/readability. */
@@ -61,7 +62,7 @@ export class MushroomVision {
     const scale=high?1:.8,w=Math.max(1,Math.floor(this.size.x*scale)),h=Math.max(1,Math.floor(this.size.y*scale));
     if(!this.target){this.target=new T.WebGLRenderTarget(w,h,{depthBuffer:true});this.target.depthTexture=new T.DepthTexture(w,h,T.UnsignedIntType);}
     if(this.target.width!==w||this.target.height!==h)this.target.setSize(w,h);
-    const u=this.uniforms;u.image.value=this.target.texture;u.depth.value=this.target.depthTexture!;u.amount.value=this.intensity;u.clock.value=reduced?0:time;u.motion.value=reduced?0:1;u.distort.value=distortion&&!reduced?1:0;u.high.value=high?1:0;u.near.value=camera.near;u.far.value=camera.far;u.pixel.value.set(1/w,1/h);
+    const u=this.uniforms;u.image.value=this.target.texture;u.depth.value=this.target.depthTexture!;u.amount.value=this.intensity;u.clock.value=reduced?0:time*MUSHROOM_VISION_SPEED;u.motion.value=reduced?0:1;u.distort.value=distortion&&!reduced?1:0;u.high.value=high?1:0;u.near.value=camera.near;u.far.value=camera.far;u.pixel.value.set(1/w,1/h);
     // Preserve aggregate metrics across the scene and fullscreen draw.
     const auto=renderer.info.autoReset;renderer.info.autoReset=false;renderer.info.reset();
     const previous=renderer.getRenderTarget();

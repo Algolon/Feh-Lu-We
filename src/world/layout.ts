@@ -191,7 +191,15 @@ export interface Route { id: string; pts: [number, number][]; width: number; pro
  */
 /** Mushroom grove: branch from the NE bend of eastGardenLoop, inside eastForest.
  * Map is north-up (X east, +Z north); terrain heights remain the original sampled heightfield. */
+// R04 perimeter follows the surveyed trees and the estate's north/east fence.
+// radius stays 13: the original tree-removal reservation must NOT grow with the ecosystem.
 export const MUSHROOM = { x: 179, z: 160, radius: 13,
+  area: [[172,149],[188.137,148.983],[198.5,148.5],[198.5,178.5],
+    [162.589,178.5],[162.589,175.673],[161.079,166.835],[163.373,158.42]] as [number,number][],
+  landmarks: [{x:188.13735219743103,z:148.98340185033157},
+    {x:163.37257224088535,z:158.4195173094049},
+    {x:161.07913819653913,z:166.83486262196675},
+    {x:162.58925312059,z:175.6726163038984}],
   approach: [[166, 140], [172, 149], [178, 157], [179, 160]] as [number, number][] };
 
 export const ROUTES: Route[] = [

@@ -1,5 +1,5 @@
 import {describe,it,expect} from 'vitest';
-import {mushroomIntensity,easeMushroom} from '../src/world/mushroomField';
+import {mushroomIntensity,easeMushroom,mushroomAreaDistance} from '../src/world/mushroomField';
 import {MUSHROOM} from '../src/world/layout';
 import {mushroomPlacements} from '../src/world/mushroomGrove';
 import {project} from '../src/world/geom2d';
@@ -27,9 +27,9 @@ describe('optional mushroom experience',()=>{
   expect(p.slice(0,2).every(m=>m.scale<.4)).toBe(true);
  });
  it('gives every hero a visible family, with clustered variation and a continuous clear lane',()=>{
-  const list=mushroomPlacements(),young=list.filter(p=>p.zone==='young');
+  const list=mushroomPlacements(),young=list.filter(p=>p.zone==='young'&&!p.expansion);
   expect(young.length).toBeGreaterThan(110);expect(young.length).toBeLessThan(200);
-  for(const hero of list.filter(p=>p.zone==='grove'&&p.scale>1.5)) {
+  for(const hero of list.filter(p=>p.zone==='grove'&&p.scale>1.5&&!p.expansion)) {
    const family=young.filter(p=>Math.hypot(p.x-hero.x,p.z-hero.z)<2.3);
    expect(family.length).toBeGreaterThanOrEqual(4);
    expect(family.some(p=>p.scale>.35)).toBe(true);
@@ -37,6 +37,20 @@ describe('optional mushroom experience',()=>{
   for(const p of young){expect(project(p.x,p.z,MUSHROOM.approach).d).toBeGreaterThanOrEqual(1.5);expect(p.z).toBeLessThan(178);}
   expect(new Set(young.map(p=>p.species)).size).toBe(4);
   expect(mushroomPlacements()).toEqual(list);
+ });
+ it('scatters mixed scales across the surveyed expansion while keeping tree trunks and the return lane clear',()=>{
+  const list=mushroomPlacements(),extra=list.filter(p=>p.expansion),adults=extra.filter(p=>p.zone==='grove');
+  expect(adults).toHaveLength(24);
+  expect(adults.filter(p=>p.scale>=1.5)).toHaveLength(6);
+  for(const p of extra) {
+   expect(mushroomAreaDistance(p.x,p.z)).toBeGreaterThan(.4);
+   expect(project(p.x,p.z,MUSHROOM.approach).d).toBeGreaterThan(1.5);
+   for(const t of MUSHROOM.landmarks)expect(Math.hypot(p.x-t.x,p.z-t.z)).toBeGreaterThan(.75);
+  }
+  const sides:((p:{x:number;z:number})=>boolean)[]=[p=>p.x<167,p=>p.x>193,p=>p.z>174,p=>p.z<154];
+  for(const side of sides)expect(adults.some(side)).toBe(true);
+  for(const [x,z] of [[165,173],[195,160],[187,176]])expect(mushroomIntensity(x,z,0,0)).toBeGreaterThan(.8);
+  expect(mushroomIntensity(150,145,0,0)).toBe(0);
  });
  it('budgets four sculpted nursery geometries with real gills and per-vertex glow',()=>{
   for(let k=0;k<4;k++) {

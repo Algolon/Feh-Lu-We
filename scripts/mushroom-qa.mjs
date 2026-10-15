@@ -24,8 +24,24 @@ const nurseryViews=process.env.NURSERY?await page.evaluate(()=>{
  return [['hero-base',p.x-4,p.z-4,...look(p.x-4,p.z-4,y+2.1)],['cluster-eye',p.x-2.5,p.z-2.7,...look(p.x-2.5,p.z-2.7,y+.7)],['grove-wide',177,155,.28,.05]];
 }):[];
 if(process.env.NURSERY)views.push(...nurseryViews);
+if(process.env.EXPANSION)views.push(
+ ['south-tree',184,151,Math.PI*.62,-.04],['east-fence',194,158,.15,-.02],
+ ['north-fence',185,175,-Math.PI*.45,-.06],['northwest-birch',165,173,Math.PI*.55,-.05],
+ ['west-trees',165,162,.6,.02]);
 const rows=[];
-for(const quality of (process.env.QUALITY?[process.env.QUALITY]:['low','high']))for(const [name,x,z,yaw,pitch] of views.filter(v=>!process.env.CHECKS&&!process.env.CLIP&&!process.env.BENCH&&(!process.env.VIEW||v[0]===process.env.VIEW))){
+if(process.env.EXPANSION){
+ const baseline=JSON.parse(readFileSync('docs/mushroom-grove/r04-tree-survey.json','utf8'));
+ const survey=await page.evaluate((baseline)=>{
+  const g=window.__game,trees=g.world.scene.userData.vegPlan.trees;
+  const retained=baseline.every(t=>trees.some(n=>n.x===t.x&&n.z===t.z&&n.species===t.species));
+  const extra=g.world.scene.userData.mushrooms.placements.filter(p=>p.expansion);
+  const overlap=extra.filter(p=>p.zone!=='young').filter(p=>trees.some(t=>Math.hypot(t.x-p.x,t.z-p.z)<1.05+p.scale*.55));
+  return {retained,baselineTrees:baseline.length,extra:extra.length,adults:extra.filter(p=>p.zone!=='young').length,treeOverlaps:overlap.length};
+ },baseline);
+ if(!survey.retained||survey.treeOverlaps)throw new Error('expanded grove altered/overlapped existing trees');
+ rows.push({expansionSurvey:survey});console.log('expansion',survey);
+}
+for(const quality of (process.env.QUALITY?[process.env.QUALITY]:['low','high']))for(const [name,x,z,yaw,pitch] of views.filter(v=>!process.env.CHECKS&&!process.env.CLIP&&!process.env.BENCH&&!process.env.FLOW&&(!process.env.VIEW||v[0]===process.env.VIEW))){
  const result=await page.evaluate(async ({x,z,yaw,pitch,quality,physical})=>{
   const g=window.__game;g.settings.quality=quality;g.applyQuality(true);
   const y=g.world.col.ground(x,z);g.player.setPose({x,y,z,yaw,pitch});
@@ -38,7 +54,7 @@ for(const quality of (process.env.QUALITY?[process.env.QUALITY]:['low','high']))
  },{x,z,yaw,pitch,quality,physical:!!process.env.PHYSICAL});
  console.log('rendered',result);if(result.overlap)throw new Error('Evidence pose overlaps collision: '+name);await page.screenshot({path:`${out}/${tag}-${quality}-${name}.jpg`,type:'jpeg',quality:85,timeout:120000});rows.push({quality,name,x,z,...result});console.log(JSON.stringify(rows.at(-1)));
 }
-if(tag==='feature'&&!process.env.CLIP&&!process.env.BENCH&&(!process.env.VIEW||process.env.CHECKS)){
+if(tag==='feature'&&!process.env.CLIP&&!process.env.BENCH&&!process.env.FLOW&&!process.env.FLOW&&(!process.env.VIEW||process.env.CHECKS)){
  const checks=await page.evaluate(()=>{
   const g=window.__game;const y=g.world.col.ground(166,140);g.player.setPose({x:166,z:140,y,yaw:.5,pitch:0});T.tick(20);
   const before=JSON.stringify({flags:g.state.flags,clues:g.state.clues,inventory:g.state.inventory});
@@ -109,6 +125,25 @@ if(process.env.CLIP){
   await page.screenshot({path:`${folder}/${String(i).padStart(3,'0')}.jpg`,quality:82,type:'jpeg'});
  }
 }
-writeFileSync(`${out}/${tag}${process.env.CHECKS?'-checks':process.env.CLIP?'-clip':process.env.BENCH?'-bench':''}-metrics.json`,JSON.stringify({rows,errors},null,2));
+if(process.env.FLOW){
+ const folder=out+'/flow-frames';mkdirSync(folder,{recursive:true});
+ await page.setViewportSize({width:915,height:412});
+ const flow=await page.evaluate(()=>{
+  const g=window.__game;g.settings.quality='low';g.settings.reducedMotion=false;g.settings.mushroomDistortion=true;g.applyQuality(true);
+  g.player.setPose({x:181,z:161,y:g.world.col.ground(181,161),yaw:.2,pitch:.05});T.wait(6);
+  g.mushroomVision.render(g.renderer,g.world.scene,g.camera,10,false,true,false);
+  const clock=g.mushroomVision.uniforms.clock.value;
+  g.mushroomVision.render(g.renderer,g.world.scene,g.camera,10,true,true,false);
+  const reducedClock=g.mushroomVision.uniforms.clock.value;
+  return {clockAtTenSeconds:clock,reducedClock,player:{x:g.player.x,z:g.player.z,yaw:g.player.yaw,pitch:g.player.pitch}};
+ });
+ if(flow.clockAtTenSeconds!==12||flow.reducedClock!==0)throw new Error('vision speed/reduced-motion contract failed');
+ for(let i=0;i<13;i++){
+  await page.evaluate(t=>{const g=window.__game;g.mushroomVision.render(g.renderer,g.world.scene,g.camera,t,false,true,false);},i*.5);
+  await page.screenshot({path:`${folder}/${String(i).padStart(3,'0')}.jpg`,quality:85,type:'jpeg'});
+ }
+ rows.push({stationaryFlow:flow});
+}
+writeFileSync(`${out}/${tag}${process.env.CHECKS?'-checks':process.env.CLIP?'-clip':process.env.BENCH?'-bench':process.env.FLOW?'-flow':''}-metrics.json`,JSON.stringify({rows,errors},null,2));
 console.log('errors',errors);await ctx.close();await browser.close();server.close();
 if(errors.length)process.exitCode=1;
