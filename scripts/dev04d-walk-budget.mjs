@@ -52,6 +52,9 @@ for (const doors of ['closed', 'open']) {
       for (const id of g.world.byId.keys()) if (id.startsWith('door.')) g.state.open[id] = open;
       g.world.syncAll();
       for (let i = 0; i < 45; i++) g.tick(1 / 30); // doors finish swinging
+      const p0 = ps[0]; // settle on the first pose (room, culling and fog state catch up before the first sample)
+      g.player.setPose(p0); g.player.y = g.world.col.supportHeight(p0.x, p0.z, p0.y + 0.05, 0.42);
+      for (let i = 0; i < 15; i++) g.tick(1 / 30);
       const want = chunks ? new Set(chunks) : null;
       const rows = [];
       let drawn = {};
