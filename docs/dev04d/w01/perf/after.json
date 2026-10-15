@@ -1,15 +1,15 @@
 {
   "multiDraw": true,
-  "programs0": 56,
+  "programs0": 59,
   "rows": [
     {
       "stage": "ready",
       "pose": "entrance",
       "calls": 36,
       "triangles": 225127,
-      "geometries": 106,
+      "geometries": 113,
       "textures": 35,
-      "programs": 73,
+      "programs": 76,
       "lights": 3,
       "na": [],
       "transparent": 1,
@@ -20,16 +20,16 @@
           "cov": 0.231
         }
       ],
-      "renderMsMedian": 771.5
+      "renderMsMedian": 877.5
     },
     {
       "stage": "ready",
       "pose": "figure",
       "calls": 39,
       "triangles": 271742,
-      "geometries": 106,
+      "geometries": 113,
       "textures": 35,
-      "programs": 74,
+      "programs": 77,
       "lights": 3,
       "na": [],
       "transparent": 1,
@@ -40,16 +40,16 @@
           "cov": 0.382
         }
       ],
-      "renderMsMedian": 955.4
+      "renderMsMedian": 967.4
     },
     {
       "stage": "ring",
       "pose": "entrance",
       "calls": 40,
       "triangles": 244457,
-      "geometries": 109,
+      "geometries": 116,
       "textures": 36,
-      "programs": 78,
+      "programs": 81,
       "lights": 3,
       "na": [],
       "transparent": 3,
@@ -68,16 +68,16 @@
           "cov": 0.464
         }
       ],
-      "renderMsMedian": 844.1
+      "renderMsMedian": 822.6
     },
     {
       "stage": "ring",
       "pose": "figure",
       "calls": 43,
       "triangles": 275164,
-      "geometries": 109,
+      "geometries": 116,
       "textures": 36,
-      "programs": 78,
+      "programs": 81,
       "lights": 3,
       "na": [],
       "transparent": 3,
@@ -96,16 +96,16 @@
           "cov": 0.767
         }
       ],
-      "renderMsMedian": 932.7
+      "renderMsMedian": 965.3
     },
     {
       "stage": "burn:4",
       "pose": "entrance",
       "calls": 43,
       "triangles": 245217,
-      "geometries": 112,
+      "geometries": 119,
       "textures": 38,
-      "programs": 81,
+      "programs": 84,
       "lights": 3,
       "na": [],
       "transparent": 6,
@@ -136,16 +136,16 @@
           "cov": 0.464
         }
       ],
-      "renderMsMedian": 861.3
+      "renderMsMedian": 896.1
     },
     {
       "stage": "burn:4",
       "pose": "figure",
       "calls": 47,
       "triangles": 276824,
-      "geometries": 113,
+      "geometries": 120,
       "textures": 38,
-      "programs": 81,
+      "programs": 84,
       "lights": 3,
       "na": [],
       "transparent": 7,
@@ -180,16 +180,16 @@
           "cov": 0.767
         }
       ],
-      "renderMsMedian": 946.1
+      "renderMsMedian": 1064.7
     },
     {
       "stage": "burn:14",
       "pose": "entrance",
       "calls": 44,
       "triangles": 246117,
-      "geometries": 113,
+      "geometries": 120,
       "textures": 38,
-      "programs": 81,
+      "programs": 84,
       "lights": 3,
       "na": [],
       "transparent": 7,
@@ -224,16 +224,16 @@
           "cov": 0.464
         }
       ],
-      "renderMsMedian": 842.3
+      "renderMsMedian": 879.9
     },
     {
       "stage": "burn:14",
       "pose": "figure",
       "calls": 47,
       "triangles": 276824,
-      "geometries": 113,
+      "geometries": 120,
       "textures": 38,
-      "programs": 81,
+      "programs": 84,
       "lights": 3,
       "na": [],
       "transparent": 7,
@@ -268,16 +268,16 @@
           "cov": 0.767
         }
       ],
-      "renderMsMedian": 953.2
+      "renderMsMedian": 1029.8
     },
     {
       "stage": "burn:32",
       "pose": "entrance",
       "calls": 45,
       "triangles": 246903,
-      "geometries": 114,
+      "geometries": 121,
       "textures": 38,
-      "programs": 82,
+      "programs": 85,
       "lights": 3,
       "na": [],
       "transparent": 7,
@@ -312,16 +312,16 @@
           "cov": 0.464
         }
       ],
-      "renderMsMedian": 879.5
+      "renderMsMedian": 898
     },
     {
       "stage": "burn:32",
       "pose": "figure",
       "calls": 48,
       "triangles": 277610,
-      "geometries": 114,
+      "geometries": 121,
       "textures": 38,
-      "programs": 82,
+      "programs": 85,
       "lights": 3,
       "na": [],
       "transparent": 7,
@@ -356,16 +356,16 @@
           "cov": 0.767
         }
       ],
-      "renderMsMedian": 1010.4
+      "renderMsMedian": 968.4
     },
     {
       "stage": "burn:58",
       "pose": "entrance",
       "calls": 45,
       "triangles": 246903,
-      "geometries": 114,
+      "geometries": 121,
       "textures": 38,
-      "programs": 82,
+      "programs": 85,
       "lights": 3,
       "na": [],
       "transparent": 7,
@@ -400,16 +400,16 @@
           "cov": 0.464
         }
       ],
-      "renderMsMedian": 833.4
+      "renderMsMedian": 949.3
     },
     {
       "stage": "burn:58",
       "pose": "figure",
       "calls": 48,
       "triangles": 277610,
-      "geometries": 114,
+      "geometries": 121,
       "textures": 38,
-      "programs": 82,
+      "programs": 85,
       "lights": 3,
       "na": [],
       "transparent": 7,
@@ -444,16 +444,16 @@
           "cov": 0.767
         }
       ],
-      "renderMsMedian": 957.3
+      "renderMsMedian": 999.9
     },
     {
       "stage": "burn:72",
       "pose": "entrance",
       "calls": 48,
       "triangles": 249311,
-      "geometries": 116,
+      "geometries": 123,
       "textures": 38,
-      "programs": 85,
+      "programs": 88,
       "lights": 3,
       "na": [],
       "transparent": 8,
@@ -492,16 +492,16 @@
           "cov": 0.464
         }
       ],
-      "renderMsMedian": 864.1
+      "renderMsMedian": 891.7
     },
     {
       "stage": "burn:72",
       "pose": "figure",
       "calls": 51,
       "triangles": 280018,
-      "geometries": 116,
+      "geometries": 123,
       "textures": 38,
-      "programs": 85,
+      "programs": 88,
       "lights": 3,
       "na": [],
       "transparent": 8,
@@ -540,16 +540,16 @@
           "cov": 0.767
         }
       ],
-      "renderMsMedian": 958.5
+      "renderMsMedian": 997.5
     },
     {
       "stage": "charred",
       "pose": "entrance",
       "calls": 43,
       "triangles": 244469,
-      "geometries": 116,
+      "geometries": 123,
       "textures": 38,
-      "programs": 85,
+      "programs": 88,
       "lights": 3,
       "na": [],
       "transparent": 5,
@@ -576,16 +576,16 @@
           "cov": 0.464
         }
       ],
-      "renderMsMedian": 865.2
+      "renderMsMedian": 903.6
     },
     {
       "stage": "charred",
       "pose": "figure",
       "calls": 46,
       "triangles": 275176,
-      "geometries": 116,
+      "geometries": 123,
       "textures": 38,
-      "programs": 85,
+      "programs": 88,
       "lights": 3,
       "na": [],
       "transparent": 5,
@@ -612,16 +612,16 @@
           "cov": 0.767
         }
       ],
-      "renderMsMedian": 950.4
+      "renderMsMedian": 1078.8
     },
     {
       "stage": "empty",
       "pose": "entrance",
       "calls": 35,
       "triangles": 238825,
-      "geometries": 116,
+      "geometries": 123,
       "textures": 38,
-      "programs": 85,
+      "programs": 88,
       "lights": 3,
       "na": [],
       "transparent": 1,
@@ -632,16 +632,16 @@
           "cov": 0.231
         }
       ],
-      "renderMsMedian": 872.3
+      "renderMsMedian": 869.3
     },
     {
       "stage": "empty",
       "pose": "figure",
       "calls": 38,
       "triangles": 269532,
-      "geometries": 116,
+      "geometries": 123,
       "textures": 38,
-      "programs": 85,
+      "programs": 88,
       "lights": 3,
       "na": [],
       "transparent": 1,
@@ -652,16 +652,16 @@
           "cov": 0.382
         }
       ],
-      "renderMsMedian": 984.1
+      "renderMsMedian": 1017.1
     },
     {
       "stage": "refill:0.8",
       "pose": "entrance",
       "calls": 36,
       "triangles": 241035,
-      "geometries": 116,
+      "geometries": 123,
       "textures": 38,
-      "programs": 85,
+      "programs": 88,
       "lights": 3,
       "na": [],
       "transparent": 1,
@@ -672,16 +672,16 @@
           "cov": 0.231
         }
       ],
-      "renderMsMedian": 893.1
+      "renderMsMedian": 814.9
     },
     {
       "stage": "refill:0.8",
       "pose": "figure",
       "calls": 39,
       "triangles": 271742,
-      "geometries": 116,
+      "geometries": 123,
       "textures": 38,
-      "programs": 85,
+      "programs": 88,
       "lights": 3,
       "na": [],
       "transparent": 1,
@@ -692,14 +692,14 @@
           "cov": 0.382
         }
       ],
-      "renderMsMedian": 1045.8
+      "renderMsMedian": 930.6
     }
   ],
   "reducedMotion": {
     "calls": 45,
     "triangles": 246213
   },
-  "programsEnd": 85,
+  "programsEnd": 88,
   "base": "http://localhost:4173/Feh-Lu-We/",
   "query": "",
   "problems": []

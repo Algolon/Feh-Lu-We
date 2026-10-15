@@ -27,7 +27,7 @@ const P = {
   figure: { x: 180.0, y: 1.2, z: 59.6, yaw: 180 * D, pitch: 0.16 },
   candles: { x: 178.6, y: 1.2, z: 58.6, yaw: 135 * D, pitch: -0.35 },
   bale: { x: 177.9, y: 1.2, z: 53.1, yaw: -139 * D, pitch: -0.36 },
-  plan: { x: 184.2, y: 1.2, z: 60.0, yaw: -140 * D, pitch: -0.18 },
+  plan: { x: 184.5, y: 1.2, z: 53.0, yaw: -82 * D, pitch: -0.22 }, // inside the clearing (SE), framing figure, ring, bale and the path-mouth lantern
   plinth: { x: 181.9, y: 1.2, z: 56.9, yaw: -135 * D, pitch: -0.42 },
 };
 export const VIEWS = [

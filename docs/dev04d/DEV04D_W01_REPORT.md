@@ -8,7 +8,7 @@
 | Branch | `ccr-1cffdfa6-w9jn3r` (the session's designated branch; the brief's proposed name `dev04d-w01-wickerman-ritual` was not used because this environment may only push to the designated branch). Isolated: nothing else is on it |
 | Starting production | `752cb02` (15 Oct 2026, "Merge PR #30 cars-r02"), verified on GitHub before any change |
 | Production during the work | moved to `6c57ced` (gravity bong, serre air conditioner). Merged into W01 without conflict (§9); all regression suites ran on the merged tree |
-| Final feature SHA | code head `9657ea4` (includes the production merge `971dc36`); this report and the evidence are committed on top of it on the same branch |
+| Final feature SHA | code head `d9c9466` (refinement pass; includes the production merge `971dc36`); this report and the evidence are committed on top of it on the same branch |
 | Owner decisions | W1–W8 implemented **provisionally** with the design's proposed defaults; none is described as owner-approved (§4) |
 
 ## 1. Recovered baseline and concurrent work
@@ -35,11 +35,11 @@
 | Rules | inline in `wickerFire.ts`; burned = permanent; ring stays lit forever | pure module `src/world/wickerRitual.ts`: stage derivation, transitions, normalisation, prompts, timelines, audio mix |
 | Stages | unlit → lit → burning → aftermath (end) | READY → RING_LIT → BURNING → CHARRED → EMPTY_FRAME (→ CARRYING_HAY) → READY, indefinitely |
 | Fire | two `makeFire('custom')` stacks of teardrop tongues ("petals") | noise-shaded flame **sheets** on 16 broad columns following legs, torso, arms, head; the fire climbs the figure base by base and dies back from below |
-| Smoke | 12 faceted icosahedra in a column | 18 soft camera-facing puffs (4 painted shapes, rotation, varied scale and drift, warm-lit base), thinning as they rise |
-| Aftermath | hay hidden, smoulder fire at the feet forever, ring lit | blackened willow, **charred hay remnant** (ash-grey clumps with charcoal breaks, ≈ 60 %), **ash heap** on the plinth, ember spots + smoulder fading over 60 s; candles out |
+| Smoke | 12 faceted icosahedra in a column | 18 soft camera-facing puffs (4 painted shapes, rotation, varied scale and drift, warm-lit base) that swell and overlap as they rise into one dispersing plume (no discrete discs, also at blue hour) |
+| Aftermath | hay hidden, smoulder fire at the feet forever, ring lit | blackened willow, **charred hay remnant** (ash-grey clumps with charcoal breaks and patches of scorched straw, ≈ 60 %, drawn double-sided so the charred cage reads filled where the empty frame is see-through), **ash heap** on the plinth, ember spots + smoulder fading over 60 s; candles out |
 | Clean / refill | — | 1.8 s clean (remnant crumbles from the top, char recedes downward, ash heap sinks, ash puff), 1.6 s refill (hay packs in from the feet up, arms then head, W8 tufts last) |
 | Filled vs empty | willow-dominant either way | hay a touch lighter / warmer; the wisps and the new W8 tufts belong to the hay, so EMPTY is the bare armature |
-| Plinth | smooth light disc ("cake board") | constructed dry stone: dark core read as deep joints, two staggered battered courses, footing stones, coping slabs, hearth slabs (W5 scorch) |
+| Plinth | smooth light disc ("cake board") | constructed dry stone without moss (a hearth stone variant of the shore stone): dark core read as deep joints, two staggered battered courses, footing stones, coping slabs, hearth slabs (W5 scorch) |
 | Candle stones | small, light, lost in the grass | broader, darker flat stone + a chock stone per jar |
 | Bale | — | compact two-string bale on a pallet, twine bands with tension dents, cut ends, pulled tuft, loose straw, leaning besom (§5) |
 | Audio | the shared campfire `fire` loop within 10 m | own procedural ritual layer (§6); the shared loop is untouched and no longer used by the Wickerman |
@@ -170,7 +170,7 @@ Summary:
 - **Absolute PB01:** every stage ≤ 53 calls / 286 k triangles with multi-draw and ≤ 110 calls without it, against 150 calls / 750 k. All views of §8 (incl. the clearing plan view 83 / 436 k) stay inside.
 - **Relative:** READY / RING_LIT +1 call (the bale's straw material group) and +3,570 triangles (+1.6 % at the entrance view: bale ≈ 1.3 k, plinth courses, W8 tufts); BURNING −2 to −3 calls and ≈ −5.7 k triangles (16 flame sheets replace two tongue stacks); CHARRED +1 call (ash heap) +2.1 k; EMPTY_FRAME / refill are new stages (production keeps its lit aftermath there). Against production the largest Wickerman-view growth is +1.6 % (within the 2 % review guard); the suites' own guards against their historical baselines are in §9.
 - **Transparency / overdraw (estimate, projected bounding spheres, not a fill measurement):** burning 1.98 → 2.43 screen-equivalents at the entrance (+23 %: wider smoke billboards, broader flame sheets); CHARRED 1.28 → 2.12 while the residual smoke fades (60 s, then 0); EMPTY / READY return to the single glass-jar mesh. The flame sheets discard most fragments (noise threshold), so the shaded area is below the bounding estimate.
-- **Shader / programs:** 79 → 85 compiled programs after a full pass (+ flame sheet, smoke, ash heap, the two W01 burn variants replace the C ones). The flame shader does two texture fetches of a 128² noise texture per fragment; the smoke one; no new lights.
+- **Shader / programs:** 79 → 88 compiled programs after a full pass (85 before the production merge; the other 3 are production's gravity bong / serre materials) (+ flame sheet, smoke, ash heap, the two W01 burn variants replace the C ones). The flame shader does two texture fetches of a 128² noise texture per fragment; the smoke one; no new lights.
 - **Dynamic lights:** unchanged: the ring and fire lamps compete in the existing 3-slot pool (3 assigned in every stage on both builds); the fire lamp now switches off when the embers have faded instead of glowing forever.
 - **Memory:** +2 textures (two 128 × 128 RGBA DataTextures: flame noise and smoke puffs, 64 KiB each) once burning; geometry objects +1 at READY (bale batch group), equal while burning.
 - **Reduced motion** (burn 32 s, entrance): 48 / 252,723 → 45 / 246,213; the fire keeps its shaped, static noise (browser-tested visible).
@@ -182,11 +182,10 @@ Reproducible with `node scripts/w01-views.mjs <baseUrl> <outDir>` (the same scri
 a build of `752cb02`) and `python3 scripts/w01-sheets.py`. Fixed poses, standard production lighting, daylight plus
 the ENV-L01 **blue hour** (dusk 0.67) for v22–v24; 915 × 412 landscape for every view, 412 × 915 portrait for seven.
 
-- `before/`, `after/`: matched frames + `views.json` (counts, stage, wicker keys per frame).
+- `before/` (production `752cb02`), `after/` (W01 head, merged with production `6c57ced`; nothing of that merge is visible in the clearing): matched frames + `views.json` (counts, stage, wicker keys per frame). `prod-6c57ced/`: the plan view on current production, to separate production's own growth from W01 (v20: `752cb02` 131 / 401,472 → `6c57ced` 138 / 408,186 → W01 139 / 411,756, i.e. W01 +1 / +3,570).
 - `sheets/pair-*.jpg`: before above / after below with counters. Key pairs: `v01` entrance, `v02` approach, `v03`
   figure at eye height, `v04` candle ring, `v08` / `v09` fire peak, `v12` / `v13` charred, `v13b` charred after the
-  embers faded, `v14` / `v15` empty frame, `v16` bale, `v17` carrying, `v18` refill mid, `v19` refilled, `v20` clearing
-  plan, `v21` plinth, `v22`–`v24` blue hour, `v25` READY after a second full cycle. The baseline has no clean / bale /
+  embers faded, `v14` / `v15` empty frame, `v16` bale, `v17` carrying, `v18` refill mid, `v19` refilled, `v20` clearing plan (inside the clearing, SE: figure, ring, bale, path-mouth lantern; re-posed in the refinement pass), `v21` plinth, `v22`–`v24` blue hour, `v25` READY after a second full cycle. The baseline has no clean / bale /
   refill: its v14–v19 frames show what production does at that point (the permanent aftermath).
 - `sheets/s1-candle-sweep.jpg`, `s2-burn.jpg`, `s3-clean.jpg`, `s4-refill.jpg`: frame sequences on the game clock
   (candles 0.4–3.6 s; burn 2–82 s; clean 0.3–2 s; refill 0.25–1.8 s).
@@ -196,7 +195,10 @@ the ENV-L01 **blue hour** (dusk 0.67) for v22–v24; 915 × 412 landscape for ev
 
 All on the **merged tree** (W01 + production `6c57ced`), SwiftShader Chromium 141, production build served by
 `vite preview`. Every failure was re-run on a build of **pure production `6c57ced`** (same scripts) to classify it.
-Logs: `docs/dev04d/w01/tests/` (`merged-*`, `merged2-*` = re-run after the two test-side fixes below, `prod-*`).
+Logs: `docs/dev04d/w01/tests/` (`merged-*`, `merged2-*` = re-run after the two test-side fixes below, `prod-*`,
+and `final-*` = the complete re-run on the refinement head `d9c9466`, with results identical to the merged run: W01 27 / 27,
+dev01 34 / 34, dev02 34 / 34, dev03 11 / 11, A 17 / 19, B 8 / 9, C 20 / 22, D 17 / 18, full e2e 96 / 103, every failure
+the inherited one listed below).
 
 | Check | Merged (W01) | Production `6c57ced` | Verdict |
 |---|---|---|---|
@@ -279,15 +281,18 @@ input timing, vegetation and terrain beyond the bale keep-out, every upstairs / 
   fill / shader cost between builds, not phone frame times. PB01 device validation stays pending.
 - **Audio by ear:** the mix levels, the drone and the pulse are tuned by reasoning, not by listening on a phone speaker;
   an owner listening pass is needed (W7). If the pulse reads as too ominous, removing it is one line.
-- **Smoke at blue hour:** the upper puffs read as discrete soft discs against the darker sky; acceptable in motion,
-  could use one more size step or lower top density.
-- **Remnant at close range** reads as uniform ash-grey clumps; a second remnant palette pass would add warmth.
-- **Hearth / coping slabs** inherit the shared rock model's moss tint on upward faces.
 - **Besom** reads as a stick + bundle at clearing distance; detail only shows close up.
 - **W8 tufts** are a review candidate, not approved art.
 - **Carry radius 12 m** (design default) keeps the bundle along the side path; 9 m would release it at the clearing rim.
+- **Charred remnant at the entrance distance** reads as a dark-grey fill of the cage (clearly not empty), not as
+  individual clumps; the clumps and scorched straw read from ≈ 3 m.
 - `fire.ts` `makeSmoke` is no longer used (the Wickerman was its only caller); left in place to keep the shared file
   untouched.
+
+Resolved in the refinement pass (commit `d9c9466`, after the first review handover `c64821f`): the blue-hour smoke
+discs (upper puffs now swell, overlap and fade earlier), the uniform / see-through remnant (lighter ash, scorched-straw
+patches, double-sided hay), the moss tint on the plinth and candle stones (moss-free stone variant, same batch group),
+and the v20 plan view (it stood in the hedge and hid the bale). Draw calls and triangles are unchanged by the pass.
 
 ## 12. Integration assessment
 

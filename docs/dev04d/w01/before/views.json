@@ -488,27 +488,6 @@
       }
     },
     {
-      "name": "v20-clearing-plan",
-      "fmt": "land",
-      "stage": null,
-      "dusk": 0,
-      "na": [],
-      "calls": 82,
-      "triangles": 432010,
-      "geometries": 131,
-      "textures": 36,
-      "programs": 98,
-      "lit": {},
-      "litCount": 0,
-      "look": {
-        "char": 0,
-        "flameLow": 0,
-        "flameHigh": 0,
-        "light": 0,
-        "settled": false
-      }
-    },
-    {
       "name": "v21-plinth-close",
       "fmt": "land",
       "stage": null,
@@ -1481,6 +1460,27 @@
         "flameHigh": 0,
         "light": 0.12,
         "settled": true
+      }
+    },
+    {
+      "name": "v20-clearing-plan",
+      "fmt": "land",
+      "stage": null,
+      "dusk": 0,
+      "na": [],
+      "calls": 131,
+      "triangles": 401472,
+      "geometries": 118,
+      "textures": 35,
+      "programs": 89,
+      "lit": {},
+      "litCount": 0,
+      "look": {
+        "char": 0,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0,
+        "settled": false
       }
     }
   ],
