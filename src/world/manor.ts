@@ -40,6 +40,7 @@ import { buildMaquette } from './maquette';
 import { addKey, presentKey, keyLiner, linerWhenOpen, hatchDish, LINER_TOP, HATCH_DISH_FLOOR, S3_BUILDERS } from './d2props';
 import { SALON_LAYOUT, SALON_SITES } from '../content/gallery';
 import { buildEntrance, entranceBay } from './entrance';
+import { EXTERIOR_STUDY, exteriorMats, studyArchitecture, dressedBlock } from './exteriorStudy';
 import { planChest, pottingBench, plantStand, plantEtagere, pottedPlant } from './d3b';
 import { wainscot, refectoryTable, gamesCabinet, dartboard, servingConsole, chinaCabinet, wallCupboards, splashback, enamelPendant, pegRailClock, panelDoor } from './d3a';
 import { placeSolved, slotContents, openBasement } from '../puzzles/rules';
@@ -68,17 +69,16 @@ export function buildManor(w: World, g: GameApi, c: Ctx, cIn: Ctx, cB: Ctx) {
 // Exterior shell: stone walls with windows (both storeys), roof with dormers, porch, entrance bay, wing.
 function shell(w: World, c: Ctx) {
   const k = c.k;
-  const stone = { mat: k.M.stone, color: '#f2e6cc' };
+  const stone = { mat: EXTERIOR_STUDY ? exteriorMats().wall : k.M.stone, color: EXTERIOR_STUDY ? '#ffffff' : '#f2e6cc' };
   const skin = { mat: k.M.plaster, color: '#f1e6cf' };
-  const ext = (axis: 'x' | 'z', f: number, a0: number, a1: number, exterior: 1 | -1, gfOpen: { at: number; w: number; h?: number }[], gfWin: number[], ufWin: number[]) => {
-    wall(c, axis, f, a0, a1, 0, UF, { ...stone, t: 0.4, exterior, skin, uv: 2.4, winStyle: 'manor', openings: gfOpen, windows: gfWin.map((at) => ({ at, sill: 1.05, h: 1.6, w: 1.1 })) });
-    wall(c, axis, f, a0, a1, UF, TOP, { ...stone, t: 0.4, exterior, skin, uv: 2.4, winStyle: 'manor', windows: ufWin.map((at) => ({ at, sill: 0.8, h: 1.5, w: 1.0 })) });
+  const ext = (axis: 'x' | 'z', f: number, a0: number, a1: number, exterior: 1 | -1, gfOpen: { at: number; w: number; h?: number }[], gfWin: number[], ufWin: number[], study = EXTERIOR_STUDY) => {
+    const facade = study ? { mat: exteriorMats().wall, color: '#ffffff' } : stone;
+    wall(c, axis, f, a0, a1, 0, UF, { ...facade, t: 0.4, exterior, skin, uv: 2.4, winStyle: 'manor', openings: gfOpen, windows: gfWin.map((at) => ({ at, sill: 1.05, h: 1.6, w: 1.1 })) });
+    wall(c, axis, f, a0, a1, UF, TOP, { ...facade, t: 0.4, exterior, skin, uv: 2.4, winStyle: 'manor', windows: ufWin.map((at) => ({ at, sill: 0.8, h: 1.5, w: 1.0 })) });
   };
-  // south (front)
+  // All four elevations share the approved facade grammar; original openings/footprints stay fixed.
   ext('x', 80.2, 72, 108, -1, [{ at: 90, w: 1.7, h: 2.7 }], [75.5, 79, 82.5, 98, 101.5, 105], [75.5, 79, 82.5, 87.5, 92.5, 98, 101.5, 105]);
-  // north (garden): billiard + kitchen garden doors, tall library windows
   ext('x', 109.8, 72, 108, 1, [{ at: 91.5, w: 1.2, h: 2.45 }, { at: 101, w: 1.0, h: 2.35 }], [75, 78.5, 82, 88, 97.5, 105], [75, 78.5, 82, 87.5, 92.5, 98, 104]);
-  // west
   ext('z', 72.2, 80.4, 109.6, -1, [], [83, 90.5, 97, 101, 105], [82.5, 90, 97, 101, 105]);
   // east: dining windows; the service wing joins at z 92–110 (door to the service corridor)
   ext('z', 107.8, 80.4, 109.6, 1, [{ at: 102.5, w: 1.0, h: 2.3 }], [83, 86.8, 90.4], [83, 87, 91]);
@@ -88,10 +88,16 @@ function shell(w: World, c: Ctx) {
   type Runs = Partial<Record<'S' | 'N' | 'W' | 'E', [number, number][]>>;
   const ring = (y0: number, y1: number, proud: number, col: string, x0 = 72, x1 = 108, z0 = 80, z1 = 110, mat: THREE.Material = k.M.stone, runs: Runs = {}) => {
     const o = { chunk: c.chunk, uv: 2, jitter: 0 };
-    for (const [a, b] of runs.S ?? [[x0 - proud, x1 + proud]]) boxMM(c.b, mat, col, a, b, y0, y1, z0 - proud, z0, o);
-    for (const [a, b] of runs.N ?? [[x0 - proud, x1 + proud]]) boxMM(c.b, mat, col, a, b, y0, y1, z1, z1 + proud, o);
-    for (const [a, b] of runs.W ?? [[z0, z1]]) boxMM(c.b, mat, col, x0 - proud, x0, y0, y1, a, b, o);
-    for (const [a, b] of runs.E ?? [[z0, z1]]) boxMM(c.b, mat, col, x1, x1 + proud, y0, y1, a, b, o);
+    const palette: Record<string,string> = { [sand]:'#a8aa99',[dressed]:'#ded8c2','#d9c9a6':'#c5c4ae','#e9dcc0':'#d2cfba','#f0e5cd':'#e1dbc6' };
+    const part=(xa:number,xb:number,za:number,zb:number)=>{
+      if (EXTERIOR_STUDY) dressedBlock(c,(xa+xb)/2,(y0+y1)/2,(za+zb)/2,xb-xa,y1-y0,zb-za,palette[col]??col,Math.min(.018,(y1-y0)/4));
+      else boxMM(c.b,mat,col,xa,xb,y0,y1,za,zb,o);
+    };
+    for (const [a,b] of runs.S??[[x0-proud,x1+proud]]) part(a,b,z0-proud,z0);
+    for (const [a,b] of runs.N??[[x0-proud,x1+proud]]) part(a,b,z1,z1+proud);
+    for (const [a,b] of runs.W??[[z0,z1]]) part(x0-proud,x0,a,b);
+    for (const [a,b] of runs.E??[[z0,z1]]) part(x1,x1+proud,a,b);
+
   };
   // DEV-04A: the plinth course is a knee-high stone band; it ran straight across every ground-floor door (front door,
   // both garden doors, the service door, the wing's yard and conservatory doors) and on through the service wing's
@@ -121,18 +127,20 @@ function shell(w: World, c: Ctx) {
   ring(TOP - 0.12, TOP - 0.02, 0.2, '#f0e5cd', 72, 108, 80, 110, k.M.paint); // cymatium under the soffit
   // quoins: alternating long and short dressed blocks at the four corners, 4 cm proud
   for (const [qx, qz, sx2, sz2] of [[72, 80, -1, -1], [108, 80, 1, -1], [72, 110, -1, 1], [108, 110, 1, 1]] as const) {
+    if (EXTERIOR_STUDY) continue;
     for (let i = 0, y = 0.7; y < TOP - 0.5; i++, y += 0.42) {
       const long = i % 2 === 0, la = long ? 0.62 : 0.34;
       boxMM(c.b, k.M.stone, dressed, qx + (sx2 < 0 ? -0.04 : -la), qx + (sx2 < 0 ? la : 0.04), y, y + 0.36, sz2 < 0 ? qz - 0.04 : qz - 0.02, sz2 < 0 ? qz + 0.02 : qz + 0.04, { chunk: c.chunk, uv: 1.2, jitter: 0.02 });
       boxMM(c.b, k.M.stone, dressed, sx2 < 0 ? qx - 0.04 : qx - 0.02, sx2 < 0 ? qx + 0.02 : qx + 0.04, y, y + 0.36, qz + (sz2 < 0 ? -0.04 : -(long ? 0.34 : 0.62)), qz + (sz2 < 0 ? (long ? 0.34 : 0.62) : 0.04), { chunk: c.chunk, uv: 1.2, jitter: 0.02 });
     }
   }
+  if (EXTERIOR_STUDY) studyArchitecture(c, TOP, UF);
   // roof (≈30°) with a real eave (fascia, soffit, gutter, caps) and downpipes at the corners and either side of the bay
   hipRoof(c, 90, 95, 36, 30, TOP, 8.2, k.M.slate, '#a39f9a', 0.7, { downpipes: [[71.86, 80.5], [108.14, 80.5], [71.86, 109.5], [108.14, 109.5], [85.85, 79.88], [94.15, 79.88]] });
   roofWindowOutside(c); // DEV-04A: the attic observation window in the east slope (inside: attic())
   // chimneys: stack with a projecting band and a cap, two pots each
   for (const [x, z] of [[72.9, 86.7], [100, 101], [86, 106]] as const) {
-    box(c.b, k.M.stone, '#d9c8a6', x, 8, z, 1.2, 8.4, 1.2, { chunk: c.chunk, uv: 2 });
+    box(c.b, stone.mat, EXTERIOR_STUDY ? '#e4ddc8' : '#d9c8a6', x, 8, z, 1.2, 8.4, 1.2, { chunk: c.chunk, uv: 2 });
     box(c.b, k.M.paint, dressed, x, 15.6, z, 1.36, 0.14, 1.36, { chunk: c.chunk });
     box(c.b, k.M.paint, '#e2d4b8', x, 16.25, z, 1.32, 0.15, 1.32, { chunk: c.chunk });
     for (const d of [-0.28, 0.28]) cyl(c.b, k.M.paint, '#a5583c', x + d, 16.4, z, 0.13, 0.16, 0.5, 8, { chunk: c.chunk });
@@ -145,18 +153,18 @@ function shell(w: World, c: Ctx) {
     const dx = x - fx * 1.0, dz = z - fz * 1.0;
     // DEV-04B: the body started at +6.2, the plane of the upstairs ceilings' underside — its stone bottom face z-fought
     // with the plaster in the Reis- and Sterrenkamer, study and guest room ceilings; it now starts inside the ceiling slab
-    box(c.b, k.M.stone, '#efe2c4', dx, TOP - 0.15, dz, sx, top - TOP + 0.15, sz, { chunk: c.chunk, uv: 1.5 });
+    box(c.b, stone.mat, EXTERIOR_STUDY ? '#ffffff' : '#efe2c4', dx, TOP - 0.15, dz, sx, top - TOP + 0.15, sz, { chunk: c.chunk, uv: 1.5 });
     gableRoof(c, dx, dz, 2.6, 2.1, top, 0.8, alongX, k.M.slate, '#9e9a94');
     // the dormer window: framed glass in a dressed surround (same grammar as the facade)
     const wx = dx + fx * (alongX ? 0.9 : 0), wz = dz + fz * (alongX ? 0 : 0.9);
-    if (alongX) windowAt(c, 'z', wx + fx * 0.3, fx as 1 | -1, wz, TOP + 0.12, 0.8, 1.05, true, { kind: 'plain' });
-    else windowAt(c, 'x', wz + fz * 0.3, fz as 1 | -1, wx, TOP + 0.12, 0.8, 1.05, true, { kind: 'plain' });
+    if (alongX) windowAt(c, 'z', wx + fx * 0.3, fx as 1 | -1, wz, TOP + 0.12, 0.8, 1.05, true, { kind: EXTERIOR_STUDY ? 'manor' : 'plain' });
+    else windowAt(c, 'x', wz + fz * 0.3, fz as 1 | -1, wx, TOP + 0.12, 0.8, 1.05, true, { kind: EXTERIOR_STUDY ? 'manor' : 'plain' });
   };
   for (const x of [78, 102]) { dormer(x, 79.6, 'S'); dormer(x, 110.4, 'N'); }
   for (const z of [88, 98]) { dormer(71.6, z, 'W'); dormer(108.4, z, 'E'); }
   // projecting central entrance bay with pediment, round window and porch
   const bay = (x0: number, x1: number, y0: number, y1: number) => {
-    boxMM(c.b, k.M.stone, '#f6ead0', x0, x1, y0, y1, 79.55, 80.02, { chunk: c.chunk, uv: 2.4 });
+    boxMM(c.b, stone.mat, EXTERIOR_STUDY ? '#ffffff' : '#f6ead0', x0, x1, y0, y1, 79.55, 80.02, { chunk: c.chunk, uv: 2.4 });
     if (y0 < 2) c.col.addBox(x0, x1, 79.55, 80.02, 0, y1, { occludes: true });
   };
   bay(86.4, 89.05, 0.5, TOP);
@@ -167,7 +175,7 @@ function shell(w: World, c: Ctx) {
     boxMM(c.b, k.M.stone, dressed, x < 90 ? x - 0.04 : x - la, x < 90 ? x + la : x + 0.04, y, y + 0.36, 79.5, 79.56, { chunk: c.chunk, uv: 1.2, jitter: 0.02 });
   }
   boxMM(c.b, k.M.stone, '#e2d2b2', 86.2, 93.8, TOP, TOP + 0.25, 79.45, 80.05, { chunk: c.chunk });
-  gableRoof(c, 90, 79.8, 0.6, 7.8, TOP + 0.25, 2.6, false, k.M.stone, '#f6ead0', false);
+  gableRoof(c, 90, 79.8, 0.6, 7.8, TOP + 0.25, 2.6, false, stone.mat, EXTERIOR_STUDY ? '#ffffff' : '#f6ead0', false);
   for (const s2 of [-1, 1]) segBox(c, k.M.paint, '#ecdfc4', [90 + s2 * 3.95, TOP + 0.2, 79.42], [90, TOP + 2.9, 79.42], 0.12, 0.26); // raking cornice
   cyl(c.b, k.M.paint, dressed, 90, TOP + 1.0, 79.46, 0.62, 0.62, 0.06, 20, { chunk: c.chunk, rx: Math.PI / 2 }); // oculus ring
   cyl(c.b, k.M.glow, '#5f6f78', 90, TOP + 1.0, 79.44, 0.5, 0.5, 0.05, 16, { chunk: c.chunk, rx: Math.PI / 2, shadow: false, jitter: 0 });

@@ -6,6 +6,8 @@
 // Layout constants live in layout.ts, keepouts in footprints.ts, ground in terrain.ts.
 import * as THREE from 'three';
 import { surface } from './surfaces';
+import { EXTERIOR_STUDY, exteriorMats } from './exteriorStudy';
+import { driveGravel } from './arrivalStudy';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { World, type GameApi } from '../interactions/world';
 import type { SceneExtras } from '../core/game';
@@ -282,13 +284,18 @@ function buildGround(w: World, trees: TreeGrid | null) {
 }
 
 /** DEV-04A: a clipped network run draped on the terrain (three vertices across: left edge, centre, right edge). */
-function runGeo(run: Run, width: number, lift: number): THREE.BufferGeometry {
+function runGeo(run: Run, width: number, lift: number, driveStudy = false): THREE.BufferGeometry {
   const pos: number[] = [], uv: number[] = [], col: number[] = [], mouth: number[] = [], idx: number[] = [];
+  const fractions = driveStudy ? [0,.2,.3,.4,.5,.6,.7,.8,1] : [0,.5,1];
+  const columns = fractions.length;
   run.rows.forEach((r, i) => {
-    for (const [x, z, u] of [[r.lx, r.lz, 0], [r.x, r.z, width / 6], [r.rx, r.rz, width / 3]] as const) {
-      pos.push(x, terrainHeight(x, z) + lift, -z); uv.push(u, r.d / 3); col.push(1, 1, 1); mouth.push(r.mouth);
+    for (const t of fractions) {
+      const q=t<=.5?t*2:(t-.5)*2;
+      const x=t<=.5?r.lx+(r.x-r.lx)*q:r.x+(r.rx-r.x)*q;
+      const z=t<=.5?r.lz+(r.z-r.lz)*q:r.z+(r.rz-r.z)*q;
+      pos.push(x, terrainHeight(x, z) + lift, -z); uv.push(t*width/3, r.d/3); col.push(1,1,1); mouth.push(r.mouth);
     }
-    if (i > 0) { const o = (i - 1) * 3; for (const [q0, q1] of [[0, 1], [1, 2]]) idx.push(o + q0, o + q0 + 3, o + q1 + 3, o + q0, o + q1 + 3, o + q1); }
+    if (i > 0) { const o=(i-1)*columns; for(let q=0;q<columns-1;q++)idx.push(o+q,o+q+columns,o+q+columns+1,o+q,o+q+columns+1,o+q+1); }
   });
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
@@ -320,7 +327,8 @@ function buildPaths(w: World, c: Ctx) {
   for (const line of pathNetwork(sample ? zonePathWidth : undefined)) {
     for (const run of line.runs) {
       const lift = line.kind === 'drive' ? 0.04 : line.kind === 'forest' ? 0.035 : 0.03;
-      let gg = runGeo(run, line.width, lift);
+      const driveStudy = EXTERIOR_STUDY && line.kind === 'drive';
+      let gg = runGeo(run, line.width, lift, driveStudy);
       const woodland = line.kind === 'forest' || line.id.startsWith('wickerman') || line.id === 'golfSpur';
       if (woodland && line.kind === 'route' && sample) gg = zonePathTint(gg); // same soil as the forest path it leaves
       if (line.kind === 'forest') {
@@ -332,7 +340,8 @@ function buildPaths(w: World, c: Ctx) {
         verge.push(run.rows.map((r) => [r.x, r.z]));
       }
       const tint = line.kind === 'drive' ? '#d4cfc2' : woodland ? '#c8ad80' : '#d9d2c2';
-      c.b.add(k.M.dirt, gg, new THREE.Matrix4(), tint, 'paths', false, 0);
+      if (driveStudy) driveGravel(gg);
+      c.b.add(driveStudy ? exteriorMats().gravel : k.M.dirt, gg, new THREE.Matrix4(), driveStudy ? '#f2f0e7' : tint, 'paths', false, 0);
       gg.dispose();
     }
   }

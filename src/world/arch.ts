@@ -5,6 +5,7 @@ import { Batcher, box, boxMM, boxGeo, cyl, geo, getKit, gableGeo, hipRoofGeo, pl
 import { lathe, softBox } from './artkit';
 import type { CollisionWorld } from '../player/collision';
 import { registerOpening } from './openings';
+import { studyWindowSite, studyWindow } from './exteriorStudy';
 
 export interface Ctx {
   b: Batcher;
@@ -209,6 +210,7 @@ const GLASS = { day: '#5f6f78', dayLow: '#4b5860', lit: '#e8b86c', litLow: '#c98
  * The glass is unlit (glow) but no longer every pane is a lit lamp: most read as cool daylight glass.
  */
 export function windowAt(c: Ctx, axis: 'x' | 'z', faceF: number, side: 1 | -1, at: number, y: number, w: number, h: number, outside: boolean, style: { frame?: string; glass?: string; arch?: boolean; kind?: WinStyle } = {}) {
+  if (outside && style.kind === 'manor' && studyWindowSite(axis, faceF, at, side)) { studyWindow(c, axis, faceF, side, at, y, w, h); return; }
   const kind = style.kind ?? 'plain';
   const lit = hash(at, faceF + y, axis === 'x' ? 1 : 2) < 0.26;
   const fr = style.frame ?? (outside ? (kind === 'cottage' ? '#f4efe4' : TRIM.frame) : TRIM.joinery);
