@@ -225,7 +225,7 @@ try {
     const g = T.G(), set = g.world.scene.userData.wickerSet;
     g.player.setPose({ x: 176.4, y: 1.2, z: 59.9, yaw: 145 * Math.PI / 180, pitch: 0.1 }); T.tick(10);
     const lk = set.look();
-    return { version: g.state.version, candles: !!g.state.lit['wicker.candles'], figure: !!g.state.lit['wicker.figure'], flames: set.flames.visible, reveal: set.reveal.uReveal.value, settled: lk.settled, low: set.fLow.visible, hay: set.hay.visible, remnant: set.burnUniforms.uRemnant?.value ?? 0, smoulder: set.smoulder.visible, stage: set.stage?.(), label: (T.lookAtId('wicker.figure'), g.metrics().label), fireClearing: !!g.state.lit['fire.clearing'] };
+    return { version: g.state.version, candles: !!g.state.lit['wicker.candles'], figure: !!g.state.lit['wicker.figure'], flames: set.flames.visible, reveal: set.reveal.uReveal.value, settled: lk.settled, low: set.fLow.visible, hay: set.hay.visible, remnant: set.burnUniforms.uRemnant?.value ?? 0, smoulder: set.smoulder.visible, stage: set.stage?.(), label: g.world.byId.get('wicker.figure').label(), fireClearing: !!g.state.lit['fire.clearing'] };
   });
   // DEV-04D W01 (superseded: the C aftermath was permanent with the ring lit): the burned figure persists as the cold charred
   // remnant with the ring out, and is now cleanable ("Stroman schoonmaken")

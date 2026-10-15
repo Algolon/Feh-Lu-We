@@ -92,10 +92,9 @@ try {
       out.push({ t, ...W.snap(), figLabel, ringLabel });
     }
     // the end of the burn, sampled on the game clock only (no aiming between samples): every 0.5 s to the settle
-    const t0 = W.g.time - (out.at(-1).t + 0.5 * 0), tail = [];
+    const tail = [];
     for (let k = 0; k < 52; k++) { T.wait(0.5); tail.push({ s: W.stage(), n: W.set().litCount() }); }
-    out.tail = tail; void t0;
-    return out;
+    return { rows: out, tail }; // (an array's extra properties do not survive page.evaluate)
   });
   c1.charred = await E(() => { T.wait(2); W.g.saveNow(); return { ...W.snap(), saved: JSON.parse(localStorage.getItem('fehluwe.save')).lit, ...W.atFigure(), bale: (W.atBale(), W.g.metrics()) }; });
   await E(() => W.atFigure());
@@ -113,11 +112,11 @@ try {
     log('the gate: the action button on the figure before the ring burns changes nothing (no toast)', r.gate.stage === 'READY' && !r.gate.low && !r.gate.toast, JSON.stringify(r.gate));
     const seq = r.sweep.seq;
     log(`candles: one touch on the action button lights all nine one after another from the nearest (${seq.join(' ')})`, /Kaarsen aansteken/.test(r.ring.label ?? '') && r.ring.target === 'wicker.candles' && seq[0] <= 2 && mono(seq, 1) && new Set(seq).size >= 6 && seq.at(-1) === 9 && r.sweep.stage === 'RING_LIT' && !r.sweep.toast, JSON.stringify(r.ring));
-    const b = r.burn, at = (t) => b.find((x) => x.t === t);
+    const b = r.burn.rows, tail = r.burn.tail, at = (t) => b.find((x) => x.t === t);
     log('ignite: "Stroman aansteken" → BURNING; the fire spreads up the figure (upper body catches later), hay burns away, smoke', /Stroman aansteken/.test(r.ignite.label ?? '') && at(2).stage === 'BURNING' && at(2).low && !at(2).high && at(12).high && at(32).smoke && at(32).hay && at(32).char > at(6).char && mono(b.map((x) => x.char), 1), JSON.stringify(b.map((x) => `${x.t}s ${x.stage} L${+x.low}H${+x.high} c${x.char}`)));
     log('no ritual interaction during the burn (no prompt on the figure or the ring)', b.filter((x) => x.stage === 'BURNING').every((x) => x.figLabel === null && x.ringLabel === null), JSON.stringify(b.map((x) => [x.t, x.figLabel, x.ringLabel])));
-    const outSeq = b.tail.map((x) => x.n);
-    log(`end of burn: the candles go out one by one (${outSeq.join(' ')}), then the figure settles CHARRED with the ring OUT (saved)`, mono(outSeq, -1) && outSeq[0] === 9 && outSeq.at(-1) === 0 && new Set(outSeq).size === 10 && b.tail.at(-1).s === 'CHARRED' && r.charred.stage === 'CHARRED' && r.charred.litCount === 0 && !r.charred.saved['wicker.candles'] && r.charred.saved['wicker.figure'] === true, JSON.stringify({ outSeq, saved: r.charred.saved }));
+    const outSeq = tail.map((x) => x.n);
+    log(`end of burn: the candles go out one by one (${outSeq.join(' ')}), then the figure settles CHARRED with the ring OUT (saved)`, mono(outSeq, -1) && outSeq[0] === 9 && outSeq.at(-1) === 0 && new Set(outSeq).size === 10 && tail.at(-1).s === 'CHARRED' && r.charred.stage === 'CHARRED' && r.charred.litCount === 0 && !r.charred.saved['wicker.candles'] && r.charred.saved['wicker.figure'] === true, JSON.stringify({ outSeq, saved: r.charred.saved }));
     log('CHARRED: blackened willow (uChar 1), the charred remnant + ash heap visible, flames out; prompt "Stroman schoonmaken"; the bale is inert (no prompt)', r.charred.uChar === 1 && r.charred.remnant === 1 && r.charred.hay && r.charred.ash && !r.charred.low && /schoonmaken/.test(r.charred.label ?? '') && r.charred.bale.target !== 'wicker.bale', JSON.stringify(r.charred));
     const cs = r.clean.seq;
     log('clean (≈ 1.8 s): the remnant crumbles from the top, the char recedes, the ash goes → EMPTY_FRAME ("Lege stroman — haal hooi"), no toast', mono(cs.map((x) => x.uClean).filter((v) => v < 5), -1) && mono(cs.map((x) => x.uChar), -1) && cs[0].hay && !r.clean.hay && !r.clean.ash && r.clean.uChar === 0 && r.clean.stage === 'EMPTY_FRAME' && /haal hooi/.test(r.clean.label ?? '') && !r.clean.toast && r.clean.lit['wicker.empty'] === true && !r.clean.lit['wicker.figure'], JSON.stringify(cs));
