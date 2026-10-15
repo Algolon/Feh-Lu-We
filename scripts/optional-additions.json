@@ -1,0 +1,9 @@
+{
+  "note": "Optional production interactables added outside the DEV-04 workstreams (Oct 2026), registered for the release of DEV-04D W01. Each is an optional inspect / action vignette: it writes no save state (act(..., { save: false }) or no act at all), records no clue, sets no puzzle flag and is not on any required route. Per id: source file, the commit that introduced it, and the feature. Loaded with the other manifests by scripts/interactable-additions.mjs.",
+  "interactables": ["garden.gravityBong.hit", "inspect.kitchenBosfruit", "inspect.serreAircoBeetle"],
+  "details": {
+    "inspect.serreAircoBeetle": { "source": "src/world/serreAirco.ts", "commit": "0381e61", "feature": "serre air conditioner with the electrocuted beetle (inspect text, synced zap SFX ed5e268 / 2125e61)", "saves": false },
+    "inspect.kitchenBosfruit": { "source": "src/world/kitchenJuicePouch.ts", "commit": "597fa51", "feature": "stylised Bosfruit drink pouch on the kitchen island (inspect text)", "saves": false },
+    "garden.gravityBong.hit": { "source": "src/world/gravityBongInteraction.ts", "commit": "aeb5080", "feature": "'Neem een hit' on the garden gravity bong (bong hit sound with a 5.6 s cooldown, toast; 5791122 bundled MP3)", "saves": false }
+  }
+}

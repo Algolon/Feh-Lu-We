@@ -88,7 +88,7 @@ src/interactions/ world.ts (World container, Interactable API, light pool, culli
 src/puzzles/     rules.ts (pure puzzle/progression rules, hints)
 src/content/     canon.ts (all answers + derived wording), items.ts, clues.ts, symbols.ts, memories.ts (editable placeholders)
 src/ui/          ui.ts (HUD, overlays, puzzle panels), diagrams.ts (SVG clues), map.ts (estate + floor plans), icons.ts, style.css
-src/audio/       audio.ts (WebAudio-synthesised sound, no files)
+src/audio/       audio.ts + footsteps.ts (original WebAudio Foley, including soft grass and dirt-path variants; no external audio files)
 tests/           vitest unit tests
 scripts/         e2e.mjs + e2e-helpers.js (Playwright suites), views.mjs (fixed-viewpoint screenshots),
                  png2jpg.mjs, shot.mjs (screenshot helpers)

@@ -1,0 +1,27 @@
+{
+  "base": "http://localhost:4176/Feh-Lu-We/",
+  "rows": [
+    {
+      "name": "v20-clearing-plan",
+      "fmt": "land",
+      "stage": null,
+      "dusk": 0,
+      "na": [],
+      "calls": 138,
+      "triangles": 408186,
+      "geometries": 125,
+      "textures": 35,
+      "programs": 94,
+      "lit": {},
+      "litCount": 0,
+      "look": {
+        "char": 0,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0,
+        "settled": false
+      }
+    }
+  ],
+  "problems": []
+}

@@ -37,7 +37,9 @@ import { FOREST_PATHS, TCELL, TERRAIN_DIMS, gridAt, gridHeight, inHole, terrainH
 import { FOOTPRINTS, vegetationClear } from './footprints';
 import { inRect as inR } from './geom2d';
 import { beginOpenings, wallArtConflicts } from './openings';
-import { pathNetwork, type Run } from './junctions';
+import { pathNetwork, type NetLine, type Run } from './junctions';
+import { onOutdoorPath } from './pathFootsteps';
+import type { FootstepSurface } from '../audio/footsteps';
 
 /** The lantern circle on the lawn behind the manor (a wrong attempt never means crossing the garden). */
 export const LANTERN_CIRCLE = SITES.lanterns;
@@ -86,7 +88,9 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
     const inWoodland = (x: number, z: number) => z < ESTATE.forestEdge + 1 || DENSE_WOODS.some((m) => inR(x, z, m, 1));
     veg.drop = (x, z, kind) => kind !== 'cap' && kind !== 'stem' && inWoodland(x, z);
   }
-  buildPaths(w, ground);
+  // Audio and rendering share the exact clipped network, including narrow woodland paths.
+  const pathLines = pathNetwork(ART.ext === 'sample' ? zonePathWidth : undefined);
+  buildPaths(w, ground, pathLines);
   buildBoundary(w, g, ground, veg);
   buildManor(w, g, manorC, manorIn, manorB);
   buildConservatory(w, g, consC);
@@ -178,13 +182,13 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
     }
   }
   const isIndoor = (x: number, z: number, y = 0) => R.roomAt(x, y + 0.8, z) !== 'out';
-  const surfaceAt = (x: number, z: number, y = 0): 'grass' | 'wood' | 'stone' => {
+  const surfaceAt = (x: number, z: number, y = 0): FootstepSurface => {
     const room = R.roomAt(x, y + 0.8, z);
     if (room !== 'out') return R.get(room)?.floor === 'b' || room === 'cons' || room === 'hall' || room === 'vestibule' || room === 'kitchen' ? 'stone' : 'wood';
     if (inR(x, z, WELLNESS) && y > 0.1) return 'wood';
     if (FOOTPRINTS.some((f) => f.kind === 'platform' && inR(x, z, f)) || inRect(x, z, TERRACE.x0, TERRACE.x1, TERRACE.z0, TERRACE.z1) || inRect(x, z, 60, 66, 8, 18.2)) return 'stone';
-    if (FOOTPRINTS.some((f) => f.kind === 'parking' && inR(x, z, f))) return 'stone';
-    if (distToPolyline(x, z, DRIVEWAY) < 2.4 || Math.hypot(x - SITES.forecourt.x, z - SITES.forecourt.z) < 8) return 'stone';
+    if (FOOTPRINTS.some((f) => f.kind === 'parking' && inR(x, z, f))) return 'dirt';
+    if (onOutdoorPath(x, z, pathLines) || Math.hypot(x - SITES.forecourt.x, z - SITES.forecourt.z) < 8) return 'dirt';
     return 'grass';
   };
   return { world: w, extras: { env, isIndoor, surfaceAt, rooms: R } };
@@ -308,7 +312,7 @@ function runGeo(run: Run, width: number, lift: number): THREE.BufferGeometry {
   return ng;
 }
 
-function buildPaths(w: World, c: Ctx) {
+function buildPaths(w: World, c: Ctx, lines: readonly NetLine[]) {
   const k = getKit();
   // DEV-04A: every drawn path comes from ONE ownership network (junctions.ts): the driveway owns its corridor, forest
   // paths stop at the driveway and the arrival gravel, routes stop at every hard surface (terraces, platforms, the
@@ -319,7 +323,7 @@ function buildPaths(w: World, c: Ctx) {
   const gravel = new THREE.Color('#d4cfc2'), forestTint = new THREE.Color('#c8ad80');
   const toGravel = [gravel.r / forestTint.r, gravel.g / forestTint.g, gravel.b / forestTint.b];
   const verge: [number, number][][] = [];
-  for (const line of pathNetwork(sample ? zonePathWidth : undefined)) {
+  for (const line of lines) {
     for (const run of line.runs) {
       const lift = line.kind === 'drive' ? 0.04 : line.kind === 'forest' ? 0.035 : 0.03;
       let gg = runGeo(run, line.width, lift);

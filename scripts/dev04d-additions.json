@@ -1,0 +1,4 @@
+{
+  "note": "DEV-04D W01 (proposed, owner decision W1): the only interactable id added after DEV-04C. The Wickerman hay bale (src/world/wickerFire.ts, wicker.bale): usable only while the frame is empty. The A/B/C/D suites accept exactly dev04c-additions.json + this file; any other addition or removal still fails their id checks.",
+  "interactables": ["wicker.bale"]
+}

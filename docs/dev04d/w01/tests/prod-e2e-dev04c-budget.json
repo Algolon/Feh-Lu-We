@@ -1,0 +1,282 @@
+[
+  {
+    "set": "A",
+    "k": "atticNook",
+    "calls": 42,
+    "triangles": 106020,
+    "before": {
+      "calls": 41,
+      "triangles": 99132
+    }
+  },
+  {
+    "set": "A",
+    "k": "atticCommon",
+    "calls": 40,
+    "triangles": 108298,
+    "before": {
+      "calls": 39,
+      "triangles": 101408
+    }
+  },
+  {
+    "set": "A",
+    "k": "conservatoryInside",
+    "calls": 74,
+    "triangles": 174346,
+    "before": {
+      "calls": 74,
+      "triangles": 128214
+    }
+  },
+  {
+    "set": "A",
+    "k": "conservatoryDoorDeck",
+    "calls": 183,
+    "triangles": 376456,
+    "before": {
+      "calls": 143,
+      "triangles": 205534
+    }
+  },
+  {
+    "set": "A",
+    "k": "wellnessDeck",
+    "calls": 65,
+    "triangles": 242015,
+    "before": {
+      "calls": 65,
+      "triangles": 155549
+    }
+  },
+  {
+    "set": "A",
+    "k": "saunaAccess",
+    "calls": 151,
+    "triangles": 313835,
+    "before": {
+      "calls": 148,
+      "triangles": 225826
+    }
+  },
+  {
+    "set": "A",
+    "k": "wickermanClearing",
+    "calls": 31,
+    "triangles": 205030,
+    "before": {
+      "calls": 31,
+      "triangles": 160593
+    }
+  },
+  {
+    "set": "A",
+    "k": "wickermanPath",
+    "calls": 35,
+    "triangles": 258929,
+    "before": {
+      "calls": 35,
+      "triangles": 211057
+    }
+  },
+  {
+    "set": "A",
+    "k": "frontForecourt",
+    "calls": 147,
+    "triangles": 271321,
+    "before": {
+      "calls": 139,
+      "triangles": 206032
+    }
+  },
+  {
+    "set": "A",
+    "k": "arrivalCourt",
+    "calls": 141,
+    "triangles": 262803,
+    "before": {
+      "calls": 133,
+      "triangles": 202574
+    }
+  },
+  {
+    "set": "A",
+    "k": "portugalTerrace",
+    "calls": 31,
+    "triangles": 112683,
+    "before": {
+      "calls": 31,
+      "triangles": 91423
+    }
+  },
+  {
+    "set": "A",
+    "k": "portugalApproach",
+    "calls": 33,
+    "triangles": 149901,
+    "before": {
+      "calls": 33,
+      "triangles": 119039
+    }
+  },
+  {
+    "set": "A",
+    "k": "golfVicinity",
+    "calls": 55,
+    "triangles": 277396,
+    "before": {
+      "calls": 55,
+      "triangles": 198013
+    }
+  },
+  {
+    "set": "A",
+    "k": "golfSpur",
+    "calls": 94,
+    "triangles": 359069,
+    "before": {
+      "calls": 93,
+      "triangles": 262690
+    }
+  },
+  {
+    "set": "C",
+    "k": "livingRoom",
+    "calls": 51,
+    "triangles": 175278,
+    "before": {
+      "calls": 50,
+      "triangles": 152010
+    }
+  },
+  {
+    "set": "C",
+    "k": "entrance hall",
+    "calls": 134,
+    "triangles": 260116,
+    "before": {
+      "calls": 105,
+      "triangles": 193300
+    }
+  },
+  {
+    "set": "C",
+    "k": "copaRoom",
+    "calls": 92,
+    "triangles": 274349,
+    "before": {
+      "calls": 85,
+      "triangles": 166914
+    }
+  },
+  {
+    "set": "C",
+    "k": "Copacabana bar",
+    "calls": 52,
+    "triangles": 169840,
+    "before": {
+      "calls": 52,
+      "triangles": 125519
+    }
+  },
+  {
+    "set": "C",
+    "k": "Portugal cottage",
+    "calls": 39,
+    "triangles": 124998,
+    "before": {
+      "calls": 39,
+      "triangles": 103099
+    }
+  },
+  {
+    "set": "C",
+    "k": "lakeApproach",
+    "calls": 38,
+    "triangles": 188390,
+    "before": {
+      "calls": 38,
+      "triangles": 133165
+    }
+  },
+  {
+    "set": "C",
+    "k": "lakeShore",
+    "calls": 39,
+    "triangles": 161175,
+    "before": {
+      "calls": 38,
+      "triangles": 126640
+    }
+  },
+  {
+    "set": "C",
+    "k": "woodlandRoute",
+    "calls": 33,
+    "triangles": 262582,
+    "before": {
+      "calls": 33,
+      "triangles": 190861
+    }
+  },
+  {
+    "set": "C",
+    "k": "boslustCalibration",
+    "calls": 101,
+    "triangles": 332789,
+    "before": {
+      "calls": 90,
+      "triangles": 235111
+    }
+  },
+  {
+    "set": "C",
+    "k": "campfire",
+    "calls": 27,
+    "triangles": 142747,
+    "before": {
+      "calls": 27,
+      "triangles": 108543
+    }
+  },
+  {
+    "set": "C",
+    "k": "wickerUnlit",
+    "calls": 31,
+    "triangles": 205026,
+    "before": {
+      "calls": 31,
+      "triangles": 160589
+    }
+  },
+  {
+    "set": "C",
+    "k": "wickerLit",
+    "calls": 35,
+    "triangles": 208448,
+    "before": {
+      "calls": 31,
+      "triangles": 160589
+    }
+  },
+  {
+    "set": "C",
+    "k": "wickerBurning",
+    "calls": 43,
+    "triangles": 220188,
+    "before": {
+      "calls": 31,
+      "triangles": 160589
+    }
+  },
+  {
+    "set": "C",
+    "k": "wickerPathBurning",
+    "calls": 47,
+    "triangles": 272353,
+    "before": {
+      "calls": 35,
+      "triangles": 217435
+    }
+  }
+]

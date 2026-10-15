@@ -40,6 +40,7 @@ import { buildMaquette } from './maquette';
 import { addKey, presentKey, keyLiner, linerWhenOpen, hatchDish, LINER_TOP, HATCH_DISH_FLOOR, S3_BUILDERS } from './d2props';
 import { SALON_LAYOUT, SALON_SITES } from '../content/gallery';
 import { buildEntrance, entranceBay } from './entrance';
+import { buildKitchenJuicePouch } from './kitchenJuicePouch';
 import { planChest, pottingBench, plantStand, plantEtagere, pottedPlant } from './d3b';
 import { coatStand, holdall, rucksack, deskTravelSet, jacketOverChair, planningDesk, daybed, observingTable, binoculars, stoolThrow, sweaterOverChest, washShelf, towelRing, bathCaddy } from './d3b2';
 import { wainscot, refectoryTable, gamesCabinet, dartboard, servingConsole, chinaCabinet, wallCupboards, splashback, enamelPendant, pegRailClock, panelDoor } from './d3a';
@@ -891,6 +892,7 @@ function kitchen(w: World, g: GameApi, c: Ctx) {
   // DEV-04B: kitchen chairs are the Windsor (spindle) build of the chair family, not the dining room's chair again
   for (let i = 0; i < 3; i++) { chair(c, 100.0, 98.9 + i * 1.1, GF, Math.PI / 2, '#6f8a7a', true, 'spindle', '#7a5232'); chair(c, 102.0, 98.9 + i * 1.1, GF, -Math.PI / 2, '#6f8a7a', true, 'spindle', '#7a5232'); }
   kitchenIsland(c, 101, 105.4); // same footprint and collider as before; the drawer (centre, south face) is untouched
+  buildKitchenJuicePouch(w, g); // decorative branded-neutral drink; optional inspect, no state changes
   c.col.addBox(99.65, 102.35, 104.85, 105.95, 0, 1);
   const kd = makeDrawer(w, g, { id: 'kitchen.drawer', x: 101, y: GF + 0.7, z: 104.92, yaw: Math.PI, w: 0.7, h: 0.2, d: 0.42, color: '#6f8a7a' });
   const spare = compound((b) => { box(b, k.M.paint, '#e6dcc0', 0, 0, 0, 0.1, 0.03, 0.06); box(b, k.M.paint, '#c4553d', 0, 0.03, 0, 0.07, 0.003, 0.04); });
