@@ -1,0 +1,35 @@
+{
+  "rows": [
+    {
+      "name": "outside",
+      "calls": 26,
+      "triangles": 304492,
+      "gpuSoftwareMedianMs": 671.973143,
+      "rafMedianMs": 715.2999999999884,
+      "rafFps": 1.3980148189571038,
+      "samples": 6,
+      "glError": 0
+    },
+    {
+      "name": "grove",
+      "calls": 23,
+      "triangles": 269755,
+      "gpuSoftwareMedianMs": 263.406645,
+      "rafMedianMs": 309.0999999999767,
+      "rafFps": 3.235198964736575,
+      "samples": 6,
+      "glError": 0
+    },
+    {
+      "name": "return",
+      "calls": 125,
+      "triangles": 467985,
+      "gpuSoftwareMedianMs": 646.117675,
+      "rafMedianMs": 702.2999999999884,
+      "rafFps": 1.423892923252195,
+      "samples": 6,
+      "glError": 0
+    }
+  ],
+  "errors": []
+}

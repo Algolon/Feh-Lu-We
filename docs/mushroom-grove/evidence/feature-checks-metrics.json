@@ -1,0 +1,62 @@
+{
+  "rows": [
+    {
+      "checks": {
+        "walked": {
+          "x": 180.88,
+          "y": 1.06,
+          "z": 161.81
+        },
+        "peak": 0.9999972762131959,
+        "restored": 0,
+        "progressionUnchanged": true,
+        "placements": 59,
+        "species": [
+          "wine-shelf",
+          "violet-bell",
+          "mint-lantern",
+          "rose-spire"
+        ]
+      }
+    },
+    {
+      "lifecycle": {
+        "ready": true,
+        "pausedBus": 0.0021825542207807302,
+        "insideBus": 0.44354528188705444,
+        "audibleRms": 0.02465040329819817,
+        "mutedRms": 0,
+        "voices": 5,
+        "context": "running",
+        "reduced": {
+          "motion": 0,
+          "distort": 0,
+          "clock": 0
+        },
+        "distortionDisabled": true,
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "gpuTimer": true,
+        "target": [
+          312,
+          675
+        ],
+        "buffer": [
+          390,
+          844
+        ]
+      }
+    },
+    {
+      "contextRecovery": {
+        "supported": true,
+        "shown": true,
+        "restored": {
+          "lost": false,
+          "glError": 0,
+          "amount": 0.048770575499285984
+        }
+      }
+    }
+  ],
+  "errors": []
+}

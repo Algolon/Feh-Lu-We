@@ -75,6 +75,7 @@ export interface Settings {
   moveSensitivity: number; // 0.5 .. 1.5 joystick response
   quality: 'low' | 'high';
   reducedMotion: boolean;
+  mushroomDistortion: boolean;
   muted: boolean;
   invertY: boolean;
   showCompass: boolean;
@@ -113,6 +114,7 @@ export function defaultSettings(coarsePointer = false): Settings {
     moveSensitivity: 1,
     quality: coarsePointer ? 'low' : 'high',
     reducedMotion: false,
+    mushroomDistortion: true,
     muted: false,
     invertY: false,
     showCompass: true,
@@ -299,6 +301,7 @@ export function parseSettings(text: string | null, coarse: boolean): Settings {
       moveSensitivity: clamp(r.moveSensitivity, 0.5, 1.5, d.moveSensitivity),
       quality: r.quality === 'low' || r.quality === 'high' ? r.quality : d.quality,
       reducedMotion: r.reducedMotion === true,
+      mushroomDistortion: r.mushroomDistortion !== false,
       muted: r.muted === true,
       invertY: r.invertY === true,
       showCompass: r.showCompass !== false,

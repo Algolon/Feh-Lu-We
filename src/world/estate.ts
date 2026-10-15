@@ -18,6 +18,7 @@ import { buildManor } from './manor';
 import { buildConservatory } from './conservatory';
 import { buildCottage } from './cottage';
 import { buildWellness } from './wellness';
+import { buildMushroomGrove } from './mushroomGrove';
 import { buildGrounds } from './grounds';
 import { buildForest, buildWoodlandMasses } from './forest';
 import { EstateWoods } from './estateWoods';
@@ -34,7 +35,7 @@ import { mulberry32 } from '../core/rng';
 import { estateRooms } from './roomdefs';
 import { ESTATE, SITES, DRIVEWAY, TERRACE, GF, HILL, WOODS, lakeQ, COTTAGE_PAD, WELLNESS } from './layout';
 import { FOREST_PATHS, TCELL, TERRAIN_DIMS, gridAt, gridHeight, inHole, terrainHeight, walkHeight, entranceMound } from './terrain';
-import { FOOTPRINTS, vegetationClear } from './footprints';
+import { FOOTPRINTS, vegetationClear, mushroomKeepout } from './footprints';
 import { inRect as inR } from './geom2d';
 import { beginOpenings, wallArtConflicts } from './openings';
 import { pathNetwork, type NetLine, type Run } from './junctions';
@@ -84,7 +85,7 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   // ?ext=base keeps the DEV-02 blob woodland for side-by-side comparison (review=boslust "Toon oud")
   const woods = ART.ext === 'sample' ? new EstateWoods() : null;
   if (woods) {
-    veg.capture = (t, chunk) => { if (t.kind === 'cypress') return false; woods.addTree(t, chunk); return true; };
+    veg.capture = (t, chunk) => { if (t.kind === 'cypress') return false; if (!mushroomKeepout(t.x, t.z)) woods.addTree(t, chunk); return true; };
     const inWoodland = (x: number, z: number) => z < ESTATE.forestEdge + 1 || DENSE_WOODS.some((m) => inR(x, z, m, 1));
     veg.drop = (x, z, kind) => kind !== 'cap' && kind !== 'stem' && inWoodland(x, z);
   }
@@ -104,6 +105,7 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   veg.drop = null; veg.capture = null;
   woods?.build(w, forestC);
   finishZone(w);
+  buildMushroomGrove(w, g);
   buildGround(w, woods ? new TreeGrid(woods.points()) : null);
 
   for (const c of [ground, manorC, manorIn, manorB, consC, cotC, forestC, gardenC, groundsC, ugC]) c.b.build(w.scene);

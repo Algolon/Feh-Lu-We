@@ -1,0 +1,4 @@
+# Intermediate iteration captures are superseded by final/.
+/*.jpg
+/feature-metrics.json
+/final/clip-frames/

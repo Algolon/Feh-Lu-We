@@ -6,9 +6,9 @@ import { FIELD_FOOTSTEP_CLIPS } from '../src/audio/fieldFootsteps';
 describe('footsteps R04 mix / single-contact grass', () => {
   it('ships the exact edited three-contact grass MP3 without base64 damage', () => {
     expect(GRASS_R04_MP3.length).toBe(7228);
-    const file = Buffer.from(GRASS_R04_MP3, 'base64');
+    const file = Uint8Array.from(atob(GRASS_R04_MP3), c => c.charCodeAt(0));
     expect(file.byteLength).toBe(5420);
-    expect(file.subarray(0, 3).toString('ascii')).toBe('ID3');
+    expect(new TextDecoder('ascii').decode(file.subarray(0, 3))).toBe('ID3');
     expect(createHash('sha256').update(file).digest('hex'))
       .toBe('7c571c18fd97fb3fe6fd61d047db82f0a4123750517584d89d825a0dfed1d78d');
   });

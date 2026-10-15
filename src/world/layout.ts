@@ -189,7 +189,21 @@ export interface Route { id: string; pts: [number, number][]; width: number; pro
  * overrides the height fields in a corridor around the line (max grade 8 %). The +0.15 → 0 step off a platform is the
  * platform edge itself, so profiles start/end at ground level 0 there.
  */
+/** Mushroom grove: branch from the NE bend of eastGardenLoop, inside eastForest.
+ * Map is north-up (X east, +Z north); terrain heights remain the original sampled heightfield. */
+// R04 perimeter follows the surveyed trees and the estate's north/east fence.
+// radius stays 13: the original tree-removal reservation must NOT grow with the ecosystem.
+export const MUSHROOM = { x: 179, z: 160, radius: 13,
+  area: [[172,149],[188.137,148.983],[198.5,148.5],[198.5,178.5],
+    [162.589,178.5],[162.589,175.673],[161.079,166.835],[163.373,158.42]] as [number,number][],
+  landmarks: [{x:188.13735219743103,z:148.98340185033157},
+    {x:163.37257224088535,z:158.4195173094049},
+    {x:161.07913819653913,z:166.83486262196675},
+    {x:162.58925312059,z:175.6726163038984}],
+  approach: [[166, 140], [172, 149], [178, 157], [179, 160]] as [number, number][] };
+
 export const ROUTES: Route[] = [
+  { id: 'mushroomApproach', pts: MUSHROOM.approach, width: 1.7, mandatory: false },
   { id: 'cottageOut', pts: [[80, 113.5], [62, 122], [40, 130], [18, 143], [18, 152], [25, 152]], width: 1.6, mandatory: false,
     profile: { d: [0, 2, 20, 43.32, 68.87, 75.87, 84.87], h: [0, 0, 0, 1.67, 3.5, 4, 4] } },
   { id: 'cottageReturn', pts: [[25, 152], [18, 152], [18, 168], [48, 168], [79, 160], [90, 139], [90, 128]], width: 1.5, mandatory: false,

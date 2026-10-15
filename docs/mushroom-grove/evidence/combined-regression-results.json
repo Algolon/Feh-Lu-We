@@ -1,0 +1,517 @@
+[
+  {
+    "name": "F01 saved-open doors are visually open after reload",
+    "ok": true,
+    "detail": "{\"library\":-1.6,\"front\":1.6}"
+  },
+  {
+    "name": "F02 upstairs bedroom objects not reachable through the ceiling",
+    "ok": true,
+    "detail": "[null,null,null]"
+  },
+  {
+    "name": "F03 selected key does not block opening an unlocked door",
+    "ok": true,
+    "detail": "{\"before\":false,\"after\":true,\"label\":\"Openen\"}"
+  },
+  {
+    "name": "F04 no stale delayed submission closes a newer modal",
+    "ok": true,
+    "detail": "{\"wrong\":0,\"modal\":\"Tas\"}"
+  },
+  {
+    "name": "B1 closing a door with the player in its swing path is refused",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "B2 no taking through closed glass/cabinet",
+    "ok": true,
+    "detail": "{\"closed\":\"cab.upper\"}"
+  },
+  {
+    "name": "F10 reduced motion holds flames steady but visible + UI transitions off",
+    "ok": true,
+    "detail": "{\"n\":14,\"motion\":0,\"visibleLit\":7,\"cls\":true}"
+  },
+  {
+    "name": "F12 unknown saved ids are dropped; inventory UI works",
+    "ok": true,
+    "detail": "{\"inv\":[\"invitation\",\"torch\",\"matches\",\"notebook\",\"frontKey\"],\"n\":5,\"slots\":{\"svc.tafel\":null}}"
+  },
+  {
+    "name": "F07 playtime counts panel reading as active and pause as paused",
+    "ok": true,
+    "detail": "{\"activeDuringPanel\":4567,\"pausedDuringPause\":4133,\"activeDuringPause\":0}"
+  },
+  {
+    "name": "B4 context loss pauses with a recovery dialog and resumes on restore",
+    "ok": true,
+    "detail": "{\"shown\":\"Beeld onderbroken\",\"after\":true,\"lost\":false}"
+  },
+  {
+    "name": "B4 repeated Start presses create one game loop",
+    "ok": true,
+    "detail": "rAF/s 2 (software-rendered)"
+  },
+  {
+    "name": "F05 stationary tap on the left side of the screen interacts",
+    "ok": true,
+    "detail": "tap at 276,212"
+  },
+  {
+    "name": "L1 seen from the hall, the living room keeps real light and its hearth flame stays visible (open arch)",
+    "ok": true,
+    "detail": "{\"room\":\"hall\",\"assigned\":[\"lamp.hallChandelier\",\"fixed.94.88.88.20\",\"fixed.85.12.95.60\",\"lamp.livingFloor\"],\"livingLit\":true,\"flameVisible\":true,\"defaultLit\":true}"
+  },
+  {
+    "name": "L2 looking away and back does not toggle or reorder lights",
+    "ok": true,
+    "detail": "{\"before\":\"lamp.hallChandelier,fixed.94.88.88.20,fixed.85.12.95.60,lamp.livingFloor\",\"changes\":0}"
+  },
+  {
+    "name": "L3 crossing the threshold changes nothing abruptly (smooth light, flame always visible)",
+    "ok": true,
+    "detail": "{\"room\":\"living\",\"maxJump\":1.88,\"slotChanges\":1,\"hiddenFrames\":0}"
+  },
+  {
+    "name": "L4 closed door blocks the neighbouring room light; open door lets it through",
+    "ok": true,
+    "detail": "{\"room\":\"lobby\",\"closed\":false,\"open\":true}"
+  },
+  {
+    "name": "L5 fixture glow follows logical state, not light-slot ownership",
+    "ok": true,
+    "detail": "{\"assigned\":false,\"lit\":true,\"glow\":\"ffd27a\"}"
+  },
+  {
+    "name": "L6 decorative candles burn; a doused fireplace stays doused after reload",
+    "ok": true,
+    "detail": "{\"diningCandles\":true,\"livingAfterReload\":false}"
+  },
+  {
+    "name": "walkthrough tutorial \u2192 finale (A \u2192 B \u2192 C)",
+    "ok": true,
+    "detail": "70 steps, 31 clues, 6.2 min of simulated walking/acting in the estate (no reading time)"
+  },
+  {
+    "name": "walkthrough: no console errors / 404s",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "collision: wall blocks movement",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "collision: closed door blocks, open door passes",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "collision: door will not close onto the player",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "collision: grand stair reaches the upper floor and back",
+    "ok": true,
+    "detail": "up 3.35, down 0.15"
+  },
+  {
+    "name": "collision: gallery railing prevents falling",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "collision: the sealed basement door blocks the stair",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "collision: pool edge is solid, no fall-through",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "collision: conservatory glass is solid",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "collision: BOSLUST door blocks while locked",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "terrain: the hill flank is walkable (feet follow the ground)",
+    "ok": true,
+    "detail": "y 6.1 at z 30.8"
+  },
+  {
+    "name": "interaction: no pickup through a wall",
+    "ok": true,
+    "detail": "reticle target: null"
+  },
+  {
+    "name": "save: pickups survive reload and stay removed from the world",
+    "ok": true,
+    "detail": "[\"invitation\",\"torch\"]"
+  },
+  {
+    "name": "save: drawer state survives reload",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "save: position restored",
+    "ok": true,
+    "detail": "{\"x\":1.44,\"y\":0,\"z\":3.09}"
+  },
+  {
+    "name": "save: upstairs pose + puzzle flags restored",
+    "ok": true,
+    "detail": "y=3.35, objective=\"Pak het landgoedregister en de schuursleutel uit de lade in de hal.\""
+  },
+  {
+    "name": "save: invalid saved pose falls back to a checkpoint",
+    "ok": true,
+    "detail": "{\"x\":82.4,\"y\":0.15,\"z\":97.5}"
+  },
+  {
+    "name": "save: underground pose restored",
+    "ok": true,
+    "detail": "{\"x\":63,\"y\":-3.4,\"z\":30,\"room\":\"entry\"}"
+  },
+  {
+    "name": "save: v3 \u2192 v4 migration keeps tools, opens retained rewards, archives the old ending, offers the new chapter",
+    "ok": true,
+    "detail": "{\"title\":\"Het landgoed is veranderd\",\"inv\":[\"invitation\",\"torch\",\"matches\",\"notebook\",\"frontKey\"],\"pos\":{\"x\":90,\"y\":0,\"z\":3},\"stone\":true,\"archived\":true,\"finished\":false}"
+  },
+  {
+    "name": "save: corrupted save is ignored safely",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "save: restart sets progress aside (no blanket wipe) and offers to restore it",
+    "ok": true,
+    "detail": "{\"save\":null,\"backup\":true,\"cont\":false,\"restore\":true}"
+  },
+  {
+    "name": "save: restoring the set-aside progress continues the old game",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "touch: simultaneous joystick move + look drag",
+    "ok": true,
+    "detail": "moved 4.59 m, turned 25\u00b0"
+  },
+  {
+    "name": "touch: release stops movement",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "touch: touchcancel clears joystick (no stuck movement)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "touch: drag starting on an object looks around instead of picking it",
+    "ok": true,
+    "detail": "yaw \u0394 38\u00b0"
+  },
+  {
+    "name": "touch: direct tap on a visible nearby object picks it up",
+    "ok": true,
+    "detail": "tap at 483,194; reticle target was null"
+  },
+  {
+    "name": "touch: open overlay blocks movement and look",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "touch: inventory interaction (torch on via bag)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "touch: HUD buttons are at least 48 px",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "touch: pause and resume",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "touch: portrait resize keeps canvas + controls usable",
+    "ok": true,
+    "detail": "{\"w\":390,\"h\":844,\"aspect\":0.46208530805687204,\"btn\":true}"
+  },
+  {
+    "name": "WebGL failure path (forced) shows an understandable message",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "WebGL failure path (browser with WebGL disabled)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "render low (phone default): gate (driveway)",
+    "ok": true,
+    "detail": "110 calls, 327800 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): gate (driveway)",
+    "ok": false,
+    "detail": "119 calls, 530253 tris"
+  },
+  {
+    "name": "render low (phone default): forecourt \u2192 manor",
+    "ok": true,
+    "detail": "138 calls, 263343 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): forecourt \u2192 manor",
+    "ok": false,
+    "detail": "171 calls, 478018 tris"
+  },
+  {
+    "name": "render low (phone default): entrance hall",
+    "ok": true,
+    "detail": "134 calls, 260116 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): entrance hall",
+    "ok": false,
+    "detail": "194 calls, 475248 tris"
+  },
+  {
+    "name": "render low (phone default): library",
+    "ok": true,
+    "detail": "57 calls, 192990 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): library",
+    "ok": true,
+    "detail": "88 calls, 391214 tris"
+  },
+  {
+    "name": "render low (phone default): garden \u2192 manor + conservatory",
+    "ok": true,
+    "detail": "139 calls, 289666 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): garden \u2192 manor + conservatory",
+    "ok": true,
+    "detail": "167 calls, 412555 tris"
+  },
+  {
+    "name": "render low (phone default): forest (shed area)",
+    "ok": true,
+    "detail": "37 calls, 187131 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): forest (shed area)",
+    "ok": false,
+    "detail": "64 calls, 501701 tris"
+  },
+  {
+    "name": "render low (phone default): BOSLUST cut",
+    "ok": true,
+    "detail": "98 calls, 308140 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): BOSLUST cut",
+    "ok": false,
+    "detail": "115 calls, 506391 tris"
+  },
+  {
+    "name": "render low (phone default): conservatory pool",
+    "ok": true,
+    "detail": "108 calls, 292757 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): conservatory pool",
+    "ok": false,
+    "detail": "183 calls, 564556 tris"
+  },
+  {
+    "name": "render low (phone default): gathering room",
+    "ok": true,
+    "detail": "30 calls, 19320 tris"
+  },
+  {
+    "name": "render high (desktop, +shadows): gathering room",
+    "ok": true,
+    "detail": "41 calls, 32422 tris"
+  },
+  {
+    "name": "art sample: living-room collision identical to the original room",
+    "ok": true,
+    "detail": "48 colliders"
+  },
+  {
+    "name": "art sample: same interactables and light sources (ids, positions, intensities)",
+    "ok": true,
+    "detail": "14 interactables, 5 lights"
+  },
+  {
+    "name": "art sample: reticle targets the same objects from the same poses",
+    "ok": true,
+    "detail": "{\"base\":[\"inspect.mantel\",\"fire.living\",\"lamp.livingFloor\",\"mem.living.photo\",null],\"sample\":[\"inspect.mantel\",\"fire.living\",\"lamp.livingFloor\",\"mem.living.photo\",null]}"
+  },
+  {
+    "name": "art sample: mantel clue readable via the inspect target, drawer opens with Veer\u2013Dennenappel\u2013Kopje",
+    "ok": true,
+    "detail": "{\"clue\":true,\"solved\":true}"
+  },
+  {
+    "name": "art sample: doused fire and switched-off lamp persist through reload; relighting restores flame and shade glow",
+    "ok": true,
+    "detail": "{\"t1\":{\"firstOff\":true,\"lamp\":false},\"t2\":{\"before\":{\"fire\":false,\"shadeEm\":\"000000\"},\"fireLitAgain\":true,\"shadeOn\":\"d9973f\"}}"
+  },
+  {
+    "name": "art sample: reduced motion holds the hearth flame and embers visible",
+    "ok": true,
+    "detail": "{\"visible\":true,\"embers\":3}"
+  },
+  {
+    "name": "art sample: from the hall the sample room is drawn, lit, and its flame visible",
+    "ok": true,
+    "detail": "{\"room\":\"hall\",\"livingLit\":true,\"flame\":true,\"roomMeshes\":11}"
+  },
+  {
+    "name": "art sample: sofa, armchair, hearth and table block movement",
+    "ok": true,
+    "detail": "{\"sofa\":{\"x\":79.75,\"z\":86.7},\"armchair\":{\"x\":77.2,\"z\":83},\"hearth\":{\"x\":73.5,\"z\":86.7},\"table\":{\"x\":77.3,\"z\":85.65}}"
+  },
+  {
+    "name": "art sample: no console errors",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "review mode: starts in the living-room doorway with a comparison bar; toggles work",
+    "ok": true,
+    "detail": "{\"r1\":{\"room\":\"hall\",\"inv\":5,\"bar\":true},\"r2\":{\"pose\":{\"x\":85.6,\"y\":0.15,\"z\":88.5,\"yaw\":-1.5707963267948966,\"pitch\":-0.04},\"tm\":7}}"
+  },
+  {
+    "name": "review mode: the player's own save, backup and settings are untouched (sandboxed state)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "review mode: normal entry still offers \"Verder spelen\" for the untouched save, no review bar",
+    "ok": true,
+    "detail": "{\"bar\":false,\"cont\":true}"
+  },
+  {
+    "name": "boslust sample: zone collision identical to the original (trees, stumps, cut walls, headwall, signpost, stair)",
+    "ok": true,
+    "detail": "160 colliders"
+  },
+  {
+    "name": "boslust sample: same interactables in the zone",
+    "ok": true,
+    "detail": "15: boslust.lock, door.boslust, door.gathering, door.shed, inspect.boslust, inspect.fork, inspect.plateDiagram, inspect.toolboard, pk.journal, pk.kindling, plate.boek, plate.boom, plate.tafel, plates.lever, shed.drawer"
+  },
+  {
+    "name": "boslust sample: every original light kept; only the two fixed entrance lanterns added",
+    "ok": true,
+    "detail": "{\"added\":[\"fixed.boslust.61.62 61.62 2.2 17.78 1.35 5.5\",\"fixed.boslust.64.38 64.38 2.2 17.78 1.35 5.5\"],\"removed\":[]}"
+  },
+  {
+    "name": "boslust sample: old vegetation left outside the zone is unchanged (subset of base; trees moved to the woodland kit)",
+    "ok": true,
+    "detail": "1024/7878 instances"
+  },
+  {
+    "name": "boslust sample: reticle targets the same objects from the same poses",
+    "ok": true,
+    "detail": "{\"base\":[\"inspect.fork\",\"inspect.boslust\",\"boslust.lock\",\"door.boslust\",\"inspect.fork\"],\"sample\":[\"inspect.fork\",\"inspect.boslust\",\"boslust.lock\",\"door.boslust\",\"inspect.fork\"]}"
+  },
+  {
+    "name": "boslust sample: fork clue, inscription, cover, cipher 2413, door and stair work by walking",
+    "ok": true,
+    "detail": "{\"fork\":true,\"inscription\":true,\"cover\":true,\"open\":true,\"under\":true}"
+  },
+  {
+    "name": "boslust sample: save restores underground and on the approach (sample world rebuilt)",
+    "ok": true,
+    "detail": "{\"sv\":{\"x\":63.000017976244244,\"y\":-3.4,\"z\":29.794078976737893,\"yaw\":0.432585410138943,\"pitch\":-0.2858695845973646},\"back1\":{\"pose\":{\"x\":63.000017976244244,\"y\":-3.4,\"z\":29.794078976737893,\"yaw\":0.432585410138943,\"pitch\":-0.2858695845973646},\"open\":true,\"trees\":1},\"back2\":{\"x\":60.5,\"y\":0,\"z\":9.6,\"yaw\":0.432585410138943,\"pitch\":-0.2858695845973646}}"
+  },
+  {
+    "name": "boslust sample: entrance lanterns lit from the cut mouth and the door; trees and understory drawn at every pose",
+    "ok": true,
+    "detail": "{\"fork\":{\"lanterns\":2,\"trees\":355,\"near\":16,\"under\":110},\"cutMouth\":{\"lanterns\":2,\"trees\":292,\"near\":15,\"under\":41},\"door\":{\"lanterns\":2,\"trees\":280,\"near\":12,\"under\":46},\"reverse\":{\"lanterns\":2,\"trees\":120,\"near\":18,\"under\":104}}"
+  },
+  {
+    "name": "boslust sample: reduced motion keeps the entrance lanterns steady and lit",
+    "ok": true,
+    "detail": "{\"a\":2,\"on\":true,\"flicker\":[0,0]}"
+  },
+  {
+    "name": "boslust sample: stumps inside a tree's base are treated (nurse/absorbed) and the drawing covers their unchanged collider",
+    "ok": true,
+    "detail": "4 in this layout [{\"at\":[56.48,55.06],\"tree\":\"oak.1\",\"treatment\":\"absorbed\",\"collider\":true,\"covered\":true},{\"at\":[146.75,57.42],\"tree\":\"oak.1\",\"treatment\":\"absorbed\",\"collider\":true,\"covered\":true},{\"at\":[175.72,7.68],\"tree\":\"oak.2\",\"treatment\":\"absorbed\",\"collider\":true,\"covered\":true},{\"at\":[109.22,57.62],\"tree\":\"oak.1\",\"treatment\":\"nurse\",\"collider\":true,\"covered\":true}]"
+  },
+  {
+    "name": "boslust sample: multi-draw path draws all vegetation in 2 calls (one BatchedMesh for trees+bushes, one for plants)",
+    "ok": true,
+    "detail": "{\"path\":\"multi-draw\",\"multiDraw\":true,\"batched\":2,\"instanced\":0,\"total\":1717,\"poses\":{\"fork\":{\"trees\":355,\"plants\":110,\"tris\":164414,\"calls\":2},\"cutMouth\":{\"trees\":292,\"plants\":41,\"tris\":140777,\"calls\":2},\"door\":{\"trees\":280,\"plants\":46,\"tris\":125904,\"calls\":2},\"reverse\":{\"trees\":120,\"plants\":104,\"tris\":95247,\"calls\":2},\"busy\":{\"trees\":348,\"plants\":127,\"tris\":175831,\"calls\":2}}}"
+  },
+  {
+    "name": "boslust sample: ?multidraw=0 really takes the instanced fallback (extension hidden, InstancedMesh groups, no BatchedMesh)",
+    "ok": true,
+    "detail": "{\"path\":\"instanced\",\"multiDraw\":false,\"batched\":0,\"instanced\":68}"
+  },
+  {
+    "name": "boslust sample: fallback draws the same trees, bushes, plants and triangles as multi-draw at 5 poses (phone quality)",
+    "ok": true,
+    "detail": "{\"fork\":{\"md\":{\"trees\":355,\"plants\":110,\"tris\":164414,\"calls\":2},\"fb\":{\"trees\":355,\"plants\":110,\"tris\":164414,\"calls\":53}},\"cutMouth\":{\"md\":{\"trees\":292,\"plants\":41,\"tris\":140777,\"calls\":2},\"fb\":{\"trees\":292,\"plants\":41,\"tris\":140777,\"calls\":47}},\"door\":{\"md\":{\"trees\":280,\"plants\":46,\"tris\":125904,\"calls\":2},\"fb\":{\"trees\":280,\"plants\":46,\"tris\":125904,\"calls\":45}},\"reverse\":{\"md\":{\"trees\":120,\"plants\":104,\"tris\":95247,\"calls\":2},\"fb\":{\"trees\":120,\"plants\":104,\"tris\":95247,\"calls\":49}},\"busy\":{\"md\":{\"trees\":348,\"plants\":127,\"tris\":175831,\"calls\":2},\"fb\":{\"trees\":348,\"plants\":127,\"tris\":175831,\"calls\":54}}}"
+  },
+  {
+    "name": "boslust sample: with shadow maps the fallback still culls (superset of the multi-draw view set, < all trees)",
+    "ok": true,
+    "detail": "{\"total\":1717,\"fork\":{\"md\":355,\"fb\":400},\"cutMouth\":{\"md\":292,\"fb\":342},\"door\":{\"md\":280,\"fb\":325},\"reverse\":{\"md\":120,\"fb\":136},\"busy\":{\"md\":348,\"fb\":424}}"
+  },
+  {
+    "name": "boslust sample: LOD transitions by walking: far \u2192 mid \u2192 near once each, near held to 19 m on the way back (3 m hysteresis), both paths",
+    "ok": false,
+    "detail": "{\"fallback\":{\"seq\":[{\"lod\":1,\"d\":33.9},{\"lod\":0,\"d\":19.5}],\"atNear\":{\"lod\":0,\"d\":19.5},\"held\":0,\"dHeld\":17.2,\"back\":0,\"dBack\":20.7},\"multiDraw\":{\"seq\":[{\"lod\":2,\"d\":33.9},{\"lod\":1,\"d\":33.3},{\"lod\":0,\"d\":19.5}],\"atNear\":{\"lod\":0,\"d\":19.5},\"held\":0,\"dHeld\":17.2,\"back\":0,\"dBack\":20.7}}"
+  },
+  {
+    "name": "boslust sample: per-instance culling follows turning, and an idle camera uploads no instance buffers (both paths)",
+    "ok": true,
+    "detail": "{\"multiDraw\":{\"toward\":355,\"away\":104,\"idleUploads\":false},\"fallback\":{\"toward\":355,\"away\":104,\"idleUploads\":false}}"
+  },
+  {
+    "name": "boslust sample: no console errors",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "review=boslust: starts at the fork with the sample, bar toggles old/new at the same pose, temporary progress opens the cover",
+    "ok": true,
+    "detail": "{\"r1\":{\"pose\":{\"x\":53.2,\"y\":0.15829448699951162,\"z\":6.8,\"yaw\":0.75,\"pitch\":-0.03},\"trees\":1,\"bar\":true,\"strip\":true},\"r2\":{\"trees\":0,\"pose\":{\"x\":53.2,\"y\":0.15829448699951162,\"z\":6.8,\"yaw\":0.75,\"pitch\":-0.03}},\"r3\":{\"cover\":true}}"
+  },
+  {
+    "name": "review=boslust: the player's own save, backup and settings are untouched (sandboxed state)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "review=boslust: normal entry afterwards still offers \"Verder spelen\", no review bar",
+    "ok": true,
+    "detail": "{\"bar\":false,\"cont\":true}"
+  }
+]
