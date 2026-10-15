@@ -554,6 +554,7 @@ export class UI {
       <label class="set">Joystickgevoeligheid <input type="range" min="0.5" max="1.5" step="0.05" value="${s.moveSensitivity}" data-k="moveSensitivity"></label>
       <label class="set">Hoge kwaliteit (schaduwen, scherper beeld) <input type="checkbox" ${s.quality === 'high' ? 'checked' : ''} data-k="quality"></label>
       <label class="set">Minder beweging <input type="checkbox" ${s.reducedMotion ? 'checked' : ''} data-k="reducedMotion"></label>
+      <label class="set">Dromerige schermvervorming <input type="checkbox" ${s.mushroomDistortion ? 'checked' : ''} data-k="mushroomDistortion"></label>
       <label class="set">Kompas tonen <input type="checkbox" ${s.showCompass ? 'checked' : ''} data-k="showCompass"></label>
       <label class="set">Kijkrichting omkeren <input type="checkbox" ${s.invertY ? 'checked' : ''} data-k="invertY"></label>
       <label class="set">Geluid uit <input type="checkbox" ${s.muted ? 'checked' : ''} data-k="muted"></label>

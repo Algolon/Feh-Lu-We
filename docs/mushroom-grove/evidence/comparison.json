@@ -1,0 +1,142 @@
+[
+  {
+    "name": "outside",
+    "quality": "low",
+    "baselineCalls": 14,
+    "featureCalls": 26,
+    "deltaCalls": 12,
+    "baselineTriangles": 119149,
+    "featureTriangles": 256439,
+    "deltaTriangles": 137290
+  },
+  {
+    "name": "approach",
+    "quality": "low",
+    "baselineCalls": 13,
+    "featureCalls": 25,
+    "deltaCalls": 12,
+    "baselineTriangles": 108450,
+    "featureTriangles": 246909,
+    "deltaTriangles": 138459
+  },
+  {
+    "name": "halfway",
+    "quality": "low",
+    "baselineCalls": 12,
+    "featureCalls": 25,
+    "deltaCalls": 13,
+    "baselineTriangles": 122789,
+    "featureTriangles": 232337,
+    "deltaTriangles": 109548
+  },
+  {
+    "name": "entrance",
+    "quality": "low",
+    "baselineCalls": 11,
+    "featureCalls": 23,
+    "deltaCalls": 12,
+    "baselineTriangles": 128868,
+    "featureTriangles": 224940,
+    "deltaTriangles": 96072
+  },
+  {
+    "name": "grove",
+    "quality": "low",
+    "baselineCalls": 11,
+    "featureCalls": 22,
+    "deltaCalls": 11,
+    "baselineTriangles": 121956,
+    "featureTriangles": 220428,
+    "deltaTriangles": 98472
+  },
+  {
+    "name": "return-view",
+    "quality": "low",
+    "baselineCalls": 112,
+    "featureCalls": 125,
+    "deltaCalls": 13,
+    "baselineTriangles": 302468,
+    "featureTriangles": 422414,
+    "deltaTriangles": 119946
+  },
+  {
+    "name": "exit",
+    "quality": "low",
+    "baselineCalls": 133,
+    "featureCalls": 133,
+    "deltaCalls": 0,
+    "baselineTriangles": 233978,
+    "featureTriangles": 234078,
+    "deltaTriangles": 100
+  },
+  {
+    "name": "outside",
+    "quality": "high",
+    "baselineCalls": 45,
+    "featureCalls": 57,
+    "deltaCalls": 12,
+    "baselineTriangles": 270208,
+    "featureTriangles": 397804,
+    "deltaTriangles": 127596
+  },
+  {
+    "name": "approach",
+    "quality": "high",
+    "baselineCalls": 30,
+    "featureCalls": 42,
+    "deltaCalls": 12,
+    "baselineTriangles": 263742,
+    "featureTriangles": 390318,
+    "deltaTriangles": 126576
+  },
+  {
+    "name": "halfway",
+    "quality": "high",
+    "baselineCalls": 25,
+    "featureCalls": 38,
+    "deltaCalls": 13,
+    "baselineTriangles": 276098,
+    "featureTriangles": 356178,
+    "deltaTriangles": 80080
+  },
+  {
+    "name": "entrance",
+    "quality": "high",
+    "baselineCalls": 21,
+    "featureCalls": 33,
+    "deltaCalls": 12,
+    "baselineTriangles": 294826,
+    "featureTriangles": 355086,
+    "deltaTriangles": 60260
+  },
+  {
+    "name": "grove",
+    "quality": "high",
+    "baselineCalls": 18,
+    "featureCalls": 29,
+    "deltaCalls": 11,
+    "baselineTriangles": 291437,
+    "featureTriangles": 354097,
+    "deltaTriangles": 62660
+  },
+  {
+    "name": "return-view",
+    "quality": "high",
+    "baselineCalls": 119,
+    "featureCalls": 132,
+    "deltaCalls": 13,
+    "baselineTriangles": 477832,
+    "featureTriangles": 561966,
+    "deltaTriangles": 84134
+  },
+  {
+    "name": "exit",
+    "quality": "high",
+    "baselineCalls": 165,
+    "featureCalls": 166,
+    "deltaCalls": 1,
+    "baselineTriangles": 376843,
+    "featureTriangles": 369491,
+    "deltaTriangles": -7352
+  }
+]
