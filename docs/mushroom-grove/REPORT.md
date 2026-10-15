@@ -1,5 +1,7 @@
 # Mushroom Grove R01 — implementation and validation
 
+Publication update: see [PUBLISH.md](PUBLISH.md) for the pushed branch and private live phone test.
+
 Status: implemented on local branch `feature/mushroom-grove-r01`. Not merged, deployed or pushed. Source commit: `f56b362bc19647ff73d567d6b790933b52a76d2e`. Base: `6b8aa3d664c0785039e32981ce71192aa254ac60`, the repository default / production branch `ccr-75ef4113-kfkimm` when work began. An automatic approval review blocked the GitHub push because the destination was not explicitly confirmed; no alternate upload to GitHub was attempted. The review package includes an applicable source patch.
 
 ## Location and scope
