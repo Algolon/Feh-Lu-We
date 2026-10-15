@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { World, type GameApi } from '../interactions/world';
-import { BONG_HIT_BUBBLES, BONG_HIT_WATER_LEVEL, BONG_HIT_BREATH_LEVEL, BONG_RIPPIE_ASSET } from '../audio/audio';
+import { BONG_HIT_BUBBLES, BONG_HIT_WATER_LEVEL, BONG_HIT_BREATH_LEVEL } from '../audio/audio';
 import { BONG_ACTION_ID, BONG_ACTION_COOLDOWN_MS, registerGravityBongAction } from './gravityBongInteraction';
 
 afterEach(() => vi.restoreAllMocks());
