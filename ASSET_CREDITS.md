@@ -12,7 +12,7 @@ two licensed outdoor-footstep recordings are edited and bundled in the game (not
 | Symbols / pictograms | Original SVG path data, drawn to canvas and inline SVG | `src/content/symbols.ts` |
 | Clue diagrams | Inline SVG generated in code | `src/ui/diagrams.ts` |
 | Sound effects and ambience (except outdoor footsteps) | WebAudio oscillators + filtered noise, synthesized at runtime | `src/audio/audio.ts` |
-| Grass and dirt footfalls | Four edited, mono, compressed field-recording excerpts played by WebAudio | `src/audio/fieldFootsteps*.ts`; credits below |
+| Grass and dirt footfalls | Five active edited, mono, compressed field-recording excerpts played by WebAudio | `src/audio/fieldFootsteps*.ts`, `src/audio/grassR04*.ts`; credits below |
 | Fonts | System font stack (Georgia/Palatino fallbacks); no web fonts loaded | `src/ui/style.css` |
 | Favicon | Inline SVG data URI | `index.html` |
 
@@ -36,9 +36,10 @@ They are documentation only; the game does not load them and they are not part o
 
 ## Licensed source recordings — outdoor footsteps
 
-The following user-supplied recordings were edited into four short original in-game step clips
-(two per surface) with per-step normalization, high-pass filtering and click-free fades.
-They are embedded in the game's code bundle as one compact MP3 sample bank; they are **not** provided
+The following user-supplied recordings were edited into five active short step clips:
+three isolated grass contacts (~290 ms each, avoiding double-stumble scuffles) and two unchanged dirt contacts.
+Grass is high-pass/band-pass filtered, levelled and given short fades. Dirt playback is 30% quieter
+than the previous build. Two compact MP3 banks are embedded directly in the build and are **not** provided
 as a standalone sound-effects library. The full original tracks are not shipped.
 
 | In-game surface | Source and creator | License |
