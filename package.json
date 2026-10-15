@@ -21,7 +21,8 @@
     "e2e:dev04c": "node scripts/e2e-dev04c.mjs",
     "e2e:dev04d": "node scripts/e2e-dev04d.mjs",
     "views:dev02": "node scripts/dev02-views.mjs",
-    "e2e:dev04d-w01": "node scripts/e2e-dev04d-w01.mjs"
+    "e2e:dev04d-w01": "node scripts/e2e-dev04d-w01.mjs",
+    "e2e:dev04d-w01-release": "node scripts/e2e-dev04d-w01-release.mjs"
   },
   "engines": {
     "node": ">=20.19"
