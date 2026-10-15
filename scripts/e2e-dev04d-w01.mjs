@@ -10,6 +10,7 @@
 //   3. persistence: reload in READY / RING_LIT / CHARRED / EMPTY_FRAME, while carrying, mid-burn; old-save fixtures;
 //   4. audio lifecycle (computed, headless-safe): ritual nodes built on ignition, silent and released far away and after
 //      the aftermath; the campfire loop untouched; 5. ids (131), collision, reduced motion; 6. render budgets per stage.
+import { ADDITIONS } from './interactable-additions.mjs';
 import { chromium } from 'playwright-core';
 import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { lowViewWithinBudget } from './performance-budget.mjs';
@@ -19,7 +20,7 @@ const OUT = process.env.E2E_OUT ?? 'scripts/out/dev04d-w01';
 mkdirSync(OUT, { recursive: true });
 const helpers = readFileSync(new URL('./e2e-helpers.js', import.meta.url), 'utf8');
 const baseline = JSON.parse(readFileSync(new URL('./dev04a-baseline.json', import.meta.url), 'utf8'));
-const additions = ['./dev04c-additions.json', './dev04d-additions.json'].flatMap((f) => JSON.parse(readFileSync(new URL(f, import.meta.url), 'utf8')).interactables);
+const additions = ADDITIONS; // scripts/interactable-additions.mjs: DEV-04C + W01 + optional production vignettes
 const exe = process.env.CHROME ?? '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
 const browser = await chromium.launch({ executablePath: exe, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--autoplay-policy=no-user-gesture-required'] });
 const results = [];

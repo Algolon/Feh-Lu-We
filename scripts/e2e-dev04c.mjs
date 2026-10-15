@@ -1,3 +1,4 @@
+import { ADDITIONS } from './interactable-additions.mjs';
 import { lowViewWithinBudget, cameraRegressionWithinBudget } from './performance-budget.mjs';
 // DEV-04C atmosphere, authored surfaces & interactive setpieces: browser suite against the production build
 // (npm run build && npm run preview). Usage: node scripts/e2e-dev04c.mjs [baseUrl]   (E2E_OUT=dir for results)
@@ -23,7 +24,7 @@ const OUT = process.env.E2E_OUT ?? 'scripts/out/dev04c';
 mkdirSync(OUT, { recursive: true });
 const helpers = readFileSync(new URL('./e2e-helpers.js', import.meta.url), 'utf8');
 const baseline = JSON.parse(readFileSync(new URL('./dev04a-baseline.json', import.meta.url), 'utf8'));
-const additions = ['./dev04c-additions.json', './dev04d-additions.json'].flatMap((f) => JSON.parse(readFileSync(new URL(f, import.meta.url), 'utf8')).interactables); // + W01 wicker.bale
+const additions = ADDITIONS; // scripts/interactable-additions.mjs: DEV-04C + W01 + optional production vignettes
 const beforeBudgetFile = new URL('../docs/dev04c/before/budget.json', import.meta.url);
 const before = existsSync(beforeBudgetFile) ? JSON.parse(readFileSync(beforeBudgetFile, 'utf8')) : null;
 const exe = process.env.CHROME ?? '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
