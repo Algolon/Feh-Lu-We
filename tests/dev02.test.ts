@@ -180,7 +180,8 @@ describe('DEV-02 placement keepouts', () => {
     expect(vegetationClear(LAKE.x, LAKE.z, 'small')).toBe(false);
     for (const r of ROUTE_LINES) { const [x, z] = pointAt(r.pts, polylineLength(r.pts) / 2); expect(vegetationClear(x, z, 'small'), r.id).toBe(false); }
     expect(vegetationClear(10, 120, 'tree')).toBe(true); // west woodland
-    expect(vegetationClear(185, 150, 'tree')).toBe(true); // east ridge
+    expect(vegetationClear(185, 150, 'tree')).toBe(false); // expanded mushroom clearing
+    expect(vegetationClear(190, 143, 'tree')).toBe(true); // east ridge outside clearing
   });
   it('trees keep their crowns off the buildings (≥ 3 m) and the sauna/jacuzzi are footprints', () => {
     expect(vegetationClear(MANOR.x0 - 2, 95, 'tree')).toBe(false);

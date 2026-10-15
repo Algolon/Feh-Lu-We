@@ -2,7 +2,7 @@ import {createServer} from 'node:http';
 import {resolve,extname} from 'node:path';
 import {chromium} from 'playwright-core';
 import {mkdirSync,writeFileSync,readFileSync} from 'node:fs';
-const out='docs/mushroom-grove/evidence';mkdirSync(out,{recursive:true});
+const out=process.env.OUT??'docs/mushroom-grove/evidence';mkdirSync(out,{recursive:true});
 const exe=process.env.CHROME??'/root/.cache/ms-playwright/chromium_headless_shell-1194/chrome-linux/headless_shell';
 const browser=await chromium.launch({executablePath:exe,args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader','--ignore-gpu-blocklist']});
 const server=createServer((req,res)=>{try{const path=resolve(process.env.DIST??'dist',decodeURIComponent(req.url.split('?')[0].replace(/^\/Feh-Lu-We\//,''))||'index.html');res.setHeader('Content-Type',({'.html':'text/html','.js':'text/javascript','.css':'text/css','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml'})[extname(path)]??'application/octet-stream');res.end(readFileSync(path));}catch{res.statusCode=404;res.end();}});await new Promise(r=>server.listen(4181,'127.0.0.1',r));
@@ -16,17 +16,26 @@ await page.reload();await page.click('[data-cont]');await page.waitForFunction((
 await page.evaluate(()=>{window.__game.running=false;});
 await page.evaluate(readFileSync(new URL('./e2e-helpers.js',import.meta.url),'utf8'));
 const views=[['outside',156,132,0.55,0],['approach',166,140,.55,0.04],['halfway',173,150,.55,.12],['entrance',177,156,.4,.12],['grove',181,161,0.2,.16],['return-view',181,163,-2.6,-.02],['exit',154,132,-1.9,0]];
+const nurseryViews=await page.evaluate(()=>{
+ const g=window.__game,data=g.world.scene.userData.mushrooms;
+ const p=data.placements.find(p=>p.zone==='grove'&&p.x>data.centre.x+8&&p.z<data.centre.z);
+ const look=(x,z,y)=>{const ground=g.world.col.ground(x,z);return [Math.atan2(p.x-x,p.z-z),Math.atan2(y-(ground+1.65),Math.hypot(p.x-x,p.z-z))];};
+ const y=g.world.col.ground(p.x,p.z);
+ return [['hero-base',p.x-4,p.z-4,...look(p.x-4,p.z-4,y+2.1)],['cluster-eye',p.x-2.5,p.z-2.7,...look(p.x-2.5,p.z-2.7,y+.7)],['grove-wide',177,155,.28,.05]];
+});
+if(process.env.NURSERY)views.push(...nurseryViews);
 const rows=[];
 for(const quality of (process.env.QUALITY?[process.env.QUALITY]:['low','high']))for(const [name,x,z,yaw,pitch] of views.filter(v=>!process.env.CHECKS&&!process.env.CLIP&&!process.env.BENCH&&(!process.env.VIEW||v[0]===process.env.VIEW))){
- const result=await page.evaluate(async ({x,z,yaw,pitch,quality})=>{
+ const result=await page.evaluate(async ({x,z,yaw,pitch,quality,physical})=>{
   const g=window.__game;g.settings.quality=quality;g.applyQuality(true);
   const y=g.world.col.ground(x,z);g.player.setPose({x,y,z,yaw,pitch});
   for(let i=0;i<180;i++)g.tick(1/30);
   await new Promise(r=>setTimeout(r,200));
-  let timing=[];for(let i=0;i<5;i++){const a=performance.now();g.tick(1/60);if(g.mushroomVision)g.mushroomVision.render(g.renderer,g.world.scene,g.camera,0,g.settings.reducedMotion,g.settings.mushroomDistortion,quality==='high');else g.renderer.render(g.world.scene,g.camera);const gl=g.renderer.getContext();gl.readPixels(0,0,1,1,gl.RGBA,gl.UNSIGNED_BYTE,new Uint8Array(4));timing.push(performance.now()-a);}
+  if(physical)g.mushroomVision.intensity=0;
+  let timing=[];for(let i=0;i<5;i++){const a=performance.now();g.tick(1/60);if(physical)g.mushroomVision.intensity=0;if(g.mushroomVision)g.mushroomVision.render(g.renderer,g.world.scene,g.camera,0,g.settings.reducedMotion,g.settings.mushroomDistortion,quality==='high');else g.renderer.render(g.world.scene,g.camera);const gl=g.renderer.getContext();gl.readPixels(0,0,1,1,gl.RGBA,gl.UNSIGNED_BYTE,new Uint8Array(4));timing.push(performance.now()-a);}
   timing.sort((a,b)=>a-b);
   return {y,amount:g.mushroomVision?.intensity??0,calls:g.renderer.info.render.calls,triangles:g.renderer.info.render.triangles,readbackMedianMs:timing[2],readbackMaxMs:timing[4],glError:g.renderer.getContext().getError(),room:g.world.hereRoom,overlap:g.world.col.overlaps(x,z,y,.3,1.75,.42)};
- },{x,z,yaw,pitch,quality});
+ },{x,z,yaw,pitch,quality,physical:!!process.env.PHYSICAL});
  console.log('rendered',result);if(result.overlap)throw new Error('Evidence pose overlaps collision: '+name);await page.screenshot({path:`${out}/${tag}-${quality}-${name}.jpg`,type:'jpeg',quality:85,timeout:120000});rows.push({quality,name,x,z,...result});console.log(JSON.stringify(rows.at(-1)));
 }
 if(tag==='feature'&&!process.env.CLIP&&!process.env.BENCH&&(!process.env.VIEW||process.env.CHECKS)){
