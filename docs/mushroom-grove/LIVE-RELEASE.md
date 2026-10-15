@@ -54,3 +54,13 @@ Release decision: publish the approved R04 source combined with current producti
 The default branch is advanced only with an expected-head lease against `87f4db5`; the existing Pages workflow builds/tests/deploys the resulting commit. The public URL and built asset identifier must be verified after successful deployment. Actual deployment evidence is appended on the integration branch after release.
 
 Remaining limitations: physical Android GPU/FPS/thermal measurements are still pending; high-quality legacy render assertions and the stale LOD test remain inherited issues. One useful subsequent polish iteration is a matched hardware pass on the target Android phone (normal forest, approach, core, return), followed by distance-culling/post-target tuning only if pacing requires it. The approved R04 art and shader strength are retained.
+
+## Published and verified
+
+Public release: **`a28848d19ee31a4dae72802edc417b9b820a3494`**, production branch `ccr-75ef4113-kfkimm`. Both the latest production base and the approved R04 history are ancestors. The default branch was updated without force and with an exact expected-head lease. Release-candidate CI run 38814557199 and production build/deploy run **38814685354** succeed (both build and Pages deploy jobs).
+
+Public URL: https://algolon.github.io/Feh-Lu-We/ . A cache-busted HTTP check returns 200 and the actual JS asset `assets/index-DBCxM7Jn.js`, containing build identifier `a28848d · 2026-10-15`. Its SHA-256 is `a6eaf9c4189d95591e219eaf4bd3565ff11745adf4927edaa761ddba29630cad` (1,505,128 bytes). Raw deployment proof: `live-evidence/deployment.json`.
+
+A fresh browser context loads the **public host** and renders the zone: 302 placements, intensity 0.999994, shader clock 12, GL error 0 and no page/console/HTTP errors. Screenshot: `live-evidence/production-live.jpg`; raw check: `production-live-smoke.json`. This host's browser needed the explicit execution-environment proxy and a context-only proxy-CA exception; the independent Python HTTP/asset verification used its normal trusted certificate chain. These are test-harness settings; no production TLS or application setting was changed.
+
+This post-deployment proof is saved on the integration branch only. Production remains the tested release commit above, avoiding a second deployment for documentation. Code, approved R04 visuals, release report, raw QA and live proof are durable on GitHub. The original private preview was left unchanged.

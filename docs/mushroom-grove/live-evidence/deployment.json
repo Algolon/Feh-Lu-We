@@ -1,0 +1,13 @@
+{
+  "release": "a28848d19ee31a4dae72802edc417b9b820a3494",
+  "url": "https://algolon.github.io/Feh-Lu-We/",
+  "httpStatus": 200,
+  "asset": "https://algolon.github.io/Feh-Lu-We/assets/index-DBCxM7Jn.js",
+  "assetBytes": 1505128,
+  "assetSha256": "a6eaf9c4189d95591e219eaf4bd3565ff11745adf4927edaa761ddba29630cad",
+  "buildIds": [
+    "a28848d \u00b7 2026-10-15"
+  ],
+  "actionsRun": 38814685354,
+  "deployment": "success"
+}

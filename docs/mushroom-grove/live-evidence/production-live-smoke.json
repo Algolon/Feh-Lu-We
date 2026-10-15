@@ -1,0 +1,18 @@
+{
+  "url": "https://algolon.github.io/Feh-Lu-We/?autotest=1&release=a28848d19ee31a4dae72802edc417b9b820a3494",
+  "release": "a28848d19ee31a4dae72802edc417b9b820a3494",
+  "state": {
+    "placements": 302,
+    "intensity": 0.9999938557876467,
+    "clock": 12,
+    "glError": 0,
+    "pose": {
+      "x": 181,
+      "y": 1.143156111240387,
+      "z": 161,
+      "yaw": 0.2,
+      "pitch": 0.16
+    }
+  },
+  "errors": []
+}
