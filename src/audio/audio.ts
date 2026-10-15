@@ -6,6 +6,7 @@ import type { RitualMix } from '../world/wickerRitual';
 import { renderOutdoorFootstep, selectOutdoorFootstepVariant, selectGrassPitchVariant, GRASS_PITCH_RATIOS, type FootstepSurface, type OutdoorFootstepSurface } from './footsteps';
 import { FIELD_FOOTSTEPS_MP3, FIELD_FOOTSTEP_CLIPS } from './fieldFootsteps';
 import { GRASS_R04_MP3, GRASS_R04_CLIPS, DIRT_PATH_GAIN } from './grassR04';
+import { footstepMixGain } from './footstepMix';
 
 type SfxName = string;
 type RitualVoice = { src: AudioScheduledSourceNode; f: BiquadFilterNode | null; g: GainNode };
@@ -252,11 +253,14 @@ export class Audio {
    */
   step(surface: FootstepSurface, gain = 1, foot: 0 | 1 = 0) {
     if (!this.ready || this.muted) return;
-    if (surface === 'grass' || surface === 'dirt') { this.outdoorStep(surface, gain, foot); return; }
+    // Consistent dB mix correction by surface: quiet indoor/terrace brought forward,
+    // louder recorded outdoor ground attenuated. Other effects use the same master as before.
+    const mixedGain = gain * footstepMixGain(surface);
+    if (surface === 'grass' || surface === 'dirt') { this.outdoorStep(surface, mixedGain, foot); return; }
     let v = Math.floor(Math.random() * 3);
     if (v === this.lastStep) v = (v + 1) % 3;
     this.lastStep = v;
-    const f = (1 + (v - 1) * 0.07) * (foot ? 0.96 : 1.03), g = gain * (0.88 + Math.random() * 0.24);
+    const f = (1 + (v - 1) * 0.07) * (foot ? 0.96 : 1.03), g = mixedGain * (0.88 + Math.random() * 0.24);
     if (surface === 'wood') { this.noise(0.1, 'bandpass', 360 * f, 1.2, 0.16 * g); this.noise(0.05, 'lowpass', 160 * f, 0.8, 0.08 * g, 0.012); }
     else if (surface === 'stone') this.noise(0.07, 'bandpass', 1300 * f, 1.5, 0.075 * g);
     else this.noise(0.14, 'highpass', 1700 * f, 0.7, 0.045 * g, 0, 0.012);
