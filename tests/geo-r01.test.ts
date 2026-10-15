@@ -4,6 +4,32 @@ import { estateRooms } from '../src/world/roomdefs';
 import { World } from '../src/interactions/world';
 
 describe('GEO-R01 building integrity', () => {
+  it('keeps the garden visible through the kitchen glass door when closed or moving', () => {
+    const w = new World('estate'); w.rooms = estateRooms();
+    const portal = w.rooms.portals.find(p => p.door === 'door.kitchenBack')!;
+    const glass = w.col.addBox(100.5, 101.5, 109.76, 109.84, .15, 2.45, { occludes: true, tag: portal.door });
+    w.visualPassThrough.add(glass);
+    w.exteriorDoors.push({ door: portal.door!, seeThrough: portal.seeThrough, x: 101, y: 1.3, z: 109.8, r: .9 });
+    const garden = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial());
+    garden.position.set(101, 1, -114); garden.userData.chunk = 'garden'; w.scene.add(garden);
+    w.roomRegion(['garden'], ['out']);
+    const cam = new THREE.PerspectiveCamera(65, .5, .05, 200);
+    cam.position.set(101, 1.8, -108.2); cam.lookAt(101, 1.3, -114); cam.updateMatrixWorld();
+    for (const open of [false, true, false]) { // closing switches saved state before the leaf finishes moving
+      w.isOpen = () => open;
+      w.updateCulling(cam.position, cam);
+      expect(w.hereRoom).toBe('kitchen');
+      expect(w.visibleRooms.has('out')).toBe(true);
+      expect(garden.visible).toBe(true);
+    }
+    expect(glass.enabled).toBe(true); expect(glass.solid).toBe(true);
+    expect(w.col.segmentBlocked(101, 1.3, 108.2, 101, 1.3, 114)).toBe(true);
+    w.col.addBox(100, 102, 108.8, 109, 0, 4, { occludes: true });
+    w.updateCulling(cam.position, cam);
+    expect(garden.visible).toBe(false);
+    w.dispose();
+  });
+
   it('keeps the entire service route indoors, including wall-depth thresholds', () => {
     const r = estateRooms();
     for (let x = 106; x <= 117; x += .025) for (const z of [102.32,102.5,102.68]) {

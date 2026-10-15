@@ -85,7 +85,8 @@ export const PORTALS: PortalDef[] = [
   P('living', 'library', 'door', 'door.livLib'), P('dining', 'kitchen', 'arch'),
   P('kitchen', 'corridor', 'door', 'door.service'), P('corridor', 'workshop', 'door', 'door.workshop'), P('corridor', 'pantry', 'door', 'door.pantry'),
   P('corridor', 'cons', 'door', 'door.consWest', true), P('workshop', 'out', 'door', 'door.workshopOut'),
-  P('billiard', 'out', 'door', 'door.billiardOut'), P('kitchen', 'out', 'door', 'door.kitchenBack'),
+  // The kitchen back door has clear glass: keep the garden visible while closed and during its swing.
+  P('billiard', 'out', 'door', 'door.billiardOut'), P('kitchen', 'out', 'door', 'door.kitchenBack', true),
   P('cons', 'out', 'door', 'door.consEast', true), P('cons', 'out', 'glass'),
   P('frontGallery', 'walkway', 'arch'), P('walkway', 'landing', 'arch'),
   P('frontGallery', 'reis', 'door', 'door.reis'), P('walkway', 'sterren', 'door', 'door.sterren'),
