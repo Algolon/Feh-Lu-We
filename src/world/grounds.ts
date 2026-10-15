@@ -32,7 +32,7 @@ const SHORE_STONE = (() => { const g = rockModel(71); g.userData.keepColor = tru
 
 export function buildGrounds(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods: EstateWoods | null) {
   arrival(w, c);
-  socialGarden(w, c);
+  socialGarden(w, g, c);
   lake(w, g, c, veg, woods);
   golf(w, c); // DEV-04B: in the grounds batch, which already carries the art-kit materials (an own chunk cost +7 draw calls)
   wickerman(w, g, c);
@@ -67,7 +67,7 @@ function platform(c: Ctx, r: Rect, color: string) {
   boxMM(c.b, c.k.M.stone, '#c4b898', r.x0 - 0.06, r.x1 + 0.06, -0.05, GF - 0.03, r.z0 - 0.06, r.z1 + 0.06, { chunk: c.chunk, uv: 1 }); // edge course
 }
 
-function socialGarden(w: World, c: Ctx) {
+function socialGarden(w: World, g: GameApi, c: Ctx) {
   const k = c.k, { sb, bx, cg } = joinery, M = artMats();
   // BBQ work place (reached from the kitchen door), apart from the balloon tank: a kettle grill on three legs with a
   // side shelf, the prep table, a gas bottle with its valve; tongs and a board on the prep table
