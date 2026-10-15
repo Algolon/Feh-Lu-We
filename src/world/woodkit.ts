@@ -525,6 +525,9 @@ export function beechSculptModel(variant: number, lod: Lod, continuous: boolean 
     }
     if (g === model.wood) {
       smoothWoodNormals(g);
+      // Select beech's continuous object-space bark instead of stretching the old atlas column.
+      const uv = g.attributes.uv as THREE.BufferAttribute;
+      for (let i = 0; i < uv.count; i++) uv.setX(i, 24 + uv.getX(i));
       const colours = g.attributes.color as THREE.BufferAttribute;
       for (let i = 0; i < p.count; i++) {
         const mottling = .97 + .035 * Math.sin(p.getY(i) * 1.5 + p.getX(i) * 3 + v);
@@ -1441,9 +1444,24 @@ export function woodMats(): WoodMats {
     if (sprays) { sh.uniforms.flwSprays = { value: sprays }; sh.fragmentShader = 'uniform sampler2D flwSprays;\n' + sh.fragmentShader; }
     if (oakBark) { sh.uniforms.flwOakBark = { value: oakBark }; sh.fragmentShader = 'uniform sampler2D flwOakBark;\n' + sh.fragmentShader; }
     if (pineBark) { sh.uniforms.flwPineBark = { value: pineBark }; sh.fragmentShader = 'uniform sampler2D flwPineBark;\n' + sh.fragmentShader; }
+    if (TREE_ART === 'trees-r03') {
+      // Model-local metres remain consistent on the main stem, forks and both batch paths.
+      // This also gives intersecting fork surfaces the same pigment at their meeting point.
+      sh.vertexShader = 'varying vec3 flwBarkPosition;\n' + sh.vertexShader;
+      sh.vertexShader = sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\nflwBarkPosition = position;');
+      sh.fragmentShader = 'varying vec3 flwBarkPosition;\n' + sh.fragmentShader;
+    }
     sh.fragmentShader = sh.fragmentShader.replace('#include <map_fragment>', `#ifdef USE_MAP
   vec2 tUv = vMapUv;
   vec4 sampledDiffuseColor;
+  ${TREE_ART === 'trees-r03' ? `if (tUv.x > 23.0 && tUv.x < 25.0) {
+    vec3 p = flwBarkPosition;
+    float cloud = sin(p.x * 2.4 + sin(p.y * .65)) * sin(p.z * 2.7 - p.y * .33);
+    float grain = sin(p.x * 6.2 + p.z * 4.7 + sin(p.y * 1.4));
+    float fold = pow(max(0.0, sin(p.x * 10.0 + p.z * 8.0 + sin(p.y * 1.1) * .8)), 10.0);
+    float tone = .93 + .035 * cloud + .014 * grain - .022 * fold;
+    sampledDiffuseColor = vec4(tone * .99, tone, tone * 1.015, 1.0);
+  } else` : ''}
   ${oakBark ? `if (tUv.x > 15.0 && tUv.x < 17.0) { sampledDiffuseColor = texture2D(flwOakBark, vec2(((tUv.x - 16.0) * 4.0 - ${GUT}) / ${1 - 2 * GUT}, tUv.y * .65)); } else` : ''}
   ${pineBark ? `if (tUv.x > 19.0 && tUv.x < 21.0) { sampledDiffuseColor = texture2D(flwPineBark, vec2(((tUv.x - 20.0) * 4.0 - ${GUT}) / ${1 - 2 * GUT}, tUv.y * .45)); } else` : ''}
   ${sprays ? `if (tUv.x > 127.0) { ${SPRAY_SAMPLE} sampledDiffuseColor = texture2D(flwSprays, flwAtlasUv); if (sampledDiffuseColor.a < 0.4) discard; } else` : ''}
@@ -1458,7 +1476,7 @@ export function woodMats(): WoodMats {
   diffuseColor *= sampledDiffuseColor;
 #endif`);
   };
-  tree.customProgramCacheKey = () => pineBark ? 'woodkit-tree-atlas-families-r03' : oakBark ? 'woodkit-tree-atlas-oak-r03' : sprays ? 'woodkit-tree-atlas-sprays-r02' : 'woodkit-tree-atlas';
+  tree.customProgramCacheKey = () => pineBark ? 'woodkit-tree-atlas-families-beech-flow-r03' : oakBark ? 'woodkit-tree-atlas-oak-r03' : sprays ? 'woodkit-tree-atlas-sprays-r02' : 'woodkit-tree-atlas';
   if (sprays) {
     const depth = new THREE.MeshDepthMaterial({ map: atlas, depthPacking: THREE.RGBADepthPacking });
     depth.onBeforeCompile = sh => {

@@ -4,7 +4,7 @@ The owner accepted the smoother oak trunk (`a0c1937`) and requested the next tre
 
 ## Species changes
 
-- **Beech:** a gently curved smooth grey leader, heavier rising forks, rounder/wider leaf groups, subtle cool bark mottling and fresh-green/deep-green/olive-with-ochre palettes. Its own smooth bark atlas is retained; oak furrows are not reused.
+- **Beech:** a gently curved smooth grey leader, heavier rising forks, rounder/wider leaf groups, subtle cool bark mottling and fresh-green/deep-green/olive-with-ochre palettes. The later bark correction replaces the old smooth atlas column with continuous model-space grey pigment; oak furrows are not reused.
 - **Scots pine:** a subtly curved tall trunk with denser longitudinal sampling and averaged UV seam normals, a separate subtle elongated-scale bark texture, warmer upper bark and three evergreen needle palettes. Its original open high crown, irregular branch whorls and dead stubs are retained and refined. Orange is confined to the bark; needles remain green.
 - **Birch:** accepted stem, branches and crown geometry are preserved exactly; only coherent green, deeper green and yellow-green foliage palettes are added. No pink, cyan or white foliage.
 - **Oak:** approved geometry and palettes are retained; the shared normal helper is extracted without altering the output. Regression tests compare all attributes between the oak-only and complete-tree selections.
@@ -37,3 +37,12 @@ The sampled BOSLUST sign and outdoor paths remain readable. No full puzzle-route
 ## Reproduce
 
 `CHROMIUM_EXECUTABLE_PATH=/path/to/chromium node scripts/veg-r03-tree-review.mjs` uses local port 5195. `GALLERY_ONLY=1` bounds the run to model comparisons. The studio renders actual Three.js geometry/materials. Source hashes and check results are recorded in `validation.json`.
+
+
+## Beech bark correction after visual feedback
+
+The owner identified that the updated stem still appeared to stretch the initial bark texture. The beech model now marks its wood separately and the shared material shades it from continuous three-dimensional model-local positions, rather than sampling the original smooth atlas strip. Soft broad mottling and fine shallow-looking tonal grain stay at a fixed model-space scale, including across stem/fork surfaces. This is colour shading, not added geometric relief or junction retopology.
+
+The change adds no texture, geometry or material draw group. It preserves the accepted shape, foliage and other species. The shared shader has a separate program key for the new bark path. Fragment cost has not been benchmarked on a physical phone.
+
+`beech-before-bark-fix.jpg` preserves the preceding studio comparison. In the regenerated `beech-trunks.jpg`, the right-hand tree has the new bark. The left-hand reference is the older recovered tree, as in the original review script; it is not the immediately preceding curved-beech geometry.
