@@ -1,0 +1,45 @@
+name: EXT-R02 release gate (temporary)
+
+on:
+  push:
+    branches:
+      - release/ext-r02-budget-fix
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - name: Install Chromium for raster/draw-call checks
+        run: npx playwright-core install --with-deps chromium
+      - name: Point the existing validation scripts to runner Chromium
+        run: |
+          sed -i "s#/root/.cache/ms-playwright/#${HOME}/.cache/ms-playwright/#g" scripts/ext-r02-validate.mjs scripts/ext-r02-motion.mjs scripts/ext-r02-mushroom-compat.mjs
+      - name: Exterior paired renders, draw calls, picking, collisions and quality
+        run: node scripts/ext-r02-validate.mjs "${RUNNER_TEMP}/ext-r02-release-qa"
+      - name: Animated door and conservatory walking checks
+        run: node scripts/ext-r02-motion.mjs "${RUNNER_TEMP}/ext-r02-motion"
+      - name: Mushroom Grove render compatibility
+        run: node scripts/ext-r02-mushroom-compat.mjs "${RUNNER_TEMP}/ext-r02-mushroom"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ext-r02-release-gate-results
+          path: |
+            ${{ runner.temp }}/ext-r02-release-qa
+            ${{ runner.temp }}/ext-r02-motion
+            ${{ runner.temp }}/ext-r02-mushroom
+          retention-days: 7
