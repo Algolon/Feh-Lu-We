@@ -67,7 +67,7 @@ for (const [name, pose] of VIEWS) {
     return { calls: i.calls, triangles: i.triangles, feetY: +g.player.y.toFixed(2), at: { x: +g.player.x.toFixed(2), z: +g.player.z.toFixed(2) } };
   }, pose);
   await page.waitForTimeout(150);
-  await page.screenshot({ path: `${OUT}/${name}.png` });
+  await page.screenshot({ path: `${OUT}/${name}.jpg`, type: 'jpeg', quality: 82 });
   rows.push({ name, pose, ...m });
   console.log(`${name.padEnd(24)} feet ${m.feetY} at ${m.at.x},${m.at.z}  ${info.quality} ${m.calls} calls / ${m.triangles} tris`);
 }

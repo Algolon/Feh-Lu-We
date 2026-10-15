@@ -1,0 +1,81 @@
+{
+  "commit": "e097634",
+  "quality": "low",
+  "rows": [
+    {
+      "name": "hp-detail",
+      "pose": {
+        "x": 83.72491913615939,
+        "y": -0.22999999999999998,
+        "z": 122.4927079897466,
+        "yaw": 3.490658503988659,
+        "pitch": -0.5326436072295171,
+        "fly": true
+      },
+      "calls": 119,
+      "triangles": 380946,
+      "feetY": 0.15,
+      "at": {
+        "x": 83.72,
+        "z": 122.49
+      }
+    },
+    {
+      "name": "hp-close-side",
+      "pose": {
+        "x": 82.66079424886048,
+        "y": 0.15,
+        "z": 122.48095110958681,
+        "yaw": 2.443460952792061,
+        "pitch": -0.7107706576899355
+      },
+      "calls": 80,
+      "triangles": 185980,
+      "feetY": 0.15,
+      "at": {
+        "x": 82.66,
+        "z": 122.48
+      }
+    },
+    {
+      "name": "hp-room",
+      "pose": {
+        "x": 84.89129873451273,
+        "y": 0.15,
+        "z": 123.72979531515138,
+        "yaw": 3.7524578917878086,
+        "pitch": -0.36381900769462927
+      },
+      "calls": 101,
+      "triangles": 371672,
+      "feetY": 0,
+      "at": {
+        "x": 84.89,
+        "z": 123.73
+      }
+    },
+    {
+      "name": "x08-music-bong-balloon",
+      "pose": {
+        "x": 85,
+        "y": 0,
+        "z": 126,
+        "yaw": 3.490658503988659,
+        "pitch": -0.12
+      },
+      "calls": 92,
+      "triangles": 296949,
+      "feetY": 0,
+      "at": {
+        "x": 85,
+        "z": 126
+      }
+    }
+  ],
+  "problems": [
+    {
+      "message": "console.warning: THREE.BufferGeometry.toNonIndexed(): BufferGeometry is already non-indexed.",
+      "count": 80
+    }
+  ]
+}
