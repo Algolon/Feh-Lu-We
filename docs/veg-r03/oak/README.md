@@ -16,15 +16,15 @@ The existing recovered style remains the default. The candidate is selected with
 
 ## Checks
 
-Typecheck, all 303 unit tests, the four unchanged budget-policy tests and production build pass (existing bundle-size warning). The two added model tests check lower-trunk compatibility, finite/bounded geometry, stable mid/far position and colour, and distinct palettes. The model topology budget is unchanged.
+Typecheck, all 303 unit tests, the four unchanged budget-policy tests and production build pass (existing bundle-size warning). The two added model tests check lower-trunk compatibility, finite/bounded geometry, stable mid/far position and colour, and distinct palettes. The flow correction increases longitudinal trunk/branch sampling; foliage topology is unchanged.
 
 Twelve fresh game render records: three poses × recovered/candidate × multi-draw/instanced. No recorded page errors, console errors, shader failures or WebGL errors. Placement inventories match and candidate low-quality camera triangles match between rendering paths.
 
 | View | Recovered triangles | Candidate triangles | Candidate calls multi / fallback |
 | --- | ---: | ---: | ---: |
-| dense | 309,354 | 309,354 | 59 / 119 |
-| garden | 185,216 | 185,216 | 25 / 52 |
-| boslust | 351,322 | 351,628 | 91 / 138 |
+| dense | 309,354 | 340,384 | 59 / 119 |
+| garden | 185,216 | 192,544 | 25 / 52 |
+| boslust | 351,322 | 378,718 | 91 / 138 |
 
 All three sampled candidate views fit the existing 150-call / 750k ceiling. This is a small comparison matrix, not an estate-wide, portrait, full puzzle-route or physical-phone acceptance test. No budget threshold was changed. Crown silhouettes changed, so sign/clue visibility still needs a complete route review before activation.
 
@@ -33,3 +33,10 @@ Reproduce with `CHROMIUM_EXECUTABLE_PATH=/path/to/chromium node scripts/veg-r03-
 ## Next art passes
 
 Review the oak form and colour grouping, then refine beech with smoother grey bark and its own rounded branching; pine with a taller trunk, warm upper bark and evergreen needle shelves; keep birch as the accepted style anchor and add restrained green/yellow variation. After the tree pass, continue with bushes, logs/stumps, ground plants and grass, with each family judged in the actual game.
+
+
+## Focused bark-flow correction
+
+Owner feedback identified broken flow on the main trunk. The correction adds longitudinal samples through the S-bend and primary forks, eases the bend over a longer interval, averages normals across coincident UV seam vertices, makes the painted grooves periodic in both texture directions, and removes gutter cropping from the dedicated repeating oak bark tile. This addresses angular interpolation and visible repeat/lighting seams. The fork still consists of intersecting trunk/branch surfaces; this is not a claim of a fully retopologized junction.
+
+`before-flow-fix.jpg` preserves the previous trunk comparison. `trunks.jpg` is the corrected comparison (recovered left/corrected right). The lower trunk/attachment regression check and all 303 tests pass. More samples add geometry, so the latest game counts below supersede the earlier claim of unchanged model cost. Physical-device tests remain outstanding.

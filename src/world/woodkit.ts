@@ -287,14 +287,14 @@ function flareK(a: number, y: number, lobes: { a: number; w: number }[], flare: 
   return k + F * 0.08 * (1 + Math.sin(a * 3 + 1.3)) * 0.5; // a little general swell between the ridges
 }
 
-function flaredTrunk(path: P3[], radius: (t: number) => number, lobes: { a: number; w: number }[], flare: number, flareH: number, radial: number, rows: number, vScale: number) {
+function flaredTrunk(path: P3[], radius: (t: number) => number, lobes: { a: number; w: number }[], flare: number, flareH: number, radial: number, rows: number, vScale: number, detailedFlare = rows >= 6) {
   const curve = new THREE.CatmullRomCurve3(path.map(vec), false, 'centripetal');
   const len = curve.getLength();
   const pos: number[] = [], uv: number[] = [], idx: number[] = [];
   const P = new THREE.Vector3();
   // ring heights: dense through the flare (where the buttresses change fastest), then even up the trunk
   const y0 = path[0][1], y1 = path[path.length - 1][1], base = [y0, -0.2, 0, 0.14, 0.3, 0.48, 0.7, 0.95, flareH + 0.25].filter((y) => y > y0 && y < y1 - 0.5);
-  const fine = rows < 6 ? base.filter((_, i) => i % 3 === 0) : base; // coarse LODs: every third flare ring
+  const fine = !detailedFlare ? base.filter((_, i) => i % 3 === 0) : base; // coarse LODs: every third flare ring
   const top = fine[fine.length - 1] ?? y0, ys = [y0, ...fine.filter((y) => y > y0)];
   const rest = Math.max(1, rows - ys.length + 1);
   for (let i = 1; i <= rest; i++) ys.push(top + ((y1 - top) * i) / rest);
@@ -398,14 +398,14 @@ function growBroadleaf(sp: Broadleaf): Skeleton {
   return { trunk: { path: trunkPath, radius, lobes }, branches, clusters };
 }
 
-function emitBroadleaf(sp: Broadleaf, sk: Skeleton, lod: Lod, continuous: boolean | 'outline' = false): Model {
+function emitBroadleaf(sp: Broadleaf, sk: Skeleton, lod: Lod, continuous: boolean | 'outline' = false, smoothFork = false): Model {
   const near = lod === 'near', xfar = lod === 'xfar', far = lod === 'far' || xfar;
   const girth = THREE.MathUtils.clamp(sp.trunk[0] / 0.45, 0.6, 1); // slim trunks need fewer sides
-  const wood: THREE.BufferGeometry[] = [flaredTrunk(sk.trunk.path, sk.trunk.radius, sk.trunk.lobes, sp.flare, 1.25, xfar ? 5 : Math.round((near ? 20 : far ? 6 : 9) * girth), near ? 11 : far ? 3 : 4, sp.vScale)];
+  const wood: THREE.BufferGeometry[] = [flaredTrunk(sk.trunk.path, sk.trunk.radius, sk.trunk.lobes, sp.flare, 1.25, xfar ? 5 : Math.round((near ? 20 : far ? 6 : 9) * girth), smoothFork ? (near ? 28 : far ? 9 : 16) : near ? 11 : far ? 3 : 4, sp.vScale, near)];
   for (const b of sk.branches) {
     if (!near && b.level === 2) continue; // mid/far: limbs only; side branches are hidden in the foliage at that distance
     if (xfar && !continuous) continue; // continuity prototype retains the primary branch skeleton
-    wood.push(taperTube(b.pts, b.r, { radial: near ? (b.level === 1 ? 6 : 3) : far ? 3 : 4, rows: near ? (b.level === 1 ? 4 : 3) : far ? 1 : 2, vScale: 1.2 }));
+    wood.push(taperTube(b.pts, b.r, { radial: near ? (b.level === 1 ? 6 : 3) : far ? 3 : 4, rows: smoothFork ? (near ? (b.level === 1 ? 12 : 5) : far ? 4 : 7) : near ? (b.level === 1 ? 4 : 3) : far ? 1 : 2, vScale: 1.2 }));
   }
   const crownC = sk.clusters.reduce((s, k) => s.add(k.c), new THREE.Vector3()).divideScalar(sk.clusters.length);
   const crownR = Math.max(...sk.clusters.map((k) => k.c.distanceTo(crownC) + Math.max(...k.r)));
@@ -478,7 +478,7 @@ export function referenceTreeModel(species: TreeSpecies, variant: number, lod: L
 export function oakSculptModel(variant: number, lod: Lod, continuous: boolean | 'outline' = 'outline'): Model {
   const v = ((variant % 3) + 3) % 3, original = OAKS[v];
   const sp = { ...original, limbR: .84, limbArch: .46, limbEl: [original.limbEl[0] + .10, original.limbEl[1] + .08] as [number, number] };
-  const sk = growBroadleaf(sp), model = emitBroadleaf(sp, sk, lod, continuous);
+  const sk = growBroadleaf(sp), model = emitBroadleaf(sp, sk, lod, continuous, true);
   model.leaves.dispose();
   const palettes = [
     { shade: '#35553b', green: '#6d963f', warm: '#afa144', warmth: .28 },
@@ -494,7 +494,8 @@ export function oakSculptModel(variant: number, lod: Lod, continuous: boolean | 
       const t = THREE.MathUtils.smoothstep(y, 1.6, 4.7);
       const angle = t * (.18 * Math.sin(y * .48 + v * 1.9));
       const c = Math.cos(angle), s = Math.sin(angle);
-      const bend = THREE.MathUtils.smoothstep(y, 1.6, 3.0) * .70 * Math.sin((y - 1.6) * 1.0 + v * 1.7);
+      // Ease into the bend without introducing a short, sharp change of curvature above the straight foot.
+      const bend = THREE.MathUtils.smoothstep(y, 1.6, 4.2) * .70 * Math.sin((y - 1.6) * .70 + v * 1.7);
       p.setXYZ(i, c * x - s * z + bend, y + Math.max(0, y - original.H) * .25,
         s * x + c * z + t * .21 * Math.sin(y * .7 + v));
       if (g === model.leaves) {
@@ -508,6 +509,16 @@ export function oakSculptModel(variant: number, lod: Lod, continuous: boolean | 
       const uv = g.attributes.uv as THREE.BufferAttribute;
       for (let i = 0; i < uv.count; i++) uv.setX(i, 16 + uv.getX(i));
       g.computeVertexNormals();
+      // UV seam vertices are separate, but must share a normal to avoid a hard lighting stripe.
+      const sums = new Map<string, THREE.Vector3>();
+      const keyAt = (i: number) => `${Math.round(p.getX(i) * 1e5)},${Math.round(p.getY(i) * 1e5)},${Math.round(p.getZ(i) * 1e5)}`;
+      for (let i = 0; i < p.count; i++) {
+        const key = keyAt(i), sum = sums.get(key) ?? new THREE.Vector3();
+        sum.add(new THREE.Vector3().fromBufferAttribute(normals, i)); sums.set(key, sum);
+      }
+      for (let i = 0; i < p.count; i++) {
+        const n = sums.get(keyAt(i))!.clone().normalize(); normals.setXYZ(i, n.x, n.y, n.z);
+      }
       const colours = g.attributes.color as THREE.BufferAttribute;
       for (let i = 0; i < p.count; i++) {
         const x = p.getX(i), y = p.getY(i), z = p.getZ(i), a = Math.atan2(z, x);
@@ -1303,9 +1314,12 @@ export function woodMats(): WoodMats {
   const oakBark = TREE_ART === 'oak-r03' ? canvasTex(256, 512, (x, r) => {
     // Long, softly bevelled furrows follow the trunk, with a few interrupted bark seams.
     x.fillStyle = grey(.82); x.fillRect(0, 0, 256, 512);
-    for (let col = -1; col < 10; col++) {
-      const cx = col * 29 + r() * 5, phase = r() * 6.28, width = 3 + r() * 3;
-      const line = (y: number) => cx + Math.sin(y * .014 + phase) * 7 + Math.sin(y * .031 + phase) * 2;
+    for (let col = 0; col < 8; col++) {
+      const cx = col * 32 + r() * 5, phase = r() * 6.28, width = 3 + r() * 3;
+      // Exact periods join the grooves across the repeated tile in both directions.
+      const line = (y: number) => cx + Math.sin(y * Math.PI * 2 / 512 + phase) * 7 + Math.sin(y * Math.PI * 4 / 512 + phase) * 2;
+      for (const wrap of [-256, 0, 256]) {
+      x.save(); x.translate(wrap, 0);
       x.fillStyle = grey(.60 + r() * .07); x.beginPath();
       for (let y = -16; y <= 528; y += 16) { if (y === -16) x.moveTo(line(y), y); else x.lineTo(line(y), y); }
       for (let y = 528; y >= -16; y -= 16) x.lineTo(line(y) + width, y);
@@ -1318,13 +1332,14 @@ export function woodMats(): WoodMats {
         const y = 80 + i * 240 + r() * 55;
         x.strokeStyle = grey(.67, .65); x.lineWidth = 1.5; x.beginPath(); x.moveTo(line(y), y); x.quadraticCurveTo(line(y) + 12, y - 9, line(y) + 22, y - 35); x.stroke();
       }
+      x.restore();
+      }
     }
     for (const [cx, cy] of [[56, 160], [184, 395]]) {
       x.strokeStyle = grey(.62); x.lineWidth = 3; x.beginPath(); x.ellipse(cx,cy,9,22,.2,0,Math.PI*2); x.stroke();
       x.fillStyle = grey(.52); x.beginPath(); x.ellipse(cx,cy,3,10,.2,0,Math.PI*2); x.fill();
     }
   }, 23017) : null;
-  if (oakBark) oakBark.wrapS = THREE.ClampToEdgeWrapping;
   // foliage UVs (u ≥ LEAF_U) repeat inside the leaf column; gradients from the unwrapped UV keep mip selection
   // continuous across the wrap (no seams); bark UVs are sampled as usual
   tree.onBeforeCompile = (sh) => {
@@ -1333,7 +1348,7 @@ export function woodMats(): WoodMats {
     sh.fragmentShader = sh.fragmentShader.replace('#include <map_fragment>', `#ifdef USE_MAP
   vec2 tUv = vMapUv;
   vec4 sampledDiffuseColor;
-  ${oakBark ? 'if (tUv.x > 15.0 && tUv.x < 17.0) { sampledDiffuseColor = texture2D(flwOakBark, vec2((tUv.x - 16.0) * 4.0, tUv.y * .65)); } else' : ''}
+  ${oakBark ? `if (tUv.x > 15.0 && tUv.x < 17.0) { sampledDiffuseColor = texture2D(flwOakBark, vec2(((tUv.x - 16.0) * 4.0 - ${GUT}) / ${1 - 2 * GUT}, tUv.y * .65)); } else` : ''}
   ${sprays ? `if (tUv.x > 127.0) { ${SPRAY_SAMPLE} sampledDiffuseColor = texture2D(flwSprays, flwAtlasUv); if (sampledDiffuseColor.a < 0.4) discard; } else` : ''}
   if (tUv.x > ${(LEAF_U / 2).toFixed(1)}) {
     vec2 lUv = vec2(fract(tUv.x), tUv.y * 0.5);

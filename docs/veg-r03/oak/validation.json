@@ -3,7 +3,7 @@
   "previewQuery": "?vegstyle=woodland-r02&treeart=oak-r03",
   "scope": "Three oak variants only; recovered vegetation remains the default.",
   "sourceHashes": {
-    "src/world/woodkit.ts": "e0dcad319ee93e5c7515c7f7594515fbdfcb60f7359fdcb1d3efb05534b411a5",
+    "src/world/woodkit.ts": "3f9917ca118a927a3c53b15693d3593a409b670a5c07123fa5ab820a944ebcb0",
     "src/world/foliageStyle.ts": "9fd2761d8ce19f3d0c651a02bf4c0a3defc60212dab1d59e648062ccaf386117",
     "scripts/veg-r03-oak-review.mjs": "1ffd870f839654d0e641a1b8816c97172bec899c6296111ffdd3e6b12cb2c096",
     "tests/oakSculpt.test.ts": "9a58db7541bef97758e74508776e4c62313576e22d25221ea4976163f49bebb1"
@@ -12,5 +12,12 @@
   "pageShaderWebGLErrors": 0,
   "placementParity": true,
   "multiFallbackTriangleParity": true,
-  "physicalDeviceTested": false
+  "physicalDeviceTested": false,
+  "flowCorrection": {
+    "previousStudyCommit": "45bf8d0",
+    "geometryCostIncreased": true,
+    "tests": 303,
+    "typecheck": "pass",
+    "build": "pass"
+  }
 }

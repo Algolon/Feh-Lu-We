@@ -9,7 +9,7 @@
     {
       "v": 0,
       "art": "oak-r03",
-      "wood": 896,
+      "wood": 2200,
       "leaves": 384
     },
     {
@@ -21,25 +21,25 @@
     {
       "v": 0,
       "art": "oak-r03",
-      "wood": 896,
+      "wood": 2200,
       "leaves": 384
     },
     {
       "v": 0,
       "art": "oak-r03",
-      "wood": 896,
+      "wood": 2200,
       "leaves": 384
     },
     {
       "v": 1,
       "art": "oak-r03",
-      "wood": 860,
+      "wood": 2140,
       "leaves": 304
     },
     {
       "v": 2,
       "art": "oak-r03",
-      "wood": 1016,
+      "wood": 2464,
       "leaves": 448
     }
   ],
@@ -79,7 +79,7 @@
       "art": "oak-r03",
       "path": "multi",
       "calls": 59,
-      "triangles": 309354,
+      "triangles": 340384,
       "actualPath": "multi-draw",
       "glError": 0,
       "shaderFailures": 0
@@ -89,7 +89,7 @@
       "art": "oak-r03",
       "path": "multi",
       "calls": 25,
-      "triangles": 185216,
+      "triangles": 192544,
       "actualPath": "multi-draw",
       "glError": 0,
       "shaderFailures": 0
@@ -99,7 +99,7 @@
       "art": "oak-r03",
       "path": "multi",
       "calls": 91,
-      "triangles": 351628,
+      "triangles": 378718,
       "actualPath": "multi-draw",
       "glError": 0,
       "shaderFailures": 0
@@ -139,7 +139,7 @@
       "art": "oak-r03",
       "path": "fallback",
       "calls": 119,
-      "triangles": 309354,
+      "triangles": 340384,
       "actualPath": "instanced",
       "glError": 0,
       "shaderFailures": 0
@@ -149,7 +149,7 @@
       "art": "oak-r03",
       "path": "fallback",
       "calls": 52,
-      "triangles": 185216,
+      "triangles": 192544,
       "actualPath": "instanced",
       "glError": 0,
       "shaderFailures": 0
@@ -159,7 +159,7 @@
       "art": "oak-r03",
       "path": "fallback",
       "calls": 138,
-      "triangles": 351628,
+      "triangles": 378718,
       "actualPath": "instanced",
       "glError": 0,
       "shaderFailures": 0
