@@ -7,13 +7,13 @@
 // Construction (stand-local three.js space, y up, origin = floor centre under the instrument):
 // - The top shell is ONE authored polar surface: a lenticular dome with the raised ding, eight elliptical tone fields
 //   (zig-zag sizes like a real pan: largest at the front) each pressed in with a hammered crease and a convex dimple,
-//   a faint hammer texture, and nitrided-steel colour breakup baked into vertex colours (keepColor).
+//   a faint hammer texture, and grey steel colour breakup baked into vertex colours (keepColor).
 // - The bottom shell is turned with its Gu opening (an inward collar closed by a dark recessed cap: no see-through).
 // - A rim bead covers the shell seam. The felt pads lie on the bottom shell's tangent plane at the contact radius, so
 //   the instrument visibly rests on them: no floating, no intersection (handpan.test.ts checks the clearances).
 // - Legs are swept rounded-square sections along an interpolating curve, ending under the pads; the rail and the hub
 //   are turned. Each leg carries a little seeded irregularity (hand-carved, not machined).
-// Decorative only: no sound, interaction, puzzle or save state. Shared art materials only (the tight metal highlight for the nitrided
+// Decorative only: no sound, interaction, puzzle or save state. Shared art materials only (the tight metal highlight for the grey
 // steel, timber, upholstery for felt): batched into the caller's chunk, no new material or draw call.
 import * as THREE from 'three';
 import type { Ctx } from './arch';
@@ -88,9 +88,9 @@ function noise(x: number, y: number) {
   return THREE.MathUtils.lerp(THREE.MathUtils.lerp(hash(i, j), hash(i + 1, j), ux), THREE.MathUtils.lerp(hash(i, j + 1), hash(i + 1, j + 1), ux), uy);
 }
 
-// nitrided steel: deep warm bronze-brown under the shared metal highlight (ceramic: tight, neutral), cooler heat-tint patches,
+// grey steel under the shared metal highlight (ceramic: tight, neutral): a mid grey with faint cool-blue tempering patches,
 // worn lighter dimple tops, darker hammered creases
-const NITRIDE = new THREE.Color('#6e5038'), HEAT = new THREE.Color('#545154'), WORN = new THREE.Color('#a07a50'), CREASE = new THREE.Color('#33271f');
+const STEEL = new THREE.Color('#7b7f83'), HEAT = new THREE.Color('#646b75'), WORN = new THREE.Color('#adb1b4'), CREASE = new THREE.Color('#383b3e');
 
 /** Ring radii of the top shell grid: dense through the tone-field band, a few steps in the ding and at the seam. */
 function topRings() {
@@ -139,7 +139,7 @@ export function topShellGeometry() {
     pos.push(base.x, base.y, base.z);
     // colour: nitride base, cool heat-tint patches, darker toward the seam, worn dimples, dark creases
     const heat = smooth(noise(x / 0.09 + 11, z / 0.09 + 5), 0.45, 0.85) * 0.55;
-    c.copy(NITRIDE).lerp(HEAT, heat).multiplyScalar(0.92 + 0.12 * noise(x / 0.035, z / 0.035));
+    c.copy(STEEL).lerp(HEAT, heat).multiplyScalar(0.92 + 0.12 * noise(x / 0.035, z / 0.035));
     c.lerp(WORN, 0.55 * worn).lerp(CREASE, 0.55 * crease).multiplyScalar(1 - 0.2 * smooth(r, 0.2, 0.265));
     col.push(c.r, c.g, c.b);
   };
@@ -170,7 +170,7 @@ export function bottomShellGeometry() {
     const x = p.getX(i), y = p.getY(i), z = p.getZ(i), r = Math.hypot(x, z);
     // the Gu interior reads dark; the underside a touch darker than the top (it never sees the sky)
     const inside = r < P.gu - 0.002 ? 0.35 : 1;
-    c.copy(NITRIDE).lerp(HEAT, 0.35 * noise(x / 0.08 + 2, z / 0.08)).multiplyScalar(inside * (0.8 + 0.1 * smooth(y, -0.1, -0.01)));
+    c.copy(STEEL).lerp(HEAT, 0.35 * noise(x / 0.08 + 2, z / 0.08)).multiplyScalar(inside * (0.8 + 0.1 * smooth(y, -0.1, -0.01)));
     col.set([c.r, c.g, c.b], i * 3);
   }
   g.setAttribute('color', new THREE.BufferAttribute(col, 3));
@@ -309,7 +309,7 @@ export function buildHandpan(c: Ctx, x: number, y0: number, z: number, yaw: numb
   // instrument
   a.add(M.ceramic, '#ffffff', cache('hp_top', topShellGeometry), 0, P.rimY, 0);
   a.add(M.ceramic, '#ffffff', cache('hp_bottom', bottomShellGeometry), 0, P.rimY, 0);
-  a.add(M.ceramic, '#4a3a2e', cache('hp_rim', rimGeometry), 0, P.rimY, 0);
+  a.add(M.ceramic, '#45484b', cache('hp_rim', rimGeometry), 0, P.rimY, 0);
   a.end();
   return HANDPAN_HEIGHT;
 }
