@@ -229,7 +229,11 @@ try {
   // ---------------------------------------------------------------- 5b. ids
   const ids = await E(() => ({ interactables: [...W.g.world.byId.keys()].sort(), stateKeys: Object.keys(W.g.state).sort(), version: W.g.state.version }));
   const expected = [...baseline.interactables, ...additions].sort(), same = (a, b) => a.length === b.length && a.every((x, i) => x === b[i]);
-  log(`ids: ${ids.interactables.length} interactables = the baseline + documented additions (${additions.join(', ')}); save keys + version unchanged`, ids.interactables.length === 131 && same(ids.interactables, expected) && same(ids.stateKeys, baseline.stateKeys) && ids.version === 4, JSON.stringify({ n: ids.interactables.length, undocumented: ids.interactables.filter((i) => !expected.includes(i)), missing: expected.filter((i) => !ids.interactables.includes(i)) }));
+  // W01's own contract: exactly wicker.candles / wicker.figure / wicker.bale among the wicker ids, every baseline + documented
+  // id present. Ids added later by other production work (outside W01) are reported, not counted against W01 here: the
+  // A–D suites own the estate-wide undocumented-id check.
+  const others = ids.interactables.filter((i) => !expected.includes(i)), wick = ids.interactables.filter((i) => i.startsWith('wicker.')).sort();
+  log(`ids: ${ids.interactables.length} interactables; all baseline + documented additions present (${additions.join(', ')}); wicker ids exactly candles / figure / bale; save keys + version unchanged${others.length ? ` (outside W01: ${others.join(', ')})` : ''}`, expected.every((i) => ids.interactables.includes(i)) && same(wick, ['wicker.bale', 'wicker.candles', 'wicker.figure']) && same(ids.stateKeys, baseline.stateKeys) && ids.version === 4, JSON.stringify({ n: ids.interactables.length, outsideW01: others, missing: expected.filter((i) => !ids.interactables.includes(i)) }));
 
   // ---------------------------------------------------------------- 6. render budgets per stage (low quality, DPR 1)
   await boot(SAVE());

@@ -17,6 +17,7 @@ const helpers = readFileSync(new URL('./e2e-helpers.js', import.meta.url), 'utf8
 const exe = process.env.CHROME ?? '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
 const browser = await chromium.launch({ executablePath: exe, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 const D = Math.PI / 180;
+const HOLD = 0.2; // shoot(): 6 ticks at the pose
 const BLUE = 0.67; // ENV-L01: dusk 0.67 = the "Blue hour" lighting phase (lightingPhases.ts, 3 segments)
 
 // stages: ready · ring · burn:<s> · charred · empty · carry · refill:<s> · refilled · cycle2:<stage>
@@ -163,7 +164,7 @@ for (const [fmt, vp] of FMTS) {
       await page.evaluate(({ from, action }) => window.W.start(from, action), { from, action });
       let t = 0;
       for (const ts of times) {
-        await page.evaluate((d) => window.W.tick(d), ts - t); t = ts;
+        await page.evaluate((d) => window.W.tick(d), Math.max(0, ts - HOLD - t)); t = ts; // shoot() holds the pose HOLD s: the frame lands at ts
         const m = await shoot(page, null, pose, 0);
         const f = `${name}-${String(ts).replace('.', 'p')}s`;
         await page.screenshot({ path: `${OUT}/${f}.jpg`, quality: 72, type: 'jpeg' });

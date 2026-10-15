@@ -45,7 +45,7 @@ const res = await page.evaluate(async ({ POSES, STAGES }) => {
     const [n, a] = st.split(':'); run(n, a);
     for (const [pk, p] of Object.entries(POSES)) {
       g.player.setPose(p); g.player.y = w.col.supportHeight(p.x, p.z, p.y + 0.05, 0.42); g.dusk = 0;
-      g.tick(DT); g.player.setPose(p); g.player.y = w.col.supportHeight(p.x, p.z, p.y + 0.05, 0.42); g.tick(DT);
+      for (let k = 0; k < 6; k++) { g.player.setPose(p); g.player.y = w.col.supportHeight(p.x, p.z, p.y + 0.05, 0.42); g.tick(DT); } // 0.2 s: the culling cadence ran here
       await new Promise((r) => setTimeout(r, 50));
       g.renderer.render(w.scene, g.camera);
       const i = g.renderer.info;
@@ -65,8 +65,8 @@ const res = await page.evaluate(async ({ POSES, STAGES }) => {
       });
       row.transparent = tr.length; row.transparentCoverage = +tr.reduce((s2, t) => s2 + t.cov, 0).toFixed(2); row.transparentList = tr;
       const px = new Uint8Array(4), ms = [];
-      for (let k = 0; k < 15; k++) { const t0 = performance.now(); g.renderer.render(w.scene, g.camera); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); ms.push(performance.now() - t0); }
-      ms.sort((x, y) => x - y); row.renderMsMedian = +ms[7].toFixed(1);
+      for (let k = 0; k < 9; k++) { const t0 = performance.now(); g.renderer.render(w.scene, g.camera); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); ms.push(performance.now() - t0); }
+      ms.sort((x, y) => x - y); row.renderMsMedian = +ms[4].toFixed(1);
       out.rows.push(row);
     }
   }
