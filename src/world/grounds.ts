@@ -22,6 +22,7 @@ import { terrainHeight } from './terrain';
 import { FIRE_UNIFORMS } from './fire';
 import { S3_BUILDERS } from './d2props';
 import { parkedCar } from './cars';
+import { buildGravityBong } from './gravityBong';
 
 const BENCH_LOG2 = logModel(157, 2.2, 0.21);
 const WICKER_GEO = wickermanGeo();
@@ -102,12 +103,7 @@ function socialGarden(w: World, c: Ctx) {
   platform(c, MUSIC_BONG, '#d8ccb0');
   boxMM(c.b, k.M.rug, '#c8b898', 79.6, 84.4, GF + 0.005, GF + 0.012, 118.5, 122.5, { chunk: c.chunk, shadow: false });
   table(c, 81.6, 120.6, GF, 1.1, 0.8, 0, '#7a5a3a', 0.4);
-  { const a = new Asm(c.b, c.chunk, 81.3, GF + 0.4, 120.5, 0.3);
-    a.add(M.paint, '#4f86a8', cg('bongBucket', () => lathe([[0.001, 0], [0.15, 0], [0.18, 0.36], [0.19, 0.38], [0.17, 0.38], [0.001, 0.36]], 14)), 0, 0, 0);
-    a.add(M.paint, '#8fb8c8', cg('bongWater', () => new THREE.CircleGeometry(0.165, 14).rotateX(-Math.PI / 2)), 0, 0.33, 0);
-    a.add(k.M.glass, '#ffffff', cg('bongBottle', () => lathe([[0.03, 0], [0.075, 0.03], [0.08, 0.28], [0.04, 0.34], [0.025, 0.4], [0.001, 0.4]], 12)), 0, 0.12, 0);
-    a.add(M.brass, '#a8a8a2', cg('bongBowl', () => lathe([[0.001, 0], [0.012, 0], [0.03, 0.04], [0.032, 0.05], [0.001, 0.02]], 8)), 0, 0.52, 0);
-  }
+  buildGravityBong(c, 81.3, GF + 0.4, 120.5);
   { const a = new Asm(c.b, c.chunk, 83.4, GF, 121.6, 0.4);
     for (let i = 0; i < 3; i++) { const an = (i / 3) * Math.PI * 2; a.add(M.timber, '#5a3a22', bx(0.025, 0.58, 0.025), Math.cos(an) * 0.13, 0.29, Math.sin(an) * 0.13, { rx: Math.sin(an) * 0.2, rz: -Math.cos(an) * 0.2 }); }
     a.add(M.brass, '#8e8a84', cg('handpanTop', () => lathe([[0.001, 0.09], [0.12, 0.08], [0.24, 0.035], [0.27, 0.0], [0.001, 0.0]], 18)), 0, 0.6, 0);
