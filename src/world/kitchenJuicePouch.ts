@@ -4,22 +4,26 @@ import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import { makeAction, place } from '../interactions/props';
 
-// Model-space metres. A flexible, sealed stand-up foil drink pouch, not a flat extruded rectangle.
-const POUCH_HEIGHT = 0.306;
+// Captures the silhouette of a REAL flexible 200 ml stand-up foil pouch, not a block.
+// Width-to-height ≈0.73; body ≈5–6 cm thick, tapering to a pressed, near-flat top.
+// The bottom gusset unfurls gently to support the pouch without a rectangular plinth.
+export const POUCH_HEIGHT = 0.306;
 export const KITCHEN_SIPPY_JUIZ = { x: 101.94, y: 0.910, z: 105.11 } as const;
-
-// The lower gusset is *wider and deeper* than the shoulder, making the pouch stand on its own.
-// The soft flare, pinched top, front swell and crimped seams are legible even without textures.
 const PROFILE = [
-  { y: 0.008, w: 0.101, d: 0.037, swell: 0.000 },
-  { y: 0.019, w: 0.124, d: 0.052, swell: 0.002 },
-  { y: 0.039, w: 0.131, d: 0.049, swell: 0.005 },
-  { y: 0.073, w: 0.129, d: 0.042, swell: 0.009 },
-  { y: 0.142, w: 0.125, d: 0.036, swell: 0.011 },
-  { y: 0.220, w: 0.119, d: 0.031, swell: 0.010 },
-  { y: 0.264, w: 0.116, d: 0.027, swell: 0.005 },
-  { y: 0.289, w: 0.110, d: 0.024, swell: 0.002 },
-  { y: POUCH_HEIGHT, w: 0.100, d: 0.021, swell: 0.000 },
+  { y: 0.005, w: 0.085, d: 0.010, swell: 0.000 },
+  { y: 0.014, w: 0.098, d: 0.019, swell: 0.003 },
+  { y: 0.029, w: 0.107, d: 0.023, swell: 0.010 },
+  { y: 0.050, w: 0.111, d: 0.024, swell: 0.008 },
+  { y: 0.077, w: 0.112, d: 0.023, swell: 0.007 },
+  { y: 0.108, w: 0.112, d: 0.022, swell: 0.007 },
+  { y: 0.145, w: 0.111, d: 0.021, swell: 0.007 },
+  { y: 0.186, w: 0.111, d: 0.020, swell: 0.006 },
+  { y: 0.224, w: 0.109, d: 0.018, swell: 0.005 },
+  { y: 0.254, w: 0.107, d: 0.016, swell: 0.004 },
+  { y: 0.277, w: 0.105, d: 0.012, swell: 0.002 },
+  { y: 0.291, w: 0.100, d: 0.008, swell: 0.001 },
+  { y: 0.300, w: 0.097, d: 0.005, swell: 0.000 },
+  { y: POUCH_HEIGHT, w: 0.091, d: 0.004, swell: 0.000 },
 ] as const;
 
 type Graphics = CanvasRenderingContext2D;
@@ -191,39 +195,100 @@ function makePrint(): HTMLCanvasElement {
   return cv;
 }
 
-/** Vertical profile + lateral bows: one continuous curving skin with coherent UVs and normals. */
-function pouchFace(front: boolean): THREE.BufferGeometry {
-  const verts: number[] = [], tex: number[] = [], tris: number[] = [];
-  const cols = 8;
-  for (const r of PROFILE) for (let i = 0; i <= cols; i++) {
-    const t = i / cols, u = 2 * t - 1;
-    const z = (front ? 1 : -1) * (r.d + r.swell * (1 - u * u));
-    verts.push(u * r.w, r.y, z);
+// Instead of square sided extrusion, the printed front and back are FLEXIBLE curving skins.
+// The lateral roll-over tapers into a narrow heat-welded edge (not a flat vertical side wall).
+const PANEL_COLS = 16;
+type Section = (typeof PROFILE)[number];
+function panelPoint(r: Section, u: number, front: boolean): [number, number, number] {
+  const edge = Math.abs(u);
+  const shoulder = r.y > 0.267 ? 0.0045 * ((r.y - 0.267) / (POUCH_HEIGHT - 0.267)) : 0;
+  const foot = r.y < 0.052 ? 0.004 * (1 - r.y / 0.052) : 0;
+  const y = r.y + foot * Math.pow(edge, 3) - shoulder * Math.pow(edge, 5);
+  // Round the cross-section toward the seam (like a soft inflated sachet).
+  const rounded = Math.pow(1 - Math.pow(edge, 3.4), 0.66);
+  const belly = r.d * (0.26 + 0.74 * rounded) + r.swell * (1 - edge * edge);
+  // Small, low-frequency fabric creases, biased toward the welded margins/bottom.
+  const wrinkle = 0.0014 * Math.pow(edge, 2) *
+    Math.sin(16 * u + r.y * 47) * Math.sin(Math.PI * r.y / POUCH_HEIGHT);
+  const x = u * r.w + 0.0012 * Math.sin(r.y * 32 + u * 4) * (1 - edge);
+  return [x, y, (front ? 1 : -1) * (belly + wrinkle)];
+}
+
+export function pouchPanelGeometry(front: boolean): THREE.BufferGeometry {
+  const verts: number[] = [], tex: number[] = [], indices: number[] = [];
+  for (const r of PROFILE) for (let i = 0; i <= PANEL_COLS; i++) {
+    const t = i / PANEL_COLS;
+    const pt = panelPoint(r, t * 2 - 1, front);
+    verts.push(...pt);
     tex.push(front ? t : 1 - t, r.y / POUCH_HEIGHT);
   }
-  for (let j = 0; j < PROFILE.length - 1; j++) for (let i = 0; i < cols; i++) {
-    const a = j * (cols + 1) + i, b = a + 1, c = a + cols + 1, d = c + 1;
-    if (front) tris.push(a, b, c, b, d, c);
-    else tris.push(a, c, b, b, c, d);
+  for (let j = 0; j < PROFILE.length - 1; j++) for (let i = 0; i < PANEL_COLS; i++) {
+    const a = j * (PANEL_COLS + 1) + i, b = a + 1, c = a + PANEL_COLS + 1, d = c + 1;
+    if (front) indices.push(a, b, c, b, d, c);
+    else indices.push(a, c, b, b, c, d);
   }
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
-  geo.setAttribute('uv', new THREE.Float32BufferAttribute(tex, 2));
-  geo.setIndex(tris); geo.computeVertexNormals();
-  return geo;
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+  geometry.setAttribute('uv', new THREE.Float32BufferAttribute(tex, 2));
+  geometry.setIndex(indices);
+  geometry.computeVertexNormals();
+  return geometry;
 }
-function sideFold(sign: number): THREE.BufferGeometry {
-  const verts: number[] = [], tris: number[] = [];
-  for (const r of PROFILE) verts.push(sign * r.w, r.y, r.d, sign * r.w, r.y, -r.d);
-  for (let i = 0; i < PROFILE.length - 1; i++) {
-    const a = 2 * i;
-    if (sign > 0) tris.push(a, a + 1, a + 2, a + 1, a + 3, a + 2);
-    else tris.push(a, a + 2, a + 1, a + 1, a + 2, a + 3);
+
+// Narrow folded side welds, shaped by the actual panel contour, instead of a slab.
+function pouchSideGeometry(side: number): THREE.BufferGeometry {
+  const verts: number[] = [], idx: number[] = [];
+  for (const r of PROFILE) {
+    const u = side > 0 ? 1 : -1;
+    verts.push(...panelPoint(r, u, true), ...panelPoint(r, u, false));
   }
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
-  geo.setIndex(tris); geo.computeVertexNormals();
-  return geo;
+  for (let j = 0; j < PROFILE.length - 1; j++) {
+    const a = 2 * j, b = a + 1, c = a + 2, d = a + 3;
+    if (side > 0) idx.push(a, b, c, b, d, c);
+    else idx.push(a, c, b, b, c, d);
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+  geometry.setIndex(idx); geometry.computeVertexNormals();
+  return geometry;
+}
+
+// Thin foil crimp: curved across the top, rounded down at each shoulder.
+// One shallow ribbon per side; NO box on the pouch's crown.
+function topCrimpGeometry(front: boolean): THREE.BufferGeometry {
+  const verts: number[] = [], indices: number[] = [];
+  for (let row = 0; row <= 2; row++) for (let i = 0; i <= PANEL_COLS; i++) {
+    const u = i / PANEL_COLS * 2 - 1, abs = Math.abs(u);
+    const y = 0.294 + row * 0.006 - 0.004 * Math.pow(abs, 5);
+    const width = 0.098 - row * 0.002;
+    const bulge = 0.0058 + 0.0017 * (1 - abs * abs);
+    verts.push(u * width, y, (front ? 1 : -1) * bulge);
+  }
+  for (let row = 0; row < 2; row++) for (let i = 0; i < PANEL_COLS; i++) {
+    const a = row * (PANEL_COLS + 1) + i, b = a + 1, c = a + PANEL_COLS + 1, d = c + 1;
+    if (front) indices.push(a, b, c, b, d, c);
+    else indices.push(a, c, b, b, c, d);
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+  geometry.setIndex(indices); geometry.computeVertexNormals();
+  return geometry;
+}
+
+// Recessed elliptical gusset under the pouch: organic tucked oval, not a rectangular box.
+function bottomGussetGeometry(): THREE.BufferGeometry {
+  const verts = [0, 0.007, 0], idx: number[] = [];
+  const n = 24;
+  for (let i = 0; i < n; i++) {
+    const a = (i / n) * Math.PI * 2;
+    verts.push(0.091 * Math.cos(a), 0.0085 + 0.002 * Math.abs(Math.cos(a)),
+      0.023 * Math.sin(a));
+  }
+  for (let i = 1; i <= n; i++) idx.push(0, i, i === n ? 1 : i + 1);
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+  geometry.setIndex(idx); geometry.computeVertexNormals();
+  return geometry;
 }
 
 export function buildKitchenJuicePouch(w: World, g: GameApi) {
@@ -231,46 +296,63 @@ export function buildKitchenJuicePouch(w: World, g: GameApi) {
   root.name = 'kitchen-sippyjuiz-pouch';
   root.userData.room = 'kitchen';
   root.userData.cullDist = 20;
-  const silver = w.material(new THREE.MeshLambertMaterial({ color: '#c8cbc5', side: THREE.DoubleSide, flatShading: true }));
-  const seamMat = w.material(new THREE.MeshLambertMaterial({ color: '#eee9d9', flatShading: true }));
-  const shade = w.material(new THREE.MeshLambertMaterial({ color: '#96a5a7', flatShading: true }));
+  const silver = w.material(new THREE.MeshLambertMaterial({ color: '#bfc5c4', side: THREE.DoubleSide }));
+  const crimpSilver = w.material(new THREE.MeshLambertMaterial({ color: '#e5e7e1', side: THREE.DoubleSide }));
+  const gussetFoil = w.material(new THREE.MeshLambertMaterial({ color: '#9eaba9', side: THREE.DoubleSide }));
   const art = w.texture(new THREE.CanvasTexture(makePrint()));
   art.colorSpace = THREE.SRGBColorSpace;
   art.anisotropy = 4;
   const printed = w.material(new THREE.MeshLambertMaterial({ map: art, side: THREE.DoubleSide }));
-  const face = new THREE.Mesh(pouchFace(true), printed);
-  face.castShadow = true; face.receiveShadow = true;
-  root.add(face);
-  const back = new THREE.Mesh(pouchFace(false), silver);
+  const front = new THREE.Mesh(pouchPanelGeometry(true), printed);
+  front.castShadow = true; front.receiveShadow = true;
+  root.add(front);
+  const back = new THREE.Mesh(pouchPanelGeometry(false), silver);
   back.castShadow = true; root.add(back);
-  for (const s of [-1, 1]) {
-    const side = new THREE.Mesh(sideFold(s), silver);
-    side.castShadow = true; root.add(side);
-  }
 
-  // Standing bottom gusset. A recessed base under the flared skirt, not a rectangular box.
-  const base = new THREE.Mesh(new THREE.BoxGeometry(0.192, 0.007, 0.064), shade);
-  base.position.y = 0.007;
-  root.add(base);
-  // Folded seam over the silver crest and tiny pressed lines across the upper lip.
-  const rim = new THREE.Mesh(new THREE.BoxGeometry(0.205, 0.009, 0.047), seamMat);
-  rim.position.y = POUCH_HEIGHT - 0.004;
-  rim.castShadow = true; root.add(rim);
-  // Foil pleats at the lower left/right corners accentuate the gusset flare.
+  // Each crimp and edge follows the soft silhouette rather than flattening it with box geometry.
   for (const sign of [-1, 1]) {
-    const pleat = new THREE.Mesh(new THREE.ConeGeometry(0.019, 0.047, 3, 1), shade);
-    pleat.rotation.z = sign * 0.42;
-    pleat.position.set(sign * 0.110, 0.038, 0.019);
-    root.add(pleat);
+    const edge = new THREE.Mesh(pouchSideGeometry(sign), silver);
+    edge.castShadow = true;
+    root.add(edge);
   }
+  for (const frontSide of [true, false]) {
+    const crimp = new THREE.Mesh(topCrimpGeometry(frontSide), crimpSilver);
+    root.add(crimp);
+  }
+  const foot = new THREE.Mesh(bottomGussetGeometry(), gussetFoil);
+  root.add(foot);
+
+  // Fine fold highlights low on the cheeks, following the inflated pouch's curved skin.
+  const folds = new THREE.Group();
+  const creaseMaterial = w.material(new THREE.MeshLambertMaterial({
+    color: '#e3e2d8', side: THREE.DoubleSide, transparent: true, opacity: 0.65,
+    depthWrite: false,
+  }));
+  for (const side of [-1, 1]) {
+    const coords = [
+      [side * 0.089, 0.015, 0.021],
+      [side * 0.111, 0.046, 0.019],
+      [side * 0.098, 0.064, 0.019],
+      [side * 0.080, 0.025, 0.031],
+    ];
+    const positions = new Float32Array([...coords[0], ...coords[1], ...coords[2],
+      ...coords[0], ...coords[2], ...coords[3]]);
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geo.computeVertexNormals();
+    folds.add(new THREE.Mesh(geo, creaseMaterial));
+  }
+  root.add(folds);
+
+
 
   // Straw inserted through a small foil puncture on the front, leaning to the upper right.
   const hole = new THREE.Mesh(new THREE.CircleGeometry(0.012, 8),
     w.material(new THREE.MeshLambertMaterial({ color: '#597481', side: THREE.DoubleSide })));
-  hole.position.set(-0.024, 0.271, 0.038);
+  hole.position.set(-0.024, 0.270, 0.025);
   root.add(hole);
-  const bottom = new THREE.Vector3(-0.023, 0.277, 0.045);
-  const top = new THREE.Vector3(0.029, 0.442, 0.048);
+  const bottom = new THREE.Vector3(-0.023, 0.277, 0.030);
+  const top = new THREE.Vector3(0.029, 0.423, 0.035);
   const vec = top.clone().sub(bottom);
   const straw = new THREE.Mesh(new THREE.CylinderGeometry(0.0064, 0.0064, vec.length(), 7),
     w.material(new THREE.MeshLambertMaterial({ color: '#f4f0e5', flatShading: true })));
