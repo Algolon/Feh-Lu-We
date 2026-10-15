@@ -40,7 +40,7 @@ export class Audio {
           this.outdoorBuffers[surface] = Array.from({ length: 7 }, (_, v) => {
             const pcm = renderOutdoorFootstep(surface, v, this.ctx!.sampleRate);
             const buffer = this.ctx!.createBuffer(1, pcm.length, this.ctx!.sampleRate);
-            buffer.copyToChannel(pcm, 0);
+            buffer.getChannelData(0).set(pcm); // same PCM copy; accepts ArrayBufferLike source on current TypeScript
             return buffer;
           });
         }
