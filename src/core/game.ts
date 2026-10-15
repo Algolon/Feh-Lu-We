@@ -258,8 +258,8 @@ export class Game implements GameApi {
     if (o.sfx !== 'none') this.sfx(o.sfx);
     if (opts.save !== false) this.changed();
   }
-  sfx(name: Sfx | 'door' | 'drawer' | 'switch' | 'water' | 'steam') {
-    this.audio.sfx(name);
+  sfx(name: Sfx | 'door' | 'drawer' | 'switch' | 'water' | 'steam' | 'electric-zap', gain = 1) {
+    this.audio.sfx(name, 'grass', gain);
   }
   toast(msg: string) {
     this.ui.toast(msg);

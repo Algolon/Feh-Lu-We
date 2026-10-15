@@ -99,7 +99,7 @@ export class Audio {
     else this.noise(0.14, 'highpass', 1700 * f, 0.7, 0.045 * g, 0, 0.012);
   }
 
-  sfx(name: SfxName, surface: 'grass' | 'wood' | 'stone' = 'grass') {
+  sfx(name: SfxName, surface: 'grass' | 'wood' | 'stone' = 'grass', gain = 1) {
     if (!this.ready || this.muted) return;
     switch (name) {
       case 'step':
@@ -121,6 +121,17 @@ export class Audio {
       case 'crank': for (let i = 0; i < 8; i++) this.noise(0.04, 'bandpass', 1800, 6, 0.12, i * 0.11); break;
       case 'steam': this.noise(1.5, 'highpass', 3000, 0.5, 0.15, 0, 0.2); break;
       case 'water': this.noise(0.5, 'lowpass', 700, 1, 0.1, 0, 0.1); break;
+      case 'electric-zap': {
+        // Original, license-free miniature electrical shock: brittle high crackle + descending
+        // midrange buzz + brief low impact. Each layer dies within the corresponding light pulse.
+        const v = Number.isFinite(gain) ? Math.max(0, Math.min(1, gain)) : 0;
+        if (v <= 0) break;
+        this.noise(0.135, 'highpass', 1650, 0.8, 0.18 * v, 0, 0.002, 4500);
+        this.noise(0.105, 'bandpass', 980, 1.4, 0.11 * v, 0.013, 0.003, 520);
+        this.tone(390, 0.125, 'sawtooth', 0.05 * v, 0, 145);
+        this.tone(1700, 0.065, 'triangle', 0.035 * v, 0.007, 950);
+        break;
+      }
       default: break;
     }
   }
