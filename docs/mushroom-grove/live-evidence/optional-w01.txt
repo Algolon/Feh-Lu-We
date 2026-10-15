@@ -1,0 +1,10 @@
+PASS  registry: the optional ids are each registered once (135 interactables) — {"total":135,"bong":1,"beetle":1,"pouch":1,"bale":1,"handpan":1}
+PASS  gravity bong: "Neem een hit" targeted, one hit sound per cooldown, toast, no state change — {"pose":{"ok":true,"x":83.08,"z":120.56,"label":"Neem een hit"},"toast":"Je neemt een hit. Het water borrelt flink.","hits":1,"stateSame":true}
+PASS  serre airco: beetle inspect targeted and shows its text; the zap plays near it (distance gain), never far away; no state change — {"pose":{"ok":true,"x":119.45,"z":93,"label":"Bekijken: airco en kever"},"zaps":[1,1,1,1],"toast":"Boven op de airco ligt een kevertje op zijn rug, de pootjes verkrampt omhoog. Een blauw vonkje knettert naast zijn verschroeide schild. Geëlektrocuteerd. De spanning was hem duidelijk te veel.","stateSame":true,"farZaps":0}
+PASS  kitchen Bosfruit pouch: inspect targeted, shows its line, no state change — {"pose":{"ok":true,"x":102.62,"z":105.05,"label":"Bekijken: drinkzakje"},"toast":"Is dit de laatste capri sun?","stateSame":true}
+PASS  field-recorded footsteps: grass and dirt resolve outdoors (wood / stone indoors) and play while walking — {"surfaceLawn":"grass","surfacePath":"dirt","surfaceHall":"stone","steps":["dirt","grass"],"n":4}
+PASS  audio coexistence: the ritual layer runs with footsteps, the bong hit and the zap; released at range (context running) — {"ready":true,"ritualOn":true,"stepsDuring":3,"ritualStill":true,"ctx":"running","farReleased":true,"stage":"CHARRED"}
+PASS  hay then an inventory item: the bag selection releases the hay, the matches are held and light the ring through the item path — {"carry":{"stage":"CARRYING_HAY","chip":"Bundel hooi in de hand — tik om los te laten"},"after":{"stage":"EMPTY_FRAME","selected":"matches","chip":"Lucifers in de hand — tik om los te laten","target":"wicker.candles","label":"Kaarsen aansteken","lit":9}}
+PASS  no page errors / failed requests
+
+8/8 passed

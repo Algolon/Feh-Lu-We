@@ -1,0 +1,12 @@
+PASS  audio context running after the start gesture
+PASS  reticle targets the handpan with the label "Bespelen: handpan" on every field and the ding — []
+PASS  each aimed field plays its own note (ding D3, fields A3 … A4) — ding D3:146.83 field 0:220 field 1:233.08 field 2:261.63 field 3:293.66 field 4:329.63 field 5:349.23 field 6:392 field 7:440
+PASS  the strokes actually sound (synth returned true)
+PASS  a fast burst of strokes is handled (voice cap, no errors) — 23 strokes
+PASS  with sound muted, playing shows the hint to turn sound on — {"sounded":false,"recorded":true,"toast":"Het geluid staat uit. Zet het aan in de instellingen om de handpan te horen."}
+PASS  playing saves nothing (inventory, flags, taken, solved, open unchanged)
+PASS  desktop: no page / console errors
+PASS  phone: tapping a field plays that field (ding, D4, G4) — [{"name":"ding D3","want":146.83,"got":146.83,"at":[420,191],"zone":"zone-look"},{"name":"field 3","want":293.66,"got":293.66,"at":[394,187],"zone":"zone-look"},{"name":"field 6","want":392,"got":392,"at":[456,195],"zone":"zone-look"}]
+PASS  phone: no page / console errors
+
+10/10 checks passed
