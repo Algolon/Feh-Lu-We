@@ -177,7 +177,7 @@ export class Audio {
       const t = c.currentTime, audible = duration / pitch;
       volume.gain.setValueAtTime(0.0001, t);
       volume.gain.linearRampToValueAtTime(vol, t + 0.01);
-      volume.gain.setValueAtTime(vol, t + Math.max(0.02, audible - 0.045));
+      volume.gain.setValueAtTime(vol, t + Math.max(0.02, audible - (surface === 'grass' ? 0.045 : 0.055)));
       volume.gain.linearRampToValueAtTime(0.0001, t + audible);
       src.start(t, offset, duration);
     } else {
