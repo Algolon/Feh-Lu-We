@@ -509,9 +509,9 @@ export function moonCrescentGeometry() {
   return g;
 }
 /** FLW-S3-016 Track 01 candidate standing on its support at the anchor (y = the support top), facing `yaw`. */
-export function buildMoon(bt: Batcher, chunk: string, x: number, y: number, z: number, yaw: number, s = 1) {
+export function buildMoon(bt: Batcher, chunk: string, x: number, y: number, z: number, yaw: number, s = 1, name = T01('FLW-S3-016')) {
   const M = artMats(), BW = 0.14 * s, BH = 0.094 * s, BD = 0.105 * s, gap = 0.02 * s;
-  const a = new Asm(bt, chunk, x, y, z, yaw).begin(T01('FLW-S3-016'));
+  const a = new Asm(bt, chunk, x, y, z, yaw).begin(name);
   const block = deform(softBox(BW, BH, BD, 0.007 * s, 1, 2), (p) => { // rough-hewn: the faces wander a few millimetres
     const k = 1 + 0.025 * Math.sin(p.x * 140 + p.y * 60) * Math.sin(p.z * 120 + 1.3);
     p.x *= k; p.z *= 2 - k;
@@ -633,9 +633,9 @@ function rodBetween(a: THREE.Vector3, b: THREE.Vector3, r0: number, r1 = r0, seg
   return g;
 }
 /** FLW-S3-015 Track 01 candidate standing on its support at the anchor, the bow towards the facing `yaw`. */
-export function buildSloop(bt: Batcher, chunk: string, x: number, y: number, z: number, yaw: number, s = 1) {
+export function buildSloop(bt: Batcher, chunk: string, x: number, y: number, z: number, yaw: number, s = 1, name = T01('FLW-S3-015')) {
   const M = artMats(), V = (a: number, b: number, c: number) => new THREE.Vector3(a, b, c);
-  const a = new Asm(bt, chunk, x, y, z, yaw).begin(T01('FLW-S3-015'));
+  const a = new Asm(bt, chunk, x, y, z, yaw).begin(name);
   let tris = 0;
   const add = (mat: THREE.Material, color: string, g: THREE.BufferGeometry) => {
     g.scale(s, s, s); toLocal(g);

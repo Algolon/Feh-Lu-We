@@ -62,9 +62,9 @@ export const PROPS3D: Prop3D[] = [
   // front gallery: the south wall pier between the windows, over the bench (face z 80.422)
   { id: 'FLW-S3-014', title: 'Gesneden zwaluwen', basis: 'OWNER_GROUP_A', room: 'frontGallery', mount: 'wall', x: 90.0, y: UF + 1.72, z: 80.422, yaw: 0, maxTris: 3200, scale: 1.15 }, // D3-b1: Track 01 build ×1.15 (≈ 2.0 × 0.69 m), centred on the pier between the windows, over the gallery bench
   // Reiskamer writing desk (top at +0.76), east half; the open book keeps the west half
-  { id: 'FLW-S3-015', title: 'Miniatuurzeilboot', basis: 'OWNER_GROUP_A', room: 'reis', mount: 'surface', x: 79.25, y: UF + 0.76, z: 80.92, yaw: Math.PI / 2, maxTris: 1500 },
+  { id: 'FLW-S3-015', title: 'Miniatuurzeilboot', basis: 'OWNER_GROUP_A', room: 'reis', mount: 'surface', x: 79.25, y: UF + 0.76, z: 80.92, yaw: Math.PI / 2, maxTris: 1500, scale: 1.15 }, // D3-b2: Track 01 build ×1.15 (0.41 m hull, ≈ 0.66 m to the masthead), the bow east along the desk
   // Sterrenkamer: the free bedside (window side), facing into the room
-  { id: 'FLW-S3-016', title: 'Keramische maanvorm', basis: 'OWNER_GROUP_A', room: 'sterren', mount: 'surface', x: 72.66, y: UF + 0.5775, z: 91.0, yaw: Math.PI / 2 - 0.35, maxTris: 600 },
+  { id: 'FLW-S3-016', title: 'Keramische maanvorm', basis: 'OWNER_GROUP_A', room: 'sterren', mount: 'surface', x: 72.66, y: UF + 0.5775, z: 91.0, yaw: Math.PI / 2 - 0.35, maxTris: 1400, scale: 1.4 }, // D3-b2: Track 01 build ×1.4 (≈ 0.46 m overall) on the window-side bedside, turned towards the bed / room
   // botanic room (D3-b1): the work-end pier of the south wall, facing the door down the room's length
   { id: 'FLW-S3-017', title: 'Terracotta bloemmedaillon', basis: 'OWNER_GROUP_A', room: 'botanic', mount: 'wall', x: 103.25, y: UF + 1.93, z: 80.422, yaw: 0, maxTris: 2600, scale: 2.5 }, // D3-b1: Track 01 build ×2.5 (Ø ≈ 1.45 m) on the south pier between the windows, over the potting bench: the work end, facing the door
   // Portugal cottage room (D2-R): over the sideboard on the west wall, part of the plates / jug vignette

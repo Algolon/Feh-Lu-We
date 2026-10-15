@@ -232,6 +232,42 @@ try {
   });
   log('D2 paths: the lake bench memory is still reached and targeted past the heron; the grill front and the gas bottle stay reachable past the fire screen', reach.bench === 'mem.pond.bench' && reach.bbq === 'ok', JSON.stringify(reach));
 
+  // ---------------------------------------------------------------- 9b. D3-b2 upstairs identity rooms
+  // culled regions: the Reis- / Sterrenkamer (mUpR) and the guest room (mUpG) are drawn while their room is visible and
+  // not from the hall or the library with their doors shut; the doors → protected memories / bed / bath routes stay
+  // walkable past the new furniture, and the memories are still targeted from a standing pose
+  const d3b2 = await E(page, () => {
+    const g = window.__game, w = g.world, T = window.T, out = {};
+    const vis = (ch) => w.scene.children.filter((o) => o.userData.chunk === ch).some((o) => o.visible);
+    const at = (x, y, z, yaw) => { g.player.setPose({ x, y, z, yaw, pitch: 0 }); g.player.y = w.col.supportHeight(x, z, y + 0.05, 0.42); for (let i = 0; i < 12; i++) g.tick(1 / 30); };
+    const doors = ['door.reis', 'door.sterren', 'door.storage', 'door.bath'], was = Object.fromEntries(doors.map((d) => [d, g.state.open[d]]));
+    for (const d of doors) g.state.open[d] = false;
+    w.syncAll();
+    at(90, 0.15, 86, 0); out.hall = { R: vis('mUpR'), G: vis('mUpG') };
+    at(79.0, 0.15, 100.0, 180); out.library = { R: vis('mUpR'), G: vis('mUpG') };
+    at(80.0, 3.35, 83.0, -1.57); out.reis = vis('mUpR');
+    at(79.0, 3.35, 91.0, -1.57); out.sterren = vis('mUpR');
+    at(103.0, 3.35, 102.0, 0); out.guest = vis('mUpG');
+    for (const d of doors) g.state.open[d] = true;
+    w.syncAll();
+    for (let i = 0; i < 45; i++) g.tick(1 / 30);
+    const route = (k, start, pts, id) => {
+      try { at(start[0], 3.35, start[1], start[2]); T.walk(pts); if (id) { T.lookAtId(id); out[k] = g.metrics().target; } else out[k] = 'ok'; } catch (e) { out[k] = String(e.message).slice(0, 120); }
+    };
+    route('suitcase', [86.4, 82.2, -1.57], [[84.0, 82.3], [82.8, 83.3]], 'mem.reis.suitcase');
+    route('logbook', [86.4, 90.2, -1.57], [[84.3, 90.4], [84.4, 92.2]], 'mem.sterren.telescope');
+    route('reisBed', [86.4, 82.2, -1.57], [[84.0, 82.3], [80.5, 83.6], [76.6, 83.6]], null);
+    route('sterrenBed', [86.4, 90.2, -1.57], [[84.0, 90.3], [78.0, 90.4], [75.3, 90.5]], null);
+    route('guestBed', [101.0, 97.4, 0], [[101.0, 99.6], [104.3, 100.6]], null);
+    route('guestWardrobe', [101.0, 97.4, 0], [[101.0, 99.6], [101.6, 105.2]], null);
+    route('bath', [87.5, 102.8, 0], [[87.5, 104.8], [88.6, 106.4], [88.6, 108.6]], null);
+    for (const d of doors) g.state.open[d] = was[d];
+    w.syncAll();
+    return out;
+  });
+  log('D3-b2 regions: Reis/Sterren (mUpR) and the guest room (mUpG) drawn in their rooms, culled from the hall and the library behind shut doors', !d3b2.hall.R && !d3b2.hall.G && !d3b2.library.R && !d3b2.library.G && d3b2.reis && d3b2.sterren && d3b2.guest, JSON.stringify(d3b2));
+  log('D3-b2 routes: door → suitcase memory and → logbook (both targeted), → both beds, → the guest bed and wardrobe, → past the bath stay walkable', d3b2.suitcase === 'mem.reis.suitcase' && d3b2.logbook === 'mem.sterren.telescope' && ['reisBed', 'sterrenBed', 'guestBed', 'guestWardrobe', 'bath'].every((k) => d3b2[k] === 'ok'), JSON.stringify(d3b2));
+
   // ---------------------------------------------------------------- 9b. the salon gallery wall
   const salonSlots = SALON_SITES.flatMap((st) => SALON_LAYOUT.map((f) => { const b = frameBox(f), rx = -Math.cos(st.yaw), rz = Math.sin(st.yaw); return { id: f.id, x: st.x + rx * b.uc, y: st.y + b.vc, z: st.z + rz * b.uc, yaw: st.yaw, w: b.w }; }));
   const salon = await E(page, (slots) => {

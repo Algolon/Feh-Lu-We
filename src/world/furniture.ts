@@ -744,13 +744,24 @@ export function bed2(c: Ctx, x: number, z: number, y0: number, yaw: number, duve
   collide(c, x, z, yaw, width, 2.15, 0.8, y0);
 }
 
+/**
+ * Night table. DEV-04D D3-b2 (the three upstairs bedrooms are its only users): four square corner posts stand on the
+ * floor and run up under the top; between them a closed drawer case, an open shelf on a bottom board below it, a back
+ * board closing the shelf. The old box on 12 cm stubs read as a crate. Footprint, top datum (0.5775: the lamp, the
+ * moon and the binoculars stand on it) and collider are unchanged.
+ */
 export function bedside(c: Ctx, x: number, z: number, y0: number, yaw: number, wood = '#6b4426') {
-  const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw), dk = darker(wood, 0.7);
-  for (const sx of [-1, 1]) for (const sz of [-1, 1]) a.add(M.timber, dk, taperLeg(0.12, 0.025, 0.02), sx * 0.19, 0, sz * 0.16);
-  a.add(M.timber, wood, sb(0.44, 0.42, 0.38, 0.008), 0, 0.33, 0);
-  a.add(M.timber, darker(wood, 1.08), sb(0.36, 0.14, 0.02, 0.005), 0, 0.44, 0.195);
-  a.add(M.brass, '#c9a44c', cg('knob', () => new THREE.SphereGeometry(0.018, 8, 6)), 0, 0.44, 0.215);
-  a.add(M.timber, darker(wood, 1.1), sb(0.5, 0.035, 0.44, 0.008), 0, 0.56, 0);
+  const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw).begin('bedside'), dk = darker(wood, 0.7), lt = darker(wood, 1.08);
+  const P = 0.036, X = 0.2, Z = 0.17, TOP = 0.5425; // post section, post centres, underside of the top
+  for (const sx of [-1, 1]) for (const sz of [-1, 1]) a.add(M.timber, dk, bx(P, TOP, P), sx * X, TOP / 2, sz * Z);
+  a.add(M.timber, wood, sb(2 * X, 0.2, 2 * Z, 0.006), 0, TOP - 0.1, 0); // drawer case between the posts
+  a.add(M.timber, lt, sb(2 * X - P - 0.012, 0.15, 0.02, 0.005), 0, TOP - 0.1, Z + 0.006); // drawer front, a shadow gap round it
+  a.add(M.brass, '#c9a44c', cg('knob', () => new THREE.SphereGeometry(0.018, 8, 6)), 0, TOP - 0.1, Z + 0.026);
+  a.add(M.timber, wood, bx(2 * X, 0.024, 2 * Z), 0, 0.11, 0); // bottom board: the open shelf
+  a.add(M.timber, dk, bx(2 * X, 0.04, 0.02), 0, 0.08, Z); // its front rail
+  a.add(M.timber, darker(wood, 0.85), bx(2 * X, TOP - 0.2 - 0.122, 0.012), 0, 0.122 + (TOP - 0.2 - 0.122) / 2, -Z); // back board
+  a.add(M.timber, darker(wood, 1.1), sb(0.5, 0.035, 0.44, 0.008), 0, 0.56, 0); // top, overhanging the posts
+  a.end();
   collide(c, x, z, yaw, 0.5, 0.45, 0.6, y0);
 }
 

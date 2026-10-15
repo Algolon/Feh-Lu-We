@@ -30,8 +30,8 @@ describe('DEV-04D D2 ship rule', () => {
     for (const id of ids) expect(['APPROVED_3D_REF', 'APPROVED_KEY_REF', 'REVIEW_READY'], `${id}: ${status[id]}`).toContain(status[id]);
     for (const id of ['FLW-RSV-019', 'FLW-RSV-020', 'FLW-RSV-021', 'FLW-RSV-022']) expect(ids.has(id), id).toBe(false);
   });
-  it('triangle budgets follow the brief (most ≤ 600; heron, sloop, the D2-R remodels / panel ≤ 1.5 k; the Track 01 builds at their owner-approved cost)', () => {
-    const big = ['FLW-S3-037', 'FLW-S3-015', 'FLW-S3-030', 'FLW-S3-031'], t01: Record<string, number> = { 'FLW-S3-014': 3200, 'FLW-S3-017': 2600 }; // Track 01: 3,042 / 2,468 tris
+  it('triangle budgets follow the brief (most ≤ 600; heron, sloop, the D2-R remodels / panel ≤ 1.5 k; the Track 01 builds (D3-b1 / D3-b2) at their owner-approved cost)', () => {
+    const big = ['FLW-S3-037', 'FLW-S3-015', 'FLW-S3-030', 'FLW-S3-031'], t01: Record<string, number> = { 'FLW-S3-014': 3200, 'FLW-S3-017': 2600, 'FLW-S3-016': 1400 }; // Track 01: 3,042 / 2,468 / 1,208 tris (the sloop's 1,334 stays in the 1.5 k class)
     for (const p of PROPS3D) expect(p.maxTris, p.id).toBeLessThanOrEqual(t01[p.id] ?? (big.includes(p.id) ? 1500 : 600));
   });
 });
