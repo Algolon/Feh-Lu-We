@@ -13,6 +13,7 @@ import { Player, PLAYER } from '../player/player';
 import { World, LightPool, type GameApi, type Interactable, type LightView } from '../interactions/world';
 import { UI } from '../ui/ui';
 import { Audio } from '../audio/audio';
+import type { FootstepSurface } from '../audio/footsteps';
 import {
   type Outcome, type Sfx, type PlaceKind, type PuzzleDef, PUZZLES, currentPuzzle, openPuzzles, viewHint, tutorialMissing, leaveHome as leaveHomeRule, submitCode, LOCK_OPTIONS,
   placePiece, takePiece, slotContents, loosePieces, placeSolved, submitDigits, submitBilliard, solvedCount, REQUIRED_COUNT, activeThread, threadNext, threadDone, owns,
@@ -33,7 +34,7 @@ import { ritualGain } from '../world/wickerRitual';
 export interface SceneExtras {
   env?: Env;
   isIndoor?: (x: number, z: number, y: number) => boolean;
-  surfaceAt?: (x: number, z: number, y: number) => 'grass' | 'wood' | 'stone';
+  surfaceAt?: (x: number, z: number, y: number) => FootstepSurface;
   /** Authored rooms + portals: lighting relevance and the floor-aware map. */
   rooms?: RoomGraph;
 }
@@ -260,8 +261,8 @@ export class Game implements GameApi {
     if (o.sfx !== 'none') this.sfx(o.sfx);
     if (opts.save !== false) this.changed();
   }
-  sfx(name: Sfx | 'door' | 'drawer' | 'switch' | 'water' | 'steam') {
-    this.audio.sfx(name);
+  sfx(name: Sfx | 'door' | 'drawer' | 'switch' | 'water' | 'steam' | 'electric-zap' | 'bongHit', gain = 1) {
+    this.audio.sfx(name, 'grass', gain);
   }
   toast(msg: string) {
     this.ui.toast(msg);

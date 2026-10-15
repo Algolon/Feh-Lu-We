@@ -31,7 +31,7 @@ export interface GameApi {
   readonly state: GameState;
   readonly selected: string | null;
   act(o: Outcome, opts?: { save?: boolean }): void;
-  sfx(name: Sfx | 'door' | 'drawer' | 'switch' | 'water' | 'steam'): void;
+  sfx(name: Sfx | 'door' | 'drawer' | 'switch' | 'water' | 'steam' | 'electric-zap' | 'bongHit', gain?: number): void;
   toast(msg: string): void;
   changed(): void; // state mutated → resync + save
   inspect(clueId: string, extra?: { title?: string; text?: string }): void;

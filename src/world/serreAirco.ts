@@ -10,6 +10,19 @@ import { terrainHeight } from './terrain';
 /** Along the south glazing, tucked against the service-wing corner; clear of the glass and pool. */
 export const SERRE_AIRCO = { x: CONS.x0 + 1.95, z: CONS.z0 - 1.00, width: 2.06, depth: 0.80, height: 1.10 } as const;
 
+// The same single timing function drives both light and sound (two short arcs per cycle).
+export const SERRE_AIRCO_ZAP_CYCLE = 2.5;
+export function serreAircoZapPulse(t: number, reducedMotion = false): 0 | 1 | 2 {
+  if (reducedMotion) return 0;
+  const phase = ((t % SERRE_AIRCO_ZAP_CYCLE) + SERRE_AIRCO_ZAP_CYCLE) % SERRE_AIRCO_ZAP_CYCLE;
+  return phase < 0.22 ? 1 : phase > 0.34 && phase < 0.48 ? 2 : 0;
+}
+
+/** No sound beyond 8.5 m; soft falloff within reach of the little outdoor unit. */
+export function serreAircoZapGain(distance: number) {
+  return Math.max(0, Math.min(1, (8.5 - distance) / 7));
+}
+
 export function buildSerreAirco(w: World, g: GameApi) {
   const k = getKit(), b = new Batcher();
   const X = SERRE_AIRCO.x, Z = SERRE_AIRCO.z, Y = terrainHeight(X, Z);
@@ -178,10 +191,20 @@ export function buildSerreAirco(w: World, g: GameApi) {
   const sparks = new THREE.LineSegments(sparksGeo,
     w.material(new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.94 })));
   root.add(sparks);
-  // Brief clustered pulses; reduced-motion mode presents a static readable lightning mark.
+  // The audio fires once at the first frame of each visible pulse, not on every frame.
+  // Reduced-motion keeps the arcs static and silent; mute/audio-unlock remain handled by Audio.
+  let lastPulseId = -1;
   w.onUpdate((_dt, t) => {
-    const phase = t % 2.5;
-    sparks.visible = w.reducedMotion || (phase < 0.22 || (phase > 0.34 && phase < 0.48));
+    const pulse = serreAircoZapPulse(t, w.reducedMotion);
+    sparks.visible = w.reducedMotion || pulse !== 0;
+    if (!pulse) return;
+    const pulseId = Math.floor(t / SERRE_AIRCO_ZAP_CYCLE) * 2 + pulse;
+    if (pulseId === lastPulseId) return;
+    lastPulseId = pulseId;
+    if (w.isCulled(root)) return;
+    const player = g.playerXZ();
+    const gain = serreAircoZapGain(Math.hypot(player.x - (X + bx), player.z - Z));
+    if (gain > 0) g.sfx('electric-zap', gain);
   });
   w.scene.add(root);
 

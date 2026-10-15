@@ -16,6 +16,7 @@ import { buildWickerSetpiece } from './wickerFire';
 import { baleGeo, twineGeo, besomGeo, looseStrawGeo, BALE } from './hayBale';
 import { propMats } from './propkit';
 import { makeInspect, place } from '../interactions/props';
+import { registerGravityBongAction } from './gravityBongInteraction';
 import type { Vegetation } from './nature';
 import {
   ARRIVAL_GRAVEL, PARKING, BBQ, OUTDOOR_DINING, MUSIC_BONG, BALLOON_NOOK, LAKE, LAKE_VIEW, GOLF_TEE, GOLF_CHUTE, GOLF_MAT, WICKERMAN, WICKER_BALE, GF, type Rect,
@@ -43,7 +44,7 @@ const HEARTH_STONE = (() => {
 
 export function buildGrounds(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods: EstateWoods | null) {
   arrival(w, c);
-  socialGarden(w, c);
+  socialGarden(w, g, c);
   lake(w, g, c, veg, woods);
   golf(w, c); // DEV-04B: in the grounds batch, which already carries the art-kit materials (an own chunk cost +7 draw calls)
   wickerman(w, g, c);
@@ -78,7 +79,7 @@ function platform(c: Ctx, r: Rect, color: string) {
   boxMM(c.b, c.k.M.stone, '#c4b898', r.x0 - 0.06, r.x1 + 0.06, -0.05, GF - 0.03, r.z0 - 0.06, r.z1 + 0.06, { chunk: c.chunk, uv: 1 }); // edge course
 }
 
-function socialGarden(w: World, c: Ctx) {
+function socialGarden(w: World, g: GameApi, c: Ctx) {
   const k = c.k, { sb, bx, cg } = joinery, M = artMats();
   // BBQ work place (reached from the kitchen door), apart from the balloon tank: a kettle grill on three legs with a
   // side shelf, the prep table, a gas bottle with its valve; tongs and a board on the prep table
@@ -116,6 +117,7 @@ function socialGarden(w: World, c: Ctx) {
   boxMM(c.b, k.M.rug, '#c8b898', 79.6, 84.4, GF + 0.005, GF + 0.012, 118.5, 122.5, { chunk: c.chunk, shadow: false });
   table(c, 81.6, 120.6, GF, 1.1, 0.8, 0, '#7a5a3a', 0.4);
   buildGravityBong(c, 81.58, GF + 0.4, 120.56);
+  registerGravityBongAction(w, g, 81.58, GF + 0.4, 120.56);
   { const a = new Asm(c.b, c.chunk, 83.4, GF, 121.6, 0.4);
     for (let i = 0; i < 3; i++) { const an = (i / 3) * Math.PI * 2; a.add(M.timber, '#5a3a22', bx(0.025, 0.58, 0.025), Math.cos(an) * 0.13, 0.29, Math.sin(an) * 0.13, { rx: Math.sin(an) * 0.2, rz: -Math.cos(an) * 0.2 }); }
     a.add(M.brass, '#8e8a84', cg('handpanTop', () => lathe([[0.001, 0.09], [0.12, 0.08], [0.24, 0.035], [0.27, 0.0], [0.001, 0.0]], 18)), 0, 0.6, 0);
