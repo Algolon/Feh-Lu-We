@@ -5,6 +5,9 @@ import { Batcher, box, boxMM, boxGeo, cyl, geo, getKit, gableGeo, hipRoofGeo, pl
 import { lathe, softBox } from './artkit';
 import type { CollisionWorld } from '../player/collision';
 import { registerOpening } from './openings';
+import { studyWindowSite, studyWindow } from './exteriorStudy';
+import { slateCourseUV } from './roofDetail';
+import { rainwater, ridgeFinish } from './exteriorFinish';
 
 export interface Ctx {
   b: Batcher;
@@ -209,6 +212,7 @@ const GLASS = { day: '#5f6f78', dayLow: '#4b5860', lit: '#e8b86c', litLow: '#c98
  * The glass is unlit (glow) but no longer every pane is a lit lamp: most read as cool daylight glass.
  */
 export function windowAt(c: Ctx, axis: 'x' | 'z', faceF: number, side: 1 | -1, at: number, y: number, w: number, h: number, outside: boolean, style: { frame?: string; glass?: string; arch?: boolean; kind?: WinStyle } = {}) {
+  if (outside && style.kind === 'manor' && studyWindowSite(axis, faceF, at, side)) { studyWindow(c, axis, faceF, side, at, y, w, h); return; }
   const kind = style.kind ?? 'plain';
   const lit = hash(at, faceF + y, axis === 'x' ? 1 : 2) < 0.26;
   const fr = style.frame ?? (outside ? (kind === 'cottage' ? '#f4efe4' : TRIM.frame) : TRIM.joinery);
@@ -384,7 +388,7 @@ export function stairRail(c: Ctx, f: number, a0: number, a1: number, y0: number,
   c.col.addBox(side < 0 ? f - t : f, side < 0 ? f : f + t, Math.min(a0, a1), Math.max(a0, a1), yFloor, Math.max(y0, y1) + 1.1, { tag: 'railing' });
 }
 
-export interface EaveLook { fascia?: THREE.ColorRepresentation; soffit?: THREE.ColorRepresentation; gutter?: THREE.ColorRepresentation | false; cap?: THREE.ColorRepresentation; downpipes?: [number, number][] }
+export interface EaveLook { finished?: boolean; courses?: boolean; fascia?: THREE.ColorRepresentation; soffit?: THREE.ColorRepresentation; gutter?: THREE.ColorRepresentation | false; cap?: THREE.ColorRepresentation; downpipes?: [number, number][] }
 /**
  * Hip roof with a real eave: fascia boards round the edge, a soffit closing the overhang underneath, a half-round
  * gutter, ridge and hip caps, optional downpipes (plan points at the wall). DEV-03 fix: the old "fascia" was a solid
@@ -393,6 +397,7 @@ export interface EaveLook { fascia?: THREE.ColorRepresentation; soffit?: THREE.C
  */
 export function hipRoof(c: Ctx, cx: number, cz: number, sx: number, sz: number, y: number, h: number, mat: THREE.Material, color: THREE.ColorRepresentation, overhang = 0.6, look: EaveLook = {}) {
   const g = hipRoofGeo(sx, sz, h, overhang);
+  if (look.courses) slateCourseUV(g);
   geo(c.b, mat, color, g, cx, y, cz, { chunk: c.chunk });
   g.dispose();
   const P = c.k.M.paint, fas = look.fascia ?? '#5a4636', sof = look.soffit ?? '#d9ccb0', cap = look.cap ?? '#5d5a58';
@@ -402,7 +407,8 @@ export function hipRoof(c: Ctx, cx: number, cz: number, sx: number, sz: number, 
     boxMM(c.b, P, fas, cx + x0, cx + x1, y - 0.24, y + 0.03, cz + z0, cz + z1, { chunk: c.chunk, jitter: 0 });
   for (const [x0, x1, z0, z1] of [[-ax, ax, -az, -wz], [-ax, ax, wz, az], [-ax, -wx, -wz, wz], [wx, ax, -wz, wz]] as const)
     boxMM(c.b, P, sof, cx + x0, cx + x1, y - 0.22, y - 0.18, cz + z0, cz + z1, { chunk: c.chunk, shadow: false, jitter: 0 });
-  if (look.gutter !== false) {
+  if (look.finished && look.gutter !== false) rainwater(c,cx,cz,ax,az,y,look.downpipes??[]);
+  else if (look.gutter !== false) {
     const gc = look.gutter ?? '#6e6f6a', go = 0.07;
     for (const [x0, x1, z0, z1] of [[-ax - go, ax + go, -az - go - 0.06, -az - go + 0.04], [-ax - go, ax + go, az + go - 0.04, az + go + 0.06], [-ax - go - 0.06, -ax - go + 0.04, -az - go, az + go], [ax + go - 0.04, ax + go + 0.06, -az - go, az + go]] as const)
       boxMM(c.b, P, gc, cx + x0, cx + x1, y - 0.16, y - 0.04, cz + z0, cz + z1, { chunk: c.chunk, jitter: 0 });
@@ -414,15 +420,17 @@ export function hipRoof(c: Ctx, cx: number, cz: number, sx: number, sz: number, 
   }
   // ridge and hip caps
   const ridge = Math.abs(ax - az), alongX = ax > az, rx = alongX ? ridge : 0, rz = alongX ? 0 : ridge;
-  if (ridge > 0.01) segBox(c, P, cap, [cx - rx, y + h + 0.02, cz - rz], [cx + rx, y + h + 0.02, cz + rz], 0.18, 0.09);
+  const capRun=(a:[number,number,number],b:[number,number,number],w:number,hh:number)=>look.finished?ridgeFinish(c,a,b,w):segBox(c,P,cap,a,b,w,hh);
+  if (ridge > 0.01) capRun([cx-rx,y+h+.02,cz-rz],[cx+rx,y+h+.02,cz+rz],.20,.09);
   for (const [sx2, sz2] of [[-1, -1], [1, -1], [1, 1], [-1, 1]] as const) {
     const ex = alongX ? sx2 * rx : 0, ez = alongX ? 0 : sz2 * rz;
-    segBox(c, P, cap, [cx + sx2 * ax, y + 0.06, cz + sz2 * az], [cx + ex, y + h + 0.03, cz + ez], 0.14, 0.07);
+    capRun([cx+sx2*ax,y+.06,cz+sz2*az],[cx+ex,y+h+.03,cz+ez],.18,.07);
   }
 }
 
-export function gableRoof(c: Ctx, cx: number, cz: number, len: number, width: number, y: number, h: number, alongX: boolean, mat: THREE.Material, color: THREE.ColorRepresentation, barge: THREE.ColorRepresentation | false = '#5a4636') {
+export function gableRoof(c: Ctx, cx: number, cz: number, len: number, width: number, y: number, h: number, alongX: boolean, mat: THREE.Material, color: THREE.ColorRepresentation, barge: THREE.ColorRepresentation | false = '#5a4636', courses = false) {
   const g = gableGeo(len, width, h, alongX);
+  if (courses) slateCourseUV(g);
   geo(c.b, mat, color, g, cx, y, cz, { chunk: c.chunk });
   g.dispose();
   if (!barge) return;

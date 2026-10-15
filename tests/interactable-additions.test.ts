@@ -14,7 +14,7 @@ describe('interactable-id additions manifests', () => {
   it('no id is listed twice or shadows a baseline id', () => {
     expect(new Set(all).size).toBe(all.length);
     expect(all.filter((i) => baseline.includes(i))).toEqual([]);
-    expect(baseline.length + all.length).toBe(134); // 128 baseline + 2 DEV-04C + 1 W01 + 3 optional production vignettes
+    expect(baseline.length + all.length).toBe(135); // 128 baseline + 2 DEV-04C + 1 W01 + 4 optional production vignettes (incl. the playable handpan)
   });
   it('the loader the suites use reads exactly these manifests', () => {
     const src = readFileSync('scripts/interactable-additions.mjs', 'utf8');

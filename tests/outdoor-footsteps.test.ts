@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { renderOutdoorFootstep, selectOutdoorFootstepVariant } from '../src/audio/footsteps';
+import { renderOutdoorFootstep, selectOutdoorFootstepVariant, selectGrassPitchVariant, GRASS_PITCH_RATIOS } from '../src/audio/footsteps';
 import { onOutdoorPath } from '../src/world/pathFootsteps';
 import { pathNetwork } from '../src/world/junctions';
 
@@ -56,5 +56,47 @@ describe('recorded footstep clip selection', () => {
     expect(selectOutdoorFootstepVariant('dirt', 2, 0, 0.1)).toBe(1);
     expect(selectOutdoorFootstepVariant('dirt', 2, 1, 0.1)).toBe(0);
     expect(selectOutdoorFootstepVariant('dirt', 2, -1, 0.99)).toBe(1);
+  });
+});
+
+describe('R05 grass pitch-only variety', () => {
+  it('offers a one-semitone-down, original, and one-semitone-up palette', () => {
+    // Equal temperament: one semitone = 2^(1/12); no new field recordings.
+    expect(GRASS_PITCH_RATIOS).toHaveLength(3);
+    expect(GRASS_PITCH_RATIOS[0]).toBeCloseTo(2 ** (-1 / 12), 12);
+    expect(GRASS_PITCH_RATIOS[1]).toBe(1);
+    expect(GRASS_PITCH_RATIOS[2]).toBeCloseTo(2 ** (1 / 12), 12);
+  });
+
+  it('selects all three variants randomly on the first step', () => {
+    expect(selectGrassPitchVariant(-1, 0.01)).toBe(0);
+    expect(selectGrassPitchVariant(-1, 0.4)).toBe(1);
+    expect(selectGrassPitchVariant(-1, 0.99)).toBe(2);
+  });
+
+  it('never plays the same pitch twice in a row, but can still visit all three', () => {
+    for (const previous of [0, 1, 2]) {
+      const left = selectGrassPitchVariant(previous, 0);
+      const right = selectGrassPitchVariant(previous, 0.999);
+      expect(left).not.toBe(previous);
+      expect(right).not.toBe(previous);
+      expect(left).not.toBe(right);
+      expect([0, 1, 2]).toContain(left);
+      expect([0, 1, 2]).toContain(right);
+    }
+    let previous = -1;
+    for (let i = 0; i < 120; i++) {
+      const next = selectGrassPitchVariant(previous, (i * 0.3677) % 1);
+      expect(next).not.toBe(previous);
+      previous = next;
+    }
+  });
+
+  it('still uses only clip 0 for grass and retains the dirt no-repeat selector', () => {
+    expect(selectOutdoorFootstepVariant('grass', 3, 2, 0.99)).toBe(0);
+    expect(selectOutdoorFootstepVariant('dirt', 2, 0, 0.1)).toBe(1);
+    expect(selectOutdoorFootstepVariant('dirt', 2, 1, 0.1)).toBe(0);
+    expect(selectGrassPitchVariant(-1, Number.NaN)).toBe(0);
+    expect(selectGrassPitchVariant(-1, 1)).toBe(2);
   });
 });

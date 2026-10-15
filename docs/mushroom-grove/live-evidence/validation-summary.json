@@ -1,0 +1,36 @@
+{
+  "productionBase": "87f4db5322b9c857034d74186d32bb43de35ffe4",
+  "codeCheckpoint": "5920d54bf439726e2dc0ecb4711481143e44f63c",
+  "unitTests": 354,
+  "unitFiles": 35,
+  "budgetPolicyTests": 4,
+  "handpanBrowser": {
+    "passed": 10,
+    "total": 10
+  },
+  "optionalWickermanBrowser": {
+    "passed": 8,
+    "total": 8
+  },
+  "fullBrowser": {
+    "passed": 96,
+    "total": 103
+  },
+  "pairedProduction": {
+    "passed": 31,
+    "total": 38
+  },
+  "newBrowserFailures": [],
+  "inheritedFailures": [
+    "render high (desktop, +shadows): gate (driveway)",
+    "render high (desktop, +shadows): forecourt \u2192 manor",
+    "render high (desktop, +shadows): entrance hall",
+    "render high (desktop, +shadows): forest (shed area)",
+    "render high (desktop, +shadows): BOSLUST cut",
+    "render high (desktop, +shadows): conservatory pool",
+    "boslust sample: LOD transitions by walking: far \u2192 mid \u2192 near once each, near held to 19 m on the way back (3 m hysteresis), both paths"
+  ],
+  "hardwareFpsValidated": false,
+  "renderer": "Chromium 141 / SwiftShader",
+  "releaseBranch": "integration/mushroom-grove-r04-live"
+}

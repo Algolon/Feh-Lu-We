@@ -3,9 +3,10 @@
 // The context is created/resumed only from the Start button (user gesture), and suspended when hidden.
 
 import type { RitualMix } from '../world/wickerRitual';
-import { renderOutdoorFootstep, selectOutdoorFootstepVariant, type FootstepSurface, type OutdoorFootstepSurface } from './footsteps';
+import { renderOutdoorFootstep, selectOutdoorFootstepVariant, selectGrassPitchVariant, GRASS_PITCH_RATIOS, type FootstepSurface, type OutdoorFootstepSurface } from './footsteps';
 import { FIELD_FOOTSTEPS_MP3, FIELD_FOOTSTEP_CLIPS } from './fieldFootsteps';
 import { GRASS_R04_MP3, GRASS_R04_CLIPS, DIRT_PATH_GAIN } from './grassR04';
+import { footstepMixGain } from './footstepMix';
 
 type SfxName = string;
 type RitualVoice = { src: AudioScheduledSourceNode; f: BiquadFilterNode | null; g: GainNode };
@@ -17,6 +18,11 @@ export const BONG_HIT_BUBBLES = [0.25, 0.35, 0.47, 0.57, 0.69, 0.77, 0.90, 1.00,
 export const BONG_HIT_WATER_LEVEL = 0.145;
 export const BONG_HIT_BREATH_LEVEL = 0.045;
 
+/** Handpan voice: [frequency multiple, peak level, decay (s), detune (cents)]. */
+export const HANDPAN_PARTIALS: readonly [number, number, number, number][] = [
+  [1, 1, 3.4, 0], [1, 0.3, 3.0, 4], [2, 0.42, 2.1, 1], [3, 0.17, 1.2, -2], [5.3, 0.04, 0.35, 0],
+];
+
 export class Audio {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
@@ -25,6 +31,12 @@ export class Audio {
   private bongRippieLoading: Promise<void> | null = null;
   private loops: Record<string, { gain: GainNode; target: number }> = {};
   private muted = false;
+  mushroom = 0;
+  private groveBus: GainNode | null = null;
+  private groveVoices: OscillatorNode[] = [];
+  private groveNext = 0;
+  private groveChord = -1;
+  private groveNote = 0;
   private nextAmbient = 8;
   private time = 0;
   ambience: 'home' | 'estate' = 'home';
@@ -112,6 +124,43 @@ export class Audio {
     o.stop(t + dur + 0.05);
   }
 
+  private voices = 0;
+  /**
+   * One handpan stroke. A tuned steel note carries its fundamental, the octave and the compound fifth (3×), each
+   * decaying on its own clock (the fundamental rings longest), a faint detuned twin for the slow shimmer, a short
+   * inharmonic ping for the metal, and a soft hand-noise transient. Lowpassed per voice for warmth. Returns false
+   * when nothing sounds (muted, no context); rapid playing is capped so a burst of taps cannot pile up voices.
+   */
+  handpan(freq: number, vel = 1): boolean {
+    if (!this.ready || this.muted) return false;
+    if (this.voices >= 10) return true;
+    const c = this.ctx!, t = c.currentTime, v = Math.max(0.05, Math.min(1, vel)) * (0.88 + Math.random() * 0.12);
+    const lp = c.createBiquadFilter();
+    lp.type = 'lowpass'; lp.frequency.value = Math.min(9000, freq * 10); lp.Q.value = 0.4;
+    const out = c.createGain();
+    out.gain.value = 0.2 * v;
+    out.connect(lp).connect(this.master!);
+    const ring = freq < 200 ? 1.35 : 1; // the ding rings on
+    let longest = 0;
+    for (const [mult, amp, decay, cents] of HANDPAN_PARTIALS) {
+      const o = c.createOscillator(), g = c.createGain(), d = decay * ring;
+      o.type = 'sine';
+      o.frequency.value = freq * mult;
+      o.detune.value = cents;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.linearRampToValueAtTime(amp, t + 0.006);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+      o.connect(g).connect(out);
+      o.start(t);
+      o.stop(t + d + 0.05);
+      longest = Math.max(longest, d);
+    }
+    this.noise(0.035, 'bandpass', 1900, 0.9, 0.05 * v);
+    this.voices++;
+    setTimeout(() => { this.voices = Math.max(0, this.voices - 1); }, longest * 1000);
+    return true;
+  }
+
   private lastStep = -1;
   private fieldStepBank: AudioBuffer | null = null;
   private fieldStepLoading: Promise<void> | null = null;
@@ -149,6 +198,7 @@ export class Audio {
   }
   private readonly outdoorBuffers: Record<OutdoorFootstepSurface, AudioBuffer[]> = { grass: [], dirt: [] };
   private readonly lastOutdoor: Record<OutdoorFootstepSurface, number> = { grass: -1, dirt: -1 };
+  private lastGrassPitch = -1;
 
   private outdoorStep(surface: OutdoorFootstepSurface, gain: number, foot: 0 | 1) {
     const pool = this.outdoorBuffers[surface];
@@ -165,9 +215,17 @@ export class Audio {
     const c = this.ctx!;
     const src = c.createBufferSource();
     src.buffer = bank ?? pool[index];
-    // Reuse the exact first grass sound at original pitch for both feet.
-    // Cadence is controlled by gait.ts, not by clip playback speed.
-    const pitch = surface === 'grass' ? 1 : (foot ? 0.986 : 1.014) * (0.98 + Math.random() * 0.04);
+    // Every grass step reuses the first approved recording, selecting one of three
+    // subtle semitone pitches. Never repeat a pitch twice consecutively.
+    // Step onset is still driven only by gait.ts, not playback rate.
+    let pitch: number;
+    if (surface === 'grass') {
+      this.lastGrassPitch = selectGrassPitchVariant(this.lastGrassPitch, Math.random());
+      pitch = GRASS_PITCH_RATIOS[this.lastGrassPitch];
+    } else {
+      // Dirt retains its previously approved random pitch and left/right modulation.
+      pitch = (foot ? 0.986 : 1.014) * (0.98 + Math.random() * 0.04);
+    }
     src.playbackRate.value = pitch;
     const surfaceMix = surface === 'grass' ? (bank ? 0.33 : 0.5) : (bank ? DIRT_PATH_GAIN : 0.35);
     const vol = Math.max(0, Math.min(1.2, gain)) * surfaceMix
@@ -195,11 +253,14 @@ export class Audio {
    */
   step(surface: FootstepSurface, gain = 1, foot: 0 | 1 = 0) {
     if (!this.ready || this.muted) return;
-    if (surface === 'grass' || surface === 'dirt') { this.outdoorStep(surface, gain, foot); return; }
+    // Consistent dB mix correction by surface: quiet indoor/terrace brought forward,
+    // louder recorded outdoor ground attenuated. Other effects use the same master as before.
+    const mixedGain = gain * footstepMixGain(surface);
+    if (surface === 'grass' || surface === 'dirt') { this.outdoorStep(surface, mixedGain, foot); return; }
     let v = Math.floor(Math.random() * 3);
     if (v === this.lastStep) v = (v + 1) % 3;
     this.lastStep = v;
-    const f = (1 + (v - 1) * 0.07) * (foot ? 0.96 : 1.03), g = gain * (0.88 + Math.random() * 0.24);
+    const f = (1 + (v - 1) * 0.07) * (foot ? 0.96 : 1.03), g = mixedGain * (0.88 + Math.random() * 0.24);
     if (surface === 'wood') { this.noise(0.1, 'bandpass', 360 * f, 1.2, 0.16 * g); this.noise(0.05, 'lowpass', 160 * f, 0.8, 0.08 * g, 0.012); }
     else if (surface === 'stone') this.noise(0.07, 'bandpass', 1300 * f, 1.5, 0.075 * g);
     else this.noise(0.14, 'highpass', 1700 * f, 0.7, 0.045 * g, 0, 0.012);
@@ -362,6 +423,17 @@ export class Audio {
     mk('water', 'lowpass', 500, 0.8);
     mk('steam', 'highpass', 2500, 0.4);
     mk('room', 'lowpass', 180, 0.3);
+    // Original suspended/add9 progression, no recorded music. All voices and echo
+    // return BEFORE the grove bus, so leaving/pause/mute fades the whole soundscape.
+    this.groveBus = c.createGain(); this.groveBus.gain.value = 0;
+    const filter = c.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.value = 1250;
+    this.groveBus.connect(filter).connect(this.master!);
+    for (let i=0; i<5; i++) {
+      const o=c.createOscillator(), gain=c.createGain(), pan=c.createStereoPanner();
+      o.type='sine'; o.frequency.value=[146.83,220,293.66,329.63,440][i];
+      o.detune.value=(i-2)*3.2; gain.gain.value=i<2?.085:.045; pan.pan.value=(i-2)*.28;
+      o.connect(gain).connect(pan).connect(this.groveBus);o.start();this.groveVoices.push(o);
+    }
   }
 
   /** Per-frame: set loop volumes from proximity, schedule sparse ambient events. */
@@ -376,8 +448,24 @@ export class Audio {
         l.gain.gain.setTargetAtTime(v, this.ctx!.currentTime, 0.3);
       }
     };
+    const grove = Math.max(0, Math.min(1, this.mushroom));
+    this.groveBus?.gain.setTargetAtTime(grove * 0.5, this.ctx!.currentTime, grove === 0 ? 0.18 : 0.8);
+    if (grove > 0.02) {
+      const chord = Math.floor(this.time / 18) % 4;
+      if (chord !== this.groveChord) {
+        this.groveChord = chord;
+        const notes = [[50,57,62,64,69], [48,55,60,62,67], [53,60,65,67,72], [50,57,62,65,69]][chord];
+        this.groveVoices.forEach((o,i) => o.frequency.setTargetAtTime(440 * 2 ** ((notes[i]-69)/12), this.ctx!.currentTime, 3));
+      }
+      this.groveNext -= dt;
+      if (this.groveNext <= 0 && !this.muted) {
+        this.groveNext = 4.5 + (this.groveNote % 3) * 1.7;
+        const melody=[74,81,76,69,79,77,72,76], midi=melody[this.groveNote++ % melody.length];
+        this.groveChime(440 * 2 ** ((midi-69)/12));
+      }
+    }
     const outdoor = this.ambience === 'estate' && !levels.indoor;
-    set('wind', outdoor ? 0.05 + 0.03 * Math.sin(this.time * 0.2) + this.dusk * 0.03 : 0.01);
+    set('wind', outdoor ? (0.05 + 0.03 * Math.sin(this.time * 0.2) + this.dusk * 0.03) * (1 - grove * 0.8) : 0.01);
     set('room', levels.indoor ? 0.05 : 0);
     // crackle: a noise floor plus random pops
     set('fire', levels.fire * 0.12);
@@ -387,7 +475,24 @@ export class Audio {
     this.nextAmbient -= dt;
     if (this.nextAmbient <= 0) {
       this.nextAmbient = 6 + Math.random() * 10;
-      if (this.ambience === 'estate') this.ambientEvent(outdoor);
+      if (this.ambience === 'estate' && grove < 0.25) this.ambientEvent(outdoor);
+    }
+  }
+
+  private groveChime(frequency: number) {
+    if (!this.ctx || !this.groveBus) return;
+    const c=this.ctx,t=c.currentTime;
+    // Soft attack, inharmonic glass overtone, staggered echoes with finite lifetimes.
+    for (let i=0;i<4;i++) {
+      const o=c.createOscillator(), gain=c.createGain(), pan=c.createStereoPanner();
+      const start=t+i*.43;
+      o.frequency.value=frequency*(i===1?2.002:1);o.type='sine';
+      gain.gain.setValueAtTime(0.0001,start);
+      gain.gain.exponentialRampToValueAtTime(.065/(i+1),start+.32);
+      gain.gain.exponentialRampToValueAtTime(.0001,start+4.2);
+      pan.pan.value=Math.sin(this.groveNote+i)*.65;
+      o.connect(gain).connect(pan).connect(this.groveBus);o.start(start);o.stop(start+4.3);
+      o.onended=()=>{o.disconnect();gain.disconnect();pan.disconnect();};
     }
   }
 

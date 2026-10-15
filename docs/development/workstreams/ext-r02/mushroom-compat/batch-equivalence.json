@@ -1,0 +1,62 @@
+[
+  {
+    "name": "outside",
+    "intensity": 0,
+    "native": {
+      "calls": 30,
+      "triangles": 485056
+    },
+    "packed": {
+      "calls": 30,
+      "triangles": 485056
+    },
+    "pixelMismatchFraction": 0,
+    "samePicking": true,
+    "glError": 0
+  },
+  {
+    "name": "approach",
+    "intensity": 0.94342943941763,
+    "native": {
+      "calls": 28,
+      "triangles": 443919
+    },
+    "packed": {
+      "calls": 28,
+      "triangles": 443919
+    },
+    "pixelMismatchFraction": 0,
+    "samePicking": true,
+    "glError": 0
+  },
+  {
+    "name": "grove",
+    "intensity": 0.9999930186382016,
+    "native": {
+      "calls": 28,
+      "triangles": 460075
+    },
+    "packed": {
+      "calls": 28,
+      "triangles": 460075
+    },
+    "pixelMismatchFraction": 0,
+    "samePicking": true,
+    "glError": 0
+  },
+  {
+    "name": "return",
+    "intensity": 0.9999999991384315,
+    "native": {
+      "calls": 131,
+      "triangles": 694321
+    },
+    "packed": {
+      "calls": 104,
+      "triangles": 694321
+    },
+    "pixelMismatchFraction": 0,
+    "samePicking": true,
+    "glError": 0
+  }
+]

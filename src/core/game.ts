@@ -1,3 +1,5 @@
+import { MushroomVision } from './mushroomVision';
+import { mushroomIntensity, easeMushroom } from '../world/mushroomField';
 // Game orchestrator: renderer + loop, input → player, interaction picking, save/restore, scenes, UI glue.
 import * as THREE from 'three';
 import { ART, SLICE } from './artflags';
@@ -53,6 +55,7 @@ export class Game implements GameApi {
   }
   readonly ui = new UI();
   readonly audio = new Audio();
+  readonly mushroomVision = new MushroomVision();
   readonly player = new Player();
   /** DEV-01 slice review (?review=dev01) only; null in the normal game. */
   readonly slice: SliceUI | null = SLICE ? new SliceUI(this) : null;
@@ -68,6 +71,7 @@ export class Game implements GameApi {
   private last = 0;
   private time = 0;
   private target: Interactable | null = null;
+  private targetPoint: THREE.Vector3 | null = null; // where the reticle ray hits the target
   private raycaster = new THREE.Raycaster();
   private saveTimer = 0;
   private poseTimer = 0;
@@ -95,6 +99,7 @@ export class Game implements GameApi {
     this.canvas.addEventListener('webglcontextlost', (e) => {
       e.preventDefault();
       this.contextLost = true;
+      this.mushroomVision.reset();
       this.saveNow();
       this.ui.contextLost(() => location.reload());
     });
@@ -209,6 +214,8 @@ export class Game implements GameApi {
       this.world = null;
     }
     this.target = null;
+    this.mushroomVision.reset();
+    this.targetPoint = null;
     const build = id === 'home' ? buildHome : buildEstate;
     const { world, extras } = build(this);
     this.world = world;
@@ -266,6 +273,9 @@ export class Game implements GameApi {
   }
   toast(msg: string) {
     this.ui.toast(msg);
+  }
+  playNote(freq: number, vel = 1) {
+    return this.audio.handpan(freq, vel);
   }
   private solvedSeen = new Set<string>();
   private trackSolved(log: boolean) {
@@ -535,7 +545,7 @@ export class Game implements GameApi {
   }
 
   // ------------------------------------------------------------------ interaction picking
-  private pickAt(ndcX: number, ndcY: number): { it: Interactable; tooFar: boolean } | null {
+  private pickAt(ndcX: number, ndcY: number): { it: Interactable; tooFar: boolean; point: THREE.Vector3 } | null {
     const w = this.world;
     if (!w) return null;
     const eye = this.camera.position;
@@ -558,7 +568,7 @@ export class Game implements GameApi {
       // line of sight: walls and closed doors between the eye and the hit point block interaction
       const p = h.point;
       if (w.col.segmentBlocked(eye.x, eye.y, -eye.z, p.x, p.y, -p.z, it.ignore)) return null;
-      return { it, tooFar: h.distance > it.reach };
+      return { it, tooFar: h.distance > it.reach, point: p };
     }
     return null;
   }
@@ -570,12 +580,12 @@ export class Game implements GameApi {
     const p = this.pickAt(((clientX - r.left) / r.width) * 2 - 1, -((clientY - r.top) / r.height) * 2 + 1);
     if (!p) return;
     if (p.tooFar) this.ui.toast('Loop er wat dichter naartoe.');
-    else this.perform(p.it);
+    else this.perform(p.it, p.point);
   }
 
   doAction() {
     if (this.ui.modalOpen || this.switching) return;
-    if (this.target) this.perform(this.target);
+    if (this.target) this.perform(this.target, this.targetPoint ?? undefined);
   }
 
   /** Held-item action label for this target, or null when the default action applies. */
@@ -585,9 +595,9 @@ export class Game implements GameApi {
     return it.itemLabel ? it.itemLabel(sel) : `Gebruik: ${ITEMS[sel].name}`;
   }
 
-  private perform(it: Interactable) {
+  private perform(it: Interactable, at?: THREE.Vector3) {
     if (this.itemAction(it) !== null) it.useItem!(this.selected!);
-    else it.run();
+    else it.run(at);
   }
 
   private actionLabel(it: Interactable): string | null {
@@ -613,7 +623,7 @@ export class Game implements GameApi {
     if (!this.world || this.contextLost) return;
     this.account(Math.min(realMs, 5000)); // off-tab time is excluded via visibilitychange; cap only guards stalls
     this.tick(dt);
-    this.renderer.render(this.world.scene, this.camera);
+    this.mushroomVision.render(this.renderer, this.world.scene, this.camera, this.time, this.settings.reducedMotion, this.settings.mushroomDistortion, this.settings.quality === 'high');
     this.frameMs[this.frameIdx++ % this.frameMs.length] = realMs;
     this.debugFrame(dt);
   };
@@ -707,9 +717,15 @@ export class Game implements GameApi {
       const p = this.pickAt(0, 0);
       const it = p && !p.tooFar ? p.it : null;
       this.target = it;
+      this.targetPoint = it ? p!.point : null;
       const al = it ? this.actionLabel(it) : null;
       this.ui.setTarget(al, al, it && this.itemAction(it) !== null ? this.selected : null);
     }
+    const field = w.id === 'estate' && w.hereRoom === 'out'
+      ? mushroomIntensity(this.player.x, this.player.z, this.player.y, w.col.ground(this.player.x, this.player.z)) : 0;
+    this.mushroomVision.intensity = easeMushroom(this.mushroomVision.intensity, field, dt);
+    w.scene.userData.mushroomIntensity = this.mushroomVision.intensity;
+    this.audio.mushroom = this.ui.modalKind === 'pause' ? 0 : this.mushroomVision.intensity;
     this.updateAudio(dt);
     // periodic safe-position save
     this.poseTimer -= dt;

@@ -4,7 +4,7 @@
 import {
   MANOR, WING, CONS, TERRACE, SHED, COTTAGE, COTTAGE_TERRACE, COTTAGE_PAD, SAUNA, JACUZZI, WELLNESS, BBQ, OUTDOOR_DINING, MUSIC_BONG,
   BALLOON_NOOK, LAKE_VIEW, GOLF_TEE, GOLF_CHUTE, ARRIVAL, ARRIVAL_SERVICE, PARKING, ROUTES, WICKERMAN, WICKER_BALE, WICKERMAN_LOOP, WICKERMAN_SIDE, GOLF_SPUR, SAUNA_STEPS,
-  LAKE, lakeQ, HILL_CUT, type Rect,
+  MUSHROOM, LAKE, lakeQ, HILL_CUT, type Rect,
 } from './layout';
 import { chaikin, distToPolyline, inRect, rectDist } from './geom2d';
 
@@ -36,7 +36,7 @@ export const ROUTE_LINES: { id: string; pts: [number, number][]; width: number }
 
 export const inBuilding = (x: number, z: number, m = 0) => FOOTPRINTS.some((f) => f.kind === 'building' && inRect(x, z, f, m));
 export const inWater = (x: number, z: number, m = 0) => lakeQ(x, z) < (1 + m / Math.min(LAKE.rx, LAKE.rz)) ** 2;
-export const onRoute = (x: number, z: number, m = 0) => ROUTE_LINES.some((r) => distToPolyline(x, z, r.pts) < r.width / 2 + m);
+export const onRoute = (x: number, z: number, m = 0, legacy = false) => ROUTE_LINES.some((r) => (!legacy || r.id !== 'mushroomApproach') && distToPolyline(x, z, r.pts) < r.width / 2 + m);
 export const inWickermanClearing = (x: number, z: number, m = 0) => Math.hypot(x - WICKERMAN.x, z - WICKERMAN.z) < WICKERMAN.r + m;
 
 /**
@@ -44,14 +44,17 @@ export const inWickermanClearing = (x: number, z: number, m = 0) => Math.hypot(x
  * (flowers, grass, shrubs without collision) only keep clear of the footprint itself. Water, routes and the wickerman
  * clearing are excluded for both.
  */
-export function vegetationClear(x: number, z: number, kind: 'tree' | 'small'): boolean {
+export const mushroomKeepout = (x: number, z: number, tree = true) => Math.hypot(x - MUSHROOM.x, z - MUSHROOM.z) < MUSHROOM.radius + (tree ? 1 : -1) || distToPolyline(x, z, MUSHROOM.approach) < (tree ? 3.05 : 1.2);
+
+export function vegetationClear(x: number, z: number, kind: 'tree' | 'small', legacy = false): boolean {
   const tree = kind === 'tree';
+  if (!legacy && mushroomKeepout(x, z, tree)) return false;
   for (const f of FOOTPRINTS) {
     const m = tree ? (f.kind === 'building' ? 3.2 : 2.2) : f.kind === 'building' ? 0.5 : 0.25;
     if (rectDist(x, z, f) < m) return false;
   }
   if (inWater(x, z, tree ? 2.5 : 0.4)) return false;
-  if (onRoute(x, z, tree ? 2.2 : 0.35)) return false;
+  if (onRoute(x, z, tree ? 2.2 : 0.35, legacy)) return false;
   if (inWickermanClearing(x, z, tree ? 1.5 : -2.5)) return false;
   if (Math.hypot(x - WICKER_BALE.x, z - WICKER_BALE.z) < WICKER_BALE.clear) return false; // DEV-04D W01: the hay bale
   return true;

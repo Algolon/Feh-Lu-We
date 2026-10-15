@@ -1,0 +1,299 @@
+[
+  {
+    "name": "gate (driveway)",
+    "baseline": {
+      "low": {
+        "calls": 111,
+        "triangles": 338648
+      },
+      "high": {
+        "calls": 120,
+        "triangles": 544137
+      }
+    },
+    "integrated": {
+      "low": {
+        "calls": 110,
+        "triangles": 338720
+      },
+      "high": {
+        "calls": 119,
+        "triangles": 544209
+      }
+    },
+    "delta": {
+      "low": {
+        "calls": -1,
+        "triangles": 72
+      },
+      "high": {
+        "calls": -1,
+        "triangles": 72
+      }
+    }
+  },
+  {
+    "name": "forecourt \u2192 manor",
+    "baseline": {
+      "low": {
+        "calls": 138,
+        "triangles": 274191
+      },
+      "high": {
+        "calls": 171,
+        "triangles": 491966
+      }
+    },
+    "integrated": {
+      "low": {
+        "calls": 139,
+        "triangles": 274263
+      },
+      "high": {
+        "calls": 172,
+        "triangles": 492038
+      }
+    },
+    "delta": {
+      "low": {
+        "calls": 1,
+        "triangles": 72
+      },
+      "high": {
+        "calls": 1,
+        "triangles": 72
+      }
+    }
+  },
+  {
+    "name": "entrance hall",
+    "baseline": {
+      "low": {
+        "calls": 134,
+        "triangles": 260116
+      },
+      "high": {
+        "calls": 194,
+        "triangles": 475248
+      }
+    },
+    "integrated": {
+      "low": {
+        "calls": 134,
+        "triangles": 260116
+      },
+      "high": {
+        "calls": 194,
+        "triangles": 475248
+      }
+    },
+    "delta": {
+      "low": {
+        "calls": 0,
+        "triangles": 0
+      },
+      "high": {
+        "calls": 0,
+        "triangles": 0
+      }
+    }
+  },
+  {
+    "name": "library",
+    "baseline": {
+      "low": {
+        "calls": 57,
+        "triangles": 192990
+      },
+      "high": {
+        "calls": 88,
+        "triangles": 391214
+      }
+    },
+    "integrated": {
+      "low": {
+        "calls": 57,
+        "triangles": 192990
+      },
+      "high": {
+        "calls": 88,
+        "triangles": 391214
+      }
+    },
+    "delta": {
+      "low": {
+        "calls": 0,
+        "triangles": 0
+      },
+      "high": {
+        "calls": 0,
+        "triangles": 0
+      }
+    }
+  },
+  {
+    "name": "garden \u2192 manor + conservatory",
+    "baseline": {
+      "low": {
+        "calls": 138,
+        "triangles": 299862
+      },
+      "high": {
+        "calls": 166,
+        "triangles": 433047
+      }
+    },
+    "integrated": {
+      "low": {
+        "calls": 139,
+        "triangles": 299934
+      },
+      "high": {
+        "calls": 167,
+        "triangles": 433119
+      }
+    },
+    "delta": {
+      "low": {
+        "calls": 1,
+        "triangles": 72
+      },
+      "high": {
+        "calls": 1,
+        "triangles": 72
+      }
+    }
+  },
+  {
+    "name": "forest (shed area)",
+    "baseline": {
+      "low": {
+        "calls": 37,
+        "triangles": 190067
+      },
+      "high": {
+        "calls": 64,
+        "triangles": 507737
+      }
+    },
+    "integrated": {
+      "low": {
+        "calls": 37,
+        "triangles": 190139
+      },
+      "high": {
+        "calls": 64,
+        "triangles": 507809
+      }
+    },
+    "delta": {
+      "low": {
+        "calls": 0,
+        "triangles": 72
+      },
+      "high": {
+        "calls": 0,
+        "triangles": 72
+      }
+    }
+  },
+  {
+    "name": "BOSLUST cut",
+    "baseline": {
+      "low": {
+        "calls": 98,
+        "triangles": 318988
+      },
+      "high": {
+        "calls": 115,
+        "triangles": 519907
+      }
+    },
+    "integrated": {
+      "low": {
+        "calls": 99,
+        "triangles": 319060
+      },
+      "high": {
+        "calls": 116,
+        "triangles": 519979
+      }
+    },
+    "delta": {
+      "low": {
+        "calls": 1,
+        "triangles": 72
+      },
+      "high": {
+        "calls": 1,
+        "triangles": 72
+      }
+    }
+  },
+  {
+    "name": "conservatory pool",
+    "baseline": {
+      "low": {
+        "calls": 108,
+        "triangles": 300443
+      },
+      "high": {
+        "calls": 186,
+        "triangles": 582674
+      }
+    },
+    "integrated": {
+      "low": {
+        "calls": 108,
+        "triangles": 292096
+      },
+      "high": {
+        "calls": 186,
+        "triangles": 574327
+      }
+    },
+    "delta": {
+      "low": {
+        "calls": 0,
+        "triangles": -8347
+      },
+      "high": {
+        "calls": 0,
+        "triangles": -8347
+      }
+    }
+  },
+  {
+    "name": "gathering room",
+    "baseline": {
+      "low": {
+        "calls": 31,
+        "triangles": 19320
+      },
+      "high": {
+        "calls": 42,
+        "triangles": 32422
+      }
+    },
+    "integrated": {
+      "low": {
+        "calls": 30,
+        "triangles": 19320
+      },
+      "high": {
+        "calls": 41,
+        "triangles": 32422
+      }
+    },
+    "delta": {
+      "low": {
+        "calls": -1,
+        "triangles": 0
+      },
+      "high": {
+        "calls": -1,
+        "triangles": 0
+      }
+    }
+  }
+]

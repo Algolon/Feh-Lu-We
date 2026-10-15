@@ -1,0 +1,45 @@
+{
+  "base": "http://127.0.0.1:4173/Feh-Lu-We/",
+  "results": [
+    {
+      "name": "registry: the optional ids are each registered once (135 interactables)",
+      "ok": true,
+      "detail": "{\"total\":135,\"bong\":1,\"beetle\":1,\"pouch\":1,\"bale\":1,\"handpan\":1}"
+    },
+    {
+      "name": "gravity bong: \"Neem een hit\" targeted, one hit sound per cooldown, toast, no state change",
+      "ok": true,
+      "detail": "{\"pose\":{\"ok\":true,\"x\":83.08,\"z\":120.56,\"label\":\"Neem een hit\"},\"toast\":\"Je neemt een hit. Het water borrelt flink.\",\"hits\":1,\"stateSame\":true}"
+    },
+    {
+      "name": "serre airco: beetle inspect targeted and shows its text; the zap plays near it (distance gain), never far away; no state change",
+      "ok": true,
+      "detail": "{\"pose\":{\"ok\":true,\"x\":119.45,\"z\":93,\"label\":\"Bekijken: airco en kever\"},\"zaps\":[1,1,1,1],\"toast\":\"Boven op de airco ligt een kevertje op zijn rug, de pootjes verkrampt omhoog. Een blauw vonkje knettert naast zijn verschroeide schild. Geëlektrocuteerd. De spanning was hem duidelijk te veel.\",\"stateSame\":true,\"farZaps\":0}"
+    },
+    {
+      "name": "kitchen Bosfruit pouch: inspect targeted, shows its line, no state change",
+      "ok": true,
+      "detail": "{\"pose\":{\"ok\":true,\"x\":102.62,\"z\":105.05,\"label\":\"Bekijken: drinkzakje\"},\"toast\":\"Is dit de laatste capri sun?\",\"stateSame\":true}"
+    },
+    {
+      "name": "field-recorded footsteps: grass and dirt resolve outdoors (wood / stone indoors) and play while walking",
+      "ok": true,
+      "detail": "{\"surfaceLawn\":\"grass\",\"surfacePath\":\"dirt\",\"surfaceHall\":\"stone\",\"steps\":[\"dirt\",\"grass\"],\"n\":4}"
+    },
+    {
+      "name": "audio coexistence: the ritual layer runs with footsteps, the bong hit and the zap; released at range (context running)",
+      "ok": true,
+      "detail": "{\"ready\":true,\"ritualOn\":true,\"stepsDuring\":3,\"ritualStill\":true,\"ctx\":\"running\",\"farReleased\":true,\"stage\":\"CHARRED\"}"
+    },
+    {
+      "name": "hay then an inventory item: the bag selection releases the hay, the matches are held and light the ring through the item path",
+      "ok": true,
+      "detail": "{\"carry\":{\"stage\":\"CARRYING_HAY\",\"chip\":\"Bundel hooi in de hand — tik om los te laten\"},\"after\":{\"stage\":\"EMPTY_FRAME\",\"selected\":\"matches\",\"chip\":\"Lucifers in de hand — tik om los te laten\",\"target\":\"wicker.candles\",\"label\":\"Kaarsen aansteken\",\"lit\":9}}"
+    },
+    {
+      "name": "no page errors / failed requests",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}

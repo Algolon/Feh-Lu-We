@@ -1,0 +1,157 @@
+{
+  "gameSource": "0a286090c46ef2081cd81f2299fd6e6a002ba9d8",
+  "buildAsset": "index-D0W74Rnu.js",
+  "assetSha256": "084cf8a023d1075216b0fd0ac2215e5686d4330c46b35d0d89c37385916a4c31",
+  "files": [
+    {
+      "name": "feature-bench-metrics.json",
+      "bytes": 755,
+      "sha256": "da63cb225738a1407fdad692e6e09787f244fb1fc9376e75c15e0fd8e8ef737a"
+    },
+    {
+      "name": "feature-checks-metrics.json",
+      "bytes": 1360,
+      "sha256": "b25881e8b5ed44977e624172feaf239ecb1395ee7352121621d6d314d0136797"
+    },
+    {
+      "name": "feature-clip-metrics.json",
+      "bytes": 32,
+      "sha256": "148609c014eafaecf3719b899f55e693ed907ea8501fa7221778a76fb7288280"
+    },
+    {
+      "name": "feature-high-approach.jpg",
+      "bytes": 147890,
+      "sha256": "10ad1780582783a60a492e1107af97f4785af681ebc671eccb6ebed62e402ae9"
+    },
+    {
+      "name": "feature-high-cluster-eye.jpg",
+      "bytes": 92010,
+      "sha256": "c7acdeec63ca2faceec6d7d694b213b00656bae0d10a5f51ca4fb014e974e92b"
+    },
+    {
+      "name": "feature-high-entrance.jpg",
+      "bytes": 106251,
+      "sha256": "3dc2910eca026f4a112458697980d25656de10cebc94afc71b2345f8e3409fcd"
+    },
+    {
+      "name": "feature-high-exit.jpg",
+      "bytes": 94451,
+      "sha256": "787bfd78bc026a1bdefb10df05572b2ea7a55fcdd6f31fee04b942affa4686e7"
+    },
+    {
+      "name": "feature-high-grove-wide.jpg",
+      "bytes": 102032,
+      "sha256": "9ced5183bf894f2936c6230855f8208fedaeaf164d1d7240856b2bb8a2a2d377"
+    },
+    {
+      "name": "feature-high-grove.jpg",
+      "bytes": 118732,
+      "sha256": "b29cea93cf77c01689b8c9e2dec19e6a777d15d7c2327a7426f6dc943ce3346c"
+    },
+    {
+      "name": "feature-high-halfway.jpg",
+      "bytes": 110638,
+      "sha256": "11c96e1c74925e4c724447fc085e606af29b03b7f88d5d02b0d99a9a0e35ef98"
+    },
+    {
+      "name": "feature-high-hero-base.jpg",
+      "bytes": 106329,
+      "sha256": "d09309c1f98966ada752f7afbd96299177c7fa7e0ddddab09daf2b60f9ea1c15"
+    },
+    {
+      "name": "feature-high-outside.jpg",
+      "bytes": 111255,
+      "sha256": "f2c1b45e35c3bf1cf68557991ddee81eb613408e46046a62714c3cadcf04bcf9"
+    },
+    {
+      "name": "feature-high-return-view.jpg",
+      "bytes": 90133,
+      "sha256": "b8a9e40c8874fc8b5e782373702a198b99d948b9a36dcd5f6fa465833b247eaa"
+    },
+    {
+      "name": "feature-low-approach.jpg",
+      "bytes": 147653,
+      "sha256": "1d4d6e77a2775e79c0b3e859178b8c1783ab29705f28afbb1fed5b49ad34014f"
+    },
+    {
+      "name": "feature-low-cluster-eye.jpg",
+      "bytes": 90727,
+      "sha256": "1ee6754c4d372cddd1e7abb406a395a73f406d4d43e468306667e7acfcbcad62"
+    },
+    {
+      "name": "feature-low-entrance.jpg",
+      "bytes": 100845,
+      "sha256": "3f0f8038cda4c77de3fcc9d649fe6c23a1f88e7d46cf280368b954f60471ba7f"
+    },
+    {
+      "name": "feature-low-exit.jpg",
+      "bytes": 93910,
+      "sha256": "ac5cc01fd00d7b0189eb56b6733bb1bf5f0daf143deb3e0db31fd66553346a20"
+    },
+    {
+      "name": "feature-low-grove-wide.jpg",
+      "bytes": 97183,
+      "sha256": "1e95a6f91c414eec4b829c2b3d331f27327a3b11bd6fcfb8e66eb914a4b8cbd3"
+    },
+    {
+      "name": "feature-low-grove.jpg",
+      "bytes": 113901,
+      "sha256": "73fe4a6ce7cbd43ad8053d5d62e755f1674825b26ab5582be383fd7c88d46fd3"
+    },
+    {
+      "name": "feature-low-halfway.jpg",
+      "bytes": 106666,
+      "sha256": "8bd8f04f314d974000b491d143a14192ffa0a01f4071f81893be31bfb96ea66c"
+    },
+    {
+      "name": "feature-low-hero-base.jpg",
+      "bytes": 103428,
+      "sha256": "022eb67223301e6f01c12b4df92a47aa36fe960f8cdffebd8e2631f52b6982cb"
+    },
+    {
+      "name": "feature-low-outside.jpg",
+      "bytes": 110041,
+      "sha256": "b85a2cd50c347193c431cdd32ec36bb9ee16b00a26b65c1f1151647bbe97d65b"
+    },
+    {
+      "name": "feature-low-return-view.jpg",
+      "bytes": 89950,
+      "sha256": "e2f4e0a40874a72f6595ce08ff68aa3153311409ea49e3096403aef8c2a64a33"
+    },
+    {
+      "name": "feature-metrics.json",
+      "bytes": 8214,
+      "sha256": "6d78f9f2c0db2ea574e7ee9cbfbe1f384689c5162df6d649521cda067e5dabbc"
+    },
+    {
+      "name": "feature-mobile-reduced.jpg",
+      "bytes": 44657,
+      "sha256": "eb8a114f84e54851d5b1209221560069804f26924ff1331f4ce760b3e9c4a747"
+    },
+    {
+      "name": "feature-mobile-settings.jpg",
+      "bytes": 62108,
+      "sha256": "1d8f4ab4f95efa91b6f5b5128ab4f61320775a58e578f96639d3b6559947728d"
+    },
+    {
+      "name": "mushroom-r03-walk.mp4",
+      "bytes": 1194615,
+      "sha256": "0c96484ddfa0076451a66a4440c04aadb79c08965a4fa60aba6b21362641e7d1"
+    },
+    {
+      "name": "physical-high-cluster-eye.jpg",
+      "bytes": 106737,
+      "sha256": "1543907b09eb344faa916b8b170320692a951538f08ca1387ef11e69b9cfac69"
+    },
+    {
+      "name": "physical-low-cluster-eye.jpg",
+      "bytes": 106217,
+      "sha256": "77821c43048f6dda44fa74b142a0e5a07bf6f0a1e43f0486b1bef0aaf0666f3c"
+    },
+    {
+      "name": "physical-metrics.json",
+      "bytes": 759,
+      "sha256": "282b19f9759e9af7a86d214a832cd54fd692f7cb09c1a07012f2fbd243ceeac3"
+    }
+  ]
+}
