@@ -231,6 +231,85 @@ function clusterGeo(k: Cluster, lod: Lod, crownC: THREE.Vector3, crownR: number,
   g.setAttribute('color', new THREE.BufferAttribute(col, 3));
   return g;
 }
+/**
+ * VEG-ART-R02 / oak-only visual experiment. A single continuous, irregular canopy cushion rather than a
+ * displaced sphere. Three offset horizontal contour rings create an overhanging, scalloped silhouette with
+ * a sheltered underside and uneven upper shoulders. This keeps one geometry/material per tree batch;
+ * ring count changes with LOD, but the underlying analytic profile and cluster centres do not.
+ *
+ * Intentional: no leaf cards, transparent alpha, independent meshes, changed tree scale, or changed roots.
+ * The silhouette is defined by broad 3/5-fold lobes, not high-frequency vertex noise or random balls.
+ */
+function sculptedOakCluster(k: Cluster, lod: Lod, crownCentre: THREE.Vector3, crownRadius: number) {
+  const sides = lod === 'near' ? 11 : lod === 'mid' ? 7 : 6;
+  const phase = k.seed * 0.319;
+  const offsetX = Math.sin(k.seed * 1.31) * 0.09, offsetZ = Math.cos(k.seed * 0.77) * 0.09;
+  const pos: number[] = [], idx: number[] = [];
+  const push = (x: number, y: number, z: number) => { pos.push(x, y, z); return pos.length / 3 - 1; };
+  const bottom = push(k.c.x + offsetX * k.r[0], k.c.y - k.r[1] * 0.52, k.c.z + offsetZ * k.r[2]);
+  // A skirt tucked in below an overhanging shoulder, then a broken upper contour.
+  const rings = [
+    { width: 0.56, height: -0.36, drift: 0.3 },
+    { width: 1.00, height: 0.02, drift: 0.65 },
+    { width: 0.62, height: 0.66, drift: 1.0 },
+  ];
+  const ringIndices: number[][] = [];
+  for (let layer = 0; layer < rings.length; layer++) {
+    const ring = rings[layer], ids: number[] = [];
+    for (let i = 0; i < sides; i++) {
+      const a = phase + i * Math.PI * 2 / sides;
+      const scallop = 1 + 0.14 * Math.cos(a * 3 + k.seed * 0.21)
+        + 0.065 * Math.sin(a * 5 - k.seed * 0.37);
+      const breadth = ring.width * scallop;
+      const yNotch = 0.09 * Math.sin(a * 3 + k.seed * 0.49)
+        + 0.055 * Math.cos(a * 2 - k.seed * 0.15);
+      ids.push(push(
+        k.c.x + k.r[0] * (Math.cos(a) * breadth + offsetX * ring.drift),
+        k.c.y + k.r[1] * (ring.height + yNotch * (layer === 1 ? 0.9 : 0.55)),
+        k.c.z + k.r[2] * (Math.sin(a) * breadth + offsetZ * ring.drift),
+      ));
+    }
+    ringIndices.push(ids);
+  }
+  const top = push(
+    k.c.x + k.r[0] * (offsetX + 0.09 * Math.sin(k.seed * 0.47)),
+    k.c.y + k.r[1] * (0.88 + 0.045 * Math.sin(k.seed)),
+    k.c.z + k.r[2] * (offsetZ + 0.08 * Math.cos(k.seed * 0.67)),
+  );
+  for (let i = 0; i < sides; i++) {
+    const j = (i + 1) % sides;
+    idx.push(bottom, ringIndices[0][i], ringIndices[0][j]);
+    for (let layer = 0; layer < rings.length - 1; layer++) {
+      const low = ringIndices[layer], high = ringIndices[layer + 1];
+      // Reversed around the xz circle so normals face outward.
+      idx.push(low[i], high[i], low[j], low[j], high[i], high[j]);
+    }
+    idx.push(top, ringIndices[2][j], ringIndices[2][i]);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  g.setIndex(idx);
+  g.computeVertexNormals();
+  const p = g.attributes.position as THREE.BufferAttribute;
+  const n = g.attributes.normal as THREE.BufferAttribute;
+  const col = new Float32Array(p.count * 3);
+  const away = new THREE.Vector3(), normal = new THREE.Vector3();
+  for (let i = 0; i < p.count; i++) {
+    // These are AO/value accents, never a painted-in sun direction.
+    const height = THREE.MathUtils.smoothstep((p.getY(i) - k.c.y) / k.r[1], -0.52, 0.88);
+    const d = away.set(p.getX(i), p.getY(i), p.getZ(i)).distanceTo(crownCentre) / crownRadius;
+    const rim = THREE.MathUtils.smoothstep(d, 0.22, 0.95);
+    const v = k.val * (0.72 + 0.28 * height) * (0.85 + 0.15 * rim);
+    col[i * 3] = v * (0.98 + 0.045 * height);
+    col[i * 3 + 1] = v * (1.0 + 0.025 * height);
+    col[i * 3 + 2] = v * (1.02 - 0.085 * height);
+    normal.fromBufferAttribute(n, i).lerp(UP, 0.12).normalize();
+    n.setXYZ(i, normal.x, normal.y, normal.z);
+  }
+  g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+  return g;
+}
+
 /** The clusters that define the crown's outline: top-, bottom-, and outermost in ±x and ±z. Kept at every LOD. */
 function extremes(ks: Cluster[]) {
   const pick = (f: (k: Cluster) => number) => ks.reduce((a, b) => (f(b) > f(a) ? b : a));
@@ -396,7 +475,7 @@ function growBroadleaf(sp: Broadleaf): Skeleton {
   return { trunk: { path: trunkPath, radius, lobes }, branches, clusters };
 }
 
-function emitBroadleaf(sp: Broadleaf, sk: Skeleton, lod: Lod, continuous: boolean | 'outline' = false): Model {
+function emitBroadleaf(sp: Broadleaf, sk: Skeleton, lod: Lod, continuous: boolean | 'outline' = false, sculptOak = false): Model {
   const near = lod === 'near', xfar = lod === 'xfar', far = lod === 'far' || xfar;
   const girth = THREE.MathUtils.clamp(sp.trunk[0] / 0.45, 0.6, 1); // slim trunks need fewer sides
   const wood: THREE.BufferGeometry[] = [flaredTrunk(sk.trunk.path, sk.trunk.radius, sk.trunk.lobes, sp.flare, 1.25, xfar ? 5 : Math.round((near ? 20 : far ? 6 : 9) * girth), near ? 11 : far ? 3 : 4, sp.vScale)];
@@ -409,7 +488,7 @@ function emitBroadleaf(sp: Broadleaf, sk: Skeleton, lod: Lod, continuous: boolea
   const crownR = Math.max(...sk.clusters.map((k) => k.c.distanceTo(crownC) + Math.max(...k.r)));
   let ks = near ? sk.clusters : dropFillers(sk.clusters); // mid/far: the small filler clumps are dropped
   if (far) ks = largest(ks, continuous ? 14 : xfar ? 6 : 14, !continuous);
-  const leaves = cullBuried(ks.map((k) => clusterGeo(k, continuous === true && lod === 'mid' ? 'near' : lod, crownC, crownR)), ks);
+  const leaves = cullBuried(ks.map((k) => sculptOak ? sculptedOakCluster(k, lod, crownC, crownR) : clusterGeo(k, continuous === true && lod === 'mid' ? 'near' : lod, crownC, crownR)), ks);
   const woodG = mergeParts(wood.map((g) => barkCol(paint(g, (p) => sp.barkK(p.y)), sp.bark)));
   return { wood: woodG, leaves: mergeParts(leaves.map((g) => foliageUV(g, 1.4))) };
 }
@@ -429,6 +508,14 @@ const OAKS: Broadleaf[] = [
   { ...OAK_BASE, seed: 1303, H: 2.3, lean: [0.18, 0.28], trunk: [0.56, 0.4], limbs: 6, limbEl: [0.12, 0.6], limbLen: [3.6, 5.0], limbArch: 0.26, subs: [2, 3], subLen: [0.4, 0.6], cl: [0.8, 1.15], buttress: 6, flare: 2.5 },
 ];
 export function oakModel(variant: number, lod: Lod): Model { return broadleaf(OAKS[variant % 3], lod); }
+/** Opt-in comparison; retains the exact existing skeleton, bark atlas, tree origins, footprint and LOD thresholds. */
+export function oakSculptModel(variant: number, lod: Lod, continuous: boolean | 'outline' = false): Model {
+  const sp = OAKS[variant % 3];
+  return emitBroadleaf(sp, growBroadleaf(sp), lod, continuous, true);
+}
+/** Feature-branch-only visual A/B selector: ?vegart=oak-r02; all other trees stay on their original models. */
+export const OAK_SCULPT_PREVIEW = typeof location !== 'undefined'
+  && new URLSearchParams(location.search).get('vegart') === 'oak-r02';
 
 // ------------------------------------------------------------------------------------------------ beech
 /**
@@ -547,6 +634,7 @@ export function trunkAt(species: TreeSpecies, variant: number, y: number, a: num
 }
 
 export function treeModel(species: TreeSpecies, variant: number, lod: Lod, continuous: boolean | 'outline' = false): Model {
+  if (species === 'oak' && OAK_SCULPT_PREVIEW) return oakSculptModel(variant, lod, continuous);
   if (continuous && species !== 'pine') {
     const sp = (species === 'oak' ? OAKS : species === 'beech' ? BEECHES : BIRCHES)[variant % 3];
     return emitBroadleaf(sp, growBroadleaf(sp), lod, continuous);
