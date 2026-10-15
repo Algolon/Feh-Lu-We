@@ -1,0 +1,35 @@
+{
+  "rows": [
+    {
+      "quality": "low",
+      "name": "cluster-eye",
+      "x": 187.21587457028227,
+      "z": 153.98519154914177,
+      "y": 0.7602777298271064,
+      "amount": 0,
+      "calls": 25,
+      "triangles": 349700,
+      "readbackMedianMs": 686,
+      "readbackMaxMs": 25303.599999999977,
+      "glError": 0,
+      "room": "out",
+      "overlap": false
+    },
+    {
+      "quality": "high",
+      "name": "cluster-eye",
+      "x": 187.21587457028227,
+      "z": 153.98519154914177,
+      "y": 0.7602777298271064,
+      "amount": 0,
+      "calls": 31,
+      "triangles": 448082,
+      "readbackMedianMs": 892.5,
+      "readbackMaxMs": 2634.79999999993,
+      "glError": 0,
+      "room": "out",
+      "overlap": false
+    }
+  ],
+  "errors": []
+}

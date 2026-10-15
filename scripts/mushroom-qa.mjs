@@ -16,13 +16,13 @@ await page.reload();await page.click('[data-cont]');await page.waitForFunction((
 await page.evaluate(()=>{window.__game.running=false;});
 await page.evaluate(readFileSync(new URL('./e2e-helpers.js',import.meta.url),'utf8'));
 const views=[['outside',156,132,0.55,0],['approach',166,140,.55,0.04],['halfway',173,150,.55,.12],['entrance',177,156,.4,.12],['grove',181,161,0.2,.16],['return-view',181,163,-2.6,-.02],['exit',154,132,-1.9,0]];
-const nurseryViews=await page.evaluate(()=>{
+const nurseryViews=process.env.NURSERY?await page.evaluate(()=>{
  const g=window.__game,data=g.world.scene.userData.mushrooms;
  const p=data.placements.find(p=>p.zone==='grove'&&p.x>data.centre.x+8&&p.z<data.centre.z);
  const look=(x,z,y)=>{const ground=g.world.col.ground(x,z);return [Math.atan2(p.x-x,p.z-z),Math.atan2(y-(ground+1.65),Math.hypot(p.x-x,p.z-z))];};
  const y=g.world.col.ground(p.x,p.z);
  return [['hero-base',p.x-4,p.z-4,...look(p.x-4,p.z-4,y+2.1)],['cluster-eye',p.x-2.5,p.z-2.7,...look(p.x-2.5,p.z-2.7,y+.7)],['grove-wide',177,155,.28,.05]];
-});
+}):[];
 if(process.env.NURSERY)views.push(...nurseryViews);
 const rows=[];
 for(const quality of (process.env.QUALITY?[process.env.QUALITY]:['low','high']))for(const [name,x,z,yaw,pitch] of views.filter(v=>!process.env.CHECKS&&!process.env.CLIP&&!process.env.BENCH&&(!process.env.VIEW||v[0]===process.env.VIEW))){
@@ -67,7 +67,11 @@ if(tag==='feature'&&!process.env.CLIP&&!process.env.BENCH&&(!process.env.VIEW||p
   const gl=g.renderer.getContext(),ext=gl.getExtension('WEBGL_debug_renderer_info');
   const renderer=ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER);
   const gpuTimer=!!gl.getExtension('EXT_disjoint_timer_query_webgl2');
-  return {ready:a.ready,pausedBus,insideBus,audibleRms:audible,mutedRms:muted,voices:a.groveVoices.length,context:a.ctx.state,reduced,distortionDisabled,renderer,gpuTimer,target:[p.target.width,p.target.height],buffer:[gl.drawingBufferWidth,gl.drawingBufferHeight]};
+  g.player.setPose({x:160,z:135,y:g.world.col.ground(160,135),yaw:.5,pitch:0});T.wait(7);await wait(2400);
+  const exitedBus=a.groveBus.gain.value,exitedIntensity=p.intensity;
+  g.player.setPose({x:181,z:161,y:g.world.col.ground(181,161),yaw:0,pitch:.1});T.wait(6);await wait(1800);render();
+  if(pausedBus>.01||insideBus<.1||audible<.00001||muted!==0||exitedBus>.03||exitedIntensity!==0||reduced.motion!==0||reduced.distort!==0||!distortionDisabled)throw new Error('audio/accessibility lifecycle failed');
+  return {ready:a.ready,pausedBus,insideBus,exitedBus,exitedIntensity,audibleRms:audible,mutedRms:muted,voices:a.groveVoices.length,context:a.ctx.state,reduced,distortionDisabled,renderer,gpuTimer,target:[p.target.width,p.target.height],buffer:[gl.drawingBufferWidth,gl.drawingBufferHeight]};
  })});
  if(process.env.CHECKS){
   const lost=await page.evaluate(async()=>{const g=window.__game,ext=g.renderer.getContext().getExtension('WEBGL_lose_context');if(!ext)return {supported:false};ext.loseContext();await new Promise(r=>setTimeout(r,100));const shown=g.contextLost;ext.restoreContext();return {supported:true,shown};});

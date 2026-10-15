@@ -1,3 +1,5 @@
+Current iteration: [R03.md](R03.md) supersedes the R01 layout/counts and records recovery, denser nursery clusters, stronger R02 vision and current QA.
+
 # Mushroom Grove R01 — implementation and validation
 
 Publication update: see [PUBLISH.md](PUBLISH.md) for the pushed branch and private live phone test.
