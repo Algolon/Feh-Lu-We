@@ -1143,7 +1143,7 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   // and atlases on the pier west of it, a rug under desk and chair; the wall now runs window · bookcase · desk ·
   // holdall · window · coat stand instead of a lone desk between two windows
   planningDesk(c, 79.0, 80.95, R0, 0, 1.4, 0.62);
-  shared(() => bookshelf(c, 77.25, 80.65, R0, 0, 1.2, 1.6, 'leather', 0.32, 'living')); // shared mUp: its books / no-shadow parts would open two batches of their own here
+  bookshelf(c, 77.25, 80.65, R0, 0, 1.2, 1.6, 'leather', 0.32, 'living'); // in mUpR: built in the shared mUp it saved one call here but pushed the hall's high-quality view over 450 k (D3B2R report §5)
   rug(c, 79.0, 81.5, R0 + 0.01, 2.6, 1.8, 0, '#d6c2aa', 'medallion');
   // DEV-04D D3-b2: the desk under the middle window is where the trip is planned: the road map and guidebook on its
   // west half (they replace the generic open book), the Track 01 sloop (×1.15) on its east half, the guest's jacket
