@@ -21,6 +21,7 @@ import {
 import { terrainHeight } from './terrain';
 import { FIRE_UNIFORMS } from './fire';
 import { S3_BUILDERS } from './d2props';
+import { parkedCar } from './cars';
 
 const BENCH_LOG2 = logModel(157, 2.2, 0.21);
 const WICKER_GEO = wickermanGeo();
@@ -52,42 +53,10 @@ function arrival(w: World, c: Ctx) {
   for (const p of PARKING) if (p.car) car(w, c, p.id, (p.x0 + p.x1) / 2, (p.z0 + p.z1) / 2 + 0.15, p.color);
 }
 
-/**
- * DEV-03 car kit: a stylised European car (body with softened shoulders, a glasshouse with pillars, wheel arches
- * with tyres and hubs, bumpers, lamps, plates). Three silhouettes by bay: estate, hatchback, compact van. The
- * collider is unchanged (one box per car, `id` tag).
- */
+/** Visual model is batched separately from the stable gameplay collider. */
 function car(w: World, c: Ctx, id: string, x: number, z: number, color: string) {
-  const { sb, bx, cg } = joinery, M = artMats(), a = new Asm(c.b, 'grounds', x, 0, z, 0);
-  const kind = ['car.1', 'car.4'].includes(id) ? 'estate' : id === 'car.2' ? 'van' : 'hatch';
-  const L = kind === 'hatch' ? 3.95 : 4.3, roofL = kind === 'estate' ? 2.55 : kind === 'van' ? 2.9 : 1.9;
-  const roofZ = kind === 'hatch' ? -0.35 : kind === 'van' ? -0.15 : -0.3;
-  const body = new THREE.Color(color), trim = '#2a2a2a', glass = '#5d6c76';
-  // lower body and bonnet (front = +z, nose toward the house)
-  a.add(M.paint, body, sb(1.76, 0.5, L, 0.12, 2), 0, 0.5, 0);
-  if (kind !== 'van') a.add(M.paint, body, sb(1.7, 0.16, L * 0.32, 0.08, 2), 0, 0.8, L / 2 - L * 0.16 - 0.1);
-  // glasshouse: glass band + roof + pillars
-  const gh = kind === 'van' ? 0.62 : 0.5, gy = 0.75 + (kind === 'van' ? 0.05 : 0);
-  a.add(c.k.M.glow, glass, bx(1.58, gh * 0.85, roofL - 0.1), 0, gy + gh * 0.45, roofZ);
-  a.add(M.paint, body, sb(1.6, 0.07, roofL, 0.03), 0, gy + gh + 0.02, roofZ);
-  for (const sx of [-1, 1]) for (const pz of [roofZ - roofL / 2 + 0.06, roofZ + roofL / 2 - 0.08, roofZ]) a.add(M.paint, pz === roofZ ? trim : body, bx(0.05, gh, 0.08), sx * 0.785, gy + gh / 2, pz);
-  if (kind === 'van') a.add(M.paint, body, sb(1.7, 0.42, 1.0, 0.1, 2), 0, 0.98, L / 2 - 0.55);
-  // wheels in arches, bumpers, lamps, plates, mirrors
-  const tyre = cg('tyre', () => new THREE.CylinderGeometry(0.33, 0.33, 0.22, 12).rotateZ(Math.PI / 2));
-  const hub = cg('hub', () => new THREE.CylinderGeometry(0.17, 0.17, 0.23, 10).rotateZ(Math.PI / 2));
-  for (const sx of [-1, 1]) for (const wz of [L / 2 - 0.78, -L / 2 + 0.78]) {
-    a.add(M.paint, '#1c1c1c', tyre, sx * 0.79, 0.33, wz);
-    a.add(M.brass, '#a8a8a2', hub, sx * 0.795, 0.33, wz);
-    a.add(M.paint, '#1e1e1e', bx(0.06, 0.12, 0.86), sx * 0.86, 0.66, wz);
-  }
-  for (const ez of [1, -1]) {
-    a.add(M.paint, trim, sb(1.8, 0.16, 0.12, 0.05), 0, 0.32, ez * (L / 2 + 0.02));
-    a.add(M.paint, '#f2d24a', bx(0.52, 0.11, 0.012), 0, 0.42, ez * (L / 2 + 0.085)); // plate
-    for (const sx of [-1, 1]) a.add(c.k.M.glow, ez > 0 ? '#fff2c8' : '#9a2a22', bx(0.32, 0.12, 0.02), sx * 0.6, 0.6, ez * (L / 2 + 0.005));
-  }
-  for (const sx of [-1, 1]) a.add(M.paint, body, sb(0.12, 0.09, 0.16, 0.03), sx * 0.93, gy + 0.08, roofZ + roofL / 2 - 0.1);
-  const col = w.col.addBox(x - 0.92, x + 0.92, z - 2.2, z + 2.2, 0, 1.25, { occludes: true, tag: id });
-  void col;
+  parkedCar(c, id, x, z, color);
+  w.col.addBox(x - 0.92, x + 0.92, z - 2.2, z + 2.2, 0, 1.25, { occludes: true, tag: id });
 }
 
 // ------------------------------------------------------------------------------------------------ social garden
