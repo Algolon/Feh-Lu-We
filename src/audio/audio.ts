@@ -130,6 +130,55 @@ export class Audio {
     else this.noise(0.14, 'highpass', 1700 * f, 0.7, 0.045 * g, 0, 0.012);
   }
 
+  /**
+   * Tight low-voltage "bzzz" rather than a hiss/crackle. Three pitched oscillators
+   * share a warm filter and a 42 Hz amplitude flutter. No noise buffer or audio
+   * download; each call is one ~140 ms buzz aligned to one visual lightning arc.
+   */
+  private electricBuzz(volume: number) {
+    const c = this.ctx!, t = c.currentTime, dur = 0.14;
+    const filter = c.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(1500, t);
+    filter.Q.value = 0.65;
+    const tremolo = c.createGain();
+    tremolo.gain.value = 0.7;
+    const flutter = c.createOscillator();
+    flutter.type = 'square';
+    flutter.frequency.setValueAtTime(42, t);
+    const depth = c.createGain();
+    depth.gain.value = 0.22;
+    flutter.connect(depth).connect(tremolo.gain);
+
+    // Short but recognisably sustained buzz with a small click-free tail.
+    const envelope = c.createGain();
+    const peak = 0.115 * volume;
+    envelope.gain.setValueAtTime(0.0001, t);
+    envelope.gain.exponentialRampToValueAtTime(peak, t + 0.008);
+    envelope.gain.setValueAtTime(peak, t + dur - 0.025);
+    envelope.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    filter.connect(tremolo).connect(envelope).connect(this.master!);
+
+    const voices: { wave: OscillatorType; from: number; to: number; level: number }[] = [
+      { wave: 'sawtooth', from: 178, to: 151, level: 0.75 },
+      { wave: 'square', from: 356, to: 302, level: 0.17 },
+      { wave: 'triangle', from: 89, to: 76, level: 0.27 },
+    ];
+    for (const voice of voices) {
+      const osc = c.createOscillator();
+      osc.type = voice.wave;
+      osc.frequency.setValueAtTime(voice.from, t);
+      osc.frequency.exponentialRampToValueAtTime(voice.to, t + dur);
+      const balance = c.createGain();
+      balance.gain.value = voice.level;
+      osc.connect(balance).connect(filter);
+      osc.start(t);
+      osc.stop(t + dur + 0.01);
+    }
+    flutter.start(t);
+    flutter.stop(t + dur + 0.01);
+  }
+
   sfx(name: SfxName, surface: FootstepSurface = 'grass', gain = 1) {
     if (!this.ready || this.muted) return;
     switch (name) {
@@ -149,14 +198,9 @@ export class Audio {
       case 'steam': this.noise(1.5, 'highpass', 3000, 0.5, 0.15, 0, 0.2); break;
       case 'water': this.noise(0.5, 'lowpass', 700, 1, 0.1, 0, 0.1); break;
       case 'electric-zap': {
-        // Original, license-free miniature electrical shock: brittle high crackle + descending
-        // midrange buzz + brief low impact. Each layer dies within the corresponding light pulse.
+        // Audible "bzzz—bzz": one short pitched buzz for each synchronized lightning pulse.
         const v = Number.isFinite(gain) ? Math.max(0, Math.min(1, gain)) : 0;
-        if (v <= 0) break;
-        this.noise(0.135, 'highpass', 1650, 0.8, 0.18 * v, 0, 0.002, 4500);
-        this.noise(0.105, 'bandpass', 980, 1.4, 0.11 * v, 0.013, 0.003, 520);
-        this.tone(390, 0.125, 'sawtooth', 0.05 * v, 0, 145);
-        this.tone(1700, 0.065, 'triangle', 0.035 * v, 0.007, 950);
+        if (v > 0) this.electricBuzz(v);
         break;
       }
       default: break;
