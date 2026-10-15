@@ -3,7 +3,7 @@
 // The context is created/resumed only from the Start button (user gesture), and suspended when hidden.
 
 import type { RitualMix } from '../world/wickerRitual';
-import { renderOutdoorFootstep, selectOutdoorFootstepVariant, type FootstepSurface, type OutdoorFootstepSurface } from './footsteps';
+import { renderOutdoorFootstep, selectOutdoorFootstepVariant, selectGrassPitchVariant, GRASS_PITCH_RATIOS, type FootstepSurface, type OutdoorFootstepSurface } from './footsteps';
 import { FIELD_FOOTSTEPS_MP3, FIELD_FOOTSTEP_CLIPS } from './fieldFootsteps';
 import { GRASS_R04_MP3, GRASS_R04_CLIPS, DIRT_PATH_GAIN } from './grassR04';
 
@@ -197,6 +197,7 @@ export class Audio {
   }
   private readonly outdoorBuffers: Record<OutdoorFootstepSurface, AudioBuffer[]> = { grass: [], dirt: [] };
   private readonly lastOutdoor: Record<OutdoorFootstepSurface, number> = { grass: -1, dirt: -1 };
+  private lastGrassPitch = -1;
 
   private outdoorStep(surface: OutdoorFootstepSurface, gain: number, foot: 0 | 1) {
     const pool = this.outdoorBuffers[surface];
@@ -213,9 +214,17 @@ export class Audio {
     const c = this.ctx!;
     const src = c.createBufferSource();
     src.buffer = bank ?? pool[index];
-    // Reuse the exact first grass sound at original pitch for both feet.
-    // Cadence is controlled by gait.ts, not by clip playback speed.
-    const pitch = surface === 'grass' ? 1 : (foot ? 0.986 : 1.014) * (0.98 + Math.random() * 0.04);
+    // Every grass step reuses the first approved recording, selecting one of three
+    // subtle semitone pitches. Never repeat a pitch twice consecutively.
+    // Step onset is still driven only by gait.ts, not playback rate.
+    let pitch: number;
+    if (surface === 'grass') {
+      this.lastGrassPitch = selectGrassPitchVariant(this.lastGrassPitch, Math.random());
+      pitch = GRASS_PITCH_RATIOS[this.lastGrassPitch];
+    } else {
+      // Dirt retains its previously approved random pitch and left/right modulation.
+      pitch = (foot ? 0.986 : 1.014) * (0.98 + Math.random() * 0.04);
+    }
     src.playbackRate.value = pitch;
     const surfaceMix = surface === 'grass' ? (bank ? 0.33 : 0.5) : (bank ? DIRT_PATH_GAIN : 0.35);
     const vol = Math.max(0, Math.min(1.2, gain)) * surfaceMix
