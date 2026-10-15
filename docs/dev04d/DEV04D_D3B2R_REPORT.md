@@ -94,14 +94,23 @@ Doors closed, low quality (camera-only), 915 × 412; immutable builds and identi
 | Failure | Classification |
 |---|---|
 | High-quality desktop budgets: driveway, forecourt, forest, BOSLUST, conservatory | **existing production failures**, identical numbers on `752cb02` |
-| Three touch checks | **infrastructure / timing**: tap timeouts under SwiftShader load. They fail on production (84 / 94) and passed in the D3-b2 run. |
-| BOSLUST sample, "LOD transitions by walking" | **see §6.1** |
+| Three touch checks | **infrastructure / timing**: tap timeouts under SwiftShader load. Production failed them in one run (84 / 94) and passed them in another (96 / 103); D3-b2 passed them. |
+| BOSLUST sample, "LOD transitions by walking" | **existing production failure** (§6.1) |
 
 The entrance-hall high-quality check **passes** (448,630; production fails it at 475 k).
 
 ### 6.1 The BOSLUST LOD-walk check
 
-<!--BOSLUST-->
+**Existing production failure.** In earlier full runs, production and D3-b2 both crashed on a page-load timeout before
+reaching this check. Re-run on production `752cb02` with fewer browsers in parallel, it fails **identically**:
+- the same LOD sequence, `lod 1 @ 33.9 m → lod 0 @ 19.5 m`;
+- production scored 96 / 103 in that run.
+
+The check is in the BOSLUST vegetation sample, far from these rooms, and D3-b2 / D3-b2R change no vegetation or LOD
+code.
+
+In the same production run the three touch checks **passed** (they failed in production's earlier run). That confirms
+they are timing-sensitive under SwiftShader load: an infrastructure failure, not a code failure.
 
 Contracts preserved (checked by tests):
 - the suitcase memory and its inspect target;
@@ -148,7 +157,7 @@ change does not alter the image.
 | **Ready for approval** | The Reiskamer planning zone. The Sterrenkamer station and daybed. The draped jacket, the soft rucksack. Sloop ×1.3, moon ×1.4. |
 | **Trade-offs to accept** | Up to +3 calls in three Reiskamer desk views (31 calls; local guide +2; the alternative failed the hall's high-quality budget). The all-doors-open hotspots, which are pre-existing (hall 306 calls / 719 k). |
 | **Visually questionable** | The planning rug's medallion pattern is bold (it was toned down once); a plainer rug is a one-line change. The Reiskamer remains a long room by architecture: the refinement layers it but does not change its proportions. |
-| **Outstanding** | The stale dev04a / dev04c budget baselines; the five exterior high-quality budgets (production); the BOSLUST LOD-walk check (§6.1); the production interactable-baseline reconciliation at integration (§1). |
+| **Outstanding** | All of these are production issues, outside D3-b2R; none is a D3-b2R defect: <br>– the stale dev04a / dev04c budget baselines; <br>– the five exterior high-quality budgets; <br>– the BOSLUST LOD-walk check (§6.1); <br>– the interactable-baseline reconciliation at integration (§1). |
 | **Deferred** | D2-017 / 027 / 030 (atlas capacity kept). A real bathroom tile texture. The estate-wide open-door call hotspots. D3-c, D4. |
 
 **Recommendation:**
