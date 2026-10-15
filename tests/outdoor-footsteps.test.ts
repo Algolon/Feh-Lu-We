@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { renderOutdoorFootstep } from '../src/audio/footsteps';
+import { renderOutdoorFootstep, selectOutdoorFootstepVariant } from '../src/audio/footsteps';
 import { onOutdoorPath } from '../src/world/pathFootsteps';
 import { pathNetwork } from '../src/world/junctions';
 
@@ -35,5 +35,26 @@ describe('outdoor path audio classification', () => {
     const p = r.rows[Math.floor(r.rows.length / 2)];
     expect(onOutdoorPath(p.x, p.z, lines)).toBe(true);
     expect(onOutdoorPath(-200, -200, lines)).toBe(false);
+  });
+});
+
+
+describe('recorded footstep clip selection', () => {
+  it('plays the first grass recording on every step, even as feet and random draws alternate', () => {
+    let previous = -1;
+    for (let i = 0; i < 30; i++) {
+      const selected = selectOutdoorFootstepVariant('grass', 3, previous, (i % 3) / 3);
+      expect(selected).toBe(0);
+      previous = selected;
+    }
+    expect(selectOutdoorFootstepVariant('grass', 1, 0, 0.99)).toBe(0);
+  });
+
+  it('preserves dirt clip variation and guards empty banks', () => {
+    expect(selectOutdoorFootstepVariant('grass', 0, 0, 0.5)).toBe(-1);
+    expect(selectOutdoorFootstepVariant('dirt', 0, 0, 0.5)).toBe(-1);
+    expect(selectOutdoorFootstepVariant('dirt', 2, 0, 0.1)).toBe(1);
+    expect(selectOutdoorFootstepVariant('dirt', 2, 1, 0.1)).toBe(0);
+    expect(selectOutdoorFootstepVariant('dirt', 2, -1, 0.99)).toBe(1);
   });
 });
