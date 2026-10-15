@@ -30,6 +30,16 @@ const BENCH_LOG2 = logModel(157, 2.2, 0.21);
 const WICKER_GEO = wickermanGeo();
 WICKER_GEO.userData.shared = true; WICKER_GEO.userData.hay.userData.shared = true; // DEV-04C: drawn directly (not batched): never disposed with a world
 const SHORE_STONE = (() => { const g = rockModel(71); g.userData.keepColor = true; return g; })();
+/**
+ * DEV-04D W01: the same stone without the moss on its upper faces, for the Wickerman plinth and candle stones (a hearth
+ * that is burned on carries no moss): every vertex keeps its baked shade, the green moss tint is taken out.
+ */
+const HEARTH_STONE = (() => {
+  const g = rockModel(71), c = g.attributes.color as THREE.BufferAttribute;
+  for (let i = 0; i < c.count; i++) { const k = Math.max(c.getX(i), c.getY(i), c.getZ(i)) * 0.97; c.setXYZ(i, k, k * 0.985, k * 0.96); }
+  g.userData.keepColor = true;
+  return g;
+})();
 
 export function buildGrounds(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods: EstateWoods | null) {
   arrival(w, c);
@@ -390,19 +400,19 @@ function wickerman(w: World, g: GameApi, c: Ctx) {
   cyl(c.b, M.rock, '#5d5850', x, gy - 0.05, z, 0.93, 0.98, 0.27, 14, { ...o, uv: 1 }); // the core: its gaps read as the joints
   for (let i = 0; i < 16; i++) { // lower course + footing stones
     const an = (i / 16) * Math.PI * 2 + 0.11 * Math.sin(i * 1.9), s2 = 0.2 + 0.025 * Math.sin(i * 2.7);
-    c.b.add(M.rock, SHORE_STONE, planMatrix(x + Math.cos(an) * 1.0, gy + 0.0, z + Math.sin(an) * 1.0, -an - Math.PI / 2 + 0.12 * Math.sin(i * 3.3), s2 * 1.05, 0.12, 0.15), SH(i, 0.72), o.chunk, true, 0);
-    if (i % 3 === 0) c.b.add(M.rock, SHORE_STONE, planMatrix(x + Math.cos(an + 0.2) * 1.16, gy - 0.07, z + Math.sin(an + 0.2) * 1.16, an * 2.1, 0.17, 0.09, 0.12), SH(i + 5, 0.66), o.chunk, true, 0);
+    c.b.add(M.rock, HEARTH_STONE, planMatrix(x + Math.cos(an) * 1.0, gy + 0.0, z + Math.sin(an) * 1.0, -an - Math.PI / 2 + 0.12 * Math.sin(i * 3.3), s2 * 1.05, 0.12, 0.15), SH(i, 0.72), o.chunk, true, 0);
+    if (i % 3 === 0) c.b.add(M.rock, HEARTH_STONE, planMatrix(x + Math.cos(an + 0.2) * 1.16, gy - 0.07, z + Math.sin(an + 0.2) * 1.16, an * 2.1, 0.17, 0.09, 0.12), SH(i + 5, 0.66), o.chunk, true, 0);
   }
   for (let i = 0; i < 15; i++) { // upper course, set back a little, joints staggered
     const an = ((i + 0.5) / 15) * Math.PI * 2 + 0.09 * Math.sin(i * 2.6), s2 = 0.2 + 0.03 * Math.sin(i * 1.7 + 1);
-    c.b.add(M.rock, SHORE_STONE, planMatrix(x + Math.cos(an) * 0.96, gy + 0.125, z + Math.sin(an) * 0.96, -an - Math.PI / 2 + 0.1 * Math.sin(i * 2.9), s2 * 1.05, 0.1, 0.14), SH(i + 9, 0.8), o.chunk, true, 0);
+    c.b.add(M.rock, HEARTH_STONE, planMatrix(x + Math.cos(an) * 0.96, gy + 0.125, z + Math.sin(an) * 0.96, -an - Math.PI / 2 + 0.1 * Math.sin(i * 2.9), s2 * 1.05, 0.1, 0.14), SH(i + 9, 0.8), o.chunk, true, 0);
   }
   for (let i = 0; i < 11; i++) { // coping slabs round the rim, a little proud of the course, tops at the plinth top
     const an = (i / 11) * Math.PI * 2 + 0.3, rr = 0.8 + 0.03 * Math.sin(i * 2.2);
-    c.b.add(M.rock, SHORE_STONE, planMatrix(x + Math.cos(an) * rr, top0 - 0.012, z + Math.sin(an) * rr, -an - Math.PI / 2 + 0.25 * Math.sin(i * 1.3), 0.27, 0.05, 0.2), SH(i + 3, 0.9), o.chunk, true, 0);
+    c.b.add(M.rock, HEARTH_STONE, planMatrix(x + Math.cos(an) * rr, top0 - 0.012, z + Math.sin(an) * rr, -an - Math.PI / 2 + 0.25 * Math.sin(i * 1.3), 0.27, 0.05, 0.2), SH(i + 3, 0.9), o.chunk, true, 0);
   }
   for (const [dx, dz, sx, sz, kk] of [[0, 0.05, 0.3, 0.26, 0.5], [-0.3, -0.32, 0.22, 0.18, 0.62], [0.34, -0.28, 0.2, 0.2, 0.6], [0.05, -0.46, 0.18, 0.16, 0.66], [-0.36, 0.34, 0.2, 0.18, 0.64], [0.38, 0.36, 0.2, 0.17, 0.62], [0, 0.48, 0.2, 0.15, 0.66]] as const) {
-    c.b.add(M.rock, SHORE_STONE, planMatrix(x + dx, top0 - 0.015, z + dz, dx * 7 + dz * 3, sx, 0.045, sz), new THREE.Color('#7a7368').multiplyScalar(kk + 0.25), o.chunk, true, 0); // hearth slabs (W5 scorch)
+    c.b.add(M.rock, HEARTH_STONE, planMatrix(x + dx, top0 - 0.015, z + dz, dx * 7 + dz * 3, sx, 0.045, sz), new THREE.Color('#7a7368').multiplyScalar(kk + 0.25), o.chunk, true, 0); // hearth slabs (W5 scorch)
   }
   // two sleepers across the plinth, the feet bound onto them (W5: scorched dark at the middle)
   for (const dx of [-0.26, 0.26]) boxMM(c.b, k.M.wood, '#4e3e2e', x + dx - 0.09, x + dx + 0.09, top0, top0 + 0.12, z - 0.75, z + 0.75, o);
@@ -428,8 +438,8 @@ function wickerman(w: World, g: GameApi, c: Ctx) {
   for (let i = 0; i < 9; i++) {
     const an = (i / 9) * Math.PI * 2 + 0.15 * Math.sin(i * 2.3), d = 3.1 + 0.2 * Math.sin(i * 1.7), cxx = x + Math.cos(an) * d, czz = z + Math.sin(an) * d, cy = terrainHeight(cxx, czz);
     // W01: a broader, darker flat stone under each jar (they barely read in the grass) and a small chock stone beside it
-    c.b.add(M.rock, SHORE_STONE, planMatrix(cxx, cy - 0.06, czz, an * 2, 0.34, 0.1, 0.3), new THREE.Color('#7c766b').multiplyScalar(0.92 + 0.12 * Math.sin(i * 1.3)), o.chunk, true, 0);
-    c.b.add(M.rock, SHORE_STONE, planMatrix(cxx + Math.cos(an + 1.9) * 0.27, cy - 0.05, czz + Math.sin(an + 1.9) * 0.27, an * 3 + 1, 0.11, 0.08, 0.09), '#6f695f', o.chunk, true, 0);
+    c.b.add(M.rock, HEARTH_STONE, planMatrix(cxx, cy - 0.06, czz, an * 2, 0.34, 0.1, 0.3), new THREE.Color('#7c766b').multiplyScalar(0.92 + 0.12 * Math.sin(i * 1.3)), o.chunk, true, 0);
+    c.b.add(M.rock, HEARTH_STONE, planMatrix(cxx + Math.cos(an + 1.9) * 0.27, cy - 0.05, czz + Math.sin(an + 1.9) * 0.27, an * 3 + 1, 0.11, 0.08, 0.09), '#6f695f', o.chunk, true, 0);
     const a = new Asm(c.b, o.chunk, cxx, cy + 0.035, czz, an);
     jarY.push(cy + 0.035); // DEV-04C: the glass jar is the setpiece's own mesh (it glows when its candle burns)
     a.add(CM.paint, '#f2ead8', joinery.cg(`candleWax${i % 3}`, () => new THREE.CylinderGeometry(0.035, 0.036, 0.09 + (i % 3) * 0.02, 10).translate(0, (0.09 + (i % 3) * 0.02) / 2 + 0.012, 0)), 0, 0, 0);

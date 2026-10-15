@@ -232,14 +232,14 @@ void main() {
   float k = fract(aPuff.y + t * aPuff.z);
   float s = aPuff.x;
   vec3 c = vec3(sin(s * 6.28 + k * 2.6) * 0.32 * k + k * k * ${o.wind.toFixed(3)}, k * ${o.h.toFixed(3)}, cos(s * 9.1 + k * 2.1) * 0.28 * k);
-  float size = ${o.size.toFixed(3)} * mix(0.32, 1.0, sqrt(k)) * (0.75 + 0.5 * fract(s * 7.31));
+  float size = ${o.size.toFixed(3)} * mix(0.32, 1.3, sqrt(k)) * (0.75 + 0.5 * fract(s * 7.31)); // the upper puffs swell and overlap: one dispersing plume, not discs
   vec4 mvPosition = modelViewMatrix * vec4(c, 1.0);
   float ang = s * 6.28 + t * 0.25 * (fract(s * 3.7) - 0.5);
   mvPosition.xy += vec2(cos(ang) * aCorner.x - sin(ang) * aCorner.y, sin(ang) * aCorner.x + cos(ang) * aCorner.y) * size;
   gl_Position = projectionMatrix * mvPosition;
   float cell = floor(aPuff.w * 3.999);
   vUv = (aCorner * 0.5 + 0.5) * 0.5 + vec2(mod(cell, 2.0), floor(cell / 2.0)) * 0.5;
-  vA = smoothstep(0.0, 0.14, k) * (1.0 - smoothstep(0.4, 1.0, k)) * uDensity;
+  vA = smoothstep(0.0, 0.14, k) * (1.0 - smoothstep(0.3, 0.9, k)) * (1.0 - 0.35 * k) * uDensity;
   vK = k;
   #include <fog_vertex>
 }`,
@@ -283,7 +283,7 @@ export function burnMaterial(m: THREE.MeshLambertMaterial, u: BurnUniforms, time
     Object.assign(sh.uniforms, u, { uTime: time });
     sh.vertexShader = sh.vertexShader
       .replace('#include <common>', `#include <common>\nvarying vec3 vBurnP;${hay ? '\nattribute float aFill; varying float vFill; uniform float uRemnant;' : ''}`)
-      .replace('#include <begin_vertex>', `#include <begin_vertex>\nvBurnP = position;${hay ? '\nvFill = aFill;\nif (uRemnant > 0.5) { transformed.xz *= 0.9; transformed.y = transformed.y * 0.97 - 0.02; } // the remnant slumps inside the cage' : ''}`);
+      .replace('#include <begin_vertex>', `#include <begin_vertex>\nvBurnP = position;${hay ? '\nvFill = aFill;\nif (uRemnant > 0.5) { transformed.xz *= 0.95; transformed.y = transformed.y * 0.97 - 0.02; } // the remnant slumps inside the cage' : ''}`);
     sh.fragmentShader = sh.fragmentShader
       .replace('#include <common>', `#include <common>
 varying vec3 vBurnP; uniform float uChar; uniform float uGlow; uniform float uEmber; uniform float uTime;${hay ? '\nvarying float vFill; uniform float uRemnant; uniform float uClean; uniform float uFill;' : ''}
@@ -297,11 +297,14 @@ float burnH(vec3 p, float s) { return fract(sin(dot(floor(p * s), vec3(12.9898, 
   if (uRemnant > 0.5) {
     // W01 charred remnant: lumpy black / ash clumps (more of it low down, where it fell), crumbling from the top
     float clump = sin(vBurnP.x * 9.0 + vBurnP.y * 5.0) * sin(vBurnP.z * 8.0 - vBurnP.y * 7.0) + 0.5 * sin((vBurnP.x + vBurnP.z) * 13.0 + vBurnP.y * 11.0);
-    float keep = 0.25 - 0.55 * (1.0 - smoothstep(0.3, 1.9, vBurnP.y)); // more of it low down, where it fell
+    float keep = 0.1 - 0.55 * (1.0 - smoothstep(0.3, 1.9, vBurnP.y)); // more of it low down, where it fell
     if (clump < keep - 0.45 || hh > uClean) discard; // broad clumps with holes (≈ 60 % kept), not speckle
     float ash = smoothstep(0.05, 1.0, clump) * 0.8 + burnH(vBurnP, 23.0) * 0.2;
-    // grey ash on the tops of the clumps, charcoal in the breaks: lighter than the black willow, so the remnant reads
-    diffuseColor.rgb = mix(vec3(0.045, 0.04, 0.036), vec3(0.25, 0.24, 0.225), clamp(ash + smoothstep(uClean - 0.25, uClean, hh) * 0.4, 0.0, 1.0));
+    float scorch = smoothstep(0.35, 0.75, sin(vBurnP.x * 17.0 - vBurnP.z * 11.0 + vBurnP.y * 6.0) * 0.5 + 0.5) * (1.0 - smoothstep(0.55, 0.9, ash));
+    // grey ash on the tops of the clumps, charcoal in the breaks, a few patches of scorched (not yet burned) straw:
+    // lighter and warmer than the black willow, so the remnant reads, and not one flat grey
+    vec3 rc = mix(vec3(0.06, 0.055, 0.05), vec3(0.4, 0.385, 0.36), clamp(ash + smoothstep(uClean - 0.25, uClean, hh) * 0.4, 0.0, 1.0));
+    diffuseColor.rgb = mix(rc, vec3(0.3, 0.19, 0.1), scorch * 0.45);
     rem = 1.0;
     charred = 1.0;
   } else {
@@ -368,7 +371,7 @@ export function buildWickerSetpiece(w: World, g: GameApi, o: WickerSetOpts) {
   const U: BurnUniforms = { uChar: { value: 0 }, uGlow: { value: 0 }, uEmber: { value: 0 }, uRemnant: { value: 0 }, uClean: { value: 9 }, uFill: { value: 2 } };
   const willowMat = w.material(burnMaterial(new THREE.MeshLambertMaterial({ vertexColors: true }), U, FIRE_UNIFORMS.uTime, 'willow'));
   // W01: the hay a touch lighter and warmer than the prop sheet, so "filled" reads against the willow at clearing distance
-  const hayMat = w.material(burnMaterial(new THREE.MeshLambertMaterial({ vertexColors: true, map: propMats().props.map, color: new THREE.Color(1.3, 1.2, 0.98) }), U, FIRE_UNIFORMS.uTime, 'hay'));
+  const hayMat = w.material(burnMaterial(new THREE.MeshLambertMaterial({ vertexColors: true, map: propMats().props.map, color: new THREE.Color(1.3, 1.2, 0.98), side: THREE.DoubleSide }), U, FIRE_UNIFORMS.uTime, 'hay')); // double-sided: where the burn front or the remnant opens a lump, its far inside shows, not the sky
   const figure = new THREE.Mesh(o.figure, willowMat), hay = new THREE.Mesh(o.hay, hayMat);
   for (const m of [figure, hay]) { m.position.copy(v3(x, foot, z)); m.castShadow = true; m.receiveShadow = true; m.userData.wicker = true; regionOwned(w, m, region); }
   figure.userData.wickerFigure = true; hay.userData.wickerHay = true;
