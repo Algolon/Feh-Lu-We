@@ -1,0 +1,25 @@
+[
+  {
+    "repo": "veg-recovery.git",
+    "counts": {
+      "tree": 1721,
+      "blob": 69,
+      "commit": 340
+    },
+    "matches": []
+  },
+  {
+    "repo": "/workspace/scratch/ad63f100ed5d/feh/.git",
+    "counts": {
+      "tree": 30,
+      "blob": 146,
+      "commit": 2
+    },
+    "matches": []
+  },
+  {
+    "repo": "/workspace/scratch/ad63f100ed5d/preview-recovery/.git",
+    "counts": {},
+    "matches": []
+  }
+]
