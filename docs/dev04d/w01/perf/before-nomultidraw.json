@@ -1,0 +1,780 @@
+{
+  "multiDraw": false,
+  "programs0": 53,
+  "rows": [
+    {
+      "stage": "ready",
+      "pose": "entrance",
+      "calls": 93,
+      "triangles": 221557,
+      "geometries": 170,
+      "textures": 23,
+      "programs": 69,
+      "lights": 3,
+      "na": [],
+      "transparent": 1,
+      "transparentCoverage": 0.23,
+      "transparentList": [
+        {
+          "key": "wicker-jar",
+          "cov": 0.231
+        }
+      ],
+      "renderMsMedian": 1628.8
+    },
+    {
+      "stage": "ready",
+      "pose": "figure",
+      "calls": 95,
+      "triangles": 268172,
+      "geometries": 172,
+      "textures": 23,
+      "programs": 70,
+      "lights": 3,
+      "na": [],
+      "transparent": 1,
+      "transparentCoverage": 0.38,
+      "transparentList": [
+        {
+          "key": "wicker-jar",
+          "cov": 0.382
+        }
+      ],
+      "renderMsMedian": 1065.3
+    },
+    {
+      "stage": "ring",
+      "pose": "entrance",
+      "calls": 95,
+      "triangles": 240887,
+      "geometries": 175,
+      "textures": 24,
+      "programs": 74,
+      "lights": 3,
+      "na": [],
+      "transparent": 3,
+      "transparentCoverage": 0.92,
+      "transparentList": [
+        {
+          "key": "flame-true-reveal",
+          "cov": 0.227
+        },
+        {
+          "key": "wicker-jar",
+          "cov": 0.231
+        },
+        {
+          "key": "wicker-glow",
+          "cov": 0.464
+        }
+      ],
+      "renderMsMedian": 1396.7
+    },
+    {
+      "stage": "ring",
+      "pose": "figure",
+      "calls": 99,
+      "triangles": 271594,
+      "geometries": 175,
+      "textures": 24,
+      "programs": 74,
+      "lights": 3,
+      "na": [],
+      "transparent": 3,
+      "transparentCoverage": 1.52,
+      "transparentList": [
+        {
+          "key": "flame-true-reveal",
+          "cov": 0.376
+        },
+        {
+          "key": "wicker-jar",
+          "cov": 0.382
+        },
+        {
+          "key": "wicker-glow",
+          "cov": 0.767
+        }
+      ],
+      "renderMsMedian": 980.9
+    },
+    {
+      "stage": "burn:4",
+      "pose": "entrance",
+      "calls": 100,
+      "triangles": 246579,
+      "geometries": 179,
+      "textures": 24,
+      "programs": 79,
+      "lights": 3,
+      "na": [],
+      "transparent": 6,
+      "transparentCoverage": 1.93,
+      "transparentList": [
+        {
+          "key": "flame-true-reveal",
+          "cov": 0.227
+        },
+        {
+          "key": "wicker-jar",
+          "cov": 0.231
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.017
+        },
+        {
+          "key": "embers",
+          "cov": 0.357
+        },
+        {
+          "key": "smoke",
+          "cov": 0.633
+        },
+        {
+          "key": "wicker-glow",
+          "cov": 0.464
+        }
+      ],
+      "renderMsMedian": 1395.9
+    },
+    {
+      "stage": "burn:4",
+      "pose": "figure",
+      "calls": 107,
+      "triangles": 283334,
+      "geometries": 181,
+      "textures": 24,
+      "programs": 79,
+      "lights": 3,
+      "na": [],
+      "transparent": 7,
+      "transparentCoverage": 3.19,
+      "transparentList": [
+        {
+          "key": "flame-true-reveal",
+          "cov": 0.376
+        },
+        {
+          "key": "wicker-jar",
+          "cov": 0.382
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.031
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.028
+        },
+        {
+          "key": "embers",
+          "cov": 0.605
+        },
+        {
+          "key": "smoke",
+          "cov": 1
+        },
+        {
+          "key": "wicker-glow",
+          "cov": 0.767
+        }
+      ],
+      "renderMsMedian": 1017.7
+    },
+    {
+      "stage": "burn:14",
+      "pose": "entrance",
+      "calls": 103,
+      "triangles": 252627,
+      "geometries": 181,
+      "textures": 24,
+      "programs": 79,
+      "lights": 3,
+      "na": [],
+      "transparent": 7,
+      "transparentCoverage": 1.98,
+      "transparentList": [
+        {
+          "key": "flame-true-reveal",
+          "cov": 0.227
+        },
+        {
+          "key": "wicker-jar",
+          "cov": 0.231
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.018
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.051
+        },
+        {
+          "key": "embers",
+          "cov": 0.357
+        },
+        {
+          "key": "smoke",
+          "cov": 0.633
+        },
+        {
+          "key": "wicker-glow",
+          "cov": 0.464
+        }
+      ],
+      "renderMsMedian": 1394.7
+    },
+    {
+      "stage": "burn:14",
+      "pose": "figure",
+      "calls": 107,
+      "triangles": 283334,
+      "geometries": 181,
+      "textures": 24,
+      "programs": 79,
+      "lights": 3,
+      "na": [],
+      "transparent": 7,
+      "transparentCoverage": 3.25,
+      "transparentList": [
+        {
+          "key": "flame-true-reveal",
+          "cov": 0.376
+        },
+        {
+          "key": "wicker-jar",
+          "cov": 0.382
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.031
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.087
+        },
+        {
+          "key": "embers",
+          "cov": 0.605
+        },
+        {
+          "key": "smoke",
+          "cov": 1
+        },
+        {
+          "key": "wicker-glow",
+          "cov": 0.767
+        }
+      ],
+      "renderMsMedian": 1099.1
+    },
+    {
+      "stage": "burn:32",
+      "pose": "entrance",
+      "calls": 103,
+      "triangles": 252627,
+      "geometries": 181,
+      "textures": 24,
+      "programs": 79,
+      "lights": 3,
+      "na": [],
+      "transparent": 7,
+      "transparentCoverage": 1.98,
+      "transparentList": [
+        {
+          "key": "flame-true-reveal",
+          "cov": 0.227
+        },
+        {
+          "key": "wicker-jar",
+          "cov": 0.231
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.018
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.051
+        },
+        {
+          "key": "embers",
+          "cov": 0.357
+        },
+        {
+          "key": "smoke",
+          "cov": 0.633
+        },
+        {
+          "key": "wicker-glow",
+          "cov": 0.464
+        }
+      ],
+      "renderMsMedian": 1396.3
+    },
+    {
+      "stage": "burn:32",
+      "pose": "figure",
+      "calls": 107,
+      "triangles": 283334,
+      "geometries": 181,
+      "textures": 24,
+      "programs": 79,
+      "lights": 3,
+      "na": [],
+      "transparent": 7,
+      "transparentCoverage": 3.25,
+      "transparentList": [
+        {
+          "key": "flame-true-reveal",
+          "cov": 0.376
+        },
+        {
+          "key": "wicker-jar",
+          "cov": 0.382
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.031
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.087
+        },
+        {
+          "key": "embers",
+          "cov": 0.605
+        },
+        {
+          "key": "smoke",
+          "cov": 1
+        },
+        {
+          "key": "wicker-glow",
+          "cov": 0.767
+        }
+      ],
+      "renderMsMedian": 1122.3
+    },
+    {
+      "stage": "burn:58",
+      "pose": "entrance",
+      "calls": 103,
+      "triangles": 252627,
+      "geometries": 181,
+      "textures": 24,
+      "programs": 79,
+      "lights": 3,
+      "na": [],
+      "transparent": 7,
+      "transparentCoverage": 1.98,
+      "transparentList": [
+        {
+          "key": "flame-true-reveal",
+          "cov": 0.227
+        },
+        {
+          "key": "wicker-jar",
+          "cov": 0.231
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.018
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.051
+        },
+        {
+          "key": "embers",
+          "cov": 0.357
+        },
+        {
+          "key": "smoke",
+          "cov": 0.633
+        },
+        {
+          "key": "wicker-glow",
+          "cov": 0.464
+        }
+      ],
+      "renderMsMedian": 1384.2
+    },
+    {
+      "stage": "burn:58",
+      "pose": "figure",
+      "calls": 107,
+      "triangles": 283334,
+      "geometries": 181,
+      "textures": 24,
+      "programs": 79,
+      "lights": 3,
+      "na": [],
+      "transparent": 7,
+      "transparentCoverage": 3.25,
+      "transparentList": [
+        {
+          "key": "flame-true-reveal",
+          "cov": 0.376
+        },
+        {
+          "key": "wicker-jar",
+          "cov": 0.382
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.031
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.087
+        },
+        {
+          "key": "embers",
+          "cov": 0.605
+        },
+        {
+          "key": "smoke",
+          "cov": 1
+        },
+        {
+          "key": "wicker-glow",
+          "cov": 0.767
+        }
+      ],
+      "renderMsMedian": 1282.8
+    },
+    {
+      "stage": "burn:72",
+      "pose": "entrance",
+      "calls": 106,
+      "triangles": 255035,
+      "geometries": 183,
+      "textures": 24,
+      "programs": 79,
+      "lights": 3,
+      "na": [],
+      "transparent": 8,
+      "transparentCoverage": 1.96,
+      "transparentList": [
+        {
+          "key": "flame-true-reveal",
+          "cov": 0.227
+        },
+        {
+          "key": "wicker-jar",
+          "cov": 0.231
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.011
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.034
+        },
+        {
+          "key": "embers",
+          "cov": 0.357
+        },
+        {
+          "key": "smoke",
+          "cov": 0.633
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.001
+        },
+        {
+          "key": "wicker-glow",
+          "cov": 0.464
+        }
+      ],
+      "renderMsMedian": 1445.2
+    },
+    {
+      "stage": "burn:72",
+      "pose": "figure",
+      "calls": 110,
+      "triangles": 285742,
+      "geometries": 183,
+      "textures": 24,
+      "programs": 79,
+      "lights": 3,
+      "na": [],
+      "transparent": 8,
+      "transparentCoverage": 3.21,
+      "transparentList": [
+        {
+          "key": "flame-true-reveal",
+          "cov": 0.376
+        },
+        {
+          "key": "wicker-jar",
+          "cov": 0.382
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.019
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.056
+        },
+        {
+          "key": "embers",
+          "cov": 0.605
+        },
+        {
+          "key": "smoke",
+          "cov": 1
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.002
+        },
+        {
+          "key": "wicker-glow",
+          "cov": 0.767
+        }
+      ],
+      "renderMsMedian": 1128.4
+    },
+    {
+      "stage": "charred",
+      "pose": "entrance",
+      "calls": 98,
+      "triangles": 242379,
+      "geometries": 183,
+      "textures": 24,
+      "programs": 79,
+      "lights": 3,
+      "na": [],
+      "transparent": 5,
+      "transparentCoverage": 1.28,
+      "transparentList": [
+        {
+          "key": "flame-true-reveal",
+          "cov": 0.227
+        },
+        {
+          "key": "wicker-jar",
+          "cov": 0.231
+        },
+        {
+          "key": "embers",
+          "cov": 0.357
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.002
+        },
+        {
+          "key": "wicker-glow",
+          "cov": 0.464
+        }
+      ],
+      "renderMsMedian": 1483.7
+    },
+    {
+      "stage": "charred",
+      "pose": "figure",
+      "calls": 102,
+      "triangles": 273086,
+      "geometries": 183,
+      "textures": 24,
+      "programs": 79,
+      "lights": 3,
+      "na": [],
+      "transparent": 5,
+      "transparentCoverage": 2.13,
+      "transparentList": [
+        {
+          "key": "flame-true-reveal",
+          "cov": 0.376
+        },
+        {
+          "key": "wicker-jar",
+          "cov": 0.382
+        },
+        {
+          "key": "embers",
+          "cov": 0.605
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.003
+        },
+        {
+          "key": "wicker-glow",
+          "cov": 0.767
+        }
+      ],
+      "renderMsMedian": 999.6
+    },
+    {
+      "stage": "empty",
+      "pose": "entrance",
+      "calls": 98,
+      "triangles": 242379,
+      "geometries": 183,
+      "textures": 24,
+      "programs": 79,
+      "lights": 3,
+      "na": [
+        "clean"
+      ],
+      "transparent": 5,
+      "transparentCoverage": 1.28,
+      "transparentList": [
+        {
+          "key": "flame-true-reveal",
+          "cov": 0.227
+        },
+        {
+          "key": "wicker-jar",
+          "cov": 0.231
+        },
+        {
+          "key": "embers",
+          "cov": 0.357
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.002
+        },
+        {
+          "key": "wicker-glow",
+          "cov": 0.464
+        }
+      ],
+      "renderMsMedian": 1492.1
+    },
+    {
+      "stage": "empty",
+      "pose": "figure",
+      "calls": 102,
+      "triangles": 273086,
+      "geometries": 183,
+      "textures": 24,
+      "programs": 79,
+      "lights": 3,
+      "na": [
+        "clean"
+      ],
+      "transparent": 5,
+      "transparentCoverage": 2.13,
+      "transparentList": [
+        {
+          "key": "flame-true-reveal",
+          "cov": 0.376
+        },
+        {
+          "key": "wicker-jar",
+          "cov": 0.382
+        },
+        {
+          "key": "embers",
+          "cov": 0.605
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.003
+        },
+        {
+          "key": "wicker-glow",
+          "cov": 0.767
+        }
+      ],
+      "renderMsMedian": 1013.3
+    },
+    {
+      "stage": "refill:0.8",
+      "pose": "entrance",
+      "calls": 98,
+      "triangles": 242379,
+      "geometries": 183,
+      "textures": 24,
+      "programs": 79,
+      "lights": 3,
+      "na": [
+        "clean",
+        "bale"
+      ],
+      "transparent": 5,
+      "transparentCoverage": 1.28,
+      "transparentList": [
+        {
+          "key": "flame-true-reveal",
+          "cov": 0.227
+        },
+        {
+          "key": "wicker-jar",
+          "cov": 0.231
+        },
+        {
+          "key": "embers",
+          "cov": 0.357
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.002
+        },
+        {
+          "key": "wicker-glow",
+          "cov": 0.464
+        }
+      ],
+      "renderMsMedian": 1408.2
+    },
+    {
+      "stage": "refill:0.8",
+      "pose": "figure",
+      "calls": 102,
+      "triangles": 273086,
+      "geometries": 183,
+      "textures": 24,
+      "programs": 79,
+      "lights": 3,
+      "na": [
+        "clean",
+        "bale"
+      ],
+      "transparent": 5,
+      "transparentCoverage": 2.13,
+      "transparentList": [
+        {
+          "key": "flame-true-reveal",
+          "cov": 0.376
+        },
+        {
+          "key": "wicker-jar",
+          "cov": 0.382
+        },
+        {
+          "key": "embers",
+          "cov": 0.605
+        },
+        {
+          "key": "flame-true",
+          "cov": 0.003
+        },
+        {
+          "key": "wicker-glow",
+          "cov": 0.767
+        }
+      ],
+      "renderMsMedian": 1067.3
+    }
+  ],
+  "reducedMotion": {
+    "calls": 104,
+    "triangles": 252723
+  },
+  "programsEnd": 79,
+  "base": "http://localhost:4174/Feh-Lu-We/",
+  "query": "&multidraw=0",
+  "problems": []
+}
