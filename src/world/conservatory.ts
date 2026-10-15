@@ -181,11 +181,13 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
   w.col.addBox(X1 - 0.08, X1 + 0.08, DD.z0, DD.z1, headY, H, { occludes: true }); // head + fanlight over the doors
   registerOpening({ kind: 'door', axis: 'z', f: X1, t: 0.1, a0: DD.z0, a1: DD.z1, y0: GF, y1: headY, id: 'door.consEast' });
   gw('z', X0, 109.6, Z1);
-  // the wing roof meets the conservatory: a glazed lean-to strip above the wing wall
+  // Pitched glass roof: both halves rise from the wall plates to the central ridge.
+  // X grows east and planMatrix preserves the Z rotation sign, so the east half tilts clockwise.
+  // The previous +s slope made an inverted valley and left the ridge beam floating above it.
   const ridge = 5.8, half = (X1 - X0) / 2, slope = Math.atan((ridge - H) / half), rl = Math.hypot(half, ridge - H), RX = (X0 + X1) / 2;
   for (const s of [-1, 1]) {
-    box(glass, k.M.glass, '#ffffff', RX + (s * half) / 2, H + (ridge - H) / 2 - 0.02, (Z0 + Z1) / 2, rl, 0.03, Z1 - Z0, { rz: s * slope, chunk: 'glass' });
-    for (let z = Z0; z <= Z1 + 0.01; z += 2) box(c.b, k.M.paint, fr, RX + (s * half) / 2, H + (ridge - H) / 2 - 0.08, z, rl, 0.08, 0.08, { rz: s * slope, chunk: c.chunk });
+    box(glass, k.M.glass, '#ffffff', RX + (s * half) / 2, H + (ridge - H) / 2 - 0.02, (Z0 + Z1) / 2, rl, 0.03, Z1 - Z0, { rz: -s * slope, chunk: 'glass' });
+    for (let z = Z0; z <= Z1 + 0.01; z += 2) box(c.b, k.M.paint, fr, RX + (s * half) / 2, H + (ridge - H) / 2 - 0.08, z, rl, 0.08, 0.08, { rz: -s * slope, chunk: c.chunk });
   }
   for (const z of [Z0, Z1]) {
     const tri = new THREE.Shape();
