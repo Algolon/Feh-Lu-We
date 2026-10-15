@@ -411,7 +411,7 @@ measurements of §7 / §9 are unchanged (production's merged changes are outside
   candle / figure / bale interactables, two cycles, saves) and the release check (bong hit, airco, pouch, footsteps,
   audio coexistence) with no runtime errors.
 - **Not verified from here:** that `https://algolon.github.io/Feh-Lu-We/` now serves the run-411 bundle (CDN / cache),
-  and a smoke test on the live URL. Quick owner check: open the game, Pauze → the build line must read
+  and a smoke test on the live URL. Quick owner check: open the game, Pauze → the line "Versie:" must read
   **`295a3b4 · 2026-10-15`** (the Vite `__BUILD__` stamp); then the Wickerman clearing must show the hay bale on its
   pallet at the south-west edge. To enable the automated live smoke in a later session, allow `algolon.github.io` in the
   environment's network settings and run `node scripts/e2e-dev04d-w01-release.mjs https://algolon.github.io/Feh-Lu-We/`
