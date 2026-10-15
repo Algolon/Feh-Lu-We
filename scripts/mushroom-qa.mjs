@@ -54,7 +54,7 @@ for(const quality of (process.env.QUALITY?[process.env.QUALITY]:['low','high']))
  },{x,z,yaw,pitch,quality,physical:!!process.env.PHYSICAL});
  console.log('rendered',result);if(result.overlap)throw new Error('Evidence pose overlaps collision: '+name);await page.screenshot({path:`${out}/${tag}-${quality}-${name}.jpg`,type:'jpeg',quality:85,timeout:120000});rows.push({quality,name,x,z,...result});console.log(JSON.stringify(rows.at(-1)));
 }
-if(tag==='feature'&&!process.env.CLIP&&!process.env.BENCH&&!process.env.FLOW&&!process.env.FLOW&&(!process.env.VIEW||process.env.CHECKS)){
+if(tag==='feature'&&!process.env.CLIP&&((!process.env.BENCH&&!process.env.FLOW)||process.env.CHECKS)&&(!process.env.VIEW||process.env.CHECKS)){
  const checks=await page.evaluate(()=>{
   const g=window.__game;const y=g.world.col.ground(166,140);g.player.setPose({x:166,z:140,y,yaw:.5,pitch:0});T.tick(20);
   const before=JSON.stringify({flags:g.state.flags,clues:g.state.clues,inventory:g.state.inventory});

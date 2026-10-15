@@ -1,3 +1,5 @@
+Latest iteration: [R04.md](R04.md) adds a tree/fence-bounded expansion and 20% faster vision.
+
 Current iteration: [R03.md](R03.md) supersedes the R01 layout/counts and records recovery, denser nursery clusters, stronger R02 vision and current QA.
 
 # Mushroom Grove R01 — implementation and validation

@@ -1,0 +1,56 @@
+{
+  "rows": [
+    {
+      "expansionSurvey": {
+        "retained": true,
+        "baselineTrees": 49,
+        "extra": 82,
+        "adults": 24,
+        "treeOverlaps": 0
+      }
+    },
+    {
+      "name": "outside",
+      "calls": 30,
+      "triangles": 485116,
+      "gpuSoftwareMedianMs": 3587.330752,
+      "rafMedianMs": 3645.5999999996275,
+      "rafFps": 0.2743032696950028,
+      "samples": 6,
+      "glError": 0
+    },
+    {
+      "name": "grove",
+      "calls": 28,
+      "triangles": 460395,
+      "gpuSoftwareMedianMs": 1312.447949,
+      "rafMedianMs": 1533.2000000001863,
+      "rafFps": 0.6522306287502468,
+      "samples": 6,
+      "glError": 0
+    },
+    {
+      "name": "return",
+      "calls": 129,
+      "triangles": 648609,
+      "gpuSoftwareMedianMs": 1377.679821,
+      "rafMedianMs": 1422.800000000745,
+      "rafFps": 0.7028394714643494,
+      "samples": 6,
+      "glError": 0
+    },
+    {
+      "stationaryFlow": {
+        "clockAtTenSeconds": 12,
+        "reducedClock": 0,
+        "player": {
+          "x": 181,
+          "z": 161,
+          "yaw": 0.2,
+          "pitch": 0.05
+        }
+      }
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,137 @@
+{
+  "gameSource": "69e73b39b6678ea5a679b075fc5fdbb218738923",
+  "asset": "index-CW1vfRIw.js",
+  "assetSha256": "e7633086865e91fede7570e068e484ecd4c16ad45cfbedd19c84767b1528e982",
+  "files": [
+    {
+      "name": "feature-bench-flow-metrics.json",
+      "bytes": 1152,
+      "sha256": "9927c67183f340808842d1971b7feb75e2e485ebc79b7e6ad0fb5e68acccfbd5"
+    },
+    {
+      "name": "feature-checks-metrics.json",
+      "bytes": 1534,
+      "sha256": "075c42bd506fce156241cb8fccfc29134dd1a7bd604dfbb6b81e99e54d6aecd3"
+    },
+    {
+      "name": "feature-high-approach.jpg",
+      "bytes": 148716,
+      "sha256": "196bc8cc5d33564dbc3c714c8dc535a45824a078cda826239ab2f4a0b7664299"
+    },
+    {
+      "name": "feature-high-east-fence.jpg",
+      "bytes": 115229,
+      "sha256": "02ff9bbedbdba5c7c474216531cbec49b61842288a0fd48c2668fabd1e118ba3"
+    },
+    {
+      "name": "feature-high-grove.jpg",
+      "bytes": 122159,
+      "sha256": "8669d110e113403494b762a0689721db824deb0dfca7601689908076d779ad0e"
+    },
+    {
+      "name": "feature-high-halfway.jpg",
+      "bytes": 111980,
+      "sha256": "6b19eecb61bda6956bd782978d56760ac2a858f1226bec2040cd6dd8239ccb23"
+    },
+    {
+      "name": "feature-high-north-fence.jpg",
+      "bytes": 114590,
+      "sha256": "d644d766d55299b5d927ae18f47c1406626d7a934814b597c9d2b08acc632970"
+    },
+    {
+      "name": "feature-high-northwest-birch.jpg",
+      "bytes": 95246,
+      "sha256": "33ad34a56eca49e7478e3faa32dc532992256c532c0529c603ac201a1fc95390"
+    },
+    {
+      "name": "feature-high-outside.jpg",
+      "bytes": 111044,
+      "sha256": "728649e7f8283f553fade767d44a2ac881a6124b2281c450c1abf2a99bc176e4"
+    },
+    {
+      "name": "feature-high-return-view.jpg",
+      "bytes": 93643,
+      "sha256": "bac0b109f49d1e614a3af424382a639295bb96670c9c1b699b99ce8ec533023e"
+    },
+    {
+      "name": "feature-high-south-tree.jpg",
+      "bytes": 75963,
+      "sha256": "c5afcc483104e05b0e741c6bffbce6dcb0f34c9531e98426242968bc88d18103"
+    },
+    {
+      "name": "feature-high-west-trees.jpg",
+      "bytes": 89699,
+      "sha256": "86524b0830f4bf13a25cb6d698bb133a0ea0a024397c8e241fb1002653c04658"
+    },
+    {
+      "name": "feature-low-approach.jpg",
+      "bytes": 148513,
+      "sha256": "1213a0e7a8d98cf60310818be7273800748203d871ed20db4458dfa60b4bb458"
+    },
+    {
+      "name": "feature-low-east-fence.jpg",
+      "bytes": 111562,
+      "sha256": "824f6dcb728500338f48bd6be47a6b4c95f9be3f9849593803e74d036f4c8ee5"
+    },
+    {
+      "name": "feature-low-grove.jpg",
+      "bytes": 116465,
+      "sha256": "f93589f0b66e0685a4a53903df9f92e2351af707fabcbb68db394e874e05488a"
+    },
+    {
+      "name": "feature-low-halfway.jpg",
+      "bytes": 108166,
+      "sha256": "a0b66c17cd22efe0cae609cfac5a8f147c5f2e026601b1acf4a1c9cf6d41ce5c"
+    },
+    {
+      "name": "feature-low-north-fence.jpg",
+      "bytes": 114366,
+      "sha256": "b026c25ee7fdd0ecf5efa515479c7060c6217cd63df39244179cbda9d42bb386"
+    },
+    {
+      "name": "feature-low-northwest-birch.jpg",
+      "bytes": 96702,
+      "sha256": "3f45a8ef11eb2c08b6ba9fd21513b25cc01e2ec1bb5c906f5b953cc8878d00d3"
+    },
+    {
+      "name": "feature-low-outside.jpg",
+      "bytes": 110031,
+      "sha256": "440bba7c08693fe4ccabbdd6d2afa95a341150792ea2fa19075013766a189ad9"
+    },
+    {
+      "name": "feature-low-return-view.jpg",
+      "bytes": 91791,
+      "sha256": "a6afefbee4e5b58e5eb62c6da5208578cf56d6cb946d486d791ec5edf8703426"
+    },
+    {
+      "name": "feature-low-south-tree.jpg",
+      "bytes": 81581,
+      "sha256": "abcf204c27f8424b27df3180a341b470f2aebe4786812c81e1267cdc6604ef58"
+    },
+    {
+      "name": "feature-low-west-trees.jpg",
+      "bytes": 89484,
+      "sha256": "8b77b63afb1aedc52a85beb6928d87351a707bb49a1101fa675471c315bcee07"
+    },
+    {
+      "name": "feature-metrics.json",
+      "bytes": 8351,
+      "sha256": "1e50fe33b338f021a09b0719defb7330f9078eb0229ea6d9fdbb1ced7d316882"
+    },
+    {
+      "name": "feature-mobile-reduced.jpg",
+      "bytes": 45896,
+      "sha256": "295a2b0d768fdb2309cb72e37b1db97fa3ea48a550110069666ac7e407c033fd"
+    },
+    {
+      "name": "feature-mobile-settings.jpg",
+      "bytes": 62238,
+      "sha256": "d90908bdb65319748e4439f69682b1f1a6dfc9961cb7862ebf47d9e2539d4ad3"
+    },
+    {
+      "name": "stationary-flow-r04.mp4",
+      "bytes": 647887,
+      "sha256": "9840ca30968ab79c52ec774dcbcd84739d3cadc05dd370f60d97cfe48c93e24c"
+    }
+  ]
+}
