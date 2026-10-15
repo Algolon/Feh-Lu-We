@@ -71,3 +71,25 @@ export function selectOutdoorFootstepVariant(
   if (count > 1 && variant === previous) variant = (variant + 1) % count;
   return variant;
 }
+
+/**
+ * Equal-tempered semitone shifts of the FIRST approved grass take. These only
+ * change AudioBufferSource.playbackRate, never the underlying clip or walk cadence.
+ * A tiny three-option palette is subtler than adding unrelated, duller samples.
+ */
+export const GRASS_PITCH_RATIOS = [
+  2 ** (-1 / 12),
+  1,
+  2 ** (1 / 12),
+] as const;
+
+/** Select the next of three grass pitches uniformly, without immediate repetition. */
+export function selectGrassPitchVariant(previous: number, random: number): number {
+  const r = Number.isFinite(random) ? Math.min(1 - Number.EPSILON, Math.max(0, random)) : 0;
+  if (!Number.isInteger(previous) || previous < 0 || previous > 2) {
+    return Math.floor(r * GRASS_PITCH_RATIOS.length);
+  }
+  // Choose 0 or 1, then skip the previous index: each *other* pitch has 50% probability.
+  const candidate = Math.floor(r * 2);
+  return candidate >= previous ? candidate + 1 : candidate;
+}
