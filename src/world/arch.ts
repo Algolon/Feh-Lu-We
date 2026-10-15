@@ -6,6 +6,7 @@ import { lathe, softBox } from './artkit';
 import type { CollisionWorld } from '../player/collision';
 import { registerOpening } from './openings';
 import { studyWindowSite, studyWindow } from './exteriorStudy';
+import { slateCourseUV } from './roofDetail';
 
 export interface Ctx {
   b: Batcher;
@@ -386,7 +387,7 @@ export function stairRail(c: Ctx, f: number, a0: number, a1: number, y0: number,
   c.col.addBox(side < 0 ? f - t : f, side < 0 ? f : f + t, Math.min(a0, a1), Math.max(a0, a1), yFloor, Math.max(y0, y1) + 1.1, { tag: 'railing' });
 }
 
-export interface EaveLook { fascia?: THREE.ColorRepresentation; soffit?: THREE.ColorRepresentation; gutter?: THREE.ColorRepresentation | false; cap?: THREE.ColorRepresentation; downpipes?: [number, number][] }
+export interface EaveLook { courses?: boolean; fascia?: THREE.ColorRepresentation; soffit?: THREE.ColorRepresentation; gutter?: THREE.ColorRepresentation | false; cap?: THREE.ColorRepresentation; downpipes?: [number, number][] }
 /**
  * Hip roof with a real eave: fascia boards round the edge, a soffit closing the overhang underneath, a half-round
  * gutter, ridge and hip caps, optional downpipes (plan points at the wall). DEV-03 fix: the old "fascia" was a solid
@@ -395,6 +396,7 @@ export interface EaveLook { fascia?: THREE.ColorRepresentation; soffit?: THREE.C
  */
 export function hipRoof(c: Ctx, cx: number, cz: number, sx: number, sz: number, y: number, h: number, mat: THREE.Material, color: THREE.ColorRepresentation, overhang = 0.6, look: EaveLook = {}) {
   const g = hipRoofGeo(sx, sz, h, overhang);
+  if (look.courses) slateCourseUV(g);
   geo(c.b, mat, color, g, cx, y, cz, { chunk: c.chunk });
   g.dispose();
   const P = c.k.M.paint, fas = look.fascia ?? '#5a4636', sof = look.soffit ?? '#d9ccb0', cap = look.cap ?? '#5d5a58';
@@ -423,8 +425,9 @@ export function hipRoof(c: Ctx, cx: number, cz: number, sx: number, sz: number, 
   }
 }
 
-export function gableRoof(c: Ctx, cx: number, cz: number, len: number, width: number, y: number, h: number, alongX: boolean, mat: THREE.Material, color: THREE.ColorRepresentation, barge: THREE.ColorRepresentation | false = '#5a4636') {
+export function gableRoof(c: Ctx, cx: number, cz: number, len: number, width: number, y: number, h: number, alongX: boolean, mat: THREE.Material, color: THREE.ColorRepresentation, barge: THREE.ColorRepresentation | false = '#5a4636', courses = false) {
   const g = gableGeo(len, width, h, alongX);
+  if (courses) slateCourseUV(g);
   geo(c.b, mat, color, g, cx, y, cz, { chunk: c.chunk });
   g.dispose();
   if (!barge) return;

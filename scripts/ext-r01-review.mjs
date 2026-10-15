@@ -6,7 +6,10 @@ const out=process.argv[2]??'docs/development/workstreams/ext-r01-rollout';
 mkdirSync(out,{recursive:true});
 const server=await preview({preview:{host:'127.0.0.1',port:4217,strictPort:true}});
 const browser=await chromium.launch({executablePath:process.env.CHROME??'/root/.cache/ms-playwright/chromium_headless_shell-1194/chrome-linux/headless_shell',args:['--use-angle=swiftshader','--enable-unsafe-swiftshader','--ignore-gpu-blocklist']});
+const roofReview=process.env.ROOF_REVIEW==='1';
 const views=[
+ ['roof-overview',{x:64,z:67,y:21},[90,9.4,95]],
+ ['roof-near',{x:78,z:77,y:10},[80,8.6,85]],
  ['arrival',{x:90,z:55},[90,4.1,80]],
  ['facade-court',{x:82,z:66},[80,3.2,80]],
  ['window-near',{x:80.5,z:77.7},[79,2.0,80]],
@@ -25,25 +28,25 @@ for(const variant of ['base','study']) {
  const page=await ctx.newPage();
  page.on('pageerror',e=>errors.push(`${variant}: ${e.message}`));
  page.on('console',m=>{if(m.type()==='error')errors.push(`${variant}: ${m.text()}`);});
- await page.goto(`http://127.0.0.1:4217/Feh-Lu-We/?autotest=1&exterior=${variant}`);
+ await page.goto(`http://127.0.0.1:4217/Feh-Lu-We/?autotest=1&exterior=${roofReview?'study':variant}${roofReview?'&roof='+variant:''}`);
  await page.evaluate(()=>{
  localStorage.setItem('fehluwe.settings',JSON.stringify({quality:'low'}));
  localStorage.setItem('fehluwe.save',JSON.stringify({version:4,scene:'estate',inventory:['invitation','torch','matches','notebook','frontKey'],flags:{leftHome:true},unlocked:['lock.door.front'],open:{'door.front':true}}));
  });
  await page.reload();await page.click('[data-cont]');
  await page.waitForFunction(()=>window.__game?.world?.id==='estate',null,{timeout:120000});
- for(const [name,stand,target] of views) {
+ for(const [name,stand,target] of views.filter(v=>!process.env.VIEWS||process.env.VIEWS.split(',').includes(v[0]))) {
    const row=await page.evaluate(async({stand,target})=>{
      const g=window.__game;
      g.settings.quality='low';g.applyQuality(true);
-     g.player.setPose({x:stand.x,y:0,z:stand.z,yaw:0,pitch:0});
-     g.player.y=g.world.col.supportHeight(stand.x,stand.z,.15,.42);
+     g.player.setPose({x:stand.x,y:stand.y??0,z:stand.z,yaw:0,pitch:0});
+     g.player.y=stand.y??g.world.col.supportHeight(stand.x,stand.z,.15,.42);
      g.player.yaw=Math.atan2(target[0]-stand.x,target[2]-stand.z);
      g.player.pitch=Math.atan2(target[1]-(g.player.y+1.65),Math.hypot(target[0]-stand.x,target[2]-stand.z));
-     for(let i=0;i<20;i++)g.tick(1/30);
+     for(let i=0;i<20;i++){g.tick(1/30);if(stand.y!==undefined)g.player.y=stand.y;}
      for(const id of ['hud','stick','toast','debug']) {const el=document.getElementById(id);if(el)el.style.display='none';}
      const costs=[];
-     for(let i=0;i<4;i++){g.tick(1/30);g.renderer.render(g.world.scene,g.camera);costs.push({calls:g.renderer.info.render.calls,triangles:g.renderer.info.render.triangles});}
+     for(let i=0;i<4;i++){g.tick(1/30);if(stand.y!==undefined){g.player.y=stand.y;g.player.applyCamera(g.camera);}g.renderer.render(g.world.scene,g.camera);costs.push({calls:g.renderer.info.render.calls,triangles:g.renderer.info.render.triangles});}
      const programs=g.renderer.info.programs.filter(p=>p.diagnostics?.runnable===false).length;
      return {room:g.world.hereRoom,costs,shaderFailures:programs,glError:g.renderer.getContext().getError(),shadows:g.renderer.shadowMap.enabled};
    },{stand,target});
@@ -82,7 +85,7 @@ for(const variant of ['base','study']) {
 }
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
 const validation={interactionIdsUnchanged:same(contracts.base.ids,contracts.study.ids),supportHeightsUnchanged:same(contracts.base.supports,contracts.study.supports),openingContractsUnchanged:same(contracts.base.openings,contracts.study.openings),highShadersOk:!contracts.study.highShaderFailures,approachWalkPassed:contracts.study.route.every(p=>p.reached),renderBudgetPassed:rows.every(r=>r.costs.every(c=>c.calls<=150&&c.triangles<=750000))};
-writeFileSync(`${out}/views.json`,JSON.stringify({rows,errors,validation,routes:{base:contracts.base.route,study:contracts.study.route},scope:'Whole manor facade rollout and revised entrance paving; low-quality software rendering, physical mobile validation pending'},null,2));
+writeFileSync(`${out}/views.json`,JSON.stringify({rows,errors,validation,routes:{base:contracts.base.route,study:contracts.study.route},scope:roofReview?'Roof-only comparison; both exterior=study, control roof=base; overview/near use elevated inspection poses.':'Whole manor facade rollout and revised entrance paving; low-quality software rendering, physical mobile validation pending'},null,2));
 console.log(JSON.stringify(validation));
 if(errors.length||Object.values(validation).some(v=>!v)||rows.some(r=>r.shaderFailures||r.glError||r.shadows))process.exitCode=1;
 } finally {await browser.close();await server.close();}

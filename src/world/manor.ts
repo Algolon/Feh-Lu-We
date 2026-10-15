@@ -41,6 +41,7 @@ import { addKey, presentKey, keyLiner, linerWhenOpen, hatchDish, LINER_TOP, HATC
 import { SALON_LAYOUT, SALON_SITES } from '../content/gallery';
 import { buildEntrance, entranceBay } from './entrance';
 import { EXTERIOR_STUDY, exteriorMats, studyArchitecture, dressedBlock } from './exteriorStudy';
+import { ROOF_DETAIL } from './roofDetail';
 import { planChest, pottingBench, plantStand, plantEtagere, pottedPlant } from './d3b';
 import { wainscot, refectoryTable, gamesCabinet, dartboard, servingConsole, chinaCabinet, wallCupboards, splashback, enamelPendant, pegRailClock, panelDoor } from './d3a';
 import { placeSolved, slotContents, openBasement } from '../puzzles/rules';
@@ -136,7 +137,7 @@ function shell(w: World, c: Ctx) {
   }
   if (EXTERIOR_STUDY) studyArchitecture(c, TOP, UF);
   // roof (≈30°) with a real eave (fascia, soffit, gutter, caps) and downpipes at the corners and either side of the bay
-  hipRoof(c, 90, 95, 36, 30, TOP, 8.2, k.M.slate, '#a39f9a', 0.7, { downpipes: [[71.86, 80.5], [108.14, 80.5], [71.86, 109.5], [108.14, 109.5], [85.85, 79.88], [94.15, 79.88]] });
+  hipRoof(c, 90, 95, 36, 30, TOP, 8.2, k.M.slate, '#a39f9a', 0.7, { courses: EXTERIOR_STUDY && ROOF_DETAIL, downpipes: [[71.86, 80.5], [108.14, 80.5], [71.86, 109.5], [108.14, 109.5], [85.85, 79.88], [94.15, 79.88]] });
   roofWindowOutside(c); // DEV-04A: the attic observation window in the east slope (inside: attic())
   // chimneys: stack with a projecting band and a cap, two pots each
   for (const [x, z] of [[72.9, 86.7], [100, 101], [86, 106]] as const) {
@@ -154,7 +155,7 @@ function shell(w: World, c: Ctx) {
     // DEV-04B: the body started at +6.2, the plane of the upstairs ceilings' underside — its stone bottom face z-fought
     // with the plaster in the Reis- and Sterrenkamer, study and guest room ceilings; it now starts inside the ceiling slab
     box(c.b, stone.mat, EXTERIOR_STUDY ? '#ffffff' : '#efe2c4', dx, TOP - 0.15, dz, sx, top - TOP + 0.15, sz, { chunk: c.chunk, uv: 1.5 });
-    gableRoof(c, dx, dz, 2.6, 2.1, top, 0.8, alongX, k.M.slate, '#9e9a94');
+    gableRoof(c, dx, dz, 2.6, 2.1, top, 0.8, alongX, k.M.slate, '#9e9a94', '#5a4636', EXTERIOR_STUDY && ROOF_DETAIL);
     // the dormer window: framed glass in a dressed surround (same grammar as the facade)
     const wx = dx + fx * (alongX ? 0.9 : 0), wz = dz + fz * (alongX ? 0 : 0.9);
     if (alongX) windowAt(c, 'z', wx + fx * 0.3, fx as 1 | -1, wz, TOP + 0.12, 0.8, 1.05, true, { kind: EXTERIOR_STUDY ? 'manor' : 'plain' });
@@ -202,7 +203,7 @@ function shell(w: World, c: Ctx) {
   ring(WH - 0.3, WH - 0.14, 0.08, dressed, 108, 116, 92.2, 109.8, k.M.paint);
   // DEV-03: the west eave stops on the manor's outer wall face (x 108); with the old symmetric 8 m footprint the
   // overhang, fascia and gutter ran 0.5 m through the manor wall into the north guest room as a "dado rail"
-  hipRoof(c, 112.25, 101, 7.5, 18, WH, 2.6, k.M.slate, '#a39f9a', 0.5, { downpipes: [[116.14, 92.6]] });
+  hipRoof(c, 112.25, 101, 7.5, 18, WH, 2.6, k.M.slate, '#a39f9a', 0.5, { courses: EXTERIOR_STUDY && ROOF_DETAIL, downpipes: [[116.14, 92.6]] });
 }
 
 // =====================================================================================================

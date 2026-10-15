@@ -63,5 +63,32 @@ The script starts a production preview and uses Chromium headless shell (overrid
 
 - First bounded prototype: `ext-r01/` (retained unchanged), implemented in local commit `97a5d792c94cf8d6e705bc672bf5d02e2a8601e9`.
 - Current rollout: `ext-r01-rollout/`, including actual game screenshots, route traces, paired counters and bundle fingerprint.
-- Automatic approval review rejected featurebranch push, including after the owner's follow-up, stating that explicit remote-export permission had not been recognized. No alternative remote-write route was attempted. Current implementation/evidence are locally committed; remote persistence still requires explicit authorization.
+- Owner explicitly authorized remote export of code and screenshots on 15 October 2026 at 09:16 Europe/Amsterdam. The normal Git transport lacked credentials; the connected GitHub API stored the approved facade/paving tree as `b55cf6504f5481a1b55798e0319d750461b9a7ec`. A fresh fetch verified its tree `60eebe788c442b110587373e4954f4045d99b8c2` is identical to local checkpoint `6d2e468`.
 - No merge or deployment was attempted. Production default branch remained at the baseline on the latest fetch.
+
+
+## Roof follow-up (owner request, 15 October 2026)
+
+### Inspected construction
+
+- Main roof: 36 × 30 m hip roof, 0.7 m overhang, four sloped faces (six triangles), 8.2 m rise above eave Y6.4, ridge Y14.6. Slope about 27.6°. Its surface matches the explicit `roofUnderside` attic envelope; changing this silhouette would also require checking attic headroom and the observation-window alignment.
+- Eight dormers have separate stone bodies and simple gable prisms. Fascia/soffit bands, gutter profiles, downpipes, continuous ridge/hip bars and three chimney stacks already exist. Gutter geometry is rectangular despite an old comment describing it as half-round.
+- The primary visible defect was material projection: `hipRoofGeo` mixed X, Z and Y into one diagonal UV field. It turned slate rows into stripes running across unrelated roof faces. Gable roofs also used generic extrusion UVs rather than a slope-based slate scale.
+
+### Implemented
+
+- Added opt-in `slateCourseUV` with 30 cm slate width and 22 cm exposed course height. Each face uses its own horizontal tangent and distance along the slope, so rows follow each roof face.
+- Applied only to the manor's main roof, service-wing roof and eight dormer roofs; all other roofs remain unchanged.
+- Kept vertex positions, attic envelope, roof-window coordinates, roof silhouette and material batching unchanged. This pass corrects the covering; it does not claim remodeled gutter sections, individual overlapping slates or new chimney/dormer flashing.
+- Compare `?exterior=study&roof=base` against `?exterior=study&roof=study`; both keep the same facade/paving. Roof-only evidence lives in `ext-r01-roof/`.
+
+### Verified
+
+- Typecheck, production build and 299 unit tests passed (including roof geometry invariance and horizontal course tests).
+- Three paired roof views plus phone captures: actual rendered overview, near-dormer inspection and normal ground-level arrival. The first two use explicitly elevated inspection cameras, not player-accessible viewpoints.
+- Roof-only costs match exactly: overview 96 calls / 243,741 triangles; near view 137 / 294,239; arrival 101 / 236,058. There is no extra geometry or draw call for this correction.
+- Page/console/WebGL/shader checks and the existing opening, interaction, support-height and approach-walk checks passed. This does not resolve the separately documented garden/conservatory draw-call exceptions.
+
+```sh
+ROOF_REVIEW=1 VIEWS=roof-overview,roof-near,arrival node scripts/ext-r01-review.mjs docs/development/workstreams/ext-r01-roof
+```

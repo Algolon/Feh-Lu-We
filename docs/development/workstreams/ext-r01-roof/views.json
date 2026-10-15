@@ -1,0 +1,292 @@
+{
+  "rows": [
+    {
+      "variant": "base",
+      "name": "roof-overview",
+      "room": "out",
+      "costs": [
+        {
+          "calls": 96,
+          "triangles": 243741
+        },
+        {
+          "calls": 96,
+          "triangles": 243741
+        },
+        {
+          "calls": 96,
+          "triangles": 243741
+        },
+        {
+          "calls": 96,
+          "triangles": 243741
+        }
+      ],
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadows": false
+    },
+    {
+      "variant": "base",
+      "name": "roof-near",
+      "room": "out",
+      "costs": [
+        {
+          "calls": 137,
+          "triangles": 294239
+        },
+        {
+          "calls": 137,
+          "triangles": 294239
+        },
+        {
+          "calls": 137,
+          "triangles": 294239
+        },
+        {
+          "calls": 137,
+          "triangles": 294239
+        }
+      ],
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadows": false
+    },
+    {
+      "variant": "base",
+      "name": "arrival",
+      "room": "out",
+      "costs": [
+        {
+          "calls": 101,
+          "triangles": 236058
+        },
+        {
+          "calls": 101,
+          "triangles": 236058
+        },
+        {
+          "calls": 101,
+          "triangles": 236058
+        },
+        {
+          "calls": 101,
+          "triangles": 236058
+        }
+      ],
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadows": false
+    },
+    {
+      "variant": "base",
+      "name": "phone-landscape",
+      "costs": [
+        {
+          "calls": 90,
+          "triangles": 233539
+        }
+      ]
+    },
+    {
+      "variant": "study",
+      "name": "roof-overview",
+      "room": "out",
+      "costs": [
+        {
+          "calls": 96,
+          "triangles": 243741
+        },
+        {
+          "calls": 96,
+          "triangles": 243741
+        },
+        {
+          "calls": 96,
+          "triangles": 243741
+        },
+        {
+          "calls": 96,
+          "triangles": 243741
+        }
+      ],
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadows": false
+    },
+    {
+      "variant": "study",
+      "name": "roof-near",
+      "room": "out",
+      "costs": [
+        {
+          "calls": 137,
+          "triangles": 294239
+        },
+        {
+          "calls": 137,
+          "triangles": 294239
+        },
+        {
+          "calls": 137,
+          "triangles": 294239
+        },
+        {
+          "calls": 137,
+          "triangles": 294239
+        }
+      ],
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadows": false
+    },
+    {
+      "variant": "study",
+      "name": "arrival",
+      "room": "out",
+      "costs": [
+        {
+          "calls": 101,
+          "triangles": 236058
+        },
+        {
+          "calls": 101,
+          "triangles": 236058
+        },
+        {
+          "calls": 101,
+          "triangles": 236058
+        },
+        {
+          "calls": 101,
+          "triangles": 236058
+        }
+      ],
+      "shaderFailures": 0,
+      "glError": 0,
+      "shadows": false
+    },
+    {
+      "variant": "study",
+      "name": "phone-landscape",
+      "costs": [
+        {
+          "calls": 90,
+          "triangles": 233539
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "validation": {
+    "interactionIdsUnchanged": true,
+    "supportHeightsUnchanged": true,
+    "openingContractsUnchanged": true,
+    "highShadersOk": true,
+    "approachWalkPassed": true,
+    "renderBudgetPassed": true
+  },
+  "routes": {
+    "base": [
+      {
+        "x": 94.4,
+        "z": 66,
+        "reached": true,
+        "pose": {
+          "x": 94.19860040573604,
+          "y": 0,
+          "z": 65.81690945976005,
+          "yaw": 0,
+          "pitch": 0
+        }
+      },
+      {
+        "x": 94.4,
+        "z": 74,
+        "reached": true,
+        "pose": {
+          "x": 94.3951372725338,
+          "y": 0,
+          "z": 73.70436704029873,
+          "yaw": 0,
+          "pitch": 0
+        }
+      },
+      {
+        "x": 90,
+        "z": 77.3,
+        "reached": true,
+        "pose": {
+          "x": 90.21071585407229,
+          "y": 0,
+          "z": 77.13245113226462,
+          "yaw": 0,
+          "pitch": 0
+        }
+      },
+      {
+        "x": 90,
+        "z": 81.5,
+        "reached": true,
+        "pose": {
+          "x": 90.00817776945217,
+          "y": 0.15,
+          "z": 81.24313694427562,
+          "yaw": 0,
+          "pitch": 0
+        }
+      }
+    ],
+    "study": [
+      {
+        "x": 94.4,
+        "z": 66,
+        "reached": true,
+        "pose": {
+          "x": 94.19860040573604,
+          "y": 0,
+          "z": 65.81690945976005,
+          "yaw": 0,
+          "pitch": 0
+        }
+      },
+      {
+        "x": 94.4,
+        "z": 74,
+        "reached": true,
+        "pose": {
+          "x": 94.3951372725338,
+          "y": 0,
+          "z": 73.70436704029873,
+          "yaw": 0,
+          "pitch": 0
+        }
+      },
+      {
+        "x": 90,
+        "z": 77.3,
+        "reached": true,
+        "pose": {
+          "x": 90.21071585407229,
+          "y": 0,
+          "z": 77.13245113226462,
+          "yaw": 0,
+          "pitch": 0
+        }
+      },
+      {
+        "x": 90,
+        "z": 81.5,
+        "reached": true,
+        "pose": {
+          "x": 90.00817776945217,
+          "y": 0.15,
+          "z": 81.24313694427562,
+          "yaw": 0,
+          "pitch": 0
+        }
+      }
+    ]
+  },
+  "scope": "Roof-only comparison: both variants keep exterior=study; control uses roof=base. Elevated inspection cameras for overview/near; ground-level arrival and phone captures. Physical mobile performance not measured."
+}
