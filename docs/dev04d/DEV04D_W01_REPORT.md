@@ -1,6 +1,6 @@
 # DEV-04D W01 — Wickerman ritual and visual iteration
 
-**Recommendation: READY_FOR_OWNER_REVIEW** (with the open review points of §11). Not merged, not deployed.
+**Status: RELEASED for live owner playtesting** (W1–W8 accepted for this release, 15 Oct 2026; W6 pacing, W7 sound balance and W8 art stay subject to the phone playtest). Release details: §14.
 
 | | |
 |---|---|
@@ -329,3 +329,68 @@ and the v20 plan view (it stood in the hedge and hid the bale). Draw calls and t
 | 10 | Performance deltas and regressions measured | met (§7, §9); device validation pending |
 | 11 | Safely stored, isolated | met: own branch, pushed; production merged in without conflict; nothing merged / deployed |
 | 12 | Owner-facing evidence complete | met: this report, `docs/dev04d/w01/` |
+
+## 14. Release (15 Oct 2026)
+
+| | |
+|---|---|
+| W01 branch / last pre-release W01 SHA | `ccr-1cffdfa6-w9jn3r` / `6f717c7` (history and evidence preserved) |
+| Production integrated | `ee72f3e` → `c1bbdfe` → `cb85941` (production moved twice during the gates; each time merged in, never rebased or forced) |
+| Integration commits | `b3bc527` (merge `ee72f3e`), `c8894ae` (id contract), `0a238ae` (release check), `7da1989` (merge `c1bbdfe`), `68636e3` (typing fix), `7bad60b` (merge `cb85941`) |
+| Release candidate | the W01 head that carries this report (see the PR merged into `ccr-75ef4113-kfkimm`) |
+
+**Source changes during integration** (nothing else):
+- `src/audio/audio.ts`: the only conflicts, twice, in the import block (W01's `RitualMix` type next to production's
+  footstep imports); both sides kept. Against production the file differs only by W01's ritual layer (+86 lines).
+  `game.ts`, `world.ts`, `grounds.ts` auto-merged; production's footsteps, bong hit + cooldown, airco zap, Bosfruit
+  pouch, `sfx(name, gain)` signature and `socialGarden(w, g, c)` are untouched.
+- `tests/node-shims.d.ts`: production `c1bbdfe` added `tests/grassR04.test.ts`, which uses Node's `Buffer`; the project
+  ships no `@types/node`, so `npm run typecheck` failed and **production's own Pages run 398 failed** (the live site
+  stayed on `ee72f3e`). W01 declares the slice of `Buffer` that test reads in the project's existing shim file
+  (test-only typing; no runtime change). This also unblocks production's deploy.
+
+**Interactable-id contract** (`scripts/optional-additions.json`, loader `scripts/interactable-additions.mjs`, unit test
+`tests/interactable-additions.test.ts`): the A–D and W01 suites now read one list = DEV-04C pair + W01 bale + three
+optional production vignettes. 128 baseline + 6 = **134**, each registered exactly once (browser-checked).
+
+| Id | Source / commit | Feature | Interactable by design | Writes save state | Contracts |
+|---|---|---|---|---|---|
+| `wicker.bale` | `wickerFire.ts` (W01) | hay bale, EMPTY_FRAME only | yes | no (session carry) | A–D, W01 |
+| `inspect.serreAircoBeetle` | `serreAirco.ts`, `0381e61` | airco + electrocuted beetle inspect | yes | no (`save: false`) | A–D |
+| `inspect.kitchenBosfruit` | `kitchenJuicePouch.ts`, `597fa51` | Bosfruit pouch inspect | yes | no (`save: false`) | A–D |
+| `garden.gravityBong.hit` | `gravityBongInteraction.ts`, `aeb5080` | "Neem een hit" (sound, 5.6 s cooldown, toast) | yes | no (no `act`) | A–D |
+
+None sets a flag, clue or item; none is on a required route. No id check was disabled or widened; the expected list is
+exactly the reconciled registry.
+
+**Final gates on the integrated candidate** (SwiftShader; production comparison = pure production builds of the same
+commits; logs `docs/dev04d/w01/tests/release-*`):
+
+| Gate | Candidate | Pure production | Verdict |
+|---|---|---|---|
+| typecheck | pass | **fails** (`c1bbdfe` / `cb85941`: `Buffer`) | corrected by W01 |
+| `npm test` | 335 / 335 | — | pass |
+| `test:budget` / build | 4 / 4 / pass | — | pass |
+| `e2e:dev04d-w01` | 27 / 27 | n/a | pass |
+| `e2e:dev04d-w01-release` (new: bong, airco, pouch, footsteps, audio coexistence, hay → item) | 8 / 8 | n/a | pass |
+| `e2e:dev04a` | 18 / 19 | 17 / 19 | id check corrected; the historical relative budget guard remains (inherited) |
+| `e2e:dev04b` | 9 / 9 | 8 / 9 | corrected |
+| `e2e:dev04c` | 21 / 22 | 17 / 22 | id check corrected; historical budget guard remains (inherited) |
+| `e2e:dev04d` | 18 / 18 | 17 / 18 | corrected |
+| `e2e:dev01` / `dev02` / `dev03` | 34 / 34 · 34 / 34 · 11 / 11 | same | pass |
+| `e2e` (full, run alone) | 96 / 103 | 96 / 103, **identical failures** | inherited: six desktop high-quality render checks, Boslust LOD walk |
+| production `src/**/*.test.ts` (outside `npm test`) | `gravityBongInteraction.test.ts` 2 fail | same | inherited: needs a DOM (`document is not defined`); behaviour covered by the release browser check |
+
+A first full-e2e run executed in parallel with the production run showed extra touch-tap timeouts on both builds;
+re-run alone, both gave 96 / 103 with identical failures (load-induced, classified flaky / infrastructure). The full
+chain ran on `0a238ae` (production `ee72f3e`); production's later `c1bbdfe` / `cb85941` changed footstep audio only,
+so the audio-sensitive gates (typecheck, unit, build, W01, release check, D ids) were re-run on `68636e3` / `7bad60b`.
+
+**Performance, candidate vs current production** (PB01 low, 915 × 412; `e2e:dev04c` budget views): every one of the
+28 views identical to production except the Wickerman views — `wickermanClearing` 31 / 205,030 → 32 / 208,600,
+`wickermanPath` 35 / 258,929 → 36 / 262,679, `wickerLit` 35 / 208,448 → 36 / 212,018, `wickerBurning` 43 / 220,188 →
+**40 / 213,678**, `wickerPathBurning` 47 / 272,353 → **44 / 266,023** — and `arrivalCourt`, which flips ± 1 call between
+runs on both builds (pool timing). All inside 750 k / 150. Stage, transparency, reduced-motion and audio-lifecycle
+measurements of §7 / §9 are unchanged (production's merged changes are outside the clearing). No phone FPS exists.
+
+**Merge, deployment, live verification:** recorded in the follow-up commit after the merge (§15).
