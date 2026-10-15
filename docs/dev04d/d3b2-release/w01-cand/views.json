@@ -1,0 +1,751 @@
+{
+  "base": "http://localhost:4182/Feh-Lu-We/",
+  "rows": [
+    {
+      "name": "v01-entrance-ready",
+      "fmt": "land",
+      "stage": "READY",
+      "dusk": 0,
+      "na": [],
+      "calls": 36,
+      "triangles": 225127,
+      "geometries": 113,
+      "textures": 35,
+      "programs": 77,
+      "lit": {},
+      "litCount": 0,
+      "look": {
+        "char": 0,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0,
+        "settled": false
+      }
+    },
+    {
+      "name": "v02-approach-ready",
+      "fmt": "land",
+      "stage": "READY",
+      "dusk": 0,
+      "na": [],
+      "calls": 33,
+      "triangles": 235984,
+      "geometries": 114,
+      "textures": 35,
+      "programs": 78,
+      "lit": {},
+      "litCount": 0,
+      "look": {
+        "char": 0,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0,
+        "settled": false
+      }
+    },
+    {
+      "name": "v03-figure-ready",
+      "fmt": "land",
+      "stage": "READY",
+      "dusk": 0,
+      "na": [],
+      "calls": 39,
+      "triangles": 275007,
+      "geometries": 114,
+      "textures": 35,
+      "programs": 78,
+      "lit": {},
+      "litCount": 0,
+      "look": {
+        "char": 0,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0,
+        "settled": false
+      }
+    },
+    {
+      "name": "v04-candle-ring-lit",
+      "fmt": "land",
+      "stage": "RING_LIT",
+      "dusk": 0,
+      "na": [],
+      "calls": 36,
+      "triangles": 213431,
+      "geometries": 117,
+      "textures": 36,
+      "programs": 82,
+      "lit": {
+        "wicker.candles": true
+      },
+      "litCount": 9,
+      "look": {
+        "char": 0,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0,
+        "settled": false
+      }
+    },
+    {
+      "name": "v05-entrance-ring-lit",
+      "fmt": "land",
+      "stage": "RING_LIT",
+      "dusk": 0,
+      "na": [],
+      "calls": 40,
+      "triangles": 247804,
+      "geometries": 117,
+      "textures": 36,
+      "programs": 82,
+      "lit": {
+        "wicker.candles": true
+      },
+      "litCount": 9,
+      "look": {
+        "char": 0,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0,
+        "settled": false
+      }
+    },
+    {
+      "name": "v06-burn-catch-4s",
+      "fmt": "land",
+      "stage": "BURNING",
+      "dusk": 0,
+      "na": [],
+      "calls": 43,
+      "triangles": 248564,
+      "geometries": 120,
+      "textures": 38,
+      "programs": 85,
+      "lit": {
+        "wicker.candles": true,
+        "wicker.figure": true
+      },
+      "litCount": 9,
+      "look": {
+        "char": 0.11,
+        "flameLow": 0.93,
+        "flameHigh": 0,
+        "light": 0.93,
+        "settled": false
+      }
+    },
+    {
+      "name": "v07-burn-build-14s",
+      "fmt": "land",
+      "stage": "BURNING",
+      "dusk": 0,
+      "na": [],
+      "calls": 44,
+      "triangles": 249464,
+      "geometries": 121,
+      "textures": 38,
+      "programs": 85,
+      "lit": {
+        "wicker.candles": true,
+        "wicker.figure": true
+      },
+      "litCount": 9,
+      "look": {
+        "char": 0.2,
+        "flameLow": 1,
+        "flameHigh": 0.98,
+        "light": 1,
+        "settled": false
+      }
+    },
+    {
+      "name": "v08-burn-peak-32s",
+      "fmt": "land",
+      "stage": "BURNING",
+      "dusk": 0,
+      "na": [],
+      "calls": 45,
+      "triangles": 250250,
+      "geometries": 122,
+      "textures": 38,
+      "programs": 86,
+      "lit": {
+        "wicker.candles": true,
+        "wicker.figure": true
+      },
+      "litCount": 9,
+      "look": {
+        "char": 0.55,
+        "flameLow": 1,
+        "flameHigh": 1,
+        "light": 1,
+        "settled": false
+      }
+    },
+    {
+      "name": "v09-burn-peak-figure-32s",
+      "fmt": "land",
+      "stage": "BURNING",
+      "dusk": 0,
+      "na": [],
+      "calls": 48,
+      "triangles": 283918,
+      "geometries": 122,
+      "textures": 38,
+      "programs": 86,
+      "lit": {
+        "wicker.candles": true,
+        "wicker.figure": true
+      },
+      "litCount": 9,
+      "look": {
+        "char": 0.55,
+        "flameLow": 1,
+        "flameHigh": 1,
+        "light": 1,
+        "settled": false
+      }
+    },
+    {
+      "name": "v10-burn-decline-58s",
+      "fmt": "land",
+      "stage": "BURNING",
+      "dusk": 0,
+      "na": [],
+      "calls": 45,
+      "triangles": 250250,
+      "geometries": 122,
+      "textures": 38,
+      "programs": 86,
+      "lit": {
+        "wicker.candles": true,
+        "wicker.figure": true
+      },
+      "litCount": 9,
+      "look": {
+        "char": 0.99,
+        "flameLow": 1,
+        "flameHigh": 1,
+        "light": 1,
+        "settled": false
+      }
+    },
+    {
+      "name": "v11-burn-settle-72s",
+      "fmt": "land",
+      "stage": "BURNING",
+      "dusk": 0,
+      "na": [],
+      "calls": 48,
+      "triangles": 264995,
+      "geometries": 128,
+      "textures": 38,
+      "programs": 106,
+      "lit": {
+        "wicker.candles": true,
+        "wicker.figure": true
+      },
+      "litCount": 5,
+      "look": {
+        "char": 1,
+        "flameLow": 0.56,
+        "flameHigh": 0.56,
+        "light": 0.56,
+        "settled": false
+      }
+    },
+    {
+      "name": "v12-charred",
+      "fmt": "land",
+      "stage": "CHARRED",
+      "dusk": 0,
+      "na": [],
+      "calls": 43,
+      "triangles": 260153,
+      "geometries": 128,
+      "textures": 38,
+      "programs": 106,
+      "lit": {
+        "wicker.figure": true
+      },
+      "litCount": 0,
+      "look": {
+        "char": 1,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0.12,
+        "settled": true
+      }
+    },
+    {
+      "name": "v13-charred-figure",
+      "fmt": "land",
+      "stage": "CHARRED",
+      "dusk": 0,
+      "na": [],
+      "calls": 46,
+      "triangles": 295721,
+      "geometries": 128,
+      "textures": 38,
+      "programs": 106,
+      "lit": {
+        "wicker.figure": true
+      },
+      "litCount": 0,
+      "look": {
+        "char": 1,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0.12,
+        "settled": true
+      }
+    },
+    {
+      "name": "v13b-charred-cold-60s",
+      "fmt": "land",
+      "stage": "CHARRED",
+      "dusk": 0,
+      "na": [],
+      "calls": 40,
+      "triangles": 293073,
+      "geometries": 128,
+      "textures": 38,
+      "programs": 106,
+      "lit": {
+        "wicker.figure": true
+      },
+      "litCount": 0,
+      "look": {
+        "char": 1,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0.12,
+        "settled": true
+      }
+    },
+    {
+      "name": "v14-empty-frame",
+      "fmt": "land",
+      "stage": "EMPTY_FRAME",
+      "dusk": 0,
+      "na": [],
+      "calls": 35,
+      "triangles": 254509,
+      "geometries": 128,
+      "textures": 38,
+      "programs": 106,
+      "lit": {
+        "wicker.empty": true
+      },
+      "litCount": 0,
+      "look": {
+        "char": 0,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0,
+        "settled": false
+      }
+    },
+    {
+      "name": "v15-empty-frame-figure",
+      "fmt": "land",
+      "stage": "EMPTY_FRAME",
+      "dusk": 0,
+      "na": [],
+      "calls": 38,
+      "triangles": 290077,
+      "geometries": 128,
+      "textures": 38,
+      "programs": 106,
+      "lit": {
+        "wicker.empty": true
+      },
+      "litCount": 0,
+      "look": {
+        "char": 0,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0,
+        "settled": false
+      }
+    },
+    {
+      "name": "v16-bale",
+      "fmt": "land",
+      "stage": "EMPTY_FRAME",
+      "dusk": 0,
+      "na": [],
+      "calls": 73,
+      "triangles": 365183,
+      "geometries": 138,
+      "textures": 38,
+      "programs": 110,
+      "lit": {
+        "wicker.empty": true
+      },
+      "litCount": 0,
+      "look": {
+        "char": 0,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0,
+        "settled": false
+      }
+    },
+    {
+      "name": "v17-carrying-hay",
+      "fmt": "land",
+      "stage": "CARRYING_HAY",
+      "dusk": 0,
+      "na": [],
+      "calls": 38,
+      "triangles": 294099,
+      "geometries": 138,
+      "textures": 38,
+      "programs": 110,
+      "lit": {
+        "wicker.empty": true
+      },
+      "litCount": 0,
+      "look": {
+        "char": 0,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0,
+        "settled": false
+      }
+    },
+    {
+      "name": "v18-refill-mid",
+      "fmt": "land",
+      "stage": "READY",
+      "dusk": 0,
+      "na": [],
+      "calls": 39,
+      "triangles": 296309,
+      "geometries": 138,
+      "textures": 38,
+      "programs": 110,
+      "lit": {},
+      "litCount": 0,
+      "look": {
+        "char": 0,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0,
+        "settled": false
+      }
+    },
+    {
+      "name": "v19-refilled-ready",
+      "fmt": "land",
+      "stage": "READY",
+      "dusk": 0,
+      "na": [],
+      "calls": 36,
+      "triangles": 260123,
+      "geometries": 138,
+      "textures": 38,
+      "programs": 110,
+      "lit": {},
+      "litCount": 0,
+      "look": {
+        "char": 0,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0,
+        "settled": false
+      }
+    },
+    {
+      "name": "v20-clearing-plan",
+      "fmt": "land",
+      "stage": "READY",
+      "dusk": 0,
+      "na": [],
+      "calls": 138,
+      "triangles": 441034,
+      "geometries": 138,
+      "textures": 38,
+      "programs": 110,
+      "lit": {},
+      "litCount": 0,
+      "look": {
+        "char": 0,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0,
+        "settled": false
+      }
+    },
+    {
+      "name": "v21-plinth-close",
+      "fmt": "land",
+      "stage": "READY",
+      "dusk": 0,
+      "na": [],
+      "calls": 82,
+      "triangles": 423355,
+      "geometries": 138,
+      "textures": 38,
+      "programs": 110,
+      "lit": {},
+      "litCount": 0,
+      "look": {
+        "char": 0,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0,
+        "settled": false
+      }
+    },
+    {
+      "name": "v22-burn-peak-bluehour",
+      "fmt": "land",
+      "stage": "BURNING",
+      "dusk": 0.67,
+      "na": [],
+      "calls": 45,
+      "triangles": 268917,
+      "geometries": 138,
+      "textures": 38,
+      "programs": 110,
+      "lit": {
+        "wicker.candles": true,
+        "wicker.figure": true
+      },
+      "litCount": 9,
+      "look": {
+        "char": 0.55,
+        "flameLow": 1,
+        "flameHigh": 1,
+        "light": 1,
+        "settled": false
+      }
+    },
+    {
+      "name": "v23-charred-bluehour",
+      "fmt": "land",
+      "stage": "CHARRED",
+      "dusk": 0.67,
+      "na": [],
+      "calls": 43,
+      "triangles": 266483,
+      "geometries": 138,
+      "textures": 38,
+      "programs": 110,
+      "lit": {
+        "wicker.figure": true
+      },
+      "litCount": 0,
+      "look": {
+        "char": 1,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0.12,
+        "settled": true
+      }
+    },
+    {
+      "name": "v24-ring-lit-bluehour",
+      "fmt": "land",
+      "stage": "RING_LIT",
+      "dusk": 0.67,
+      "na": [],
+      "calls": 40,
+      "triangles": 266471,
+      "geometries": 138,
+      "textures": 38,
+      "programs": 110,
+      "lit": {
+        "wicker.candles": true
+      },
+      "litCount": 9,
+      "look": {
+        "char": 0,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0,
+        "settled": false
+      }
+    },
+    {
+      "name": "v25-cycle2-ready",
+      "fmt": "land",
+      "stage": "READY",
+      "dusk": 0,
+      "na": [],
+      "calls": 36,
+      "triangles": 263049,
+      "geometries": 138,
+      "textures": 38,
+      "programs": 110,
+      "lit": {},
+      "litCount": 0,
+      "look": {
+        "char": 0,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0,
+        "settled": false
+      }
+    },
+    {
+      "name": "v01-entrance-ready",
+      "fmt": "port",
+      "stage": "READY",
+      "dusk": 0,
+      "na": [],
+      "calls": 29,
+      "triangles": 133195,
+      "geometries": 98,
+      "textures": 34,
+      "programs": 75,
+      "lit": {},
+      "litCount": 0,
+      "look": {
+        "char": 0,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0,
+        "settled": false
+      }
+    },
+    {
+      "name": "v03-figure-ready",
+      "fmt": "port",
+      "stage": "READY",
+      "dusk": 0,
+      "na": [],
+      "calls": 31,
+      "triangles": 159332,
+      "geometries": 101,
+      "textures": 34,
+      "programs": 76,
+      "lit": {},
+      "litCount": 0,
+      "look": {
+        "char": 0,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0,
+        "settled": false
+      }
+    },
+    {
+      "name": "v08-burn-peak-32s",
+      "fmt": "port",
+      "stage": "BURNING",
+      "dusk": 0,
+      "na": [],
+      "calls": 38,
+      "triangles": 147744,
+      "geometries": 109,
+      "textures": 37,
+      "programs": 84,
+      "lit": {
+        "wicker.candles": true,
+        "wicker.figure": true
+      },
+      "litCount": 9,
+      "look": {
+        "char": 0.55,
+        "flameLow": 1,
+        "flameHigh": 1,
+        "light": 1,
+        "settled": false
+      }
+    },
+    {
+      "name": "v12-charred",
+      "fmt": "port",
+      "stage": "CHARRED",
+      "dusk": 0,
+      "na": [],
+      "calls": 36,
+      "triangles": 145310,
+      "geometries": 111,
+      "textures": 37,
+      "programs": 87,
+      "lit": {
+        "wicker.figure": true
+      },
+      "litCount": 0,
+      "look": {
+        "char": 1,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0.12,
+        "settled": true
+      }
+    },
+    {
+      "name": "v14-empty-frame",
+      "fmt": "port",
+      "stage": "EMPTY_FRAME",
+      "dusk": 0,
+      "na": [],
+      "calls": 28,
+      "triangles": 139666,
+      "geometries": 111,
+      "textures": 37,
+      "programs": 87,
+      "lit": {
+        "wicker.empty": true
+      },
+      "litCount": 0,
+      "look": {
+        "char": 0,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0,
+        "settled": false
+      }
+    },
+    {
+      "name": "v16-bale",
+      "fmt": "port",
+      "stage": "EMPTY_FRAME",
+      "dusk": 0,
+      "na": [],
+      "calls": 34,
+      "triangles": 177872,
+      "geometries": 113,
+      "textures": 38,
+      "programs": 90,
+      "lit": {
+        "wicker.empty": true
+      },
+      "litCount": 0,
+      "look": {
+        "char": 0,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0,
+        "settled": false
+      }
+    },
+    {
+      "name": "v19-refilled-ready",
+      "fmt": "port",
+      "stage": "READY",
+      "dusk": 0,
+      "na": [],
+      "calls": 29,
+      "triangles": 152131,
+      "geometries": 113,
+      "textures": 38,
+      "programs": 90,
+      "lit": {},
+      "litCount": 0,
+      "look": {
+        "char": 0,
+        "flameLow": 0,
+        "flameHigh": 0,
+        "light": 0,
+        "settled": false
+      }
+    }
+  ],
+  "problems": []
+}
