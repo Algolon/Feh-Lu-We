@@ -116,7 +116,7 @@ side, so it only becomes a shortcut after the finale and never bypasses the base
 ## Optional content
 Billiard panel (balls → lamps: cells 0, 5, 8), memory notes (photo, guestbook, kitchen list, suitcase, telescope
 logbook, storage box, nest box in the old oak east of the pond, pond bench, side-gate postbox, cottage card,
-keepsakes), the botanical room's herbarium, the old cottage with the Kwartiermaker's note.
+keepsakes), the botanical room's herbarium, the old cottage with the Game Master's note.
 
 ## Recorded walkthrough (automated, desktop, no debug cheats)
 `node scripts/e2e.mjs` (suite `walkthrough`) plays 70 steps through the real movement, collision, action button

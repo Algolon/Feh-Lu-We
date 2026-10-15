@@ -3,7 +3,7 @@
 // Fictional placeholder notes, kept separate from the story so they can later be replaced by the friends
 // group's real Veluwe Weekend memories. Keep the IDs stable (saves and world objects refer to them); only
 // change `title` and `text`. None of these make claims about real people; they are written by the
-// fictional organiser "de Kwartiermaker" or describe fictional objects. The story itself (the house,
+// fictional organiser "de Game Master" or describe fictional objects. The story itself (the house,
 // the seals, BOSLUST) is explicitly fiction and does not depend on any of these slots.
 
 export interface Memory {

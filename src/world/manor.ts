@@ -216,7 +216,7 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   for (const [x0, x1, z0, z1] of [[72.4, 92, 80.4, 109.6], [92, 95, 80.4, 99.6], [92, 95, 104.8, 109.6], [95, 107.6, 80.4, 109.6], [108, 115.6, 92.4, 109.6], [107.4, 108.6, 101.9, 103.1], [111.3, 112.7, 91.6, 92.6], [115.4, 116.4, 101.7, 103.3]] as const) w.col.addFloor(x0, x1, z0, z1, GF);
   // ---------------------------------------------------------------- slabs between storeys (walk above, occlude interaction)
   const slab = (x0: number, x1: number, z0: number, z1: number) => {
-    boxMM(c.b, k.M.wood, '#8a5a34', x0, x1, CEIL, UF, z0, z1, { uv: 2.2, chunk: c.chunk });
+    boxMM(c.b, k.M.wood, '#8a5a34', x0, x1, CEIL, UF, z0, z1, { uv: 2.2, chunk: 'manor' }); // structural sun blocker: never furniture-culled
     w.col.addFloor(x0, x1, z0, z1, UF);
     w.col.addOccluder(x0, x1, z0, z1, CEIL, UF);
   };
@@ -875,9 +875,9 @@ function kitchen(w: World, g: GameApi, c: Ctx) {
   // runner in the work aisle, and the peg rail and clock between the hatch and the dresser
   for (const [x0, x1] of [[95.15, 96.69], [98.31, 100.31], [105.81, 107.55]] as const) wallCupboards(c, (x0 + x1) / 2, GF + 1.45, 109.578, Math.PI, x1 - x0);
   for (const [x0, x1] of [[95.15, 96.69], [98.31, 100.31], [101.65, 102.22], [103.58, 104.23], [105.81, 107.2]] as const) splashback(c, (x0 + x1) / 2, GF + 0.98, 109.578, Math.PI, x1 - x0, 0.47); // on the north wall's plaster skin
-  // a glazed tile dado (1.0 m, 30 cm tiles, blue border) round the free walls: west (skipping the hatch recess), the
+  // a glazed tile dado (1.0 m, 30 cm tiles, blue border) round the free walls: west (continuous below the raised hatch), the
   // arch wall, the east wall either side of the service door; the furniture in front of it stays where it was
-  for (const [ax, f, yaw, a0, a1] of [['z', 95.08, Math.PI / 2, 92.08, 98.1], ['z', 95.08, Math.PI / 2, 99.1, 109.6], ['x', 92.08, 0, 95.08, 99.85], ['x', 92.08, 0, 102.15, 107.578],
+  for (const [ax, f, yaw, a0, a1] of [['z', 95.08, Math.PI / 2, 92.08, 109.6], ['x', 92.08, 0, 95.08, 99.85], ['x', 92.08, 0, 102.15, 107.578],
     ['z', 107.578, -Math.PI / 2, 92.08, 101.85], ['z', 107.578, -Math.PI / 2, 103.15, 109.6]] as const) {
     const m = (a0 + a1) / 2;
     splashback(c, ax === 'z' ? f : m, GF, ax === 'z' ? m : f, yaw, a1 - a0, 1.0, 0.3);
@@ -1506,7 +1506,7 @@ function attic(w: World, g: GameApi, c: Ctx) {
   railing(c, 'x', S03.landing.z1, 96.4, 99, AF);
   // ---------------------------------------------------------------- attic floor (only the attic rooms; the stairwell stays open)
   const af = (x0: number, x1: number, z0: number, z1: number) => {
-    boxMM(c.b, k.M.wood, '#a8845a', x0, x1, AF - 0.2, AF, z0, z1, { uv: 2.2, chunk: c.chunk });
+    boxMM(c.b, k.M.wood, '#a8845a', x0, x1, AF - 0.2, AF, z0, z1, { uv: 2.2, chunk: 'manor' }); // structural sun blocker: never furniture-culled
     w.col.addFloor(x0, x1, z0, z1, AF);
     w.col.addOccluder(x0, x1, z0, z1, AF - 0.2, AF);
   };

@@ -68,9 +68,11 @@ export function makeDoor(w: World, g: GameApi, o: DoorOpts) {
         box(b, k.M.wood, '#2b2b2b', o.width / 2, o.height * 0.2, 0, o.width * 0.9, 0.08, th + 0.03);
         box(b, k.M.wood, '#2b2b2b', o.width / 2, o.height * 0.75, 0, o.width * 0.9, 0.08, th + 0.03);
       }
+      // Keep short hatch handles on the leaf; full-size doors retain their 1 m grip height.
+      const handleY = Math.min(1.0, o.height * 0.55);
       // handles both sides
-      box(b, k.M.wood, '#e8c040', o.width - 0.12, 1.0, 0, 0.05, 0.05, th + 0.12);
-      box(b, k.M.wood, '#e8c040', o.width - 0.18, 1.0, 0, 0.14, 0.04, th + 0.14);
+      box(b, k.M.wood, '#e8c040', o.width - 0.12, handleY, 0, 0.05, 0.05, th + 0.12);
+      box(b, k.M.wood, '#e8c040', o.width - 0.18, handleY, 0, 0.14, 0.04, th + 0.14);
     }
   });
   const leaf = buildLeaf();
