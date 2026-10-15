@@ -9,6 +9,12 @@ export class Audio {
   private noiseBuf: AudioBuffer | null = null;
   private loops: Record<string, { gain: GainNode; target: number }> = {};
   private muted = false;
+  mushroom = 0;
+  private groveBus: GainNode | null = null;
+  private groveVoices: OscillatorNode[] = [];
+  private groveNext = 0;
+  private groveChord = -1;
+  private groveNote = 0;
   private nextAmbient = 8;
   private time = 0;
   ambience: 'home' | 'estate' = 'home';
@@ -145,6 +151,17 @@ export class Audio {
     mk('water', 'lowpass', 500, 0.8);
     mk('steam', 'highpass', 2500, 0.4);
     mk('room', 'lowpass', 180, 0.3);
+    // Original suspended/add9 progression, no recorded music. All voices and echo
+    // return BEFORE the grove bus, so leaving/pause/mute fades the whole soundscape.
+    this.groveBus = c.createGain(); this.groveBus.gain.value = 0;
+    const filter = c.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.value = 1250;
+    this.groveBus.connect(filter).connect(this.master!);
+    for (let i=0; i<5; i++) {
+      const o=c.createOscillator(), gain=c.createGain(), pan=c.createStereoPanner();
+      o.type='sine'; o.frequency.value=[146.83,220,293.66,329.63,440][i];
+      o.detune.value=(i-2)*3.2; gain.gain.value=i<2?.085:.045; pan.pan.value=(i-2)*.28;
+      o.connect(gain).connect(pan).connect(this.groveBus);o.start();this.groveVoices.push(o);
+    }
   }
 
   /** Per-frame: set loop volumes from proximity, schedule sparse ambient events. */
@@ -159,8 +176,24 @@ export class Audio {
         l.gain.gain.setTargetAtTime(v, this.ctx!.currentTime, 0.3);
       }
     };
+    const grove = Math.max(0, Math.min(1, this.mushroom));
+    this.groveBus?.gain.setTargetAtTime(grove * 0.5, this.ctx!.currentTime, grove === 0 ? 0.18 : 0.8);
+    if (grove > 0.02) {
+      const chord = Math.floor(this.time / 18) % 4;
+      if (chord !== this.groveChord) {
+        this.groveChord = chord;
+        const notes = [[50,57,62,64,69], [48,55,60,62,67], [53,60,65,67,72], [50,57,62,65,69]][chord];
+        this.groveVoices.forEach((o,i) => o.frequency.setTargetAtTime(440 * 2 ** ((notes[i]-69)/12), this.ctx!.currentTime, 3));
+      }
+      this.groveNext -= dt;
+      if (this.groveNext <= 0 && !this.muted) {
+        this.groveNext = 4.5 + (this.groveNote % 3) * 1.7;
+        const melody=[74,81,76,69,79,77,72,76], midi=melody[this.groveNote++ % melody.length];
+        this.groveChime(440 * 2 ** ((midi-69)/12));
+      }
+    }
     const outdoor = this.ambience === 'estate' && !levels.indoor;
-    set('wind', outdoor ? 0.05 + 0.03 * Math.sin(this.time * 0.2) + this.dusk * 0.03 : 0.01);
+    set('wind', outdoor ? (0.05 + 0.03 * Math.sin(this.time * 0.2) + this.dusk * 0.03) * (1 - grove * 0.8) : 0.01);
     set('room', levels.indoor ? 0.05 : 0);
     // crackle: a noise floor plus random pops
     set('fire', levels.fire * 0.12);
@@ -170,7 +203,24 @@ export class Audio {
     this.nextAmbient -= dt;
     if (this.nextAmbient <= 0) {
       this.nextAmbient = 6 + Math.random() * 10;
-      if (this.ambience === 'estate') this.ambientEvent(outdoor);
+      if (this.ambience === 'estate' && grove < 0.25) this.ambientEvent(outdoor);
+    }
+  }
+
+  private groveChime(frequency: number) {
+    if (!this.ctx || !this.groveBus) return;
+    const c=this.ctx,t=c.currentTime;
+    // Soft attack, inharmonic glass overtone, staggered echoes with finite lifetimes.
+    for (let i=0;i<4;i++) {
+      const o=c.createOscillator(), gain=c.createGain(), pan=c.createStereoPanner();
+      const start=t+i*.43;
+      o.frequency.value=frequency*(i===1?2.002:1);o.type='sine';
+      gain.gain.setValueAtTime(0.0001,start);
+      gain.gain.exponentialRampToValueAtTime(.065/(i+1),start+.32);
+      gain.gain.exponentialRampToValueAtTime(.0001,start+4.2);
+      pan.pan.value=Math.sin(this.groveNote+i)*.65;
+      o.connect(gain).connect(pan).connect(this.groveBus);o.start(start);o.stop(start+4.3);
+      o.onended=()=>{o.disconnect();gain.disconnect();pan.disconnect();};
     }
   }
 

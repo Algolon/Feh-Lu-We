@@ -189,7 +189,13 @@ export interface Route { id: string; pts: [number, number][]; width: number; pro
  * overrides the height fields in a corridor around the line (max grade 8 %). The +0.15 → 0 step off a platform is the
  * platform edge itself, so profiles start/end at ground level 0 there.
  */
+/** Mushroom grove: branch from the NE bend of eastGardenLoop, inside eastForest.
+ * Map is north-up (X east, +Z north); terrain heights remain the original sampled heightfield. */
+export const MUSHROOM = { x: 181, z: 162, radius: 9,
+  approach: [[166, 140], [172, 149], [178, 157], [181, 162]] as [number, number][] };
+
 export const ROUTES: Route[] = [
+  { id: 'mushroomApproach', pts: MUSHROOM.approach, width: 1.7, mandatory: false },
   { id: 'cottageOut', pts: [[80, 113.5], [62, 122], [40, 130], [18, 143], [18, 152], [25, 152]], width: 1.6, mandatory: false,
     profile: { d: [0, 2, 20, 43.32, 68.87, 75.87, 84.87], h: [0, 0, 0, 1.67, 3.5, 4, 4] } },
   { id: 'cottageReturn', pts: [[25, 152], [18, 152], [18, 168], [48, 168], [79, 160], [90, 139], [90, 128]], width: 1.5, mandatory: false,

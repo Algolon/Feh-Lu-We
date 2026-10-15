@@ -18,7 +18,7 @@ import { useOnFirePit, lightPostLantern, readFirePlate } from '../puzzles/rules'
 import { has } from '../core/state';
 import { ITEMS } from '../content/items';
 import { ESTATE, SITES, DRIVEWAY, CLEARINGS, SHED, HILL, WOODS } from './layout';
-import { vegetationClear } from './footprints';
+import { vegetationClear, mushroomKeepout } from './footprints';
 import { FOREST_PATHS, terrainHeight } from './terrain';
 import { ART } from '../core/artflags';
 import { signpostV2, stumpsV2 } from './boslustSample';
@@ -522,7 +522,7 @@ function buildFork(w: World, g: GameApi, c: Ctx) {
 export function buildWoodlandMasses(w: World, veg: Vegetation) {
   const r = mulberry32(911);
   for (const zone of WOODS) {
-    const pts = scatter(r, zone.x0 + 1, zone.x1 - 1, zone.z0 + 1, zone.z1 - 1, zone.gap, Math.round(((zone.x1 - zone.x0) * (zone.z1 - zone.z0)) / (zone.gap * zone.gap) * 3), (x, z) => vegetationClear(x, z, 'tree'));
+    const pts = scatter(r, zone.x0 + 1, zone.x1 - 1, zone.z0 + 1, zone.z1 - 1, zone.gap, Math.round(((zone.x1 - zone.x0) * (zone.z1 - zone.z0)) / (zone.gap * zone.gap) * 3), (x, z) => vegetationClear(x, z, 'tree', true));
     for (const [x, z] of pts) {
       const roll = r();
       const kind = roll < zone.pine ? 'pine' : roll < zone.pine + 0.15 ? 'birch' : 'oak';
@@ -531,7 +531,7 @@ export function buildWoodlandMasses(w: World, veg: Vegetation) {
       const rad = kind === 'pine' ? 1.5 + r() * 0.6 : 1.9 + r() * 1.1;
       const y = terrainHeight(x, z);
       veg.tree({ x, z, h, r: rad, kind, hue: r() - 0.5, y }, `w${Math.floor(x / 50)}_${Math.floor(z / 45)}`, `T${Math.floor(x / 100)}_${Math.floor(z / 90)}`);
-      w.col.addCircle(x, z, kind === 'birch' ? 0.22 : 0.34, y - 0.5, y + 6);
+      if (!mushroomKeepout(x, z)) w.col.addCircle(x, z, kind === 'birch' ? 0.22 : 0.34, y - 0.5, y + 6);
       if (zone.gap <= 6 && r() < 0.35) veg.smallThing(r() < 0.5 ? 'fern' : 'shrub', x + 1.2, z + 0.6, 0.4 + r() * 0.3, r() < 0.5 ? '#557f34' : '#4f7f38', `w${Math.floor(x / 50)}_${Math.floor(z / 45)}`, terrainHeight(x + 1.2, z + 0.6));
     }
   }
