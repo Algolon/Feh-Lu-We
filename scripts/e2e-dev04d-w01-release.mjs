@@ -57,8 +57,8 @@ try {
   });
 
   // ---------------------------------------------------------------- 1–2. the optional interactables
-  const ids = await E(() => { const keys = [...window.__game.world.byId.keys()]; const n = (id) => keys.filter((k) => k === id).length; return { total: keys.length, bong: n('garden.gravityBong.hit'), beetle: n('inspect.serreAircoBeetle'), pouch: n('inspect.kitchenBosfruit'), bale: n('wicker.bale') }; });
-  log(`registry: the four optional ids are each registered once (${ids.total} interactables)`, ids.bong === 1 && ids.beetle === 1 && ids.pouch === 1 && ids.bale === 1 && ids.total === 134, JSON.stringify(ids));
+  const ids = await E(() => { const keys = [...window.__game.world.byId.keys()]; const n = (id) => keys.filter((k) => k === id).length; return { total: keys.length, bong: n('garden.gravityBong.hit'), beetle: n('inspect.serreAircoBeetle'), pouch: n('inspect.kitchenBosfruit'), bale: n('wicker.bale'), handpan: n('play.handpan') }; });
+  log(`registry: the optional ids are each registered once (${ids.total} interactables)`, ids.bong === 1 && ids.beetle === 1 && ids.pouch === 1 && ids.bale === 1 && ids.handpan === 1 && ids.total === 135, JSON.stringify(ids));
 
   const bong = await step('bong', () => {
     const g = window.__game, out = { pose: window.standAt('garden.gravityBong.hit') }, sig = window.stateSig();

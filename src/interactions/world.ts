@@ -14,7 +14,8 @@ export interface Interactable {
   focus: THREE.Vector3; // world-space point for distance prefilter
   reach: number;
   label: () => string | null; // null → not interactable right now
-  run: () => void;
+  /** `at` = the world-space point the reticle / tap hit on this target (where on the object it was used). */
+  run: (at?: THREE.Vector3) => void;
   acceptsItems?: boolean;
   useItem?: (item: string) => void;
   /**
@@ -33,6 +34,8 @@ export interface GameApi {
   act(o: Outcome, opts?: { save?: boolean }): void;
   sfx(name: Sfx | 'door' | 'drawer' | 'switch' | 'water' | 'steam' | 'electric-zap' | 'bongHit', gain?: number): void;
   toast(msg: string): void;
+  /** Play one handpan stroke at `freq` Hz (`vel` 0–1). False when nothing sounds (audio muted or unavailable). */
+  playNote(freq: number, vel?: number): boolean;
   changed(): void; // state mutated → resync + save
   inspect(clueId: string, extra?: { title?: string; text?: string }): void;
   openPanel(kind: string, data?: Record<string, unknown>): void;

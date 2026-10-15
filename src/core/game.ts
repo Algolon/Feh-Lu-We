@@ -68,6 +68,7 @@ export class Game implements GameApi {
   private last = 0;
   private time = 0;
   private target: Interactable | null = null;
+  private targetPoint: THREE.Vector3 | null = null; // where the reticle ray hits the target
   private raycaster = new THREE.Raycaster();
   private saveTimer = 0;
   private poseTimer = 0;
@@ -209,6 +210,7 @@ export class Game implements GameApi {
       this.world = null;
     }
     this.target = null;
+    this.targetPoint = null;
     const build = id === 'home' ? buildHome : buildEstate;
     const { world, extras } = build(this);
     this.world = world;
@@ -266,6 +268,9 @@ export class Game implements GameApi {
   }
   toast(msg: string) {
     this.ui.toast(msg);
+  }
+  playNote(freq: number, vel = 1) {
+    return this.audio.handpan(freq, vel);
   }
   private solvedSeen = new Set<string>();
   private trackSolved(log: boolean) {
@@ -535,7 +540,7 @@ export class Game implements GameApi {
   }
 
   // ------------------------------------------------------------------ interaction picking
-  private pickAt(ndcX: number, ndcY: number): { it: Interactable; tooFar: boolean } | null {
+  private pickAt(ndcX: number, ndcY: number): { it: Interactable; tooFar: boolean; point: THREE.Vector3 } | null {
     const w = this.world;
     if (!w) return null;
     const eye = this.camera.position;
@@ -558,7 +563,7 @@ export class Game implements GameApi {
       // line of sight: walls and closed doors between the eye and the hit point block interaction
       const p = h.point;
       if (w.col.segmentBlocked(eye.x, eye.y, -eye.z, p.x, p.y, -p.z, it.ignore)) return null;
-      return { it, tooFar: h.distance > it.reach };
+      return { it, tooFar: h.distance > it.reach, point: p };
     }
     return null;
   }
@@ -570,12 +575,12 @@ export class Game implements GameApi {
     const p = this.pickAt(((clientX - r.left) / r.width) * 2 - 1, -((clientY - r.top) / r.height) * 2 + 1);
     if (!p) return;
     if (p.tooFar) this.ui.toast('Loop er wat dichter naartoe.');
-    else this.perform(p.it);
+    else this.perform(p.it, p.point);
   }
 
   doAction() {
     if (this.ui.modalOpen || this.switching) return;
-    if (this.target) this.perform(this.target);
+    if (this.target) this.perform(this.target, this.targetPoint ?? undefined);
   }
 
   /** Held-item action label for this target, or null when the default action applies. */
@@ -585,9 +590,9 @@ export class Game implements GameApi {
     return it.itemLabel ? it.itemLabel(sel) : `Gebruik: ${ITEMS[sel].name}`;
   }
 
-  private perform(it: Interactable) {
+  private perform(it: Interactable, at?: THREE.Vector3) {
     if (this.itemAction(it) !== null) it.useItem!(this.selected!);
-    else it.run();
+    else it.run(at);
   }
 
   private actionLabel(it: Interactable): string | null {
@@ -707,6 +712,7 @@ export class Game implements GameApi {
       const p = this.pickAt(0, 0);
       const it = p && !p.tooFar ? p.it : null;
       this.target = it;
+      this.targetPoint = it ? p!.point : null;
       const al = it ? this.actionLabel(it) : null;
       this.ui.setTarget(al, al, it && this.itemAction(it) !== null ? this.selected : null);
     }

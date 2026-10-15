@@ -26,6 +26,7 @@ import { FIRE_UNIFORMS } from './fire';
 import { S3_BUILDERS } from './d2props';
 import { parkedCar } from './cars';
 import { buildGravityBong } from './gravityBong';
+import { buildHandpan, addHandpanPlay } from './handpan';
 
 const BENCH_LOG2 = logModel(157, 2.2, 0.21);
 const WICKER_GEO = wickermanGeo();
@@ -118,14 +119,10 @@ function socialGarden(w: World, g: GameApi, c: Ctx) {
   table(c, 81.6, 120.6, GF, 1.1, 0.8, 0, '#7a5a3a', 0.4);
   buildGravityBong(c, 81.58, GF + 0.4, 120.56);
   registerGravityBongAction(w, g, 81.58, GF + 0.4, 120.56);
-  { const a = new Asm(c.b, c.chunk, 83.4, GF, 121.6, 0.4);
-    for (let i = 0; i < 3; i++) { const an = (i / 3) * Math.PI * 2; a.add(M.timber, '#5a3a22', bx(0.025, 0.58, 0.025), Math.cos(an) * 0.13, 0.29, Math.sin(an) * 0.13, { rx: Math.sin(an) * 0.2, rz: -Math.cos(an) * 0.2 }); }
-    a.add(M.brass, '#8e8a84', cg('handpanTop', () => lathe([[0.001, 0.09], [0.12, 0.08], [0.24, 0.035], [0.27, 0.0], [0.001, 0.0]], 18)), 0, 0.6, 0);
-    a.add(M.brass, '#7e7a74', cg('handpanBot', () => lathe([[0.27, 0], [0.24, -0.035], [0.12, -0.075], [0.001, -0.08]], 18)), 0, 0.6, 0);
-    for (let i = 0; i < 7; i++) { const an = (i / 7) * Math.PI * 2; a.add(M.brass, '#6e6a64', cg('tone', () => new THREE.CircleGeometry(0.045, 8).rotateX(-Math.PI / 2)), Math.cos(an) * 0.17, 0.6 + 0.052, Math.sin(an) * 0.17, { rx: -Math.sin(an) * 0.25, rz: Math.cos(an) * 0.25 }); }
-    a.add(M.brass, '#6e6a64', cg('ding', () => lathe([[0.001, 0.02], [0.04, 0.015], [0.05, 0.0], [0.001, 0.0]], 10)), 0, 0.69, 0);
-  }
-  w.col.addCircle(83.4, 121.6, 0.3, 0, 0.8);
+  // Asset 01: the handpan on its walnut stand (FLW-S3-035), standing on the rug (top at GF + 0.012), same spot as before
+  const handpanTop = buildHandpan(c, 83.4, GF + 0.012, 121.6, 0.4);
+  addHandpanPlay(w, g, 83.4, GF + 0.012, 121.6, 0.4); // aim at a tone field (or tap it) to play that note
+  w.col.addCircle(83.4, 121.6, 0.3, 0, GF + 0.012 + handpanTop);
   for (const [x, z, col] of [[80.0, 119.0, '#b3813f'], [80.0, 122.0, '#7a2e2a'], [82.8, 119.0, '#62704a']] as const) { const a = new Asm(c.b, c.chunk, x, GF, z, x * 0.7); a.add(M.upholstery, col, cg('pouf', () => projectUV(cushion(0.55, 0.3, 0.55, 0.12, 0.03), 0.25)), 0, 0.15, 0); }
   // helium tank on its trolley + balloons tethered to a weight (they float on strings, they do not hover loose)
   platform(c, BALLOON_NOOK, '#e2d6bc');
