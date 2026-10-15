@@ -26,3 +26,11 @@ Release gates and final deployment identifiers are recorded below when complete.
 The transient worktrees, running browser processes and unpushed live-evidence files were removed by workspace maintenance. They were not reset or deleted by this implementation. Remote checkpoint `2a8e12dcc2f3de8c55cab0ae32363fab5e6677e3` and approved R04 remain reachable and have been freshly cloned. The interrupted complete browser run has no recoverable final results and is not claimed as a final pass. Earlier observed partial results in the conversation (including the successful tutorial-to-finale route) are historical observations only.
 
 Production advanced to `87f4db5322b9c857034d74186d32bb43de35ffe4` (playable handpan plus repeatable Wickerman and first-clip-only grass footfalls). It was merged into the recovery branch. Two conflicts were combined deliberately: scene replacement clears both MushroomVision and the handpan target point; vegetation footprints retain both Mushroom Grove and the new hay bale exclusion. Original feature and production histories are preserved. New validation below supersedes the incomplete old run for release.
+
+### Recovered integration validation
+
+- Typecheck and production build pass. 354 unit tests / 35 files pass; four budget-policy tests pass. Existing bundle-size warning remains. Remote checkpoint `5920d54bf439726e2dc0ecb4711481143e44f63c` passes CI run 38811110819.
+- Handpan desktop/mobile suite: 10/10 pass, including correct aimed/tapped notes, mute hint and no saved-state mutation.
+- Repeated focused zone checks pass: 302 placements, 49 surveyed trees retained, zero trunk overlaps, progression unchanged, effect/audio zero on exit, mute RMS zero, pause fade, both production MP3 banks decoded, shader clock 12 at time 10, reduced motion clock/distortion/motion zero, distortion toggle and context recovery with GL error zero.
+- Recovered integrated low mobile landscape sweep peaks at 130 calls / 659,557 triangles. This remains within the current 150 / 750k low-quality policy. Software SwiftShader timing is retained in raw evidence but is not a physical Android frame-rate result.
+- Full regression, optional vignette/Wickerman and paired production checks are still running at this checkpoint.
