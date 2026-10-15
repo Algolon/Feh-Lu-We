@@ -22,6 +22,7 @@ describe('gravity bong: Neem een hit', () => {
     const api = { sfx: vi.fn(), toast: vi.fn(), changed: vi.fn() } as unknown as GameApi;
     const clock = vi.spyOn(Date, 'now').mockReturnValue(12000);
     registerGravityBongAction(w, api, 81.58, 0.4, 120.56);
+    expect(BONG_ACTION_COOLDOWN_MS).toBeGreaterThan(5000);
     const run = w.byId.get(BONG_ACTION_ID)!.run;
     run(); run();
     expect(api.sfx).toHaveBeenCalledTimes(1);
@@ -42,3 +43,4 @@ describe('gravity bong: Neem een hit', () => {
     expect(new Set(gaps).size).toBeGreaterThan(2);
   });
 });
+

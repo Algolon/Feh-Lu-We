@@ -4,7 +4,7 @@ import type { World, GameApi } from '../interactions/world';
 import { makeAction, place } from '../interactions/props';
 
 export const BONG_ACTION_ID = 'garden.gravityBong.hit';
-export const BONG_ACTION_COOLDOWN_MS = 3400;
+export const BONG_ACTION_COOLDOWN_MS = 5600;
 
 /** Invisible hitbox covering the actual bong, not the entire table. */
 export function registerGravityBongAction(w: World, g: GameApi, x: number, tableY: number, z: number) {
