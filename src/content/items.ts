@@ -9,7 +9,7 @@ export interface ItemDef {
 }
 
 export const ITEMS: Record<string, ItemDef> = {
-  invitation: { id: 'invitation', name: 'Uitnodiging', desc: 'Een handgeschreven uitnodiging van de Kwartiermaker.', readClue: 'c.invitation', essential: true },
+  invitation: { id: 'invitation', name: 'Uitnodiging', desc: 'Een handgeschreven uitnodiging van de Game Master.', readClue: 'c.invitation', essential: true },
   torch: { id: 'torch', name: 'Zaklamp', desc: 'Een stevige zaklamp. Tik op “Zaklamp” in je tas om hem aan of uit te zetten.', essential: true },
   matches: { id: 'matches', name: 'Lucifers', desc: 'Een doosje lucifers. Kies ze in je tas en gebruik ze op iets wat aan moet. Ze raken niet op.', essential: true },
   notebook: { id: 'notebook', name: 'Notitieboek', desc: 'Je notitieboek. Aanwijzingen die je bekijkt, worden er vanzelf in bewaard.', essential: true },

@@ -1,5 +1,5 @@
 // Notebook entries. Inspecting the matching object in the world records the entry.
-// Story: “Het huis dat zich herinnert” — explicitly fictional; the organiser is the fictional Kwartiermaker.
+// Story: “Het huis dat zich herinnert” — explicitly fictional; the organiser is the fictional Game Master.
 // Answers must always be derivable from these texts + the 3D world (see docs/PUZZLE_SOLUTIONS.md).
 import { MEMORIES } from './memories';
 import { MANTEL_TEXT, DRAWER_DIAL, SERVICE, CIPHER, EMBLEMS, GUESTBOOK_TABS, CATALOG, PLATES } from './canon';
@@ -19,7 +19,7 @@ export interface ClueDef {
   memory?: boolean;
 }
 
-const K = '— de Kwartiermaker';
+const K = '— de Game Master';
 const nm = (id: string) => SYMBOLS[id].name.toLowerCase();
 
 export const CLUES: Record<string, ClueDef> = {

@@ -9,7 +9,7 @@ lanterns and a large woodland. Three seals open the basement; a restored route a
 **BOSLUST**, a door in a wooded hill, where a stair leads down to the gathering room. Player-facing text is Dutch.
 
 **Status:** playable prototype, end-to-end solvable. Prototype content (notes, memories) is placeholder text
-by a fictional organiser ("de Kwartiermaker") and is meant to be replaced — see [Memory content](#memory-content).
+by a fictional organiser ("de Game Master") and is meant to be replaced — see [Memory content](#memory-content).
 
 - Published at https://algolon.github.io/Feh-Lu-We/ (GitHub Pages; see [Deploy](#deploy))
 - Build brief and concept art: [`docs/BUILD_BRIEF.md`](docs/BUILD_BRIEF.md), [`docs/concept-art/`](docs/concept-art/)

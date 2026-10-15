@@ -12,7 +12,7 @@ import { Batcher, box, boxMM, cyl, blob, compound, v3, getKit } from './kit';
 import { plant, staticLantern, barSign, BAR_SIGN, lounger, joinery, bottleGeo } from './furniture';
 import { Asm, artMats, lathe } from './artkit';
 import { makeDoor, makePickup, makeInspect, makeAction, place } from '../interactions/props';
-import { drawSymbol } from '../content/symbols';
+import { drawSymbol, SYMBOLS } from '../content/symbols';
 import { registerOpening } from './openings';
 import { addClue } from '../core/state';
 import { turnWheel, wheels, WHEEL_SYMBOLS } from '../puzzles/rules';
@@ -23,14 +23,36 @@ function mosaicTexture(sym: string) {
   const cv = document.createElement('canvas');
   cv.width = cv.height = 128;
   const x = cv.getContext('2d')!;
-  x.fillStyle = '#e8f4f0';
-  x.fillRect(0, 0, 128, 128);
-  x.strokeStyle = '#2f6f80';
-  x.lineWidth = 6;
+  // Glazed white/aqua tesserae belong to the basin palette, rather than a white sign laid on the floor.
+  const glaze = ['#f4f2e7', '#c0dfd8', '#e5eee5', '#a9d3cd', '#f8f5e9', '#d1e7e0'];
+  const glazeIndex = (row: number, col: number, seed: number, count: number) => {
+    const value = Math.sin(row * 127.1 + col * 311.7 + seed * 74.7) * 43758.5453;
+    return Math.floor((value - Math.floor(value)) * count);
+  };
+  for (let row = 0; row < 16; row++) for (let col = 0; col < 16; col++) {
+    x.fillStyle = glaze[glazeIndex(row, col, 1, glaze.length)];
+    x.fillRect(col * 8, row * 8, 8, 8);
+  }
+  x.strokeStyle = '#3c8e8a';
+  x.lineWidth = 3;
   x.strokeRect(4, 4, 120, 120);
-  drawSymbol(x, sym, 14, 14, 100);
+  x.strokeStyle = '#9ecac1'; x.lineWidth = 1;
+  x.strokeRect(9, 9, 110, 110);
+  // Clip glazed turquoise tesserae to the canonical silhouette; preserve the shared puzzle shape.
+  const turquoise = ['#1f8186', '#43b4ac', '#2b969e', '#68c6b7', '#237c93', '#3da9a6'];
+  const phase = ['cirkel', 'driehoek', 'golf', 'ruit'].indexOf(sym);
+  for (const layer of SYMBOLS[sym].layers) {
+    const path = new Path2D(layer.d);
+    x.save(); x.translate(14, 14); x.clip(path); x.setTransform(1, 0, 0, 1, 0, 0);
+    for (let row = 0; row < 16; row++) for (let col = 0; col < 16; col++) {
+      x.fillStyle = turquoise[glazeIndex(row, col, phase + 2, turquoise.length)];
+      x.fillRect(col * 8, row * 8, 8, 8);
+    }
+    x.restore();
+    x.save(); x.translate(14, 14); x.strokeStyle = '#205c60'; x.lineWidth = 3; x.lineJoin = 'round'; x.stroke(path); x.restore();
+  }
   // mosaic grout
-  x.strokeStyle = 'rgba(255,255,255,0.35)';
+  x.strokeStyle = 'rgba(224,242,232,0.25)';
   x.lineWidth = 1;
   for (let i = 0; i < 128; i += 8) { x.beginPath(); x.moveTo(i, 0); x.lineTo(i, 128); x.moveTo(0, i); x.lineTo(128, i); x.stroke(); }
   const t = new THREE.CanvasTexture(cv);
@@ -103,6 +125,7 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
     m.rotation.order = 'YXZ';
     m.rotation.x = -Math.PI / 2 - tilt;
     m.position.copy(v3(PX, poolDepth(z) + 0.075, z));
+    m.userData.poolMosaic = s;
     w.scene.add(m);
   });
   // water
@@ -118,11 +141,13 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
   w.scene.add(water);
   w.onUpdate((_dt, t) => { if (!w.reducedMotion) waterTex.offset.set(Math.sin(t * 0.2) * 0.05, t * 0.02); });
   w.emitters.push({ kind: 'water', pos: v3(PX, 0, PZ), on: () => true });
-  for (const [z, txt, rotY] of [[POOL.z0 - 0.55, 'ONDIEP · 1,0 m', 0], [POOL.z1 + 0.55, 'DIEP · 2,0 m', Math.PI]] as const) {
-    const m = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 0.5), w.material(new THREE.MeshLambertMaterial({ map: w.texture(textTexture([txt])) })));
+  for (const [z, txt, rotY] of [[POOL.z0 - 0.17, '1,0 m', 0], [POOL.z1 + 0.17, '2,0 m', Math.PI]] as const) {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(0.64, 0.20), w.material(new THREE.MeshLambertMaterial({ map: w.texture(textTexture([txt], 256, 80, '#e5ddc7', '#426d69')) })));
     m.rotation.order = 'YXZ';
     m.rotation.set(-Math.PI / 2, rotY, 0);
-    m.position.copy(v3(PX, GF + 0.012, z));
+    const markerX = rotY === 0 ? POOL.x1 - 0.55 : POOL.x0 + 0.55; // right when facing the water at either end
+    m.position.copy(v3(markerX, GF + 0.045, z)); // above the coping, not floating over the walking tiles
+    m.userData.poolDepthMarker = txt;
     w.scene.add(m);
   }
   const poolHit = new THREE.Group();

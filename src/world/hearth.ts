@@ -245,18 +245,6 @@ function buildMantel(w: World, g: GameApi, o: HearthOpts, c: Ctx) {
   grp.userData.noCull = true;
   w.scene.add(grp);
   }
-  // brass reading-direction plaque on the shelf edge (a visual anchor for "left → right")
-  const cv = document.createElement('canvas'); cv.width = 512; cv.height = 64;
-  const x = cv.getContext('2d')!;
-  x.fillStyle = '#c9a44c'; x.fillRect(0, 0, 512, 64);
-  x.strokeStyle = '#7a5a1a'; x.lineWidth = 4; x.strokeRect(3, 3, 506, 58);
-  x.fillStyle = '#3a2a1a'; x.font = 'bold 34px Georgia'; x.textAlign = 'center'; x.fillText('links  ⟶  rechts', 256, 44);
-  const tex = w.texture(new THREE.CanvasTexture(cv)); tex.colorSpace = THREE.SRGBColorSpace;
-  const pl = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.075), w.material(new THREE.MeshLambertMaterial({ map: tex })));
-  const pp = P(o.style === 'v2' ? 0.808 : 0.785, 0); // v2: on the shelf's flat fascia
-  pl.position.copy(v3(pp.x, o.y + (o.style === 'v2' ? 1.262 : 1.29), pp.z));
-  pl.rotation.y = Math.PI - o.facing; // plane normal points into the room
-  w.scene.add(pl);
   // one inspect target over the whole shelf
   const mh = new THREE.Group();
   const mp = P(0.45, 0);

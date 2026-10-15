@@ -4,7 +4,7 @@ What was built for iteration 3, why, and where it lives in the code. Spoilers ar
 [`PUZZLE_SOLUTIONS.md`](PUZZLE_SOLUTIONS.md); test evidence is in [`ITERATION_3_VALIDATION.md`](ITERATION_3_VALIDATION.md).
 
 ## 1. Story frame (fiction)
-The organiser is the fictional **Kwartiermaker**. This year the group does not meet in the old cottage: the
+The organiser is the fictional **Game Master**. This year the group does not meet in the old cottage: the
 house itself has "kept three parts of the route" — what was shared at the table, what was written down, and what
 was discovered off the paths. Each part ends in a seal; together they open the basement, which leads (via a
 restored route and a taught cipher) to **BOSLUST**, a door in a wooded hill, and a gathering room underneath it.
