@@ -138,4 +138,202 @@ measured:
 - With every door in the house open, the pre-existing > 150-call hotspots on the landing and walkway rise by +7…+11.
 - In exchange, every room that cannot see Reis / Sterren / the guest room no longer draws them.
 
-<!--TABLES-->
+### 5.2 D3-b2 poses (doors closed, 915 × 412, low)
+
+Files: `budget-base-752cb02-poses.json` and `budget-d3b2-poses.json`.
+
+| Pose | Before calls / tris | After calls / tris | Δ calls | Δ tris |
+|---|---|---|---|---|
+| re-door | 56 / 176,518 | 53 / 157,498 | -3 | -19,020 |
+| re-enter | 32 / 80,824 | 34 / 85,690 | +2 | +4,866 |
+| re-wide | 36 / 82,288 | 38 / 87,154 | +2 | +4,866 |
+| re-travel | 27 / 80,682 | 28 / 85,448 | +1 | +4,766 |
+| re-desk | 27 / 80,682 | 28 / 85,448 | +1 | +4,766 |
+| re-sloop | 27 / 80,682 | 28 / 85,448 | +1 | +4,766 |
+| re-bed | 27 / 80,396 | 29 / 85,262 | +2 | +4,866 |
+| re-case | 33 / 85,268 | 40 / 95,846 | +7 | +10,578 |
+| sk-door | 60 / 197,260 | 59 / 182,188 | -1 | -15,072 |
+| sk-enter | 33 / 80,840 | 35 / 85,706 | +2 | +4,866 |
+| sk-wide | 33 / 80,840 | 37 / 89,654 | +4 | +8,814 |
+| sk-bed | 25 / 80,382 | 27 / 85,248 | +2 | +4,866 |
+| sk-moon | 25 / 75,510 | 27 / 80,376 | +2 | +4,866 |
+| sk-scope | 31 / 83,884 | 37 / 94,362 | +6 | +10,478 |
+| sk-back | 33 / 83,898 | 40 / 94,476 | +7 | +10,578 |
+| gu-door | 52 / 155,466 | 54 / 142,158 | +2 | -13,308 |
+| gu-enter | 31 / 112,988 | 32 / 60,762 | +1 | -52,226 |
+| gu-wide | 38 / 136,890 | 39 / 83,646 | +1 | -53,244 |
+| gu-bed | 29 / 106,986 | 28 / 59,184 | -1 | -47,802 |
+| gu-corner | 36 / 136,790 | 38 / 83,558 | +2 | -53,232 |
+| gu-back | 43 / 146,646 | 39 / 79,340 | -4 | -67,306 |
+| ba-door | 45 / 150,826 | 46 / 137,430 | +1 | -13,396 |
+| ba-enter | 28 / 83,798 | 29 / 70,402 | +1 | -13,396 |
+| ba-basin | 29 / 83,814 | 31 / 70,506 | +2 | -13,308 |
+| ba-tub | 29 / 83,814 | 30 / 70,418 | +1 | -13,396 |
+| ba-back | 33 / 84,140 | 34 / 70,744 | +1 | -13,396 |
+| re-coat | 26 / 80,438 | 27 / 85,204 | +1 | +4,766 |
+| sk-table | 30 / 83,824 | 36 / 94,302 | +6 | +10,478 |
+| sk-bedside | 25 / 75,510 | 27 / 80,376 | +2 | +4,866 |
+| gu-games | 35 / 136,730 | 36 / 83,414 | +1 | -53,316 |
+| gu-bags | 26 / 104,360 | 26 / 59,012 | +0 | -45,348 |
+| ba-wash | 29 / 83,760 | 31 / 70,452 | +2 | -13,308 |
+| ba-caddy | 25 / 83,418 | 26 / 70,010 | +1 | -13,408 |
+
+- **Inside the Reis / Sterrenkamer:** +4.8…+10.6 k triangles. That stays inside the +12 k guide for the room batch.
+- **The guest room and the bathroom** are cheaper than production: they no longer draw the study / botanic batches
+  (guest room) or the Reis / Sterren furnishings (bathroom).
+
+### 5.3 Every room and exterior hero view (124 views, doors closed)
+
+Files: `budget-base-752cb02-all.json` and `budget-d3b2-all.json`.
+
+| | Result |
+|---|---|
+| Δ triangles | −65.7 k … +10.6 k |
+| Δ calls | −3 … +7 |
+| Ground floor and attic | 12–29 k lower in most views, e.g. library-b 246,248 → 231,336, kitchen-b 406,622 → 393,314, attic common −13 k |
+| Highest after | 204 calls / 428 k triangles (see below) |
+| Views over 150 calls | the six already over in production. Two of them, the kitchen views, gain +2 calls: 183 → 185, 202 → 204. **No view newly crosses 150.** |
+| PB01 750 k | no view reaches it |
+| Wickerman x28 / x29 | unchanged (outside this batch) |
+
+The highest view after D3-b2:
+- **Most calls:** 204, r-kitchen-b, at 393,314 triangles.
+- **Most triangles:** 428,156, x28-wickerman-from-bench, unchanged by D3-b2.
+
+### 5.4 Movement (doors closed and all doors open)
+
+`scripts/dev04d-walk-budget.mjs`: the paths are sampled every 0.4 m with the camera along the direction of travel, plus
+an eight-way turn at every waypoint.
+
+| Path | Route |
+|---|---|
+| up-west | landing → walkway → Sterrenkamer → Reiskamer → gallery |
+| up-east | landing → bathroom → corridor → guest room |
+| hall | the hall |
+| library | the library |
+
+Files: `walk-base-752cb02.json` and `walk-d3b2.json`.
+
+| Path / doors | Samples | Calls min / median / max (before → after) | Triangles min / median / max (before → after) |
+|---|---|---|---|
+| up-west/closed | 291 | 24 / 33 / 112 → 26 / 40 / 114 | 75 k / 84 k / 214 k → 80 k / 96 k / 201 k |
+| up-east/closed | 216 | 24 / 42 / 115 → 25 / 39 / 116 | 83 k / 147 k / 221 k → 58 k / 84 k / 208 k |
+| hall/closed | 77 | 36 / 84 / 121 → 34 / 85 / 123 | 130 k / 181 k / 216 k → 111 k / 167 k / 203 k |
+| library/closed | 109 | 25 / 50 / 87 → 23 / 49 / 89 | 182 k / 192 k / 247 k → 163 k / 179 k / 234 k |
+| up-west/open | 291 | 31 / 81 / 234 → 32 / 85 / 241 | 115 k / 233 k / 601 k → 114 k / 237 k / 599 k |
+| up-east/open | 216 | 28 / 103 / 257 → 32 / 105 / 268 | 107 k / 316 k / 617 k → 109 k / 311 k / 618 k |
+| hall/open | 77 | 102 / 217 / 293 → 100 / 222 / 305 | 374 k / 623 k / 701 k → 338 k / 611 k / 715 k |
+| library/open | 109 | 29 / 88 / 176 → 27 / 88 / 178 | 184 k / 287 k / 350 k → 165 k / 274 k / 337 k |
+
+- **Doors closed:** the median falls on three of four paths (library −13 k, hall −14 k, upstairs east −63 k). Upstairs
+  west rises (+12 k median) because those samples stand inside the Reis / Sterrenkamer.
+- **All doors open** (every door in the house, an extreme state): the pre-existing hotspots stay the hotspots.
+  - Hall max: 293 → 305 calls, 701 k → 715 k triangles. That is still under 750 k, and over 150 calls in production
+    already.
+  - Landing max: 257 → 268 calls.
+  - These +7…+12 calls are the cost of the regions when several of them are visible at once. They are recorded here
+    and not hidden. The open-door hotspots on the landing, walkway and hall are a pre-existing D4-scale budget topic,
+    not a D3-b2 one.
+
+### 5.5 Relative guards
+
+| Suite | D3-b2 vs production | Status of the suite's own check |
+|---|---|---|
+| `e2e:dev04c` (2 % guard) | Its manor views **fall**: attic nook −17.7 %, attic common −12.4 %, living room −10.9 %, entrance hall −5.1 % triangles. Calls: hall 134 → 136, others ±1. | The check itself **fails identically on production `752cb02`** (21 / 22). Its recorded `docs/dev04c/before/budget.json` predates ENV-L01 / VEG-R01 / GEO-R01; exterior views such as Wickerman (+27 %) and the conservatory deck exceed it. |
+| `e2e:dev04a` (8 % / +6 calls) | Manor views fall | The same: **18 / 19 on production and on D3-b2**, against the stale `dev04a-baseline.json` (conservatory, golf, Wickerman views). |
+
+Re-baselining those two files is an owner decision (it changes what "material regression" means). D3-b2 does not
+touch them.
+
+## 6. Player-eye assessment (phone, 915 × 412)
+
+Matched poses: `d3b2/compare/<pose>.jpg` (before | after). Room sheets: `d3b2/sheets/<room>-{915,1280,portrait,dusk}.jpg`.
+
+| Room | Reads at normal play distance? | What reads |
+|---|---|---|
+| Reiskamer | **Yes** from the door (`re-enter`, `re-wide`) | The coat stand (navy coat, rust scarf, hat) on entry. The desk at the window as a planning place: the sloop silhouette against the glass, the blue guidebook on the map, the jacket on the chair, the holdall. The suitcase rack stays the most distinct object at the east end. |
+| Sterrenkamer | **Yes** (`sk-enter`, `sk-door`, `sk-scope`) | The room now has two ends: rest (bed, window, armchair, the moon on the bedside) and observation (telescope, stool with its throw, the observing table). The moon reads as a crescent volume from the bed approach. |
+| North guest room | **Yes** (`gu-wide`, `gu-corner`, `gu-back`) | Zones you can name: sleeping, bags by the wardrobe, games / reading corner. The walk line door → bed / wardrobe stays clear. |
+| Bathroom | **Yes, the strongest gain** (`ba-enter`, `ba-back`, `ba-tub`) | Tiled floor and dado make it a bathroom from the doorway. The wash zone (mirror, shelf, towel ring) and the bath zone (caddy, mat) read at 2–4 m. |
+
+Clay (`after-clay`): the gain is construction, not colour. You can see:
+- the coat stand's legs and pegs;
+- the night tables' posts and shelf;
+- the observing table's aprons and shelf;
+- the holdall's bands and handles;
+- the dado's joints.
+
+**Darker lighting (late dusk, mood 1.0, `*-dusk`).** Every room keeps its identity under the cooler, darker production
+dusk.
+- Regular play peaks at 0.85; the 1.0 state follows the finish.
+- At dusk 0.75 the interiors change little (−0…5 % mean luminance), because ENV-L01 pulls sun and fill back indoors and
+  the fixtures dominate. No lamp, light or exposure was changed for D3-b2.
+
+**Viewports.** The 1280 × 720 and portrait (412 × 915) captures use the same cameras. In portrait, several close-ups
+composed for landscape lose their target at the edges (e.g. `sk-moon`). That is a limit of the fixed poses: the room
+reads are kept (`*-enter`, `*-wide`).
+
+## 7. Evidence (reproducible)
+
+| Path | Content |
+|---|---|
+| `d3b2/before`, `before-dusk`, `before-clay`, `before-neutral`, `before-1280`, `before-portrait` | production `752cb02`, served from an immutable copy of its build (bundle `index-xMKKuRbU.js`) |
+| `d3b2/after*` | the same sets from the final D3-b2 build (`index-DfMkJuUo.js`, frozen before the gates) |
+| `d3b2/compare/` | before \| after per pose (standard), plus `-dusk` (room-whole poses) and `-clay` |
+| `d3b2/sheets/` | per room × viewport (915, 1280, portrait, dusk) |
+| `d3b2/budget-*.json`, `d3b2/walk-*.json` | §5 |
+
+Poses: `SET=d3b2` in `scripts/dev04d-audit-views.mjs`, 33 fixed poses:
+- door approach, entry, room whole, zones and hero close-ups;
+- `DUSK=v` sets the production mood value.
+
+Sheets: `python3 scripts/dev04d-d3b2-sheets.py`. Movement: `scripts/dev04d-walk-budget.mjs`.
+
+## 8. Regression (one immutable build; its bundle hash was recorded before the run and is unchanged after it)
+
+| Gate | D3-b2 | Production `752cb02` (same suite) |
+|---|---|---|
+| typecheck | clean | — |
+| unit (vitest) | **304 / 304**, including the new `dev04d-d3b2.test.ts` (10) | — |
+| test:budget | 4 / 4 | — |
+| e2e:dev04d | **20 / 20** (new: D3-b2 regions culled from hall / library and drawn in their rooms; the door → suitcase / logbook / beds / wardrobe / bath routes walkable, both memories targeted) | — |
+| e2e:dev04b | 9 / 9 | — |
+| e2e:dev04a | 18 / 19 | **18 / 19: the same stale-baseline render check** |
+| e2e:dev04c | 21 / 22 | **21 / 22: the same stale-baseline render check** |
+| e2e:dev03 / dev02 / dev01 | 11 / 11, 34 / 34, 34 / 34 | — |
+| full e2e | 91 / 97 | **84 / 94** |
+
+**Full e2e failures, D3-b2 vs production:**
+- **Common to both builds:**
+  - high-quality desktop budgets for five exterior views: driveway, forecourt, forest, BOSLUST, conservatory;
+  - a BOSLUST sample page-load timeout.
+- **Production only:**
+  - the entrance hall's high-quality budget: 475 k on production, **448 k and passing on D3-b2**;
+  - three touch checks, failing on a tap timeout. They passed in the D3-b2 run, so they are load-sensitive.
+- **No failure is new in D3-b2.**
+
+Run conditions:
+- A first gate attempt ran three SwiftShader browsers on 4 cores and crashed two suites on 30 s page timeouts.
+- It was rerun with at most two browsers; the results above are from that rerun.
+
+**Contracts:**
+- 130 interactables, 21 checkpoints and save schema 4 are unchanged (e2e:dev04d / dev04a).
+- No decor is interactable.
+- The wall-art contract and the construction audits are clean.
+- Puzzles, clue positions, evidence, ids, HUD, controls, lighting, sky, vegetation, LOD and the tutorial are untouched.
+- RSV-019…022 are not referenced.
+
+## 9. Owner review
+
+| | Items |
+|---|---|
+| **Ready for approval** | Track 01 moon (×1.4) and sloop (×1.15) in production. Bathroom (tile floor, dado, wash and bath zones). Guest-room zoning. Reiskamer travel identity (desk set, coat stand, jacket, holdall). Sterrenkamer two-ended composition (observing station, armchair rest corner). Night-table joinery. The `mUpR` / `mUpG` regions with their measured savings. |
+| **Visually questionable (owner's eye)** | The jacket over the Reis chair reads as a block of cloth from the door (it is a garment within 2 m). The rucksack is plain. The bathroom floor uses the existing warm stone-flag tile texture, tinted cool: a true bathroom tile (checker / encaustic) would need a new texture. Moon and sloop scale: ×1.4 / ×1.15 as approved; ×1.6 / ×1.3 would read further from the door (one-line change). |
+| **Trade-off needing acceptance** | Inside the Reis / Sterrenkamer up to +7 draw calls (max 40; local guide +2) in exchange for the culling savings elsewhere (§5.1). With every door open, the existing > 150-call hotspots grow by +7…+12. |
+| **Outstanding defects** | none found in D3-b2. Unrelated, recorded only: the e2e:dev04a / dev04c budget baselines are stale (production fails them); five exterior desktop budgets fail on production; window panes stay daylight-bright at late dusk (inherited from the window material); the BOSLUST / touch page-load timeouts under load. |
+| **Deferred** | D2-017 (atlas repack first, §3.2), D2-027, D2-030. A real bathroom tile texture. The open-door call hotspots (landing / walkway / hall). D3-c…f (attic stores, cottage…), D4 (Wickerman ritual; x28 / x29). |
+
+**Recommendation:**
+1. Accept D3-b2 as built, including the region trade-off.
+2. If the owner wants the sloop and moon readable from further away, test ×1.3 / ×1.6 in this same branch before merge.
+3. Decide separately whether to re-baseline the e2e:dev04a / dev04c budget files to the current production.
