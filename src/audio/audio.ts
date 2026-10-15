@@ -4,6 +4,7 @@
 import { renderOutdoorFootstep, type FootstepSurface, type OutdoorFootstepSurface } from './footsteps';
 
 type SfxName = string;
+export const BONG_HIT_BUBBLES = [0.31, 0.47, 0.65, 0.81, 0.98, 1.16, 1.33, 1.51, 1.68, 1.83] as const;
 
 export class Audio {
   private ctx: AudioContext | null = null;
@@ -148,6 +149,7 @@ export class Audio {
       case 'crank': for (let i = 0; i < 8; i++) this.noise(0.04, 'bandpass', 1800, 6, 0.12, i * 0.11); break;
       case 'steam': this.noise(1.5, 'highpass', 3000, 0.5, 0.15, 0, 0.2); break;
       case 'water': this.noise(0.5, 'lowpass', 700, 1, 0.1, 0, 0.1); break;
+      case 'bongHit': this.bongHit(); break;
       case 'electric-zap': {
         // Original, license-free miniature electrical shock: brittle high crackle + descending
         // midrange buzz + brief low impact. Each layer dies within the corresponding light pulse.
@@ -161,6 +163,19 @@ export class Audio {
       }
       default: break;
     }
+  }
+
+  private bongHit() {
+    this.noise(1.85, 'bandpass', 540, 0.8, 0.09, 0.05, 0.21, 690);
+    this.noise(1.50, 'lowpass', 310, 0.72, 0.06, 0.16, 0.19, 420);
+    BONG_HIT_BUBBLES.forEach((when, i) => {
+      const f = 122 + ((i * 41) % 88);
+      this.tone(f, 0.10 + (i % 3) * 0.025, 'sine', 0.075, when, f * 0.58);
+      this.noise(0.082, 'bandpass', 460 + ((i * 113) % 650), 1.8, 0.040,
+        when + 0.012, 0.018);
+    });
+    this.noise(0.60, 'bandpass', 1000, 0.65, 0.090, 1.95, 0.18, 680);
+    this.noise(0.48, 'highpass', 1500, 0.65, 0.038, 2.55, 0.14);
   }
 
   private startLoops() {
