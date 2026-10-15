@@ -14,6 +14,7 @@ import { Asm, artMats, lathe, cushion, projectUV } from './artkit';
 import { wickermanGeo, WICKER } from './wickerman';
 import { buildWickerSetpiece } from './wickerFire';
 import { makeInspect, place } from '../interactions/props';
+import { registerGravityBongAction } from './gravityBongInteraction';
 import type { Vegetation } from './nature';
 import {
   ARRIVAL_GRAVEL, PARKING, BBQ, OUTDOOR_DINING, MUSIC_BONG, BALLOON_NOOK, LAKE, LAKE_VIEW, GOLF_TEE, GOLF_CHUTE, GOLF_MAT, WICKERMAN, GF, type Rect,
@@ -104,6 +105,7 @@ function socialGarden(w: World, c: Ctx) {
   boxMM(c.b, k.M.rug, '#c8b898', 79.6, 84.4, GF + 0.005, GF + 0.012, 118.5, 122.5, { chunk: c.chunk, shadow: false });
   table(c, 81.6, 120.6, GF, 1.1, 0.8, 0, '#7a5a3a', 0.4);
   buildGravityBong(c, 81.58, GF + 0.4, 120.56);
+  registerGravityBongAction(w, g, 81.58, GF + 0.4, 120.56);
   { const a = new Asm(c.b, c.chunk, 83.4, GF, 121.6, 0.4);
     for (let i = 0; i < 3; i++) { const an = (i / 3) * Math.PI * 2; a.add(M.timber, '#5a3a22', bx(0.025, 0.58, 0.025), Math.cos(an) * 0.13, 0.29, Math.sin(an) * 0.13, { rx: Math.sin(an) * 0.2, rz: -Math.cos(an) * 0.2 }); }
     a.add(M.brass, '#8e8a84', cg('handpanTop', () => lathe([[0.001, 0.09], [0.12, 0.08], [0.24, 0.035], [0.27, 0.0], [0.001, 0.0]], 18)), 0, 0.6, 0);
