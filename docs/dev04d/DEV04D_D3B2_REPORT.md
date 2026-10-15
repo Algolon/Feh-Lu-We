@@ -1,5 +1,7 @@
 # DEV-04D D3-b2: upstairs identity rooms and craftsmanship
 
+> **Follow-up:** the visual refinement D3-b2R (Reiskamer / Sterrenkamer composition, the draped jacket, the soft rucksack, the sloop at ×1.3) is reported separately in [`DEV04D_D3B2R_REPORT.md`](DEV04D_D3B2R_REPORT.md). The numbers below are D3-b2's own (`b2c4ae7`).
+
 - **Branch:** `dev04-d3-b2` (isolated), cut from production `ccr-75ef4113-kfkimm` at
   **`752cb024a349ec0045d4f1873e5b191b154191f0`** (15 October 2026).
 - **Scope:** the Reiskamer, the Sterrenkamer, the north guest room (source id `storage`) and the bathroom; the Track 01
