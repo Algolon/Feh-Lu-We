@@ -1,0 +1,105 @@
+{
+  "rows": [
+    {
+      "name": "front-three-quarter",
+      "pose": {
+        "x": 78.8,
+        "y": 0,
+        "z": 79.1,
+        "yaw": -2.3,
+        "pitch": -0.14
+      },
+      "low": {
+        "calls": 61,
+        "triangles": 305412
+      },
+      "high": {
+        "calls": 99,
+        "triangles": 464169
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "suv-side",
+      "pose": {
+        "x": 106.6,
+        "y": 0,
+        "z": 74.9,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.12
+      },
+      "low": {
+        "calls": 100,
+        "triangles": 316455
+      },
+      "high": {
+        "calls": 136,
+        "triangles": 476997
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "rear-three-quarter",
+      "pose": {
+        "x": 80,
+        "y": 0,
+        "z": 70,
+        "yaw": -0.86,
+        "pitch": -0.12
+      },
+      "low": {
+        "calls": 55,
+        "triangles": 220914
+      },
+      "high": {
+        "calls": 88,
+        "triangles": 417029
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "bus-front",
+      "pose": {
+        "x": 74,
+        "y": 0,
+        "z": 79.2,
+        "yaw": -3.04,
+        "pitch": -0.1
+      },
+      "low": {
+        "calls": 62,
+        "triangles": 327234
+      },
+      "high": {
+        "calls": 98,
+        "triangles": 508111
+      },
+      "room": "out",
+      "feetY": 0
+    },
+    {
+      "name": "estate-detail",
+      "pose": {
+        "x": 68.4,
+        "y": 0,
+        "z": 77.7,
+        "yaw": 2.43,
+        "pitch": -0.1
+      },
+      "low": {
+        "calls": 67,
+        "triangles": 325040
+      },
+      "high": {
+        "calls": 100,
+        "triangles": 515132
+      },
+      "room": "out",
+      "feetY": 0
+    }
+  ],
+  "problems": []
+}
