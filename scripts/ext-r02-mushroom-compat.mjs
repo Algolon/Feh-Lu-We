@@ -1,7 +1,7 @@
 import {preview} from 'vite';
 import {chromium} from 'playwright-core';
 import {mkdirSync,writeFileSync} from 'node:fs';
-const out='docs/development/workstreams/ext-r02/mushroom-compat';mkdirSync(out,{recursive:true});
+const out=process.argv[2]??'docs/development/workstreams/ext-r02/mushroom-compat';mkdirSync(out,{recursive:true});
 const server=await preview({preview:{host:'127.0.0.1',port:4222,strictPort:true}});
 const browser=await chromium.launch({executablePath:'/root/.cache/ms-playwright/chromium_headless_shell-1194/chrome-linux/headless_shell',args:['--use-angle=swiftshader','--enable-unsafe-swiftshader','--ignore-gpu-blocklist']});
 try {

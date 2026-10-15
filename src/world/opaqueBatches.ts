@@ -23,7 +23,10 @@ export function installOpaqueBatches(w:World) {
     const list=grouped.get(key)??[];list.push(m);grouped.set(key,list);
   });
   const batches:Batch[]=[];
-  for(const list of [...grouped.values()].sort((a,b)=>b.length-a.length)) {
+  // Spend the bounded buffer on draw-call savings per vertex, so large
+  // material groups cannot starve small, frequently repeated prop meshes.
+  const savingsPerVertex=(list:THREE.Mesh[]) => (list.length-1)/list.reduce((n,m)=>n+m.geometry.attributes.position.count,0);
+  for(const list of [...grouped.values()].sort((a,b)=>savingsPerVertex(b)-savingsPerVertex(a))) {
     if(list.length<3)continue;
     const selected:THREE.Mesh[]=[];let n=0;
     for(const m of list.sort((a,b)=>a.geometry.attributes.position.count-b.geometry.attributes.position.count)) {

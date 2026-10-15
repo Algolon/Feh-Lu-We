@@ -1,5 +1,5 @@
 import {preview} from 'vite';import {chromium} from 'playwright-core';import {mkdirSync,writeFileSync} from 'node:fs';
-const out='docs/development/workstreams/ext-r02/qa';mkdirSync(out,{recursive:true});const server=await preview({preview:{host:'127.0.0.1',port:4220,strictPort:true}});
+const out=process.argv[2]??'docs/development/workstreams/ext-r02/qa';mkdirSync(out,{recursive:true});const server=await preview({preview:{host:'127.0.0.1',port:4220,strictPort:true}});
 const browser=await chromium.launch({executablePath:'/root/.cache/ms-playwright/chromium_headless_shell-1194/chrome-linux/headless_shell',args:['--use-angle=swiftshader','--enable-unsafe-swiftshader','--ignore-gpu-blocklist']});
 try{const page=await browser.newPage({viewport:{width:915,height:412},hasTouch:true,isMobile:true});await page.goto('http://127.0.0.1:4220/Feh-Lu-We/?autotest=1');
 await page.evaluate(()=>{localStorage.setItem('fehluwe.settings',JSON.stringify({quality:'low'}));localStorage.setItem('fehluwe.save',JSON.stringify({version:4,scene:'estate',inventory:['frontKey','consKey'],flags:{leftHome:true},unlocked:['lock.door.front','lock.door.consWest'],open:{'door.front':true}}));});await page.reload();await page.click('[data-cont]');await page.waitForFunction(()=>window.__game?.world?.id==='estate',null,{timeout:120000});

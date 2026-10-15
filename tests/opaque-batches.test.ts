@@ -14,6 +14,21 @@ function fixture(){
  return {scene,meshes,camera,renderer,before,after,batch};
 }
 describe('opaque render aggregation invariants',()=>{
+ it('keeps small repeated props batched when a large material group fills the vertex budget',()=>{
+  const scene=new THREE.Scene(),largeMat=new THREE.MeshLambertMaterial(),propMat=new THREE.MeshLambertMaterial();
+  for(let i=0;i<20;i++){
+   const geometry=new THREE.BufferGeometry();
+   geometry.setAttribute('position',new THREE.Float32BufferAttribute(17_500*3,3));
+   geometry.setAttribute('normal',new THREE.Float32BufferAttribute(17_500*3,3));
+   scene.add(new THREE.Mesh(geometry,largeMat));
+  }
+  for(let i=0;i<4;i++)scene.add(new THREE.Mesh(new THREE.BoxGeometry(.5,.5,.5),propMat));
+  installOpaqueBatches({scene} as unknown as World);
+  const propBatch=scene.children.find(o=>o.userData.opaqueAggregate&&(o as THREE.Mesh).material===propMat);
+  expect(propBatch).toBeDefined();
+  expect(scene.userData.opaqueBatches.vertices).toBeLessThanOrEqual(350_000);
+ });
+
  it('suppresses sources only inside rendering, preserving gameplay visibility afterwards',()=>{
   const f=fixture();f.before();expect(f.meshes.every(m=>!m.visible)).toBe(true);expect(f.batch.visible).toBe(true);f.after();expect(f.meshes.every(m=>m.visible)).toBe(true);
  });
