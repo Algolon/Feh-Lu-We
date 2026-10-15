@@ -1,0 +1,24 @@
+{
+  "baseCommit": "7fa286d373b927c0f363122be6817147aabdaa02",
+  "previewQuery": "?vegstyle=woodland-r02&treeart=trees-r03&vegdetail=r04",
+  "sourceHashes": {
+    "src/world/woodkit.ts": "51429aed01bad30bc11afbc7664587264a750e11bea013ade50a65a49fb2ac1b",
+    "src/world/foliageStyle.ts": "4f8eb349cfe08b528f82b5eaaa83d399759fe92077e77f19da580ea22fa33065",
+    "scripts/veg-r04-review.mjs": "c1f52429d75aa21db42a70fd63998f901ba269d2151721bde8e60886fccb670b",
+    "tests/shrubsTimber.test.ts": "a7c27269d41190211cafabe8cbeb3d845ce7a262a9abd05bdca222a5f238a171"
+  },
+  "checks": {
+    "unitTests": 308,
+    "budgetPolicyTests": 4,
+    "typecheck": "pass",
+    "build": "pass",
+    "renderRecords": 20,
+    "pageShaderWebGLErrors": 0,
+    "lowCameraTriangleParity": true,
+    "placementParity": true,
+    "closedOutwardTimberAudit": true,
+    "physicalDeviceTested": false,
+    "portraitRerun": false,
+    "fullPuzzleRouteTested": false
+  }
+}
