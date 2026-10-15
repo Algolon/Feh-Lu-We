@@ -23,7 +23,7 @@ export function registerGravityBongAction(w: World, g: GameApi, x: number, table
       if (now - lastHitAt < BONG_ACTION_COOLDOWN_MS) return;
       lastHitAt = now;
       g.sfx('bongHit');
-      g.toast('Je neemt een hit. Het water borrelt zachtjes.');
+      g.toast('Je neemt een hit. Het water borrelt flink.');
     },
   });
 }

@@ -4,7 +4,10 @@
 import { renderOutdoorFootstep, type FootstepSurface, type OutdoorFootstepSurface } from './footsteps';
 
 type SfxName = string;
-export const BONG_HIT_BUBBLES = [0.31, 0.47, 0.65, 0.81, 0.98, 1.16, 1.33, 1.51, 1.68, 1.83] as const;
+// R05: denser, louder water glugs while the breath remains a quiet supporting layer.
+export const BONG_HIT_BUBBLES = [0.25, 0.35, 0.47, 0.57, 0.69, 0.77, 0.90, 1.00, 1.12, 1.23, 1.31, 1.44, 1.55, 1.68, 1.80, 1.91, 2.02] as const;
+export const BONG_HIT_WATER_LEVEL = 0.145;
+export const BONG_HIT_BREATH_LEVEL = 0.045;
 
 export class Audio {
   private ctx: AudioContext | null = null;
@@ -209,17 +212,31 @@ export class Audio {
     }
   }
 
+  /** R05: the water is the foreground, not a quiet series of synth beeps.
+   * Irregular downward-pitched "glugs" sit in a bed of lower wet turbulence,
+   * with an occasional coarse splash. No new sound file or engine loops.
+   */
   private bongHit() {
-    this.noise(1.85, 'bandpass', 540, 0.8, 0.09, 0.05, 0.21, 690);
-    this.noise(1.50, 'lowpass', 310, 0.72, 0.06, 0.16, 0.19, 420);
+    // Inhale remains perceptible, but well underneath the liquid.
+    this.noise(1.68, 'bandpass', 620, 0.65, BONG_HIT_BREATH_LEVEL, 0.05, 0.18, 750);
+    // Water churning in the lower glass chamber; prevents disconnected beeps.
+    this.noise(2.02, 'bandpass', 310, 0.72, 0.125, 0.18, 0.14, 450);
+    this.noise(1.90, 'lowpass', 230, 0.85, 0.085, 0.24, 0.13, 330);
     BONG_HIT_BUBBLES.forEach((when, i) => {
-      const f = 122 + ((i * 41) % 88);
-      this.tone(f, 0.10 + (i % 3) * 0.025, 'sine', 0.075, when, f * 0.58);
-      this.noise(0.082, 'bandpass', 460 + ((i * 113) % 650), 1.8, 0.040,
-        when + 0.012, 0.018);
+      // Rounded resonant water bubble: pitches descend as each bubble bursts.
+      const frequency = 124 + ((i * 43) % 93);
+      this.tone(frequency, 0.13 + (i % 3) * 0.018, 'sine',
+        BONG_HIT_WATER_LEVEL * (0.88 + (i % 4) * 0.06), when, frequency * 0.53);
+      // A deeper, wetter splash, not an airy hiss.
+      this.noise(0.10 + (i % 3) * 0.012, 'bandpass', 330 + ((i * 97) % 380),
+        1.15, 0.088 + (i % 4) * 0.007, when + 0.007, 0.012);
+      // Occasional overlapping low gulp for a denser, organically messy burble.
+      if (i % 3 === 1) this.noise(0.16, 'lowpass', 270 + (i % 4) * 32,
+        0.85, 0.070, when + 0.015, 0.018);
     });
-    this.noise(0.60, 'bandpass', 1000, 0.65, 0.090, 1.95, 0.18, 680);
-    this.noise(0.48, 'highpass', 1500, 0.65, 0.038, 2.55, 0.14);
+    // A short breath release, kept below the water volume.
+    this.noise(0.52, 'bandpass', 950, 0.60, 0.052, 2.19, 0.14, 710);
+    this.noise(0.38, 'highpass', 1450, 0.65, 0.018, 2.61, 0.13);
   }
 
   private startLoops() {

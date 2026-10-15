@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { World, type GameApi } from '../interactions/world';
-import { BONG_HIT_BUBBLES } from '../audio/audio';
+import { BONG_HIT_BUBBLES, BONG_HIT_WATER_LEVEL, BONG_HIT_BREATH_LEVEL } from '../audio/audio';
 import { BONG_ACTION_ID, BONG_ACTION_COOLDOWN_MS, registerGravityBongAction } from './gravityBongInteraction';
 
 afterEach(() => vi.restoreAllMocks());
@@ -34,7 +34,9 @@ describe('gravity bong: Neem een hit', () => {
   });
 
   it('uses a brief irregular bubbling pattern without an audio asset', () => {
-    expect(BONG_HIT_BUBBLES.length).toBeGreaterThanOrEqual(8);
+    expect(BONG_HIT_BUBBLES.length).toBeGreaterThanOrEqual(16);
+    expect(BONG_HIT_WATER_LEVEL).toBeGreaterThan(0.12);
+    expect(BONG_HIT_WATER_LEVEL).toBeGreaterThan(BONG_HIT_BREATH_LEVEL * 2.5);
     expect(BONG_HIT_BUBBLES.at(-1)).toBeLessThan(2.2);
     const gaps = BONG_HIT_BUBBLES.slice(1).map((t, i) => Math.round((t - BONG_HIT_BUBBLES[i]) * 100));
     expect(new Set(gaps).size).toBeGreaterThan(2);
