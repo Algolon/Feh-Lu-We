@@ -8,19 +8,27 @@ export function natureStyle(value: string | null): NatureStyle {
 }
 export const NATURE_STYLE = natureStyle(typeof location === 'undefined' ? null : new URLSearchParams(location.search).get('vegstyle'));
 export const FULL_NATURE = NATURE_STYLE === 'woodland-r02';
+/** Opt-in tree study; the recovered, accepted vegetation remains the default. */
+export const TREE_ART = typeof location !== 'undefined' && new URLSearchParams(location.search).get('treeart') === 'oak-r03' ? 'oak-r03' : 'recovered';
 export const LEAF_FAMILIES = ['birch', 'oak', 'beech', 'pine', 'hazel', 'holly', 'cypress', 'hedge'] as const;
 export type LeafFamily = typeof LEAF_FAMILIES[number];
 export interface SprayCluster { c: THREE.Vector3; r: [number, number, number]; seed: number; val: number }
 const UP = new THREE.Vector3(0, 1, 0);
+export interface SprayPalette { base: string; shade: string; green: string; warm: string; warmth: number }
 
 /** Atlas UVs are marked at 128 + 2*tile + u, leaving a gap between tiles so interpolation is unambiguous. */
-export function foliageSprays(clusters: SprayCluster[], lod: 'near' | 'mid' | 'far' | 'xfar', family: LeafFamily): THREE.BufferGeometry {
+export function foliageSprays(clusters: SprayCluster[], lod: 'near' | 'mid' | 'far' | 'xfar', family: LeafFamily, palette?: SprayPalette): THREE.BufferGeometry {
   const pos: number[] = [], normals: number[] = [], colors: number[] = [], uv: number[] = [], idx: number[] = [];
   const centre = clusters.reduce((a, k) => a.add(k.c), new THREE.Vector3()).divideScalar(Math.max(1, clusters.length));
   const tile = LEAF_FAMILIES.indexOf(family), birch = family === 'birch', needle = family === 'pine' || family === 'cypress';
   const planes = lod === 'near' ? (birch ? 5 : 4) : 3;
   for (const k of clusters) {
     const r = mulberry32(Math.round(k.seed * 10000)), yaw = r() * Math.PI * 2;
+    // Whole sprays share one hue: warm groups sit toward the upper/outer crown, not confetti per leaf.
+    const groupHeight = THREE.MathUtils.clamp((k.c.y - centre.y + 2) / 4, 0, 1);
+    const groupColour = palette ? new THREE.Color(palette.shade).lerp(new THREE.Color(palette.green), .45 + .55 * groupHeight)
+      .lerp(new THREE.Color(palette.warm), palette.warmth * groupHeight * (.5 + .5 * Math.sin(k.c.x * .72 + k.c.z * .48 + k.seed * .12))) : null;
+    const base = palette ? new THREE.Color(palette.base) : null;
     for (let i = 0; i < planes; i++) {
       const angle = yaw + i * Math.PI / 3;
       const side = new THREE.Vector3(Math.cos(angle), 0, Math.sin(angle));
@@ -38,7 +46,9 @@ export function foliageSprays(clusters: SprayCluster[], lod: 'near' | 'mid' | 'f
         const n = p.clone().sub(centre).normalize().lerp(UP, .55).normalize(); normals.push(n.x, n.y, n.z);
         const top = THREE.MathUtils.clamp((p.y - (centre.y - 4)) / 8, 0, 1);
         const value = (.68 + .43 * top) * k.val;
-        colors.push(value * (.94 + .1 * top), value, value * (needle ? .98 - .09 * top : .96 - .18 * top));
+        colors.push(value * (.94 + .1 * top) * (groupColour && base ? groupColour.r / base.r : 1),
+          value * (groupColour && base ? groupColour.g / base.g : 1),
+          value * (needle ? .98 - .09 * top : .96 - .18 * top) * (groupColour && base ? groupColour.b / base.b : 1));
       }
       const u0 = 128 + tile * 2;
       uv.push(u0,0,u0+1,0,u0+1,1,u0,1);

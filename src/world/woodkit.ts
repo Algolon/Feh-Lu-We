@@ -11,7 +11,7 @@ import { softBox } from './artkit';
 import { ConvexGeometry } from 'three/examples/jsm/geometries/ConvexGeometry.js';
 import { mergeGeometries, mergeVertices, toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { mulberry32, type Rng } from '../core/rng';
-import { NATURE_STYLE, FULL_NATURE, foliageSprays, foliageAtlas, SPRAY_SAMPLE } from './foliageStyle';
+import { NATURE_STYLE, FULL_NATURE, TREE_ART, foliageSprays, foliageAtlas, SPRAY_SAMPLE } from './foliageStyle';
 
 // ------------------------------------------------------------------------------------------------ primitives
 /**
@@ -463,11 +463,61 @@ const BIRCHES: Broadleaf[] = [0, 1, 2].map((v) => ({
 export function birchModel(variant: number, lod: Lod): Model { return broadleaf(BIRCHES[variant % 3], lod); }
 
 /** VEG-R02: family-specific foliage on the compatible existing trunk and branch skeleton. */
-export function referenceTreeModel(species: TreeSpecies, variant: number, lod: Lod, continuous: boolean | 'outline' = 'outline'): Model {
+export function referenceTreeModel(species: TreeSpecies, variant: number, lod: Lod, continuous: boolean | 'outline' = 'outline', art: 'recovered' | 'oak-r03' = TREE_ART): Model {
+  if (species === 'oak' && art === 'oak-r03') return oakSculptModel(variant, lod, continuous);
   if (species === 'pine') return pineModel(lod, variant, continuous, true);
   const sp = (species === 'oak' ? OAKS : species === 'beech' ? BEECHES : BIRCHES)[variant % 3], sk = growBroadleaf(sp);
   const model = emitBroadleaf(sp, sk, lod, continuous);
   model.leaves.dispose(); model.leaves = foliageSprays(sk.clusters, lod, species);
+  return model;
+}
+
+/** First tree study from the owner's references: heavier curved forks, a taller grouped crown and
+ * three restrained palettes. The lower trunk is kept on its original attachment/collision surface.
+ * All LODs use the same deformation field and palette, so neither shape nor hue changes with distance. */
+export function oakSculptModel(variant: number, lod: Lod, continuous: boolean | 'outline' = 'outline'): Model {
+  const v = ((variant % 3) + 3) % 3, original = OAKS[v];
+  const sp = { ...original, limbR: .84, limbArch: .46, limbEl: [original.limbEl[0] + .10, original.limbEl[1] + .08] as [number, number] };
+  const sk = growBroadleaf(sp), model = emitBroadleaf(sp, sk, lod, continuous);
+  model.leaves.dispose();
+  const palettes = [
+    { shade: '#35553b', green: '#6d963f', warm: '#afa144', warmth: .28 },
+    { shade: '#294d38', green: '#517b3c', warm: '#939244', warmth: .18 },
+    { shade: '#4b6036', green: '#849342', warm: '#c08337', warmth: .78 },
+  ];
+  model.leaves = foliageSprays(sk.clusters, lod, 'oak', { base: LEAF_TINT.oak, ...palettes[v] });
+  for (const g of [model.wood, model.leaves]) {
+    const p = g.attributes.position as THREE.BufferAttribute;
+    const normals = g.attributes.normal as THREE.BufferAttribute;
+    for (let i = 0; i < p.count; i++) {
+      const x = p.getX(i), y = p.getY(i), z = p.getZ(i);
+      const t = THREE.MathUtils.smoothstep(y, 1.6, 4.7);
+      const angle = t * (.18 * Math.sin(y * .48 + v * 1.9));
+      const c = Math.cos(angle), s = Math.sin(angle);
+      const bend = THREE.MathUtils.smoothstep(y, 1.6, 3.0) * .70 * Math.sin((y - 1.6) * 1.0 + v * 1.7);
+      p.setXYZ(i, c * x - s * z + bend, y + Math.max(0, y - original.H) * .25,
+        s * x + c * z + t * .21 * Math.sin(y * .7 + v));
+      if (g === model.leaves) {
+        // Rotate the soft canopy normals with the local twist; retain their broad grouping.
+        const nx = normals.getX(i), nz = normals.getZ(i);
+        normals.setXYZ(i, c * nx - s * nz, normals.getY(i), s * nx + c * nz);
+      }
+    }
+    if (g === model.wood) {
+      // A dedicated bark tile leaves the recovered oak/pine atlas untouched in the comparison.
+      const uv = g.attributes.uv as THREE.BufferAttribute;
+      for (let i = 0; i < uv.count; i++) uv.setX(i, 16 + uv.getX(i));
+      g.computeVertexNormals();
+      const colours = g.attributes.color as THREE.BufferAttribute;
+      for (let i = 0; i < p.count; i++) {
+        const x = p.getX(i), y = p.getY(i), z = p.getZ(i), a = Math.atan2(z, x);
+        const ridge = .91 + .13 * Math.sin(a * 7 + y * .65 + v);
+        const moss = (1 - THREE.MathUtils.smoothstep(y, .05, 1.25)) * Math.max(0, Math.sin(a * 2 + v)) * .3;
+        colours.setXYZ(i, colours.getX(i) * ridge * (1 - moss * .5), colours.getY(i) * ridge * (1 + moss * .12), colours.getZ(i) * ridge * (1 - moss * .22));
+      }
+    }
+    g.computeBoundingBox(); g.computeBoundingSphere();
+  }
   return model;
 }
 export function birchReferenceModel(variant: number, lod: Lod, continuous: boolean | 'outline' = 'outline'): Model {
@@ -1250,13 +1300,40 @@ export function woodMats(): WoodMats {
   const lam = (o: THREE.MeshLambertMaterialParameters) => new THREE.MeshLambertMaterial({ vertexColors: true, ...o });
   const tree = lam({ map: atlas });
   const sprays = NATURE_STYLE !== 'baseline' ? foliageAtlas() : null;
+  const oakBark = TREE_ART === 'oak-r03' ? canvasTex(256, 512, (x, r) => {
+    // Long, softly bevelled furrows follow the trunk, with a few interrupted bark seams.
+    x.fillStyle = grey(.82); x.fillRect(0, 0, 256, 512);
+    for (let col = -1; col < 10; col++) {
+      const cx = col * 29 + r() * 5, phase = r() * 6.28, width = 3 + r() * 3;
+      const line = (y: number) => cx + Math.sin(y * .014 + phase) * 7 + Math.sin(y * .031 + phase) * 2;
+      x.fillStyle = grey(.60 + r() * .07); x.beginPath();
+      for (let y = -16; y <= 528; y += 16) { if (y === -16) x.moveTo(line(y), y); else x.lineTo(line(y), y); }
+      for (let y = 528; y >= -16; y -= 16) x.lineTo(line(y) + width, y);
+      x.closePath(); x.fill();
+      x.fillStyle = grey(.94, .65); x.beginPath();
+      for (let y = -16; y <= 528; y += 16) { if (y === -16) x.moveTo(line(y) + width + 1, y); else x.lineTo(line(y) + width + 1, y); }
+      for (let y = 528; y >= -16; y -= 16) x.lineTo(line(y) + width + 6, y);
+      x.closePath(); x.fill();
+      for (let i = 0; i < 2; i++) {
+        const y = 80 + i * 240 + r() * 55;
+        x.strokeStyle = grey(.67, .65); x.lineWidth = 1.5; x.beginPath(); x.moveTo(line(y), y); x.quadraticCurveTo(line(y) + 12, y - 9, line(y) + 22, y - 35); x.stroke();
+      }
+    }
+    for (const [cx, cy] of [[56, 160], [184, 395]]) {
+      x.strokeStyle = grey(.62); x.lineWidth = 3; x.beginPath(); x.ellipse(cx,cy,9,22,.2,0,Math.PI*2); x.stroke();
+      x.fillStyle = grey(.52); x.beginPath(); x.ellipse(cx,cy,3,10,.2,0,Math.PI*2); x.fill();
+    }
+  }, 23017) : null;
+  if (oakBark) oakBark.wrapS = THREE.ClampToEdgeWrapping;
   // foliage UVs (u ≥ LEAF_U) repeat inside the leaf column; gradients from the unwrapped UV keep mip selection
   // continuous across the wrap (no seams); bark UVs are sampled as usual
   tree.onBeforeCompile = (sh) => {
     if (sprays) { sh.uniforms.flwSprays = { value: sprays }; sh.fragmentShader = 'uniform sampler2D flwSprays;\n' + sh.fragmentShader; }
+    if (oakBark) { sh.uniforms.flwOakBark = { value: oakBark }; sh.fragmentShader = 'uniform sampler2D flwOakBark;\n' + sh.fragmentShader; }
     sh.fragmentShader = sh.fragmentShader.replace('#include <map_fragment>', `#ifdef USE_MAP
   vec2 tUv = vMapUv;
   vec4 sampledDiffuseColor;
+  ${oakBark ? 'if (tUv.x > 15.0 && tUv.x < 17.0) { sampledDiffuseColor = texture2D(flwOakBark, vec2((tUv.x - 16.0) * 4.0, tUv.y * .65)); } else' : ''}
   ${sprays ? `if (tUv.x > 127.0) { ${SPRAY_SAMPLE} sampledDiffuseColor = texture2D(flwSprays, flwAtlasUv); if (sampledDiffuseColor.a < 0.4) discard; } else` : ''}
   if (tUv.x > ${(LEAF_U / 2).toFixed(1)}) {
     vec2 lUv = vec2(fract(tUv.x), tUv.y * 0.5);
@@ -1269,7 +1346,7 @@ export function woodMats(): WoodMats {
   diffuseColor *= sampledDiffuseColor;
 #endif`);
   };
-  tree.customProgramCacheKey = () => sprays ? 'woodkit-tree-atlas-sprays-r02' : 'woodkit-tree-atlas';
+  tree.customProgramCacheKey = () => oakBark ? 'woodkit-tree-atlas-oak-r03' : sprays ? 'woodkit-tree-atlas-sprays-r02' : 'woodkit-tree-atlas';
   if (sprays) {
     const depth = new THREE.MeshDepthMaterial({ map: atlas, depthPacking: THREE.RGBADepthPacking });
     depth.onBeforeCompile = sh => {
