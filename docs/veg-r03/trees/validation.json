@@ -1,0 +1,25 @@
+{
+  "baseApprovedOakCommit": "a0c19371f042157a7f0da8a3b0751217763b9ccd",
+  "previewQuery": "?vegstyle=woodland-r02&treeart=trees-r03",
+  "sourceHashes": {
+    "src/world/foliageStyle.ts": "25f8d01847ceadca57b450df585dfcdc019f7e5d6adb2fe8c8957ca0e7d06bd9",
+    "src/world/woodkit.ts": "45ba4f572c150730df12a0d8fe221c1511389ae054807c3281ee62991dd4a5ac",
+    "tests/treeFamilySculpt.test.ts": "5e0d7066b29822537f5cd10787365c11bb2e2aaf6b69bbe803712d9164740009",
+    "scripts/veg-r03-tree-review.mjs": "b2b97cb2c1a417550bcabd58268207c2316cd0380b880516fdfa759d3a0be37d"
+  },
+  "checks": {
+    "unitTests": 306,
+    "budgetPolicyTests": 4,
+    "typecheck": "pass",
+    "build": "pass",
+    "renderRecords": 20,
+    "lowQualityRecords": 16,
+    "shadowRecords": 4,
+    "pageConsoleShaderWebGLErrors": 0,
+    "placementParity": true,
+    "lowQualityTriangleParity": true,
+    "physicalDeviceTested": false,
+    "portraitRerun": false,
+    "fullPuzzleWalkthrough": false
+  }
+}

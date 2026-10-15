@@ -1,0 +1,354 @@
+{
+  "models": [
+    {
+      "species": "beech",
+      "v": 0,
+      "art": "oak-r03",
+      "wood": 996,
+      "leaves": 384
+    },
+    {
+      "species": "beech",
+      "v": 0,
+      "art": "trees-r03",
+      "wood": 2520,
+      "leaves": 384
+    },
+    {
+      "species": "beech",
+      "v": 0,
+      "art": "oak-r03",
+      "wood": 996,
+      "leaves": 384
+    },
+    {
+      "species": "beech",
+      "v": 0,
+      "art": "trees-r03",
+      "wood": 2520,
+      "leaves": 384
+    },
+    {
+      "species": "beech",
+      "v": 0,
+      "art": "trees-r03",
+      "wood": 2520,
+      "leaves": 384
+    },
+    {
+      "species": "beech",
+      "v": 1,
+      "art": "trees-r03",
+      "wood": 2694,
+      "leaves": 416
+    },
+    {
+      "species": "beech",
+      "v": 2,
+      "art": "trees-r03",
+      "wood": 2664,
+      "leaves": 368
+    },
+    {
+      "species": "pine",
+      "v": 0,
+      "art": "oak-r03",
+      "wood": 880,
+      "leaves": 560
+    },
+    {
+      "species": "pine",
+      "v": 0,
+      "art": "trees-r03",
+      "wood": 1752,
+      "leaves": 560
+    },
+    {
+      "species": "pine",
+      "v": 0,
+      "art": "oak-r03",
+      "wood": 880,
+      "leaves": 560
+    },
+    {
+      "species": "pine",
+      "v": 0,
+      "art": "trees-r03",
+      "wood": 1752,
+      "leaves": 560
+    },
+    {
+      "species": "pine",
+      "v": 0,
+      "art": "trees-r03",
+      "wood": 1752,
+      "leaves": 560
+    },
+    {
+      "species": "pine",
+      "v": 1,
+      "art": "trees-r03",
+      "wood": 1752,
+      "leaves": 592
+    },
+    {
+      "species": "pine",
+      "v": 2,
+      "art": "trees-r03",
+      "wood": 1592,
+      "leaves": 512
+    },
+    {
+      "species": "birch",
+      "v": 0,
+      "art": "oak-r03",
+      "wood": 966,
+      "leaves": 640
+    },
+    {
+      "species": "birch",
+      "v": 0,
+      "art": "trees-r03",
+      "wood": 966,
+      "leaves": 640
+    },
+    {
+      "species": "birch",
+      "v": 0,
+      "art": "oak-r03",
+      "wood": 966,
+      "leaves": 640
+    },
+    {
+      "species": "birch",
+      "v": 0,
+      "art": "trees-r03",
+      "wood": 966,
+      "leaves": 640
+    },
+    {
+      "species": "birch",
+      "v": 0,
+      "art": "trees-r03",
+      "wood": 966,
+      "leaves": 640
+    },
+    {
+      "species": "birch",
+      "v": 1,
+      "art": "trees-r03",
+      "wood": 864,
+      "leaves": 560
+    },
+    {
+      "species": "birch",
+      "v": 2,
+      "art": "trees-r03",
+      "wood": 960,
+      "leaves": 600
+    }
+  ],
+  "results": [
+    {
+      "name": "dense",
+      "art": "oak-r03",
+      "path": "multi",
+      "calls": 59,
+      "triangles": 340384,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "garden",
+      "art": "oak-r03",
+      "path": "multi",
+      "calls": 25,
+      "triangles": 192544,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "boslust",
+      "art": "oak-r03",
+      "path": "multi",
+      "calls": 91,
+      "triangles": 378718,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "woodland-east",
+      "art": "oak-r03",
+      "path": "multi",
+      "calls": 38,
+      "triangles": 292938,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense-high",
+      "art": "oak-r03",
+      "path": "multi",
+      "calls": 89,
+      "triangles": 654316,
+      "shadows": true,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense",
+      "art": "trees-r03",
+      "path": "multi",
+      "calls": 59,
+      "triangles": 380476,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "garden",
+      "art": "trees-r03",
+      "path": "multi",
+      "calls": 25,
+      "triangles": 211090,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "boslust",
+      "art": "trees-r03",
+      "path": "multi",
+      "calls": 91,
+      "triangles": 414572,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "woodland-east",
+      "art": "trees-r03",
+      "path": "multi",
+      "calls": 38,
+      "triangles": 328094,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense-high",
+      "art": "trees-r03",
+      "path": "multi",
+      "calls": 89,
+      "triangles": 749268,
+      "shadows": true,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense",
+      "art": "oak-r03",
+      "path": "fallback",
+      "calls": 119,
+      "triangles": 340384,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "garden",
+      "art": "oak-r03",
+      "path": "fallback",
+      "calls": 52,
+      "triangles": 192544,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "boslust",
+      "art": "oak-r03",
+      "path": "fallback",
+      "calls": 138,
+      "triangles": 378718,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "woodland-east",
+      "art": "oak-r03",
+      "path": "fallback",
+      "calls": 102,
+      "triangles": 292938,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense-high",
+      "art": "oak-r03",
+      "path": "fallback",
+      "calls": 196,
+      "triangles": 678070,
+      "shadows": true,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense",
+      "art": "trees-r03",
+      "path": "fallback",
+      "calls": 119,
+      "triangles": 380476,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "garden",
+      "art": "trees-r03",
+      "path": "fallback",
+      "calls": 52,
+      "triangles": 211090,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "boslust",
+      "art": "trees-r03",
+      "path": "fallback",
+      "calls": 138,
+      "triangles": 414572,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "woodland-east",
+      "art": "trees-r03",
+      "path": "fallback",
+      "calls": 102,
+      "triangles": 328094,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense-high",
+      "art": "trees-r03",
+      "path": "fallback",
+      "calls": 196,
+      "triangles": 771254,
+      "shadows": true,
+      "glError": 0,
+      "shaderFailures": 0
+    }
+  ],
+  "errors": []
+}

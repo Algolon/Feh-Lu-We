@@ -9,7 +9,9 @@ export function natureStyle(value: string | null): NatureStyle {
 export const NATURE_STYLE = natureStyle(typeof location === 'undefined' ? null : new URLSearchParams(location.search).get('vegstyle'));
 export const FULL_NATURE = NATURE_STYLE === 'woodland-r02';
 /** Opt-in tree study; the recovered, accepted vegetation remains the default. */
-export const TREE_ART = typeof location !== 'undefined' && new URLSearchParams(location.search).get('treeart') === 'oak-r03' ? 'oak-r03' : 'recovered';
+export type TreeArt = 'recovered' | 'oak-r03' | 'trees-r03';
+const requestedTreeArt = typeof location === 'undefined' ? null : new URLSearchParams(location.search).get('treeart');
+export const TREE_ART: TreeArt = requestedTreeArt === 'oak-r03' || requestedTreeArt === 'trees-r03' ? requestedTreeArt : 'recovered';
 export const LEAF_FAMILIES = ['birch', 'oak', 'beech', 'pine', 'hazel', 'holly', 'cypress', 'hedge'] as const;
 export type LeafFamily = typeof LEAF_FAMILIES[number];
 export interface SprayCluster { c: THREE.Vector3; r: [number, number, number]; seed: number; val: number }
@@ -36,8 +38,9 @@ export function foliageSprays(clusters: SprayCluster[], lod: 'near' | 'mid' | 'f
       // Pine uses broad, tilted bough shelves instead of the birch's hanging curtains.
       if (family === 'pine' && i === 2) up = new THREE.Vector3(-Math.sin(angle), .38, Math.cos(angle)).normalize();
       const c = k.c.clone().add(new THREE.Vector3((r() - .5) * .18, (birch ? -.05 : 0) + (r() - .5) * .16, (r() - .5) * .18));
-      const width = (k.r[0] + k.r[2]) * (birch ? 1.45 : family === 'pine' ? .85 : family === 'cypress' ? .68 : .82);
-      const height = k.r[1] * (birch ? 3.2 : family === 'pine' ? 1.4 : family === 'cypress' ? 1.6 : family === 'holly' ? 1.45 : 1.3);
+      const roundedBeech = family === 'beech' && palette !== undefined;
+      const width = (k.r[0] + k.r[2]) * (birch ? 1.45 : roundedBeech ? .99 : family === 'pine' ? .85 : family === 'cypress' ? .68 : .82);
+      const height = k.r[1] * (birch ? 3.2 : roundedBeech ? 1.1 : family === 'pine' ? 1.4 : family === 'cypress' ? 1.6 : family === 'holly' ? 1.45 : 1.3);
       const pts = [c.clone().addScaledVector(side, -width).addScaledVector(up, -height), c.clone().addScaledVector(side, width).addScaledVector(up, -height),
         c.clone().addScaledVector(side, width).addScaledVector(up, height), c.clone().addScaledVector(side, -width).addScaledVector(up, height)];
       const n0 = pos.length / 3;

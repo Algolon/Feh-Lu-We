@@ -11,7 +11,7 @@ import { softBox } from './artkit';
 import { ConvexGeometry } from 'three/examples/jsm/geometries/ConvexGeometry.js';
 import { mergeGeometries, mergeVertices, toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { mulberry32, type Rng } from '../core/rng';
-import { NATURE_STYLE, FULL_NATURE, TREE_ART, foliageSprays, foliageAtlas, SPRAY_SAMPLE } from './foliageStyle';
+import { NATURE_STYLE, FULL_NATURE, TREE_ART, foliageSprays, foliageAtlas, SPRAY_SAMPLE, type TreeArt, type SprayPalette } from './foliageStyle';
 
 // ------------------------------------------------------------------------------------------------ primitives
 /**
@@ -463,12 +463,76 @@ const BIRCHES: Broadleaf[] = [0, 1, 2].map((v) => ({
 export function birchModel(variant: number, lod: Lod): Model { return broadleaf(BIRCHES[variant % 3], lod); }
 
 /** VEG-R02: family-specific foliage on the compatible existing trunk and branch skeleton. */
-export function referenceTreeModel(species: TreeSpecies, variant: number, lod: Lod, continuous: boolean | 'outline' = 'outline', art: 'recovered' | 'oak-r03' = TREE_ART): Model {
-  if (species === 'oak' && art === 'oak-r03') return oakSculptModel(variant, lod, continuous);
-  if (species === 'pine') return pineModel(lod, variant, continuous, true);
+export function referenceTreeModel(species: TreeSpecies, variant: number, lod: Lod, continuous: boolean | 'outline' = 'outline', art: TreeArt = TREE_ART): Model {
+  if (species === 'oak' && art !== 'recovered') return oakSculptModel(variant, lod, continuous);
+  if (species === 'beech' && art === 'trees-r03') return beechSculptModel(variant, lod, continuous);
+  if (species === 'pine') return pineModel(lod, variant, continuous, true, art === 'trees-r03');
   const sp = (species === 'oak' ? OAKS : species === 'beech' ? BEECHES : BIRCHES)[variant % 3], sk = growBroadleaf(sp);
   const model = emitBroadleaf(sp, sk, lod, continuous);
-  model.leaves.dispose(); model.leaves = foliageSprays(sk.clusters, lod, species);
+  model.leaves.dispose(); model.leaves = foliageSprays(sk.clusters, lod, species, art === 'trees-r03' && species === 'birch' ? treePalette('birch', variant) : undefined);
+  return model;
+}
+
+/** Species-specific whole-tree palettes; evergreen pine stays green throughout. */
+function treePalette(species: 'beech' | 'birch' | 'pine', variant: number): SprayPalette {
+  const v = ((variant % 3) + 3) % 3;
+  const palettes = {
+    beech: [
+      { shade: '#345c37', green: '#83a34a', warm: '#b3a449', warmth: .20 },
+      { shade: '#2f5134', green: '#618842', warm: '#979546', warmth: .18 },
+      { shade: '#52683a', green: '#959449', warm: '#c1843c', warmth: .68 },
+    ],
+    birch: [
+      { shade: '#456d3a', green: '#9cb653', warm: '#c0b756', warmth: .18 },
+      { shade: '#355f3c', green: '#7fa34d', warm: '#a8b257', warmth: .12 },
+      { shade: '#596e39', green: '#a8b354', warm: '#c6ae48', warmth: .48 },
+    ],
+    pine: [
+      { shade: '#254c38', green: '#52794b', warm: '#6f8b51', warmth: .14 },
+      { shade: '#234639', green: '#41674a', warm: '#678357', warmth: .10 },
+      { shade: '#32523b', green: '#64804d', warm: '#84915b', warmth: .17 },
+    ],
+  };
+  return { base: LEAF_TINT[species], ...palettes[species][v] };
+}
+
+/** Smooth geometric normals across duplicated UV vertices without changing the UVs themselves. */
+function smoothWoodNormals(g: THREE.BufferGeometry) {
+  g.computeVertexNormals();
+  const p = g.attributes.position as THREE.BufferAttribute, normals = g.attributes.normal as THREE.BufferAttribute;
+  const sums = new Map<string, THREE.Vector3>();
+  const keyAt = (i: number) => `${Math.round(p.getX(i) * 1e5)},${Math.round(p.getY(i) * 1e5)},${Math.round(p.getZ(i) * 1e5)}`;
+  for (let i = 0; i < p.count; i++) {
+    const key = keyAt(i), sum = sums.get(key) ?? new THREE.Vector3();
+    sum.add(new THREE.Vector3().fromBufferAttribute(normals, i)); sums.set(key, sum);
+  }
+  for (let i = 0; i < p.count; i++) {
+    const n = sums.get(keyAt(i))!.clone().normalize(); normals.setXYZ(i, n.x, n.y, n.z);
+  }
+}
+
+/** Beech: a cool smooth-barked leader, rising forks and rounded, layered foliage. */
+export function beechSculptModel(variant: number, lod: Lod, continuous: boolean | 'outline' = 'outline'): Model {
+  const v = ((variant % 3) + 3) % 3, original = BEECHES[v];
+  const sp = { ...original, limbR: .68, limbArch: .31, clSquash: .96, cl: [.78, 1.06] as [number, number] };
+  const sk = growBroadleaf(sp), model = emitBroadleaf(sp, sk, lod, continuous, true);
+  model.leaves.dispose(); model.leaves = foliageSprays(sk.clusters, lod, 'beech', treePalette('beech', v));
+  for (const g of [model.wood, model.leaves]) {
+    const p = g.attributes.position as THREE.BufferAttribute;
+    for (let i = 0; i < p.count; i++) {
+      const x = p.getX(i), y = p.getY(i), z = p.getZ(i), t = THREE.MathUtils.smoothstep(y, 1.6, 5.0);
+      p.setXYZ(i, x + t * .48 * Math.sin((y - 1.6) * .49 + v * 1.8), y, z + t * .22 * Math.sin(y * .43 + v));
+    }
+    if (g === model.wood) {
+      smoothWoodNormals(g);
+      const colours = g.attributes.color as THREE.BufferAttribute;
+      for (let i = 0; i < p.count; i++) {
+        const mottling = .97 + .035 * Math.sin(p.getY(i) * 1.5 + p.getX(i) * 3 + v);
+        colours.setXYZ(i, colours.getX(i) * mottling, colours.getY(i) * mottling * 1.02, colours.getZ(i) * mottling * 1.08);
+      }
+    }
+    g.computeBoundingBox(); g.computeBoundingSphere();
+  }
   return model;
 }
 
@@ -508,17 +572,7 @@ export function oakSculptModel(variant: number, lod: Lod, continuous: boolean | 
       // A dedicated bark tile leaves the recovered oak/pine atlas untouched in the comparison.
       const uv = g.attributes.uv as THREE.BufferAttribute;
       for (let i = 0; i < uv.count; i++) uv.setX(i, 16 + uv.getX(i));
-      g.computeVertexNormals();
-      // UV seam vertices are separate, but must share a normal to avoid a hard lighting stripe.
-      const sums = new Map<string, THREE.Vector3>();
-      const keyAt = (i: number) => `${Math.round(p.getX(i) * 1e5)},${Math.round(p.getY(i) * 1e5)},${Math.round(p.getZ(i) * 1e5)}`;
-      for (let i = 0; i < p.count; i++) {
-        const key = keyAt(i), sum = sums.get(key) ?? new THREE.Vector3();
-        sum.add(new THREE.Vector3().fromBufferAttribute(normals, i)); sums.set(key, sum);
-      }
-      for (let i = 0; i < p.count; i++) {
-        const n = sums.get(keyAt(i))!.clone().normalize(); normals.setXYZ(i, n.x, n.y, n.z);
-      }
+      smoothWoodNormals(g);
       const colours = g.attributes.color as THREE.BufferAttribute;
       for (let i = 0; i < p.count; i++) {
         const x = p.getX(i), y = p.getY(i), z = p.getZ(i), a = Math.atan2(z, x);
@@ -543,13 +597,13 @@ export function birchReferenceModel(variant: number, lod: Lod, continuous: boole
  * ragged, tilted needle clumps; the top rounds off rather than tapering to a spire. Three layouts.
  */
 const pineLobes = (rnd: (a: number, b: number) => number) => [0, 1, 2, 3].map((i) => ({ a: i * 1.57 + rnd(-0.4, 0.4), w: rnd(0.5, 1) }));
-export function pineModel(lod: Lod, variant = 0, continuous: boolean | 'outline' = false, reference = false): Model {
+export function pineModel(lod: Lod, variant = 0, continuous: boolean | 'outline' = false, reference = false, sculpt = false): Model {
   const v = variant % 3, r = mulberry32(733 + v * 211), near = lod === 'near', xfar = lod === 'xfar', far = lod === 'far' || xfar;
   const rnd = (a: number, b: number) => a + r() * (b - a);
   const T = [12.2, 11.0, 13.4][v], bend = [[0.45, -0.25], [-0.3, 0.2], [0.75, 0.4]][v], light = [0.6, 2.4, 4.1][v];
   const axis = (y: number): P3 => { const t = Math.max(0, y) / T; return [bend[0] * (t * t * 0.8 + 0.25 * Math.sin(t * 3.1)), y, bend[1] * (t * t * 0.8 + 0.2 * Math.sin(t * 2.6))]; };
   const lobes = pineLobes(rnd);
-  const wood: THREE.BufferGeometry[] = [flaredTrunk([[0, -0.45, 0], axis(T * 0.3), axis(T * 0.65), axis(T)], (t) => THREE.MathUtils.lerp(0.36, 0.06, Math.pow(t, 0.9)), lobes, 1.1, 0.9, near ? 14 : far ? 5 : 7, near ? 12 : far ? 3 : 4, 1.6)];
+  const wood: THREE.BufferGeometry[] = [flaredTrunk([[0, -0.45, 0], axis(T * 0.3), axis(T * 0.65), axis(T)], (t) => THREE.MathUtils.lerp(0.36, 0.06, Math.pow(t, 0.9)), lobes, 1.1, 0.9, near ? 14 : far ? 5 : 7, sculpt ? (near ? 26 : far ? 9 : 14) : near ? 12 : far ? 3 : 4, 1.6, near)];
   const clusters: Cluster[] = [];
   const crownBase = T * [0.56, 0.5, 0.62][v];
   // irregular whorls: 4–5 levels, 2–4 branches each, some skipped
@@ -565,7 +619,7 @@ export function pineModel(lod: Lod, variant = 0, continuous: boolean | 'outline'
       const S = vec(axis(y + rnd(-0.25, 0.25)));
       const d = new THREE.Vector3(Math.cos(el) * Math.cos(a), Math.sin(el), Math.cos(el) * Math.sin(a));
       const E = S.clone().addScaledVector(d, L), M = S.clone().lerp(E, 0.5).add(new THREE.Vector3(0, -0.12 + f * 0.2, 0));
-      if (!xfar || continuous) wood.push(taperTube([[S.x, S.y, S.z], [M.x, M.y, M.z], [E.x, E.y, E.z]], [0.1 - f * 0.03, 0.06, 0.025], { radial: near ? 5 : 3, rows: near ? 4 : far ? 1 : 2, vScale: 1.2 }));
+      if (!xfar || continuous) wood.push(taperTube([[S.x, S.y, S.z], [M.x, M.y, M.z], [E.x, E.y, E.z]], [0.1 - f * 0.03, 0.06, 0.025], { radial: near ? 5 : 3, rows: sculpt ? (near ? 8 : far ? 2 : 4) : near ? 4 : far ? 1 : 2, vScale: 1.2 }));
       // two or three ragged clumps along the end of the branch, tilted with it, at different heights
       const m = 2 + Math.floor(r() * 2.5);
       for (let q = 0; q < m; q++) {
@@ -590,7 +644,29 @@ export function pineModel(lod: Lod, variant = 0, continuous: boolean | 'outline'
   }), BARK.fissured)));
   const centre = clusters.reduce((s, k) => s.add(k.c), new THREE.Vector3()).divideScalar(clusters.length);
   const cr = Math.max(...clusters.map((k) => k.c.distanceTo(centre) + k.r[0]));
-  if (reference) return { wood: woodG, leaves: foliageSprays(clusters, lod, 'pine') };
+  if (reference) {
+    const leaves = foliageSprays(clusters, lod, 'pine', sculpt ? treePalette('pine', v) : undefined);
+    if (sculpt) {
+      for (const g of [woodG, leaves]) {
+        const p = g.attributes.position as THREE.BufferAttribute;
+        for (let i = 0; i < p.count; i++) {
+          const x = p.getX(i), y = p.getY(i), z = p.getZ(i), t = THREE.MathUtils.smoothstep(y, 1.6, 7);
+          p.setXYZ(i, x + t * .32 * Math.sin(y * .38 + v * 1.6), y, z + t * .15 * Math.sin(y * .48 + v));
+        }
+        if (g === woodG) {
+          smoothWoodNormals(g);
+          const uv = g.attributes.uv as THREE.BufferAttribute, colours = g.attributes.color as THREE.BufferAttribute;
+          for (let i = 0; i < p.count; i++) {
+            uv.setX(i, 20 + uv.getX(i));
+            const warm = THREE.MathUtils.smoothstep(p.getY(i), T * .30, T * .67);
+            colours.setXYZ(i, colours.getX(i) * (1 + warm * .14), colours.getY(i) * (1 - warm * .03), colours.getZ(i) * (1 - warm * .16));
+          }
+        }
+        g.computeBoundingBox(); g.computeBoundingSphere();
+      }
+    }
+    return { wood: woodG, leaves };
+  }
   const ks = near ? clusters : xfar ? largest(dropFillers(clusters), continuous ? 14 : 8, !continuous) : dropFillers(clusters);
   const leaves = cullBuried(ks.map((k) => clusterGeo(k, continuous === true && lod === 'mid' ? 'near' : lod, centre, cr, 0.4, 0.75)), ks); // high crown, seen from 6 m+ below
   return { wood: woodG, leaves: mergeParts(leaves.map((g) => foliageUV(g, 1.2))) };
@@ -1311,7 +1387,7 @@ export function woodMats(): WoodMats {
   const lam = (o: THREE.MeshLambertMaterialParameters) => new THREE.MeshLambertMaterial({ vertexColors: true, ...o });
   const tree = lam({ map: atlas });
   const sprays = NATURE_STYLE !== 'baseline' ? foliageAtlas() : null;
-  const oakBark = TREE_ART === 'oak-r03' ? canvasTex(256, 512, (x, r) => {
+  const oakBark = TREE_ART !== 'recovered' ? canvasTex(256, 512, (x, r) => {
     // Long, softly bevelled furrows follow the trunk, with a few interrupted bark seams.
     x.fillStyle = grey(.82); x.fillRect(0, 0, 256, 512);
     for (let col = 0; col < 8; col++) {
@@ -1340,15 +1416,36 @@ export function woodMats(): WoodMats {
       x.fillStyle = grey(.52); x.beginPath(); x.ellipse(cx,cy,3,10,.2,0,Math.PI*2); x.fill();
     }
   }, 23017) : null;
+  const pineBark = TREE_ART === 'trees-r03' ? canvasTex(256, 512, (x, r) => {
+    // Soft elongated scales, with staggered independent heights rather than a regular brick grid.
+    x.fillStyle = grey(.73); x.fillRect(0, 0, 256, 512);
+    for (let col = 0; col < 6; col++) {
+      const count = 2 + Math.floor(r() * 2), step = 512 / count, phase = r() * 512;
+      for (let row = 0; row < count; row++) {
+        const cx = col * (256 / 6) + r() * 8, cy = row * step + phase;
+        const w = 34 + r() * 8, h = step - 4, bow = (r() - .5) * 12, val = .79 + r() * .08;
+        for (const dx of [-256,0,256]) for (const dy of [-1024,-512,0,512]) {
+          x.save(); x.translate(cx + dx, cy + dy);
+          x.fillStyle = grey(val); x.beginPath(); x.moveTo(3, 0); x.quadraticCurveTo(w*.5,-5,w-4,2);
+          x.bezierCurveTo(w + bow, h*.30, w-2+bow, h*.72, w-4, h);
+          x.quadraticCurveTo(w*.5,h+5,4,h-1); x.bezierCurveTo(-3+bow,h*.72,bow,h*.3,3,0); x.closePath(); x.fill();
+          x.strokeStyle = grey(.93, .35); x.lineWidth = 3; x.beginPath(); x.moveTo(5, 8); x.bezierCurveTo(1+bow,h*.3,1+bow,h*.7,7,h-8); x.stroke();
+          x.restore();
+        }
+      }
+    }
+  }, 23019) : null;
   // foliage UVs (u ≥ LEAF_U) repeat inside the leaf column; gradients from the unwrapped UV keep mip selection
   // continuous across the wrap (no seams); bark UVs are sampled as usual
   tree.onBeforeCompile = (sh) => {
     if (sprays) { sh.uniforms.flwSprays = { value: sprays }; sh.fragmentShader = 'uniform sampler2D flwSprays;\n' + sh.fragmentShader; }
     if (oakBark) { sh.uniforms.flwOakBark = { value: oakBark }; sh.fragmentShader = 'uniform sampler2D flwOakBark;\n' + sh.fragmentShader; }
+    if (pineBark) { sh.uniforms.flwPineBark = { value: pineBark }; sh.fragmentShader = 'uniform sampler2D flwPineBark;\n' + sh.fragmentShader; }
     sh.fragmentShader = sh.fragmentShader.replace('#include <map_fragment>', `#ifdef USE_MAP
   vec2 tUv = vMapUv;
   vec4 sampledDiffuseColor;
   ${oakBark ? `if (tUv.x > 15.0 && tUv.x < 17.0) { sampledDiffuseColor = texture2D(flwOakBark, vec2(((tUv.x - 16.0) * 4.0 - ${GUT}) / ${1 - 2 * GUT}, tUv.y * .65)); } else` : ''}
+  ${pineBark ? `if (tUv.x > 19.0 && tUv.x < 21.0) { sampledDiffuseColor = texture2D(flwPineBark, vec2(((tUv.x - 20.0) * 4.0 - ${GUT}) / ${1 - 2 * GUT}, tUv.y * .45)); } else` : ''}
   ${sprays ? `if (tUv.x > 127.0) { ${SPRAY_SAMPLE} sampledDiffuseColor = texture2D(flwSprays, flwAtlasUv); if (sampledDiffuseColor.a < 0.4) discard; } else` : ''}
   if (tUv.x > ${(LEAF_U / 2).toFixed(1)}) {
     vec2 lUv = vec2(fract(tUv.x), tUv.y * 0.5);
@@ -1361,7 +1458,7 @@ export function woodMats(): WoodMats {
   diffuseColor *= sampledDiffuseColor;
 #endif`);
   };
-  tree.customProgramCacheKey = () => oakBark ? 'woodkit-tree-atlas-oak-r03' : sprays ? 'woodkit-tree-atlas-sprays-r02' : 'woodkit-tree-atlas';
+  tree.customProgramCacheKey = () => pineBark ? 'woodkit-tree-atlas-families-r03' : oakBark ? 'woodkit-tree-atlas-oak-r03' : sprays ? 'woodkit-tree-atlas-sprays-r02' : 'woodkit-tree-atlas';
   if (sprays) {
     const depth = new THREE.MeshDepthMaterial({ map: atlas, depthPacking: THREE.RGBADepthPacking });
     depth.onBeforeCompile = sh => {
