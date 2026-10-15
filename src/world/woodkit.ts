@@ -398,14 +398,23 @@ function growBroadleaf(sp: Broadleaf): Skeleton {
   return { trunk: { path: trunkPath, radius, lobes }, branches, clusters };
 }
 
-function emitBroadleaf(sp: Broadleaf, sk: Skeleton, lod: Lod, continuous: boolean | 'outline' = false, smoothFork = false): Model {
+function emitBroadleaf(sp: Broadleaf, sk: Skeleton, lod: Lod, continuous: boolean | 'outline' = false, smoothFork = false, relief = false): Model {
   const near = lod === 'near', xfar = lod === 'xfar', far = lod === 'far' || xfar;
   const girth = THREE.MathUtils.clamp(sp.trunk[0] / 0.45, 0.6, 1); // slim trunks need fewer sides
   const wood: THREE.BufferGeometry[] = [flaredTrunk(sk.trunk.path, sk.trunk.radius, sk.trunk.lobes, sp.flare, 1.25, xfar ? 5 : Math.round((near ? 20 : far ? 6 : 9) * girth), smoothFork ? (near ? 28 : far ? 9 : 16) : near ? 11 : far ? 3 : 4, sp.vScale, near)];
+  const reliefCaps: number[] = [];
+  const capPart = (g: THREE.BufferGeometry, radius: (t: number) => number) => {
+    if (!relief) return;
+    const uv = g.attributes.uv; let length = 0;
+    for (let i = 0; i < uv.count; i++) length = Math.max(length, uv.getY(i));
+    for (let i = 0; i < uv.count; i++) reliefCaps.push(Math.min(.055, radius(uv.getY(i) / Math.max(.001, length)) * .18));
+  };
+  capPart(wood[0], sk.trunk.radius);
   for (const b of sk.branches) {
     if (!near && b.level === 2) continue; // mid/far: limbs only; side branches are hidden in the foliage at that distance
     if (xfar && !continuous) continue; // continuity prototype retains the primary branch skeleton
-    wood.push(taperTube(b.pts, b.r, { radial: near ? (b.level === 1 ? 6 : 3) : far ? 3 : 4, rows: smoothFork ? (near ? (b.level === 1 ? 12 : 5) : far ? 4 : 7) : near ? (b.level === 1 ? 4 : 3) : far ? 1 : 2, vScale: 1.2 }));
+    wood.push(taperTube(b.pts, b.r, { radial: near ? (b.level === 1 ? (relief ? 12 : 6) : (relief ? 6 : 3)) : far ? 3 : (relief ? 8 : 4), rows: smoothFork ? (near ? (b.level === 1 ? 12 : 5) : far ? 4 : 7) : near ? (b.level === 1 ? 4 : 3) : far ? 1 : 2, vScale: 1.2 }));
+    capPart(wood[wood.length - 1], t => THREE.MathUtils.lerp(b.r[0], b.r[b.r.length - 1], t));
   }
   const crownC = sk.clusters.reduce((s, k) => s.add(k.c), new THREE.Vector3()).divideScalar(sk.clusters.length);
   const crownR = Math.max(...sk.clusters.map((k) => k.c.distanceTo(crownC) + Math.max(...k.r)));
@@ -413,6 +422,7 @@ function emitBroadleaf(sp: Broadleaf, sk: Skeleton, lod: Lod, continuous: boolea
   if (far) ks = largest(ks, continuous ? 14 : xfar ? 6 : 14, !continuous);
   const leaves = cullBuried(ks.map((k) => clusterGeo(k, continuous === true && lod === 'mid' ? 'near' : lod, crownC, crownR)), ks);
   const woodG = mergeParts(wood.map((g) => barkCol(paint(g, (p) => sp.barkK(p.y)), sp.bark)));
+  if (relief) woodG.userData.barkReliefCaps = new Float32Array(reliefCaps);
   return { wood: woodG, leaves: mergeParts(leaves.map((g) => foliageUV(g, 1.4))) };
 }
 const broadleaf = (sp: Broadleaf, lod: Lod) => emitBroadleaf(sp, growBroadleaf(sp), lod);
@@ -515,7 +525,7 @@ function smoothWoodNormals(g: THREE.BufferGeometry) {
 export function beechSculptModel(variant: number, lod: Lod, continuous: boolean | 'outline' = 'outline'): Model {
   const v = ((variant % 3) + 3) % 3, original = BEECHES[v];
   const sp = { ...original, limbR: .68, limbArch: .31, clSquash: .96, cl: [.78, 1.06] as [number, number] };
-  const sk = growBroadleaf(sp), model = emitBroadleaf(sp, sk, lod, continuous, true);
+  const sk = growBroadleaf(sp), model = emitBroadleaf(sp, sk, lod, continuous, true, true);
   model.leaves.dispose(); model.leaves = foliageSprays(sk.clusters, lod, 'beech', treePalette('beech', v));
   for (const g of [model.wood, model.leaves]) {
     const p = g.attributes.position as THREE.BufferAttribute;
@@ -525,8 +535,19 @@ export function beechSculptModel(variant: number, lod: Lod, continuous: boolean 
     }
     if (g === model.wood) {
       smoothWoodNormals(g);
-      // Select beech's continuous object-space bark instead of stretching the old atlas column.
       const uv = g.attributes.uv as THREE.BufferAttribute;
+      const n = g.attributes.normal as THREE.BufferAttribute;
+      // Broad sculpted folds follow each tube's growth direction, rather than painted stripes.
+      // Keep the grounded root footprint, then grow the folds up from the foot into the forks.
+      for (let i = 0; i < p.count; i++) {
+        const y = p.getY(i), u = (uv.getX(i) * ATLAS_COLS - BARK.smooth - GUT) / (1 - 2 * GUT);
+        const phase = u * Math.PI * 2 + .18 * Math.sin(uv.getY(i) * 1.4 + v);
+        const height = THREE.MathUtils.smoothstep(y, .2, 1.0) * (g.userData.barkReliefCaps as Float32Array)[i] *
+          (.72 * Math.cos(phase * 3) + .28 * Math.cos(phase * 5 + 1.1));
+        p.setXYZ(i, p.getX(i) + n.getX(i) * height, y + n.getY(i) * height, p.getZ(i) + n.getZ(i) * height);
+      }
+      smoothWoodNormals(g);
+      // Marker for continuous bark colour plus fine normal relief, separate from the original atlas.
       for (let i = 0; i < uv.count; i++) uv.setX(i, 24 + uv.getX(i));
       const colours = g.attributes.color as THREE.BufferAttribute;
       for (let i = 0; i < p.count; i++) {
@@ -1449,7 +1470,29 @@ export function woodMats(): WoodMats {
       // This also gives intersecting fork surfaces the same pigment at their meeting point.
       sh.vertexShader = 'varying vec3 flwBarkPosition;\n' + sh.vertexShader;
       sh.vertexShader = sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\nflwBarkPosition = position;');
-      sh.fragmentShader = 'varying vec3 flwBarkPosition;\n' + sh.fragmentShader;
+      sh.fragmentShader = `varying vec3 flwBarkPosition;
+vec2 flwBeechFlow(vec2 uv) {
+  return vec2(((uv.x - 24.0) * 4.0 - 1.0 - ${GUT}) / ${1 - 2 * GUT} * 6.28318530718, uv.y);
+}
+float flwBeechGroove(vec2 flow) {
+  return pow(.5 + .5 * sin(flow.x * 6.0 + sin(flow.y * 1.4) * .9), 5.0);
+}
+float flwBeechRelief(vec2 flow) {
+  return -.022 * flwBeechGroove(flow) + .005 * sin(flow.x * 13.0 + sin(flow.y * 4.0)) * sin(flow.y * 7.0);
+}
+` + sh.fragmentShader;
+      sh.fragmentShader = sh.fragmentShader.replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
+if (vMapUv.x > 23.0 && vMapUv.x < 25.0) {
+  vec2 flow = flwBeechFlow(vMapUv);
+  float height = flwBeechRelief(flow) * (1.0 - smoothstep(24.0, 48.0, length(vViewPosition)));
+  vec2 slope = vec2(dFdx(height), dFdy(height));
+  float footprint = length(vec2(dFdx(flow.x * 6.0), dFdy(flow.x * 6.0)));
+  float resolved = 1.0 - smoothstep(.7, 2.5, footprint);
+  vec3 sx = dFdx(-vViewPosition), sy = dFdy(-vViewPosition);
+  vec3 rx = cross(sy, normal), ry = cross(normal, sx);
+  float det = dot(sx, rx);
+  if (abs(det) > 1e-10) normal = normalize(abs(det) * normal - sign(det) * resolved * (slope.x * rx + slope.y * ry));
+}`);
     }
     sh.fragmentShader = sh.fragmentShader.replace('#include <map_fragment>', `#ifdef USE_MAP
   vec2 tUv = vMapUv;
@@ -1459,7 +1502,10 @@ export function woodMats(): WoodMats {
     float cloud = sin(p.x * 2.4 + sin(p.y * .65)) * sin(p.z * 2.7 - p.y * .33);
     float grain = sin(p.x * 6.2 + p.z * 4.7 + sin(p.y * 1.4));
     float fold = pow(max(0.0, sin(p.x * 10.0 + p.z * 8.0 + sin(p.y * 1.1) * .8)), 10.0);
-    float tone = .93 + .035 * cloud + .014 * grain - .022 * fold;
+    vec2 flow = flwBeechFlow(tUv);
+    float footprint = length(vec2(dFdx(flow.x * 6.0), dFdy(flow.x * 6.0)));
+    float groove = mix(flwBeechGroove(flow), .20, smoothstep(.7, 2.5, footprint));
+    float tone = .90 + .055 * cloud + .025 * grain - .035 * fold - .19 * groove * (1.0 - smoothstep(24.0, 48.0, length(vViewPosition)));
     sampledDiffuseColor = vec4(tone * .99, tone, tone * 1.015, 1.0);
   } else` : ''}
   ${oakBark ? `if (tUv.x > 15.0 && tUv.x < 17.0) { sampledDiffuseColor = texture2D(flwOakBark, vec2(((tUv.x - 16.0) * 4.0 - ${GUT}) / ${1 - 2 * GUT}, tUv.y * .65)); } else` : ''}
@@ -1476,7 +1522,7 @@ export function woodMats(): WoodMats {
   diffuseColor *= sampledDiffuseColor;
 #endif`);
   };
-  tree.customProgramCacheKey = () => pineBark ? 'woodkit-tree-atlas-families-beech-flow-r03' : oakBark ? 'woodkit-tree-atlas-oak-r03' : sprays ? 'woodkit-tree-atlas-sprays-r02' : 'woodkit-tree-atlas';
+  tree.customProgramCacheKey = () => pineBark ? 'woodkit-tree-atlas-families-beech-relief-r03' : oakBark ? 'woodkit-tree-atlas-oak-r03' : sprays ? 'woodkit-tree-atlas-sprays-r02' : 'woodkit-tree-atlas';
   if (sprays) {
     const depth = new THREE.MeshDepthMaterial({ map: atlas, depthPacking: THREE.RGBADepthPacking });
     depth.onBeforeCompile = sh => {

@@ -20,7 +20,7 @@ try {
     const renderer = new T.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true }); renderer.setSize(1440,810); renderer.setClearColor('#e5e9dd'); renderer.outputColorSpace = T.SRGBColorSpace; document.body.append(renderer.domElement);
     window.showTrees = (mode, species, variant = 0) => {
       const scene = new T.Scene(), group = new T.Group(); scene.add(group);
-      scene.add(new T.HemisphereLight('#d1e4f2','#738361',1.35)); const sun = new T.DirectionalLight('#fff1d4',2.25); sun.position.set(-8,15,9); scene.add(sun);
+      scene.add(new T.HemisphereLight('#d1e4f2','#738361',mode==='relief'?.45:1.35)); const sun = new T.DirectionalLight('#fff1d4',mode==='relief'?3.1:2.25); sun.position.set(-8,mode==='relief'?6:15,mode==='relief'?2:9); scene.add(sun);
       const specs = mode === 'palettes' ? [0,1,2].map(v=>({v,art:'trees-r03',x:(v-1)*10})) : [{v:variant,art:'oak-r03',x:-5.2},{v:variant,art:'trees-r03',x:5.2}];
       const rows = [];
       for (const {v,art,x} of specs) {
@@ -32,10 +32,10 @@ try {
       }
       const floor = new T.Mesh(new T.PlaneGeometry(200,200),new T.MeshLambertMaterial({color:'#adba96'})); floor.rotation.x=-Math.PI/2; floor.position.y=-.03; scene.add(floor);
       const camera = new T.PerspectiveCamera(31,1440/810,.01,200);
-      if(mode==='trunks'){const y=species==='pine'?5.3:3.2;camera.position.set(0,y,19);camera.lookAt(0,y-.2,0);}
+      if(mode==='trunks'||mode==='relief'){const y=species==='pine'?5.3:3.2;camera.position.set(0,y,19);camera.lookAt(0,y-.2,0);}
       else {const box=new T.Box3().setFromObject(group),size=box.getSize(new T.Vector3()),c=box.getCenter(new T.Vector3()); const d=Math.max(size.y/(2*Math.tan(.27)),size.x/(2*Math.tan(.27)*(1440/810)))*1.12+size.z*.5; camera.position.set(0,c.y+d*.10,d);camera.lookAt(0,c.y,0);}
       const name={beech:'Beuk',pine:'Grove den',birch:'Berk',oak:'Eik'}[species];
-      document.querySelector('h1').textContent=name+' · '+(mode==='palettes'?'drie natuurlijke kleurvarianten':mode==='trunks'?'stam en vertakking':'vorm en loof');
+      document.querySelector('h1').textContent=name+' · '+(mode==='palettes'?'drie natuurlijke kleurvarianten':mode==='relief'?'bastreliëf onder strijklicht':mode==='trunks'?'stam en vertakking':'vorm en loof');
       document.querySelector('p').textContent=mode==='palettes'?'Drie echte modelvarianten · dezelfde verlichting':'Links: vorige versie · rechts: nieuwe bomenstudie · identieke verlichting';
       renderer.render(scene,camera); return rows;
     };
@@ -44,6 +44,8 @@ try {
     models.push(...await page.evaluate(([mode,species])=>window.showTrees(mode,species),[mode,species]));
     await page.screenshot({path:`${out}/${species}-${mode}.jpg`,quality:94});
   }
+  await page.evaluate(()=>window.showTrees('relief','beech'));
+  await page.screenshot({path:`${out}/beech-relief.jpg`,quality:94});
   await page.close();
   if (process.env.GALLERY_ONLY !== '1') {
     for (const path of ['multi','fallback']) for (const art of ['oak-r03','trees-r03']) {

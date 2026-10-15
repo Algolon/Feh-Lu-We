@@ -3,9 +3,9 @@
   "previewQuery": "?vegstyle=woodland-r02&treeart=trees-r03",
   "sourceHashes": {
     "src/world/foliageStyle.ts": "25f8d01847ceadca57b450df585dfcdc019f7e5d6adb2fe8c8957ca0e7d06bd9",
-    "src/world/woodkit.ts": "bf17aea009c25466dbf79eb8fa6389c2596ce34c0c855926605ad6ea36aedb84",
-    "tests/treeFamilySculpt.test.ts": "5e0d7066b29822537f5cd10787365c11bb2e2aaf6b69bbe803712d9164740009",
-    "scripts/veg-r03-tree-review.mjs": "b2b97cb2c1a417550bcabd58268207c2316cd0380b880516fdfa759d3a0be37d"
+    "src/world/woodkit.ts": "e712b6f4a25d3c3a838ba0767d2fb1201a8465cf4a3012bdeee1c3a993c7dbbd",
+    "tests/treeFamilySculpt.test.ts": "07e41917fca8e341a44b3448958a576fea4e59aa316b57229c6e2bcf83e5af07",
+    "scripts/veg-r03-tree-review.mjs": "e84cf2a93b4fb05a223517e05ac5ce46d3cb48f810686063e391870c17e81ede"
   },
   "checks": {
     "unitTests": 306,
@@ -28,5 +28,17 @@
     "geometryAdded": false,
     "drawGroupsAdded": false,
     "texturesAdded": false
+  },
+  "beechRelief": {
+    "baseCommit": "9e638a24cb62814fcdfcbdcd94069fc0820527fc",
+    "reference": "../references/05-sculpted-relief.png",
+    "geometryAdded": true,
+    "drawGroupsAdded": false,
+    "texturesAdded": false,
+    "maxStemDisplacementMetres": 0.055,
+    "branchDisplacementCappedByRadius": true,
+    "groundFootprintPreservedBelowMetres": 0.2,
+    "growthAlignedNormalRelief": true,
+    "finePatternFiltered": true
   }
 }

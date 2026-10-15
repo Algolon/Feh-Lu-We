@@ -12,14 +12,16 @@ describe('tree family reference continuation', () => {
       dispose(a); dispose(b);
     }
   });
-  it('preserves the beech and pine foot and low attachment rings while refining their upper stems', () => {
+  it('preserves grounded beech roots and pine attachment rings while refining their stems', () => {
     for (const sp of ['beech','pine'] as const) for (let v = 0; v < 3; v++) for (const lod of ['near','mid','far','xfar'] as const) {
       const a = referenceTreeModel(sp,v,lod,'outline','recovered'), b = referenceTreeModel(sp,v,lod,'outline','trees-r03');
       const p = a.wood.attributes.position, q = b.wood.attributes.position;
       let previousY = -Infinity, checked = 0;
       for (let i = 0; i < p.count; i++) {
         const y = p.getY(i); if (y < previousY - .01) break;
-        if (y <= 1.6) { expect([q.getX(i),q.getY(i),q.getZ(i)]).toEqual([p.getX(i),y,p.getZ(i)]); checked++; }
+        // Sculpted beech folds now grow from .2 m upward, as explicitly requested in the relief reference.
+        // Its grounded footprint stays fixed; the unchanged pine retains all low attachment rings.
+        if (y <= (sp === 'beech' ? .15 : 1.6)) { expect([q.getX(i),q.getY(i),q.getZ(i)]).toEqual([p.getX(i),y,p.getZ(i)]); checked++; }
         previousY = y;
       }
       expect(checked).toBeGreaterThan(10); dispose(a); dispose(b);
