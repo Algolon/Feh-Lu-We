@@ -5,6 +5,7 @@
 import type { RitualMix } from '../world/wickerRitual';
 import { renderOutdoorFootstep, type FootstepSurface, type OutdoorFootstepSurface } from './footsteps';
 import { FIELD_FOOTSTEPS_MP3, FIELD_FOOTSTEP_CLIPS } from './fieldFootsteps';
+import { GRASS_R04_MP3, GRASS_R04_CLIPS, DIRT_PATH_GAIN } from './grassR04';
 
 type SfxName = string;
 type RitualVoice = { src: AudioScheduledSourceNode; f: BiquadFilterNode | null; g: GainNode };
@@ -59,6 +60,10 @@ export class Audio {
         this.fieldStepLoading = this.loadFieldSteps().finally(() => { this.fieldStepLoading = null; });
       }
       if (this.fieldStepLoading) await this.fieldStepLoading;
+      if (!this.grassR04Bank && !this.grassR04Loading) {
+        this.grassR04Loading = this.loadGrassR04().finally(() => { this.grassR04Loading = null; });
+      }
+      if (this.grassR04Loading) await this.grassR04Loading;
       this.preloadBongRippie();
     } catch {
       /* audio is optional */
@@ -110,6 +115,20 @@ export class Audio {
   private lastStep = -1;
   private fieldStepBank: AudioBuffer | null = null;
   private fieldStepLoading: Promise<void> | null = null;
+  private grassR04Bank: AudioBuffer | null = null;
+  private grassR04Loading: Promise<void> | null = null;
+
+  private async loadGrassR04(): Promise<void> {
+    try {
+      const encoded = atob(GRASS_R04_MP3);
+      const bytes = new Uint8Array(encoded.length);
+      for (let i = 0; i < encoded.length; i++) bytes[i] = encoded.charCodeAt(i);
+      this.grassR04Bank = await this.ctx!.decodeAudioData(bytes.buffer);
+    } catch {
+      // The original grass sample bank remains the fallback if MP3 decoding fails.
+      this.grassR04Bank = null;
+    }
+  }
   private async loadFieldSteps(): Promise<void> {
     try {
       const raw = atob(FIELD_FOOTSTEPS_MP3);
@@ -133,27 +152,34 @@ export class Audio {
 
   private outdoorStep(surface: OutdoorFootstepSurface, gain: number, foot: 0 | 1) {
     const pool = this.outdoorBuffers[surface];
-    const clips = FIELD_FOOTSTEP_CLIPS[surface];
-    const count = this.fieldStepBank ? clips.length : pool.length;
+    const useSteadyGrass = surface === 'grass' && !!this.grassR04Bank;
+    const bank = useSteadyGrass ? this.grassR04Bank : this.fieldStepBank;
+    const clips = useSteadyGrass ? GRASS_R04_CLIPS : FIELD_FOOTSTEP_CLIPS[surface];
+    const count = bank ? clips.length : pool.length;
     if (!count) return;
     let index = Math.floor(Math.random() * count);
     if (count > 1 && index === this.lastOutdoor[surface]) index = (index + 1) % count;
     this.lastOutdoor[surface] = index;
+
     const c = this.ctx!;
     const src = c.createBufferSource();
-    src.buffer = this.fieldStepBank ?? pool[index];
-    const pitch = (foot ? 0.986 : 1.014) * (0.98 + Math.random() * 0.04);
+    src.buffer = bank ?? pool[index];
+    // Grass: restrained playback variance. Rhythmic cadence still comes exclusively from gait.ts.
+    const pitch = surface === 'grass'
+      ? (foot ? 0.997 : 1.003) * (0.995 + Math.random() * 0.01)
+      : (foot ? 0.986 : 1.014) * (0.98 + Math.random() * 0.04);
     src.playbackRate.value = pitch;
-    const vol = Math.max(0, Math.min(1.2, gain)) * (this.fieldStepBank ? (surface === 'grass' ? 0.33 : 0.31) : 0.5)
-      * (0.93 + Math.random() * 0.14);
+    const surfaceMix = surface === 'grass' ? (bank ? 0.33 : 0.5) : (bank ? DIRT_PATH_GAIN : 0.35);
+    const vol = Math.max(0, Math.min(1.2, gain)) * surfaceMix * (0.93 + Math.random() * 0.14);
     const volume = c.createGain();
     src.connect(volume).connect(this.master!);
-    if (this.fieldStepBank) {
+
+    if (bank) {
       const [offset, duration] = clips[index];
       const t = c.currentTime, audible = duration / pitch;
       volume.gain.setValueAtTime(0.0001, t);
       volume.gain.linearRampToValueAtTime(vol, t + 0.01);
-      volume.gain.setValueAtTime(vol, t + Math.max(0.02, audible - 0.055));
+      volume.gain.setValueAtTime(vol, t + Math.max(0.02, audible - (surface === 'grass' ? 0.045 : 0.055)));
       volume.gain.linearRampToValueAtTime(0.0001, t + audible);
       src.start(t, offset, duration);
     } else {
