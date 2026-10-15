@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { pouchPanelGeometry, POUCH_HEIGHT, KITCHEN_SIPPY_JUIZ } from '../src/world/kitchenJuicePouch';
+import { pouchPanelGeometry, POUCH_HEIGHT, KITCHEN_SIPPY_JUIZ, SIPPY_JUIZ_ACTION, SIPPY_JUIZ_TEXT } from '../src/world/kitchenJuicePouch';
 
 describe('SippyJuiz flexible foil silhouette', () => {
   it('is a tall, slim, sculpted pouch rather than a box with planar faces', () => {
@@ -7,10 +7,11 @@ describe('SippyJuiz flexible foil silhouette', () => {
     const p = g.getAttribute('position');
     g.computeBoundingBox();
     const b = g.boundingBox!;
-    expect(b.max.x - b.min.x).toBeGreaterThan(0.20);
-    expect(b.max.x - b.min.x).toBeLessThan(0.24);
-    expect(b.max.y - b.min.y).toBeGreaterThan(0.29);
-    expect((b.max.x - b.min.x) / (b.max.y - b.min.y)).toBeLessThan(0.78);
+    expect(b.max.x - b.min.x).toBeGreaterThan(0.18);
+    expect(b.max.x - b.min.x).toBeLessThan(0.20);
+    expect(b.max.y - b.min.y).toBeGreaterThan(0.33);
+    expect((b.max.y - b.min.y) / (b.max.x - b.min.x)).toBeGreaterThan(1.75);
+    expect((b.max.y - b.min.y) / (b.max.x - b.min.x)).toBeLessThan(2.0);
     expect(b.max.z - b.min.z).toBeGreaterThan(0.02);
     expect(b.max.z - b.min.z).toBeLessThan(0.05);
     expect(p.count).toBeGreaterThan(200); // multiple curved strips, not two rectangular planes
@@ -40,6 +41,8 @@ describe('SippyJuiz flexible foil silhouette', () => {
     }
     expect(KITCHEN_SIPPY_JUIZ.x).toBeGreaterThan(101.5);
     expect(KITCHEN_SIPPY_JUIZ.x).toBeLessThan(102.2);
+    expect(SIPPY_JUIZ_ACTION).toBe('Bekijk drinkpakje');
+    expect(SIPPY_JUIZ_TEXT).toBe('Is dit echt de laatste CapriSun?');
     front.dispose(); back.dispose();
   });
 });
