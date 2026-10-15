@@ -38,3 +38,19 @@ Production advanced to `87f4db5322b9c857034d74186d32bb43de35ffe4` (playable hand
 The optional production/Wickerman release browser suite also passes 8/8: the bong cooldown, airco inspect/zap range, drink pouch, recorded grass/dirt surface resolution, ritual/audio coexistence, hay-to-matches handoff and absence of page/request errors are preserved. Raw handpan and optional-vignette logs are retained as text. The fresh full run's initial regression and lighting sections all pass, including F05 touch (no retry or input changes).
 
 Current untouched production `87f4db5` paired metrics/BOSLUST run is complete: 31/38 pass. Exactly seven failures: six fixed high-quality 450k triangle assertions (gate, forecourt, hall, shed/forest, BOSLUST and pool) and the historical BOSLUST LOD-distance assertion. Every low-quality camera-budget check passes. No test thresholds were changed. `live-evidence/baseline/results.json` and `metrics.json` retain the exact failures/counters.
+
+### Matched render comparison
+
+All nine integrated low-quality camera checks pass. Maximum low calls in this representative set are 140 (zone landscape maximum: 130). Hall, library and gathering-room triangles are identical to production. Gate, forecourt, garden, shed and BOSLUST each submit 72 additional triangles; call differences are between -1 and +1. Pool counters vary with dynamic/culling state (-8,347 triangles in this sample), so this is not represented as a performance gain. The same six legacy high-quality assertions fail. Exact paired counters: `live-evidence/render-comparison.json`.
+
+The merged JS bundle is 1,505.12 kB / 483.38 kB gzip versus production 1,484.79 kB / 475.79 kB gzip (about +7.6 kB gzip). Both builds already have the bundle-size warning. There are no new downloaded mushroom geometry/music assets: geometry and music are procedural. Physical Android GPU/FPS validation remains unavailable on this software-rendered host; no hardware FPS claim is made.
+
+## Final release validation
+
+The recovered complete integrated browser run finishes **96/103 passed**. Its exact seven failing test names match the current production baseline's seven failures; there are **zero new browser failures**. All functional checks (full tutorial-to-finale route, collision, lighting, saves/migration, touch/resize, WebGL recovery/failure, living-room and BOSLUST interaction/review checks) pass. F05 touch passes in this fresh full run without retry. Assertions were unchanged; only navigation/default waits were lengthened to 120 seconds for software rendering. The complete raw results and metrics are in `live-evidence/full/`, with the matched baseline in `live-evidence/baseline/`.
+
+Release decision: publish the approved R04 source combined with current production, given passing build/typecheck/354 unit tests, four policy tests, focused zone lifecycle, handpan 10/10, optional Wickerman/vignette 8/8 and no new full-suite failures. The full browser suite is explicitly not described as wholly green. No LOD, quality threshold, puzzle or progression workaround was introduced.
+
+The default branch is advanced only with an expected-head lease against `87f4db5`; the existing Pages workflow builds/tests/deploys the resulting commit. The public URL and built asset identifier must be verified after successful deployment. Actual deployment evidence is appended on the integration branch after release.
+
+Remaining limitations: physical Android GPU/FPS/thermal measurements are still pending; high-quality legacy render assertions and the stale LOD test remain inherited issues. One useful subsequent polish iteration is a matched hardware pass on the target Android phone (normal forest, approach, core, return), followed by distance-culling/post-target tuning only if pacing requires it. The approved R04 art and shader strength are retained.
