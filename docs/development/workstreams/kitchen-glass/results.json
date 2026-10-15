@@ -1,0 +1,75 @@
+{
+  "rows": [
+    {
+      "quality": "low",
+      "state": "before-closed",
+      "visible": false,
+      "calls": 26,
+      "triangles": 96388
+    },
+    {
+      "quality": "low",
+      "state": "closed",
+      "visible": true,
+      "calls": 67,
+      "triangles": 236681
+    },
+    {
+      "quality": "low",
+      "state": "open",
+      "visible": true,
+      "calls": 67,
+      "triangles": 236681
+    },
+    {
+      "quality": "low",
+      "state": "closing",
+      "visible": true,
+      "calls": 67,
+      "triangles": 236681
+    },
+    {
+      "quality": "low",
+      "state": "opening",
+      "visible": true,
+      "calls": 67,
+      "triangles": 236681
+    },
+    {
+      "quality": "high",
+      "state": "before-closed",
+      "visible": false,
+      "calls": 70,
+      "triangles": 265934
+    },
+    {
+      "quality": "high",
+      "state": "closed",
+      "visible": true,
+      "calls": 153,
+      "triangles": 502895
+    },
+    {
+      "quality": "high",
+      "state": "open",
+      "visible": true,
+      "calls": 153,
+      "triangles": 502895
+    },
+    {
+      "quality": "high",
+      "state": "closing",
+      "visible": true,
+      "calls": 153,
+      "triangles": 502895
+    },
+    {
+      "quality": "high",
+      "state": "opening",
+      "visible": true,
+      "calls": 153,
+      "triangles": 502895
+    }
+  ],
+  "errors": []
+}
