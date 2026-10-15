@@ -6,6 +6,7 @@ import { boxMM, planMatrix } from './kit';
 import { bake, projectUV } from './artkit';
 import { surface } from './surfaces';
 import { mulberry32 } from '../core/rng';
+import { EXTERIOR_FINISH, ageFacade } from './exteriorFinish';
 
 export const EXTERIOR_STUDY = typeof location === 'undefined' || new URLSearchParams(location.search).get('exterior') !== 'base';
 let materials: { wall: THREE.Material; gravel: THREE.Material } | undefined;
@@ -20,6 +21,23 @@ export function exteriorMats() {
   if (materials) return materials;
   const wall = new THREE.MeshLambertMaterial({ vertexColors: true, map: texture((x, r) => {
     x.fillStyle = '#aaa69a'; x.fillRect(0, 0, 512, 512);
+    if(EXTERIOR_FINISH){
+    // Dressed stone stays calm, with unequal block lengths and soft, interrupted edge highlights.
+    for(let row=0;row<8;row++) {
+      const weights=Array.from({length:4},()=>.8+r()*.4),sum=weights.reduce((a,b)=>a+b,0);let at=row%2?-58:0;
+      for(let col=0;col<4;col++) {
+        const bw=weights[col]/sum*512,v=Math.floor(r()*19),warm=r()>.4;
+        for(const ox of [-512,0,512]) {
+          const px=at+ox,py=row*64;
+          x.fillStyle=`rgb(${195+v},${(warm?186:191)+v},${(warm?165:175)+v})`;
+          x.beginPath();x.roundRect(px+1.5,py+1.5,bw-3,61,2+r()*2);x.fill();
+          x.strokeStyle='rgba(238,229,204,.23)';x.lineWidth=1.5;
+          x.beginPath();x.moveTo(px+7,py+4);x.lineTo(px+bw-9,py+4);x.stroke();
+        }
+        at+=bw;
+      }
+    }
+    }else{
     // Eight 30 cm courses per 2.4 m repeat; long dressed blocks, soft bevels and narrow mortar.
     for (let row = 0; row < 8; row++) for (let col = -1; col < 4; col++) {
       const px = col * 128 + (row % 2) * 64, py = row * 64, v = Math.floor(r() * 15);
@@ -32,6 +50,7 @@ export function exteriorMats() {
         x.fillStyle = i % 2 ? 'rgba(115,121,110,.055)' : 'rgba(245,232,202,.10)';
         x.fillRect(px+7+r()*65, py+8+r()*39, 20+r()*35, 3+r()*9);
       }
+    }
     }
   }, 1901) });
   const gravel = new THREE.MeshLambertMaterial({ vertexColors: true, map: texture((x, r) => {
@@ -47,6 +66,7 @@ export function exteriorMats() {
     }
   }, 1902) });
   surface(wall, 'stone'); surface(gravel, 'ground');
+  if(EXTERIOR_FINISH)ageFacade(wall);
   materials = { wall, gravel }; return materials;
 }
 

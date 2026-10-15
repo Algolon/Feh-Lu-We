@@ -14,6 +14,7 @@ import { Asm, artMats, lathe } from './artkit';
 import { makeDoor, makePickup, makeInspect, makeAction, place } from '../interactions/props';
 import { drawSymbol, SYMBOLS } from '../content/symbols';
 import { registerOpening } from './openings';
+import { buildSerreAirco } from './serreAirco';
 import { addClue } from '../core/state';
 import { turnWheel, wheels, WHEEL_SYMBOLS } from '../puzzles/rules';
 import { GF, CONS, POOL, SITES, CONS_EAST_DOOR, SAUNA_STEPS, SAUNA_FLOOR } from './layout';
@@ -385,6 +386,9 @@ export function buildConservatory(w: World, g: GameApi, c: Ctx) {
 
   // ---------------------------------------------------------------- barrel sauna (outside, to the right)
   buildSauna(w, g, c);
+
+  // Optional inspection vignette on the grass at the south-facing glass facade.
+  buildSerreAirco(w, g);
 
   w.checkpoints.push({ name: 'conservatory', pose: { x: 118, y: GF, z: 99.5, yaw: Math.PI / 2, pitch: -0.2 } });
 }

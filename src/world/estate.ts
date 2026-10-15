@@ -6,6 +6,7 @@
 // Layout constants live in layout.ts, keepouts in footprints.ts, ground in terrain.ts.
 import * as THREE from 'three';
 import { surface } from './surfaces';
+import { installOpaqueBatches } from './opaqueBatches';
 import { EXTERIOR_STUDY, exteriorMats } from './exteriorStudy';
 import { driveGravel } from './arrivalStudy';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
@@ -187,6 +188,7 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
     if (distToPolyline(x, z, DRIVEWAY) < 2.4 || Math.hypot(x - SITES.forecourt.x, z - SITES.forecourt.z) < 8) return 'stone';
     return 'grass';
   };
+  installOpaqueBatches(w);
   return { world: w, extras: { env, isIndoor, surfaceAt, rooms: R } };
 }
 
