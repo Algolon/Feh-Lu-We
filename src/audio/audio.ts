@@ -3,6 +3,11 @@
 
 type SfxName = string;
 
+/** Handpan voice: [frequency multiple, peak level, decay (s), detune (cents)]. */
+export const HANDPAN_PARTIALS: readonly [number, number, number, number][] = [
+  [1, 1, 3.4, 0], [1, 0.3, 3.0, 4], [2, 0.42, 2.1, 1], [3, 0.17, 1.2, -2], [5.3, 0.04, 0.35, 0],
+];
+
 export class Audio {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
@@ -81,6 +86,43 @@ export class Audio {
     o.connect(g).connect(this.master!);
     o.start(t);
     o.stop(t + dur + 0.05);
+  }
+
+  private voices = 0;
+  /**
+   * One handpan stroke. A tuned steel note carries its fundamental, the octave and the compound fifth (3×), each
+   * decaying on its own clock (the fundamental rings longest), a faint detuned twin for the slow shimmer, a short
+   * inharmonic ping for the metal, and a soft hand-noise transient. Lowpassed per voice for warmth. Returns false
+   * when nothing sounds (muted, no context); rapid playing is capped so a burst of taps cannot pile up voices.
+   */
+  handpan(freq: number, vel = 1): boolean {
+    if (!this.ready || this.muted) return false;
+    if (this.voices >= 10) return true;
+    const c = this.ctx!, t = c.currentTime, v = Math.max(0.05, Math.min(1, vel)) * (0.88 + Math.random() * 0.12);
+    const lp = c.createBiquadFilter();
+    lp.type = 'lowpass'; lp.frequency.value = Math.min(9000, freq * 10); lp.Q.value = 0.4;
+    const out = c.createGain();
+    out.gain.value = 0.2 * v;
+    out.connect(lp).connect(this.master!);
+    const ring = freq < 200 ? 1.35 : 1; // the ding rings on
+    let longest = 0;
+    for (const [mult, amp, decay, cents] of HANDPAN_PARTIALS) {
+      const o = c.createOscillator(), g = c.createGain(), d = decay * ring;
+      o.type = 'sine';
+      o.frequency.value = freq * mult;
+      o.detune.value = cents;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.linearRampToValueAtTime(amp, t + 0.006);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+      o.connect(g).connect(out);
+      o.start(t);
+      o.stop(t + d + 0.05);
+      longest = Math.max(longest, d);
+    }
+    this.noise(0.035, 'bandpass', 1900, 0.9, 0.05 * v);
+    this.voices++;
+    setTimeout(() => { this.voices = Math.max(0, this.voices - 1); }, longest * 1000);
+    return true;
   }
 
   private lastStep = -1;

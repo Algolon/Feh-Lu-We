@@ -13,11 +13,15 @@
 //   the instrument visibly rests on them: no floating, no intersection (handpan.test.ts checks the clearances).
 // - Legs are swept rounded-square sections along an interpolating curve, ending under the pads; the rail and the hub
 //   are turned. Each leg carries a little seeded irregularity (hand-carved, not machined).
-// Decorative only: no sound, interaction, puzzle or save state. Shared art materials only (the tight metal highlight for the grey
+// Playable (see `addHandpanPlay`): aim at a tone field or the ding and use it to hear that note. No puzzle, progression or
+// save state. Shared art materials only (the tight metal highlight for the grey
 // steel, timber, upholstery for felt): batched into the caller's chunk, no new material or draw call.
 import * as THREE from 'three';
 import type { Ctx } from './arch';
+import type { World, GameApi } from '../interactions/world';
 import { Asm, artMats, lathe, softBox, projectUV, arcPts } from './artkit';
+import { getKit } from './kit';
+import { place } from '../interactions/props';
 import { mulberry32 } from '../core/rng';
 
 const GEOS = new Map<string, THREE.BufferGeometry>();
@@ -312,4 +316,76 @@ export function buildHandpan(c: Ctx, x: number, y0: number, z: number, yaw: numb
   a.add(M.ceramic, '#45484b', cache('hp_rim', rimGeometry), 0, P.rimY, 0);
   a.end();
   return HANDPAN_HEIGHT;
+}
+
+// ------------------------------------------------------------------------------------------------ playing
+/**
+ * Tuning: D Kurd, the classic handpan scale. The ding is D3; the tone fields climb from A3 (rank 0, the largest field at
+ * the front) to A4 in the zig-zag order of `toneFields`.
+ */
+export const HANDPAN_SCALE = {
+  ding: { name: 'D3', hz: 146.83 },
+  fields: [['A3', 220.0], ['B♭3', 233.08], ['C4', 261.63], ['D4', 293.66], ['E4', 329.63], ['F4', 349.23], ['G4', 392.0], ['A4', 440.0]].map(([name, hz]) => ({ name: name as string, hz: hz as number })),
+} as const;
+
+/**
+ * The note struck at a point on the instrument (stand-local three.js x / z, metres): the ding inside its rim, else the
+ * tone field nearest in its own elliptical metric (a forgiving target on a phone), so every stroke sounds a note.
+ * `vel` drops a little away from a field's centre (an off-centre stroke is softer).
+ */
+export function noteAt(x: number, z: number): { name: string; hz: number; field: number; vel: number } {
+  const r = Math.hypot(x, z);
+  const dingE = r / P.dingR;
+  let best = -1, bestE = dingE;
+  for (const f of toneFields()) {
+    const px = x - Math.cos(f.az) * f.rho, pz = z - Math.sin(f.az) * f.rho;
+    const u = (px * Math.cos(f.az) + pz * Math.sin(f.az)) / f.a, v = (-px * Math.sin(f.az) + pz * Math.cos(f.az)) / f.b;
+    const e = Math.hypot(u, v);
+    if (e < bestE) { bestE = e; best = f.rank; }
+  }
+  const vel = 1 - 0.35 * smooth(bestE, 0.4, 1.6);
+  if (best < 0) return { ...HANDPAN_SCALE.ding, field: -1, vel };
+  return { ...HANDPAN_SCALE.fields[best], field: best, vel };
+}
+
+/** Invisible raycast target shaped like the instrument (top dome + the seam band), so the hit point lies on the pan. */
+export function playTargetGeometry() {
+  const pts: [number, number][] = [[0.28, -0.03], [0.28, 0.0]];
+  for (let i = 1; i <= 8; i++) { const r = P.R * (1 - i / 8); pts.push([Math.max(0.001, r), topRise(r) + (r < P.dingR ? P.dingH * (1 - (r / P.dingR) ** 2) : 0) + 0.004]); }
+  return lathe(pts, 20); // outside-in: lathe normals (and front faces) point up and out
+}
+
+/**
+ * The play interaction for a handpan built with `buildHandpan` at the same origin and yaw. Uses the existing reticle /
+ * tap flow: the hit point picks the note. Nothing is saved; muted audio gets a one-line hint instead of silence.
+ */
+export function addHandpanPlay(w: World, g: GameApi, x: number, y0: number, z: number, yaw: number) {
+  const root = place(new THREE.Object3D(), x, y0, z, yaw);
+  const target = new THREE.Mesh(cache('hp_play_target', playTargetGeometry), getKit().hitMat);
+  target.position.y = P.rimY;
+  target.visible = false;
+  target.userData.hit = true;
+  root.add(target);
+  w.scene.add(root);
+  root.updateMatrixWorld(true);
+  const focus = new THREE.Vector3(0, P.rimY, 0).applyMatrix4(root.matrixWorld), local = new THREE.Vector3();
+  let hinted = 0;
+  w.add({
+    id: 'play.handpan',
+    obj: root,
+    hit: [target],
+    focus,
+    reach: 2.4,
+    label: () => 'Bespelen: handpan',
+    run: (at) => {
+      local.copy(at ?? focus);
+      root.worldToLocal(local);
+      const n = noteAt(local.x, local.z);
+      if (!g.playNote(n.hz, n.vel) && performance.now() - hinted > 8000) {
+        hinted = performance.now();
+        g.toast('Het geluid staat uit. Zet het aan in de instellingen om de handpan te horen.');
+      }
+    },
+  });
+  return root;
 }

@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
+import { HANDPAN_PARTIALS } from '../src/audio/audio';
 import {
-  HANDPAN as P, HANDPAN_HEIGHT, bottomDrop, bottomShellGeometry, legGeometry, legPath, padContact, rimGeometry, toneFields, topRise, topShellGeometry,
+  HANDPAN as P, HANDPAN_HEIGHT, HANDPAN_SCALE, noteAt, playTargetGeometry, bottomDrop, bottomShellGeometry, legGeometry, legPath, padContact, rimGeometry, toneFields, topRise, topShellGeometry,
 } from '../src/world/handpan';
 
 const tris = (g: THREE.BufferGeometry) => (g.index ? g.index.count : g.attributes.position.count) / 3;
@@ -104,5 +105,60 @@ describe('handpan asset 01 — stand (FLW-S3-035)', () => {
     for (const [r] of legPath()) expect(r * Math.SQRT2).toBeGreaterThan(0.05);
     const total = tris(topShellGeometry()) + tris(bottomShellGeometry()) + tris(rimGeometry()) + legs.reduce((s, g) => s + tris(g), 0);
     expect(total).toBeLessThan(10000); // instrument + legs; rail, hub, pegs and pads add ≈ 1.2k
+  });
+});
+
+describe('handpan asset 01 — playing', () => {
+  it('is tuned to D Kurd: the ding below eight ascending fields, A3 to A4', () => {
+    expect(HANDPAN_SCALE.ding.hz).toBeCloseTo(146.83, 2);
+    const hz = HANDPAN_SCALE.fields.map((f) => f.hz);
+    expect(hz).toHaveLength(P.notes);
+    for (let i = 1; i < hz.length; i++) expect(hz[i]).toBeGreaterThan(hz[i - 1]);
+    expect(hz[0]).toBeGreaterThan(HANDPAN_SCALE.ding.hz);
+    expect(hz[7] / hz[0]).toBeCloseTo(2, 3); // A3 → A4
+    expect(HANDPAN_SCALE.fields.map((f) => f.name)).toEqual(['A3', 'B♭3', 'C4', 'D4', 'E4', 'F4', 'G4', 'A4']);
+  });
+
+  it('plays the field you hit: each field centre gives its own note, the centre gives the ding', () => {
+    for (const f of toneFields()) {
+      const n = noteAt(Math.cos(f.az) * f.rho, Math.sin(f.az) * f.rho);
+      expect(n.field).toBe(f.rank);
+      expect(n.hz).toBe(HANDPAN_SCALE.fields[f.rank].hz);
+      expect(n.vel).toBeCloseTo(1, 2);
+    }
+    expect(noteAt(0, 0)).toMatchObject({ field: -1, name: 'D3' });
+    expect(noteAt(0.03, -0.02).field).toBe(-1);
+  });
+
+  it('always sounds a note, softer off-centre (the rim, between fields)', () => {
+    for (let a = 0; a < Math.PI * 2; a += 0.1) {
+      const n = noteAt(Math.cos(a) * 0.26, Math.sin(a) * 0.26);
+      expect(n.hz).toBeGreaterThan(100);
+      expect(n.vel).toBeLessThan(1);
+      expect(n.vel).toBeGreaterThanOrEqual(0.65);
+    }
+  });
+
+  it('aims on the pan itself: a ray from above lands on the dome, within a few mm of the shell', () => {
+    const m = new THREE.Mesh(playTargetGeometry(), new THREE.MeshBasicMaterial());
+    const rc = new THREE.Raycaster();
+    for (const f of toneFields()) {
+      const x = Math.cos(f.az) * f.rho, z = Math.sin(f.az) * f.rho;
+      rc.set(new THREE.Vector3(x, 1, z), new THREE.Vector3(0, -1, 0));
+      const h = rc.intersectObject(m)[0];
+      expect(h).toBeDefined();
+      expect(Math.abs(h.point.y - topRise(f.rho))).toBeLessThan(0.012);
+      expect(noteAt(h.point.x, h.point.z).field).toBe(f.rank);
+    }
+    // and from the side, at the seam
+    rc.set(new THREE.Vector3(1, -0.01, 0), new THREE.Vector3(-1, 0, 0));
+    expect(rc.intersectObject(m)[0]).toBeDefined();
+  });
+
+  it('voices a handpan stroke as fundamental, octave and compound fifth, the fundamental ringing longest', () => {
+    const mults = HANDPAN_PARTIALS.map((p) => p[0]);
+    for (const m of [1, 2, 3]) expect(mults).toContain(m);
+    const fundamental = HANDPAN_PARTIALS.find((p) => p[0] === 1)!;
+    for (const p of HANDPAN_PARTIALS) expect(p[2]).toBeLessThanOrEqual(fundamental[2]);
   });
 });

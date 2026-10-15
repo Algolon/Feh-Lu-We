@@ -23,7 +23,7 @@ import { FIRE_UNIFORMS } from './fire';
 import { S3_BUILDERS } from './d2props';
 import { parkedCar } from './cars';
 import { buildGravityBong } from './gravityBong';
-import { buildHandpan } from './handpan';
+import { buildHandpan, addHandpanPlay } from './handpan';
 
 const BENCH_LOG2 = logModel(157, 2.2, 0.21);
 const WICKER_GEO = wickermanGeo();
@@ -32,7 +32,7 @@ const SHORE_STONE = (() => { const g = rockModel(71); g.userData.keepColor = tru
 
 export function buildGrounds(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods: EstateWoods | null) {
   arrival(w, c);
-  socialGarden(w, c);
+  socialGarden(w, g, c);
   lake(w, g, c, veg, woods);
   golf(w, c); // DEV-04B: in the grounds batch, which already carries the art-kit materials (an own chunk cost +7 draw calls)
   wickerman(w, g, c);
@@ -67,7 +67,7 @@ function platform(c: Ctx, r: Rect, color: string) {
   boxMM(c.b, c.k.M.stone, '#c4b898', r.x0 - 0.06, r.x1 + 0.06, -0.05, GF - 0.03, r.z0 - 0.06, r.z1 + 0.06, { chunk: c.chunk, uv: 1 }); // edge course
 }
 
-function socialGarden(w: World, c: Ctx) {
+function socialGarden(w: World, g: GameApi, c: Ctx) {
   const k = c.k, { sb, bx, cg } = joinery, M = artMats();
   // BBQ work place (reached from the kitchen door), apart from the balloon tank: a kettle grill on three legs with a
   // side shelf, the prep table, a gas bottle with its valve; tongs and a board on the prep table
@@ -107,6 +107,7 @@ function socialGarden(w: World, c: Ctx) {
   buildGravityBong(c, 81.58, GF + 0.4, 120.56);
   // Asset 01: the handpan on its walnut stand (FLW-S3-035), standing on the rug (top at GF + 0.012), same spot as before
   const handpanTop = buildHandpan(c, 83.4, GF + 0.012, 121.6, 0.4);
+  addHandpanPlay(w, g, 83.4, GF + 0.012, 121.6, 0.4); // aim at a tone field (or tap it) to play that note
   w.col.addCircle(83.4, 121.6, 0.3, 0, GF + 0.012 + handpanTop);
   for (const [x, z, col] of [[80.0, 119.0, '#b3813f'], [80.0, 122.0, '#7a2e2a'], [82.8, 119.0, '#62704a']] as const) { const a = new Asm(c.b, c.chunk, x, GF, z, x * 0.7); a.add(M.upholstery, col, cg('pouf', () => projectUV(cushion(0.55, 0.3, 0.55, 0.12, 0.03), 0.25)), 0, 0.15, 0); }
   // helium tank on its trolley + balloons tethered to a weight (they float on strings, they do not hover loose)

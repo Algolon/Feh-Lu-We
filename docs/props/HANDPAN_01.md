@@ -1,7 +1,7 @@
 # Asset 01 — Handpan op standaard (FLW-S3-035)
 
 ## Scope
-Vervang de placeholder-handpan (platte lathe-schijf met losse toonveld-schijfjes op drie staafjes) in de gravity-bong/handpanhoek (`MUSIC_BONG`, LEVEL_PLAN `musicBong` 79–85 / 118–123) door een gestileerd, gedetailleerd instrument op een walnoten standaard. Uitsluitend visueel: geen geluid, interactie, puzzel-, progressie- of save-logica. Er bestond geen interactie op de handpan; er is niets verwijderd.
+Vervang de placeholder-handpan (platte lathe-schijf met losse toonveld-schijfjes op drie staafjes) in de gravity-bong/handpanhoek (`MUSIC_BONG`, LEVEL_PLAN `musicBong` 79–85 / 118–123) door een gestileerd, gedetailleerd instrument op een walnoten standaard. Daarna (op verzoek van de eigenaar) bespeelbaar gemaakt: zie **Bespelen**. Geen puzzel-, progressie- of save-logica. Er bestond geen interactie op de handpan; er is niets verwijderd.
 
 ## Referenties
 - **FLW-S3-035 Handpanstandaard** (`docs/reference/flw/MANIFEST.json`): status `AMBIGUOUS`, `canonical: false`, geen geselecteerde winnaar. Beide alternatieven zijn bekeken (archief, sha256 gecontroleerd tegen het manifest):
@@ -21,6 +21,13 @@ Vervang de placeholder-handpan (platte lathe-schijf met losse toonveld-schijfjes
 ## Integratie (`src/world/grounds.ts`)
 - Zelfde plek en richting als de placeholder: (83.4, 121.6), yaw 0.4, nu op het kleed (`GF + 0.012`) in plaats van 1 cm erin.
 - Collider ongewijzigd in plaats en straal (cirkel 0,3 m; alle poten binnen die straal, getest); alleen de hoogte volgt het nieuwe instrument (bovenkant ≈ 1,01 m). Looproutes en de rest van de hoek zijn niet aangepast.
+
+## Bespelen
+- **Hoe**: richt op een toonveld of de ding en gebruik de actieknop (desktop: E/klik met pointer lock; label **"Bespelen: handpan"**), of tik direct op een toonveld (mobiel, of klik zonder pointer lock). Het geraakte punt bepaalt de noot; de ding in het midden, anders het dichtstbijzijnde toonveld (vergevingsgezind op een telefoon). Buiten het hart van een veld klinkt de slag iets zachter.
+- **Stemming**: D Kurd. Ding D3 (146,83 Hz); toonvelden van groot naar klein in zigzag: A3, B♭3, C4, D4, E4, F4, G4, A4.
+- **Klank** (`Audio.handpan`, `src/audio/audio.ts`): WebAudio-synthese zoals alle geluid in de game (geen audiobestanden). Grondtoon, octaaf en kwint daarboven (3×) met eigen uitklinktijden (grondtoon ≈ 3,4 s, ding langer), een licht ontstemde tweeling voor de zweving, een korte metalen ping en een zachte handtransient; lowpass per stem. Maximaal 10 gelijktijdige stemmen. Volgt de bestaande mute/master-gain.
+- **Geluid uit**: één melding ("Het geluid staat uit. Zet het aan in de instellingen …"), maximaal eens per 8 s.
+- **Techniek**: `Interactable.run` krijgt optioneel het geraakte wereldpunt (`run(at?)`); `game.ts` geeft het door bij reticle en tik (achterwaarts compatibel: bestaande `run()` negeren het). `GameApi.playNote(hz, vel)`. Raakdoel: een onzichtbare, lage-poly koepel in de vorm van de pan (het raakpunt ligt dus op het instrument, niet op een doos). Nieuwe interactie-ID `play.handpan`, opgenomen in het id-contract `scripts/dev04c-additions.json`. Niets wordt opgeslagen.
 
 ## Validatie
 Zie `handpan-01/views.json` (telefoonviewport 915 × 412, quality low) en de screenshots in `handpan-01/`.
@@ -56,4 +63,6 @@ Kanttekening: door chunk-batching tekent de garden-chunk het instrument mee (en 
 - FLW-S3-035 blijft `AMBIGUOUS`. Kiest de eigenaar later één sheet, dan kunnen de verbindingsdetails (ring tegenover gebogen draagarmen, rond tegenover vierkant penblok) worden aangescherpt in `legPath`/`railGeometry`/`hubGeometry`.
 - De close-ups zijn gerenderd met SwiftShader (software-GPU); er zijn geen fps- of apparaatmetingen gedaan.
 - Geen LOD voor het instrument: op afstand blijft het 10,7k driehoeken kosten zolang de garden-chunk getekend wordt.
-- Alleen visueel: geen geluid of bespeel-interactie (buiten scope).
+- Geen visuele reactie op een slag (geen trilling/gloed); alleen geluid. Bewust klein gehouden voor mobiele prestaties.
+- Echte touch-latency is niet in CI te meten: SwiftShader heeft tot ~1,5 s per estate-frame, waardoor een echte CDP-tik als sleepbeweging telt. De tik-check stuurt daarom touch-pointer-events in één taak door hetzelfde inputpad.
+- Geluid is niet op een echt toestel beluisterd; de klank is offline gerenderd en spectraal gecontroleerd (grondtoon, octaaf, kwint; piek 0,37 bij overlappende noten).
