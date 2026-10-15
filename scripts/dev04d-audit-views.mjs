@@ -205,7 +205,14 @@ const D3B2 = [
   ['re-coat', 83.1, 3.35, 81.9, 130, -0.12], ['sk-table', 83.0, 3.35, 92.0, 40, -0.45], ['sk-bedside', 74.1, 3.35, 90.3, -100, -0.5],
   ['gu-games', 101.6, 3.35, 103.2, -70, -0.4], ['gu-bags', 103.4, 3.35, 104.6, 10, -0.45], ['ba-wash', 88.6, 3.35, 105.3, 95, -0.08],
   ['ba-caddy', 87.2, 3.35, 106.6, -45, -0.5],
+  // D3-b2R additions: the draped jacket, the Sterrenkamer resting side and the rucksack at close / play distance
+  ['re-jacket', 80.4, 3.35, 82.75, -135, -0.38], ['sk-rest', 79.6, 3.35, 89.4, -75, -0.1], ['sk-centre', 81.8, 3.35, 88.0, -60, -0.06],
+  ['gu-ruck', 104.05, 3.35, 105.45, 12, -0.55], ['gu-ruck-far', 103.0, 3.35, 102.6, 25, -0.22],
 ].map(([n, x, y, z, yaw, pitch]) => [`d3b2-${n}`, { x, y, z, yaw: (yaw * Math.PI) / 180, pitch }]);
+// DEV-04D D3-b2R (SET=d3b2r): the refinement's subset of the D3-b2 poses (Reis / Sterren composition, the soft goods)
+const D3B2R_NAMES = ['re-door', 're-enter', 're-wide', 're-travel', 're-desk', 're-sloop', 're-coat', 're-jacket', 're-bed', 're-case',
+  'sk-door', 'sk-enter', 'sk-wide', 'sk-centre', 'sk-rest', 'sk-scope', 'sk-table', 'sk-bed', 'sk-moon', 'sk-bedside', 'sk-back', 'gu-ruck', 'gu-ruck-far', 'gu-bags'];
+const D3B2R = D3B2.filter(([n]) => D3B2R_NAMES.includes(n.slice(5)));
 
 const ctx = await browser.newContext({ viewport: { width: +(process.env.VW ?? 1280), height: +(process.env.VH ?? 720) } });
 const page = await ctx.newPage();
@@ -262,6 +269,7 @@ else if (process.env.SET === 'd3a') views.push(...D3A);
 else if (process.env.SET === 'd3arch') views.push(...D3ARCH);
 else if (process.env.SET === 'd3b1') views.push(...D3B1);
 else if (process.env.SET === 'd3b2') views.push(...D3B2);
+else if (process.env.SET === 'd3b2r') views.push(...D3B2R);
 else if (!process.env.ROOMS) views.push(...EXT);
 const sel = process.env.VIEWS ? new Set(process.env.VIEWS.split(',')) : null;
 const rows = [];

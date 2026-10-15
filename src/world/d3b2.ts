@@ -76,21 +76,59 @@ export function holdall(c: Ctx, x: number, z: number, y0: number, yaw: number, b
 }
 
 /**
- * Rucksack leaning back against a wall (local −z): a soft body with a flap and a front pocket, two shoulder straps
- * and a grab loop. The whole bag tips about its bottom back edge, so it rests on that edge and the wall.
+ * Rucksack leaning back against a wall (local −z): a soft canvas body that bellies forward under its load and narrows to
+ * a drawstring top under a flap; a full front pocket, two compression straps, a grab loop; the shoulder straps against
+ * the wall. D3-b2R: rebuilt from the boxy first pass (a soft box with a cushion on top read as a crate). The whole bag
+ * tips about its bottom back edge, so it rests on that edge and the wall.
  */
 export function rucksack(c: Ctx, x: number, z: number, y0: number, yaw: number, body = '#4f6a5a', trim = '#3a2a1e') {
-  const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw).begin('rucksack'), H = 0.46, D = 0.18, t = 0.16;
+  const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw).begin('rucksack'), H = 0.48, D = 0.2, t = 0.15;
   const zp = -D / 2, lean = (y: number, zz: number): [number, number] => { const dz = zz - zp; return [y * Math.cos(t) + dz * Math.sin(t), zp + dz * Math.cos(t) - y * Math.sin(t)]; };
-  const put = (mat: THREE.Material, col: THREE.ColorRepresentation, g: THREE.BufferGeometry, lx: number, y: number, zz: number) => { const [yy, z2] = lean(y, zz); a.add(mat, col, g, lx, yy, z2, { rx: t }); };
-  put(M.upholstery, body, cg('d3b2Ruck', () => projectUV(softBox(0.31, H, D, 0.06, 2, 2), 0.25)), 0, H / 2, 0);
-  put(M.upholstery, darker(body, 0.85), cg('d3b2RuckFlap', () => projectUV(cushion(0.3, 0.05, 0.2, 0.025, 0.012, 'top', 1, 2), 0.25)), 0, H + 0.005, 0.01);
-  put(M.upholstery, darker(body, 0.92), cg('d3b2RuckPocket', () => projectUV(softBox(0.22, 0.16, 0.06, 0.025, 1, 1), 0.25)), 0, 0.13, D / 2 + 0.02);
-  for (const s of [-1, 1]) put(M.upholstery, trim, bx(0.035, 0.2, 0.01), s * 0.07, H - 0.12, D / 2 + 0.004); // flap straps
-  for (const s of [-1, 1]) put(M.upholstery, trim, bx(0.045, H - 0.08, 0.012), s * 0.08, H / 2, -D / 2 - 0.004); // shoulder straps (against the wall)
-  put(M.upholstery, trim, cg('d3b2RuckLoop', () => new THREE.TorusGeometry(0.03, 0.007, 3, 8, Math.PI)), 0, H + 0.03, -0.04);
-  a.end({ gap: 0.015 });
-  collide(c, x, z, yaw, 0.32, 0.28, H, y0);
+  const put = (mat: THREE.Material, col: THREE.ColorRepresentation, g: THREE.BufferGeometry, lx: number, y: number, zz: number, o: { rx?: number; rz?: number } = {}) => { const [yy, z2] = lean(y, zz); a.add(mat, col, g, lx, yy, z2, { rx: t + (o.rx ?? 0), rz: o.rz }); };
+  // the body: a soft box deformed into a loaded sack (bulging front and sides low, a narrower gathered top, a flat back)
+  put(M.upholstery, body, cg('d3b2RuckBody', () => projectUV(deform(softBox(0.32, H, D, 0.07, 2, 3), (p) => {
+    const v = (p.y + H / 2) / H; // 0 bottom … 1 top
+    const belly = Math.sin(Math.PI * Math.min(1, v * 1.15)) ** 0.8;
+    p.x *= 1 + 0.12 * belly - 0.28 * Math.max(0, v - 0.75) / 0.25;
+    if (p.z > 0) p.z += 0.045 * belly * (1 - (2 * p.x / 0.36) ** 2);
+    p.z *= 1 - 0.3 * Math.max(0, v - 0.8) / 0.2;
+  }), 0.25)), 0, H / 2, 0);
+  put(M.upholstery, darker(body, 0.82), cg('d3b2RuckFlap', () => projectUV(deform(cushion(0.27, 0.05, 0.2, 0.024, 0.016, 'top', 1, 2), (p) => { if (p.z > 0.04) p.y -= 0.06 * ((p.z - 0.04) / 0.06); }), 0.25)), 0, H + 0.005, 0.015, { rx: -0.12 }); // the lid flap, its front edge falling over the body
+  put(M.upholstery, darker(body, 0.9), cg('d3b2RuckPocket', () => projectUV(cushion(0.22, 0.17, 0.07, 0.03, 0.018, 'front', 1, 2), 0.25)), 0, 0.15, D / 2 + 0.05, { rx: Math.PI });
+  for (const s of [-1, 1]) put(M.upholstery, trim, bx(0.03, 0.24, 0.012), s * 0.07, H - 0.13, D / 2 + 0.035, { rx: -0.18 }); // flap straps down onto the belly
+  for (const s of [-1, 1]) put(M.paint, '#8a8478', bx(0.034, 0.02, 0.016), s * 0.07, H - 0.24, D / 2 + 0.05); // their buckles
+  for (const s of [-1, 1]) put(M.upholstery, trim, bx(0.045, H - 0.06, 0.012), s * 0.085, H / 2, -D / 2 - 0.004); // shoulder straps (against the wall)
+  put(M.upholstery, trim, cg('d3b2RuckLoop', () => new THREE.TorusGeometry(0.03, 0.007, 3, 8, Math.PI)), 0, H + 0.035, -0.05);
+  a.end({ gap: 0.02 });
+  collide(c, x, z, yaw, 0.34, 0.3, H, y0);
+}
+
+/**
+ * Planning desk (Reiskamer, D3-b2R; replaces the slim writing desk under the middle window). A heavier silhouette for the
+ * room's planning zone: a pedestal of three drawers (plinth, carcass, drawer fronts with cup pulls) carries the west end,
+ * two square tapered legs the east end, an apron with a drawer between them, and a low gallery rail stands along the
+ * back edge. The top datum is 0.76 (the sloop and the map stand on it). Width along local x, the user side at local +z.
+ */
+export function planningDesk(c: Ctx, x: number, z: number, y0: number, yaw: number, w = 1.4, d = 0.62, wood = '#7a4f2c') {
+  const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw).begin('planningDesk'), dk = darker(wood, 0.78), lt = darker(wood, 1.12), H = 0.76, T = 0.04;
+  const pw = 0.42, px = -w / 2 + 0.03 + pw / 2; // the pedestal, under the west end
+  a.add(M.timber, dk, bx(pw - 0.04, 0.06, d - 0.1), px, 0.03, -0.01); // plinth
+  a.add(M.timber, wood, sb(pw, H - T - 0.06, d - 0.06, 0.008), px, 0.06 + (H - T - 0.06) / 2, 0);
+  for (let i = 0; i < 3; i++) {
+    const hy = 0.12 + i * 0.19;
+    a.add(M.timber, lt, sb(pw - 0.06, 0.16, 0.02, 0.005), px, hy + 0.08, d / 2 - 0.045); // drawer front, inside the top's edge
+    a.add(M.brass, '#b8913e', cg('d3bCupPull', () => new THREE.CylinderGeometry(0.035, 0.035, 0.018, 8, 1, false, 0, Math.PI).rotateZ(Math.PI / 2)), px, hy + 0.1, d / 2 - 0.026, { ry: Math.PI / 2 });
+  }
+  for (const sz of [-1, 1]) a.add(M.timber, dk, joinery.taperLeg(H - T, 0.05, 0.034), w / 2 - 0.06, 0, sz * (d / 2 - 0.06)); // east legs
+  a.add(M.timber, wood, bx(w - pw - 0.14, 0.1, 0.022), (px + pw / 2 + w / 2 - 0.06) / 2, H - T - 0.05, d / 2 - 0.06); // front apron
+  a.add(M.timber, wood, bx(w - pw - 0.14, 0.1, 0.022), (px + pw / 2 + w / 2 - 0.06) / 2, H - T - 0.05, -d / 2 + 0.06); // back apron
+  a.add(M.timber, wood, bx(0.022, 0.1, d - 0.12), w / 2 - 0.06, H - T - 0.05, 0); // end apron
+  a.add(M.timber, lt, sb(0.4, 0.07, 0.016, 0.004), (px + pw / 2 + w / 2 - 0.06) / 2, H - T - 0.05, d / 2 - 0.045); // the centre drawer
+  a.add(M.timber, wood, sb(w, T, d, 0.01), 0, H - T / 2, 0); // top
+  a.add(M.timber, dk, bx(w - 0.04, 0.05, 0.018), 0, H + 0.025, -d / 2 + 0.012); // gallery rail along the back
+  for (const sx of [-1, 1]) a.add(M.timber, dk, bx(0.018, 0.05, 0.1), sx * (w / 2 - 0.03), H + 0.025, -d / 2 + 0.06); // its returns
+  a.end();
+  collide(c, x, z, yaw, w, d, 0.8, y0);
 }
 
 /**
@@ -118,16 +156,37 @@ export function deskTravelSet(c: Ctx, x: number, y: number, z: number, yaw: numb
 }
 
 /**
- * A jacket hung over a chair's back (cresting rail at `railY`, its centre `railZ` along the chair's local z): the body
- * falls in front of the rail and behind it, folding over the rail's top, one sleeve hanging loose at the side.
+ * A jacket hung by its shoulders over a chair's back (cresting rail at `railY`, its centre `railZ` along the chair's
+ * local z, the back raked by `rake`). D3-b2R: rebuilt from the first pass's flat slabs. The shoulders straddle the rail
+ * (two rounded humps over it, the collar rolled between them), the body falls behind the back in a slight A-line with a
+ * fold, the open fronts and lapels fall in front of it, one sleeve hangs straight, the other is caught on the seat corner
+ * and bends forward. It reads as a garment from 2–4 m: shoulder line, two hanging sleeves, an uneven hem.
  */
-export function jacketOverChair(c: Ctx, x: number, z: number, y0: number, yaw: number, railY: number, railZ: number, col = '#5f6a46') {
-  const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw).begin('chairJacket'), W = 0.36;
-  a.add(M.upholstery, col, cg('d3b2JacketFold', () => new THREE.CylinderGeometry(0.03, 0.03, W, 8, 1, false, -Math.PI / 2, Math.PI).rotateZ(Math.PI / 2)), 0, railY + 0.034, railZ, { rx: -0.06 });
-  a.add(M.upholstery, col, sb(W, 0.3, 0.02, 0.008), 0, railY + 0.035 - 0.15, railZ + 0.03, { rx: 0.06 }); // front, over the back
-  a.add(M.upholstery, darker(col, 0.88), sb(W, 0.42, 0.02, 0.008), 0, railY + 0.035 - 0.21, railZ - 0.035, { rx: -0.08 }); // back, hanging lower
-  a.add(M.upholstery, darker(col, 0.92), cg('d3b2Sleeve', () => new THREE.CylinderGeometry(0.035, 0.042, 0.42, 7).translate(0, -0.21, 0)), W / 2 + 0.03, railY + 0.03, railZ - 0.03, { rz: 0.1 });
-  a.end({ ground: false, gap: 0.02 });
+export function jacketOverChair(c: Ctx, x: number, z: number, y0: number, yaw: number, railY: number, railZ: number, col = '#7a8458', rake = 0.06) {
+  const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw).begin('chairJacket'), W = 0.42, top = railY + 0.045, dk = darker(col, 0.86), lt = darker(col, 1.08);
+  // the back, hanging behind the chair back (local −z), a little wider at the hem, one fold down the middle
+  a.add(M.upholstery, col, cg('d3b2JacketBack', () => projectUV(deform(softBox(W, 0.52, 0.024, 0.01, 1, 3), (p) => {
+    const v = (0.26 - p.y) / 0.52; // 0 shoulders … 1 hem
+    p.x *= 1 + 0.1 * v - 0.18 * Math.max(0, 0.2 - v) / 0.2; // sloping shoulders, a slight A-line below
+    if (v < 0.12) p.y -= 0.05 * (2 * Math.abs(p.x) / W) ** 2; // the shoulder line falls to the sleeve heads
+    p.z -= 0.014 * Math.cos((p.x / W) * Math.PI * 2) * v; // the fold
+    p.y -= 0.06 * v * (p.x / W); // the hem drops lower on one side
+  }), 0.25)), 0, top - 0.26, railZ - 0.032, { rx: rake });
+  a.add(M.upholstery, dk, bx(0.012, 0.16, 0.006), 0.02, top - 0.44, railZ - 0.048, { rx: rake }); // the back vent
+  // the shoulders over the rail: two humps and the rolled collar between them
+  for (const sx of [-1, 1]) a.add(M.upholstery, col, cg('d3b2JacketShoulder', () => new THREE.SphereGeometry(0.05, 6, 3, 0, Math.PI * 2, 0, Math.PI / 2).scale(1.5, 0.8, 1.05)), sx * 0.13, top - 0.012, railZ, { rx: rake });
+  a.add(M.upholstery, lt, cg('d3b2JacketCollar', () => new THREE.CylinderGeometry(0.03, 0.03, 0.17, 5, 1, false, -Math.PI / 2, Math.PI).rotateZ(Math.PI / 2)), 0, top - 0.01, railZ, { rx: rake });
+  // the open fronts in front of the back (local +z), each with its lapel turned out, falling shorter than the back
+  for (const sx of [-1, 1]) {
+    a.add(M.upholstery, col, cg('d3b2JacketFront', () => projectUV(softBox(0.15, 0.4, 0.018, 0.008, 1, 1), 0.25)), sx * 0.12, top - 0.22, railZ + 0.03, { rx: rake - 0.05, rz: -sx * 0.06 });
+    a.add(M.upholstery, lt, bx(0.05, 0.2, 0.008), sx * 0.065, top - 0.11, railZ + 0.042, { rx: rake - 0.05, rz: sx * 0.32 }); // lapel
+  }
+  // sleeves: one straight down outside the post, one caught forward over the seat corner
+  a.add(M.upholstery, col, cg('d3b2SleeveA', () => new THREE.CylinderGeometry(0.045, 0.056, 0.52, 6, 1, true).translate(0, -0.26, 0)), W / 2 + 0.01, top - 0.05, railZ - 0.01, { rz: 0.14, rx: rake });
+  a.add(M.upholstery, dk, cg('d3b2Cuff', () => new THREE.CylinderGeometry(0.057, 0.057, 0.04, 6, 1, true)), W / 2 + 0.01 + Math.sin(0.14) * 0.5, top - 0.05 - 0.5, railZ - 0.01 - 0.03);
+  a.add(M.upholstery, col, cg('d3b2SleeveB1', () => new THREE.CylinderGeometry(0.048, 0.056, 0.27, 6, 1, true).translate(0, -0.135, 0)), -W / 2 - 0.01, top - 0.05, railZ, { rz: -0.2 });
+  a.add(M.upholstery, col, cg('d3b2SleeveB2', () => new THREE.CylinderGeometry(0.044, 0.048, 0.28, 6).translate(0, -0.14, 0)), -W / 2 - 0.05, top - 0.3, railZ + 0.02, { rx: -0.65, rz: -0.08 }); // forearm, bent forward
+  a.end({ ground: false, gap: 0.025 });
 }
 
 // ================================================================================================ Sterrenkamer
@@ -156,6 +215,33 @@ export function observingTable(c: Ctx, x: number, z: number, y0: number, yaw: nu
   a.add(M.ceramic, '#e8e2d4', cg('d3b2MugHandle', () => new THREE.TorusGeometry(0.024, 0.006, 4, 8, Math.PI)), 0.255, h + 0.045, -0.14, { rz: -Math.PI / 2 });
   a.end();
   collide(c, x, z, yaw, w, d, h, y0);
+}
+
+/**
+ * Daybed under the star map (Sterrenkamer, D3-b2R): somewhere to lie down between observations, in the middle of the
+ * room's north wall. Four square legs and side rails carry a slatted deck; two scrolled end boards rise 0.55 m at the
+ * ends; a spindled back (end posts, top rail) stands along the wall side and gives it a silhouette under the chart; a crowned mattress, a bolster at the head end, a throw folded at the foot and a star atlas left open face down.
+ * Length along local x, the open side at local +z.
+ */
+export function daybed(c: Ctx, x: number, z: number, y0: number, yaw: number, l = 1.9, d = 0.74, wood = '#4a3a2a', cover = '#93a3b6') {
+  const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw).begin('daybed'), dk = darker(wood, 0.8), RH = 0.22, top = 0.4;
+  for (const sx of [-1, 1]) for (const sz of [-1, 1]) a.add(M.timber, dk, joinery.taperLeg(RH + 0.05, 0.045, 0.034), sx * (l / 2 - 0.05), 0, sz * (d / 2 - 0.05));
+  for (const sz of [-1, 1]) a.add(M.timber, wood, sb(l - 0.04, 0.1, 0.03, 0.006), 0, RH + 0.03, sz * (d / 2 - 0.03)); // side rails
+  a.add(M.timber, dk, bx(l - 0.1, 0.03, d - 0.08), 0, RH + 0.05, 0); // the deck
+  for (const sx of [-1, 1]) { // scrolled end boards: a board and a rolled top
+    a.add(M.timber, wood, sb(0.04, 0.5, d, 0.008), sx * (l / 2 - 0.02), 0.3, 0);
+    a.add(M.timber, wood, cg('d3b2DaybedScroll', () => new THREE.CylinderGeometry(0.045, 0.045, d + 0.02, 8).rotateX(Math.PI / 2)), sx * (l / 2 - 0.005), 0.56, 0);
+  }
+  // the back along the wall side (local −z): end posts rise to 0.78, a top rail on them, spindles from the side rail up
+  for (const sx of [-1, 1]) a.add(M.timber, dk, bx(0.045, 0.78, 0.045), sx * (l / 2 - 0.03), 0.39, -d / 2 + 0.03);
+  a.add(M.timber, wood, sb(l, 0.06, 0.05, 0.01), 0, 0.78, -d / 2 + 0.03);
+  for (let i = 1; i < 8; i++) a.add(M.timber, wood, bx(0.022, 0.78 - RH - 0.08 - 0.03, 0.022), -l / 2 + (i * l) / 8, (RH + 0.08 + 0.75) / 2, -d / 2 + 0.03);
+  a.add(M.upholstery, cover, cg(`d3b2DaybedMat${l}`, () => projectUV(cushion(l - 0.1, 0.13, d - 0.06, 0.04, 0.02, 'top', 1, 3), 0.25)), 0, RH + 0.065 + 0.065, 0);
+  a.add(M.upholstery, darker(cover, 1.25), cg('d3b2Bolster', () => new THREE.CylinderGeometry(0.085, 0.085, d - 0.12, 8).rotateX(Math.PI / 2)), -l / 2 + 0.14, top + 0.08, 0);
+  a.add(M.upholstery, '#c9a25a', cg('d3b2DaybedThrow', () => projectUV(cushion(0.42, 0.06, d - 0.1, 0.02, 0.012, 'top', 1, 2), 0.25)), l / 2 - 0.3, top + 0.03, 0, { ry: 0.05 });
+  addBook(a, { size: 'folio', thick: 'medium', hard: true, design: 2 }, '#26344a', 0.12, top + 0.004, 0.08, { flat: true, ry: 0.5, paper: PAPER.aged });
+  a.end();
+  collide(c, x, z, yaw, l, d, 0.6, y0);
 }
 
 /** Binoculars set down on a surface (support y = 0): two barrels on a hinge bridge, eyecups and a neck strap loop. */

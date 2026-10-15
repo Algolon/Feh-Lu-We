@@ -38,7 +38,7 @@ describe('DEV-04D D3-b2: Track 01 moon and sloop in production', () => {
     const { PROPS3D } = await import('../src/content/props3d');
     const { buildMoon, buildSloop } = await import('../src/world/d3bAssets');
     const { assetTris } = await import('../src/world/artkit');
-    for (const [id, build, scale] of [['FLW-S3-016', buildMoon, 1.4], ['FLW-S3-015', buildSloop, 1.15]] as const) {
+    for (const [id, build, scale] of [['FLW-S3-016', buildMoon, 1.4], ['FLW-S3-015', buildSloop, 1.3]] as const) { // D3-b2R: sloop ×1.3 on the 1.4 m planning desk; moon ×1.4 kept (×1.6 compared, rejected)
       const p = PROPS3D.find((q) => q.id === id)!;
       expect(p.scale, id).toBe(scale);
       const prod = ctx(), ref = ctx();
@@ -61,9 +61,9 @@ describe('DEV-04D D3-b2: Track 01 moon and sloop in production', () => {
     S3_BUILDERS['FLW-S3-015'](sl.c);
     const s = bounds(sl.parts);
     expect(s.y0).toBeCloseTo(UF + 0.76, 3); // desk top (writingDesk at R0, top 0.76)
-    expect(s.x0).toBeGreaterThan(79.0 - 0.55); expect(s.x1).toBeLessThan(79.0 + 0.55); // desk 1.1 × 0.55 at (79.0, 80.95)
-    expect(s.z0).toBeGreaterThan(80.95 - 0.275); expect(s.z1).toBeLessThan(80.95 + 0.275);
-    expect(s.x0).toBeGreaterThan(79.0); // the east half: the map and guidebook keep the west half
+    expect(s.x0).toBeGreaterThan(79.0 - 0.7); expect(s.x1).toBeLessThan(79.0 + 0.7); // D3-b2R planning desk 1.4 × 0.62 at (79.0, 80.95)
+    expect(s.z0).toBeGreaterThan(80.95 - 0.31 + 0.03); expect(s.z1).toBeLessThan(80.95 + 0.31); // in front of the back gallery rail
+    expect(s.x0).toBeGreaterThan(78.95); // the east half: the map and guidebook keep the west half (map edge 79.025, under the hull)
     const mo = ctx();
     S3_BUILDERS['FLW-S3-016'](mo.c);
     const m = bounds(mo.parts);
@@ -85,8 +85,9 @@ describe('DEV-04D D3-b2: construction', () => {
     D.jacketOverChair(c, 8, 0, 0, Math.PI, 0.88, -0.214); D.observingTable(c, 10, 0, 0, Math.PI); D.binoculars(c, 12, 0.5775, 0, 1.1);
     D.stoolThrow(c, 14, 0, 0, 0.6, 0.535, 0.18); D.sweaterOverChest(c, 16, 0, 0, 0, 0.58, 0.235); D.washShelf(c, 18, 1.12, 0, 0);
     D.towelRing(c, 20, 0.95, 0, 0); D.bathCaddy(c, 22, 0.57, 0, 0); bedside(c, 24, 0, 0, 0);
+    D.planningDesk(c, 26, 0, 0, 0); D.daybed(c, 29, 0, 0, Math.PI); // D3-b2R
     expect(assetWarnings.slice(before)).toEqual([]);
-    expect(assetAudits.length - n0).toBe(13);
+    expect(assetAudits.length - n0).toBe(15);
   });
   it('the rebuilt night table keeps its top datum (0.5775), footprint and collider; corner posts reach the floor', async () => {
     const { bedside } = await import('../src/world/furniture');
@@ -100,6 +101,18 @@ describe('DEV-04D D3-b2: construction', () => {
     expect(boxes).toEqual([[0, 0, 0.5, 0.45, 0, 0.6]]);
     const posts = parts.filter((p) => { p.geo.computeBoundingBox(); const s = p.geo.boundingBox!.getSize(new THREE.Vector3()); return s.y > 0.5 && s.x < 0.05; });
     expect(posts.length).toBe(4);
+  });
+  it('D3-b2R planning desk: top datum 0.76 (sloop and map stand on it), 1.4 × 0.62 footprint and collider, the gallery rail at the back', async () => {
+    const { planningDesk } = await import('../src/world/d3b2');
+    const { c, parts, boxes } = ctx();
+    planningDesk(c, 0, 0, 0, 0);
+    const top = parts.filter((p) => { p.geo.computeBoundingBox(); const s = p.geo.boundingBox!.getSize(new THREE.Vector3()); return s.x > 1.35 && s.z > 0.6; });
+    expect(top.length).toBe(1);
+    expect(bounds(top).y1).toBeCloseTo(0.76, 4);
+    const b = bounds(parts);
+    expect(b.x1 - b.x0).toBeLessThanOrEqual(1.4 + 1e-6);
+    expect(b.z1 - b.z0).toBeLessThanOrEqual(0.62 + 1e-6);
+    expect(boxes).toEqual([[0, 0, 1.4, 0.62, 0, 0.8]]);
   });
   it('the observing table keeps the logbook datum (top 0.70) and the old table footprint / collider', async () => {
     const { observingTable } = await import('../src/world/d3b2');
@@ -116,9 +129,12 @@ describe('DEV-04D D3-b2: construction', () => {
     const cost = (f: (c: never) => void) => { const { c, parts } = ctx(); f(c); return tris(parts); };
     expect(cost((c) => D.coatStand(c, 0, 0, 0, 0))).toBeLessThanOrEqual(1500);
     expect(cost((c) => D.holdall(c, 0, 0, 0, 0))).toBeLessThanOrEqual(1000);
-    expect(cost((c) => D.rucksack(c, 0, 0, 0, 0))).toBeLessThanOrEqual(1000);
+    expect(cost((c) => D.rucksack(c, 0, 0, 0, 0))).toBeLessThanOrEqual(1200); // D3-b2R soft rebuild: 1,092
+    expect(cost((c) => D.daybed(c, 0, 0, 0, 0))).toBeLessThanOrEqual(1500);
+    expect(cost((c) => D.jacketOverChair(c, 0, 0, 0, 0, 0.88, -0.2))).toBeLessThanOrEqual(900); // D3-b2R draped jacket (soft goods)
+    expect(cost((c) => D.planningDesk(c, 0, 0, 0, 0))).toBeLessThanOrEqual(1500);
     expect(cost((c) => D.observingTable(c, 0, 0, 0, 0))).toBeLessThanOrEqual(1000);
-    for (const f of [(c: never) => D.deskTravelSet(c, 0, 0, 0, 0), (c: never) => D.jacketOverChair(c, 0, 0, 0, 0, 0.88, -0.2), (c: never) => D.binoculars(c, 0, 0, 0, 0), (c: never) => D.stoolThrow(c, 0, 0, 0, 0, 0.535, 0.18),
+    for (const f of [(c: never) => D.deskTravelSet(c, 0, 0, 0, 0), (c: never) => D.binoculars(c, 0, 0, 0, 0), (c: never) => D.stoolThrow(c, 0, 0, 0, 0, 0.535, 0.18),
       (c: never) => D.sweaterOverChest(c, 0, 0, 0, 0, 0.58, 0.2), (c: never) => D.washShelf(c, 0, 0, 0, 0), (c: never) => D.towelRing(c, 0, 0, 0, 0), (c: never) => D.bathCaddy(c, 0, 0, 0, 0)])
       expect(cost(f)).toBeLessThanOrEqual(500);
   });

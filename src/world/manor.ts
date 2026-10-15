@@ -41,7 +41,7 @@ import { addKey, presentKey, keyLiner, linerWhenOpen, hatchDish, LINER_TOP, HATC
 import { SALON_LAYOUT, SALON_SITES } from '../content/gallery';
 import { buildEntrance, entranceBay } from './entrance';
 import { planChest, pottingBench, plantStand, plantEtagere, pottedPlant } from './d3b';
-import { coatStand, holdall, rucksack, deskTravelSet, jacketOverChair, observingTable, binoculars, stoolThrow, sweaterOverChest, washShelf, towelRing, bathCaddy } from './d3b2';
+import { coatStand, holdall, rucksack, deskTravelSet, jacketOverChair, planningDesk, daybed, observingTable, binoculars, stoolThrow, sweaterOverChest, washShelf, towelRing, bathCaddy } from './d3b2';
 import { wainscot, refectoryTable, gamesCabinet, dartboard, servingConsole, chinaCabinet, wallCupboards, splashback, enamelPendant, pegRailClock, panelDoor } from './d3a';
 import { placeSolved, slotContents, openBasement } from '../puzzles/rules';
 
@@ -1138,7 +1138,13 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   // its hinges with straps inside and travel labels outside, clothes folded in it (was a box and a tilted slab)
   luggageRack(c, 83.8, 84.4, R0, -Math.PI / 2);
   blanketChest(c, 75.05, 84.9, R0, Math.PI / 2, 1.0, '#6b4a2a');
-  writingDesk(c, 79.0, 80.95, R0, 0, 1.1, 0.55, '#7a4f2c');
+  // DEV-04D D3-b2R: the window wall becomes one planning zone instead of scattered pieces on a long plain wall: a
+  // heavier planning desk (drawer pedestal, gallery rail; same 0.76 top) under the middle window, a bookcase of guides
+  // and atlases on the pier west of it, a rug under desk and chair; the wall now runs window · bookcase · desk ·
+  // holdall · window · coat stand instead of a lone desk between two windows
+  planningDesk(c, 79.0, 80.95, R0, 0, 1.4, 0.62);
+  bookshelf(c, 77.25, 80.65, R0, 0, 1.2, 1.6, 'leather', 0.32, 'living');
+  rug(c, 79.0, 81.5, R0 + 0.01, 2.6, 1.8, 0, '#d6c2aa', 'medallion');
   // DEV-04D D3-b2: the desk under the middle window is where the trip is planned: the road map and guidebook on its
   // west half (they replace the generic open book), the Track 01 sloop (×1.15) on its east half, the guest's jacket
   // over the chair and a soft holdall by the desk; a coat stand by the door carries the coat, scarf and hat. The
@@ -1187,10 +1193,15 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   // and an armchair in the window corner make the west end the resting / looking-out side (bed, window, chair). No new
   // star / emblem shapes (EB.stars stays the logbook's).
   shared(() => observingTable(c, 83.9, 93.0, R0, Math.PI, 0.6, 0.5, 0.7));
+  rug(c, 83.3, 92.1, R0 + 0.01, 2.2, 2.4, 0, '#c4cee2', 'field'); // D3-b2R: the observing station's own floor: telescope, stool and table on one rug
   stool(c, 83.5, 91.6, R0);
   stoolThrow(c, 83.5, 91.6, R0, 0.6, 0.535, 0.18);
   binoculars(c, 72.6, R0 + 0.5775, 91.2, 1.1);
-  armchair(c, 73.85, 88.15, R0, -0.7, '#3b4f5d'); // the rest corner: by the window, turned to it and the bed (the west end's second seat)
+  // D3-b2R: a daybed under the star map (north wall) fills the room's empty middle with a purpose: between the bed end
+  // and the observing station, a place to lie down between observations under the chart, so the room reads as one
+  // sequence along its length (sleep · look out · rest under the chart · observe) instead of two islands
+  daybed(c, 78.6, 93.48, R0, Math.PI);
+  armchair(c, 73.85, 88.15, R0, -0.7, '#3b4f5d'); // D3-b2: the window corner, turned to the window and the bed
   const logbook = compound((b) => { addBook(new Asm(b, 'main', 0, 0, 0, Math.PI / 2), { size: 'tall', thick: 'medium', hard: true, design: 5 }, '#2f3f5f', 0, 0, 0, { flat: true, paper: PAPER.fresh }); });
   place(logbook, 83.9, R0 + 0.7, 93.0, 0.4);
   w.scene.add(logbook);
