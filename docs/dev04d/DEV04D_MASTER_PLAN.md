@@ -11,7 +11,7 @@ Status update (11 Oct 2026, D3 started):
 | D2 | complete, merged and deployed (PR #8, `f26e563`) |
 | D2-R | complete, merged and deployed (PR #10, `31c80bf`); owner-reviewed and **closed as a milestone**. Open points carried forward into D3-b / D3-f / D4 ([`DEV04D_D3_KICKOFF.md`](DEV04D_D3_KICKOFF.md) §3) |
 | D3 | in progress: **D3-a** (PR #11) and **D3-A2** (PR #13) merged and deployed, owner PASS; Asset Track 01 merged (PR #12). **D3-b1** (study, botanic room, front gallery swallows) on the D branch, awaiting owner review ([`DEV04D_D3B1_REPORT.md`](DEV04D_D3B1_REPORT.md)). D3-b2, D3-c…f pending. |
-| D4 | pending: the Wickerman's full ritual cycle is binding D4 scope (kick-off §3.3) |
+| D4 | pending: the Wickerman's full ritual cycle is binding D4 scope (kick-off §3.3). **W01** (15 Oct 2026) is the Wickerman implementation stream inside the D4 scope, run in parallel with D3-b2 on its own branch: lifecycle, bale, W8 filled read, fire / smoke / char / clean / refill, plinth polish, ritual audio ([`DEV04D_W01_REPORT.md`](DEV04D_W01_REPORT.md)). D4 does **not** redo that work: after the owner's W01 review it covers W01 acceptance, the phone check and the D closeout only |
 
 - D2 report: [`DEV04D_D2_REPORT.md`](DEV04D_D2_REPORT.md).
 - D2-R triage and D3 recalibration: [`DEV04D_D3_CRAFTSMANSHIP_AUDIT.md`](DEV04D_D3_CRAFTSMANSHIP_AUDIT.md) and
@@ -49,7 +49,7 @@ Invariants carried into D:
 | Invariant | Value |
 |---|---|
 | Save schema | **4** (`STATE_VERSION`); the Wickerman uses one new key in the open `lit` record, no bump |
-| Interactable / door ids | **130** (128 + `wicker.candles`, `wicker.figure`); `wicker.bale` → 131 only with owner approval (W1) |
+| Interactable / door ids | **130** (128 + `wicker.candles`, `wicker.figure`); `wicker.bale` → 131 only with owner approval (W1). W01 implements it provisionally on its branch (`scripts/dev04d-additions.json`); production stays at 130 until W01 is approved and merged |
 | Checkpoints | **21** |
 | Estate | 200 × 180 m |
 | Puzzles, notebook, ART-01 / 01.1, light systems | authoritative; reference art never changes puzzle text, evidence placement or mechanics |
@@ -98,7 +98,7 @@ starts when the owner approves a group).
 | **D2-a** 3D, approved | K3 key family on the four gameplay ids + icon fix; S3-004 bird; gingerbread maquette re-skin | D0 approval; K1 / K-B | ids, pickups, labels, saves unchanged; `Asm` construction audit clean; keys seated, not floating |
 | **D2-b** 3D, group A | S3-014 swallows (landing), 015 sloop (Reiskamer), 016 moon (Sterrenkamer), 017 medallion (botanic), 030 mask + 031 tile (Portugal), 033 fire screen (BBQ), 037 heron (lake) | owner approves group A | one coherent model per sheet (majority of views; flagged inconsistencies resolved as the manifest says); budget |
 | **D3** curation | per the room audit (batches D3-a…f), incl. the game-table scene; group-B pieces only where a zone brief asks for one | none (existing kit) | per zone: the six questions, before / after from the same audit poses, budget deltas (§7), decor QA probe |
-| **D4** Wickerman + closeout | lifecycle + bale + audio + W8 filled-state read + fire / smoke / plinth polish; final audit, performance, QA, D report | W1–W8 | design §10 matrix green; all suites green (C-R exception aside); phone check |
+| **D4** Wickerman + closeout | lifecycle + bale + audio + W8 filled-state read + fire / smoke / plinth polish (**implemented by W01**, see its report); final audit, performance, QA, D report | W1–W8 | design §10 matrix green; all suites green (C-R exception aside); phone check |
 
 **Recommended order (O1, revised).** The earlier D0 draft proposed "D3 first" because D1 / D2 looked blocked. They are
 not blocked any more, so follow the brief's order with the a / b split: **D1-a → D2-a → D3 → D4**, with D1-b / D2-b

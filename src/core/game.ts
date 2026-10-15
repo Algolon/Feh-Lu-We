@@ -28,6 +28,7 @@ import { estateMapSvg, floorPlanSvg, MAP_LEVELS, levelAt, type MapLevel } from '
 import type { Env } from '../world/env';
 import type { RoomGraph } from '../world/rooms';
 import { tickFires, FIRE_UNIFORMS } from '../world/fire';
+import { ritualGain } from '../world/wickerRitual';
 
 export interface SceneExtras {
   env?: Env;
@@ -200,6 +201,7 @@ export class Game implements GameApi {
   }
 
   async loadScene(id: SceneId) {
+    this.carry(null); // W01: a carried bundle never leaves its world
     if (this.world) {
       this.world.scene.remove(this.camera);
       this.world.dispose();
@@ -287,6 +289,14 @@ export class Game implements GameApi {
   }
   playerXZ() {
     return { x: this.player.x, z: this.player.z, y: this.player.y };
+  }
+  /** DEV-04D W01: a held non-item (the hay bundle): shown in the held chip, released by any item selection or a chip tap. */
+  carried: { name: string; icon: string; release: () => void } | null = null;
+  carry(held: { name: string; icon: string; release: () => void } | null) {
+    if (held) { this.selected = null; this.carried = held; this.ui.setHeld(held.name, held.icon); return; }
+    if (!this.carried) return;
+    this.carried = null;
+    this.ui.setHeld(this.selected ? ITEMS[this.selected].name : null, this.selected);
   }
   async leaveHome() {
     const r = leaveHomeRule(this.state);
@@ -386,6 +396,7 @@ export class Game implements GameApi {
 
   // ------------------------------------------------------------------ player-facing menus
   select(item: string | null) {
+    if (this.carried) { const c = this.carried; this.carried = null; c.release(); } // W01: one thing in the hand
     this.selected = item;
     this.ui.setHeld(item ? ITEMS[item].name : null, item);
     if (item) this.ui.toast(`${ITEMS[item].name} in de hand. Richt op iets en gebruik de actieknop.`);
@@ -724,6 +735,9 @@ export class Game implements GameApi {
     }
     const indoor = this.extras.isIndoor?.(this.player.x, this.player.z, this.player.y) ?? true;
     this.audio.update(dt, { indoor, fire, water, steam });
+    // DEV-04D W01: the Wickerman ritual layer (its own nodes, built on ignition, released after the aftermath)
+    const r = w.ritual;
+    this.audio.ritual(dt, r ? r.mix() : null, r ? ritualGain(r.pos.distanceTo(eye), indoor) : { fire: 0, close: 0 }, r ? r.events.splice(0) : []);
     // footsteps: hooked once (the closure reads the current world's surface lookup), not re-created every frame
     this.player.onStep ??= (e) => this.audio.step(this.extras.surfaceAt?.(this.player.x, this.player.z, this.player.y) ?? 'wood', e.gain, e.foot);
   }

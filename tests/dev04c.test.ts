@@ -158,7 +158,10 @@ describe('DEV-04C Wickerman burn look', () => {
   it('flame tongues sit on the figure (finite, within its reach), lower and upper body', () => {
     for (const part of ['low', 'high'] as const) {
       const t = effigyTongues(part);
-      expect(t.length).toBeGreaterThan(8);
+      // DEV-04D W01 (superseded count): a few broad sheet columns that merge into one fire replace the C stack of
+      // narrow teardrop tongues (> 8 per part); every column is broad (r ≥ 0.12 m)
+      expect(t.length).toBeGreaterThanOrEqual(5);
+      for (const q of t) expect(q.r).toBeGreaterThanOrEqual(0.12);
       for (const q of t) {
         for (const v of [q.x, q.y, q.z, q.h, q.r]) expect(Number.isFinite(v)).toBe(true);
         expect(Math.abs(q.x)).toBeLessThan(WICKER.wrist[0] + 0.3);

@@ -18,7 +18,7 @@ mkdirSync(OUT, { recursive: true });
 const helpers = readFileSync(new URL('./e2e-helpers.js', import.meta.url), 'utf8');
 const baseline = JSON.parse(readFileSync(new URL('./dev04a-baseline.json', import.meta.url), 'utf8'));
 // DEV-04C: the baseline ids plus exactly the documented additions (scripts/dev04c-additions.json); nothing else may appear or go
-const additions = JSON.parse(readFileSync(new URL('./dev04c-additions.json', import.meta.url), 'utf8')).interactables;
+const additions = ['./dev04c-additions.json', './dev04d-additions.json'].flatMap((f) => JSON.parse(readFileSync(new URL(f, import.meta.url), 'utf8')).interactables); // + W01 wicker.bale
 const expectedIds = [...baseline.interactables, ...additions].sort();
 const exe = process.env.CHROME ?? '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
 const browser = await chromium.launch({ executablePath: exe, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });

@@ -4,7 +4,11 @@
 > revision: §1.1 (FLW-S3-039 vs. the DEV-04 sheet vs. the current figure) and decision W8. The lifecycle, save
 > migration, bale, audio and tests are unchanged from the paused draft: the approved D direction stands.
 
-Status: **D0 design, for owner review. Nothing here is implemented.** Implementation is D4 (§11 of the master plan).
+Status: **D0 design, for owner review.** Implementation is D4 (§11 of the master plan).
+
+> **W01 (15 Oct 2026):** implemented on the W01 branch as the Wickerman stream of D4, with the W1–W8 defaults applied
+> *provisionally* (not owner-approved). Deviations and measurements: [`DEV04D_W01_REPORT.md`](DEV04D_W01_REPORT.md).
+> This design stays the reference; the report records where the implementation differs from it.
 Baseline: production `6c5e5c6` (PR #6 / DEV-04C-R merge).
 
 The DEV-04C rule "burned is permanent per save" (DEV-04C report §11, owner decision 2) is **superseded** by the DEV-04D

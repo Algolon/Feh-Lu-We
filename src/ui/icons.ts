@@ -83,6 +83,13 @@ const ICONS: Record<string, P[]> = {
     ['M18 44 H36 V52 H18 Z', '#f2e6c8', INK, 1.5],
     ['M23 48 H31', 'none', '#c4553d', 2],
   ],
+  // DEV-04D W01: a bundle of hay (the Wickerman refill; held, never an inventory item): stalks bound by a twine band
+  hay: [
+    ['M14 50 C12 38 18 22 26 12 M22 52 C22 40 26 24 32 10 M30 52 C32 40 36 26 42 12 M38 52 C42 42 46 30 52 18 M46 50 C50 44 54 36 58 30', 'none', INK, 5],
+    ['M14 50 C12 38 18 22 26 12 M22 52 C22 40 26 24 32 10 M30 52 C32 40 36 26 42 12 M38 52 C42 42 46 30 52 18 M46 50 C50 44 54 36 58 30', 'none', '#e4c878', 3],
+    ['M8 58 C14 50 22 46 32 46 C42 46 50 50 56 58 Z', '#c9a95a', INK, 2.5],
+    ['M15 36 C24 40 38 41 50 35 L52 42 C40 47 24 47 13 43 Z', '#6b4a2c', INK, 2],
+  ],
   notebook: [
     ['M14 6 H50 C53 6 54 8 54 10 V56 C54 58 53 60 50 60 H14 Z', '#5a7a3a', INK, 2.5],
     ['M50 10 V56', 'none', '#efe6d0', 3],
