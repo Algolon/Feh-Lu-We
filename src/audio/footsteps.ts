@@ -57,3 +57,17 @@ export function renderOutdoorFootstep(surface: OutdoorFootstepSurface, variant: 
   }
   return out;
 }
+
+/**
+ * Grass intentionally reuses the FIRST approved recorded impact on every footfall.
+ * Dirt retains varied clips without immediate repeats. Never alters gait timing.
+ */
+export function selectOutdoorFootstepVariant(
+  surface: OutdoorFootstepSurface, count: number, previous: number, random: number,
+): number {
+  if (count < 1) return -1;
+  if (surface === 'grass') return 0;
+  let variant = Math.min(count - 1, Math.max(0, Math.floor(random * count)));
+  if (count > 1 && variant === previous) variant = (variant + 1) % count;
+  return variant;
+}

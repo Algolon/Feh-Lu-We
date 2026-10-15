@@ -20,3 +20,9 @@ Only the test decoder was changed: `Uint8Array.from(atob(...))` and `TextDecoder
 - Assertions are unchanged. The local harness only increases navigation/default wait timeouts to 120 seconds for the software WebGL host. This temporary runner is not shipped.
 
 Release gates and final deployment identifiers are recorded below when complete. The default production ref is updated only against the exact tested base SHA, so concurrent production updates cannot be overwritten.
+
+## Resume after workspace maintenance (2026-10-15)
+
+The transient worktrees, running browser processes and unpushed live-evidence files were removed by workspace maintenance. They were not reset or deleted by this implementation. Remote checkpoint `2a8e12dcc2f3de8c55cab0ae32363fab5e6677e3` and approved R04 remain reachable and have been freshly cloned. The interrupted complete browser run has no recoverable final results and is not claimed as a final pass. Earlier observed partial results in the conversation (including the successful tutorial-to-finale route) are historical observations only.
+
+Production advanced to `87f4db5322b9c857034d74186d32bb43de35ffe4` (playable handpan plus repeatable Wickerman and first-clip-only grass footfalls). It was merged into the recovery branch. Two conflicts were combined deliberately: scene replacement clears both MushroomVision and the handpan target point; vegetation footprints retain both Mushroom Grove and the new hay bale exclusion. Original feature and production histories are preserved. New validation below supersedes the incomplete old run for release.

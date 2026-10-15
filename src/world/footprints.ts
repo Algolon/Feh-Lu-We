@@ -3,7 +3,7 @@
 // scatter: vegetation never stands in a building, on a platform, in the water or on a route. Pure (unit-tested).
 import {
   MANOR, WING, CONS, TERRACE, SHED, COTTAGE, COTTAGE_TERRACE, COTTAGE_PAD, SAUNA, JACUZZI, WELLNESS, BBQ, OUTDOOR_DINING, MUSIC_BONG,
-  BALLOON_NOOK, LAKE_VIEW, GOLF_TEE, GOLF_CHUTE, ARRIVAL, ARRIVAL_SERVICE, PARKING, ROUTES, WICKERMAN, WICKERMAN_LOOP, WICKERMAN_SIDE, GOLF_SPUR, SAUNA_STEPS,
+  BALLOON_NOOK, LAKE_VIEW, GOLF_TEE, GOLF_CHUTE, ARRIVAL, ARRIVAL_SERVICE, PARKING, ROUTES, WICKERMAN, WICKER_BALE, WICKERMAN_LOOP, WICKERMAN_SIDE, GOLF_SPUR, SAUNA_STEPS,
   MUSHROOM, LAKE, lakeQ, HILL_CUT, type Rect,
 } from './layout';
 import { chaikin, distToPolyline, inRect, rectDist } from './geom2d';
@@ -56,5 +56,6 @@ export function vegetationClear(x: number, z: number, kind: 'tree' | 'small', le
   if (inWater(x, z, tree ? 2.5 : 0.4)) return false;
   if (onRoute(x, z, tree ? 2.2 : 0.35, legacy)) return false;
   if (inWickermanClearing(x, z, tree ? 1.5 : -2.5)) return false;
+  if (Math.hypot(x - WICKER_BALE.x, z - WICKER_BALE.z) < WICKER_BALE.clear) return false; // DEV-04D W01: the hay bale
   return true;
 }

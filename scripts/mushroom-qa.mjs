@@ -87,7 +87,11 @@ if(tag==='feature'&&!process.env.CLIP&&((!process.env.BENCH&&!process.env.FLOW)|
   const exitedBus=a.groveBus.gain.value,exitedIntensity=p.intensity;
   g.player.setPose({x:181,z:161,y:g.world.col.ground(181,161),yaw:0,pitch:.1});T.wait(6);await wait(1800);render();
   if(pausedBus>.01||insideBus<.1||audible<.00001||muted!==0||exitedBus>.03||exitedIntensity!==0||reduced.motion!==0||reduced.distort!==0||!distortionDisabled)throw new Error('audio/accessibility lifecycle failed');
-  return {ready:a.ready,pausedBus,insideBus,exitedBus,exitedIntensity,audibleRms:audible,mutedRms:muted,voices:a.groveVoices.length,context:a.ctx.state,reduced,distortionDisabled,renderer,gpuTimer,target:[p.target.width,p.target.height],buffer:[gl.drawingBufferWidth,gl.drawingBufferHeight]};
+  p.render(g.renderer,g.world.scene,g.camera,10,false,true,false);
+  const speedClock=p.uniforms.clock.value;
+  const preservedFootsteps={field:!!a.fieldStepBank,grassR04:!!a.grassR04Bank};
+  if(speedClock!==12||!preservedFootsteps.field||!preservedFootsteps.grassR04)throw new Error('integrated clock / production footstep decoding failed');
+  return {speedClock,preservedFootsteps,ready:a.ready,pausedBus,insideBus,exitedBus,exitedIntensity,audibleRms:audible,mutedRms:muted,voices:a.groveVoices.length,context:a.ctx.state,reduced,distortionDisabled,renderer,gpuTimer,target:[p.target.width,p.target.height],buffer:[gl.drawingBufferWidth,gl.drawingBufferHeight]};
  })});
  if(process.env.CHECKS){
   const lost=await page.evaluate(async()=>{const g=window.__game,ext=g.renderer.getContext().getExtension('WEBGL_lose_context');if(!ext)return {supported:false};ext.loseContext();await new Promise(r=>setTimeout(r,100));const shown=g.contextLost;ext.restoreContext();return {supported:true,shown};});

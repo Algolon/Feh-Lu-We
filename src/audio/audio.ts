@@ -2,11 +2,13 @@
 // the user-authorized bong hit also plays its own bundled MP3.
 // The context is created/resumed only from the Start button (user gesture), and suspended when hidden.
 
-import { renderOutdoorFootstep, type FootstepSurface, type OutdoorFootstepSurface } from './footsteps';
+import type { RitualMix } from '../world/wickerRitual';
+import { renderOutdoorFootstep, selectOutdoorFootstepVariant, type FootstepSurface, type OutdoorFootstepSurface } from './footsteps';
 import { FIELD_FOOTSTEPS_MP3, FIELD_FOOTSTEP_CLIPS } from './fieldFootsteps';
 import { GRASS_R04_MP3, GRASS_R04_CLIPS, DIRT_PATH_GAIN } from './grassR04';
 
 type SfxName = string;
+type RitualVoice = { src: AudioScheduledSourceNode; f: BiquadFilterNode | null; g: GainNode };
 
 /** Self-hosted, unmodified sound from the user's authorized Myinstants reference. */
 export const BONG_RIPPIE_ASSET = 'audio/bong-rippie.mp3';
@@ -14,6 +16,11 @@ export const BONG_RIPPIE_ASSET = 'audio/bong-rippie.mp3';
 export const BONG_HIT_BUBBLES = [0.25, 0.35, 0.47, 0.57, 0.69, 0.77, 0.90, 1.00, 1.12, 1.23, 1.31, 1.44, 1.55, 1.68, 1.80, 1.91, 2.02] as const;
 export const BONG_HIT_WATER_LEVEL = 0.145;
 export const BONG_HIT_BREATH_LEVEL = 0.045;
+
+/** Handpan voice: [frequency multiple, peak level, decay (s), detune (cents)]. */
+export const HANDPAN_PARTIALS: readonly [number, number, number, number][] = [
+  [1, 1, 3.4, 0], [1, 0.3, 3.0, 4], [2, 0.42, 2.1, 1], [3, 0.17, 1.2, -2], [5.3, 0.04, 0.35, 0],
+];
 
 export class Audio {
   private ctx: AudioContext | null = null;
@@ -116,6 +123,43 @@ export class Audio {
     o.stop(t + dur + 0.05);
   }
 
+  private voices = 0;
+  /**
+   * One handpan stroke. A tuned steel note carries its fundamental, the octave and the compound fifth (3×), each
+   * decaying on its own clock (the fundamental rings longest), a faint detuned twin for the slow shimmer, a short
+   * inharmonic ping for the metal, and a soft hand-noise transient. Lowpassed per voice for warmth. Returns false
+   * when nothing sounds (muted, no context); rapid playing is capped so a burst of taps cannot pile up voices.
+   */
+  handpan(freq: number, vel = 1): boolean {
+    if (!this.ready || this.muted) return false;
+    if (this.voices >= 10) return true;
+    const c = this.ctx!, t = c.currentTime, v = Math.max(0.05, Math.min(1, vel)) * (0.88 + Math.random() * 0.12);
+    const lp = c.createBiquadFilter();
+    lp.type = 'lowpass'; lp.frequency.value = Math.min(9000, freq * 10); lp.Q.value = 0.4;
+    const out = c.createGain();
+    out.gain.value = 0.2 * v;
+    out.connect(lp).connect(this.master!);
+    const ring = freq < 200 ? 1.35 : 1; // the ding rings on
+    let longest = 0;
+    for (const [mult, amp, decay, cents] of HANDPAN_PARTIALS) {
+      const o = c.createOscillator(), g = c.createGain(), d = decay * ring;
+      o.type = 'sine';
+      o.frequency.value = freq * mult;
+      o.detune.value = cents;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.linearRampToValueAtTime(amp, t + 0.006);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+      o.connect(g).connect(out);
+      o.start(t);
+      o.stop(t + d + 0.05);
+      longest = Math.max(longest, d);
+    }
+    this.noise(0.035, 'bandpass', 1900, 0.9, 0.05 * v);
+    this.voices++;
+    setTimeout(() => { this.voices = Math.max(0, this.voices - 1); }, longest * 1000);
+    return true;
+  }
+
   private lastStep = -1;
   private fieldStepBank: AudioBuffer | null = null;
   private fieldStepLoading: Promise<void> | null = null;
@@ -161,20 +205,21 @@ export class Audio {
     const clips = useSteadyGrass ? GRASS_R04_CLIPS : FIELD_FOOTSTEP_CLIPS[surface];
     const count = bank ? clips.length : pool.length;
     if (!count) return;
-    let index = Math.floor(Math.random() * count);
-    if (count > 1 && index === this.lastOutdoor[surface]) index = (index + 1) % count;
+    // Only the first grass recording sounds right: reuse it on every step.
+    // Dirt retains its approved no-repeat variation.
+    const index = selectOutdoorFootstepVariant(surface, count, this.lastOutdoor[surface], Math.random());
     this.lastOutdoor[surface] = index;
 
     const c = this.ctx!;
     const src = c.createBufferSource();
     src.buffer = bank ?? pool[index];
-    // Grass: restrained playback variance. Rhythmic cadence still comes exclusively from gait.ts.
-    const pitch = surface === 'grass'
-      ? (foot ? 0.997 : 1.003) * (0.995 + Math.random() * 0.01)
-      : (foot ? 0.986 : 1.014) * (0.98 + Math.random() * 0.04);
+    // Reuse the exact first grass sound at original pitch for both feet.
+    // Cadence is controlled by gait.ts, not by clip playback speed.
+    const pitch = surface === 'grass' ? 1 : (foot ? 0.986 : 1.014) * (0.98 + Math.random() * 0.04);
     src.playbackRate.value = pitch;
     const surfaceMix = surface === 'grass' ? (bank ? 0.33 : 0.5) : (bank ? DIRT_PATH_GAIN : 0.35);
-    const vol = Math.max(0, Math.min(1.2, gain)) * surfaceMix * (0.93 + Math.random() * 0.14);
+    const vol = Math.max(0, Math.min(1.2, gain)) * surfaceMix
+      * (surface === 'grass' ? 1 : 0.93 + Math.random() * 0.14);
     const volume = c.createGain();
     src.connect(volume).connect(this.master!);
 
@@ -435,6 +480,90 @@ export class Audio {
       pan.pan.value=Math.sin(this.groveNote+i)*.65;
       o.connect(gain).connect(pan).connect(this.groveBus);o.start(start);o.stop(start+4.3);
       o.onended=()=>{o.disconnect();gain.disconnect();pan.disconnect();};
+    }
+  }
+
+  // ------------------------------------------------------------------ DEV-04D W01: the Wickerman ritual layer
+  // Own node graph (≤ 5 continuous voices: fire body, air, ember hiss = filtered loops on the shared noise buffer; the
+  // drone = two oscillators a fifth apart), built on ignition and released ≈ 2.5 s after the mix falls silent or the
+  // player leaves its range. Transients (crackle, deep snaps, the slow frame-drum pulse) are scheduled one-shots. The
+  // campfire / candle `fire` loop is untouched. Levels come from the pure mix (wickerRitual.ritualMix) × distance gain.
+  private rit: { out: GainNode; body: RitualVoice; air: RitualVoice; hiss: RitualVoice; drone: RitualVoice[]; droneGain: GainNode; idle: number } | null = null;
+  private pulseIn = 0;
+  /** True while the ritual nodes exist (tests / QA: created on ignition, released after the aftermath). */
+  get ritualActive() { return !!this.rit; }
+
+  ritual(dt: number, m: RitualMix | null, gain: { fire: number; close: number }, events: string[]) {
+    if (!this.ready) return;
+    if (!this.muted) for (const e of events) this.ritualEvent(e, Math.max(gain.fire, 0.15));
+    const audible = !!m && gain.fire > 0.002 && m.body + m.air + m.hiss + m.drone + m.snap > 0.002;
+    if (audible && !this.rit) this.buildRitual();
+    const R = this.rit;
+    if (!R) return;
+    const c = this.ctx!, t = c.currentTime, M = m ?? { body: 0, crackle: 0, snap: 0, drone: 0, pulse: 0, air: 0, hiss: 0 }, f = gain.fire, cl = gain.close;
+    const set = (p: AudioParam, v: number, tc = 0.3) => p.setTargetAtTime(v, t, tc);
+    set(R.body.g.gain, 0.15 * M.body * f); set(R.body.f!.frequency, 300 + 600 * M.body, 0.8);
+    set(R.air.g.gain, 0.045 * M.air * f * (0.75 + 0.25 * Math.sin(this.time * 0.37))); set(R.air.f!.frequency, 520 + 160 * Math.sin(this.time * 0.21), 1);
+    set(R.hiss.g.gain, 0.022 * M.hiss * f);
+    set(R.droneGain.gain, 0.04 * M.drone * cl, 1.5);
+    if (!this.muted && audible) {
+      // burning willow: quick high clicks, denser with the flames (≤ ~6 / s), and rarer deep cracks (a thump + a click)
+      if (Math.random() < dt * 6 * M.crackle) this.noise(0.025 + Math.random() * 0.02, 'highpass', 2200 + Math.random() * 1500, 1, (0.05 + Math.random() * 0.07) * M.crackle * f);
+      if (Math.random() < dt * 0.3 * M.snap) { this.noise(0.18, 'bandpass', 160 + Math.random() * 60, 1.4, 0.16 * f); this.noise(0.04, 'highpass', 1800, 1, 0.12 * f, 0.01); }
+      // the pulse: a soft frame-drum heartbeat, ~1.9 s in the build, ~1.5 s at the peak; never faster
+      this.pulseIn -= dt;
+      if (M.pulse > 0.05 && cl > 0.01 && this.pulseIn <= 0) { this.tone(70, 0.4, 'sine', 0.09 * M.pulse * cl, 0, 48); this.pulseIn = 1.9 - 0.4 * M.pulse; }
+    }
+    R.idle = audible ? 0 : R.idle + dt;
+    if (R.idle > 2.5) this.releaseRitual();
+  }
+
+  private buildRitual() {
+    const c = this.ctx!, t = c.currentTime;
+    const out = c.createGain(); out.gain.value = 1; out.connect(this.master!);
+    const loop = (type: BiquadFilterType, freq: number, q: number): RitualVoice => {
+      const src = c.createBufferSource(); src.buffer = this.noiseBuf; src.loop = true;
+      const f = c.createBiquadFilter(); f.type = type; f.frequency.value = freq; f.Q.value = q;
+      const g = c.createGain(); g.gain.value = 0;
+      src.connect(f).connect(g).connect(out); src.start(t, Math.random() * 1.5);
+      return { src, f, g };
+    };
+    const droneGain = c.createGain(); droneGain.gain.value = 0;
+    const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 400; lp.Q.value = 0.5;
+    droneGain.connect(lp).connect(out);
+    const osc = (type: OscillatorType, freq: number, level: number): RitualVoice => {
+      const o = c.createOscillator(); o.type = type; o.frequency.value = freq;
+      const g = c.createGain(); g.gain.value = level;
+      o.connect(g).connect(droneGain); o.start(t);
+      return { src: o, f: null, g };
+    };
+    // a fifth apart (55 Hz triangle + 82.4 Hz sine, 0.3 Hz beat): a bed you feel more than hear
+    this.rit = { out, body: loop('lowpass', 300, 0.7), air: loop('bandpass', 600, 0.7), hiss: loop('highpass', 3600, 0.5), drone: [osc('triangle', 55, 0.8), osc('sine', 82.7, 0.6)], droneGain, idle: 0 };
+    this.pulseIn = 0.8;
+  }
+
+  private releaseRitual() {
+    const R = this.rit, c = this.ctx;
+    if (!R || !c) return;
+    this.rit = null;
+    const t = c.currentTime;
+    R.out.gain.setTargetAtTime(0, t, 0.15); // fade, never cut
+    for (const v of [R.body, R.air, R.hiss, ...R.drone]) { v.src.stop(t + 0.8); v.src.onended = () => { v.src.disconnect(); v.f?.disconnect(); v.g.disconnect(); }; }
+    setTimeout(() => { R.droneGain.disconnect(); R.out.disconnect(); }, 1200);
+  }
+
+  /** One-shot ritual sounds (soft, restrained; `k` = distance gain). */
+  private ritualEvent(name: string, k: number) {
+    switch (name) {
+      case 'match': this.noise(0.07, 'bandpass', 2600, 2, 0.12 * k); this.noise(0.4, 'lowpass', 900, 0.8, 0.07 * k, 0.05, 0.03, 2200); break;
+      case 'strike': this.noise(0.16, 'lowpass', 750, 0.9, 0.045 * k, 0, 0.02, 1400); break; // a candle catches
+      case 'puff': this.noise(0.24, 'lowpass', 520, 0.7, 0.045 * k, 0, 0.03, 180); break; // a candle goes out
+      case 'ignite': this.noise(1.3, 'lowpass', 280, 0.8, 0.2 * k, 0.15, 0.3, 1500); break; // the hay takes: a soft whoomp
+      case 'settle': this.tone(62, 0.7, 'sine', 0.07 * k, 0, 40); for (let i = 0; i < 6; i++) this.noise(0.05, 'bandpass', 900 + Math.random() * 900, 1.2, 0.05 * k, 0.15 + i * 0.09 + Math.random() * 0.05); break;
+      case 'brush': for (let i = 0; i < 3; i++) this.noise(0.3, 'bandpass', 1500, 0.8, 0.075 * k, i * 0.55, 0.06, 650); for (let i = 0; i < 5; i++) this.noise(0.05, 'bandpass', 700 + Math.random() * 500, 1, 0.04 * k, 0.2 + i * 0.3); break;
+      case 'rustle': for (let i = 0; i < 5; i++) this.noise(0.07 + Math.random() * 0.05, 'highpass', 1900 + Math.random() * 900, 0.6, 0.05 * k, i * 0.06 + Math.random() * 0.03, 0.01); break;
+      case 'refill': for (let i = 0; i < 10; i++) this.noise(0.08 + Math.random() * 0.06, 'bandpass', 1500 + Math.random() * 900, 0.7, 0.05 * k, i * 0.15 + Math.random() * 0.05, 0.015); break;
+      default: break;
     }
   }
 
