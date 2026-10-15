@@ -1,0 +1,101 @@
+[
+  {
+    "name": "gate (driveway)",
+    "low": {
+      "calls": 111,
+      "triangles": 338648
+    },
+    "high": {
+      "calls": 120,
+      "triangles": 544137
+    }
+  },
+  {
+    "name": "forecourt → manor",
+    "low": {
+      "calls": 138,
+      "triangles": 274191
+    },
+    "high": {
+      "calls": 171,
+      "triangles": 491966
+    }
+  },
+  {
+    "name": "entrance hall",
+    "low": {
+      "calls": 134,
+      "triangles": 260116
+    },
+    "high": {
+      "calls": 194,
+      "triangles": 475248
+    }
+  },
+  {
+    "name": "library",
+    "low": {
+      "calls": 57,
+      "triangles": 192990
+    },
+    "high": {
+      "calls": 88,
+      "triangles": 391214
+    }
+  },
+  {
+    "name": "garden → manor + conservatory",
+    "low": {
+      "calls": 138,
+      "triangles": 299862
+    },
+    "high": {
+      "calls": 166,
+      "triangles": 433047
+    }
+  },
+  {
+    "name": "forest (shed area)",
+    "low": {
+      "calls": 37,
+      "triangles": 190067
+    },
+    "high": {
+      "calls": 64,
+      "triangles": 507737
+    }
+  },
+  {
+    "name": "BOSLUST cut",
+    "low": {
+      "calls": 98,
+      "triangles": 318988
+    },
+    "high": {
+      "calls": 115,
+      "triangles": 519907
+    }
+  },
+  {
+    "name": "conservatory pool",
+    "low": {
+      "calls": 108,
+      "triangles": 300443
+    },
+    "high": {
+      "calls": 186,
+      "triangles": 582674
+    }
+  },
+  {
+    "name": "gathering room",
+    "low": {
+      "calls": 31,
+      "triangles": 19320
+    },
+    "high": {
+      "calls": 42,
+      "triangles": 32422
+    }
+  }
+]
