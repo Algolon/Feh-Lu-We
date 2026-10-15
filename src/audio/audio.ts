@@ -1,6 +1,8 @@
 // All sound is synthesised with WebAudio at runtime: no audio files, no licensing questions.
 // The context is created/resumed only from the Start button (user gesture), and suspended when hidden.
 
+import { renderOutdoorFootstep, type FootstepSurface, type OutdoorFootstepSurface } from './footsteps';
+
 type SfxName = string;
 
 export class Audio {
@@ -33,6 +35,15 @@ export class Audio {
         const d = this.noiseBuf.getChannelData(0);
         let last = 0;
         for (let i = 0; i < len; i++) { const w = Math.random() * 2 - 1; last = last * 0.6 + w * 0.4; d[i] = last; }
+        // Seven small variants per material, built once after the Start gesture; no file I/O on mobile.
+        for (const surface of ['grass', 'dirt'] as const) {
+          this.outdoorBuffers[surface] = Array.from({ length: 7 }, (_, v) => {
+            const pcm = renderOutdoorFootstep(surface, v, this.ctx!.sampleRate);
+            const buffer = this.ctx!.createBuffer(1, pcm.length, this.ctx!.sampleRate);
+            buffer.copyToChannel(pcm, 0);
+            return buffer;
+          });
+        }
         this.startLoops();
       }
       if (this.ctx.state !== 'running') await this.ctx.resume();
@@ -84,12 +95,32 @@ export class Audio {
   }
 
   private lastStep = -1;
+  private readonly outdoorBuffers: Record<OutdoorFootstepSurface, AudioBuffer[]> = { grass: [], dirt: [] };
+  private readonly lastOutdoor: Record<OutdoorFootstepSurface, number> = { grass: -1, dirt: -1 };
+
+  private outdoorStep(surface: OutdoorFootstepSurface, gain: number, foot: 0 | 1) {
+    const pool = this.outdoorBuffers[surface];
+    if (!pool.length) return;
+    let index = Math.floor(Math.random() * pool.length);
+    if (index === this.lastOutdoor[surface]) index = (index + 1) % pool.length;
+    this.lastOutdoor[surface] = index;
+    const c = this.ctx!;
+    const src = c.createBufferSource();
+    src.buffer = pool[index];
+    src.playbackRate.value = (foot ? 0.972 : 1.02) * (0.965 + Math.random() * 0.07);
+    const volume = c.createGain();
+    volume.gain.value = Math.max(0, Math.min(1.2, gain)) * (surface === 'grass' ? 0.62 : 0.55) * (0.9 + Math.random() * 0.18);
+    src.connect(volume).connect(this.master!);
+    src.start();
+  }
+
   /**
-   * One footfall. Small per-step variation (filter ±7 %, level ±12 %, the two feet a touch apart) so a walk never
-   * sounds like one sample repeated; never two of the same variant in a row.
+   * One footfall. Outdoors, varied close Foley has a soft heel and a rustle (grass) or a dry
+   * compacted crunch (paths). Indoor wood/stone retain their existing sound design.
    */
-  step(surface: 'grass' | 'wood' | 'stone', gain = 1, foot: 0 | 1 = 0) {
+  step(surface: FootstepSurface, gain = 1, foot: 0 | 1 = 0) {
     if (!this.ready || this.muted) return;
+    if (surface === 'grass' || surface === 'dirt') { this.outdoorStep(surface, gain, foot); return; }
     let v = Math.floor(Math.random() * 3);
     if (v === this.lastStep) v = (v + 1) % 3;
     this.lastStep = v;
@@ -99,14 +130,10 @@ export class Audio {
     else this.noise(0.14, 'highpass', 1700 * f, 0.7, 0.045 * g, 0, 0.012);
   }
 
-  sfx(name: SfxName, surface: 'grass' | 'wood' | 'stone' = 'grass') {
+  sfx(name: SfxName, surface: FootstepSurface = 'grass') {
     if (!this.ready || this.muted) return;
     switch (name) {
-      case 'step':
-        if (surface === 'wood') this.noise(0.09, 'bandpass', 380, 1.2, 0.18);
-        else if (surface === 'stone') this.noise(0.06, 'bandpass', 1400, 1.5, 0.08);
-        else this.noise(0.12, 'highpass', 1800, 0.7, 0.05);
-        break;
+      case 'step': this.step(surface); break;
       case 'click': this.tone(1200, 0.05, 'square', 0.05); break;
       case 'switch': this.tone(900, 0.04, 'square', 0.06); this.tone(600, 0.04, 'square', 0.04, 0.05); break;
       case 'pickup': this.tone(660, 0.12, 'sine', 0.18); this.tone(990, 0.2, 'sine', 0.15, 0.08); break;
