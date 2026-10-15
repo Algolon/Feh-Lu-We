@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { pouchPanelGeometry, POUCH_HEIGHT, KITCHEN_SIPPY_JUIZ, SIPPY_JUIZ_ACTION, SIPPY_JUIZ_TEXT } from '../src/world/kitchenJuicePouch';
+import { pouchPanelGeometry, POUCH_HEIGHT, KITCHEN_SIPPY_JUIZ, KITCHEN_ISLAND_SURFACE_Y, SIPPY_JUIZ_SCALE, SIPPY_JUIZ_LOCAL_FOOT_Y, SIPPY_JUIZ_ACTION, SIPPY_JUIZ_TEXT } from '../src/world/kitchenJuicePouch';
+import { GF } from '../src/world/layout';
 
 describe('SippyJuiz flexible foil silhouette', () => {
   it('is a tall, slim, sculpted pouch rather than a box with planar faces', () => {
@@ -31,6 +32,21 @@ describe('SippyJuiz flexible foil silhouette', () => {
     expect(at(13, 8)[1]).toBeCloseTo(POUCH_HEIGHT, 4);
     g.dispose();
   });
+  it('stands entirely on the stone worktop at two-thirds scale (including the straw)', () => {
+    // Regression: forgetting GF = 0.15 sunk much of the previous model into the island.
+    expect(KITCHEN_ISLAND_SURFACE_Y).toBeCloseTo(GF + 0.885 + 0.025, 7);
+    expect(SIPPY_JUIZ_SCALE).toBeCloseTo(2 / 3, 7);
+    expect(KITCHEN_SIPPY_JUIZ.y + SIPPY_JUIZ_SCALE * SIPPY_JUIZ_LOCAL_FOOT_Y)
+      .toBeCloseTo(KITCHEN_ISLAND_SURFACE_Y, 7);
+    const panel = pouchPanelGeometry(true);
+    panel.computeBoundingBox();
+    expect(panel.boundingBox!.min.y).toBeCloseTo(SIPPY_JUIZ_LOCAL_FOOT_Y, 5);
+    const scaledPouchHeight = (panel.boundingBox!.max.y - panel.boundingBox!.min.y) * SIPPY_JUIZ_SCALE;
+    expect(scaledPouchHeight).toBeGreaterThan(0.22);
+    expect(scaledPouchHeight).toBeLessThan(0.24);
+    panel.dispose();
+  });
+
   it('has a correctly oriented matching back and a right-side kitchen placement', () => {
     const front = pouchPanelGeometry(true), back = pouchPanelGeometry(false);
     const a = front.getAttribute('position'), b = back.getAttribute('position');

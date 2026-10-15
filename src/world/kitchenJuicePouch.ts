@@ -3,12 +3,23 @@
 import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import { makeAction, place } from '../interactions/props';
+import { GF } from './layout';
 
 // Tall, softly inflated foil pack: visible body height : width ≈ 1.85 : 1.
 // The previous 0.306 m × 0.224 m silhouette appeared too square at player eye level.
 // A rounded gusset, slightly tucked corners and a thin top seal preserve the Capri-Sun-style silhouette.
 export const POUCH_HEIGHT = 0.350;
-export const KITCHEN_SIPPY_JUIZ = { x: 101.94, y: 0.910, z: 105.11 } as const;
+// Match the stone slab used by kitchenIsland() in manor.ts:
+// its centre sits GF + 0.885 and its full thickness is 0.05m.
+// The last version forgot GF (0.15m), sinking the pouch into the worktop.
+export const KITCHEN_ISLAND_SURFACE_Y = GF + 0.885 + 0.05 / 2;
+export const SIPPY_JUIZ_SCALE = 2 / 3;
+export const SIPPY_JUIZ_LOCAL_FOOT_Y = 0.005; // lowest point of the curved pouch skin
+export const KITCHEN_SIPPY_JUIZ = {
+  x: 101.94,
+  y: KITCHEN_ISLAND_SURFACE_Y - SIPPY_JUIZ_LOCAL_FOOT_Y * SIPPY_JUIZ_SCALE,
+  z: 105.11,
+} as const;
 export const SIPPY_JUIZ_ACTION = 'Bekijk drinkpakje';
 export const SIPPY_JUIZ_TEXT = 'Is dit echt de laatste CapriSun?';
 const PROFILE = [
@@ -352,13 +363,16 @@ export function buildKitchenJuicePouch(w: World, g: GameApi) {
   straw.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), vec.normalize());
   straw.castShadow = true; root.add(straw);
 
-  // Right-hand side of the island from the south-facing player's view; away from the note on the left.
-  // Island is x=99.65..102.35; slab top at y=0.91. All geometry remains on the worktop.
+  // Scale the entire model (including foil folds, fruit label and straw) to 2/3.
+  // Root scaling also shrinks its attached raycast target, so size the target in local metres.
+  root.scale.setScalar(SIPPY_JUIZ_SCALE);
+  // South-facing view: right-hand side of the island, clear of the note and the drawer.
+  // Set the model's *lowest* vertex on the actual stone slab, not on an unoffset local Y.
   place(root, KITCHEN_SIPPY_JUIZ.x, KITCHEN_SIPPY_JUIZ.y, KITCHEN_SIPPY_JUIZ.z);
   w.scene.add(root);
   makeAction(w, {
     id: 'inspect.kitchenBosfruit', // Stable interaction id for backwards compatibility.
-    obj: root, hit: [0.30, 0.52, 0.20], hitOffset: [0, 0.24, 0], reach: 3.0,
+    obj: root, hit: [0.35, 0.47, 0.20], hitOffset: [0, 0.235, 0], reach: 3.0,
     label: () => SIPPY_JUIZ_ACTION,
     run: () => g.act({ ok: true, msg: SIPPY_JUIZ_TEXT, sfx: 'none' }, { save: false }),
   });
