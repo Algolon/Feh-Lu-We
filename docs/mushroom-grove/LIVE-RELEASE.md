@@ -36,3 +36,5 @@ Production advanced to `87f4db5322b9c857034d74186d32bb43de35ffe4` (playable hand
 - Full regression, optional vignette/Wickerman and paired production checks are still running at this checkpoint.
 
 The optional production/Wickerman release browser suite also passes 8/8: the bong cooldown, airco inspect/zap range, drink pouch, recorded grass/dirt surface resolution, ritual/audio coexistence, hay-to-matches handoff and absence of page/request errors are preserved. Raw handpan and optional-vignette logs are retained as text. The fresh full run's initial regression and lighting sections all pass, including F05 touch (no retry or input changes).
+
+Current untouched production `87f4db5` paired metrics/BOSLUST run is complete: 31/38 pass. Exactly seven failures: six fixed high-quality 450k triangle assertions (gate, forecourt, hall, shed/forest, BOSLUST and pool) and the historical BOSLUST LOD-distance assertion. Every low-quality camera-budget check passes. No test thresholds were changed. `live-evidence/baseline/results.json` and `metrics.json` retain the exact failures/counters.
