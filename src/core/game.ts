@@ -13,6 +13,7 @@ import { Player, PLAYER } from '../player/player';
 import { World, LightPool, type GameApi, type Interactable, type LightView } from '../interactions/world';
 import { UI } from '../ui/ui';
 import { Audio } from '../audio/audio';
+import type { FootstepSurface } from '../audio/footsteps';
 import {
   type Outcome, type Sfx, type PlaceKind, type PuzzleDef, PUZZLES, currentPuzzle, openPuzzles, viewHint, tutorialMissing, leaveHome as leaveHomeRule, submitCode, LOCK_OPTIONS,
   placePiece, takePiece, slotContents, loosePieces, placeSolved, submitDigits, submitBilliard, solvedCount, REQUIRED_COUNT, activeThread, threadNext, threadDone, owns,
@@ -28,11 +29,12 @@ import { estateMapSvg, floorPlanSvg, MAP_LEVELS, levelAt, type MapLevel } from '
 import type { Env } from '../world/env';
 import type { RoomGraph } from '../world/rooms';
 import { tickFires, FIRE_UNIFORMS } from '../world/fire';
+import { ritualGain } from '../world/wickerRitual';
 
 export interface SceneExtras {
   env?: Env;
   isIndoor?: (x: number, z: number, y: number) => boolean;
-  surfaceAt?: (x: number, z: number, y: number) => 'grass' | 'wood' | 'stone';
+  surfaceAt?: (x: number, z: number, y: number) => FootstepSurface;
   /** Authored rooms + portals: lighting relevance and the floor-aware map. */
   rooms?: RoomGraph;
 }
@@ -201,6 +203,7 @@ export class Game implements GameApi {
   }
 
   async loadScene(id: SceneId) {
+    this.carry(null); // W01: a carried bundle never leaves its world
     if (this.world) {
       this.world.scene.remove(this.camera);
       this.world.dispose();
@@ -260,8 +263,8 @@ export class Game implements GameApi {
     if (o.sfx !== 'none') this.sfx(o.sfx);
     if (opts.save !== false) this.changed();
   }
-  sfx(name: Sfx | 'door' | 'drawer' | 'switch' | 'water' | 'steam') {
-    this.audio.sfx(name);
+  sfx(name: Sfx | 'door' | 'drawer' | 'switch' | 'water' | 'steam' | 'electric-zap' | 'bongHit', gain = 1) {
+    this.audio.sfx(name, 'grass', gain);
   }
   toast(msg: string) {
     this.ui.toast(msg);
@@ -292,6 +295,14 @@ export class Game implements GameApi {
   }
   playerXZ() {
     return { x: this.player.x, z: this.player.z, y: this.player.y };
+  }
+  /** DEV-04D W01: a held non-item (the hay bundle): shown in the held chip, released by any item selection or a chip tap. */
+  carried: { name: string; icon: string; release: () => void } | null = null;
+  carry(held: { name: string; icon: string; release: () => void } | null) {
+    if (held) { this.selected = null; this.carried = held; this.ui.setHeld(held.name, held.icon); return; }
+    if (!this.carried) return;
+    this.carried = null;
+    this.ui.setHeld(this.selected ? ITEMS[this.selected].name : null, this.selected);
   }
   async leaveHome() {
     const r = leaveHomeRule(this.state);
@@ -391,6 +402,7 @@ export class Game implements GameApi {
 
   // ------------------------------------------------------------------ player-facing menus
   select(item: string | null) {
+    if (this.carried) { const c = this.carried; this.carried = null; c.release(); } // W01: one thing in the hand
     this.selected = item;
     this.ui.setHeld(item ? ITEMS[item].name : null, item);
     if (item) this.ui.toast(`${ITEMS[item].name} in de hand. Richt op iets en gebruik de actieknop.`);
@@ -730,6 +742,9 @@ export class Game implements GameApi {
     }
     const indoor = this.extras.isIndoor?.(this.player.x, this.player.z, this.player.y) ?? true;
     this.audio.update(dt, { indoor, fire, water, steam });
+    // DEV-04D W01: the Wickerman ritual layer (its own nodes, built on ignition, released after the aftermath)
+    const r = w.ritual;
+    this.audio.ritual(dt, r ? r.mix() : null, r ? ritualGain(r.pos.distanceTo(eye), indoor) : { fire: 0, close: 0 }, r ? r.events.splice(0) : []);
     // footsteps: hooked once (the closure reads the current world's surface lookup), not re-created every frame
     this.player.onStep ??= (e) => this.audio.step(this.extras.surfaceAt?.(this.player.x, this.player.z, this.player.y) ?? 'wood', e.gain, e.foot);
   }

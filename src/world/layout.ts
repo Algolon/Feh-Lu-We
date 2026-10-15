@@ -163,6 +163,12 @@ export const GOLF_MAT: Rect = { x0: (GOLF_CHUTE.x0 + GOLF_CHUTE.x1) / 2 - 1.35, 
  * so the figure is revealed only once the player has turned onto it. Same level (+1.2) as the loop there.
  */
 export const WICKERMAN = { x: 180, z: 55, r: 6.0, y: 1.2 };
+/**
+ * DEV-04D W01: the hay bale at the south-west edge of the clearing (≈ 5.2 m from the figure, ≥ 1.5 m outside the candle
+ * ring, clear of the path mouth, the lantern and the bench); `yaw` turns its long side tangential to the clearing; `clear`
+ * = the small-vegetation keep-out round it (pallet, besom, loose straw).
+ */
+export const WICKER_BALE = { x: 176.4, z: 51.3, yaw: Math.atan2(180 - 176.4, 55 - 51.3) /* long side tangential: 44° */, clear: 1.0 };
 /** DEV-04A side path: leaves the loop at Z ≈ 57.6, heads north-east past the hedge, enters the clearing at its
  * north-west rim (so the line of sight from the loop to the figure crosses unbroken hedge). */
 export const WICKERMAN_SIDE: [number, number][] = [[167.9, 57.6], [170.9, 59.7], [174.2, 60.6], [177.0, 60.1]];

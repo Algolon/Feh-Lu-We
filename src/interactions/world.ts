@@ -5,6 +5,7 @@ import { CollisionWorld, type Collider } from '../player/collision';
 import type { GameState, PlayerPose, SceneId } from '../core/state';
 import type { Outcome, Sfx } from '../puzzles/rules';
 import { type RoomGraph, type LampCandidate, chooseLamps } from '../world/rooms';
+import type { RitualMix } from '../world/wickerRitual';
 
 export interface Interactable {
   id: string;
@@ -31,7 +32,7 @@ export interface GameApi {
   readonly state: GameState;
   readonly selected: string | null;
   act(o: Outcome, opts?: { save?: boolean }): void;
-  sfx(name: Sfx | 'door' | 'drawer' | 'switch' | 'water' | 'steam'): void;
+  sfx(name: Sfx | 'door' | 'drawer' | 'switch' | 'water' | 'steam' | 'electric-zap' | 'bongHit', gain?: number): void;
   toast(msg: string): void;
   /** Play one handpan stroke at `freq` Hz (`vel` 0–1). False when nothing sounds (audio muted or unavailable). */
   playNote(freq: number, vel?: number): boolean;
@@ -41,6 +42,11 @@ export interface GameApi {
   playerXZ(): { x: number; z: number; y: number };
   playerRadius: number;
   readonly reducedMotion: boolean;
+  /**
+   * DEV-04D W01: hold something that is not an item (the Wickerman's hay bundle) in the held chip. Selecting an item or
+   * tapping the chip calls `release`; `null` clears it without calling `release` (the holder put it down itself).
+   */
+  carry(held: { name: string; icon: string; release: () => void } | null): void;
   leaveHome(): void;
   finish(): void;
 }
@@ -79,6 +85,8 @@ export class World {
   ambience: 'home' | 'estate' = 'estate';
   /** Named sound emitters (fire crackle, water, heater) — audio reads these each frame. */
   readonly emitters: { kind: 'fire' | 'water' | 'steam'; pos: THREE.Vector3; on: () => boolean }[] = [];
+  /** DEV-04D W01: the Wickerman ritual's sound (procedural layers + one-shot events), localised by Game.updateAudio. */
+  ritual: { pos: THREE.Vector3; mix: () => RitualMix; events: string[] } | null = null;
   /** Small objects hidden beyond a size-dependent distance; whole interior chunks hidden by zone. */
   private cullables: { root: THREE.Object3D; meshes: THREE.Object3D[]; pos: THREE.Vector3; dist2: number; on: boolean; zone: { on: boolean } | null; rooms: string[] | null }[] = [];
   private zones: { meshes: THREE.Object3D[]; near: (x: number, z: number) => boolean; inside: (x: number, z: number) => boolean; on: boolean }[] = [];

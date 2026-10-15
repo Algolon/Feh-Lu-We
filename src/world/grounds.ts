@@ -13,10 +13,13 @@ import { table, part, staticLantern, joinery } from './furniture';
 import { Asm, artMats, lathe, cushion, projectUV } from './artkit';
 import { wickermanGeo, WICKER } from './wickerman';
 import { buildWickerSetpiece } from './wickerFire';
+import { baleGeo, twineGeo, besomGeo, looseStrawGeo, BALE } from './hayBale';
+import { propMats } from './propkit';
 import { makeInspect, place } from '../interactions/props';
+import { registerGravityBongAction } from './gravityBongInteraction';
 import type { Vegetation } from './nature';
 import {
-  ARRIVAL_GRAVEL, PARKING, BBQ, OUTDOOR_DINING, MUSIC_BONG, BALLOON_NOOK, LAKE, LAKE_VIEW, GOLF_TEE, GOLF_CHUTE, GOLF_MAT, WICKERMAN, GF, type Rect,
+  ARRIVAL_GRAVEL, PARKING, BBQ, OUTDOOR_DINING, MUSIC_BONG, BALLOON_NOOK, LAKE, LAKE_VIEW, GOLF_TEE, GOLF_CHUTE, GOLF_MAT, WICKERMAN, WICKER_BALE, GF, type Rect,
 } from './layout';
 import { terrainHeight } from './terrain';
 import { FIRE_UNIFORMS } from './fire';
@@ -29,6 +32,16 @@ const BENCH_LOG2 = logModel(157, 2.2, 0.21);
 const WICKER_GEO = wickermanGeo();
 WICKER_GEO.userData.shared = true; WICKER_GEO.userData.hay.userData.shared = true; // DEV-04C: drawn directly (not batched): never disposed with a world
 const SHORE_STONE = (() => { const g = rockModel(71); g.userData.keepColor = true; return g; })();
+/**
+ * DEV-04D W01: the same stone without the moss on its upper faces, for the Wickerman plinth and candle stones (a hearth
+ * that is burned on carries no moss): every vertex keeps its baked shade, the green moss tint is taken out.
+ */
+const HEARTH_STONE = (() => {
+  const g = rockModel(71), c = g.attributes.color as THREE.BufferAttribute;
+  for (let i = 0; i < c.count; i++) { const k = Math.max(c.getX(i), c.getY(i), c.getZ(i)) * 0.97; c.setXYZ(i, k, k * 0.985, k * 0.96); }
+  g.userData.keepColor = true;
+  return g;
+})();
 
 export function buildGrounds(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods: EstateWoods | null) {
   arrival(w, c);
@@ -105,6 +118,7 @@ function socialGarden(w: World, g: GameApi, c: Ctx) {
   boxMM(c.b, k.M.rug, '#c8b898', 79.6, 84.4, GF + 0.005, GF + 0.012, 118.5, 122.5, { chunk: c.chunk, shadow: false });
   table(c, 81.6, 120.6, GF, 1.1, 0.8, 0, '#7a5a3a', 0.4);
   buildGravityBong(c, 81.58, GF + 0.4, 120.56);
+  registerGravityBongAction(w, g, 81.58, GF + 0.4, 120.56);
   // Asset 01: the handpan on its walnut stand (FLW-S3-035), standing on the rug (top at GF + 0.012), same spot as before
   const handpanTop = buildHandpan(c, 83.4, GF + 0.012, 121.6, 0.4);
   addHandpanPlay(w, g, 83.4, GF + 0.012, 121.6, 0.4); // aim at a tone field (or tap it) to play that note
@@ -375,15 +389,32 @@ function wickerman(w: World, g: GameApi, c: Ctx) {
   const { x, z } = WICKERMAN;
   const M = woodMats();
   const gy = terrainHeight(x, z);
-  // plinth: a ring of field stones round a stone-capped base, 0.25 m high, on the ground
-  for (let i = 0; i < 12; i++) {
-    const an = (i / 12) * Math.PI * 2, s2 = 0.32 + 0.06 * Math.sin(i * 2.7);
-    c.b.add(M.rock, SHORE_STONE, planMatrix(x + Math.cos(an) * 1.05, gy - 0.12, z + Math.sin(an) * 1.05, an * 3.1, s2 * 1.3, s2, s2), new THREE.Color('#8f877a').multiplyScalar(0.85 + 0.15 * Math.sin(i)), o.chunk, true, 0);
-  }
-  cyl(c.b, k.M.stone, '#9a9282', x, gy - 0.05, z, 1.0, 1.08, 0.3, 14, { ...o, uv: 1 });
+  // DEV-04D W01: the plinth reads as constructed dry stone (it read as a smooth light disc, a "cake board"): a dark core
+  // whose gaps read as the deep joints, two battered courses of laid field stones (the upper course set back half a
+  // stone, joints staggered), a ring of cap slabs and a few hearth slabs in the middle, 0.25 m high, bedded in the
+  // ground with a few footing stones. W5: the middle slabs and the timber carry a faint permanent scorch (a shrine that
+  // has burned before; the same in a new game as after the twentieth cycle).
   const top0 = gy + 0.25;
-  // two sleepers across the plinth, the feet bound onto them
-  for (const dx of [-0.26, 0.26]) boxMM(c.b, k.M.wood, '#5e4a36', x + dx - 0.09, x + dx + 0.09, top0, top0 + 0.12, z - 0.75, z + 0.75, o);
+  const SH = (i: number, a: number) => new THREE.Color('#8f877a').multiplyScalar(a + 0.16 * (0.5 + 0.5 * Math.sin(i * 2.31 + 0.7)));
+  cyl(c.b, M.rock, '#5d5850', x, gy - 0.05, z, 0.93, 0.98, 0.27, 14, { ...o, uv: 1 }); // the core: its gaps read as the joints
+  for (let i = 0; i < 16; i++) { // lower course + footing stones
+    const an = (i / 16) * Math.PI * 2 + 0.11 * Math.sin(i * 1.9), s2 = 0.2 + 0.025 * Math.sin(i * 2.7);
+    c.b.add(M.rock, HEARTH_STONE, planMatrix(x + Math.cos(an) * 1.0, gy + 0.0, z + Math.sin(an) * 1.0, -an - Math.PI / 2 + 0.12 * Math.sin(i * 3.3), s2 * 1.05, 0.12, 0.15), SH(i, 0.72), o.chunk, true, 0);
+    if (i % 3 === 0) c.b.add(M.rock, HEARTH_STONE, planMatrix(x + Math.cos(an + 0.2) * 1.16, gy - 0.07, z + Math.sin(an + 0.2) * 1.16, an * 2.1, 0.17, 0.09, 0.12), SH(i + 5, 0.66), o.chunk, true, 0);
+  }
+  for (let i = 0; i < 15; i++) { // upper course, set back a little, joints staggered
+    const an = ((i + 0.5) / 15) * Math.PI * 2 + 0.09 * Math.sin(i * 2.6), s2 = 0.2 + 0.03 * Math.sin(i * 1.7 + 1);
+    c.b.add(M.rock, HEARTH_STONE, planMatrix(x + Math.cos(an) * 0.96, gy + 0.125, z + Math.sin(an) * 0.96, -an - Math.PI / 2 + 0.1 * Math.sin(i * 2.9), s2 * 1.05, 0.1, 0.14), SH(i + 9, 0.8), o.chunk, true, 0);
+  }
+  for (let i = 0; i < 11; i++) { // coping slabs round the rim, a little proud of the course, tops at the plinth top
+    const an = (i / 11) * Math.PI * 2 + 0.3, rr = 0.8 + 0.03 * Math.sin(i * 2.2);
+    c.b.add(M.rock, HEARTH_STONE, planMatrix(x + Math.cos(an) * rr, top0 - 0.012, z + Math.sin(an) * rr, -an - Math.PI / 2 + 0.25 * Math.sin(i * 1.3), 0.27, 0.05, 0.2), SH(i + 3, 0.9), o.chunk, true, 0);
+  }
+  for (const [dx, dz, sx, sz, kk] of [[0, 0.05, 0.3, 0.26, 0.5], [-0.3, -0.32, 0.22, 0.18, 0.62], [0.34, -0.28, 0.2, 0.2, 0.6], [0.05, -0.46, 0.18, 0.16, 0.66], [-0.36, 0.34, 0.2, 0.18, 0.64], [0.38, 0.36, 0.2, 0.17, 0.62], [0, 0.48, 0.2, 0.15, 0.66]] as const) {
+    c.b.add(M.rock, HEARTH_STONE, planMatrix(x + dx, top0 - 0.015, z + dz, dx * 7 + dz * 3, sx, 0.045, sz), new THREE.Color('#7a7368').multiplyScalar(kk + 0.25), o.chunk, true, 0); // hearth slabs (W5 scorch)
+  }
+  // two sleepers across the plinth, the feet bound onto them (W5: scorched dark at the middle)
+  for (const dx of [-0.26, 0.26]) boxMM(c.b, k.M.wood, '#4e3e2e', x + dx - 0.09, x + dx + 0.09, top0, top0 + 0.12, z - 0.75, z + 0.75, o);
   const foot = top0 + 0.12;
   // DEV-04B: the figure is the willow build (wickerman.ts): armature uprights, irregular woven bands, bound joints, a
   // woven head cage — in place of straw-coloured cylinders with a ball head. Each foot stands in a timber shoe
@@ -391,7 +422,7 @@ function wickerman(w: World, g: GameApi, c: Ctx) {
   // DEV-04C: the figure and its hay are their own meshes (built by the setpiece below): their materials char and glow
   { const M2 = artMats(), a = new Asm(c.b, o.chunk, x, foot, z, 0);
     for (const sd of [-1, 1]) {
-      a.add(M2.timber, '#5e4a36', joinery.bx(0.2, 0.12, 0.3), sd * WICKER.footX, 0.06, 0); // shoe
+      a.add(M2.timber, '#4a3b2c', joinery.bx(0.2, 0.12, 0.3), sd * WICKER.footX, 0.06, 0); // shoe (W5: smoke-darkened)
       for (const dz of [-0.11, 0.11]) a.add(M2.paint, '#2b2622', joinery.bx(0.22, 0.03, 0.025), sd * WICKER.footX, 0.105, dz); // iron straps over it
       for (const dz of [-0.11, 0.11]) for (const dx of [-0.1, 0.1]) a.add(M2.paint, '#2b2622', joinery.cg('boltHead', () => new THREE.CylinderGeometry(0.012, 0.012, 0.01, 6)), sd * WICKER.footX + dx, 0.125, dz);
     } }
@@ -405,7 +436,9 @@ function wickerman(w: World, g: GameApi, c: Ctx) {
   const jar = joinery.cg('candleJar', () => lathe([[0.001, 0], [0.06, 0], [0.065, 0.01], [0.065, 0.17], [0.07, 0.18], [0.062, 0.18], [0.058, 0.17], [0.058, 0.012], [0.001, 0.012]], 10));
   for (let i = 0; i < 9; i++) {
     const an = (i / 9) * Math.PI * 2 + 0.15 * Math.sin(i * 2.3), d = 3.1 + 0.2 * Math.sin(i * 1.7), cxx = x + Math.cos(an) * d, czz = z + Math.sin(an) * d, cy = terrainHeight(cxx, czz);
-    c.b.add(M.rock, SHORE_STONE, planMatrix(cxx, cy - 0.06, czz, an * 2, 0.26, 0.1, 0.24), '#9a9282', o.chunk, true, 0);
+    // W01: a broader, darker flat stone under each jar (they barely read in the grass) and a small chock stone beside it
+    c.b.add(M.rock, HEARTH_STONE, planMatrix(cxx, cy - 0.06, czz, an * 2, 0.34, 0.1, 0.3), new THREE.Color('#7c766b').multiplyScalar(0.92 + 0.12 * Math.sin(i * 1.3)), o.chunk, true, 0);
+    c.b.add(M.rock, HEARTH_STONE, planMatrix(cxx + Math.cos(an + 1.9) * 0.27, cy - 0.05, czz + Math.sin(an + 1.9) * 0.27, an * 3 + 1, 0.11, 0.08, 0.09), '#6f695f', o.chunk, true, 0);
     const a = new Asm(c.b, o.chunk, cxx, cy + 0.035, czz, an);
     jarY.push(cy + 0.035); // DEV-04C: the glass jar is the setpiece's own mesh (it glows when its candle burns)
     a.add(CM.paint, '#f2ead8', joinery.cg(`candleWax${i % 3}`, () => new THREE.CylinderGeometry(0.035, 0.036, 0.09 + (i % 3) * 0.02, 10).translate(0, (0.09 + (i % 3) * 0.02) / 2 + 0.012, 0)), 0, 0, 0);
@@ -415,7 +448,8 @@ function wickerman(w: World, g: GameApi, c: Ctx) {
   }
   w.scene.userData.wickerCandles = { centre: { x, y: gy, z }, candles };
   // DEV-04C setpiece: candles → ignitable figure → burning → charred aftermath (optional; wickerFire.ts)
-  buildWickerSetpiece(w, g, { x, z, gy, foot, figure: WICKER_GEO, hay: WICKER_GEO.userData.hay, candles, jar, jarY, region: o.chunk });
+  const bale = haleBale(w, c, o.chunk);
+  buildWickerSetpiece(w, g, { x, z, gy, foot, figure: WICKER_GEO, hay: WICKER_GEO.userData.hay, candles, jar, jarY, region: o.chunk, bale });
   // a log bench on the east side facing the figure (clear of the path mouth in the north-west), a lantern on a stake
   // marking where the side path opens into the clearing
   const bx = x + 4.6, by = terrainHeight(bx, z);
@@ -426,3 +460,34 @@ function wickerman(w: World, g: GameApi, c: Ctx) {
   staticLantern({ ...c, chunk: 'wick' }, w, lx, ly + 1.15, lz, 0.7, 0, 3, 8);
   w.col.addCircle(lx, lz, 0.08, ly, ly + 1.5);
 }
+
+/**
+ * DEV-04D W01: the hay bale at the south-west edge of the clearing (DEV04D_WICKERMAN_DESIGN §4), long side tangential to
+ * the clearing, on a low timber pallet seated on the terrain (the four corners sampled, 2 cm bedded), with a twig besom
+ * leaning on the clearing-side face and a few loose stalks in front. All in the clearing batch (`wick`): the straw adds
+ * one material group (the prop atlas) there, everything else joins existing groups. One collider (two circles along
+ * the bale: the top at ≈ 0.5 m is above the 0.42 m step-up, so it is an obstacle, not a step).
+ */
+function haleBale(w: World, c: Ctx, chunk: string) {
+  const { x, z, yaw } = WICKER_BALE, M = artMats(), k = c.k;
+  const ca = Math.cos(yaw), sa = Math.sin(yaw), at = (lx: number, lz: number) => [x + lx * ca + lz * sa, z - lx * sa + lz * ca] as const; // Asm local → plan
+  const y = Math.min(...[[-0.5, -0.3], [0.5, -0.3], [-0.5, 0.3], [0.5, 0.3], [0.3, 0.6]].map(([lx, lz]) => terrainHeight(...at(lx, lz)))) - 0.02;
+  const a = new Asm(c.b, chunk, x, y, z, yaw);
+  // pallet: two runners along the bale, five deck boards across
+  for (const lz of [-0.17, 0.17]) a.add(M.timber, '#6a5642', joinery.bx(1.0, 0.075, 0.08), 0, 0.0375, lz);
+  for (let i = 0; i < 5; i++) a.add(M.timber, i % 2 ? '#75604a' : '#6e5a45', joinery.bx(0.1, 0.025, 0.56), -0.42 + i * 0.21, 0.0875, 0);
+  const P = BALE.pallet - 0.005;
+  a.add(propMats().props, '#ead4a0', BALE_GEO.bale, 0, P, 0, { ry: 0.012 });
+  a.add(M.paint, '#4a3826', BALE_GEO.twine, 0, P, 0, { ry: 0.012 });
+  a.add(propMats().props, '#e2cb92', BALE_GEO.loose, 0, 0.02, 0, { shadow: false });
+  // the besom: foot in the grass on the clearing side, handle resting on the bale's top edge (W4)
+  a.add(k.M.wood, '#ffffff', BALE_GEO.besom, 0.28, 0.0, BALE.W / 2 + 0.24, { rx: 0.42, rz: -0.1 });
+  const [c0x, c0z] = at(-0.3, 0), [c1x, c1z] = at(0.3, 0);
+  for (const [cx, cz] of [[c0x, c0z], [c1x, c1z]]) w.col.addCircle(cx, cz, 0.32, y, y + 0.52);
+  return { x, z, yaw, y };
+}
+const BALE_GEO = (() => {
+  const g = { bale: baleGeo(), twine: twineGeo(), loose: looseStrawGeo(), besom: besomGeo() };
+  for (const v of Object.values(g)) v.userData.shared = true;
+  return g;
+})();

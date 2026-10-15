@@ -1,3 +1,4 @@
+import { ADDITIONS } from './interactable-additions.mjs';
 import { lowViewWithinBudget } from './performance-budget.mjs';
 // DEV-04B visual grammar & asset convergence: browser suite against the production build (npm run build && npm run preview).
 // Usage: node scripts/e2e-dev04b.mjs [baseUrl]   (E2E_OUT=dir for results)
@@ -18,7 +19,7 @@ mkdirSync(OUT, { recursive: true });
 const helpers = readFileSync(new URL('./e2e-helpers.js', import.meta.url), 'utf8');
 const baseline = JSON.parse(readFileSync(new URL('./dev04a-baseline.json', import.meta.url), 'utf8'));
 // DEV-04C: the baseline ids plus exactly the documented additions (scripts/dev04c-additions.json); nothing else may appear or go
-const additions = JSON.parse(readFileSync(new URL('./dev04c-additions.json', import.meta.url), 'utf8')).interactables;
+const additions = ADDITIONS; // scripts/interactable-additions.mjs: DEV-04C + W01 + optional production vignettes
 const expectedIds = [...baseline.interactables, ...additions].sort();
 const exe = process.env.CHROME ?? '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
 const browser = await chromium.launch({ executablePath: exe, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });

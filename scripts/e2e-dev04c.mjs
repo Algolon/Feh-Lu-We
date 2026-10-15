@@ -1,3 +1,4 @@
+import { ADDITIONS } from './interactable-additions.mjs';
 import { lowViewWithinBudget, cameraRegressionWithinBudget } from './performance-budget.mjs';
 // DEV-04C atmosphere, authored surfaces & interactive setpieces: browser suite against the production build
 // (npm run build && npm run preview). Usage: node scripts/e2e-dev04c.mjs [baseUrl]   (E2E_OUT=dir for results)
@@ -23,7 +24,7 @@ const OUT = process.env.E2E_OUT ?? 'scripts/out/dev04c';
 mkdirSync(OUT, { recursive: true });
 const helpers = readFileSync(new URL('./e2e-helpers.js', import.meta.url), 'utf8');
 const baseline = JSON.parse(readFileSync(new URL('./dev04a-baseline.json', import.meta.url), 'utf8'));
-const additions = JSON.parse(readFileSync(new URL('./dev04c-additions.json', import.meta.url), 'utf8')).interactables;
+const additions = ADDITIONS; // scripts/interactable-additions.mjs: DEV-04C + W01 + optional production vignettes
 const beforeBudgetFile = new URL('../docs/dev04c/before/budget.json', import.meta.url);
 const before = existsSync(beforeBudgetFile) ? JSON.parse(readFileSync(beforeBudgetFile, 'utf8')) : null;
 const exe = process.env.CHROME ?? '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
@@ -194,7 +195,7 @@ try {
     out.burning = { state: !!g.state.lit['wicker.figure'], low: set.fLow.visible, high: set.fHigh.visible, char: +lk.char.toFixed(2), light: +lk.light.toFixed(2), hay: set.hay.visible, smoke: set.smoke.visible, embers: set.embers.visible, uChar: +set.burnUniforms.uChar.value.toFixed(2) };
     T.wait(75);
     const la = set.look();
-    out.after = { settled: la.settled, low: set.fLow.visible, high: set.fHigh.visible, hay: set.hay.visible, smoulder: set.smoulder.visible, char: la.char, label: (T.lookAtId('wicker.figure'), g.metrics().label) };
+    out.after = { settled: la.settled, low: set.fLow.visible, high: set.fHigh.visible, hay: set.hay.visible, remnant: set.burnUniforms.uRemnant?.value ?? 0, smoulder: set.smoulder.visible, char: la.char, label: (T.lookAtId('wicker.figure'), g.metrics().label) };
     g.select(null);
     // puzzles untouched
     out.solvedFlags = Object.keys(g.state.flags).filter((k) => /Solved$/.test(k));
@@ -210,8 +211,10 @@ try {
     const seq = w0.seq ?? [], mono = seq.every((v, i) => i === 0 || v >= seq[i - 1]), distinct = new Set(seq).size;
     log(`candle sequence (DEV-04C-R): one action → candles light one after another round the ring, no message card (lit per 0.2 s: ${seq.join(' ')})`, w0.candleTarget === 'wicker.candles' && /Kaarsen aansteken/.test(w0.candleLabel ?? '') && seq[0] <= 2 && mono && distinct >= 5 && seq[seq.length - 1] === 9 && w0.full >= 2.5 && w0.full <= 4.5 && !w0.candleToast && w0.lit.state && w0.lit.flames && w0.lit.reveal === 1 && w0.lit.lamp, JSON.stringify({ t: w0.candleTarget, l: w0.candleLabel, full: w0.full, toast: w0.candleToast, lit: w0.lit }));
     log('burn state: with the ring lit the figure ignites ("Stroman aansteken", no message card): flames on body, char rising, hay burning, smoke / embers, strong light', /Stroman aansteken/.test(w0.igniteLabel ?? '') && !w0.igniteToast && w0.burning.state && w0.burning.low && w0.burning.high && w0.burning.char > 0.1 && w0.burning.uChar === w0.burning.char && w0.burning.light > 0.8 && w0.burning.hay && w0.burning.smoke && w0.burning.embers, JSON.stringify({ l: w0.igniteLabel, b: w0.burning }));
-    log('burn settles into the charred aftermath (flames out, hay gone, smouldering remains, fully charred)', w0.after.settled && !w0.after.low && !w0.after.high && !w0.after.hay && w0.after.smoulder && w0.after.char === 1, JSON.stringify(w0.after));
-    log('optional: no puzzle flag set by the setpiece; only the two lit keys saved', w0.solvedFlags.length === 0 && w0.saved['wicker.candles'] === true && w0.saved['wicker.figure'] === true, JSON.stringify({ f: w0.solvedFlags, lit: w0.saved }));
+    // DEV-04D W01 (superseded: the hay no longer vanishes): the settled figure keeps a charred hay remnant (the hay mesh in its remnant look)
+    log('burn settles into the charred aftermath (flames out, the hay a charred remnant, smouldering remains, fully charred)', w0.after.settled && !w0.after.low && !w0.after.high && w0.after.hay && w0.after.remnant === 1 && w0.after.smoulder && w0.after.char === 1, JSON.stringify(w0.after));
+    // DEV-04D W01 (superseded: the ring no longer burns forever): a completed burn has put the candles out, so only the figure key is saved
+    log('optional: no puzzle flag set by the setpiece; only the figure key saved (the burn put the ring out)', w0.solvedFlags.length === 0 && !w0.saved['wicker.candles'] && w0.saved['wicker.figure'] === true, JSON.stringify({ f: w0.solvedFlags, lit: w0.saved }));
   }
 
   // ---------------------------------------------------------------- 7. persistence across a real reload
@@ -223,9 +226,11 @@ try {
     const g = T.G(), set = g.world.scene.userData.wickerSet;
     g.player.setPose({ x: 176.4, y: 1.2, z: 59.9, yaw: 145 * Math.PI / 180, pitch: 0.1 }); T.tick(10);
     const lk = set.look();
-    return { version: g.state.version, candles: !!g.state.lit['wicker.candles'], figure: !!g.state.lit['wicker.figure'], flames: set.flames.visible, reveal: set.reveal.uReveal.value, settled: lk.settled, low: set.fLow.visible, hay: set.hay.visible, smoulder: set.smoulder.visible, fireClearing: !!g.state.lit['fire.clearing'] };
+    return { version: g.state.version, candles: !!g.state.lit['wicker.candles'], figure: !!g.state.lit['wicker.figure'], flames: set.flames.visible, reveal: set.reveal.uReveal.value, settled: lk.settled, low: set.fLow.visible, hay: set.hay.visible, remnant: set.burnUniforms.uRemnant?.value ?? 0, smoulder: set.smoulder.visible, stage: set.stage?.(), label: g.world.byId.get('wicker.figure').label(), fireClearing: !!g.state.lit['fire.clearing'] };
   });
-  if (re) log('save / load: the lit ring and the burned figure persist (save version 4, aftermath on load, other lit state kept)', re.version === 4 && re.candles && re.figure && re.flames && re.reveal === 1 && re.settled && !re.low && !re.hay && re.smoulder && re.fireClearing, JSON.stringify(re));
+  // DEV-04D W01 (superseded: the C aftermath was permanent with the ring lit): the burned figure persists as the cold charred
+  // remnant with the ring out, and is now cleanable ("Stroman schoonmaken")
+  if (re) log('save / load: the burned figure persists as the charred remnant, ring out, cleanable (save version 4, other lit state kept)', re.version === 4 && !re.candles && re.figure && !re.flames && re.settled && !re.low && re.hay && re.remnant === 1 && re.stage === 'CHARRED' && /schoonmaken/.test(re.label ?? '') && re.fireClearing, JSON.stringify(re));
   // an older save without the keys loads unlit
   await boot({ version: 4, scene: 'estate', inventory: ['matches'], flags: { leftHome: true }, open: {} });
   const old = await step('old save', () => {
