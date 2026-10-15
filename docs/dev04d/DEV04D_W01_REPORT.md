@@ -393,4 +393,30 @@ so the audio-sensitive gates (typecheck, unit, build, W01, release check, D ids)
 runs on both builds (pool timing). All inside 750 k / 150. Stage, transparency, reduced-motion and audio-lifecycle
 measurements of §7 / §9 are unchanged (production's merged changes are outside the clearing). No phone FPS exists.
 
-**Merge, deployment, live verification:** recorded in the follow-up commit after the merge (§15).
+## 15. Merge, deployment and live verification
+
+| | |
+|---|---|
+| Pull request | [#48](https://github.com/Algolon/Feh-Lu-We/pull/48) `ccr-1cffdfa6-w9jn3r` → `ccr-75ef4113-kfkimm`, merge commit (history kept), merged with `expectedHeadSha` = the tested head `ae7b42f` |
+| **Production release commit** | **`295a3b4`** "Merge DEV-04D W01: repeatable Wickerman ritual (#48)" (parents `cb85941`, `ae7b42f`) |
+| Tested = released | tree of `295a3b4` = tree of `ae7b42f` (`c5a8595`); `ae7b42f` differs from the last browser-validated build `7bad60b` only in `docs/` |
+| Production during the release | unchanged between the last re-integration (`cb85941`) and the merge |
+| Pages deployment | workflow run [411](https://github.com/Algolon/Feh-Lu-We/actions/runs/38794768701) on `295a3b4`: build job (npm ci, typecheck, `npm test`, build, upload artifact `github-pages` 4.09 MB, digest `sha256:1075420…769c`) **success**; deploy job (configure-pages, deploy-pages) **success**, 19:33 UTC |
+| Previous production deploys | runs 398 (`c1bbdfe`) and 408 (`cb85941`) **failed** at typecheck (the `Buffer` issue above), so before this release the live site still served `ee72f3e`; run 411 is the first successful production deploy since |
+
+**Live verification — what is and is not verified.** This cloud environment's network policy denies
+`algolon.github.io` and the Actions artifact storage (`*.blob.core.windows.net`): the proxy refuses both. Therefore:
+- **Verified:** the deploy job of run 411 succeeded for `295a3b4`; the deployed source is byte-identical to the tested
+  source; that source passes the gates of §14 in a production build, including the W01 suite (stages, bale,
+  candle / figure / bale interactables, two cycles, saves) and the release check (bong hit, airco, pouch, footsteps,
+  audio coexistence) with no runtime errors.
+- **Not verified from here:** that `https://algolon.github.io/Feh-Lu-We/` now serves the run-411 bundle (CDN / cache),
+  and a smoke test on the live URL. Quick owner check: open the game, Pauze → the line "Versie:" must read
+  **`295a3b4 · 2026-10-15`** (the Vite `__BUILD__` stamp); then the Wickerman clearing must show the hay bale on its
+  pallet at the south-west edge. To enable the automated live smoke in a later session, allow `algolon.github.io` in the
+  environment's network settings and run `node scripts/e2e-dev04d-w01-release.mjs https://algolon.github.io/Feh-Lu-We/`
+  (it uses its own fresh browser profile: no player's save is touched).
+
+**Remaining device-only review points (post-release acceptance, open):** Samsung performance and pacing (no
+physical-device FPS exists; PB01 device validation pending); ritual audio balance on phone speakers / headphones (W7);
+the real 80 s burn experience (W6); final visual opinion on smoke, fire, charred remnant and the W8 tufts.
