@@ -13,6 +13,7 @@ import { Player, PLAYER } from '../player/player';
 import { World, LightPool, type GameApi, type Interactable, type LightView } from '../interactions/world';
 import { UI } from '../ui/ui';
 import { Audio } from '../audio/audio';
+import type { FootstepSurface } from '../audio/footsteps';
 import {
   type Outcome, type Sfx, type PlaceKind, type PuzzleDef, PUZZLES, currentPuzzle, openPuzzles, viewHint, tutorialMissing, leaveHome as leaveHomeRule, submitCode, LOCK_OPTIONS,
   placePiece, takePiece, slotContents, loosePieces, placeSolved, submitDigits, submitBilliard, solvedCount, REQUIRED_COUNT, activeThread, threadNext, threadDone, owns,
@@ -32,7 +33,7 @@ import { tickFires, FIRE_UNIFORMS } from '../world/fire';
 export interface SceneExtras {
   env?: Env;
   isIndoor?: (x: number, z: number, y: number) => boolean;
-  surfaceAt?: (x: number, z: number, y: number) => 'grass' | 'wood' | 'stone';
+  surfaceAt?: (x: number, z: number, y: number) => FootstepSurface;
   /** Authored rooms + portals: lighting relevance and the floor-aware map. */
   rooms?: RoomGraph;
 }
