@@ -29,8 +29,9 @@ def pair(a, b, label, w=None):
     out = Image.new('RGB', (A.width + B.width + 6, A.height + bar), (24, 24, 24))
     out.paste(A, (0, bar)); out.paste(B, (A.width + 6, bar))
     d = ImageDraw.Draw(out)
-    d.text((8, 4), f'BEFORE (production 752cb02) · {label}', fill=(230, 230, 230), font=FONT)
-    d.text((A.width + 14, 4), f'AFTER (D3-b2) · {label}', fill=(230, 230, 230), font=FONT)
+    narrow = A.width < 360
+    d.text((8, 4), f'BEFORE · {label}' if narrow else f'BEFORE (production 752cb02) · {label}', fill=(230, 230, 230), font=FONT)
+    d.text((A.width + 14, 4), 'AFTER' if narrow else f'AFTER (D3-b2) · {label}', fill=(230, 230, 230), font=FONT)
     return out
 
 
