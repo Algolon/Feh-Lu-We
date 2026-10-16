@@ -1,0 +1,25 @@
+name: BOSLUST R05 touch UX visual QA
+on:
+  push:
+    branches: [boslust-lock-r01-stylized-metal]
+permissions:
+  contents: read
+jobs:
+  touch-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright-core install --with-deps chromium
+      - run: node scripts/boslust-r05-qa.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: boslust-r05-touch-evidence
+          path: scripts/out/boslust-r05/
