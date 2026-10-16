@@ -21,8 +21,8 @@
       "here": "billiard",
       "target": "out",
       "targetVisible": true,
-      "calls": 63,
-      "triangles": 297178,
+      "calls": 65,
+      "triangles": 501882,
       "buffer": [
         480,
         860
@@ -36,8 +36,8 @@
       "here": "billiard",
       "target": "out",
       "targetVisible": true,
-      "calls": 63,
-      "triangles": 297178,
+      "calls": 65,
+      "triangles": 501882,
       "buffer": [
         480,
         860
@@ -51,8 +51,8 @@
       "here": "out",
       "target": "billiard",
       "targetVisible": true,
-      "calls": 67,
-      "triangles": 317644,
+      "calls": 71,
+      "triangles": 523044,
       "buffer": [
         480,
         860
@@ -66,8 +66,8 @@
       "here": "out",
       "target": "billiard",
       "targetVisible": true,
-      "calls": 69,
-      "triangles": 317716,
+      "calls": 73,
+      "triangles": 523116,
       "buffer": [
         480,
         860
@@ -81,8 +81,8 @@
       "here": "billiard",
       "target": "out",
       "targetVisible": true,
-      "calls": 172,
-      "triangles": 603854,
+      "calls": 175,
+      "triangles": 1013966,
       "buffer": [
         480,
         860
@@ -96,8 +96,8 @@
       "here": "billiard",
       "target": "out",
       "targetVisible": true,
-      "calls": 172,
-      "triangles": 603854,
+      "calls": 175,
+      "triangles": 1013966,
       "buffer": [
         480,
         860
@@ -111,8 +111,8 @@
       "here": "out",
       "target": "billiard",
       "targetVisible": true,
-      "calls": 147,
-      "triangles": 464976,
+      "calls": 151,
+      "triangles": 875080,
       "buffer": [
         480,
         860
@@ -126,8 +126,8 @@
       "here": "out",
       "target": "billiard",
       "targetVisible": true,
-      "calls": 150,
-      "triangles": 465048,
+      "calls": 154,
+      "triangles": 875152,
       "buffer": [
         480,
         860
@@ -140,16 +140,16 @@
       "side": "inside",
       "here": "billiard",
       "targetVisible": true,
-      "calls": 68,
-      "triangles": 318744,
+      "calls": 70,
+      "triangles": 523448,
       "glError": 0
     },
     {
       "side": "outside",
       "here": "out",
       "targetVisible": true,
-      "calls": 64,
-      "triangles": 322163,
+      "calls": 67,
+      "triangles": 527563,
       "glError": 0
     }
   ],
