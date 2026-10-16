@@ -57,7 +57,7 @@ export function libraryR01Furniture(c: Ctx) {
   for (const z of [d.z - 0.86, d.z - 0.61, d.z - 0.36])
     box(c.b, k.M.wood, '#765035', d.x - 0.19, GF + 0.90, z, 0.028, 0.13, 0.19, { chunk: c.chunk });
   // A single upholstered visitor chair, parked just north of the puzzle standing point.
-  chair(c, 76.05, 98.52, GF, Math.PI / 2, '#b39a77', true, 'upholstered', '#5a3a22');
+  chair(c, 76.3, 96.2, GF, Math.PI / 2, '#b39a77', true, 'upholstered', '#5a3a22');
 
   // Central quiet reading lounge. Seating is deliberately outside B01/DS01 routes.
   rug(c, 78.35, 102.5, GF + 0.01, 4.6, 5.0, 0, '#a34f38', 'medallion', true);
