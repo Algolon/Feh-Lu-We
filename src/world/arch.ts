@@ -6,7 +6,9 @@ import { lathe, softBox } from './artkit';
 import type { CollisionWorld } from '../player/collision';
 import { registerOpening } from './openings';
 import { studyWindowSite, studyWindow } from './exteriorStudy';
+import { opaqueWallRects } from './windowOpenings';
 import { slateCourseUV, gableTrimGeo } from './roofDetail';
+import { seamlessWallFaceUV } from './seamlessWallFinish';
 import { rainwater, ridgeFinish } from './exteriorFinish';
 
 export interface Ctx {
@@ -21,7 +23,7 @@ export function makeCtx(col: CollisionWorld, chunk: string, b = new Batcher()): 
 }
 
 export interface Opening { at: number; w: number; h?: number }
-export interface Win { at: number; w?: number; h?: number; sill?: number; side?: 1 | -1 | 0; inside?: boolean }
+export interface Win { at: number; w?: number; h?: number; sill?: number; side?: 1 | -1 | 0; inside?: boolean; transparent?: boolean }
 
 export interface WallOpts {
   mat?: THREE.Material;
@@ -51,14 +53,36 @@ export type WinStyle = 'plain' | 'manor' | 'cottage';
 /** Joinery (painted surrounds, skirting) and oak trim colours: ART_TOKENS world.joinery / world.oak family. */
 export const TRIM = { joinery: '#e2d6bc', oak: '#6e4a2c', dressed: '#efe4cb', frame: '#ece4d2', bar: '#e6dcc6' };
 
+/**
+ * A split wall panel needs the same pigment and texture coordinates as its neighbours.
+ * Used only when a transparent window requires physically slicing a wall into rectangles.
+ * Ordinary authored walls retain the existing, softly varied painterly box behaviour.
+ */
+function seamlessWallPanel(
+  c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number,
+  y0: number, y1: number, t: number, mat: THREE.Material, color: THREE.ColorRepresentation,
+  uvScale: number, shadow: boolean,
+) {
+  const cx = axis === 'x' ? (a0 + a1) / 2 : f;
+  const cz = axis === 'x' ? f : (a0 + a1) / 2;
+  const cy = (y0 + y1) / 2;
+  const g = boxGeo(axis === 'x' ? a1 - a0 : t, y1 - y0, axis === 'x' ? t : a1 - a0, uvScale);
+  seamlessWallFaceUV(g, axis, cx, cy, cz, uvScale);
+  // Disable per-part stochastic brightness. Identical finish faces must remain identical even
+  // though the wall has multiple boxes after carving out the window aperture.
+  c.b.add(mat, g, planMatrix(cx, cy, cz), color, c.chunk, shadow, 0);
+  g.dispose();
+}
+
 /** Axis-aligned wall. axis 'x': runs along x from a0..a1 at fixed z = f. axis 'z': along z at fixed x = f. */
 export function wall(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number, y0: number, y1: number, o: WallOpts = {}) {
   const t = o.t ?? 0.18;
   const mat = o.mat ?? c.k.M.plaster;
   const color = o.color ?? '#f1e8d6';
   const ops = [...(o.openings ?? [])].sort((p, q) => p.at - q.at);
+  const seamless = (o.windows ?? []).some(w => w.transparent);
   const lo = Math.min(a0, a1), hi = Math.max(a0, a1);
-  const piece = (s0: number, s1: number, ya: number, yb: number) => {
+  const solidPiece = (s0: number, s1: number, ya: number, yb: number) => {
     if (s1 - s0 < 0.005 || yb - ya < 0.005) return;
     if (o.top && yb >= y1 - 1e-6) { // runs up to a sloped top: one slanted slab per straight stretch of the profile
       const cuts = [s0, ...(o.kinks ?? []).filter((q) => q > s0 + 0.01 && q < s1 - 0.01).sort((p, q) => p - q), s1];
@@ -72,13 +96,24 @@ export function wall(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number,
       }
       return;
     }
-    if (axis === 'x') {
+    if (seamless) {
+      seamlessWallPanel(c, axis, f, s0, s1, ya, yb, t, mat, color, o.uv ?? 2, true);
+    } else if (axis === 'x') {
       boxMM(c.b, mat, color, s0, s1, ya, yb, f - t / 2, f + t / 2, { uv: o.uv ?? 2, chunk: c.chunk });
-      if (o.collide !== false) c.col.addBox(s0, s1, f - t / 2, f + t / 2, ya, yb, { occludes: true });
     } else {
       boxMM(c.b, mat, color, f - t / 2, f + t / 2, ya, yb, s0, s1, { uv: o.uv ?? 2, chunk: c.chunk });
-      if (o.collide !== false) c.col.addBox(f - t / 2, f + t / 2, s0, s1, ya, yb, { occludes: true });
     }
+    if (o.collide !== false) {
+      if (axis === 'x') c.col.addBox(s0, s1, f - t / 2, f + t / 2, ya, yb, { occludes: true });
+      else c.col.addBox(f - t / 2, f + t / 2, s0, s1, ya, yb, { occludes: true });
+    }
+  };
+  // Only explicitly clear glazing creates real apertures; all legacy windows remain sealed.
+  const cuts = (o.windows ?? []).filter(w => w.transparent).map(w => ({
+    at: w.at, w: w.w ?? 1.1, y0: y0 + (w.sill ?? 0.9), y1: y0 + (w.sill ?? 0.9) + (w.h ?? 1.5),
+  }));
+  const piece = (s0: number, s1: number, ya: number, yb: number) => {
+    for (const [a, b, lo, hi] of opaqueWallRects(s0, s1, ya, yb, cuts)) solidPiece(a, b, lo, hi);
   };
   let cur = lo;
   for (const op of ops) {
@@ -112,7 +147,7 @@ export function wall(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number,
     // thin interior finish layer on the inner face (no collider)
     const side = -(o.exterior ?? 1);
     const ff = f + side * (t / 2 + 0.012);
-    const sk = { ...o, mat: o.skin.mat, color: o.skin.color, t: 0.02, collide: false, skin: undefined, windows: [], exterior: 0 as const };
+    const sk = { ...o, mat: o.skin.mat, color: o.skin.color, t: 0.02, collide: false, skin: undefined, windows: o.windows, exterior: 0 as const };
     wallNoFrames(c, axis, ff, a0, a1, y0, y1, sk);
   }
   for (const wdef of o.windows ?? []) {
@@ -122,7 +157,11 @@ export function wall(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number,
     const sides: (1 | -1)[] = wdef.side ? [wdef.side] : ext ? [ext as 1 | -1, (-ext) as 1 | -1] : [1, -1];
     for (const s of sides) {
       const outside = ext !== 0 && s === ext;
-      windowAt(c, axis, f + s * (t / 2 + (o.skin && !outside ? 0.03 : 0)), s, wdef.at, y0 + (wdef.sill ?? 0.9), wdef.w ?? 1.1, wdef.h ?? 1.5, outside, { kind: outside ? o.winStyle ?? 'plain' : 'plain' });
+      // WINDOW-R01-R02: a genuine clear pane has ONE exterior sash. Its interior side
+      // is finished with plaster reveals and a sill at the actual wall depth (manor.ts),
+      // never a second decorative windowAt frame with duplicate mullions and bars.
+      if (wdef.transparent && !outside) continue;
+      windowAt(c, axis, f + s * (t / 2 + (o.skin && !outside ? 0.03 : 0)), s, wdef.at, y0 + (wdef.sill ?? 0.9), wdef.w ?? 1.1, wdef.h ?? 1.5, outside, { kind: outside ? o.winStyle ?? 'plain' : 'plain', transparent: wdef.transparent });
     }
   }
 }
@@ -145,13 +184,21 @@ function slantedSlab(c: Ctx, axis: 'x' | 'z', f: number, t: number, a0: number, 
 
 function wallNoFrames(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number, y0: number, y1: number, o: WallOpts) {
   const ops = [...(o.openings ?? [])].sort((p, q) => p.at - q.at);
+  const seamless = (o.windows ?? []).some(w => w.transparent);
   let cur = Math.min(a0, a1);
   const hi = Math.max(a0, a1);
   const t = o.t ?? 0.02;
-  const piece = (s0: number, s1: number, ya: number, yb: number) => {
+  const solidPiece = (s0: number, s1: number, ya: number, yb: number) => {
     if (s1 - s0 < 0.005 || yb - ya < 0.005) return;
-    if (axis === 'x') boxMM(c.b, o.mat!, o.color!, s0, s1, ya, yb, f - t / 2, f + t / 2, { uv: 2, chunk: c.chunk, shadow: false });
+    if (seamless) seamlessWallPanel(c, axis, f, s0, s1, ya, yb, t, o.mat!, o.color!, 2, false);
+    else if (axis === 'x') boxMM(c.b, o.mat!, o.color!, s0, s1, ya, yb, f - t / 2, f + t / 2, { uv: 2, chunk: c.chunk, shadow: false });
     else boxMM(c.b, o.mat!, o.color!, f - t / 2, f + t / 2, ya, yb, s0, s1, { uv: 2, chunk: c.chunk, shadow: false });
+  };
+  const cuts = (o.windows ?? []).filter(w => w.transparent).map(w => ({
+    at: w.at, w: w.w ?? 1.1, y0: y0 + (w.sill ?? 0.9), y1: y0 + (w.sill ?? 0.9) + (w.h ?? 1.5),
+  }));
+  const piece = (s0: number, s1: number, ya: number, yb: number) => {
+    for (const [a, b, lo, hi] of opaqueWallRects(s0, s1, ya, yb, cuts)) solidPiece(a, b, lo, hi);
   };
   for (const op of ops) {
     piece(cur, op.at - op.w / 2, y0, y1);
@@ -213,8 +260,8 @@ const GLASS = { day: '#5f6f78', dayLow: '#4b5860', lit: '#e8b86c', litLow: '#c98
  * `manor` adds a dressed-stone architrave, a lintel and a keystone. Inside: a painted lining and a deep window board.
  * The glass is unlit (glow) but no longer every pane is a lit lamp: most read as cool daylight glass.
  */
-export function windowAt(c: Ctx, axis: 'x' | 'z', faceF: number, side: 1 | -1, at: number, y: number, w: number, h: number, outside: boolean, style: { frame?: string; glass?: string; arch?: boolean; kind?: WinStyle } = {}) {
-  if (outside && style.kind === 'manor' && studyWindowSite(axis, faceF, at, side)) { studyWindow(c, axis, faceF, side, at, y, w, h); return; }
+export function windowAt(c: Ctx, axis: 'x' | 'z', faceF: number, side: 1 | -1, at: number, y: number, w: number, h: number, outside: boolean, style: { frame?: string; glass?: string; arch?: boolean; kind?: WinStyle; transparent?: boolean } = {}) {
+  if (outside && style.kind === 'manor' && studyWindowSite(axis, faceF, at, side)) { studyWindow(c, axis, faceF, side, at, y, w, h, !!style.transparent); return; }
   const kind = style.kind ?? 'plain';
   const lit = hash(at, faceF + y, axis === 'x' ? 1 : 2) < 0.26;
   const fr = style.frame ?? (outside ? (kind === 'cottage' ? '#f4efe4' : TRIM.frame) : TRIM.joinery);
@@ -226,7 +273,8 @@ export function windowAt(c: Ctx, axis: 'x' | 'z', faceF: number, side: 1 | -1, a
   };
   const x0 = at - w / 2, x1 = at + w / 2, top = y + h;
   // glass: two tones, lighter at the top (sky reflection), darker low (the room behind); warm when a lamp is on
-  if (outside) {
+  if (style.transparent) { /* A single real pane is placed within the wall instead of painted face cards. */ }
+  else if (outside) {
     const [hi, lo] = style.glass ? [style.glass, style.glass] : lit ? [GLASS.lit, GLASS.litLow] : [GLASS.day, GLASS.dayLow];
     B(x0, x1, y + h * 0.45, top, 0.004, 0.012, c.k.M.glow, hi);
     B(x0, x1, y, y + h * 0.45, 0.004, 0.012, c.k.M.glow, lo);
