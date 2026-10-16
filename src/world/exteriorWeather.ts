@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 import type { Ctx } from './arch';
 import type { World } from '../interactions/world';
-import { box, geo } from './kit';
+import { geo } from './kit';
 import { softBox } from './artkit';
 export const EXTERIOR_WEATHER=typeof location==='undefined'||new URLSearchParams(location.search).get('weather')!=='base';
 
