@@ -3,6 +3,9 @@
 // group for its display end. Construction first (every top is carried by a frame you can read), the existing art kit
 // materials only, visual only (no interactable). Origins at the floor centre, facing plan heading `yaw` (Asm: +lz forward).
 import * as THREE from 'three';
+import { INTERIOR_GREEN } from './gardenkit';
+import { addIndoorPlant, chooseIndoorFamily, indoorLeafMaterial, indoorPlantModel } from './indoorPlants';
+
 import { GARDEN_DETAIL, gardenPot, gardenSoil, gardenSoilMaterial, SOIL_TINT, gardenHouseplant } from './gardenkit';
 import { woodMats } from './woodkit';
 import type { Ctx } from './arch';
@@ -81,7 +84,7 @@ export function pottingBench(c: Ctx, x: number, z: number, y0: number, yaw: numb
     a.add(M.paint, terr, potGeo(pr, ph), px, H, -0.08);
     if(GARDEN_DETAIL){
       a.add(gardenSoilMaterial(),SOIL_TINT,gardenSoil(pr*.89),px,H+ph*.82,-.08);
-      a.add(woodMats().flat,'#ffffff',cg('gardenBenchPlant',()=>gardenHouseplant(0)),px,H+ph*.82,-.08,{s:[pr*2,pr*2,pr*2]});
+      a.add(INTERIOR_GREEN?indoorLeafMaterial():woodMats().flat,'#ffffff',INTERIOR_GREEN?indoorPlantModel(px<0?'succulent':'cactus',Math.round(Math.abs(px)*10)%3):cg('gardenBenchPlant',()=>gardenHouseplant(0)),px,H+ph*.82,-.08,{s:[pr*2,pr*2,pr*2]});
     }else a.add(M.paint, '#4f7a34', leafBall(pr * 1.1), px, H + ph + pr * 0.5, -0.08, { s: [1, 0.8, 1] });
   }
   for (let i = 0; i < 5; i++){a.add(M.paint, darker(terr, 0.9 + (i % 2) * 0.15), potGeo(0.05, 0.08), -0.62 + i * 0.13, 1.2, -d / 2 + 0.1);if(GARDEN_DETAIL)a.add(gardenSoilMaterial(),SOIL_TINT,gardenSoil(.0445),-.62+i*.13,1.2+.08*.82,-d/2+.1);} // a row of small pots on the shelf
@@ -133,6 +136,10 @@ export function plantEtagere(c: Ctx, x: number, z: number, y0: number, yaw: numb
 export function pottedPlant(c: Ctx, x: number, z: number, y0: number, r: number, leaf = '#4f7a34', pot = '#b8653e', tall = 1) {
   const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, (x * 5.1 + z * 2.3) % 6.28);
   const ph = r * 1.6;
+  if(INTERIOR_GREEN){
+    const family=chooseIndoorFamily(x,z),v=Math.abs(Math.floor(x*13+z*17))%3;
+    addIndoorPlant(c,x,z,y0,family,v,r/.245,family==='snake'?'wicker':'clay');return;
+  }
   if(GARDEN_DETAIL){
     a.add(M.ceramic,pot,potGeo(r,ph),0,0,0);
     a.add(gardenSoilMaterial(),SOIL_TINT,gardenSoil(r*.89),0,ph*.82,0);

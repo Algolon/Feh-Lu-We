@@ -5,17 +5,20 @@ import { mulberry32 } from '../core/rng';
 import { getKit } from './kit';
 import { surface } from './surfaces';
 
-export const GARDEN_DETAIL = typeof location !== 'undefined' && new URLSearchParams(location.search).get('gardenart') === 'r08';
+const gardenArt = typeof location === 'undefined' ? null : new URLSearchParams(location.search).get('gardenart');
+export const GARDEN_DETAIL = gardenArt === 'r08' || gardenArt === 'r09';
+export const INTERIOR_GREEN = gardenArt === 'r09';
 const Y=new THREE.Vector3(0,1,0);
 
 /** Curved blade with shared end vertices, rounded outline and continuous normals; both windings share lighting. */
-export function gardenLeaf(base:THREE.Vector3,dir:THREE.Vector3,length:number,width:number,lift:number,c0:THREE.Color,c1:THREE.Color,upright=0,segments=8,across=2) {
-  const side=new THREE.Vector3(-dir.z,0,dir.x).normalize(),p:number[]=[],col:number[]=[],ix:number[]=[];
+export function gardenLeaf(base:THREE.Vector3,dir:THREE.Vector3,length:number,width:number,lift:number,c0:THREE.Color,c1:THREE.Color,upright=0,segments=8,across=2,textureFamily?:number) {
+  const side=new THREE.Vector3(-dir.z,0,dir.x).normalize(),p:number[]=[],col:number[]=[],ix:number[]=[],uv:number[]=[];
   const add=(u:number,s:number)=>{
     const w=width*Math.pow(Math.sin(Math.PI*u),.72)*(1-u*.15);
     const v=base.clone().addScaledVector(dir,length*u*(1-upright*.6)).addScaledVector(side,w*s)
       .addScaledVector(Y,Math.sin(u*Math.PI*.85)*lift+u*upright*length-w*s*s*.25);
     p.push(v.x,v.y,v.z);
+    if(textureFamily!==undefined)uv.push(((textureFamily%4)+(.5+s*Math.pow(Math.sin(Math.PI*u),.72)*(1-u*.15)*.5))/4,(1-Math.floor(textureFamily/4)+u)/2);
     const colour=c0.clone().lerp(c1,.2+u*.65).multiplyScalar(1+.075*Math.cos(u*Math.PI*8-Math.abs(s)*3)+.10*Math.exp(-Math.abs(s)*8)-.025*Math.abs(s));
     col.push(colour.r,colour.g,colour.b);
   };
@@ -28,7 +31,7 @@ export function gardenLeaf(base:THREE.Vector3,dir:THREE.Vector3,length:number,wi
   }
   const end=1+(segments-2)*row;
   for(let j=0;j<across;j++)ix.push(end+j,tip,end+j+1);
-  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(p,3));g.setAttribute('color',new THREE.Float32BufferAttribute(col,3));g.setIndex(ix);g.computeVertexNormals();
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(p,3));g.setAttribute('color',new THREE.Float32BufferAttribute(col,3));if(textureFamily!==undefined)g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));g.setIndex(ix);g.computeVertexNormals();
   const n=g.attributes.normal;
   for(let i=0;i<n.count;i++){
     const v=new THREE.Vector3().fromBufferAttribute(n,i);if(v.y<0)v.negate();v.lerp(Y,.35).normalize();n.setXYZ(i,v.x,v.y,v.z);

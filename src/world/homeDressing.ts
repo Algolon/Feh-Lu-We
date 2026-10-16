@@ -1,6 +1,9 @@
 // TUT-R02 — the remaining home-only asset families. Shared estate builders stay unchanged.
 // Rounded garment volumes, readable footwear construction and built fixtures; metre-scale origins.
 import * as THREE from 'three';
+import { INTERIOR_GREEN } from './gardenkit';
+import { addIndoorPlant } from './indoorPlants';
+
 import { GARDEN_DETAIL, gardenPot, gardenSoilMaterial, SOIL_TINT } from './gardenkit';
 import type { Ctx } from './arch';
 import { Asm, artMats, lathe, projectUV, bake, baseAO } from './artkit';
@@ -142,6 +145,7 @@ export function homeBoots(c: Ctx) {
 
 /** Home plants use individual shaped leaves on visible stems, not outdoor shrub crown chunks. */
 export function homePottedPlant(c: Ctx, x: number, z: number, s: number) {
+  if(INTERIOR_GREEN){addIndoorPlant(c,x,z,0,x>4?'ficus':'snake',x>4?1:2,s,x>4?'ceramic':'wicker');c.col.addCircle(x,z,.22*s,0,1);return;}
   const M = artMats(), a = new Asm(c.b, c.chunk, x, 0, z, 0);
   a.add(M.paint, '#b57752', cg(GARDEN_DETAIL?'homeGardenPot':'homePlantPot', () => GARDEN_DETAIL?gardenPot(.24,.40):lathe([
     [0, 0], [0.15, 0], [0.17, 0.03], [0.224, 0.32], [0.242, 0.34],

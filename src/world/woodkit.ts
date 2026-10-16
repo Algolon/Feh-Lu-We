@@ -11,7 +11,8 @@ import { softBox } from './artkit';
 import { ConvexGeometry } from 'three/examples/jsm/geometries/ConvexGeometry.js';
 import { mergeGeometries, mergeVertices, toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { mulberry32, type Rng } from '../core/rng';
-import { GARDEN_DETAIL, gardenLeaf, gardenHedge, gardenSmoothNormals } from './gardenkit';
+import { whitePlantUV } from './indoorPlants';
+import { GARDEN_DETAIL, INTERIOR_GREEN, gardenLeaf, gardenHedge, gardenSmoothNormals } from './gardenkit';
 import { NATURE_STYLE, FULL_NATURE, TREE_ART, VEGETATION_DETAIL, GROUND_DETAIL, foliageSprays, foliageAtlas, SPRAY_SAMPLE, type TreeArt, type SprayPalette } from './foliageStyle';
 
 // ------------------------------------------------------------------------------------------------ primitives
@@ -1099,7 +1100,7 @@ export function referencePlantModel(kind: PlantKind, variant: number, detail = G
   const rounded:THREE.BufferGeometry[]=[];
   const plantLeaf=(...args:Parameters<typeof leafShape>)=>{
     if(!garden){leafShape(...args);return;}
-    const [,p,d,L,W,h,a,b,segs=4,up=0]=args;rounded.push(gardenLeaf(p,d,L,W,h,a,b,up,Math.max(6,segs*2),2));
+    const [,p,d,L,W,h,a,b,segs=4,up=0]=args;rounded.push(gardenLeaf(p,d,L,W,h,a,b,up,Math.max(6,segs*2),2,INTERIOR_GREEN?0:undefined));
   };
   // Species retain their own flower colours; foliage warms in coherent whole-plant variants.
   const palette = detail ? (kind === 'grass'
@@ -1107,7 +1108,7 @@ export function referencePlantModel(kind: PlantKind, variant: number, detail = G
     : [['#426d43','#91b568','#284f39'],['#507b45','#a4bb70','#32583c'],['#365e43','#7da16a','#254b39']][v]) : ['#3c6235','#88a856','#294b30'];
   const [green,light,dark] = palette.map(C);
   const blade = (p: THREE.Vector3, d: THREE.Vector3, L: number, W: number, rise: number, a = green, b = light) => {
-    if(garden){rounded.push(gardenLeaf(p,d,L,W,rise,a,b,0,kind==='fern'?3:6,2));return;}
+    if(garden){rounded.push(gardenLeaf(p,d,L,W,rise,a,b,0,kind==='fern'?3:6,2,INTERIOR_GREEN?(kind==='grass'?1:0):undefined));return;}
     const s=V(-d.z,0,d.x), mid=p.clone().addScaledVector(d,L*.48).add(V(0,rise,0)), tip=p.clone().addScaledVector(d,L).add(V(0,rise*.48,0));
     if (detail) {
       // Six-point outline rounds the shoulders around a raised midrib.
@@ -1232,6 +1233,7 @@ export function referencePlantModel(kind: PlantKind, variant: number, detail = G
   const base=t.build(kind==='grass'?.6:.45);
   if(!garden)return base;
   gardenSmoothNormals(base);
+  if(INTERIOR_GREEN)whitePlantUV(base);
   const result=mergeGeometries([base,...rounded])!;base.dispose();rounded.forEach(g=>g.dispose());result.computeBoundingSphere();return result;
 }
 

@@ -4,6 +4,8 @@
 // the cut and headwall colliders are created by the original code (visuals replaced); the door, sign,
 // inscription tablet, lock, signpost hitbox and all interaction ids are untouched.
 import * as THREE from 'three';
+import { INTERIOR_GREEN } from './gardenkit';
+import { indoorLeafMaterial, whitePlantUV } from './indoorPlants';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { makeVegBatch, onFrame, type VegBatch } from './vegbatch';
 import { TREE_LOD_PROFILE, selectTreeLod } from './vegetationLod';
@@ -356,7 +358,7 @@ export class PlantBatch {
   }
   /** Any geometry, shared by `key` (made once by `make`), shown within `show` metres. */
   addGeo(key: string, make: () => THREE.BufferGeometry, m: THREE.Matrix4, c: THREE.ColorRepresentation, show: number, kind = key) {
-    if (!this.kinds.has(key)) { this.kinds.set(key, this.geos.length); this.geos.push(make()); }
+    if (!this.kinds.has(key)) { this.kinds.set(key, this.geos.length); const geo=make();if(INTERIOR_GREEN&&!this.material&&!geo.attributes.uv)whitePlantUV(geo);this.geos.push(geo); }
     this.items.push({ geo: this.kinds.get(key)!, m: m.clone(), p: new THREE.Vector3().setFromMatrixPosition(m), c: new THREE.Color(c), show, id: -1, k: -1 });
     this.count.set(kind, (this.count.get(kind) ?? 0) + 1);
   }
@@ -364,7 +366,7 @@ export class PlantBatch {
   counts() { return Object.fromEntries(this.count); }
   build(w: World) {
     if (!this.items.length) return;
-    this.batch = makeVegBatch(w, this.geos, this.items.length, this.material ?? woodMats().flat, { sortObjects: false, tag: this.tag, preserveRegions: TREE_LOD_PROFILE.id !== 'baseline' });
+    this.batch = makeVegBatch(w, this.geos, this.items.length, this.material ?? (INTERIOR_GREEN?indoorLeafMaterial():woodMats().flat), { sortObjects: false, tag: this.tag, preserveRegions: TREE_LOD_PROFILE.id !== 'baseline' });
     for (const it of this.items) { it.id = this.batch.addInstance(it.geo, it.m, it.c); this.batch.setVisibleAt(it.id, false); }
     onFrame(w, (cam) => this.update(cam));
   }

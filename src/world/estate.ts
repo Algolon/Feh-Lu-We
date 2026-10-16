@@ -5,6 +5,7 @@
 // North: the lake with the Portugal cottage on its plateau, wooded ridges along the north and east, the west bank.
 // Layout constants live in layout.ts, keepouts in footprints.ts, ground in terrain.ts.
 import * as THREE from 'three';
+import { buildInteriorGreenery, registerGreeneryRegions } from './interiorGreenery';
 import { surface } from './surfaces';
 import { FULL_NATURE } from './foliageStyle';
 import { GARDEN_DETAIL, gardenSoil, gardenSoilMaterial, SOIL_TINT } from './gardenkit';
@@ -105,6 +106,7 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   finishZone(w);
   buildGround(w, woods ? new TreeGrid(woods.points()) : null);
 
+  buildInteriorGreenery(w,manorIn);
   for (const c of [ground, manorC, manorIn, manorB, consC, cotC, forestC, gardenC, groundsC, ugC]) c.b.build(w.scene);
   w.scene.userData.openings = openings;
   w.scene.userData.supportWarnings = [...supportWarnings];
@@ -118,6 +120,7 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   if (artBad.length) console.warn('DEV-04A wall-art contract:', JSON.stringify(artBad));
   for (const m of veg.build(w.scene, true)) m.userData.region = 'outdoor';
 
+  registerGreeneryRegions(w);
   // whole-room culling: chunks are shown only while one of their rooms can be seen from the player's room
   const R = estateRooms();
   const manorRooms = R.rooms.filter((r) => r.floor === 'g' || r.floor === 'u' || r.floor === 'a').filter((r) => r.x0 >= 72 && r.x1 <= 116 && r.id !== 'cons').map((r) => r.id);

@@ -1,5 +1,8 @@
 // Static furniture and decor (batched), plus lamp/lantern models for interactive lights.
 import * as THREE from 'three';
+import { INTERIOR_GREEN } from './gardenkit';
+import { addIndoorPlant, chooseIndoorFamily } from './indoorPlants';
+
 import { GARDEN_DETAIL, gardenPot, gardenSoil, gardenSoilMaterial, SOIL_TINT, gardenHouseplant } from './gardenkit';
 
 import { type Ctx, segBox } from './arch';
@@ -341,6 +344,11 @@ export function rug(c: Ctx, x: number, z: number, y: number, w: number, d: numbe
 
 export function plant(c: Ctx, x: number, z: number, y0: number, s = 1, pot = '#c9774a', detail = GARDEN_DETAIL) {
   const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, (x * 7.3 + z * 3.1) % 6.28);
+  if(detail&&INTERIOR_GREEN){
+    const f=chooseIndoorFamily(x,z),v=(Math.floor(x*7)+Math.floor(z*11))%3;
+    addIndoorPlant(c,x,z,y0,f,Math.abs(v),s,f==='snake'?'wicker':f==='alocasia'||f==='zz'?'ceramic':'clay');
+    c.col.addCircle(x,z,.22*s,y0,y0+1);return;
+  }
   if(detail){
     a.add(M.ceramic,pot,cg('gardenPot',()=>gardenPot(.245,.40)),0,0,0,{s:[s,s,s]});
     a.add(gardenSoilMaterial(),SOIL_TINT,cg('gardenSoil',()=>gardenSoil(.218)),0,.328*s,0,{s:[s,1,s]});
