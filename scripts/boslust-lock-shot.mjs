@@ -37,14 +37,13 @@ try {
     return {pose:g.player.pose(),hasLock:g.world.byId.has('boslust.lock'),meshes:g.world.byId.get('boslust.lock')?.obj.children.length};
   });
   await page.waitForTimeout(1200);
-  await page.screenshot({path:OUT+'/boslust-r01-closed.png'});
   await page.evaluate(()=>{
     const g=window.__game;
     g.state.flags.boslustCover=true;
     g.world.syncAll();
   });
   await page.waitForTimeout(1700);
-  await page.screenshot({path:OUT+'/boslust-r01-open.png'});
+  await page.screenshot({path:OUT+'/boslust-r01-open.png',timeout:120000});
   const after=await page.evaluate(()=>{
     const g=window.__game;
     return {pose:g.player.pose(),cover:g.state.flags.boslustCover,lock:g.world.byId.has('boslust.lock'),target:g.metrics().target};
