@@ -228,8 +228,8 @@ body.reduced-motion * { transition: none !important; animation: none !important;
 .b01-slots .pslot-label svg { width: 56px; height: 56px; }
 .zoombox:not(.zoomed) .slice-art { max-height: 46vh; width: auto; max-width: 100%; margin: 0 auto; }
 
-/* BOSLUST-R04: true in-world inspect; the 3D lock stays fully visible.
-   No parchment modal, no blur/dimmer and no artificial digit buttons. */
+/* BOSLUST-R05: diegetic 3D interaction. Overlay only provides lightweight
+   touch affordances, no simulated number pad, dimmer or keyboard on mobile. */
 body.boslust-inspecting #hud > :not(#boslust-focus):not(#toast) { visibility: hidden; }
 body.boslust-inspecting #hud #toast { visibility: visible; max-width: min(80vw, 420px); bottom: calc(72px + var(--safe-b)); }
 #boslust-focus { position: absolute; inset: 0; pointer-events: none; z-index: 8; color: #f4e8d2; font: 500 13px/1.35 var(--wa-sans, sans-serif); }
@@ -238,7 +238,45 @@ body.boslust-inspecting #hud #toast { visibility: visible; max-width: min(80vw, 
 #boslust-focus .boslust-back { pointer-events: auto; touch-action: manipulation; min-width: 88px; min-height: 48px; color: #f4e8d2; background: rgba(24,23,19,.70); border: 1px solid rgba(211,176,107,.72); border-radius: 10px; font: inherit; font-weight: 650; cursor: pointer; }
 #boslust-focus .boslust-back:focus-visible { outline: 3px solid #efc981; outline-offset: 2px; }
 #boslust-focus .boslust-focus-foot { position: absolute; bottom: calc(16px + var(--safe-b)); left: 50%; transform: translateX(-50%); width: min(92vw, 660px); display: flex; flex-direction: column; align-items: center; gap: 5px; pointer-events: none; text-align: center; color: #f4e8d2; text-shadow: 0 1px 5px black; }
-#boslust-focus .boslust-hint, #boslust-focus .boslust-key-hint { padding: 4px 10px; background: rgba(22,22,18,.62); border-radius: 7px; }
-#boslust-focus .boslust-key-hint { display: none; font-size: 11px; }
-@media (pointer: fine) { #boslust-focus .boslust-key-hint { display: inline; } }
-@media (max-width: 550px) { #boslust-focus .boslust-focus-head { top: calc(10px + var(--safe-t)); } #boslust-focus .boslust-focus-foot { bottom: calc(12px + var(--safe-b)); font-size: 12px; } }
+#boslust-focus .boslust-mobile-hint, #boslust-focus .boslust-desktop-hint, #boslust-focus .boslust-key-hint {
+  padding: 4px 10px; background: rgba(22,22,18,.62); border-radius: 7px;
+}
+#boslust-focus .boslust-mobile-hint { display: none; }
+#boslust-focus .boslust-key-hint { font-size: 11px; }
+#boslust-focus.touch-mode .boslust-mobile-hint { display: inline; }
+#boslust-focus.touch-mode :is(.boslust-desktop-hint, .boslust-key-hint) { display: none; }
+
+/* Screen-space guides follow the real 3D drum pivots, never receive touches. */
+#boslust-focus .boslust-wheel-guides { position: absolute; inset: 0; pointer-events: none; }
+#boslust-focus .boslust-guide { position: absolute; transform: translate(-50%, -50%);
+  width: 32px; height: 85px; opacity: 0; border: 1px solid transparent;
+  border-radius: 8px; transition: opacity .16s ease, border-color .16s ease;
+}
+#boslust-focus .boslust-guide[hidden] { display: none; }
+#boslust-focus.touch-mode .boslust-guide { opacity: .68; }
+#boslust-focus.touch-mode .boslust-guide.active {
+  opacity: 1; border-color: rgba(244,204,123,.63);
+  box-shadow: 0 0 0 1px #171c1777, 0 0 13px rgba(238,202,117,.16);
+}
+#boslust-focus .boslust-chevron { position: absolute; left: 50%; transform: translateX(-50%);
+  color: #f7e3af; font: 700 19px/16px var(--wa-sans, sans-serif);
+  text-shadow: 0 1px 4px #121210, 0 0 7px #171711; }
+#boslust-focus .boslust-chevron.up { top: -14px; }
+#boslust-focus .boslust-chevron.down { bottom: -14px; }
+
+@media (pointer: coarse), (any-pointer: coarse) {
+  #boslust-focus .boslust-mobile-hint { display: inline; }
+  #boslust-focus :is(.boslust-desktop-hint, .boslust-key-hint) { display: none; }
+  #boslust-focus .boslust-guide { opacity: .68; }
+  #boslust-focus .boslust-guide.active { opacity: 1; border-color: rgba(244,204,123,.63); }
+}
+@media (max-width: 550px) {
+  #boslust-focus .boslust-focus-head { top: calc(10px + var(--safe-t)); }
+  #boslust-focus .boslust-focus-foot { bottom: calc(85px + var(--safe-b)); width: min(94vw, 480px); font-size: 12px; }
+  #boslust-focus .boslust-back { position: fixed; left: calc(16px + var(--safe-l));
+    bottom: calc(14px + var(--safe-b)); min-width: 108px; min-height: 54px; }
+  #boslust-focus .boslust-guide { width: 30px; height: 78px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #boslust-focus .boslust-guide { transition: none; }
+}
