@@ -48,7 +48,10 @@ export function lionHeadSculptGeometry():THREE.BufferGeometry {
   for(let i=0;i<src.vertexCount;i++){
     for(let j=0;j<3;j++) {
       p[i*3+j]=pos[i*3+j]/src.coordinateScale;
-      colors[i*3+j]=packedColors[i*3+j]/255;
+      // Packed tint is sRGB; Three.js vertex colours require LINEAR components.
+      // Without this conversion the near-black bronze renders ivory in daylight.
+      const srgb=packedColors[i*3+j]/255;
+      colors[i*3+j]=srgb<=.04045?srgb/12.92:Math.pow((srgb+.055)/1.055,2.4);
     }
     uv[i*2]=.5+p[i*3]/.33;
     uv[i*2+1]=.5+p[i*3+1]/.39;
