@@ -13,7 +13,7 @@
       "x": 90,
       "z": 77.7,
       "calls": 157,
-      "triangles": 1165242,
+      "triangles": 1165946,
       "doorFound": false
     },
     {
@@ -28,7 +28,7 @@
       "x": 90,
       "z": 78.65,
       "calls": 153,
-      "triangles": 1161068,
+      "triangles": 1161772,
       "doorFound": false
     },
     {
@@ -43,7 +43,7 @@
       "x": 89.25,
       "z": 78.5,
       "calls": 178,
-      "triangles": 1228028,
+      "triangles": 1228732,
       "doorFound": false
     },
     {
@@ -58,7 +58,7 @@
       "x": 90,
       "z": 82,
       "calls": 128,
-      "triangles": 941442,
+      "triangles": 942146,
       "doorFound": false
     },
     {
@@ -73,7 +73,7 @@
       "x": 90,
       "z": 78.85,
       "calls": 132,
-      "triangles": 1106340,
+      "triangles": 1107044,
       "doorFound": false
     }
   ],
