@@ -6,7 +6,7 @@ import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx } from '../world/arch';
 import { box, cyl, compound, planMatrix, mesh, v3, getKit } from '../world/kit';
-import { table, chair } from '../world/furniture';
+import { table } from '../world/furniture';
 import { makeAction, makePickup, place } from '../interactions/props';
 import { PROPS, prop, type PropRec } from './placement';
 import { B01_SLOTS, B01_FOLIOS, SRC, SLICE_IDS, B01_DRAWER, type FolioId, type SlotId, type Subject } from './ids';
