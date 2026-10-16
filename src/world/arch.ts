@@ -184,20 +184,18 @@ function frame(c: Ctx, axis: 'x' | 'z', f: number, s: number, e: number, y0: num
     else boxMM(c.b, m, cc, f + d0, f + d1, ya, yb, a0, a1, { chunk: c.chunk, jitter: 0 });
   };
   if(frameStyle==='slim-metal') {
-    // FRONT-R02: approximately 40 mm steel-look casing, not recoloured oak joinery.
-    // The door opening, wall colliders, head datum and hinge geometry do NOT move.
-    const L=t/2+.005, lip=.004, casing=.030;
+    // FRONT-R04: deliberately slim steel casing. Outer 30 mm → 18 mm (-40%);
+    // inner lip / liner / projection / head all follow the same visual reduction.
+    const L=t/2+.005, lip=.0024, casing=.018;
     const lo=(a:number,b:number)=>[Math.min(a,b),Math.max(a,b)] as [number,number];
-    // 27 mm slim through-wall liner, extended only 4 mm into the clear opening.
-    B(s-.027,s+lip,y0,y1,-L,L);
-    B(e-lip,e+.027,y0,y1,-L,L);
-    B(s-.027,e+.027,y1-lip,y1+.027,-L,L);
-    // Two identical narrow face bands. No fake wooden plinths or oversized cap.
+    B(s-.0162,s+lip,y0,y1,-L,L);
+    B(e-lip,e+.0162,y0,y1,-L,L);
+    B(s-.0162,e+.0162,y1-lip,y1+.0162,-L,L);
     for(const side of [-1,1]) {
-      const depth=lo(side*L,side*(L+.020));
-      B(s-casing,s-.001,y0,y1+.039,...depth);
-      B(e+.001,e+casing,y0,y1+.039,...depth);
-      B(s-casing,e+casing,y1,y1+.039,...depth);
+      const depth=lo(side*L,side*(L+.012));
+      B(s-casing,s-.001,y0,y1+.018,...depth);
+      B(e+.001,e+casing,y0,y1+.018,...depth);
+      B(s-casing,e+casing,y1,y1+.018,...depth);
     }
     return;
   }
