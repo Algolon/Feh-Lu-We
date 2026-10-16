@@ -172,12 +172,12 @@
     }
   ],
   "sillMaterial": {
-    "meanRed": 149.6456278763971,
-    "meanGreen": 108.25641025641026,
-    "meanBlue": 73.9388560157791,
-    "contrast": 56,
-    "lengthwiseVariation": 2.9000657462195925,
-    "crossGrainVariation": 8.38395792241946,
+    "meanRed": 134.12426035502958,
+    "meanGreen": 96.63247863247864,
+    "meanBlue": 66.16962524654832,
+    "contrast": 49,
+    "lengthwiseVariation": 2.5733070348454965,
+    "crossGrainVariation": 7.3208415516107825,
     "surface": "timber"
   },
   "errors": [],
