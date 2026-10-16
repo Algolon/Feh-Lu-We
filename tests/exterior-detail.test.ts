@@ -40,7 +40,7 @@ describe('FRONT-R01 horizontal timber entrance door',()=>{
     const hinge=new THREE.Group();hinge.add(leaf);
     hinge.rotation.y=1.6;hinge.updateMatrixWorld(true);
     const opened=new THREE.Box3().setFromObject(leaf);
-    expect(opened.max.x-opened.min.x).toBeLessThan(.3);
+    expect(opened.max.x-opened.min.x).toBeLessThan(.32); // sculpted knocker projects beyond flat leaf
     leaf.traverse(o=>{if(o instanceof THREE.Mesh)o.geometry.dispose();});
     mat.dispose();
   });
