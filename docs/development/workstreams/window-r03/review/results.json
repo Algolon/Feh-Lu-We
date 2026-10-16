@@ -21,6 +21,93 @@
       "glError": 0
     }
   ],
+  "cottage": {
+    "portals": 7,
+    "solid": 7,
+    "clear": 7
+  },
+  "cottageViews": [
+    {
+      "id": "south",
+      "side": "inside",
+      "here": "cottageEntry",
+      "target": "out",
+      "visible": true,
+      "calls": 52,
+      "triangles": 330898,
+      "glError": 0
+    },
+    {
+      "id": "south",
+      "side": "outside",
+      "here": "out",
+      "target": "cottageEntry",
+      "visible": true,
+      "calls": 34,
+      "triangles": 144692,
+      "glError": 0
+    },
+    {
+      "id": "north",
+      "side": "inside",
+      "here": "cottageRoom",
+      "target": "out",
+      "visible": true,
+      "calls": 22,
+      "triangles": 146088,
+      "glError": 0
+    },
+    {
+      "id": "north",
+      "side": "outside",
+      "here": "out",
+      "target": "cottageRoom",
+      "visible": true,
+      "calls": 63,
+      "triangles": 353446,
+      "glError": 0
+    },
+    {
+      "id": "west",
+      "side": "inside",
+      "here": "cottageRoom",
+      "target": "out",
+      "visible": true,
+      "calls": 22,
+      "triangles": 149864,
+      "glError": 0
+    },
+    {
+      "id": "west",
+      "side": "outside",
+      "here": "out",
+      "target": "cottageRoom",
+      "visible": true,
+      "calls": 52,
+      "triangles": 338982,
+      "glError": 0
+    },
+    {
+      "id": "east",
+      "side": "inside",
+      "here": "cottageRoom",
+      "target": "out",
+      "visible": true,
+      "calls": 42,
+      "triangles": 308960,
+      "glError": 0
+    },
+    {
+      "id": "east",
+      "side": "outside",
+      "here": "out",
+      "target": "cottageRoom",
+      "visible": true,
+      "calls": 33,
+      "triangles": 166724,
+      "glError": 0
+    }
+  ],
   "errors": [],
   "samsungValidated": false
 }
