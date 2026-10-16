@@ -2,7 +2,7 @@ name: FRONT-R02 in-game door review
 on:
   push:
     branches:
-      - front-r02-horizontal-lion-door
+      - front-r02-brass-slim-sculpted-lion
     paths:
       - src/world/exteriorDetail.ts
       - src/world/lionKnocker.ts
@@ -58,5 +58,5 @@ jobs:
           git add docs/development/workstreams/front-r02/review/
           if ! git diff --cached --quiet; then
             git commit -m "docs(front-r02): capture in-game exterior/interior door review"
-            git push origin HEAD:front-r02-horizontal-lion-door
+            git push origin HEAD:front-r02-brass-slim-sculpted-lion
           fi
