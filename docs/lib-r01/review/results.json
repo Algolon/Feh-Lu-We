@@ -1,6 +1,6 @@
 {
   "source": "actual candidate branch Vite/Chromium SwiftShader",
-  "commit": "c2e32882193662605d9996b93d73850c8d70cdc8",
+  "commit": "6265acbe98bee90d1404361beed78b29e63d101c",
   "records": [
     {
       "name": "01-entrance-wide",
@@ -82,7 +82,7 @@
         "pitch": 0.14685515089236043
       },
       "room": "library",
-      "calls": 350,
+      "calls": 349,
       "triangles": 1619928,
       "glError": 0
     },
@@ -379,9 +379,9 @@
       "data": {
         "pass": true,
         "final": {
-          "x": 82.27,
-          "y": 0.52,
-          "z": 104.66
+          "x": 82.05,
+          "y": 0.15,
+          "z": 103.99
         },
         "path": [
           {
@@ -509,6 +509,22 @@
         },
         "lamp.library": {
           "exists": true
+        }
+      },
+      "pass": true
+    },
+    {
+      "name": "dev01-playable-reticle-targets",
+      "data": {
+        "b01.table": {
+          "target": "b01.table",
+          "label": "Bekijken: tekenbladen en vakken",
+          "pass": true
+        },
+        "ds01.album": {
+          "target": "ds01.album",
+          "label": "Bekijken: album",
+          "pass": true
         }
       },
       "pass": true
