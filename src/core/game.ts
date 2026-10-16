@@ -62,7 +62,7 @@ export class Game implements GameApi {
   /** DEV-01 slice review (?review=dev01) only; null in the normal game. */
   readonly slice: SliceUI | null = SLICE ? new SliceUI(this) : null;
   private modalClosedAt = 0;
-  private boslustFocus: { lock: THREE.Object3D; blend: number; closing: boolean; selected: number } | null = null;
+  private boslustFocus: { lock: THREE.Object3D; blend: number; closing: boolean; selected: number; startedAt: number; closingFrom: number } | null = null;
   private boslustFocusHud: BoslustFocusHud | null = null;
   get isBoslustInspecting() { return !!this.boslustFocus && !this.boslustFocus.closing; }
   readonly renderer: THREE.WebGLRenderer;
@@ -545,7 +545,7 @@ export class Game implements GameApi {
         !this.state.flags.boslustCover || this.state.flags.boslustOpen) return;
     const obj = this.world?.byId.get('boslust.lock')?.obj;
     if (!obj) return;
-    this.boslustFocus = { lock: obj, blend: 0, closing: false, selected: 0 };
+    this.boslustFocus = { lock: obj, blend: 0, closing: false, selected: 0, startedAt: performance.now(), closingFrom: 0 };
     this.target = null;
     this.input?.setEnabled(false);
     this.input?.exitPointerLock(); // pointerunlock ignored while focus is active
@@ -568,6 +568,8 @@ export class Game implements GameApi {
       return;
     }
     this.boslustFocus.closing = true;
+    this.boslustFocus.closingFrom = this.boslustFocus.blend;
+    this.boslustFocus.startedAt = performance.now();
   }
 
   private turnBoslustFocusWheel(index: number, direction: 1 | -1) {
@@ -595,10 +597,17 @@ export class Game implements GameApi {
     }
   }
 
-  private updateBoslustFocusCamera(dt: number) {
+  private updateBoslustFocusCamera() {
     const f = this.boslustFocus;
     if (!f) return;
-    f.blend = THREE.MathUtils.clamp(f.blend + dt * (f.closing ? -5.5 : 5), 0, 1);
+    // Wall-clock easing, not frame-count easing: software GPUs/mobile stalls
+    // must not leave camera/controls locked for several seconds.
+    const canvasAspect = this.canvas.clientWidth / Math.max(1, this.canvas.clientHeight);
+    if (Math.abs(canvasAspect - this.camera.aspect) > 0.015) this.resize();
+    const elapsed = this.settings.reducedMotion ? 1 : (performance.now() - f.startedAt) / 1000;
+    f.blend = f.closing
+      ? Math.max(0, f.closingFrom * (1 - elapsed / 0.36))
+      : Math.min(1, elapsed / 0.43);
     const normalFov = this.camera.aspect < 1 ? 82 : 68;
     const portrait = this.camera.aspect < 0.85;
     const distance = portrait ? 1.55 : 1.07;
@@ -804,7 +813,7 @@ export class Game implements GameApi {
       this.movedLastTick = Math.abs(this.player.x - px) + Math.abs(this.player.z - pz) > 1e-4;
     }
     this.player.applyCamera(this.camera);
-    this.updateBoslustFocusCamera(dt);
+    this.updateBoslustFocusCamera();
     // Direction-only HUD; the tutorial stays uncluttered, and the compass is opt-out.
     this.ui.setCompass(this.player.yaw, this.settings.showCompass && w.id === 'estate', this.settings.reducedMotion);
     this.cullTimer -= dt;
