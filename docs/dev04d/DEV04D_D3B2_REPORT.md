@@ -339,3 +339,15 @@ Run conditions:
 1. Accept D3-b2 as built, including the region trade-off.
 2. If the owner wants the sloop and moon readable from further away, test ×1.3 / ×1.6 in this same branch before merge.
 3. Decide separately whether to re-baseline the e2e:dev04a / dev04c budget files to the current production.
+
+## 10. Release
+
+D3-b2 was integrated and deployed together with D3-b2R (PR #54, release commit
+`ac82b6abf2c8628f3830924a52094b334f50b448`, Pages run 461 succeeded) after revalidation against production
+`74610c5`, which includes Wickerman W01. The record is in [`DEV04D_D3B2R_REPORT.md`](DEV04D_D3B2R_REPORT.md) §10:
+- conflicts;
+- the ID contract (135 interactables);
+- the render-culling fix (doorway rule, `mUpS`);
+- gates, matched performance and live-verification limits.
+
+**Status: implemented, integrated and deployed for owner review.**
