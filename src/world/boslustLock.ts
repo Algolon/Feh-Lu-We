@@ -211,6 +211,10 @@ export function makeBoslustMetalLock(w: World, k: Kit) {
     }
     // Divider underlining forms a continuous horizontal code reading axis.
     box(b, k.M.paint, '#735632', 0.135, -0.004, -0.105, 0.535, 0.007, 0.01, { shadow: false });
+    // Fixed hinge pins share the same metal-detail batch / draw call.
+    for (const x of [-0.076, 0.344]) {
+      rod(b, k.M.paint, '#aa8853', x, 0.154, -0.151, 0.018, 0.018, 0.075, 10, { rz: Math.PI / 2, shadow: false });
+    }
   }));
   const atlas = numberAtlas(w);
   const band = new THREE.Mesh(bentReels(),
@@ -290,12 +294,6 @@ export function makeBoslustMetalLock(w: World, k: Kit) {
       box(b, k.M.paint, '#b9975c', x, -0.162, -0.030, 0.04, 0.004, 0.005, { shadow: false });
     }
     box(b, k.M.paint, '#35291e', 0, -0.281, -0.033, 0.090, 0.009, 0.009, { shadow: false });
-  }));
-  // Actual hinge pins on the frame, shared material/draw call.
-  lock.add(compound((b) => {
-    for (const x of [-0.076, 0.344]) {
-      rod(b, k.M.paint, '#aa8853', x, 0.154, -0.151, 0.018, 0.018, 0.075, 10, { rz: Math.PI / 2, shadow: false });
-    }
   }));
   lock.add(cover);
   return { lock, cover, setDigits };
