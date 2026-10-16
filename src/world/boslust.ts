@@ -22,6 +22,7 @@ import { HUT, gridHeight, hillHeight } from './terrain';
 import { Batcher } from './kit';
 import { ART } from '../core/artflags';
 import { cutRocks, entranceV2 } from './boslustSample';
+import { makeBoslustMetalLock, BOSLUST_LOCK_SIZE } from './boslustLock';
 
 const DOOR_X = 63, DOOR_Z = 18.2;
 
@@ -101,21 +102,13 @@ function entrance(w: World, g: GameApi, c0: Ctx, u: Ctx) {
   place(tab, 60.75, 1.2, 17.9, 0);
   w.scene.add(tab);
   makeInspect(w, g, { id: 'inspect.boslust', obj: tab, clue: 'c.boslust', hit: [1.2, 0.8, 0.3], hitOffset: [0, 0.35, 0], label: 'Bekijken: gravure' });
-  // the cipher lock right of the door: four wheels under a cover with a narrow slot
-  const lock = new THREE.Group();
+  // BOSLUST-R01: authored aged-metal four-wheel lock; visuals do not change cipher rules.
+  const { lock, cover } = makeBoslustMetalLock(w, k);
   place(lock, 64.85, 1.2, 17.94, 0);
   w.scene.add(lock);
-  lock.add(compound((b) => {
-    box(b, k.M.paint, '#6b5a3a', 0, -0.2, 0.02, 0.5, 0.42, 0.06);
-    for (let i = 0; i < 4; i++) cyl(b, k.M.paint, '#c9a44c', -0.15 + i * 0.1, -0.02, -0.02, 0.04, 0.04, 0.05, 10, { rz: Math.PI / 2 });
-  }));
-  const cover = new THREE.Group();
-  cover.position.set(0, 0.2, -0.04);
-  cover.add(compound((b) => { box(b, k.M.paint, '#8a6a3a', 0, -0.38, 0, 0.46, 0.36, 0.03); box(b, k.M.paint, '#2a1f16', 0, -0.12, -0.016, 0.3, 0.025, 0.005); }));
-  lock.add(cover);
-  w.onSync(() => { cover.rotation.x = g.state.flags.boslustCover ? 1.9 : 0; });
+  w.onSync(() => { cover.rotation.x = g.state.flags.boslustCover ? -1.9 : 0; });
   makeAction(w, {
-    id: 'boslust.lock', obj: lock, hit: [0.6, 0.6, 0.3], hitOffset: [0, 0, 0],
+    id: 'boslust.lock', obj: lock, hit: [BOSLUST_LOCK_SIZE.width + 0.08, BOSLUST_LOCK_SIZE.height + 0.12, BOSLUST_LOCK_SIZE.depth + 0.05], hitOffset: [0, 0, 0],
     label: () => (g.state.flags.boslustOpen ? null : g.state.flags.boslustCover ? 'Cijferwieltjes' : 'Klepje bekijken'),
     run: () => {
       if (g.state.flags.boslustCover) { g.openPanel('boslust'); return; }
