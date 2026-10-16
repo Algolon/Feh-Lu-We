@@ -8,6 +8,7 @@ import { registerOpening } from './openings';
 import { studyWindowSite, studyWindow } from './exteriorStudy';
 import { opaqueWallRects } from './windowOpenings';
 import { slateCourseUV, gableTrimGeo } from './roofDetail';
+import { cutEastHipRoofWindow, type RoofCutout } from './specialRoofGlass';
 import { seamlessWallFaceUV } from './seamlessWallFinish';
 import { rainwater, ridgeFinish } from './exteriorFinish';
 
@@ -438,7 +439,7 @@ export function stairRail(c: Ctx, f: number, a0: number, a1: number, y0: number,
   c.col.addBox(side < 0 ? f - t : f, side < 0 ? f : f + t, Math.min(a0, a1), Math.max(a0, a1), yFloor, Math.max(y0, y1) + 1.1, { tag: 'railing' });
 }
 
-export interface EaveLook { finished?: boolean; courses?: boolean; fascia?: THREE.ColorRepresentation; soffit?: THREE.ColorRepresentation; gutter?: THREE.ColorRepresentation | false; cap?: THREE.ColorRepresentation; downpipes?: [number, number][] }
+export interface EaveLook { finished?: boolean; courses?: boolean; fascia?: THREE.ColorRepresentation; soffit?: THREE.ColorRepresentation; gutter?: THREE.ColorRepresentation | false; cap?: THREE.ColorRepresentation; downpipes?: [number, number][]; eastRoofWindow?: RoofCutout }
 /**
  * Hip roof with a real eave: fascia boards round the edge, a soffit closing the overhang underneath, a half-round
  * gutter, ridge and hip caps, optional downpipes (plan points at the wall). DEV-03 fix: the old "fascia" was a solid
@@ -446,7 +447,13 @@ export interface EaveLook { finished?: boolean; courses?: boolean; fascia?: THRE
  * turned them black.
  */
 export function hipRoof(c: Ctx, cx: number, cz: number, sx: number, sz: number, y: number, h: number, mat: THREE.Material, color: THREE.ColorRepresentation, overhang = 0.6, look: EaveLook = {}) {
-  const g = hipRoofGeo(sx, sz, h, overhang);
+  const solid = hipRoofGeo(sx, sz, h, overhang);
+  // WINDOW-R03: carve the actual east attic observation opening from the exterior
+  // slate face. Inner attic lining already uses the same four aperture coordinates.
+  const g = look.eastRoofWindow
+    ? cutEastHipRoofWindow(solid, sx, sz, h, overhang, cx, cz, look.eastRoofWindow)
+    : solid;
+  if (g !== solid) solid.dispose();
   if (look.courses) slateCourseUV(g);
   geo(c.b, mat, color, g, cx, y, cz, { chunk: c.chunk });
   g.dispose();
