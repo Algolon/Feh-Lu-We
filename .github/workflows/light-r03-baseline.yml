@@ -1,0 +1,30 @@
+name: LIGHT-R03 matched live baseline
+on:
+  push:
+    branches: [qa/light-r03-baseline]
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright-core install --with-deps chromium
+      - name: Live baseline light intensity frame trace
+        shell: bash
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4188 >/tmp/light-r03-base.log 2>&1 &
+          for i in $(seq 1 40); do curl -sf http://127.0.0.1:4188/Feh-Lu-We/ >/dev/null && break; sleep 1; done
+          node scripts/light-r03-production-baseline.mjs http://127.0.0.1:4188/Feh-Lu-We/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: light-r03-live-baseline
+          path: light-r03-qa
