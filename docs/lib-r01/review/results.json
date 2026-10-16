@@ -1,6 +1,6 @@
 {
   "source": "actual candidate branch Vite/Chromium SwiftShader",
-  "commit": "e74bb9bbf0ea718d77d0b700ecff380065929c19",
+  "commit": "ca1499e76e4c6e1633f698d67d9cdbead1a433d3",
   "records": [
     {
       "name": "01-entrance-wide",
@@ -96,8 +96,8 @@
         "pitch": -0.939986256830184
       },
       "room": "libGallery",
-      "calls": 272,
-      "triangles": 1474829,
+      "calls": 269,
+      "triangles": 1474325,
       "glError": 0
     },
     {
@@ -124,8 +124,8 @@
         "pitch": -0.3372264541186275
       },
       "room": "library",
-      "calls": 244,
-      "triangles": 1602682,
+      "calls": 253,
+      "triangles": 1604194,
       "glError": 0
     },
     {
