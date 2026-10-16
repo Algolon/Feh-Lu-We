@@ -28,6 +28,25 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      # Guard the actual image pixels before publishing. Unit tests alone cannot catch a 4px placeholder.
+      # Force a failed initial WebP request: the atlas loader must self-heal and keep batching enabled.
+      - name: Painting atlas WebGL release gate
+        if: github.ref_name == github.event.repository.default_branch
+        shell: bash
+        run: |
+          npx playwright-core install --with-deps chromium
+          npm run preview -- --host 127.0.0.1 --port 4188 > /tmp/flw-paint-preview.log 2>&1 &
+          for attempt in $(seq 1 40); do
+            curl -sf http://127.0.0.1:4188/Feh-Lu-We/ > /dev/null && break
+            sleep 1
+          done
+          ART_PROBE_ASSERT=1 ART_PROBE_INJECT_FIRST=1 ART_PROBE_OUT=art-probe node scripts/art-painting-regression-probe.mjs http://127.0.0.1:4188/Feh-Lu-We/
+      - uses: actions/upload-artifact@v4
+        if: always() && github.ref_name == github.event.repository.default_branch
+        with:
+          name: painting-atlas-release-evidence
+          path: art-probe
+          if-no-files-found: warn
       - uses: actions/upload-pages-artifact@v5
         with:
           path: dist
