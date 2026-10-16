@@ -1,0 +1,45 @@
+name: WINDOW-R01 pilot screenshots (no deploy)
+on:
+  push:
+    branches:
+      - window-r01-billiard-glazing-pilot
+    paths:
+      - 'src/**'
+      - 'scripts/window-r01-review.mjs'
+      - '.github/workflows/window-r01-review.yml'
+permissions:
+  contents: write
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright-core install --with-deps chromium
+      - run: node scripts/window-r01-review.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: window-r01-review-evidence
+          path: docs/development/workstreams/window-r01/review
+          if-no-files-found: warn
+      - name: Preserve screenshots on pilot branch only
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/development/workstreams/window-r01/review/
+          if ! git diff --cached --quiet; then
+            git commit -m "docs(window-r01): capture pilot window screenshots and render metrics"
+            git push origin HEAD:window-r01-billiard-glazing-pilot
+          fi
