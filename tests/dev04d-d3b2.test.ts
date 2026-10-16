@@ -178,12 +178,11 @@ describe('DEV-04D D3-b2: culled regions', () => {
     const manor = readFileSync('src/world/manor.ts', 'utf8');
     for (const ch of ['mUpR', 'mUpS', 'mUpG']) expect(manor).toContain(`c.chunk = '${ch}';`);
   });
-  it('release: the D3-b2 regions name their only doorways; the older regions keep the rooms-only rule', () => {
+  it('release: the D3-b2 regions name their only doorways (the full set of doorway regions: tests/perf-r02.test.ts)', () => {
     const est = readFileSync('src/world/estate.ts', 'utf8');
     expect(est).toMatch(/roomRegion\(\['mUpR'\], \['reis'\], Infinity, IN_FAR, \['door\.reis'\]\)/);
     expect(est).toMatch(/roomRegion\(\['mUpS'\], \['sterren'\], Infinity, IN_FAR, \['door\.sterren'\]\)/);
     expect(est).toMatch(/roomRegion\(\['mUpG'\], \['storage'\], Infinity, IN_FAR, \['door\.storage'\]\)/);
-    expect(est.split('\n').filter((l) => /w\.roomRegion\(.*\['door\./.test(l)).length).toBe(3);
   });
   it('release: a doorway region is drawn inside its rooms, or from outside only with an open doorway in view and in sight', async () => {
     const { World } = await import('../src/interactions/world');
