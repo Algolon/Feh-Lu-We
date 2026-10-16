@@ -9,7 +9,7 @@ import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { openSky, render, timeSky, diffPng } from './sky-c01-r01-lib.mjs';
+import { openSky, render, timeSky, diffFrames } from './sky-c01-r01-lib.mjs';
 
 const out = process.argv[2]; if (!out) throw Error('Explicit output directory required');
 mkdirSync(out, { recursive: true });
@@ -68,8 +68,11 @@ for (const [layout, quality] of sessions) {
   version = s.version;
   const { page } = s;
   try {
+    // Load B's atlas once (review selector), then keep the live material on A; B renders through a cached override.
+    await render(page, { pose: poses.sky, t: 0, skyOnly: true, variant: 'masks' });
+    await page.waitForFunction(() => window.__r01.sky.material.uniforms.uCloudAtlas.value?.image?.naturalWidth === 1024);
     const shot = async (name, o, save) => {
-      const r = await render(page, { t: 0, skyOnly: true, ...o });
+      const r = await render(page, { t: 0, skyOnly: true, ...o, save });
       if (save) writeFileSync(`${out}/${tag}-${name}.png`, Buffer.from(r.png, 'base64'));
       return r;
     };
@@ -81,17 +84,17 @@ for (const [layout, quality] of sessions) {
       const off = await shot(`${name}-clouds0`, { pose, t, skyOnly, clouds: false }, false);
       const offPre = await shot(`${name}-clouds0-before`, { pose, t, skyOnly, clouds: false, frag: use(before.procedural) }, false);
       // Full-scene frames carry unrelated 1-LSB scene noise (manor windows); measure it with a same-shader repeat.
-      const noise = skyOnly ? { max: 0, count: 0 } : await diffPng(page, after.png, (await shot(`${name}-repeat`, { pose, t, skyOnly }, false)).png);
-      const diff = await diffPng(page, after.png, pre.png);
-      const row = { tag, name, pose: pn, t, skyOnly, diff, noise, equalToBefore: skyOnly ? diff.max === 0 : diff.max <= Math.max(1, noise.max), afterHash: sha(after.png).slice(0, 16),
-        cloudsOffEqual: (await diffPng(page, off.png, offPre.png)).max <= (skyOnly ? 0 : 1), calls: after.calls, triangles: after.triangles, callsBefore: pre.calls, trianglesBefore: pre.triangles,
+      const noise = skyOnly ? { max: 0, count: 0 } : await diffFrames(page, after.id, (await shot(`${name}-repeat`, { pose, t, skyOnly }, false)).id);
+      const diff = await diffFrames(page, after.id, pre.id);
+      const row = { tag, name, pose: pn, t, skyOnly, diff, noise, equalToBefore: skyOnly ? diff.max === 0 : diff.max <= Math.max(1, noise.max), afterHash: after.hash,
+        cloudsOffEqual: (await diffFrames(page, off.id, offPre.id)).max <= (skyOnly ? 0 : 1), calls: after.calls, triangles: after.triangles, callsBefore: pre.calls, trianglesBefore: pre.triangles,
         glError: after.glError || pre.glError, failures: after.failures, width: after.width, height: after.height, pixelRatio: after.pixelRatio };
       if (t === 0 && skyOnly) {
         await shot(`${name}-stale-before`, { pose, t, frag: use(staleBefore) }, true);
         await shot(`${name}-ubmap-before`, { pose, t, frag: use(ubBefore) }, true);
-        const m = await shot(`${name}-masks-after`, { pose, t, variant: 'masks' }, true);
-        const mb = await shot(`${name}-masks-before`, { pose, t, variant: 'masks', frag: use(before.masks) }, true);
-        row.masksFailures = m.failures; row.masksGlError = m.glError; row.masksDiff = await diffPng(page, m.png, mb.png);
+        const m = await shot(`${name}-masks-after`, { pose, t, frag: use(current.masks) }, true);
+        const mb = await shot(`${name}-masks-before`, { pose, t, frag: use(before.masks) }, true);
+        row.masksFailures = m.failures; row.masksGlError = m.glError; row.masksDiff = await diffFrames(page, m.id, mb.id);
       }
       rows.push(row);
       console.log(tag, name, row.equalToBefore ? 'equal' : 'DIFF', row.calls, row.triangles);
@@ -100,12 +103,12 @@ for (const [layout, quality] of sessions) {
     for (let yaw = 0; yaw < 360; yaw += quick ? 90 : 30) {
       const o = { pose: { ...poses.sky, yaw: yaw * Math.PI / 180, pitch: .5 }, t: 0 };
       const a = await shot(`turn-${yaw}-after`, o, yaw % 90 === 0), b = await shot(`turn-${yaw}-before`, { ...o, frag: use(before.procedural) }, false);
-      rows.push({ tag, name: `turn-${yaw}`, diff: await diffPng(page, a.png, b.png), equalToBefore: (await diffPng(page, a.png, b.png)).max === 0, glError: a.glError, failures: a.failures, calls: a.calls, callsBefore: b.calls, triangles: a.triangles, trianglesBefore: b.triangles });
+      rows.push({ tag, name: `turn-${yaw}`, diff: await diffFrames(page, a.id, b.id), equalToBefore: (await diffFrames(page, a.id, b.id)).max === 0, glError: a.glError, failures: a.failures, calls: a.calls, callsBefore: b.calls, triangles: a.triangles, trianglesBefore: b.triangles });
     }
     for (const yaw of [0, 1.7, 3.6]) {
       const o = { pose: poses.zenith, t: 0, camera: { pitch: Math.PI / 2 - 1e-4, yaw } };
       const a = await shot(`pole-${yaw}-after`, o, yaw === 0), b = await shot(`pole-${yaw}-before`, { ...o, frag: use(before.procedural) }, false);
-      rows.push({ tag, name: `pole-${yaw}`, diff: await diffPng(page, a.png, b.png), equalToBefore: (await diffPng(page, a.png, b.png)).max === 0, glError: a.glError, failures: a.failures, calls: a.calls, callsBefore: b.calls, triangles: a.triangles, trianglesBefore: b.triangles });
+      rows.push({ tag, name: `pole-${yaw}`, diff: await diffFrames(page, a.id, b.id), equalToBefore: (await diffFrames(page, a.id, b.id)).max === 0, glError: a.glError, failures: a.failures, calls: a.calls, callsBefore: b.calls, triangles: a.triangles, trianglesBefore: b.triangles });
     }
     // Software sky-only and full-scene timing, interleaved before/after (NOT physical GPU time).
     if (!quick || process.env.TIMING === '1') for (const scope of ['sky-only', 'scene']) for (let round = 0; round < 3; round++) for (const which of round % 2 ? ['after', 'before'] : ['before', 'after']) {

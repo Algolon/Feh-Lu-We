@@ -40,21 +40,29 @@ export async function render(page, opts) {
     g.player.setPose(o.pose);
     g.player.y = g.world.col.supportHeight(o.pose.x, o.pose.z, o.pose.y + .05, .42);
     e.mode = 'pilot'; e.preview = o.t; e.cloudVariant = o.variant ?? 'procedural'; e.clouds = o.clouds !== false;
-    for (let i = 0; i < (o.settle ?? 40); i++) g.tick(1 / 30);
+    const poseKey = JSON.stringify([o.pose, o.t, o.quality]);
+    for (let i = 0; i < (r.poseKey === poseKey ? 1 : o.settle ?? 40); i++) g.tick(1 / 30);
+    r.poseKey = poseKey;
     if (o.camera) g.camera.rotation.set(o.camera.pitch, -o.camera.yaw, 0, 'YXZ');
     g.camera.updateMatrixWorld(true);
     e.update(o.t, g.camera.position, g.world.hereRoom === 'out' ? 0 : 1);
-    // Diagnostic overrides on the live material/geometry; restored below so cases stay independent.
-    const baseFrag = sky.material.fragmentShader, baseVert = sky.material.vertexShader;
-    if (o.frag) { const next = new Function('s', o.frag)(baseFrag); if (next === baseFrag) throw Error('diagnostic transform did not apply'); sky.material.fragmentShader = next; }
-    if (o.vert) sky.material.vertexShader = o.vert;
-    if (o.frag || o.vert) sky.material.needsUpdate = true;
+    // Diagnostic overrides: a cached clone of the live material sharing its uniforms, so every shader variant keeps
+    // its compiled program (switching source on one material would recompile on every swap).
+    const base = sky.material;
+    if (o.frag || o.vert) {
+      const frag = o.frag ? new Function('s', o.frag)(base.fragmentShader) : base.fragmentShader;
+      if (o.frag && frag === base.fragmentShader) throw Error('diagnostic transform did not apply');
+      const key = (o.vert ?? '') + '\u0000' + frag;
+      r.mats ??= new Map();
+      if (!r.mats.has(key)) { const m = base.clone(); m.uniforms = base.uniforms; m.fragmentShader = frag; if (o.vert) m.vertexShader = o.vert; r.mats.set(key, m); }
+      sky.material = r.mats.get(key);
+    }
     if (o.segments) sky.geometry = new r.geometry.constructor(400, o.segments[0], o.segments[1]);
     const visible = g.world.scene.children.map(c => c.visible);
     if (o.skyOnly) g.world.scene.children.forEach(c => { if (c !== sky) c.visible = false; });
     const gl = g.renderer.getContext();
     try {
-      for (let i = 0; i < 3; i++) g.renderer.render(g.world.scene, g.camera);
+      g.renderer.render(g.world.scene, g.camera);
       const calls = g.renderer.info.render.calls, triangles = g.renderer.info.render.triangles;
       if (o.wire) {
         // Triangulation overlay: same dome, wireframe, flat colour, drawn over the finished frame.
@@ -65,14 +73,21 @@ export async function render(page, opts) {
         g.renderer.render(g.world.scene, g.camera);
         sky.material.wireframe = false; sky.material.fragmentShader = keepFrag; sky.material.needsUpdate = true; g.renderer.autoClear = auto;
       }
-      const png = g.renderer.domElement.toDataURL('image/png').split(',')[1];
+      // Raw framebuffer kept in the page for exact diffs; PNG only when the frame is saved (encoding dominates time).
+      const w = g.renderer.domElement.width, h = g.renderer.domElement.height, pixels = new Uint8Array(w * h * 4);
+      gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+      r.frames ??= new Map(); r.next = (r.next ?? 0) + 1; r.frames.set(r.next, pixels);
+      if (r.frames.size > 16) r.frames.delete(r.frames.keys().next().value);
+      let hash = 2166136261; for (let i = 0; i < pixels.length; i += 7) hash = Math.imul(hash ^ pixels[i], 16777619) >>> 0;
+      const png = o.save === false ? null : g.renderer.domElement.toDataURL('image/png').split(',')[1];
+      const id = r.next;
       const bad = g.renderer.info.programs.filter(p => p.diagnostics?.runnable === false), failures = bad.length;
       if (o.frag && bad.length) console.error('shader', bad.at(-1).diagnostics.fragmentShader.log);
-      return { png, calls, triangles, glError: gl.getError(), failures, width: g.renderer.domElement.width, height: g.renderer.domElement.height,
+      return { id, hash: hash.toString(16), png, calls, triangles, glError: gl.getError(), failures, width: g.renderer.domElement.width, height: g.renderer.domElement.height,
         pixelRatio: g.renderer.getPixelRatio(), camera: g.camera.position.toArray(), skyCenter: sky.position.toArray() };
     } finally {
       g.world.scene.children.forEach((c, i) => c.visible = visible[i]);
-      if (o.frag || o.vert) { sky.material.fragmentShader = baseFrag; sky.material.vertexShader = baseVert; sky.material.needsUpdate = true; }
+      sky.material = base;
       if (o.segments) { sky.geometry.dispose(); sky.geometry = r.geometry; }
     }
   }, opts);
@@ -85,8 +100,13 @@ export async function timeSky(page, opts, n = 9, warm = 4) {
     g.player.setPose(o.pose); e.preview = o.t; e.clouds = o.clouds !== false; e.cloudVariant = o.variant ?? 'procedural';
     for (let i = 0; i < 20; i++) g.tick(1 / 30);
     e.update(o.t, g.camera.position, 0);
-    const baseFrag = sky.material.fragmentShader;
-    if (o.frag) { sky.material.fragmentShader = new Function('s', o.frag)(baseFrag); sky.material.needsUpdate = true; }
+    const base = sky.material;
+    if (o.frag) {
+      const frag = new Function('s', o.frag)(base.fragmentShader), key = '\u0000' + frag;
+      window.__r01.mats ??= new Map();
+      if (!window.__r01.mats.has(key)) { const m = base.clone(); m.uniforms = base.uniforms; m.fragmentShader = frag; window.__r01.mats.set(key, m); }
+      sky.material = window.__r01.mats.get(key);
+    }
     const visible = g.world.scene.children.map(c => c.visible);
     if (o.skyOnly) g.world.scene.children.forEach(c => { if (c !== sky) c.visible = false; });
     const gl = g.renderer.getContext(), px = new Uint8Array(4), times = [];
@@ -97,19 +117,18 @@ export async function timeSky(page, opts, n = 9, warm = 4) {
       }
     } finally {
       g.world.scene.children.forEach((c, i) => c.visible = visible[i]);
-      if (o.frag) { sky.material.fragmentShader = baseFrag; sky.material.needsUpdate = true; }
+      sky.material = base;
     }
     times.sort((a, b) => a - b);
     return { median: times[times.length >> 1], min: times[0], max: times.at(-1), calls: g.renderer.info.render.calls, triangles: g.renderer.info.render.triangles };
   }, { o: opts, n, warm });
 }
 
-/** Decoded per-channel pixel difference of two base64 PNGs: { max, count } (count = pixels with any change). */
-export async function diffPng(page, a, b) {
-  return page.evaluate(async ([a, b]) => {
-    const load = async s => { const i = new Image(); i.src = 'data:image/png;base64,' + s; await i.decode(); const c = document.createElement('canvas'); c.width = i.width; c.height = i.height; const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(i, 0, 0); return x.getImageData(0, 0, i.width, i.height).data; };
-    const [p, q] = await Promise.all([load(a), load(b)]);
-    if (p.length !== q.length) return { max: 255, count: -1 };
+/** Per-channel difference of two frames kept by render(): { max, count } (count = pixels with any change). */
+export async function diffFrames(page, a, b) {
+  return page.evaluate(([a, b]) => {
+    const p = window.__r01.frames.get(a), q = window.__r01.frames.get(b);
+    if (!p || !q || p.length !== q.length) throw Error('frame missing or size mismatch');
     let max = 0, count = 0;
     for (let i = 0; i < p.length; i += 4) { const m = Math.max(Math.abs(p[i] - q[i]), Math.abs(p[i + 1] - q[i + 1]), Math.abs(p[i + 2] - q[i + 2])); if (m) { count++; if (m > max) max = m; } }
     return { max, count };
