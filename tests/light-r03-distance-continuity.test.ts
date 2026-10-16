@@ -65,6 +65,16 @@ describe('LIGHT-R03: no point light popping from camera-room / view / distance t
   expect(pool.assigned()).toEqual(['b']);
   expect(pool.lights[0].intensity).toBeGreaterThan(5);
  });
+ it('does not drop a light behind a closed clear-glass door that already shows its room',()=>{
+  const rooms=new RoomGraph([
+   {id:'r0',name:'r0',floor:'g',x0:0,x1:2,z0:0,z1:3,y0:0,y1:3},
+   {id:'r1',name:'r1',floor:'g',x0:2,x1:4,z0:0,z1:3,y0:0,y1:3}
+  ],[{a:'r0',b:'r1',kind:'door',door:'glass-door',seeThrough:true}]);
+  const pool=new LightPool(new THREE.Scene(),1);
+  const lamp=fixture('glass-light',3.1,'r1');
+  for(let i=0;i<10;i++)pool.update(.05,i*.05,[lamp],eye(1),rooms,()=>false,undefined,new Set(['r0']));
+  expect(pool.assigned()).toEqual(['glass-light']);
+ });
  it('keeps closed-door lamps excluded despite extra portal prefetch depth',()=>{
   const rooms=graph(2,true),pool=new LightPool(new THREE.Scene(),1);
   const lamp=fixture('hidden-room',3,'r1');
