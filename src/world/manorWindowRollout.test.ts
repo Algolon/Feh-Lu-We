@@ -37,7 +37,7 @@ describe('WINDOW-R02 manor-wide physical windows', () => {
     }
   });
   it('assigns exactly one clear, physical portal to every facade window on both floors', () => {
-    const portals = PORTALS.filter(p => p.kind === 'window' && p.seeThrough && p.aperture && p.a !== 'atticLookout');
+    const portals = PORTALS.filter(p => p.kind === 'window' && p.seeThrough && p.aperture && p.a !== 'atticLookout' && p.a !== 'cottageEntry' && p.a !== 'cottageRoom');
     expect(portals).toHaveLength(MANOR_WINDOWS.length);
     for (const w of MANOR_WINDOWS) {
       const aperture = windowAperture(w);
