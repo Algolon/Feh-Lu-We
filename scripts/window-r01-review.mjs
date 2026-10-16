@@ -96,20 +96,12 @@ try {
       window.__game.world.scene.traverse(obj => {
         if (!obj.isMesh) return;
         for (const material of (Array.isArray(obj.material) ? obj.material : [obj.material]))
-          if (material?.map?.image?.getContext && material.userData.surface === 'timber')
-            materials.add(material);
+          if (material?.name === 'WINDOW-R01-OakSill') materials.add(material);
       });
-      const candidates = [];
-      for (const m of materials) {
-        const canvas = m.map.image;
-        if (canvas.width !== 512 || canvas.height !== 512) continue;
-        const d = canvas.getContext('2d').getImageData(128, 128, 1, 1).data;
-        // Warm stained oak: unlike the common pale wood-plank material.
-        if (d[0] > 120 && d[0] < 185 && d[1] > 75 && d[1] < 145 && d[2] < 110)
-          candidates.push(m);
-      }
-      if (candidates.length !== 1) throw Error('Expected one batched stained-oak sill material, got ' + candidates.length);
-      const material = candidates[0];
+      if (materials.size !== 1) throw Error('Expected one oak sill material in the rendered scene, got ' + materials.size);
+      const material = [...materials][0];
+      if (material.userData.surface !== 'timber' || !material.map?.image?.getContext)
+        throw Error('Oak windowsill lost its timber shader or texture');
       const canvas = material.map.image;
       const data = canvas.getContext('2d').getImageData(0, 0, 512, 512).data;
       let min = Infinity, max = -Infinity, red = 0, green = 0, blue = 0;
