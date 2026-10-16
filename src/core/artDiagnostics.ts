@@ -51,7 +51,7 @@ export function installArtDiagnostics(game: Game) {
   const update=document.createElement('button'),copy=document.createElement('button'),collapse=document.createElement('button');
   for(const b of [update,copy,collapse])b.style.cssText='background:#c99b61;color:#211e1a;border:0;padding:7px;border-radius:4px;font:inherit;cursor:pointer';
   update.textContent='Meet GPU';copy.textContent='Kopieer';collapse.textContent='Inklappen';
-  controls.append(update,copy,collapse);host.append(title,label,controls);document.body.append(host);
+  controls.append(update,copy,collapse);host.append(title,controls,label);document.body.append(host);
   let last: Record<string,unknown>={message:'Spel starten om atlasgegevens te meten'};
   let lastGpu: ReturnType<typeof gpuSample> | string = 'Druk op Meet GPU';
   const collect=(gpu:boolean)=>{
