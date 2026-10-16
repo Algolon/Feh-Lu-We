@@ -1,4 +1,5 @@
 {
+  "baseline": false,
   "collision": {
     "physical": true,
     "visual": false,

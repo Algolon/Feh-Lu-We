@@ -1,0 +1,94 @@
+{
+  "rows": [
+    {
+      "quality": "low",
+      "side": "inside",
+      "door": "closed",
+      "callsBefore": 14,
+      "callsAfter": 63,
+      "callsDelta": 49,
+      "trianglesBefore": 75500,
+      "trianglesAfter": 297298,
+      "trianglesDelta": 221798
+    },
+    {
+      "quality": "low",
+      "side": "inside",
+      "door": "open",
+      "callsBefore": 61,
+      "callsAfter": 63,
+      "callsDelta": 2,
+      "trianglesBefore": 265463,
+      "trianglesAfter": 297298,
+      "trianglesDelta": 31835
+    },
+    {
+      "quality": "low",
+      "side": "outside",
+      "door": "closed",
+      "callsBefore": 48,
+      "callsAfter": 67,
+      "callsDelta": 19,
+      "trianglesBefore": 269138,
+      "trianglesAfter": 317764,
+      "trianglesDelta": 48626
+    },
+    {
+      "quality": "low",
+      "side": "outside",
+      "door": "open",
+      "callsBefore": 67,
+      "callsAfter": 69,
+      "callsDelta": 2,
+      "trianglesBefore": 317720,
+      "trianglesAfter": 317836,
+      "trianglesDelta": 116
+    },
+    {
+      "quality": "high",
+      "side": "inside",
+      "door": "closed",
+      "callsBefore": 37,
+      "callsAfter": 171,
+      "callsDelta": 134,
+      "trianglesBefore": 129022,
+      "trianglesAfter": 603986,
+      "trianglesDelta": 474964
+    },
+    {
+      "quality": "high",
+      "side": "inside",
+      "door": "open",
+      "callsBefore": 169,
+      "callsAfter": 171,
+      "callsDelta": 2,
+      "trianglesBefore": 572115,
+      "trianglesAfter": 603986,
+      "trianglesDelta": 31871
+    },
+    {
+      "quality": "high",
+      "side": "outside",
+      "door": "closed",
+      "callsBefore": 110,
+      "callsAfter": 146,
+      "callsDelta": 36,
+      "trianglesBefore": 416446,
+      "trianglesAfter": 465108,
+      "trianglesDelta": 48662
+    },
+    {
+      "quality": "high",
+      "side": "outside",
+      "door": "open",
+      "callsBefore": 147,
+      "callsAfter": 149,
+      "callsDelta": 2,
+      "trianglesBefore": 465028,
+      "trianglesAfter": 465180,
+      "trianglesDelta": 152
+    }
+  ],
+  "baselineSha": "76f410a31cc80e2617267bd3693e52aa9f55ae96",
+  "note": "SwiftShader only, camera counts on low; high includes shadows."
+}
