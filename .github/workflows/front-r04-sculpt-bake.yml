@@ -1,0 +1,33 @@
+name: FRONT-R04 offline lion sculpt bake
+on:
+  push:
+    branches:
+      - front-r02-brass-slim-sculpted-lion
+    paths:
+      - scripts/generate-lion-sculpt.mjs
+      - .github/workflows/front-r04-sculpt-bake.yml
+permissions:
+  contents: write
+jobs:
+  bake:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Bake detailed 3D mesh
+        run: node scripts/generate-lion-sculpt.mjs
+      - name: Save baked vertex/index data on review branch only
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/world/lionSculptData.ts
+          if ! git diff --cached --quiet; then
+            git commit -m "art(front-r04): bake authored connected bronze lion sculpt mesh"
+            git push origin HEAD:front-r02-brass-slim-sculpted-lion
+          fi
