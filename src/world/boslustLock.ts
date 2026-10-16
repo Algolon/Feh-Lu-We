@@ -59,39 +59,51 @@ function patina(w: World): THREE.Texture {
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
   return t;
 }
-function wheelNumbers(w: World) {
-  const c = document.createElement('canvas'); c.width = 128; c.height = 384;
+/** Single updated texture atlas for four actually rotating, numbered drum faces.
+ *  Only updated when a wheel changes; no per-frame idle uploads or draw calls.
+ */
+function numberAtlas(w: World) {
+  const c = document.createElement('canvas'); c.width = 512; c.height = 384;
   const g = c.getContext('2d')!;
-  g.fillStyle = '#141617'; g.fillRect(0, 0, 128, 384);
-  // Three stacked numerals are projected onto a bent metal drum, not quads.
-  g.textAlign = 'center'; g.textBaseline = 'middle'; g.font = 'bold 99px Arial, sans-serif';
-  for (const [i, digit] of ['9', '0', '1'].entries()) {
-    g.fillStyle = i === 1 ? '#f3e8d2' : '#bcb6a9';
-    g.fillText(digit, 64, (i + 0.5) * 128 + 5);
-  }
-  const shade = g.createLinearGradient(0, 0, 0, 384);
-  shade.addColorStop(0, 'rgba(0,0,0,.64)'); shade.addColorStop(0.26, 'rgba(0,0,0,.04)');
-  shade.addColorStop(0.74, 'rgba(0,0,0,.04)'); shade.addColorStop(1, 'rgba(0,0,0,.64)');
-  g.fillStyle = shade; g.fillRect(0, 0, 128, 384);
-  // Hairline breaks make clear these are separate engraved number bands.
-  g.fillStyle = 'rgba(201,186,153,.18)';
-  g.fillRect(0, 126, 128, 2); g.fillRect(0, 254, 128, 2);
   const t = w.texture(new THREE.CanvasTexture(c));
   t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4;
-  return t;
+  const paint = (value: number, i: number, direction = 0, progress = 0) => {
+    const x = i * 128;
+    g.fillStyle = '#151819'; g.fillRect(x, 0, 128, 384);
+    g.save(); g.beginPath(); g.rect(x, 0, 128, 384); g.clip();
+    const offset = -direction * progress * 128;
+    g.textAlign = 'center'; g.textBaseline = 'middle'; g.font = 'bold 99px Arial, sans-serif';
+    // Draw five positions so 9↔0 is visibly continuous during a full step.
+    for (let j = -2; j <= 2; j++) {
+      const num = (value + j + 20) % 10;
+      const y = 192 + j * 128 + offset + 5;
+      g.fillStyle = j === 0 ? '#f4e8cf' : '#c0b7a6';
+      g.fillText(String(num), x + 64, y);
+    }
+    const shade = g.createLinearGradient(0, 0, 0, 384);
+    shade.addColorStop(0, 'rgba(0,0,0,.7)'); shade.addColorStop(.26, 'rgba(0,0,0,.08)');
+    shade.addColorStop(.74, 'rgba(0,0,0,.08)'); shade.addColorStop(1, 'rgba(0,0,0,.7)');
+    g.fillStyle = shade; g.fillRect(x, 0, 128, 384);
+    g.fillStyle = 'rgba(197,178,141,.16)';
+    g.fillRect(x, 127 + offset, 128, 1.5);
+    g.fillRect(x, 255 + offset, 128, 1.5);
+    g.restore();
+    t.needsUpdate = true;
+  };
+  return { texture: t, paint };
 }
 function bentReels(): THREE.BufferGeometry {
   const positions: number[] = [], uv: number[] = [], indices: number[] = [];
-  // Reels are curved forwards by 0.05 m. This is observable from oblique angles.
   const radius = 0.103, angle = 1.12, segments = 18;
-  for (const x of CENTRES) {
+  for (const [wheel, x] of CENTRES.entries()) {
     const base = positions.length / 3;
     for (let i = 0; i <= segments; i++) {
       const a = -angle + 2 * angle * i / segments;
       const y = radius * Math.sin(a);
       const z = 0.195 - radius * (1 - Math.cos(a));
       for (const [dx, u] of [[-0.045, 0], [0.045, 1]] as const) {
-        positions.push(x + dx, y, z); uv.push(u, i / segments);
+        positions.push(x + dx, y, z);
+        uv.push((wheel + u) / 4, i / segments);
       }
     }
     for (let i = 0; i < segments; i++) {
@@ -113,11 +125,11 @@ function roundedPart(w: World, size: [number,number,number], radius: number, mat
 export function makeBoslustMetalLock(w: World, k: Kit) {
   const lock = new THREE.Group();
   lock.name = 'BOSLUST — patinated metal four-digit mechanical lock';
-  const edge = w.material(new THREE.MeshStandardMaterial({ color: '#bda06c', metalness: 0.35, roughness: 0.58 }));
+  const edge = w.material(new THREE.MeshStandardMaterial({ color: '#bda16e', metalness: 0.28, roughness: 0.62 }));
   const bodyMetal = w.material(new THREE.MeshStandardMaterial({ color: '#634a30', metalness: 0.28, roughness: 0.76 }));
-  const patinated = w.material(new THREE.MeshStandardMaterial({ map: patina(w), color: '#f8e2b7', metalness: 0.21, roughness: 0.8 }));
+  const patinated = w.material(new THREE.MeshStandardMaterial({ map: patina(w), color: '#e9d2a8', metalness: 0.15, roughness: 0.79 }));
   const dark = w.material(new THREE.MeshStandardMaterial({ color: '#24201e', metalness: 0.16, roughness: 0.8 }));
-  const handleMetal = w.material(new THREE.MeshStandardMaterial({ color: '#775c3f', metalness: 0.34, roughness: 0.58 }));
+  const handleMetal = w.material(new THREE.MeshStandardMaterial({ color: '#715941', metalness: 0.26, roughness: 0.61 }));
 
   // Native THREE meshes face +Z here; kit.box/rod convert plan Z internally.\n  // Thick dark outer chassis, a raised bevel and a properly recessed inner
   // plate. The bright bezel is a shaped ring with a real hole, not a sheet
@@ -166,15 +178,52 @@ export function makeBoslustMetalLock(w: World, k: Kit) {
     // Divider underlining forms a continuous horizontal code reading axis.
     box(b, k.M.paint, '#735632', 0.135, -0.004, -0.105, 0.535, 0.007, 0.01, { shadow: false });
   }));
+  const atlas = numberAtlas(w);
   const band = new THREE.Mesh(bentReels(),
-    w.material(new THREE.MeshLambertMaterial({ map: wheelNumbers(w), side: THREE.DoubleSide })));
+    w.material(new THREE.MeshLambertMaterial({ map: atlas.texture, side: THREE.DoubleSide })));
   band.receiveShadow = true; lock.add(band);
+
+  const values = [0, 0, 0, 0];
+  const motion = CENTRES.map(() => ({ from: 0, to: 0, direction: 1, elapsed: 0, moving: false }));
+  let initialized = false;
+  const setDigits = (next: readonly number[]) => {
+    if (next.length !== 4) return;
+    if (!initialized) {
+      for (let i = 0; i < 4; i++) {
+        values[i] = next[i]; motion[i].to = next[i];
+        atlas.paint(values[i], i);
+      }
+      initialized = true;
+      return;
+    }
+    for (let i = 0; i < 4; i++) {
+      if (values[i] === next[i]) continue;
+      const from = values[i], to = next[i];
+      const m = motion[i];
+      m.from = from; m.to = to; m.elapsed = 0;
+      m.direction = to === (from + 9) % 10 ? -1 : 1;
+      m.moving = true;
+      values[i] = to;
+    }
+  };
+  w.onUpdate((dt) => {
+    for (let i = 0; i < motion.length; i++) {
+      const m = motion[i];
+      if (!m.moving) continue;
+      m.elapsed += dt;
+      const t = Math.min(1, m.elapsed / 0.19);
+      // Ease out without overshoot; saved state always holds the final exact digit.
+      const eased = 1 - (1 - t) * (1 - t);
+      atlas.paint(m.from, i, m.direction, eased);
+      if (t >= 1) { m.moving = false; atlas.paint(m.to, i); }
+    }
+  });
 
   // The original cover puzzle is retained. This is now a shaped, thin metal
   // access flap with one engraved emblem, restrained rim and mechanical hinge.
   const cover = new THREE.Group();
   cover.position.set(0.135, 0.154, 0.214);
-  const doorMat = w.material(new THREE.MeshStandardMaterial({ color: '#745633', metalness: 0.3, roughness: 0.68 }));
+  const doorMat = w.material(new THREE.MeshStandardMaterial({ color: '#90714d', metalness: 0.20, roughness: 0.73, emissive: '#4a3521', emissiveIntensity: 0.08 }));
   const flap = new THREE.Mesh(extrude((() => {
     const s = new THREE.Shape();
     s.moveTo(-0.273, -0.285); s.lineTo(0.256, -0.285);
@@ -206,5 +255,5 @@ export function makeBoslustMetalLock(w: World, k: Kit) {
     }
   }));
   lock.add(cover);
-  return { lock, cover };
+  return { lock, cover, setDigits };
 }
