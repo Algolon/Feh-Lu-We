@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { MANOR_WINDOWS, MANOR_WINDOW_WALLS, windowDepths, windowAperture } from './manorWindowLayout';
-import { sillBoardGeometry, manorLatchPose } from './manorWindowAssembly';
+import * as assembly from './manorWindowAssembly';
+const { sillBoardGeometry } = assembly;
 import { PORTALS, manorWindowRoom } from './roomdefs';
 
 describe('WINDOW-R02 manor-wide physical windows', () => {
@@ -45,19 +46,9 @@ describe('WINDOW-R02 manor-wide physical windows', () => {
       expect(matching, w.id).toHaveLength(1);
     }
   });
-  it('anchors a single right-side brass latch to the real outer sash on every facade', () => {
-    for (const w of MANOR_WINDOWS) {
-      const p = manorLatchPose(w);
-      const { exteriorFace, glazingF } = windowDepths(w);
-      // The latch's back plate must be on the narrow green sash, never in the inner plaster reveal.
-      expect(p.along).toBeGreaterThan(w.at + w.w / 2 - 0.025);
-      expect(p.along).toBeLessThan(w.at + w.w / 2 + 0.04);
-      expect(p.sashInnerFace).toBeCloseTo(exteriorFace - w.exterior * 0.067, 5);
-      expect(Math.abs(p.sashInnerFace - glazingF)).toBeCloseTo(0.018, 5);
-      expect(p.facing).toBe(w.exterior);
-      expect(p.y).toBeGreaterThan(w.y0 + w.sill + w.h * 0.5);
-      expect(p.y + 0.091).toBeLessThan(w.y0 + w.sill + w.h);
-    }
+  it('does not expose any window-handle assembly or mounting geometry', () => {
+    expect('manorLatchPose' in assembly).toBe(false);
+    expect('buildManorWindowLatch' in assembly).toBe(false);
   });
   it('aligns mahogany grain with each long window-board direction', () => {
     for (const axis of ['x', 'z'] as const) {
