@@ -32,6 +32,11 @@ export function sillBoardGeometry(s: ManorWindow, inside: number, nearGlass: num
   return g;
 }
 
+/** Non-overlapping butt joints: the wood board's top is y0+10 mm. */
+export function windowRevealLevels(y0: number, y1: number, headThickness = 0.014) {
+  return { boardTop: y0 + 0.01, jambBase: y0 + 0.012, headBase: y1 - headThickness };
+}
+
 export function buildManorWindow(w: World, c: Ctx, s: ManorWindow) {
   const k = c.k, { glazingF, interiorF } = windowDepths(s);
   const x0 = s.at - s.w / 2, x1 = s.at + s.w / 2;
@@ -39,12 +44,14 @@ export function buildManorWindow(w: World, c: Ctx, s: ManorWindow) {
   segment(c, s.axis, x0, x1, y0, y1, glazingF - 0.006, glazingF + 0.006,
     k.M.windowGlass, '#ffffff');
 
-  // Interior has ONLY plastered deep jambs and head. The one green sash lives
-  // close to the outside face and is created by wall() / studyWindow().
+  // One plaster reveal; jambs rest ON the board and BUTT against the head.
+  // Previous jambs occupied the sill top (10 mm) and head corners (14 mm).
+  // Shared sash remains on the outer face, outside the plaster reveal.
   const plaster = '#e9dfcf', edge = 0.014;
-  segment(c, s.axis, x0, x0 + edge, y0, y1, interiorF, glazingF, k.M.plaster, plaster);
-  segment(c, s.axis, x1 - edge, x1, y0, y1, interiorF, glazingF, k.M.plaster, plaster);
-  segment(c, s.axis, x0, x1, y1 - edge, y1, interiorF, glazingF, k.M.plaster, plaster);
+  const { jambBase, headBase } = windowRevealLevels(y0, y1, edge);
+  segment(c, s.axis, x0, x0 + edge, jambBase, headBase, interiorF, glazingF, k.M.plaster, plaster);
+  segment(c, s.axis, x1 - edge, x1, jambBase, headBase, interiorF, glazingF, k.M.plaster, plaster);
+  segment(c, s.axis, x0, x1, headBase, y1, interiorF, glazingF, k.M.plaster, plaster);
 
   // Single dark mahogany interior board; 9 cm overhang into the room, never outside.
   const sill0 = interiorF - s.exterior * 0.09;
