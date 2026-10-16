@@ -1,0 +1,26 @@
+{
+  "results": [
+    {
+      "position": "inside",
+      "here": "atticLookout",
+      "target": "out",
+      "targetVisible": true,
+      "glassPortals": 1,
+      "calls": 64,
+      "triangles": 566364,
+      "glError": 0
+    },
+    {
+      "position": "outside",
+      "here": "out",
+      "target": "atticLookout",
+      "targetVisible": true,
+      "glassPortals": 1,
+      "calls": 61,
+      "triangles": 553338,
+      "glError": 0
+    }
+  ],
+  "errors": [],
+  "samsungValidated": false
+}
