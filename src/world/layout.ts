@@ -60,6 +60,11 @@ export const SHED = { x0: 39.5, x1: 44.5, z0: 37.2, z1: 40.8 };
 
 // Heights
 export const GF = 0.15, CEIL = 3.15, UF = 3.35, UCEIL = 6.2, TOP = 6.4, BF = -3.2, BCEIL = -0.25;
+/** Visible lower face of the structural upper floor. Its overlap hides plaster wall caps at CEIL
+ * rather than placing coplanar wood/plaster triangles at the ceiling and creating z-fighting. */
+export const SLAB_UNDERSIDE = CEIL - 0.03;
+/** Sample plaster ceiling must remain 2 mm below the structural slab, not intersect it. */
+export const LIVING_PLASTER_UNDERSIDE = SLAB_UNDERSIDE - 0.022;
 /** Underground (BOSLUST) floor and ceiling. */
 export const UG = -3.4, UGCEIL = -0.55;
 
