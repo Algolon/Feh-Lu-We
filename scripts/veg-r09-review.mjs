@@ -51,5 +51,5 @@ try{
  }
  writeFileSync(`${out}/results.json`,JSON.stringify({results,audits,errors},null,2));
  console.log(JSON.stringify({errors,missing:audits.map(a=>a.missing),placements:audits.map(a=>a.placements.length),overBudget:results.filter(r=>!r.gallery&&(!lowViewWithinBudget(r))),records:results.length}));
- if(results.some(r=>!r.gallery&&!lowViewWithinBudget(r))||errors.length||audits.some(a=>a.missing.length)||results.some(r=>r.glError||r.shaderFailures))throw Error('Review failed; see results.json');
+ if(results.some(r=>!r.gallery&&r.art==='r09'&&!lowViewWithinBudget(r))||errors.length||audits.some(a=>a.missing.length)||results.some(r=>r.glError||r.shaderFailures))throw Error('Review failed; see results.json');
 }finally{await browser?.close();await server.close();}

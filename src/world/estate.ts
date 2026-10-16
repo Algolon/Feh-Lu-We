@@ -11,8 +11,8 @@ import { installOpaqueBatches } from './opaqueBatches';
 import { EXTERIOR_STUDY, exteriorMats } from './exteriorStudy';
 import { driveGravel } from './arrivalStudy';
 import { FULL_NATURE } from './foliageStyle';
-import { GARDEN_DETAIL, gardenSoil, gardenSoilMaterial, SOIL_TINT } from './gardenkit';
-import { referenceHedgeModel, referenceTopiaryModel, woodMats } from './woodkit';
+import { GARDEN_DETAIL, gardenSoil, gardenSoilMaterial, gardenHedge, SOIL_TINT } from './gardenkit';
+import { referenceHedgeModel, referenceHedgeCore, referenceTopiaryModel, woodMats } from './woodkit';
 
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { World, type GameApi } from '../interactions/world';
@@ -134,7 +134,7 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   // whole-room culling: chunks are shown only while one of their rooms can be seen from the player's room
   const R = estateRooms();
   // Keep dense clipped hedge leaves out of distant woodland views and unrelated coarse garden batches.
-  for(const chunk of ['frontHedge.left','frontHedge.right'])w.roomRegion([chunk],['out',...R.rooms.map(r=>r.id)],45);
+  for(const chunk of ['frontHedge.left','frontHedge.right'])w.roomRegion([chunk],['out',...R.rooms.map(r=>r.id)],25);
   const manorRooms = R.rooms.filter((r) => r.floor === 'g' || r.floor === 'u' || r.floor === 'a').filter((r) => r.x0 >= 72 && r.x1 <= 116 && r.id !== 'cons').map((r) => r.id);
   const atticRooms = ['atticLanding', 'atticCommon', 'atticStore', 'atticLookout'];
   const basementRooms = ['bstair', 'bLobby', 'archive', 'boiler', 'route', 'tunnel2', 'tunnel'];
@@ -578,7 +578,10 @@ function buildGarden(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods: Estat
     // one clipped piece per run (DEV-03 budget: 16 short pieces cost 9.4 k triangles in the forecourt view; one
     // piece per run with the same wavy clipped top costs ~2 k)
     for (const [x0, x1] of [[72.6, 84.9], [95.1, 107.4]] as const) {
-      geo(c.b, FULL_NATURE ? woodMats().tree : k2.M.foliage, '#3f5f34', FULL_NATURE ? referenceHedgeModel(x1 - x0) : hedgeGeo(x1 - x0), (x0 + x1) / 2, 0, 79.2, { chunk: x0<90?'frontHedge.left':'frontHedge.right' });
+      if(FULL_NATURE&&GARDEN_DETAIL){
+        geo(c.b,woodMats().tree,'#3f5f34',referenceHedgeCore(x1-x0),(x0+x1)/2,0,79.2,{chunk:c.chunk});
+        geo(c.b,woodMats().tree,'#3f5f34',gardenHedge(x1-x0),(x0+x1)/2,0,79.2,{chunk:x0<90?'frontHedge.left':'frontHedge.right'});
+      }else geo(c.b, FULL_NATURE ? woodMats().tree : k2.M.foliage, '#3f5f34', FULL_NATURE ? referenceHedgeModel(x1 - x0) : hedgeGeo(x1 - x0), (x0 + x1) / 2, 0, 79.2, {chunk:c.chunk});
       w.col.addBox(x0, x1, 78.85, 79.55, 0, 0.75);
     }
   } else {

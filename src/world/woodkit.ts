@@ -1354,9 +1354,13 @@ export function referenceCypressModel(): THREE.BufferGeometry {
   return foliageSprays(clusters,'near','cypress');
 }
 
+export function referenceHedgeCore(len:number) {
+  const core=foliageUV(paint(softBox(len-.06,.60,.53,.10,2,3).translate(0,.32,0),.52),.6);
+  core.userData.keepColor=true;return core;
+}
 export function referenceHedgeModel(len: number, detail = GARDEN_DETAIL): THREE.BufferGeometry {
   if(detail){
-    const core=foliageUV(paint(softBox(len-.06,.60,.53,.10,2,3).translate(0,.32,0),.52),.6);
+    const core=referenceHedgeCore(len);
     const result=mergeParts([core,gardenHedge(len)]);result.userData.keepColor=true;return result;
   }
   const core=foliageUV(paint(softBox(len,.69,.60,.12,2,3).translate(0,.345,0),p=>{
