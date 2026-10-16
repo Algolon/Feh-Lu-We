@@ -7,7 +7,7 @@
 // pop-in: a doorway rule that turns a region on one culling update after it became visible shows up as lost pixels.
 // Usage: node scripts/perf/visibility-lossless.mjs <baseUrl> <outDir>
 //   REGIONS=mUpE,mAttic,mLib (chunks whose rule is tested)  MODES=A,B  PATHS=...  DOORS=open,partial  FPS=30  TH=6
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { openEstate } from './visibility-harness.mjs';
 import { ALL_PATHS, DOOR_SETS, legacySamples, trajectory } from './visibility-paths.mjs';
 
@@ -21,7 +21,11 @@ const paths = ALL_PATHS.filter(([n]) => !wanted || wanted.includes(n));
 
 const { browser, page, problems } = await openEstate(base);
 const summary = { base, regions: REGIONS, threshold: TH, runs: [] };
+// RESUME=1 keeps completed runs from <outDir>/lossless.json
+if (env.RESUME && existsSync(`${outDir}/lossless.json`)) summary.runs = JSON.parse(readFileSync(`${outDir}/lossless.json`, 'utf8')).runs ?? [];
+const doneRuns = new Set(summary.runs.map((r) => `${r.path}|${r.doors}|${r.mode}`));
 for (const doorName of DOORS) for (const [name, y, pts] of paths) for (const mode of MODES) {
+  if (doneRuns.has(`${name}|${doorName}|${mode}`)) continue;
   const poses = mode === 'A' ? trajectory(pts, y, { fps: FPS, lookUp: name === 'well' ? pts.map((_, i) => i) : [] }) : legacySamples(pts, y, 0.4, [0, 0.35]);
   const res = await page.evaluate(({ poses, mode, doors, regions, fps, TH }) => {
     const G = window.__game, w = G.world, gl = G.renderer.getContext();
@@ -53,7 +57,7 @@ for (const doorName of DOORS) for (const [name, y, pts] of paths) for (const mod
       for (const r of ruled) { show(r, true); render(one); show(r, r.on); const e = diff(cand, one); if (e.n) by[r.meshes.find((m) => m.userData.chunk)?.userData.chunk] = e; }
       const row = { k, x: p.x, z: p.z, yaw: p.yaw, pitch: p.pitch, room: w.hereRoom, n: d.n, box: d.box, by, cand: c, ref: rr };
       rows.push(row);
-      if (crops.length < 12) { show(ruled[0], false); VP.renderFrame(); crops.push({ k, cand: G.renderer.domElement.toDataURL('image/png') }); for (const r of ruled) show(r, true); VP.renderFrame(); crops[crops.length - 1].ref = G.renderer.domElement.toDataURL('image/png'); for (const r of ruled) show(r, r.on); }
+      if (crops.length < 6 || d.n > Math.min(...crops.map((c) => c.n))) { if (crops.length >= 6) crops.splice(crops.findIndex((c) => c.n === Math.min(...crops.map((q) => q.n))), 1); show(ruled[0], false); VP.renderFrame(); crops.push({ k, n: d.n, cand: G.renderer.domElement.toDataURL('image/png') }); for (const r of ruled) show(r, true); VP.renderFrame(); crops[crops.length - 1].ref = G.renderer.domElement.toDataURL('image/png'); for (const r of ruled) show(r, r.on); }
     }
     return { frames: poses.length, culledFrames, savedTris, maxSaved, diffs: rows, crops };
   }, { poses, mode, doors: DOOR_SETS[doorName], regions: REGIONS, fps: FPS, TH });
@@ -61,6 +65,7 @@ for (const doorName of DOORS) for (const [name, y, pts] of paths) for (const mod
   delete res.crops;
   const maxPx = Math.max(0, ...res.diffs.map((d) => d.n));
   summary.runs.push({ path: name, doors: doorName, mode, ...res, maxPx });
+  writeFileSync(`${outDir}/lossless.json`, JSON.stringify(summary, null, 1));
   console.log(`${name.padEnd(9)} ${doorName.padEnd(7)} ${mode}  frames ${String(res.frames).padStart(4)}  culled by rule ${String(res.culledFrames).padStart(4)}  avg saved ${res.culledFrames ? Math.round(res.savedTris / res.culledFrames) : 0} max ${res.maxSaved}  pixel-diff frames ${res.diffs.length} max ${maxPx} px`);
 }
 summary.problems = problems;
