@@ -151,7 +151,7 @@ if(!pos.length||pos.length/3>65535)throw Error('Bad sculpture vertices '+pos.len
 const bytesOf=(arr)=>Buffer.from(arr.buffer,arr.byteOffset,arr.byteLength).toString('base64');
 const q=new Int16Array(pos.length), c=new Uint8Array(pos.length);
 const rgb=(hex)=>[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16));
-const mid=rgb('#5c4a3b'),gold=rgb('#ae8b56'),dark=rgb('#242322');
+const mid=rgb('#39362f'),gold=rgb('#a58a5f'),dark=rgb('#242322');
 const gauss=(x,y,cx,cy,rx,ry)=>Math.exp(-2*(((x-cx)/rx)**2+((y-cy)/ry)**2));
 for(let i=0;i<pos.length/3;i++){
  const x=pos[i*3],y=pos[i*3+1],z=pos[i*3+2];
@@ -159,7 +159,7 @@ for(let i=0;i<pos.length/3;i++){
  const eye=gauss(Math.abs(x),y,.038,.024,.024,.013);
  const nostril=gauss(Math.abs(x),y,.018,-.093,.009,.007);
  const mouth=gauss(x,y,0,-.123,.052,.010);
- const wear=Math.min(1,.13+
+ const wear=Math.min(1,.075+
    .45*gauss(Math.abs(x),y,.037,.050,.043,.019)+
    .49*gauss(x,y,0,-.050,.034,.077)+
    .36*gauss(Math.abs(x),y,.029,-.091,.033,.027)+
