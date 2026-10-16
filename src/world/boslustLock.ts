@@ -89,7 +89,7 @@ function bentReels(): THREE.BufferGeometry {
     for (let i = 0; i <= segments; i++) {
       const a = -angle + 2 * angle * i / segments;
       const y = radius * Math.sin(a);
-      const z = -0.184 + radius * (1 - Math.cos(a));
+      const z = 0.195 - radius * (1 - Math.cos(a));
       for (const [dx, u] of [[-0.045, 0], [0.045, 1]] as const) {
         positions.push(x + dx, y, z); uv.push(u, i / segments);
       }
@@ -119,28 +119,28 @@ export function makeBoslustMetalLock(w: World, k: Kit) {
   const dark = w.material(new THREE.MeshStandardMaterial({ color: '#24201e', metalness: 0.16, roughness: 0.8 }));
   const handleMetal = w.material(new THREE.MeshStandardMaterial({ color: '#775c3f', metalness: 0.34, roughness: 0.58 }));
 
-  // Thick dark outer chassis, a raised bevel and a properly recessed inner
+  // Native THREE meshes face +Z here; kit.box/rod convert plan Z internally.\n  // Thick dark outer chassis, a raised bevel and a properly recessed inner
   // plate. The bright bezel is a shaped ring with a real hole, not a sheet
   // hiding its own detail underneath.
-  const chassis = new THREE.Mesh(extrude(pathShape(1), -0.034, 0.09, 0.008), bodyMetal);
+  const chassis = new THREE.Mesh(extrude(pathShape(1), 0.005, 0.055, 0.008), bodyMetal);
   chassis.receiveShadow = true; lock.add(chassis);
-  const inset = new THREE.Mesh(extrude(pathShape(0.952), -0.071, 0.023, 0.002), patinated);
+  const inset = new THREE.Mesh(extrude(pathShape(0.952), 0.060, 0.026, 0.002), patinated);
   lock.add(inset);
-  const rim = new THREE.Mesh(extrude(pathShape(1.002, 0.934), -0.086, 0.033, 0.006), edge);
+  const rim = new THREE.Mesh(extrude(pathShape(1.002, 0.934), 0.079, 0.032, 0.006), edge);
   lock.add(rim);
 
   // Knob: the concentric rings, recessed lock barrel, and chamfered turning
   // grip are true 3D geometry with rounded edges.
   const ring = new THREE.Mesh(new THREE.TorusGeometry(0.13, 0.010, 6, 28), edge);
-  ring.position.set(KNOB_X, 0.003, -0.103); lock.add(ring);
+  ring.position.set(KNOB_X, 0.003, 0.126); lock.add(ring);
   const spindle = new THREE.Mesh(new THREE.CylinderGeometry(0.111, 0.111, 0.029, 24), dark);
-  spindle.rotation.x = Math.PI / 2; spindle.position.set(KNOB_X, 0.003, -0.110); lock.add(spindle);
+  spindle.rotation.x = Math.PI / 2; spindle.position.set(KNOB_X, 0.003, 0.137); lock.add(spindle);
   const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.079, 0.079, 0.041, 20), handleMetal);
-  hub.rotation.x = Math.PI / 2; hub.position.set(KNOB_X, 0.003, -0.138); lock.add(hub);
+  hub.rotation.x = Math.PI / 2; hub.position.set(KNOB_X, 0.003, 0.158); lock.add(hub);
   const grip = roundedPart(w, [0.22, 0.061, 0.055], 0.012, handleMetal);
-  grip.rotation.z = -0.55; grip.position.set(KNOB_X, 0.0, -0.179); lock.add(grip);
+  grip.rotation.z = -0.55; grip.position.set(KNOB_X, 0.0, 0.199); lock.add(grip);
   const thumb = roundedPart(w, [0.054, 0.059, 0.015], 0.004, edge);
-  thumb.rotation.z = -0.55; thumb.position.set(KNOB_X + 0.076, -0.043, -0.211); lock.add(thumb);
+  thumb.rotation.z = -0.55; thumb.position.set(KNOB_X + 0.076, -0.043, 0.242); lock.add(thumb);
 
   // Four actual curved digit surfaces in four shadowed wells, with slim
   // machined separators and a fine common centre-line. Dark centre keeps
@@ -173,7 +173,7 @@ export function makeBoslustMetalLock(w: World, k: Kit) {
   // The original cover puzzle is retained. This is now a shaped, thin metal
   // access flap with one engraved emblem, restrained rim and mechanical hinge.
   const cover = new THREE.Group();
-  cover.position.set(0.135, 0.154, -0.188);
+  cover.position.set(0.135, 0.154, 0.214);
   const doorMat = w.material(new THREE.MeshStandardMaterial({ color: '#745633', metalness: 0.3, roughness: 0.68 }));
   const flap = new THREE.Mesh(extrude((() => {
     const s = new THREE.Shape();
