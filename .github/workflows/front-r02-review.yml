@@ -57,9 +57,23 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Never allow a screenshot job from older source to overwrite a newer candidate.
+          git fetch origin front-r02-brass-slim-sculpted-lion
+          if ! git diff --quiet HEAD origin/front-r02-brass-slim-sculpted-lion -- src/world/ tests/ scripts/; then
+            echo "Newer game source exists; screenshots retained as downloadable workflow artifact."
+            exit 0
+          fi
           git add docs/development/workstreams/front-r04/review/
           if ! git diff --cached --quiet; then
-            git commit -m "docs(front-r02): capture in-game exterior/interior door review"
-            git pull --rebase origin front-r02-brass-slim-sculpted-lion
-            git push origin HEAD:front-r02-brass-slim-sculpted-lion
+            git commit -m "docs(front-r04): capture reviewed in-game 3D lion sculpt"
+            # Both sides can update JPEGs concurrently. During a rebase, 'theirs'
+            # is OUR newly rendered image, never older screenshots from origin.
+            for attempt in 1 2 3; do
+              git pull --rebase -X theirs origin front-r02-brass-slim-sculpted-lion
+              if git push origin HEAD:front-r02-brass-slim-sculpted-lion; then
+                exit 0
+              fi
+              sleep 2
+            done
+            exit 1
           fi
