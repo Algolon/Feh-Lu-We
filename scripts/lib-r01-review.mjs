@@ -19,16 +19,18 @@ const { PI } = Math;
 const scenes = [
   ['01-entrance-wide', [83.05, 0.15, 100.0], [78.4, 1.55, 102.3]],
   ['02-reading-lounge', [81.4, 0.15, 99.5], [77.7, 0.9, 103.3]],
-  ['03-puzzle-bureau', [77.15, 0.15, 97.35], [74.5, 1.0, 97.35]],
+  ['03-puzzle-bureau', [76.2, 0.15, 98.35], [73.17, 1.05, 99.0]],
   ['04-window-bay-shelves', [81.25, 0.15, 102.0], [72.75, 1.55, 101.0]],
   ['05-north-builtins', [79.0, 0.15, 105.1], [78.5, 1.6, 109.1]],
   ['06-spiral-from-floor', [79.7, 0.15, 103.8], [81.95, 2.2, 105.3]],
   ['07-spiral-upper-gallery', [83.7, 3.35, 105.2], [81.95, 2.6, 105.3]],
   // R02 furniture close views, fixed positions for before/after owner comparison.
-  ['12-secretary-chair-oblique', [77.4, 0.15, 96.2], [74.75, 0.89, 97.65]],
+  ['12-secretary-chair-oblique', [75.45, 0.15, 96.9], [73.3, 0.95, 99.0]],
   ['13-wing-chair-faces-rug', [78.05, 0.15, 101.4], [75.8, 0.88, 102.75]],
   ['14-sofa-tufting-near', [78.0, 0.15, 101.45], [78.75, 0.79, 103.76]],
   ['15-spiral-sculpted-treads', [80.6, 0.15, 102.6], [81.95, 1.75, 105.3]],
+  ['16-r03-banker-lamp-close', [74.82, 0.15, 99.87], [73.33, 1.40, 99.83]],
+  ['17-r03-desk-wall-fit', [75.45, 0.15, 100.85], [72.52, 1.05, 99.0]],
 ];
 const helpers = readFileSync(new URL('./e2e-helpers.js', import.meta.url), 'utf8');
 
@@ -91,6 +93,19 @@ try {
     }));
   });
   checks.push({name:'production-puzzle-and-lamp-anchors', data:puzzle,pass:Object.values(puzzle).every(v=>v.exists)});
+  // R03: use real locomotion from library entrance to the relocated bureau, not a teleport.
+  const deskApproach=await page.evaluate(()=>{
+    const g=window.__game;
+    g.player.setPose({x:83.2,y:0.15,z:101,yaw:0,pitch:0});T.tick(8);
+    const path=[[82.0,100.1],[79.7,99.2],[76.8,99.2],[74.57,99.0]], visited=[];
+    for(const p of path){
+      try{T.walkTo(...p,false,20);visited.push(T.pos());}
+      catch(e){return {pass:false,error:e.message,at:p,visited};}
+    }
+    return {pass:Math.hypot(g.player.x-74.57,g.player.z-99.0)<0.30,final:T.pos(),visited};
+  });
+  checks.push({name:'r03-library-door-to-wall-desk-walk',data:deskApproach,pass:deskApproach.pass});
+  console.log('LIB-R03 DESK APPROACH',JSON.stringify(deskApproach));
   // Walk actual steps one by one using the game's own autopilot/collision, not teleports.
   const spiral=await page.evaluate(()=>{
     const g=window.__game, steps=26,x=81.95,z=105.3;
@@ -131,12 +146,12 @@ try {
   await capture(mobile,'08-mobile-portrait-lounge',[82.6,0.15,99.4],[78.5,1.2,103.4],true);
   await mobileContext.close();
   const {page:landscape,context:landContext}=await pageFor({width:844,height:390},true);
-  await capture(landscape,'09-mobile-landscape-desk',[77.3,0.15,97.35],[74.55,1.0,97.35],true);
+  await capture(landscape,'09-mobile-landscape-desk',[76.0,0.15,99.5],[73.17,1.0,99.0],true);
   await landContext.close();
   // Canonical B01+DS01 build is opt-in via review=dev01. Never confuse these
   // optional slice interactables with the production catalogue IDs.
   const review = await pageFor({width:1280,height:720},false,true);
-  await capture(review.page,'10-b01-review-desk',[76.65,0.15,97.35],[74.55,0.93,97.35]);
+  await capture(review.page,'10-b01-review-desk',[75.3,0.15,98.85],[73.17,0.93,99.0]);
   const v = await review.page.evaluate(()=>{
     const g=window.__game, ids=['b01.table','library.desk','pk.studyKey','ds01.album','lamp.library'];
     return Object.fromEntries(ids.map(id=>[id,{exists:g.world.byId.has(id)}]));
@@ -145,7 +160,7 @@ try {
   console.log('LIB-R01 DEV01',JSON.stringify(v));
   const targetability=await review.page.evaluate(()=>{
     const g=window.__game,out={};
-    for(const [id,x,z] of [['b01.table',75.95,97.35],['ds01.album',75.75,106.6]]){
+    for(const [id,x,z] of [['b01.table',74.57,99.0],['ds01.album',75.75,106.6]]){
       g.player.setPose({x,y:0.15,z,yaw:0,pitch:0});T.tick(8);
       T.lookAtId(id);const m=g.metrics();
       out[id]={target:m.target,label:m.label,pass:m.target===id};
