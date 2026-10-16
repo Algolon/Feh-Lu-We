@@ -445,13 +445,54 @@ function flwAtlas() {
   const tex = new THREE.Texture<HTMLCanvasElement | HTMLImageElement>(ph);
   tex.colorSpace = THREE.SRGBColorSpace;
   tex.needsUpdate = true;
-  flwReady = new Promise((done) => {
-    const img = new Image();
-    img.onload = () => { tex.image = img; tex.needsUpdate = true; done(); };
-    img.onerror = () => done(); // keeps the neutral placeholder; the art suite reports the missing image
-    img.src = FLW_ATLAS_URL;
-  });
   flwMat = new THREE.MeshLambertMaterial({ map: tex, vertexColors: true });
+  // The atlas is fetched asynchronously. A request can hang on a cold Pages load without
+  // emitting load/error (observed on live Pages, 16 Oct 2026). Never leave the 4px fallback
+  // permanently just because one network request stalls. Retry using a fresh cache key.
+  const loadState = { state: 'loading', attempts: 0, error: '' };
+  flwMat.userData.flwAtlasLoad = loadState;
+  flwReady = new Promise<void>((done) => {
+    let resolved = false;
+    const maxAttempts = 3, perAttemptMs = 8000;
+    let watchdog: ReturnType<typeof setTimeout> | undefined;
+    const finish = (success: boolean, reason = '') => {
+      if (resolved) return;
+      resolved = true;
+      if (watchdog) clearTimeout(watchdog);
+      loadState.state = success ? 'ready' : 'error';
+      loadState.error = reason;
+      if (!success) console.error('FLW-D2 painting atlas failed after retries:', reason, FLW_ATLAS_URL);
+      done();
+    };
+    const attempt = () => {
+      if (resolved) return;
+      const n = ++loadState.attempts;
+      const img = new Image();
+      img.onload = () => {
+        if (resolved) return;
+        const [width, height] = FLW_ATLAS.size;
+        if (img.naturalWidth !== width || img.naturalHeight !== height) {
+          failed(`unexpected atlas image size ${img.naturalWidth}x${img.naturalHeight}`, n);
+          return;
+        }
+        tex.image = img;
+        tex.needsUpdate = true; // upload the REAL image even if the 4px fallback was uploaded earlier
+        finish(true);
+      };
+      img.onerror = () => failed('image request error', n);
+      // The filename is content-hashed by Vite; the retry query bypasses a stuck browser/proxy cache.
+      img.src = n === 1 ? FLW_ATLAS_URL : FLW_ATLAS_URL + (FLW_ATLAS_URL.includes('?') ? '&' : '?') + 'flw_retry=' + n;
+      if (watchdog) clearTimeout(watchdog);
+      watchdog = setTimeout(() => failed('image request timed out', n), perAttemptMs);
+    };
+    const failed = (reason: string, n: number) => {
+      if (resolved || n !== loadState.attempts) return;
+      if (watchdog) clearTimeout(watchdog);
+      if (n < maxAttempts) attempt();
+      else finish(false, reason);
+    };
+    attempt();
+  });
   // exposure compensation (pixels untouched): the paintings are full-range images, the walls round them pale plaster;
   // under ACES tone mapping a 1:1 albedo reads a stop under the wall. A linear albedo gain keeps them lit by the room
   // (dark room → dark painting: no emission, no glow), only restoring the source's own exposure
