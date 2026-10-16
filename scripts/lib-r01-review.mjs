@@ -42,7 +42,7 @@ async function pageFor(viewport, mobile = false) {
   await page.click('[data-cont]');
   await page.waitForFunction(() => window.__game?.world?.id === 'estate', null, { timeout: 150000 });
   await page.evaluate(helpers);
-  await page.evaluate(() => { const g=window.__game; if (g.ui.modalOpen()) g.ui.closeModal(); });
+  await page.evaluate(() => { const g=window.__game; if (T.modalOpen()) T.closeModal(); });
   return { page, context };
 }
 async function capture(page, name, pose, target, withHud=false) {
