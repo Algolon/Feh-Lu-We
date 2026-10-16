@@ -31,6 +31,8 @@ export interface WallOpts {
   openings?: Opening[];
   /** Optional joinery colour for this wall's door frames (default: oak). */
   frameColor?: THREE.ColorRepresentation;
+  /** Opt-in narrow metal casing only for the estate's exterior front door. */
+  frameStyle?: 'traditional' | 'slim-metal';
   windows?: Win[];
   t?: number;
   collide?: boolean;
@@ -123,7 +125,7 @@ export function wall(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number,
     piece(cur, s, y0, y1);
     piece(s, e, y0 + (op.h ?? 2.3), y1); // lintel
     // door frame (visual only)
-    frame(c, axis, f, s, e, y0, y0 + (op.h ?? 2.3), t, o.frameColor);
+    frame(c, axis, f, s, e, y0, y0 + (op.h ?? 2.3), t, o.frameColor, o.frameStyle);
     cur = e;
   }
   piece(cur, hi, y0, y1);
@@ -222,12 +224,32 @@ function trimRun(c: Ctx, axis: 'x' | 'z', ff: number, sd: 1 | -1, s0: number, s1
 /**
  * Door frame (visual only): a lining across the full wall depth plus, on both faces, an architrave, plinth blocks at the foot and a capped head — the joinery of a real opening instead of three sticks.
  */
-function frame(c: Ctx, axis: 'x' | 'z', f: number, s: number, e: number, y0: number, y1: number, t: number, frameColor:THREE.ColorRepresentation=TRIM.oak) {
+function frame(c: Ctx, axis: 'x' | 'z', f: number, s: number, e: number, y0: number, y1: number, t: number, frameColor:THREE.ColorRepresentation=TRIM.oak, frameStyle: 'traditional' | 'slim-metal'='traditional') {
   const col = frameColor, m = c.k.M.paint;
   const B = (a0: number, a1: number, ya: number, yb: number, d0: number, d1: number, cc: THREE.ColorRepresentation = col) => {
     if (axis === 'x') boxMM(c.b, m, cc, a0, a1, ya, yb, f + d0, f + d1, { chunk: c.chunk, jitter: 0 });
     else boxMM(c.b, m, cc, f + d0, f + d1, ya, yb, a0, a1, { chunk: c.chunk, jitter: 0 });
   };
+  if(frameStyle==='slim-metal') {
+    // FRONT-R04: deliberately slim steel casing. Outer 30 mm → 18 mm (-40%);
+    // inner lip / liner / projection / head all follow the same visual reduction.
+    const L=t/2+.005, lip=.0024, casing=.018;
+    const lo=(a:number,b:number)=>[Math.min(a,b),Math.max(a,b)] as [number,number];
+    // FRONT-R04-R01: match the inner jamb and soffit to the black steel casing.
+    // Only these three narrow through-wall liner strips change colour; the stone
+    // surround outside the 18 mm face trim remains untouched.
+    const innerLiner=col;
+    B(s-.0162,s+lip,y0,y1,-L,L,innerLiner);
+    B(e-lip,e+.0162,y0,y1,-L,L,innerLiner);
+    B(s-.0162,e+.0162,y1-lip,y1+.0162,-L,L,innerLiner);
+    for(const side of [-1,1]) {
+      const depth=lo(side*L,side*(L+.012));
+      B(s-casing,s-.001,y0,y1+.018,...depth);
+      B(e+.001,e+casing,y0,y1+.018,...depth);
+      B(s-casing,e+casing,y1,y1+.018,...depth);
+    }
+    return;
+  }
   const L = t / 2 + 0.005, w = 0.11, p = 0.004;
   // lining (the reveal) across the wall thickness. DEV-04A: 4 mm proud of the wall's reveal faces (it used to lie IN
   // the plane of the wall's end faces and lintel soffit: the two surfaces z-fought in every doorway)
