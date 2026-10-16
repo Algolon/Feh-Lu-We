@@ -7,6 +7,11 @@ on:
       - 'src/**'
       - 'scripts/window-r01-review.mjs'
       - '.github/workflows/window-r01-review.yml'
+# Keep concurrent source pushes from publishing out-of-date captures over newer code.
+concurrency:
+  group: window-r01-review
+  cancel-in-progress: true
+
 permissions:
   contents: write
 jobs:
@@ -64,13 +69,24 @@ jobs:
           name: window-r01-review-evidence
           path: docs/development/workstreams/window-r01/review
           if-no-files-found: warn
-      - name: Preserve screenshots on pilot branch only
+      - name: Preserve screenshots on latest pilot branch only
         if: success()
+        shell: bash
         run: |
+          set -euo pipefail
+          # The runner's source commit may have aged while software rendering ran.
+          # Publish generated evidence on a separate worktree based on CURRENT remote HEAD.
+          mkdir -p /tmp/window-r01-evidence
+          cp -a docs/development/workstreams/window-r01/review/. /tmp/window-r01-evidence/
+          git fetch origin window-r01-billiard-glazing-pilot
+          git worktree add --detach /tmp/window-r01-publish origin/window-r01-billiard-glazing-pilot
+          cd /tmp/window-r01-publish
+          mkdir -p docs/development/workstreams/window-r01/review
+          cp -a /tmp/window-r01-evidence/. docs/development/workstreams/window-r01/review/
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/development/workstreams/window-r01/review/
           if ! git diff --cached --quiet; then
-            git commit -m "docs(window-r01): capture pilot window screenshots and render metrics"
+            git commit -m "docs(window-r01): capture R02 review screenshots and render metrics"
             git push origin HEAD:window-r01-billiard-glazing-pilot
           fi
