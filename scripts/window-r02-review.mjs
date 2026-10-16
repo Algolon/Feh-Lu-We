@@ -162,7 +162,28 @@ try {
     },p);
     if (view.glError || view.calls>150 || view.triangles>750000) throw Error('Hardware closeup render failure '+JSON.stringify(view));
     await page.screenshot({path:`${folder}/mahogany-latch-${p.id}.jpg`,type:'jpeg',quality:92});
-    hardware.push(view);console.log('hardware',JSON.stringify(view));
+    // Aim at the handle itself for proportion/material review; the wider image above
+    // still shows the mahogany sill with its floor/wall context.
+    const detail=await page.evaluate(p => {
+      const g=window.__game,w=g.world;
+      const side=p.ext, along=p.at+(p.id==='west-ground'?.5:.55);
+      const nx=p.axis==='z'?side:0,nz=p.axis==='x'?side:0;
+      const wx=p.axis==='x'?along:p.f+nx*.115;
+      const wz=p.axis==='x'?p.f+nz*.115:along;
+      const camX=p.axis==='x'?along-.16:p.f-nx*.52;
+      const camZ=p.axis==='x'?p.f-nz*.52:along-.16;
+      const handleY=p.id==='north-ground'?1.05+1.6*.63:1.05+1.6*.63;
+      g.camera.position.set(camX,handleY-.05,-camZ);
+      g.camera.lookAt(wx,handleY,-wz);
+      g.camera.updateMatrixWorld(true);
+      w.updateCulling(g.camera.position,g.camera);
+      g.renderer.render(w.scene,g.camera);
+      return {site:p.id,calls:g.renderer.info.render.calls,triangles:g.renderer.info.render.triangles,
+        glError:g.renderer.getContext().getError()};
+    },p);
+    if(detail.glError)throw Error('Window handle detail GL error '+JSON.stringify(detail));
+    await page.screenshot({path:`${folder}/latch-detail-${p.id}.jpg`,type:'jpeg',quality:94});
+    hardware.push({...view,detail});console.log('hardware',JSON.stringify({...view,detail}));
   }
   if (errors.length) throw Error('Page errors: '+errors.join('\\n'));
   writeFileSync(folder+'/results.json',JSON.stringify({registry,views,hardware,mahogany,errors,
