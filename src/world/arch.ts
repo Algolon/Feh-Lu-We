@@ -302,13 +302,14 @@ export function windowAt(c: Ctx, axis: 'x' | 'z', faceF: number, side: 1 | -1, a
     B(x0, x1, y + h * 0.45, top, 0.004, 0.012, c.k.M.glow, hi);
     B(x0, x1, y, y + h * 0.45, 0.004, 0.012, c.k.M.glow, lo);
   } else B(x0, x1, y, top, 0.004, 0.012, c.k.M.glow, style.glass ?? GLASS.inside);
+  const fw = 0.065;
   // In ?exterior=base the regular clear manor windows must use exactly the same
   // connected sash as the finished facade, not resurrect overlapping legacy bars.
   if (style.transparent && outside && kind === 'manor') {
     addUnifiedManorSash(c, axis, faceF, side, at, y, w, h);
   } else {
     // sash frame + glazing bars (2 × 3 panes; the meeting rail heavier)
-    const fw = 0.065, fd0 = 0.006, fd1 = 0.05;
+    const fd0 = 0.006, fd1 = 0.05;
     B(x0 - fw, x0, y - fw, top + fw, fd0, fd1, P, fr);
     B(x1, x1 + fw, y - fw, top + fw, fd0, fd1, P, fr);
     B(x0, x1, top, top + fw, fd0, fd1, P, fr);
