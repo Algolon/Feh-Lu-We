@@ -8,7 +8,7 @@ import { box, cyl, compound, v3, getKit } from './kit';
 import { bookshelf, rug, table, roundTable, plant } from './furniture';
 import { libraryR02Desk, libraryR02StudyChair, libraryR02ReadingSeat, libraryR02Spiral } from './libraryR02';
 import { tabletop } from './dressing';
-import { GF, UF } from './layout';
+import { GF } from './layout';
 
 export const LIB_R01 = {
   desk: { x: 74.55, z: 97.35, w: 1.3, d: 2.2, h: 0.81 },
