@@ -78,7 +78,13 @@ for (const ph of R.phases ?? [{ route: R.route }]) {
     if (r !== 'ok') throw new Error(`act ${ph.act}: ${r}`);
     await page.waitForTimeout(900);
   }
-  if (ph.code) { for (const [i, d] of ph.code.entries()) for (let k = 0; k < d; k++) { await page.click(`[data-up="${i}"]`); await page.waitForTimeout(120); } await page.click('[data-try]'); }
+  if (ph.code) {
+    await page.evaluate((digits) => {
+      const g = window.__game;
+      for (const [i, d] of digits.entries()) for (let n = 0; n < d; n++) g.world.byId.get(`boslust.wheel.${i}`).run();
+      g.world.byId.get('boslust.knob').run();
+    }, ph.code);
+  }
   if (ph.wait) await page.waitForTimeout(ph.wait);
 }
 const end = await page.evaluate(() => ({ pose: window.__game.player.pose(), open: !!window.__game.state.flags.boslustOpen }));

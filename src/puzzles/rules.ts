@@ -535,7 +535,7 @@ export function submitDigits(s: GameState, digits: number[]): Outcome {
     return ok('Het slot klikt. De deur van BOSLUST gaat naar binnen open; een koele trap loopt de heuvel in.', 'unlock');
   }
   s.wrong.boslust = (s.wrong.boslust ?? 0) + 1;
-  return no('De wieltjes draaien terug. Er gebeurt niets.', 'fail');
+  return no('De combinatie klopt niet. Het slot blijft dicht.', 'fail');
 }
 
 // ---------------------------------------------------------------------------------------------
