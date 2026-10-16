@@ -7,7 +7,7 @@
       "targetVisible": true,
       "glassPortals": 1,
       "calls": 64,
-      "triangles": 566364,
+      "triangles": 566352,
       "glError": 0
     },
     {
@@ -17,7 +17,7 @@
       "targetVisible": true,
       "glassPortals": 1,
       "calls": 61,
-      "triangles": 553338,
+      "triangles": 553326,
       "glError": 0
     }
   ],
