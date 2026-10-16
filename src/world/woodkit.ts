@@ -11,6 +11,7 @@ import { softBox } from './artkit';
 import { ConvexGeometry } from 'three/examples/jsm/geometries/ConvexGeometry.js';
 import { mergeGeometries, mergeVertices, toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { mulberry32, type Rng } from '../core/rng';
+import { GARDEN_DETAIL, gardenLeaf, gardenHedge, gardenSmoothNormals } from './gardenkit';
 import { NATURE_STYLE, FULL_NATURE, TREE_ART, VEGETATION_DETAIL, GROUND_DETAIL, foliageSprays, foliageAtlas, SPRAY_SAMPLE, type TreeArt, type SprayPalette } from './foliageStyle';
 
 // ------------------------------------------------------------------------------------------------ primitives
@@ -1093,14 +1094,20 @@ export function plantModel(kind: PlantKind, variant: number): THREE.BufferGeomet
 /** VEG-R02 understory: authored broad shapes with a dark stool, curved midribs and lighter growing tips.
  * All variants stay vertex-coloured and share the existing range-faded plant batch, without alpha overdraw.
  */
-export function referencePlantModel(kind: PlantKind, variant: number, detail = GROUND_DETAIL): THREE.BufferGeometry {
+export function referencePlantModel(kind: PlantKind, variant: number, detail = GROUND_DETAIL, garden = GARDEN_DETAIL): THREE.BufferGeometry {
   const v = variant % PLANT_VARIANTS[kind], r = mulberry32(4201 + v * 71 + Object.keys(PLANT_VARIANTS).indexOf(kind) * 417), t = new Tris();
+  const rounded:THREE.BufferGeometry[]=[];
+  const plantLeaf=(...args:Parameters<typeof leafShape>)=>{
+    if(!garden){leafShape(...args);return;}
+    const [,p,d,L,W,h,a,b,segs=4,up=0]=args;rounded.push(gardenLeaf(p,d,L,W,h,a,b,up,Math.max(6,segs*2),2));
+  };
   // Species retain their own flower colours; foliage warms in coherent whole-plant variants.
   const palette = detail ? (kind === 'grass'
     ? [['#46663c','#9fac68','#2e4e36'],['#365b40','#7fa46b','#234535'],['#686d3e','#b9ac6a','#3f5636'],['#4b7148','#9fb873','#2c503c']][v]
     : [['#426d43','#91b568','#284f39'],['#507b45','#a4bb70','#32583c'],['#365e43','#7da16a','#254b39']][v]) : ['#3c6235','#88a856','#294b30'];
   const [green,light,dark] = palette.map(C);
   const blade = (p: THREE.Vector3, d: THREE.Vector3, L: number, W: number, rise: number, a = green, b = light) => {
+    if(garden){rounded.push(gardenLeaf(p,d,L,W,rise,a,b,0,kind==='fern'?3:6,2));return;}
     const s=V(-d.z,0,d.x), mid=p.clone().addScaledVector(d,L*.48).add(V(0,rise,0)), tip=p.clone().addScaledVector(d,L).add(V(0,rise*.48,0));
     if (detail) {
       // Six-point outline rounds the shoulders around a raised midrib.
@@ -1117,6 +1124,7 @@ export function referencePlantModel(kind: PlantKind, variant: number, detail = G
     }
   };
   const flowerBell = (p: THREE.Vector3, dir: THREE.Vector3, len: number, rad: number, c0: THREE.Color, c1: THREE.Color, n: number) => {
+    if(garden)n=10;
     if(!detail){bell(t,p,dir,len,rad,c0,c1,n);return;}
     const axis=dir.clone().normalize(),side=V(0,1,0).cross(axis).normalize();
     if(side.lengthSq()<.1)side.set(1,0,0);
@@ -1136,7 +1144,7 @@ export function referencePlantModel(kind: PlantKind, variant: number, detail = G
       // Sample the arch once; foliage construction never changes another model's random stream.
       const pts=Array.from({length:7},(_,i)=>at(i/6));stem(t,pts,.005,dark,light);
       // The review fern exposes its feathered edge around a narrow central blade.
-      leafShape(t,V(0,0,0),d,L,detail?.026:.075,.38,dark,light,4);
+      plantLeaf(t,V(0,0,0),d,L,detail?.026:.075,.38,dark,light,4);
       const pinnae=detail?9:6;
       for(let k=1;k<pinnae;k++)for(const sign of [-1,1]){
         const u=k/pinnae,segment=Math.min(5,Math.floor(u*6)),p=detail?pts[segment].clone().lerp(pts[segment+1],u*6-segment):pts[k],span=L*(detail?.31:.25)*Math.sin(u*Math.PI)*(.95-u*.2);
@@ -1191,7 +1199,7 @@ export function referencePlantModel(kind: PlantKind, variant: number, detail = G
       }
     }
   } else if(kind==='foxglove') {
-    for(let i=0;i<5;i++){const a=i*1.256+r()*.2;leafShape(t,V(0,.015,0),V(Math.cos(a),0,Math.sin(a)),.28+r()*.08,detail?.082:.065,detail?.095:.065,dark,light,3);}
+    for(let i=0;i<5;i++){const a=i*1.256+r()*.2;plantLeaf(t,V(0,.015,0),V(Math.cos(a),0,Math.sin(a)),.28+r()*.08,detail?.082:.065,detail?.095:.065,dark,light,3);}
     const spikes=v===2?2:1;
     for(let j=0;j<spikes;j++){
       const h=(v===1?1.2:1.0)-j*.25,end=V(.08+j*.11,h,.04),base=V(j*.06,0,0);
@@ -1202,7 +1210,7 @@ export function referencePlantModel(kind: PlantKind, variant: number, detail = G
       }
     }
   } else if(kind==='lily') {
-    for(let i=0;i<(v===1?3:2);i++){const a=i*2.6+r()*.3;leafShape(t,V(0,0,0),V(Math.cos(a),0,Math.sin(a)),.33,detail?.09:.065,detail?.10:.055,detail?dark:C('#315b3b'),detail?light:C('#83aa63'),detail?4:3,.7);}
+    for(let i=0;i<(v===1?3:2);i++){const a=i*2.6+r()*.3;plantLeaf(t,V(0,0,0),V(Math.cos(a),0,Math.sin(a)),.33,detail?.09:.065,detail?.10:.055,detail?dark:C('#315b3b'),detail?light:C('#83aa63'),detail?4:3,.7);}
     const d=V(Math.cos(v),0,Math.sin(v)),pts=[V(0,0,0),d.clone().multiplyScalar(.02).add(V(0,.24,0)),d.clone().multiplyScalar(.13).add(V(0,.29,0)),d.clone().multiplyScalar(.22).add(V(0,.22,0))];
     stem(t,pts,.004,green,light);
     for(let k=0;k<5+v;k++){
@@ -1221,7 +1229,10 @@ export function referencePlantModel(kind: PlantKind, variant: number, detail = G
       bell(t,top.clone().add(V(0,.008,0)),UP,.01,.014,C('#c2a142'),C('#f0d074'),6);
     }
   }
-  return t.build(kind==='grass'?.6:.45);
+  const base=t.build(kind==='grass'?.6:.45);
+  if(!garden)return base;
+  gardenSmoothNormals(base);
+  const result=mergeGeometries([base,...rounded])!;base.dispose();rounded.forEach(g=>g.dispose());result.computeBoundingSphere();return result;
 }
 
 /**
@@ -1341,7 +1352,11 @@ export function referenceCypressModel(): THREE.BufferGeometry {
   return foliageSprays(clusters,'near','cypress');
 }
 
-export function referenceHedgeModel(len: number): THREE.BufferGeometry {
+export function referenceHedgeModel(len: number, detail = GARDEN_DETAIL): THREE.BufferGeometry {
+  if(detail){
+    const core=foliageUV(paint(softBox(len-.06,.60,.53,.10,2,3).translate(0,.32,0),.52),.6);
+    const result=mergeParts([core,gardenHedge(len)]);result.userData.keepColor=true;return result;
+  }
   const core=foliageUV(paint(softBox(len,.69,.60,.12,2,3).translate(0,.345,0),p=>{
     const k=.58+.34*THREE.MathUtils.clamp(p.y/.69,0,1);return[k,k,k*.9];
   }),.6);
@@ -1571,6 +1586,7 @@ if ((vMapUv.x > 23.0 && vMapUv.x < 25.0) ${VEGETATION_DETAIL ? '|| (vMapUv.x > 2
     sh.fragmentShader = sh.fragmentShader.replace('#include <map_fragment>', `#ifdef USE_MAP
   vec2 tUv = vMapUv;
   vec4 sampledDiffuseColor;
+  ${GARDEN_DETAIL ? 'if (tUv.x > 29.0 && tUv.x < 31.0) { sampledDiffuseColor = vec4(1.0); } else' : ''}
   ${VEGETATION_DETAIL ? `if (tUv.x > 27.0 && tUv.x < 29.0) {
     sampledDiffuseColor = texture2D(flwOakBark, vec2(((tUv.x - 28.0) * 4.0 - ${GUT}) / ${1 - 2 * GUT}, tUv.y * .65));
     vec2 flow = flwTimberFlow(tUv);
@@ -1603,7 +1619,7 @@ if ((vMapUv.x > 23.0 && vMapUv.x < 25.0) ${VEGETATION_DETAIL ? '|| (vMapUv.x > 2
   diffuseColor *= sampledDiffuseColor;
 #endif`);
   };
-  tree.customProgramCacheKey = () => VEGETATION_DETAIL ? 'woodkit-shrubs-timber-relief-r04' : pineBark ? 'woodkit-tree-atlas-families-beech-relief-r03' : oakBark ? 'woodkit-tree-atlas-oak-r03' : sprays ? 'woodkit-tree-atlas-sprays-r02' : 'woodkit-tree-atlas';
+  tree.customProgramCacheKey = () => GARDEN_DETAIL ? 'woodkit-garden-leaves-r08' : VEGETATION_DETAIL ? 'woodkit-shrubs-timber-relief-r04' : pineBark ? 'woodkit-tree-atlas-families-beech-relief-r03' : oakBark ? 'woodkit-tree-atlas-oak-r03' : sprays ? 'woodkit-tree-atlas-sprays-r02' : 'woodkit-tree-atlas';
   if (sprays) {
     const depth = new THREE.MeshDepthMaterial({ map: atlas, depthPacking: THREE.RGBADepthPacking });
     depth.onBeforeCompile = sh => {

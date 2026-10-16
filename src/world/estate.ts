@@ -7,6 +7,7 @@
 import * as THREE from 'three';
 import { surface } from './surfaces';
 import { FULL_NATURE } from './foliageStyle';
+import { GARDEN_DETAIL, gardenSoil, gardenSoilMaterial, SOIL_TINT } from './gardenkit';
 import { referenceHedgeModel, referenceTopiaryModel, woodMats } from './woodkit';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { World, type GameApi } from '../interactions/world';
@@ -342,7 +343,8 @@ function buildPaths(w: World, c: Ctx) {
   // forecourt: the gravel court itself is one surface built with the arrival (grounds.ts); the central planter stays
   // DEV-04B: a dressed stone planter (plinth course, a moulded rim) instead of a plain drum; soil just under its rim
   geo(c.b, k.M.stone, '#d8ccb0', FORECOURT_PLANTER, SITES.forecourt.x, 0, SITES.forecourt.z, { chunk: 'ground' });
-  cyl(c.b, k.M.paint, '#5a4434', SITES.forecourt.x, 0.4, SITES.forecourt.z, 1.62, 1.62, 0.02, 18, { chunk: 'ground' });
+  if(GARDEN_DETAIL)geo(c.b,gardenSoilMaterial(),SOIL_TINT,gardenSoil(1.66),SITES.forecourt.x,.416,SITES.forecourt.z,{chunk:'ground'});
+  else cyl(c.b, k.M.paint, '#5a4434', SITES.forecourt.x, 0.4, SITES.forecourt.z, 1.62, 1.62, 0.02, 18, { chunk: 'ground' });
   w.col.addCircle(SITES.forecourt.x, SITES.forecourt.z, 1.9, 0, 0.8);
 }
 

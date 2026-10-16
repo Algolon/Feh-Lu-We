@@ -1,5 +1,7 @@
 // Static furniture and decor (batched), plus lamp/lantern models for interactive lights.
 import * as THREE from 'three';
+import { GARDEN_DETAIL, gardenPot, gardenSoil, gardenSoilMaterial, SOIL_TINT, gardenHouseplant } from './gardenkit';
+
 import { type Ctx, segBox } from './arch';
 import { box, cyl, compound, planMatrix, v3, getKit } from './kit';
 import { registerArt, artFootprint } from './openings';
@@ -337,8 +339,15 @@ export function rug(c: Ctx, x: number, z: number, y: number, w: number, d: numbe
   new Asm(c.b, c.chunk, x, y, z, yaw).add(propMats().rug, tint, rugGeo(pattern, w, d, fringe), 0, 0, 0, { shadow: false });
 }
 
-export function plant(c: Ctx, x: number, z: number, y0: number, s = 1, pot = '#c9774a') {
+export function plant(c: Ctx, x: number, z: number, y0: number, s = 1, pot = '#c9774a', detail = GARDEN_DETAIL) {
   const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, (x * 7.3 + z * 3.1) % 6.28);
+  if(detail){
+    a.add(M.ceramic,pot,cg('gardenPot',()=>gardenPot(.245,.40)),0,0,0,{s:[s,s,s]});
+    a.add(gardenSoilMaterial(),SOIL_TINT,cg('gardenSoil',()=>gardenSoil(.218)),0,.328*s,0,{s:[s,1,s]});
+    const v=Math.floor(Math.abs(Math.sin(x*3.1+z))*3);
+    a.add(woodMats().flat,'#ffffff',cg(`gardenHouseplant${v}`,()=>gardenHouseplant(v)),0,.328*s,0,{s:[s,s,s]});
+    c.col.addCircle(x,z,.22*s,y0,y0+1);return;
+  }
   // a thrown terracotta pot with a rolled rim, dark soil, a leafy shrub from the woodland kit (hazel / holly)
   a.add(M.paint, pot, cg('pot', () => lathe([[0.001, 0], [0.15, 0], [0.19, 0.06], [0.23, 0.33], [0.255, 0.35], [0.26, 0.39], [0.235, 0.4], [0.225, 0.37], [0.001, 0.37]], 14)), 0, 0, 0, { s: [s, s, s] });
   a.add(M.paint, '#3e2e22', cg('soil', () => new THREE.CircleGeometry(0.22, 12).rotateX(-Math.PI / 2)), 0, 0.36 * s, 0, { s: [s, 1, s] });
