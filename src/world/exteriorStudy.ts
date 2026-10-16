@@ -8,6 +8,7 @@ import { surface } from './surfaces';
 import { mulberry32 } from '../core/rng';
 import { EXTERIOR_FINISH, ageFacade } from './exteriorFinish';
 import { EXTERIOR_WEATHER, ageDressedStone } from './exteriorWeather';
+import { addUnifiedManorSash } from './manorSash';
 
 export const EXTERIOR_STUDY = typeof location === 'undefined' || new URLSearchParams(location.search).get('exterior') !== 'base';
 let materials: { wall: THREE.Material; gravel: THREE.Material; dressed: THREE.Material } | undefined;
@@ -162,14 +163,19 @@ export function studyWindow(c: Ctx, axis: 'x' | 'z', f: number, side: 1 | -1, at
   const gx=axis==='x'?at:f+side*.018,gz=axis==='x'?f+side*.018:at;
   c.b.add(c.k.M.glow,glass,planMatrix(gx,y+h/2,gz),'#ffffff',c.chunk,false,0);glass.dispose();
   }
-  // The pilot's ONE sash sits against the actual pane just inside the wall face
-  // (no free-floating frame on the facade and no second sash on the room-facing side).
-  // Historic opaque windows retain their original exterior trim coordinates.
-  const near = transparent ? -0.067 : .02, far = transparent ? .005 : .09;
-  for(const [a,b] of [[a0-.04,a0+.025],[a1-.025,a1+.04]])block(a,b,y-.04,top+.045,near,far,'#58685d');
-  for(const yy of [y-.025,top+.015])block(a0,a1,yy-.025,yy+.025,near,far,'#687568');
+  // The normal see-through facade windows have ONE connected, single-colour
+  // sash: its 8 real apertures are holes in the geometry, not overlapping bars.
+  // The painted sash sits behind the separate, deliberately stone-coloured casing.
+  if (transparent) {
+    addUnifiedManorSash(c, axis, f, side, at, y, w, h);
+    return;
+  }
+  // The historic sealed/decorative windows retain their legacy (non-portal) detail.
+  const near = .02, far = .09;
+  for (const [a,b] of [[a0-.04,a0+.025],[a1-.025,a1+.04]])block(a,b,y-.04,top+.045,near,far,'#58685d');
+  for (const yy of [y-.025,top+.015])block(a0,a1,yy-.025,yy+.025,near,far,'#687568');
   block(at-.018,at+.018,y,top,near,far-.006,'#6b796b');
-  for(const q of [.25,.5,.75])block(a0,a1,y+h*q-.017,y+h*q+.017,near,far-.004,q===.5?'#7b8776':'#687667');
+  for (const q of [.25,.5,.75])block(a0,a1,y+h*q-.017,y+h*q+.017,near,far-.004,q===.5?'#7b8776':'#687667');
 }
 
 /** Matched dressed quoins on all four main corners. Bands use manor.ts's doorway-aware runs. */
