@@ -1,6 +1,6 @@
 # EXT-R04 — entreebakken, gevelgroen en aansluitingsverfijning
 
-16 oktober 2026. Implementatie en lokale reviewcontroles afgerond; niet live.
+16 oktober 2026. LIVE als `be9a9e2`; productiebuild, Pages-deploy en openbare entree-/tuingevelcontrole geslaagd. Zie `EXT-R04-RELEASE.md`. De onderstaande rev1/rev2-metingen documenteren de voorafgaande review.
 Branch `feat/exterior-greenery-r04`, gebouwd op R03 `438a503` (PR #56). De R04-PR richt zich op die branch; de dak-/steencorrectie blijft een aparte dependency.
 
 ## Resultaat

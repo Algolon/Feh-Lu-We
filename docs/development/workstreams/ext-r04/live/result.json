@@ -1,0 +1,26 @@
+{
+  "url": "https://algolon.github.io/Feh-Lu-We/?autotest=1&release=be9a9e2",
+  "expected": "be9a9e2",
+  "status": 200,
+  "buildMatches": true,
+  "views": [
+    {
+      "name": "entrance",
+      "calls": 94,
+      "triangles": 522740,
+      "glError": 0,
+      "failedShaders": 0,
+      "greeneryPresent": true
+    },
+    {
+      "name": "garden",
+      "calls": 104,
+      "triangles": 657516,
+      "glError": 0,
+      "failedShaders": 0,
+      "greeneryPresent": true
+    }
+  ],
+  "errors": [],
+  "checkedAt": "2026-10-16T12:47:46.549Z"
+}
