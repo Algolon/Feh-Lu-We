@@ -10,7 +10,7 @@ export const v3 = (x: number, y: number, n: number) => new THREE.Vector3(x, y, -
 
 export type MatKey =
   | 'paint' | 'plaster' | 'stone' | 'wood' | 'tile' | 'slate' | 'terracotta' | 'grass' | 'dirt'
-  | 'foliage' | 'bark' | 'glass' | 'windowGlass' | 'glow' | 'poolTile' | 'rug';
+  | 'foliage' | 'bark' | 'glass' | 'windowGlass' | 'windowSillWood' | 'glow' | 'poolTile' | 'rug';
 
 export interface Kit {
   T: Record<string, THREE.Texture>;
@@ -30,6 +30,7 @@ export function getKit(): Kit {
     plaster: lam({ map: T.plaster }),
     stone: lam({ map: T.stone }),
     wood: lam({ map: T.wood }),
+    windowSillWood: lam({ map: T.windowSillWood }),
     tile: lam({ map: T.tile }),
     slate: lam({ map: T.slate }),
     terracotta: lam({ map: T.terracotta }),
@@ -49,7 +50,7 @@ export function getKit(): Kit {
   };
   // DEV-04C ART-01.1: broad authored value / hue breakup per material family (surfaces.ts; no extra draw calls)
   const SURF: Partial<Record<MatKey, Parameters<typeof surface>[1]>> = {
-    paint: 'paint', plaster: 'plaster', stone: 'stone', wood: 'timber', tile: 'stone', slate: 'stone', terracotta: 'stone',
+    paint: 'paint', plaster: 'plaster', stone: 'stone', wood: 'timber', windowSillWood: 'timber', tile: 'stone', slate: 'stone', terracotta: 'stone',
     grass: 'ground', dirt: 'ground', foliage: 'foliage', bark: 'timber', rug: 'fabric',
   };
   for (const [key, prof] of Object.entries(SURF)) surface(M[key as MatKey], prof);
