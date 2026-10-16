@@ -47,6 +47,25 @@ jobs:
           mkdir -p docs/development/workstreams/portal-r01-r03/review
           cp docs/development/workstreams/portal-r01/review/*.jpg docs/development/workstreams/portal-r01-r03/review/
           cp docs/development/workstreams/portal-r01/review/results.json docs/development/workstreams/portal-r01-r03/review/results.json
+          # Independent close-range photos; the source screenshot runner itself stays unchanged.
+          node --input-type=module <<'NODE'
+          import { readFileSync, writeFileSync } from 'node:fs';
+          let source = readFileSync('scripts/portal-r01-review.mjs', 'utf8');
+          const scenes = [
+            { name: '06-hall-oak-detail', pose: { x: 93.4, y: 0.15, z: 96.55, yaw: Math.PI / 2, pitch: -0.82 } },
+            { name: '07-kitchen-oak-detail', pose: { x: 96.6, y: 0.15, z: 96.55, yaw: -Math.PI / 2, pitch: -0.82 } },
+          ];
+          const scenesBlock = /const scenes = \[[\s\S]*?\n\];/;
+          if (!scenesBlock.test(source)) throw Error('Cannot locate original screenshot scene list');
+          source = source.replace(scenesBlock, 'const scenes = ' + JSON.stringify(scenes) + ';');
+          source = source.replace("const OUT = 'docs/development/workstreams/portal-r01/review';", "const OUT = 'docs/development/workstreams/portal-r01-r03/detail';");
+          source = source.replace("x: 91.5, y: 0.15, z: 96.55, yaw: Math.PI/2, pitch: 0.02", "x: 93.4, y: 0.15, z: 96.55, yaw: Math.PI/2, pitch: -0.82");
+          source = source.replace("05-mobile-hall-to-kitchen.jpg", "08-mobile-oak-detail.jpg");
+          writeFileSync('scripts/portal-r01-r03-close.mjs', source);
+          NODE
+          node scripts/portal-r01-r03-close.mjs
+          cp docs/development/workstreams/portal-r01-r03/detail/*.jpg docs/development/workstreams/portal-r01-r03/review/
+          cp docs/development/workstreams/portal-r01-r03/detail/results.json docs/development/workstreams/portal-r01-r03/review/close-results.json
       - name: Preserve screenshot evidence as a workflow artifact
         if: always()
         uses: actions/upload-artifact@v4
