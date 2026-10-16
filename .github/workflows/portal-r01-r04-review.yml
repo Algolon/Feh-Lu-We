@@ -1,0 +1,84 @@
+# PORTAL-R01-R04 review only. Screenshots are generated from the real local build; no deploy.
+name: PORTAL-R01-R04 frame colour and threshold size review
+on:
+  push:
+    branches:
+      - fix/portal-r01-r04-frame-matched-threshold
+    paths:
+      - src/world/manor.ts
+      - .github/workflows/portal-r01-r04-review.yml
+permissions:
+  contents: write
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - name: Inspect scoped visual geometry contract
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync } from 'node:fs';
+          const s = readFileSync('src/world/manor.ts', 'utf8');
+          if (!s.includes("boxMM(c.b, portalThresholdOak(w), TRIM.oak,\n    94.86, 95.14, GF + 0.003, GF + 0.022, 95.725, 97.375")) throw Error('Frame-colour / 28-cm threshold contract changed');
+          if (!s.includes('texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping;')) throw Error('Grain may repeat');
+          if (!s.includes("const col = TRIM.oak")) console.log('Frame tint is defined in arch.ts');
+          console.log('PASS: same TRIM.oak tint, 28 cm depth, 19 mm height, no repeating grain');
+          NODE
+      - name: Render hall, kitchen, oblique and mobile; verify navigation
+        shell: bash
+        run: |
+          npm run preview -- --host 127.0.0.1 > /tmp/portal-r04.log 2>&1 &
+          for i in {1..60}; do
+            if curl -fsS http://127.0.0.1:4173/Feh-Lu-We/ > /dev/null; then break; fi
+            sleep 2
+          done
+          if command -v google-chrome >/dev/null; then
+            export CHROME="$(command -v google-chrome)"
+          elif command -v chromium >/dev/null; then
+            export CHROME="$(command -v chromium)"
+          else
+            npx playwright-core install chromium
+          fi
+          node --input-type=module <<'NODE'
+          import { readFileSync, writeFileSync } from 'node:fs';
+          let s = readFileSync('scripts/portal-r01-review.mjs','utf8');
+          const scenes = [
+            {name:'01-hall-detail',pose:{x:93.4,y:0.15,z:96.55,yaw:Math.PI/2,pitch:-0.82}},
+            {name:'02-kitchen-detail',pose:{x:96.6,y:0.15,z:96.55,yaw:-Math.PI/2,pitch:-0.82}},
+            {name:'03-oblique-frame-match',pose:{x:96.4,y:0.15,z:97.75,yaw:-2.32,pitch:-0.93}},
+            {name:'04-hall-overview',pose:{x:90.8,y:0.15,z:96.55,yaw:Math.PI/2,pitch:0.02}}
+          ];
+          s=s.replace(/const scenes = \[[\s\S]*?\n\];/, 'const scenes = '+JSON.stringify(scenes)+';');
+          s=s.replace("const OUT = 'docs/development/workstreams/portal-r01/review';", "const OUT = 'docs/development/workstreams/portal-r01-r04/review';");
+          s=s.replace("x: 91.5, y: 0.15, z: 96.55, yaw: Math.PI/2, pitch: 0.02", "x: 96.4, y: 0.15, z: 97.75, yaw: -2.32, pitch: -0.93");
+          s=s.replace('05-mobile-hall-to-kitchen.jpg', '05-mobile-oblique.jpg');
+          writeFileSync('scripts/portal-r01-r04-review.mjs',s);
+          NODE
+          node scripts/portal-r01-r04-review.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: portal-r01-r04-review
+          path: docs/development/workstreams/portal-r01-r04/review/
+          if-no-files-found: warn
+      - name: Commit reviewed screenshots to feature branch only
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/development/workstreams/portal-r01-r04/review/
+          if ! git diff --cached --quiet; then
+            git commit -m "test(portal-r01-r04): review screenshots and traversal"
+            git push origin HEAD:fix/portal-r01-r04-frame-matched-threshold
+          fi
