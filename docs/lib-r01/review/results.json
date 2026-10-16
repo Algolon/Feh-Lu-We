@@ -1,6 +1,6 @@
 {
   "source": "actual candidate branch Vite/Chromium SwiftShader",
-  "commit": "6265acbe98bee90d1404361beed78b29e63d101c",
+  "commit": "5869a8cb6e7df03481d1c73aad896e8a4b20f81a",
   "records": [
     {
       "name": "01-entrance-wide",
@@ -12,8 +12,8 @@
         "pitch": -0.048153419375853976
       },
       "room": "library",
-      "calls": 271,
-      "triangles": 1675302,
+      "calls": 269,
+      "triangles": 1700094,
       "glError": 0
     },
     {
@@ -26,8 +26,8 @@
         "pitch": -0.16808937839086718
       },
       "room": "library",
-      "calls": 261,
-      "triangles": 1705480,
+      "calls": 260,
+      "triangles": 1730320,
       "glError": 0
     },
     {
@@ -40,8 +40,8 @@
         "pitch": -0.29318689655788155
       },
       "room": "library",
-      "calls": 239,
-      "triangles": 1584406,
+      "calls": 237,
+      "triangles": 1609198,
       "glError": 0
     },
     {
@@ -54,8 +54,8 @@
         "pitch": -0.029202008317641335
       },
       "room": "library",
-      "calls": 268,
-      "triangles": 1698730,
+      "calls": 266,
+      "triangles": 1723522,
       "glError": 0
     },
     {
@@ -68,8 +68,8 @@
         "pitch": -0.049573245018024625
       },
       "room": "library",
-      "calls": 260,
-      "triangles": 1609552,
+      "calls": 259,
+      "triangles": 1632264,
       "glError": 0
     },
     {
@@ -83,7 +83,7 @@
       },
       "room": "library",
       "calls": 349,
-      "triangles": 1619928,
+      "triangles": 1644768,
       "glError": 0
     },
     {
@@ -96,8 +96,64 @@
         "pitch": -0.939986256830184
       },
       "room": "libGallery",
-      "calls": 255,
-      "triangles": 1455837,
+      "calls": 253,
+      "triangles": 1480629,
+      "glError": 0
+    },
+    {
+      "name": "12-secretary-chair-oblique",
+      "pose": {
+        "x": 77.4,
+        "y": 0.15,
+        "z": 96.2,
+        "yaw": -1.0701286019201606,
+        "pitch": -0.2926018532016378
+      },
+      "room": "library",
+      "calls": 246,
+      "triangles": 1655448,
+      "glError": 0
+    },
+    {
+      "name": "13-wing-chair-faces-rug",
+      "pose": {
+        "x": 78.05,
+        "y": 0.15,
+        "z": 101.4,
+        "yaw": -1.0303768265243143,
+        "pitch": -0.3372264541186275
+      },
+      "room": "library",
+      "calls": 224,
+      "triangles": 1604250,
+      "glError": 0
+    },
+    {
+      "name": "14-sofa-tufting-near",
+      "pose": {
+        "x": 78,
+        "y": 0.15,
+        "z": 101.45,
+        "yaw": 0.31393821333654076,
+        "pitch": -0.3941033826028476
+      },
+      "room": "library",
+      "calls": 277,
+      "triangles": 1664640,
+      "glError": 0
+    },
+    {
+      "name": "15-spiral-sculpted-treads",
+      "pose": {
+        "x": 80.6,
+        "y": 0.15,
+        "z": 102.6,
+        "yaw": 0.46364760900080826,
+        "pitch": -0.01656195202898439
+      },
+      "room": "library",
+      "calls": 303,
+      "triangles": 1689570,
       "glError": 0
     },
     {
@@ -111,7 +167,7 @@
       },
       "room": "library",
       "calls": 89,
-      "triangles": 818380,
+      "triangles": 830776,
       "glError": 0
     },
     {
@@ -125,7 +181,7 @@
       },
       "room": "library",
       "calls": 72,
-      "triangles": 708956,
+      "triangles": 721400,
       "glError": 0
     },
     {
@@ -139,7 +195,7 @@
       },
       "room": "library",
       "calls": 81,
-      "triangles": 760850,
+      "triangles": 773246,
       "glError": 0
     },
     {
@@ -152,8 +208,8 @@
         "pitch": -0.39276066563731993
       },
       "room": "library",
-      "calls": 232,
-      "triangles": 1579476,
+      "calls": 231,
+      "triangles": 1604256,
       "glError": 0
     }
   ],
