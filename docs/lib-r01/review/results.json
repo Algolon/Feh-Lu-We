@@ -1,10 +1,342 @@
 {
   "source": "actual candidate branch Vite/Chromium SwiftShader",
-  "commit": "bcb56ddb815c15edcb92e943039a692590baa6ed",
-  "records": [],
-  "checks": [],
-  "errors": [
-    "QA script: page.evaluate: TypeError: g.ui.modalOpen is not a function\n    at eval (eval at evaluate (:290:30), <anonymous>:1:41)\n    at UtilityScript.evaluate (<anonymous>:292:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at pageFor (/home/runner/work/Feh-Lu-We/Feh-Lu-We/scripts/lib-r01-review.mjs:45:14)\n    at async file:///home/runner/work/Feh-Lu-We/Feh-Lu-We/scripts/lib-r01-review.mjs:68:29"
+  "commit": "48b5b55bafc28ddf6c38aff615ab8ff7245eb603",
+  "records": [
+    {
+      "name": "",
+      "pose": {
+        "x": 83.05,
+        "y": 0.15,
+        "z": 100,
+        "yaw": -1.1114590359279042,
+        "pitch": -0.048153419375853976
+      },
+      "room": "library",
+      "calls": 272,
+      "triangles": 1676286,
+      "glError": 0
+    },
+    {
+      "name": "",
+      "pose": {
+        "x": 81.4,
+        "y": 0.15,
+        "z": 99.5,
+        "yaw": -0.7720656201033034,
+        "pitch": -0.16808937839086718
+      },
+      "room": "library",
+      "calls": 260,
+      "triangles": 1705200,
+      "glError": 0
+    },
+    {
+      "name": "",
+      "pose": {
+        "x": 77.15,
+        "y": 0.15,
+        "z": 97.35,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.29318689655788155
+      },
+      "room": "library",
+      "calls": 240,
+      "triangles": 1585390,
+      "glError": 0
+    },
+    {
+      "name": "",
+      "pose": {
+        "x": 81.25,
+        "y": 0.15,
+        "z": 102,
+        "yaw": -1.687905071361761,
+        "pitch": -0.029202008317641335
+      },
+      "room": "library",
+      "calls": 269,
+      "triangles": 1699714,
+      "glError": 0
+    },
+    {
+      "name": "",
+      "pose": {
+        "x": 79,
+        "y": 0.15,
+        "z": 105.1,
+        "yaw": -0.12435499454676144,
+        "pitch": -0.049573245018024625
+      },
+      "room": "library",
+      "calls": 259,
+      "triangles": 1609272,
+      "glError": 0
+    },
+    {
+      "name": "",
+      "pose": {
+        "x": 79.7,
+        "y": 0.15,
+        "z": 103.8,
+        "yaw": 0.982793723247329,
+        "pitch": 0.14685515089236043
+      },
+      "room": "library",
+      "calls": 349,
+      "triangles": 1619648,
+      "glError": 0
+    },
+    {
+      "name": "",
+      "pose": {
+        "x": 83.7,
+        "y": 3.35,
+        "z": 105.2,
+        "yaw": -1.5137155443886352,
+        "pitch": -0.939986256830184
+      },
+      "room": "libGallery",
+      "calls": 254,
+      "triangles": 1455557,
+      "glError": 0
+    },
+    {
+      "name": "",
+      "pose": {
+        "x": 82.6,
+        "y": 0.15,
+        "z": 99.4,
+        "yaw": -0.7977432152416721,
+        "pitch": -0.10436797065772957
+      },
+      "room": "library",
+      "calls": 72,
+      "triangles": 709288,
+      "glError": 0
+    },
+    {
+      "name": "",
+      "pose": {
+        "x": 77.3,
+        "y": 0.15,
+        "z": 97.35,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.2830957852994955
+      },
+      "room": "library",
+      "calls": 81,
+      "triangles": 761182,
+      "glError": 0
+    }
   ],
+  "checks": [
+    {
+      "name": "puzzle-and-album-anchors",
+      "data": {
+        "b01.table": {
+          "exists": false
+        },
+        "library.desk": {
+          "exists": true,
+          "position": [
+            75.21,
+            0.8300000000000001,
+            97.35
+          ]
+        },
+        "pk.studyKey": {
+          "exists": true,
+          "position": [
+            74.81,
+            0.8660000000000001,
+            97.3
+          ]
+        },
+        "ds01.album": {
+          "exists": false
+        },
+        "lamp.library": {
+          "exists": true,
+          "position": [
+            74.3,
+            1.31,
+            98.27
+          ]
+        }
+      },
+      "pass": false
+    },
+    {
+      "name": "spiral-upstairs-walking",
+      "data": {
+        "pass": true,
+        "final": {
+          "x": 83.17,
+          "y": 3.35,
+          "z": 105.24
+        },
+        "steps": [
+          {
+            "i": 0,
+            "feet": 0.396,
+            "x": 82.067,
+            "z": 104.308
+          },
+          {
+            "i": 1,
+            "feet": 0.396,
+            "x": 82.144,
+            "z": 104.411
+          },
+          {
+            "i": 2,
+            "feet": 0.519,
+            "x": 82.331,
+            "z": 104.589
+          },
+          {
+            "i": 3,
+            "feet": 0.642,
+            "x": 82.472,
+            "z": 104.743
+          },
+          {
+            "i": 4,
+            "feet": 0.765,
+            "x": 82.586,
+            "z": 104.926
+          },
+          {
+            "i": 5,
+            "feet": 0.888,
+            "x": 82.667,
+            "z": 105.173
+          },
+          {
+            "i": 6,
+            "feet": 1.012,
+            "x": 82.672,
+            "z": 105.373
+          },
+          {
+            "i": 7,
+            "feet": 1.135,
+            "x": 82.617,
+            "z": 105.573
+          },
+          {
+            "i": 8,
+            "feet": 1.258,
+            "x": 82.506,
+            "z": 105.754
+          },
+          {
+            "i": 9,
+            "feet": 1.381,
+            "x": 82.346,
+            "z": 105.896
+          },
+          {
+            "i": 10,
+            "feet": 1.504,
+            "x": 82.15,
+            "z": 105.985
+          },
+          {
+            "i": 11,
+            "feet": 1.627,
+            "x": 81.938,
+            "z": 106.013
+          },
+          {
+            "i": 12,
+            "feet": 1.75,
+            "x": 81.726,
+            "z": 105.976
+          },
+          {
+            "i": 13,
+            "feet": 1.873,
+            "x": 81.535,
+            "z": 105.879
+          },
+          {
+            "i": 14,
+            "feet": 1.996,
+            "x": 81.382,
+            "z": 105.729
+          },
+          {
+            "i": 15,
+            "feet": 2.119,
+            "x": 81.28,
+            "z": 105.541
+          },
+          {
+            "i": 16,
+            "feet": 2.242,
+            "x": 81.238,
+            "z": 105.33
+          },
+          {
+            "i": 17,
+            "feet": 2.365,
+            "x": 81.262,
+            "z": 105.117
+          },
+          {
+            "i": 18,
+            "feet": 2.488,
+            "x": 81.347,
+            "z": 104.921
+          },
+          {
+            "i": 19,
+            "feet": 2.612,
+            "x": 81.487,
+            "z": 104.758
+          },
+          {
+            "i": 20,
+            "feet": 2.735,
+            "x": 81.669,
+            "z": 104.645
+          },
+          {
+            "i": 21,
+            "feet": 2.858,
+            "x": 81.877,
+            "z": 104.591
+          },
+          {
+            "i": 22,
+            "feet": 2.981,
+            "x": 82.091,
+            "z": 104.602
+          },
+          {
+            "i": 23,
+            "feet": 3.104,
+            "x": 82.292,
+            "z": 104.675
+          },
+          {
+            "i": 24,
+            "feet": 3.227,
+            "x": 82.463,
+            "z": 104.805
+          },
+          {
+            "i": 25,
+            "feet": 3.35,
+            "x": 82.587,
+            "z": 104.98
+          }
+        ]
+      },
+      "pass": true
+    }
+  ],
+  "errors": [],
   "realDeviceVerified": false
 }
