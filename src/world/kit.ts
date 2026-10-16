@@ -48,6 +48,8 @@ export function getKit(): Kit {
     poolTile: lam({ map: T.poolTile }),
     rug: lam({ map: T.rug, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }),
   };
+  // Named distinctly for QA and reuse when the window system later expands beyond the pilot.
+  M.windowSillWood.name = 'WINDOW-R01-OakSill';
   // DEV-04C ART-01.1: broad authored value / hue breakup per material family (surfaces.ts; no extra draw calls)
   const SURF: Partial<Record<MatKey, Parameters<typeof surface>[1]>> = {
     paint: 'paint', plaster: 'plaster', stone: 'stone', wood: 'timber', windowSillWood: 'timber', tile: 'stone', slate: 'stone', terracotta: 'stone',
