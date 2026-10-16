@@ -41,6 +41,7 @@ import { addKey, presentKey, keyLiner, linerWhenOpen, hatchDish, LINER_TOP, HATC
 import { SALON_LAYOUT, SALON_SITES } from '../content/gallery';
 import { buildEntrance, entranceBay } from './entrance';
 import { EXTERIOR_STUDY, exteriorMats, studyArchitecture, dressedBlock } from './exteriorStudy';
+import { buildExteriorGreenery, EXTERIOR_GREENERY } from './exteriorGreenery';
 import { ROOF_DETAIL, gableTrimGeo } from './roofDetail';
 import { EXTERIOR_FINISH, finishedChimney, roofFlashing } from './exteriorFinish';
 import { buildKitchenJuicePouch } from './kitchenJuicePouch';
@@ -54,6 +55,7 @@ export { GF, CEIL, UF, UCEIL, TOP };
 /** Chunks: 'manor' (exterior shell + inner skins), 'mIn' (ground + upper interiors), 'mB' (basement). */
 export function buildManor(w: World, g: GameApi, c: Ctx, cIn: Ctx, cB: Ctx) {
   shell(w, c);
+  if (EXTERIOR_STUDY && EXTERIOR_GREENERY) buildExteriorGreenery(c);
   interiorStructure(w, g, cIn);
   groundRooms(w, g, cIn);
   upperRooms(w, g, cIn);
@@ -159,6 +161,14 @@ function shell(w: World, c: Ctx) {
     // with the plaster in the Reis- and Sterrenkamer, study and guest room ceilings; it now starts inside the ceiling slab
     box(c.b, stone.mat, EXTERIOR_STUDY ? '#ffffff' : '#efe2c4', dx, TOP - 0.15, dz, sx, top - TOP + 0.15, sz, { chunk: c.chunk, uv: 1.5 });
     gableRoof(c, dx, dz, 2.6, 2.1, top, 0.8, alongX, k.M.slate, '#9e9a94', '#5a4636', EXTERIOR_STUDY && ROOF_DETAIL);
+    if (EXTERIOR_STUDY && EXTERIOR_GREENERY) {
+      // A stepped, bevelled cheek/eave junction returns behind the front surround on both sides.
+      for (const side of [-1,1]) {
+        const px=dx+(alongX?0:side*(sx/2+.025)), pz=dz+(alongX?side*(sz/2+.025):0);
+        dressedBlock(c,px,top-.055,pz,alongX?sx:.10,.11,alongX?.10:sz,'#c4c3b0',.015);
+        dressedBlock(c,px,top-.13,pz,alongX?sx:.065,.035,alongX?.065:sz,'#999f8e',.008);
+      }
+    }
     if(EXTERIOR_STUDY && EXTERIOR_FINISH)roofFlashing(c,dx-sx/2,dx+sx/2,dz-sz/2,dz+sz/2,.13,.06);
     // the dormer window: framed glass in a dressed surround (same grammar as the facade)
     const wx = dx + fx * (alongX ? 0.9 : 0), wz = dz + fz * (alongX ? 0 : 0.9);
