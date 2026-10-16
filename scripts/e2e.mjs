@@ -213,9 +213,24 @@ async function walkthrough() {
     await step('D: west along the southern loop to the fork signpost', () => { T.walk([[76, 9.4], [57.5, 8.0]], true); T.act('inspect.fork', 'wegwijzer'); T.closeModal(); });
     await step('D: up the side path into the cut', () => T.walk([[59.5, 10.4], [63, 12.4], [63, 16.4]]));
     await shot(page, '17-boslust');
-    await step('D: inscription, then the cover with the strip', () => { T.act('inspect.boslust', 'gravure'); T.closeModal(); T.walk([[64.4, 16.6]]); T.act('boslust.lock', 'Klepje'); if (!T.G().state.flags.boslustCover) throw new Error('cover still closed'); if (!document.querySelector('.digits')) throw new Error('no digit panel'); });
-    await step('D: a wrong code gives neutral feedback', () => { UI.digits([2, 4, 1, 4]); if (T.G().state.flags.boslustOpen) throw new Error('wrong code opened'); for (let i = 0; i < 4; i++) for (let k = 0; k < 10 - [2, 4, 1, 4][i]; k++) document.querySelector(`[data-up="${i}"]`).click(); });
-    await step('D: TWEE VIER EEN DRIE → 2413 opens BOSLUST', () => { UI.digits([2, 4, 1, 3]); T.wait(1.5); if (!T.G().state.flags.boslustOpen) throw new Error('door closed'); });
+    await step('D: inscription, then the cover with the strip', () => {
+      T.act('inspect.boslust', 'gravure'); T.closeModal(); T.walk([[64.4, 16.6]]);
+      T.act('boslust.lock', 'Klepje');
+      if (!T.G().state.flags.boslustCover || !T.G().isBoslustInspecting) throw new Error('lock did not enter diegetic focus');
+      if (document.querySelector('.digits') || T.G().ui.modalOpen) throw new Error('obsolete code popup appeared');
+    });
+    await step('D: a wrong combination leaves the physical wheels set', () => {
+      const g = T.G();
+      [2, 4, 1, 4].forEach((n, i) => { for (let k = 0; k < n; k++) g.world.byId.get(`boslust.wheel.${i}`).run(); });
+      g.world.byId.get('boslust.knob').run();
+      if (g.state.flags.boslustOpen || !g.isBoslustInspecting || g.state.wrong.boslust !== 1) throw new Error('wrong combination accepted');
+    });
+    await step('D: TWEE VIER EEN DRIE → 2413 via real knob opens BOSLUST', () => {
+      const g = T.G();
+      for (let k = 0; k < 9; k++) g.world.byId.get('boslust.wheel.3').run(); // 4 → 3 with wrapping
+      g.world.byId.get('boslust.knob').run(); T.wait(1.0);
+      if (!g.state.flags.boslustOpen || g.isBoslustInspecting) throw new Error('physical knob did not solve/exit');
+    });
     await step('D: down the stair under the hill (no teleport)', () => { const p = T.walk([[63, 17.4], [63, 19.4], [63, 25.6], [63, 30]]); if (p.y > -3.2) throw new Error('not under the hill ' + JSON.stringify(p)); });
     await shot(page, '18-under-hill');
     await step('D: plate diagram', () => { T.walk([[63.4, 35.2]]); T.act('inspect.plateDiagram', 'tekening'); T.closeModal(); });
@@ -994,8 +1009,10 @@ async function boslustSample() {
       T.walk([[57.5, 8.0]], true); T.act('inspect.fork', 'wegwijzer'); out.fork = T.G().state.clues.includes('c.fork'); T.closeModal();
       T.walk([[59.5, 10.4], [63, 12.4], [63, 16.4]]);
       T.act('inspect.boslust', 'gravure'); out.inscription = T.G().state.clues.includes('c.boslust'); T.closeModal();
-      T.walk([[64.4, 16.6]]); T.act('boslust.lock', 'Klepje'); out.cover = !!T.G().state.flags.boslustCover;
-      [2, 4, 1, 3].forEach((d, i) => { for (let k = 0; k < d; k++) document.querySelector(`[data-up="${i}"]`).click(); }); document.querySelector('[data-try]').click(); T.wait(1.5);
+      T.walk([[64.4, 16.6]]); T.act('boslust.lock', 'Klepje');
+      out.cover = !!T.G().state.flags.boslustCover && T.G().isBoslustInspecting;
+      [2, 4, 1, 3].forEach((d, i) => { for (let k = 0; k < d; k++) T.G().world.byId.get(`boslust.wheel.${i}`).run(); });
+      T.G().world.byId.get('boslust.knob').run(); T.wait(1.5);
       out.open = !!T.G().state.flags.boslustOpen;
       const p = T.walk([[63, 17.4], [63, 19.4], [63, 25.6], [63, 30]]); out.under = p.y < -3.2;
       return out;
