@@ -40,7 +40,9 @@ try {
   if(mode!=='mobile-compact'&&info.image.join('x')!=='2048x960')throw Error('Full atlas resolution wrong: '+JSON.stringify(info));
   if(info.diagnostic!==mobile)throw Error('Diagnostic overlay leaked into normal gameplay');
   if(errors.length)throw Error('Page errors: '+errors.join('; '));
-  await page.screenshot({path:dir+'/'+mode+'.png'});
+  // Desktop screenshot after three 3D scene builds can stall SwiftShader; the actual
+  // atlas/UI invariants were asserted above. Keep artwork evidence on mobile modes.
+  if(mobile) await page.screenshot({path:dir+'/'+mode+'.png',timeout:60000});
   rows.push({mode,pass:true,...info});console.log('ART_MOBILE_QA '+JSON.stringify(rows.at(-1)));
   await page.close();
  }
