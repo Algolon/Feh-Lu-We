@@ -210,6 +210,47 @@ function shell(w: World, c: Ctx) {
   hipRoof(c, 112.25, 101, 7.5, 18, WH, 2.6, k.M.slate, '#a39f9a', 0.5, { finished: EXTERIOR_STUDY && EXTERIOR_FINISH, courses: EXTERIOR_STUDY && ROOF_DETAIL, downpipes: [[116.14, 92.6]] });
 }
 
+// PORTAL-R01-R03: dedicated non-repeating grain for one solid oak threshold.
+// The shared wood texture deliberately draws plank joints, so it must not be used here.
+function portalThresholdOak(w: World): THREE.Material {
+  const canvas = document.createElement('canvas');
+  canvas.width = 256;
+  canvas.height = 512; // canvas V aligns with the long (Z) axis on boxGeo's top face
+  const ctx = canvas.getContext('2d')!;
+  const base = ctx.createLinearGradient(0, 0, canvas.width, 0);
+  base.addColorStop(0, '#e8d3b5');
+  base.addColorStop(0.25, '#f4e5cf');
+  base.addColorStop(0.65, '#ead7bb');
+  base.addColorStop(1, '#f0dfc6');
+  ctx.fillStyle = base;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Deterministic, gentle longitudinal fibres: no cross-grain joints or tile boundaries.
+  let seed = 1303;
+  const random = () => {
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    return seed / 4294967296;
+  };
+  for (let i = 0; i < 135; i++) {
+    const x = random() * canvas.width;
+    const y = -80 + random() * (canvas.height + 160);
+    const len = 60 + random() * 250;
+    const sway = (random() - 0.5) * 6;
+    ctx.strokeStyle = i % 4 === 0 ? 'rgba(106,65,33,0.11)' : 'rgba(116,78,45,0.065)';
+    ctx.lineWidth = 0.4 + random() * 1.4;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.bezierCurveTo(x + sway, y + len * 0.35, x - sway, y + len * 0.68, x + sway * 0.5, y + len);
+    ctx.stroke();
+  }
+
+  const texture = w.texture(new THREE.CanvasTexture(canvas));
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping;
+  texture.anisotropy = 4;
+  return w.material(new THREE.MeshLambertMaterial({ map: texture, vertexColors: true }));
+}
+
 // ==============================================================================================// Floors, ceilings, partitions, stairs, doors (interior chunk).
 function interiorStructure(w: World, g: GameApi, c: Ctx) {
   const k = c.k;
@@ -269,10 +310,12 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   // (GF + 1.21, height 2.42), which made them extend above the doorway lintel.
   // Keep only the shallow head casing: no stray upright strips above the frame.
   box(c.b, k.M.wood, '#705036', 95, GF + 2.47, 96.55, 0.21, 0.095, 1.79, { chunk: c.chunk });
-  // Thin, visual-only warm-stone threshold across the wood/tile seam, flush enough to walk across.
-  // 1.65 m between jambs; 0.42 m deep across the wall; 22 mm proud of the two floor finishes.
-  // No collider or floor-height changes: the new circulation loop and sealed basement remain untouched.
-  boxMM(c.b, k.M.stone, '#a99b83', 94.79, 95.21, GF + 0.003, GF + 0.025, 95.725, 97.375, { chunk: c.chunk, uv: 0.7, jitter: 0 });
+  // PORTAL-R01-R03: one continuous, 19 mm oak threshold with subtle lengthwise grain.
+  // Preserve the 42 cm cover over the floor transition; a narrower 25–30 cm strip would expose the seam.
+  // Visual geometry only: do not change floor height, collision, portal or walk route.
+  boxMM(c.b, portalThresholdOak(w), '#b98556',
+    94.79, 95.21, GF + 0.003, GF + 0.022, 95.725, 97.375,
+    { chunk: c.chunk, jitter: 0 });
   wall(c, 'x', 92, 95, 107.6, GF, CEIL, { ...P, openings: [{ at: 101, w: 2.0, h: 2.5 }] }); // dining | kitchen
   // basement stairwell enclosure (west side has the sealed door; walls run down to the basement floor)
   wall(c, 'z', 92, 98, 104.8, GF, CEIL, { ...P, openings: [{ at: 98.9, w: 1.0, h: 2.3 }] });
