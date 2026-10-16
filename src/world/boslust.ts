@@ -106,7 +106,8 @@ function entrance(w: World, g: GameApi, c0: Ctx, u: Ctx) {
   // BOSLUST-R03: actual rotatable 3D wheels, one persistent code shared
   // with the accessible modal; all gating and unlock rules remain canonical.
   const { lock, cover, setDigits } = makeBoslustMetalLock(w, k);
-  place(lock, 64.85, 1.2, 17.94, 0);
+  // Raised to a clear masonry bay; the matching rock keep-out is in boslustSample.ts.
+  place(lock, 65.04, 1.64, 18.04, 0);
   w.scene.add(lock);
   w.onSync(() => {
     cover.rotation.x = g.state.flags.boslustCover ? -2.05 : 0;
@@ -119,12 +120,12 @@ function entrance(w: World, g: GameApi, c0: Ctx, u: Ctx) {
     id: 'boslust.lock', obj: lock,
     hit: [BOSLUST_LOCK_SIZE.width + 0.08, BOSLUST_LOCK_SIZE.height + 0.12, BOSLUST_LOCK_SIZE.depth + 0.05],
     hitOffset: [0, 0, 0],
-    label: () => (g.state.flags.boslustOpen ? null : g.state.flags.boslustCover ? 'Cijferslot bedienen' : 'Klepje bekijken'),
+    label: () => (g.state.flags.boslustOpen ? null : g.state.flags.boslustCover ? 'Bekijk het cijferslot' : 'Klepje bekijken'),
     run: () => {
-      if (g.state.flags.boslustCover) { g.openPanel('boslust'); return; }
+      if (g.state.flags.boslustCover) { g.enterBoslustInspect(); return; }
       const result = openCipherCover(g.state);
       g.act(result);
-      if (result.ok) g.openPanel('boslust');
+      if (result.ok) g.enterBoslustInspect();
     },
   });
   for (const [i, x] of ([-0.063, 0.069, 0.201, 0.333] as const).entries()) {
@@ -137,9 +138,10 @@ function entrance(w: World, g: GameApi, c0: Ctx, u: Ctx) {
       label: () => {
         if (!g.state.flags.boslustCover || g.state.flags.boslustOpen) return null;
         const digit = boslustDigits(g.state)[i];
-        return `Draai wieltje ${i + 1}: ${digit} → ${(digit + 1) % 10}`;
+        return g.isBoslustInspecting ? `Draai wieltje ${i + 1}: ${digit} → ${(digit + 1) % 10}` : 'Bekijk het cijferslot';
       },
       run: () => {
+        if (!g.isBoslustInspecting) { g.enterBoslustInspect(); return; }
         if (turnBoslustWheel(g.state, i) === null) return;
         g.sfx('click', 0.45);
         g.changed();
@@ -151,8 +153,8 @@ function entrance(w: World, g: GameApi, c0: Ctx, u: Ctx) {
   lock.add(knob);
   makeAction(w, {
     id: 'boslust.knob', obj: knob, hit: [0.255, 0.25, 0.13], hitOffset: [0, 0, 0],
-    label: () => g.state.flags.boslustCover && !g.state.flags.boslustOpen ? 'Draai knop: probeer combinatie' : null,
-    run: () => { g.tryBoslustCode(); },
+    label: () => g.state.flags.boslustCover && !g.state.flags.boslustOpen ? (g.isBoslustInspecting ? 'Draai knop: probeer combinatie' : 'Bekijk het cijferslot') : null,
+    run: () => { if (!g.isBoslustInspecting) g.enterBoslustInspect(); else g.tryBoslustCode(); },
   });
   makeDoor(w, g, {
     id: 'door.boslust', x: DOOR_X - 0.6, z: DOOR_Z, dir: 'x+', width: 1.2, height: 2.3, y0: 0, swing: 1, color: '#5a3a22', style: 'plank',
