@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 import type { Ctx } from './arch';
 import { box, cyl, planMatrix } from './kit';
+import { EXTERIOR_DETAILS, drainGrate } from './exteriorDetail';
 import { roofUnderside } from './layout';
 export const EXTERIOR_FINISH = typeof location==='undefined'||new URLSearchParams(location.search).get('finish')!=='base';
 const UP=new THREE.Vector3(0,1,0);
@@ -19,7 +20,7 @@ function gutterGeo(length:number) {
   for(let i=8;i>=0;i--){const a=Math.PI+i*Math.PI/8;pts.push(new THREE.Vector2(Math.cos(a)*(r-t),Math.sin(a)*(r-t)));}
   const g=new THREE.ExtrudeGeometry(new THREE.Shape(pts),{depth:length,bevelEnabled:false,curveSegments:1});g.translate(0,0,-length/2);g.rotateY(Math.PI/2);return g;
 }
-export function rainwater(c:Ctx,cx:number,cz:number,ax:number,az:number,y:number,sites:readonly [number,number][],col='#76817e') {
+export function rainwater(c:Ctx,cx:number,cz:number,ax:number,az:number,y:number,sites:readonly [number,number][],col='#76817e',overhang=.7) {
   for(const sign of [-1,1]) {
     add(c,gutterGeo(2*ax+.16),cx,y-.035,cz+sign*(az+.06),col);
     const side=gutterGeo(2*az+.16);side.rotateY(Math.PI/2);add(c,side,cx+sign*(ax+.06),y-.035,cz,col);
@@ -33,9 +34,16 @@ export function rainwater(c:Ctx,cx:number,cz:number,ax:number,az:number,y:number
     pipe(c,[gx,y-.13,gz],[gx,y-.075,gz],.052,col);
     const dx=gx-x,dz=gz-z,L=Math.hypot(dx,dz)||1;
     pipe(c,[x,.20,z],[x+dx/L*.13,.08,z+dz/L*.13],.052,col);
+    const wallEdges=[[cx-ax+overhang,z],[cx+ax-overhang,z],[x,cz-az+overhang],[x,cz+az-overhang]];
+    const [wx,wz]=wallEdges.sort((a,b)=>Math.hypot(a[0]-x,a[1]-z)-Math.hypot(b[0]-x,b[1]-z))[0];
+    if(EXTERIOR_DETAILS)drainGrate(c,x+dx/L*.13,z+dz/L*.13);
     for(let h=.7;h<y-.4;h+=1.7){
       cyl(c.b,c.k.M.paint,'#56635e',x,h,z,.057,.057,.036,8,{chunk:c.chunk,jitter:0});
-      box(c.b,c.k.M.paint,'#63716a',x-dx/L*.035,h,z-dz/L*.035,.10,.035,.10,{chunk:c.chunk,jitter:0});
+      if(EXTERIOR_DETAILS) {
+        pipe(c,[x,h+.018,z],[wx+(x-wx)*.02,h+.018,wz+(z-wz)*.02],.012,'#63716a');
+        const normalX=Math.abs(wx-x)>Math.abs(wz-z);
+        box(c.b,c.k.M.paint,'#63716a',wx+(x-wx)*.05,h-.025,wz+(z-wz)*.05,normalX?.018:.09,.09,normalX?.09:.018,{chunk:c.chunk,jitter:0});
+      } else box(c.b,c.k.M.paint,'#63716a',x-dx/L*.035,h,z-dz/L*.035,.10,.035,.10,{chunk:c.chunk,jitter:0});
     }
   }
 }
@@ -88,7 +96,14 @@ export function ageFacade(mat:THREE.MeshLambertMaterial) {
   const W=1024,H=128,L=184,canvas=document.createElement('canvas');canvas.width=W;canvas.height=H;
   const x=canvas.getContext('2d')!;x.fillStyle='#ffffff';x.fillRect(0,0,W,H);
   const py=(y:number)=>H*(1-y/6.4),px=(s:number)=>W*s/L;
-  const base=x.createLinearGradient(0,H,0,py(1.3));base.addColorStop(0,'rgba(96,111,94,.19)');base.addColorStop(.5,'rgba(117,126,106,.08)');base.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=base;x.fillRect(0,py(1.3),W,H-py(1.3));
+  const shelter=EXTERIOR_DETAILS?[[0,36,.45],[36,66,.65],[66,102,1],[102,132,.9],[132,140,.5],[140,157.6,.65],[157.6,184,.9]]:[[0,184,1]];
+  for(const [lo,hi,weight] of shelter) {
+    const base=x.createLinearGradient(0,H,0,py(1.3));base.addColorStop(0,`rgba(96,111,94,${.19*weight})`);base.addColorStop(.5,`rgba(117,126,106,${.08*weight})`);base.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=base;x.fillRect(px(lo),py(1.3),px(hi-lo),H-py(1.3));
+  }
+  if(EXTERIOR_DETAILS)for(const at of [13.85,22.15,36.5,65.5,102.5,131.5,140.4]) {
+    const damp=x.createRadialGradient(px(at),py(.32),0,px(at),py(.32),px(.4));
+    damp.addColorStop(0,'rgba(103,124,103,.12)');damp.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=damp;x.fillRect(px(at-.4),py(.78),px(.8),H-py(.78));
+  }
   // Broad variation is sparse; local runoff and shelter carry the ageing.
   for(let i=0;i<8;i++){
     const s=(Math.sin(i*12.91)*43758.5%1+1)%1*L,y=1.4+((i*17)%31)/7,r=1.3+(i%4)*.55;
@@ -133,5 +148,5 @@ export function ageFacade(mat:THREE.MeshLambertMaterial) {
       diffuseColor.rgb*=mix(vec3(1.0),texture2D(flwFacadeWash,vec2(along/184.0,clamp(wp.y/6.4,0.0,1.0))).rgb,washMask);
     `);
   };
-  mat.customProgramCacheKey=()=> 'ext-r02-facade-wash';mat.needsUpdate=true;
+  mat.customProgramCacheKey=()=> EXTERIOR_DETAILS?'ext-r05-sheltered-wash':'ext-r02-facade-wash';mat.needsUpdate=true;
 }

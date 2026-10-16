@@ -7,6 +7,7 @@ import { getKit, compound, box, hitbox, v3, type Batcher } from '../world/kit';
 import { has } from '../core/state';
 import { pickup as pickupRule, unlockWithKey } from '../puzzles/rules';
 import { ITEMS } from '../content/items';
+import { frontDoorLeaf } from '../world/exteriorDetail';
 import { registerSweep } from '../world/openings';
 
 const DIRS = { 'x+': [1, 0], 'x-': [-1, 0], 'z+': [0, 1], 'z-': [0, -1] } as const;
@@ -19,7 +20,7 @@ export interface DoorOpts {
   width: number; height: number; y0: number;
   swing: 1 | -1; // +1 = counter-clockwise seen from above
   color?: THREE.ColorRepresentation;
-  style?: 'panel' | 'plank' | 'glass' | 'gate';
+  style?: 'panel' | 'plank' | 'glass' | 'gate' | 'estate';
   key?: string; // key item that unlocks (lock id = lock.<id>, or lockId when doors share one lock)
   lockId?: string;
   unlock?: string; // OR a lock id set by a puzzle (no key)
@@ -44,7 +45,9 @@ export function makeDoor(w: World, g: GameApi, o: DoorOpts) {
   const col = o.color ?? '#7a4f2c';
   const buildLeaf = () => compound((b: Batcher) => {
     // local leaf frame: built at plan origin, spanning +X; local plan z ≡ thickness
-    if (o.style === 'glass') {
+    if (o.style === 'estate') {
+      frontDoorLeaf(b,k,o.width,o.height,th,col);
+    } else if (o.style === 'glass') {
       // DEV-04A: rails run BETWEEN the stiles (they overlapped them, sharing end, top and bottom faces: z-fighting), and
       // the stiles are 4 mm thicker so the joint faces never share a plane
       box(b, k.M.paint, '#2f4a3c', o.width / 2, 0, 0, o.width - 0.2, 0.1, th);
