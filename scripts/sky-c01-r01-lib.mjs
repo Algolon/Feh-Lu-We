@@ -46,7 +46,7 @@ export async function render(page, opts) {
     e.update(o.t, g.camera.position, g.world.hereRoom === 'out' ? 0 : 1);
     // Diagnostic overrides on the live material/geometry; restored below so cases stay independent.
     const baseFrag = sky.material.fragmentShader, baseVert = sky.material.vertexShader;
-    if (o.frag) { sky.material.fragmentShader = new Function('s', o.frag)(baseFrag); }
+    if (o.frag) { const next = new Function('s', o.frag)(baseFrag); if (next === baseFrag) throw Error('diagnostic transform did not apply'); sky.material.fragmentShader = next; }
     if (o.vert) sky.material.vertexShader = o.vert;
     if (o.frag || o.vert) sky.material.needsUpdate = true;
     if (o.segments) sky.geometry = new r.geometry.constructor(400, o.segments[0], o.segments[1]);
@@ -102,4 +102,16 @@ export async function timeSky(page, opts, n = 9, warm = 4) {
     times.sort((a, b) => a - b);
     return { median: times[times.length >> 1], min: times[0], max: times.at(-1), calls: g.renderer.info.render.calls, triangles: g.renderer.info.render.triangles };
   }, { o: opts, n, warm });
+}
+
+/** Decoded per-channel pixel difference of two base64 PNGs: { max, count } (count = pixels with any change). */
+export async function diffPng(page, a, b) {
+  return page.evaluate(async ([a, b]) => {
+    const load = async s => { const i = new Image(); i.src = 'data:image/png;base64,' + s; await i.decode(); const c = document.createElement('canvas'); c.width = i.width; c.height = i.height; const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(i, 0, 0); return x.getImageData(0, 0, i.width, i.height).data; };
+    const [p, q] = await Promise.all([load(a), load(b)]);
+    if (p.length !== q.length) return { max: 255, count: -1 };
+    let max = 0, count = 0;
+    for (let i = 0; i < p.length; i += 4) { const m = Math.max(Math.abs(p[i] - q[i]), Math.abs(p[i + 1] - q[i + 1]), Math.abs(p[i + 2] - q[i + 2])); if (m) { count++; if (m > max) max = m; } }
+    return { max, count };
+  }, [a, b]);
 }
