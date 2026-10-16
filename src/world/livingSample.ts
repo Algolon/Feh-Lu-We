@@ -12,7 +12,7 @@ import { v3, compound, box, getKit } from './kit';
 import { makeLamp, makeInspect, place } from '../interactions/props';
 import { bookshelf, plant, flwPainting, rug } from './furniture';
 import { MANTEL, mantelSlots } from '../content/canon';
-import { GF, CEIL } from './layout';
+import { GF, CEIL, LIVING_PLASTER_UNDERSIDE } from './layout';
 
 // ------------------------------------------------------------------------------------------------ palette
 // Base material colours (albedo before lighting). Shading comes from light + baked occlusion, so these are
@@ -464,35 +464,13 @@ function skirting(c: Ctx, x0: number, z0: number, x1: number, z1: number, yaw: n
 }
 
 /**
- * Inside dressing of an existing window (the shell already draws glass, frame and mullions on the wall face):
- * plastered linings that box the window out 14 cm (a reveal), a deep oak window board, painted architraves,
- * and floor-length pleated curtains on a brass rod.
+ * Curtain-only accent for the living room's west windows. WINDOW-R02 owns the actual
+ * glazing, jambs, head, mahogany sill and architrave for all facade windows.
+ * Never reconstruct that older joinery here or it will overlap the shared assembly.
  */
-function windowDressing(c: Ctx, wx: number, wz: number, yaw: number, w = 1.1, sill = GF + 0.9, top = GF + 2.6, curtains = true) {
-  const M = artMats();
-  const k = getKit();
-  const a = new Asm(c.b, c.chunk, wx, 0, wz, yaw);
+function windowCurtains(c: Ctx, wx: number, wz: number, yaw: number, w = 1.1, top = GF + 2.6) {
+  const M = artMats(), a = new Asm(c.b, c.chunk, wx, 0, wz, yaw);
   const half = w / 2 + 0.1, dep = 0.14;
-  const lining = projectUV(softBox(0.035, top - sill + 0.12, dep, 0.006, 1), 2);
-  for (const s of [-1, 1]) a.add(k.M.plaster, LIV.joinery, lining, s * (half + 0.0175), (sill + top) / 2 + 0.02, dep / 2);
-  lining.dispose();
-  const head = projectUV(softBox(2 * half + 0.07, 0.035, dep, 0.006, 1), 2);
-  a.add(k.M.plaster, LIV.joinery, head, 0, top + 0.095, dep / 2);
-  head.dispose();
-  const board = bake(projectUV(softBox(2 * half + 0.24, 0.035, dep + 0.08, 0.012), 1, 'x'), (p) => (p.y < 0 ? 0.8 : 1));
-  a.add(M.timber, LIV.sillWood, board, 0, sill - 0.04, (dep + 0.08) / 2);
-  board.dispose();
-  const apron = projectUV(softBox(2 * half + 0.1, 0.07, 0.022, 0.006, 1), 1, 'x');
-  a.add(M.paint, LIV.joinery, apron, 0, sill - 0.095, 0.011);
-  apron.dispose();
-  // architraves: 7 cm, 2 cm proud of the lining edge, a capped head
-  const arch = projectUV(softBox(0.07, top - sill + 0.16, 0.022, 0.006, 1), 1, 'y');
-  for (const s of [-1, 1]) a.add(M.paint, LIV.joinery, arch, s * (half + 0.035 + 0.035), (sill + top) / 2 + 0.04, dep + 0.011);
-  arch.dispose();
-  const cap = projectUV(softBox(2 * half + 0.28, 0.06, 0.04, 0.008, 1), 1, 'x');
-  a.add(M.paint, LIV.joinery, cap, 0, top + 0.15, dep + 0.02);
-  cap.dispose();
-  if (!curtains) return;
   // rod with finials
   const rod = new THREE.CylinderGeometry(0.014, 0.014, 1, 8).rotateZ(Math.PI / 2);
   const rodY = top + 0.26, rodL = 2 * half + 1.2;
@@ -622,11 +600,11 @@ export function livingRoomV2(w: World, g: GameApi, c: Ctx, sh: ContactShadows) {
   skirting(c, E, 90.0, E, N, -Math.PI / 2);
   skirting(c, W, N, 78.2, N, Math.PI);
   skirting(c, 79.8, N, E, N, Math.PI);
-  for (const z of [83, 90.5]) windowDressing(c, W, z, Math.PI / 2);
-  for (const x of [75.5, 79, 82.5]) windowDressing(c, x, S0, 0, 1.1, GF + 0.9, GF + 2.6, false);
+  for (const z of [83, 90.5]) windowCurtains(c, W, z, Math.PI / 2);
+  // South-facing windows need no duplicate dressing: the shared WINDOW-R02 assembly owns it.
   for (const x of [74, 76.4, 78.8, 81.2, 83.6]) beam(c, x, S0, N);
   // plastered ceiling between the beams (the bare ceiling was the dark underside of the upstairs floorboards)
   const ceil = projectUV(softBox(E - W, 0.02, N - S0, 0.004, 1), 3);
-  new Asm(c.b, c.chunk, (W + E) / 2, CEIL - 0.022, (S0 + N) / 2, 0).add(k.M.plaster, '#ece3cf', ceil, 0, 0.01, 0);
+  new Asm(c.b, c.chunk, (W + E) / 2, LIVING_PLASTER_UNDERSIDE, (S0 + N) / 2, 0).add(k.M.plaster, '#ece3cf', ceil, 0, 0.01, 0);
   ceil.dispose();
 }
