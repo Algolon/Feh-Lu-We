@@ -30,6 +30,7 @@ jobs:
       - name: Capture matched pre-pilot baseline
         shell: bash
         run: |
+          git fetch --no-tags --depth=1 origin 76f410a31cc80e2617267bd3693e52aa9f55ae96
           git worktree add --detach /tmp/window-r01-baseline 76f410a31cc80e2617267bd3693e52aa9f55ae96
           cp scripts/window-r01-review.mjs /tmp/window-r01-baseline/scripts/window-r01-review.mjs
           (
