@@ -9,7 +9,7 @@ import { mulberry32 } from '../core/rng';
 import { EXTERIOR_FINISH, ageFacade } from './exteriorFinish';
 
 export const EXTERIOR_STUDY = typeof location === 'undefined' || new URLSearchParams(location.search).get('exterior') !== 'base';
-let materials: { wall: THREE.Material; gravel: THREE.Material } | undefined;
+let materials: { wall: THREE.Material; gravel: THREE.Material; dressed: THREE.Material } | undefined;
 function texture(draw: (x: CanvasRenderingContext2D, r: () => number) => void, seed: number) {
   const c = document.createElement('canvas'); c.width = c.height = 512;
   draw(c.getContext('2d')!, mulberry32(seed));
@@ -72,9 +72,18 @@ export function exteriorMats() {
       }
     }
   }, 1902) });
+  // Cut limestone for solid profiles: fine grain, without false masonry joints across a column or rim.
+  const dressed = new THREE.MeshLambertMaterial({ vertexColors: true, map: texture((x, r) => {
+    x.fillStyle = '#f5f4ef'; x.fillRect(0, 0, 512, 512);
+    for (let i = 0; i < 7000; i++) {
+      x.fillStyle = i % 2 ? 'rgba(105,107,96,.035)' : 'rgba(255,255,247,.12)';
+      x.fillRect(r()*512, r()*512, 1+r()*3, 1+r()*2);
+    }
+  }, 1903) });
+  surface(dressed, 'stone');
   surface(wall, 'stone'); surface(gravel, 'ground');
   if(EXTERIOR_FINISH)ageFacade(wall);
-  materials = { wall, gravel }; return materials;
+  materials = { wall, gravel, dressed }; return materials;
 }
 
 /** Plan-space UVs: the same pebble scale on a 2 m path and a 38 m court. */

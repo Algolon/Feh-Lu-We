@@ -18,3 +18,20 @@ export function slateCourseUV(g: THREE.BufferGeometry): THREE.BufferGeometry {
   }
   g.setAttribute('uv',new THREE.BufferAttribute(uv,2));return g;
 }
+
+/** Closed chevron with a true vertical mitre at the apex. Unlike two rotated boxes,
+ * the outer edges meet at one point, without an exposed square-end notch. */
+export function gableTrimGeo(width: number, rise: number, thickness: number, depth: number) {
+  const half = width / 2, slope = Math.atan2(rise, half);
+  const dx = Math.sin(slope) * thickness / 2;
+  const dy = Math.cos(slope) * thickness / 2;
+  const tip = thickness / (2 * Math.cos(slope));
+  const shape = new THREE.Shape([
+    new THREE.Vector2(-half - dx, dy), new THREE.Vector2(0, rise + tip),
+    new THREE.Vector2(half + dx, dy), new THREE.Vector2(half - dx, -dy),
+    new THREE.Vector2(0, rise - tip), new THREE.Vector2(-half + dx, -dy),
+  ]);
+  const g = new THREE.ExtrudeGeometry(shape, { depth, steps: 1, bevelEnabled: false, curveSegments: 1 });
+  g.translate(0, 0, -depth / 2);
+  return g;
+}

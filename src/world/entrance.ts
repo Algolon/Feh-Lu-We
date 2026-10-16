@@ -10,12 +10,13 @@ import type { Ctx } from './arch';
 import { TRIM } from './arch';
 import { lathe } from './artkit';
 import { boxMM, rod } from './kit';
+import { EXTERIOR_STUDY, exteriorMats } from './exteriorStudy';
 
 /** The entrance datum (plan): door centre x, bay face z, portico column line z, floor y. */
 export interface EntranceSite { x: number; bayZ: number; colZ: number; colX: [number, number]; gf: number }
 
 /** Shades of one limestone family (broad value zones, not texture noise): base darkest, trim lightest. */
-export const STONE = { base: '#c4b08c', baseTop: '#d6c6a2', riser: '#b9a888', tread: '#ddd0b2', field: '#f6ead0', dressed: TRIM.dressed, shadowed: '#e2d4b6', lead: '#6f7476' };
+export const STONE = { base: EXTERIOR_STUDY ? '#c4c0ac' : '#c4b08c', baseTop: EXTERIOR_STUDY ? '#d6d1bd' : '#d6c6a2', riser: EXTERIOR_STUDY ? '#b9b6a4' : '#b9a888', tread: EXTERIOR_STUDY ? '#ddd7c4' : '#ddd0b2', field: '#f6ead0', dressed: TRIM.dressed, shadowed: '#e2d4b6', lead: '#6f7476' };
 
 /**
  * Tuscan column profile from the top of its plinth block: torus base, fillet, a shaft with a slight entasis (widest at
@@ -45,25 +46,25 @@ export function corniceRun(c: Ctx, x0: number, x1: number, z0: number, zW: numbe
 }
 
 export function buildEntrance(c: Ctx, s: EntranceSite) {
-  const k = c.k, o = { chunk: c.chunk }, oj = { chunk: c.chunk, jitter: 0.015 }, gf = s.gf;
+  const k = c.k, stone = EXTERIOR_STUDY ? exteriorMats().dressed : k.M.stone, o = { chunk: c.chunk }, oj = { chunk: c.chunk, jitter: 0.015 }, gf = s.gf;
   const [cx0, cx1] = s.colX, cz = s.colZ, bay = s.bayZ;
   const ABACUS = gf + 2.76; // the old abacus top: the beam datum is unchanged
 
   // ---- steps and landing (the walk surfaces stay the shell's floor + step heights: 0.075 and GF)
-  boxMM(c.b, k.M.stone, STONE.riser, 87.4, 92.6, -0.1, 0.045, 78.2, 80.0, { ...oj, uv: 1 }); // step body (riser in the darker base stone)
-  boxMM(c.b, k.M.stone, STONE.tread, 87.375, 92.625, 0.045, 0.075, 78.175, 78.6, { ...oj, uv: 1 }); // tread with a 2.5 cm nosing
-  boxMM(c.b, k.M.stone, STONE.tread, 87.375, 87.8, 0.045, 0.075, 78.6, 79.95, { ...oj, uv: 1 }); // tread returns at the ends
-  boxMM(c.b, k.M.stone, STONE.tread, 92.2, 92.625, 0.045, 0.075, 78.6, 79.95, { ...oj, uv: 1 });
-  boxMM(c.b, k.M.stone, STONE.riser, 87.8, 92.2, 0.075, 0.118, 78.59, 78.62, o); // landing riser band (1 cm proud of the slab's own face: no shared plane)
-  boxMM(c.b, k.M.stone, STONE.tread, 87.775, 92.225, 0.118, 0.15, 78.575, 78.6, oj); // landing nosing lip (top flush with GF)
-  for (const x of [87.775, 92.2]) boxMM(c.b, k.M.stone, STONE.tread, x, x + 0.025, 0.118, 0.15, 78.6, 79.95, oj);
+  boxMM(c.b, stone, STONE.riser, 87.4, 92.6, -0.1, 0.045, 78.2, 80.0, { ...oj, uv: 1 }); // step body (riser in the darker base stone)
+  boxMM(c.b, stone, STONE.tread, 87.375, 92.625, 0.045, 0.075, 78.175, 78.6, { ...oj, uv: 1 }); // tread with a 2.5 cm nosing
+  boxMM(c.b, stone, STONE.tread, 87.375, 87.8, 0.045, 0.075, 78.6, 79.95, { ...oj, uv: 1 }); // tread returns at the ends
+  boxMM(c.b, stone, STONE.tread, 92.2, 92.625, 0.045, 0.075, 78.6, 79.95, { ...oj, uv: 1 });
+  boxMM(c.b, stone, STONE.riser, 87.8, 92.2, 0.075, 0.118, 78.59, 78.62, o); // landing riser band (1 cm proud of the slab's own face: no shared plane)
+  boxMM(c.b, stone, STONE.tread, 87.775, 92.225, 0.118, 0.15, 78.575, 78.6, oj); // landing nosing lip (top flush with GF)
+  for (const x of [87.775, 92.2]) boxMM(c.b, stone, STONE.tread, x, x + 0.025, 0.118, 0.15, 78.6, 79.95, oj);
 
   // ---- columns on plinth blocks
   const PL = 0.14, colH = ABACUS - 0.1 - (gf + PL);
   const colG = tuscanColumnGeo(colH);
   for (const x of [cx0, cx1]) {
-    boxMM(c.b, k.M.stone, STONE.baseTop, x - 0.25, x + 0.25, gf, gf + PL, cz - 0.25, cz + 0.25, { ...oj, uv: 0.8 });
-    c.b.add(k.M.stone, colG, new THREE.Matrix4().makeTranslation(x, gf + PL, -cz), '#efe4ca', c.chunk, true, 0);
+    boxMM(c.b, stone, STONE.baseTop, x - 0.25, x + 0.25, gf, gf + PL, cz - 0.25, cz + 0.25, { ...oj, uv: 0.8 });
+    c.b.add(stone, colG, new THREE.Matrix4().makeTranslation(x, gf + PL, -cz), '#efe4ca', c.chunk, true, 0);
     boxMM(c.b, k.M.paint, STONE.dressed, x - 0.27, x + 0.27, ABACUS - 0.1, ABACUS, cz - 0.27, cz + 0.27, o); // abacus
   }
   colG.dispose();
@@ -71,7 +72,7 @@ export function buildEntrance(c: Ctx, s: EntranceSite) {
   // ---- responding pilasters on the bay face behind the columns (the beam's back bearing)
   for (const x of [cx0, cx1]) {
     boxMM(c.b, k.M.paint, STONE.shadowed, x - 0.2, x + 0.2, gf, ABACUS, bay - 0.07, bay + 0.01, oj); // shaft (a step darker than the columns: they stay the figure)
-    boxMM(c.b, k.M.stone, STONE.baseTop, x - 0.24, x + 0.24, gf, gf + PL, bay - 0.11, bay + 0.01, { ...oj, uv: 0.8 }); // base block
+    boxMM(c.b, stone, STONE.baseTop, x - 0.24, x + 0.24, gf, gf + PL, bay - 0.11, bay + 0.01, { ...oj, uv: 0.8 }); // base block
     boxMM(c.b, k.M.paint, STONE.dressed, x - 0.24, x + 0.24, ABACUS - 0.1, ABACUS, bay - 0.11, bay + 0.01, o); // cap
   }
 
@@ -97,7 +98,7 @@ export function buildEntrance(c: Ctx, s: EntranceSite) {
   const dx0 = s.x - 0.95, dx1 = s.x + 0.95, DH = gf + 2.7;
   for (const [a, b2] of [[dx0 - 0.2, dx0], [dx1, dx1 + 0.2]] as const) {
     boxMM(c.b, k.M.paint, STONE.dressed, a, b2, gf + 0.3, DH, bay - 0.06, bay + 0.01, oj); // jamb
-    boxMM(c.b, k.M.stone, STONE.baseTop, a - 0.02, b2 + 0.02, gf, gf + 0.3, bay - 0.09, bay + 0.01, { ...oj, uv: 0.8 }); // jamb plinth
+    boxMM(c.b, stone, STONE.baseTop, a - 0.02, b2 + 0.02, gf, gf + 0.3, bay - 0.09, bay + 0.01, { ...oj, uv: 0.8 }); // jamb plinth
   }
   boxMM(c.b, k.M.paint, STONE.dressed, dx0 - 0.2, dx1 + 0.2, DH, DH + 0.14, bay - 0.06, bay + 0.01, oj); // lintel: the surround's head
   for (const [a, b2] of [[dx0, dx0 + 0.03], [dx1 - 0.03, dx1]] as const) boxMM(c.b, k.M.paint, STONE.shadowed, a, b2, gf, DH, bay + 0.01, 79.99, o); // reveal linings
@@ -110,9 +111,9 @@ export function buildEntrance(c: Ctx, s: EntranceSite) {
  * returns at the first floor (it carries the main string course round the projecting bay).
  */
 export function entranceBay(c: Ctx, x0: number, x1: number, bayZ: number, wallZ: number, plinthGap: [number, number], uf: number) {
-  const k = c.k, oj = { chunk: c.chunk, jitter: 0.015 };
+  const k = c.k, stone = EXTERIOR_STUDY ? exteriorMats().dressed : k.M.stone, oj = { chunk: c.chunk, jitter: 0.015 };
   for (const [a, b2] of [[x0 - 0.1, plinthGap[0]], [plinthGap[1], x1 + 0.1]] as const) {
-    boxMM(c.b, k.M.stone, STONE.base, a, b2, -0.1, 0.62, bayZ - 0.1, wallZ - 0.05, { ...oj, uv: 2 });
+    boxMM(c.b, stone, STONE.base, a, b2, -0.1, 0.62, bayZ - 0.1, wallZ - 0.05, { ...oj, uv: 2 });
     boxMM(c.b, k.M.paint, STONE.baseTop, a - 0.03, b2 + 0.03, 0.62, 0.7, bayZ - 0.14, wallZ - 0.05, oj); // weathered top
   }
   // at the main string course's height (UF − 0.12 … UF + 0.08), so the band reads as one line running round the bay;

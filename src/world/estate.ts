@@ -359,7 +359,7 @@ function buildPaths(w: World, c: Ctx, lines: readonly NetLine[]) {
   if (sample) pathVerge(w, verge, (k.M.dirt as THREE.MeshLambertMaterial).map!);
   // forecourt: the gravel court itself is one surface built with the arrival (grounds.ts); the central planter stays
   // DEV-04B: a dressed stone planter (plinth course, a moulded rim) instead of a plain drum; soil just under its rim
-  geo(c.b, k.M.stone, '#d8ccb0', FORECOURT_PLANTER, SITES.forecourt.x, 0, SITES.forecourt.z, { chunk: 'ground' });
+  geo(c.b, EXTERIOR_STUDY ? exteriorMats().dressed : k.M.stone, EXTERIOR_STUDY ? '#d8d2bf' : '#d8ccb0', FORECOURT_PLANTER, SITES.forecourt.x, 0, SITES.forecourt.z, { chunk: 'ground' });
   cyl(c.b, k.M.paint, '#5a4434', SITES.forecourt.x, 0.4, SITES.forecourt.z, 1.62, 1.62, 0.02, 18, { chunk: 'ground' });
   w.col.addCircle(SITES.forecourt.x, SITES.forecourt.z, 1.9, 0, 0.8);
 }
