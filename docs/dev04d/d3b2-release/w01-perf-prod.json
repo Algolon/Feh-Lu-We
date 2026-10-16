@@ -1,15 +1,15 @@
 {
   "multiDraw": true,
-  "programs0": 60,
+  "programs0": 101,
   "rows": [
     {
       "stage": "ready",
       "pose": "entrance",
-      "calls": 36,
-      "triangles": 225127,
-      "geometries": 113,
-      "textures": 35,
-      "programs": 77,
+      "calls": 32,
+      "triangles": 225139,
+      "geometries": 114,
+      "textures": 38,
+      "programs": 118,
       "lights": 3,
       "na": [],
       "transparent": 1,
@@ -20,16 +20,16 @@
           "cov": 0.231
         }
       ],
-      "renderMsMedian": 780.6
+      "renderMsMedian": 1425.3
     },
     {
       "stage": "ready",
       "pose": "figure",
-      "calls": 39,
-      "triangles": 271742,
-      "geometries": 113,
-      "textures": 35,
-      "programs": 78,
+      "calls": 34,
+      "triangles": 271994,
+      "geometries": 115,
+      "textures": 38,
+      "programs": 119,
       "lights": 3,
       "na": [],
       "transparent": 1,
@@ -40,16 +40,16 @@
           "cov": 0.382
         }
       ],
-      "renderMsMedian": 917.9
+      "renderMsMedian": 1643.1
     },
     {
       "stage": "ring",
       "pose": "entrance",
-      "calls": 40,
-      "triangles": 244457,
-      "geometries": 116,
-      "textures": 36,
-      "programs": 82,
+      "calls": 36,
+      "triangles": 244469,
+      "geometries": 118,
+      "textures": 39,
+      "programs": 123,
       "lights": 3,
       "na": [],
       "transparent": 3,
@@ -68,16 +68,16 @@
           "cov": 0.464
         }
       ],
-      "renderMsMedian": 825.3
+      "renderMsMedian": 1477.1
     },
     {
       "stage": "ring",
       "pose": "figure",
-      "calls": 43,
-      "triangles": 275164,
-      "geometries": 116,
-      "textures": 36,
-      "programs": 82,
+      "calls": 38,
+      "triangles": 275416,
+      "geometries": 118,
+      "textures": 39,
+      "programs": 123,
       "lights": 3,
       "na": [],
       "transparent": 3,
@@ -96,16 +96,16 @@
           "cov": 0.767
         }
       ],
-      "renderMsMedian": 941.5
+      "renderMsMedian": 1621.1
     },
     {
       "stage": "burn:4",
       "pose": "entrance",
-      "calls": 43,
-      "triangles": 245217,
-      "geometries": 119,
-      "textures": 38,
-      "programs": 85,
+      "calls": 39,
+      "triangles": 245229,
+      "geometries": 121,
+      "textures": 41,
+      "programs": 126,
       "lights": 3,
       "na": [],
       "transparent": 6,
@@ -136,16 +136,16 @@
           "cov": 0.464
         }
       ],
-      "renderMsMedian": 776.8
+      "renderMsMedian": 1462.1
     },
     {
       "stage": "burn:4",
       "pose": "figure",
-      "calls": 47,
-      "triangles": 276824,
-      "geometries": 120,
-      "textures": 38,
-      "programs": 85,
+      "calls": 42,
+      "triangles": 277076,
+      "geometries": 122,
+      "textures": 41,
+      "programs": 126,
       "lights": 3,
       "na": [],
       "transparent": 7,
@@ -180,16 +180,16 @@
           "cov": 0.767
         }
       ],
-      "renderMsMedian": 898.2
+      "renderMsMedian": 1664.8
     },
     {
       "stage": "burn:14",
       "pose": "entrance",
-      "calls": 44,
-      "triangles": 246117,
-      "geometries": 120,
-      "textures": 38,
-      "programs": 85,
+      "calls": 40,
+      "triangles": 246129,
+      "geometries": 122,
+      "textures": 41,
+      "programs": 126,
       "lights": 3,
       "na": [],
       "transparent": 7,
@@ -224,16 +224,16 @@
           "cov": 0.464
         }
       ],
-      "renderMsMedian": 780
+      "renderMsMedian": 1467.6
     },
     {
       "stage": "burn:14",
       "pose": "figure",
-      "calls": 47,
-      "triangles": 276824,
-      "geometries": 120,
-      "textures": 38,
-      "programs": 85,
+      "calls": 42,
+      "triangles": 277076,
+      "geometries": 122,
+      "textures": 41,
+      "programs": 126,
       "lights": 3,
       "na": [],
       "transparent": 7,
@@ -268,16 +268,16 @@
           "cov": 0.767
         }
       ],
-      "renderMsMedian": 922.7
+      "renderMsMedian": 1736.2
     },
     {
       "stage": "burn:32",
       "pose": "entrance",
-      "calls": 45,
-      "triangles": 246903,
-      "geometries": 121,
-      "textures": 38,
-      "programs": 86,
+      "calls": 41,
+      "triangles": 246915,
+      "geometries": 123,
+      "textures": 41,
+      "programs": 127,
       "lights": 3,
       "na": [],
       "transparent": 7,
@@ -312,16 +312,16 @@
           "cov": 0.464
         }
       ],
-      "renderMsMedian": 872.7
+      "renderMsMedian": 1496.3
     },
     {
       "stage": "burn:32",
       "pose": "figure",
-      "calls": 48,
-      "triangles": 277610,
-      "geometries": 121,
-      "textures": 38,
-      "programs": 86,
+      "calls": 43,
+      "triangles": 277862,
+      "geometries": 123,
+      "textures": 41,
+      "programs": 127,
       "lights": 3,
       "na": [],
       "transparent": 7,
@@ -356,16 +356,16 @@
           "cov": 0.767
         }
       ],
-      "renderMsMedian": 932
+      "renderMsMedian": 1716.6
     },
     {
       "stage": "burn:58",
       "pose": "entrance",
-      "calls": 45,
-      "triangles": 246903,
-      "geometries": 121,
-      "textures": 38,
-      "programs": 86,
+      "calls": 41,
+      "triangles": 246915,
+      "geometries": 123,
+      "textures": 41,
+      "programs": 127,
       "lights": 3,
       "na": [],
       "transparent": 7,
@@ -400,16 +400,16 @@
           "cov": 0.464
         }
       ],
-      "renderMsMedian": 785.8
+      "renderMsMedian": 1450.5
     },
     {
       "stage": "burn:58",
       "pose": "figure",
-      "calls": 48,
-      "triangles": 277610,
-      "geometries": 121,
-      "textures": 38,
-      "programs": 86,
+      "calls": 43,
+      "triangles": 277862,
+      "geometries": 123,
+      "textures": 41,
+      "programs": 127,
       "lights": 3,
       "na": [],
       "transparent": 7,
@@ -444,16 +444,16 @@
           "cov": 0.767
         }
       ],
-      "renderMsMedian": 951.4
+      "renderMsMedian": 1620.6
     },
     {
       "stage": "burn:72",
       "pose": "entrance",
-      "calls": 48,
-      "triangles": 249311,
-      "geometries": 123,
-      "textures": 38,
-      "programs": 89,
+      "calls": 44,
+      "triangles": 249323,
+      "geometries": 125,
+      "textures": 41,
+      "programs": 130,
       "lights": 3,
       "na": [],
       "transparent": 8,
@@ -492,16 +492,16 @@
           "cov": 0.464
         }
       ],
-      "renderMsMedian": 823.9
+      "renderMsMedian": 770.6
     },
     {
       "stage": "burn:72",
       "pose": "figure",
-      "calls": 51,
-      "triangles": 280018,
-      "geometries": 123,
-      "textures": 38,
-      "programs": 89,
+      "calls": 46,
+      "triangles": 280270,
+      "geometries": 125,
+      "textures": 41,
+      "programs": 130,
       "lights": 3,
       "na": [],
       "transparent": 8,
@@ -540,16 +540,16 @@
           "cov": 0.767
         }
       ],
-      "renderMsMedian": 904.3
+      "renderMsMedian": 1564.8
     },
     {
       "stage": "charred",
       "pose": "entrance",
-      "calls": 43,
-      "triangles": 244469,
-      "geometries": 123,
-      "textures": 38,
-      "programs": 89,
+      "calls": 39,
+      "triangles": 244481,
+      "geometries": 125,
+      "textures": 41,
+      "programs": 130,
       "lights": 3,
       "na": [],
       "transparent": 5,
@@ -576,16 +576,16 @@
           "cov": 0.464
         }
       ],
-      "renderMsMedian": 815.8
+      "renderMsMedian": 1343.6
     },
     {
       "stage": "charred",
       "pose": "figure",
-      "calls": 46,
-      "triangles": 275176,
-      "geometries": 123,
-      "textures": 38,
-      "programs": 89,
+      "calls": 41,
+      "triangles": 275428,
+      "geometries": 125,
+      "textures": 41,
+      "programs": 130,
       "lights": 3,
       "na": [],
       "transparent": 5,
@@ -612,16 +612,16 @@
           "cov": 0.767
         }
       ],
-      "renderMsMedian": 926.4
+      "renderMsMedian": 1523.7
     },
     {
       "stage": "empty",
       "pose": "entrance",
-      "calls": 35,
-      "triangles": 238825,
-      "geometries": 123,
-      "textures": 38,
-      "programs": 89,
+      "calls": 31,
+      "triangles": 238837,
+      "geometries": 125,
+      "textures": 41,
+      "programs": 130,
       "lights": 3,
       "na": [],
       "transparent": 1,
@@ -632,16 +632,16 @@
           "cov": 0.231
         }
       ],
-      "renderMsMedian": 780.9
+      "renderMsMedian": 1387.1
     },
     {
       "stage": "empty",
       "pose": "figure",
-      "calls": 38,
-      "triangles": 269532,
-      "geometries": 123,
-      "textures": 38,
-      "programs": 89,
+      "calls": 33,
+      "triangles": 269784,
+      "geometries": 125,
+      "textures": 41,
+      "programs": 130,
       "lights": 3,
       "na": [],
       "transparent": 1,
@@ -652,16 +652,16 @@
           "cov": 0.382
         }
       ],
-      "renderMsMedian": 855.1
+      "renderMsMedian": 1669.4
     },
     {
       "stage": "refill:0.8",
       "pose": "entrance",
-      "calls": 36,
-      "triangles": 241035,
-      "geometries": 123,
-      "textures": 38,
-      "programs": 89,
+      "calls": 32,
+      "triangles": 241047,
+      "geometries": 125,
+      "textures": 41,
+      "programs": 130,
       "lights": 3,
       "na": [],
       "transparent": 1,
@@ -672,16 +672,16 @@
           "cov": 0.231
         }
       ],
-      "renderMsMedian": 805.6
+      "renderMsMedian": 1362.8
     },
     {
       "stage": "refill:0.8",
       "pose": "figure",
-      "calls": 39,
-      "triangles": 271742,
-      "geometries": 123,
-      "textures": 38,
-      "programs": 89,
+      "calls": 34,
+      "triangles": 271994,
+      "geometries": 125,
+      "textures": 41,
+      "programs": 130,
       "lights": 3,
       "na": [],
       "transparent": 1,
@@ -692,14 +692,14 @@
           "cov": 0.382
         }
       ],
-      "renderMsMedian": 875.8
+      "renderMsMedian": 1538.1
     }
   ],
   "reducedMotion": {
-    "calls": 45,
-    "triangles": 246213
+    "calls": 40,
+    "triangles": 246225
   },
-  "programsEnd": 89,
+  "programsEnd": 130,
   "base": "http://localhost:4181/Feh-Lu-We/",
   "query": "",
   "problems": []

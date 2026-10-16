@@ -1,5 +1,5 @@
 {
-  "commit": "bb625ac",
+  "commit": "ec45ebd",
   "rows": [
     {
       "name": "d3b2-re-door",
@@ -10,8 +10,8 @@
         "yaw": -1.5707963267948966,
         "pitch": -0.04
       },
-      "calls": 84,
-      "triangles": 297392,
+      "calls": 50,
+      "triangles": 317656,
       "room": "frontGallery",
       "feetY": 3.35
     },
@@ -24,8 +24,8 @@
         "yaw": -1.7453292519943295,
         "pitch": -0.06
       },
-      "calls": 58,
-      "triangles": 177620,
+      "calls": 42,
+      "triangles": 197884,
       "room": "reis",
       "feetY": 3.35
     },
@@ -38,8 +38,8 @@
         "yaw": -2.234021442552742,
         "pitch": -0.06
       },
-      "calls": 65,
-      "triangles": 186772,
+      "calls": 45,
+      "triangles": 207036,
       "room": "reis",
       "feetY": 3.35
     },
@@ -52,8 +52,8 @@
         "yaw": -2.6179938779914944,
         "pitch": -0.22
       },
-      "calls": 43,
-      "triangles": 169506,
+      "calls": 32,
+      "triangles": 188210,
       "room": "reis",
       "feetY": 3.35
     },
@@ -66,8 +66,8 @@
         "yaw": 3.141592653589793,
         "pitch": -0.4
       },
-      "calls": 42,
-      "triangles": 164710,
+      "calls": 31,
+      "triangles": 184974,
       "room": "reis",
       "feetY": 3.35
     },
@@ -80,8 +80,8 @@
         "yaw": 3.3161255787892263,
         "pitch": -0.62
       },
-      "calls": 44,
-      "triangles": 176866,
+      "calls": 33,
+      "triangles": 197130,
       "room": "reis",
       "feetY": 3.35
     },
@@ -94,8 +94,8 @@
         "yaw": -1.3962634015954636,
         "pitch": -0.08
       },
-      "calls": 49,
-      "triangles": 138138,
+      "calls": 36,
+      "triangles": 156842,
       "room": "reis",
       "feetY": 3.35
     },
@@ -108,8 +108,8 @@
         "yaw": 0.6981317007977318,
         "pitch": -0.3
       },
-      "calls": 122,
-      "triangles": 233220,
+      "calls": 58,
+      "triangles": 253484,
       "room": "reis",
       "feetY": 3.35
     },
@@ -122,8 +122,8 @@
         "yaw": -1.5707963267948966,
         "pitch": -0.04
       },
-      "calls": 106,
-      "triangles": 365386,
+      "calls": 58,
+      "triangles": 385650,
       "room": "walkway",
       "feetY": 3.35
     },
@@ -136,8 +136,8 @@
         "yaw": -1.6580627893946132,
         "pitch": -0.06
       },
-      "calls": 74,
-      "triangles": 295254,
+      "calls": 48,
+      "triangles": 315518,
       "room": "sterren",
       "feetY": 3.35
     },
@@ -150,8 +150,8 @@
         "yaw": -2.303834612632515,
         "pitch": -0.06
       },
-      "calls": 86,
-      "triangles": 298212,
+      "calls": 54,
+      "triangles": 318476,
       "room": "sterren",
       "feetY": 3.35
     },
@@ -164,8 +164,8 @@
         "yaw": -1.2217304763960306,
         "pitch": -0.12
       },
-      "calls": 52,
-      "triangles": 276908,
+      "calls": 38,
+      "triangles": 295612,
       "room": "sterren",
       "feetY": 3.35
     },
@@ -178,8 +178,8 @@
         "yaw": -1.9547687622336491,
         "pitch": -0.38
       },
-      "calls": 42,
-      "triangles": 130174,
+      "calls": 32,
+      "triangles": 148878,
       "room": "sterren",
       "feetY": 3.35
     },
@@ -192,8 +192,8 @@
         "yaw": 1.3089969389957472,
         "pitch": -0.14
       },
-      "calls": 109,
-      "triangles": 316394,
+      "calls": 54,
+      "triangles": 336658,
       "room": "sterren",
       "feetY": 3.35
     },
@@ -206,8 +206,8 @@
         "yaw": 1.0471975511965976,
         "pitch": -0.04
       },
-      "calls": 146,
-      "triangles": 346420,
+      "calls": 69,
+      "triangles": 366684,
       "room": "sterren",
       "feetY": 3.35
     },
@@ -220,8 +220,8 @@
         "yaw": 2.2689280275926285,
         "pitch": -0.12
       },
-      "calls": 57,
-      "triangles": 186476,
+      "calls": 38,
+      "triangles": 206740,
       "room": "reis",
       "feetY": 3.35
     },
@@ -234,8 +234,8 @@
         "yaw": 0.6981317007977318,
         "pitch": -0.45
       },
-      "calls": 93,
-      "triangles": 304708,
+      "calls": 47,
+      "triangles": 324972,
       "room": "sterren",
       "feetY": 3.35
     },
@@ -248,8 +248,8 @@
         "yaw": -1.7453292519943295,
         "pitch": -0.5
       },
-      "calls": 41,
-      "triangles": 141278,
+      "calls": 32,
+      "triangles": 159982,
       "room": "sterren",
       "feetY": 3.35
     },
@@ -262,8 +262,8 @@
         "yaw": 0.17453292519943295,
         "pitch": -0.45
       },
-      "calls": 33,
-      "triangles": 109504,
+      "calls": 23,
+      "triangles": 129768,
       "room": "storage",
       "feetY": 3.35
     },
@@ -276,8 +276,8 @@
         "yaw": -2.356194490192345,
         "pitch": -0.38
       },
-      "calls": 42,
-      "triangles": 132808,
+      "calls": 30,
+      "triangles": 153072,
       "room": "reis",
       "feetY": 3.35
     },
@@ -290,8 +290,8 @@
         "yaw": -1.3089969389957472,
         "pitch": -0.1
       },
-      "calls": 59,
-      "triangles": 284718,
+      "calls": 43,
+      "triangles": 303422,
       "room": "sterren",
       "feetY": 3.35
     },
@@ -304,8 +304,8 @@
         "yaw": -1.0471975511965976,
         "pitch": -0.06
       },
-      "calls": 77,
-      "triangles": 302828,
+      "calls": 51,
+      "triangles": 323092,
       "room": "sterren",
       "feetY": 3.35
     },
@@ -318,8 +318,8 @@
         "yaw": 0.20943951023931953,
         "pitch": -0.55
       },
-      "calls": 30,
-      "triangles": 96788,
+      "calls": 22,
+      "triangles": 117052,
       "room": "storage",
       "feetY": 3.35
     },
@@ -332,8 +332,8 @@
         "yaw": 0.4363323129985824,
         "pitch": -0.22
       },
-      "calls": 35,
-      "triangles": 115148,
+      "calls": 24,
+      "triangles": 135412,
       "room": "storage",
       "feetY": 3.35
     }

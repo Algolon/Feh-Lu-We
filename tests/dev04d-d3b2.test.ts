@@ -177,4 +177,37 @@ describe('DEV-04D D3-b2: culled regions', () => {
     const manor = readFileSync('src/world/manor.ts', 'utf8');
     for (const ch of ['mUpR', 'mUpG']) expect(manor).toContain(`c.chunk = '${ch}';`);
   });
+  it('release: both D3-b2 regions name their only doorways; the older regions keep the rooms-only rule', () => {
+    const est = readFileSync('src/world/estate.ts', 'utf8');
+    expect(est).toMatch(/roomRegion\(\['mUpR'\], \['reis', 'sterren'\], Infinity, IN_FAR, \['door\.reis', 'door\.sterren'\]\)/);
+    expect(est).toMatch(/roomRegion\(\['mUpG'\], \['storage'\], Infinity, IN_FAR, \['door\.storage'\]\)/);
+    expect(est.split('\n').filter((l) => /w\.roomRegion\(.*\['door\./.test(l)).length).toBe(2);
+  });
+  it('release: a doorway region is drawn inside its rooms, or from outside only with an open doorway in view and in sight', async () => {
+    const { World } = await import('../src/interactions/world');
+    const { estateRooms } = await import('../src/world/roomdefs');
+    const w = new World('estate'); w.rooms = estateRooms();
+    const leaf = new THREE.Object3D(); leaf.position.set(85, 4.45, -82.19); w.scene.add(leaf); // door.reis, as in the build
+    (w.byId as Map<string, unknown>).set('door.reis', { id: 'door.reis', hit: [leaf] });
+    const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial());
+    mesh.position.set(79, 4, -81); mesh.userData.chunk = 'mUpR'; w.scene.add(mesh);
+    const plain = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial());
+    plain.position.set(79, 4, -81); plain.userData.chunk = 'old'; w.scene.add(plain);
+    w.roomRegion(['mUpR'], ['reis', 'sterren'], Infinity, 30, ['door.reis']);
+    w.roomRegion(['old'], ['reis', 'sterren'], Infinity, 30);
+    let open = true; w.isOpen = () => open;
+    const cam = new THREE.PerspectiveCamera(65, 915 / 412, 0.05, 200);
+    const look = (x: number, y: number, z: number, tx: number, ty: number, tz: number) => { cam.position.set(x, y, -z); cam.lookAt(tx, ty, -tz); cam.updateMatrixWorld(); w.updateCulling(cam.position, cam); };
+    look(86.6, 5.05, 82.2, 79, 4.4, 82.2); // in the front gallery, facing the open door
+    expect(w.hereRoom).toBe('frontGallery'); expect(mesh.visible).toBe(true);
+    look(86.6, 5.05, 82.2, 95, 4.4, 82.2); // same spot, facing away: the doorway is behind the viewer
+    expect(mesh.visible).toBe(false); expect(plain.visible).toBe(true); // the rooms-only region is unchanged
+    look(79, 5.05, 82, 79, 4.4, 70); // inside the Reiskamer: always drawn, whatever the view
+    expect(w.hereRoom).toBe('reis'); expect(mesh.visible).toBe(true);
+    open = false; look(86.6, 5.05, 82.2, 79, 4.4, 82.2); // door shut: not visible through the graph either
+    expect(mesh.visible).toBe(false);
+    open = true; w.col.addBox(85.6, 85.8, 80, 84.5, 3.35, 6, { occludes: true }); look(86.6, 5.05, 82.2, 79, 4.4, 82.2); // a wall in the sight line
+    expect(mesh.visible).toBe(false);
+    w.dispose();
+  });
 });
