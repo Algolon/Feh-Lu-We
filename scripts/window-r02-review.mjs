@@ -86,7 +86,7 @@ try {
     window.__game.world.scene.traverse(obj => {
       if (!obj.isMesh) return;
       for (const m of (Array.isArray(obj.material) ? obj.material : [obj.material]))
-        if (m?.name === 'WINDOW-R01-OakSill') materials.add(m);
+        if (m?.name === 'WINDOW-R02-MahoganySill') materials.add(m);
     });
     if (materials.size !== 1) throw Error('Expected one shared timber sill material, got ' + materials.size);
     const material = [...materials][0], canvas = material.map?.image;
