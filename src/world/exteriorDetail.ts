@@ -4,12 +4,13 @@ import type { Ctx } from './arch';
 import { box, boxMM, boxGeo, planMatrix, geo, rod, type Batcher, type Kit, type PartOpts } from './kit';
 import { mulberry32 } from '../core/rng';
 import { softBox } from './artkit';
+import { addLionKnocker, castBronzeMetal } from './lionKnocker';
 
 export const EXTERIOR_DETAILS = typeof location==='undefined'||new URLSearchParams(location.search).get('details')!=='base';
 export const ENTRANCE_METAL={iron:'#343c37',bronze:'#9a895f',shadow:'#625b43'};
 /** Horizontal, lightly separated mahogany boards inside the existing wide door envelope. */
 export function horizontalDoorBoards(width:number,height:number,count=7) {
-  const border=.055,gap=.008;
+  const border=.025,gap=.008; // FRONT-R04: reduce wood inset so black surround really reads slim
   const h=(height-2*border-(count-1)*gap)/count;
   return Array.from({length:count},(_,i)=>({
     x0:border,x1:width-border,
@@ -39,8 +40,8 @@ function timber(b:Batcher,mat:THREE.Material,color:THREE.ColorRepresentation,x:n
 }
 
 /**
- * FRONT-R01: single broad exterior leaf, horizontal mahogany boards, charcoal perimeter,
- * a long right-hand pull and a sculpted, blackened-bronze lion knocker. All fittings
+ * FRONT-R03: broad horizontal mahogany leaf with slim charcoal perimeter,
+ * matching blackened-bronze pull and a unified sculpted lion knocker. All fittings
  * are part of the hinged batch so the original save/lock/swing/collision stay intact.
  * Plan Z negative is the outdoor-facing side of the front door.
  */
@@ -48,7 +49,7 @@ export function frontDoorLeaf(b:Batcher,k:Kit,width:number,height:number,th:numb
   const wood=entranceTimber(k.M.wood),metal=k.M.paint;
   const mahogany=new THREE.Color(color);
   const dark=mahogany.clone().multiplyScalar(.72);
-  const edge=.043;
+  const edge=.0162; // FRONT-R04: 40% thinner swing-leaf black edge, all sides
   const charcoal='#292a27',bevel='#383630';
 
   // Backing closes the thin shadow lines: no view through the 8 mm joints.
@@ -69,8 +70,8 @@ export function frontDoorLeaf(b:Batcher,k:Kit,width:number,height:number,th:numb
   for(const y of [edge/2,height-edge/2])
     box(b,metal,charcoal,width/2,y-edge/2,0,width-2*edge,edge,th+.014,{jitter:0});
   // Fine inset reveals against the timber, rather than an oversized trim.
-  for(const x of [edge+.004,width-edge-.004])
-    box(b,metal,bevel,x,.055,0,.007,height-.11,th+.016,{jitter:0});
+  for(const x of [edge+.0024,width-edge-.0024])
+    box(b,metal,bevel,x,.055,0,.0042,height-.11,th+.016,{jitter:0});
 
   // Long contemporary pull on the outside/right. A quieter shorter inner grip
   // keeps the game door usable from both sides without duplicating the hero detail.
@@ -80,87 +81,33 @@ export function frontDoorLeaf(b:Batcher,k:Kit,width:number,height:number,th:numb
     const len=exterior?1.13:.66,cy=exterior?1.16:1.05;
     const handleZ=side*(th/2+.027);
     const radius=exterior?.018:.014;
-    rod(b,metal,'#252825',hx,cy,handleZ,radius,radius,len,10,{jitter:0});
+    // FRONT-R03: the same blackened cast-bronze vertex patina as the lion,
+    // with narrow rubbed-gold edge highlights instead of an orange painted rod.
+    const pull=castBronzeMetal(new THREE.CylinderGeometry(radius,radius,len,16,1));
+    geo(b,metal,'#ffffff',pull,hx,cy,handleZ,{jitter:0});pull.dispose();
     for(const y of [cy-len*.40,cy+len*.40]){
       // A mounting post projecting from the leaf to the pull-bar axis.
-      rod(b,metal,'#3d3e38',hx,y,side*(th/2+.012),.012,.012,.032,8,{rx:Math.PI/2,jitter:0});
+      const post=castBronzeMetal(new THREE.CylinderGeometry(.012,.012,.032,12));
+      geo(b,metal,'#ffffff',post,hx,y,side*(th/2+.012),{rx:Math.PI/2,jitter:0});post.dispose();
       const stud=softBox(.044,.048,.012,.006);
-      geo(b,metal,'#30312e',stud,hx,y,side*(th/2+.003),{jitter:0});
+      castBronzeMetal(stud);
+      geo(b,metal,'#ffffff',stud,hx,y,side*(th/2+.003),{jitter:0});
       stud.dispose();
     }
   }
   // Small, restrained key cylinder rather than the old interior-style lever.
   const key=new THREE.CylinderGeometry(.012,.012,.007,12);
-  geo(b,metal,'#a29370',key,width-.245,.97,-th/2-.012,{rx:Math.PI/2,jitter:0});
+  castBronzeMetal(key);
+  geo(b,metal,'#ffffff',key,width-.245,.97,-th/2-.012,{rx:Math.PI/2,jitter:0});
   key.dispose();
 
-  lionEntranceKnocker(b,metal,width/2,height*.70,th);
+  addLionKnocker(b,metal,width/2,height*.70,th);
 
   // Keep hinges flush within the original leaf x/y envelope.
   for(const y of [.30,height*.5,height-.30])
     rod(b,metal,charcoal,.029,y,-th/2,.011,.011,.082,8,{jitter:0});
 }
 
-/** A small readable relief, not a flat decal or an assembly of anonymous boxes. */
-function lionEntranceKnocker(b:Batcher,metal:THREE.Material,cx:number,cy:number,th:number) {
-  // Dark, weathered bronze: highlights catch ridges, recesses stay almost black.
-  const front=-th/2,iron='#24201e',bronze='#493b30',lit='#756149';
-  const orb=new THREE.SphereGeometry(1,12,9);
-  const swell=(dx:number,dy:number,dz:number,sx:number,sy:number,sz:number,tint:string,rz=0)=>
-    geo(b,metal,tint,orb,cx+dx,cy+dy,front-dz,{s:[sx,sy,sz],rz,jitter:0});
-
-  // A compact oval backing follows the silhouette. No rectangular doorbell plate.
-  swell(0,.004,.015,.095,.126,.013,iron);
-  swell(0,.010,.045,.091,.113,.030,bronze);
-
-  // Round, directional locks of mane, not spikes radiating like a sun.
-  // Raised dark grooves alternate with low bronze highlights.
-  for(let i=0;i<16;i++){
-    const a=i*Math.PI*2/16;
-    const dx=Math.sin(a)*.081,dy=Math.cos(a)*.103;
-    swell(dx,dy,.046,.023,.050,.021,i%4===0?lit:bronze,-a+.16*Math.sin(i*2.1));
-    if(i%2===0){
-      const cx2=dx+Math.sin(a)*.013,cy2=dy+Math.cos(a)*.014;
-      swell(cx2,cy2,.062,.009,.031,.009,iron,-a+.17);
-    }
-  }
-  // Crown and ears give the distinct lion silhouette, with a sculpted forehead.
-  for(const side of [-1,1]){
-    swell(side*.068,.055,.059,.029,.024,.023,bronze,-side*.30);
-    swell(side*.030,.080,.068,.025,.024,.018,lit,side*.24);
-  }
-  swell(0,.024,.075,.059,.072,.034,bronze);
-  swell(0,.060,.103,.037,.016,.012,lit);
-  // Heavy upper lids shadow deeply set eyes (no cartoon-white pupils).
-  for(const side of [-1,1]){
-    swell(side*.029,.029,.105,.025,.014,.013,lit,side*.16);
-    swell(side*.029,.017,.116,.010,.006,.006,iron);
-    swell(side*.044,-.020,.084,.029,.038,.027,bronze);
-    swell(side*.019,-.041,.111,.027,.022,.019,lit);
-    for(let j=0;j<2;j++){
-      const brow=new THREE.CylinderGeometry(.0035,.0035,.035,6);
-      geo(b,metal,iron,brow,cx+side*(.028+j*.006),cy-.043-j*.013,front-.133,{rz:side*(.76+j*.14),jitter:0});
-      brow.dispose();
-    }
-  }
-  // Sculpted triangular feline nose, dark lip and a jaw beneath the ring.
-  const triangle=new THREE.Shape();
-  triangle.moveTo(-.023,.008);triangle.lineTo(.023,.008);triangle.lineTo(0,-.018);triangle.closePath();
-  const nose=new THREE.ExtrudeGeometry(triangle,{depth:.007,bevelEnabled:true,bevelSegments:1,steps:1,bevelSize:.003,bevelThickness:.003});
-  geo(b,metal,iron,nose,cx,cy-.048,front-.131,{jitter:0});nose.dispose();
-  rod(b,metal,iron,cx,cy-.075,front-.132,.0035,.0035,.026,6,{jitter:0});
-  swell(0,-.077,.110,.030,.010,.011,iron);
-  swell(0,-.094,.085,.034,.021,.020,bronze);
-
-  // Hanging bronze ring held just below the lion's muzzle.
-  const ring=new THREE.TorusGeometry(.057,.009,7,24);
-  geo(b,metal,'#5a4b3a',ring,cx,cy-.148,front-.106,{jitter:0});
-  ring.dispose();
-  const stop=new THREE.SphereGeometry(.013,8,6);
-  geo(b,metal,iron,stop,cx,cy-.214,front-.056,{jitter:0});
-  stop.dispose();
-  orb.dispose();
-}
 /** Mounting plate → bowed arm → small hanging ring, ending at the existing lantern cap. */
 export function lanternMount(c:Ctx,x:number,wallZ:number,lanternZ:number,capY:number) {
   const plate=softBox(.085,.22,.022,.012);

@@ -86,7 +86,7 @@ function shell(w: World, c: Ctx) {
   for (const face of MANOR_WINDOW_WALLS.filter(face => !face.id.startsWith('wing-'))) {
     const facade = EXTERIOR_STUDY ? { mat: exteriorMats().wall, color: '#ffffff' } : stone;
     wall(c, face.axis, face.f, face.a0, face.a1, face.y0, face.y1, {
-      ...facade, t: 0.4, exterior: face.exterior, frameColor: face.axis==='x'&&face.f===80.2?'#252725':undefined, skin, uv: 2.4, winStyle: 'manor',
+      ...facade, t: 0.4, exterior: face.exterior, frameColor: face.axis==='x'&&face.f===80.2?'#252725':undefined, frameStyle: face.axis==='x'&&face.f===80.2?'slim-metal':undefined, skin, uv: 2.4, winStyle: 'manor',
       openings: face.openings, windows: face.windows.map(v => ({ ...v, transparent: true })),
     });
   }
