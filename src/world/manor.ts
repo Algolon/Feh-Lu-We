@@ -105,7 +105,7 @@ function shell(w: World, c: Ctx) {
     // One quiet, painted timber inside sill, broad enough to read as a window board but not chunky.
     // Its top lies just over the cut-out's lower edge; it reaches the sash and projects 9 cm
     // into the room beyond the plaster finish, without protruding through the exterior frame.
-    boxMM(c.b, k.M.wood, '#d8c9b1', x0 - 0.105, x1 + 0.105, y0 - 0.045, y0 + 0.012,
+    boxMM(c.b, k.M.wood, '#d8c9b1', x0 - 0.105, x1 + 0.105, y0 - 0.03, y0 + 0.01,
       innerFinishZ - 0.09, glazingZ - 0.012, { ...o, uv: 0.65 });
 
     // Keep glass opaque to movement and interaction picking while visual/culling rays pass.
