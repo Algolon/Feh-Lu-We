@@ -121,40 +121,49 @@ export function makeTextures() {
     }
     T.wood = tex(c);
   }
-  { // WINDOW-R02-R03: dark, warm mahogany window board (not the same warm oak as the floor).
-    // Grain runs horizontally along the width of the sill. A dedicated procedural canvas
-    // leaves other wood in the house unchanged and needs no downloaded assets.
+  { // WINDOW-R02-R04: quiet, deeply stained mahogany window board.
+    // Match the live manor entrance's calm timber treatment: one continuous surface,
+    // diffuse lengthwise figure rather than strong/regular stripes or plank joints.
+    // A dedicated texture keeps the floor/doors and other wood entirely unchanged.
     const [c, x] = canvas(512);
     const r = mulberry32(17042);
+    // Smooth non-periodic 1D noise: variable growth zones without sine-wave repetition.
+    const bands = (step: number) =>
+      Array.from({ length: Math.ceil(512 / step) + 3 }, () => r() * 2 - 1);
+    const wide = bands(104), medium = bands(27), fine = bands(9), wave = bands(96);
+    const sample = (values: number[], t: number, step: number) => {
+      const at = Math.max(0, Math.min(values.length - 2.00001, t / step + 1));
+      const i = Math.floor(at), f = at - i, ease = f * f * (3 - 2 * f);
+      return values[i] * (1 - ease) + values[i + 1] * ease;
+    };
+    const warp = Array.from({ length: 512 }, (_, px) => sample(wave, px, 96) * 4.5);
     const pixels = x.createImageData(512, 512);
     for (let y = 0; y < 512; y++) for (let px = 0; px < 512; px++) {
-      // Slowly wandering annual rings and fine, elongated open-pore lines:
-      // deterministic so the grain is stable between sessions and camera views.
-      const bend = 7 * Math.sin(px * 0.011 + y * 0.005) + 2.7 * Math.sin(px * 0.028 + y * 0.01);
-      const track = y + bend;
-      const growth = 7 * Math.sin(track * 0.044) + 3.5 * Math.sin(track * 0.115);
-      const pore = Math.pow(Math.max(0, Math.cos(track * 0.34)), 18) * 24;
-      const fine = 2.5 * Math.sin(track * 0.68 + px * 0.008);
-      const noise = (r() - 0.5) * 6;
-      const shift = growth - pore + fine + noise;
+      const track = y + warp[px];
+      // Few broad, softly varying fibres and faint fine detail; no repeating sharp
+      // dark pores or dozens of full-width stripes. Preserve the approved mahogany hue.
+      const variation = 3.6 * sample(wide, track, 104)
+        + 1.45 * sample(medium, track, 27)
+        + 0.38 * sample(fine, track, 9)
+        + (r() - 0.5) * 1.35;
       const i = (y * 512 + px) * 4;
-      pixels.data[i] = Math.round(107 + shift * 1.02);
-      pixels.data[i + 1] = Math.round(51 + shift * 0.61);
-      pixels.data[i + 2] = Math.round(39 + shift * 0.54);
+      pixels.data[i] = Math.round(107 + variation);
+      pixels.data[i + 1] = Math.round(51 + variation * 0.65);
+      pixels.data[i + 2] = Math.round(39 + variation * 0.55);
       pixels.data[i + 3] = 255;
     }
     x.putImageData(pixels, 0, 0);
-    // A few irregular darker grain veins, not straight tile or plank seams.
-    for (let i = 0; i < 75; i++) {
-      const y = r() * 512;
-      const phase = r() * Math.PI * 2;
+    // Only a handful of broken, very low-opacity fibres; never long dark rails.
+    for (let i = 0; i < 9; i++) {
+      const y = 25 + r() * 460, start = r() * 330;
+      const length = 85 + r() * 190, drift = (r() - 0.5) * 2.5;
       x.beginPath();
-      for (let px = 0; px <= 512; px += 12) {
-        const yy = y + Math.sin(px * 0.015 + phase) * (1.2 + r() * 2);
-        if (px === 0) x.moveTo(px, yy); else x.lineTo(px, yy);
+      for (let px = start; px <= Math.min(512, start + length); px += 8) {
+        const yy = y + (px - start) / length * drift + sample(wave, px, 96) * 1.4;
+        if (px === start) x.moveTo(px, yy); else x.lineTo(px, yy);
       }
-      x.strokeStyle = i % 4 === 0 ? 'rgba(35,14,13,0.33)' : 'rgba(41,18,16,0.18)';
-      x.lineWidth = i % 5 === 0 ? 1.8 : 0.8;
+      x.strokeStyle = 'rgba(37,16,14,0.07)';
+      x.lineWidth = 0.7;
       x.stroke();
     }
     T.windowSillWood = tex(c);
