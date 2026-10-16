@@ -61,6 +61,31 @@ try {
     await page.screenshot({ path: `${folder}/${quality}-${side}-${door}.jpg`, type: 'jpeg', quality: 88 });
     console.log(JSON.stringify(row));
   }
+  // WINDOW-R01-R02: the second interior sash was most conspicuous from an oblique view.
+  // Capture that actual geometry in addition to head-on technical checks.
+  const oblique = [];
+  for (const side of ['inside', 'outside']) {
+    const row = await page.evaluate(side => {
+      const g = window.__game, w = g.world;
+      g.settings.quality = 'low'; g.applyQuality(true);
+      g.state.open['door.billiardOut'] = false; w.syncAll();
+      const x = side === 'inside' ? 89.5 : 89.65;
+      const z = side === 'inside' ? 107.3 : 112.5;
+      g.player.setPose({ x, y: 0.15, z, yaw: Math.atan2(88 - x, 109.8 - z), pitch: 0 });
+      for (let i = 0; i < 35; i++) g.tick(1 / 30);
+      w.updateCulling(g.camera.position, g.camera);
+      g.renderer.render(w.scene, g.camera);
+      const target = side === 'inside' ? 'out' : 'billiard';
+      return { side, here: w.hereRoom, targetVisible: w.visibleRooms.has(target),
+        calls: g.renderer.info.render.calls, triangles: g.renderer.info.render.triangles,
+        glError: g.renderer.getContext().getError() };
+    }, side);
+    if (row.glError !== 0 || (!baseline && !row.targetVisible))
+      throw Error('Unexpected oblique sightline: '+JSON.stringify(row));
+    oblique.push(row);
+    await page.screenshot({ path: `${folder}/low-${side}-oblique.jpg`, type: 'jpeg', quality: 88 });
+    console.log('oblique', JSON.stringify(row));
+  }
   if (errors.length) throw Error(errors.join('\n'));
-  writeFileSync(folder+'/results.json', JSON.stringify({baseline, collision, frames, errors, deviceValidated:false}, null, 2));
+  writeFileSync(folder+'/results.json', JSON.stringify({baseline, collision, frames, oblique, errors, deviceValidated:false}, null, 2));
 } finally { await browser.close(); await server.close(); }
