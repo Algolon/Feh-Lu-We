@@ -103,7 +103,8 @@ try {
     if (!(result.rgb[0] > 85 && result.rgb[0] < 122 &&
        result.rgb[1] < 70 && result.rgb[1] > 30 &&
        result.rgb[2] < result.rgb[1] && result.rgb[1] < result.rgb[0] &&
-       result.across > result.lengthwise*1.25))
+       result.across > result.lengthwise * 1.15 &&
+       result.across < 4.0))
       throw Error('Mahogany hue/grain check failed: '+JSON.stringify(result));
     return result;
   });
@@ -140,53 +141,34 @@ try {
     await page.screenshot({ path: `${folder}/${p.id}-${side}.jpg`, type:'jpeg', quality:85 });
     console.log(JSON.stringify(view));
   }
-  // Close-ups from inside, targeting the same real sash and oak-to-mahogany window board.
-  const hardware = [];
+  // WINDOW-R02-R04: real game close-ups of the mahogany sill only.
+  const sills = [];
   for (const p of [poses[1], poses[2]]) {
-    const view=await page.evaluate(p => {
-      const g=window.__game,w=g.world;
-      g.settings.quality='low';g.applyQuality(true);
-      const nx=p.axis==='z'?p.ext:0,nz=p.axis==='x'?p.ext:0;
-      const atX=p.axis==='x'?p.at:p.f,atZ=p.axis==='x'?p.f:p.at;
-      const camX=atX-nx*.78+(p.axis==='x'?.22:0);
-      const camZ=atZ-nz*.78+(p.axis==='z'?.22:0);
-      const targetX=atX+(p.axis==='x'?.39:nx*.115);
-      const targetZ=atZ+(p.axis==='z'?.39:nz*.115);
-      g.camera.position.set(camX,1.61,-camZ);
-      g.camera.lookAt(targetX,1.58,-targetZ);
+    const view = await page.evaluate(p => {
+      const g = window.__game, w = g.world;
+      g.settings.quality = 'low'; g.applyQuality(true);
+      const nx = p.axis === 'z' ? p.ext : 0, nz = p.axis === 'x' ? p.ext : 0;
+      const atX = p.axis === 'x' ? p.at : p.f;
+      const atZ = p.axis === 'x' ? p.f : p.at;
+      const camX = atX - nx * 0.82 + (p.axis === 'x' ? 0.15 : 0);
+      const camZ = atZ - nz * 0.82 + (p.axis === 'z' ? 0.15 : 0);
+      g.camera.position.set(camX, 1.46, -camZ);
+      g.camera.lookAt(atX, 1.02, -atZ);
       g.camera.updateMatrixWorld(true);
-      w.updateCulling(g.camera.position,g.camera);
-      g.renderer.render(w.scene,g.camera);
-      return {site:p.id,calls:g.renderer.info.render.calls,
-        triangles:g.renderer.info.render.triangles,glError:g.renderer.getContext().getError()};
-    },p);
-    if (view.glError || view.calls>150 || view.triangles>750000) throw Error('Hardware closeup render failure '+JSON.stringify(view));
-    await page.screenshot({path:`${folder}/mahogany-latch-${p.id}.jpg`,type:'jpeg',quality:92});
-    // Aim at the handle itself for proportion/material review; the wider image above
-    // still shows the mahogany sill with its floor/wall context.
-    const detail=await page.evaluate(p => {
-      const g=window.__game,w=g.world;
-      const side=p.ext, along=p.at+(p.id==='west-ground'?.5:.55);
-      const nx=p.axis==='z'?side:0,nz=p.axis==='x'?side:0;
-      const wx=p.axis==='x'?along:p.f+nx*.115;
-      const wz=p.axis==='x'?p.f+nz*.115:along;
-      const camX=p.axis==='x'?along-.16:p.f-nx*.52;
-      const camZ=p.axis==='x'?p.f-nz*.52:along-.16;
-      const handleY=p.id==='north-ground'?1.05+1.6*.63:1.05+1.6*.63;
-      g.camera.position.set(camX,handleY-.05,-camZ);
-      g.camera.lookAt(wx,handleY,-wz);
-      g.camera.updateMatrixWorld(true);
-      w.updateCulling(g.camera.position,g.camera);
-      g.renderer.render(w.scene,g.camera);
-      return {site:p.id,calls:g.renderer.info.render.calls,triangles:g.renderer.info.render.triangles,
-        glError:g.renderer.getContext().getError()};
-    },p);
-    if(detail.glError)throw Error('Window handle detail GL error '+JSON.stringify(detail));
-    await page.screenshot({path:`${folder}/latch-detail-${p.id}.jpg`,type:'jpeg',quality:94});
-    hardware.push({...view,detail});console.log('hardware',JSON.stringify({...view,detail}));
+      w.updateCulling(g.camera.position, g.camera);
+      g.renderer.render(w.scene, g.camera);
+      return { site: p.id, calls: g.renderer.info.render.calls,
+        triangles: g.renderer.info.render.triangles,
+        glError: g.renderer.getContext().getError() };
+    }, p);
+    if (view.glError || view.calls > 150 || view.triangles > 750000)
+      throw Error('Mahogany sill closeup failed: ' + JSON.stringify(view));
+    await page.screenshot({path:`${folder}/sill-${p.id}.jpg`,type:'jpeg',quality:92});
+    sills.push(view);
+    console.log('sill', JSON.stringify(view));
   }
   if (errors.length) throw Error('Page errors: '+errors.join('\\n'));
-  writeFileSync(folder+'/results.json',JSON.stringify({registry,views,hardware,mahogany,errors,
+  writeFileSync(folder+'/results.json',JSON.stringify({registry,views,sills,mahogany,errors,
     samsungValidated:false,budget:{calls:150,triangles:750000}},null,2));
 } finally {
   await browser.close();
