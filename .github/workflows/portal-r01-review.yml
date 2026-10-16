@@ -1,0 +1,66 @@
+name: PORTAL-R01 screenshot review (no deploy)
+
+on:
+  push:
+    branches:
+      - level/hal-keuken-portaal-r01
+    paths:
+      - src/world/manor.ts
+      - src/world/roomdefs.ts
+      - src/slice/placement.ts
+      - tests/portal-r01.test.ts
+      - scripts/portal-r01-review.mjs
+      - .github/workflows/portal-r01-review.yml
+
+permissions:
+  contents: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - name: Capture in-game screenshots and route checks (software WebGL)
+        shell: bash
+        run: |
+          npm run preview -- --host 127.0.0.1 > /tmp/flw-preview.log 2>&1 &
+          for i in {1..60}; do
+            if curl -fsS http://127.0.0.1:4173/Feh-Lu-We/ > /dev/null; then break; fi
+            sleep 2
+          done
+          if command -v google-chrome >/dev/null; then
+            export CHROME="$(command -v google-chrome)"
+          elif command -v chromium >/dev/null; then
+            export CHROME="$(command -v chromium)"
+          else
+            npx playwright-core install chromium
+          fi
+          node scripts/portal-r01-review.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: portal-r01-review-screenshots
+          path: docs/development/workstreams/portal-r01/review/
+          if-no-files-found: warn
+      - name: Preserve screenshots on review branch only
+        if: success()
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/development/workstreams/portal-r01/review/
+          if ! git diff --cached --quiet; then
+            git commit -m "docs(portal-r01): capture review screenshots and route evidence"
+            git push origin HEAD:level/hal-keuken-portaal-r01
+          fi

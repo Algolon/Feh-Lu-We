@@ -98,7 +98,7 @@ async function walkthrough() {
     // --- thread A: aan tafel
     await step('A: read the torn hosting plan', () => { T.walk([[90, 85.2], [97, 85.2], [97, 90.4], [103.5, 90.4], [105.6, 88.6], [105.9, 86.3]]); T.act('inspect.hostingPlan', 'tafelplan'); T.closeModal(); });
     await step('A: service chart — a wrong full plan is refused', () => {
-      T.walk([[105.6, 88.6], [103.5, 90.4], [101, 93.5], [96.7, 96]]);
+      T.walk([[105.6, 88.6], [103.5, 90.4], [101, 93.5], [97.2, 94.1], [97.2, 98.9], [96.8, 101.1]]); // PORTAL-R01: chart relocated beside the hatch
       T.act('kitchen.chart', 'Labels');
       UI.place([['warm', 'provisie'], ['koud', 'serre'], ['bloem', 'tafel']]);
       if (T.G().state.flags.servicePlanSolved) throw new Error('wrong plan accepted');
