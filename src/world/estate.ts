@@ -148,7 +148,7 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   w.roomRegion(['mUpR'], ['reis'], Infinity, IN_FAR, ['door.reis']); // DEV-04D D3-b2: the Reiskamer, drawn only while it is visible (release: and its doorway seen through)
   w.roomRegion(['mUpS'], ['sterren'], Infinity, IN_FAR, ['door.sterren']); // DEV-04D release: the Sterrenkamer split from mUpR (the rooms share no door)
   w.roomRegion(['mUpG'], ['storage'], Infinity, IN_FAR, ['door.storage']); // DEV-04D D3-b2: the north guest room, drawn only while it is visible (release: and its doorway seen through)
-  w.roomRegion(['mAttic'], [...atticRooms, 'atticStair'], Infinity, IN_FAR, ['door.atticStair', 'door.atticRear']); // seen through the open stair doors (atticStair is then visible); PERF-R02: only while one of them is seen through
+  w.roomRegion(['mAttic'], [...atticRooms, 'atticStair'], Infinity, IN_FAR); // seen through the open stair doors (atticStair is then visible)
   w.roomRegion(['mB'], basementRooms);
   w.roomRegion(['ug'], ugRooms);
   w.roomRegion(['cons', 'glass'], ['cons', 'out', 'corridor'], 95);
