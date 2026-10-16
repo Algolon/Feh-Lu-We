@@ -9,7 +9,7 @@ describe('botanical families and interior planting',()=>{
     for(const family of INDOOR_FAMILIES){const signatures=new Set<string>();for(let v=0;v<3;v++){
       const g=indoorPlantModel(family,v);expect(g.index).toBeNull();expect(Object.keys(g.attributes).sort()).toEqual(['color','normal','position','uv']);
       for(const a of Object.values(g.attributes))expect([...a.array].every(Number.isFinite)).toBe(true);
-      const uv=g.attributes.uv;for(const n of uv.array)expect(n).toBeGreaterThanOrEqual(0);for(const n of uv.array)expect(n).toBeLessThanOrEqual(1);
+      const uv=g.attributes.uv;expect([...uv.array].every(n=>n>=0&&n<=1)).toBe(true);
       g.computeBoundingBox();expect(g.boundingBox!.min.y).toBeGreaterThan(-1.6);expect(g.boundingBox!.max.y).toBeLessThan(1.6);
       signatures.add(`${g.attributes.position.count}:${g.boundingBox!.max.y}:${g.boundingBox!.min.y}`);
       expect(g.attributes.position.count/3).toBeLessThan(14000);
