@@ -41,6 +41,10 @@ export interface GameApi {
   openPanel(kind: string, data?: Record<string, unknown>): void;
   /** Submit the same four-digit BOSLUST draft from the metal knob or accessible panel. */
   tryBoslustCode(digits?: readonly number[]): boolean;
+  /** Enter a diegetic, movement-locked camera inspection; no puzzle popup. */
+  enterBoslustInspect(): void;
+  /** Whether the direct lock inspection currently owns input. */
+  readonly isBoslustInspecting: boolean;
   playerXZ(): { x: number; z: number; y: number };
   playerRadius: number;
   readonly reducedMotion: boolean;
