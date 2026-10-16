@@ -97,7 +97,7 @@ Verschillen van −13 % tot +8 % in beide richtingen zijn meetruis van de gedeel
 
 - Typecheck en build: OK. Unit: **395/395** (42 bestanden, incl. 6 nieuwe R01-tests). `npm run test:budget`: 4/4. CI op de branch (Pages-workflow, build-only): groen.
 - R01-browsermatrix: 4/4 checks, 258/258 frames.
-- Bestaande SKY-C01-browser-QA en walkthrough/save-suites: EXISTING_QA_PLACEHOLDER
+- Bestaande SKY-C01-browser-QA en walkthrough/save-suites: bestaande `scripts/sky-c01-qa.mjs` **18/18** (o.a. normale A = review-A framebuffer, clouds-off-pariteit, deterministische reload, B laadt en rendert, save-isolatie); `E2E_ONLY=walkthrough,saveChecks` **12/12** (tutorial → finale, 70 stappen / 31 clues; save/migratie/restore; geen console-errors/404's). Gameplay, UI, puzzels, saves en vegetatie zijn niet gewijzigd.
 
 ## 6. Regressietests
 
@@ -126,4 +126,9 @@ Visueel in de game: `/Feh-Lu-We/` (normaal, A), `?clouds=0`, `?review=lighting&s
 - `CLOUD_OUTSIDE` is gekoppeld aan de cull-marges; wie profielen of grenzen wijzigt, krijgt bij overschrijding een falende unit-test (bedoeld).
 - De SwiftShader-pixelgelijkheid bewijst stijlbehoud; het bewijst niet dat elke GPU identiek rendert.
 
-COMMIT_PLACEHOLDER
+## 9. Oplevering
+
+- Branch: **`sky-c01-r01-artifact-fix`** (vanaf productie `436e106`).
+- Runtime-fix: commit **`c446f56`** (`src/world/cloudPrototypes.ts` + `tests/sky-c01-r01.test.ts`).
+- Harnas/bewijs: `5a4c0af` (diagnose-checkpoint), `e56dfdd` (snelle QA), `ac969a4` (sheets/resultaten). De branch-HEAD bevat dit rapport.
+- Niet gemerged, niet gedeployed. Volgende stap na visuele goedkeuring: controle op het eigen Android- en desktopapparaat (zelfde plek als de screenshot), daarna merge via het normale releaseproces.
