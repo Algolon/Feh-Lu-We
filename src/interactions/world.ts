@@ -457,13 +457,14 @@ export interface LightView { dir: THREE.Vector3; cosHalf: number; blocked: (x0: 
  * A small, fixed pool of point lights (no shader recompiles). Logical lamp state and the emissive fixture never depend
  * on this: losing a pooled light only fades its illumination, the source stays visibly lit.
  *
- * Candidates (DEV-04C-R): the lamps of every room the player can SEE — the same room/portal visibility the renderer
- * uses (two portal steps through open doors / arches / stairs) — plus outdoor lamps through windows. Ranking: distance,
- * a penalty for another room (more for two steps away), source strength, and an ATTENTION bonus: a source that has been
- * in the view cone with a clear line of sight for a while (dwell ≥ 1.2 s, full at 2 s; decaying at half speed once out of
- * view) ranks first and is not penalised for its room. So a hearth you keep looking at through an arch keeps its light as
- * you step across the threshold (it used to lose it to a nearer lamp behind you, or never got one two rooms away), while
- * glancing or turning round never reorders the pool (the iteration-3 rule). Lamps in rooms you cannot see are never lit.
+ * LIGHT-R03: eligibility follows up to six *open and optically transparent* physical portals,
+ * never the renderer's camera-dependent room / distance culling. Closed opaque doors still block
+ * reachability. Nearby physical fixtures are ranked primarily by metric distance and source
+ * strength; looking at one is only a small tie-breaker, not an excuse to switch to a 17 m distant
+ * fireplace. A held source gets hysteresis across thresholds, and switching between the limited
+ * mobile slots fades both ends gradually. Its visible fixture is always independent of pooled light.
+ * No extra shader light slots are created.
+
  */
 export class LightPool {
   readonly lights: THREE.PointLight[] = [];
