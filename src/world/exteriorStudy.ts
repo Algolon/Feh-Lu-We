@@ -134,10 +134,14 @@ export function studyWindow(c: Ctx, axis: 'x' | 'z', f: number, side: 1 | -1, at
   const gx=axis==='x'?at:f+side*.018,gz=axis==='x'?f+side*.018:at;
   c.b.add(c.k.M.glow,glass,planMatrix(gx,y+h/2,gz),'#ffffff',c.chunk,false,0);glass.dispose();
   }
-  for(const [a,b] of [[a0-.04,a0+.025],[a1-.025,a1+.04]])block(a,b,y-.04,top+.045,.02,.09,'#58685d');
-  for(const yy of [y-.025,top+.015])block(a0,a1,yy-.025,yy+.025,.02,.09,'#687568');
-  block(at-.018,at+.018,y,top,.021,.084,'#6b796b');
-  for(const q of [.25,.5,.75])block(a0,a1,y+h*q-.017,y+h*q+.017,.021,.086,q===.5?'#7b8776':'#687667');
+  // The pilot's ONE sash sits against the actual pane just inside the wall face
+  // (no free-floating frame on the facade and no second sash on the room-facing side).
+  // Historic opaque windows retain their original exterior trim coordinates.
+  const near = transparent ? -0.067 : .02, far = transparent ? .005 : .09;
+  for(const [a,b] of [[a0-.04,a0+.025],[a1-.025,a1+.04]])block(a,b,y-.04,top+.045,near,far,'#58685d');
+  for(const yy of [y-.025,top+.015])block(a0,a1,yy-.025,yy+.025,near,far,'#687568');
+  block(at-.018,at+.018,y,top,near,far-.006,'#6b796b');
+  for(const q of [.25,.5,.75])block(a0,a1,y+h*q-.017,y+h*q+.017,near,far-.004,q===.5?'#7b8776':'#687667');
 }
 
 /** Matched dressed quoins on all four main corners. Bands use manor.ts's doorway-aware runs. */
