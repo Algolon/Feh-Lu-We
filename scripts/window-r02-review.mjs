@@ -41,7 +41,7 @@ try {
     const w = window.__game.world;
     const p = w.rooms.portals.filter(p => p.kind === 'window' && p.seeThrough && p.aperture);
     const result = { portals: p.length, rooms: [...new Set(p.map(x => x.a))].sort(),
-      glassColliderTags: 0, physicallyBlocked: 0, visuallyClear: 0 };
+      glassColliderTags: 0, physicallyBlocked: 0, visuallyClear: 0, obstructed: [] };
     const normals = (p) => {
       const a = p.aperture;
       const ext = a.axis === 'x' ? (a.z === 80.2 || a.z === 92.2 ? -1 : 1)
@@ -56,9 +56,28 @@ try {
       const points = normals(portal);
       if (w.col.segmentBlocked(...points)) result.physicallyBlocked++;
       if (!w.col.segmentBlocked(...points, w.visualPassThrough)) result.visuallyClear++;
+      else {
+        const [ax, ay, az, bx, by, bz] = points;
+        const blockers = [];
+        const hit = (c) => {
+          const a=[ax,ay,az], d=[bx-ax,by-ay,bz-az];
+          const mn=[c.minX,c.minY,c.minZ], mx=[c.maxX,c.maxY,c.maxZ];
+          let t0=0.001,t1=0.999;
+          for(let i=0;i<3;i++){
+            if(Math.abs(d[i])<1e-9){if(a[i]<mn[i]||a[i]>mx[i])return false;}
+            else {let l=(mn[i]-a[i])/d[i],h=(mx[i]-a[i])/d[i];if(l>h)[l,h]=[h,l];t0=Math.max(t0,l);t1=Math.min(t1,h);if(t0>t1)return false;}
+          } return true;
+        };
+        w.col.forEachNear(Math.min(ax,bx),Math.max(ax,bx),Math.min(az,bz),Math.max(az,bz), c => {
+          if (!c.enabled || !c.occludes || w.visualPassThrough.has(c)) return;
+          if (c.kind==='box'&&hit(c)) blockers.push({tag:c.tag,bounds:[c.minX,c.maxX,c.minY,c.maxY,c.minZ,c.maxZ]});
+        });
+        result.obstructed.push({room:portal.a,aperture:portal.aperture,blockers});
+      }
     }
     return result;
   });
+  console.log('WINDOW-R02 registrar QA:',JSON.stringify(registry));
   if (registry.portals !== 46 || registry.physicallyBlocked !== 46 || registry.visuallyClear !== 46)
     throw Error('All facade glasses must block motion but transmit visibility: ' + JSON.stringify(registry));
   for (const p of poses) for (const side of ['inside','outside']) {
