@@ -43,6 +43,7 @@ import { buildEntrance, entranceBay } from './entrance';
 import { EXTERIOR_STUDY, exteriorMats, studyArchitecture, dressedBlock } from './exteriorStudy';
 import { buildExteriorGreenery, EXTERIOR_GREENERY } from './exteriorGreenery';
 import { EXTERIOR_DETAILS, lanternMount } from './exteriorDetail';
+import { EXTERIOR_WEATHER, houseNameplate } from './exteriorWeather';
 import { ROOF_DETAIL, gableTrimGeo } from './roofDetail';
 import { EXTERIOR_FINISH, finishedChimney, roofFlashing } from './exteriorFinish';
 import { buildKitchenJuicePouch } from './kitchenJuicePouch';
@@ -217,6 +218,7 @@ function shell(w: World, c: Ctx) {
     }
     staticLantern(c, w, x, 2.15, 79.36, 0.7, 0, 2.2, 5); // out of the bay the same 4 / 7 washed the portico white
   }
+  if(EXTERIOR_STUDY&&EXTERIOR_WEATHER)houseNameplate(w,c);
   // ---------------------------------------------------------------- service wing (single storey, own roof)
   const WH = 3.9;
   wall(c, 'x', 92.2, 107.6, 116, 0, WH, { ...stone, t: 0.4, exterior: -1, skin, uv: 2.4, winStyle: 'manor', openings: [{ at: 112, w: 1.1, h: 2.3 }], windows: [{ at: 110, sill: 1.1, h: 1.3, w: 1.0 }, { at: 114.4, sill: 1.1, h: 1.3, w: 0.8 }] });

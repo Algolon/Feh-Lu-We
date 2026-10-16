@@ -4,6 +4,8 @@ import type { Ctx } from './arch';
 import { box, cyl, planMatrix } from './kit';
 import { EXTERIOR_DETAILS, drainGrate } from './exteriorDetail';
 import { roofUnderside } from './layout';
+import { EXTERIOR_WEATHER } from './exteriorWeather';
+import { mulberry32 } from '../core/rng';
 export const EXTERIOR_FINISH = typeof location==='undefined'||new URLSearchParams(location.search).get('finish')!=='base';
 const UP=new THREE.Vector3(0,1,0);
 function add(c:Ctx,g:THREE.BufferGeometry,x:number,y:number,z:number,color:string,shadow=true) {
@@ -93,7 +95,7 @@ export function finishedChimney(c:Ctx,x:number,z:number,mat:THREE.Material) {
 /** A single low-resolution perimeter wash, sampled in world space. Texture factors encode
  * sheltered stone, local rain streaks and a damp plinth; they do not encode sun direction. */
 export function ageFacade(mat:THREE.MeshLambertMaterial) {
-  const W=1024,H=128,L=184,canvas=document.createElement('canvas');canvas.width=W;canvas.height=H;
+  const W=1024,H=256,L=184,canvas=document.createElement('canvas');canvas.width=W;canvas.height=H;
   const x=canvas.getContext('2d')!;x.fillStyle='#ffffff';x.fillRect(0,0,W,H);
   const py=(y:number)=>H*(1-y/6.4),px=(s:number)=>W*s/L;
   const shelter=EXTERIOR_DETAILS?[[0,36,.45],[36,66,.65],[66,102,1],[102,132,.9],[132,140,.5],[140,157.6,.65],[157.6,184,.9]]:[[0,184,1]];
@@ -123,6 +125,25 @@ export function ageFacade(mat:THREE.MeshLambertMaterial) {
     const g=x.createLinearGradient(0,py(y-.75),0,py(y));g.addColorStop(0,'rgba(255,255,255,0)');g.addColorStop(.65,'rgba(120,131,112,.08)');g.addColorStop(1,'rgba(114,124,108,.15)');x.fillStyle=g;
     x.beginPath();x.moveTo(px(s-.43),py(y));x.lineTo(px(s+.43),py(y));x.lineTo(px(s+.23),py(y-.75));x.lineTo(px(s-.19),py(y-.75));x.fill();
   }
+  if(EXTERIOR_WEATHER) {
+    const r=mulberry32(606);
+    // Broken low moss/damp patches, rooted at the sheltered north/west plinth.
+    for(const [lo,hi] of [[66,89.5],[90.5,94],[96,102],[102,132]] as const)for(let s=lo;s<hi;s+=.14+r()*.3) {
+      const h=.09+r()*.29,w=.12+r()*.38;
+      const g=x.createLinearGradient(0,py(0),0,py(h));g.addColorStop(0,'rgba(78,103,65,.25)');g.addColorStop(.45,'rgba(103,120,83,.14)');g.addColorStop(1,'rgba(255,255,255,0)');
+      x.fillStyle=g;x.fillRect(px(s),py(h),px(w),H-py(h));
+    }
+    // Thin irregular trails from a few sill corners, tapering independently.
+    for(const [i,[s,y]] of windows.entries())if(i%4===2)for(const side of [-1,1]) {
+      const at=s+side*.43,len=.25+r()*.6,w=.025+r()*.045;
+      const g=x.createLinearGradient(0,py(y),0,py(y-len));g.addColorStop(0,'rgba(110,116,96,.22)');g.addColorStop(.35,'rgba(127,130,107,.10)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;
+      x.beginPath();x.moveTo(px(at-w),py(y));x.lineTo(px(at+w),py(y));x.lineTo(px(at+w*.15),py(y-len));x.lineTo(px(at-w*.12),py(y-len*.9));x.fill();
+    }
+    // Small washes at selected pipe collars, quieter on the arrival facade.
+    for(const at of [13.85,22.15,66.5,102.5,131.5])for(const h of [.7,2.4,4.1]) {
+      const g=x.createRadialGradient(px(at),py(h),0,px(at),py(h),px(.2));g.addColorStop(0,`rgba(99,116,94,${at<36?.10:.19})`);g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(px(at-.2),py(h)-px(.2),px(.4),px(.4));
+    }
+  }
   // Soft contact under the projecting cornice, strongest at the joint and fading into the wall.
   const joint=x.createLinearGradient(0,py(6.36),0,py(5.98));
   joint.addColorStop(0,'rgba(72,80,66,.13)');joint.addColorStop(.32,'rgba(85,94,77,.055)');joint.addColorStop(1,'rgba(255,255,255,0)');
@@ -148,5 +169,5 @@ export function ageFacade(mat:THREE.MeshLambertMaterial) {
       diffuseColor.rgb*=mix(vec3(1.0),texture2D(flwFacadeWash,vec2(along/184.0,clamp(wp.y/6.4,0.0,1.0))).rgb,washMask);
     `);
   };
-  mat.customProgramCacheKey=()=> EXTERIOR_DETAILS?'ext-r05-sheltered-wash':'ext-r02-facade-wash';mat.needsUpdate=true;
+  mat.customProgramCacheKey=()=> EXTERIOR_WEATHER?'ext-r06-local-weather':EXTERIOR_DETAILS?'ext-r05-sheltered-wash':'ext-r02-facade-wash';mat.needsUpdate=true;
 }
