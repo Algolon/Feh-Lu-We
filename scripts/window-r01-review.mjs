@@ -4,7 +4,8 @@ import { chromium } from 'playwright-core';
 import { createServer } from 'vite';
 import { mkdirSync, writeFileSync } from 'node:fs';
 
-const folder = 'docs/development/workstreams/window-r01/review';
+const baseline = process.env.WINDOW_R01_BASELINE === '1';
+const folder = 'docs/development/workstreams/window-r01/review' + (baseline ? '/baseline' : '');
 mkdirSync(folder, { recursive: true });
 const server = await createServer({ server: { host: '127.0.0.1', port: 5173, strictPort: false } });
 await server.listen();
@@ -35,7 +36,7 @@ try {
       billiardDoorSeeThrough: w.rooms.portals.find(p => p.door === 'door.billiardOut')?.seeThrough,
     };
   });
-  if (!collision.physical || collision.visual || !collision.optedWindow || !collision.billiardDoorSeeThrough)
+  if (!baseline && (!collision.physical || collision.visual || !collision.optedWindow || !collision.billiardDoorSeeThrough))
     throw Error('Failed billiard glazing physical/visual separation: ' + JSON.stringify(collision));
   for (const quality of ['low', 'high']) for (const side of ['inside', 'outside']) for (const door of ['closed', 'open']) {
     const row = await page.evaluate(({quality,side,door}) => {
@@ -56,10 +57,10 @@ try {
       };
     }, {quality,side,door});
     frames.push(row);
-    if (!row.targetVisible || row.glError !== 0) throw Error('Unexpected window view: '+JSON.stringify(row));
+    if (row.glError !== 0 || (!baseline && !row.targetVisible)) throw Error('Unexpected window view: '+JSON.stringify(row));
     await page.screenshot({ path: `${folder}/${quality}-${side}-${door}.jpg`, type: 'jpeg', quality: 88 });
     console.log(JSON.stringify(row));
   }
   if (errors.length) throw Error(errors.join('\n'));
-  writeFileSync(folder+'/results.json', JSON.stringify({collision, frames, errors, deviceValidated:false}, null, 2));
+  writeFileSync(folder+'/results.json', JSON.stringify({baseline, collision, frames, errors, deviceValidated:false}, null, 2));
 } finally { await browser.close(); await server.close(); }
