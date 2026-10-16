@@ -102,6 +102,9 @@ try {
   // Back must restore same player pose, normal camera and controls without saving any camera teleport.
   await page.click('.boslust-back');
   await page.waitForTimeout(700);
+  // Software WebGL may not render another frame for seconds. The player's
+  // next tick (not the Playwright wall-clock wait) commits the camera return.
+  await page.evaluate(() => window.__game.tick(1/30));
   record.back=await page.evaluate(()=>{
     const g=window.__game;return {inspecting:g.isBoslustInspecting,focus:!!g.boslustFocus,
       enabled:g.input.enabled,player:g.player.pose(),fov:g.camera.fov,
@@ -113,6 +116,7 @@ try {
   // Re-enter without cover popup, trigger knob via visible world target after zoom settles.
   await page.evaluate(()=>window.__game.enterBoslustInspect());
   await page.waitForTimeout(800);
+  await page.evaluate(()=>window.__game.tick(1/30));
   const knob=await project('boslust.knob');
   await page.mouse.click(knob.x,knob.y);
   record.wrong=await page.evaluate(()=>{
