@@ -1,0 +1,66 @@
+name: PORTAL-R01 as-built performance comparison
+
+on:
+  push:
+    branches:
+      - level/hal-keuken-portaal-r01
+    paths:
+      - scripts/portal-r01-baseline.mjs
+      - .github/workflows/portal-r01-baseline.yml
+
+permissions:
+  contents: write
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: candidate
+          persist-credentials: true
+      - uses: actions/checkout@v7
+        with:
+          ref: 6c52b770705389db4aa14e923123e6d569b58488
+          path: baseline
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: candidate/package-lock.json
+      - run: npm ci && npm run build
+        working-directory: baseline
+      - run: npm ci
+        working-directory: candidate
+      - name: Capture baseline metrics at exactly the reviewed poses
+        shell: bash
+        run: |
+          cd baseline
+          ./node_modules/.bin/vite preview --host 127.0.0.1 --port 4175 --strictPort > /tmp/flw-baseline.log 2>&1 &
+          cd ../candidate
+          for i in {1..60}; do
+            if curl -fsS http://127.0.0.1:4175/Feh-Lu-We/ >/dev/null; then break; fi
+            sleep 2
+          done
+          if command -v google-chrome >/dev/null; then
+            export CHROME="$(command -v google-chrome)"
+          else
+            npx playwright-core install chromium
+          fi
+          BASE=http://127.0.0.1:4175/Feh-Lu-We/ node scripts/portal-r01-baseline.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: portal-r01-baseline-comparison
+          path: candidate/docs/development/workstreams/portal-r01/review/baseline-comparison.json
+          if-no-files-found: warn
+      - name: Save comparison report on review branch
+        if: success()
+        working-directory: candidate
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/development/workstreams/portal-r01/review/baseline-comparison.json
+          git commit -m "docs(portal-r01): same-view production baseline budget comparison"
+          git push origin HEAD:level/hal-keuken-portaal-r01
