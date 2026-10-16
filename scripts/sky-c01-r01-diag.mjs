@@ -11,7 +11,7 @@ const view = profile === 'mobile' ? { viewport: { width: 412, height: 915 }, dpr
 // --- diagnostic shader transforms (applied to the live procedural-A fragment source) -------------------------------
 const js = f => `return (${f.toString()})(s);`;
 /** Quads where any cloud's early-return decision differs between the 2x2 fragments: derivatives inside the
- *  culled function are undefined there (GLSL ES 3.00 §8.14.1). Red = divergent quad, blue = evaluated region. */
+ *  culled function are undefined there (GLSL ES 3.00: derivatives undefined in non-uniform control flow). Red = divergent quad, blue = evaluated region. */
 const UB_MAP = js(s => s
   .replace('vec2 candidateGroup(', 'float gActive = 0.0;\nvec2 candidateGroup(')
   .replace('  vec3 shape = candidateShape(p,id);', '  gActive += exp2(id);\n  vec3 shape = candidateShape(p,id);')

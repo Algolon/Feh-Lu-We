@@ -42,7 +42,7 @@ for pose in ['sky', 'wide']:
     x, y = busiest(d, 320, 180)
     box = (x, y, x + 320, y + 180)
     zoom = lambda p, k=1.0: ImageEnhance.Contrast(img(p).crop(box)).enhance(k).resize((960, 540), Image.NEAREST)
-    cells = [label(fit(img(qa / f'{tag}-ubmap-before.png'), 960), 'Pre-fix: red = quads with undefined fwidth (cull-bound divergence)'),
+    cells = [label(fit(img(qa / f'{tag}-ubmap-before.png'), 960), 'Pre-fix: orange (tone-mapped red) = quads with undefined fwidth'),
              label(zoom(stale, 3), 'Pre-fix, GPU stale-lane EMULATION, 3x zoom, contrast x3'),
              label(zoom(after, 3), 'Fixed, same frame/crop, contrast x3 (no lines)'),
              label(fit(img(after), 960), f'Fixed render, full frame (crop box {box})')]
