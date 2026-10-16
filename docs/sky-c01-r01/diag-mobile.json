@@ -1,0 +1,1313 @@
+{
+  "browser": "141.0.7390.37",
+  "profile": "mobile",
+  "view": {
+    "viewport": {
+      "width": 412,
+      "height": 915
+    },
+    "dpr": 2.625,
+    "quality": "high"
+  },
+  "rows": [
+    {
+      "file": "mobile-sky-A.png",
+      "name": "sky-A",
+      "hash": "76961163a6c0ba80",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-sky-A-ref.png",
+      "name": "sky-A-ref",
+      "hash": "76961163a6c0ba80",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-sky-A-stale0.png",
+      "name": "sky-A-stale0",
+      "hash": "af01d9ccc9c25d76",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-sky-ubmap.png",
+      "name": "sky-ubmap",
+      "hash": "244f4ced90a20559",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-sky-ubmap-wire.png",
+      "name": "sky-ubmap-wire",
+      "hash": "2f60a4bd5dd1f096",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-sky-aamap.png",
+      "name": "sky-aamap",
+      "hash": "61bffeb204aab154",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-sky-A-wire.png",
+      "name": "sky-A-wire",
+      "hash": "cda8900a1b7f9479",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-sky-clouds0.png",
+      "name": "sky-clouds0",
+      "hash": "861ee8706c6e6392",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-sky-noshape.png",
+      "name": "sky-noshape",
+      "hash": "861ee8706c6e6392",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-sky-envl01.png",
+      "name": "sky-envl01",
+      "hash": "861ee8706c6e6392",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-sky-A-48x24.png",
+      "name": "sky-A-48x24",
+      "hash": "843f352fccc14013",
+      "calls": 1,
+      "triangles": 2208,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-sky-A-64x32.png",
+      "name": "sky-A-64x32",
+      "hash": "6d0a8bc895c871b6",
+      "calls": 1,
+      "triangles": 3968,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-sky-A-ray.png",
+      "name": "sky-A-ray",
+      "hash": "56affec8ab54f227",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-sky-A-scene.png",
+      "name": "sky-A-scene",
+      "hash": "f781d2e70c379bf3",
+      "calls": 112,
+      "triangles": 421752,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-wide-A.png",
+      "name": "wide-A",
+      "hash": "13da19ec1fcc7c0b",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-wide-A-ref.png",
+      "name": "wide-A-ref",
+      "hash": "13da19ec1fcc7c0b",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-wide-A-stale0.png",
+      "name": "wide-A-stale0",
+      "hash": "d45a0b52ab27b7ce",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-wide-ubmap.png",
+      "name": "wide-ubmap",
+      "hash": "b49d4bd88a631491",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-wide-ubmap-wire.png",
+      "name": "wide-ubmap-wire",
+      "hash": "c23b9b0a628f0f91",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-wide-aamap.png",
+      "name": "wide-aamap",
+      "hash": "298b1ac2639d03dd",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-wide-A-wire.png",
+      "name": "wide-A-wire",
+      "hash": "557183b3ad1d4886",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-wide-clouds0.png",
+      "name": "wide-clouds0",
+      "hash": "59c7092dffe472f7",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-wide-noshape.png",
+      "name": "wide-noshape",
+      "hash": "59c7092dffe472f7",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-wide-envl01.png",
+      "name": "wide-envl01",
+      "hash": "7f89fe02fe81ba80",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-wide-A-48x24.png",
+      "name": "wide-A-48x24",
+      "hash": "7df83fc18a605c1b",
+      "calls": 1,
+      "triangles": 2208,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-wide-A-64x32.png",
+      "name": "wide-A-64x32",
+      "hash": "66d5d3f00cceaa1e",
+      "calls": 1,
+      "triangles": 3968,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-wide-A-ray.png",
+      "name": "wide-A-ray",
+      "hash": "2772eb12efa648c4",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-wide-A-scene.png",
+      "name": "wide-A-scene",
+      "hash": "139eea4c2501c810",
+      "calls": 114,
+      "triangles": 412865,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-north-A.png",
+      "name": "north-A",
+      "hash": "f0b201c01294be42",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-north-A-ref.png",
+      "name": "north-A-ref",
+      "hash": "f0b201c01294be42",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-north-A-stale0.png",
+      "name": "north-A-stale0",
+      "hash": "171c1412128a88e2",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-north-ubmap.png",
+      "name": "north-ubmap",
+      "hash": "5a54178374b16a98",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-north-ubmap-wire.png",
+      "name": "north-ubmap-wire",
+      "hash": "da9b6c73f3de67b7",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-north-aamap.png",
+      "name": "north-aamap",
+      "hash": "55ff89e3192708a5",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-north-A-wire.png",
+      "name": "north-A-wire",
+      "hash": "4cba393d7c777b62",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-north-clouds0.png",
+      "name": "north-clouds0",
+      "hash": "34184cd7d81aeb62",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-north-noshape.png",
+      "name": "north-noshape",
+      "hash": "34184cd7d81aeb62",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-north-envl01.png",
+      "name": "north-envl01",
+      "hash": "0a2edf5f5aed50d7",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-north-A-48x24.png",
+      "name": "north-A-48x24",
+      "hash": "df5250e05d75ad41",
+      "calls": 1,
+      "triangles": 2208,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-north-A-64x32.png",
+      "name": "north-A-64x32",
+      "hash": "79d5f72bfc3e0d52",
+      "calls": 1,
+      "triangles": 3968,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-north-A-ray.png",
+      "name": "north-A-ray",
+      "hash": "e4fba98032b80073",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-north-A-scene.png",
+      "name": "north-A-scene",
+      "hash": "3557d58a19ac5d65",
+      "calls": 86,
+      "triangles": 315191,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-zenith-A.png",
+      "name": "zenith-A",
+      "hash": "5725241fe3d949b9",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-zenith-A-ref.png",
+      "name": "zenith-A-ref",
+      "hash": "5725241fe3d949b9",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-zenith-A-stale0.png",
+      "name": "zenith-A-stale0",
+      "hash": "139fad6f3f1a3ad1",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-zenith-ubmap.png",
+      "name": "zenith-ubmap",
+      "hash": "a2de69ab264c6cc9",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-zenith-ubmap-wire.png",
+      "name": "zenith-ubmap-wire",
+      "hash": "99115a41f4e7015d",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-zenith-aamap.png",
+      "name": "zenith-aamap",
+      "hash": "445ffdd8d982ca34",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-zenith-A-wire.png",
+      "name": "zenith-A-wire",
+      "hash": "6592d2a37fcfcf05",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-zenith-clouds0.png",
+      "name": "zenith-clouds0",
+      "hash": "214839be2dc8813e",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-zenith-noshape.png",
+      "name": "zenith-noshape",
+      "hash": "214839be2dc8813e",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-zenith-envl01.png",
+      "name": "zenith-envl01",
+      "hash": "da1d3ab2851af417",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-zenith-A-48x24.png",
+      "name": "zenith-A-48x24",
+      "hash": "cf5f0e419e3063d7",
+      "calls": 1,
+      "triangles": 2208,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-zenith-A-64x32.png",
+      "name": "zenith-A-64x32",
+      "hash": "d3edaa2325b6bc6d",
+      "calls": 1,
+      "triangles": 3968,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-zenith-A-ray.png",
+      "name": "zenith-A-ray",
+      "hash": "6a8ef564c3e5a102",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-zenith-A-scene.png",
+      "name": "zenith-A-scene",
+      "hash": "5725241fe3d949b9",
+      "calls": 77,
+      "triangles": 322777,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-pole-A.png",
+      "name": "pole-A",
+      "hash": "b6fd4a61739f0a6a",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-pole-A-wire.png",
+      "name": "pole-A-wire",
+      "hash": "d426596ac44af7b4",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    },
+    {
+      "file": "mobile-pole-A-ref.png",
+      "name": "pole-A-ref",
+      "hash": "b6fd4a61739f0a6a",
+      "calls": 1,
+      "triangles": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "camera": [
+        90,
+        1.65,
+        -123
+      ],
+      "skyCenter": [
+        90,
+        1.65,
+        -123
+      ]
+    }
+  ],
+  "errors": []
+}

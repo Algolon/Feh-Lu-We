@@ -61,7 +61,43 @@ Ongewijzigd: acht vormen, posities, schaal, silhouetten, vier lichtfasen/palette
 
 Elke rij rendert hetzelfde frame tweemaal in één sessie: huidige shader vs pre-fix productieshader (`436e106`) in het live materiaal.
 
-QA_RESULTS_PLACEHOLDER
+Matrix: desktop 1600×900 (DPR 1), portrait 412×915 en landscape 915×412 (device-DPR 2,625; Low cap 1 zonder MSAA, High cap 1,5 met MSAA) → 6 sessies × (7 views × 4 lichtfasen + 12 headings over 360° + 3× camera exact verticaal) = **258 gematchte frames**. Views: open lucht, brede lucht, noord, bijna-zenit (1,35 rad), wolken op schermrand, zonsrichting met horizon, aankomst met manor.
+
+| Check | Resultaat |
+|---|---|
+| A na vs A voor, sky-only (230 frames) | **Pixel-identiek** (max Δ 0) |
+| A na vs A voor, volledige scène (28 frames) | Δ ≤ 1/255 alleen in manor-ramen, gelijk aan de ruis van een tweede render met dezelfde shader → lucht identiek |
+| `?clouds=0` voor/na | Identiek |
+| B (review) `textureGrad` vs `texture2D` (30 frames) | max Δ 1/255 |
+| Draw calls / triangles | Sky 1 / 528 voor en na; scène-tellingen identiek in elk frame |
+| Shadercompilatie, GL- en pagina-fouten | 0 |
+
+Visueel geïnspecteerd: [mechanisme sky](mechanism-sky.jpg) en [wide](mechanism-wide.jpg) (UB-kaart, emulatie voor, fix na; 3× zoom, contrast ×3), [native voor/na + diff](before-after-native.jpg), [4 fasen desktop](phases-desktop-high.jpg) en [portrait](phases-portrait-high.jpg), [360° + pool, Low/High, portrait/landscape](turns-pole.jpg), [dome-dichtheid/camerastraal](dome-ray-diffs.jpg), [B](masks-b.jpg). Geen lijnen, driehoeken, naden of fragmenten buiten de contouren; wolkenstijl, fasen, zon en horizon ongewijzigd. Ruwe resultaten: [r01-qa.json](r01-qa.json), [diag-desktop.json](diag-desktop.json), [diag-mobile.json](diag-mobile.json).
+
+Kanttekening: omdat SwiftShader pre-fix A al "correct" rendert, kunnen de native voor/na-beelden het defect niet tonen. Het voor-beeld van het defect is de gelabelde **emulatie**.
+
+### Performance
+
+Statisch: geen extra draw calls, triangles, passes of textures; dome blijft 24×12. Per luchtfragment komt er één `fwidth` + `smoothstep` + `max` bij (eerder alleen binnen actieve wolken). Vormevaluaties en culling zijn ongewijzigd.
+
+Software-rendertijd (SwiftShader, GPU-gesynchroniseerd, mediaan van 3 rondes × 9 renders, view "wide", **geen fysieke GPU-tijd**):
+
+| Sessie | Sky-only voor → na (ms) | Scène voor → na (ms) |
+|---|---|---|
+| desktop Low | 299 → 291 | 1470 → 1508 |
+| desktop High | 302 → 292 | 2612 → 2603 |
+| portrait Low | 79 → 80 | 452 → 411 |
+| portrait High | 208 → 189 | 1396 → 1252 |
+| landscape Low | 91 → 79 | 611 → 596 |
+| landscape High | 188 → 202 | 2095 → 1993 |
+
+Verschillen van −13 % tot +8 % in beide richtingen zijn meetruis van de gedeelde host; geen systematische regressie. PB01-budgetchecks: 4/4. Samsung/Android-GPU-tijd, FPS en thermiek zijn **niet** gemeten.
+
+### Testresultaten
+
+- Typecheck en build: OK. Unit: **395/395** (42 bestanden, incl. 6 nieuwe R01-tests). `npm run test:budget`: 4/4. CI op de branch (Pages-workflow, build-only): groen.
+- R01-browsermatrix: 4/4 checks, 258/258 frames.
+- Bestaande SKY-C01-browser-QA en walkthrough/save-suites: EXISTING_QA_PLACEHOLDER
 
 ## 6. Regressietests
 

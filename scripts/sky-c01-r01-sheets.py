@@ -22,9 +22,13 @@ def label(im, text):
     out.paste(im, (0, 28)); ImageDraw.Draw(out).text((8, 5), text, fill=(235, 235, 235), font=FONT)
     return out
 def grid(cells, cols, gap=6):
-    w = max(c.width for c in cells); h = max(c.height for c in cells); rows = (len(cells) + cols - 1) // cols
-    out = Image.new('RGB', (cols * w + (cols - 1) * gap, rows * h + (rows - 1) * gap), (24, 24, 28))
-    for i, c in enumerate(cells): out.paste(c, ((i % cols) * (w + gap), (i // cols) * (h + gap)))
+    w = max(c.width for c in cells); rows = [cells[i:i + cols] for i in range(0, len(cells), cols)]
+    hs = [max(c.height for c in r) for r in rows]
+    out = Image.new('RGB', (cols * w + (cols - 1) * gap, sum(hs) + gap * (len(rows) - 1)), (24, 24, 28))
+    y = 0
+    for r, h in zip(rows, hs):
+        for i, c in enumerate(r): out.paste(c, (i * (w + gap), y))
+        y += h + gap
     return out
 def save(im, name):
     im.save(docs / name, quality=88, optimize=True); print(name, im.size)
