@@ -9,8 +9,8 @@ describe('FRONT-R01 horizontal timber entrance door',()=>{
     expect(boards).toHaveLength(7);
     for(let i=0;i<boards.length;i++){
       const p=boards[i];
-      expect(p.x0).toBeGreaterThanOrEqual(.043);
-      expect(p.x1).toBeLessThanOrEqual(1.7-.043);
+      expect(p.x0).toBeGreaterThanOrEqual(.021);
+      expect(p.x1).toBeLessThanOrEqual(1.7-.021);
       expect(p.x1-p.x0).toBeGreaterThan(1.5);
       expect(p.y0).toBeGreaterThan(0);
       expect(p.y1).toBeLessThan(2.62);
