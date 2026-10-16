@@ -151,14 +151,14 @@ export function libraryR01AntiqueGlobe(w: World, c: Ctx, x: number, z: number) {
    [[461,62],[484,55],[499,76],[483,97],[460,86]]
   ];
   for(const pts of islands){
-    ctx.beginPath();ctx.moveTo(...pts[0]);for(let i=1;i<pts.length;i++)ctx.lineTo(...pts[i]);
+    ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);
     ctx.closePath();ctx.fillStyle='#b09769';ctx.fill();ctx.strokeStyle='#806748';ctx.lineWidth=2;ctx.stroke();
     ctx.strokeStyle='rgba(99,73,46,.35)';ctx.lineWidth=.7;ctx.stroke();
   }
   ctx.fillStyle='#6d5539';ctx.font='italic 13px Georgia';
   ctx.fillText('OCEANVS ATLANTICVS',130,130);ctx.fillText('TERRA',306,134);
   const tex=w.texture(new THREE.CanvasTexture(cv));tex.colorSpace=THREE.SRGBColorSpace;
-  const mat=w.material(new THREE.MeshLambertMaterial({map:tex,roughness:1}));
+  const mat=w.material(new THREE.MeshLambertMaterial({map:tex}));
   const brass=w.material(new THREE.MeshLambertMaterial({color:'#b29250'}));
   const walnut=w.material(new THREE.MeshLambertMaterial({color:'#5b3b25'}));
   const orbY=y+1.28, group=new THREE.Group();
