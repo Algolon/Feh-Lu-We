@@ -1,5 +1,5 @@
 {
-  "commit": "295a3b4",
+  "commit": "74610c5",
   "rows": [
     {
       "name": "d3b2-re-door",
@@ -10,14 +10,14 @@
         "yaw": -1.5707963267948966,
         "pitch": -0.04
       },
-      "calls": 56,
-      "triangles": 176518,
+      "calls": 38,
+      "triangles": 196782,
       "room": "frontGallery",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 7,
-          "triangles": 28304
+          "calls": 3,
+          "triangles": 22706
         }
       }
     },
@@ -30,14 +30,14 @@
         "yaw": -1.7453292519943295,
         "pitch": -0.06
       },
-      "calls": 32,
-      "triangles": 80824,
+      "calls": 22,
+      "triangles": 101088,
       "room": "reis",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 7,
-          "triangles": 28304
+          "calls": 3,
+          "triangles": 22706
         }
       }
     },
@@ -50,14 +50,14 @@
         "yaw": -2.234021442552742,
         "pitch": -0.06
       },
-      "calls": 36,
-      "triangles": 82288,
+      "calls": 25,
+      "triangles": 102552,
       "room": "reis",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 7,
-          "triangles": 28304
+          "calls": 3,
+          "triangles": 22706
         }
       }
     },
@@ -70,14 +70,14 @@
         "yaw": -2.6179938779914944,
         "pitch": -0.22
       },
-      "calls": 27,
-      "triangles": 80682,
+      "calls": 20,
+      "triangles": 99386,
       "room": "reis",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 7,
-          "triangles": 28304
+          "calls": 3,
+          "triangles": 22706
         }
       }
     },
@@ -90,14 +90,14 @@
         "yaw": 3.141592653589793,
         "pitch": -0.4
       },
-      "calls": 27,
-      "triangles": 80682,
+      "calls": 20,
+      "triangles": 100946,
       "room": "reis",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 7,
-          "triangles": 28304
+          "calls": 3,
+          "triangles": 22706
         }
       }
     },
@@ -110,14 +110,14 @@
         "yaw": 3.3161255787892263,
         "pitch": -0.62
       },
-      "calls": 27,
-      "triangles": 80682,
+      "calls": 20,
+      "triangles": 100946,
       "room": "reis",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 7,
-          "triangles": 28304
+          "calls": 3,
+          "triangles": 22706
         }
       }
     },
@@ -130,14 +130,14 @@
         "yaw": -1.3962634015954636,
         "pitch": -0.08
       },
-      "calls": 27,
-      "triangles": 80396,
+      "calls": 19,
+      "triangles": 99100,
       "room": "reis",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 7,
-          "triangles": 28304
+          "calls": 3,
+          "triangles": 22706
         }
       }
     },
@@ -150,14 +150,14 @@
         "yaw": 0.6981317007977318,
         "pitch": -0.3
       },
-      "calls": 33,
-      "triangles": 85268,
+      "calls": 24,
+      "triangles": 105532,
       "room": "reis",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 11,
-          "triangles": 31686
+          "calls": 4,
+          "triangles": 24716
         }
       }
     },
@@ -170,14 +170,14 @@
         "yaw": -1.5707963267948966,
         "pitch": -0.04
       },
-      "calls": 60,
-      "triangles": 197260,
+      "calls": 39,
+      "triangles": 217524,
       "room": "walkway",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 7,
-          "triangles": 28304
+          "calls": 3,
+          "triangles": 22706
         }
       }
     },
@@ -190,14 +190,14 @@
         "yaw": -1.6580627893946132,
         "pitch": -0.06
       },
-      "calls": 33,
-      "triangles": 80840,
+      "calls": 23,
+      "triangles": 101104,
       "room": "sterren",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 7,
-          "triangles": 28304
+          "calls": 3,
+          "triangles": 22706
         }
       }
     },
@@ -210,14 +210,14 @@
         "yaw": -2.303834612632515,
         "pitch": -0.06
       },
-      "calls": 33,
-      "triangles": 80840,
+      "calls": 23,
+      "triangles": 101104,
       "room": "sterren",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 7,
-          "triangles": 28304
+          "calls": 3,
+          "triangles": 22706
         }
       }
     },
@@ -230,14 +230,14 @@
         "yaw": -1.2217304763960306,
         "pitch": -0.12
       },
-      "calls": 25,
-      "triangles": 80382,
+      "calls": 18,
+      "triangles": 99086,
       "room": "sterren",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 7,
-          "triangles": 28304
+          "calls": 3,
+          "triangles": 22706
         }
       }
     },
@@ -250,14 +250,14 @@
         "yaw": -1.9547687622336491,
         "pitch": -0.38
       },
-      "calls": 25,
-      "triangles": 75510,
+      "calls": 19,
+      "triangles": 94214,
       "room": "sterren",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 7,
-          "triangles": 28304
+          "calls": 3,
+          "triangles": 22706
         }
       }
     },
@@ -270,14 +270,14 @@
         "yaw": 1.3089969389957472,
         "pitch": -0.14
       },
-      "calls": 31,
-      "triangles": 83884,
+      "calls": 22,
+      "triangles": 104148,
       "room": "sterren",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 11,
-          "triangles": 31686
+          "calls": 4,
+          "triangles": 24716
         }
       }
     },
@@ -290,14 +290,14 @@
         "yaw": 1.0471975511965976,
         "pitch": -0.04
       },
-      "calls": 33,
-      "triangles": 83898,
+      "calls": 23,
+      "triangles": 104162,
       "room": "sterren",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 11,
-          "triangles": 31686
+          "calls": 4,
+          "triangles": 24716
         }
       }
     },
@@ -310,14 +310,14 @@
         "yaw": 0,
         "pitch": -0.04
       },
-      "calls": 52,
-      "triangles": 155466,
+      "calls": 32,
+      "triangles": 175730,
       "room": "ucorr",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 11,
-          "triangles": 31686
+          "calls": 4,
+          "triangles": 24716
         }
       }
     },
@@ -330,18 +330,18 @@
         "yaw": 0.4363323129985824,
         "pitch": -0.06
       },
-      "calls": 31,
-      "triangles": 112988,
+      "calls": 20,
+      "triangles": 133252,
       "room": "storage",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 6,
-          "triangles": 22094
+          "calls": 2,
+          "triangles": 21194
         },
         "mUpE": {
-          "calls": 8,
-          "triangles": 53070
+          "calls": 3,
+          "triangles": 51284
         }
       }
     },
@@ -354,18 +354,18 @@
         "yaw": -0.8377580409572781,
         "pitch": -0.06
       },
-      "calls": 38,
-      "triangles": 136890,
+      "calls": 25,
+      "triangles": 157154,
       "room": "storage",
       "feetY": 3.35,
       "chunks": {
         "mUpE": {
-          "calls": 8,
-          "triangles": 53070
+          "calls": 3,
+          "triangles": 51284
         },
         "mUp": {
-          "calls": 11,
-          "triangles": 31686
+          "calls": 4,
+          "triangles": 24716
         }
       }
     },
@@ -378,18 +378,18 @@
         "yaw": 1.5707963267948966,
         "pitch": -0.1
       },
-      "calls": 30,
-      "triangles": 106986,
+      "calls": 21,
+      "triangles": 127250,
       "room": "storage",
       "feetY": 3.35,
       "chunks": {
-        "mUp": {
-          "calls": 4,
-          "triangles": 13626
-        },
         "mUpE": {
-          "calls": 9,
-          "triangles": 55596
+          "calls": 4,
+          "triangles": 53810
+        },
+        "mUp": {
+          "calls": 1,
+          "triangles": 13106
         }
       }
     },
@@ -402,18 +402,18 @@
         "yaw": -0.9599310885968813,
         "pitch": -0.12
       },
-      "calls": 36,
-      "triangles": 136790,
+      "calls": 25,
+      "triangles": 157054,
       "room": "storage",
       "feetY": 3.35,
       "chunks": {
-        "mUp": {
-          "calls": 11,
-          "triangles": 31686
-        },
         "mUpE": {
-          "calls": 6,
-          "triangles": 52970
+          "calls": 3,
+          "triangles": 51284
+        },
+        "mUp": {
+          "calls": 4,
+          "triangles": 24716
         }
       }
     },
@@ -426,18 +426,18 @@
         "yaw": 3.490658503988659,
         "pitch": -0.06
       },
-      "calls": 43,
-      "triangles": 146646,
+      "calls": 27,
+      "triangles": 166910,
       "room": "storage",
       "feetY": 3.35,
       "chunks": {
         "mUpE": {
-          "calls": 12,
-          "triangles": 65568
+          "calls": 5,
+          "triangles": 63482
         },
         "mUp": {
-          "calls": 9,
-          "triangles": 28624
+          "calls": 3,
+          "triangles": 22706
         }
       }
     },
@@ -450,14 +450,14 @@
         "yaw": 0,
         "pitch": -0.04
       },
-      "calls": 45,
-      "triangles": 150826,
+      "calls": 30,
+      "triangles": 171090,
       "room": "landing",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 11,
-          "triangles": 31686
+          "calls": 4,
+          "triangles": 24716
         }
       }
     },
@@ -470,14 +470,14 @@
         "yaw": 0.08726646259971647,
         "pitch": -0.06
       },
-      "calls": 28,
-      "triangles": 83798,
+      "calls": 20,
+      "triangles": 104062,
       "room": "bath",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 11,
-          "triangles": 31686
+          "calls": 4,
+          "triangles": 24716
         }
       }
     },
@@ -490,14 +490,14 @@
         "yaw": 1.5707963267948966,
         "pitch": -0.12
       },
-      "calls": 29,
-      "triangles": 83814,
+      "calls": 21,
+      "triangles": 104078,
       "room": "bath",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 11,
-          "triangles": 31686
+          "calls": 4,
+          "triangles": 24716
         }
       }
     },
@@ -510,14 +510,14 @@
         "yaw": -0.6981317007977318,
         "pitch": -0.2
       },
-      "calls": 29,
-      "triangles": 83814,
+      "calls": 21,
+      "triangles": 104078,
       "room": "bath",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 11,
-          "triangles": 31686
+          "calls": 4,
+          "triangles": 24716
         }
       }
     },
@@ -530,14 +530,14 @@
         "yaw": -2.6179938779914944,
         "pitch": -0.06
       },
-      "calls": 33,
-      "triangles": 84140,
+      "calls": 23,
+      "triangles": 104404,
       "room": "bath",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 11,
-          "triangles": 31686
+          "calls": 4,
+          "triangles": 24716
         }
       }
     },
@@ -550,14 +550,14 @@
         "yaw": 2.2689280275926285,
         "pitch": -0.12
       },
-      "calls": 26,
-      "triangles": 80438,
+      "calls": 20,
+      "triangles": 100702,
       "room": "reis",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 7,
-          "triangles": 28304
+          "calls": 3,
+          "triangles": 22706
         }
       }
     },
@@ -570,14 +570,14 @@
         "yaw": 0.6981317007977318,
         "pitch": -0.45
       },
-      "calls": 30,
-      "triangles": 83824,
+      "calls": 22,
+      "triangles": 104088,
       "room": "sterren",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 11,
-          "triangles": 31686
+          "calls": 4,
+          "triangles": 24716
         }
       }
     },
@@ -590,14 +590,14 @@
         "yaw": -1.7453292519943295,
         "pitch": -0.5
       },
-      "calls": 25,
-      "triangles": 75510,
+      "calls": 19,
+      "triangles": 94214,
       "room": "sterren",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 7,
-          "triangles": 28304
+          "calls": 3,
+          "triangles": 22706
         }
       }
     },
@@ -610,18 +610,18 @@
         "yaw": -1.2217304763960306,
         "pitch": -0.4
       },
-      "calls": 35,
-      "triangles": 136730,
+      "calls": 25,
+      "triangles": 156994,
       "room": "storage",
       "feetY": 3.35,
       "chunks": {
-        "mUp": {
-          "calls": 11,
-          "triangles": 31686
-        },
         "mUpE": {
-          "calls": 6,
-          "triangles": 52970
+          "calls": 3,
+          "triangles": 51284
+        },
+        "mUp": {
+          "calls": 4,
+          "triangles": 24716
         }
       }
     },
@@ -634,18 +634,18 @@
         "yaw": 0.17453292519943295,
         "pitch": -0.45
       },
-      "calls": 26,
-      "triangles": 104360,
+      "calls": 19,
+      "triangles": 124624,
       "room": "storage",
       "feetY": 3.35,
       "chunks": {
-        "mUp": {
-          "calls": 4,
-          "triangles": 13626
-        },
         "mUpE": {
-          "calls": 6,
-          "triangles": 52970
+          "calls": 3,
+          "triangles": 51284
+        },
+        "mUp": {
+          "calls": 1,
+          "triangles": 13106
         }
       }
     },
@@ -658,14 +658,14 @@
         "yaw": 1.6580627893946132,
         "pitch": -0.08
       },
-      "calls": 29,
-      "triangles": 83760,
+      "calls": 23,
+      "triangles": 104024,
       "room": "bath",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 11,
-          "triangles": 31686
+          "calls": 4,
+          "triangles": 24716
         }
       }
     },
@@ -678,14 +678,14 @@
         "yaw": -0.7853981633974483,
         "pitch": -0.5
       },
-      "calls": 25,
-      "triangles": 83418,
+      "calls": 20,
+      "triangles": 103682,
       "room": "bath",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 9,
-          "triangles": 31366
+          "calls": 4,
+          "triangles": 24716
         }
       }
     },
@@ -698,14 +698,14 @@
         "yaw": -2.356194490192345,
         "pitch": -0.38
       },
-      "calls": 28,
-      "triangles": 80702,
+      "calls": 20,
+      "triangles": 100966,
       "room": "reis",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 7,
-          "triangles": 28304
+          "calls": 3,
+          "triangles": 22706
         }
       }
     },
@@ -718,14 +718,14 @@
         "yaw": -1.3089969389957472,
         "pitch": -0.1
       },
-      "calls": 28,
-      "triangles": 80444,
+      "calls": 20,
+      "triangles": 99148,
       "room": "sterren",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 7,
-          "triangles": 28304
+          "calls": 3,
+          "triangles": 22706
         }
       }
     },
@@ -738,14 +738,14 @@
         "yaw": -1.0471975511965976,
         "pitch": -0.06
       },
-      "calls": 29,
-      "triangles": 80460,
+      "calls": 22,
+      "triangles": 100724,
       "room": "sterren",
       "feetY": 3.35,
       "chunks": {
         "mUp": {
-          "calls": 7,
-          "triangles": 28304
+          "calls": 3,
+          "triangles": 22706
         }
       }
     },
@@ -758,18 +758,18 @@
         "yaw": 0.20943951023931953,
         "pitch": -0.55
       },
-      "calls": 24,
-      "triangles": 104202,
+      "calls": 18,
+      "triangles": 124466,
       "room": "storage",
       "feetY": 3.35,
       "chunks": {
-        "mUp": {
-          "calls": 4,
-          "triangles": 13626
-        },
         "mUpE": {
-          "calls": 4,
-          "triangles": 52812
+          "calls": 3,
+          "triangles": 51284
+        },
+        "mUp": {
+          "calls": 1,
+          "triangles": 13106
         }
       }
     },
@@ -782,18 +782,18 @@
         "yaw": 0.4363323129985824,
         "pitch": -0.22
       },
-      "calls": 26,
-      "triangles": 104360,
+      "calls": 19,
+      "triangles": 124624,
       "room": "storage",
       "feetY": 3.35,
       "chunks": {
-        "mUp": {
-          "calls": 4,
-          "triangles": 13626
-        },
         "mUpE": {
-          "calls": 6,
-          "triangles": 52970
+          "calls": 3,
+          "triangles": 51284
+        },
+        "mUp": {
+          "calls": 1,
+          "triangles": 13106
         }
       }
     }
