@@ -6,6 +6,7 @@ import { lathe, softBox } from './artkit';
 import type { CollisionWorld } from '../player/collision';
 import { registerOpening } from './openings';
 import { studyWindowSite, studyWindow } from './exteriorStudy';
+import { addUnifiedManorSash } from './manorSash';
 import { opaqueWallRects } from './windowOpenings';
 import { slateCourseUV, gableTrimGeo } from './roofDetail';
 import { seamlessWallFaceUV } from './seamlessWallFinish';
@@ -301,15 +302,22 @@ export function windowAt(c: Ctx, axis: 'x' | 'z', faceF: number, side: 1 | -1, a
     B(x0, x1, y + h * 0.45, top, 0.004, 0.012, c.k.M.glow, hi);
     B(x0, x1, y, y + h * 0.45, 0.004, 0.012, c.k.M.glow, lo);
   } else B(x0, x1, y, top, 0.004, 0.012, c.k.M.glow, style.glass ?? GLASS.inside);
-  // sash frame + glazing bars (2 × 3 panes; the meeting rail heavier)
-  const fw = 0.065, fd0 = 0.006, fd1 = 0.05;
-  B(x0 - fw, x0, y - fw, top + fw, fd0, fd1, P, fr);
-  B(x1, x1 + fw, y - fw, top + fw, fd0, fd1, P, fr);
-  B(x0, x1, top, top + fw, fd0, fd1, P, fr);
-  const bar = kind === 'manor' ? TRIM.bar : fr;
-  B(at - 0.018, at + 0.018, y, top, fd0, fd1 - 0.012, P, bar);
-  B(x0, x1, y + h * 0.5 - 0.025, y + h * 0.5 + 0.025, fd0, fd1, P, bar);
-  if (h > 1.1) for (const q of [0.25, 0.75]) B(x0, x1, y + h * q - 0.014, y + h * q + 0.014, fd0, fd1 - 0.012, P, bar);
+  const fw = 0.065;
+  // In ?exterior=base the regular clear manor windows must use exactly the same
+  // connected sash as the finished facade, not resurrect overlapping legacy bars.
+  if (style.transparent && outside && kind === 'manor') {
+    addUnifiedManorSash(c, axis, faceF, side, at, y, w, h);
+  } else {
+    // sash frame + glazing bars (2 × 3 panes; the meeting rail heavier)
+    const fd0 = 0.006, fd1 = 0.05;
+    B(x0 - fw, x0, y - fw, top + fw, fd0, fd1, P, fr);
+    B(x1, x1 + fw, y - fw, top + fw, fd0, fd1, P, fr);
+    B(x0, x1, top, top + fw, fd0, fd1, P, fr);
+    const bar = kind === 'manor' ? TRIM.bar : fr;
+    B(at - 0.018, at + 0.018, y, top, fd0, fd1 - 0.012, P, bar);
+    B(x0, x1, y + h * 0.5 - 0.025, y + h * 0.5 + 0.025, fd0, fd1, P, bar);
+    if (h > 1.1) for (const q of [0.25, 0.75]) B(x0, x1, y + h * q - 0.014, y + h * q + 0.014, fd0, fd1 - 0.012, P, bar);
+  }
   if (!outside) {
     // interior: painted lining round the opening and a deep window board
     B(x0 - fw - 0.06, x0 - fw, y - fw, top + fw + 0.06, 0, 0.03, P, TRIM.joinery);

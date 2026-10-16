@@ -1,0 +1,35 @@
+name: WINDOW-FIX-R02 unified frame QA (no deploy)
+on:
+  push:
+    branches: [window-fix-r02-unified-sash]
+    paths: ['src/**', 'tests/window-unified-sash.test.ts', 'scripts/window-unified-r02-review.mjs', '.github/workflows/window-fix-r02-review.yml']
+permissions:
+  contents: read
+concurrency:
+  group: window-fix-r02-review
+  cancel-in-progress: true
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright-core install --with-deps chromium
+      - run: node scripts/window-unified-r02-review.mjs
+      - run: node scripts/window-r02-review.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: window-fix-r02-screenshots
+          path: |
+            docs/development/workstreams/window-fix-r02/review/
+            docs/development/workstreams/window-r02/review/
+          if-no-files-found: warn
