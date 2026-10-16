@@ -142,9 +142,9 @@ export function makeTextures() {
       const track = y + warp[px];
       // Few broad, softly varying fibres and faint fine detail; no repeating sharp
       // dark pores or dozens of full-width stripes. Preserve the approved mahogany hue.
-      const variation = 3.6 * sample(wide, track, 104)
-        + 1.45 * sample(medium, track, 27)
-        + 0.38 * sample(fine, track, 9)
+      const variation = 4.2 * sample(wide, track, 104)
+        + 2.8 * sample(medium, track, 27)
+        + 1.25 * sample(fine, track, 9)
         + (r() - 0.5) * 1.35;
       const i = (y * 512 + px) * 4;
       pixels.data[i] = Math.round(107 + variation);
@@ -153,8 +153,8 @@ export function makeTextures() {
       pixels.data[i + 3] = 255;
     }
     x.putImageData(pixels, 0, 0);
-    // Only a handful of broken, very low-opacity fibres; never long dark rails.
-    for (let i = 0; i < 9; i++) {
+    // A few broken, very low-opacity fibres; never long dark rails.
+    for (let i = 0; i < 18; i++) {
       const y = 25 + r() * 460, start = r() * 330;
       const length = 85 + r() * 190, drift = (r() - 0.5) * 2.5;
       x.beginPath();
@@ -162,8 +162,8 @@ export function makeTextures() {
         const yy = y + (px - start) / length * drift + sample(wave, px, 96) * 1.4;
         if (px === start) x.moveTo(px, yy); else x.lineTo(px, yy);
       }
-      x.strokeStyle = 'rgba(37,16,14,0.07)';
-      x.lineWidth = 0.7;
+      x.strokeStyle = 'rgba(37,16,14,0.095)';
+      x.lineWidth = 0.75;
       x.stroke();
     }
     T.windowSillWood = tex(c);
