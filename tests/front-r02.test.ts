@@ -1,18 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
-import { lionHeadReliefGeometry } from '../src/world/lionKnocker';
+import { castBronzeMetal, lionHeadReliefGeometry, LION_BRONZE } from '../src/world/lionKnocker';
 import { Batcher, type Kit } from '../src/world/kit';
 import { frontDoorLeaf } from '../src/world/exteriorDetail';
 import { readFileSync } from 'node:fs';
 
-describe('FRONT-R02 - sculpted bronze lion and slim metal doorway',()=>{
+describe('FRONT-R03 - reference-led lion and coherent bronze hardware',()=>{
   it('constructs one continuous, closed relief with authored patina, no primitive-sphere assembly',()=>{
     const g=lionHeadReliefGeometry();
     const p=g.getAttribute('position') as THREE.BufferAttribute;
     const c=g.getAttribute('color') as THREE.BufferAttribute;
     expect(g.userData.keepColor).toBe(true);
     expect(p.count).toBeGreaterThan(1000);
-    expect(g.index!.count/3).toBeLessThan(5500);
+    expect(g.index!.count/3).toBeLessThan(7500); // detailed single cast, still inexpensive
     expect(g.getAttribute('normal').count).toBe(p.count);
     const box=new THREE.Box3().setFromBufferAttribute(p);
     expect(box.max.x-box.min.x).toBeLessThan(.30);
@@ -30,6 +30,10 @@ describe('FRONT-R02 - sculpted bronze lion and slim metal doorway',()=>{
       unite(a,b);unite(a,c);
     }
     expect(new Set(parent.map((_,i)=>find(i))).size).toBe(1);
+    // Dark bronze with localized warm highlights instead of flat orange-brown paint.
+    const lightness=Array.from({length:c.count},(_,i)=>c.getX(i)+c.getY(i)+c.getZ(i));
+    expect(Math.max(...lightness)-Math.min(...lightness)).toBeGreaterThan(.12);
+    expect(LION_BRONZE.recess).toBe('#242322');
     g.dispose();
   });
 
@@ -50,6 +54,19 @@ describe('FRONT-R02 - sculpted bronze lion and slim metal doorway',()=>{
     const opened=new THREE.Box3().setFromObject(leaf);
     expect(opened.max.x-opened.min.x).toBeLessThan(.36);
     leaf.traverse(o=>{if(o instanceof THREE.Mesh)o.geometry.dispose();});mat.dispose();
+  });
+
+  it('matches handle and lion through the SAME bronze vertex-patina system',()=>{
+    const pull=castBronzeMetal(new THREE.CylinderGeometry(.018,.018,1.13,16,1));
+    expect(pull.userData.keepColor).toBe(true);
+    const col=pull.getAttribute('color') as THREE.BufferAttribute;
+    const tones=Array.from({length:col.count},(_,i)=>col.getX(i)+col.getY(i)+col.getZ(i));
+    expect(Math.max(...tones)-Math.min(...tones)).toBeGreaterThan(.03);
+    const source=readFileSync(new URL('../src/world/exteriorDetail.ts',import.meta.url).pathname,'utf8');
+    expect(source).toContain("const pull=castBronzeMetal(");
+    expect(source).toContain("addLionKnocker(b,metal");
+    expect(source).not.toContain("'#946a43'");
+    pull.dispose();
   });
 
   it('uses narrow front-door-specific metal joinery, not the old oak head cap and plinths',()=>{
