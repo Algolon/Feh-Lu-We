@@ -78,7 +78,7 @@ export const ROOM_THRESHOLDS: RoomThreshold[] = [
 const P = (a: string, b: string, kind: PortalDef['kind'], door?: string, seeThrough = false): PortalDef => ({ a, b, kind, door, seeThrough });
 export const PORTALS: PortalDef[] = [
   P('vestibule', 'out', 'door', 'door.front'), P('vestibule', 'hall', 'arch'),
-  P('hall', 'living', 'arch'), P('hall', 'dining', 'arch'), P('hall', 'lobby', 'arch'), P('hall', 'landing', 'stair'),
+  P('hall', 'living', 'arch'), P('hall', 'dining', 'arch'), P('hall', 'kitchen', 'arch'), P('hall', 'lobby', 'arch'), P('hall', 'landing', 'stair'),
   P('hall', 'frontGallery', 'arch'), P('hall', 'walkway', 'arch'),
   P('lobby', 'library', 'door', 'door.library'), P('lobby', 'billiard', 'door', 'door.billiard'), P('lobby', 'bstair', 'door', 'door.basement'),
   P('bstair', 'bLobby', 'arch'),
