@@ -177,7 +177,7 @@ export class World {
   }
   /**
    * A region doorway that is open, in the cone round the view and seen through: sight lines from the eye through points
-   * of the opening (across its width, at three heights), carried 0.8 m on into the room, must be clear of walls, closed
+   * of the opening (across its width, at three heights), carried 0.35 m on into the room, must be clear of walls, closed
    * doors and the walkable floors (an upstairs doorway is not seen from the ground floor through the gallery's floor;
    * the hall's open well has none). Without a room graph or a camera the region stays drawn.
    */
@@ -192,13 +192,13 @@ export class World {
       const dist = tmpTo.length();
       if (dist > d.r && Math.acos(THREE.MathUtils.clamp(tmpTo.dot(fwd) / dist, -1, 1)) - Math.asin(Math.min(1, d.r / dist)) >= half) continue;
       if (d.n === undefined) d.n = this.doorInward(d, rooms);
-      if (!d.n) return true;
+      if (!d.n || dist < 1.2) return true; // standing in the doorway
       const [nx, nz] = d.n;
       for (const dy of [0, -0.8, 0.8]) for (const s of [0, -0.35, 0.35]) {
         const px = d.x + nz * s, py = d.y + dy, pz = d.z + nx * s; // a point of the opening (its plane through the centre)
         const vx = px - ex, vy = py - ey, vz = pz - ez, inward = vx * nx + vz * nz;
         if (inward <= 0.05) continue; // the eye is not in front of the opening (or looks along it)
-        const k = 1 + 0.8 / inward;
+        const k = 1 + 0.35 / inward; // just past the wall: the jambs either side must be passed
         const tx = ex + vx * k, ty = ey + vy * k, tz = ez + vz * k;
         if (!this.col.segmentBlocked(ex, ey, ez, tx, ty, tz, this.visualPassThrough) && !this.floorBetween(ex, ey, ez, tx, ty, tz)) return true;
       }
