@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { opaqueWallRects } from './windowOpenings';
 import { PORTALS } from './roomdefs';
+import { BILLIARD_PILOT_WINDOW, billiardPilotDepths } from './windowPilot';
 import { RoomGraph } from './rooms';
 
 describe('WINDOW-R01 aperture construction', () => {
@@ -8,6 +9,17 @@ describe('WINDOW-R01 aperture construction', () => {
   const solidAt = (rects: ReturnType<typeof opaqueWallRects>, x: number, y: number) =>
     rects.some(([x0, x1, y0, y1]) => x > x0 && x < x1 && y > y0 && y < y1);
 
+  it('places a single pane just behind the exterior wall face, leaving one deep interior reveal', () => {
+    const { exteriorFace, glazingZ, innerFinishZ } = billiardPilotDepths();
+    expect(BILLIARD_PILOT_WINDOW.wallThickness).toBeCloseTo(0.4);
+    expect(exteriorFace).toBeCloseTo(110.0);
+    expect(glazingZ).toBeCloseTo(109.915);
+    expect(innerFinishZ).toBeCloseTo(109.575);
+    expect(glazingZ).toBeLessThan(exteriorFace);
+    expect(glazingZ).toBeGreaterThan(innerFinishZ);
+    expect(exteriorFace - glazingZ).toBeLessThan(0.1);
+    expect(glazingZ - innerFinishZ).toBeGreaterThan(0.3);
+  });
   it('carves the aperture while preserving side wall, sill and lintel', () => {
     const rects = opaqueWallRects(86, 90, 0, 3.2, aperture);
     expect(solidAt(rects, 88, 1.85)).toBe(false);
