@@ -86,6 +86,64 @@ try {
     await page.screenshot({ path: `${folder}/low-${side}-oblique.jpg`, type: 'jpeg', quality: 88 });
     console.log('oblique', JSON.stringify(row));
   }
+  // WINDOW-R01-R04: verify the ACTUAL game material and two low-quality close-up captures
+  // (the wide room view did not resolve the texture's fine timber grain well enough).
+  let sillMaterial = null;
+  if (!baseline) {
+    sillMaterial = await page.evaluate(async () => {
+      const { getKit } = await import('/src/world/kit.ts');
+      const kit = getKit();
+      const material = kit.M.windowSillWood;
+      const tex = kit.T.windowSillWood;
+      const canvas = tex?.image;
+      if (!canvas || !(material?.map === tex)) throw Error('Pilot sill has no dedicated oak texture');
+      const data = canvas.getContext('2d').getImageData(0, 0, 512, 512).data;
+      let min = Infinity, max = -Infinity, red = 0, green = 0, blue = 0;
+      let along = 0, across = 0, samples = 0;
+      for (let y = 8; y < 504; y += 13) for (let x = 8; x < 504; x += 13) {
+        const i = (y * 512 + x) * 4;
+        red += data[i]; green += data[i + 1]; blue += data[i + 2];
+        min = Math.min(min, data[i]); max = Math.max(max, data[i]);
+        along += Math.abs(data[i] - data[i + 4 * 6]);
+        across += Math.abs(data[i] - data[i + 4 * 512 * 6]);
+        samples++;
+      }
+      const result = { meanRed: red / samples, meanGreen: green / samples,
+        meanBlue: blue / samples, contrast: max - min,
+        lengthwiseVariation: along / samples, crossGrainVariation: across / samples,
+        surface: material.userData.surface };
+      if (!(result.meanRed > 125 && result.meanRed < 180
+        && result.meanGreen < result.meanRed && result.meanBlue < result.meanGreen
+        && result.contrast > 28 && result.crossGrainVariation > result.lengthwiseVariation * 1.15
+        && result.surface === 'timber')) throw Error('Oak grain or tone contract not met: ' + JSON.stringify(result));
+      return result;
+    });
+    console.log('Oak window board material:', JSON.stringify(sillMaterial));
+  }
+  const closeups = [];
+  for (const position of ['front', 'oblique']) {
+    const row = await page.evaluate(position => {
+      const g = window.__game, w = g.world;
+      g.settings.quality = 'low'; g.applyQuality(true);
+      g.state.open['door.billiardOut'] = false; w.syncAll();
+      const x = position === 'front' ? 88 : 88.8;
+      const z = 108.25;
+      g.player.setPose({ x, y: 0.15, z, yaw: Math.atan2(88 - x, 109.8 - z),
+        pitch: position === 'front' ? -0.46 : -0.43 });
+      for (let i = 0; i < 35; i++) g.tick(1 / 30);
+      w.updateCulling(g.camera.position, g.camera);
+      g.renderer.render(w.scene, g.camera);
+      return { position, here: w.hereRoom, exteriorVisible: w.visibleRooms.has('out'),
+        calls: g.renderer.info.render.calls, triangles: g.renderer.info.render.triangles,
+        glError: g.renderer.getContext().getError() };
+    }, position);
+    if (row.glError !== 0 || (!baseline && !row.exteriorVisible))
+      throw Error('Unexpected oak windowsill closeup: ' + JSON.stringify(row));
+    closeups.push(row);
+    await page.screenshot({ path: `${folder}/low-sill-${position}.jpg`, type: 'jpeg', quality: 92 });
+    console.log('sill:', JSON.stringify(row));
+  }
   if (errors.length) throw Error(errors.join('\n'));
-  writeFileSync(folder+'/results.json', JSON.stringify({baseline, collision, frames, oblique, errors, deviceValidated:false}, null, 2));
+  writeFileSync(folder+'/results.json',
+    JSON.stringify({baseline, collision, frames, oblique, closeups, sillMaterial, errors, deviceValidated:false}, null, 2));
 } finally { await browser.close(); await server.close(); }
