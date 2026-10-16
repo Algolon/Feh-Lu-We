@@ -33,6 +33,22 @@ describe('PORTAL-R02: cross-room window sightlines', () => {
     expect(dining.windows).toBeGreaterThan(0);
     expect(kitchen.windows).toBeGreaterThan(0);
   });
+  it('admits the specific kitchen north window from the dining side without moving the player',()=>{
+    const w=new World('estate');
+    w.rooms=estateRooms();
+    w.isOpen=()=>false;
+    const window=w.rooms.portals.find(p=>p.kind==='window'&&p.a==='kitchen'
+      && p.aperture&&Math.abs(p.aperture.x-97.5)<0.1&&p.aperture.z>109.5);
+    expect(window).toBeDefined();
+    const camera=cameraAt(101,91.85,new THREE.Vector3(97.5,2,-109.8));
+    w.hereRoom='dining';
+    const reachable=w.rooms.visible('dining',w.isOpen,3,()=>false,()=>false);
+    expect(reachable.has('kitchen')).toBe(true);
+    const testWindow=w as unknown as {
+      clearWindowInView:(eye:THREE.Vector3,cam:THREE.PerspectiveCamera,p:NonNullable<typeof window>,reach:ReadonlySet<string>)=>boolean;
+    };
+    expect(testWindow.clearWindowInView(camera.position,camera,window!,reachable)).toBe(true);
+  });
   it('does not reveal windows through a closed interior door from an unrelated room',()=>{
     const w=new World('estate');
     w.rooms=estateRooms();
