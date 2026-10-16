@@ -32,7 +32,7 @@
       "target": "out",
       "visible": true,
       "calls": 57,
-      "triangles": 525084,
+      "triangles": 511532,
       "glError": 0
     },
     {
@@ -42,7 +42,7 @@
       "target": "living",
       "visible": true,
       "calls": 79,
-      "triangles": 558477,
+      "triangles": 544925,
       "glError": 0
     },
     {
@@ -51,8 +51,8 @@
       "source": "billiard",
       "target": "out",
       "visible": true,
-      "calls": 57,
-      "triangles": 506230,
+      "calls": 56,
+      "triangles": 492678,
       "glError": 0
     },
     {
@@ -61,8 +61,8 @@
       "source": "out",
       "target": "billiard",
       "visible": true,
-      "calls": 76,
-      "triangles": 538668,
+      "calls": 75,
+      "triangles": 525116,
       "glError": 0
     },
     {
@@ -71,8 +71,8 @@
       "source": "library",
       "target": "out",
       "visible": true,
-      "calls": 46,
-      "triangles": 536664,
+      "calls": 45,
+      "triangles": 523112,
       "glError": 0
     },
     {
@@ -81,8 +81,8 @@
       "source": "out",
       "target": "library",
       "visible": true,
-      "calls": 91,
-      "triangles": 606334,
+      "calls": 90,
+      "triangles": 592782,
       "glError": 0
     },
     {
@@ -91,8 +91,8 @@
       "source": "dining",
       "target": "out",
       "visible": true,
-      "calls": 61,
-      "triangles": 319619,
+      "calls": 60,
+      "triangles": 306067,
       "glError": 0
     },
     {
@@ -101,8 +101,8 @@
       "source": "out",
       "target": "dining",
       "visible": true,
-      "calls": 81,
-      "triangles": 627629,
+      "calls": 80,
+      "triangles": 614077,
       "glError": 0
     },
     {
@@ -111,8 +111,8 @@
       "source": "botanic",
       "target": "out",
       "visible": true,
-      "calls": 62,
-      "triangles": 380884,
+      "calls": 61,
+      "triangles": 367332,
       "glError": 0
     },
     {
@@ -121,8 +121,8 @@
       "source": "out",
       "target": "botanic",
       "visible": true,
-      "calls": 105,
-      "triangles": 646480,
+      "calls": 104,
+      "triangles": 632928,
       "glError": 0
     },
     {
@@ -131,8 +131,8 @@
       "source": "rearNookEast",
       "target": "out",
       "visible": true,
-      "calls": 55,
-      "triangles": 514794,
+      "calls": 54,
+      "triangles": 501242,
       "glError": 0
     },
     {
@@ -141,8 +141,8 @@
       "source": "out",
       "target": "rearNookEast",
       "visible": true,
-      "calls": 87,
-      "triangles": 598156,
+      "calls": 86,
+      "triangles": 584604,
       "glError": 0
     },
     {
@@ -152,7 +152,7 @@
       "target": "out",
       "visible": true,
       "calls": 51,
-      "triangles": 491403,
+      "triangles": 477851,
       "glError": 0
     },
     {
@@ -162,7 +162,7 @@
       "target": "sterren",
       "visible": true,
       "calls": 94,
-      "triangles": 553902,
+      "triangles": 540350,
       "glError": 0
     },
     {
@@ -171,8 +171,8 @@
       "source": "botanic",
       "target": "out",
       "visible": true,
-      "calls": 66,
-      "triangles": 364123,
+      "calls": 65,
+      "triangles": 350571,
       "glError": 0
     },
     {
@@ -181,8 +181,8 @@
       "source": "out",
       "target": "botanic",
       "visible": true,
-      "calls": 80,
-      "triangles": 626039,
+      "calls": 79,
+      "triangles": 612487,
       "glError": 0
     },
     {
@@ -191,8 +191,8 @@
       "source": "workshop",
       "target": "out",
       "visible": true,
-      "calls": 56,
-      "triangles": 357905,
+      "calls": 55,
+      "triangles": 344353,
       "glError": 0
     },
     {
@@ -201,8 +201,8 @@
       "source": "out",
       "target": "workshop",
       "visible": true,
-      "calls": 68,
-      "triangles": 363717,
+      "calls": 67,
+      "triangles": 350165,
       "glError": 0
     },
     {
@@ -211,8 +211,8 @@
       "source": "pantry",
       "target": "out",
       "visible": true,
-      "calls": 40,
-      "triangles": 268520,
+      "calls": 39,
+      "triangles": 254968,
       "glError": 0
     },
     {
@@ -221,45 +221,45 @@
       "source": "out",
       "target": "pantry",
       "visible": true,
-      "calls": 110,
-      "triangles": 597820,
+      "calls": 109,
+      "triangles": 584268,
       "glError": 0
     }
   ],
   "hardware": [
     {
       "site": "north-ground",
-      "calls": 55,
-      "triangles": 513474,
+      "calls": 54,
+      "triangles": 499922,
       "glError": 0,
       "detail": {
         "site": "north-ground",
-        "calls": 54,
-        "triangles": 504173,
+        "calls": 53,
+        "triangles": 490621,
         "glError": 0
       }
     },
     {
       "site": "west-ground",
-      "calls": 44,
-      "triangles": 535477,
+      "calls": 43,
+      "triangles": 521925,
       "glError": 0,
       "detail": {
         "site": "west-ground",
-        "calls": 44,
-        "triangles": 533523,
+        "calls": 43,
+        "triangles": 519971,
         "glError": 0
       }
     }
   ],
   "mahogany": {
     "rgb": [
-      102.98753462603878,
-      48.8303324099723,
-      37.28116343490305
+      106.41897506925208,
+      50.612880886426595,
+      38.6606648199446
     ],
-    "lengthwise": 3.011080332409972,
-    "across": 8.159279778393351
+    "lengthwise": 0.4265927977839335,
+    "across": 0.6128808864265928
   },
   "errors": [],
   "samsungValidated": false,
