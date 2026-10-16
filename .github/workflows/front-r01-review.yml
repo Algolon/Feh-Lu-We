@@ -1,0 +1,58 @@
+name: FRONT-R01 in-game door review
+on:
+  push:
+    branches:
+      - front-r01-horizontal-lion-door
+    paths:
+      - src/world/exteriorDetail.ts
+      - tests/exterior-detail.test.ts
+      - scripts/front-r01-review.mjs
+      - .github/workflows/front-r01-review.yml
+permissions:
+  contents: write
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
+      - name: Capture running in-game front door (software WebGL)
+        shell: bash
+        run: |
+          npm run preview -- --host 127.0.0.1 > /tmp/front-r01-preview.log 2>&1 &
+          for i in {1..60}; do
+            if curl -fsS http://127.0.0.1:4173/Feh-Lu-We/ >/dev/null; then break; fi
+            sleep 2
+          done
+          if command -v google-chrome >/dev/null; then
+            export CHROME="$(command -v google-chrome)"
+          elif command -v chromium >/dev/null; then
+            export CHROME="$(command -v chromium)"
+          else
+            npx playwright-core install chromium
+          fi
+          node scripts/front-r01-review.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: front-r01-in-game-screenshots
+          path: docs/development/workstreams/front-r01/review
+          if-no-files-found: warn
+      - name: Save screenshots on review branch only
+        if: success()
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/development/workstreams/front-r01/review/
+          if ! git diff --cached --quiet; then
+            git commit -m "docs(front-r01): capture in-game exterior/interior door review"
+            git push origin HEAD:front-r01-horizontal-lion-door
+          fi
