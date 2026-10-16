@@ -87,6 +87,6 @@ describe('FRONT-R04 - authored 3D lion sculpture, bronze hardware, narrow steel 
     expect(arch).not.toContain("const stoneReveal='#d7d0bf'");
     expect(arch).not.toContain("casing=.030");
     expect(arch).toContain("if(frameStyle==='slim-metal')");
-    expect(manor).toContain("frameStyle: axis==='x'&&f===80.2?'slim-metal':undefined");
+    expect(manor).toContain("frameStyle: face.axis==='x'&&face.f===80.2?'slim-metal':undefined");
   });
 });
