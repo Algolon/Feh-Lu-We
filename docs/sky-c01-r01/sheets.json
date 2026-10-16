@@ -1,0 +1,14 @@
+{
+ "sheets": [
+  "before-after-native.jpg",
+  "dome-ray-diffs.jpg",
+  "masks-b.jpg",
+  "mechanism-sky.jpg",
+  "mechanism-wide.jpg",
+  "phases-desktop-high.jpg",
+  "phases-portrait-high.jpg",
+  "turns-pole.jpg",
+  "ubmap-vs-dome.jpg"
+ ],
+ "note": "Composed from real game-canvas PNGs of scripts/sky-c01-r01-qa.mjs and -diag.mjs; regenerate rather than edit."
+}
