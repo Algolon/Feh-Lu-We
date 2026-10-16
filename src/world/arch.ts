@@ -27,6 +27,8 @@ export interface WallOpts {
   mat?: THREE.Material;
   color?: THREE.ColorRepresentation;
   openings?: Opening[];
+  /** Optional joinery colour for this wall's door frames (default: oak). */
+  frameColor?: THREE.ColorRepresentation;
   windows?: Win[];
   t?: number;
   collide?: boolean;
@@ -86,7 +88,7 @@ export function wall(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number,
     piece(cur, s, y0, y1);
     piece(s, e, y0 + (op.h ?? 2.3), y1); // lintel
     // door frame (visual only)
-    frame(c, axis, f, s, e, y0, y0 + (op.h ?? 2.3), t);
+    frame(c, axis, f, s, e, y0, y0 + (op.h ?? 2.3), t, o.frameColor);
     cur = e;
   }
   piece(cur, hi, y0, y1);
@@ -173,8 +175,8 @@ function trimRun(c: Ctx, axis: 'x' | 'z', ff: number, sd: 1 | -1, s0: number, s1
 /**
  * Door frame (visual only): a lining across the full wall depth plus, on both faces, an architrave, plinth blocks at the foot and a capped head — the joinery of a real opening instead of three sticks.
  */
-function frame(c: Ctx, axis: 'x' | 'z', f: number, s: number, e: number, y0: number, y1: number, t: number) {
-  const col = TRIM.oak, m = c.k.M.paint;
+function frame(c: Ctx, axis: 'x' | 'z', f: number, s: number, e: number, y0: number, y1: number, t: number, frameColor:THREE.ColorRepresentation=TRIM.oak) {
+  const col = frameColor, m = c.k.M.paint;
   const B = (a0: number, a1: number, ya: number, yb: number, d0: number, d1: number, cc: THREE.ColorRepresentation = col) => {
     if (axis === 'x') boxMM(c.b, m, cc, a0, a1, ya, yb, f + d0, f + d1, { chunk: c.chunk, jitter: 0 });
     else boxMM(c.b, m, cc, f + d0, f + d1, ya, yb, a0, a1, { chunk: c.chunk, jitter: 0 });
