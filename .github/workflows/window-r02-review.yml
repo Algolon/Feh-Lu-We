@@ -2,7 +2,7 @@ name: WINDOW-R02 production integration review (no deploy)
 on:
   push:
     branches: [window-r02-prod-integration]
-    paths: ['src/**', 'scripts/window-r02-review.mjs', '.github/workflows/window-r02-review.yml']
+    paths: ['src/**', 'scripts/window-r02-review.mjs', 'scripts/window-r02-baseline.mjs', '.github/workflows/window-r02-review.yml']
 concurrency:
   group: window-r02-prod-integration
   cancel-in-progress: true
@@ -25,6 +25,15 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npx playwright-core install --with-deps chromium
+      - name: Prepare immutable production baseline source
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --depth=1 origin f5b27bcebaae42f0789e0694546e14d1a8ab4583
+          git worktree add --detach /tmp/window-r02-baseline f5b27bcebaae42f0789e0694546e14d1a8ab4583
+          ln -s "$GITHUB_WORKSPACE/node_modules" /tmp/window-r02-baseline/node_modules
+      - name: Compare camera triangle loads against production
+        run: WINDOW_R02_BASELINE_ROOT=/tmp/window-r02-baseline node scripts/window-r02-baseline.mjs
       - run: node scripts/window-r02-review.mjs
       - uses: actions/upload-artifact@v4
         if: always()
