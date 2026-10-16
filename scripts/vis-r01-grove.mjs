@@ -11,7 +11,7 @@
 import { createServer } from 'node:http';
 import { resolve, extname, join } from 'node:path';
 import { chromium } from 'playwright-core';
-import { mkdirSync, writeFileSync, readFileSync, existsSync, rmSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, appendFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 
 const env = process.env;
@@ -100,7 +100,8 @@ await page.evaluate(({ quality, dusk }) => {
       nearest = Math.min(nearest, Math.hypot(it.x - cam.x, it.z - cam.z));
       const view = inView(it.x, it.y, it.z, it.r);
       const px = ((2 * it.r) / (2 * Math.max(0.1, d) * tanH)) * H;
-      const f = fog ? Math.min(1, Math.max(0, (d - fog.near) / (fog.far - fog.near))) : 0;
+      // three.js linear Fog is smoothstep(near, far, view depth); the Euclidean distance stands in for the depth
+      const u = fog ? Math.min(1, Math.max(0, (d - fog.near) / (fog.far - fog.near))) : 0, f = u * u * (3 - 2 * u);
       const shown = it.drawn && it.k > 0;
       state[it.id] = { view, shown, level: it.level, k: it.k, px, fog: f, d, cat: it.cat };
       by[it.cat] ??= { total: 0, drawn: 0, levels: {} };
@@ -154,7 +155,8 @@ await page.evaluate(({ quality, dusk }) => {
 }, { quality: QUALITY, dusk: DUSK });
 
 // The reproducible route into the grove (walkable routes of the layout) and its reverse.
-const ROUTE = [[48, 168], [79, 160], [90, 139], [90, 128], [94, 127], [124, 132], [149, 145], [166, 140], [172, 149], [178, 157], [179, 160], [181, 162]];
+// (91.5, 130.5) for the terrace-lantern junction (90, 128), which a lantern base blocks.
+const ROUTE = [[48, 168], [79, 160], [90, 139], [91.5, 130.5], [94, 127], [124, 132], [149, 145], [166, 140], [172, 149], [178, 157], [179, 160], [181, 162]];
 const DISTANCES = (env.DISTANCES ?? '120,100,80,65,55,30').split(',').map(Number);
 // First point on the route (walking in) at each distance from the grove centre.
 function routePoint(d) {
@@ -168,7 +170,7 @@ function routePoint(d) {
   return ROUTE.at(-1);
 }
 
-const rows = { label, tag: TAG, params: PARAMS, quality: QUALITY, viewport, dusk: DUSK, path, chrome: await browser.version(), ua: await page.evaluate(() => navigator.userAgent), modes: {} };
+const rows = { fogModel: 'smoothstep', label, tag: TAG, params: PARAMS, quality: QUALITY, viewport, dusk: DUSK, path, chrome: await browser.version(), ua: await page.evaluate(() => navigator.userAgent), modes: {} };
 const summarize = (frames) => {
   const q = (a, p) => { const s = [...a].sort((x, y) => x - y); return +(s[Math.min(s.length - 1, Math.floor(s.length * p))] ?? 0).toFixed(1); };
   return {
@@ -249,6 +251,7 @@ if (MODE.includes('walk')) {
   await page.evaluate(({ start }) => { const g = window.__game; g.player.setPose({ x: start[0], y: g.world.col.ground(start[0], start[1]), z: start[1], yaw: 0, pitch: 0 }); window.VIS.lookAtGrove(); for (let i = 0; i < 60; i++) g.tick(1 / 30); }, { start: ROUTE[0] });
   const frames = [], events = [];
   let prev = null, n = 0, frameNo = 0;
+  const t0 = Date.now();
   const legs = [...ROUTE.slice(1).map((p) => ['in', p]), ...ROUTE.slice(0, -1).reverse().map((p) => ['out', p])];
   for (const [leg, [tx, tz]] of legs) {
     for (let guard = 0; guard < 4000; guard++) {
@@ -264,11 +267,13 @@ if (MODE.includes('walk')) {
         return { done, ms, ...window.VIS.probe(), mushroomPx: wantPx ? window.VIS.mushroomPixels() : null };
       }, { tx, tz, every, wantPx });
       const f = { leg, i: n++, ...step };
+      if (n % 25 === 0) appendFileSync(join(OUT, `${label}.progress`), `${n} ${leg} ${f.centreDist} m ${((Date.now() - t0) / 1000).toFixed(0)} s\n`);
       if (prev) events.push(...pops(prev, f, f.i).map((e) => ({ leg, ...e })));
       prev = f;
       frames.push(strip(f));
       if (video && n % (shotEvery / every) === 0) await page.screenshot({ path: join(video, `${String(frameNo++).padStart(5, '0')}.jpg`), type: 'jpeg', quality: 80 });
       if (step.done) break;
+      if (guard > 600) throw new Error(`walk stuck before (${tx}, ${tz}) at ${JSON.stringify(step.pos)}`);
     }
   }
   // largest frame-to-frame change of visible mushroom pixels (sampled frames, ~0.4 m apart), and where they first show
@@ -394,10 +399,12 @@ if (MODE.includes('lodpop')) {
       const file = join(OUT, `${label}-lodpop-${cat}-${dist}-${nth}-L${level}.png`);
       const clip = { x: Math.max(0, box.cx - box.half * 1.3), y: Math.max(0, box.cy - box.half * 1.3), width: Math.max(8, box.half * 2.6), height: Math.max(8, box.half * 2.6) };
       clip.width = Math.min(clip.width, viewport.width - clip.x); clip.height = Math.min(clip.height, viewport.height - clip.y);
+      if (!(clip.width >= 8 && clip.height >= 8 && clip.x < viewport.width && clip.y < viewport.height)) { shots.length = 0; break; } // projected off screen
       await page.screenshot({ path: file, clip });
       shots.push({ file, clip });
     }
     await page.evaluate(() => window.__game.world.scene.userData.groveForceLevel(null));
+    if (shots.length < 2) continue;
     const diff = JSON.parse(execFileSync('python3', ['-c', `
 import sys,json
 from PIL import Image, ImageChops
