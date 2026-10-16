@@ -23,7 +23,7 @@ describe('PORTAL-R01 hal-keuken shortcut', () => {
     expect(kitchen.z0).toBeLessThan(opening!.at - opening!.w / 2);
   });
 
-  it('does not alter the sealed basement's door connection', () => {
+  it('does not alter the sealed basement door connection', () => {
     expect(PORTALS.find((p) => p.a === 'lobby' && p.b === 'bstair')).toMatchObject({ kind: 'door', door: 'door.basement' });
   });
 });
