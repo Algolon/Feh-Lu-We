@@ -23,6 +23,7 @@ import { Batcher } from './kit';
 import { ART } from '../core/artflags';
 import { cutRocks, entranceV2 } from './boslustSample';
 import { makeBoslustMetalLock, BOSLUST_LOCK_SIZE } from './boslustLock';
+import { boslustDigits, turnBoslustWheel } from '../puzzles/boslustDials';
 
 const DOOR_X = 63, DOOR_Z = 18.2;
 
@@ -102,20 +103,56 @@ function entrance(w: World, g: GameApi, c0: Ctx, u: Ctx) {
   place(tab, 60.75, 1.2, 17.9, 0);
   w.scene.add(tab);
   makeInspect(w, g, { id: 'inspect.boslust', obj: tab, clue: 'c.boslust', hit: [1.2, 0.8, 0.3], hitOffset: [0, 0.35, 0], label: 'Bekijken: gravure' });
-  // BOSLUST-R01: authored aged-metal four-wheel lock; visuals do not change cipher rules.
-  const { lock, cover } = makeBoslustMetalLock(w, k);
+  // BOSLUST-R03: actual rotatable 3D wheels, one persistent code shared
+  // with the accessible modal; all gating and unlock rules remain canonical.
+  const { lock, cover, setDigits } = makeBoslustMetalLock(w, k);
   place(lock, 64.85, 1.2, 17.94, 0);
   w.scene.add(lock);
-  w.onSync(() => { cover.rotation.x = g.state.flags.boslustCover ? -2.05 : 0; });
+  w.onSync(() => {
+    cover.rotation.x = g.state.flags.boslustCover ? -2.05 : 0;
+    setDigits(boslustDigits(g.state));
+  });
+
+  // The broad plate opens the enlarged mobile-friendly code panel, while
+  // narrow, more-forward ray targets allow direct wheel manipulation in 3D.
   makeAction(w, {
-    id: 'boslust.lock', obj: lock, hit: [BOSLUST_LOCK_SIZE.width + 0.08, BOSLUST_LOCK_SIZE.height + 0.12, BOSLUST_LOCK_SIZE.depth + 0.05], hitOffset: [0, 0, 0],
-    label: () => (g.state.flags.boslustOpen ? null : g.state.flags.boslustCover ? 'Cijferwieltjes' : 'Klepje bekijken'),
+    id: 'boslust.lock', obj: lock,
+    hit: [BOSLUST_LOCK_SIZE.width + 0.08, BOSLUST_LOCK_SIZE.height + 0.12, BOSLUST_LOCK_SIZE.depth + 0.05],
+    hitOffset: [0, 0, 0],
+    label: () => (g.state.flags.boslustOpen ? null : g.state.flags.boslustCover ? 'Cijferslot bedienen' : 'Klepje bekijken'),
     run: () => {
       if (g.state.flags.boslustCover) { g.openPanel('boslust'); return; }
-      const r = openCipherCover(g.state);
-      g.act(r);
-      if (r.ok) g.openPanel('boslust');
+      const result = openCipherCover(g.state);
+      g.act(result);
+      if (result.ok) g.openPanel('boslust');
     },
+  });
+  for (const [i, x] of ([-0.063, 0.069, 0.201, 0.333] as const).entries()) {
+    const target = new THREE.Group();
+    target.position.set(x, 0, 0.245);
+    lock.add(target);
+    makeAction(w, {
+      id: `boslust.wheel.${i}`, obj: target,
+      hit: [0.115, 0.230, 0.11], hitOffset: [0, 0, 0],
+      label: () => {
+        if (!g.state.flags.boslustCover || g.state.flags.boslustOpen) return null;
+        const digit = boslustDigits(g.state)[i];
+        return `Draai wieltje ${i + 1}: ${digit} → ${(digit + 1) % 10}`;
+      },
+      run: () => {
+        if (turnBoslustWheel(g.state, i) === null) return;
+        g.sfx('click', 0.45);
+        g.changed();
+      },
+    });
+  }
+  const knob = new THREE.Group();
+  knob.position.set(-0.307, 0, 0.285);
+  lock.add(knob);
+  makeAction(w, {
+    id: 'boslust.knob', obj: knob, hit: [0.255, 0.25, 0.13], hitOffset: [0, 0, 0],
+    label: () => g.state.flags.boslustCover && !g.state.flags.boslustOpen ? 'Draai knop: probeer combinatie' : null,
+    run: () => { g.tryBoslustCode(); },
   });
   makeDoor(w, g, {
     id: 'door.boslust', x: DOOR_X - 0.6, z: DOOR_Z, dir: 'x+', width: 1.2, height: 2.3, y0: 0, swing: 1, color: '#5a3a22', style: 'plank',
