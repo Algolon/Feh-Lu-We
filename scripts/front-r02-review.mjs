@@ -41,7 +41,7 @@ try{
     const metrics=await page.evaluate(pose=>{
       const g=window.__game;
       g.player.setPose(pose);
-      for(let i=0;i<75;i++)g.tick(1/30);
+      for(let i=0;i<15;i++)g.tick(1/30); // settle camera without 75 costly software GPU frames
       g.renderer.render(g.world.scene,g.camera);
       return {
         x:g.player.x,z:g.player.z,
