@@ -132,7 +132,8 @@ try {
       const g = window.__game, w = g.world;
       g.settings.quality = 'low'; g.applyQuality(true);
       g.state.open['door.billiardOut'] = false; w.syncAll();
-      const x = position === 'front' ? 88 : 88.8;
+      // Look from the LEFT to avoid the standing floor lamp obstructing the right-side view.
+      const x = position === 'front' ? 88 : 87.25;
       const z = 108.25;
       g.player.setPose({ x, y: 0.15, z, yaw: Math.atan2(88 - x, 109.8 - z),
         pitch: position === 'front' ? -0.46 : -0.43 });
