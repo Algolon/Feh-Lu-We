@@ -5,8 +5,8 @@
 | Branch | `perf-r02-frame-accurate-culling` |
 | Production baseline | **`436e106d40443b8e105dce5d4d3722b46fc4be11`** (D3-b2 + D3-b2R closeout; build `index-B2a-hSQD.js`) |
 | Checkpoint A (measurement) | harness `0bcc75d` … `9de478b`, `055dfca`; baseline evidence and §1–§5 of this report |
-| Checkpoint B (culling) | see §6 |
-| Final feature SHA | see §9 |
+| Checkpoint B (culling) | `7f51e0f` (`mUpE`), `f7ee08a` (`mLib`); `mAttic` `e4684ca` reverted in `31c2971` (§6) |
+| Final feature SHA | **`92bf875fac12de30faa71c3b9e56756b91ec8d20`** (source identical to the measured candidate `88382b3`: only tests, tooling and docs changed after it) |
 | Merge / deploy | **not done**; owner review required |
 
 All numbers are SwiftShader (software WebGL) in headless Chromium at mobile low quality: 915 × 412 CSS = drawing
