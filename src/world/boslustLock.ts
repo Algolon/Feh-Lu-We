@@ -2,6 +2,7 @@
 // The four physical drums are an authored visual; the existing cipher panel
 // owns input, solution, unlock state and save compatibility.
 import * as THREE from 'three';
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import type { World } from '../interactions/world';
 import { softBox } from './artkit';
 import { box, compound, rod, type Kit } from './kit';
@@ -117,6 +118,38 @@ function bentReels(): THREE.BufferGeometry {
   g.setIndex(indices); g.computeVertexNormals();
   return g;
 }
+/** Collapse the fixed metal castings into one vertex-coloured mesh.
+ *  One draw call for chassis, beveled rim, lever hub, grip and thumb-rest;
+ *  avoids paying for seven separate tiny metallic draw submissions.
+ */
+function joinMetalCastings(w: World, lock: THREE.Group, parts: THREE.Mesh[]) {
+  const pieces: THREE.BufferGeometry[] = [];
+  for (const mesh of parts) {
+    mesh.updateMatrix();
+    const g = mesh.geometry.index ? mesh.geometry.toNonIndexed() : mesh.geometry.clone();
+    g.applyMatrix4(mesh.matrix);
+    if (!g.getAttribute('normal')) g.computeVertexNormals();
+    const vertices = g.getAttribute('position').count;
+    if (!g.getAttribute('uv')) g.setAttribute('uv', new THREE.Float32BufferAttribute(new Float32Array(vertices * 2), 2));
+    const col = (mesh.material as THREE.MeshStandardMaterial).color;
+    const colors = new Float32Array(vertices * 3);
+    for (let i = 0; i < vertices; i++) {
+      colors[i * 3] = col.r; colors[i * 3 + 1] = col.g; colors[i * 3 + 2] = col.b;
+    }
+    g.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    pieces.push(g);
+  }
+  const merged = mergeGeometries(pieces, false);
+  for (const g of pieces) g.dispose();
+  if (!merged) throw new Error('BOSLUST lock metal castings failed to merge');
+  for (const m of parts) { lock.remove(m); m.geometry.dispose(); }
+  const metal = new THREE.Mesh(merged,
+    w.material(new THREE.MeshStandardMaterial({ vertexColors: true, metalness: 0.26, roughness: 0.65 })));
+  metal.receiveShadow = true;
+  metal.name = 'single-batched sculpted metal castings';
+  lock.add(metal);
+}
+
 function roundedPart(w: World, size: [number,number,number], radius: number, material: THREE.Material) {
   const geo = softBox(...size, radius, 2);
   return new THREE.Mesh(geo, material);
@@ -153,6 +186,7 @@ export function makeBoslustMetalLock(w: World, k: Kit) {
   grip.rotation.z = -0.55; grip.position.set(KNOB_X, 0.0, 0.199); lock.add(grip);
   const thumb = roundedPart(w, [0.054, 0.059, 0.015], 0.004, edge);
   thumb.rotation.z = -0.55; thumb.position.set(KNOB_X + 0.076, -0.043, 0.242); lock.add(thumb);
+  joinMetalCastings(w, lock, [chassis, rim, ring, spindle, hub, grip, thumb]);
 
   // Four actual curved digit surfaces in four shadowed wells, with slim
   // machined separators and a fine common centre-line. Dark centre keeps
@@ -186,7 +220,7 @@ export function makeBoslustMetalLock(w: World, k: Kit) {
   const values = [0, 0, 0, 0];
   const motion = CENTRES.map(() => ({ from: 0, to: 0, direction: 1, elapsed: 0, moving: false }));
   let initialized = false;
-  const setDigits = (next: readonly number[]) => {
+  const setDigits = (next: readonly number[], animate = true) => {
     if (next.length !== 4) return;
     if (!initialized) {
       for (let i = 0; i < 4; i++) {
@@ -197,13 +231,22 @@ export function makeBoslustMetalLock(w: World, k: Kit) {
       return;
     }
     for (let i = 0; i < 4; i++) {
-      if (values[i] === next[i]) continue;
+      if (values[i] === next[i] && (animate || !motion[i].moving)) continue;
       const from = values[i], to = next[i];
       const m = motion[i];
       m.from = from; m.to = to; m.elapsed = 0;
-      m.direction = to === (from + 9) % 10 ? -1 : 1;
-      m.moving = true;
+      const forward = to === (from + 1) % 10;
+      const backward = to === (from + 9) % 10;
       values[i] = to;
+      // A single physical click rotates. Multi-digit changes and a solved
+      // lock snap to the authoritative final number rather than rendering an
+      // unrelated intermediate digit for a few software-rendered frames.
+      if (!animate || (!forward && !backward)) {
+        m.moving = false; atlas.paint(to, i);
+        continue;
+      }
+      m.direction = backward ? -1 : 1;
+      m.moving = true;
     }
   };
   w.onUpdate((dt) => {
@@ -211,7 +254,7 @@ export function makeBoslustMetalLock(w: World, k: Kit) {
       const m = motion[i];
       if (!m.moving) continue;
       m.elapsed += dt;
-      const t = Math.min(1, m.elapsed / 0.19);
+      const t = Math.min(1, m.elapsed / 0.16);
       // Ease out without overshoot; saved state always holds the final exact digit.
       const eased = 1 - (1 - t) * (1 - t);
       atlas.paint(m.from, i, m.direction, eased);
