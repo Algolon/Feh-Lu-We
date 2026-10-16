@@ -787,8 +787,7 @@ function library(w: World, g: GameApi, c: Ctx) {
 /** Iteration-3 catalogue (emblem → room → tab). Replaced by B01 v0.2 in the DEV-01 review build. */
 function libraryCatalogue(w: World, g: GameApi, c: Ctx, tx: number, tz: number, deskDrawer: ReturnType<typeof makeDrawer>) {
   const k = c.k;
-  chair(c, tx + 0.95, tz - 0.5, GF, -Math.PI / 2, '#3f5a6a');
-  chair(c, tx + 0.95, tz + 0.5, GF, -Math.PI / 2, '#3f5a6a');
+  // LIB-R01: no duplicate catalogue chairs — one separate upholstered desk chair exists.
   const sockets = new THREE.Group();
   place(sockets, tx, GF + 0.81, tz, 0);
   w.scene.add(sockets);
@@ -852,12 +851,12 @@ function libraryCatalogue(w: World, g: GameApi, c: Ctx, tx: number, tz: number, 
   card.position.set(0.05, -0.03 + LINER_TOP.blotter, 0.1);
   deskDrawer.slider.add(card);
   makePickup(w, g, { id: 'pk.studyKey', item: 'studyKey', obj: card, available: deskDrawer.isOpen, hit: [0.3, 0.12, 0.3], label: 'Pakken: messing sleutel en kaart', after: () => g.inspect('c.archiveCard') });
-  // framed floor plan with the room emblems, on the east wall facing into the library
-  canvasPanel(w, 84.82, GF + 1.75, 96.6, -Math.PI / 2, 1.3, 1.0, (x, W, H) => drawLibraryPlan(x, W, H), 512);
-  const planHit = new THREE.Group(); place(planHit, 84.7, GF + 1.25, 96.6, 0); w.scene.add(planHit);
+  // LIB-R01: relocation to an empty south wall section. The former east wall is now a filled book bay.
+  canvasPanel(w, 82.0, GF + 1.75, 94.16, 0, 1.3, 1.0, (x, W, H) => drawLibraryPlan(x, W, H), 512);
+  const planHit = new THREE.Group(); place(planHit, 82.0, GF + 1.25, 94.30, 0); w.scene.add(planHit);
   makeInspect(w, g, { id: 'inspect.libraryPlan', obj: planHit, clue: 'c.libraryPlan', hit: [0.3, 1.0, 1.4], hitOffset: [0, 0.5, 0], label: 'Bekijken: plattegrond' });
   // lectern with the big guestbook (page tabs)
-  const lec = lectern(c, 82.8, 105.6, GF, -Math.PI / 2);
+  const lec = lectern(c, 78.1, 107.0, GF, -Math.PI / 2); // clear of the new spiral
   // DEV-04B: the guestbook is an open book from the book family (boards, gutter, curving pages) with its page tabs
   const gbk = compound((b) => {
     addOpenBook(new Asm(b, 'main', 0, -0.035, 0, Math.PI / 2), '#5a2a22', 0, 0, 0, { size: 'tall', rx: -0.45 });
