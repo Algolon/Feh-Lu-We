@@ -1,0 +1,36 @@
+name: LIGHT-R03 continuity visual QA
+on:
+  push:
+    branches: [fix/light-r03-distance-continuity]
+  workflow_dispatch:
+concurrency:
+  group: light-r03-continuity
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 23
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright-core install --with-deps chromium
+      - name: Real-browser threshold light-intensity timeline
+        shell: bash
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4188 >/tmp/light-r03-preview.log 2>&1 &
+          for i in $(seq 1 40); do curl -sf http://127.0.0.1:4188/Feh-Lu-We/ >/dev/null && break; sleep 1; done
+          node scripts/light-r03-continuity-qa.mjs http://127.0.0.1:4188/Feh-Lu-We/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: light-r03-continuity
+          path: light-r03-qa
