@@ -185,7 +185,11 @@ export function migrate(raw: unknown): GameState | null {
   const slots: Record<string, string | null> = {};
   if (isObj(data.slots)) for (const [k, acc] of Object.entries(SLOT_RULES)) { if (!(k in data.slots)) continue; const v2 = data.slots[k]; slots[k] = typeof v2 === 'string' && acc.includes(v2) ? v2 : null; }
   const dials: Record<string, number> = {};
-  for (const [k, n] of Object.entries(numRec(data.dials))) if (/^plate\.(tafel|boek|boom)$/.test(k)) dials[k] = count(n, 3);
+  for (const [k, n] of Object.entries(numRec(data.dials))) {
+    if (/^plate\.(tafel|boek|boom)$/.test(k)) dials[k] = count(n, 3);
+    // R03: only the four BOSLUST wheels may persist 0–9. Old saves simply default to 0000.
+    else if (/^boslust\.wheel\.[0-3]$/.test(k)) dials[k] = count(n, 9);
+  }
   const seq: Record<string, string[]> = {};
   if (isObj(data.seq)) for (const [k, s] of Object.entries(data.seq)) seq[k] = knownSymbols(strArr(s)).slice(0, 8);
   const hints: Record<string, number> = {};

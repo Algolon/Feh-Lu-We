@@ -520,15 +520,25 @@ export class UI {
     render();
   }
 
-  /** Number wheels (0–9) with neutral feedback; returns true from onTry when it opened. */
-  digitLock(title: string, intro: string, count: number, onTry: (digits: number[]) => boolean) {
+  /** Accessible numbered fallback; shares the physical BOSLUST wheel draft. */
+  digitLock(title: string, intro: string, count: number, onTry: (digits: number[]) => boolean,
+    options: { initial?: readonly number[]; onChange?: (digits: number[]) => void } = {}) {
     const body = this.modal(title, `<p>${esc(intro)}</p><div class="dials digits"></div><div class="row center"><button class="btn primary" data-try>Proberen</button></div>`);
-    const vals = new Array(count).fill(0);
+    const vals = Array.from({length:count},(_,i) => options.initial?.[i] ?? 0);
     const dials = $('.dials', body);
-    const render = () => {
+    const render = (focus?: string) => {
       dials.innerHTML = vals.map((v, i) => `<div class="dial"><button class="btn" data-up="${i}" aria-label="Wieltje ${i + 1} omhoog">▲</button><div class="face num" aria-live="polite">${v}</div><button class="btn" data-down="${i}" aria-label="Wieltje ${i + 1} omlaag">▼</button></div>`).join('');
-      dials.querySelectorAll<HTMLButtonElement>('[data-up]').forEach((b) => b.addEventListener('click', () => { const i = +b.dataset.up!; vals[i] = (vals[i] + 1) % 10; render(); }));
-      dials.querySelectorAll<HTMLButtonElement>('[data-down]').forEach((b) => b.addEventListener('click', () => { const i = +b.dataset.down!; vals[i] = (vals[i] + 9) % 10; render(); }));
+      const turn = (i: number, step: number) => {
+        vals[i] = (vals[i] + step + 10) % 10;
+        options.onChange?.([...vals]);
+        render(`${step > 0 ? 'up' : 'down'}-${i}`);
+      };
+      dials.querySelectorAll<HTMLButtonElement>('[data-up]').forEach((b) => b.addEventListener('click', () => turn(+b.dataset.up!, 1)));
+      dials.querySelectorAll<HTMLButtonElement>('[data-down]').forEach((b) => b.addEventListener('click', () => turn(+b.dataset.down!, -1)));
+      if (focus) {
+        const [direction,index] = focus.split('-');
+        dials.querySelector<HTMLButtonElement>(`[data-${direction}="${index}"]`)?.focus({ preventScroll: true });
+      }
     };
     render();
     $('[data-try]', body).addEventListener('click', () => { if (onTry([...vals])) this.closeModal(); });

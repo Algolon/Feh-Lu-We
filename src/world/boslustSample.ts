@@ -526,7 +526,7 @@ export function entranceV2(w: World, c: Ctx) {
   const DX = 63, DZ = 18.2, TOP = 3.62;
   const r = mulberry32(5);
   // clear zones (plan x0, x1, y0, y1) for the door opening, tablet, lock and sign
-  const keep: [number, number, number, number][] = [[62.38, 63.62, -1, 2.32], [60.12, 61.38, 1.17, 1.93], [64.55, 65.15, 0.92, 1.48], [62.0, 64.0, 2.85, 3.46]];
+  const keep: [number, number, number, number][] = [[62.38, 63.62, -1, 2.32], [60.12, 61.38, 1.17, 1.93], [64.41, 65.64, 1.26, 2.02], [62.0, 64.0, 2.85, 3.46]];
   const blocked = (x0: number, x1: number, y0: number, y1: number) => keep.some(([a, b, c0, d]) => x1 > a && x0 < b && y1 > c0 && y0 < d);
   // the wall top steps down toward both ends (it sinks into the hill there): full height over the door, sign and
   // tablet (x 61.05–64.95), one step lower, then lower again at the ends
