@@ -15,9 +15,13 @@ describe('FRONT-R04 - authored 3D lion sculpture, bronze hardware, narrow steel 
     expect(g.index!.count/3).toBeLessThan(55000); // explicit high-detail sculpt, capped for mobile
     expect(g.getAttribute('normal').count).toBe(p.count);
     const box=new THREE.Box3().setFromBufferAttribute(p);
-    expect(box.max.x-box.min.x).toBeLessThan(.30);
+    expect(box.max.x-box.min.x).toBeLessThan(.36); // true ears + cast mane extend beyond the old flat oval
+    expect(box.min.x).toBeGreaterThan(-.18);
+    expect(box.max.x).toBeLessThan(.18); // verify no grid-edge clipping
     expect(box.max.y-box.min.y).toBeGreaterThan(.27);
-    expect(box.max.y-box.min.y).toBeLessThan(.40);
+    expect(box.max.y-box.min.y).toBeLessThan(.41);
+    expect(box.min.y).toBeGreaterThan(-.207);
+    expect(box.max.y).toBeLessThan(.211);
     expect(box.max.z-box.min.z).toBeGreaterThan(.095);
     expect(box.max.z-box.min.z).toBeLessThan(.22); // true volumetric profile, no excessively protruding relief
     expect(Array.from(p.array).every(Number.isFinite)).toBe(true);
