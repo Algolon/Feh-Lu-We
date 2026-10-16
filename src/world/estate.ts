@@ -564,9 +564,10 @@ function buildGarden(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods: Estat
   }
   // soft meadow: grass tufts across the lawns (instanced, tiled so only nearby tiles draw; DEV-03: 2.5 m spacing, the
   // low flowers and the woodland understory carry the ground detail now)
+  // Smaller grass tiles preserve every tuft while avoiding whole 40 m cells behind walls or outside the view.
   for (const [x, z] of scatter(r, 2, ESTATE.w - 2, ESTATE.forestEdge - 4, ESTATE.d - 2, 2.5, 11000, (x, z) => clearOf(x, z) || (z > 118 && vegetationClear(x, z, 'small') && !inWood(x, z) && Math.hypot(x - LC.x, z - LC.z) > 4.5))) {
     const size = 0.25 + r() * 0.2, col = r() < 0.5 ? '#7fae4a' : '#94bc58';
-    veg.smallThing('grass', x, z, size, col, `gr${Math.floor(x / 40)}_${Math.floor(z / 40)}`, terrainHeight(x, z));
+    veg.smallThing('grass', x, z, size, col, `gr${Math.floor(x / (GARDEN_DETAIL?20:40))}_${Math.floor(z / (GARDEN_DETAIL?20:40))}`, terrainHeight(x, z));
   }
   if (woods) {
     // forecourt planter: a clipped box ball in the middle, a ring of foxgloves and anemones (planted in the soil)
