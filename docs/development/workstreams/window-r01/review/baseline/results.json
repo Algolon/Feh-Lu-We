@@ -127,6 +127,24 @@
       "glError": 0
     }
   ],
+  "oblique": [
+    {
+      "side": "inside",
+      "here": "billiard",
+      "targetVisible": false,
+      "calls": 15,
+      "triangles": 76360,
+      "glError": 0
+    },
+    {
+      "side": "outside",
+      "here": "out",
+      "targetVisible": false,
+      "calls": 50,
+      "triangles": 278073,
+      "glError": 0
+    }
+  ],
   "errors": [],
   "deviceValidated": false
 }
