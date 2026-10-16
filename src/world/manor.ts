@@ -260,7 +260,13 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   wall(c, 'x', 104, 85, 92, GF, CEIL, { ...P, openings: [{ at: 86.5, w: 0.9, h: 2.25 }, { at: 90, w: 1.0, h: 2.3 }] }); // lobby | guest WC, billiard
   wall(c, 'z', 88, 104, 107, GF, CEIL, P); // guest WC | billiard (v0.2 guestWC X 85–88 / Z 104–107)
   wall(c, 'x', 107, 85, 88, GF, CEIL, P);
-  wall(c, 'z', 95, 92, 109.6, BF, CEIL, P); // kitchen | stairwell/billiard (down to the basement floor)
+  // PORTAL-R01: a walkable hal → keuken shortcut just north of the main stair (stair ends at Z95.5).
+  // Keep the full-height structural wall below the kitchen floor so the basement enclosure remains sealed.
+  wall(c, 'z', 95, 92, 109.6, BF, GF, { ...P, trim: false });
+  wall(c, 'z', 95, 92, 109.6, GF, CEIL, { ...P, openings: [{ at: 96.55, w: 1.65, h: 2.45 }] }); // hal | kitchen portal; basement enclosure beyond Z98 untouched
+  // Shallow oak casing, without a door or any new collider in the clear opening.
+  for (const z of [95.725, 97.375]) box(c.b, k.M.wood, '#705036', 95, GF + 1.21, z, 0.21, 2.42, 0.075, { chunk: c.chunk });
+  box(c.b, k.M.wood, '#705036', 95, GF + 2.47, 96.55, 0.21, 0.095, 1.79, { chunk: c.chunk });
   wall(c, 'x', 92, 95, 107.6, GF, CEIL, { ...P, openings: [{ at: 101, w: 2.0, h: 2.5 }] }); // dining | kitchen
   // basement stairwell enclosure (west side has the sealed door; walls run down to the basement floor)
   wall(c, 'z', 92, 98, 104.8, GF, CEIL, { ...P, openings: [{ at: 98.9, w: 1.0, h: 2.3 }] });
@@ -896,7 +902,7 @@ function kitchen(w: World, g: GameApi, c: Ctx) {
   rug(c, 101.0, 100.0, GF + 0.01, 3.0, 4.4, 0, '#ffffff', 'oval');
   rug(c, 103.6, 107.75, GF + 0.01, 0.8, 3.6, Math.PI / 2, '#b8c6cc', 'runner'); // tinted towards the kitchen's blue-green
   for (const z of [99.25, 100.75]) enamelPendant(c, 101.0, GF, z, CEIL, 1.95);
-  pegRailClock(c, 95.08, GF, 101.15, Math.PI / 2, 3.0);
+  pegRailClock(c, 95.08, GF, 106.6, Math.PI / 2, 1.8); // PORTAL-R01: free the service-chart wall bay; rail stays by the dresser
   refectoryTable(c, 101.0, 100.0, GF, 1.2, 3.0, 0, '#8a5a33');
   // DEV-04B: kitchen chairs are the Windsor (spindle) build of the chair family, not the dining room's chair again
   for (let i = 0; i < 3; i++) { chair(c, 100.0, 98.9 + i * 1.1, GF, Math.PI / 2, '#6f8a7a', true, 'spindle', '#7a5232'); chair(c, 102.0, 98.9 + i * 1.1, GF, -Math.PI / 2, '#6f8a7a', true, 'spindle', '#7a5232'); }
@@ -923,11 +929,11 @@ function kitchen(w: World, g: GameApi, c: Ctx) {
     a2.add(M2.timber, '#8a6440', joinery.bx(1.36, 0.025, 0.55), 0, 0.22, 0);
     for (const sx of [-1, 1]) for (const sz of [-1, 1]) a2.add(M2.timber, '#8a6440', joinery.bx(0.03, 0.025, 0.03), sx * 0.66, 0.22, sz * 0.27);
     addShoppingCrate(a2, -0.35, 0.2325, 0, { ry: Math.PI / 2, load: 'veg', seed: 5 }); }
-  // DEV-04B: a tall larder cupboard fills the empty south-west corner (the plant moved to the dining arch)
-  larder(c, 95.38, 93.4, GF, Math.PI / 2, 1.2, 0.5, 2.05);
+  // PORTAL-R01: relocate the tall green larder to the south wall, facing the open kitchen; clear of the new arch and dining opening.
+  larder(c, 96.9, 92.42, GF, 0, 1.2, 0.5, 2.05);
   plant(c, 104.4, 92.6, GF, 0.9, '#d0a070'); // beside the arch, clear of the walk line through it
-  // ---- service chart (thread A) on the west wall + hook board with the three trolley tags
-  const chart = canvasPanel(w, 95.1, GF + 1.65, 96.0, Math.PI / 2, 2.0, 1.0, (x, W, H) => drawServiceChart(x, W, H), 768);
+  // ---- service chart (thread A), relocated north of the portal on the west wall + original hook-board interactions
+  const chart = canvasPanel(w, 95.1, GF + 1.65, 101.1, Math.PI / 2, 2.0, 1.0, (x, W, H) => drawServiceChart(x, W, H), 768); // PORTAL-R01: same wall, beside the existing hatch, away from the new opening
   const tagGroups: Record<string, THREE.Object3D> = {};
   SERVICE.tags.forEach((t) => {
     const cv = document.createElement('canvas'); cv.width = cv.height = 96;
