@@ -53,6 +53,7 @@ export function installArtDiagnostics(game: Game) {
   update.textContent='Meet GPU';copy.textContent='Kopieer';collapse.textContent='Inklappen';
   controls.append(update,copy,collapse);host.append(title,label,controls);document.body.append(host);
   let last: Record<string,unknown>={message:'Spel starten om atlasgegevens te meten'};
+  let lastGpu: ReturnType<typeof gpuSample> | string = 'Druk op Meet GPU';
   const collect=(gpu:boolean)=>{
     const gl=game.renderer.getContext();
     const materials=new Set<THREE.Material>();
@@ -66,7 +67,7 @@ export function installArtDiagnostics(game: Game) {
     const image=mat?.map?.image as HTMLImageElement | HTMLCanvasElement | undefined;
     const width=image instanceof HTMLImageElement?image.naturalWidth:image?.width??0;
     const height=image instanceof HTMLImageElement?image.naturalHeight:image?.height??0;
-    let cpu:ReturnType<typeof stats>|string='niet geladen', gpuResult:ReturnType<typeof gpuSample>|string='Druk op Meet GPU';
+    let cpu:ReturnType<typeof stats>|string='niet geladen';
     if(image && width>4 && height>4) {
       try {
         const canvas=document.createElement('canvas');canvas.width=64;canvas.height=32;
@@ -75,8 +76,8 @@ export function installArtDiagnostics(game: Game) {
         else cpu='2D canvas niet beschikbaar';
       }catch(e){cpu='CPU-fout: '+String(e);}
       if(gpu&&mat?.map){
-        try{gpuResult=gpuSample(game.renderer,mat.map);}
-        catch(e){gpuResult='GPU-fout: '+String(e);}
+        try{lastGpu=gpuSample(game.renderer,mat.map);}
+        catch(e){lastGpu='GPU-fout: '+String(e);}
       }
     }
     last={
@@ -89,7 +90,7 @@ export function installArtDiagnostics(game: Game) {
       maxTextureSize:gl.getParameter(gl.MAX_TEXTURE_SIZE),
       quality:game.settings.quality,
       dpr:game.renderer.getPixelRatio(),
-      cpu,gpu:gpuResult
+      cpu,gpu:lastGpu
     };
     label.textContent=JSON.stringify(last,null,2);
   };
