@@ -479,22 +479,31 @@ function flwAtlas() {
           failed(`unexpected atlas image size ${img.naturalWidth}x${img.naturalHeight}`, n);
           return;
         }
+        // Three.js/WebGL2 texture storage is IMMUTABLE after its first render.
+        // Updating the 4x4 placeholder's image to a 2048x960 atlas only replaces
+        // the CPU source; on actual mobile GPUs the allocated 4x4 texture remains
+        // unchanged and the painting stays a flat colour. Always replace the
+        // Texture instance (new GPU allocation), NEVER resize tex.image.
+        let source: HTMLCanvasElement | HTMLImageElement = img;
         if (compactAtlas) {
-          // Keep UVs unchanged: exactly half-size in both axes. The canvas upload
-          // avoids a large decoded-WebP image being sent directly to mobile WebGL.
+          // Same atlas UVs, optionally half-resolution for diagnosing GPU memory.
           const canvas = document.createElement('canvas');
           canvas.width = width / 2;
           canvas.height = height / 2;
           const ctx = canvas.getContext('2d');
           if (!ctx) { failed('compact canvas 2D context unavailable', n); return; }
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          tex.image = canvas;
-          loadState.textureSize = [canvas.width, canvas.height];
-        } else {
-          tex.image = img;
-          loadState.textureSize = [img.naturalWidth, img.naturalHeight];
+          source = canvas;
         }
-        tex.needsUpdate = true; // upload the REAL art even if the 4px placeholder was uploaded
+        const realTexture = new THREE.Texture<HTMLCanvasElement | HTMLImageElement>(source);
+        realTexture.colorSpace = THREE.SRGBColorSpace;
+        realTexture.needsUpdate = true;
+        const oldTexture = flwMat!.map;
+        flwMat!.map = realTexture;
+        flwMat!.needsUpdate = true;
+        oldTexture?.dispose(); // the old GPU storage was only 4x4, never usable for the full atlas
+        loadState.textureSize = [source instanceof HTMLImageElement ? source.naturalWidth : source.width,
+          source instanceof HTMLImageElement ? source.naturalHeight : source.height];
         finish(true);
       };
       img.onerror = () => failed('image request error', n);
