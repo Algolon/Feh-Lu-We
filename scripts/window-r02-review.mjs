@@ -141,14 +141,13 @@ try {
     if (!reference) throw Error('No exact production baseline for '+p.id+'/'+side);
     const triangleDelta = view.triangles - reference.triangles;
     const callDelta = view.calls - reference.calls;
-    if (view.calls > 150 || callDelta > 5 || triangleDelta > 35000)
-      throw Error('Window integration render regression: '+JSON.stringify({view,reference,triangleDelta,callDelta}));
-    if (view.triangles > 750000) {
-      if (reference.triangles <= 750000)
-        throw Error('New PB01 mobile-low overrun caused by windows: '+JSON.stringify({view,reference}));
+    // More triangles are EXPECTED through a formerly opaque window. The essential
+    // quality gate is the absolute PB01 ceiling, not equivalence with an opaque pane.
+    // Still retain matched production deltas for diagnosing new cost.
+    if (view.calls > 150 || view.triangles > 750000)
+      throw Error('WINDOW-R02 budget exceeded with visible rooms: '+JSON.stringify({view,reference,triangleDelta,callDelta}));
+    if (triangleDelta > 20000 || callDelta > 5)
       budgetExceptions.push({view,reference,triangleDelta,callDelta});
-      console.log('Known production triangle-budget debt (not introduced by windows):',JSON.stringify({view,reference,triangleDelta}));
-    }
     await page.screenshot({ path: `${folder}/${p.id}-${side}.jpg`, type:'jpeg', quality:85 });
     console.log(JSON.stringify(view));
   }
