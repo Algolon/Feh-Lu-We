@@ -2,7 +2,6 @@
 // The four physical drums are an authored visual; the existing cipher panel
 // owns input, solution, unlock state and save compatibility.
 import * as THREE from 'three';
-import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import type { World } from '../interactions/world';
 import { softBox } from './artkit';
 import { box, compound, rod, type Kit } from './kit';
