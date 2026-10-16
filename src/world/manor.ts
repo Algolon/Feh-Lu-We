@@ -768,7 +768,7 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
 function library(w: World, g: GameApi, c: Ctx) {
   // LIB-R01: fitted shelving, central reading lounge, corner bureau and a traversable
   // spiral staircase replacing the two freestanding double-sided stack aisles.
-  libraryR01Furniture(c);
+  libraryR01Furniture(w, c);
   libraryR01Stair(c);
   // The upstairs library collection and its rolling ladder remain accessible from the gallery.
   for (const [x, pal] of [[75.0, 'linen'], [79.0, 'leather']] as const) bookshelf(c, x, 109.3, UF, Math.PI, 2.6, 2.4, pal, 0.25);
