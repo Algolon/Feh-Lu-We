@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 import { mulberry32, type Rng } from '../core/rng';
 import { drawSymbol } from '../content/symbols';
-import { GROUND_SURFACE_DETAIL, paintGroundTexture } from './groundTexture';
+import { GROUND_SURFACE_DETAIL, GROUND_SURFACE_VARIATION, paintGroundTexture } from './groundTexture';
 
 function canvas(w: number, h = w): [HTMLCanvasElement, CanvasRenderingContext2D] {
   const c = document.createElement('canvas');
@@ -52,7 +52,7 @@ function strokes(ctx: CanvasRenderingContext2D, r: Rng, w: number, h: number, n:
   ctx.globalAlpha = 1;
 }
 
-export function makeTextures(groundDetail = GROUND_SURFACE_DETAIL) {
+export function makeTextures(groundDetail = GROUND_SURFACE_DETAIL, groundVariation = GROUND_SURFACE_VARIATION) {
   const T: Record<string, THREE.Texture> = {};
 
   { // grass: warm mossy greens, painterly
@@ -63,7 +63,7 @@ export function makeTextures(groundDetail = GROUND_SURFACE_DETAIL) {
     blotches(x, r, 512, 512, 220, ['#7ea24c', '#9cc163', '#86ab4f', '#a7c46c', '#6f9443'], 10, 46, 0.35);
     strokes(x, r, 512, 512, 2600, ['#6c9140', '#a9cc6e', '#7fa94a', '#b8d27d'], 7, 2, 0.5, -Math.PI / 2.2);
     blotches(x, r, 512, 512, 40, ['#c9d98a', '#e8e0a0'], 2, 4, 0.5);
-    if(groundDetail)paintGroundTexture(x,'grass');
+    if(groundDetail)paintGroundTexture(x,'grass',512,groundVariation);
     T.grass = tex(c);
   }
   { // dirt path
@@ -74,7 +74,7 @@ export function makeTextures(groundDetail = GROUND_SURFACE_DETAIL) {
     x.fillRect(0, 0, 256, 256);
     blotches(x, r, 256, 256, 160, ['#ab9676', '#c6b496', '#9e8a6c', '#cbbc9e'], 4, 18, 0.4);
     blotches(x, r, 256, 256, 260, ['#857258', '#e2d6bc', '#9a8f80'], 1, 2.6, 0.55);
-    if(groundDetail)paintGroundTexture(x,'dirt');
+    if(groundDetail)paintGroundTexture(x,'dirt',512,groundVariation);
     T.dirt = tex(c);
   }
   { // cream stone blocks (exterior walls)

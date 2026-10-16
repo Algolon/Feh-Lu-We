@@ -1,0 +1,48 @@
+{
+  "baseCommit": "6f3e8e33d55eb1ca69670c14005930d692a965ff",
+  "previewQuery": "?vegstyle=woodland-r02&treeart=trees-r03&vegdetail=r05&groundart=r07",
+  "sourceHashes": {
+    "src/world/groundTexture.ts": "c6b6febae0907f1f9658090be7f4c306c9377248eb262bfa6d21db7a01f08b67",
+    "src/world/textures.ts": "67cd160324de739bc2dece074ff69605b7e7b755da2c6b6e83b30b51228b8617",
+    "tests/groundTexture.test.ts": "55f81168bfb643c39c9374103bc854e3fe72f27d5a775d7c0a31c09952c39047",
+    "scripts/veg-r07-review.mjs": "de0c923b5c1dcdc8bd2445701293da77a3921e4830b1ac8ef7fc759bf108bcde"
+  },
+  "checks": {
+    "unitTests": 311,
+    "finalTextureTests": 2,
+    "typecheck": "pass",
+    "build": "pass",
+    "gameRenderRecords": 14,
+    "pageShaderWebGLErrors": 0,
+    "drawCallAndTriangleParityWithR06": true,
+    "placementParity": true,
+    "freshInstancedRerun": false,
+    "physicalDeviceTested": false
+  },
+  "paintedTextureStats": [
+    {
+      "kind": "grass",
+      "detail": "r07",
+      "repeat": 1,
+      "width": 512,
+      "height": 512,
+      "meanRGB": [
+        144.48672485351562,
+        179.9042205810547,
+        91.06111145019531
+      ]
+    },
+    {
+      "kind": "dirt",
+      "detail": "r07",
+      "repeat": 1,
+      "width": 512,
+      "height": 512,
+      "meanRGB": [
+        182.9600830078125,
+        163.57229614257812,
+        132.90549850463867
+      ]
+    }
+  ]
+}

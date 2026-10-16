@@ -1,0 +1,291 @@
+{
+  "models": [
+    {
+      "kind": "grass",
+      "detail": "original",
+      "repeat": 1,
+      "width": 512,
+      "height": 512,
+      "meanRGB": [
+        141.04122924804688,
+        176.76353454589844,
+        88.07901382446289
+      ]
+    },
+    {
+      "kind": "grass",
+      "detail": "r06",
+      "repeat": 1,
+      "width": 512,
+      "height": 512,
+      "meanRGB": [
+        143.3069839477539,
+        178.97488021850586,
+        90.41902923583984
+      ]
+    },
+    {
+      "kind": "grass",
+      "detail": "r07",
+      "repeat": 1,
+      "width": 512,
+      "height": 512,
+      "meanRGB": [
+        144.48672485351562,
+        179.9042205810547,
+        91.06111145019531
+      ]
+    },
+    {
+      "kind": "grass",
+      "detail": "original",
+      "repeat": 3,
+      "width": 512,
+      "height": 512,
+      "meanRGB": [
+        141.04122924804688,
+        176.76353454589844,
+        88.07901382446289
+      ]
+    },
+    {
+      "kind": "grass",
+      "detail": "r06",
+      "repeat": 3,
+      "width": 512,
+      "height": 512,
+      "meanRGB": [
+        143.3069839477539,
+        178.97488021850586,
+        90.41902923583984
+      ]
+    },
+    {
+      "kind": "grass",
+      "detail": "r07",
+      "repeat": 3,
+      "width": 512,
+      "height": 512,
+      "meanRGB": [
+        144.48672485351562,
+        179.9042205810547,
+        91.06111145019531
+      ]
+    },
+    {
+      "kind": "dirt",
+      "detail": "original",
+      "repeat": 1,
+      "width": 256,
+      "height": 256,
+      "meanRGB": [
+        184.40736389160156,
+        164.78314208984375,
+        134.0088653564453
+      ]
+    },
+    {
+      "kind": "dirt",
+      "detail": "r06",
+      "repeat": 1,
+      "width": 512,
+      "height": 512,
+      "meanRGB": [
+        184.50774002075195,
+        164.60824584960938,
+        133.7100372314453
+      ]
+    },
+    {
+      "kind": "dirt",
+      "detail": "r07",
+      "repeat": 1,
+      "width": 512,
+      "height": 512,
+      "meanRGB": [
+        182.9600830078125,
+        163.57229614257812,
+        132.90549850463867
+      ]
+    },
+    {
+      "kind": "dirt",
+      "detail": "original",
+      "repeat": 3,
+      "width": 256,
+      "height": 256,
+      "meanRGB": [
+        184.40736389160156,
+        164.78314208984375,
+        134.0088653564453
+      ]
+    },
+    {
+      "kind": "dirt",
+      "detail": "r06",
+      "repeat": 3,
+      "width": 512,
+      "height": 512,
+      "meanRGB": [
+        184.50774002075195,
+        164.60824584960938,
+        133.7100372314453
+      ]
+    },
+    {
+      "kind": "dirt",
+      "detail": "r07",
+      "repeat": 3,
+      "width": 512,
+      "height": 512,
+      "meanRGB": [
+        182.9600830078125,
+        163.57229614257812,
+        132.90549850463867
+      ]
+    }
+  ],
+  "results": [
+    {
+      "name": "dense",
+      "art": "previous",
+      "path": "multi",
+      "calls": 59,
+      "triangles": 455580,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "garden",
+      "art": "previous",
+      "path": "multi",
+      "calls": 25,
+      "triangles": 273908,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "boslust",
+      "art": "previous",
+      "path": "multi",
+      "calls": 91,
+      "triangles": 474202,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "woodland-east",
+      "art": "previous",
+      "path": "multi",
+      "calls": 38,
+      "triangles": 415196,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "ground-dense",
+      "art": "previous",
+      "path": "multi",
+      "calls": 51,
+      "triangles": 335648,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "ground-garden",
+      "art": "previous",
+      "path": "multi",
+      "calls": 23,
+      "triangles": 192400,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense-high",
+      "art": "previous",
+      "path": "multi",
+      "calls": 89,
+      "triangles": 905848,
+      "shadows": true,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense",
+      "art": "r07",
+      "path": "multi",
+      "calls": 59,
+      "triangles": 455580,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "garden",
+      "art": "r07",
+      "path": "multi",
+      "calls": 25,
+      "triangles": 273908,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "boslust",
+      "art": "r07",
+      "path": "multi",
+      "calls": 91,
+      "triangles": 474202,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "woodland-east",
+      "art": "r07",
+      "path": "multi",
+      "calls": 38,
+      "triangles": 415196,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "ground-dense",
+      "art": "r07",
+      "path": "multi",
+      "calls": 51,
+      "triangles": 335648,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "ground-garden",
+      "art": "r07",
+      "path": "multi",
+      "calls": 23,
+      "triangles": 192400,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense-high",
+      "art": "r07",
+      "path": "multi",
+      "calls": 89,
+      "triangles": 905848,
+      "shadows": true,
+      "glError": 0,
+      "shaderFailures": 0
+    }
+  ],
+  "errors": []
+}
