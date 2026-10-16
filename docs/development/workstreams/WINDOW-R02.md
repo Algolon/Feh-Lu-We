@@ -1,10 +1,14 @@
 # Feh Lu We — WINDOW-R02: reguliere ramen huisbrede uitrol
 
 ## Status / beperkingen
-Scope: **46 normale, rechthoekige gevelramen** op het hoofdgebouw (beide verdiepingen)
+Scope: **44 normale, rechthoekige gevelramen** op het hoofdgebouw (beide verdiepingen)
 en de servicevleugel. Werkt op geïsoleerde ontwikkelbranch `window-r02-manor-glazing-rollout`,
 draft PR #72, bovenop de eerder visueel goedgekeurde WINDOW-R01-R05 pilot / PR #70.
 **Geen merge of deploy** zonder expliciete owner approval en volledige verificatie.
+
+De twee vroegere bovenramen van de zuidgevel (X87.5 en X92.5) zitten direct achter
+de massieve entree-uitbouw (Z79.55–80.02). Dit waren schijnramen zonder echte zichtlijn.
+De juiste correctie is daar een gesloten binnenwand, niet door de structurele entreegevel boren.
 
 De dakramen, dakkapellen, entreebaai/oculus en ramen in losstaande gebouwen
 hebben andere wandtopologie. Deze blijven bewust ongemoeid: niet blind door dezelfde
@@ -12,7 +16,7 @@ uitsnijder halen (risico op dak-/serre-/gevelgaten). Er komt een aparte audit op
 welke special-geometry werkelijk als fysiek raam bedoeld is.
 
 ## Gedeelde architectuur
-- `manorWindowLayout.ts`: 10 gevelsegmenten, 46 posities, consistent oppervlak, raamhoogte,
+- `manorWindowLayout.ts`: 10 gevelsegmenten, 44 posities, consistent oppervlak, raamhoogte,
   verdiepingshoogte, buitenrichting en uitsparing. Eén bron voor gevelgeometrie én portalen.
 - `manorWindowAssembly.ts`: één naar buiten geplaatst groen kozijn (gemaakt door de gevelhelper),
   glazen vlak, fysiek ondoordringbare ruit, afgewerkte diepe pleister-dagkanten,
@@ -26,7 +30,7 @@ welke special-geometry werkelijk als fysiek raam bedoeld is.
   zodat de eerdere verticale banden niet terugkeren.
 
 ## Harde review-gates
-1. Typecheck, alle tests, build, voor alle 46 ramen: correcte positionering in muuropening,
+1. Typecheck, alle tests, build, voor alle 44 ramen: correcte positionering in muuropening,
    fysiek dicht glas, visueel vrij glas, geen raam/deur-overlap.
 2. In-game screenshots vanuit beide richtingen op hoofdgevels en servicevleugel;
    ook bovenverdieping en zijgevels beoordelen; leg bekende uitzonderingen expliciet vast.
