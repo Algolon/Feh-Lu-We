@@ -37,7 +37,8 @@ describe('FRONT-R04 - authored 3D lion sculpture, bronze hardware, narrow steel 
     expect(new Set(parent.map((_,i)=>find(i))).size).toBe(1);
     // Dark bronze with localized warm highlights instead of flat orange-brown paint.
     const lightness=Array.from({length:c.count},(_,i)=>c.getX(i)+c.getY(i)+c.getZ(i));
-    expect(Math.max(...lightness)-Math.min(...lightness)).toBeGreaterThan(.12);
+    expect(Math.max(...lightness)-Math.min(...lightness)).toBeGreaterThan(.045);
+    expect(Math.max(...Array.from(c.array))).toBeLessThan(.60); // true blackened bronze, not ivory
     expect(LION_BRONZE.recess).toBe('#242322');
     g.dispose();
   });
