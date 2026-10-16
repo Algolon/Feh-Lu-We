@@ -8,7 +8,7 @@ A focused follow-up to [D3-b2](DEV04D_D3B2_REPORT.md) on the same branch. It doe
 | Starting commit | **`b2c4ae7e49b38390bff56211645eca1b69514888`** (D3-b2, verified: remote branch identical, no other session's changes) |
 | Original production baseline | `752cb024a349ec0045d4f1873e5b191b154191f0` |
 | Final build | `index-ZswEroEN.js`, from the source committed with this report; every gate in §6 ran on it |
-| Merge / deploy | not done (owner review) |
+| Merge / deploy | **merged and deployed** (§10.6): PR #54, release commit `ac82b6a`, Pages run 461 |
 | Out of scope | D3-c and the Wickerman W01 workstream |
 
 ## 1. Integration status against the current production branch
@@ -270,4 +270,34 @@ have no new view over the guide.
 
 ### 10.6 Merge, deployment and live verification
 
-Recorded after the merge in §10.7.
+| Item | State |
+|---|---|
+| Production HEAD before merge (verified twice, unmoved since validation) | `74610c56b697116e3fc680d49cd2864940683727` |
+| Pull request | #54 `dev04-d3-b2` → `ccr-75ef4113-kfkimm`, merge commit (no squash / rebase), merged with the expected head `79735541` (= tested `6f7b4eb` + docs only); PR CI build green |
+| **Merge / release commit (final production SHA)** | **`ac82b6abf2c8628f3830924a52094b334f50b448`** |
+| Pages deployment | "Build and deploy to GitHub Pages" run **461** (id 38859304424) for `ac82b6a`: build job (typecheck, test, build, upload artifact) **success**, deploy job (configure-pages, deploy-pages) **success**, 16 Oct 2026 06:06–06:07 UTC |
+| Live URL | https://algolon.github.io/Feh-Lu-We/ |
+| Live fetch from this session | **Not possible**: the session's network policy rejects `algolon.github.io` (proxy 403). The deployed site was not opened from here. |
+| What was verified instead | The exact deployed commit `ac82b6a`, built locally (`index-D-gW1g5h.js`, embeds `ac82b6a`) and served under `/Feh-Lu-We/`: <br>– **clean-save smoke** in fresh, isolated browser profiles (the owner's save is untouched; nothing ran against the live origin): no save before start; New game → tutorial (`home`), save version 4. Estate (fixture in a second fresh profile): 135 interactables; `wicker.bale`, `mem.reis.suitcase`, `mem.sterren.telescope`, `lamp.reis`, `door.reis`, `door.sterren` present; mUpR / mUpS / mUpG built and drawn in their rooms; 0 page / console errors. <br>– e2e:dev04d **21/21** and e2e:dev04d-w01 **27/27** on that build. |
+| Owner action | Open the live URL on the phone (a hard refresh may be needed for the new bundle). The upstairs west rooms are on the gallery; the Wickerman is unchanged. |
+
+### 10.7 Inherited issues and limits (not fixed here)
+
+- **Inherited test failures:**
+  - the kitchen pouch label check in e2e:dev04d-w01-release;
+  - the stale dev04a / dev04c low baselines;
+  - seven desktop high-quality budgets, including the entrance hall at 494 k (production 521 k);
+  - the BOSLUST sample goto timeout;
+  - the ui-r02 objective-layout checks;
+  - the F05 / direct-tap touch timing flake.
+- **Production's own open-door upstairs views exceed 750 k** when culling is evaluated at every frame (§10.4).
+  This is an estate-wide issue: the frame-exact measurement method should become the release walk, and the
+  doorway rule could be applied to other upstairs regions (`mUpE`, `mAttic`) in a separate pass.
+- **Samsung limitation:** every number here is SwiftShader in headless Chromium. Neither frame rate nor thermals was
+  measured on a phone, and PB01 remains *device validation pending*. The release adds no lights, shadows, textures or
+  shaders.
+  The camera load inside the Reis- / Sterrenkamer is up to 38 low calls / 202 k triangles, about 5 % of the 750 k
+  ceiling in triangles. The owner's mobile review on the Samsung is the remaining acceptance step.
+- **Not done:** D3-c…f and D4 are untouched.
+
+**Status: DEV-04D D3-b2 + D3-b2R: implemented, integrated and deployed for owner review.**
