@@ -166,8 +166,8 @@
       "position": "oblique",
       "here": "billiard",
       "exteriorVisible": true,
-      "calls": 69,
-      "triangles": 514436,
+      "calls": 50,
+      "triangles": 498273,
       "glError": 0
     }
   ],
