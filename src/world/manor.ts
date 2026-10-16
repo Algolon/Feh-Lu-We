@@ -875,7 +875,7 @@ function libraryRest(w: World, g: GameApi, c: Ctx, tx: number, tz: number) {
   place(nt, lec2.x, lec2.y, lec2.z, -Math.PI / 2);
   w.scene.add(nt);
   makeInspect(w, g, { id: 'inspect.cipherExample', obj: nt, clue: 'c.cipherExample', hit: [0.5, 0.4, 0.45], hitOffset: [0, 0.1, 0], label: 'Lezen: notitie' });
-  const rl = libraryR01BankerLamp(w, tx - 0.25, GF + LIB_R01.desk.h, tz + 0.92);
+  const rl = libraryR01BankerLamp(w, tx + 0.16, GF + LIB_R01.desk.h, tz + 0.83);
   makeLamp(w, g, { id: 'lamp.library', ...rl, name: 'leeslamp', defaultOn: true, hit: [0.4, 0.7, 0.4], intensity: 5, distance: 8, patch: { y: GF + 0.82, r: 0.8, strength: 0.3 } });
   const lch = chandelier(w, 78.4, UCEIL, 101, 0.8, 1.6, 'mLib'); // DEV-04C: owned by the library batch
   const lsw = compound((b) => box(b, k.M.paint, '#c9a44c', 0, 0, 0, 0.12, 0.18, 0.03));
