@@ -33,6 +33,7 @@ export const OPENINGS: OpeningRec[] = [
   { id: 'front', rooms: ['vestibule', 'out'], axis: 'x', f: 80.2, at: 90, w: 1.7, y: GF, door: { id: 'door.front', hinge: [89.15, 80.2], dir: 'x+', swing: 1 } },
   { id: 'vest-hall', rooms: ['vestibule', 'hall'], axis: 'x', f: 84, at: 90, w: 2.4, y: GF },
   { id: 'hall-living', rooms: ['hall', 'living'], axis: 'z', f: 85, at: 88.5, w: 3.0, y: GF },
+  { id: 'hall-kitchen', rooms: ['hall', 'kitchen'], axis: 'z', f: 95, at: 96.55, w: 1.65, y: GF }, // PORTAL-R01: shared render / collision opening
   { id: 'hall-lobby', rooms: ['hall', 'lobby'], axis: 'x', f: 98, at: 88.5, w: 4.2, y: GF },
   { id: 'lobby-library', rooms: ['lobby', 'library'], axis: 'z', f: 85, at: 101, w: 1.0, y: GF, door: { id: 'door.library', hinge: [85, 100.5], dir: 'z+', swing: -1 } },
   { id: 'living-library', rooms: ['living', 'library'], axis: 'x', f: 94, at: 79, w: 1.6, y: GF, door: { id: 'door.livLib', hinge: [78.2, 94], dir: 'x+', swing: 1 } },
