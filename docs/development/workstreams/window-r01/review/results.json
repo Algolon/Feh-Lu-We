@@ -21,7 +21,7 @@
       "here": "billiard",
       "target": "out",
       "targetVisible": true,
-      "calls": 65,
+      "calls": 66,
       "triangles": 501882,
       "buffer": [
         480,
@@ -36,7 +36,7 @@
       "here": "billiard",
       "target": "out",
       "targetVisible": true,
-      "calls": 65,
+      "calls": 66,
       "triangles": 501882,
       "buffer": [
         480,
@@ -51,7 +51,7 @@
       "here": "out",
       "target": "billiard",
       "targetVisible": true,
-      "calls": 71,
+      "calls": 72,
       "triangles": 523044,
       "buffer": [
         480,
@@ -66,7 +66,7 @@
       "here": "out",
       "target": "billiard",
       "targetVisible": true,
-      "calls": 73,
+      "calls": 74,
       "triangles": 523116,
       "buffer": [
         480,
@@ -140,7 +140,7 @@
       "side": "inside",
       "here": "billiard",
       "targetVisible": true,
-      "calls": 70,
+      "calls": 71,
       "triangles": 523448,
       "glError": 0
     },
@@ -148,11 +148,38 @@
       "side": "outside",
       "here": "out",
       "targetVisible": true,
-      "calls": 67,
+      "calls": 68,
       "triangles": 527563,
       "glError": 0
     }
   ],
+  "closeups": [
+    {
+      "position": "front",
+      "here": "billiard",
+      "exteriorVisible": true,
+      "calls": 58,
+      "triangles": 493557,
+      "glError": 0
+    },
+    {
+      "position": "oblique",
+      "here": "billiard",
+      "exteriorVisible": true,
+      "calls": 69,
+      "triangles": 514436,
+      "glError": 0
+    }
+  ],
+  "sillMaterial": {
+    "meanRed": 149.6456278763971,
+    "meanGreen": 108.25641025641026,
+    "meanBlue": 73.9388560157791,
+    "contrast": 56,
+    "lengthwiseVariation": 2.9000657462195925,
+    "crossGrainVariation": 8.38395792241946,
+    "surface": "timber"
+  },
   "errors": [],
   "deviceValidated": false
 }

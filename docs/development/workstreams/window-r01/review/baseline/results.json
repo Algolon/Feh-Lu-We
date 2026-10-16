@@ -145,6 +145,25 @@
       "glError": 0
     }
   ],
+  "closeups": [
+    {
+      "position": "front",
+      "here": "billiard",
+      "exteriorVisible": false,
+      "calls": 15,
+      "triangles": 280204,
+      "glError": 0
+    },
+    {
+      "position": "oblique",
+      "here": "billiard",
+      "exteriorVisible": false,
+      "calls": 16,
+      "triangles": 280744,
+      "glError": 0
+    }
+  ],
+  "sillMaterial": null,
   "errors": [],
   "deviceValidated": false
 }
