@@ -12,9 +12,9 @@
 //
 // Usage: node scripts/perf/visibility-harness.mjs <baseUrl> <out.json> [options as env]
 //   MODES=A,Astar,B,C  PATHS=up-west,hall,...  DOORS=closed,open,partial  FPS=30,60  SPEED=3.2  VW=915 VH=412
-//   BREAK=550000 (attribute every frame above this; plus the top TOPN frames per run)  COMMIT=sha  SMOKE=1
+//   BREAK=550000 (attribute every frame above this; plus the top TOPN frames per run)  COMMIT=sha  SMOKE=1  RESUME=1
 import { chromium } from 'playwright-core';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { ALL_PATHS, DOOR_SETS, legacySamples, trajectory } from './visibility-paths.mjs';
 
 const env = process.env;
@@ -107,9 +107,13 @@ async function main() {
   const speed = +(env.SPEED ?? 3.2), brk = +(env.BREAK ?? 550000), topN = +(env.TOPN ?? 5);
   const { browser, page, problems } = await openEstate(base, { width: +(env.VW ?? 915), height: +(env.VH ?? 412) });
   const result = { tool: 'scripts/perf/visibility-harness.mjs', commit: env.COMMIT ?? null, base, smoke, speed, runs: [] };
+  // RESUME=1: keep the runs already in <out.json> (same path / doors / mode / fps) and measure only the rest
+  if (env.RESUME && existsSync(out)) { const prev = JSON.parse(readFileSync(out, 'utf8')); result.runs = prev.runs ?? []; result.meta = prev.meta; }
+  const done = new Set(result.runs.map((r) => `${r.path}|${r.doors}|${r.mode}|${r.fps}`));
   for (const doorName of doorsList) for (const [name, y, pts] of paths) for (const mode of modes) {
     const fpsFor = mode === 'A' || mode === 'Astar' ? fpsList : [30];
     for (const fps of fpsFor) {
+      if (done.has(`${name}|${doorName}|${mode}|${fps}`)) continue;
       const poses = mode === 'A' || mode === 'Astar' ? trajectory(pts, y, { fps, speed, lookAround: smoke ? 'first' : 'corners', lookUp: name === 'well' ? pts.map((_, i) => i) : name === 'smoke-well' ? [0] : [] }) : legacySamples(pts, y);
       const t0 = Date.now();
       const r = await runMode(page, { mode, poses, doors: DOOR_SETS[doorName], fps, brk, topN });
