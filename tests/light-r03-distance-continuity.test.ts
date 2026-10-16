@@ -54,14 +54,14 @@ describe('LIGHT-R03: no point light popping from camera-room / view / distance t
   expect(pool.assigned()).toEqual(['near']);
  });
  it('still allows a real replacement with a smooth fade after a substantial change of location',()=>{
-  const rooms=graph(2),pool=new LightPool(new THREE.Scene(),1);
-  const a=fixture('a',1,'r0',8),b=fixture('b',3.5,'r1',8),both=new Set(['r0','r1']);
+  const rooms=graph(3),pool=new LightPool(new THREE.Scene(),1);
+  const a=fixture('a',1,'r0',8),b=fixture('b',5.3,'r2',8),both=new Set(['r0','r1','r2']);
   step(pool,0.7,[a,b],rooms,40,both);
   expect(pool.assigned()).toEqual(['a']);
   const old=pool.lights[0].intensity;
-  step(pool,3.8,[a,b],rooms,1,both);
+  step(pool,5.6,[a,b],rooms,1,both);
   expect(old-pool.lights[0].intensity).toBeLessThan(1.0); // no instant 20 units/s extinguish
-  step(pool,3.8,[a,b],rooms,70,both);
+  step(pool,5.6,[a,b],rooms,70,both);
   expect(pool.assigned()).toEqual(['b']);
   expect(pool.lights[0].intensity).toBeGreaterThan(5);
  });
