@@ -1,0 +1,49 @@
+{
+  "source": "actual branch build / Chromium software WebGL",
+  "results": [
+    {
+      "screenshot": "06-hall-oak-detail",
+      "room": "hall",
+      "x": 93.4,
+      "z": 96.55,
+      "calls": 97,
+      "triangles": 341424
+    },
+    {
+      "screenshot": "07-kitchen-oak-detail",
+      "room": "kitchen",
+      "x": 96.6,
+      "z": 96.55,
+      "calls": 126,
+      "triangles": 434176
+    },
+    {
+      "test": "collision-and-chart",
+      "legs": [
+        {
+          "label": "hall-to-kitchen",
+          "end": {
+            "x": 97.85,
+            "y": 0.15,
+            "z": 96.68
+          },
+          "room": "kitchen"
+        },
+        {
+          "label": "kitchen-to-hall",
+          "end": {
+            "x": 92.22,
+            "y": 0.15,
+            "z": 96.55
+          },
+          "room": "hall"
+        }
+      ],
+      "chart": {
+        "target": "kitchen.chart",
+        "label": "Labels ophangen"
+      }
+    }
+  ],
+  "problems": []
+}
