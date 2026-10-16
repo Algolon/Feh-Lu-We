@@ -14,7 +14,7 @@ zoals het subtiele hout van de live voordeur in `src/world/exteriorDetail.ts`.
 - `src/world/textures.ts`: exact dezelfde donkere basis mahonie (107/51/39),
   maar vervangen regelmatige sinusfrequenties/piekporiën + 75 donkere aders
   door zacht geïnterpoleerde *niet-periodieke* groeivariatie op verschillende
-  schalen en negen zeer zwakke, onderbroken fibres. Geen planknaden.
+  schalen en achttien zeer zwakke, onderbroken fibres. Geen planknaden.
   Textuur blijft één gedeelde 512×512 CanvasTexture; overige houtmaterialen
   en de live voordeur worden niet aangepast.
 - `src/world/manorWindowRollout.test.ts`: geen plaatsingstest voor afgekeurd
