@@ -260,9 +260,14 @@ export class World {
   /** WINDOW-R01: both sides of a physically open window, limited by actual aperture, view cone and LOS.
    * The glass collider remains solid for movement and picking; only these visual rays skip it.
    */
-  private clearWindowInView(eye: THREE.Vector3, cam: THREE.PerspectiveCamera | undefined, portal: PortalDef) {
+  private clearWindowInView(eye: THREE.Vector3, cam: THREE.PerspectiveCamera | undefined, portal: PortalDef, reachable: ReadonlySet<string>) {
     const p = portal.aperture;
-    if (!cam || !portal.seeThrough || !p || (this.hereRoom !== 'out' && this.hereRoom !== (portal.a === 'out' ? portal.b : portal.a))) return false;
+    // Do not require the camera to already be INSIDE this window's room: a kitchen
+    // window must remain transparent when seen through the dining/kitchen arch.
+    // Limit candidates to rooms reachable via OPEN interior portals (no glass/window
+    // shortcuts), then retain the aperture cone + physical LOS below.
+    const windowRoom = portal.a === 'out' ? portal.b : portal.a;
+    if (!cam || !portal.seeThrough || !p || (this.hereRoom !== 'out' && !reachable.has(windowRoom))) return false;
     tmpTo.set(p.x - eye.x, p.y - eye.y, -p.z - eye.z);
     const dist = tmpTo.length();
     if (dist < 0.01 || dist > (this.hereRoom === 'out' ? 25 : 40)) return false;
@@ -317,7 +322,11 @@ export class World {
       // outdoors, an open door shows only the first rooms behind it (windows are opaque panes)
       // Closed glass adds a visual path only if that particular aperture can be seen from outside.
       // Otherwise the global 'out' node would pull the service wing into views behind opaque manor walls.
-      const clearWindows = this.rooms.portals.filter(p => p.kind === 'window' && p.seeThrough && this.clearWindowInView(eye, cam, p));
+      // Pass through arches/open doors for sightlines (three hops as for room rendering),
+      // but do not use glazing itself to make unrelated rooms reachable.
+      const reachable = this.hereRoom === 'out' ? new Set(['out'])
+        : this.rooms.visible(this.hereRoom, this.isOpen, 3, () => false, () => false);
+      const clearWindows = this.rooms.portals.filter(p => p.kind === 'window' && p.seeThrough && this.clearWindowInView(eye, cam, p, reachable));
       if (this.hereRoom === 'out') {
         // WINDOW-R02: seeing through a window reveals its room, not every adjacent
         // room reached through that room's arches/doors. Otherwise many simultaneous
