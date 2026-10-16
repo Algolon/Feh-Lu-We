@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 import type { Ctx } from './arch';
 import type { World } from '../interactions/world';
-import { box, geo } from './kit';
+import { geo } from './kit';
 import { softBox } from './artkit';
 export const EXTERIOR_WEATHER=typeof location==='undefined'||new URLSearchParams(location.search).get('weather')!=='base';
 
@@ -32,10 +32,11 @@ export function ageDressedStone(mat:THREE.MeshLambertMaterial) {
   mat.customProgramCacheKey=()=> 'ext-r06-dressed-weather';mat.needsUpdate=true;
 }
 
-/** Modest enamel house sign beneath the right lantern, clear of the door and column. */
+/** Enamel house sign fitted into the flat bay wall between the door surround (x=91.15) and pilaster (x=91.70). */
 export function houseNameplate(w:World,c:Ctx) {
-  const x=91.4,y=1.62,z=79.49,o={chunk:c.chunk,shadow:false,jitter:0};
-  const backing=softBox(.57,.22,.025,.025);
+  // The 2.5 cm backing ends at z=79.5475, just 2.5 mm in front of the bay wall (z=79.55).
+  const x=91.425,y=1.62,z=79.535,o={chunk:c.chunk,shadow:false,jitter:0};
+  const backing=softBox(.47,.20,.025,.025);
   geo(c.b,c.k.M.paint,'#7f806d',backing,x,y,z,o);backing.dispose();
   const cv=document.createElement('canvas');cv.width=512;cv.height=192;
   const ctx=cv.getContext('2d')!;
@@ -46,8 +47,7 @@ export function houseNameplate(w:World,c:Ctx) {
   for(const at of [26,486]){ctx.fillStyle='#99977e';ctx.beginPath();ctx.arc(at,96,5,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#3e4a3d';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(at-3,95);ctx.lineTo(at+3,97);ctx.stroke();}
   const map=w.texture(new THREE.CanvasTexture(cv));map.colorSpace=THREE.SRGBColorSpace;map.anisotropy=4;
   const mat=w.material(new THREE.MeshLambertMaterial({map}));
-  const face=new THREE.PlaneGeometry(.53,.185);
+  const face=new THREE.PlaneGeometry(.44,.165);
   geo(c.b,mat,'#ffffff',face,x,y,z-.014,o);face.dispose();
-  // Tiny standoffs seat the plaque on the facade, instead of floating on it.
-  for(const dx of [-.21,.21])box(c.b,c.k.M.paint,'#51594c',x+dx,y-.035,79.525,.025,.07,.05,o);
+  // The painted screwheads are retained on the face; no projecting mounts are needed.
 }
