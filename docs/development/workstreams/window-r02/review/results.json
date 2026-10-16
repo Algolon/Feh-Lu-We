@@ -231,13 +231,25 @@
       "site": "north-ground",
       "calls": 55,
       "triangles": 513474,
-      "glError": 0
+      "glError": 0,
+      "detail": {
+        "site": "north-ground",
+        "calls": 54,
+        "triangles": 504173,
+        "glError": 0
+      }
     },
     {
       "site": "west-ground",
       "calls": 44,
       "triangles": 535477,
-      "glError": 0
+      "glError": 0,
+      "detail": {
+        "site": "west-ground",
+        "calls": 44,
+        "triangles": 533523,
+        "glError": 0
+      }
     }
   ],
   "mahogany": {
