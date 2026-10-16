@@ -330,8 +330,8 @@ Gameplay contracts:
 ### 9.2 Reproducibility
 
 - **Modes B and C:** reproducible pose for pose for an identical history (§8).
-- **Repeated sweeps:** the baseline's up-west / up-east / hall / partial runs, measured twice across container
-  restarts, gave identical summaries.
+- **Repeated sweeps:** baseline runs measured twice across container restarts (up-west doors open and partial, Mode A)
+  gave identical triangle summaries (median, p95, p99, max) and max calls within ±1 (137 / 138: opaque batching).
 - **Mode A:** deterministic for a fixed trajectory and cadence phase (pinned at the path start).
 
 ### 9.3 Smoke
