@@ -104,11 +104,12 @@ function shell(w: World, c: Ctx) {
     boxMM(c.b, k.M.plaster, plaster, x1 - edge, x1, y0, y1, innerFinishZ, glazingZ, o);
     boxMM(c.b, k.M.plaster, plaster, x0, x1, y1 - edge, y1, innerFinishZ, glazingZ, o);
 
-    // One quiet, painted timber inside sill, broad enough to read as a window board but not chunky.
-    // Its top lies just over the cut-out's lower edge; it reaches the sash and projects 9 cm
-    // into the room beyond the plaster finish, without protruding through the exterior frame.
-    boxMM(c.b, k.M.wood, '#d8c9b1', x0 - 0.105, x1 + 0.105, y0 - 0.03, y0 + 0.01,
-      innerFinishZ - 0.09, glazingZ - 0.012, { ...o, uv: 0.65 });
+    // WINDOW-R01-R04: a single stained-oak window board like a traditional timber sill.
+    // Continuous lengthwise grain (not tiled/planked), a warm medium-dark finish and
+    // the same restrained 40 mm profile with 9 cm projection into the room.
+    // The larger UV repeat distance avoids restarting the grain across the ~1.3 m board.
+    boxMM(c.b, k.M.windowSillWood, '#ffffff', x0 - 0.105, x1 + 0.105, y0 - 0.03, y0 + 0.01,
+      innerFinishZ - 0.09, glazingZ - 0.012, { ...o, uv: 1.45 });
 
     // Keep glass opaque to movement and interaction picking while visual/culling rays pass.
     const pane = w.col.addBox(x0, x1, glazingZ - 0.025, glazingZ + 0.025, y0, y1,
