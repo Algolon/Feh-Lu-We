@@ -5,7 +5,8 @@
 // upper rooms, the guest WC before the billiard room; utility and pantry do not overlap.
 import { RoomGraph, type RoomDef, type PortalDef, type RoomThreshold } from './rooms';
 import { MANOR_WINDOWS, windowAperture, type ManorWindow } from './manorWindowLayout';
-import { SHED, COTTAGE, COTTAGE_FLOOR, SAUNA, ATTIC_NOOK } from './layout';
+import { COTTAGE_WINDOWS, cottageAperture, type CottageClearWindow } from './cottageClearWindows';
+import { SHED, COTTAGE, COTTAGE_FLOOR, SAUNA, ATTIC_NOOK, ATTIC_ROOF_WINDOW, roofUnderside } from './layout';
 
 const R = (id: string, name: string, floor: RoomDef['floor'], x0: number, x1: number, z0: number, z1: number, y0: number, y1: number, map = true): RoomDef => ({ id, name, floor, x0, x1, z0, z1, y0, y1, map });
 const G0 = -0.5, G1 = 3.2, U0 = 3.2, U1 = 6.4, B0 = -3.7, B1 = -0.2, A0 = 6.55, A1 = 9.8;
@@ -92,6 +93,18 @@ export function manorWindowRoom(site: ManorWindow): string {
   return room;
 }
 
+/** The true interior compartment immediately behind each cottage exterior window. */
+export function cottageWindowRoom(site:CottageClearWindow):string {
+  const inset=0.53;
+  const x=site.axis==='x'?site.at:site.f-site.exterior*inset;
+  const z=site.axis==='x'?site.f-site.exterior*inset:site.at;
+  const y=site.y0+site.sill+site.h/2;
+  const room=ROOMS.find(r=>['cottageEntry','cottageRoom'].includes(r.id)
+    && x>=r.x0&&x<=r.x1&&z>=r.z0&&z<=r.z1&&y>=r.y0&&y<=r.y1);
+  if(!room)throw Error('Cottage glazed window is not backed by a real room: '+site.id);
+  return room.id;
+}
+
 export const PORTALS: PortalDef[] = [
   P('vestibule', 'out', 'door', 'door.front'), P('vestibule', 'hall', 'arch'),
   P('hall', 'living', 'arch'), P('hall', 'dining', 'arch'), P('hall', 'kitchen', 'arch'), P('hall', 'lobby', 'arch'), P('hall', 'landing', 'stair'),
@@ -116,12 +129,27 @@ export const PORTALS: PortalDef[] = [
   P('sauna', 'out', 'door', 'door.sauna'), P('shed', 'out', 'door', 'door.shed'),
   P('cottageEntry', 'out', 'door', 'door.cottage'), P('cottageEntry', 'cottageRoom', 'arch'),
   // Decorative/non-facade windows remain opaque until their architecture is reviewed.
-  ...['vestibule', 'landing', 'cottageEntry', 'cottageRoom'].map(r => P(r, 'out', 'window')),
+  ...['vestibule', 'landing'].map(r => P(r, 'out', 'window')),
   // Actual wall apertures, one portal per physical window — includes upper floor and wing.
   ...MANOR_WINDOWS.map(site => ({
     ...P(manorWindowRoom(site), 'out', 'window', undefined, true),
     aperture: windowAperture(site),
   })),
+  // Portugal cottage: seven real view portals backed by either the entry or dining room.
+  ...COTTAGE_WINDOWS.map(site=>({
+    ...P(cottageWindowRoom(site),'out','window',undefined,true),
+    aperture:cottageAperture(site),
+  })),
+  // WINDOW-R03: real pitched attic observation pane, separate from vertical facade glass.
+  // Midpoint/size are grounded in the physical aperture cut through BOTH roof skins.
+  { ...P('atticLookout', 'out', 'window', undefined, true), aperture: {
+    x: (ATTIC_ROOF_WINDOW.x0 + ATTIC_ROOF_WINDOW.x1) / 2,
+    y: roofUnderside((ATTIC_ROOF_WINDOW.x0 + ATTIC_ROOF_WINDOW.x1)/2,
+      (ATTIC_ROOF_WINDOW.z0+ATTIC_ROOF_WINDOW.z1)/2)+0.16,
+    z: (ATTIC_ROOF_WINDOW.z0 + ATTIC_ROOF_WINDOW.z1) / 2,
+    width: ATTIC_ROOF_WINDOW.z1 - ATTIC_ROOF_WINDOW.z0,
+    height: 0.85, axis: 'z' as const,
+  } },
   // ---------------------------------------------------------------- DEV-02 additive portals (v0.2 adjacency)
   P('lobby', 'guestWC', 'door', 'door.guestWC'), P('corridor', 'utility', 'door', 'door.utility'),
   P('ucorr', 'atticStair', 'door', 'door.atticStair'), P('rearNookEast', 'linen', 'door', 'door.linen'),

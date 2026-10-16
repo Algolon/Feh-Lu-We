@@ -1,0 +1,53 @@
+name: WINDOW-R03 sloped roof glazing review (no deploy)
+on:
+  push:
+    branches: [window-r03-special-glazing]
+    paths: ['src/**', 'scripts/window-r03-review.mjs', '.github/workflows/window-r03-review.yml']
+concurrency:
+  group: window-r03-roof-glass
+  cancel-in-progress: true
+permissions:
+  contents: write
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright-core install --with-deps chromium
+      - run: node scripts/window-r03-review.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: window-r03-skylight-evidence
+          path: docs/development/workstreams/window-r03/review
+          if-no-files-found: warn
+      - name: Safely publish screenshot evidence against current branch HEAD
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/window-r03-evidence
+          cp -a docs/development/workstreams/window-r03/review/. /tmp/window-r03-evidence/
+          git fetch origin window-r03-special-glazing
+          git worktree add --detach /tmp/window-r03-publish origin/window-r03-special-glazing
+          cd /tmp/window-r03-publish
+          mkdir -p docs/development/workstreams/window-r03/review
+          cp -a /tmp/window-r03-evidence/. docs/development/workstreams/window-r03/review/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/development/workstreams/window-r03/review/
+          if ! git diff --cached --quiet; then
+            git commit -m "docs(window-r03): real-game attic skylight captures"
+            git push origin HEAD:window-r03-special-glazing
+          fi

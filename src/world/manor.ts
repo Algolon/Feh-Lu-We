@@ -146,7 +146,7 @@ function shell(w: World, c: Ctx) {
   }
   if (EXTERIOR_STUDY) studyArchitecture(c, TOP, UF);
   // roof (≈30°) with a real eave (fascia, soffit, gutter, caps) and downpipes at the corners and either side of the bay
-  hipRoof(c, 90, 95, 36, 30, TOP, 8.2, k.M.slate, '#a39f9a', 0.7, { finished: EXTERIOR_STUDY && EXTERIOR_FINISH, courses: EXTERIOR_STUDY && ROOF_DETAIL, downpipes: [[71.86, 80.5], [108.14, 80.5], [71.86, 109.5], [108.14, 109.5], [85.85, 79.88], [94.15, 79.88]] });
+  hipRoof(c, 90, 95, 36, 30, TOP, 8.2, k.M.slate, '#a39f9a', 0.7, { finished: EXTERIOR_STUDY && EXTERIOR_FINISH, courses: EXTERIOR_STUDY && ROOF_DETAIL, eastRoofWindow: ATTIC_ROOF_WINDOW, downpipes: [[71.86, 80.5], [108.14, 80.5], [71.86, 109.5], [108.14, 109.5], [85.85, 79.88], [94.15, 79.88]] });
   roofWindowOutside(c); // DEV-04A: the attic observation window in the east slope (inside: attic())
   // chimneys: stack with a projecting band and a cap, two pots each
   for (const [x, z] of [[72.9, 86.7], [100, 101], [86, 106]] as const) {
@@ -1840,10 +1840,9 @@ const rwQuad = (x0: number, x1: number, z0: number, z1: number, yf: (x: number) 
 /** The observation window seen from outside (built with the exterior shell, so it merges into the shell's meshes). */
 function roofWindowOutside(c: Ctx) {
   const k = c.k, RW = ATTIC_ROOF_WINDOW, P = k.M.paint, yOut = rwOut;
-  // dark glazing facing the sky (single-sided: from inside it is culled and the sky shows), frame and lead apron
-  const pane = rwQuad(RW.x0, RW.x1, RW.z0, RW.z1, (x) => yOut(x) + 0.05);
-  c.b.add(k.M.glow, pane, new THREE.Matrix4(), '#55656e', c.chunk, false, 0);
-  pane.dispose();
+  // WINDOW-R03: the decorative opaque exterior slate-blue panel has been removed.
+  // There is ONE actual glass sheet below, built by atticRoofWindow(), and now an
+  // aligned hole in the external roofing above it, retaining flashing/frame here.
   const fr = '#4a3a2c';
   for (const z of [RW.z0 - 0.04, RW.z1 + 0.04]) segBox(c, P, fr, [RW.x0 - 0.06, yOut(RW.x0 - 0.06) + 0.04, z], [RW.x1 + 0.06, yOut(RW.x1 + 0.06) + 0.04, z], 0.1, 0.12);
   for (const x of [RW.x0 - 0.04, RW.x1 + 0.04]) segBox(c, P, fr, [x, yOut(x) + 0.04, RW.z0 - 0.08], [x, yOut(x) + 0.04, RW.z1 + 0.08], 0.1, 0.12);
@@ -1867,6 +1866,6 @@ function atticRoofWindow(c: Ctx) {
   glass.dispose();
   for (const z of [RW.z0 + 0.04, RW.z1 - 0.04]) segBox(cIn, P, '#e8e0cc', [RW.x0, gl(0.16)(RW.x0), z], [RW.x1, gl(0.16)(RW.x1), z], 0.07, 0.06);
   for (const x of [RW.x0 + 0.04, RW.x1 - 0.04]) segBox(cIn, P, '#e8e0cc', [x, gl(0.16)(x), RW.z0], [x, gl(0.16)(x), RW.z1], 0.07, 0.06);
-  segBox(cIn, k.M.paint, '#c9a44c', [RW.x0 + 0.1, gl(0.1)(RW.x0 + 0.1), RW.z0 + 0.25], [RW.x0 + 0.1, gl(0.1)(RW.x0 + 0.1), RW.z1 - 0.25], 0.025, 0.025);
+  // WINDOW-R03: the old yellow faux operating bar was removed. The sash remains visual-only.
 }
 
