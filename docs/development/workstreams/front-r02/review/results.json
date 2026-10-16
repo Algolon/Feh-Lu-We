@@ -1,0 +1,81 @@
+{
+  "source": "candidate branch in Chromium / software WebGL",
+  "results": [
+    {
+      "view": "01-exterior-full",
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 77.7,
+        "yaw": 0,
+        "pitch": 0.025
+      },
+      "x": 90,
+      "z": 77.7,
+      "calls": 157,
+      "triangles": 1165242,
+      "doorFound": false
+    },
+    {
+      "view": "01b-exterior-close",
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 78.65,
+        "yaw": 0,
+        "pitch": 0.025
+      },
+      "x": 90,
+      "z": 78.65,
+      "calls": 153,
+      "triangles": 1161068,
+      "doorFound": false
+    },
+    {
+      "view": "02-exterior-oblique",
+      "pose": {
+        "x": 89.25,
+        "y": 0.15,
+        "z": 78.5,
+        "yaw": 0.33,
+        "pitch": 0.015
+      },
+      "x": 89.25,
+      "z": 78.5,
+      "calls": 178,
+      "triangles": 1228028,
+      "doorFound": false
+    },
+    {
+      "view": "03-interior-front",
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 82,
+        "yaw": 3.141592653589793,
+        "pitch": 0.02
+      },
+      "x": 90,
+      "z": 82,
+      "calls": 128,
+      "triangles": 941442,
+      "doorFound": false
+    },
+    {
+      "view": "04-mobile-exterior",
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 78.85,
+        "yaw": 0,
+        "pitch": 0.02
+      },
+      "x": 90,
+      "z": 78.85,
+      "calls": 132,
+      "triangles": 1106340,
+      "doorFound": false
+    }
+  ],
+  "errors": []
+}
