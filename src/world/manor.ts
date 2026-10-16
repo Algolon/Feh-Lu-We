@@ -80,7 +80,7 @@ function shell(w: World, c: Ctx) {
   const skin = { mat: k.M.plaster, color: '#f1e6cf' };
   const ext = (axis: 'x' | 'z', f: number, a0: number, a1: number, exterior: 1 | -1, gfOpen: { at: number; w: number; h?: number }[], gfWin: number[], ufWin: number[], study = EXTERIOR_STUDY) => {
     const facade = study ? { mat: exteriorMats().wall, color: '#ffffff' } : stone;
-    wall(c, axis, f, a0, a1, 0, UF, { ...facade, t: 0.4, exterior, skin, uv: 2.4, winStyle: 'manor', openings: gfOpen, windows: gfWin.map((at) => ({ at, sill: 1.05, h: 1.6, w: 1.1 })) });
+    wall(c, axis, f, a0, a1, 0, UF, { ...facade, t: 0.4, exterior, skin, uv: 2.4, winStyle: 'manor', frameColor: axis==='x'&&f===80.2?'#252725':undefined, openings: gfOpen, windows: gfWin.map((at) => ({ at, sill: 1.05, h: 1.6, w: 1.1 })) });
     wall(c, axis, f, a0, a1, UF, TOP, { ...facade, t: 0.4, exterior, skin, uv: 2.4, winStyle: 'manor', windows: ufWin.map((at) => ({ at, sill: 0.8, h: 1.5, w: 1.0 })) });
   };
   // All four elevations share the approved facade grammar; original openings/footprints stay fixed.
