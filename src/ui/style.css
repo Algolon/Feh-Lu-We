@@ -271,6 +271,8 @@ body.boslust-inspecting #hud #toast { visibility: visible; max-width: min(80vw, 
   #boslust-focus .boslust-guide.active { opacity: 1; border-color: rgba(244,204,123,.63); }
 }
 @media (max-width: 550px) {
+  /* Keep success/wrong-code feedback above the touch hint, never underneath it. */
+  body.boslust-inspecting #hud #toast { bottom: calc(175px + var(--safe-b)); max-width: min(90vw, 350px); }
   #boslust-focus .boslust-focus-head { top: calc(10px + var(--safe-t)); }
   #boslust-focus .boslust-focus-foot { bottom: calc(85px + var(--safe-b)); width: min(94vw, 480px); font-size: 12px; }
   #boslust-focus .boslust-back { position: fixed; left: calc(16px + var(--safe-l));
