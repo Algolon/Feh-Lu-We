@@ -21,7 +21,7 @@ export function cutEastHipRoofWindow(
     new THREE.Vector2(-(opening.z0-cz),opening.x1-cx),
     new THREE.Vector2(-(opening.z0-cz),opening.x0-cx),
   ];
-  const triangle=new THREE.Triangle(...outside);
+  const triangle=new THREE.Triangle(outside[0],outside[1],outside[2]);
   if(!hole.every(v=>triangle.containsPoint(v)))throw Error('Attic skylight exceeds east hip face');
   const pos=src.getAttribute('position'),uv=src.getAttribute('uv');
   const positions:number[]=[],uvs:number[]=[];
