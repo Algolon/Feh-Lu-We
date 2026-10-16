@@ -10,7 +10,7 @@ export const v3 = (x: number, y: number, n: number) => new THREE.Vector3(x, y, -
 
 export type MatKey =
   | 'paint' | 'plaster' | 'stone' | 'wood' | 'tile' | 'slate' | 'terracotta' | 'grass' | 'dirt'
-  | 'foliage' | 'bark' | 'glass' | 'glow' | 'poolTile' | 'rug';
+  | 'foliage' | 'bark' | 'glass' | 'windowGlass' | 'glow' | 'poolTile' | 'rug';
 
 export interface Kit {
   T: Record<string, THREE.Texture>;
@@ -38,6 +38,11 @@ export function getKit(): Kit {
     foliage: lam({ map: T.foliage }),
     bark: lam({ map: T.bark }),
     glass: new THREE.MeshLambertMaterial({ color: 0xd8efe9, transparent: true, opacity: 0.16, depthWrite: false, side: THREE.DoubleSide }),
+    // WINDOW-R01: visible glass tint and modest light response, without realtime reflections.
+    windowGlass: new THREE.MeshPhongMaterial({
+      vertexColors: true, color: 0xc4d9e0, specular: 0x879ea4, shininess: 46,
+      transparent: true, opacity: 0.22, depthWrite: false, side: THREE.DoubleSide,
+    }),
     glow: new THREE.MeshBasicMaterial({ vertexColors: true }),
     poolTile: lam({ map: T.poolTile }),
     rug: lam({ map: T.rug, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }),

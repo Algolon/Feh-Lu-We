@@ -17,7 +17,12 @@ export interface RoomDef {
  * 'window' portals are one-way for lighting: from inside you see outdoor lamps; from outside, lit
  * windows read warm through their emissive glass instead of real lights (no lamp leaks outward).
  */
-export interface PortalDef { a: string; b: string; kind: 'door' | 'arch' | 'window' | 'stair' | 'glass'; door?: string; seeThrough?: boolean }
+export interface PortalDef {
+  a: string; b: string; kind: 'door' | 'arch' | 'window' | 'stair' | 'glass';
+  door?: string; seeThrough?: boolean;
+  /** Actual clear glazing aperture in plan coordinates; required for transparent window culling. */
+  aperture?: { x: number; y: number; z: number; width: number; height: number; axis: 'x' | 'z' };
+}
 
 /** Walkable wall-depth openings absent from room rectangles. They retain an existing room identity. */
 export interface RoomThreshold { room: string; x0: number; x1: number; z0: number; z1: number; y0: number; y1: number }
@@ -55,13 +60,13 @@ export class RoomGraph {
    * Rooms whose CONTENTS can be seen from `here`, up to `depth` portal steps. Windows are glowing panes
    * (opaque); glass walls, open doors, arches and stairs are see-through. Used to hide whole rooms.
    */
-  visible(here: string, isOpen: (door: string) => boolean, depth = 2, closedGlassInView: (door: string) => boolean = () => true): Set<string> {
+  visible(here: string, isOpen: (door: string) => boolean, depth = 2, closedGlassInView: (door: string) => boolean = () => true, clearWindowInView: (portal: PortalDef) => boolean = () => false): Set<string> {
     const seen = new Set<string>([here]);
     let frontier = [here];
     for (let d = 0; d < depth; d++) {
       const next: string[] = [];
       for (const r of frontier) for (const p of this.portals) {
-        if (p.kind === 'window' || (p.door && !isOpen(p.door) && (!p.seeThrough || !closedGlassInView(p.door)))) continue;
+        if ((p.kind === 'window' && (!p.seeThrough || !p.aperture || !clearWindowInView(p))) || (p.door && !isOpen(p.door) && (!p.seeThrough || !closedGlassInView(p.door)))) continue;
         const o = p.a === r ? p.b : p.b === r ? p.a : null;
         if (o && !seen.has(o)) { seen.add(o); next.push(o); }
       }

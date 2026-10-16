@@ -13,6 +13,7 @@
 import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, wall, floor, ceiling, stairsZ, railing, stairRail, hipRoof, gableRoof, windowAt, balustrade, newel, segBox, threshold, TRIM } from './arch';
+import { BILLIARD_PILOT_WINDOW, billiardPilotDepths } from './windowPilot';
 import { lathe, Asm, artMats, projectUV, cushion } from './artkit';
 import { box, boxMM, cyl, rod, blob, compound, v3, hipRoofGeo, geo } from './kit';
 import {
@@ -78,7 +79,7 @@ function shell(w: World, c: Ctx) {
   const skin = { mat: k.M.plaster, color: '#f1e6cf' };
   const ext = (axis: 'x' | 'z', f: number, a0: number, a1: number, exterior: 1 | -1, gfOpen: { at: number; w: number; h?: number }[], gfWin: number[], ufWin: number[], study = EXTERIOR_STUDY) => {
     const facade = study ? { mat: exteriorMats().wall, color: '#ffffff' } : stone;
-    wall(c, axis, f, a0, a1, 0, UF, { ...facade, t: 0.4, exterior, skin, uv: 2.4, winStyle: 'manor', openings: gfOpen, windows: gfWin.map((at) => ({ at, sill: 1.05, h: 1.6, w: 1.1 })) });
+    wall(c, axis, f, a0, a1, 0, UF, { ...facade, t: 0.4, exterior, skin, uv: 2.4, winStyle: 'manor', openings: gfOpen, windows: gfWin.map((at) => ({ at, sill: 1.05, h: 1.6, w: 1.1, transparent: axis === BILLIARD_PILOT_WINDOW.axis && f === BILLIARD_PILOT_WINDOW.f && at === BILLIARD_PILOT_WINDOW.at })) });
     wall(c, axis, f, a0, a1, UF, TOP, { ...facade, t: 0.4, exterior, skin, uv: 2.4, winStyle: 'manor', windows: ufWin.map((at) => ({ at, sill: 0.8, h: 1.5, w: 1.0 })) });
   };
   // All four elevations share the approved facade grammar; original openings/footprints stay fixed.
@@ -87,6 +88,33 @@ function shell(w: World, c: Ctx) {
   ext('z', 72.2, 80.4, 109.6, -1, [], [83, 90.5, 97, 101, 105], [82.5, 90, 97, 101, 105]);
   // east: dining windows; the service wing joins at z 92–110 (door to the service corridor)
   ext('z', 107.8, 80.4, 109.6, 1, [{ at: 102.5, w: 1.0, h: 2.3 }], [83, 86.8, 90.4], [83, 87, 91]);
+  // WINDOW-R01-R02: ONE exterior-set sash and ONE glass pane, 8.5 cm behind the outer wall face.
+  // The room-facing construction is a plastered reveal, not an independent second window.
+  {
+    const p = BILLIARD_PILOT_WINDOW, x0 = p.at - p.w / 2, x1 = p.at + p.w / 2;
+    const y0 = p.sill, y1 = p.sill + p.h;
+    const { glazingZ, innerFinishZ } = billiardPilotDepths();
+    const o = { chunk: c.chunk, shadow: false, jitter: 0 };
+    boxMM(c.b, k.M.windowGlass, '#ffffff', x0, x1, y0, y1, glazingZ - 0.006, glazingZ + 0.006, o);
+
+    // The three deep plaster returns meet the *same* exterior sash. Slightly warm to match the
+    // room's existing interior finish; no inside mullions, glazing bars or secondary architrave.
+    const plaster = '#e9dfcf', edge = 0.014;
+    boxMM(c.b, k.M.plaster, plaster, x0, x0 + edge, y0, y1, innerFinishZ, glazingZ, o);
+    boxMM(c.b, k.M.plaster, plaster, x1 - edge, x1, y0, y1, innerFinishZ, glazingZ, o);
+    boxMM(c.b, k.M.plaster, plaster, x0, x1, y1 - edge, y1, innerFinishZ, glazingZ, o);
+
+    // One quiet, painted timber inside sill, broad enough to read as a window board but not chunky.
+    // Its top lies just over the cut-out's lower edge; it reaches the sash and projects 9 cm
+    // into the room beyond the plaster finish, without protruding through the exterior frame.
+    boxMM(c.b, k.M.wood, '#d8c9b1', x0 - 0.105, x1 + 0.105, y0 - 0.03, y0 + 0.01,
+      innerFinishZ - 0.09, glazingZ - 0.012, { ...o, uv: 0.65 });
+
+    // Keep glass opaque to movement and interaction picking while visual/culling rays pass.
+    const pane = w.col.addBox(x0, x1, glazingZ - 0.025, glazingZ + 0.025, y0, y1,
+      { occludes: true, tag: 'window.billiardNorth' });
+    w.visualPassThrough.add(pane);
+  }
   // DEV-03 facade grammar: a proud sandstone plinth with a weathered top, rusticated quoins at the corners, a string
   // course at the first floor and a moulded cornice under the eaves on all four sides (one family with the wing).
   const sand = '#cdbb98', dressed = TRIM.dressed;
