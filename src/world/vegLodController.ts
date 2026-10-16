@@ -103,19 +103,28 @@ export class VegLodController<I extends VegLodInstance> {
 
   invalidate() { this.lastPosition.set(Infinity, 0, 0); }
 
+  /** Convenient adapter for tests/tools; the per-frame game path should use updateCamera. */
   update(view: VegLodView) {
-    this.cameraPosition.setFromMatrixPosition(view.camera.matrixWorld);
-    if (this.cameraPosition.distanceTo(this.lastPosition) < this.movementThreshold
-      && this.lastWindowsVersion === view.windowsVersion
-      && this.lastOutdoors === view.outdoors) return;
-    this.lastPosition.copy(this.cameraPosition);
-    this.lastWindowsVersion = view.windowsVersion;
-    this.lastOutdoors = view.outdoors;
+    this.updateCamera(view.camera, view.outdoors, view.windows, view.windowsVersion);
+  }
 
-    const b = this.opts.batch, windows = view.windows;
+  /** Allocation-free hot path: camera/window references and scalar state, no new view object. */
+  updateCamera(
+    camera: T.Camera, outdoors: boolean,
+    windows: readonly VegOutdoorWindow[] | null, windowsVersion: number,
+  ) {
+    this.cameraPosition.setFromMatrixPosition(camera.matrixWorld);
+    if (this.cameraPosition.distanceTo(this.lastPosition) < this.movementThreshold
+      && this.lastWindowsVersion === windowsVersion
+      && this.lastOutdoors === outdoors) return;
+    this.lastPosition.copy(this.cameraPosition);
+    this.lastWindowsVersion = windowsVersion;
+    this.lastOutdoors = outdoors;
+
+    const b = this.opts.batch;
     for (const it of this.opts.instances) {
       const distance = it.p.distanceTo(this.cameraPosition), bands = this.opts.bands(it);
-      let k = view.outdoors ? vegetationFade(distance, bands, this.fadeMode) : 0;
+      let k = outdoors ? vegetationFade(distance, bands, this.fadeMode) : 0;
       if (k > 0 && windows && !visibleThroughOutdoorWindows(it.p.x, it.p.z, it.r, windows, this.windowPlanZSign)) k = 0;
 
       const level = Math.min(it.lods.length - 1,
