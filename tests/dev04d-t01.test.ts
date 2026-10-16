@@ -178,12 +178,11 @@ describe('DEV-04D Track 01: loft winding (regression)', () => {
   });
 });
 
-describe('DEV-04D Track 01: placement is deliberate (D3-b1 promotes only what it places)', () => {
-  it('only the PROPS3D placement wrappers (d2props) use the Track 01 builders, and only the swallows and the medallion: the moon and the sloop wait for D3-b2', () => {
-    const roots = ['src/world/manor.ts', 'src/world/estate.ts', 'src/world/rooms.ts', 'src/world/d3a.ts', 'src/world/d3b.ts', 'src/main.ts', 'src/core/game.ts'];
+describe('DEV-04D Track 01: placement is deliberate (D3-b1 / D3-b2 promote what they place)', () => {
+  it('only the PROPS3D placement wrappers (d2props) use the Track 01 builders: swallows and medallion (D3-b1), moon and sloop (D3-b2)', () => {
+    const roots = ['src/world/manor.ts', 'src/world/estate.ts', 'src/world/rooms.ts', 'src/world/d3a.ts', 'src/world/d3b.ts', 'src/world/d3b2.ts', 'src/main.ts', 'src/core/game.ts'];
     for (const f of roots) expect(readFileSync(f, 'utf8'), f).not.toMatch(/d3bAssets/);
     const d2 = readFileSync('src/world/d2props.ts', 'utf8');
-    expect(d2).toMatch(/import \{ buildMedallion, buildSwallows \} from '\.\/d3bAssets'/);
-    expect(d2).not.toMatch(/buildMoon|buildSloop/);
+    expect(d2).toMatch(/import \{ buildMedallion, buildMoon, buildSloop, buildSwallows \} from '\.\/d3bAssets'/);
   });
 });

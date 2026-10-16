@@ -66,6 +66,8 @@ export interface Checkpoint { name: string; pose: PlayerPose }
 
 const tmpFwd = new THREE.Vector3(), tmpTo = new THREE.Vector3();
 const DOOR_SAMPLES: [number, number][] = [[0, 0], [0.7, 0], [-0.7, 0], [0, 0.7], [0, -0.7]];
+/** A region doorway (plan centre; `n` = the plan direction into the region's room, found on first use). */
+interface RegionDoor { door: string; x: number; y: number; z: number; r: number; n?: [number, number] | null }
 
 export class World {
   readonly scene = new THREE.Scene();
@@ -93,7 +95,7 @@ export class World {
   /** Room-based visibility (estate): regions are static chunks that belong to a set of rooms ('out' = outdoors). */
   rooms: RoomGraph | null = null;
   isOpen: (door: string) => boolean = () => false;
-  private regions: { meshes: THREE.Object3D[]; rooms: Set<string>; on: boolean; far: number; outFar: number; sph: THREE.Sphere; shade?: boolean }[] = [];
+  private regions: { meshes: THREE.Object3D[]; rooms: Set<string>; on: boolean; far: number; outFar: number; sph: THREE.Sphere; shade?: boolean; doors?: RegionDoor[] }[] = [];
   visibleRooms = new Set<string>(['out']);
   hereRoom = 'out';
   constructor(public readonly id: SceneId) {}
@@ -153,13 +155,73 @@ export class World {
    * `outFar` (DEV-03): while the player is OUTSIDE, the region is drawn only within this distance (an interior seen
    * through an open door is a few pixels from 40 m but cost ~100 k triangles from the forest).
    */
-  roomRegion(chunks: string[], rooms: string[], far = Infinity, outFar = Infinity) {
+  /**
+   * `doors` (DEV-04D D3-b2, opt-in): the region's only doorways. From another room the region is then drawn only while
+   * one of them is open and in (a generous cone round) the view with a line of sight, as the outdoors through
+   * exteriorDoors: with every door open the graph reaches these rooms from the hall at depth 2-3, behind solid walls.
+   */
+  roomRegion(chunks: string[], rooms: string[], far = Infinity, outFar = Infinity, doors?: string[]) {
     const meshes = this.scene.children.filter((o) => chunks.includes(o.userData.chunk) || chunks.includes(o.userData.region));
     // bounding sphere of the whole region (for the optional distance limit)
     const box = new THREE.Box3();
     for (const m of meshes) box.expandByObject(m);
     const sph = box.isEmpty() ? new THREE.Sphere() : box.getBoundingSphere(new THREE.Sphere());
-    this.regions.push({ meshes, rooms: new Set(rooms), on: true, far, outFar, sph });
+    const ds = doors?.flatMap((door) => {
+      const it = this.byId.get(door);
+      if (!it?.hit[0]) return [];
+      it.hit[0].updateWorldMatrix(true, false);
+      const v = it.hit[0].getWorldPosition(new THREE.Vector3());
+      return [{ door, x: v.x, y: v.y, z: -v.z, r: 0.9 }];
+    });
+    this.regions.push({ meshes, rooms: new Set(rooms), on: true, far, outFar, sph, doors: ds?.length === doors?.length ? ds : undefined });
+  }
+  /**
+   * A region doorway that is open, in the cone round the view and seen through: sight lines from the eye through points
+   * of the opening (across its width, at three heights), carried 0.35 m on into the room, must be clear of walls, closed
+   * doors and the walkable floors (an upstairs doorway is not seen from the ground floor through the gallery's floor;
+   * the hall's open well has none). Without a room graph or a camera the region stays drawn.
+   */
+  private doorwayInView(eye: THREE.Vector3, cam: THREE.PerspectiveCamera | undefined, doors: RegionDoor[], rooms: Set<string>) {
+    if (!cam || !this.rooms) return true;
+    const fwd = cam.getWorldDirection(tmpFwd);
+    const half = Math.atan(Math.tan(THREE.MathUtils.degToRad(cam.fov / 2)) * cam.aspect) + THREE.MathUtils.degToRad(32);
+    const ex = eye.x, ey = eye.y, ez = -eye.z;
+    for (const d of doors) {
+      if (!this.isOpen(d.door)) continue;
+      tmpTo.set(d.x - eye.x, d.y - eye.y, -d.z - eye.z);
+      const dist = tmpTo.length();
+      if (dist > d.r && Math.acos(THREE.MathUtils.clamp(tmpTo.dot(fwd) / dist, -1, 1)) - Math.asin(Math.min(1, d.r / dist)) >= half) continue;
+      if (d.n === undefined) d.n = this.doorInward(d, rooms);
+      if (!d.n || dist < 1.2) return true; // standing in the doorway
+      const [nx, nz] = d.n;
+      for (const dy of [0, -0.8, 0.8]) for (const s of [0, -0.35, 0.35]) {
+        const px = d.x + nz * s, py = d.y + dy, pz = d.z + nx * s; // a point of the opening (its plane through the centre)
+        const vx = px - ex, vy = py - ey, vz = pz - ez, inward = vx * nx + vz * nz;
+        if (inward <= 0.05) continue; // the eye is not in front of the opening (or looks along it)
+        const k = 1 + 0.35 / inward; // just past the wall: the jambs either side must be passed
+        const tx = ex + vx * k, ty = ey + vy * k, tz = ez + vz * k;
+        if (!this.col.segmentBlocked(ex, ey, ez, tx, ty, tz, this.visualPassThrough) && !this.floorBetween(ex, ey, ez, tx, ty, tz)) return true;
+      }
+    }
+    return false;
+  }
+  /** The plan direction from a region doorway into its room: the room rectangle's nearest edge (null if unknown). */
+  private doorInward(d: RegionDoor, rooms: Set<string>): [number, number] | null {
+    const p = this.rooms?.portals.find((q) => q.door === d.door);
+    const r = p && this.rooms?.get(rooms.has(p.a) ? p.a : p.b);
+    if (!r) return null;
+    const edges: [number, [number, number]][] = [[Math.abs(d.x - r.x0), [1, 0]], [Math.abs(d.x - r.x1), [-1, 0]], [Math.abs(d.z - r.z0), [0, 1]], [Math.abs(d.z - r.z1), [0, -1]]];
+    edges.sort((a, b) => a[0] - b[0]);
+    return edges[0][0] < 0.5 ? edges[0][1] : null;
+  }
+  /** Does the segment pass through a walkable floor plate (strictly between its ends)? */
+  private floorBetween(ax: number, ay: number, az: number, bx: number, by: number, bz: number) {
+    for (const f of this.col.floors) {
+      if ((ay - f.y) * (by - f.y) >= 0) continue;
+      const t = (f.y - ay) / (by - ay), x = ax + (bx - ax) * t, z = az + (bz - az) * t;
+      if (x > f.minX + 0.05 && x < f.maxX - 0.05 && z > f.minZ + 0.05 && z < f.maxZ - 0.05) return true;
+    }
+    return false;
   }
   /** Top-level objects whose render meshes are currently culled: never pickable (explicit invariant). */
   readonly culledRoots = new Set<THREE.Object3D>();
@@ -243,6 +305,7 @@ export class World {
       for (const r of this.regions) {
         let on = false;
         for (const id of r.rooms) if (this.visibleRooms.has(id)) { on = true; break; }
+        if (on && r.doors && !r.rooms.has(this.hereRoom)) on = this.doorwayInView(eye, cam, r.doors, r.rooms);
         if (on && r.far < Infinity) on = r.sph.center.distanceTo(eye) - r.sph.radius < r.far;
         if (on && r.outFar < Infinity && this.hereRoom === 'out') on = this.interiorThroughDoor && r.sph.center.distanceTo(eye) - r.sph.radius < r.outFar;
         if (on !== r.on) { r.on = on; for (const m of r.meshes) { m.visible = on; m.userData.regionOff = !on; } }

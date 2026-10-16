@@ -13,7 +13,7 @@ import type { World } from '../interactions/world';
 import { Asm, artMats, lathe, projectUV } from './artkit';
 import { joinery } from './furniture';
 import { registerArt, artFootprint } from './openings';
-import { buildMedallion, buildSwallows } from './d3bAssets';
+import { buildMedallion, buildMoon, buildSloop, buildSwallows } from './d3bAssets';
 import { woodMats } from './woodkit';
 import { PROP3D, KEY_SPECS, KEY_SCALE as KS, KEY_PRESENT, type KeyItem } from '../content/props3d';
 
@@ -192,91 +192,6 @@ export function carvedBird(c: Ctx) {
   a.end();
 }
 
-/** FLW-S3-015 Miniatuurzeilboot: wooden model sloop on brass posts and an oak base; rigging simplified to 4 lines. */
-export function modelSloop(c: Ctx) {
-  const p = anchor('FLW-S3-015'), M = artMats(), walnut = '#6a3e22', deck = '#b88a58';
-  const a = new Asm(c.b, c.chunk, p.x, p.y, p.z, p.yaw).begin(p.id);
-  const HL = 0.17, HB = 0.048, HD = 0.05, yh = 0.02 + 0.03 + HD; // hull half-length / half-beam / depth; deck height
-  const bowTaper = (v: THREE.Vector3) => { if (v.z < 0) v.x *= 1 - 0.62 * (-v.z) ** 1.6; }; // three −z = bow
-  a.add(M.timber, '#7a5232', sb(0.075, 0.02, 0.24, 0.004), 0, 0.01, 0); // base board, along the hull
-  for (const lz of [-0.07, 0.07]) {
-    a.add(M.brass, '#c9a24c', cg('sloopPost', () => new THREE.CylinderGeometry(0.0045, 0.0045, 0.042, 6).translate(0, 0.021, 0)), 0, 0.02, lz);
-    a.add(M.brass, '#c9a24c', cg('sloopCup', () => new THREE.CylinderGeometry(0.009, 0.011, 0.006, 8).translate(0, 0.003, 0)), 0, 0.02, lz);
-  }
-  a.add(M.timber, walnut, cg('sloopHull', () => {
-    const g = new THREE.SphereGeometry(1, 12, 4, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2);
-    const v = new THREE.Vector3(), pa = g.attributes.position as THREE.BufferAttribute;
-    for (let i = 0; i < pa.count; i++) { v.fromBufferAttribute(pa, i); bowTaper(v); pa.setXYZ(i, v.x * HB, v.y * HD, v.z * HL); }
-    g.computeVertexNormals();
-    return projectUV(g, 2, 'z');
-  }), 0, yh, 0);
-  a.add(M.timber, deck, cg('sloopDeck', () => {
-    const g = new THREE.CircleGeometry(1, 16).rotateX(-Math.PI / 2);
-    const v = new THREE.Vector3(), pa = g.attributes.position as THREE.BufferAttribute;
-    for (let i = 0; i < pa.count; i++) { v.fromBufferAttribute(pa, i); bowTaper(v); pa.setXYZ(i, v.x * HB * 0.97, 0, v.z * HL * 0.97); }
-    return projectUV(g, 2, 'z');
-  }), 0, yh + 0.001, 0);
-  a.add(M.timber, walnut, bx(0.006, 0.026, 0.15), 0, yh - HD - 0.006, -0.005); // keel
-  a.add(M.timber, walnut, bx(0.005, 0.04, 0.022), 0, yh - 0.024, -HL + 0.01); // rudder
-  a.add(M.timber, '#8a5a34', bx(0.044, 0.02, 0.05), 0, yh + 0.011, -0.055); // cabin
-  a.add(M.paint, '#efe6d2', cg('sloopSheer', () => { // a cream band just under the sheer: a thin slice of the hull, 2 % proud
-    const g = new THREE.SphereGeometry(1, 12, 1, 0, Math.PI * 2, Math.PI / 2 + 0.12, 0.1);
-    const v = new THREE.Vector3(), pa = g.attributes.position as THREE.BufferAttribute;
-    for (let i = 0; i < pa.count; i++) { v.fromBufferAttribute(pa, i); bowTaper(v); pa.setXYZ(i, v.x * HB * 1.02, v.y * HD, v.z * HL * 1.02); }
-    g.computeVertexNormals();
-    return g;
-  }), 0, yh, 0);
-  const mz = 0.035, top = yh + 0.38;
-  put(a, M.timber, '#7e4e2a', strut([0, yh - 0.01, mz], [0, top, mz], 0.0055, 0.004, 6)); // mast
-  put(a, M.timber, '#7e4e2a', strut([0, yh + 0.045, mz], [0, yh + 0.05, -0.14], 0.0035, 0.003, 5)); // boom
-  put(a, M.timber, '#7e4e2a', strut([0, yh + 0.004, HL - 0.01], [0, yh + 0.012, HL + 0.045], 0.003, 0.0025, 5)); // bowsprit
-  put(a, M.brass, '#c9a24c', strut([0, yh - 0.002, mz], [0, yh + 0.012, mz], 0.009, 0.009, 8)); // mast collar
-  // mainsail: a triangle from the mast head to the boom, cream canvas, both faces
-  put(a, M.paint, '#ece2cc', (() => {
-    const g = new THREE.BufferGeometry(), A = P([0, yh + 0.055, mz - 0.006]), B = P([0, top - 0.015, mz - 0.006]), C = P([0, yh + 0.055, -0.135]);
-    const off = 0.0012, pts: number[] = [];
-    for (const s of [1, -1]) { const q = [A, B, C].map((v) => v.clone().setX(s * off)); (s > 0 ? [q[0], q[1], q[2]] : [q[0], q[2], q[1]]).forEach((v) => pts.push(v.x, v.y, v.z)); }
-    g.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
-    g.computeVertexNormals();
-    return g;
-  })());
-  // rigging: forestay, two shrouds, backstay
-  for (const [from, to] of [[[0, top, mz], [0, yh + 0.01, HL + 0.04]], [[0, top - 0.08, mz], [HB * 0.9, yh, mz - 0.01]], [[0, top - 0.08, mz], [-HB * 0.9, yh, mz - 0.01]], [[0, top, mz], [0, yh + 0.004, -HL + 0.004]]] as [V3, V3][]) put(a, M.paint, '#c8b48a', strut(from, to, 0.0011, 0.0011, 3, true));
-  a.end();
-}
-
-/** Crescent outline: the outer circle minus an offset inner circle, as one closed polygon (x right, y up). */
-function crescentPts(R: number, cx: number, cy: number, r: number, n = 14): [number, number][] {
-  const d = Math.hypot(cx, cy), aa = (R * R - r * r + d * d) / (2 * d), h = Math.sqrt(Math.max(0, R * R - aa * aa));
-  const px = (aa * cx) / d, py = (aa * cy) / d, I = [[px - (h * cy) / d, py + (h * cx) / d], [px + (h * cy) / d, py - (h * cx) / d]];
-  const arc = (ox: number, oy: number, rad: number, p0: number[], p1: number[], keep: (x: number, y: number) => boolean) => {
-    let a0 = Math.atan2(p0[1] - oy, p0[0] - ox), a1 = Math.atan2(p1[1] - oy, p1[0] - ox);
-    if (a1 < a0) a1 += Math.PI * 2;
-    const mid = (a0 + a1) / 2;
-    if (!keep(ox + rad * Math.cos(mid), oy + rad * Math.sin(mid))) a1 -= Math.PI * 2; // go the other way round
-    return Array.from({ length: n + 1 }, (_, i) => { const t = a0 + ((a1 - a0) * i) / n; return [ox + rad * Math.cos(t), oy + rad * Math.sin(t)] as [number, number]; });
-  };
-  const outer = arc(0, 0, R, I[0], I[1], (x, y) => Math.hypot(x - cx, y - cy) > r);
-  const inner = arc(cx, cy, r, I[1], I[0], (x, y) => Math.hypot(x, y) < R);
-  return [...outer, ...inner.slice(1, -1)];
-}
-
-/** FLW-S3-016 Keramische maanvorm: matte ivory ceramic crescent on a plain oak block (the art's simple base), ≈ 24 cm. */
-export function ceramicMoon(c: Ctx) {
-  const p = anchor('FLW-S3-016'), M = artMats();
-  const a = new Asm(c.b, c.chunk, p.x, p.y, p.z, p.yaw).begin(p.id);
-  a.add(M.timber, '#7a4a28', sb(0.085, 0.058, 0.07, 0.006), 0, 0.029, 0); // block
-  a.add(M.paint, '#3a2a1e', cg('moonPeg', () => new THREE.CylinderGeometry(0.006, 0.006, 0.02, 6).translate(0, 0.01, 0)), 0, 0.056, 0);
-  a.add(M.paint, '#e8dec6', cg('moonCrescent', () => {
-    const pts = crescentPts(0.085, 0.042, 0.03, 0.072);
-    let lo = pts[0];
-    for (const q of pts) if (q[1] < lo[1]) lo = q;
-    const g = slab(pts.map(([x, y]) => [x - lo[0], y - lo[1]]), 0.022, 0.003);
-    return g.translate(0, 0, 0.011); // centred on its thickness
-  }), 0, 0.073, 0);
-  a.end();
-}
-
 /** FLW-S3-017 Terracotta bloemmedaillon: a shallow terracotta disc (Ø 35 cm) with a raised bud on paired leaves. */
 /** FLW-S3-033 Smeedijzeren BBQ-haardplaat: a wrought-iron screen with a shouldered arch, scrollwork, A-frame feet. */
 export function fireScreen(c: Ctx) {
@@ -398,12 +313,21 @@ export function paperMask(c: Ctx) {
   a.end({ ground: false });
 }
 
-// FLW-S3-017 / FLW-S3-014: the D2-R interim models are superseded by the owner-approved Track 01 builds
-// (d3bAssets.ts `buildMedallion` / `buildSwallows`), placed by D3-b1 through their PROPS3D anchors and scales.
+// FLW-S3-017 / FLW-S3-014 (D3-b1) and FLW-S3-016 / FLW-S3-015 (D3-b2): the D2 / D2-R models are superseded by the
+// owner-approved Track 01 builds (d3bAssets.ts), placed through their PROPS3D anchors and scales. One production
+// implementation per stable id: the D2 moon and sloop builders are retired.
 function t01Medallion(c: Ctx) {
   const p = anchor('FLW-S3-017'), s = p.scale ?? 1;
   wallPiece(p.id, p.x, p.y, p.z, p.yaw, 0.6 * s, 0.6 * s);
   buildMedallion(c.b, c.chunk, p.x, p.y, p.z, p.yaw, s, p.id);
+}
+function t01Moon(c: Ctx) {
+  const p = anchor('FLW-S3-016'), s = p.scale ?? 1;
+  buildMoon(c.b, c.chunk, p.x, p.y, p.z, p.yaw, s, p.id); // stands on the bedside top (anchor y)
+}
+function t01Sloop(c: Ctx) {
+  const p = anchor('FLW-S3-015'), s = p.scale ?? 1;
+  buildSloop(c.b, c.chunk, p.x, p.y, p.z, p.yaw, s, p.id); // its oak base on the desk top (anchor y), the bow towards the facing
 }
 function t01Swallows(c: Ctx) {
   const p = anchor('FLW-S3-014'), s = p.scale ?? 1;
@@ -490,6 +414,6 @@ export function carvedHeron(c: Ctx) {
 
 /** All D2-b pieces whose anchor lies in `room` (callers pass their own chunk context). */
 export const S3_BUILDERS: Record<string, (c: Ctx) => void> = {
-  'FLW-S3-004': carvedBird, 'FLW-S3-014': t01Swallows, 'FLW-S3-015': modelSloop, 'FLW-S3-016': ceramicMoon, 'FLW-S3-017': t01Medallion,
+  'FLW-S3-004': carvedBird, 'FLW-S3-014': t01Swallows, 'FLW-S3-015': t01Sloop, 'FLW-S3-016': t01Moon, 'FLW-S3-017': t01Medallion,
   'FLW-S3-030': paperMask, 'FLW-S3-031': lemonPanel, 'FLW-S3-033': fireScreen, 'FLW-S3-037': carvedHeron,
 };

@@ -186,6 +186,34 @@ const D3B1 = [
   ['ga-void', 90.0, 3.35, 97.2, 180, 0.06],
 ].map(([n, x, y, z, yaw, pitch]) => [`d3b1-${n}`, { x, y, z, yaw: (yaw * Math.PI) / 180, pitch }]);
 
+// DEV-04D D3-b2 (SET=d3b2): Reiskamer, Sterrenkamer, north guest room (`storage`) and bathroom at player eye. Fixed
+// poses (production and candidate from the same cameras): the doorway approach from outside, the room on entry, the room
+// whole from its far corner, each zone, the hero close-up. Run at 915 × 412 (primary), 1280 × 720 and 412 × 915; DUSK=v
+// sets the production mood value (0 daylight … 1 late dusk) for the darker-lighting evidence.
+const D3B2 = [
+  ['re-door', 86.6, 3.35, 82.2, -90, -0.04], ['re-enter', 84.2, 3.35, 82.3, -100, -0.06], ['re-wide', 84.3, 3.35, 86.2, -128, -0.06],
+  ['re-travel', 81.6, 3.35, 83.4, -150, -0.22], ['re-desk', 79.3, 3.35, 82.75, 180, -0.4], ['re-sloop', 79.55, 3.35, 81.95, 190, -0.62],
+  ['re-bed', 80.4, 3.35, 83.6, -80, -0.08], ['re-case', 81.9, 3.35, 82.9, 40, -0.3],
+  ['sk-door', 86.6, 3.35, 90.2, -90, -0.04], ['sk-enter', 84.2, 3.35, 90.3, -95, -0.06], ['sk-wide', 84.3, 3.35, 93.4, -132, -0.06],
+  ['sk-bed', 78.8, 3.35, 89.2, -70, -0.12], ['sk-moon', 74.4, 3.35, 89.9, -112, -0.38], ['sk-scope', 80.2, 3.35, 92.9, 75, -0.14],
+  ['sk-back', 74.6, 3.35, 88.0, 60, -0.04],
+  ['gu-door', 101.0, 3.35, 97.2, 0, -0.04], ['gu-enter', 101.2, 3.35, 99.4, 25, -0.06], ['gu-wide', 106.8, 3.35, 99.3, -48, -0.06],
+  ['gu-bed', 101.6, 3.35, 102.4, 90, -0.1], ['gu-corner', 104.2, 3.35, 101.0, -55, -0.12], ['gu-back', 104.6, 3.35, 105.6, 200, -0.06],
+  ['ba-door', 87.5, 3.35, 102.6, 0, -0.04], ['ba-enter', 87.5, 3.35, 104.6, 5, -0.06], ['ba-basin', 87.4, 3.35, 105.6, 90, -0.12],
+  ['ba-tub', 89.2, 3.35, 105.0, -40, -0.2], ['ba-back', 89.3, 3.35, 109.0, -150, -0.06],
+  // hero / use-trace close-ups (≈ 1–1.5 m, arm's length on the phone)
+  ['re-coat', 83.1, 3.35, 81.9, 130, -0.12], ['sk-table', 83.0, 3.35, 92.0, 40, -0.45], ['sk-bedside', 74.1, 3.35, 90.3, -100, -0.5],
+  ['gu-games', 101.6, 3.35, 103.2, -70, -0.4], ['gu-bags', 103.4, 3.35, 104.6, 10, -0.45], ['ba-wash', 88.6, 3.35, 105.3, 95, -0.08],
+  ['ba-caddy', 87.2, 3.35, 106.6, -45, -0.5],
+  // D3-b2R additions: the draped jacket, the Sterrenkamer resting side and the rucksack at close / play distance
+  ['re-jacket', 80.4, 3.35, 82.75, -135, -0.38], ['sk-rest', 79.6, 3.35, 89.4, -75, -0.1], ['sk-centre', 81.8, 3.35, 88.0, -60, -0.06],
+  ['gu-ruck', 104.05, 3.35, 105.45, 12, -0.55], ['gu-ruck-far', 103.0, 3.35, 102.6, 25, -0.22],
+].map(([n, x, y, z, yaw, pitch]) => [`d3b2-${n}`, { x, y, z, yaw: (yaw * Math.PI) / 180, pitch }]);
+// DEV-04D D3-b2R (SET=d3b2r): the refinement's subset of the D3-b2 poses (Reis / Sterren composition, the soft goods)
+const D3B2R_NAMES = ['re-door', 're-enter', 're-wide', 're-travel', 're-desk', 're-sloop', 're-coat', 're-jacket', 're-bed', 're-case',
+  'sk-door', 'sk-enter', 'sk-wide', 'sk-centre', 'sk-rest', 'sk-scope', 'sk-table', 'sk-bed', 'sk-moon', 'sk-bedside', 'sk-back', 'gu-ruck', 'gu-ruck-far', 'gu-bags'];
+const D3B2R = D3B2.filter(([n]) => D3B2R_NAMES.includes(n.slice(5)));
+
 const ctx = await browser.newContext({ viewport: { width: +(process.env.VW ?? 1280), height: +(process.env.VH ?? 720) } });
 const page = await ctx.newPage();
 const problems = [];
@@ -240,18 +268,21 @@ else if (process.env.SET === 'd1r') views.push(...D1R);
 else if (process.env.SET === 'd3a') views.push(...D3A);
 else if (process.env.SET === 'd3arch') views.push(...D3ARCH);
 else if (process.env.SET === 'd3b1') views.push(...D3B1);
+else if (process.env.SET === 'd3b2') views.push(...D3B2);
+else if (process.env.SET === 'd3b2r') views.push(...D3B2R);
 else if (!process.env.ROOMS) views.push(...EXT);
 const sel = process.env.VIEWS ? new Set(process.env.VIEWS.split(',')) : null;
 const rows = [];
 for (const [name, pose] of views) {
   if (sel && !sel.has(name)) continue;
-  const m = await page.evaluate(async ({ p, open, chunks }) => {
+  const m = await page.evaluate(async ({ p, open, chunks, dusk }) => {
     const g = window.__game;
     if (open) { g.state.open[open] = true; g.world.syncAll(); for (let i = 0; i < 60; i++) g.tick(1 / 30); }
     const place = () => { g.player.setPose(p); if (!p.fly) g.player.y = g.world.col.supportHeight(p.x, p.z, p.y + 0.05, 0.42); };
     place();
     for (let i = 0; i < 40; i++) g.tick(1 / 30);
     place();
+    if (dusk != null) { g.dusk = dusk; g.tick(1 / 30); g.dusk = dusk; } // DUSK=v: the production mood value, held for the frame
     g.tick(1 / 30);
     await new Promise((r) => setTimeout(r, 200));
     // CHUNKS=a,b: which of these batch chunks this frame actually draws (calls, triangles): the budget reach of a room
@@ -260,7 +291,7 @@ for (const [name, pose] of views) {
     g.renderer.render(g.world.scene, g.camera);
     const i = g.renderer.info.render;
     return { calls: i.calls, triangles: i.triangles, room: g.world.hereRoom, feetY: +g.player.y.toFixed(2), ...(want ? { chunks: drawn } : {}) };
-  }, { p: pose, open: OPEN_FOR[name] ?? null, chunks: process.env.CHUNKS ? process.env.CHUNKS.split(',') : null });
+  }, { p: pose, open: OPEN_FOR[name] ?? null, chunks: process.env.CHUNKS ? process.env.CHUNKS.split(',') : null, dusk: process.env.DUSK != null ? +process.env.DUSK : null });
   await page.waitForTimeout(120);
   await page.screenshot({ path: `${OUT}/${name}.jpg`, quality: 72, type: 'jpeg' });
   rows.push({ name, pose, ...m });

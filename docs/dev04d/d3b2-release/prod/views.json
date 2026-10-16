@@ -1,0 +1,342 @@
+{
+  "commit": "74610c5",
+  "rows": [
+    {
+      "name": "d3b2-re-door",
+      "pose": {
+        "x": 86.6,
+        "y": 3.35,
+        "z": 82.2,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.04
+      },
+      "calls": 47,
+      "triangles": 308836,
+      "room": "frontGallery",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-re-enter",
+      "pose": {
+        "x": 84.2,
+        "y": 3.35,
+        "z": 82.3,
+        "yaw": -1.7453292519943295,
+        "pitch": -0.06
+      },
+      "calls": 39,
+      "triangles": 189064,
+      "room": "reis",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-re-wide",
+      "pose": {
+        "x": 84.3,
+        "y": 3.35,
+        "z": 86.2,
+        "yaw": -2.234021442552742,
+        "pitch": -0.06
+      },
+      "calls": 42,
+      "triangles": 198216,
+      "room": "reis",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-re-travel",
+      "pose": {
+        "x": 81.6,
+        "y": 3.35,
+        "z": 83.4,
+        "yaw": -2.6179938779914944,
+        "pitch": -0.22
+      },
+      "calls": 29,
+      "triangles": 179390,
+      "room": "reis",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-re-desk",
+      "pose": {
+        "x": 79.3,
+        "y": 3.35,
+        "z": 82.75,
+        "yaw": 3.141592653589793,
+        "pitch": -0.4
+      },
+      "calls": 28,
+      "triangles": 176154,
+      "room": "reis",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-re-sloop",
+      "pose": {
+        "x": 79.55,
+        "y": 3.35,
+        "z": 81.95,
+        "yaw": 3.3161255787892263,
+        "pitch": -0.62
+      },
+      "calls": 30,
+      "triangles": 188310,
+      "room": "reis",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-re-bed",
+      "pose": {
+        "x": 80.4,
+        "y": 3.35,
+        "z": 83.6,
+        "yaw": -1.3962634015954636,
+        "pitch": -0.08
+      },
+      "calls": 33,
+      "triangles": 148022,
+      "room": "reis",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-re-case",
+      "pose": {
+        "x": 81.9,
+        "y": 3.35,
+        "z": 82.9,
+        "yaw": 0.6981317007977318,
+        "pitch": -0.3
+      },
+      "calls": 54,
+      "triangles": 238964,
+      "room": "reis",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-sk-door",
+      "pose": {
+        "x": 86.6,
+        "y": 3.35,
+        "z": 90.2,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.04
+      },
+      "calls": 55,
+      "triangles": 378246,
+      "room": "walkway",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-sk-enter",
+      "pose": {
+        "x": 84.2,
+        "y": 3.35,
+        "z": 90.3,
+        "yaw": -1.6580627893946132,
+        "pitch": -0.06
+      },
+      "calls": 45,
+      "triangles": 306698,
+      "room": "sterren",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-sk-wide",
+      "pose": {
+        "x": 84.3,
+        "y": 3.35,
+        "z": 93.4,
+        "yaw": -2.303834612632515,
+        "pitch": -0.06
+      },
+      "calls": 51,
+      "triangles": 305708,
+      "room": "sterren",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-sk-bed",
+      "pose": {
+        "x": 78.8,
+        "y": 3.35,
+        "z": 89.2,
+        "yaw": -1.2217304763960306,
+        "pitch": -0.12
+      },
+      "calls": 35,
+      "triangles": 286804,
+      "room": "sterren",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-sk-moon",
+      "pose": {
+        "x": 74.4,
+        "y": 3.35,
+        "z": 89.9,
+        "yaw": -1.9547687622336491,
+        "pitch": -0.38
+      },
+      "calls": 29,
+      "triangles": 140070,
+      "room": "sterren",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-sk-scope",
+      "pose": {
+        "x": 80.2,
+        "y": 3.35,
+        "z": 92.9,
+        "yaw": 1.3089969389957472,
+        "pitch": -0.14
+      },
+      "calls": 50,
+      "triangles": 322138,
+      "room": "sterren",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-sk-back",
+      "pose": {
+        "x": 74.6,
+        "y": 3.35,
+        "z": 88,
+        "yaw": 1.0471975511965976,
+        "pitch": -0.04
+      },
+      "calls": 64,
+      "triangles": 352164,
+      "room": "sterren",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-re-coat",
+      "pose": {
+        "x": 83.1,
+        "y": 3.35,
+        "z": 81.9,
+        "yaw": 2.2689280275926285,
+        "pitch": -0.12
+      },
+      "calls": 35,
+      "triangles": 199254,
+      "room": "reis",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-sk-table",
+      "pose": {
+        "x": 83,
+        "y": 3.35,
+        "z": 92,
+        "yaw": 0.6981317007977318,
+        "pitch": -0.45
+      },
+      "calls": 43,
+      "triangles": 311774,
+      "room": "sterren",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-sk-bedside",
+      "pose": {
+        "x": 74.1,
+        "y": 3.35,
+        "z": 90.3,
+        "yaw": -1.7453292519943295,
+        "pitch": -0.5
+      },
+      "calls": 29,
+      "triangles": 151174,
+      "room": "sterren",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-gu-bags",
+      "pose": {
+        "x": 103.4,
+        "y": 3.35,
+        "z": 104.6,
+        "yaw": 0.17453292519943295,
+        "pitch": -0.45
+      },
+      "calls": 20,
+      "triangles": 140768,
+      "room": "storage",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-re-jacket",
+      "pose": {
+        "x": 80.4,
+        "y": 3.35,
+        "z": 82.75,
+        "yaw": -2.356194490192345,
+        "pitch": -0.38
+      },
+      "calls": 27,
+      "triangles": 144252,
+      "room": "reis",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-sk-rest",
+      "pose": {
+        "x": 79.6,
+        "y": 3.35,
+        "z": 89.4,
+        "yaw": -1.3089969389957472,
+        "pitch": -0.1
+      },
+      "calls": 40,
+      "triangles": 294614,
+      "room": "sterren",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-sk-centre",
+      "pose": {
+        "x": 81.8,
+        "y": 3.35,
+        "z": 88,
+        "yaw": -1.0471975511965976,
+        "pitch": -0.06
+      },
+      "calls": 48,
+      "triangles": 310336,
+      "room": "sterren",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-gu-ruck",
+      "pose": {
+        "x": 104.05,
+        "y": 3.35,
+        "z": 105.45,
+        "yaw": 0.20943951023931953,
+        "pitch": -0.55
+      },
+      "calls": 18,
+      "triangles": 127894,
+      "room": "storage",
+      "feetY": 3.35
+    },
+    {
+      "name": "d3b2-gu-ruck-far",
+      "pose": {
+        "x": 103,
+        "y": 3.35,
+        "z": 102.6,
+        "yaw": 0.4363323129985824,
+        "pitch": -0.22
+      },
+      "calls": 21,
+      "triangles": 146328,
+      "room": "storage",
+      "feetY": 3.35
+    }
+  ],
+  "problems": []
+}

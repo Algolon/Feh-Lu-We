@@ -45,6 +45,7 @@ import { ROOF_DETAIL } from './roofDetail';
 import { EXTERIOR_FINISH, finishedChimney, roofFlashing } from './exteriorFinish';
 import { buildKitchenJuicePouch } from './kitchenJuicePouch';
 import { planChest, pottingBench, plantStand, plantEtagere, pottedPlant } from './d3b';
+import { coatStand, holdall, rucksack, deskTravelSet, jacketOverChair, planningDesk, daybed, observingTable, binoculars, stoolThrow, sweaterOverChest, washShelf, towelRing, bathCaddy } from './d3b2';
 import { wainscot, refectoryTable, gamesCabinet, dartboard, servingConsole, chinaCabinet, wallCupboards, splashback, enamelPendant, pegRailClock, panelDoor } from './d3a';
 import { placeSolved, slotContents, openBasement } from '../puzzles/rules';
 
@@ -1125,6 +1126,13 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   // between the windows, on the walking line; it stood alone by the east window
   slatBench(c, 90.0, 81.0, UF, 0, 1.4, '#6b4426');
   S3_BUILDERS['FLW-S3-014'](c);
+  // DEV-04D D3-b2: the Reis- and Sterrenkamer furnishings are their own culled region (estate.ts `mUpR`): drawn while
+  // either room is visible, no longer from the hall, living room, library and attic, which drew them through the
+  // floors whenever `mUp` was (measured: DEV04D_D3B2_REPORT.md §5). Pieces whose material would open a tiny batch of
+  // its own here (the two FLW canvases, the desk's map and guidebook, the observing table with its books and mug) stay
+  // in the shared `mUp`, so the region adds four batches (timber, fabric, paint, brass), not eight.
+  const shared = (f: () => void) => { const ch = c.chunk; c.chunk = 'mUp'; f(); c.chunk = ch; };
+  c.chunk = 'mUpR';
   // ---------------------------------------------------------------- Reiskamer (warm, travel)
   // DEV-03: headboard on the west wall beside its window (it stood 1.5 m off the wall with the bedside behind it)
   rug(c, 75.4, 84.9, R0 + 0.01, 2.2, 3.0, Math.PI / 2, '#f4e0cc', 'kilim', true);
@@ -1132,7 +1140,7 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   for (const bz of [83.75, 86.05]) bedside(c, 72.65, bz, R0, Math.PI / 2, '#7a4f2c');
   // DEV-04D D1-R: the traveller over the bed, on the view from the door, lit by the bedside lamp; bottom 0.155 m above the
   // headboard capping (R0 + 1.20; the post finials stand outside the frame)
-  flwPainting(c, 'FLW-D2-022', 72.42, R0 + 1.92, 84.9, Math.PI / 2);  wardrobe(c, 81.6, 86.35, R0, Math.PI, 1.4, '#7a4f2c');
+  shared(() => flwPainting(c, 'FLW-D2-022', 72.42, R0 + 1.92, 84.9, Math.PI / 2));  wardrobe(c, 81.6, 86.35, R0, Math.PI, 1.4, '#7a4f2c');
   curtains(c, 75.5, 80.45, R0 + 0.75, 0, 1.0, 1.9, '#c8643a');
   curtains(c, 82.5, 80.45, R0 + 0.75, 0, 1.0, 1.9, '#c8643a');
   canvasPanel(w, 78.6, R0 + 1.6, 86.68, Math.PI, 1.1, 0.75, (x, W, H) => { const gr = x.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, '#f6e2b8'); gr.addColorStop(1, '#e8d2a0'); x.fillStyle = gr; x.fillRect(0, 0, W, H); x.strokeStyle = '#7a5a3a'; x.lineWidth = 3; x.beginPath(); x.moveTo(0, H * 0.7); for (let i = 0; i <= 10; i++) x.lineTo((W * i) / 10, H * (0.55 + 0.12 * Math.sin(i * 1.3))); x.stroke(); x.beginPath(); x.arc(W * 0.75, H * 0.3, 26, 0, Math.PI * 2); x.stroke(); x.font = 'italic 22px Georgia'; x.fillStyle = '#7a5a3a'; if (!SLICE) x.fillText('onderweg', 20, H - 18); /* DEV-01R: no label-like words in clue rooms */ }, 256);
@@ -1140,10 +1148,23 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   // its hinges with straps inside and travel labels outside, clothes folded in it (was a box and a tilted slab)
   luggageRack(c, 83.8, 84.4, R0, -Math.PI / 2);
   blanketChest(c, 75.05, 84.9, R0, Math.PI / 2, 1.0, '#6b4a2a');
-  writingDesk(c, 79.0, 80.95, R0, 0, 1.1, 0.55, '#7a4f2c');
-  tabletop(c, 78.78, 80.95, R0 + 0.76, 0, ['open'], 13); // DEV-04D D2: the book stack makes way for the model sloop
-  S3_BUILDERS['FLW-S3-015'](c); // DEV-04D D2: model sloop on the desk (not in the suitcase memory cluster)
+  // DEV-04D D3-b2R: the window wall becomes one planning zone instead of scattered pieces on a long plain wall: a
+  // heavier planning desk (drawer pedestal, gallery rail; same 0.76 top) under the middle window, a bookcase of guides
+  // and atlases on the pier west of it, a rug under desk and chair; the wall now runs window · bookcase · desk ·
+  // holdall · window · coat stand instead of a lone desk between two windows
+  planningDesk(c, 79.0, 80.95, R0, 0, 1.4, 0.62);
+  bookshelf(c, 77.25, 80.65, R0, 0, 1.2, 1.6, 'leather', 0.32, 'living'); // in mUpR: built in the shared mUp it saved one call here but pushed the hall's high-quality view over 450 k (D3B2R report §5)
+  rug(c, 79.0, 81.5, R0 + 0.01, 2.6, 1.8, 0, '#d6c2aa', 'medallion');
+  // DEV-04D D3-b2: the desk under the middle window is where the trip is planned: the road map and guidebook on its
+  // west half (they replace the generic open book), the Track 01 sloop (×1.15) on its east half, the guest's jacket
+  // over the chair and a soft holdall by the desk; a coat stand by the door carries the coat, scarf and hat. The
+  // suitcase memory (rack, east end) stays the room's focal object: nothing else on this floor is a hard case.
+  shared(() => deskTravelSet(c, 78.8, R0 + 0.76, 80.97, 0));
+  S3_BUILDERS['FLW-S3-015'](c); // DEV-04D D2 / D3-b2: model sloop on the desk (not in the suitcase memory cluster)
   chair(c, 79.0, 81.65, R0, Math.PI, '#b5643c', true, 'carver', '#7a4f2c');
+  jacketOverChair(c, 79.0, 81.65, R0, Math.PI, 0.88, -0.214);
+  holdall(c, 80.2, 81.02, R0, 0.22);
+  coatStand(c, 84.3, 80.95, R0, -1.03);
   const suitcase = compound((b) => {
     const M2 = artMats(), a2 = new Asm(b, 'main', 0, 0, 0, 0), leather = '#a8743f', lining = '#7a2e2a';
     a2.add(M2.upholstery, leather, joinery.sb(0.8, 0.02, 0.5, 0.008), 0, 0.01, 0);
@@ -1168,6 +1189,7 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   const rl = tableLamp(w, 72.65, R0 + 0.59, 83.75);
   makeLamp(w, g, { id: 'lamp.reis', ...rl, name: 'lamp', defaultOn: true, hit: [0.4, 0.7, 0.4], intensity: 4, distance: 6, patch: { y: R0 + 0.03, r: 1.0 } });
   // ---------------------------------------------------------------- Sterrenkamer (cool, astronomy)
+  c.chunk = 'mUpS'; // DEV-04D release: its own culled region (estate.ts `mUpS`): seen from the hall when the Reiskamer is not
   rug(c, 75.6, 92.2, R0 + 0.01, 2.6, 3.0, 0, '#ffffff', 'oval');
   bed2(c, 73.5, 92.2, R0, Math.PI / 2, '#26344a', '#4a3a2a', 1.6, { style: 'upholstered', cushion: '#3b4f5d', throwColor: '#c9a25a' });
   for (const bz of [91.05, 93.35]) bedside(c, 72.65, bz, R0, Math.PI / 2, '#4a3a2a');
@@ -1175,8 +1197,22 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   curtains(c, 72.45, 90.0, R0 + 0.75, Math.PI / 2, 1.0, 1.9, '#2f3f5f');
   canvasPanel(w, 78.6, R0 + 1.6, 93.9, Math.PI, 1.4, 0.95, (x, W, H) => { x.fillStyle = '#1c2a44'; x.fillRect(0, 0, W, H); for (let i = 0; i < 60; i++) { x.fillStyle = i % 5 ? '#f4ecd8' : '#e8c547'; x.beginPath(); x.arc((Math.sin(i * 12.9) * 0.5 + 0.5) * W, (Math.sin(i * 7.3) * 0.5 + 0.5) * H, i % 7 ? 2 : 4, 0, Math.PI * 2); x.fill(); } x.strokeStyle = 'rgba(244,236,216,.5)'; x.lineWidth = 1.5; x.beginPath(); x.moveTo(W * 0.2, H * 0.3); x.lineTo(W * 0.32, H * 0.42); x.lineTo(W * 0.45, H * 0.36); x.lineTo(W * 0.58, H * 0.5); x.stroke(); x.font = 'italic 20px Georgia'; x.fillStyle = '#f4ecd8'; if (!SLICE) x.fillText('sterrenkaart', 16, H - 14); /* DEV-01R */ }, 384);
   telescope(c, 82.6, 91.4, R0, -1.71);
-  flwPainting(c, 'FLW-D2-029', 78.6, R0 + 1.6, 86.9, 0); // DEV-04D D1-R: centre of the south wall, facing the star map on its axis and line // DEV-04A: aimed at the west window (z 90); the old tube faced into the room
-  table(c, 83.9, 93.0, R0, 0.6, 0.5, 0, '#4a3a2a', 0.7);
+  shared(() => flwPainting(c, 'FLW-D2-029', 78.6, R0 + 1.6, 86.9, 0)); // DEV-04D D1-R: centre of the south wall, facing the star map on its axis and line // DEV-04A: aimed at the west window (z 90); the old tube faced into the room
+  // DEV-04D D3-b2: the observing corner reads as one station: the logbook's table rebuilt as a small observing table
+  // (drawer, a shelf of star atlases, a red torch and a mug beside the logbook; same footprint and top), the observer's
+  // stool behind the eyepiece with a throw left on it; binoculars beside the Track 01 moon (×1.4) on the window bedside
+  // and an armchair in the window corner make the west end the resting / looking-out side (bed, window, chair). No new
+  // star / emblem shapes (EB.stars stays the logbook's).
+  shared(() => observingTable(c, 83.9, 93.0, R0, Math.PI, 0.6, 0.5, 0.7));
+  rug(c, 83.3, 92.1, R0 + 0.01, 2.2, 2.4, 0, '#c4cee2', 'field'); // D3-b2R: the observing station's own floor: telescope, stool and table on one rug
+  stool(c, 83.5, 91.6, R0);
+  stoolThrow(c, 83.5, 91.6, R0, 0.6, 0.535, 0.18);
+  binoculars(c, 72.6, R0 + 0.5775, 91.2, 1.1);
+  // D3-b2R: a daybed under the star map (north wall) fills the room's empty middle with a purpose: between the bed end
+  // and the observing station, a place to lie down between observations under the chart, so the room reads as one
+  // sequence along its length (sleep · look out · rest under the chart · observe) instead of two islands
+  daybed(c, 78.6, 93.48, R0, Math.PI);
+  armchair(c, 73.85, 88.15, R0, -0.7, '#3b4f5d'); // D3-b2: the window corner, turned to the window and the bed
   const logbook = compound((b) => { addBook(new Asm(b, 'main', 0, 0, 0, Math.PI / 2), { size: 'tall', thick: 'medium', hard: true, design: 5 }, '#2f3f5f', 0, 0, 0, { flat: true, paper: PAPER.fresh }); });
   place(logbook, 83.9, R0 + 0.7, 93.0, 0.4);
   w.scene.add(logbook);
@@ -1184,17 +1220,38 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   const sl = tableLamp(w, 72.65, R0 + 0.59, 93.35);
   // DEV-01: on by default so the B01 evidence is readable on arrival
   makeLamp(w, g, { id: 'lamp.sterren', ...sl, name: 'lamp', defaultOn: SLICE, hit: [0.4, 0.7, 0.4], intensity: 4, distance: 6, patch: { y: R0 + 0.03, r: 1.0 } });
+  c.chunk = 'mUp';
   // ---------------------------------------------------------------- bathroom
+  // DEV-04D D3-b2: the bathroom gets its material: a pale tiled floor in a slate border (a 6 mm visual layer on the
+  // boards; the walking floor is unchanged), a 1.1 m glazed tile dado with a sea-green cap course on every free wall
+  // run (stopped at the door casing and under the window), a wash zone (shelf with tumbler and soap under the mirror,
+  // a towel ring) and a bath zone (caddy across the tub, the mat moved alongside it). D2-017 / D2-030 stay unhung: the
+  // atlas would grow 960 → 1152 rows (the full 12 MiB cap) for one 0.35 × 0.7 m print.
+  {
+    const tile = k.M.tile, ceram = artMats().ceramic, B = 0.14, y0 = R0 - 0.01, y1 = R0 + 0.006;
+    boxMM(c.b, tile, '#e6e8e2', 85.08 + B, 89.92 - B, y0, y1, 104.08 + B, 109.6 - B, { uv: 1.2, chunk: c.chunk });
+    for (const [x0, x1, z0, z1] of [[85.08, 89.92, 104.08, 104.08 + B], [85.08, 89.92, 109.6 - B, 109.6], [85.08, 85.08 + B, 104.08 + B, 109.6 - B], [89.92 - B, 89.92, 104.08 + B, 109.6 - B]] as const)
+      boxMM(c.b, tile, '#8e9a9a', x0, x1, y0, y1, z0, z1, { uv: 1.2, chunk: c.chunk });
+    // tile dado runs: [axis, face, a0, a1, yaw into the room]
+    for (const [ax, f, a0, a1, yaw] of [['z', 85.08, 104.08, 109.6, Math.PI / 2], ['z', 89.92, 104.08, 109.6, -Math.PI / 2], ['x', 109.6, 85.08, 86.88, Math.PI], ['x', 109.6, 88.12, 89.92, Math.PI], ['x', 104.08, 85.08, 86.93, 0], ['x', 104.08, 88.07, 89.92, 0]] as const) {
+      const mid = (a0 + a1) / 2, [x, z] = ax === 'z' ? [f, mid] : [mid, f];
+      splashback(c, x, R0, z, yaw, a1 - a0, 1.1, 0.2);
+      new Asm(c.b, c.chunk, x, R0, z, yaw).add(ceram, '#7f8c8a', joinery.bx(a1 - a0, 0.12, 0.03), 0, 0.06, 0.015); // tiled base course over the skirting
+    }
+  }
   bathtub(c, 86.0, 107.6, R0, 0);
+  bathCaddy(c, 86.0, R0 + 0.57, 107.9, 0);
   pedestalBasin(c, 89.6, 105.0, R0, -Math.PI / 2); // DEV-04B: was a white box
   wallMirror(c, 89.92, R0 + 1.55, 105.0, -Math.PI / 2, 0.5, 0.7); // DEV-04D F1: framed tinted mirror (was a glowing panel)
+  washShelf(c, 89.92, R0 + 1.12, 105.0, -Math.PI / 2);
+  towelRing(c, 89.92, R0 + 0.95, 105.56, -Math.PI / 2, '#6fae9a');
   towelRail(c, 85.5, 105.3, R0, Math.PI / 2, ['#6fae9a', '#f2ead8']);
-  rug(c, 86.0, 105.9, R0 + 0.01, 1.2, 0.7, 0, '#e8f0f0', 'field');
+  rug(c, 86.85, 107.6, R0 + 0.016, 0.55, 0.95, 0, '#e8f0f0', 'field'); // the bath mat, alongside the tub (was at its tap end)
   staticSconce(c, w, 89.85, R0 + 1.9, 106.8, -Math.PI / 2, 2.5, 4.5);
   // ---------------------------------------------------------------- upstairs corridor
   rug(c, 101.3, 97.3, R0 + 0.01, 1.2, 11.4, Math.PI / 2, '#ffffff', 'runner');
   for (const x of [99, 104]) staticSconce(c, w, x, R0 + 1.9, 98.5, Math.PI, 2.5, 5);
-  c.chunk = 'mUpE'; // DEV-04B: study, botanic room, north guest room and linen: their own culled region
+  c.chunk = 'mUpE'; // DEV-04B: study, botanic room and linen: their own culled region (D3-b2: the guest room is mUpG)
   study(w, g, c);
   // ---------------------------------------------------------------- botanical / map room (optional observation)
   rug(c, 104.4, 88, R0 + 0.01, 2.8, 4.2, 0, '#d8e8c8', 'field');
@@ -1232,16 +1289,36 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   const bl = tableLamp(w, 103.9, R0 + 0.76, 89.4);
   makeLamp(w, g, { id: 'lamp.botanic', ...bl, name: 'lamp', defaultOn: true, hit: [0.4, 0.7, 0.4], intensity: 4, distance: 7, patch: { y: R0 + 0.03, r: 1.2 } });
   // ---------------------------------------------------------------- north guest room (source id `storage`), linen, rear nooks
+  // DEV-04D D3-b2: the guest room is its own culled region (estate.ts `mUpG`, drawn only while the room is visible): its
+  // books and games had joined the study's prop-atlas batch and stretched it into this room (+10.8 k drawn here). The
+  // painting and the lantern (one tiny batch each) stay in the shared `mUp`, which this room also shows.
+  c.chunk = 'mUpG';
   // DEV-03: headboard on the east wall (it stood 1.1 m off it), a bedside each side, a chest at the foot, a reading
   // chair in the free corner by the door; the wardrobe keeps the north wall, the walk line door → bed stays clear
   bed2(c, 106.45, 102.6, R0, -Math.PI / 2, '#6f8a7a', '#7a5a3a', 1.6, { style: 'spindle', throwColor: '#c8b48a' });
   for (const bz of [101.35, 103.85]) bedside(c, 107.33, bz, R0, -Math.PI / 2, '#7a5a3a');
   blanketChest(c, 104.95, 102.6, R0, -Math.PI / 2, 1.1, '#7a5a3a');
+  c.chunk = 'mUp';
   flwPainting(c, 'FLW-D2-035', 107.58, R0 + 1.85, 102.6, -Math.PI / 2); // DEV-04D D1: replaces the duplicate of the living room's atlas #3
+  c.chunk = 'mUpG';
   wardrobe(c, 101.6, 106.25, R0, Math.PI, 1.4, '#7a5a3a');
   armchair(c, 100.0, 104.9, R0, Math.PI * 0.62, '#8a9a7a');
   rug(c, 104.5, 102.6, R0 + 0.01, 2.0, 2.8, 0, '#efe6d0', 'oval');
+  c.chunk = 'mUp';
   staticLantern(c, w, 103.3, UCEIL - 0.6, 101.0, 0.5, 0, 2.5, 6);
+  c.chunk = 'mUpG';
+  // DEV-04D D3-b2: a lived-in weekend room in three zones round a clear walk line (door → bed, door → wardrobe): the
+  // sleeping zone (a sweater left on the chest), the bags by the wardrobe on the north wall (a holdall on the floor, a
+  // rucksack against the wall), and a games / reading corner at the west wall (a low bookcase with games on it, a side
+  // table with a card game laid out beside the armchair). Soft bags only (see d3b2.ts); no names, no new art.
+  sweaterOverChest(c, 104.95, 102.75, R0, -Math.PI / 2, 0.58, 0.235);
+  holdall(c, 103.35, 106.1, R0, 0.12, '#3f5a6a', '#a8743f', 0.6);
+  rucksack(c, 104.3, 106.32, R0, Math.PI - 0.12);
+  bookshelf(c, 99.35, 102.9, R0, Math.PI / 2, 1.0, 1.25, 'linen', 0.32, 'living');
+  gameBoxes(c, 99.26, 102.62, R0 + 1.25, Math.PI / 2 + 0.1, ['a', 'b', 'c'], 1);
+  roundTable(c, 100.45, 103.95, R0, 0.26, '#5a3a22');
+  tabletop(c, 100.45, 103.95, R0 + 0.76, 0.3, ['cards'], 21);
+  c.chunk = 'mUpE';
   // shared linen: shelves along the north wall, reached centrally from the rear nook (not through a bedroom)
   // DEV-04B: open linen shelves holding folded stacks (were solid blocks with coloured slabs on their faces)
   for (let i = 0; i < 3; i++) shelvingUnit(c, 101.2 + i * 2.2, 109.25, R0, Math.PI, 1.9, 0.5, 2.0, ['linen', 'linen', 'linen', 'empty'], '#8a6a4a', 80 + i);

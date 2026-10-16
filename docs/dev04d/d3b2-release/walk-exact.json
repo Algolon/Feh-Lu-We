@@ -1,0 +1,378 @@
+{
+ "what": "Frame-exact walk check (culling recomputed at every sample; the official walk script samples every 0.1 s against a 0.12 s culling cadence). Same four paths and steps as dev04d-walk-budget.mjs plus a 0.35 rad look-up at every waypoint turn. fix = candidate with the doorway rule; rooms-only = the same frame with the rule switched off (diff: pixels > 6/255 apart, same frame); prod = production 74610c5 under the same method; pre-fix = candidate ec45ebd (one mUpR region, rooms-only).",
+ "candidate": "6f7b4eb (built as 3900aeb+doorway fixes; same source)",
+ "production": "74610c5",
+ "paths": {
+  "up-west/closed": {
+   "samples": 419,
+   "max": {
+    "prod": {
+     "calls": 60,
+     "tris": 234746
+    },
+    "preFix": {
+     "calls": 60,
+     "tris": 221248
+    },
+    "candidate": {
+     "calls": 60,
+     "tris": 221248
+    }
+   },
+   "culledByDoorwayRule": 0,
+   "pixelDiffSamples": [],
+   "overPB01": {
+    "prod": 0,
+    "candidate": 0
+   },
+   "newOverPB01": []
+  },
+  "up-east/closed": {
+   "samples": 320,
+   "max": {
+    "prod": {
+     "calls": 67,
+     "tris": 241204
+    },
+    "preFix": {
+     "calls": 67,
+     "tris": 227808
+    },
+    "candidate": {
+     "calls": 67,
+     "tris": 227808
+    }
+   },
+   "culledByDoorwayRule": 0,
+   "pixelDiffSamples": [],
+   "overPB01": {
+    "prod": 0,
+    "candidate": 0
+   },
+   "newOverPB01": []
+  },
+  "hall/closed": {
+   "samples": 109,
+   "max": {
+    "prod": {
+     "calls": 60,
+     "tris": 236298
+    },
+    "preFix": {
+     "calls": 60,
+     "tris": 222902
+    },
+    "candidate": {
+     "calls": 60,
+     "tris": 222902
+    }
+   },
+   "culledByDoorwayRule": 0,
+   "pixelDiffSamples": [],
+   "overPB01": {
+    "prod": 0,
+    "candidate": 0
+   },
+   "newOverPB01": []
+  },
+  "library/closed": {
+   "samples": 149,
+   "max": {
+    "prod": {
+     "calls": 50,
+     "tris": 267392
+    },
+    "preFix": {
+     "calls": 50,
+     "tris": 254084
+    },
+    "candidate": {
+     "calls": 50,
+     "tris": 254084
+    }
+   },
+   "culledByDoorwayRule": 0,
+   "pixelDiffSamples": [],
+   "overPB01": {
+    "prod": 0,
+    "candidate": 0
+   },
+   "newOverPB01": []
+  },
+  "up-west/open": {
+   "samples": 419,
+   "max": {
+    "prod": {
+     "calls": 150,
+     "tris": 929026
+    },
+    "preFix": {
+     "calls": 153,
+     "tris": 920254
+    },
+    "candidate": {
+     "calls": 153,
+     "tris": 920254
+    }
+   },
+   "culledByDoorwayRule": 413,
+   "pixelDiffSamples": [
+    {
+     "x": 83.4,
+     "z": 90.2,
+     "yaw": 3.93,
+     "pitch": 0,
+     "room": "sterren",
+     "diff": 1
+    },
+    {
+     "x": 83.4,
+     "z": 90.2,
+     "yaw": 3.93,
+     "pitch": 0.35,
+     "room": "sterren",
+     "diff": 4
+    },
+    {
+     "x": 78.5,
+     "z": 90.6,
+     "yaw": 3.14,
+     "pitch": 0.35,
+     "room": "sterren",
+     "diff": 5
+    },
+    {
+     "x": 82,
+     "z": 91.5,
+     "yaw": 2.17,
+     "pitch": -0.04,
+     "room": "sterren",
+     "diff": 4
+    },
+    {
+     "x": 82.32,
+     "z": 91.28,
+     "yaw": 2.17,
+     "pitch": -0.04,
+     "room": "sterren",
+     "diff": 101
+    },
+    {
+     "x": 83.6,
+     "z": 90.4,
+     "yaw": 3.93,
+     "pitch": 0.35,
+     "room": "sterren",
+     "diff": 5
+    },
+    {
+     "x": 83.4,
+     "z": 82.2,
+     "yaw": 5.5,
+     "pitch": 0.35,
+     "room": "reis",
+     "diff": 1
+    },
+    {
+     "x": 83,
+     "z": 82.22,
+     "yaw": -1.52,
+     "pitch": -0.04,
+     "room": "reis",
+     "diff": 1
+    },
+    {
+     "x": 81,
+     "z": 82.32,
+     "yaw": -1.52,
+     "pitch": -0.04,
+     "room": "reis",
+     "diff": 1
+    },
+    {
+     "x": 80.6,
+     "z": 82.34,
+     "yaw": -1.52,
+     "pitch": -0.04,
+     "room": "reis",
+     "diff": 1
+    },
+    {
+     "x": 79.8,
+     "z": 82.38,
+     "yaw": -1.52,
+     "pitch": -0.04,
+     "room": "reis",
+     "diff": 1
+    },
+    {
+     "x": 79.4,
+     "z": 82.4,
+     "yaw": 0,
+     "pitch": 0,
+     "room": "reis",
+     "diff": 1
+    },
+    {
+     "x": 79.4,
+     "z": 82.4,
+     "yaw": 4.71,
+     "pitch": 0,
+     "room": "reis",
+     "diff": 1
+    },
+    {
+     "x": 79.4,
+     "z": 82.4,
+     "yaw": 5.5,
+     "pitch": 0.35,
+     "room": "reis",
+     "diff": 3
+    },
+    {
+     "x": 79,
+     "z": 82.48,
+     "yaw": -1.39,
+     "pitch": -0.04,
+     "room": "reis",
+     "diff": 7
+    },
+    {
+     "x": 77.8,
+     "z": 82.7,
+     "yaw": -1.39,
+     "pitch": -0.04,
+     "room": "reis",
+     "diff": 1
+    }
+   ],
+   "overPB01": {
+    "prod": 2,
+    "candidate": 2
+   },
+   "newOverPB01": []
+  },
+  "up-east/open": {
+   "samples": 320,
+   "max": {
+    "prod": {
+     "calls": 147,
+     "tris": 927881
+    },
+    "preFix": {
+     "calls": 154,
+     "tris": 918117
+    },
+    "candidate": {
+     "calls": 148,
+     "tris": 904719
+    }
+   },
+   "culledByDoorwayRule": 203,
+   "pixelDiffSamples": [
+    {
+     "x": 87.5,
+     "z": 105,
+     "yaw": 0.79,
+     "pitch": 0,
+     "room": "bath",
+     "diff": 4
+    },
+    {
+     "x": 88.09,
+     "z": 102.48,
+     "yaw": 2.29,
+     "pitch": -0.04,
+     "room": "landing",
+     "diff": 1
+    },
+    {
+     "x": 92.5,
+     "z": 98.6,
+     "yaw": 1.89,
+     "pitch": -0.04,
+     "room": "landing",
+     "diff": 2
+    }
+   ],
+   "overPB01": {
+    "prod": 2,
+    "candidate": 2
+   },
+   "newOverPB01": []
+  },
+  "hall/open": {
+   "samples": 109,
+   "max": {
+    "prod": {
+     "calls": 147,
+     "tris": 745521
+    },
+    "preFix": {
+     "calls": 155,
+     "tris": 763585
+    },
+    "candidate": {
+     "calls": 152,
+     "tris": 734379
+    }
+   },
+   "culledByDoorwayRule": 101,
+   "pixelDiffSamples": [
+    {
+     "x": 90,
+     "z": 88,
+     "yaw": 1.57,
+     "pitch": 0.35,
+     "room": "hall",
+     "diff": 1
+    }
+   ],
+   "overPB01": {
+    "prod": 0,
+    "candidate": 1
+   },
+   "newOverPB01": [
+    {
+     "x": 90,
+     "z": 88,
+     "yaw": 0,
+     "pitch": 0.35,
+     "room": "hall",
+     "candidate": {
+      "calls": 152,
+      "tris": 720692
+     },
+     "prod": {
+      "calls": 147,
+      "tris": 731898
+     }
+    }
+   ]
+  },
+  "library/open": {
+   "samples": 149,
+   "max": {
+    "prod": {
+     "calls": 80,
+     "tris": 370328
+    },
+    "preFix": {
+     "calls": 80,
+     "tris": 357020
+    },
+    "candidate": {
+     "calls": 81,
+     "tris": 357020
+    }
+   },
+   "culledByDoorwayRule": 0,
+   "pixelDiffSamples": [],
+   "overPB01": {
+    "prod": 0,
+    "candidate": 0
+   },
+   "newOverPB01": []
+  }
+ }
+}
