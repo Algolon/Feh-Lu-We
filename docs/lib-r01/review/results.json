@@ -1,9 +1,9 @@
 {
   "source": "actual candidate branch Vite/Chromium SwiftShader",
-  "commit": "48b5b55bafc28ddf6c38aff615ab8ff7245eb603",
+  "commit": "c2e32882193662605d9996b93d73850c8d70cdc8",
   "records": [
     {
-      "name": "",
+      "name": "01-entrance-wide",
       "pose": {
         "x": 83.05,
         "y": 0.15,
@@ -12,12 +12,12 @@
         "pitch": -0.048153419375853976
       },
       "room": "library",
-      "calls": 272,
-      "triangles": 1676286,
+      "calls": 271,
+      "triangles": 1675302,
       "glError": 0
     },
     {
-      "name": "",
+      "name": "02-reading-lounge",
       "pose": {
         "x": 81.4,
         "y": 0.15,
@@ -26,12 +26,12 @@
         "pitch": -0.16808937839086718
       },
       "room": "library",
-      "calls": 260,
-      "triangles": 1705200,
+      "calls": 261,
+      "triangles": 1705480,
       "glError": 0
     },
     {
-      "name": "",
+      "name": "03-puzzle-bureau",
       "pose": {
         "x": 77.15,
         "y": 0.15,
@@ -40,12 +40,12 @@
         "pitch": -0.29318689655788155
       },
       "room": "library",
-      "calls": 240,
-      "triangles": 1585390,
+      "calls": 239,
+      "triangles": 1584406,
       "glError": 0
     },
     {
-      "name": "",
+      "name": "04-window-bay-shelves",
       "pose": {
         "x": 81.25,
         "y": 0.15,
@@ -54,12 +54,12 @@
         "pitch": -0.029202008317641335
       },
       "room": "library",
-      "calls": 269,
-      "triangles": 1699714,
+      "calls": 268,
+      "triangles": 1698730,
       "glError": 0
     },
     {
-      "name": "",
+      "name": "05-north-builtins",
       "pose": {
         "x": 79,
         "y": 0.15,
@@ -68,12 +68,12 @@
         "pitch": -0.049573245018024625
       },
       "room": "library",
-      "calls": 259,
-      "triangles": 1609272,
+      "calls": 260,
+      "triangles": 1609552,
       "glError": 0
     },
     {
-      "name": "",
+      "name": "06-spiral-from-floor",
       "pose": {
         "x": 79.7,
         "y": 0.15,
@@ -82,12 +82,12 @@
         "pitch": 0.14685515089236043
       },
       "room": "library",
-      "calls": 349,
-      "triangles": 1619648,
+      "calls": 350,
+      "triangles": 1619928,
       "glError": 0
     },
     {
-      "name": "",
+      "name": "07-spiral-upper-gallery",
       "pose": {
         "x": 83.7,
         "y": 3.35,
@@ -96,12 +96,26 @@
         "pitch": -0.939986256830184
       },
       "room": "libGallery",
-      "calls": 254,
-      "triangles": 1455557,
+      "calls": 255,
+      "triangles": 1455837,
       "glError": 0
     },
     {
-      "name": "",
+      "name": "11-desktop-low-comparison",
+      "pose": {
+        "x": 83.05,
+        "y": 0.15,
+        "z": 100,
+        "yaw": -1.1114590359279042,
+        "pitch": -0.048153419375853976
+      },
+      "room": "library",
+      "calls": 89,
+      "triangles": 818380,
+      "glError": 0
+    },
+    {
+      "name": "08-mobile-portrait-lounge",
       "pose": {
         "x": 82.6,
         "y": 0.15,
@@ -111,11 +125,11 @@
       },
       "room": "library",
       "calls": 72,
-      "triangles": 709288,
+      "triangles": 708956,
       "glError": 0
     },
     {
-      "name": "",
+      "name": "09-mobile-landscape-desk",
       "pose": {
         "x": 77.3,
         "y": 0.15,
@@ -125,16 +139,35 @@
       },
       "room": "library",
       "calls": 81,
-      "triangles": 761182,
+      "triangles": 760850,
+      "glError": 0
+    },
+    {
+      "name": "10-b01-review-desk",
+      "pose": {
+        "x": 76.65,
+        "y": 0.15,
+        "z": 97.35,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.39276066563731993
+      },
+      "room": "library",
+      "calls": 232,
+      "triangles": 1579476,
       "glError": 0
     }
   ],
   "checks": [
     {
-      "name": "puzzle-and-album-anchors",
+      "name": "production-puzzle-and-lamp-anchors",
       "data": {
-        "b01.table": {
-          "exists": false
+        "library.catalog": {
+          "exists": true,
+          "position": [
+            74.55,
+            1.06,
+            97.35
+          ]
         },
         "library.desk": {
           "exists": true,
@@ -152,9 +185,6 @@
             97.3
           ]
         },
-        "ds01.album": {
-          "exists": false
-        },
         "lamp.library": {
           "exists": true,
           "position": [
@@ -162,9 +192,17 @@
             1.31,
             98.27
           ]
+        },
+        "inspect.cipherExample": {
+          "exists": true,
+          "position": [
+            73.8,
+            1.31,
+            101.1
+          ]
         }
       },
-      "pass": false
+      "pass": true
     },
     {
       "name": "spiral-upstairs-walking",
@@ -333,6 +371,145 @@
             "z": 104.98
           }
         ]
+      },
+      "pass": true
+    },
+    {
+      "name": "spiral-downstairs-walking",
+      "data": {
+        "pass": true,
+        "final": {
+          "x": 82.27,
+          "y": 0.52,
+          "z": 104.66
+        },
+        "path": [
+          {
+            "step": 25,
+            "y": 3.35
+          },
+          {
+            "step": 24,
+            "y": 3.35
+          },
+          {
+            "step": 23,
+            "y": 3.35
+          },
+          {
+            "step": 22,
+            "y": 3.227
+          },
+          {
+            "step": 21,
+            "y": 3.107
+          },
+          {
+            "step": 20,
+            "y": 2.981
+          },
+          {
+            "step": 19,
+            "y": 2.858
+          },
+          {
+            "step": 18,
+            "y": 2.735
+          },
+          {
+            "step": 17,
+            "y": 2.612
+          },
+          {
+            "step": 16,
+            "y": 2.492
+          },
+          {
+            "step": 15,
+            "y": 2.365
+          },
+          {
+            "step": 14,
+            "y": 2.242
+          },
+          {
+            "step": 13,
+            "y": 2.119
+          },
+          {
+            "step": 12,
+            "y": 1.996
+          },
+          {
+            "step": 11,
+            "y": 1.936
+          },
+          {
+            "step": 10,
+            "y": 1.75
+          },
+          {
+            "step": 9,
+            "y": 1.627
+          },
+          {
+            "step": 8,
+            "y": 1.504
+          },
+          {
+            "step": 7,
+            "y": 1.381
+          },
+          {
+            "step": 6,
+            "y": 1.261
+          },
+          {
+            "step": 5,
+            "y": 1.135
+          },
+          {
+            "step": 4,
+            "y": 1.012
+          },
+          {
+            "step": 3,
+            "y": 0.888
+          },
+          {
+            "step": 2,
+            "y": 0.765
+          },
+          {
+            "step": 1,
+            "y": 0.642
+          },
+          {
+            "step": 0,
+            "y": 0.519
+          }
+        ]
+      },
+      "pass": true
+    },
+    {
+      "name": "dev01-b01-ds01-anchors",
+      "data": {
+        "b01.table": {
+          "exists": true
+        },
+        "library.desk": {
+          "exists": true
+        },
+        "pk.studyKey": {
+          "exists": true
+        },
+        "ds01.album": {
+          "exists": true
+        },
+        "lamp.library": {
+          "exists": true
+        }
       },
       "pass": true
     }
