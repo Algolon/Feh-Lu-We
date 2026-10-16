@@ -40,7 +40,7 @@ function swept(x,y,z,a,b) {
   const vx=b[0]-a[0],vy=b[1]-a[1],vz=b[2]-a[2];
   const t=Math.min(1,Math.max(0,((x-a[0])*vx+(y-a[1])*vy+(z-a[2])*vz)/(vx*vx+vy*vy+vz*vz)));
   const px=a[0]+t*vx,py=a[1]+t*vy,pz=a[2]+t*vz;
-  const r=a[3]+(b[3]-a[3])*t;
+  const r=(a[3]+(b[3]-a[3])*t)*.90; // taper broad cast locks, avoiding rounded sausage silhouettes
   return Math.sqrt((x-px)**2+(y-py)**2+((z-pz)*1.17)**2)-r;
 }
 function field(x,y,z) {
@@ -70,7 +70,7 @@ function field(x,y,z) {
     // Quickly skip strands outside influence.
     const mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2;
     if(Math.abs(x-mx)>.105||Math.abs(y-my)>.105)continue;
-    d=smoothMin(d,swept(x,y,z,a,b),.007);
+    d=smoothMin(d,swept(x,y,z,a,b),.018); // merge locks organically into common mane mass
   }
   // Negative spaces carved into the continuous casting:
   // lower ear bowl, almond eye hollows, small pupils and whisker scratches.
