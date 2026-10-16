@@ -13,6 +13,7 @@ describe('FRONT-R04 - authored 3D lion sculpture, bronze hardware, narrow steel 
     expect(g.userData.keepColor).toBe(true);
     expect(p.count).toBeGreaterThan(1000);
     expect(g.index!.count/3).toBeLessThan(55000); // explicit high-detail sculpt, capped for mobile
+    expect(g.index!.count/3).toBeGreaterThan(20000); // reject fallback to R03's flat procedural relief
     expect(g.getAttribute('normal').count).toBe(p.count);
     const box=new THREE.Box3().setFromBufferAttribute(p);
     expect(box.max.x-box.min.x).toBeLessThan(.36); // true ears + cast mane extend beyond the old flat oval
