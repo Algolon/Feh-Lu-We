@@ -118,7 +118,7 @@ await page.evaluate(({ quality, dusk }) => {
       fog: fog ? { near: +fog.near.toFixed(1), far: +fog.far.toFixed(1) } : null,
       groveSubmittedTris: tris, categories: by, onScreen,
       lights: (() => { let n = 0; w.scene.traverseVisible((o) => { if (o.isPointLight) n++; }); return n; })(),
-      vegPath: w.scene.userData.vegPath, grovePath: w.scene.userData.grovePath ?? 'instanced-legacy', groveProfile: w.scene.userData.groveProfile?.id ?? 'production',
+      vegPath: w.scene.userData.vegPath, grovePath: w.scene.userData.grovePath ?? 'instanced-legacy', groveProfile: w.scene.userData.groveProfile?.id ?? 'production', groveLodImpl: w.scene.userData.groveLodImpl ?? 'legacy-r01b',
       state,
     };
   }

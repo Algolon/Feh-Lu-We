@@ -7,6 +7,7 @@ import { mushroomModel, mushroomYoungModel, MUSHROOM_SPECIES } from './mushroomM
 import { mulberry32 } from '../core/rng';
 import { mushroomAreaDistance } from './mushroomField';
 import { makeVegBatch, onFrame } from './vegbatch';
+import { VegLodController } from './vegLodController';
 import { GROVE_LOD_PROFILE, rangeFade, selectTreeLod, type GroveCategory } from './vegetationLod';
 export interface MushroomPlacement { x:number; z:number; scale:number; species:number; yaw:number; zone:'approach'|'grove'|'young'; colony?:number; glow?:number; lean?:number; expansion?:boolean; lightGeometry?:boolean }
 export function mushroomPlacements(trees:readonly {x:number;z:number}[]=MUSHROOM.landmarks): MushroomPlacement[] {
@@ -148,7 +149,20 @@ vGroveGlow*=groveData.x*(1.+sin(groveTime*.63+groveData.y)*.07*groveMotion*step(
   for(const o of batch.objects){o.name='Mushroom Grove instances';o.castShadow=false;o.receiveShadow=true;}
   const camPos=new T.Vector3(),last=new T.Vector3(Infinity,0,0),tmp=new T.Matrix4(),shrink=new T.Matrix4();
   let winVersion=-1,outdoors=true,force:number|null=null;
+  // VIS-R01C C1: exactly the R01B behavior through a reusable state controller.
+  // Default remains the validated production implementation until matched browser
+  // and Samsung evidence allows switching. No art, light or draw-path changes.
+  const useSharedLod=typeof location!=='undefined'&&new URLSearchParams(location.search).get('veglodshared')==='1';
+  const sharedLod=useSharedLod?new VegLodController({
+    batch, instances:items, bands:(it:GroveItem)=>profile.bands[it.cat],
+    fadeMode:'ceil12', movementThreshold:0.3, windowPlanZSign:-1,
+  }):null;
+  w.scene.userData.groveLodImpl=sharedLod?'shared-c1':'legacy-r01b';
   onFrame(w,(cam)=>{
+    if(sharedLod){
+      sharedLod.updateCamera(cam,w.visibleRooms.has('out'),w.outdoorWindows,w.outdoorWindowsVersion);
+      return;
+    }
     camPos.setFromMatrixPosition(cam.matrixWorld);
     const out=w.visibleRooms.has('out'),wins=w.outdoorWindows,wv=w.outdoorWindowsVersion;
     if(camPos.distanceTo(last)<0.3&&wv===winVersion&&out===outdoors)return;
@@ -169,7 +183,7 @@ vGroveGlow*=groveData.x*(1.+sin(groveTime*.63+groveData.y)*.07*groveMotion*step(
   w.scene.userData.grovePath=(batch.objects[0] as T.BatchedMesh).isBatchedMesh?'multi-draw':'instanced';
   w.scene.userData.groveProfile=profile;
   // diagnostics for the VIS-R01 harness and tests (allocates; never called by the render loop)
-  w.scene.userData.groveForceLevel=(level:number|null)=>{force=level;last.set(Infinity,0,0);};
+  w.scene.userData.groveForceLevel=(level:number|null)=>{force=level;last.set(Infinity,0,0);sharedLod?.setForcedLevel(level);};
   w.scene.userData.groveSnapshot=()=>items.map(it=>{
     const g=geos[it.lods[it.level]],c=g.boundingSphere!.center.clone().applyMatrix4(it.m);
     return {id:it.mesh+'#'+it.placement,cat:it.cat,level:it.level,k:Math.max(0,it.k),drawn:it.k>0,perInstanceCulling:true,x:c.x,y:c.y,z:c.z,r:g.boundingSphere!.radius*it.m.getMaxScaleOnAxis(),tris:g.attributes.position.count/3,placement:it.placement};
