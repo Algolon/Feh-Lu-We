@@ -80,6 +80,34 @@ try {
   console.log('WINDOW-R02 registrar QA:',JSON.stringify(registry));
   if (registry.portals !== 44 || registry.physicallyBlocked !== 44 || registry.visuallyClear !== 44)
     throw Error('All facade glasses must block motion but transmit visibility: ' + JSON.stringify(registry));
+  // WINDOW-R02-R03: verify the actual mahogany canvas in the real loaded gameplay scene.
+  const mahogany = await page.evaluate(() => {
+    const materials = new Set();
+    window.__game.world.scene.traverse(obj => {
+      if (!obj.isMesh) return;
+      for (const m of (Array.isArray(obj.material) ? obj.material : [obj.material]))
+        if (m?.name === 'WINDOW-R01-OakSill') materials.add(m);
+    });
+    if (materials.size !== 1) throw Error('Expected one shared timber sill material, got ' + materials.size);
+    const material = [...materials][0], canvas = material.map?.image;
+    if (!canvas?.getContext) throw Error('Mahogany texture not found in game render');
+    const rgba = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
+    let red=0, green=0, blue=0, lengthwise=0, across=0, n=0;
+    for (let y=12; y<canvas.height-12; y+=13) for(let x=12; x<canvas.width-12; x+=13) {
+      const i=(y*canvas.width+x)*4;
+      red+=rgba[i]; green+=rgba[i+1]; blue+=rgba[i+2];
+      lengthwise+=Math.abs(rgba[i] - rgba[i+4*6]);
+      across+=Math.abs(rgba[i] - rgba[i+4*canvas.width*6]); n++;
+    }
+    const result={ rgb:[red/n,green/n,blue/n], lengthwise:lengthwise/n, across:across/n };
+    if (!(result.rgb[0] > 85 && result.rgb[0] < 122 &&
+       result.rgb[1] < 70 && result.rgb[1] > 30 &&
+       result.rgb[2] < result.rgb[1] && result.rgb[1] < result.rgb[0] &&
+       result.across > result.lengthwise*1.25))
+      throw Error('Mahogany hue/grain check failed: '+JSON.stringify(result));
+    return result;
+  });
+  console.log('Real in-game mahogany texture:', JSON.stringify(mahogany));
   for (const p of poses) for (const side of ['inside','outside']) {
     const view = await page.evaluate(({ p, side }) => {
       const g = window.__game, w = g.world;
@@ -112,9 +140,33 @@ try {
     await page.screenshot({ path: `${folder}/${p.id}-${side}.jpg`, type:'jpeg', quality:85 });
     console.log(JSON.stringify(view));
   }
-  if (errors.length) throw Error('Page errors: '+errors.join('\n'));
-  writeFileSync(folder+'/results.json',JSON.stringify({ registry, views, errors,
-    samsungValidated:false, budget:{calls:150,triangles:750000} },null,2));
+  // Close-ups from inside, targeting the same real sash and oak-to-mahogany window board.
+  const hardware = [];
+  for (const p of [poses[1], poses[2]]) {
+    const view=await page.evaluate(p => {
+      const g=window.__game,w=g.world;
+      g.settings.quality='low';g.applyQuality(true);
+      const nx=p.axis==='z'?p.ext:0,nz=p.axis==='x'?p.ext:0;
+      const atX=p.axis==='x'?p.at:p.f,atZ=p.axis==='x'?p.f:p.at;
+      const camX=atX-nx*.78+(p.axis==='x'?.22:0);
+      const camZ=atZ-nz*.78+(p.axis==='z'?.22:0);
+      const targetX=atX+(p.axis==='x'?.39:nx*.115);
+      const targetZ=atZ+(p.axis==='z'?.39:nz*.115);
+      g.camera.position.set(camX,1.61,-camZ);
+      g.camera.lookAt(targetX,1.58,-targetZ);
+      g.camera.updateMatrixWorld(true);
+      w.updateCulling(g.camera.position,g.camera);
+      g.renderer.render(w.scene,g.camera);
+      return {site:p.id,calls:g.renderer.info.render.calls,
+        triangles:g.renderer.info.render.triangles,glError:g.renderer.getContext().getError()};
+    },p);
+    if (view.glError || view.calls>150 || view.triangles>750000) throw Error('Hardware closeup render failure '+JSON.stringify(view));
+    await page.screenshot({path:`${folder}/mahogany-latch-${p.id}.jpg`,type:'jpeg',quality:92});
+    hardware.push(view);console.log('hardware',JSON.stringify(view));
+  }
+  if (errors.length) throw Error('Page errors: '+errors.join('\\n'));
+  writeFileSync(folder+'/results.json',JSON.stringify({registry,views,hardware,mahogany,errors,
+    samsungValidated:false,budget:{calls:150,triangles:750000}},null,2));
 } finally {
   await browser.close();
   await server.close();
