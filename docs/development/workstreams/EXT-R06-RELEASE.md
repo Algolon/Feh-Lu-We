@@ -11,3 +11,11 @@ De huidige productie-inhoud verhoogt kosten tegenover de oorspronkelijke R06-rev
 De release beperkt zich tot de goedgekeurde exteriorafwerking. Optimalisatie van brede vegetatie-/interieurbeelden is een afzonderlijk vervolg; fysieke telefoon-FPS is nog niet gemeten.
 
 [Integratiebewijs](ext-r06/integration/results.json). Na deployment volgt publieke buildverificatie en controle van de naamplaat-/verweringsmaterialen.
+
+## Gepubliceerd en publiek geverifieerd
+
+16 oktober 2026: PR #69 en de inbegrepen PR #67 zijn gemerged naar productiecommit `55f6da6af62c00ad74e2de3b9818214573e1dc13`. [Build en deployment geslaagd](https://github.com/Algolon/Feh-Lu-We/actions/runs/38919793470).
+
+Publieke controle om 16:58 CEST: HTTP 200, juiste build-ID, beide verweringsmaterialen en naamplaattexture aanwezig. Entree-, naamplaat- en tuinbeelden opgeslagen, zonder browser-/WebGL-/shaderfouten. De bekende tuinbudgetoverschrijding blijft zichtbaar (822.935 driehoeken / 115 calls); `budgetWithin` is false. Geen verhoogd budget of claim dat dit opgelost is.
+
+[Live resultaat](ext-r06/live/result.json) · [Entree](ext-r06/live/entrance.jpg) · [Naamplaat](ext-r06/live/nameplate.jpg).

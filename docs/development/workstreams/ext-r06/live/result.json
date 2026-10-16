@@ -1,0 +1,40 @@
+{
+  "url": "https://algolon.github.io/Feh-Lu-We/?autotest=1&release=55f6da6",
+  "expected": "55f6da6",
+  "budgetWithin": false,
+  "status": 200,
+  "buildMatches": true,
+  "features": {
+    "facadeWeather": true,
+    "dressedWeather": true,
+    "nameplateTexture": true
+  },
+  "views": [
+    {
+      "name": "entrance",
+      "calls": 105,
+      "triangles": 717326,
+      "glError": 0,
+      "failedShaders": 0,
+      "greeneryPresent": true
+    },
+    {
+      "name": "nameplate",
+      "calls": 103,
+      "triangles": 702028,
+      "glError": 0,
+      "failedShaders": 0,
+      "greeneryPresent": true
+    },
+    {
+      "name": "garden",
+      "calls": 115,
+      "triangles": 822935,
+      "glError": 0,
+      "failedShaders": 0,
+      "greeneryPresent": true
+    }
+  ],
+  "errors": [],
+  "checkedAt": "2026-10-16T14:58:44.078Z"
+}
