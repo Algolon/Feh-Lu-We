@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import * as THREE from 'three';
-import { gravelUV } from '../src/world/exteriorStudy';
+import { gravelUV, dressedLatheUV } from '../src/world/exteriorStudy';
 
 describe('arrival gravel physical scale', () => {
   const plane = (w: number, d: number, x: number, z: number) => gravelUV(new THREE.PlaneGeometry(w,d).rotateX(-Math.PI/2).translate(x,.03,-z));
@@ -26,5 +26,19 @@ describe('arrival gravel physical scale', () => {
     const g=new THREE.PlaneGeometry(12,8).rotateX(-Math.PI/2).translate(90,.03,-70);
     const before=Array.from(g.attributes.position.array);gravelUV(g);
     expect(Array.from(g.attributes.position.array)).toEqual(before);g.dispose();
+  });
+});
+
+
+describe('round cut-stone grain',()=>{
+  it('uses the same physical height repeat on a tall column and a short planter without changing their shape',()=>{
+    for(const [radius,height] of [[.24,2.5],[.39,.75]]) {
+      const g=new THREE.LatheGeometry([new THREE.Vector2(radius,0),new THREE.Vector2(radius,height)],16);
+      const before=Array.from(g.attributes.position.array);dressedLatheUV(g);
+      expect(Array.from(g.attributes.position.array)).toEqual(before);
+      const p=g.attributes.position,uv=g.attributes.uv;
+      for(let i=0;i<p.count;i++)expect(uv.getY(i)).toBeCloseTo(p.getY(i)/.6,5);
+      g.dispose();
+    }
   });
 });

@@ -20,7 +20,8 @@ describe('authored facade greenery',()=>{
     const n=g.attributes.normal;
     for(let i=0;i<n.count;i++)expect(Math.hypot(n.getX(i),n.getY(i),n.getZ(i))).toBeCloseTo(1,5);
     g.computeBoundingBox();expect(g.boundingBox!.max.z).toBeGreaterThan(.05);g.dispose();
-    expect(climberPlan().reduce((n,s)=>n+s.leaves.length,0)).toBeLessThan(1400);
+    expect(climberPlan().reduce((n,s)=>n+s.leaves.length*26,0)).toBeLessThan(150000);
+    for(const site of climberPlan())for(const l of site.leaves)expect(l.size*1.64).toBeLessThan(.21);
   });
   it('puts solid planters outside the entrance step footprint and central walking line',()=>{
     for(const p of ENTRANCE_POTS){

@@ -10,7 +10,7 @@ import type { Ctx } from './arch';
 import { TRIM } from './arch';
 import { lathe } from './artkit';
 import { boxMM, rod } from './kit';
-import { EXTERIOR_STUDY, exteriorMats } from './exteriorStudy';
+import { EXTERIOR_STUDY, exteriorMats, dressedLatheUV } from './exteriorStudy';
 
 /** The entrance datum (plan): door centre x, bay face z, portico column line z, floor y. */
 export interface EntranceSite { x: number; bayZ: number; colZ: number; colX: [number, number]; gf: number }
@@ -62,6 +62,7 @@ export function buildEntrance(c: Ctx, s: EntranceSite) {
   // ---- columns on plinth blocks
   const PL = 0.14, colH = ABACUS - 0.1 - (gf + PL);
   const colG = tuscanColumnGeo(colH);
+  if(EXTERIOR_STUDY)dressedLatheUV(colG);
   for (const x of [cx0, cx1]) {
     boxMM(c.b, stone, STONE.baseTop, x - 0.25, x + 0.25, gf, gf + PL, cz - 0.25, cz + 0.25, { ...oj, uv: 0.8 });
     c.b.add(stone, colG, new THREE.Matrix4().makeTranslation(x, gf + PL, -cz), '#efe4ca', c.chunk, true, 0);

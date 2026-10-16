@@ -203,7 +203,7 @@ function shell(w: World, c: Ctx) {
   windowAt(c, 'x', 79.55, -1, 90, 4.0, 1.2, 1.6, true, { kind: 'manor' });
   // porch (DEV-04D D3-A2, entrance.ts): the walk surfaces and colliders stay exactly as before (the landing floor at GF,
   // the 7.5 cm step, the column circles); the portico, doorway surround, steps and bay base are rebuilt as construction
-  floor(c, 87.8, 92.2, 78.6, 80.0, GF, EXTERIOR_STUDY ? exteriorMats().dressed : k.M.stone, EXTERIOR_STUDY ? '#d8d2bf' : '#d9ccb0', 0.4, true);
+  floor(c, 87.8, 92.2, 78.6, 80.0, GF, EXTERIOR_STUDY ? exteriorMats().dressed : k.M.stone, EXTERIOR_STUDY ? '#d8d2bf' : '#d9ccb0', 0.4, true, EXTERIOR_STUDY ? .6 : 2);
   for (const x of [88.1, 91.9]) c.col.addCircle(x, 78.85, 0.2, 0, 3);
   buildEntrance(c, { x: 90, bayZ: 79.55, colZ: 78.85, colX: [88.1, 91.9], gf: GF });
   entranceBay(c, 86.4, 93.6, 79.55, 80.0, [87.375, 92.625], UF);

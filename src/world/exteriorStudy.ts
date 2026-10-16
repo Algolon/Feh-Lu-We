@@ -74,16 +74,33 @@ export function exteriorMats() {
   }, 1902) });
   // Cut limestone for solid profiles: fine grain, without false masonry joints across a column or rim.
   const dressed = new THREE.MeshLambertMaterial({ vertexColors: true, map: texture((x, r) => {
-    x.fillStyle = '#f5f4ef'; x.fillRect(0, 0, 512, 512);
-    for (let i = 0; i < 7000; i++) {
-      x.fillStyle = i % 2 ? 'rgba(105,107,96,.035)' : 'rgba(255,255,247,.12)';
-      x.fillRect(r()*512, r()*512, 1+r()*3, 1+r()*2);
+    x.fillStyle = '#f1efe5'; x.fillRect(0, 0, 512, 512);
+    // Quiet limestone clouding at several scales; wrap every mark across the repeat seam.
+    for(let i=0;i<180;i++) {
+      const px=r()*512,py=r()*512,rx=7+r()*35,ry=4+r()*19;
+      for(const ox of [-512,0,512])for(const oy of [-512,0,512]) {
+        const wash=x.createRadialGradient(px+ox,py+oy,0,px+ox,py+oy,rx);
+        wash.addColorStop(0,i%3?'rgba(125,126,111,.075)':'rgba(255,252,235,.20)');wash.addColorStop(1,'rgba(255,255,255,0)');
+        x.fillStyle=wash;x.beginPath();x.ellipse(px+ox,py+oy,rx,ry,0,0,Math.PI*2);x.fill();
+      }
+    }
+    for (let i = 0; i < 14000; i++) {
+      x.fillStyle = i % 3 ? 'rgba(116,116,99,.105)' : 'rgba(255,255,245,.24)';
+      x.fillRect(r()*512, r()*512, .5+r()*2, .5+r()*1.5);
     }
   }, 1903) });
   surface(dressed, 'stone');
   surface(wall, 'stone'); surface(gravel, 'ground');
   if(EXTERIOR_FINISH)ageFacade(wall);
   materials = { wall, gravel, dressed }; return materials;
+}
+
+/** Equal grain scale on round stone profiles; lathe's default V follows profile indices, not metres. */
+export function dressedLatheUV(g:THREE.BufferGeometry, repeat=.6) {
+  const p=g.attributes.position,uv=g.attributes.uv as THREE.BufferAttribute;
+  let radius=0;for(let i=0;i<p.count;i++)radius=Math.max(radius,Math.hypot(p.getX(i),p.getZ(i)));
+  for(let i=0;i<p.count;i++)uv.setXY(i,uv.getX(i)*2*Math.PI*radius/repeat,p.getY(i)/repeat);
+  return g;
 }
 
 /** Plan-space UVs: the same pebble scale on a 2 m path and a 38 m court. */

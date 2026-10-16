@@ -1,6 +1,6 @@
 // Actual production renders, frozen-frame draw aggregation equivalence and collision-driven movement.
 import {preview} from 'vite';import {chromium} from 'playwright-core';import {mkdirSync,writeFileSync} from 'node:fs';
-const OUT=process.argv[2]??'docs/development/workstreams/ext-r04/qa';mkdirSync(OUT,{recursive:true});
+const OUT=process.argv[2]??'docs/development/workstreams/ext-r04/rev2';mkdirSync(OUT,{recursive:true});
 const server=await preview({preview:{host:'127.0.0.1',port:4220,strictPort:true}});
 const browser=await chromium.launch({executablePath:process.env.CHROME??'/root/.cache/ms-playwright/chromium_headless_shell-1194/chrome-linux/headless_shell',args:['--use-angle=swiftshader','--enable-unsafe-swiftshader','--ignore-gpu-blocklist']});
 const views=[

@@ -4,7 +4,7 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import type { Ctx } from './arch';
 import { Batcher, box, geo, planMatrix } from './kit';
 import { lathe } from './artkit';
-import { exteriorMats } from './exteriorStudy';
+import { exteriorMats, dressedLatheUV } from './exteriorStudy';
 import { surface } from './surfaces';
 import { mulberry32 } from '../core/rng';
 
@@ -36,20 +36,20 @@ export function climberPlan(): Climber[] {
     const r=mulberry32(seed), leaves: GreenLeaf[]=[], stems: GreenStem[]=[];
     for (let leader=0; leader<3; leader++) {
       const tip=(leader-1)*spread*.58+(r()-.5)*.28, h=height*(leader===1?1:.68+r()*.29), points:THREE.Vector3[]=[];
-      const phase=r()*6, count=18;
+      const phase=r()*6, count=26;
       for(let j=0;j<=count;j++) {
         const t=j/count, at=root+tip*Math.pow(t,.8)+Math.sin(t*8+phase)*.13*Math.sin(t*Math.PI), y=.09+t*h;
         const depth=.075+.06*(1-THREE.MathUtils.smoothstep(y,.65,.9))+.10*Math.exp(-(((y-3.32)/.16)**2));
         if(!greenClear(face,at,y,.055)) break;
         points.push(new THREE.Vector3(at,y,depth));
-        if(j<3 || r()<.16)continue;
+        if(j<4 || r()<.10)continue;
         // Irregular side shoots create distinct leafy islands instead of leaves evenly spaced on a fan.
         const side=(r()-.5)*2*spread*(.13+.19*t);
         const ba=at+side, by=y+.08+r()*.24, bd=depth+.035;
         if(!greenClear(face,ba,by,.07))continue;
         stems.push({points:[new THREE.Vector3(at,y,depth),new THREE.Vector3(ba,by,bd)],radius:.007});
-        for(let k=0;k<5;k++) {
-          const size=.15+r()*.075, a=ba+(r()-.5)*.38, ly=by+(r()-.5)*.40, ld=bd+.055+r()*.07;
+        for(let k=0;k<14;k++) {
+          const size=.085+r()*.04, a=ba+(r()-.5)*.40, ly=by+(r()-.5)*.40, ld=bd+.055+r()*.07;
           if(greenClear(face,a,ly,size*1.25)) {
             leaves.push({at:a,y:ly,depth:ld,size,angle:(r()-.5)*1.5,tilt:(r()-.5)*.7,tone:Math.floor(r()*4)});
             stems.push({points:[new THREE.Vector3(ba,by,bd),new THREE.Vector3(a,ly+size*.5,ld)],radius:.0035});
@@ -116,7 +116,7 @@ function climbers(c:Ctx) {
 }
 function entrancePot(c:Ctx,x:number,z:number,seed:number,dressed:THREE.Material) {
   const profile:[[number,number],...[number,number][]]=[[.001,0],[.39,0],[.39,.10],[.32,.13],[.28,.23],[.30,.59],[.38,.66],[.39,.75],[.31,.75],[.29,.67],[.27,.61],[.001,.61]];
-  const g=lathe(profile,16);geo(c.b,dressed,'#d8d2bf',g,x,.03,z,{chunk:c.chunk,jitter:0});g.dispose();
+  const g=dressedLatheUV(lathe(profile,16));geo(c.b,dressed,'#d8d2bf',g,x,.03,z,{chunk:c.chunk,jitter:0});g.dispose();
   const soil=new THREE.CylinderGeometry(.275,.275,.02,16);geo(c.b,c.k.M.paint,'#514735',soil,x,.65,z,{chunk:c.chunk,jitter:0});soil.dispose();
   const r=mulberry32(seed), raw=climberLeafGeo(),leaves:THREE.BufferGeometry[]=[],stems:THREE.BufferGeometry[]=[];
   for(let j=0;j<9;j++) {
