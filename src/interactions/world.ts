@@ -486,9 +486,9 @@ export class LightPool {
   /** Global multiplier for fixture light (art-refresh lighting comparison; 1 = original behaviour). */
   gain = 1;
   /** Ranking weights (DEV-04C-R). */
-  static readonly VIEW_BONUS = 16;
+  static readonly VIEW_BONUS = 2.0; // Gaze is a tie-breaker, not a 16 m teleport of real illumination.
   static readonly VIEW_RANGE = 24;
-  static readonly TWO_STEP_PENALTY = 1.5;
+  static readonly TWO_STEP_PENALTY = 0; // Physical distance, not categorical room membership, controls score.
   /** Attention: seconds of continuous viewing before the bonus starts / is full. */
   static readonly DWELL_START = 1.2;
   static readonly DWELL_FULL = 2.0;
@@ -508,17 +508,23 @@ export class LightPool {
         return r;
       };
       this.here = rooms ? rooms.roomAt(eye.x, eye.y - 0.8, -eye.z) : 'out';
-      const rel = rooms ? rooms.relevant(this.here, isOpen) : null; // one step + outdoor lamps through windows
-      // Share the renderer's portal-aware visibility. The old two-step graph could
-      // omit a lamp in the room the player was already looking into. Crossing
-      // the threshold then made it eligible in one frame, causing a light pop.
-      const vis = visibleRooms ?? (rooms ? rooms.visible(this.here, isOpen, 2) : null);
+      // Dynamic point-light assignment must NEVER be gated by camera culling:
+      // camera cones, exterior-window LOS and room culling change discretely at
+      // specific distances / door thresholds. They are valid for rendering geometry
+      // but produce unmistakable illumination pops when applied to light candidates.
+      //
+      // Use only physical *open* portal connectivity over six steps, independent
+      // of where the camera looks. The pool already ranks by metric distance,
+      // so expanding this inexpensive graph does not add point lights or draw calls.
+      // Keep the one-way outdoor/window relevance used for outdoor practicals.
+      const rel = rooms ? rooms.relevant(this.here, isOpen) : null;
+      const stableRooms = rooms ? rooms.visible(this.here, isOpen, 6, () => false, () => false) : null;
       const byId = new Map<string, LampSource>();
       const cands: LampCandidate[] = [];
       for (const l of lamps) {
         if (!l.on()) continue;
         const room = roomOf(l);
-        if (rel && !rel.has(room) && !(vis && vis.has(room))) continue;
+        if (stableRooms && !stableRooms.has(room) && !(rel && rel.has(room))) continue;
         const d = l.pos.distanceTo(eye);
         let inView = false;
         if (view && d < LightPool.VIEW_RANGE && d > 0.01) {
@@ -537,7 +543,7 @@ export class LightPool {
       // across an open arch. Keep a very small own-room tie breaker rather than
       // the 2.5 m penalty that reshuffled otherwise identical candidates at Z=92.
       // The finite light budget, view priority and existing hysteresis are kept.
-      this.want = chooseLamps(cands, this.here, this.want, this.lights.length, 2.5, 0.35);
+      this.want = chooseLamps(cands, this.here, this.want, this.lights.length, 3.0, 0);
       this.lookup = byId;
     }
     for (let i = 0; i < this.lights.length; i++) {
@@ -546,16 +552,20 @@ export class LightPool {
       const cur = this.shown[i];
       if (cur !== target) {
         // fade the old source out before the light moves: no pop when a slot changes hands
-        l.intensity = Math.max(0, l.intensity - dt * 20); // DEV-04C-R: a gentler hand-over (was 30/s: a visible blink)
+        // A fixed 20 units/s fade was still visibly abrupt for weak sources
+        // (and left distant lamps dark until the viewer crossed a boundary).
+        // Ease every source over roughly a second regardless of its brightness.
+        const fadeRate = Math.max(3.5, (cur?.intensity ?? 4) * this.gain * 0.95);
+        l.intensity = Math.max(0, l.intensity - dt * fadeRate);
         if (l.intensity > 0.05 && cur) continue;
         this.shown[i] = target;
         if (target) { l.position.copy(target.pos); l.color.set(target.color); l.distance = target.distance; }
         l.intensity = 0;
         continue;
       }
-      if (!cur || !cur.on()) { l.intensity = Math.max(0, l.intensity - dt * 20); continue; }
+      if (!cur || !cur.on()) { l.intensity = Math.max(0, l.intensity - dt * Math.max(3.5, (cur?.intensity ?? 4) * this.gain * 0.95)); continue; }
       const f = cur.flicker && !this.reducedMotion ? 1 - cur.flicker * (0.5 + 0.5 * Math.sin(t * 13.1 + i) * Math.sin(t * 7.3)) : 1;
-      l.intensity += (cur.intensity * f * this.gain - l.intensity) * Math.min(1, dt * 5);
+      l.intensity += (cur.intensity * f * this.gain - l.intensity) * (1 - Math.exp(-dt * 2.0));
     }
   }
   private lookup = new Map<string, LampSource>();
