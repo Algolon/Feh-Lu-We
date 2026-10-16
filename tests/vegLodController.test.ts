@@ -117,7 +117,7 @@ describe('VIS-R01C C1 — shared vegetation LOD contract', () => {
     const { go, ops, item, base } = harness();
     go(115);
     expect(item.k).toBe(0.5);
-    const m = ops.findLast(o => o.kind === 'matrix')!.value as number[];
+    const m = ops.filter(o => o.kind === 'matrix').at(-1)!.value as number[];
     expect(m[0]).toBeCloseTo(0.5, 6);
     expect(m[12]).toBe(10);
     expect(base.elements[0]).toBe(1);
