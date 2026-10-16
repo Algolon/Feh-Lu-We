@@ -1,0 +1,6366 @@
+{
+  "head": "1b357311953bc2b40a2229831d9e6d3af6fcea43",
+  "base": "436e106",
+  "browser": "141.0.7390.37",
+  "build": {
+    "index-D6-h8qCv.js": "73f62bff5fc038b3"
+  },
+  "conditions": "Real game canvas, WebGL2 ANGLE SwiftShader headless_shell. desktop 1600x900 DPR1; portrait 412x915 / landscape 915x412 at device DPR 2.625 (Low caps 1, High caps 1.5). Timings are synchronised software wall times, NOT physical GPU time.",
+  "checks": [
+    {
+      "name": "No shader compile failures, GL errors or page errors",
+      "ok": true,
+      "details": []
+    },
+    {
+      "name": "Procedural A pixel-identical to pre-fix production in every matched frame (full scene: within same-shader repeat noise)",
+      "ok": true,
+      "details": []
+    },
+    {
+      "name": "Clouds-off sky unchanged",
+      "ok": true,
+      "details": {}
+    },
+    {
+      "name": "No added draw calls or triangles",
+      "ok": true,
+      "details": {}
+    }
+  ],
+  "perf": [
+    {
+      "tag": "desktop-low",
+      "scope": "sky-only",
+      "which": "before",
+      "medianOfRoundMedians": 299.39999999990687,
+      "rounds": [
+        287.6999999997206,
+        299.39999999990687,
+        301.60000000009313
+      ]
+    },
+    {
+      "tag": "desktop-low",
+      "scope": "sky-only",
+      "which": "after",
+      "medianOfRoundMedians": 290.6999999997206,
+      "rounds": [
+        280,
+        290.6999999997206,
+        299.5
+      ]
+    },
+    {
+      "tag": "desktop-low",
+      "scope": "scene",
+      "which": "before",
+      "medianOfRoundMedians": 1470.2000000001863,
+      "rounds": [
+        1359.5,
+        1470.2000000001863,
+        1526.3999999999069
+      ]
+    },
+    {
+      "tag": "desktop-low",
+      "scope": "scene",
+      "which": "after",
+      "medianOfRoundMedians": 1508.0999999996275,
+      "rounds": [
+        1410,
+        1508.0999999996275,
+        1568.5999999996275
+      ]
+    },
+    {
+      "tag": "desktop-high",
+      "scope": "sky-only",
+      "which": "before",
+      "medianOfRoundMedians": 301.6999999997206,
+      "rounds": [
+        297.5,
+        301.6999999997206,
+        314.89999999990687
+      ]
+    },
+    {
+      "tag": "desktop-high",
+      "scope": "sky-only",
+      "which": "after",
+      "medianOfRoundMedians": 291.8000000002794,
+      "rounds": [
+        291.6999999997206,
+        291.8000000002794,
+        292.60000000009313
+      ]
+    },
+    {
+      "tag": "desktop-high",
+      "scope": "scene",
+      "which": "before",
+      "medianOfRoundMedians": 2612.2999999998137,
+      "rounds": [
+        2483.3000000002794,
+        2612.2999999998137,
+        2623.5999999996275
+      ]
+    },
+    {
+      "tag": "desktop-high",
+      "scope": "scene",
+      "which": "after",
+      "medianOfRoundMedians": 2603.100000000093,
+      "rounds": [
+        2513.2000000001863,
+        2603.100000000093,
+        2627.899999999907
+      ]
+    },
+    {
+      "tag": "portrait-low",
+      "scope": "sky-only",
+      "which": "before",
+      "medianOfRoundMedians": 79.10000000009313,
+      "rounds": [
+        74.1999999997206,
+        79.10000000009313,
+        81.5
+      ]
+    },
+    {
+      "tag": "portrait-low",
+      "scope": "sky-only",
+      "which": "after",
+      "medianOfRoundMedians": 80.39999999990687,
+      "rounds": [
+        79.20000000018626,
+        80.39999999990687,
+        86.10000000009313
+      ]
+    },
+    {
+      "tag": "portrait-low",
+      "scope": "scene",
+      "which": "before",
+      "medianOfRoundMedians": 451.70000000018626,
+      "rounds": [
+        447.70000000018626,
+        451.70000000018626,
+        485.89999999990687
+      ]
+    },
+    {
+      "tag": "portrait-low",
+      "scope": "scene",
+      "which": "after",
+      "medianOfRoundMedians": 411,
+      "rounds": [
+        377.10000000009313,
+        411,
+        419.40000000037253
+      ]
+    },
+    {
+      "tag": "portrait-high",
+      "scope": "sky-only",
+      "which": "before",
+      "medianOfRoundMedians": 208,
+      "rounds": [
+        183.70000000018626,
+        208,
+        209.40000000037253
+      ]
+    },
+    {
+      "tag": "portrait-high",
+      "scope": "sky-only",
+      "which": "after",
+      "medianOfRoundMedians": 188.70000000018626,
+      "rounds": [
+        174.79999999981374,
+        188.70000000018626,
+        205.29999999981374
+      ]
+    },
+    {
+      "tag": "portrait-high",
+      "scope": "scene",
+      "which": "before",
+      "medianOfRoundMedians": 1395.6000000000931,
+      "rounds": [
+        1190,
+        1395.6000000000931,
+        1472
+      ]
+    },
+    {
+      "tag": "portrait-high",
+      "scope": "scene",
+      "which": "after",
+      "medianOfRoundMedians": 1251.7999999998137,
+      "rounds": [
+        1182.0999999996275,
+        1251.7999999998137,
+        1328.3000000002794
+      ]
+    },
+    {
+      "tag": "landscape-low",
+      "scope": "sky-only",
+      "which": "before",
+      "medianOfRoundMedians": 90.6999999997206,
+      "rounds": [
+        85.1999999997206,
+        90.6999999997206,
+        98
+      ]
+    },
+    {
+      "tag": "landscape-low",
+      "scope": "sky-only",
+      "which": "after",
+      "medianOfRoundMedians": 78.60000000009313,
+      "rounds": [
+        75.89999999990687,
+        78.60000000009313,
+        87.70000000018626
+      ]
+    },
+    {
+      "tag": "landscape-low",
+      "scope": "scene",
+      "which": "before",
+      "medianOfRoundMedians": 611.2000000001863,
+      "rounds": [
+        605.2999999998137,
+        611.2000000001863,
+        618.6999999997206
+      ]
+    },
+    {
+      "tag": "landscape-low",
+      "scope": "scene",
+      "which": "after",
+      "medianOfRoundMedians": 595.5,
+      "rounds": [
+        561.5,
+        595.5,
+        612.8000000002794
+      ]
+    },
+    {
+      "tag": "landscape-high",
+      "scope": "sky-only",
+      "which": "before",
+      "medianOfRoundMedians": 187.8000000002794,
+      "rounds": [
+        184.60000000009313,
+        187.8000000002794,
+        204.6999999997206
+      ]
+    },
+    {
+      "tag": "landscape-high",
+      "scope": "sky-only",
+      "which": "after",
+      "medianOfRoundMedians": 202,
+      "rounds": [
+        183.6999999997206,
+        202,
+        203.1999999997206
+      ]
+    },
+    {
+      "tag": "landscape-high",
+      "scope": "scene",
+      "which": "before",
+      "medianOfRoundMedians": 2095.100000000093,
+      "rounds": [
+        1986.7999999998137,
+        2095.100000000093,
+        2107.899999999907
+      ]
+    },
+    {
+      "tag": "landscape-high",
+      "scope": "scene",
+      "which": "after",
+      "medianOfRoundMedians": 1992.8999999999069,
+      "rounds": [
+        1988,
+        1992.8999999999069,
+        2025.5999999996275
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "tag": "desktop-low",
+      "name": "sky-0",
+      "pose": "sky",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "2d1fd31a",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 0,
+        "count": 0
+      }
+    },
+    {
+      "tag": "desktop-low",
+      "name": "sky-1",
+      "pose": "sky",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "6f2b3a9e",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "sky-2",
+      "pose": "sky",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "31b63e94",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "sky-3",
+      "pose": "sky",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "7338be48",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "wide-0",
+      "pose": "wide",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "34606ce9",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 0,
+        "count": 0
+      }
+    },
+    {
+      "tag": "desktop-low",
+      "name": "wide-1",
+      "pose": "wide",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "22701c56",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "wide-2",
+      "pose": "wide",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "26d9e5f7",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "wide-3",
+      "pose": "wide",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "24d942dd",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "north-0",
+      "pose": "north",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "cd274d79",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 0,
+        "count": 0
+      }
+    },
+    {
+      "tag": "desktop-low",
+      "name": "north-1",
+      "pose": "north",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "61591013",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "north-2",
+      "pose": "north",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "750412af",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "north-3",
+      "pose": "north",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "43bc1e87",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "zenith-0",
+      "pose": "zenith",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "aec4294",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 0,
+        "count": 0
+      }
+    },
+    {
+      "tag": "desktop-low",
+      "name": "zenith-1",
+      "pose": "zenith",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "d302754a",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "zenith-2",
+      "pose": "zenith",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "e60987d",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "zenith-3",
+      "pose": "zenith",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "bc8fb5d3",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "edge-0",
+      "pose": "edge",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "264fff52",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 0,
+        "count": 0
+      }
+    },
+    {
+      "tag": "desktop-low",
+      "name": "edge-1",
+      "pose": "edge",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "11606498",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "edge-2",
+      "pose": "edge",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "1104c9ad",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "edge-3",
+      "pose": "edge",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "701c1d62",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "sunset-0",
+      "pose": "sunset",
+      "t": 0,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 83
+      },
+      "noise": {
+        "max": 1,
+        "count": 277
+      },
+      "equalToBefore": true,
+      "afterHash": "1f9b513f",
+      "cloudsOffEqual": true,
+      "calls": 68,
+      "triangles": 330079,
+      "callsBefore": 68,
+      "trianglesBefore": 330079,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "sunset-1",
+      "pose": "sunset",
+      "t": 0.3333333333333333,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 180
+      },
+      "noise": {
+        "max": 1,
+        "count": 539
+      },
+      "equalToBefore": true,
+      "afterHash": "afd26b29",
+      "cloudsOffEqual": true,
+      "calls": 68,
+      "triangles": 330079,
+      "callsBefore": 68,
+      "trianglesBefore": 330079,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "sunset-2",
+      "pose": "sunset",
+      "t": 0.6666666666666666,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 47
+      },
+      "noise": {
+        "max": 1,
+        "count": 196
+      },
+      "equalToBefore": true,
+      "afterHash": "f669c0bf",
+      "cloudsOffEqual": true,
+      "calls": 68,
+      "triangles": 330079,
+      "callsBefore": 68,
+      "trianglesBefore": 330079,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "sunset-3",
+      "pose": "sunset",
+      "t": 1,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 71
+      },
+      "noise": {
+        "max": 1,
+        "count": 232
+      },
+      "equalToBefore": true,
+      "afterHash": "1dd4dad6",
+      "cloudsOffEqual": true,
+      "calls": 68,
+      "triangles": 330079,
+      "callsBefore": 68,
+      "trianglesBefore": 330079,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "arrival-0",
+      "pose": "arrival",
+      "t": 0,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 647
+      },
+      "noise": {
+        "max": 1,
+        "count": 1903
+      },
+      "equalToBefore": true,
+      "afterHash": "9b519eb3",
+      "cloudsOffEqual": true,
+      "calls": 90,
+      "triangles": 304759,
+      "callsBefore": 90,
+      "trianglesBefore": 304759,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "arrival-1",
+      "pose": "arrival",
+      "t": 0.3333333333333333,
+      "skyOnly": false,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 1,
+        "count": 1
+      },
+      "equalToBefore": true,
+      "afterHash": "981b7640",
+      "cloudsOffEqual": true,
+      "calls": 90,
+      "triangles": 304759,
+      "callsBefore": 90,
+      "trianglesBefore": 304759,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "arrival-2",
+      "pose": "arrival",
+      "t": 0.6666666666666666,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 8
+      },
+      "noise": {
+        "max": 1,
+        "count": 25
+      },
+      "equalToBefore": true,
+      "afterHash": "6513d535",
+      "cloudsOffEqual": true,
+      "calls": 90,
+      "triangles": 304759,
+      "callsBefore": 90,
+      "trianglesBefore": 304759,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "arrival-3",
+      "pose": "arrival",
+      "t": 1,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 13
+      },
+      "noise": {
+        "max": 1,
+        "count": 28
+      },
+      "equalToBefore": true,
+      "afterHash": "a778832d",
+      "cloudsOffEqual": true,
+      "calls": 90,
+      "triangles": 304759,
+      "callsBefore": 90,
+      "trianglesBefore": 304759,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-low",
+      "name": "turn-0",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-low",
+      "name": "turn-30",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-low",
+      "name": "turn-60",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-low",
+      "name": "turn-90",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-low",
+      "name": "turn-120",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-low",
+      "name": "turn-150",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-low",
+      "name": "turn-180",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-low",
+      "name": "turn-210",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-low",
+      "name": "turn-240",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-low",
+      "name": "turn-270",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-low",
+      "name": "turn-300",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-low",
+      "name": "turn-330",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-low",
+      "name": "pole-0",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-low",
+      "name": "pole-1.7",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-low",
+      "name": "pole-3.6",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-high",
+      "name": "sky-0",
+      "pose": "sky",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "2d1fd31a",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 0,
+        "count": 0
+      }
+    },
+    {
+      "tag": "desktop-high",
+      "name": "sky-1",
+      "pose": "sky",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "6f2b3a9e",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "sky-2",
+      "pose": "sky",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "31b63e94",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "sky-3",
+      "pose": "sky",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "7338be48",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "wide-0",
+      "pose": "wide",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "34606ce9",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 0,
+        "count": 0
+      }
+    },
+    {
+      "tag": "desktop-high",
+      "name": "wide-1",
+      "pose": "wide",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "22701c56",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "wide-2",
+      "pose": "wide",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "26d9e5f7",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "wide-3",
+      "pose": "wide",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "24d942dd",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "north-0",
+      "pose": "north",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "cd274d79",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 0,
+        "count": 0
+      }
+    },
+    {
+      "tag": "desktop-high",
+      "name": "north-1",
+      "pose": "north",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "9f816806",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "north-2",
+      "pose": "north",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "750412af",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "north-3",
+      "pose": "north",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "43bc1e87",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "zenith-0",
+      "pose": "zenith",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "aec4294",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 0,
+        "count": 0
+      }
+    },
+    {
+      "tag": "desktop-high",
+      "name": "zenith-1",
+      "pose": "zenith",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "d302754a",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "zenith-2",
+      "pose": "zenith",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "e60987d",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "zenith-3",
+      "pose": "zenith",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "bc8fb5d3",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "edge-0",
+      "pose": "edge",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "3b21d2fb",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 0,
+        "count": 0
+      }
+    },
+    {
+      "tag": "desktop-high",
+      "name": "edge-1",
+      "pose": "edge",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "11606498",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "edge-2",
+      "pose": "edge",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "1104c9ad",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "edge-3",
+      "pose": "edge",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "701c1d62",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "sunset-0",
+      "pose": "sunset",
+      "t": 0,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 132
+      },
+      "noise": {
+        "max": 1,
+        "count": 381
+      },
+      "equalToBefore": true,
+      "afterHash": "b7c6aa8c",
+      "cloudsOffEqual": true,
+      "calls": 135,
+      "triangles": 483842,
+      "callsBefore": 135,
+      "trianglesBefore": 483842,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "sunset-1",
+      "pose": "sunset",
+      "t": 0.3333333333333333,
+      "skyOnly": false,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "877ca3f6",
+      "cloudsOffEqual": true,
+      "calls": 135,
+      "triangles": 507506,
+      "callsBefore": 135,
+      "trianglesBefore": 507506,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "sunset-2",
+      "pose": "sunset",
+      "t": 0.6666666666666666,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 49
+      },
+      "noise": {
+        "max": 1,
+        "count": 190
+      },
+      "equalToBefore": true,
+      "afterHash": "2ea613da",
+      "cloudsOffEqual": true,
+      "calls": 94,
+      "triangles": 330079,
+      "callsBefore": 94,
+      "trianglesBefore": 330079,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "sunset-3",
+      "pose": "sunset",
+      "t": 1,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 69
+      },
+      "noise": {
+        "max": 1,
+        "count": 232
+      },
+      "equalToBefore": true,
+      "afterHash": "507b4278",
+      "cloudsOffEqual": true,
+      "calls": 94,
+      "triangles": 330079,
+      "callsBefore": 94,
+      "trianglesBefore": 330079,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "arrival-0",
+      "pose": "arrival",
+      "t": 0,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 794
+      },
+      "noise": {
+        "max": 1,
+        "count": 2381
+      },
+      "equalToBefore": true,
+      "afterHash": "c99b12fd",
+      "cloudsOffEqual": true,
+      "calls": 175,
+      "triangles": 548302,
+      "callsBefore": 175,
+      "trianglesBefore": 548302,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "arrival-1",
+      "pose": "arrival",
+      "t": 0.3333333333333333,
+      "skyOnly": false,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "ee865545",
+      "cloudsOffEqual": true,
+      "calls": 184,
+      "triangles": 598463,
+      "callsBefore": 184,
+      "trianglesBefore": 598463,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "arrival-2",
+      "pose": "arrival",
+      "t": 0.6666666666666666,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 7
+      },
+      "noise": {
+        "max": 1,
+        "count": 23
+      },
+      "equalToBefore": true,
+      "afterHash": "132aaf4",
+      "cloudsOffEqual": true,
+      "calls": 141,
+      "triangles": 304759,
+      "callsBefore": 141,
+      "trianglesBefore": 304759,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "arrival-3",
+      "pose": "arrival",
+      "t": 1,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 12
+      },
+      "noise": {
+        "max": 1,
+        "count": 28
+      },
+      "equalToBefore": true,
+      "afterHash": "76d4c4ce",
+      "cloudsOffEqual": true,
+      "calls": 141,
+      "triangles": 304759,
+      "callsBefore": 141,
+      "trianglesBefore": 304759,
+      "glError": 0,
+      "failures": 0,
+      "width": 1600,
+      "height": 900,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "desktop-high",
+      "name": "turn-0",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-high",
+      "name": "turn-30",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-high",
+      "name": "turn-60",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-high",
+      "name": "turn-90",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-high",
+      "name": "turn-120",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-high",
+      "name": "turn-150",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-high",
+      "name": "turn-180",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-high",
+      "name": "turn-210",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-high",
+      "name": "turn-240",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-high",
+      "name": "turn-270",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-high",
+      "name": "turn-300",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-high",
+      "name": "turn-330",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-high",
+      "name": "pole-0",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-high",
+      "name": "pole-1.7",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "desktop-high",
+      "name": "pole-3.6",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-low",
+      "name": "sky-0",
+      "pose": "sky",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "ae5e1642",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 0,
+        "count": 0
+      }
+    },
+    {
+      "tag": "portrait-low",
+      "name": "sky-1",
+      "pose": "sky",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "ef576c39",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "sky-2",
+      "pose": "sky",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "1cdcb7e6",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "sky-3",
+      "pose": "sky",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "5b4db3f6",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "wide-0",
+      "pose": "wide",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "b3e31d19",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 0,
+        "count": 0
+      }
+    },
+    {
+      "tag": "portrait-low",
+      "name": "wide-1",
+      "pose": "wide",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "12f945a0",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "wide-2",
+      "pose": "wide",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "ec24c15",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "wide-3",
+      "pose": "wide",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "5710af0e",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "north-0",
+      "pose": "north",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "556d527b",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 1,
+        "count": 12
+      }
+    },
+    {
+      "tag": "portrait-low",
+      "name": "north-1",
+      "pose": "north",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "d8fd72d8",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "north-2",
+      "pose": "north",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "c0d747ba",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "north-3",
+      "pose": "north",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "63078cf7",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "zenith-0",
+      "pose": "zenith",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "116b5d8",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 0,
+        "count": 0
+      }
+    },
+    {
+      "tag": "portrait-low",
+      "name": "zenith-1",
+      "pose": "zenith",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "50b57db8",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "zenith-2",
+      "pose": "zenith",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "8123b573",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "zenith-3",
+      "pose": "zenith",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "a7fc8d",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "edge-0",
+      "pose": "edge",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "a3808d47",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 0,
+        "count": 0
+      }
+    },
+    {
+      "tag": "portrait-low",
+      "name": "edge-1",
+      "pose": "edge",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "aeec85e2",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "edge-2",
+      "pose": "edge",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "f5057590",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "edge-3",
+      "pose": "edge",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "4016473f",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "sunset-0",
+      "pose": "sunset",
+      "t": 0,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 7
+      },
+      "noise": {
+        "max": 1,
+        "count": 14
+      },
+      "equalToBefore": true,
+      "afterHash": "78aacbe7",
+      "cloudsOffEqual": true,
+      "calls": 45,
+      "triangles": 222329,
+      "callsBefore": 45,
+      "trianglesBefore": 222329,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "sunset-1",
+      "pose": "sunset",
+      "t": 0.3333333333333333,
+      "skyOnly": false,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "93ba9ead",
+      "cloudsOffEqual": true,
+      "calls": 45,
+      "triangles": 222329,
+      "callsBefore": 45,
+      "trianglesBefore": 222329,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "sunset-2",
+      "pose": "sunset",
+      "t": 0.6666666666666666,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 5
+      },
+      "noise": {
+        "max": 1,
+        "count": 13
+      },
+      "equalToBefore": true,
+      "afterHash": "e3fcf5e9",
+      "cloudsOffEqual": true,
+      "calls": 45,
+      "triangles": 222329,
+      "callsBefore": 45,
+      "trianglesBefore": 222329,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "sunset-3",
+      "pose": "sunset",
+      "t": 1,
+      "skyOnly": false,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 1,
+        "count": 8
+      },
+      "equalToBefore": true,
+      "afterHash": "c6ffb807",
+      "cloudsOffEqual": true,
+      "calls": 45,
+      "triangles": 222329,
+      "callsBefore": 45,
+      "trianglesBefore": 222329,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "arrival-0",
+      "pose": "arrival",
+      "t": 0,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 444
+      },
+      "noise": {
+        "max": 1,
+        "count": 1268
+      },
+      "equalToBefore": true,
+      "afterHash": "87d0ae23",
+      "cloudsOffEqual": true,
+      "calls": 67,
+      "triangles": 268408,
+      "callsBefore": 67,
+      "trianglesBefore": 268408,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "arrival-1",
+      "pose": "arrival",
+      "t": 0.3333333333333333,
+      "skyOnly": false,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 1,
+        "count": 3
+      },
+      "equalToBefore": true,
+      "afterHash": "b3e1ce3f",
+      "cloudsOffEqual": true,
+      "calls": 67,
+      "triangles": 268408,
+      "callsBefore": 67,
+      "trianglesBefore": 268408,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "arrival-2",
+      "pose": "arrival",
+      "t": 0.6666666666666666,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 5
+      },
+      "noise": {
+        "max": 1,
+        "count": 14
+      },
+      "equalToBefore": true,
+      "afterHash": "1a17efe3",
+      "cloudsOffEqual": true,
+      "calls": 67,
+      "triangles": 268408,
+      "callsBefore": 67,
+      "trianglesBefore": 268408,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "arrival-3",
+      "pose": "arrival",
+      "t": 1,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 6
+      },
+      "noise": {
+        "max": 1,
+        "count": 12
+      },
+      "equalToBefore": true,
+      "afterHash": "eaeeddca",
+      "cloudsOffEqual": true,
+      "calls": 67,
+      "triangles": 268408,
+      "callsBefore": 67,
+      "trianglesBefore": 268408,
+      "glError": 0,
+      "failures": 0,
+      "width": 412,
+      "height": 915,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "portrait-low",
+      "name": "turn-0",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-low",
+      "name": "turn-30",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-low",
+      "name": "turn-60",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-low",
+      "name": "turn-90",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-low",
+      "name": "turn-120",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-low",
+      "name": "turn-150",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-low",
+      "name": "turn-180",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-low",
+      "name": "turn-210",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-low",
+      "name": "turn-240",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-low",
+      "name": "turn-270",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-low",
+      "name": "turn-300",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-low",
+      "name": "turn-330",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-low",
+      "name": "pole-0",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-low",
+      "name": "pole-1.7",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-low",
+      "name": "pole-3.6",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-high",
+      "name": "sky-0",
+      "pose": "sky",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "9aa422c1",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 0,
+        "count": 0
+      }
+    },
+    {
+      "tag": "portrait-high",
+      "name": "sky-1",
+      "pose": "sky",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "3ab62ac7",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "sky-2",
+      "pose": "sky",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "fef52e76",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "sky-3",
+      "pose": "sky",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "11f1b61c",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "wide-0",
+      "pose": "wide",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "e11eefae",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 0,
+        "count": 0
+      }
+    },
+    {
+      "tag": "portrait-high",
+      "name": "wide-1",
+      "pose": "wide",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "882769bd",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "wide-2",
+      "pose": "wide",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "296bb8f0",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "wide-3",
+      "pose": "wide",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "237c9c42",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "north-0",
+      "pose": "north",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "3d9e330",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 0,
+        "count": 0
+      }
+    },
+    {
+      "tag": "portrait-high",
+      "name": "north-1",
+      "pose": "north",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "11d7ef66",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "north-2",
+      "pose": "north",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "48ec586",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "north-3",
+      "pose": "north",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "c8f51c78",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "zenith-0",
+      "pose": "zenith",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "84b5e21a",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 0,
+        "count": 0
+      }
+    },
+    {
+      "tag": "portrait-high",
+      "name": "zenith-1",
+      "pose": "zenith",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "9e21044f",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "zenith-2",
+      "pose": "zenith",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "d7626b7a",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "zenith-3",
+      "pose": "zenith",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "a1f6f444",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "edge-0",
+      "pose": "edge",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "40cca956",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 0,
+        "count": 0
+      }
+    },
+    {
+      "tag": "portrait-high",
+      "name": "edge-1",
+      "pose": "edge",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "7300c963",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "edge-2",
+      "pose": "edge",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "81b6eb95",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "edge-3",
+      "pose": "edge",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "a6c0b11d",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "sunset-0",
+      "pose": "sunset",
+      "t": 0,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 13
+      },
+      "noise": {
+        "max": 1,
+        "count": 35
+      },
+      "equalToBefore": true,
+      "afterHash": "27fe201",
+      "cloudsOffEqual": true,
+      "calls": 98,
+      "triangles": 376092,
+      "callsBefore": 98,
+      "trianglesBefore": 376092,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "sunset-1",
+      "pose": "sunset",
+      "t": 0.3333333333333333,
+      "skyOnly": false,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "a0bfe05b",
+      "cloudsOffEqual": true,
+      "calls": 98,
+      "triangles": 399756,
+      "callsBefore": 98,
+      "trianglesBefore": 399756,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "sunset-2",
+      "pose": "sunset",
+      "t": 0.6666666666666666,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 7
+      },
+      "noise": {
+        "max": 1,
+        "count": 24
+      },
+      "equalToBefore": true,
+      "afterHash": "e214edac",
+      "cloudsOffEqual": true,
+      "calls": 57,
+      "triangles": 222329,
+      "callsBefore": 57,
+      "trianglesBefore": 222329,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "sunset-3",
+      "pose": "sunset",
+      "t": 1,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 8
+      },
+      "noise": {
+        "max": 1,
+        "count": 23
+      },
+      "equalToBefore": true,
+      "afterHash": "d8cf9a07",
+      "cloudsOffEqual": true,
+      "calls": 57,
+      "triangles": 222329,
+      "callsBefore": 57,
+      "trianglesBefore": 222329,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "arrival-0",
+      "pose": "arrival",
+      "t": 0,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 1141
+      },
+      "noise": {
+        "max": 1,
+        "count": 3348
+      },
+      "equalToBefore": true,
+      "afterHash": "118f9f8b",
+      "cloudsOffEqual": true,
+      "calls": 139,
+      "triangles": 511951,
+      "callsBefore": 139,
+      "trianglesBefore": 511951,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "arrival-1",
+      "pose": "arrival",
+      "t": 0.3333333333333333,
+      "skyOnly": false,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 1,
+        "count": 1
+      },
+      "equalToBefore": true,
+      "afterHash": "20338731",
+      "cloudsOffEqual": true,
+      "calls": 148,
+      "triangles": 562112,
+      "callsBefore": 148,
+      "trianglesBefore": 562112,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "arrival-2",
+      "pose": "arrival",
+      "t": 0.6666666666666666,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 11
+      },
+      "noise": {
+        "max": 1,
+        "count": 24
+      },
+      "equalToBefore": true,
+      "afterHash": "c0032e69",
+      "cloudsOffEqual": true,
+      "calls": 105,
+      "triangles": 268408,
+      "callsBefore": 105,
+      "trianglesBefore": 268408,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "arrival-3",
+      "pose": "arrival",
+      "t": 1,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 7
+      },
+      "noise": {
+        "max": 1,
+        "count": 24
+      },
+      "equalToBefore": true,
+      "afterHash": "1a9277f4",
+      "cloudsOffEqual": true,
+      "calls": 105,
+      "triangles": 268408,
+      "callsBefore": 105,
+      "trianglesBefore": 268408,
+      "glError": 0,
+      "failures": 0,
+      "width": 618,
+      "height": 1372,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "portrait-high",
+      "name": "turn-0",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-high",
+      "name": "turn-30",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-high",
+      "name": "turn-60",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-high",
+      "name": "turn-90",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-high",
+      "name": "turn-120",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-high",
+      "name": "turn-150",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-high",
+      "name": "turn-180",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-high",
+      "name": "turn-210",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-high",
+      "name": "turn-240",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-high",
+      "name": "turn-270",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-high",
+      "name": "turn-300",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-high",
+      "name": "turn-330",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-high",
+      "name": "pole-0",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-high",
+      "name": "pole-1.7",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "portrait-high",
+      "name": "pole-3.6",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-low",
+      "name": "sky-0",
+      "pose": "sky",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "6af05090",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 1,
+        "count": 31
+      }
+    },
+    {
+      "tag": "landscape-low",
+      "name": "sky-1",
+      "pose": "sky",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "ea3794f3",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "sky-2",
+      "pose": "sky",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "8800b170",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "sky-3",
+      "pose": "sky",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "d7cbcfe5",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "wide-0",
+      "pose": "wide",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "30162e9a",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 1,
+        "count": 15
+      }
+    },
+    {
+      "tag": "landscape-low",
+      "name": "wide-1",
+      "pose": "wide",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "428b7d8e",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "wide-2",
+      "pose": "wide",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "4b0b9a66",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "wide-3",
+      "pose": "wide",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "d24b101",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "north-0",
+      "pose": "north",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "b60445f8",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 1,
+        "count": 26
+      }
+    },
+    {
+      "tag": "landscape-low",
+      "name": "north-1",
+      "pose": "north",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "9cb64e12",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "north-2",
+      "pose": "north",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "89527071",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "north-3",
+      "pose": "north",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "36be5629",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "zenith-0",
+      "pose": "zenith",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "eb2a18b3",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 1,
+        "count": 16
+      }
+    },
+    {
+      "tag": "landscape-low",
+      "name": "zenith-1",
+      "pose": "zenith",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "ecb65540",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "zenith-2",
+      "pose": "zenith",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "a5e6615b",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "zenith-3",
+      "pose": "zenith",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "e635f924",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "edge-0",
+      "pose": "edge",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "aeb761c",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 1,
+        "count": 15
+      }
+    },
+    {
+      "tag": "landscape-low",
+      "name": "edge-1",
+      "pose": "edge",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "a7af197e",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "edge-2",
+      "pose": "edge",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "813afde9",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "edge-3",
+      "pose": "edge",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "82e49c3",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "sunset-0",
+      "pose": "sunset",
+      "t": 0,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 31
+      },
+      "noise": {
+        "max": 1,
+        "count": 82
+      },
+      "equalToBefore": true,
+      "afterHash": "808abe50",
+      "cloudsOffEqual": true,
+      "calls": 71,
+      "triangles": 344614,
+      "callsBefore": 71,
+      "trianglesBefore": 344614,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "sunset-1",
+      "pose": "sunset",
+      "t": 0.3333333333333333,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 44
+      },
+      "noise": {
+        "max": 1,
+        "count": 118
+      },
+      "equalToBefore": true,
+      "afterHash": "4f2770b1",
+      "cloudsOffEqual": true,
+      "calls": 71,
+      "triangles": 344614,
+      "callsBefore": 71,
+      "trianglesBefore": 344614,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "sunset-2",
+      "pose": "sunset",
+      "t": 0.6666666666666666,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 22
+      },
+      "noise": {
+        "max": 1,
+        "count": 65
+      },
+      "equalToBefore": true,
+      "afterHash": "66234216",
+      "cloudsOffEqual": true,
+      "calls": 71,
+      "triangles": 344614,
+      "callsBefore": 71,
+      "trianglesBefore": 344614,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "sunset-3",
+      "pose": "sunset",
+      "t": 1,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 19
+      },
+      "noise": {
+        "max": 1,
+        "count": 49
+      },
+      "equalToBefore": true,
+      "afterHash": "38b7e3e9",
+      "cloudsOffEqual": true,
+      "calls": 71,
+      "triangles": 344614,
+      "callsBefore": 71,
+      "trianglesBefore": 344614,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "arrival-0",
+      "pose": "arrival",
+      "t": 0,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 123
+      },
+      "noise": {
+        "max": 1,
+        "count": 395
+      },
+      "equalToBefore": true,
+      "afterHash": "b7ed9264",
+      "cloudsOffEqual": true,
+      "calls": 93,
+      "triangles": 313860,
+      "callsBefore": 93,
+      "trianglesBefore": 313860,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "arrival-1",
+      "pose": "arrival",
+      "t": 0.3333333333333333,
+      "skyOnly": false,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "9cceaa4d",
+      "cloudsOffEqual": true,
+      "calls": 93,
+      "triangles": 313860,
+      "callsBefore": 93,
+      "trianglesBefore": 313860,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "arrival-2",
+      "pose": "arrival",
+      "t": 0.6666666666666666,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 1
+      },
+      "noise": {
+        "max": 1,
+        "count": 4
+      },
+      "equalToBefore": true,
+      "afterHash": "315efc44",
+      "cloudsOffEqual": true,
+      "calls": 93,
+      "triangles": 313860,
+      "callsBefore": 93,
+      "trianglesBefore": 313860,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "arrival-3",
+      "pose": "arrival",
+      "t": 1,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 3
+      },
+      "noise": {
+        "max": 1,
+        "count": 6
+      },
+      "equalToBefore": true,
+      "afterHash": "8796d11d",
+      "cloudsOffEqual": true,
+      "calls": 93,
+      "triangles": 313860,
+      "callsBefore": 93,
+      "trianglesBefore": 313860,
+      "glError": 0,
+      "failures": 0,
+      "width": 915,
+      "height": 412,
+      "pixelRatio": 1
+    },
+    {
+      "tag": "landscape-low",
+      "name": "turn-0",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-low",
+      "name": "turn-30",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-low",
+      "name": "turn-60",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-low",
+      "name": "turn-90",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-low",
+      "name": "turn-120",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-low",
+      "name": "turn-150",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-low",
+      "name": "turn-180",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-low",
+      "name": "turn-210",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-low",
+      "name": "turn-240",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-low",
+      "name": "turn-270",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-low",
+      "name": "turn-300",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-low",
+      "name": "turn-330",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-low",
+      "name": "pole-0",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-low",
+      "name": "pole-1.7",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-low",
+      "name": "pole-3.6",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-high",
+      "name": "sky-0",
+      "pose": "sky",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "84e1618d",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 1,
+        "count": 1
+      }
+    },
+    {
+      "tag": "landscape-high",
+      "name": "sky-1",
+      "pose": "sky",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "be06fac0",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "sky-2",
+      "pose": "sky",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "d2275ace",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "sky-3",
+      "pose": "sky",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "7493981d",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "wide-0",
+      "pose": "wide",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "691bc631",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 1,
+        "count": 5
+      }
+    },
+    {
+      "tag": "landscape-high",
+      "name": "wide-1",
+      "pose": "wide",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "284a26e",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "wide-2",
+      "pose": "wide",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "16b05672",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "wide-3",
+      "pose": "wide",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "37b88060",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "north-0",
+      "pose": "north",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "67a8fd",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 1,
+        "count": 10
+      }
+    },
+    {
+      "tag": "landscape-high",
+      "name": "north-1",
+      "pose": "north",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "f862dde7",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "north-2",
+      "pose": "north",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "dac55079",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "north-3",
+      "pose": "north",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "71666394",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "zenith-0",
+      "pose": "zenith",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "cf51d560",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 1,
+        "count": 8
+      }
+    },
+    {
+      "tag": "landscape-high",
+      "name": "zenith-1",
+      "pose": "zenith",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "3424f070",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "zenith-2",
+      "pose": "zenith",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "cc5cdcd1",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "zenith-3",
+      "pose": "zenith",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "c1a2e678",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "edge-0",
+      "pose": "edge",
+      "t": 0,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "4d13cde7",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5,
+      "masksFailures": 0,
+      "masksGlError": 0,
+      "masksDiff": {
+        "max": 1,
+        "count": 2
+      }
+    },
+    {
+      "tag": "landscape-high",
+      "name": "edge-1",
+      "pose": "edge",
+      "t": 0.3333333333333333,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "b64633b7",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "edge-2",
+      "pose": "edge",
+      "t": 0.6666666666666666,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "3084ea36",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "edge-3",
+      "pose": "edge",
+      "t": 1,
+      "skyOnly": true,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "842a78ac",
+      "cloudsOffEqual": true,
+      "calls": 1,
+      "triangles": 528,
+      "callsBefore": 1,
+      "trianglesBefore": 528,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "sunset-0",
+      "pose": "sunset",
+      "t": 0,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 74
+      },
+      "noise": {
+        "max": 1,
+        "count": 223
+      },
+      "equalToBefore": true,
+      "afterHash": "3aa42080",
+      "cloudsOffEqual": true,
+      "calls": 140,
+      "triangles": 498377,
+      "callsBefore": 140,
+      "trianglesBefore": 498377,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "sunset-1",
+      "pose": "sunset",
+      "t": 0.3333333333333333,
+      "skyOnly": false,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "afterHash": "a0831e85",
+      "cloudsOffEqual": true,
+      "calls": 140,
+      "triangles": 522041,
+      "callsBefore": 140,
+      "trianglesBefore": 522041,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "sunset-2",
+      "pose": "sunset",
+      "t": 0.6666666666666666,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 53
+      },
+      "noise": {
+        "max": 1,
+        "count": 148
+      },
+      "equalToBefore": true,
+      "afterHash": "cda5f2ab",
+      "cloudsOffEqual": true,
+      "calls": 99,
+      "triangles": 344614,
+      "callsBefore": 99,
+      "trianglesBefore": 344614,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "sunset-3",
+      "pose": "sunset",
+      "t": 1,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 52
+      },
+      "noise": {
+        "max": 1,
+        "count": 139
+      },
+      "equalToBefore": true,
+      "afterHash": "c3afb9",
+      "cloudsOffEqual": true,
+      "calls": 99,
+      "triangles": 344614,
+      "callsBefore": 99,
+      "trianglesBefore": 344614,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "arrival-0",
+      "pose": "arrival",
+      "t": 0,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 359
+      },
+      "noise": {
+        "max": 1,
+        "count": 1147
+      },
+      "equalToBefore": true,
+      "afterHash": "47f355f5",
+      "cloudsOffEqual": true,
+      "calls": 178,
+      "triangles": 557403,
+      "callsBefore": 178,
+      "trianglesBefore": 557403,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "arrival-1",
+      "pose": "arrival",
+      "t": 0.3333333333333333,
+      "skyOnly": false,
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "noise": {
+        "max": 1,
+        "count": 1
+      },
+      "equalToBefore": true,
+      "afterHash": "a396e553",
+      "cloudsOffEqual": true,
+      "calls": 187,
+      "triangles": 607564,
+      "callsBefore": 187,
+      "trianglesBefore": 607564,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "arrival-2",
+      "pose": "arrival",
+      "t": 0.6666666666666666,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 4
+      },
+      "noise": {
+        "max": 1,
+        "count": 14
+      },
+      "equalToBefore": true,
+      "afterHash": "c2283616",
+      "cloudsOffEqual": true,
+      "calls": 144,
+      "triangles": 313860,
+      "callsBefore": 144,
+      "trianglesBefore": 313860,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "arrival-3",
+      "pose": "arrival",
+      "t": 1,
+      "skyOnly": false,
+      "diff": {
+        "max": 1,
+        "count": 3
+      },
+      "noise": {
+        "max": 1,
+        "count": 15
+      },
+      "equalToBefore": true,
+      "afterHash": "e829d96d",
+      "cloudsOffEqual": true,
+      "calls": 144,
+      "triangles": 313860,
+      "callsBefore": 144,
+      "trianglesBefore": 313860,
+      "glError": 0,
+      "failures": 0,
+      "width": 1372,
+      "height": 618,
+      "pixelRatio": 1.5
+    },
+    {
+      "tag": "landscape-high",
+      "name": "turn-0",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-high",
+      "name": "turn-30",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-high",
+      "name": "turn-60",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-high",
+      "name": "turn-90",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-high",
+      "name": "turn-120",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-high",
+      "name": "turn-150",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-high",
+      "name": "turn-180",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-high",
+      "name": "turn-210",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-high",
+      "name": "turn-240",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-high",
+      "name": "turn-270",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-high",
+      "name": "turn-300",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-high",
+      "name": "turn-330",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-high",
+      "name": "pole-0",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-high",
+      "name": "pole-1.7",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    },
+    {
+      "tag": "landscape-high",
+      "name": "pole-3.6",
+      "diff": {
+        "max": 0,
+        "count": 0
+      },
+      "equalToBefore": true,
+      "glError": 0,
+      "failures": 0,
+      "calls": 1,
+      "callsBefore": 1,
+      "triangles": 528,
+      "trianglesBefore": 528
+    }
+  ],
+  "errors": []
+}
