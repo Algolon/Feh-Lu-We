@@ -1,0 +1,49 @@
+# VIS-R01C C1: compare two controllers on the same built game, using a software GPU.
+# Intentionally only runs for the opt-in development branch; it never deploys.
+name: VIS-R01C C1 parity (branch only)
+on:
+  push:
+    branches:
+      - vis-r01c-c1-shared-controller
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        multidraw: ['1', '0']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Run PB01 policy tests
+        run: npm run test:budget
+      - name: Build exact candidate
+        run: npm run typecheck && npm run build
+      - name: Install headless Chromium for Playwright Core
+        run: npx playwright-core install --with-deps chromium
+      - name: Compare R01B against C1 opt-in in a real browser
+        env:
+          MULTIDRAW: ${{ matrix.multidraw }}
+          MODE: views,turn,still,toggle,gameplay
+          QUALITY: low
+          VIEWPORT: landscape
+          DUSK: '0'
+          PARITY_TIMEOUT_MS: '900000'
+        run: node scripts/vis-r01c-parity.mjs
+      - name: Save diagnostics, even if parity fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vis-r01c-parity-multidraw-${{ matrix.multidraw }}
+          path: scripts/out/vis-r01c-parity/
+          if-no-files-found: warn
