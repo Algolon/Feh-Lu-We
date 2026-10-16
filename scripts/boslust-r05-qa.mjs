@@ -104,6 +104,9 @@ try {
   }));
   console.log('solved',result.solved);
   assert(result.solved.open&&result.solved.door&&!result.solved.focus,'right code did not unlock');
+  // Release the heavy mobile WebGL scene before starting desktop: software
+  // renderers cannot reliably initialize two estate scenes concurrently.
+  await ctx.close();
   // Desktop regression: keyboard copy, fine-pointer tap remains +1.
   const dpage=await browser.newPage({viewport:{width:1100,height:730}});
   await dpage.goto('http://127.0.0.1:4173/Feh-Lu-We/?autotest=1&multidraw=0');
@@ -115,7 +118,7 @@ try {
     }));
     localStorage.setItem('fehluwe.settings',JSON.stringify({quality:'low',reducedMotion:true}));
   });
-  await dpage.reload();await dpage.click('[data-cont]');
+  await dpage.reload({waitUntil:'domcontentloaded',timeout:90000});await dpage.click('[data-cont]');
   await dpage.waitForFunction(()=>window.__game?.world?.id==='estate',null,{timeout:120000});
   await dpage.evaluate(()=>{window.__game.world.byId.get('boslust.lock').run();window.__game.tick(1/30);});
   await dpage.waitForTimeout(300);
