@@ -1189,6 +1189,7 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   const rl = tableLamp(w, 72.65, R0 + 0.59, 83.75);
   makeLamp(w, g, { id: 'lamp.reis', ...rl, name: 'lamp', defaultOn: true, hit: [0.4, 0.7, 0.4], intensity: 4, distance: 6, patch: { y: R0 + 0.03, r: 1.0 } });
   // ---------------------------------------------------------------- Sterrenkamer (cool, astronomy)
+  c.chunk = 'mUpS'; // DEV-04D release: its own culled region (estate.ts `mUpS`): seen from the hall when the Reiskamer is not
   rug(c, 75.6, 92.2, R0 + 0.01, 2.6, 3.0, 0, '#ffffff', 'oval');
   bed2(c, 73.5, 92.2, R0, Math.PI / 2, '#26344a', '#4a3a2a', 1.6, { style: 'upholstered', cushion: '#3b4f5d', throwColor: '#c9a25a' });
   for (const bz of [91.05, 93.35]) bedside(c, 72.65, bz, R0, Math.PI / 2, '#4a3a2a');

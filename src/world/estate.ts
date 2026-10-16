@@ -145,8 +145,9 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   w.roomRegion(['mServ'], ['corridor', 'workshop', 'pantry', 'utility'], Infinity, IN_FAR); // DEV-04B split from mWing
   w.roomRegion(['mUp'], ['frontGallery', 'walkway', 'landing', 'libGallery', 'reis', 'sterren', 'bath', 'ucorr', 'study', 'botanic', 'storage', 'library', 'linen', 'rearNook', 'rearNookEast', 'atticStair'], Infinity, IN_FAR);
   w.roomRegion(['mUpE'], ['study', 'botanic', 'linen'], Infinity, IN_FAR); // DEV-04B split from mUp (D3-b2: the guest room moved to mUpG)
-  w.roomRegion(['mUpR'], ['reis', 'sterren'], Infinity, IN_FAR, ['door.reis', 'door.sterren']); // DEV-04D D3-b2: the Reis- and Sterrenkamer, drawn only while one is visible (release: and its doorway in view)
-  w.roomRegion(['mUpG'], ['storage'], Infinity, IN_FAR, ['door.storage']); // DEV-04D D3-b2: the north guest room, drawn only while it is visible (release: and its doorway in view)
+  w.roomRegion(['mUpR'], ['reis'], Infinity, IN_FAR, ['door.reis']); // DEV-04D D3-b2: the Reiskamer, drawn only while it is visible (release: and its doorway seen through)
+  w.roomRegion(['mUpS'], ['sterren'], Infinity, IN_FAR, ['door.sterren']); // DEV-04D release: the Sterrenkamer split from mUpR (the rooms share no door)
+  w.roomRegion(['mUpG'], ['storage'], Infinity, IN_FAR, ['door.storage']); // DEV-04D D3-b2: the north guest room, drawn only while it is visible (release: and its doorway seen through)
   w.roomRegion(['mAttic'], [...atticRooms, 'atticStair'], Infinity, IN_FAR); // seen through the open stair doors (atticStair is then visible)
   w.roomRegion(['mB'], basementRooms);
   w.roomRegion(['ug'], ugRooms);

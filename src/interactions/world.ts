@@ -176,11 +176,10 @@ export class World {
     this.regions.push({ meshes, rooms: new Set(rooms), on: true, far, outFar, sph, doors: ds?.length === doors?.length ? ds : undefined });
   }
   /**
-   * A region doorway that is open, in the cone round the view and in line of sight into the room behind it. The sight
-   * lines aim just inside the room (0.6 m and 1.2 m past the opening, across its width, at three heights), so the walls
-   * either side of the opening must be passed; walls, closed doors and movement barriers (balustrades, furniture)
-   * block them, and so do the walkable floors (an upstairs doorway is not seen from the ground floor through the
-   * gallery's floor; the hall's open well has none). Without a room graph or a camera the region stays drawn.
+   * A region doorway that is open, in the cone round the view and seen through: sight lines from the eye through points
+   * of the opening (across its width, at three heights), carried 0.8 m on into the room, must be clear of walls, closed
+   * doors and the walkable floors (an upstairs doorway is not seen from the ground floor through the gallery's floor;
+   * the hall's open well has none). Without a room graph or a camera the region stays drawn.
    */
   private doorwayInView(eye: THREE.Vector3, cam: THREE.PerspectiveCamera | undefined, doors: RegionDoor[], rooms: Set<string>) {
     if (!cam || !this.rooms) return true;
@@ -195,9 +194,13 @@ export class World {
       if (d.n === undefined) d.n = this.doorInward(d, rooms);
       if (!d.n) return true;
       const [nx, nz] = d.n;
-      for (const k of [0.6, 1.2]) for (const dy of [0, -0.8, 0.8]) for (const s of [0, -0.3, 0.3]) {
-        const tx = d.x + nx * k + nz * s, ty = d.y + dy, tz = d.z + nz * k + nx * s;
-        if (!this.col.segmentBlocked(ex, ey, ez, tx, ty, tz, this.visualPassThrough, true) && !this.floorBetween(ex, ey, ez, tx, ty, tz)) return true;
+      for (const dy of [0, -0.8, 0.8]) for (const s of [0, -0.35, 0.35]) {
+        const px = d.x + nz * s, py = d.y + dy, pz = d.z + nx * s; // a point of the opening (its plane through the centre)
+        const vx = px - ex, vy = py - ey, vz = pz - ez, inward = vx * nx + vz * nz;
+        if (inward <= 0.05) continue; // the eye is not in front of the opening (or looks along it)
+        const k = 1 + 0.8 / inward;
+        const tx = ex + vx * k, ty = ey + vy * k, tz = ez + vz * k;
+        if (!this.col.segmentBlocked(ex, ey, ez, tx, ty, tz, this.visualPassThrough) && !this.floorBetween(ex, ey, ez, tx, ty, tz)) return true;
       }
     }
     return false;

@@ -169,19 +169,21 @@ describe('DEV-04D D3-b2: protected gameplay and the luggage rule', () => {
 });
 
 describe('DEV-04D D3-b2: culled regions', () => {
-  it('Reis + Sterren (mUpR) and the guest room (mUpG) are registered regions; mUpE no longer lists the guest room', () => {
+  it('Reis (mUpR), Sterren (mUpS) and the guest room (mUpG) are registered regions; mUpE no longer lists the guest room', () => {
     const est = readFileSync('src/world/estate.ts', 'utf8');
-    expect(est).toMatch(/roomRegion\(\['mUpR'\], \['reis', 'sterren'\]/);
+    expect(est).toMatch(/roomRegion\(\['mUpR'\], \['reis'\]/);
+    expect(est).toMatch(/roomRegion\(\['mUpS'\], \['sterren'\]/);
     expect(est).toMatch(/roomRegion\(\['mUpG'\], \['storage'\]/);
     expect(est).toMatch(/roomRegion\(\['mUpE'\], \['study', 'botanic', 'linen'\]/);
     const manor = readFileSync('src/world/manor.ts', 'utf8');
-    for (const ch of ['mUpR', 'mUpG']) expect(manor).toContain(`c.chunk = '${ch}';`);
+    for (const ch of ['mUpR', 'mUpS', 'mUpG']) expect(manor).toContain(`c.chunk = '${ch}';`);
   });
-  it('release: both D3-b2 regions name their only doorways; the older regions keep the rooms-only rule', () => {
+  it('release: the D3-b2 regions name their only doorways; the older regions keep the rooms-only rule', () => {
     const est = readFileSync('src/world/estate.ts', 'utf8');
-    expect(est).toMatch(/roomRegion\(\['mUpR'\], \['reis', 'sterren'\], Infinity, IN_FAR, \['door\.reis', 'door\.sterren'\]\)/);
+    expect(est).toMatch(/roomRegion\(\['mUpR'\], \['reis'\], Infinity, IN_FAR, \['door\.reis'\]\)/);
+    expect(est).toMatch(/roomRegion\(\['mUpS'\], \['sterren'\], Infinity, IN_FAR, \['door\.sterren'\]\)/);
     expect(est).toMatch(/roomRegion\(\['mUpG'\], \['storage'\], Infinity, IN_FAR, \['door\.storage'\]\)/);
-    expect(est.split('\n').filter((l) => /w\.roomRegion\(.*\['door\./.test(l)).length).toBe(2);
+    expect(est.split('\n').filter((l) => /w\.roomRegion\(.*\['door\./.test(l)).length).toBe(3);
   });
   it('release: a doorway region is drawn inside its rooms, or from outside only with an open doorway in view and in sight', async () => {
     const { World } = await import('../src/interactions/world');
@@ -193,8 +195,8 @@ describe('DEV-04D D3-b2: culled regions', () => {
     mesh.position.set(79, 4, -81); mesh.userData.chunk = 'mUpR'; w.scene.add(mesh);
     const plain = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial());
     plain.position.set(79, 4, -81); plain.userData.chunk = 'old'; w.scene.add(plain);
-    w.roomRegion(['mUpR'], ['reis', 'sterren'], Infinity, 30, ['door.reis']);
-    w.roomRegion(['old'], ['reis', 'sterren'], Infinity, 30);
+    w.roomRegion(['mUpR'], ['reis'], Infinity, 30, ['door.reis']);
+    w.roomRegion(['old'], ['reis'], Infinity, 30);
     let open = true; w.isOpen = () => open;
     const cam = new THREE.PerspectiveCamera(65, 915 / 412, 0.05, 200);
     const look = (x: number, y: number, z: number, tx: number, ty: number, tz: number) => { cam.position.set(x, y, -z); cam.lookAt(tx, ty, -tz); cam.updateMatrixWorld(); w.updateCulling(cam.position, cam); };
@@ -214,22 +216,8 @@ describe('DEV-04D D3-b2: culled regions', () => {
     expect(mesh.visible).toBe(false); expect(plain.visible).toBe(true);
     look(86.6, 5.05, 82.2, 79, 4.4, 82.2); // standing on that floor, the doorway is seen again
     expect(mesh.visible).toBe(true);
-    const rail = w.col.addBox(85.9, 86.0, 81, 83.5, 3.35, 6); // a movement barrier (solid, not an occluder) across the line
-    look(86.6, 5.05, 82.2, 79, 4.4, 82.2);
-    expect(mesh.visible).toBe(false);
-    rail.enabled = false; look(86.6, 5.05, 82.2, 79, 4.4, 82.2);
-    expect(mesh.visible).toBe(true);
     w.col.addBox(85.6, 85.8, 80, 84.5, 3.35, 6, { occludes: true }); look(86.6, 5.05, 82.2, 79, 4.4, 82.2); // a wall in the sight line
     expect(mesh.visible).toBe(false);
     w.dispose();
-  });
-  it('release: movement barriers block a segment only when asked (interaction line of sight is unchanged)', async () => {
-    const { CollisionWorld } = await import('../src/player/collision');
-    const col = new CollisionWorld({ minX: 0, maxX: 200, minZ: 0, maxZ: 200 });
-    col.addBox(10, 11, 0, 20, 0, 3); // solid, occludes: false
-    expect(col.segmentBlocked(5, 1, 10, 15, 1, 10)).toBe(false);
-    expect(col.segmentBlocked(5, 1, 10, 15, 1, 10, undefined, true)).toBe(true);
-    col.addEllipse(30, 10, 3, 3, 0, 1);
-    expect(col.segmentBlocked(25, 0.5, 10, 35, 0.5, 10, undefined, true)).toBe(false); // water never blocks
   });
 });

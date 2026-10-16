@@ -234,9 +234,10 @@ try {
   log('D2 paths: the lake bench memory is still reached and targeted past the heron; the grill front and the gas bottle stay reachable past the fire screen', reach.bench === 'mem.pond.bench' && reach.bbq === 'ok', JSON.stringify(reach));
 
   // ---------------------------------------------------------------- 9b. D3-b2 upstairs identity rooms
-  // culled regions: the Reis- / Sterrenkamer (mUpR) and the guest room (mUpG) are drawn while their room is visible and
-  // not from the hall or the library with their doors shut; the doors → protected memories / bed / bath routes stay
-  // walkable past the new furniture, and the memories are still targeted from a standing pose
+  // culled regions: the Reiskamer (mUpR), the Sterrenkamer (mUpS, split from mUpR at release) and the guest room (mUpG)
+  // are drawn while their room is visible and not from the hall or the library with their doors shut; with the doors
+  // open, from another room only while the doorway is seen through (in view, clear sight line); the doors → protected
+  // memories / bed / bath routes stay walkable past the new furniture, and the memories are still targeted
   const d3b2 = await E(page, () => {
     const g = window.__game, w = g.world, T = window.T, out = {};
     const vis = (ch) => w.scene.children.filter((o) => o.userData.chunk === ch).some((o) => o.visible);
@@ -244,14 +245,21 @@ try {
     const doors = ['door.reis', 'door.sterren', 'door.storage', 'door.bath'], was = Object.fromEntries(doors.map((d) => [d, g.state.open[d]]));
     for (const d of doors) g.state.open[d] = false;
     w.syncAll();
-    at(90, 0.15, 86, 0); out.hall = { R: vis('mUpR'), G: vis('mUpG') };
-    at(79.0, 0.15, 100.0, 180); out.library = { R: vis('mUpR'), G: vis('mUpG') };
+    at(90, 0.15, 86, 0); out.hall = { R: vis('mUpR'), S: vis('mUpS'), G: vis('mUpG') };
+    at(79.0, 0.15, 100.0, 180); out.library = { R: vis('mUpR'), S: vis('mUpS'), G: vis('mUpG') };
     at(80.0, 3.35, 83.0, -1.57); out.reis = vis('mUpR');
-    at(79.0, 3.35, 91.0, -1.57); out.sterren = vis('mUpR');
+    at(79.0, 3.35, 91.0, -1.57); out.sterren = vis('mUpS');
     at(103.0, 3.35, 102.0, 0); out.guest = vis('mUpG');
     for (const d of doors) g.state.open[d] = true;
     w.syncAll();
     for (let i = 0; i < 45; i++) g.tick(1 / 30);
+    // doors open: seen through the doorway from the gallery / walkway / corridor; not with the doorway behind the viewer
+    at(86.6, 3.35, 82.2, -1.57); out.openFacing = { R: vis('mUpR') };
+    at(86.6, 3.35, 90.2, -1.57); out.openFacing.S = vis('mUpS');
+    at(101.0, 3.35, 97.3, 0); out.openFacing.G = vis('mUpG');
+    at(86.6, 3.35, 82.2, 1.57); out.openAway = { R: vis('mUpR') };
+    at(86.6, 3.35, 90.2, 1.57); out.openAway.S = vis('mUpS');
+    at(101.0, 3.35, 97.3, Math.PI); out.openAway.G = vis('mUpG');
     const route = (k, start, pts, id) => {
       try { at(start[0], 3.35, start[1], start[2]); T.walk(pts); if (id) { T.lookAtId(id); out[k] = g.metrics().target; } else out[k] = 'ok'; } catch (e) { out[k] = String(e.message).slice(0, 120); }
     };
@@ -266,7 +274,8 @@ try {
     w.syncAll();
     return out;
   });
-  log('D3-b2 regions: Reis/Sterren (mUpR) and the guest room (mUpG) drawn in their rooms, culled from the hall and the library behind shut doors', !d3b2.hall.R && !d3b2.hall.G && !d3b2.library.R && !d3b2.library.G && d3b2.reis && d3b2.sterren && d3b2.guest, JSON.stringify(d3b2));
+  log('D3-b2 regions: Reis (mUpR), Sterren (mUpS) and the guest room (mUpG) drawn in their rooms, culled from the hall and the library behind shut doors', !d3b2.hall.R && !d3b2.hall.S && !d3b2.hall.G && !d3b2.library.R && !d3b2.library.S && !d3b2.library.G && d3b2.reis && d3b2.sterren && d3b2.guest, JSON.stringify(d3b2));
+  log('D3-b2 regions, doors open: drawn while the doorway is seen through, culled with it behind the viewer', d3b2.openFacing.R && d3b2.openFacing.S && d3b2.openFacing.G && !d3b2.openAway.R && !d3b2.openAway.S && !d3b2.openAway.G, JSON.stringify({ facing: d3b2.openFacing, away: d3b2.openAway }));
   log('D3-b2 routes: door → suitcase memory and → logbook (both targeted), → both beds, → the guest bed and wardrobe, → past the bath stay walkable', d3b2.suitcase === 'mem.reis.suitcase' && d3b2.logbook === 'mem.sterren.telescope' && ['reisBed', 'sterrenBed', 'guestBed', 'guestWardrobe', 'bath'].every((k) => d3b2[k] === 'ok'), JSON.stringify(d3b2));
 
   // ---------------------------------------------------------------- 9b. the salon gallery wall

@@ -248,11 +248,10 @@ export class CollisionWorld {
   }
 
   /** Is the 3D segment a→b blocked by an occluding collider (walls, closed doors)? `ignore` skips the target's own colliders. */
-  /** `solid` (opt-in): movement barriers (balustrades, furniture) block the segment too, not only occluders. */
-  segmentBlocked(ax: number, ay: number, az: number, bx: number, by: number, bz: number, ignore?: ReadonlySet<Collider>, solid = false): boolean {
+  segmentBlocked(ax: number, ay: number, az: number, bx: number, by: number, bz: number, ignore?: ReadonlySet<Collider>): boolean {
     let blocked = false;
     this.forEachNear(Math.min(ax, bx), Math.max(ax, bx), Math.min(az, bz), Math.max(az, bz), (c) => {
-      if (blocked || !c.enabled || !(c.occludes || (solid && c.solid)) || c.kind === 'ellipse' || ignore?.has(c)) return; // water (ellipse) never occludes
+      if (blocked || !c.enabled || !c.occludes || ignore?.has(c)) return; // water (ellipse) never occludes
       if (c.kind === 'box') {
         if (segBox(ax, ay, az, bx, by, bz, c)) blocked = true;
       } else {
