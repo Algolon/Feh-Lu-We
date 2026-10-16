@@ -214,8 +214,22 @@ describe('DEV-04D D3-b2: culled regions', () => {
     expect(mesh.visible).toBe(false); expect(plain.visible).toBe(true);
     look(86.6, 5.05, 82.2, 79, 4.4, 82.2); // standing on that floor, the doorway is seen again
     expect(mesh.visible).toBe(true);
+    const rail = w.col.addBox(85.9, 86.0, 81, 83.5, 3.35, 6); // a movement barrier (solid, not an occluder) across the line
+    look(86.6, 5.05, 82.2, 79, 4.4, 82.2);
+    expect(mesh.visible).toBe(false);
+    rail.enabled = false; look(86.6, 5.05, 82.2, 79, 4.4, 82.2);
+    expect(mesh.visible).toBe(true);
     w.col.addBox(85.6, 85.8, 80, 84.5, 3.35, 6, { occludes: true }); look(86.6, 5.05, 82.2, 79, 4.4, 82.2); // a wall in the sight line
     expect(mesh.visible).toBe(false);
     w.dispose();
+  });
+  it('release: movement barriers block a segment only when asked (interaction line of sight is unchanged)', async () => {
+    const { CollisionWorld } = await import('../src/player/collision');
+    const col = new CollisionWorld({ minX: 0, maxX: 200, minZ: 0, maxZ: 200 });
+    col.addBox(10, 11, 0, 20, 0, 3); // solid, occludes: false
+    expect(col.segmentBlocked(5, 1, 10, 15, 1, 10)).toBe(false);
+    expect(col.segmentBlocked(5, 1, 10, 15, 1, 10, undefined, true)).toBe(true);
+    col.addEllipse(30, 10, 3, 3, 0, 1);
+    expect(col.segmentBlocked(25, 0.5, 10, 35, 0.5, 10, undefined, true)).toBe(false); // water never blocks
   });
 });
