@@ -264,9 +264,15 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   // Keep the full-height structural wall below the kitchen floor so the basement enclosure remains sealed.
   wall(c, 'z', 95, 92, 109.6, BF, GF, { ...P, trim: false });
   wall(c, 'z', 95, 92, 109.6, GF, CEIL, { ...P, openings: [{ at: 96.55, w: 1.65, h: 2.45 }] }); // hal | kitchen portal; basement enclosure beyond Z98 untouched
-  // Shallow oak casing, without a door or any new collider in the clear opening.
-  for (const z of [95.725, 97.375]) box(c.b, k.M.wood, '#705036', 95, GF + 1.21, z, 0.21, 2.42, 0.075, { chunk: c.chunk });
+  // PORTAL-R01-R02: wall() already makes the full-height oak architrave legs.
+  // The previous extra posts used box()'s base-height argument as if it were a centre height
+  // (GF + 1.21, height 2.42), which made them extend above the doorway lintel.
+  // Keep only the shallow head casing: no stray upright strips above the frame.
   box(c.b, k.M.wood, '#705036', 95, GF + 2.47, 96.55, 0.21, 0.095, 1.79, { chunk: c.chunk });
+  // Thin, visual-only warm-stone threshold across the wood/tile seam, flush enough to walk across.
+  // 1.65 m between jambs; 0.42 m deep across the wall; 22 mm proud of the two floor finishes.
+  // No collider or floor-height changes: the new circulation loop and sealed basement remain untouched.
+  boxMM(c.b, k.M.stone, '#a99b83', 94.79, 95.21, GF + 0.003, GF + 0.025, 95.725, 97.375, { chunk: c.chunk, uv: 0.7, jitter: 0 });
   wall(c, 'x', 92, 95, 107.6, GF, CEIL, { ...P, openings: [{ at: 101, w: 2.0, h: 2.5 }] }); // dining | kitchen
   // basement stairwell enclosure (west side has the sealed door; walls run down to the basement floor)
   wall(c, 'z', 92, 98, 104.8, GF, CEIL, { ...P, openings: [{ at: 98.9, w: 1.0, h: 2.3 }] });
