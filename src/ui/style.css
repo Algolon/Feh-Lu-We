@@ -227,3 +227,18 @@ body.reduced-motion * { transition: none !important; animation: none !important;
 @media (max-width: 520px) { .b01-slots .pslot { min-width: 96px; } .b01-slots .slot-empty { min-width: 96px; } .tabs { flex-wrap: wrap; } }
 .b01-slots .pslot-label svg { width: 56px; height: 56px; }
 .zoombox:not(.zoomed) .slice-art { max-height: 46vh; width: auto; max-width: 100%; margin: 0 auto; }
+
+/* BOSLUST-R04: true in-world inspect; the 3D lock stays fully visible.
+   No parchment modal, no blur/dimmer and no artificial digit buttons. */
+body.boslust-inspecting #hud > :not(#boslust-focus):not(#toast) { visibility: hidden; }
+body.boslust-inspecting #hud #toast { visibility: visible; max-width: min(80vw, 420px); bottom: calc(72px + var(--safe-b)); }
+#boslust-focus { position: absolute; inset: 0; pointer-events: none; z-index: 8; color: #f4e8d2; font: 500 13px/1.35 var(--wa-sans, sans-serif); }
+#boslust-focus .boslust-touchplane { position: absolute; inset: 0; pointer-events: auto; touch-action: none; user-select: none; -webkit-user-select: none; cursor: pointer; }
+#boslust-focus .boslust-focus-head { position: absolute; top: calc(18px + var(--safe-t)); left: calc(16px + var(--safe-l)); right: calc(16px + var(--safe-r)); display: flex; align-items: center; justify-content: space-between; gap: 16px; pointer-events: none; text-shadow: 0 1px 6px #10100c; }
+#boslust-focus .boslust-back { pointer-events: auto; touch-action: manipulation; min-width: 88px; min-height: 48px; color: #f4e8d2; background: rgba(24,23,19,.70); border: 1px solid rgba(211,176,107,.72); border-radius: 10px; font: inherit; font-weight: 650; cursor: pointer; }
+#boslust-focus .boslust-back:focus-visible { outline: 3px solid #efc981; outline-offset: 2px; }
+#boslust-focus .boslust-focus-foot { position: absolute; bottom: calc(16px + var(--safe-b)); left: 50%; transform: translateX(-50%); width: min(92vw, 660px); display: flex; flex-direction: column; align-items: center; gap: 5px; pointer-events: none; text-align: center; color: #f4e8d2; text-shadow: 0 1px 5px black; }
+#boslust-focus .boslust-hint, #boslust-focus .boslust-key-hint { padding: 4px 10px; background: rgba(22,22,18,.62); border-radius: 7px; }
+#boslust-focus .boslust-key-hint { display: none; font-size: 11px; }
+@media (pointer: fine) { #boslust-focus .boslust-key-hint { display: inline; } }
+@media (max-width: 550px) { #boslust-focus .boslust-focus-head { top: calc(10px + var(--safe-t)); } #boslust-focus .boslust-focus-foot { bottom: calc(12px + var(--safe-b)); font-size: 12px; } }
