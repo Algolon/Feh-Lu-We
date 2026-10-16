@@ -494,7 +494,7 @@ export class LightPool {
   static readonly DWELL_FULL = 2.0;
   private dwell = new Map<string, number>();
   private sinceRank = 0;
-  update(dt: number, t: number, lamps: LampSource[], eye: THREE.Vector3, rooms?: RoomGraph, isOpen: (door: string) => boolean = () => true, view?: LightView) {
+  update(dt: number, t: number, lamps: LampSource[], eye: THREE.Vector3, rooms?: RoomGraph, isOpen: (door: string) => boolean = () => true, view?: LightView, visibleRooms?: ReadonlySet<string>) {
     this.timer -= dt;
     this.sinceRank += dt;
     if (this.timer <= 0) {
@@ -509,7 +509,10 @@ export class LightPool {
       };
       this.here = rooms ? rooms.roomAt(eye.x, eye.y - 0.8, -eye.z) : 'out';
       const rel = rooms ? rooms.relevant(this.here, isOpen) : null; // one step + outdoor lamps through windows
-      const vis = rooms ? rooms.visible(this.here, isOpen, 2) : null; // what the renderer can show (no windows)
+      // Share the renderer's portal-aware visibility. The old two-step graph could
+      // omit a lamp in the room the player was already looking into. Crossing
+      // the threshold then made it eligible in one frame, causing a light pop.
+      const vis = visibleRooms ?? (rooms ? rooms.visible(this.here, isOpen, 2) : null);
       const byId = new Map<string, LampSource>();
       const cands: LampCandidate[] = [];
       for (const l of lamps) {
@@ -530,7 +533,11 @@ export class LightPool {
         cands.push({ id: l.id, room, d, w });
       }
       for (const [id, v] of this.dwell) if (!seen.has(id)) { const nv = v - elapsed * 0.5; if (nv <= 0) this.dwell.delete(id); else this.dwell.set(id, nv); }
-      this.want = chooseLamps(cands, this.here, this.want, this.lights.length);
+      // Room membership is a categorical label, but illumination is continuous
+      // across an open arch. Keep a very small own-room tie breaker rather than
+      // the 2.5 m penalty that reshuffled otherwise identical candidates at Z=92.
+      // The finite light budget, view priority and existing hysteresis are kept.
+      this.want = chooseLamps(cands, this.here, this.want, this.lights.length, 2.5, 0.35);
       this.lookup = byId;
     }
     for (let i = 0; i < this.lights.length; i++) {

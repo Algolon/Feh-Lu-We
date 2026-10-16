@@ -875,7 +875,7 @@ export class Game implements GameApi {
       // DEV-04C-R: the pool ranks a source in view + line of sight first (cone: half the horizontal FOV + 10°)
       const half = Math.atan(Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2)) * this.camera.aspect) + THREE.MathUtils.degToRad(10);
       this.lightView.dir.copy(this.camera.getWorldDirection(this.lightView.dir)); this.lightView.cosHalf = Math.cos(Math.min(Math.PI * 0.95, half));
-      this.pool.update(dt, this.time, w.lamps, this.camera.position, this.extras.rooms, (d) => this.state.open[d] === true, this.lightView);
+      this.pool.update(dt, this.time, w.lamps, this.camera.position, this.extras.rooms, (d) => this.state.open[d] === true, this.lightView, w.visibleRooms);
     }
     tickFires(this.time, this.settings.reducedMotion);
     const targetDusk = Math.min(1, (solvedCount(this.state) / REQUIRED_COUNT) * 0.85 + (this.state.finished ? 0.15 : 0));
