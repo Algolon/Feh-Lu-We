@@ -13,7 +13,10 @@ export type TreeArt = 'recovered' | 'oak-r03' | 'trees-r03';
 const requestedTreeArt = typeof location === 'undefined' ? null : new URLSearchParams(location.search).get('treeart');
 export const TREE_ART: TreeArt = requestedTreeArt === 'oak-r03' || requestedTreeArt === 'trees-r03' ? requestedTreeArt : 'recovered';
 /** Next review step: shrubs and dead wood, alongside the accepted tree study. */
-export const VEGETATION_DETAIL = typeof location !== 'undefined' && new URLSearchParams(location.search).get('vegdetail') === 'r04';
+const requestedVegetationDetail = typeof location === 'undefined' ? null : new URLSearchParams(location.search).get('vegdetail');
+export const VEGETATION_DETAIL = requestedVegetationDetail === 'r04' || requestedVegetationDetail === 'r05';
+/** Ground-cover study builds on the accepted shrubs and timber. */
+export const GROUND_DETAIL = requestedVegetationDetail === 'r05';
 export const LEAF_FAMILIES = ['birch', 'oak', 'beech', 'pine', 'hazel', 'holly', 'cypress', 'hedge'] as const;
 export type LeafFamily = typeof LEAF_FAMILIES[number];
 export interface SprayCluster { c: THREE.Vector3; r: [number, number, number]; seed: number; val: number }

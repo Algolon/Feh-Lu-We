@@ -11,7 +11,7 @@ import { softBox } from './artkit';
 import { ConvexGeometry } from 'three/examples/jsm/geometries/ConvexGeometry.js';
 import { mergeGeometries, mergeVertices, toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { mulberry32, type Rng } from '../core/rng';
-import { NATURE_STYLE, FULL_NATURE, TREE_ART, VEGETATION_DETAIL, foliageSprays, foliageAtlas, SPRAY_SAMPLE, type TreeArt, type SprayPalette } from './foliageStyle';
+import { NATURE_STYLE, FULL_NATURE, TREE_ART, VEGETATION_DETAIL, GROUND_DETAIL, foliageSprays, foliageAtlas, SPRAY_SAMPLE, type TreeArt, type SprayPalette } from './foliageStyle';
 
 // ------------------------------------------------------------------------------------------------ primitives
 /**
@@ -1093,13 +1093,40 @@ export function plantModel(kind: PlantKind, variant: number): THREE.BufferGeomet
 /** VEG-R02 understory: authored broad shapes with a dark stool, curved midribs and lighter growing tips.
  * All variants stay vertex-coloured and share the existing range-faded plant batch, without alpha overdraw.
  */
-export function referencePlantModel(kind: PlantKind, variant: number): THREE.BufferGeometry {
+export function referencePlantModel(kind: PlantKind, variant: number, detail = GROUND_DETAIL): THREE.BufferGeometry {
   const v = variant % PLANT_VARIANTS[kind], r = mulberry32(4201 + v * 71 + Object.keys(PLANT_VARIANTS).indexOf(kind) * 417), t = new Tris();
-  const green = C('#3c6235'), light = C('#88a856'), dark = C('#294b30');
+  // Species retain their own flower colours; foliage warms in coherent whole-plant variants.
+  const palette = detail ? (kind === 'grass'
+    ? [['#46663c','#9fac68','#2e4e36'],['#365b40','#7fa46b','#234535'],['#686d3e','#b9ac6a','#3f5636'],['#4b7148','#9fb873','#2c503c']][v]
+    : [['#426d43','#91b568','#284f39'],['#507b45','#a4bb70','#32583c'],['#365e43','#7da16a','#254b39']][v]) : ['#3c6235','#88a856','#294b30'];
+  const [green,light,dark] = palette.map(C);
   const blade = (p: THREE.Vector3, d: THREE.Vector3, L: number, W: number, rise: number, a = green, b = light) => {
     const s=V(-d.z,0,d.x), mid=p.clone().addScaledVector(d,L*.48).add(V(0,rise,0)), tip=p.clone().addScaledVector(d,L).add(V(0,rise*.48,0));
-    t.tri(p,mid.clone().addScaledVector(s,W),tip,a,b,b);
-    t.tri(p,tip,mid.clone().addScaledVector(s,-W),a,b,mix(a,b,.65));
+    if (detail) {
+      // Six-point outline rounds the shoulders around a raised midrib.
+      const ridge=mid.clone().add(V(0,W*.32,0));
+      const edge=(u:number,sign:number,w:number)=>p.clone().addScaledVector(d,L*u).addScaledVector(s,sign*W*w).add(V(0,Math.sin(u*Math.PI*.8)*rise,0));
+      const ring=[p,edge(.28,1,.78),edge(.68,1,.87),tip,edge(.68,-1,.87),edge(.28,-1,.78)];
+      for(let i=0;i<ring.length;i++){
+        const colour=mix(a,b,i<3?.72:.42);
+        t.tri(ring[i],ring[(i+1)%ring.length],ridge,colour,colour,b);
+      }
+    } else {
+      t.tri(p,mid.clone().addScaledVector(s,W),tip,a,b,b);
+      t.tri(p,tip,mid.clone().addScaledVector(s,-W),a,b,mix(a,b,.65));
+    }
+  };
+  const flowerBell = (p: THREE.Vector3, dir: THREE.Vector3, len: number, rad: number, c0: THREE.Color, c1: THREE.Color, n: number) => {
+    if(!detail){bell(t,p,dir,len,rad,c0,c1,n);return;}
+    const axis=dir.clone().normalize(),side=V(0,1,0).cross(axis).normalize();
+    if(side.lengthSq()<.1)side.set(1,0,0);
+    const across=axis.clone().cross(side);
+    const ring=(u:number,radius:number,q:number)=>p.clone().addScaledVector(axis,len*u).addScaledVector(side,Math.cos(q)*radius).addScaledVector(across,Math.sin(q)*radius);
+    for(let i=0;i<n;i++){
+      const a=i/n*Math.PI*2,b=(i+1)/n*Math.PI*2;
+      const a0=ring(.42,rad*.72,a),b0=ring(.42,rad*.72,b),a1=ring(.82,rad,a),b1=ring(.82,rad,b),a2=ring(1,rad*.86,a),b2=ring(1,rad*.86,b);
+      t.tri(p,a0,b0,c0,c1,c1);t.quad(a0,a1,b1,b0,c1,c1);t.quad(a1,a2,b2,b1,c1,mix(c1,C('#fff3d5'),.2));
+    }
   };
   if (kind === 'fern') {
     const n=[7,9,6][v], length=[.70,.85,.55][v];
@@ -1108,12 +1135,13 @@ export function referencePlantModel(kind: PlantKind, variant: number): THREE.Buf
       const at=(u:number)=>d.clone().multiplyScalar(L*u).add(V(0,Math.sin(u*Math.PI*.85)*(.42+r()*0.01)-u*u*.08,0));
       // Sample the arch once; foliage construction never changes another model's random stream.
       const pts=Array.from({length:7},(_,i)=>at(i/6));stem(t,pts,.005,dark,light);
-      // A continuous folded frond keeps the plant readable at player height; the pinnae cut its edge.
-      leafShape(t,V(0,0,0),d,L,.075,.38,dark,light,4);
-      for(let k=1;k<6;k++)for(const sign of [-1,1]){
-        const u=k/6,p=pts[k], span=L*.25*Math.sin(u*Math.PI)*(.95-u*.2);
-        const outward=side.clone().multiplyScalar(sign).addScaledVector(d,.3).normalize();
-        blade(p,outward,span,.035*(1-u*.65),-.025,green,mix(green,light,.4+u*.6));
+      // The review fern exposes its feathered edge around a narrow central blade.
+      leafShape(t,V(0,0,0),d,L,detail?.026:.075,.38,dark,light,4);
+      const pinnae=detail?9:6;
+      for(let k=1;k<pinnae;k++)for(const sign of [-1,1]){
+        const u=k/pinnae,segment=Math.min(5,Math.floor(u*6)),p=detail?pts[segment].clone().lerp(pts[segment+1],u*6-segment):pts[k],span=L*(detail?.31:.25)*Math.sin(u*Math.PI)*(.95-u*.2);
+        const outward=side.clone().multiplyScalar(sign).addScaledVector(d,detail?.45:.3).normalize();
+        blade(p,outward,span*(detail?1.12:1),.035*(1-u*.65),detail?.018:-.025,green,mix(green,light,.4+u*.6));
       }
       blade(pts[5],d,L*.17,.023,.025,green,light);
     }
@@ -1123,9 +1151,19 @@ export function referencePlantModel(kind: PlantKind, variant: number): THREE.Buf
       const a=i*2.39996+r()*.5,d=V(Math.cos(a),0,Math.sin(a)),s=V(-d.z,0,d.x), h=H*(.65+r()*.55),lean=(v===3?.38:.22)*(.6+r());
       const base=d.clone().multiplyScalar(.02+r()*.06);
       const at=(u:number,w:number)=>base.clone().addScaledVector(d,lean*u*u).add(V(0,h*u*(1-(v===3?.25:.08)*u),0)).addScaledVector(s,w*width*(1-u));
-      for(let k=0;k<3;k++){
-        const u=k/3,z=(k+1)/3,c0=mix(dark,light,u),c1=mix(dark,light,z);
-        t.quad(at(u,-1),at(u,1),at(z,1),at(z,-1),c0,c1);
+      if(detail){
+        // Three bent sections, each folded along the midrib, without extra alpha layers.
+        const fold=(u:number,w:number)=>at(u,w).add(V(0,(1-Math.abs(w))*width*.22*Math.sin(Math.PI*u),0));
+        for(let k=0;k<3;k++){
+          const u=k/3,z=(k+1)/3,c0=mix(dark,light,u*.85),c1=mix(dark,light,z*.85);
+          t.quad(fold(u,-1),fold(u,0),fold(z,0),fold(z,-1),c0,c1);
+          t.quad(fold(u,0),fold(u,1),fold(z,1),fold(z,0),mix(c0,green,.18),mix(c1,green,.18));
+        }
+      }else{
+        for(let k=0;k<3;k++){
+          const u=k/3,z=(k+1)/3,c0=mix(dark,light,u),c1=mix(dark,light,z);
+          t.quad(at(u,-1),at(u,1),at(z,1),at(z,-1),c0,c1);
+        }
       }
     }
     if(v===2)for(let i=0;i<3;i++){
@@ -1139,28 +1177,37 @@ export function referencePlantModel(kind: PlantKind, variant: number): THREE.Buf
       stem(t,[V(0,0,0),end.clone().multiplyScalar(.5),end],.005,C('#486448'),green);
       for(let k=0;k<4;k++){
         const p=end.clone().multiplyScalar(.36+k*.18),dir=d.clone().applyAxisAngle(UP,k%2?1.2:-1.2);
-        blade(p,dir,.085,.035,.025,C('#365d43'),C('#7ba06a'));
+        blade(p,dir,detail?.105:.085,detail?.043:.035,.025,detail?green:C('#365d43'),detail?light:C('#7ba06a'));
       }
-      if(v&&i%2===0)bell(t,end.clone().add(V(0,-.02,0)),V(0,-1,0),.032,.018,C('#26394d'),C('#566583'),5);
+      if(v&&i%2===0){
+        const p=end.clone().add(V(0,-.035,0));
+        if(detail){
+          const top=p.clone().add(V(0,.019,0)),bottom=p.clone().add(V(0,-.019,0));
+          for(let j=0;j<4;j++){
+            const a=j*Math.PI/2,b=(j+1)*Math.PI/2,l=p.clone().add(V(Math.cos(a)*.019,0,Math.sin(a)*.019)),r=p.clone().add(V(Math.cos(b)*.019,0,Math.sin(b)*.019));
+            t.tri(top,l,r,C('#40546a'));t.tri(bottom,r,l,C('#253c50'));
+          }
+        }else bell(t,end.clone().add(V(0,-.02,0)),V(0,-1,0),.032,.018,C('#26394d'),C('#566583'),5);
+      }
     }
   } else if(kind==='foxglove') {
-    for(let i=0;i<5;i++){const a=i*1.256+r()*.2;leafShape(t,V(0,.015,0),V(Math.cos(a),0,Math.sin(a)),.28+r()*.08,.065,.065,dark,light,3);}
+    for(let i=0;i<5;i++){const a=i*1.256+r()*.2;leafShape(t,V(0,.015,0),V(Math.cos(a),0,Math.sin(a)),.28+r()*.08,detail?.082:.065,detail?.095:.065,dark,light,3);}
     const spikes=v===2?2:1;
     for(let j=0;j<spikes;j++){
       const h=(v===1?1.2:1.0)-j*.25,end=V(.08+j*.11,h,.04),base=V(j*.06,0,0);
       stem(t,[base,V(.015,h*.5,0),end],.009,green,light);
       for(let k=0;k<10;k++){
         const u=.38+k*.058,p=base.clone().lerp(end,u),a=.2+(k%2)*.65+j*2,dir=V(Math.cos(a),-.7,Math.sin(a));
-        bell(t,p,dir,.105*(1-k*.045),.042*(1-k*.035),C('#854e88'),C('#dc9dce'),6);
+        flowerBell(p,dir,.105*(1-k*.045),.042*(1-k*.035),C('#854e88'),C('#dc9dce'),6);
       }
     }
   } else if(kind==='lily') {
-    for(let i=0;i<(v===1?3:2);i++){const a=i*2.6+r()*.3;leafShape(t,V(0,0,0),V(Math.cos(a),0,Math.sin(a)),.33,.065,.055,C('#315b3b'),C('#83aa63'),3,.7);}
+    for(let i=0;i<(v===1?3:2);i++){const a=i*2.6+r()*.3;leafShape(t,V(0,0,0),V(Math.cos(a),0,Math.sin(a)),.33,detail?.09:.065,detail?.10:.055,detail?dark:C('#315b3b'),detail?light:C('#83aa63'),detail?4:3,.7);}
     const d=V(Math.cos(v),0,Math.sin(v)),pts=[V(0,0,0),d.clone().multiplyScalar(.02).add(V(0,.24,0)),d.clone().multiplyScalar(.13).add(V(0,.29,0)),d.clone().multiplyScalar(.22).add(V(0,.22,0))];
     stem(t,pts,.004,green,light);
     for(let k=0;k<5+v;k++){
       const u=.4+k/(5+v)*.6,i=Math.min(2,Math.floor(u*3)),p=pts[i].clone().lerp(pts[i+1],u*3-i);
-      bell(t,p,V(0,-1,0),.028,.018,C('#d3ddca'),C('#fff7e7'),6);
+      flowerBell(p,V(0,-1,0),.028,.018,C('#d3ddca'),C('#fff7e7'),6);
     }
   } else {
     for(let i=0;i<[2,3,5][v];i++){
@@ -1169,7 +1216,7 @@ export function referencePlantModel(kind: PlantKind, variant: number): THREE.Buf
       for(let k=0;k<3;k++)blade(base.clone().add(V(0,h*.5,0)),V(Math.cos(a+k*2.1),0,Math.sin(a+k*2.1)),.075,.035,.012,green,light);
       for(let k=0;k<6;k++){
         const d=V(Math.cos(a+k*Math.PI/3),0,Math.sin(a+k*Math.PI/3));
-        blade(top,d,.048,.022,.017,C('#e0cc65'),v===2?C('#f0dfe9'):C('#fff7e9'));
+        blade(top,d,.048,.022,.017,detail?C('#e7e2c9'):C('#e0cc65'),detail?C('#fff8e8'):v===2?C('#f0dfe9'):C('#fff7e9'));
       }
       bell(t,top.clone().add(V(0,.008,0)),UP,.01,.014,C('#c2a142'),C('#f0d074'),6);
     }
