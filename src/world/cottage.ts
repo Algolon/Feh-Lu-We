@@ -17,6 +17,8 @@ import { mulberry32 } from '../core/rng';
 import { makeDoor, makeLamp, makeInspect, place } from '../interactions/props';
 import { COTTAGE, COTTAGE_TERRACE, COTTAGE_PAD, COTTAGE_LANDING, COTTAGE_FLOOR, COTTAGE_PAD_Y, COTTAGE_CANOPY } from './layout';
 import { terrainHeight } from './terrain';
+import { COTTAGE_WINDOWS } from './cottageClearWindows';
+import { buildCottageGlazing } from './cottageGlazing';
 import { onRoute } from './footprints';
 
 export function buildCottage(w: World, g: GameApi, c: Ctx) {
@@ -25,11 +27,14 @@ export function buildCottage(w: World, g: GameApi, c: Ctx) {
   const CX = (X0 + X1) / 2, CZ = (Z0 + Z1) / 2, MID = Z0 + 3;
   const B = COTTAGE_PAD_Y, Y = COTTAGE_FLOOR, TOPW = B + 3.3;
   const white = { mat: k.M.plaster, color: '#fbf6ec', t: 0.3, uv: 2, winStyle: 'cottage' as const };
-  const win = (at: number) => ({ at, w: 0.9, h: 1.2, sill: 0.95 });
+  const win = (at: number) => ({ at, w: 0.9, h: 1.2, sill: 0.95, transparent: true });
   wall(c, 'x', Z0 + 0.15, X0, X1, B, TOPW, { ...white, exterior: -1, openings: [{ at: CX, w: 1.0, h: 2.4 }], windows: [win(X0 + 2.2), win(X1 - 2.2)] });
   wall(c, 'x', Z1 - 0.15, X0, X1, B, TOPW, { ...white, exterior: 1, windows: [win(X0 + 2.5), win(X1 - 2.5)] });
   wall(c, 'z', X0 + 0.15, Z0 + 0.3, Z1 - 0.3, B, TOPW, { ...white, exterior: -1, windows: [win(Z0 + 5.3)] });
   wall(c, 'z', X1 - 0.15, Z0 + 0.3, Z1 - 0.3, B, TOPW, { ...white, exterior: 1, windows: [win(Z0 + 1.7), win(Z0 + 5.6)] });
+  // WINDOW-R03: seven one-sheet, real wall apertures and shallow whitewashed room
+  // reveals; exterior pale sashes, shutters and terracotta ledges keep their identity.
+  for (const site of COTTAGE_WINDOWS) buildCottageGlazing(w,c,site);
   // DEV-03: louvred shutters folded back beside the windows (frame + slats), hung on the whitewashed wall; a painted
   // cobalt barra (plinth band) round the house, as on the Portuguese coast
   const shutter = (x: number, z: number, along: 'x' | 'z', out: number) => {
