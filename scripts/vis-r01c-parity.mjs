@@ -48,6 +48,13 @@ function run(tag, flags) {
 const legacy = run('c1-legacy', `grovelod=${profile}`);
 const shared = run('c1-shared', `grovelod=${profile}&veglodshared=1`);
 const violations = [];
+// Guard against a false-green comparison in which both URLs accidentally used the old controller.
+const implOf = data => data.modes.views?.[0]?.groveLodImpl
+  ?? data.modes.walk?.frames?.[0]?.groveLodImpl;
+if (implOf(legacy) !== 'legacy-r01b')
+  violations.push({ name: 'legacy-controller-active', found: implOf(legacy) });
+if (implOf(shared) !== 'shared-c1')
+  violations.push({ name: 'shared-controller-active', found: implOf(shared) });
 
 function compare(name, a, b) {
   if (JSON.stringify(a) !== JSON.stringify(b))
