@@ -29,7 +29,7 @@ describe('FRONT-R01 horizontal timber entrance door',()=>{
     expect(closed.min.y).toBeGreaterThanOrEqual(-.001);
     expect(closed.max.y).toBeLessThanOrEqual(2.621);
     expect(closed.max.z-closed.min.z).toBeLessThan(.27);
-    expect(closed.min.z).toBeLessThan(-.11); // actual exterior knocker projection
+    expect(closed.max.z).toBeGreaterThan(.11); // negative plan Z faces outside (+Three.js Z)
     expect(leaf.children.length).toBeGreaterThan(0);
     expect(leaf.children.every(o=>o instanceof THREE.Mesh)).toBe(true);
     for(const o of leaf.children){
