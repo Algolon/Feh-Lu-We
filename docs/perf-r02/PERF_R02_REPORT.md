@@ -354,6 +354,23 @@ Gameplay contracts:
 
 On the candidate: **7/7 passed** (walkway max 636,855 / 130 calls; well max 679,152 / 142 calls; max call difference between same-history runs 1).
 
+### 9.4 Production moved during this iteration
+
+At handover, production is **`5cedaee`**, 220 commits after the measured baseline `436e106`: window rollout,
+exterior and interior greenery, the lion knocker, the BOSLUST lock, foliage and ground textures, and more.
+
+- **Merge:** `git merge-tree` of this branch with `5cedaee` is clean, and production's `world.ts` / `estate.ts`
+  changes do not touch region or doorway logic.
+- **Measurements:** the numbers in this report describe `436e106` and the candidate built on it. Production's new
+  geometry adds to every view.
+- **Before merging:**
+  - merge production in;
+  - rerun `npm run perf:visibility:smoke` and the hotspot sweep
+    (`DOORS=open MODES=A,B PATHS=hall,well,stair node scripts/perf/visibility-harness.mjs …`) on both the merged
+    tree and `5cedaee`;
+  - rerun the pixel proof for `mUpE` / `mLib` (`scripts/perf/visibility-lossless.mjs`);
+  - rerun the gates.
+
 ## 10. Interface constraints and recommendations
 
 - **Measure with the harness, never with an out-of-order `World.updateCulling`.** For a fully updated frame, force the
