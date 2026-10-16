@@ -128,6 +128,10 @@ export function wall(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number,
     const sides: (1 | -1)[] = wdef.side ? [wdef.side] : ext ? [ext as 1 | -1, (-ext) as 1 | -1] : [1, -1];
     for (const s of sides) {
       const outside = ext !== 0 && s === ext;
+      // WINDOW-R01-R02: a genuine clear pane has ONE exterior sash. Its interior side
+      // is finished with plaster reveals and a sill at the actual wall depth (manor.ts),
+      // never a second decorative windowAt frame with duplicate mullions and bars.
+      if (wdef.transparent && !outside) continue;
       windowAt(c, axis, f + s * (t / 2 + (o.skin && !outside ? 0.03 : 0)), s, wdef.at, y0 + (wdef.sill ?? 0.9), wdef.w ?? 1.1, wdef.h ?? 1.5, outside, { kind: outside ? o.winStyle ?? 'plain' : 'plain', transparent: wdef.transparent });
     }
   }
