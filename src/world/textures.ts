@@ -121,7 +121,7 @@ export function makeTextures() {
     }
     T.wood = tex(c);
   }
-  { // WINDOW-R01-R04: one continuous, stained oak window board rather than repeated plank tiles.
+  { // WINDOW-R02-R03: dark, warm mahogany window board (not the same warm oak as the floor).
     // Grain runs horizontally along the width of the sill. A dedicated procedural canvas
     // leaves other wood in the house unchanged and needs no downloaded assets.
     const [c, x] = canvas(512);
@@ -138,9 +138,9 @@ export function makeTextures() {
       const noise = (r() - 0.5) * 6;
       const shift = growth - pore + fine + noise;
       const i = (y * 512 + px) * 4;
-      pixels.data[i] = Math.round(137 + shift * 0.90);
-      pixels.data[i + 1] = Math.round(99 + shift * 0.76);
-      pixels.data[i + 2] = Math.round(68 + shift * 0.60);
+      pixels.data[i] = Math.round(107 + shift * 1.02);
+      pixels.data[i + 1] = Math.round(51 + shift * 0.61);
+      pixels.data[i + 2] = Math.round(39 + shift * 0.54);
       pixels.data[i + 3] = 255;
     }
     x.putImageData(pixels, 0, 0);
@@ -153,7 +153,7 @@ export function makeTextures() {
         const yy = y + Math.sin(px * 0.015 + phase) * (1.2 + r() * 2);
         if (px === 0) x.moveTo(px, yy); else x.lineTo(px, yy);
       }
-      x.strokeStyle = i % 4 === 0 ? 'rgba(65,39,24,0.27)' : 'rgba(69,44,27,0.13)';
+      x.strokeStyle = i % 4 === 0 ? 'rgba(35,14,13,0.33)' : 'rgba(41,18,16,0.18)';
       x.lineWidth = i % 5 === 0 ? 1.8 : 0.8;
       x.stroke();
     }
