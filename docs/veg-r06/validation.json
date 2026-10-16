@@ -1,0 +1,52 @@
+{
+  "baseCommit": "0370a05c9c7b326f15fa809d6f8063f03b91fffc",
+  "previewQuery": "?vegstyle=woodland-r02&treeart=trees-r03&vegdetail=r05&groundart=r06",
+  "sourceHashes": {
+    "src/world/groundTexture.ts": "89a1f7052816845a8cdf1fd30356755ef581986064aafff7479ab99ada99c703",
+    "src/world/textures.ts": "5a23145a53b1e88fb0cad919b4c35edb36a9c3320d40c878f1c2dd432365ae51",
+    "scripts/veg-r06-review.mjs": "68ef72f2b6d791a7cbf23a1f0624a9d4d9e8d06e75c34d6a99513e9cd44116a9",
+    "tests/groundTexture.test.ts": "ab7382f7487ffa67ad56a24ad2241d82b206e4dbda4a63de5b97f615ed9b258b"
+  },
+  "paintedTextureStats": [
+    {
+      "kind": "grass",
+      "detail": true,
+      "repeat": 1,
+      "width": 512,
+      "height": 512,
+      "meanRGB": [
+        143.3069839477539,
+        178.97488021850586,
+        90.41902923583984
+      ]
+    },
+    {
+      "kind": "dirt",
+      "detail": true,
+      "repeat": 1,
+      "width": 512,
+      "height": 512,
+      "meanRGB": [
+        184.50774002075195,
+        164.60824584960938,
+        133.7100372314453
+      ]
+    }
+  ],
+  "checks": {
+    "unitTests": 311,
+    "unitCommand": "npm test -- --maxWorkers=1 --testTimeout=30000",
+    "budgetPolicyTests": 4,
+    "typecheck": "pass",
+    "build": "pass",
+    "renderRecords": 28,
+    "pageShaderWebGLErrors": 0,
+    "drawCallAndTriangleParityWithR05": true,
+    "lowCameraTriangleParity": true,
+    "placementParity": true,
+    "paintedAlbedoCalibrationPass": true,
+    "physicalDeviceTested": false,
+    "portraitRerun": false,
+    "fullPuzzleRouteTested": false
+  }
+}

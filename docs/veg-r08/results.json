@@ -1,0 +1,987 @@
+{
+  "models": [
+    {
+      "kind": "fern",
+      "v": 0,
+      "detail": false,
+      "triangles": 1988
+    },
+    {
+      "kind": "fern",
+      "v": 0,
+      "detail": true,
+      "triangles": 2632
+    },
+    {
+      "kind": "fern",
+      "v": 1,
+      "detail": false,
+      "triangles": 2556
+    },
+    {
+      "kind": "fern",
+      "v": 1,
+      "detail": true,
+      "triangles": 3384
+    },
+    {
+      "kind": "fern",
+      "v": 2,
+      "detail": false,
+      "triangles": 1704
+    },
+    {
+      "kind": "fern",
+      "v": 2,
+      "detail": true,
+      "triangles": 2256
+    },
+    {
+      "kind": "fern",
+      "v": 0,
+      "detail": true,
+      "triangles": 2632
+    },
+    {
+      "kind": "fern",
+      "v": 1,
+      "detail": true,
+      "triangles": 3384
+    },
+    {
+      "kind": "fern",
+      "v": 2,
+      "detail": true,
+      "triangles": 2256
+    },
+    {
+      "kind": "fern",
+      "v": 0,
+      "detail": true,
+      "triangles": 2632
+    },
+    {
+      "kind": "grass",
+      "v": 0,
+      "detail": false,
+      "triangles": 216
+    },
+    {
+      "kind": "grass",
+      "v": 0,
+      "detail": true,
+      "triangles": 216
+    },
+    {
+      "kind": "grass",
+      "v": 1,
+      "detail": false,
+      "triangles": 264
+    },
+    {
+      "kind": "grass",
+      "v": 1,
+      "detail": true,
+      "triangles": 264
+    },
+    {
+      "kind": "grass",
+      "v": 2,
+      "detail": false,
+      "triangles": 384
+    },
+    {
+      "kind": "grass",
+      "v": 2,
+      "detail": true,
+      "triangles": 720
+    },
+    {
+      "kind": "grass",
+      "v": 3,
+      "detail": false,
+      "triangles": 168
+    },
+    {
+      "kind": "grass",
+      "v": 3,
+      "detail": true,
+      "triangles": 168
+    },
+    {
+      "kind": "grass",
+      "v": 0,
+      "detail": true,
+      "triangles": 216
+    },
+    {
+      "kind": "grass",
+      "v": 1,
+      "detail": true,
+      "triangles": 264
+    },
+    {
+      "kind": "grass",
+      "v": 2,
+      "detail": true,
+      "triangles": 720
+    },
+    {
+      "kind": "grass",
+      "v": 3,
+      "detail": true,
+      "triangles": 168
+    },
+    {
+      "kind": "grass",
+      "v": 0,
+      "detail": true,
+      "triangles": 216
+    },
+    {
+      "kind": "bilberry",
+      "v": 0,
+      "detail": false,
+      "triangles": 384
+    },
+    {
+      "kind": "bilberry",
+      "v": 0,
+      "detail": true,
+      "triangles": 1056
+    },
+    {
+      "kind": "bilberry",
+      "v": 1,
+      "detail": false,
+      "triangles": 512
+    },
+    {
+      "kind": "bilberry",
+      "v": 1,
+      "detail": true,
+      "triangles": 1296
+    },
+    {
+      "kind": "bilberry",
+      "v": 2,
+      "detail": false,
+      "triangles": 576
+    },
+    {
+      "kind": "bilberry",
+      "v": 2,
+      "detail": true,
+      "triangles": 1472
+    },
+    {
+      "kind": "bilberry",
+      "v": 0,
+      "detail": true,
+      "triangles": 1056
+    },
+    {
+      "kind": "bilberry",
+      "v": 1,
+      "detail": true,
+      "triangles": 1296
+    },
+    {
+      "kind": "bilberry",
+      "v": 2,
+      "detail": true,
+      "triangles": 1472
+    },
+    {
+      "kind": "bilberry",
+      "v": 0,
+      "detail": true,
+      "triangles": 1056
+    },
+    {
+      "kind": "foxglove",
+      "v": 0,
+      "detail": false,
+      "triangles": 736
+    },
+    {
+      "kind": "foxglove",
+      "v": 0,
+      "detail": true,
+      "triangles": 1216
+    },
+    {
+      "kind": "foxglove",
+      "v": 1,
+      "detail": false,
+      "triangles": 736
+    },
+    {
+      "kind": "foxglove",
+      "v": 1,
+      "detail": true,
+      "triangles": 1216
+    },
+    {
+      "kind": "foxglove",
+      "v": 2,
+      "detail": false,
+      "triangles": 1352
+    },
+    {
+      "kind": "foxglove",
+      "v": 2,
+      "detail": true,
+      "triangles": 2232
+    },
+    {
+      "kind": "foxglove",
+      "v": 0,
+      "detail": true,
+      "triangles": 1216
+    },
+    {
+      "kind": "foxglove",
+      "v": 1,
+      "detail": true,
+      "triangles": 1216
+    },
+    {
+      "kind": "foxglove",
+      "v": 2,
+      "detail": true,
+      "triangles": 2232
+    },
+    {
+      "kind": "foxglove",
+      "v": 0,
+      "detail": true,
+      "triangles": 1216
+    },
+    {
+      "kind": "lily",
+      "v": 0,
+      "detail": false,
+      "triangles": 388
+    },
+    {
+      "kind": "lily",
+      "v": 0,
+      "detail": true,
+      "triangles": 636
+    },
+    {
+      "kind": "lily",
+      "v": 1,
+      "detail": false,
+      "triangles": 480
+    },
+    {
+      "kind": "lily",
+      "v": 1,
+      "detail": true,
+      "triangles": 792
+    },
+    {
+      "kind": "lily",
+      "v": 2,
+      "detail": false,
+      "triangles": 508
+    },
+    {
+      "kind": "lily",
+      "v": 2,
+      "detail": true,
+      "triangles": 836
+    },
+    {
+      "kind": "lily",
+      "v": 0,
+      "detail": true,
+      "triangles": 636
+    },
+    {
+      "kind": "lily",
+      "v": 1,
+      "detail": true,
+      "triangles": 792
+    },
+    {
+      "kind": "lily",
+      "v": 2,
+      "detail": true,
+      "triangles": 836
+    },
+    {
+      "kind": "lily",
+      "v": 0,
+      "detail": true,
+      "triangles": 636
+    },
+    {
+      "kind": "anemone",
+      "v": 0,
+      "detail": false,
+      "triangles": 256
+    },
+    {
+      "kind": "anemone",
+      "v": 0,
+      "detail": true,
+      "triangles": 760
+    },
+    {
+      "kind": "anemone",
+      "v": 1,
+      "detail": false,
+      "triangles": 384
+    },
+    {
+      "kind": "anemone",
+      "v": 1,
+      "detail": true,
+      "triangles": 1140
+    },
+    {
+      "kind": "anemone",
+      "v": 2,
+      "detail": false,
+      "triangles": 640
+    },
+    {
+      "kind": "anemone",
+      "v": 2,
+      "detail": true,
+      "triangles": 1900
+    },
+    {
+      "kind": "anemone",
+      "v": 0,
+      "detail": true,
+      "triangles": 760
+    },
+    {
+      "kind": "anemone",
+      "v": 1,
+      "detail": true,
+      "triangles": 1140
+    },
+    {
+      "kind": "anemone",
+      "v": 2,
+      "detail": true,
+      "triangles": 1900
+    },
+    {
+      "kind": "anemone",
+      "v": 0,
+      "detail": true,
+      "triangles": 760
+    },
+    {
+      "kind": "hedge",
+      "detail": false,
+      "triangles": 660
+    },
+    {
+      "kind": "hedge",
+      "detail": true,
+      "triangles": 17036
+    }
+  ],
+  "results": [
+    {
+      "name": "dense",
+      "art": "previous",
+      "path": "multi",
+      "calls": 59,
+      "triangles": 455580,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "garden",
+      "art": "previous",
+      "path": "multi",
+      "calls": 25,
+      "triangles": 273908,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "boslust",
+      "art": "previous",
+      "path": "multi",
+      "calls": 91,
+      "triangles": 474202,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "woodland-east",
+      "art": "previous",
+      "path": "multi",
+      "calls": 38,
+      "triangles": 415196,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "ground-dense",
+      "art": "previous",
+      "path": "multi",
+      "calls": 51,
+      "triangles": 335648,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "ground-garden",
+      "art": "previous",
+      "path": "multi",
+      "calls": 23,
+      "triangles": 192400,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "forecourt",
+      "art": "previous",
+      "path": "multi",
+      "calls": 97,
+      "triangles": 323906,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "planter",
+      "art": "previous",
+      "path": "multi",
+      "calls": 78,
+      "triangles": 255886,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "hedge",
+      "art": "previous",
+      "path": "multi",
+      "calls": 68,
+      "triangles": 360790,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "hall-pot",
+      "art": "previous",
+      "path": "multi",
+      "calls": 46,
+      "triangles": 170494,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "botanic",
+      "art": "previous",
+      "path": "multi",
+      "calls": 39,
+      "triangles": 149012,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "conservatory",
+      "art": "previous",
+      "path": "multi",
+      "calls": 86,
+      "triangles": 409758,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense-high",
+      "art": "previous",
+      "path": "multi",
+      "calls": 89,
+      "triangles": 905848,
+      "shadows": true,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense",
+      "art": "r08",
+      "path": "multi",
+      "calls": 59,
+      "triangles": 475476,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "garden",
+      "art": "r08",
+      "path": "multi",
+      "calls": 25,
+      "triangles": 281916,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "boslust",
+      "art": "r08",
+      "path": "multi",
+      "calls": 93,
+      "triangles": 615110,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "woodland-east",
+      "art": "r08",
+      "path": "multi",
+      "calls": 38,
+      "triangles": 442956,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "ground-dense",
+      "art": "r08",
+      "path": "multi",
+      "calls": 51,
+      "triangles": 354968,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "ground-garden",
+      "art": "r08",
+      "path": "multi",
+      "calls": 23,
+      "triangles": 199148,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "forecourt",
+      "art": "r08",
+      "path": "multi",
+      "calls": 101,
+      "triangles": 468118,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "planter",
+      "art": "r08",
+      "path": "multi",
+      "calls": 82,
+      "triangles": 400098,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "hedge",
+      "art": "r08",
+      "path": "multi",
+      "calls": 70,
+      "triangles": 489658,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "hall-pot",
+      "art": "r08",
+      "path": "multi",
+      "calls": 49,
+      "triangles": 175592,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "botanic",
+      "art": "r08",
+      "path": "multi",
+      "calls": 42,
+      "triangles": 187448,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "conservatory",
+      "art": "r08",
+      "path": "multi",
+      "calls": 89,
+      "triangles": 429030,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense-high",
+      "art": "r08",
+      "path": "multi",
+      "calls": 91,
+      "triangles": 1051900,
+      "shadows": true,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense",
+      "art": "previous",
+      "path": "fallback",
+      "calls": 119,
+      "triangles": 455580,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "garden",
+      "art": "previous",
+      "path": "fallback",
+      "calls": 52,
+      "triangles": 273908,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "boslust",
+      "art": "previous",
+      "path": "fallback",
+      "calls": 138,
+      "triangles": 474202,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "woodland-east",
+      "art": "previous",
+      "path": "fallback",
+      "calls": 102,
+      "triangles": 415196,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "ground-dense",
+      "art": "previous",
+      "path": "fallback",
+      "calls": 100,
+      "triangles": 335648,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "ground-garden",
+      "art": "previous",
+      "path": "fallback",
+      "calls": 34,
+      "triangles": 192400,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "forecourt",
+      "art": "previous",
+      "path": "fallback",
+      "calls": 110,
+      "triangles": 323906,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "planter",
+      "art": "previous",
+      "path": "fallback",
+      "calls": 81,
+      "triangles": 255886,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "hedge",
+      "art": "previous",
+      "path": "fallback",
+      "calls": 81,
+      "triangles": 360790,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "hall-pot",
+      "art": "previous",
+      "path": "fallback",
+      "calls": 46,
+      "triangles": 170494,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "botanic",
+      "art": "previous",
+      "path": "fallback",
+      "calls": 39,
+      "triangles": 149012,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "conservatory",
+      "art": "previous",
+      "path": "fallback",
+      "calls": 99,
+      "triangles": 409758,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense-high",
+      "art": "previous",
+      "path": "fallback",
+      "calls": 196,
+      "triangles": 908334,
+      "shadows": true,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense",
+      "art": "r08",
+      "path": "fallback",
+      "calls": 119,
+      "triangles": 475476,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "garden",
+      "art": "r08",
+      "path": "fallback",
+      "calls": 52,
+      "triangles": 281916,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "boslust",
+      "art": "r08",
+      "path": "fallback",
+      "calls": 140,
+      "triangles": 615110,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "woodland-east",
+      "art": "r08",
+      "path": "fallback",
+      "calls": 102,
+      "triangles": 442956,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "ground-dense",
+      "art": "r08",
+      "path": "fallback",
+      "calls": 100,
+      "triangles": 354968,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "ground-garden",
+      "art": "r08",
+      "path": "fallback",
+      "calls": 34,
+      "triangles": 199148,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "forecourt",
+      "art": "r08",
+      "path": "fallback",
+      "calls": 114,
+      "triangles": 468118,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "planter",
+      "art": "r08",
+      "path": "fallback",
+      "calls": 85,
+      "triangles": 400098,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "hedge",
+      "art": "r08",
+      "path": "fallback",
+      "calls": 83,
+      "triangles": 489658,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "hall-pot",
+      "art": "r08",
+      "path": "fallback",
+      "calls": 49,
+      "triangles": 175592,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "botanic",
+      "art": "r08",
+      "path": "fallback",
+      "calls": 42,
+      "triangles": 187448,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "conservatory",
+      "art": "r08",
+      "path": "fallback",
+      "calls": 102,
+      "triangles": 429030,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense-high",
+      "art": "r08",
+      "path": "fallback",
+      "calls": 198,
+      "triangles": 1054386,
+      "shadows": true,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "home-east",
+      "art": "previous",
+      "path": "multi",
+      "calls": 14,
+      "triangles": 22434,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "home-west",
+      "art": "previous",
+      "path": "multi",
+      "calls": 11,
+      "triangles": 20052,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "home-east",
+      "art": "r08",
+      "path": "multi",
+      "calls": 15,
+      "triangles": 22802,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "home-west",
+      "art": "r08",
+      "path": "multi",
+      "calls": 12,
+      "triangles": 20420,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "home-east",
+      "art": "previous",
+      "path": "fallback",
+      "calls": 14,
+      "triangles": 22434,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "home-west",
+      "art": "previous",
+      "path": "fallback",
+      "calls": 11,
+      "triangles": 20052,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "home-east",
+      "art": "r08",
+      "path": "fallback",
+      "calls": 15,
+      "triangles": 22802,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "home-west",
+      "art": "r08",
+      "path": "fallback",
+      "calls": 12,
+      "triangles": 20420,
+      "glError": 0,
+      "shaderFailures": 0
+    }
+  ],
+  "errors": []
+}

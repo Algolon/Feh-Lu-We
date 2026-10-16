@@ -1,0 +1,30 @@
+{
+  "baseCommit": "fa4fd670db96b475e9b55f6601d704ea856a7202",
+  "previewQuery": "?vegstyle=woodland-r02&treeart=trees-r03&vegdetail=r05&groundart=r07&gardenart=r08",
+  "sourceHashes": {
+    "src/world/gardenkit.ts": "4027abf3a26c15c9128eabbc4bdcf8bc48751c12aa13023abd8ce80d5d376eaa",
+    "src/world/woodkit.ts": "a8cdbcc9fbd26af73036f4db3ffe3aa96dac2da0128adf407a45e707c4cba4b7",
+    "src/world/furniture.ts": "e9f904f93c2dee5c4f57d4c2168260a4a063133b4e2972bd8818aa4ecc3bfa4d",
+    "src/world/d3b.ts": "db4ae236fdabf2c1f9b319b2013f6e638baf0e957b750dcb95f0a6553d043d47",
+    "src/world/homeDressing.ts": "17f85dc651e3d0c295ff4ed4b235b969fc59579b62133d856ba7b6d53693d1c9",
+    "src/world/estate.ts": "3263d3bc4710901a89964a21f41f3068c09d87bcc84403177f31d37d37a994d9",
+    "tests/gardenkit.test.ts": "ae9ee0a4a04be52d084e65c9601713b94d632629bea50cecce153677f5c66e2f",
+    "scripts/veg-r08-review.mjs": "db84343926d19a643fff93b35115b080b109eb85b79ac7f59c32bf88eb8ad43b"
+  },
+  "checks": {
+    "unitTests": 314,
+    "budgetPolicyTests": 4,
+    "typecheck": "pass",
+    "build": "pass",
+    "renderRecords": 60,
+    "pageShaderWebGLErrors": 0,
+    "lowCameraTriangleParity": true,
+    "placementInventoryParity": true,
+    "sampledLowCameraBudgetPass": true,
+    "hollowPotRayAudit": true,
+    "physicalDeviceTested": false,
+    "portraitRerun": false,
+    "fullPuzzleRouteTested": false,
+    "historicalConservatoryStressRerun": false
+  }
+}

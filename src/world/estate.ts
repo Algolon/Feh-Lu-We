@@ -5,10 +5,15 @@
 // North: the lake with the Portugal cottage on its plateau, wooded ridges along the north and east, the west bank.
 // Layout constants live in layout.ts, keepouts in footprints.ts, ground in terrain.ts.
 import * as THREE from 'three';
+import { buildInteriorGreenery, registerGreeneryRegions } from './interiorGreenery';
 import { surface } from './surfaces';
 import { installOpaqueBatches } from './opaqueBatches';
 import { EXTERIOR_STUDY, exteriorMats } from './exteriorStudy';
 import { driveGravel } from './arrivalStudy';
+import { FULL_NATURE } from './foliageStyle';
+import { GARDEN_DETAIL, gardenSoil, gardenSoilMaterial, gardenHedge, SOIL_TINT } from './gardenkit';
+import { referenceHedgeModel, referenceHedgeCore, referenceTopiaryModel, woodMats } from './woodkit';
+
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { World, type GameApi } from '../interactions/world';
 import type { SceneExtras } from '../core/game';
@@ -111,6 +116,7 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   buildMushroomGrove(w, g);
   buildGround(w, woods ? new TreeGrid(woods.points()) : null);
 
+  buildInteriorGreenery(w,manorIn);
   for (const c of [ground, manorC, manorIn, manorB, consC, cotC, forestC, gardenC, groundsC, ugC]) c.b.build(w.scene);
   w.scene.userData.openings = openings;
   w.scene.userData.supportWarnings = [...supportWarnings];
@@ -124,8 +130,11 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   if (artBad.length) console.warn('DEV-04A wall-art contract:', JSON.stringify(artBad));
   for (const m of veg.build(w.scene, true)) m.userData.region = 'outdoor';
 
+  registerGreeneryRegions(w);
   // whole-room culling: chunks are shown only while one of their rooms can be seen from the player's room
   const R = estateRooms();
+  // Keep dense clipped hedge leaves out of distant woodland views and unrelated coarse garden batches.
+  for(const chunk of ['frontHedge.left','frontHedge.right'])w.roomRegion([chunk],['out',...R.rooms.map(r=>r.id)],25);
   const manorRooms = R.rooms.filter((r) => r.floor === 'g' || r.floor === 'u' || r.floor === 'a').filter((r) => r.x0 >= 72 && r.x1 <= 116 && r.id !== 'cons').map((r) => r.id);
   const atticRooms = ['atticLanding', 'atticCommon', 'atticStore', 'atticLookout'];
   const basementRooms = ['bstair', 'bLobby', 'archive', 'boiler', 'route', 'tunnel2', 'tunnel'];
@@ -360,7 +369,8 @@ function buildPaths(w: World, c: Ctx, lines: readonly NetLine[]) {
   // forecourt: the gravel court itself is one surface built with the arrival (grounds.ts); the central planter stays
   // DEV-04B: a dressed stone planter (plinth course, a moulded rim) instead of a plain drum; soil just under its rim
   geo(c.b, EXTERIOR_STUDY ? exteriorMats().dressed : k.M.stone, EXTERIOR_STUDY ? '#d8d2bf' : '#d8ccb0', FORECOURT_PLANTER, SITES.forecourt.x, 0, SITES.forecourt.z, { chunk: 'ground' });
-  cyl(c.b, k.M.paint, '#5a4434', SITES.forecourt.x, 0.4, SITES.forecourt.z, 1.62, 1.62, 0.02, 18, { chunk: 'ground' });
+  if(GARDEN_DETAIL)geo(c.b,gardenSoilMaterial(),SOIL_TINT,gardenSoil(1.66),SITES.forecourt.x,.416,SITES.forecourt.z,{chunk:'ground'});
+  else cyl(c.b, k.M.paint, '#5a4434', SITES.forecourt.x, 0.4, SITES.forecourt.z, 1.62, 1.62, 0.02, 18, { chunk: 'ground' });
   w.col.addCircle(SITES.forecourt.x, SITES.forecourt.z, 1.9, 0, 0.8);
 }
 
@@ -554,20 +564,25 @@ function buildGarden(w: World, g: GameApi, c: Ctx, veg: Vegetation, woods: Estat
   }
   // soft meadow: grass tufts across the lawns (instanced, tiled so only nearby tiles draw; DEV-03: 2.5 m spacing, the
   // low flowers and the woodland understory carry the ground detail now)
+  // Smaller grass tiles preserve every tuft while avoiding whole 40 m cells behind walls or outside the view.
   for (const [x, z] of scatter(r, 2, ESTATE.w - 2, ESTATE.forestEdge - 4, ESTATE.d - 2, 2.5, 11000, (x, z) => clearOf(x, z) || (z > 118 && vegetationClear(x, z, 'small') && !inWood(x, z) && Math.hypot(x - LC.x, z - LC.z) > 4.5))) {
     const size = 0.25 + r() * 0.2, col = r() < 0.5 ? '#7fae4a' : '#94bc58';
-    veg.smallThing('grass', x, z, size, col, `gr${Math.floor(x / 40)}_${Math.floor(z / 40)}`, terrainHeight(x, z));
+    veg.smallThing('grass', x, z, size, col, `gr${Math.floor(x / (GARDEN_DETAIL?20:40))}_${Math.floor(z / (GARDEN_DETAIL?20:40))}`, terrainHeight(x, z));
   }
   if (woods) {
     // forecourt planter: a clipped box ball in the middle, a ring of foxgloves and anemones (planted in the soil)
     const k2 = c.k;
-    blob(c.b, k2.M.foliage, '#3f5f34', SITES.forecourt.x, 0.95, SITES.forecourt.z, 0.75, 0.6, 0.75, { chunk: c.chunk });
+    if (FULL_NATURE) geo(c.b, woodMats().tree, '#4d713c', referenceTopiaryModel(), SITES.forecourt.x, .45, SITES.forecourt.z, { chunk: c.chunk, s: [1.25,1.1,1.25] });
+    else blob(c.b, k2.M.foliage, '#3f5f34', SITES.forecourt.x, 0.95, SITES.forecourt.z, 0.75, 0.6, 0.75, { chunk: c.chunk });
     for (let i = 0; i < 14; i++) { const a = (i / 14) * Math.PI * 2, d = 1.25 + (i % 2) * 0.15; woods.addPlant(i % 3 ? 'anemone' : 'foxglove', i, SITES.forecourt.x + Math.cos(a) * d, SITES.forecourt.z + Math.sin(a) * d, 0.9, 0.45); }
     // clipped box hedges along the manor front (two runs, the approach to the porch open), on a low collider
     // one clipped piece per run (DEV-03 budget: 16 short pieces cost 9.4 k triangles in the forecourt view; one
     // piece per run with the same wavy clipped top costs ~2 k)
     for (const [x0, x1] of [[72.6, 84.9], [95.1, 107.4]] as const) {
-      geo(c.b, k2.M.foliage, '#3f5f34', hedgeGeo(x1 - x0), (x0 + x1) / 2, 0, 79.2, { chunk: c.chunk });
+      if(FULL_NATURE&&GARDEN_DETAIL){
+        geo(c.b,woodMats().tree,'#3f5f34',referenceHedgeCore(x1-x0),(x0+x1)/2,0,79.2,{chunk:c.chunk});
+        geo(c.b,woodMats().tree,'#3f5f34',gardenHedge(x1-x0),(x0+x1)/2,0,79.2,{chunk:x0<90?'frontHedge.left':'frontHedge.right'});
+      }else geo(c.b, FULL_NATURE ? woodMats().tree : k2.M.foliage, '#3f5f34', FULL_NATURE ? referenceHedgeModel(x1 - x0) : hedgeGeo(x1 - x0), (x0 + x1) / 2, 0, 79.2, {chunk:c.chunk});
       w.col.addBox(x0, x1, 78.85, 79.55, 0, 0.75);
     }
   } else {

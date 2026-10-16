@@ -107,6 +107,7 @@ export class Batcher {
       if (!merged) continue;
       merged.computeBoundingSphere();
       const mesh = new THREE.Mesh(merged, grp.mat);
+      if (grp.mat.userData.vegetationDepth) mesh.customDepthMaterial = grp.mat.userData.vegetationDepth;
       // interiors sit inside shadow-casting shells already; their own shadows would only cost draw calls
       mesh.castShadow = castShadow && grp.shadow && !(grp.mat as THREE.Material).transparent && !grp.chunk.endsWith('In');
       mesh.userData.chunk = grp.chunk;

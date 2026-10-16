@@ -1,0 +1,327 @@
+{
+  "models": [
+    {
+      "species": "hazel",
+      "v": 0,
+      "detail": false,
+      "wood": 400,
+      "leaves": 384
+    },
+    {
+      "species": "hazel",
+      "v": 0,
+      "detail": true,
+      "wood": 960,
+      "leaves": 384
+    },
+    {
+      "species": "hazel",
+      "v": 0,
+      "detail": true,
+      "wood": 960,
+      "leaves": 384
+    },
+    {
+      "species": "hazel",
+      "v": 1,
+      "detail": true,
+      "wood": 1152,
+      "leaves": 416
+    },
+    {
+      "species": "hazel",
+      "v": 2,
+      "detail": true,
+      "wood": 672,
+      "leaves": 272
+    },
+    {
+      "species": "holly",
+      "v": 0,
+      "detail": false,
+      "wood": 120,
+      "leaves": 520
+    },
+    {
+      "species": "holly",
+      "v": 0,
+      "detail": true,
+      "wood": 120,
+      "leaves": 520
+    },
+    {
+      "species": "holly",
+      "v": 0,
+      "detail": true,
+      "wood": 120,
+      "leaves": 520
+    },
+    {
+      "species": "holly",
+      "v": 1,
+      "detail": true,
+      "wood": 132,
+      "leaves": 552
+    },
+    {
+      "species": "holly",
+      "v": 2,
+      "detail": true,
+      "wood": 156,
+      "leaves": 584
+    },
+    {
+      "name": "stump",
+      "detail": false,
+      "triangles": 432
+    },
+    {
+      "name": "stump",
+      "detail": true,
+      "triangles": 880
+    },
+    {
+      "name": "log",
+      "detail": false,
+      "triangles": 388
+    },
+    {
+      "name": "log",
+      "detail": true,
+      "triangles": 972
+    },
+    {
+      "name": "branch0",
+      "detail": false,
+      "triangles": 170
+    },
+    {
+      "name": "branch1",
+      "detail": false,
+      "triangles": 320
+    },
+    {
+      "name": "branch2",
+      "detail": false,
+      "triangles": 320
+    },
+    {
+      "name": "branch0",
+      "detail": true,
+      "triangles": 400
+    },
+    {
+      "name": "branch1",
+      "detail": true,
+      "triangles": 672
+    },
+    {
+      "name": "branch2",
+      "detail": true,
+      "triangles": 672
+    }
+  ],
+  "results": [
+    {
+      "name": "dense",
+      "art": "previous",
+      "path": "multi",
+      "calls": 59,
+      "triangles": 398430,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "garden",
+      "art": "previous",
+      "path": "multi",
+      "calls": 25,
+      "triangles": 213554,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "boslust",
+      "art": "previous",
+      "path": "multi",
+      "calls": 91,
+      "triangles": 424298,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "woodland-east",
+      "art": "previous",
+      "path": "multi",
+      "calls": 38,
+      "triangles": 348032,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense-high",
+      "art": "previous",
+      "path": "multi",
+      "calls": 89,
+      "triangles": 809856,
+      "shadows": true,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense",
+      "art": "r04",
+      "path": "multi",
+      "calls": 59,
+      "triangles": 433692,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "garden",
+      "art": "r04",
+      "path": "multi",
+      "calls": 25,
+      "triangles": 241436,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "boslust",
+      "art": "r04",
+      "path": "multi",
+      "calls": 91,
+      "triangles": 453690,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "woodland-east",
+      "art": "r04",
+      "path": "multi",
+      "calls": 38,
+      "triangles": 391168,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense-high",
+      "art": "r04",
+      "path": "multi",
+      "calls": 89,
+      "triangles": 883960,
+      "shadows": true,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense",
+      "art": "previous",
+      "path": "fallback",
+      "calls": 119,
+      "triangles": 398430,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "garden",
+      "art": "previous",
+      "path": "fallback",
+      "calls": 52,
+      "triangles": 213554,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "boslust",
+      "art": "previous",
+      "path": "fallback",
+      "calls": 138,
+      "triangles": 424298,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "woodland-east",
+      "art": "previous",
+      "path": "fallback",
+      "calls": 102,
+      "triangles": 348032,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense-high",
+      "art": "previous",
+      "path": "fallback",
+      "calls": 196,
+      "triangles": 819610,
+      "shadows": true,
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense",
+      "art": "r04",
+      "path": "fallback",
+      "calls": 119,
+      "triangles": 433692,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "garden",
+      "art": "r04",
+      "path": "fallback",
+      "calls": 52,
+      "triangles": 241436,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "boslust",
+      "art": "r04",
+      "path": "fallback",
+      "calls": 138,
+      "triangles": 453690,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "woodland-east",
+      "art": "r04",
+      "path": "fallback",
+      "calls": 102,
+      "triangles": 391168,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense-high",
+      "art": "r04",
+      "path": "fallback",
+      "calls": 196,
+      "triangles": 886446,
+      "shadows": true,
+      "glError": 0,
+      "shaderFailures": 0
+    }
+  ],
+  "errors": []
+}
