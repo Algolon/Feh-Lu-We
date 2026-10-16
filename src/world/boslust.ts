@@ -106,7 +106,7 @@ function entrance(w: World, g: GameApi, c0: Ctx, u: Ctx) {
   const { lock, cover } = makeBoslustMetalLock(w, k);
   place(lock, 64.85, 1.2, 17.94, 0);
   w.scene.add(lock);
-  w.onSync(() => { cover.rotation.x = g.state.flags.boslustCover ? -1.9 : 0; });
+  w.onSync(() => { cover.rotation.x = g.state.flags.boslustCover ? 2.05 : 0; });
   makeAction(w, {
     id: 'boslust.lock', obj: lock, hit: [BOSLUST_LOCK_SIZE.width + 0.08, BOSLUST_LOCK_SIZE.height + 0.12, BOSLUST_LOCK_SIZE.depth + 0.05], hitOffset: [0, 0, 0],
     label: () => (g.state.flags.boslustOpen ? null : g.state.flags.boslustCover ? 'Cijferwieltjes' : 'Klepje bekijken'),
