@@ -25,7 +25,7 @@ const RECESS = new THREE.Color(LION_BRONZE.recess);
 /** Smoothly patinated blackened bronze, with gold wear only on raised cast edges. */
 function bronzeColor(wear:number,shadow:number):THREE.Color {
   const c=BASE.clone().lerp(MID,clamp(.25+wear*.55));
-  c.lerp(HILITE,clamp(wear*.40));
+  c.lerp(HILITE,clamp(wear*.78));
   c.lerp(RECESS,clamp(shadow*.91));
   return c;
 }
@@ -44,7 +44,7 @@ export function lionHeadReliefGeometry():THREE.BufferGeometry {
   // irregular instead of a symmetrical scalloped disk.
   const outline=(a:number)=>{
     const cr=.022*Math.sin(5*a+.22)+.019*Math.sin(9*a-.65)+.008*Math.sin(14*a+.4);
-    const ears=.095*Math.exp(-(near(a,.77)**2)/.016)+.085*Math.exp(-(near(a,2.39)**2)/.019);
+    const ears=.18*Math.exp(-(near(a,.77)**2)/.016)+.165*Math.exp(-(near(a,2.39)**2)/.019);
     const crown=.042*Math.exp(-(near(a,Math.PI/2)**2)/.22);
     const chin=.078*Math.exp(-(near(a,3*Math.PI/2)**2)/.22);
     return 1+cr+ears+crown+chin;
@@ -117,9 +117,9 @@ export function lionHeadReliefGeometry():THREE.BufferGeometry {
       .95*nostrils+.88*mouth+.70*philtrum+
       .81*furCut*mane+.72*earHollows+.34*whiskers);
     const wear=clamp(
-      .34*brows+.22*bridge+.19*cheeks+.29*muzzle+
-      .18*snoutTip+.29*nose+.21*jaw+
-      .19*Math.max(0,bigFur)*mane+.08*earMask);
+      .58*brows+.35*bridge+.30*cheeks+.40*muzzle+
+      .30*snoutTip+.40*nose+.26*jaw+
+      .26*Math.max(0,bigFur)*mane+.16*earMask);
     return {height,wear,shadow};
   }
 
