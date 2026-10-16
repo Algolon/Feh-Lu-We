@@ -48,7 +48,7 @@ describe('FRONT-R03 - reference-led lion and coherent bronze hardware',()=>{
     expect(bounds.max.x).toBeLessThanOrEqual(1.701);
     expect(bounds.max.y).toBeLessThanOrEqual(2.621);
     expect(bounds.min.y).toBeGreaterThanOrEqual(-.001);
-    expect(bounds.max.z-bounds.min.z).toBeLessThan(.30);
+    expect(bounds.max.z-bounds.min.z).toBeLessThan(.35); // full sculptural head and matching pulls
     const hinge=new THREE.Group();hinge.add(leaf);hinge.rotation.y=1.6;
     hinge.updateMatrixWorld(true);
     const opened=new THREE.Box3().setFromObject(leaf);
