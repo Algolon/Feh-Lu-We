@@ -457,13 +457,14 @@ export interface LightView { dir: THREE.Vector3; cosHalf: number; blocked: (x0: 
  * A small, fixed pool of point lights (no shader recompiles). Logical lamp state and the emissive fixture never depend
  * on this: losing a pooled light only fades its illumination, the source stays visibly lit.
  *
- * Candidates (DEV-04C-R): the lamps of every room the player can SEE — the same room/portal visibility the renderer
- * uses (two portal steps through open doors / arches / stairs) — plus outdoor lamps through windows. Ranking: distance,
- * a penalty for another room (more for two steps away), source strength, and an ATTENTION bonus: a source that has been
- * in the view cone with a clear line of sight for a while (dwell ≥ 1.2 s, full at 2 s; decaying at half speed once out of
- * view) ranks first and is not penalised for its room. So a hearth you keep looking at through an arch keeps its light as
- * you step across the threshold (it used to lose it to a nearer lamp behind you, or never got one two rooms away), while
- * glancing or turning round never reorders the pool (the iteration-3 rule). Lamps in rooms you cannot see are never lit.
+ * LIGHT-R03: eligibility follows up to six *open and optically transparent* physical portals,
+ * never the renderer's camera-dependent room / distance culling. Closed opaque doors still block
+ * reachability. Nearby physical fixtures are ranked primarily by metric distance and source
+ * strength; looking at one is only a small tie-breaker, not an excuse to switch to a 17 m distant
+ * fireplace. A held source gets hysteresis across thresholds, and switching between the limited
+ * mobile slots fades both ends gradually. Its visible fixture is always independent of pooled light.
+ * No extra shader light slots are created.
+
  */
 export class LightPool {
   readonly lights: THREE.PointLight[] = [];
@@ -486,15 +487,15 @@ export class LightPool {
   /** Global multiplier for fixture light (art-refresh lighting comparison; 1 = original behaviour). */
   gain = 1;
   /** Ranking weights (DEV-04C-R). */
-  static readonly VIEW_BONUS = 16;
+  static readonly VIEW_BONUS = 2.0; // Gaze is a tie-breaker, not a 16 m teleport of real illumination.
   static readonly VIEW_RANGE = 24;
-  static readonly TWO_STEP_PENALTY = 1.5;
+  static readonly TWO_STEP_PENALTY = 0; // Physical distance, not categorical room membership, controls score.
   /** Attention: seconds of continuous viewing before the bonus starts / is full. */
   static readonly DWELL_START = 1.2;
   static readonly DWELL_FULL = 2.0;
   private dwell = new Map<string, number>();
   private sinceRank = 0;
-  update(dt: number, t: number, lamps: LampSource[], eye: THREE.Vector3, rooms?: RoomGraph, isOpen: (door: string) => boolean = () => true, view?: LightView, visibleRooms?: ReadonlySet<string>) {
+  update(dt: number, t: number, lamps: LampSource[], eye: THREE.Vector3, rooms?: RoomGraph, isOpen: (door: string) => boolean = () => true, view?: LightView, _visibleRooms?: ReadonlySet<string>) {
     this.timer -= dt;
     this.sinceRank += dt;
     if (this.timer <= 0) {
@@ -508,17 +509,25 @@ export class LightPool {
         return r;
       };
       this.here = rooms ? rooms.roomAt(eye.x, eye.y - 0.8, -eye.z) : 'out';
-      const rel = rooms ? rooms.relevant(this.here, isOpen) : null; // one step + outdoor lamps through windows
-      // Share the renderer's portal-aware visibility. The old two-step graph could
-      // omit a lamp in the room the player was already looking into. Crossing
-      // the threshold then made it eligible in one frame, causing a light pop.
-      const vis = visibleRooms ?? (rooms ? rooms.visible(this.here, isOpen, 2) : null);
+      // Dynamic point-light assignment must NEVER be gated by camera culling:
+      // camera cones, exterior-window LOS and room culling change discretely at
+      // specific distances / door thresholds. They are valid for rendering geometry
+      // but produce unmistakable illumination pops when applied to light candidates.
+      //
+      // Use only physical *open* portal connectivity over six steps, independent
+      // of where the camera looks. The pool already ranks by metric distance,
+      // so expanding this inexpensive graph does not add point lights or draw calls.
+      // Keep the one-way outdoor/window relevance used for outdoor practicals.
+      const rel = rooms ? rooms.relevant(this.here, isOpen) : null;
+      // Closed clear-glass doors also conduct visible light; opaque closed doors
+      // do not. Window apertures are kept out of graph reachability.
+      const stableRooms = rooms ? rooms.visible(this.here, isOpen, 6, () => true, () => false) : null;
       const byId = new Map<string, LampSource>();
       const cands: LampCandidate[] = [];
       for (const l of lamps) {
         if (!l.on()) continue;
         const room = roomOf(l);
-        if (rel && !rel.has(room) && !(vis && vis.has(room))) continue;
+        if (stableRooms && !stableRooms.has(room) && !(rel && rel.has(room))) continue;
         const d = l.pos.distanceTo(eye);
         let inView = false;
         if (view && d < LightPool.VIEW_RANGE && d > 0.01) {
@@ -533,11 +542,10 @@ export class LightPool {
         cands.push({ id: l.id, room, d, w });
       }
       for (const [id, v] of this.dwell) if (!seen.has(id)) { const nv = v - elapsed * 0.5; if (nv <= 0) this.dwell.delete(id); else this.dwell.set(id, nv); }
-      // Room membership is a categorical label, but illumination is continuous
-      // across an open arch. Keep a very small own-room tie breaker rather than
-      // the 2.5 m penalty that reshuffled otherwise identical candidates at Z=92.
-      // The finite light budget, view priority and existing hysteresis are kept.
-      this.want = chooseLamps(cands, this.here, this.want, this.lights.length, 2.5, 0.35);
+      // Do not use a room-identity preference: crossing a doorway changes that
+      // identity instantly even when the eye and all fixture distances barely move.
+      // Rank the stable candidate set by distance, with held-source hysteresis.
+      this.want = chooseLamps(cands, this.here, this.want, this.lights.length, 2.3, 0);
       this.lookup = byId;
     }
     for (let i = 0; i < this.lights.length; i++) {
@@ -546,16 +554,20 @@ export class LightPool {
       const cur = this.shown[i];
       if (cur !== target) {
         // fade the old source out before the light moves: no pop when a slot changes hands
-        l.intensity = Math.max(0, l.intensity - dt * 20); // DEV-04C-R: a gentler hand-over (was 30/s: a visible blink)
+        // A fixed 20 units/s fade was still visibly abrupt for weak sources
+        // (and left distant lamps dark until the viewer crossed a boundary).
+        // Ease every source over roughly a second regardless of its brightness.
+        const fadeRate = Math.max(3.5, (cur?.intensity ?? 4) * this.gain * 0.95);
+        l.intensity = Math.max(0, l.intensity - dt * fadeRate);
         if (l.intensity > 0.05 && cur) continue;
         this.shown[i] = target;
         if (target) { l.position.copy(target.pos); l.color.set(target.color); l.distance = target.distance; }
         l.intensity = 0;
         continue;
       }
-      if (!cur || !cur.on()) { l.intensity = Math.max(0, l.intensity - dt * 20); continue; }
+      if (!cur || !cur.on()) { l.intensity = Math.max(0, l.intensity - dt * Math.max(3.5, (cur?.intensity ?? 4) * this.gain * 0.95)); continue; }
       const f = cur.flicker && !this.reducedMotion ? 1 - cur.flicker * (0.5 + 0.5 * Math.sin(t * 13.1 + i) * Math.sin(t * 7.3)) : 1;
-      l.intensity += (cur.intensity * f * this.gain - l.intensity) * Math.min(1, dt * 5);
+      l.intensity += (cur.intensity * f * this.gain - l.intensity) * (1 - Math.exp(-dt * 2.0));
     }
   }
   private lookup = new Map<string, LampSource>();

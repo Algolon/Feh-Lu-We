@@ -189,7 +189,7 @@ describe('DEV-04C-R Wickerman candle sequence', () => {
   });
 });
 
-describe('DEV-04C-R light pool: sources in view keep their light across room boundaries', () => {
+describe('DEV-04C / LIGHT-R03: consistent nearby illumination across room and gaze boundaries', () => {
   // three rooms in a row joined by arches (A | B | C) and a fourth behind a closed door (A | D)
   const R = (id: string, x0: number, x1: number) => ({ id, name: id, floor: 'g' as const, x0, x1, z0: 0, z1: 10, y0: 0, y1: 3 });
   const graph = new RoomGraph([R('A', 0, 10), R('B', 10, 20), R('C', 20, 30), R('D', -10, 0)], [
@@ -205,8 +205,10 @@ describe('DEV-04C-R light pool: sources in view keep their light across room bou
     return slots === 1 ? p.assigned()[0] : p.assigned();
   };
   const scene3 = () => [lamp('behind1', 4), lamp('behind2', 1), lamp('hearthC', 25)]; // 4 m and 7 m behind, the hearth 17 m ahead
-  it('a source two rooms away that you keep looking at takes a pooled light from a nearer one behind you', () => {
-    expect(pick(scene3(), view, 2)).toContain('hearthC');
+  it('watching a distant hearth does not steal one of the scarce nearby light slots', () => {
+    // LIGHT-R03: keep its visible glowing fixture; do not teleport the local point
+    // light to a remote source after the old 2-second gaze priority timer.
+    expect(pick(scene3(), view, 2)).not.toContain('hearthC');
   });
   it('a glance is not attention: a source only briefly in view does not take a light (turning never reorders the pool)', () => {
     expect(pick(scene3(), view, 2, 0.75)).not.toContain('hearthC');
