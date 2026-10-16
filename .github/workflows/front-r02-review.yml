@@ -14,6 +14,9 @@ on:
       - tests/exterior-detail.test.ts
       - scripts/front-r02-review.mjs
       - .github/workflows/front-r02-review.yml
+concurrency:
+  group: front-r04-door-review-${{ github.ref }}
+  cancel-in-progress: true
 permissions:
   contents: write
 jobs:
