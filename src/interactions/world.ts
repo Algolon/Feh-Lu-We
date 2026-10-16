@@ -542,7 +542,7 @@ export class LightPool {
       // Do not use a room-identity preference: crossing a doorway changes that
       // identity instantly even when the eye and all fixture distances barely move.
       // Rank the stable candidate set by distance, with held-source hysteresis.
-      this.want = chooseLamps(cands, this.here, this.want, this.lights.length, 3.0, 0);
+      this.want = chooseLamps(cands, this.here, this.want, this.lights.length, 2.3, 0);
       this.lookup = byId;
     }
     for (let i = 0; i < this.lights.length; i++) {
