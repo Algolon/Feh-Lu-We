@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { MANOR_WINDOWS, MANOR_WINDOW_WALLS, windowDepths, windowAperture } from './manorWindowLayout';
 import * as assembly from './manorWindowAssembly';
-const { sillBoardGeometry } = assembly;
+const { sillBoardGeometry, windowRevealLevels } = assembly;
 import { PORTALS, manorWindowRoom } from './roomdefs';
 
 describe('WINDOW-R02 manor-wide physical windows', () => {
@@ -49,6 +49,15 @@ describe('WINDOW-R02 manor-wide physical windows', () => {
   it('does not expose any window-handle assembly or mounting geometry', () => {
     expect('manorLatchPose' in assembly).toBe(false);
     expect('buildManorWindowLatch' in assembly).toBe(false);
+  });
+  it('butt-joints plaster jambs to the modern board and head without overlapping geometry', () => {
+    for (const w of MANOR_WINDOWS) {
+      const y0 = w.y0 + w.sill, y1 = y0 + w.h;
+      const { boardTop, jambBase, headBase } = windowRevealLevels(y0, y1);
+      expect(jambBase).toBeGreaterThan(boardTop);
+      expect(headBase).toBeGreaterThan(jambBase);
+      expect(headBase + 0.014).toBeCloseTo(y1, 5);
+    }
   });
   it('aligns mahogany grain with each long window-board direction', () => {
     for (const axis of ['x', 'z'] as const) {

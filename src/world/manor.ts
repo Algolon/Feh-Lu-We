@@ -37,7 +37,7 @@ import { makeFire } from './fire';
 import { drawSymbol } from '../content/symbols';
 import { EMBLEMS, SERVICE, CATALOG, CONSOLE_SOCKETS, ROUTE_LINES } from '../content/canon';
 import { addClue, has } from '../core/state';
-import { GF, CEIL, UF, UCEIL, TOP, BF, BCEIL, AF, S03, roofUnderside, ATTIC_NOOK, ATTIC_ROOF_WINDOW } from './layout';
+import { GF, CEIL, UF, UCEIL, TOP, BF, BCEIL, AF, S03, SLAB_UNDERSIDE, roofUnderside, ATTIC_NOOK, ATTIC_ROOF_WINDOW } from './layout';
 import { buildMaquette } from './maquette';
 import { addKey, presentKey, keyLiner, linerWhenOpen, hatchDish, LINER_TOP, HATCH_DISH_FLOOR, S3_BUILDERS } from './d2props';
 import { SALON_LAYOUT, SALON_SITES } from '../content/gallery';
@@ -299,9 +299,9 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   for (const [x0, x1, z0, z1] of [[72.4, 92, 80.4, 109.6], [92, 95, 80.4, 99.6], [92, 95, 104.8, 109.6], [95, 107.6, 80.4, 109.6], [108, 115.6, 92.4, 109.6], [107.4, 108.6, 101.9, 103.1], [111.3, 112.7, 91.6, 92.6], [115.4, 116.4, 101.7, 103.3]] as const) w.col.addFloor(x0, x1, z0, z1, GF);
   // ---------------------------------------------------------------- slabs between storeys (walk above, occlude interaction)
   const slab = (x0: number, x1: number, z0: number, z1: number) => {
-    boxMM(c.b, k.M.wood, '#8a5a34', x0, x1, CEIL, UF, z0, z1, { uv: 2.2, chunk: 'manor' }); // structural sun blocker: never furniture-culled
+    boxMM(c.b, k.M.wood, '#8a5a34', x0, x1, SLAB_UNDERSIDE, UF, z0, z1, { uv: 2.2, chunk: 'manor' }); // slightly buried over wall/beam heads, no coplanar ceiling strips
     w.col.addFloor(x0, x1, z0, z1, UF);
-    w.col.addOccluder(x0, x1, z0, z1, CEIL, UF);
+    w.col.addOccluder(x0, x1, z0, z1, SLAB_UNDERSIDE, UF);
   };
   slab(72.4, 85, 80.4, 94); // bedrooms
   slab(85, 95, 80.4, 84); // front gallery
@@ -314,7 +314,12 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   // beams under ground-floor ceilings (not in the double-height spaces)
   for (let x = 74; x < 107; x += 2.4) {
     if (x < 85 && ART.set !== 'sample') boxMM(c.b, k.M.wood, '#6b4426', x - 0.1, x + 0.1, CEIL - 0.22, CEIL, 80.4, 94, { chunk: c.chunk, uv: 1.5 }); // sample: livingSample beams
-    if (x > 95) boxMM(c.b, k.M.wood, '#6b4426', x - 0.1, x + 0.1, CEIL - 0.22, CEIL, 80.4, 109.6, { chunk: c.chunk, uv: 1.5 });
+    if (x > 95) {
+      // Stop each timber at the faces of the dining/kitchen partition (Z92 ± 8 cm).
+      // A single 29 m beam used to intersect the plaster and create bad seams.
+      for (const [z0, z1] of [[80.4, 91.92], [92.08, 109.6]] as const)
+        boxMM(c.b, k.M.wood, '#6b4426', x - 0.1, x + 0.1, CEIL - 0.22, CEIL, z0, z1, { chunk: c.chunk, uv: 1.5 });
+    }
   }
   // upper ceiling with the S03 stairwell left open (X 95–99 / Z 99.8–105.6; the upper landing covers Z 98.6–99.8)
   for (const [x0, x1, z0, z1] of [[72.4, 107.6, 80.4, 99.8], [72.4, 95, 99.8, 109.6], [99, 107.6, 99.8, 109.6], [95, 99, 105.6, 109.6]] as const) ceiling(c, x0, x1, z0, z1, UCEIL, '#efe4cc');
