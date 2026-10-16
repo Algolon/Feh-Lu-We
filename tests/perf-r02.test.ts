@@ -18,10 +18,11 @@ const DOORWAY_REGIONS: Record<string, { rooms: string[]; doors: string[] }> = {
   mUpS: { rooms: ['sterren'], doors: ['door.sterren'] },
   mUpG: { rooms: ['storage'], doors: ['door.storage'] },
   mUpE: { rooms: ['study', 'botanic', 'linen'], doors: ['door.study', 'door.botanic', 'door.linen'] },
-  mAttic: { rooms: ['atticLanding', 'atticCommon', 'atticStore', 'atticLookout', 'atticStair'], doors: ['door.atticStair', 'door.atticRear'] },
   mLib: { rooms: ['library', 'libGallery'], doors: ['door.library', 'door.livLib', 'door.libGallery'] },
 };
 
+// mAttic is deliberately NOT a doorway region: its geometry includes structure seen from the floor below (the attic
+// floor is the upstairs and hall ceilings), so the doorway rule removed visible ceilings (up to 87,016 px, PERF-R02 §6).
 describe('PERF-R02: doorway regions', () => {
   const est = readFileSync('src/world/estate.ts', 'utf8');
   it('exactly these six regions use the doorway rule, each with its full door list; every other region is rooms-only', () => {
@@ -32,6 +33,9 @@ describe('PERF-R02: doorway regions', () => {
       expect(line, chunk).toBeTruthy();
       expect(line!.match(/\['door\.[^\]]*\]/)![0]).toBe(`[${doors.map((d) => `'${d}'`).join(', ')}]`);
     }
+  });
+  it('mAttic keeps the rooms-only rule (its geometry is seen from below)', () => {
+    expect(est).toMatch(/w\.roomRegion\(\['mAttic'\], \[\.\.\.atticRooms, 'atticStair'\], Infinity, IN_FAR\);/);
   });
   it('each doorway region is enclosed: every portal from its rooms to the rest of the house is one of its listed doors (windows are opaque to culling)', () => {
     const R = estateRooms();
