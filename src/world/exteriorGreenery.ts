@@ -2,9 +2,10 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import type { Ctx } from './arch';
-import { box, geo, planMatrix } from './kit';
+import { Batcher, box, geo, planMatrix } from './kit';
 import { lathe } from './artkit';
 import { exteriorMats } from './exteriorStudy';
+import { surface } from './surfaces';
 import { mulberry32 } from '../core/rng';
 
 export const EXTERIOR_GREENERY = typeof location === 'undefined' || new URLSearchParams(location.search).get('greenery') !== 'base';
@@ -38,7 +39,7 @@ export function climberPlan(): Climber[] {
       const phase=r()*6, count=18;
       for(let j=0;j<=count;j++) {
         const t=j/count, at=root+tip*Math.pow(t,.8)+Math.sin(t*8+phase)*.13*Math.sin(t*Math.PI), y=.09+t*h;
-        const depth=.075+.018*Math.sin(t*6+phase);
+        const depth=.075+.06*(1-THREE.MathUtils.smoothstep(y,.65,.9))+.10*Math.exp(-(((y-3.32)/.16)**2));
         if(!greenClear(face,at,y,.055)) break;
         points.push(new THREE.Vector3(at,y,depth));
         if(j<3 || r()<.16)continue;
@@ -51,7 +52,7 @@ export function climberPlan(): Climber[] {
           const size=.15+r()*.075, a=ba+(r()-.5)*.38, ly=by+(r()-.5)*.40, ld=bd+.055+r()*.07;
           if(greenClear(face,a,ly,size*1.25)) {
             leaves.push({at:a,y:ly,depth:ld,size,angle:(r()-.5)*1.5,tilt:(r()-.5)*.7,tone:Math.floor(r()*4)});
-            stems.push({points:[new THREE.Vector3(ba,by,bd),new THREE.Vector3(a,ly-size*.5,ld)],radius:.0035});
+            stems.push({points:[new THREE.Vector3(ba,by,bd),new THREE.Vector3(a,ly+size*.5,ld)],radius:.0035});
           }
         }
       }
@@ -79,7 +80,7 @@ export function climberLeafGeo(): THREE.BufferGeometry {
     const sign=Math.floor(i/3)%2===0?1:-1, n=new THREE.Vector3(-p[i*3]*.35,-p[i*3+1]*.12,1).normalize().multiplyScalar(sign);
     normals.setXYZ(i,n.x,n.y,n.z);
   }
-  g.userData.keepColor=true;return g;
+  g.rotateZ(Math.PI);g.userData.keepColor=true;return g;
 }
 const GREEN=['#63834e','#6b8d54','#78965b','#587749'];
 function placeLeaf(raw:THREE.BufferGeometry,l:GreenLeaf,yaw=0) {
@@ -113,9 +114,9 @@ function climbers(c:Ctx) {
   }
   raw.dispose();
 }
-function entrancePot(c:Ctx,x:number,z:number,seed:number) {
+function entrancePot(c:Ctx,x:number,z:number,seed:number,dressed:THREE.Material) {
   const profile:[[number,number],...[number,number][]]=[[.001,0],[.39,0],[.39,.10],[.32,.13],[.28,.23],[.30,.59],[.38,.66],[.39,.75],[.31,.75],[.29,.67],[.27,.61],[.001,.61]];
-  const g=lathe(profile,16);geo(c.b,exteriorMats().dressed,'#d8d2bf',g,x,.03,z,{chunk:c.chunk,jitter:0});g.dispose();
+  const g=lathe(profile,16);geo(c.b,dressed,'#d8d2bf',g,x,.03,z,{chunk:c.chunk,jitter:0});g.dispose();
   const soil=new THREE.CylinderGeometry(.275,.275,.02,16);geo(c.b,c.k.M.paint,'#514735',soil,x,.65,z,{chunk:c.chunk,jitter:0});soil.dispose();
   const r=mulberry32(seed), raw=climberLeafGeo(),leaves:THREE.BufferGeometry[]=[],stems:THREE.BufferGeometry[]=[];
   for(let j=0;j<9;j++) {
@@ -136,7 +137,13 @@ function entrancePot(c:Ctx,x:number,z:number,seed:number) {
   // Pots have physical bodies; do not add collision for their soft foliage.
   c.col.addCircle(x,z,.39,0,.78);
 }
-export function buildExteriorGreenery(c:Ctx) {
-  climbers(c);
-  for(const pot of ENTRANCE_POTS)entrancePot(c,pot.x,pot.z,pot.seed);
+export function buildExteriorGreenery(parent:THREE.Object3D,c:Ctx) {
+  // Keep new vegetation out of the architectural mesh. Expanding that mesh's bounding sphere
+  // changes opaque draw ordering at coplanar doorway trims, even when geometry there is untouched.
+  const paint=c.k.M.paint.clone();surface(paint,'foliage');
+  const dressed=exteriorMats().dressed.clone();surface(dressed,'stone');
+  const local:Ctx={...c,b:new Batcher(),k:{...c.k,M:{...c.k.M,paint}}};
+  climbers(local);
+  for(const pot of ENTRANCE_POTS)entrancePot(local,pot.x,pot.z,pot.seed,dressed);
+  local.b.build(parent);
 }

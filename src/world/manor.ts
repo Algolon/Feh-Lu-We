@@ -55,7 +55,7 @@ export { GF, CEIL, UF, UCEIL, TOP };
 /** Chunks: 'manor' (exterior shell + inner skins), 'mIn' (ground + upper interiors), 'mB' (basement). */
 export function buildManor(w: World, g: GameApi, c: Ctx, cIn: Ctx, cB: Ctx) {
   shell(w, c);
-  if (EXTERIOR_STUDY && EXTERIOR_GREENERY) buildExteriorGreenery(c);
+  if (EXTERIOR_STUDY && EXTERIOR_GREENERY) buildExteriorGreenery(w.scene,c);
   interiorStructure(w, g, cIn);
   groundRooms(w, g, cIn);
   upperRooms(w, g, cIn);

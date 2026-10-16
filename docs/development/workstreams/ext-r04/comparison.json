@@ -1,0 +1,145 @@
+[
+  {
+    "view": "entrance",
+    "control": {
+      "calls": 90,
+      "triangles": 313616
+    },
+    "greenery": {
+      "calls": 92,
+      "triangles": 375276
+    },
+    "controlPixelDifference": 0,
+    "greeneryPixelDifference": 0
+  },
+  {
+    "view": "pot-near",
+    "control": {
+      "calls": 95,
+      "triangles": 330808
+    },
+    "greenery": {
+      "calls": 97,
+      "triangles": 392468
+    },
+    "controlPixelDifference": 0,
+    "greeneryPixelDifference": 0
+  },
+  {
+    "view": "arrival",
+    "control": {
+      "calls": 81,
+      "triangles": 262621
+    },
+    "greenery": {
+      "calls": 83,
+      "triangles": 324281
+    },
+    "controlPixelDifference": 0,
+    "greeneryPixelDifference": 0
+  },
+  {
+    "view": "west",
+    "control": {
+      "calls": 80,
+      "triangles": 301094
+    },
+    "greenery": {
+      "calls": 82,
+      "triangles": 362754
+    },
+    "controlPixelDifference": 0,
+    "greeneryPixelDifference": 0
+  },
+  {
+    "view": "west-near",
+    "control": {
+      "calls": 75,
+      "triangles": 311250
+    },
+    "greenery": {
+      "calls": 77,
+      "triangles": 372910
+    },
+    "controlPixelDifference": 0,
+    "greeneryPixelDifference": 0
+  },
+  {
+    "view": "garden",
+    "control": {
+      "calls": 101,
+      "triangles": 452180
+    },
+    "greenery": {
+      "calls": 103,
+      "triangles": 513840
+    },
+    "controlPixelDifference": 819,
+    "greeneryPixelDifference": 819
+  },
+  {
+    "view": "garden-near",
+    "control": {
+      "calls": 93,
+      "triangles": 454102
+    },
+    "greenery": {
+      "calls": 95,
+      "triangles": 515762
+    },
+    "controlPixelDifference": 8,
+    "greeneryPixelDifference": 8
+  },
+  {
+    "view": "corner",
+    "control": {
+      "calls": 77,
+      "triangles": 312501
+    },
+    "greenery": {
+      "calls": 79,
+      "triangles": 374161
+    },
+    "controlPixelDifference": 89,
+    "greeneryPixelDifference": 89
+  },
+  {
+    "view": "dormer",
+    "control": {
+      "calls": 93,
+      "triangles": 323351
+    },
+    "greenery": {
+      "calls": 95,
+      "triangles": 385011
+    },
+    "controlPixelDifference": 0,
+    "greeneryPixelDifference": 0
+  },
+  {
+    "view": "conservatory",
+    "control": {
+      "calls": 139,
+      "triangles": 460456
+    },
+    "greenery": {
+      "calls": 140,
+      "triangles": 521412
+    },
+    "controlPixelDifference": 2,
+    "greeneryPixelDifference": 2
+  },
+  {
+    "view": "east",
+    "control": {
+      "calls": 94,
+      "triangles": 419651
+    },
+    "greenery": {
+      "calls": 96,
+      "triangles": 481311
+    },
+    "controlPixelDifference": 4,
+    "greeneryPixelDifference": 4
+  }
+]

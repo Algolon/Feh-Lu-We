@@ -1,6 +1,6 @@
 # Vervolg op EXT-R02 — bouwkundige verfijning en groenclusters
 
-Analyse, 16 oktober 2026. Geen nieuwe sceneplaatsingen of wijzigingen aan het parallelle vegetatiewerk.
+Ontwerpanalyse van 16 oktober 2026. Inmiddels uitgewerkt; zie `EXT-R04.md` voor implementatie en verificatie. Parallel vegetatiewerk is niet gewijzigd.
 Bronnen: door de eigenaar bijgevoegde screenshot (punten 3–5), bestaande EXT-R02-code/verslag, EXT-R03-correctie en de lokale VEG-R04/05-uitwerking binnen de doorgaande VEG-R02-werksessie.
 
 ## Nummering en dekking
