@@ -894,7 +894,7 @@ function kitchen(w: World, g: GameApi, c: Ctx) {
   for (const [x0, x1] of [[95.15, 96.69], [98.31, 100.31], [101.65, 102.22], [103.58, 104.23], [105.81, 107.2]] as const) splashback(c, (x0 + x1) / 2, GF + 0.98, 109.578, Math.PI, x1 - x0, 0.47); // on the north wall's plaster skin
   // a glazed tile dado (1.0 m, 30 cm tiles, blue border) round the free walls: west (continuous below the raised hatch), the
   // arch wall, the east wall either side of the service door; the furniture in front of it stays where it was
-  for (const [ax, f, yaw, a0, a1] of [['z', 95.08, Math.PI / 2, 92.08, 109.6], ['x', 92.08, 0, 95.08, 99.85], ['x', 92.08, 0, 102.15, 107.578],
+  for (const [ax, f, yaw, a0, a1] of [['z', 95.08, Math.PI / 2, 92.08, 95.70], ['z', 95.08, Math.PI / 2, 97.40, 109.6], ['x', 92.08, 0, 95.08, 99.85], ['x', 92.08, 0, 102.15, 107.578],
     ['z', 107.578, -Math.PI / 2, 92.08, 101.85], ['z', 107.578, -Math.PI / 2, 103.15, 109.6]] as const) {
     const m = (a0 + a1) / 2;
     splashback(c, ax === 'z' ? f : m, GF, ax === 'z' ? m : f, yaw, a1 - a0, 1.0, 0.3);
