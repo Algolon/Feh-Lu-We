@@ -1,0 +1,26 @@
+name: BOSLUST R01 render capture (temporary)
+on:
+  push:
+    branches:
+      - boslust-lock-r01-stylized-metal
+permissions:
+  contents: read
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright-core install --with-deps chromium
+      - run: node scripts/boslust-lock-shot.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: boslust-lock-r01-screenshots
+          path: scripts/out/boslust-lock-r01/
