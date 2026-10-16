@@ -46,6 +46,54 @@ try{
   await page.screenshot({path:`${folder}/attic-roof-${position}.jpg`,type:'jpeg',quality:92});
   console.log('roof window',JSON.stringify(res));
  }
+ // Cottage: seven real panes with physical glass and unobstructed visual rays.
+ const cottage=await page.evaluate(()=>{
+   const w=window.__game.world;
+   const portals=w.rooms.portals.filter(p=>p.kind==='window'&&p.seeThrough
+     && ['cottageEntry','cottageRoom'].includes(p.a));
+   let solid=0,clear=0;
+   for(const p of portals){
+     const a=p.aperture,ext=(a.axis==='x'?(a.z<161?-1:1):(a.x<25?-1:1));
+     const sx=a.x+(a.axis==='z'?-ext*.25:0),sz=a.z+(a.axis==='x'?-ext*.25:0);
+     const tx=a.x+(a.axis==='z'?ext*.25:0),tz=a.z+(a.axis==='x'?ext*.25:0);
+     if(w.col.segmentBlocked(sx,a.y,sz,tx,a.y,tz))solid++;
+     if(!w.col.segmentBlocked(sx,a.y,sz,tx,a.y,tz,w.visualPassThrough))clear++;
+   }
+   return {portals:portals.length,solid,clear};
+ });
+ if(cottage.portals!==7||cottage.solid!==7||cottage.clear!==7)
+   throw Error('Cottage pane test failed: '+JSON.stringify(cottage));
+ const cottageViews=[];
+ for(const pose of [
+   {id:'south',axis:'x',at:22.2,f:157.15,ext:-1},
+   {id:'north',axis:'x',at:22.5,f:164.85,ext:1},
+   {id:'west',axis:'z',at:162.3,f:20.15,ext:-1},
+   {id:'east',axis:'z',at:162.6,f:29.85,ext:1},
+ ])for(const side of ['inside','outside']){
+   const capture=await page.evaluate(({pose,side})=>{
+     const g=window.__game,w=g.world;
+     g.settings.quality='low';g.applyQuality(true);
+     const nx=pose.axis==='z'?pose.ext:0,nz=pose.axis==='x'?pose.ext:0;
+     const x=pose.axis==='x'?pose.at:pose.f,z=pose.axis==='x'?pose.f:pose.at;
+     const step=side==='outside'?.72:-.72;
+     g.camera.position.set(x+nx*step,5.5,-z-nz*step);
+     g.camera.lookAt(x,5.5,-z);
+     g.camera.updateMatrixWorld(true);
+     w.updateCulling(g.camera.position,g.camera);
+     g.renderer.render(w.scene,g.camera);
+     const target=side==='inside'?'out':
+       w.rooms.portals.find(p=>p.kind==='window'&&p.seeThrough&&p.aperture?.x===x
+          &&p.aperture?.z===z)?.a??'missing';
+     return {id:pose.id,side,here:w.hereRoom,target,visible:w.visibleRooms.has(target),
+       calls:g.renderer.info.render.calls,triangles:g.renderer.info.render.triangles,
+       glError:g.renderer.getContext().getError()};
+   },{pose,side});
+   if(!capture.visible||capture.glError!==0)
+     throw Error('Cottage in-game sightline failed '+JSON.stringify(capture));
+   cottageViews.push(capture);
+   await page.screenshot({path:`${folder}/cottage-${pose.id}-${side}.jpg`,type:'jpeg',quality:90});
+   console.log('cottage window',JSON.stringify(capture));
+ }
  if(errors.length)throw Error('Browser errors: '+errors.join(';'));
- writeFileSync(folder+'/results.json',JSON.stringify({results,errors,samsungValidated:false},null,2));
+ writeFileSync(folder+'/results.json',JSON.stringify({results,cottage,cottageViews,errors,samsungValidated:false},null,2));
 }finally{await browser.close();await server.close();}
