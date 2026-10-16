@@ -1,6 +1,10 @@
 // TUT-R02 — the remaining home-only asset families. Shared estate builders stay unchanged.
 // Rounded garment volumes, readable footwear construction and built fixtures; metre-scale origins.
 import * as THREE from 'three';
+import { INTERIOR_GREEN } from './gardenkit';
+import { addIndoorPlant } from './indoorPlants';
+
+import { GARDEN_DETAIL, gardenPot, gardenSoilMaterial, SOIL_TINT } from './gardenkit';
 import type { Ctx } from './arch';
 import { Asm, artMats, lathe, projectUV, bake, baseAO } from './artkit';
 import { compound, v3 } from './kit';
@@ -141,12 +145,13 @@ export function homeBoots(c: Ctx) {
 
 /** Home plants use individual shaped leaves on visible stems, not outdoor shrub crown chunks. */
 export function homePottedPlant(c: Ctx, x: number, z: number, s: number) {
+  if(INTERIOR_GREEN){addIndoorPlant(c,x,z,0,x>4?'ficus':'snake',x>4?1:2,s,x>4?'ceramic':'wicker');c.col.addCircle(x,z,.22*s,0,1);return;}
   const M = artMats(), a = new Asm(c.b, c.chunk, x, 0, z, 0);
-  a.add(M.paint, '#b57752', cg('homePlantPot', () => lathe([
+  a.add(M.paint, '#b57752', cg(GARDEN_DETAIL?'homeGardenPot':'homePlantPot', () => GARDEN_DETAIL?gardenPot(.24,.40):lathe([
     [0, 0], [0.15, 0], [0.17, 0.03], [0.224, 0.32], [0.242, 0.34],
     [0.248, 0.365], [0.23, 0.386], [0.217, 0.365], [0.213, 0.345], [0, 0.345],
   ], 24)), 0, 0, 0, { s: [s, s, s] });
-  a.add(M.paint, '#41362c', cg('homePlantSoil', () => new THREE.CircleGeometry(0.213, 20).rotateX(-Math.PI / 2)), 0, 0.35 * s, 0, { s: [s, 1, s] });
+  a.add(GARDEN_DETAIL?gardenSoilMaterial():M.paint, GARDEN_DETAIL?SOIL_TINT:'#41362c', cg('homePlantSoil', () => new THREE.CircleGeometry(0.213, 20).rotateX(-Math.PI / 2)), 0, 0.35 * s, 0, { s: [s, 1, s] });
   const leaf = cg('homePlantLeaf', () => {
     const pos: number[] = [], uv: number[] = [], ix: number[] = [];
     const rings = [[0, 0.003, 0], [0.046, 0.038, 0.055], [0.076, 0.047, 0.128], [0.048, 0.028, 0.205], [0, -0.006, 0.25]];

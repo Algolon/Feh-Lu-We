@@ -1,0 +1,20 @@
+{
+  "sourceParent": "e989cec15abe984f1c8d941dd3e75e1f42621b01",
+  "unitTests": 433,
+  "gameplayChecks": "33/33",
+  "defaultEntryViews": 10,
+  "maxLowCalls": 131,
+  "maxLowTriangles": 746794,
+  "roomCount": 38,
+  "extraPlants": 49,
+  "errors": [],
+  "sourceHashes": {
+    "src/world/estate.ts": "9abb2aba5d51bc8962de07b84d6a7eb81ac7e0297c84ba06a760f3db406d737f",
+    "src/world/woodkit.ts": "ebfbf99266e731a10802fa3ca4f32f3ae394a53ecb1b0ef8a8b24f28d447f074",
+    "src/world/foliageStyle.ts": "8fb2d3cdf13fea25cba03327326e1f6856f27515ff4971a999ac2da0047625aa",
+    "src/world/groundTexture.ts": "3d51c97841b545b67af71acc20d85e59b6ab7973510680b8753b0ad67fb4d1d7",
+    "src/world/gardenkit.ts": "7ac9489a85cc4778e6db5d5e26f524f9aef9984181975d0744b7a82ad557181f",
+    "src/world/indoorPlants.ts": "fd2817c2445cf4147196a080a85459cac7ecb17f14be7fa4eeaa28c971c2a471",
+    "src/world/interiorGreenery.ts": "96edc34528acef1ee5f7a3e3febda907cb1d835d6b91e9c6cd09f28339cbfec1"
+  }
+}

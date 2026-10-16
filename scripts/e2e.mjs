@@ -34,7 +34,7 @@ async function startGame(page, query = '?autotest=1', fresh = true) {
   await page.evaluate(helpers);
 }
 const E = (page, fn, ...args) => page.evaluate(fn, ...args);
-async function shot(page, name) { await page.waitForTimeout(400); await page.screenshot({ path: `${OUT}/${name}.png` }); }
+async function shot(page, name) { if(process.env.E2E_CAPTURE==='0')return; await page.waitForTimeout(400); await page.screenshot({ path: `${OUT}/${name}.png` }); }
 
 // ------------------------------------------------------------------------------------------------
 // 1. Full walkthrough (desktop), tutorial → finale, normal controls only (walk, look, act, panels).

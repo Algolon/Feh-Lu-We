@@ -1,0 +1,38 @@
+{
+  "base": "752cb024a349ec0045d4f1873e5b191b154191f0",
+  "historicalCommits": [
+    "fef8046",
+    "e208629"
+  ],
+  "method": "Original untruncated fileChange patches and three reviewed Python source-edit blocks replayed in order. Historical Git objects and binary images are not restored.",
+  "sourceHashes": {
+    "src/world/foliageStyle.ts": "9c5bf8cae8d0c1958c8881c38eb339f4cc5c781ae0f06ec4847b3ca7c5dac591",
+    "src/world/woodkit.ts": "9e37ce69bc28e15bd5c3ef429d04e53684c02e218ed7d386a923e19f8e481664",
+    "src/world/boslustSample.ts": "7ae4b05b5fd490d66cb18b446bcd2c617a69f522dcca3850d0c8afa405cf85b7",
+    "src/world/nature.ts": "757434107afb40e9db991636a4409c93a8d0f28388c1f8b0de7879822646280f",
+    "src/world/estate.ts": "12e31d280052f506edaec5a2707459b9c42a06981e2baa2bdbeb637505c30a8f",
+    "src/world/estateWoods.ts": "99c6d19ae3f86e81c714162c90c6c7a63e084de71d760a740a3a56ae936b3d04",
+    "src/world/kit.ts": "8345fb88c05acd1be304fdb40863da75cf3a967cfb05a705c56a435c605ddcab",
+    "src/world/vegbatch.ts": "9f2242a6d70e05f5494a2aa1829385bcec79fa2aeb347af5dbfc06217613f07a",
+    "tests/vegetationStyle.test.ts": "9ce3f2a915a29940939895675be20317aaf0b6e03d8972ca17c01b7e926a9ce9"
+  },
+  "validation": {
+    "typecheck": "pass",
+    "unitTests": 301,
+    "budgetPolicyTests": 4,
+    "productionBuild": "pass",
+    "physicalDeviceTested": false,
+    "coreRenderRecords": 40,
+    "modelRecords": 74,
+    "pageAndShaderErrors": 0,
+    "lowQualityTriangleParity": true,
+    "placementParity": true,
+    "distanceSweepFrames": 60,
+    "stressMatrixRerun": false,
+    "portraitRenderRecords": 8,
+    "portraitPageAndShaderErrors": 0
+  },
+  "recoveryChanges": [
+    "CHROMIUM_EXECUTABLE_PATH override in both review scripts"
+  ]
+}

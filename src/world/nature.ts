@@ -3,6 +3,8 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { getKit } from './kit';
+import { FULL_NATURE } from './foliageStyle';
+import { referenceCypressModel, referenceTopiaryModel, referencePlantModel, referenceStumpModel, rockModel, woodMats } from './woodkit';
 import { mulberry32, type Rng } from '../core/rng';
 
 export interface TreeSpec { x: number; z: number; h: number; r: number; kind: 'oak' | 'birch' | 'cypress' | 'pine'; hue: number; /** ground height at the trunk */ y?: number }
@@ -147,21 +149,47 @@ export class Vegetation {
       push(`crown|${t.chunk}`, crownGeo, k.M.foliage, t, true, 'near');
       push(`crownLow|${t.chunk}`, lowCrown, k.M.foliage, t, true, 'far');
     }
-    for (const t of this.cones) push(`cone|${t.chunk}`, coneGeo, k.M.foliage, t, true);
+    const clippedGeo = FULL_NATURE ? referenceCypressModel() : coneGeo;
+    for (const t of this.cones) push(`cone|${t.chunk}`, clippedGeo, FULL_NATURE ? woodMats().tree : k.M.foliage, t, true);
     const softGeo = shadeVertically(withColor(new THREE.IcosahedronGeometry(1, 1)), 0.6, 1.1);
     const capGeo = shadeVertically(withColor(new THREE.SphereGeometry(1, 9, 4, 0, Math.PI * 2, 0, Math.PI / 2)), 0.75, 1.15);
+    if(FULL_NATURE){const p=capGeo.attributes.position;for(let i=0;i<p.count;i++){const a=Math.atan2(p.getZ(i),p.getX(i)),k=1+.035*Math.sin(a*5);p.setXYZ(i,p.getX(i)*k,p.getY(i)*(.94+.06*Math.cos(a*3)),p.getZ(i)*k);}capGeo.computeVertexNormals();}
     const stemGeo = withColor(new THREE.CylinderGeometry(0.7, 0.9, 1, 6)).translate(0, 0.5, 0);
     const stumpGeo = shadeVertically(withColor(new THREE.CylinderGeometry(0.85, 1.05, 1, 9)), 0.7, 1.05).translate(0, 0.5, 0);
     // a grass tuft: five thin blades leaning outwards
     const blades = [0, 1, 2, 3, 4].map((i) => new THREE.ConeGeometry(0.09, 1, 3).translate(0, 0.5, 0).rotateZ(((i % 2) - 0.5) * 0.5).rotateY(i * 1.26).translate(Math.cos(i * 1.26) * 0.08, 0, Math.sin(i * 1.26) * 0.08));
     const grassGeo = shadeVertically(withColor(mergeGeometries(blades)!), 0.55, 1.15);
     blades.forEach((b) => b.dispose());
-    const geoOf = (kind: string) => kind === 'rock' ? rockGeo : kind === 'flower' ? blobGeo : kind === 'cap' ? capGeo : kind === 'stem' ? stemGeo : kind === 'stump' ? stumpGeo : kind === 'grass' ? grassGeo : softGeo;
-    const matOf = (kind: string) => kind === 'rock' || kind === 'cap' || kind === 'stem' ? rockMat : kind === 'stump' ? k.M.bark : k.M.foliage;
-    for (const t of this.small) push(`${t.kind}|${t.chunk}`, geoOf(t.kind), matOf(t.kind), t, false, t.chunk === 'garden' && t.kind !== 'grass' ? 'all' : 'small');
+    const normalized = (g: THREE.BufferGeometry, offset = 0) => {
+      g.computeBoundingBox(); const box=g.boundingBox!, h=box.max.y-box.min.y;
+      g.translate(0,-box.min.y,0); g.scale(1/h,1/h,1/h); g.translate(0,offset,0); return g;
+    };
+    const fresh: Record<string,THREE.BufferGeometry> = FULL_NATURE ? {
+      fern:normalized(referencePlantModel('fern',0),-.6), flower:normalized(referencePlantModel('anemone',1),-.6),
+      grass:normalized(referencePlantModel('grass',0)), shrub:normalized(referenceTopiaryModel(),-.6),
+      rock:rockModel(91), stump:referenceStumpModel(),
+    } : {};
+    const geoOf = (kind: string) => fresh[kind] ?? (kind === 'rock' ? rockGeo : kind === 'flower' ? blobGeo : kind === 'cap' ? capGeo : kind === 'stem' ? stemGeo : kind === 'stump' ? stumpGeo : kind === 'grass' ? grassGeo : softGeo);
+    const matOf = (kind: string) => FULL_NATURE
+      ? kind==='shrub'||kind==='stump'?woodMats().tree:kind==='rock'?woodMats().rock:woodMats().flat
+      : kind === 'rock' || kind === 'cap' || kind === 'stem' ? rockMat : kind === 'stump' ? k.M.bark : k.M.foliage;
+    let spots: THREE.BufferGeometry | null = null;
+    if(FULL_NATURE){
+      const dots=Array.from({length:7},(_,i)=>{
+        const a=i*2.39996,d=.25+(i%3)*.22, y=Math.sqrt(1-d*d);
+        return withColor(new THREE.IcosahedronGeometry(.075+(i%2)*.025,0)).scale(1,.35,1).translate(Math.cos(a)*d,y+.012,Math.sin(a)*d);
+      });spots=mergeGeometries(dots)!;dots.forEach(g=>g.dispose());
+    }
+    for (const t of this.small) {
+      const herb=FULL_NATURE&&['fern','flower','grass'].includes(t.kind);
+      const it=herb?{...t,c:new THREE.Color(1,1,1)}:t;
+      push(`${t.kind}|${t.chunk}`,geoOf(t.kind),matOf(t.kind),it,false,t.chunk==='garden'&&t.kind!=='grass'?'all':'small');
+      if(t.kind==='cap'&&spots)push(`capSpots|${t.chunk}`,spots,woodMats().flat,{...t,c:new THREE.Color('#f7edd6')},false,'small');
+    }
     const meshes: THREE.InstancedMesh[] = [];
     for (const [key, g] of groups) {
       const im = new THREE.InstancedMesh(g.geo, g.mat, g.items.length);
+      if (g.mat.userData.vegetationDepth) im.customDepthMaterial = g.mat.userData.vegetationDepth;
       im.userData.veg = g.lod;
       im.name = key;
       g.items.forEach((it, i) => {

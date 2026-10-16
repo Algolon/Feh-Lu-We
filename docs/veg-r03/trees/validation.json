@@ -1,0 +1,44 @@
+{
+  "baseApprovedOakCommit": "a0c19371f042157a7f0da8a3b0751217763b9ccd",
+  "previewQuery": "?vegstyle=woodland-r02&treeart=trees-r03",
+  "sourceHashes": {
+    "src/world/foliageStyle.ts": "25f8d01847ceadca57b450df585dfcdc019f7e5d6adb2fe8c8957ca0e7d06bd9",
+    "src/world/woodkit.ts": "e712b6f4a25d3c3a838ba0767d2fb1201a8465cf4a3012bdeee1c3a993c7dbbd",
+    "tests/treeFamilySculpt.test.ts": "07e41917fca8e341a44b3448958a576fea4e59aa316b57229c6e2bcf83e5af07",
+    "scripts/veg-r03-tree-review.mjs": "e84cf2a93b4fb05a223517e05ac5ce46d3cb48f810686063e391870c17e81ede"
+  },
+  "checks": {
+    "unitTests": 306,
+    "budgetPolicyTests": 4,
+    "typecheck": "pass",
+    "build": "pass",
+    "renderRecords": 20,
+    "lowQualityRecords": 16,
+    "shadowRecords": 4,
+    "pageConsoleShaderWebGLErrors": 0,
+    "placementParity": true,
+    "lowQualityTriangleParity": true,
+    "physicalDeviceTested": false,
+    "portraitRerun": false,
+    "fullPuzzleWalkthrough": false
+  },
+  "beechBarkCorrection": {
+    "baseCommit": "fa91af25b2ad0a084a66c034e9061bfa20f100d5",
+    "mapping": "continuous model-local position; old atlas sampling removed for beech",
+    "geometryAdded": false,
+    "drawGroupsAdded": false,
+    "texturesAdded": false
+  },
+  "beechRelief": {
+    "baseCommit": "9e638a24cb62814fcdfcbdcd94069fc0820527fc",
+    "reference": "../references/05-sculpted-relief.png",
+    "geometryAdded": true,
+    "drawGroupsAdded": false,
+    "texturesAdded": false,
+    "maxStemDisplacementMetres": 0.055,
+    "branchDisplacementCappedByRadius": true,
+    "groundFootprintPreservedBelowMetres": 0.2,
+    "growthAlignedNormalRelief": true,
+    "finePatternFiltered": true
+  }
+}
