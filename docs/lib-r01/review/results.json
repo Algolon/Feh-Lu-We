@@ -1,0 +1,10 @@
+{
+  "source": "actual candidate branch Vite/Chromium SwiftShader",
+  "commit": "bcb56ddb815c15edcb92e943039a692590baa6ed",
+  "records": [],
+  "checks": [],
+  "errors": [
+    "QA script: page.evaluate: TypeError: g.ui.modalOpen is not a function\n    at eval (eval at evaluate (:290:30), <anonymous>:1:41)\n    at UtilityScript.evaluate (<anonymous>:292:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at pageFor (/home/runner/work/Feh-Lu-We/Feh-Lu-We/scripts/lib-r01-review.mjs:45:14)\n    at async file:///home/runner/work/Feh-Lu-We/Feh-Lu-We/scripts/lib-r01-review.mjs:68:29"
+  ],
+  "realDeviceVerified": false
+}
