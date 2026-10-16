@@ -39,6 +39,8 @@ export interface GameApi {
   changed(): void; // state mutated → resync + save
   inspect(clueId: string, extra?: { title?: string; text?: string }): void;
   openPanel(kind: string, data?: Record<string, unknown>): void;
+  /** Submit the same four-digit BOSLUST draft from the metal knob or accessible panel. */
+  tryBoslustCode(digits?: readonly number[]): boolean;
   playerXZ(): { x: number; z: number; y: number };
   playerRadius: number;
   readonly reducedMotion: boolean;
