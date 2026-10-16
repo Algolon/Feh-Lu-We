@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import type { World } from '../interactions/world';
 import type { Ctx } from './arch';
 import { segBox } from './arch';
-import { box, cyl, compound, v3 } from './kit';
+import { box, cyl, compound, v3, getKit } from './kit';
 import { bookshelf, sofa, armchair, rug, table, roundTable, chair, plant } from './furniture';
 import { floorGlobe, tabletop } from './dressing';
 import { GF, UF } from './layout';
@@ -118,10 +118,11 @@ export function libraryR01Stair(c: Ctx) {
 
 /** Classic green brass banker's lamp, preserving the existing lamp.library save/id contract. */
 export function libraryR01BankerLamp(w: World, x: number, y: number, z: number) {
+  const kit = getKit();
   const obj = compound((b) => {
-    cyl(b, b.M.paint, '#a88942', 0, 0, 0, 0.11, 0.13, 0.025, 12);
-    cyl(b, b.M.paint, '#bd9c4d', 0, 0.025, 0, 0.017, 0.018, 0.31, 10);
-    box(b, b.M.paint, '#aa8847', 0, 0.31, 0, 0.43, 0.022, 0.04);
+    cyl(b, kit.M.paint, '#a88942', 0, 0, 0, 0.11, 0.13, 0.025, 12);
+    cyl(b, kit.M.paint, '#bd9c4d', 0, 0.025, 0, 0.017, 0.018, 0.31, 10);
+    box(b, kit.M.paint, '#aa8847', 0, 0.31, 0, 0.43, 0.022, 0.04);
   });
   const shadeMat = w.material(new THREE.MeshLambertMaterial({ color: '#176244', side: THREE.DoubleSide }));
   const greenShade = new THREE.Mesh(new THREE.SphereGeometry(1, 16, 10), shadeMat);
