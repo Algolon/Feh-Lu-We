@@ -41,7 +41,8 @@ import { addKey, presentKey, keyLiner, linerWhenOpen, hatchDish, LINER_TOP, HATC
 import { SALON_LAYOUT, SALON_SITES } from '../content/gallery';
 import { buildEntrance, entranceBay } from './entrance';
 import { EXTERIOR_STUDY, exteriorMats, studyArchitecture, dressedBlock } from './exteriorStudy';
-import { ROOF_DETAIL } from './roofDetail';
+import { buildExteriorGreenery, EXTERIOR_GREENERY } from './exteriorGreenery';
+import { ROOF_DETAIL, gableTrimGeo } from './roofDetail';
 import { EXTERIOR_FINISH, finishedChimney, roofFlashing } from './exteriorFinish';
 import { buildKitchenJuicePouch } from './kitchenJuicePouch';
 import { planChest, pottingBench, plantStand, plantEtagere, pottedPlant } from './d3b';
@@ -54,6 +55,7 @@ export { GF, CEIL, UF, UCEIL, TOP };
 /** Chunks: 'manor' (exterior shell + inner skins), 'mIn' (ground + upper interiors), 'mB' (basement). */
 export function buildManor(w: World, g: GameApi, c: Ctx, cIn: Ctx, cB: Ctx) {
   shell(w, c);
+  if (EXTERIOR_STUDY && EXTERIOR_GREENERY) buildExteriorGreenery(w.scene,c);
   interiorStructure(w, g, cIn);
   groundRooms(w, g, cIn);
   upperRooms(w, g, cIn);
@@ -123,7 +125,7 @@ function shell(w: World, c: Ctx) {
   ring(-0.1, 0.62, 0.1, sand, 72, 108, 80, 110, k.M.stone, mainRuns(0.1)); // plinth
   ring(0.62, 0.7, 0.06, '#d9c9a6', 72, 108, 80, 110, k.M.paint, mainRuns(0.06)); // weathered plinth top
   // stone thresholds through the wall depth of the ground-floor exterior doors (flush walking line, no knee-high sill)
-  for (const [x0, x1, z0, z1] of [[89.15, 90.85, 79.9, 80.42], [90.9, 92.1, 109.58, 110.1], [100.5, 101.5, 109.58, 110.1], [107.58, 108.42, 102, 103]] as const) threshold(c, x0, x1, z0, z1, GF);
+  for (const [x0, x1, z0, z1] of [[89.15, 90.85, 79.9, 80.42], [90.9, 92.1, 109.58, 110.1], [100.5, 101.5, 109.58, 110.1], [107.58, 108.42, 102, 103]] as const) threshold(c, x0, x1, z0, z1, GF, EXTERIOR_STUDY ? '#d6d1bd' : '#d6c8a8', EXTERIOR_STUDY ? exteriorMats().dressed : k.M.stone);
   ring(UF - 0.12, UF + 0.08, 0.07, dressed, 72, 108, 80, 110, k.M.paint); // string course
   ring(TOP - 0.42, TOP - 0.26, 0.06, dressed, 72, 108, 80, 110, k.M.paint); // cornice: frieze band
   ring(TOP - 0.26, TOP - 0.12, 0.13, '#e9dcc0', 72, 108, 80, 110, k.M.paint); // corona
@@ -159,6 +161,14 @@ function shell(w: World, c: Ctx) {
     // with the plaster in the Reis- and Sterrenkamer, study and guest room ceilings; it now starts inside the ceiling slab
     box(c.b, stone.mat, EXTERIOR_STUDY ? '#ffffff' : '#efe2c4', dx, TOP - 0.15, dz, sx, top - TOP + 0.15, sz, { chunk: c.chunk, uv: 1.5 });
     gableRoof(c, dx, dz, 2.6, 2.1, top, 0.8, alongX, k.M.slate, '#9e9a94', '#5a4636', EXTERIOR_STUDY && ROOF_DETAIL);
+    if (EXTERIOR_STUDY && EXTERIOR_GREENERY) {
+      // A stepped, bevelled cheek/eave junction returns behind the front surround on both sides.
+      for (const side of [-1,1]) {
+        const px=dx+(alongX?0:side*(sx/2+.025)), pz=dz+(alongX?side*(sz/2+.025):0);
+        dressedBlock(c,px,top-.055,pz,alongX?sx:.10,.11,alongX?.10:sz,'#c4c3b0',.015);
+        dressedBlock(c,px,top-.13,pz,alongX?sx:.065,.035,alongX?.065:sz,'#999f8e',.008);
+      }
+    }
     if(EXTERIOR_STUDY && EXTERIOR_FINISH)roofFlashing(c,dx-sx/2,dx+sx/2,dz-sz/2,dz+sz/2,.13,.06);
     // the dormer window: framed glass in a dressed surround (same grammar as the facade)
     const wx = dx + fx * (alongX ? 0.9 : 0), wz = dz + fz * (alongX ? 0 : 0.9);
@@ -177,17 +187,23 @@ function shell(w: World, c: Ctx) {
   bay(89.05, 90.95, 3.0, TOP);
   for (const x of [86.4, 93.6]) for (let i = 0, y = 0.7; y < TOP - 0.5; i++, y += 0.42) { // quoins on the bay
     const la = i % 2 ? 0.3 : 0.55;
+    if (EXTERIOR_STUDY) {
+      dressedBlock(c, x < 90 ? x + (la - .04) / 2 : x - (la - .04) / 2, y + .18, 79.53, la + .04, .36, .06, i % 3 === 0 ? '#d1cfba' : '#dfd8c2', .012);
+      continue;
+    }
     boxMM(c.b, k.M.stone, dressed, x < 90 ? x - 0.04 : x - la, x < 90 ? x + la : x + 0.04, y, y + 0.36, 79.5, 79.56, { chunk: c.chunk, uv: 1.2, jitter: 0.02 });
   }
-  boxMM(c.b, k.M.stone, '#e2d2b2', 86.2, 93.8, TOP, TOP + 0.25, 79.45, 80.05, { chunk: c.chunk });
+  boxMM(c.b, EXTERIOR_STUDY ? exteriorMats().dressed : k.M.stone, EXTERIOR_STUDY ? '#dfd8c2' : '#e2d2b2', 86.2, 93.8, TOP, TOP + 0.25, 79.45, 80.05, { chunk: c.chunk });
   gableRoof(c, 90, 79.8, 0.6, 7.8, TOP + 0.25, 2.6, false, stone.mat, EXTERIOR_STUDY ? '#ffffff' : '#f6ead0', false);
-  for (const s2 of [-1, 1]) segBox(c, k.M.paint, '#ecdfc4', [90 + s2 * 3.95, TOP + 0.2, 79.42], [90, TOP + 2.9, 79.42], 0.12, 0.26); // raking cornice
+  const cornice = gableTrimGeo(7.9, 2.7, .26, .12);
+  geo(c.b, k.M.paint, '#ecdfc4', cornice, 90, TOP + .2, 79.42, { chunk: c.chunk, jitter: 0 });
+  cornice.dispose();
   cyl(c.b, k.M.paint, dressed, 90, TOP + 1.0, 79.46, 0.62, 0.62, 0.06, 20, { chunk: c.chunk, rx: Math.PI / 2 }); // oculus ring
   cyl(c.b, k.M.glow, '#5f6f78', 90, TOP + 1.0, 79.44, 0.5, 0.5, 0.05, 16, { chunk: c.chunk, rx: Math.PI / 2, shadow: false, jitter: 0 });
   windowAt(c, 'x', 79.55, -1, 90, 4.0, 1.2, 1.6, true, { kind: 'manor' });
   // porch (DEV-04D D3-A2, entrance.ts): the walk surfaces and colliders stay exactly as before (the landing floor at GF,
   // the 7.5 cm step, the column circles); the portico, doorway surround, steps and bay base are rebuilt as construction
-  floor(c, 87.8, 92.2, 78.6, 80.0, GF, k.M.stone, '#d9ccb0', 0.4, true);
+  floor(c, 87.8, 92.2, 78.6, 80.0, GF, EXTERIOR_STUDY ? exteriorMats().dressed : k.M.stone, EXTERIOR_STUDY ? '#d8d2bf' : '#d9ccb0', 0.4, true, EXTERIOR_STUDY ? .6 : 2);
   for (const x of [88.1, 91.9]) c.col.addCircle(x, 78.85, 0.2, 0, 3);
   buildEntrance(c, { x: 90, bayZ: 79.55, colZ: 78.85, colX: [88.1, 91.9], gf: GF });
   entranceBay(c, 86.4, 93.6, 79.55, 80.0, [87.375, 92.625], UF);
@@ -203,7 +219,7 @@ function shell(w: World, c: Ctx) {
   wall(c, 'x', 109.8, 107.6, 116, 0, WH, { ...stone, t: 0.4, exterior: 1, skin, uv: 2.4, winStyle: 'manor', windows: [{ at: 112, sill: 1.2, h: 1.1, w: 1.0 }] });
   wall(c, 'z', 115.8, 92.4, 109.6, 0, WH, { ...stone, t: 0.4, exterior: 1, skin, uv: 2.4, openings: [{ at: 102.5, w: 1.3, h: 2.35 }] });
   ring(-0.1, 0.62, 0.1, sand, 108, 116, 92.2, 109.8, k.M.stone, wingRuns(0.1));
-  for (const [x0, x1, z0, z1] of [[111.45, 112.55, 92.0, 92.42], [115.58, 116.12, 101.85, 103.15]] as const) threshold(c, x0, x1, z0, z1, GF);
+  for (const [x0, x1, z0, z1] of [[111.45, 112.55, 92.0, 92.42], [115.58, 116.12, 101.85, 103.15]] as const) threshold(c, x0, x1, z0, z1, GF, EXTERIOR_STUDY ? '#d6d1bd' : '#d6c8a8', EXTERIOR_STUDY ? exteriorMats().dressed : k.M.stone);
   ring(WH - 0.3, WH - 0.14, 0.08, dressed, 108, 116, 92.2, 109.8, k.M.paint);
   // DEV-03: the west eave stops on the manor's outer wall face (x 108); with the old symmetric 8 m footprint the
   // overhang, fascia and gutter ran 0.5 m through the manor wall into the north guest room as a "dado rail"

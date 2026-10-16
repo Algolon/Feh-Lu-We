@@ -6,7 +6,7 @@ import { lathe, softBox } from './artkit';
 import type { CollisionWorld } from '../player/collision';
 import { registerOpening } from './openings';
 import { studyWindowSite, studyWindow } from './exteriorStudy';
-import { slateCourseUV } from './roofDetail';
+import { slateCourseUV, gableTrimGeo } from './roofDetail';
 import { rainwater, ridgeFinish } from './exteriorFinish';
 
 export interface Ctx {
@@ -282,8 +282,8 @@ export function floor(c: Ctx, x0: number, x1: number, z0: number, z1: number, yT
  * DEV-04A door threshold: a dressed stone sill through the full depth of a wall opening, its top 12 mm over the floor
  * level y (a readable threshold, never a knee-high piece of wall), walkable.
  */
-export function threshold(c: Ctx, x0: number, x1: number, z0: number, z1: number, y: number, color: THREE.ColorRepresentation = '#d6c8a8') {
-  boxMM(c.b, c.k.M.stone, color, x0, x1, y - 0.14, y + 0.012, z0, z1, { uv: 0.8, chunk: c.chunk, jitter: 0 });
+export function threshold(c: Ctx, x0: number, x1: number, z0: number, z1: number, y: number, color: THREE.ColorRepresentation = '#d6c8a8', mat: THREE.Material = c.k.M.stone) {
+  boxMM(c.b, mat, color, x0, x1, y - 0.14, y + 0.012, z0, z1, { uv: 0.8, chunk: c.chunk, jitter: 0 });
   c.col.addFloor(x0, x1, z0, z1, y);
 }
 
@@ -437,10 +437,10 @@ export function gableRoof(c: Ctx, cx: number, cz: number, len: number, width: nu
   // bargeboards on both gable ends + a ridge cap: the roof gets an edge thickness instead of a paper prism
   for (const e of [-1, 1]) {
     const ex = alongX ? cx + e * (len / 2 + 0.02) : cx, ez = alongX ? cz : cz + e * (len / 2 + 0.02);
-    for (const s2 of [-1, 1]) {
-      const a: [number, number, number] = alongX ? [ex, y - 0.05, cz + s2 * (width / 2 + 0.02)] : [cx + s2 * (width / 2 + 0.02), y - 0.05, ez];
-      segBox(c, c.k.M.paint, barge, a, [ex, y + h + 0.02, ez], 0.06, 0.2);
-    }
+    const trim = gableTrimGeo(width + 0.04, h + 0.07, 0.2, 0.06);
+    if (alongX) trim.rotateY(Math.PI / 2);
+    geo(c.b, c.k.M.paint, barge, trim, ex, y - 0.05, ez, { chunk: c.chunk, jitter: 0 });
+    trim.dispose();
   }
   const r0: [number, number, number] = alongX ? [cx - len / 2, y + h + 0.02, cz] : [cx, y + h + 0.02, cz - len / 2];
   const r1: [number, number, number] = alongX ? [cx + len / 2, y + h + 0.02, cz] : [cx, y + h + 0.02, cz + len / 2];

@@ -89,7 +89,8 @@ export function ageFacade(mat:THREE.MeshLambertMaterial) {
   const x=canvas.getContext('2d')!;x.fillStyle='#ffffff';x.fillRect(0,0,W,H);
   const py=(y:number)=>H*(1-y/6.4),px=(s:number)=>W*s/L;
   const base=x.createLinearGradient(0,H,0,py(1.3));base.addColorStop(0,'rgba(96,111,94,.19)');base.addColorStop(.5,'rgba(117,126,106,.08)');base.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=base;x.fillRect(0,py(1.3),W,H-py(1.3));
-  for(let i=0;i<28;i++){
+  // Broad variation is sparse; local runoff and shelter carry the ageing.
+  for(let i=0;i<8;i++){
     const s=(Math.sin(i*12.91)*43758.5%1+1)%1*L,y=1.4+((i*17)%31)/7,r=1.3+(i%4)*.55;
     const g=x.createRadialGradient(px(s),py(y),0,px(s),py(y),px(r));g.addColorStop(0,i%2?'rgba(167,157,127,.055)':'rgba(130,151,139,.045)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(px(s-r),py(y)-px(r),px(r)*2,px(r)*2);
   }
@@ -102,10 +103,18 @@ export function ageFacade(mat:THREE.MeshLambertMaterial) {
   for(const a of [82.5,90,97,101,105])windows.push([102+110-a,4.15]);
   for(const a of [83,86.8,90.4])windows.push([36+a-80,1.05]);
   for(const a of [83,87,91])windows.push([36+a-80,4.15]);
-  for(const [s,y] of windows){
+  for(const [index,[s,y]] of windows.entries()){
+    if(index%3!==1)continue; // selected runoff sites, not an identical stain below every window
     const g=x.createLinearGradient(0,py(y-.75),0,py(y));g.addColorStop(0,'rgba(255,255,255,0)');g.addColorStop(.65,'rgba(120,131,112,.08)');g.addColorStop(1,'rgba(114,124,108,.15)');x.fillStyle=g;
     x.beginPath();x.moveTo(px(s-.43),py(y));x.lineTo(px(s+.43),py(y));x.lineTo(px(s+.23),py(y-.75));x.lineTo(px(s-.19),py(y-.75));x.fill();
   }
+  // Soft contact under the projecting cornice, strongest at the joint and fading into the wall.
+  const joint=x.createLinearGradient(0,py(6.36),0,py(5.98));
+  joint.addColorStop(0,'rgba(72,80,66,.13)');joint.addColorStop(.32,'rgba(85,94,77,.055)');joint.addColorStop(1,'rgba(255,255,255,0)');
+  x.fillStyle=joint;x.fillRect(0,py(6.36),px(132),py(5.98)-py(6.36));
+  // Entrance contact wear is confined to the lower projecting bay; no cracks or wall-wide grime.
+  const wear=x.createRadialGradient(px(18),py(.25),0,px(18),py(.25),px(1.7));
+  wear.addColorStop(0,'rgba(128,118,94,.07)');wear.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=wear;x.fillRect(px(16.3),py(.65),px(3.4),py(0)-py(.65));
   const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.NoColorSpace;texture.wrapS=THREE.RepeatWrapping;
   const previous=mat.onBeforeCompile;
   mat.onBeforeCompile=(shader,renderer)=>{

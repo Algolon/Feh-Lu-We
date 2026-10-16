@@ -1,0 +1,235 @@
+{
+  "rows": [
+    {
+      "view": "entrance",
+      "before": {
+        "calls": 87,
+        "triangles": 313088
+      },
+      "after": {
+        "calls": 87,
+        "triangles": 313436
+      },
+      "pixelMismatchBefore": 0,
+      "pixelMismatchAfter": 0
+    },
+    {
+      "view": "planter",
+      "before": {
+        "calls": 48,
+        "triangles": 322680
+      },
+      "after": {
+        "calls": 49,
+        "triangles": 323332
+      },
+      "pixelMismatchBefore": 0,
+      "pixelMismatchAfter": 0
+    },
+    {
+      "view": "pediment-front",
+      "before": {
+        "calls": 88,
+        "triangles": 309254
+      },
+      "after": {
+        "calls": 88,
+        "triangles": 309602
+      },
+      "pixelMismatchBefore": 2554,
+      "pixelMismatchAfter": 2554
+    },
+    {
+      "view": "pediment-oblique",
+      "before": {
+        "calls": 71,
+        "triangles": 300598
+      },
+      "after": {
+        "calls": 71,
+        "triangles": 300946
+      },
+      "pixelMismatchBefore": 1102,
+      "pixelMismatchAfter": 1102
+    },
+    {
+      "view": "dormer-front",
+      "before": {
+        "calls": 79,
+        "triangles": 318615
+      },
+      "after": {
+        "calls": 80,
+        "triangles": 318963
+      },
+      "pixelMismatchBefore": 0,
+      "pixelMismatchAfter": 0
+    },
+    {
+      "view": "dormer-east",
+      "before": {
+        "calls": 67,
+        "triangles": 298273
+      },
+      "after": {
+        "calls": 68,
+        "triangles": 298613
+      },
+      "pixelMismatchBefore": 441,
+      "pixelMismatchAfter": 441
+    },
+    {
+      "view": "dormer-north",
+      "before": {
+        "calls": 97,
+        "triangles": 456790
+      },
+      "after": {
+        "calls": 99,
+        "triangles": 457130
+      },
+      "pixelMismatchBefore": 6400,
+      "pixelMismatchAfter": 6400
+    },
+    {
+      "view": "dormer-west",
+      "before": {
+        "calls": 74,
+        "triangles": 296501
+      },
+      "after": {
+        "calls": 76,
+        "triangles": 296849
+      },
+      "pixelMismatchBefore": 0,
+      "pixelMismatchAfter": 0
+    },
+    {
+      "view": "junction-near",
+      "before": {
+        "calls": 58,
+        "triangles": 271167
+      },
+      "after": {
+        "calls": 59,
+        "triangles": 271515
+      },
+      "pixelMismatchBefore": 437,
+      "pixelMismatchAfter": 437
+    },
+    {
+      "view": "roof-overview",
+      "before": {
+        "calls": 77,
+        "triangles": 268878
+      },
+      "after": {
+        "calls": 79,
+        "triangles": 269226
+      },
+      "pixelMismatchBefore": 0,
+      "pixelMismatchAfter": 0
+    },
+    {
+      "view": "roof-near",
+      "before": {
+        "calls": 92,
+        "triangles": 319072
+      },
+      "after": {
+        "calls": 92,
+        "triangles": 319420
+      },
+      "pixelMismatchBefore": 0,
+      "pixelMismatchAfter": 0
+    },
+    {
+      "view": "arrival",
+      "before": {
+        "calls": 79,
+        "triangles": 262273
+      },
+      "after": {
+        "calls": 81,
+        "triangles": 262621
+      },
+      "pixelMismatchBefore": 0,
+      "pixelMismatchAfter": 0
+    },
+    {
+      "view": "facade-near",
+      "before": {
+        "calls": 56,
+        "triangles": 265791
+      },
+      "after": {
+        "calls": 57,
+        "triangles": 266139
+      },
+      "pixelMismatchBefore": 0,
+      "pixelMismatchAfter": 0
+    },
+    {
+      "view": "garden",
+      "before": {
+        "calls": 99,
+        "triangles": 451840
+      },
+      "after": {
+        "calls": 101,
+        "triangles": 452180
+      },
+      "pixelMismatchBefore": 819,
+      "pixelMismatchAfter": 819
+    },
+    {
+      "view": "conservatory",
+      "before": {
+        "calls": 138,
+        "triangles": 460108
+      },
+      "after": {
+        "calls": 139,
+        "triangles": 460456
+      },
+      "pixelMismatchBefore": 2,
+      "pixelMismatchAfter": 2
+    },
+    {
+      "view": "east",
+      "before": {
+        "calls": 92,
+        "triangles": 419311
+      },
+      "after": {
+        "calls": 94,
+        "triangles": 419651
+      },
+      "pixelMismatchBefore": 4,
+      "pixelMismatchAfter": 4
+    }
+  ],
+  "sameGameplayContracts": true,
+  "beforeValidation": {
+    "noErrors": true,
+    "functionalContractsUnchanged": true,
+    "approachWalk": true,
+    "pixelEquivalent": false,
+    "triangleEquivalent": true,
+    "visibilityAndPicking": true,
+    "staticBudget": true,
+    "movingBudget": true,
+    "qualitySwitches": true
+  },
+  "afterValidation": {
+    "noErrors": true,
+    "functionalContractsUnchanged": true,
+    "approachWalk": true,
+    "pixelEquivalent": false,
+    "triangleEquivalent": true,
+    "visibilityAndPicking": true,
+    "staticBudget": true,
+    "movingBudget": true,
+    "qualitySwitches": true
+  }
+}

@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import type { Ctx } from './arch';
 import { ARRIVAL_GRAVEL, DRIVEWAY, type Rect } from './layout';
 import { boxMM, planMatrix } from './kit';
-import { bake } from './artkit';
+import { bake, projectUV } from './artkit';
 import { dressedBlock, exteriorMats, gravelUV } from './exteriorStudy';
 import { FOREST_PATHS } from './terrain';
 import { distToPolyline } from './nature';
@@ -38,7 +38,7 @@ export function arrivalGravel(c: Ctx) {
     const pts=[[Math.cos(a0)*ri+90,Math.sin(a0)*ri+70],[Math.cos(a1)*ri+90,Math.sin(a1)*ri+70],[Math.cos(a1)*ro+90,Math.sin(a1)*ro+70],[Math.cos(a0)*ro+90,Math.sin(a0)*ro+70]];
     const shape=new THREE.Shape(pts.map(([x,z])=>new THREE.Vector2(x,z)));
     const g=new THREE.ShapeGeometry(shape);g.rotateX(-Math.PI/2);g.translate(0,.053,0);
-    c.b.add(c.k.M.paint,g,new THREE.Matrix4(),stone[(i+row*2)%stone.length],'paths',false,0);g.dispose();
+    c.b.add(exteriorMats().dressed,projectUV(g,.6),new THREE.Matrix4(),stone[(i+row*2)%stone.length],'paths',false,0);g.dispose();
   }
   // Inlaid bay markers replace painted white stripes, keeping all five original parking bays legible.
   for(const x of [69.5,72.3,75.1,77.9,101,103.8,106.6])for(let z=72.25;z<77.4;z+=.52)
@@ -73,7 +73,7 @@ function pavingStone(c:Ctx,xa:number,xb:number,za:number,zb:number,row:number) {
   bake(g,p=>.83+.17*THREE.MathUtils.smoothstep(p.y,.032,.054));
   const tint=new THREE.Color(stone[Math.floor(seed*stone.length)]);
   tint.multiplyScalar(.95+hash(row,xa)*.10);
-  c.b.add(c.k.M.paint,g,planMatrix((xa+xb)/2,0,(za+zb)/2),tint,'paths',false,0);g.dispose();
+  c.b.add(exteriorMats().dressed,projectUV(g,.6),planMatrix((xa+xb)/2,0,(za+zb)/2),tint,'paths',false,0);g.dispose();
 }
 
 function edging(c:Ctx) {
