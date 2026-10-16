@@ -1,5 +1,6 @@
 import './ui/style.css';
 import { Game, TEST_HOOKS } from './core/game';
+import { installArtDiagnostics } from './core/artDiagnostics';
 import { UI } from './ui/ui';
 import { REVIEW } from './core/artflags';
 import { reviewState, showReviewStart, mountReviewBar } from './ui/review';
@@ -38,6 +39,7 @@ function boot() {
   let game: Game;
   try {
     game = new Game(canvas);
+    installArtDiagnostics(game); // ?artdiag=1 only: GPU diagnostics on the actual phone
   } catch (e) {
     console.error(e);
     fail('Het 3D-beeld kon niet worden gestart.');
