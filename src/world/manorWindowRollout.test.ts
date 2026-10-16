@@ -4,9 +4,11 @@ import { sillBoardGeometry } from './manorWindowAssembly';
 import { PORTALS, manorWindowRoom } from './roomdefs';
 
 describe('WINDOW-R02 manor-wide physical windows', () => {
-  it('uses one authored layout for 46 windows on main manor and service wing', () => {
+  it('uses one authored layout for 44 windows on main manor and service wing', () => {
     expect(MANOR_WINDOW_WALLS).toHaveLength(10);
-    expect(MANOR_WINDOWS).toHaveLength(46);
+    const entranceFacade = MANOR_WINDOW_WALLS.find(w => w.id === 'south-u')!;
+    expect(entranceFacade.windows.some(w => w.at === 87.5 || w.at === 92.5)).toBe(false);
+    expect(MANOR_WINDOWS).toHaveLength(44);
     expect(new Set(MANOR_WINDOWS.map(w => w.id)).size).toBe(MANOR_WINDOWS.length);
     expect(MANOR_WINDOWS.filter(w => w.id === 'north-g-3').map(w => [w.at, w.f]))
       .toEqual([[88, 109.8]]);
