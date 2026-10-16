@@ -1,0 +1,31 @@
+name: WINDOW-R02 baseline on original production (no deploy)
+on:
+  push:
+    branches: [window-r02-perf-prod-baseline]
+    paths: ['scripts/window-r02-production-baseline.mjs', '.github/workflows/window-r02-perf-baseline.yml']
+permissions:
+  contents: write
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with: {node-version: 22, cache: npm}
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npx playwright-core install --with-deps chromium
+      - run: node scripts/window-r02-production-baseline.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: window-r02-production-baseline
+          path: docs/development/workstreams/window-r02/baseline/results.json
+      - name: Commit baseline measurements
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/development/workstreams/window-r02/baseline/results.json
+          git commit -m "perf(WINDOW-R02): actual production baseline screenshot pose counters"
+          git push origin HEAD:window-r02-perf-prod-baseline
