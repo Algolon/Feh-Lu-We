@@ -10,7 +10,7 @@ export const v3 = (x: number, y: number, n: number) => new THREE.Vector3(x, y, -
 
 export type MatKey =
   | 'paint' | 'plaster' | 'stone' | 'wood' | 'tile' | 'slate' | 'terracotta' | 'grass' | 'dirt'
-  | 'foliage' | 'bark' | 'glass' | 'windowGlass' | 'windowSillWood' | 'glow' | 'poolTile' | 'rug';
+  | 'foliage' | 'bark' | 'glass' | 'windowGlass' | 'windowSillWood' | 'windowSash' | 'glow' | 'poolTile' | 'rug';
 
 export interface Kit {
   T: Record<string, THREE.Texture>;
@@ -31,6 +31,8 @@ export function getKit(): Kit {
     stone: lam({ map: T.stone }),
     wood: lam({ map: T.wood }),
     windowSillWood: lam({ map: T.windowSillWood }),
+    // A single untextured paint material, shared by all connected WINDOW-FIX-R02 sashes.
+    windowSash: lam({}),
     tile: lam({ map: T.tile }),
     slate: lam({ map: T.slate }),
     terracotta: lam({ map: T.terracotta }),
@@ -50,6 +52,7 @@ export function getKit(): Kit {
   };
   // Named distinctly for QA and reuse when the window system later expands beyond the pilot.
   M.windowSillWood.name = 'WINDOW-R02-MahoganySill';
+  M.windowSash.name = 'WINDOW-FIX-R02-ConnectedSash';
   // DEV-04C ART-01.1: broad authored value / hue breakup per material family (surfaces.ts; no extra draw calls)
   const SURF: Partial<Record<MatKey, Parameters<typeof surface>[1]>> = {
     paint: 'paint', plaster: 'plaster', stone: 'stone', wood: 'timber', windowSillWood: 'timber', tile: 'stone', slate: 'stone', terracotta: 'stone',
