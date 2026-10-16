@@ -600,7 +600,7 @@ export class Game implements GameApi {
     const hit = this.boslustPick(x, y);
     if (!hit) return;
     const id = hit.it.id;
-    if (/^boslust\\.wheel\\.[0-3]$/.test(id)) {
+    if (/^boslust\.wheel\.[0-3]$/.test(id)) {
       const index = Number(id.slice(-1));
       this.boslustFocus!.selected = index;
       const localY = hit.it.obj.worldToLocal(hit.point.clone()).y;
@@ -614,7 +614,7 @@ export class Game implements GameApi {
   private boslustFocusSteps(x: number, y: number, steps: number, isTouch: boolean) {
     if (!steps) return;
     const hit = this.boslustPick(x, y);
-    if (!hit || !/^boslust\\.wheel\\.[0-3]$/.test(hit.it.id)) return;
+    if (!hit || !/^boslust\.wheel\.[0-3]$/.test(hit.it.id)) return;
     const index = Number(hit.it.id.slice(-1));
     this.boslustFocus!.selected = index;
     this.turnBoslustFocusWheel(index, steps > 0 ? 1 : -1, isTouch, Math.abs(steps));
