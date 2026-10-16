@@ -1,8 +1,8 @@
-// FRONT-R02: actual in-game software WebGL screenshots and scene-budget check.
+// FRONT-R04: actual in-game software WebGL screenshots and scene-budget check.
 // Runs against the candidate production build on an Actions runner, no deployment.
 import { chromium } from 'playwright-core';
 import { mkdirSync, writeFileSync } from 'node:fs';
-const OUT='docs/development/workstreams/front-r02/review';
+const OUT='docs/development/workstreams/front-r04/review';
 const BASE=process.env.BASE ?? 'http://127.0.0.1:4173/Feh-Lu-We/';
 mkdirSync(OUT,{recursive:true});
 const browser=await chromium.launch({
@@ -17,6 +17,7 @@ const views=[
   {name:'02-exterior-oblique',size:{width:1050,height:750},pose:{x:89.25,y:.15,z:78.5,yaw:.33,pitch:0.015}},
   {name:'03-interior-front',size:{width:1050,height:750},pose:{x:90,y:.15,z:82.0,yaw:Math.PI,pitch:.02}},
   {name:'04-mobile-exterior',size:{width:390,height:844},pose:{x:90,y:.15,z:78.85,yaw:0,pitch:.02}},
+  {name:'05-lion-detail-oblique',size:{width:1400,height:1000},pose:{x:89.80,y:.15,z:79.06,yaw:.16,pitch:.05}},
 ];
 try{
   for(const v of views){
@@ -48,7 +49,7 @@ try{
     await page.waitForTimeout(650);
     await page.screenshot({path:OUT+'/'+v.name+'.jpg',type:'jpeg',quality:82});
     results.push({view:v.name,pose:v.pose,...metrics});
-    console.log('FRONT_R01_VIEW',JSON.stringify(results.at(-1)));
+    console.log('FRONT_R04_VIEW',JSON.stringify(results.at(-1)));
     await ctx.close();
   }
   writeFileSync(OUT+'/results.json',JSON.stringify({source:'candidate branch in Chromium / software WebGL',results,errors},null,2));
