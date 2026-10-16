@@ -7,10 +7,14 @@ import { softBox } from './artkit';
 
 export const EXTERIOR_DETAILS = typeof location==='undefined'||new URLSearchParams(location.search).get('details')!=='base';
 export const ENTRANCE_METAL={iron:'#343c37',bronze:'#9a895f',shadow:'#625b43'};
-export function entrancePanels(width:number,height:number) {
-  const stile=.145,centre=.05;
-  return [[stile,width/2-centre],[width/2+centre,width-stile]].flatMap(([x0,x1])=>
-    [[.14,height*.43-.055],[height*.43+.055,height-.14]].map(([y0,y1])=>({x0,x1,y0,y1})));
+/** Horizontal, lightly separated mahogany boards inside the existing wide door envelope. */
+export function horizontalDoorBoards(width:number,height:number,count=7) {
+  const border=.055,gap=.008;
+  const h=(height-2*border-(count-1)*gap)/count;
+  return Array.from({length:count},(_,i)=>({
+    x0:border,x1:width-border,
+    y0:border+i*(h+gap),y1:border+i*(h+gap)+h,
+  }));
 }
 let doorTimber:THREE.Material|undefined;
 function entranceTimber(base:THREE.Material) {
@@ -34,37 +38,108 @@ function timber(b:Batcher,mat:THREE.Material,color:THREE.ColorRepresentation,x:n
   b.add(mat,g,planMatrix(x,y+sy/2,z),color,'main',true,0);g.dispose();
 }
 
-/** Four genuinely recessed fields carried between stiles and rails; all metal follows the same hinge. */
+/**
+ * FRONT-R01: single broad exterior leaf, horizontal mahogany boards, charcoal perimeter,
+ * a long right-hand pull and a sculpted, blackened-bronze lion knocker. All fittings
+ * are part of the hinged batch so the original save/lock/swing/collision stay intact.
+ * Plan Z negative is the outdoor-facing side of the front door.
+ */
 export function frontDoorLeaf(b:Batcher,k:Kit,width:number,height:number,th:number,color:THREE.ColorRepresentation) {
-  const wood=entranceTimber(k.M.wood),metal=k.M.paint,col=new THREE.Color(color),frame=col.clone().multiplyScalar(1.04);
-  const rail=.14,mid=height*.43;
-  for(const x of [rail/2,width-rail/2])timber(b,wood,frame,x,0,0,rail,height,th,{uv:1.2,jitter:0});
-  timber(b,wood,frame,width/2,0,0,width-2*rail,.14,th,{uv:1.2,jitter:0});
-  timber(b,wood,frame,width/2,height-.14,0,width-2*rail,.14,th,{uv:1.2,jitter:0});
-  timber(b,wood,frame,width/2,mid-.055,0,width-2*rail,.11,th,{uv:1.2,jitter:0});
-  timber(b,wood,frame,width/2,.14,0,.10,height-.28,th,{uv:1.2,jitter:0});
-  for(const p of entrancePanels(width,height)) {
-    const w=p.x1-p.x0,h=p.y1-p.y0,cx=(p.x0+p.x1)/2;
-    timber(b,wood,col.clone().multiplyScalar(.88),cx,p.y0,0,w+.012,h+.012,th*.54,{uv:1.2,jitter:0});
-    for(const side of [-1,1]) {
-      const z=side*(th/2-.004);
-      for(const x of [p.x0+.018,p.x1-.018])timber(b,wood,col,x,p.y0+.018,z,.036,h-.036,.018,{uv:1.2,jitter:0});
-      for(const y of [p.y0+.018,p.y1-.054])timber(b,wood,col,cx,y,z,w-.072,.036,.018,{uv:1.2,jitter:0});
+  const wood=entranceTimber(k.M.wood),metal=k.M.paint;
+  const mahogany=new THREE.Color(color);
+  const dark=mahogany.clone().multiplyScalar(.72);
+  const edge=.043;
+  const charcoal='#292a27',bevel='#383630';
+
+  // Backing closes the thin shadow lines: no view through the 8 mm joints.
+  timber(b,wood,dark,width/2,.012,0,width-.025,height-.024,th*.82,{jitter:0});
+  const boards=horizontalDoorBoards(width,height);
+  for(let i=0;i<boards.length;i++){
+    const p=boards[i],shade=[1.04,.99,1.015,.97,1.03,.985,1.01][i%7];
+    const boardColor=mahogany.clone().multiplyScalar(shade);
+    const y0=p.y0+.002,h=p.y1-p.y0-.004;
+    // Front and back boards: texture grain follows their long, horizontal axis.
+    for(const side of [-1,1])
+      timber(b,wood,boardColor,width/2,y0,side*(th*.41+.004),p.x1-p.x0,h,.012,{jitter:0});
+  }
+
+  // All-black frame belongs to the swinging leaf, not to the stone entrance.
+  for(const x of [edge/2,width-edge/2])
+    box(b,metal,charcoal,x,0,0,edge,height,th+.014,{jitter:0});
+  for(const y of [edge/2,height-edge/2])
+    box(b,metal,charcoal,width/2,y-edge/2,0,width-2*edge,edge,th+.014,{jitter:0});
+  // Fine inset reveals against the timber, rather than an oversized trim.
+  for(const x of [edge+.004,width-edge-.004])
+    box(b,metal,bevel,x,.055,0,.007,height-.11,th+.016,{jitter:0});
+
+  // Long contemporary pull on the outside/right. A quieter shorter inner grip
+  // keeps the game door usable from both sides without duplicating the hero detail.
+  const hx=width-.15;
+  for(const side of [-1,1]){
+    const exterior=side===-1;
+    const len=exterior?1.13:.66,cy=exterior?1.16:1.05;
+    const handleZ=side*(th/2+.027);
+    const radius=exterior?.018:.014;
+    rod(b,metal,'#252825',hx,cy,handleZ,radius,radius,len,10,{jitter:0});
+    for(const y of [cy-len*.40,cy+len*.40]){
+      // A mounting post projecting from the leaf to the pull-bar axis.
+      rod(b,metal,'#3d3e38',hx,y,side*(th/2+.012),.012,.012,.032,8,{rx:Math.PI/2,jitter:0});
+      const stud=softBox(.044,.048,.012,.006);
+      geo(b,metal,'#30312e',stud,hx,y,side*(th/2+.003),{jitter:0});
+      stud.dispose();
     }
   }
-  for(const side of [-1,1]) {
-    const z=side*(th/2+.011),x=width-.105;
-    const plate=softBox(.06,.23,.018,.009);geo(b,metal,ENTRANCE_METAL.shadow,plate,x,1.06,z,{jitter:0});plate.dispose();
-    rod(b,metal,ENTRANCE_METAL.bronze,x,1.09,z+side*.02,.018,.018,.045,8,{rx:Math.PI/2,jitter:0});
-    rod(b,metal,ENTRANCE_METAL.bronze,x-.045,1.09,z+side*.04,.014,.014,.105,8,{rz:Math.PI/2,jitter:0});
-    const key=new THREE.CircleGeometry(.008,8);geo(b,metal,'#30362e',key,x,1.005,z+side*.011,{rx:side===1?Math.PI:0,jitter:0});key.dispose();
+  // Small, restrained key cylinder rather than the old interior-style lever.
+  const key=new THREE.CylinderGeometry(.012,.012,.007,12);
+  geo(b,metal,'#a29370',key,width-.245,.97,-th/2-.012,{rx:Math.PI/2,jitter:0});
+  key.dispose();
+
+  lionEntranceKnocker(b,metal,width/2,height*.70,th);
+
+  // Keep hinges flush within the original leaf x/y envelope.
+  for(const y of [.30,height*.5,height-.30])
+    rod(b,metal,charcoal,.029,y,-th/2,.011,.011,.082,8,{jitter:0});
+}
+
+/** A small readable relief, not a flat decal or an assembly of anonymous boxes. */
+function lionEntranceKnocker(b:Batcher,metal:THREE.Material,cx:number,cy:number,th:number) {
+  const front=-th/2,iron='#242522',bronze='#715b3e',lit='#a18a64';
+  const plate=softBox(.212,.29,.014,.022);
+  geo(b,metal,iron,plate,cx,cy,front-.011,{jitter:0});plate.dispose();
+
+  // Shared shape, vertex tinted and merged with the rest of the metalwork:
+  // broad mane silhouette, radial tufts, cheek planes, brows, muzzle and jaw.
+  const orb=new THREE.SphereGeometry(1,10,8);
+  const swell=(dx:number,dy:number,dz:number,sx:number,sy:number,sz:number,tint:string)=>
+    geo(b,metal,tint,orb,cx+dx,cy+dy,front-dz,{s:[sx,sy,sz],jitter:0});
+  swell(0,.005,.035,.091,.112,.029,bronze);
+  const tuft=new THREE.ConeGeometry(.023,.072,5);
+  for(let i=0;i<14;i++){
+    const a=i*Math.PI*2/14,dx=Math.sin(a)*.081,dy=Math.cos(a)*.102;
+    geo(b,metal,i%3===0?lit:bronze,tuft,cx+dx,cy+dy,front-.042,{rz:-a,jitter:0});
   }
-  // A restrained bronze knocker, on the exterior centre stile.
-  const z=-th/2-.018,plate=softBox(.065,.20,.018,.009);
-  geo(b,metal,ENTRANCE_METAL.shadow,plate,width/2,height*.65,z,{jitter:0});plate.dispose();
-  const ring=new THREE.TorusGeometry(.052,.009,5,16);ring.scale(1,1.22,1);
-  geo(b,metal,ENTRANCE_METAL.bronze,ring,width/2,height*.65-.012,z-.018,{jitter:0});ring.dispose();
-  for(const y of [.28,height*.5,height-.28])rod(b,metal,ENTRANCE_METAL.iron,.035,y,-th/2,.012,.012,.10,8,{jitter:0});
+  tuft.dispose();
+  // Face projects clear of the mane, with characteristic heavy brows and snout.
+  swell(0,.022,.061,.060,.073,.030,bronze);
+  for(const side of [-1,1]){
+    swell(side*.030,.030,.085,.025,.013,.014,lit); // brow
+    swell(side*.029,.016,.098,.010,.007,.006,iron); // recessed eye
+    swell(side*.040,-.022,.075,.025,.039,.024,bronze); // cheek
+    swell(side*.018,-.044,.095,.026,.021,.018,lit); // whisker pad
+  }
+  swell(0,-.048,.113,.021,.015,.014,iron); // triangular-looking nose in shadow
+  swell(0,-.070,.098,.026,.011,.012,iron); // open mouth above ring
+  swell(0,-.087,.076,.031,.022,.019,bronze); // chin below mouth
+  orb.dispose();
+
+  // Ring held by the mouth, plus small strike stop. One solid circle, not
+  // a door handle: its plane faces the visitor.
+  const ring=new THREE.TorusGeometry(.059,.009,6,20);
+  geo(b,metal,'#65523b',ring,cx,cy-.139,front-.098,{jitter:0});
+  ring.dispose();
+  const stop=new THREE.SphereGeometry(.013,8,6);
+  geo(b,metal,iron,stop,cx,cy-.205,front-.062,{jitter:0});
+  stop.dispose();
 }
 /** Mounting plate → bowed arm → small hanging ring, ending at the existing lantern cap. */
 export function lanternMount(c:Ctx,x:number,wallZ:number,lanternZ:number,capY:number) {
