@@ -1,0 +1,18 @@
+typecheck exit 0
+unit exit 0       Tests  398 passed (398)
+test:budget exit 0 # pass 4 # fail 0 
+build exit 0 index-CkRwP4sZ.js
+e2e-dev04d exit 0 21/21 passed
+e2e-dev04d-w01 exit 0 27/27 passed
+e2e-dev04d-w01-release exit 1 7/8 passed
+e2e-dev04a exit 1 18/19 passed
+e2e-dev04b exit 0 9/9 passed
+e2e-dev04c exit 1 21/22 passed
+e2e-dev03 exit 0 11/11 DEV-03 checks passed
+e2e-dev02 exit 0 34/34 checks passed
+e2e-dev01 exit 1 31/32 DEV-01 checks passed
+e2e-handpan exit 0 10/10 checks passed
+e2e exit 1 83/94 checks passed
+e2e:ui-r02 exit 1 106/112 UI-R02 checks passed; 36 actual screenshots.
+perf:visibility:smoke exit 1 5/7 checks passed
+DONE

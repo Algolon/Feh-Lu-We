@@ -46,8 +46,8 @@ exact renderer submissions; times are not device times (§8).
    ceilings. With every door open, production draws attic floorboards in place of the hall's plaster ceiling. That is
    a pre-existing geometry defect, reported for a geometry fix (§6.3); culling should not be used to mask it.
 7. **Remaining:**
-   - climbing the main stair with every door open still exceeds the 150-call guide in 9 runtime frames (max 153;
-     was 27 frames, max 158);
+   - climbing the main stair with every door open still exceeds the 150-call guide in 9 of 459 runtime frames at
+     30 FPS and 20 of 914 at 60 FPS (max 153; was 27 / 52 frames, max 158);
    - production's other inherited failures are unchanged (§9).
 
 ## 2. How visibility is updated, and what each measurement saw
@@ -249,6 +249,15 @@ Full table: [`evidence/compare-table.md`](evidence/compare-table.md).
   | up-west | 637,773 → 637,773 | 287 k → 222 k | | |
 
   Where the maximum is unchanged, the worst frame's content is genuinely visible.
+- **60 FPS** (culling every 8th frame) behaves like 30 FPS:
+
+  | Path, all doors open | Max | Calls max | Frames > 150 calls |
+  |---|---|---|---|
+  | stair | 735,744 → 687,070 | 158 → 153 | 52 → 20 of 914 |
+  | well | 737,860 → 682,422 | 156 → 151 | 26 → 1 of 848 |
+
+- **A\* (culling every frame) vs A**, after the change: well 679,152 / 147 for both, hall 678,941 / 142 vs 143. The
+  cadence still adds at most a few thousand triangles and 1–4 calls.
 - **Over all 65 matched runs, no triangle median, p95, p99 or maximum increased.** The only increase of any kind is
   library / partial / Mode B max calls, 76 → 77. The rule never fires on that path and its triangles are identical, so
   this is the opaque batching's ±1 (§8).
@@ -343,7 +352,7 @@ Gameplay contracts:
 - no Mushroom Grove leak;
 - no page errors.
 
-On the candidate: *(final run below)*.
+On the candidate: **7/7 passed** (walkway max 636,855 / 130 calls; well max 679,152 / 142 calls; max call difference between same-history runs 1).
 
 ## 10. Interface constraints and recommendations
 
@@ -358,7 +367,8 @@ On the candidate: *(final run below)*.
   region, with that list, from the start.
 - **Attic floor / ceiling overlap** (§6.3): a production visual defect with every door open. Recommended as a small
   separate geometry fix; then re-run the `mAttic` proof.
-- **Remaining over-guide frames:** the main stair with every door open (9 Mode A frames, max 153 calls). Candidates
+- **Remaining over-guide frames:** the main stair with every door open (30 FPS: 9 of 459 frames, 60 FPS: 20 of 914,
+  max 153 calls) and one 60 FPS well frame (151). Candidates
   for a later bounded pass:
   - the hall and wing furnishings (`mWing` 62 k / 11 calls, `mServ` 35 k / 8 calls in the hotspots);
   - the woodland seen through the front door.
