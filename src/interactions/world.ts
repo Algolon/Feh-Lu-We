@@ -312,9 +312,20 @@ export class World {
       // Closed glass adds a visual path only if that particular aperture can be seen from outside.
       // Otherwise the global 'out' node would pull the service wing into views behind opaque manor walls.
       const clearWindows = this.rooms.portals.filter(p => p.kind === 'window' && p.seeThrough && this.clearWindowInView(eye, cam, p));
-      this.visibleRooms = this.rooms.visible(this.hereRoom, this.isOpen, this.hereRoom === 'out' ? 2 : 3,
-        this.hereRoom === 'out' ? (door) => this.outdoorInView(eye, cam, 22, false, door) : undefined,
-        p => clearWindows.includes(p));
+      // WINDOW-R02-R06: from outdoors, a transparent pane reveals the room immediately
+      // behind it, NOT a two-door BFS into the entire neighbouring floor. Separate
+      // visible *doors* keep their established 2-step path, so the vestibule/hall still
+      // render when looking through the entrance. This reduces costly hidden rooms
+      // behind a side-window without making the actual window pane opaque again.
+      if (this.hereRoom === 'out' && clearWindows.length) {
+        this.visibleRooms = this.rooms.visible('out', this.isOpen, 2,
+          door => this.outdoorInView(eye, cam, 22, false, door), () => false);
+        for (const p of clearWindows) this.visibleRooms.add(p.a === 'out' ? p.b : p.a);
+      } else {
+        this.visibleRooms = this.rooms.visible(this.hereRoom, this.isOpen, this.hereRoom === 'out' ? 2 : 3,
+          this.hereRoom === 'out' ? (door) => this.outdoorInView(eye, cam, 22, false, door) : undefined,
+          p => clearWindows.includes(p));
+      }
       // the outdoors and the glass Copacabana Room (whose walls show the outdoors) count as one view: from inside the
       // house they are drawn only while an open doorway to them is in (a generous cone round) the view
       if (this.hereRoom !== 'out' && this.hereRoom !== 'cons' && (this.visibleRooms.has('out') || this.visibleRooms.has('cons')) && !this.outdoorInView(eye, cam, 26) && !clearWindows.length) {
