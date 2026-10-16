@@ -1866,6 +1866,6 @@ function atticRoofWindow(c: Ctx) {
   glass.dispose();
   for (const z of [RW.z0 + 0.04, RW.z1 - 0.04]) segBox(cIn, P, '#e8e0cc', [RW.x0, gl(0.16)(RW.x0), z], [RW.x1, gl(0.16)(RW.x1), z], 0.07, 0.06);
   for (const x of [RW.x0 + 0.04, RW.x1 - 0.04]) segBox(cIn, P, '#e8e0cc', [x, gl(0.16)(x), RW.z0], [x, gl(0.16)(x), RW.z1], 0.07, 0.06);
-  segBox(cIn, k.M.paint, '#c9a44c', [RW.x0 + 0.1, gl(0.1)(RW.x0 + 0.1), RW.z0 + 0.25], [RW.x0 + 0.1, gl(0.1)(RW.x0 + 0.1), RW.z1 - 0.25], 0.025, 0.025);
+  // WINDOW-R03: the old yellow faux operating bar was removed. The sash remains visual-only.
 }
 
