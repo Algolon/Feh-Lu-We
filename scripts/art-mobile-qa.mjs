@@ -31,7 +31,7 @@ try {
       diagnostic:!!document.querySelector('#flw-art-diagnostics')};
   });
   if(mobile){
-    await page.click('#flw-art-diagnostics button');
+    await page.evaluate(() => (document.querySelector('#flw-art-diagnostics button')).click());
     const diagnostics=JSON.parse(await page.locator('#flw-art-diag-output').textContent());
     info={...info,diags:{cpu:diagnostics.cpu,gpu:diagnostics.gpu,maxTextureSize:diagnostics.maxTextureSize}};
     if(info.diags.cpu?.std<5||info.diags.gpu?.stats?.std<5||info.diags.gpu?.glError!==0)throw Error('GPU art diagnostic failed: '+JSON.stringify(info));
