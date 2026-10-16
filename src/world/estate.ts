@@ -140,7 +140,7 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   w.roomRegion(['mHall'], ['vestibule', 'hall', 'living', 'lobby', 'billiard', 'frontGallery', 'walkway', 'landing'], Infinity, IN_FAR);
   w.roomRegion(['mLiv'], ['vestibule', 'hall', 'living', 'lobby', 'library', 'frontGallery', 'walkway', 'landing'], Infinity, 0); // DEV-04B split from mHall: never from outside
   w.roomRegion(['mBil'], ['billiard', 'lobby', 'bstair'], Infinity, IN_FAR); // DEV-04B split from mHall (the stair box overlaps the billiard room's south strip)
-  w.roomRegion(['mLib'], ['library', 'libGallery'], Infinity, IN_FAR); // DEV-03: drawn when the library itself is visible (its doors open), not whenever the living room or lobby is
+  w.roomRegion(['mLib'], ['library', 'libGallery'], Infinity, IN_FAR, ['door.library', 'door.livLib', 'door.libGallery']); // DEV-03: drawn when the library itself is visible (its doors open), not whenever the living room or lobby is; PERF-R02: from another room only while one of its three doorways is seen through (its other openings are windows)
   w.roomRegion(['mWing'], ['dining', 'kitchen', 'corridor', 'workshop', 'pantry', 'utility', 'guestWC', 'lobby'], Infinity, IN_FAR);
   w.roomRegion(['mServ'], ['corridor', 'workshop', 'pantry', 'utility'], Infinity, IN_FAR); // DEV-04B split from mWing
   w.roomRegion(['mUp'], ['frontGallery', 'walkway', 'landing', 'libGallery', 'reis', 'sterren', 'bath', 'ucorr', 'study', 'botanic', 'storage', 'library', 'linen', 'rearNook', 'rearNookEast', 'atticStair'], Infinity, IN_FAR);
