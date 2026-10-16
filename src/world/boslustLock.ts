@@ -187,17 +187,17 @@ export function makeBoslustMetalLock(w: World, k: Kit) {
   // Subtle relief, not the previous two thick vertical bars.
   cover.add(compound((b) => {
     for (const sign of [-1, 1]) {
-      box(b, k.M.paint, '#ab8954', sign * 0.253, -0.269, -0.012, 0.009, 0.245, 0.007, { shadow: false });
+      box(b, k.M.paint, '#ab8954', sign * 0.253, -0.269, -0.030, 0.009, 0.245, 0.007, { shadow: false });
     }
-    box(b, k.M.paint, '#b59966', 0, -0.035, -0.012, 0.465, 0.009, 0.007, { shadow: false });
-    box(b, k.M.paint, '#ab8954', 0, -0.272, -0.012, 0.46, 0.007, 0.007, { shadow: false });
+    box(b, k.M.paint, '#b59966', 0, -0.035, -0.030, 0.465, 0.009, 0.007, { shadow: false });
+    box(b, k.M.paint, '#ab8954', 0, -0.272, -0.030, 0.46, 0.007, 0.007, { shadow: false });
     // A small centred diamond with short lines adds recognizable craftsmanship.
-    box(b, k.M.paint, '#b9975c', 0, -0.161, -0.013, 0.046, 0.046, 0.005, { rz: Math.PI / 4, shadow: false });
-    box(b, k.M.paint, '#483626', 0, -0.161, -0.020, 0.026, 0.026, 0.003, { rz: Math.PI / 4, shadow: false });
+    box(b, k.M.paint, '#b9975c', 0, -0.161, -0.030, 0.046, 0.046, 0.005, { rz: Math.PI / 4, shadow: false });
+    box(b, k.M.paint, '#483626', 0, -0.161, -0.039, 0.026, 0.026, 0.003, { rz: Math.PI / 4, shadow: false });
     for (const x of [-0.090, 0.090]) {
-      box(b, k.M.paint, '#b9975c', x, -0.162, -0.013, 0.04, 0.004, 0.005, { shadow: false });
+      box(b, k.M.paint, '#b9975c', x, -0.162, -0.030, 0.04, 0.004, 0.005, { shadow: false });
     }
-    box(b, k.M.paint, '#35291e', 0, -0.281, -0.023, 0.090, 0.009, 0.009, { shadow: false });
+    box(b, k.M.paint, '#35291e', 0, -0.281, -0.033, 0.090, 0.009, 0.009, { shadow: false });
   }));
   // Actual hinge pins on the frame, shared material/draw call.
   lock.add(compound((b) => {
