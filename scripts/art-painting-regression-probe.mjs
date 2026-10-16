@@ -7,6 +7,8 @@ const out=process.env.ART_PROBE_OUT ?? 'art-probe';
 mkdirSync(out,{recursive:true});
 const browser=await chromium.launch({args:['--use-angle=swiftshader','--enable-unsafe-swiftshader','--ignore-gpu-blocklist']});
 const RESULTS=[];
+const assertMode=process.env.ART_PROBE_ASSERT==='1';
+const injectFirst=process.env.ART_PROBE_INJECT_FIRST==='1';
 const SAVE={version:4,scene:'estate',inventory:['invitation','torch','matches','notebook'],flags:{leftHome:true},unlocked:[],open:{}};
 try {
  for(const suffix of ['','&batch=base']) {
@@ -17,13 +19,26 @@ try {
   page.on('requestfailed',r=>requests.push({url:r.url(),failure:r.failure()?.errorText}));
   page.on('response',r=>{if(r.status()>=400)requests.push({url:r.url(),status:r.status()});});
   const mode=suffix?'base':'default';
+  if(injectFirst && mode==='default') {
+    let intercepted=0;
+    await page.route('**/flw-d2-atlas*.webp*', route => {
+      if(intercepted++===0) return route.abort('failed');
+      return route.continue();
+    });
+  }
   try{
    await page.goto(base+'?autotest=1'+suffix,{waitUntil:'domcontentloaded',timeout:45000});
    await page.evaluate(save=>localStorage.setItem('fehluwe.save',JSON.stringify(save)),SAVE);
    await page.reload({waitUntil:'domcontentloaded'});
    await page.click('[data-cont]',{timeout:45000});
    await page.waitForFunction(()=>window.__game?.world?.id==='estate',null,{timeout:90000});
-   await page.waitForTimeout(1500);
+   // A release is not ready until the image, not merely its placeholder mesh, is loaded.
+   // On a cold deployment a request may hang without firing onerror; retries must repair it.
+   await page.waitForFunction(()=>{
+     let ready=false;
+     window.__game.world.scene.traverse(o=>{if(o.material?.userData?.flwAtlas && o.material.map?.image?.naturalWidth>4)ready=true});
+     return ready;
+   },null,{timeout:33000}).catch(()=>{});
    const sample=await page.evaluate(()=>{
     const g=window.__game,scene=g.world.scene,materials=new Set();
     scene.traverse(o=>{if(o.isMesh&&(o.material?.userData?.flwAtlas))materials.add(o.material)});
@@ -54,3 +69,9 @@ try {
   await ctx.close();
  }
 }finally{writeFileSync(out+'/results.json',JSON.stringify(RESULTS,null,2));await browser.close();}
+if(assertMode) {
+ const failing=RESULTS.filter(r=>r.error || r.sample?.materials!==1 || r.sample?.sourceImage?.width!==2048 || r.sample?.sourceImage?.height!==960 || r.sample?.pixel?.std<8 || r.sample?.renderer?.glError!==0 || r.errors?.some(x=>x.startsWith('pageerror:')||x.includes('atlas failed after retries')));
+ if(failing.length) { console.error('ART_PROBE_RELEASE_GATE_FAILED '+JSON.stringify(failing));process.exitCode=1; }
+ else console.log('ART_PROBE_RELEASE_GATE_PASS all painting materials and real GPU pixels verified');
+}
+
