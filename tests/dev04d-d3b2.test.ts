@@ -206,7 +206,15 @@ describe('DEV-04D D3-b2: culled regions', () => {
     expect(w.hereRoom).toBe('reis'); expect(mesh.visible).toBe(true);
     open = false; look(86.6, 5.05, 82.2, 79, 4.4, 82.2); // door shut: not visible through the graph either
     expect(mesh.visible).toBe(false);
-    open = true; w.col.addBox(85.6, 85.8, 80, 84.5, 3.35, 6, { occludes: true }); look(86.6, 5.05, 82.2, 79, 4.4, 82.2); // a wall in the sight line
+    open = true;
+    look(89.5, 1.75, 84.5, 85, 4.45, 82.19); // from the hall floor, up at the doorway with nothing in between
+    expect(w.hereRoom).toBe('hall'); expect(mesh.visible).toBe(true);
+    w.col.floors.push({ minX: 84.6, maxX: 88.6, minZ: 80, maxZ: 92, y: 3.35 }); // the gallery's floor plate
+    look(89.5, 1.75, 84.5, 85, 4.45, 82.19);
+    expect(mesh.visible).toBe(false); expect(plain.visible).toBe(true);
+    look(86.6, 5.05, 82.2, 79, 4.4, 82.2); // standing on that floor, the doorway is seen again
+    expect(mesh.visible).toBe(true);
+    w.col.addBox(85.6, 85.8, 80, 84.5, 3.35, 6, { occludes: true }); look(86.6, 5.05, 82.2, 79, 4.4, 82.2); // a wall in the sight line
     expect(mesh.visible).toBe(false);
     w.dispose();
   });

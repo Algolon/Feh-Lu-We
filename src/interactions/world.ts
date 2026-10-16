@@ -173,17 +173,35 @@ export class World {
     });
     this.regions.push({ meshes, rooms: new Set(rooms), on: true, far, outFar, sph, doors: ds?.length === doors?.length ? ds : undefined });
   }
-  /** A region doorway that is open, in the cone round the view and in line of sight (walls and closed doors occlude). */
+  /**
+   * A region doorway that is open, in the cone round the view and in line of sight: walls and closed doors occlude, and
+   * so do the walkable floors (an upstairs doorway is not seen from the ground floor through the gallery's floor; the
+   * hall's open well has no floor, so a doorway seen up through it still counts). Sampled across the opening's width
+   * and at three heights.
+   */
   private doorwayInView(eye: THREE.Vector3, cam: THREE.PerspectiveCamera | undefined, doors: { door: string; x: number; y: number; z: number; r: number }[]) {
     if (!cam) return true;
     const fwd = cam.getWorldDirection(tmpFwd);
     const half = Math.atan(Math.tan(THREE.MathUtils.degToRad(cam.fov / 2)) * cam.aspect) + THREE.MathUtils.degToRad(32);
+    const ex = eye.x, ey = eye.y, ez = -eye.z;
     for (const d of doors) {
       if (!this.isOpen(d.door)) continue;
       tmpTo.set(d.x - eye.x, d.y - eye.y, -d.z - eye.z);
       const dist = tmpTo.length();
       if (dist > d.r && Math.acos(THREE.MathUtils.clamp(tmpTo.dot(fwd) / dist, -1, 1)) - Math.asin(Math.min(1, d.r / dist)) >= half) continue;
-      for (const [ox, oz] of DOOR_SAMPLES) if (!this.col.segmentBlocked(eye.x, eye.y, -eye.z, d.x + ox, d.y, d.z + oz, this.visualPassThrough)) return true;
+      for (const dy of [0, -0.8, 0.8]) for (const [ox, oz] of DOOR_SAMPLES) {
+        const tx = d.x + ox, ty = d.y + dy, tz = d.z + oz;
+        if (!this.col.segmentBlocked(ex, ey, ez, tx, ty, tz, this.visualPassThrough) && !this.floorBetween(ex, ey, ez, tx, ty, tz)) return true;
+      }
+    }
+    return false;
+  }
+  /** Does the segment pass through a walkable floor plate (strictly between its ends)? */
+  private floorBetween(ax: number, ay: number, az: number, bx: number, by: number, bz: number) {
+    for (const f of this.col.floors) {
+      if ((ay - f.y) * (by - f.y) >= 0) continue;
+      const t = (f.y - ay) / (by - ay), x = ax + (bx - ax) * t, z = az + (bz - az) * t;
+      if (x > f.minX + 0.05 && x < f.maxX - 0.05 && z > f.minZ + 0.05 && z < f.maxZ - 0.05) return true;
     }
     return false;
   }
