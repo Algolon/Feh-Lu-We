@@ -7,6 +7,7 @@ import { bake, projectUV } from './artkit';
 import { surface } from './surfaces';
 import { mulberry32 } from '../core/rng';
 import { EXTERIOR_FINISH, ageFacade } from './exteriorFinish';
+import { EXTERIOR_WEATHER, ageDressedStone } from './exteriorWeather';
 
 export const EXTERIOR_STUDY = typeof location === 'undefined' || new URLSearchParams(location.search).get('exterior') !== 'base';
 let materials: { wall: THREE.Material; gravel: THREE.Material; dressed: THREE.Material } | undefined;
@@ -92,6 +93,7 @@ export function exteriorMats() {
   surface(dressed, 'stone');
   surface(wall, 'stone'); surface(gravel, 'ground');
   if(EXTERIOR_FINISH)ageFacade(wall);
+  if(EXTERIOR_FINISH&&EXTERIOR_WEATHER)ageDressedStone(dressed);
   materials = { wall, gravel, dressed }; return materials;
 }
 
@@ -126,7 +128,7 @@ export function studyWindowSite(_axis: 'x' | 'z', _faceF: number, _at: number, _
 }
 /** Decorative glazing stays on the existing sealed wall; the deep stone reveal projects outward.
  * No change to opening/collision ownership or to the interior-facing window model. */
-export function studyWindow(c: Ctx, axis: 'x' | 'z', f: number, side: 1 | -1, at: number, y: number, w: number, h: number) {
+export function studyWindow(c: Ctx, axis: 'x' | 'z', f: number, side: 1 | -1, at: number, y: number, w: number, h: number, transparent = false) {
   const P = c.k.M.paint, top = y+h, a0=at-w/2, a1=at+w/2;
   const block = (a: number,b: number,lo: number,hi: number,d0: number,d1: number,col: string,soft=false) => {
     const fa=f+side*d0,fb=f+side*d1;
@@ -149,7 +151,8 @@ export function studyWindow(c: Ctx, axis: 'x' | 'z', f: number, side: 1 | -1, at
   block(a0-.32,a1+.32,y-.105,y-.055,.015,.335,'#ded8c3',true);
   block(a0-.25,a1+.25,y-.20,y-.18,.06,.245,'#8b8d81');
   // Existing opaque window convention: differentiated panes, subdued sky tint, no false reflection geometry.
-  const glass = new THREE.PlaneGeometry(w,h,1,2);
+  if (!transparent) {
+    const glass = new THREE.PlaneGeometry(w,h,1,2);
   const color = [], p = glass.attributes.position;
   for(let i=0;i<p.count;i++) { const t=(p.getY(i)+h/2)/h; const v=new THREE.Color('#394c50').lerp(new THREE.Color('#879d9c'),t); color.push(v.r,v.g,v.b); }
   glass.setAttribute('color',new THREE.Float32BufferAttribute(color,3));glass.userData.keepColor=true;
@@ -158,10 +161,15 @@ export function studyWindow(c: Ctx, axis: 'x' | 'z', f: number, side: 1 | -1, at
   if(axis==='z')glass.rotateY(Math.PI);
   const gx=axis==='x'?at:f+side*.018,gz=axis==='x'?f+side*.018:at;
   c.b.add(c.k.M.glow,glass,planMatrix(gx,y+h/2,gz),'#ffffff',c.chunk,false,0);glass.dispose();
-  for(const [a,b] of [[a0-.04,a0+.025],[a1-.025,a1+.04]])block(a,b,y-.04,top+.045,.02,.09,'#58685d');
-  for(const yy of [y-.025,top+.015])block(a0,a1,yy-.025,yy+.025,.02,.09,'#687568');
-  block(at-.018,at+.018,y,top,.021,.084,'#6b796b');
-  for(const q of [.25,.5,.75])block(a0,a1,y+h*q-.017,y+h*q+.017,.021,.086,q===.5?'#7b8776':'#687667');
+  }
+  // The pilot's ONE sash sits against the actual pane just inside the wall face
+  // (no free-floating frame on the facade and no second sash on the room-facing side).
+  // Historic opaque windows retain their original exterior trim coordinates.
+  const near = transparent ? -0.067 : .02, far = transparent ? .005 : .09;
+  for(const [a,b] of [[a0-.04,a0+.025],[a1-.025,a1+.04]])block(a,b,y-.04,top+.045,near,far,'#58685d');
+  for(const yy of [y-.025,top+.015])block(a0,a1,yy-.025,yy+.025,near,far,'#687568');
+  block(at-.018,at+.018,y,top,near,far-.006,'#6b796b');
+  for(const q of [.25,.5,.75])block(a0,a1,y+h*q-.017,y+h*q+.017,near,far-.004,q===.5?'#7b8776':'#687667');
 }
 
 /** Matched dressed quoins on all four main corners. Bands use manor.ts's doorway-aware runs. */

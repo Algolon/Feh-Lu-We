@@ -457,6 +457,7 @@ function flwAtlas() {
   // (dark room → dark painting: no emission, no glow), only restoring the source's own exposure
   flwMat.color.setScalar(FLW_EXPOSURE);
   flwMat.userData.flwAtlas = true;
+  flwMat.userData.skipOpaqueBatch = true; // Keep async image replacement on the native path (FLW-D2 paintings).
   return flwMat;
 }
 /** Resolves when the FLW atlas image has loaded (evidence captures, e2e). */

@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { CollisionWorld, type Collider } from '../player/collision';
 import type { GameState, PlayerPose, SceneId } from '../core/state';
 import type { Outcome, Sfx } from '../puzzles/rules';
-import { type RoomGraph, type LampCandidate, chooseLamps } from '../world/rooms';
+import { type RoomGraph, type LampCandidate, type PortalDef, chooseLamps } from '../world/rooms';
 import type { RitualMix } from '../world/wickerRitual';
 
 export interface Interactable {
@@ -257,6 +257,34 @@ export class World {
   private collectWindows = false;
   private windowsTmp: { x: number; z: number; dx: number; dz: number; cos: number }[] = [];
   private windowsKey = '';
+  /** WINDOW-R01: both sides of a physically open window, limited by actual aperture, view cone and LOS.
+   * The glass collider remains solid for movement and picking; only these visual rays skip it.
+   */
+  private clearWindowInView(eye: THREE.Vector3, cam: THREE.PerspectiveCamera | undefined, portal: PortalDef) {
+    const p = portal.aperture;
+    if (!cam || !portal.seeThrough || !p || (this.hereRoom !== 'out' && this.hereRoom !== (portal.a === 'out' ? portal.b : portal.a))) return false;
+    tmpTo.set(p.x - eye.x, p.y - eye.y, -p.z - eye.z);
+    const dist = tmpTo.length();
+    if (dist < 0.01 || dist > (this.hereRoom === 'out' ? 25 : 40)) return false;
+    const forward = cam.getWorldDirection(tmpFwd);
+    const half = Math.atan(Math.tan(THREE.MathUtils.degToRad(cam.fov / 2)) * cam.aspect) + THREE.MathUtils.degToRad(32);
+    const angular = Math.acos(THREE.MathUtils.clamp(tmpTo.dot(forward) / dist, -1, 1));
+    if (angular - Math.asin(Math.min(1, Math.hypot(p.width, p.height) / (2 * dist))) > half) return false;
+    // Sample the centre and four offsets, and continue past the wall thickness to avoid false positives.
+    for (const across of [0, -0.27, 0.27]) for (const up of [0, -0.25, 0.25]) {
+      const tx = p.x + (p.axis === 'x' ? across * p.width : 0);
+      const tz = p.z + (p.axis === 'z' ? across * p.width : 0);
+      const ty = p.y + up * p.height;
+      const dx = tx - eye.x, dy = ty - eye.y, dz = tz + eye.z;
+      const d = Math.hypot(dx, dy, dz);
+      if (d < 0.01) continue;
+      const k = 1 + 0.35 / d;
+      const endX = eye.x + dx * k, endY = eye.y + dy * k, endZ = -eye.z + dz * k;
+      if (!this.col.segmentBlocked(eye.x, eye.y, -eye.z, endX, endY, endZ, this.visualPassThrough)
+          && !this.floorBetween(eye.x, eye.y, -eye.z, endX, endY, endZ)) return true;
+    }
+    return false;
+  }
   private outdoorInView(eye: THREE.Vector3, cam?: THREE.PerspectiveCamera, maxDist = Infinity, all = false, onlyDoor?: string) {
     if ((!cam && !all) || !this.exteriorDoors.length) return true;
     const fwd = cam ? cam.getWorldDirection(tmpFwd) : tmpFwd.set(0, 0, -1);
@@ -289,11 +317,23 @@ export class World {
       // outdoors, an open door shows only the first rooms behind it (windows are opaque panes)
       // Closed glass adds a visual path only if that particular aperture can be seen from outside.
       // Otherwise the global 'out' node would pull the service wing into views behind opaque manor walls.
-      this.visibleRooms = this.rooms.visible(this.hereRoom, this.isOpen, this.hereRoom === 'out' ? 2 : 3,
-        this.hereRoom === 'out' ? (door) => this.outdoorInView(eye, cam, 22, false, door) : undefined);
+      const clearWindows = this.rooms.portals.filter(p => p.kind === 'window' && p.seeThrough && this.clearWindowInView(eye, cam, p));
+      if (this.hereRoom === 'out') {
+        // WINDOW-R02: seeing through a window reveals its room, not every adjacent
+        // room reached through that room's arches/doors. Otherwise many simultaneous
+        // exterior apertures bypass the woodland/mobile culling budget.
+        // Keep the previous two-step traversal for genuinely open exterior doors.
+        const behindDoors = this.rooms.visible('out', this.isOpen, 2,
+          door => this.outdoorInView(eye, cam, 22, false, door), () => false);
+        this.visibleRooms = behindDoors;
+        for (const p of clearWindows) this.visibleRooms.add(p.a === 'out' ? p.b : p.a);
+      } else {
+        this.visibleRooms = this.rooms.visible(this.hereRoom, this.isOpen, 3,
+          undefined, p => clearWindows.includes(p));
+      }
       // the outdoors and the glass Copacabana Room (whose walls show the outdoors) count as one view: from inside the
       // house they are drawn only while an open doorway to them is in (a generous cone round) the view
-      if (this.hereRoom !== 'out' && this.hereRoom !== 'cons' && (this.visibleRooms.has('out') || this.visibleRooms.has('cons')) && !this.outdoorInView(eye, cam, 26)) {
+      if (this.hereRoom !== 'out' && this.hereRoom !== 'cons' && (this.visibleRooms.has('out') || this.visibleRooms.has('cons')) && !this.outdoorInView(eye, cam, 26) && !clearWindows.length) {
         this.visibleRooms.delete('out'); this.visibleRooms.delete('cons');
       }
       // portal windows for the woodland (inside, outdoors visible, not in the glass room or next to it)
@@ -302,12 +342,19 @@ export class World {
         this.windowsTmp = []; this.collectWindows = true;
         this.outdoorInView(eye, undefined, 60, true);
         this.collectWindows = false;
+        // Pass the actual glazing cone to woodland LOD instead of drawing all trees behind the manor.
+        for (const portal of clearWindows) {
+          const p = portal.aperture!;
+          const dx = p.x - eye.x, dz = p.z + eye.z, d = Math.hypot(dx, dz) || 1;
+          this.windowsTmp.push({ x: eye.x, z: -eye.z, dx: dx / d, dz: dz / d,
+            cos: Math.cos(Math.min(Math.PI / 2, Math.atan2(p.width / 2 + 0.6, d) + 0.12)) });
+        }
         wins = this.windowsTmp.length ? this.windowsTmp : null;
       }
       const key = wins ? wins.map((q) => `${q.dx.toFixed(2)},${q.dz.toFixed(2)},${q.cos.toFixed(2)}`).join('|') : '';
       if (key !== this.windowsKey) { this.windowsKey = key; this.outdoorWindows = wins; this.outdoorWindowsVersion++; }
       // from outside, interiors are drawn only through an open doorway within 22 m in (the cone round) the view
-      this.interiorThroughDoor = this.hereRoom !== 'out' || this.outdoorInView(eye, cam, 22);
+      this.interiorThroughDoor = this.hereRoom !== 'out' || this.outdoorInView(eye, cam, 22) || clearWindows.length > 0;
       for (const r of this.regions) {
         let on = false;
         for (const id of r.rooms) if (this.visibleRooms.has(id)) { on = true; break; }
