@@ -21,8 +21,10 @@ const DOORWAY_REGIONS: Record<string, { rooms: string[]; doors: string[] }> = {
   mLib: { rooms: ['library', 'libGallery'], doors: ['door.library', 'door.livLib', 'door.libGallery'] },
 };
 
-// mAttic is deliberately NOT a doorway region: its geometry includes structure seen from the floor below (the attic
-// floor is the upstairs and hall ceilings), so the doorway rule removed visible ceilings (up to 87,016 px, PERF-R02 §6).
+// mAttic is deliberately NOT a doorway region. Its pixel proof differed by up to 87,016 px, and the frames show why: the
+// attic floor overlaps the hall and guest-room ceilings, and wherever mAttic is drawn (production, every door open) its
+// planks replace the plaster ceiling. Culling would only mask that geometry defect in some views; it is reported for a
+// geometry fix instead (PERF-R02 §6.3).
 describe('PERF-R02: doorway regions', () => {
   const est = readFileSync('src/world/estate.ts', 'utf8');
   it('exactly these six regions use the doorway rule, each with its full door list; every other region is rooms-only', () => {
@@ -34,7 +36,7 @@ describe('PERF-R02: doorway regions', () => {
       expect(line!.match(/\['door\.[^\]]*\]/)![0]).toBe(`[${doors.map((d) => `'${d}'`).join(', ')}]`);
     }
   });
-  it('mAttic keeps the rooms-only rule (its geometry is seen from below)', () => {
+  it('mAttic keeps the rooms-only rule (the doorway rule would only mask an attic-floor / ceiling overlap)', () => {
     expect(est).toMatch(/w\.roomRegion\(\['mAttic'\], \[\.\.\.atticRooms, 'atticStair'\], Infinity, IN_FAR\);/);
   });
   it('each doorway region is enclosed: every portal from its rooms to the rest of the house is one of its listed doors (windows are opaque to culling)', () => {
