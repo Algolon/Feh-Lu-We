@@ -13,7 +13,8 @@
 import * as THREE from 'three';
 import type { World, GameApi } from '../interactions/world';
 import { type Ctx, wall, floor, ceiling, stairsZ, railing, stairRail, hipRoof, gableRoof, windowAt, balustrade, newel, segBox, threshold, TRIM } from './arch';
-import { BILLIARD_PILOT_WINDOW, billiardPilotDepths } from './windowPilot';
+import { MANOR_WINDOW_WALLS, MANOR_WINDOWS } from './manorWindowLayout';
+import { buildManorWindow } from './manorWindowAssembly';
 import { lathe, Asm, artMats, projectUV, cushion } from './artkit';
 import { box, boxMM, cyl, rod, blob, compound, v3, hipRoofGeo, geo } from './kit';
 import {
@@ -77,45 +78,17 @@ function shell(w: World, c: Ctx) {
   const k = c.k;
   const stone = { mat: EXTERIOR_STUDY ? exteriorMats().wall : k.M.stone, color: EXTERIOR_STUDY ? '#ffffff' : '#f2e6cc' };
   const skin = { mat: k.M.plaster, color: '#f1e6cf' };
-  const ext = (axis: 'x' | 'z', f: number, a0: number, a1: number, exterior: 1 | -1, gfOpen: { at: number; w: number; h?: number }[], gfWin: number[], ufWin: number[], study = EXTERIOR_STUDY) => {
-    const facade = study ? { mat: exteriorMats().wall, color: '#ffffff' } : stone;
-    wall(c, axis, f, a0, a1, 0, UF, { ...facade, t: 0.4, exterior, skin, uv: 2.4, winStyle: 'manor', openings: gfOpen, windows: gfWin.map((at) => ({ at, sill: 1.05, h: 1.6, w: 1.1, transparent: axis === BILLIARD_PILOT_WINDOW.axis && f === BILLIARD_PILOT_WINDOW.f && at === BILLIARD_PILOT_WINDOW.at })) });
-    wall(c, axis, f, a0, a1, UF, TOP, { ...facade, t: 0.4, exterior, skin, uv: 2.4, winStyle: 'manor', windows: ufWin.map((at) => ({ at, sill: 0.8, h: 1.5, w: 1.0 })) });
-  };
-  // All four elevations share the approved facade grammar; original openings/footprints stay fixed.
-  ext('x', 80.2, 72, 108, -1, [{ at: 90, w: 1.7, h: 2.7 }], [75.5, 79, 82.5, 98, 101.5, 105], [75.5, 79, 82.5, 87.5, 92.5, 98, 101.5, 105]);
-  ext('x', 109.8, 72, 108, 1, [{ at: 91.5, w: 1.2, h: 2.45 }, { at: 101, w: 1.0, h: 2.35 }], [75, 78.5, 82, 88, 97.5, 105], [75, 78.5, 82, 87.5, 92.5, 98, 104]);
-  ext('z', 72.2, 80.4, 109.6, -1, [], [83, 90.5, 97, 101, 105], [82.5, 90, 97, 101, 105]);
-  // east: dining windows; the service wing joins at z 92–110 (door to the service corridor)
-  ext('z', 107.8, 80.4, 109.6, 1, [{ at: 102.5, w: 1.0, h: 2.3 }], [83, 86.8, 90.4], [83, 87, 91]);
-  // WINDOW-R01-R02: ONE exterior-set sash and ONE glass pane, 8.5 cm behind the outer wall face.
-  // The room-facing construction is a plastered reveal, not an independent second window.
-  {
-    const p = BILLIARD_PILOT_WINDOW, x0 = p.at - p.w / 2, x1 = p.at + p.w / 2;
-    const y0 = p.sill, y1 = p.sill + p.h;
-    const { glazingZ, innerFinishZ } = billiardPilotDepths();
-    const o = { chunk: c.chunk, shadow: false, jitter: 0 };
-    boxMM(c.b, k.M.windowGlass, '#ffffff', x0, x1, y0, y1, glazingZ - 0.006, glazingZ + 0.006, o);
-
-    // The three deep plaster returns meet the *same* exterior sash. Slightly warm to match the
-    // room's existing interior finish; no inside mullions, glazing bars or secondary architrave.
-    const plaster = '#e9dfcf', edge = 0.014;
-    boxMM(c.b, k.M.plaster, plaster, x0, x0 + edge, y0, y1, innerFinishZ, glazingZ, o);
-    boxMM(c.b, k.M.plaster, plaster, x1 - edge, x1, y0, y1, innerFinishZ, glazingZ, o);
-    boxMM(c.b, k.M.plaster, plaster, x0, x1, y1 - edge, y1, innerFinishZ, glazingZ, o);
-
-    // WINDOW-R01-R04: a single stained-oak window board like a traditional timber sill.
-    // Continuous lengthwise grain (not tiled/planked), a warm medium-dark finish and
-    // the same restrained 40 mm profile with 9 cm projection into the room.
-    // The larger UV repeat distance avoids restarting the grain across the ~1.3 m board.
-    boxMM(c.b, k.M.windowSillWood, '#ffffff', x0 - 0.105, x1 + 0.105, y0 - 0.03, y0 + 0.01,
-      innerFinishZ - 0.09, glazingZ - 0.012, { ...o, uv: 1.45 });
-
-    // Keep glass opaque to movement and interaction picking while visual/culling rays pass.
-    const pane = w.col.addBox(x0, x1, glazingZ - 0.025, glazingZ + 0.025, y0, y1,
-      { occludes: true, tag: 'window.billiardNorth' });
-    w.visualPassThrough.add(pane);
+  // WINDOW-R02: all normal main-manor windows use the same opt-in physical aperture,
+  // exterior-set sash, inset pane and oak sill. Layout is authored once, including portals.
+  // Special decorative windows in the porch, roof/attic and other buildings stay untouched.
+  for (const face of MANOR_WINDOW_WALLS.filter(face => !face.id.startsWith('wing-'))) {
+    const facade = EXTERIOR_STUDY ? { mat: exteriorMats().wall, color: '#ffffff' } : stone;
+    wall(c, face.axis, face.f, face.a0, face.a1, face.y0, face.y1, {
+      ...facade, t: 0.4, exterior: face.exterior, skin, uv: 2.4, winStyle: 'manor',
+      openings: face.openings, windows: face.windows.map(v => ({ ...v, transparent: true })),
+    });
   }
+  for (const site of MANOR_WINDOWS) buildManorWindow(w, c, site);
   // DEV-03 facade grammar: a proud sandstone plinth with a weathered top, rusticated quoins at the corners, a string
   // course at the first floor and a moulded cornice under the eaves on all four sides (one family with the wing).
   const sand = '#cdbb98', dressed = TRIM.dressed;
@@ -244,8 +217,12 @@ function shell(w: World, c: Ctx) {
   }
   // ---------------------------------------------------------------- service wing (single storey, own roof)
   const WH = 3.9;
-  wall(c, 'x', 92.2, 107.6, 116, 0, WH, { ...stone, t: 0.4, exterior: -1, skin, uv: 2.4, winStyle: 'manor', openings: [{ at: 112, w: 1.1, h: 2.3 }], windows: [{ at: 110, sill: 1.1, h: 1.3, w: 1.0 }, { at: 114.4, sill: 1.1, h: 1.3, w: 0.8 }] });
-  wall(c, 'x', 109.8, 107.6, 116, 0, WH, { ...stone, t: 0.4, exterior: 1, skin, uv: 2.4, winStyle: 'manor', windows: [{ at: 112, sill: 1.2, h: 1.1, w: 1.0 }] });
+  for (const face of MANOR_WINDOW_WALLS.filter(face => face.id.startsWith('wing-'))) {
+    wall(c, face.axis, face.f, face.a0, face.a1, face.y0, face.y1, {
+      ...stone, t: 0.4, exterior: face.exterior, skin, uv: 2.4, winStyle: 'manor',
+      openings: face.openings, windows: face.windows.map(v => ({ ...v, transparent: true })),
+    });
+  }
   wall(c, 'z', 115.8, 92.4, 109.6, 0, WH, { ...stone, t: 0.4, exterior: 1, skin, uv: 2.4, openings: [{ at: 102.5, w: 1.3, h: 2.35 }] });
   ring(-0.1, 0.62, 0.1, sand, 108, 116, 92.2, 109.8, k.M.stone, wingRuns(0.1));
   for (const [x0, x1, z0, z1] of [[111.45, 112.55, 92.0, 92.42], [115.58, 116.12, 101.85, 103.15]] as const) threshold(c, x0, x1, z0, z1, GF, EXTERIOR_STUDY ? '#d6d1bd' : '#d6c8a8', EXTERIOR_STUDY ? exteriorMats().dressed : k.M.stone);
