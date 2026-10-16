@@ -11,17 +11,17 @@
         "pitch": 0.0811223921009011
       },
       "cost": {
-        "calls": 90,
-        "triangles": 313616
+        "calls": 92,
+        "triangles": 317680
       },
       "equivalence": {
         "original": {
-          "calls": 143,
-          "triangles": 313616
+          "calls": 145,
+          "triangles": 317680
         },
         "packed": {
-          "calls": 90,
-          "triangles": 313616
+          "calls": 92,
+          "triangles": 317680
         },
         "pixelsOver4": 0,
         "maxError": 0,
@@ -31,9 +31,9 @@
         "resources": {
           "enabled": true,
           "groups": 17,
-          "sources": 354,
-          "vertices": 349941,
-          "attributeBytes": 16801752,
+          "sources": 353,
+          "vertices": 349737,
+          "attributeBytes": 16791960,
           "submittedSources": 66
         }
       },
@@ -52,17 +52,17 @@
         "pitch": -0.3167418976755381
       },
       "cost": {
-        "calls": 95,
-        "triangles": 330808
+        "calls": 97,
+        "triangles": 334672
       },
       "equivalence": {
         "original": {
-          "calls": 150,
-          "triangles": 330808
+          "calls": 152,
+          "triangles": 334672
         },
         "packed": {
-          "calls": 95,
-          "triangles": 330808
+          "calls": 97,
+          "triangles": 334672
         },
         "pixelsOver4": 0,
         "maxError": 0,
@@ -72,9 +72,9 @@
         "resources": {
           "enabled": true,
           "groups": 17,
-          "sources": 354,
-          "vertices": 349941,
-          "attributeBytes": 16801752,
+          "sources": 353,
+          "vertices": 349737,
+          "attributeBytes": 16791960,
           "submittedSources": 68
         }
       },
@@ -113,9 +113,9 @@
         "resources": {
           "enabled": true,
           "groups": 17,
-          "sources": 354,
-          "vertices": 349941,
-          "attributeBytes": 16801752,
+          "sources": 353,
+          "vertices": 349737,
+          "attributeBytes": 16791960,
           "submittedSources": 41
         }
       },
@@ -134,17 +134,17 @@
         "pitch": 0.18335404106345157
       },
       "cost": {
-        "calls": 80,
-        "triangles": 301094
+        "calls": 81,
+        "triangles": 301894
       },
       "equivalence": {
         "original": {
-          "calls": 121,
-          "triangles": 301094
+          "calls": 122,
+          "triangles": 301894
         },
         "packed": {
-          "calls": 80,
-          "triangles": 301094
+          "calls": 81,
+          "triangles": 301894
         },
         "pixelsOver4": 0,
         "maxError": 0,
@@ -154,9 +154,9 @@
         "resources": {
           "enabled": true,
           "groups": 17,
-          "sources": 354,
-          "vertices": 349941,
-          "attributeBytes": 16801752,
+          "sources": 353,
+          "vertices": 349737,
+          "attributeBytes": 16791960,
           "submittedSources": 51
         }
       },
@@ -195,9 +195,9 @@
         "resources": {
           "enabled": true,
           "groups": 17,
-          "sources": 354,
-          "vertices": 349941,
-          "attributeBytes": 16801752,
+          "sources": 353,
+          "vertices": 349737,
+          "attributeBytes": 16791960,
           "submittedSources": 45
         }
       },
@@ -216,17 +216,17 @@
         "pitch": 0.14313213013919407
       },
       "cost": {
-        "calls": 101,
-        "triangles": 452180
+        "calls": 102,
+        "triangles": 452456
       },
       "equivalence": {
         "original": {
-          "calls": 170,
-          "triangles": 452180
+          "calls": 171,
+          "triangles": 452456
         },
         "packed": {
-          "calls": 101,
-          "triangles": 452180
+          "calls": 102,
+          "triangles": 452456
         },
         "pixelsOver4": 819,
         "maxError": 145,
@@ -236,9 +236,9 @@
         "resources": {
           "enabled": true,
           "groups": 17,
-          "sources": 354,
-          "vertices": 349941,
-          "attributeBytes": 16801752,
+          "sources": 353,
+          "vertices": 349737,
+          "attributeBytes": 16791960,
           "submittedSources": 81
         }
       },
@@ -257,17 +257,17 @@
         "pitch": 0.30543036668542484
       },
       "cost": {
-        "calls": 93,
-        "triangles": 454102
+        "calls": 94,
+        "triangles": 454378
       },
       "equivalence": {
         "original": {
-          "calls": 164,
-          "triangles": 454102
+          "calls": 165,
+          "triangles": 454378
         },
         "packed": {
-          "calls": 93,
-          "triangles": 454102
+          "calls": 94,
+          "triangles": 454378
         },
         "pixelsOver4": 8,
         "maxError": 61,
@@ -277,9 +277,9 @@
         "resources": {
           "enabled": true,
           "groups": 17,
-          "sources": 354,
-          "vertices": 349941,
-          "attributeBytes": 16801752,
+          "sources": 353,
+          "vertices": 349737,
+          "attributeBytes": 16791960,
           "submittedSources": 84
         }
       },
@@ -318,9 +318,9 @@
         "resources": {
           "enabled": true,
           "groups": 17,
-          "sources": 354,
-          "vertices": 349941,
-          "attributeBytes": 16801752,
+          "sources": 353,
+          "vertices": 349737,
+          "attributeBytes": 16791960,
           "submittedSources": 42
         }
       },
@@ -339,17 +339,17 @@
         "pitch": -0.2896424945934936
       },
       "cost": {
-        "calls": 93,
-        "triangles": 323351
+        "calls": 95,
+        "triangles": 324815
       },
       "equivalence": {
         "original": {
-          "calls": 148,
-          "triangles": 323351
+          "calls": 150,
+          "triangles": 324815
         },
         "packed": {
-          "calls": 93,
-          "triangles": 323351
+          "calls": 95,
+          "triangles": 324815
         },
         "pixelsOver4": 0,
         "maxError": 0,
@@ -359,9 +359,9 @@
         "resources": {
           "enabled": true,
           "groups": 17,
-          "sources": 354,
-          "vertices": 349941,
-          "attributeBytes": 16801752,
+          "sources": 353,
+          "vertices": 349737,
+          "attributeBytes": 16791960,
           "submittedSources": 68
         }
       },
@@ -380,17 +380,17 @@
         "pitch": 2.4084118901274838e-17
       },
       "cost": {
-        "calls": 139,
-        "triangles": 456928
+        "calls": 140,
+        "triangles": 457204
       },
       "equivalence": {
         "original": {
-          "calls": 208,
-          "triangles": 456928
+          "calls": 209,
+          "triangles": 457204
         },
         "packed": {
-          "calls": 139,
-          "triangles": 456928
+          "calls": 140,
+          "triangles": 457204
         },
         "pixelsOver4": 2,
         "maxError": 42,
@@ -400,9 +400,9 @@
         "resources": {
           "enabled": true,
           "groups": 17,
-          "sources": 354,
-          "vertices": 349941,
-          "attributeBytes": 16801752,
+          "sources": 353,
+          "vertices": 349737,
+          "attributeBytes": 16791960,
           "submittedSources": 83
         }
       },
@@ -421,17 +421,17 @@
         "pitch": 0.14123750657794432
       },
       "cost": {
-        "calls": 94,
-        "triangles": 419651
+        "calls": 95,
+        "triangles": 419927
       },
       "equivalence": {
         "original": {
-          "calls": 147,
-          "triangles": 419651
+          "calls": 148,
+          "triangles": 419927
         },
         "packed": {
-          "calls": 94,
-          "triangles": 419651
+          "calls": 95,
+          "triangles": 419927
         },
         "pixelsOver4": 4,
         "maxError": 32,
@@ -441,9 +441,9 @@
         "resources": {
           "enabled": true,
           "groups": 17,
-          "sources": 354,
-          "vertices": 349941,
-          "attributeBytes": 16801752,
+          "sources": 353,
+          "vertices": 349737,
+          "attributeBytes": 16791960,
           "submittedSources": 67
         }
       },
@@ -462,29 +462,29 @@
         "pitch": 0.0811223921009011
       },
       "cost": {
-        "calls": 92,
-        "triangles": 518676
+        "calls": 94,
+        "triangles": 522740
       },
       "equivalence": {
         "original": {
-          "calls": 145,
-          "triangles": 518676
+          "calls": 147,
+          "triangles": 522740
         },
         "packed": {
-          "calls": 92,
-          "triangles": 518676
+          "calls": 94,
+          "triangles": 522740
         },
         "pixelsOver4": 0,
-        "maxError": 0,
+        "maxError": 1,
         "pixelMismatchFraction": 0,
         "samePicking": true,
         "visibilityRestored": true,
         "resources": {
           "enabled": true,
           "groups": 17,
-          "sources": 354,
-          "vertices": 349941,
-          "attributeBytes": 16801752,
+          "sources": 353,
+          "vertices": 349737,
+          "attributeBytes": 16791960,
           "submittedSources": 66
         }
       },
@@ -503,17 +503,17 @@
         "pitch": -0.3167418976755381
       },
       "cost": {
-        "calls": 97,
-        "triangles": 535868
+        "calls": 99,
+        "triangles": 539732
       },
       "equivalence": {
         "original": {
-          "calls": 152,
-          "triangles": 535868
+          "calls": 154,
+          "triangles": 539732
         },
         "packed": {
-          "calls": 97,
-          "triangles": 535868
+          "calls": 99,
+          "triangles": 539732
         },
         "pixelsOver4": 0,
         "maxError": 0,
@@ -523,9 +523,9 @@
         "resources": {
           "enabled": true,
           "groups": 17,
-          "sources": 354,
-          "vertices": 349941,
-          "attributeBytes": 16801752,
+          "sources": 353,
+          "vertices": 349737,
+          "attributeBytes": 16791960,
           "submittedSources": 68
         }
       },
@@ -564,9 +564,9 @@
         "resources": {
           "enabled": true,
           "groups": 17,
-          "sources": 354,
-          "vertices": 349941,
-          "attributeBytes": 16801752,
+          "sources": 353,
+          "vertices": 349737,
+          "attributeBytes": 16791960,
           "submittedSources": 41
         }
       },
@@ -585,17 +585,17 @@
         "pitch": 0.18335404106345157
       },
       "cost": {
-        "calls": 82,
-        "triangles": 506154
+        "calls": 83,
+        "triangles": 506954
       },
       "equivalence": {
         "original": {
-          "calls": 123,
-          "triangles": 506154
+          "calls": 124,
+          "triangles": 506954
         },
         "packed": {
-          "calls": 82,
-          "triangles": 506154
+          "calls": 83,
+          "triangles": 506954
         },
         "pixelsOver4": 0,
         "maxError": 0,
@@ -605,9 +605,9 @@
         "resources": {
           "enabled": true,
           "groups": 17,
-          "sources": 354,
-          "vertices": 349941,
-          "attributeBytes": 16801752,
+          "sources": 353,
+          "vertices": 349737,
+          "attributeBytes": 16791960,
           "submittedSources": 51
         }
       },
@@ -646,9 +646,9 @@
         "resources": {
           "enabled": true,
           "groups": 17,
-          "sources": 354,
-          "vertices": 349941,
-          "attributeBytes": 16801752,
+          "sources": 353,
+          "vertices": 349737,
+          "attributeBytes": 16791960,
           "submittedSources": 45
         }
       },
@@ -667,17 +667,17 @@
         "pitch": 0.14313213013919407
       },
       "cost": {
-        "calls": 103,
-        "triangles": 657240
+        "calls": 104,
+        "triangles": 657516
       },
       "equivalence": {
         "original": {
-          "calls": 172,
-          "triangles": 657240
+          "calls": 173,
+          "triangles": 657516
         },
         "packed": {
-          "calls": 103,
-          "triangles": 657240
+          "calls": 104,
+          "triangles": 657516
         },
         "pixelsOver4": 819,
         "maxError": 145,
@@ -687,9 +687,9 @@
         "resources": {
           "enabled": true,
           "groups": 17,
-          "sources": 354,
-          "vertices": 349941,
-          "attributeBytes": 16801752,
+          "sources": 353,
+          "vertices": 349737,
+          "attributeBytes": 16791960,
           "submittedSources": 81
         }
       },
@@ -708,17 +708,17 @@
         "pitch": 0.30543036668542484
       },
       "cost": {
-        "calls": 95,
-        "triangles": 659162
+        "calls": 96,
+        "triangles": 659438
       },
       "equivalence": {
         "original": {
-          "calls": 166,
-          "triangles": 659162
+          "calls": 167,
+          "triangles": 659438
         },
         "packed": {
-          "calls": 95,
-          "triangles": 659162
+          "calls": 96,
+          "triangles": 659438
         },
         "pixelsOver4": 8,
         "maxError": 61,
@@ -728,9 +728,9 @@
         "resources": {
           "enabled": true,
           "groups": 17,
-          "sources": 354,
-          "vertices": 349941,
-          "attributeBytes": 16801752,
+          "sources": 353,
+          "vertices": 349737,
+          "attributeBytes": 16791960,
           "submittedSources": 84
         }
       },
@@ -769,9 +769,9 @@
         "resources": {
           "enabled": true,
           "groups": 17,
-          "sources": 354,
-          "vertices": 349941,
-          "attributeBytes": 16801752,
+          "sources": 353,
+          "vertices": 349737,
+          "attributeBytes": 16791960,
           "submittedSources": 42
         }
       },
@@ -790,17 +790,17 @@
         "pitch": -0.2896424945934936
       },
       "cost": {
-        "calls": 95,
-        "triangles": 528411
+        "calls": 97,
+        "triangles": 529875
       },
       "equivalence": {
         "original": {
-          "calls": 150,
-          "triangles": 528411
+          "calls": 152,
+          "triangles": 529875
         },
         "packed": {
-          "calls": 95,
-          "triangles": 528411
+          "calls": 97,
+          "triangles": 529875
         },
         "pixelsOver4": 0,
         "maxError": 0,
@@ -810,9 +810,9 @@
         "resources": {
           "enabled": true,
           "groups": 17,
-          "sources": 354,
-          "vertices": 349941,
-          "attributeBytes": 16801752,
+          "sources": 353,
+          "vertices": 349737,
+          "attributeBytes": 16791960,
           "submittedSources": 68
         }
       },
@@ -831,29 +831,29 @@
         "pitch": 2.4084118901274838e-17
       },
       "cost": {
-        "calls": 140,
-        "triangles": 661284
+        "calls": 141,
+        "triangles": 661560
       },
       "equivalence": {
         "original": {
-          "calls": 209,
-          "triangles": 661284
+          "calls": 210,
+          "triangles": 661560
         },
         "packed": {
-          "calls": 140,
-          "triangles": 661284
+          "calls": 141,
+          "triangles": 661560
         },
         "pixelsOver4": 2,
-        "maxError": 42,
+        "maxError": 41,
         "pixelMismatchFraction": 0.000002170138888888889,
         "samePicking": true,
         "visibilityRestored": true,
         "resources": {
           "enabled": true,
           "groups": 17,
-          "sources": 354,
-          "vertices": 349941,
-          "attributeBytes": 16801752,
+          "sources": 353,
+          "vertices": 349737,
+          "attributeBytes": 16791960,
           "submittedSources": 83
         }
       },
@@ -872,17 +872,17 @@
         "pitch": 0.14123750657794432
       },
       "cost": {
-        "calls": 96,
-        "triangles": 624711
+        "calls": 97,
+        "triangles": 624987
       },
       "equivalence": {
         "original": {
-          "calls": 149,
-          "triangles": 624711
+          "calls": 150,
+          "triangles": 624987
         },
         "packed": {
-          "calls": 96,
-          "triangles": 624711
+          "calls": 97,
+          "triangles": 624987
         },
         "pixelsOver4": 4,
         "maxError": 32,
@@ -892,9 +892,9 @@
         "resources": {
           "enabled": true,
           "groups": 17,
-          "sources": 354,
-          "vertices": 349941,
-          "attributeBytes": 16801752,
+          "sources": 353,
+          "vertices": 349737,
+          "attributeBytes": 16791960,
           "submittedSources": 67
         }
       },
@@ -1088,6 +1088,7 @@
           "{\"kind\":\"door\",\"axis\":\"z\",\"f\":95,\"t\":0.12,\"a0\":94.35,\"a1\":95.65,\"y0\":6.65,\"y1\":8.850000000000001}",
           "{\"kind\":\"door\",\"axis\":\"z\",\"f\":95,\"t\":0.16,\"a0\":107,\"a1\":108.19999999999999,\"y0\":3.15,\"y1\":5.55}",
           "{\"kind\":\"door\",\"axis\":\"z\",\"f\":95,\"t\":0.16,\"a0\":84.25,\"a1\":86.15,\"y0\":0.15,\"y1\":2.75}",
+          "{\"kind\":\"door\",\"axis\":\"z\",\"f\":95,\"t\":0.16,\"a0\":95.725,\"a1\":97.375,\"y0\":0.15,\"y1\":2.6}",
           "{\"kind\":\"door\",\"axis\":\"z\",\"f\":95,\"t\":0.16,\"a0\":96.3,\"a1\":98.3,\"y0\":3.15,\"y1\":5.65}",
           "{\"kind\":\"door\",\"axis\":\"z\",\"f\":97,\"t\":0.3,\"a0\":106.5,\"a1\":107.9,\"y0\":-3.2,\"y1\":-0.9000000000000004}",
           "{\"kind\":\"door\",\"axis\":\"z\",\"f\":99,\"t\":0.16,\"a0\":107.5,\"a1\":108.5,\"y0\":3.15,\"y1\":5.35}",
@@ -1238,9 +1239,9 @@
           "{\"id\":\"panel@83.00,90.35\",\"axis\":\"x\",\"f\":90.35,\"a0\":81.8,\"a1\":84.2,\"y0\":-1.85,\"y1\":-0.6500000000000002}",
           "{\"id\":\"panel@84.82,96.60\",\"axis\":\"z\",\"f\":84.82,\"a0\":95.89999999999999,\"a1\":97.3,\"y0\":1.3499999999999999,\"y1\":2.45}",
           "{\"id\":\"panel@94.90,89.35\",\"axis\":\"z\",\"f\":94.9,\"a0\":88.35,\"a1\":90.35,\"y0\":3.95,\"y1\":5.3500000000000005}",
-          "{\"id\":\"panel@95.10,96.00\",\"axis\":\"z\",\"f\":95.1,\"a0\":94.95,\"a1\":97.05,\"y0\":1.2499999999999998,\"y1\":2.3499999999999996}",
+          "{\"id\":\"panel@95.10,101.10\",\"axis\":\"z\",\"f\":95.1,\"a0\":100.05,\"a1\":102.14999999999999,\"y0\":1.2499999999999998,\"y1\":2.3499999999999996}",
           "{\"id\":\"panel@99.75,98.52\",\"axis\":\"x\",\"f\":98.52,\"a0\":99.25,\"a1\":100.25,\"y0\":7.850000000000001,\"y1\":8.55}",
-          "{\"id\":\"pegrail@95.08,101.15\",\"axis\":\"z\",\"f\":95.08,\"a0\":99.65,\"a1\":102.65,\"y0\":1.35,\"y1\":2.55}",
+          "{\"id\":\"pegrail@95.08,106.60\",\"axis\":\"z\",\"f\":95.08,\"a0\":105.69999999999999,\"a1\":107.5,\"y0\":1.35,\"y1\":2.55}",
           "{\"id\":\"relief@103.25,80.42\",\"axis\":\"x\",\"f\":80.422,\"a0\":102.5,\"a1\":104,\"y0\":4.53,\"y1\":6.03}",
           "{\"id\":\"relief@20.30,161.00\",\"axis\":\"z\",\"f\":20.3,\"a0\":160.79,\"a1\":161.21,\"y0\":5.420000000000001,\"y1\":6.12}",
           "{\"id\":\"relief@29.35,157.00\",\"axis\":\"x\",\"f\":157,\"a0\":28.830000000000002,\"a1\":29.87,\"y0\":5.130000000000001,\"y1\":6.17}",
@@ -1801,6 +1802,7 @@
           "{\"kind\":\"door\",\"axis\":\"z\",\"f\":95,\"t\":0.12,\"a0\":94.35,\"a1\":95.65,\"y0\":6.65,\"y1\":8.850000000000001}",
           "{\"kind\":\"door\",\"axis\":\"z\",\"f\":95,\"t\":0.16,\"a0\":107,\"a1\":108.19999999999999,\"y0\":3.15,\"y1\":5.55}",
           "{\"kind\":\"door\",\"axis\":\"z\",\"f\":95,\"t\":0.16,\"a0\":84.25,\"a1\":86.15,\"y0\":0.15,\"y1\":2.75}",
+          "{\"kind\":\"door\",\"axis\":\"z\",\"f\":95,\"t\":0.16,\"a0\":95.725,\"a1\":97.375,\"y0\":0.15,\"y1\":2.6}",
           "{\"kind\":\"door\",\"axis\":\"z\",\"f\":95,\"t\":0.16,\"a0\":96.3,\"a1\":98.3,\"y0\":3.15,\"y1\":5.65}",
           "{\"kind\":\"door\",\"axis\":\"z\",\"f\":97,\"t\":0.3,\"a0\":106.5,\"a1\":107.9,\"y0\":-3.2,\"y1\":-0.9000000000000004}",
           "{\"kind\":\"door\",\"axis\":\"z\",\"f\":99,\"t\":0.16,\"a0\":107.5,\"a1\":108.5,\"y0\":3.15,\"y1\":5.35}",
@@ -1951,9 +1953,9 @@
           "{\"id\":\"panel@83.00,90.35\",\"axis\":\"x\",\"f\":90.35,\"a0\":81.8,\"a1\":84.2,\"y0\":-1.85,\"y1\":-0.6500000000000002}",
           "{\"id\":\"panel@84.82,96.60\",\"axis\":\"z\",\"f\":84.82,\"a0\":95.89999999999999,\"a1\":97.3,\"y0\":1.3499999999999999,\"y1\":2.45}",
           "{\"id\":\"panel@94.90,89.35\",\"axis\":\"z\",\"f\":94.9,\"a0\":88.35,\"a1\":90.35,\"y0\":3.95,\"y1\":5.3500000000000005}",
-          "{\"id\":\"panel@95.10,96.00\",\"axis\":\"z\",\"f\":95.1,\"a0\":94.95,\"a1\":97.05,\"y0\":1.2499999999999998,\"y1\":2.3499999999999996}",
+          "{\"id\":\"panel@95.10,101.10\",\"axis\":\"z\",\"f\":95.1,\"a0\":100.05,\"a1\":102.14999999999999,\"y0\":1.2499999999999998,\"y1\":2.3499999999999996}",
           "{\"id\":\"panel@99.75,98.52\",\"axis\":\"x\",\"f\":98.52,\"a0\":99.25,\"a1\":100.25,\"y0\":7.850000000000001,\"y1\":8.55}",
-          "{\"id\":\"pegrail@95.08,101.15\",\"axis\":\"z\",\"f\":95.08,\"a0\":99.65,\"a1\":102.65,\"y0\":1.35,\"y1\":2.55}",
+          "{\"id\":\"pegrail@95.08,106.60\",\"axis\":\"z\",\"f\":95.08,\"a0\":105.69999999999999,\"a1\":107.5,\"y0\":1.35,\"y1\":2.55}",
           "{\"id\":\"relief@103.25,80.42\",\"axis\":\"x\",\"f\":80.422,\"a0\":102.5,\"a1\":104,\"y0\":4.53,\"y1\":6.03}",
           "{\"id\":\"relief@20.30,161.00\",\"axis\":\"z\",\"f\":20.3,\"a0\":160.79,\"a1\":161.21,\"y0\":5.420000000000001,\"y1\":6.12}",
           "{\"id\":\"relief@29.35,157.00\",\"axis\":\"x\",\"f\":157,\"a0\":28.830000000000002,\"a1\":29.87,\"y0\":5.130000000000001,\"y1\":6.17}",
@@ -2335,8 +2337,8 @@
         {
           "name": "garden",
           "i": 0,
-          "calls": 117,
-          "triangles": 658906,
+          "calls": 118,
+          "triangles": 659182,
           "pose": {
             "x": 90.14377179280031,
             "y": 0,
@@ -2348,8 +2350,8 @@
         {
           "name": "garden",
           "i": 1,
-          "calls": 118,
-          "triangles": 668528,
+          "calls": 119,
+          "triangles": 668804,
           "pose": {
             "x": 90.29459028149543,
             "y": 0,
@@ -2361,8 +2363,8 @@
         {
           "name": "garden",
           "i": 2,
-          "calls": 115,
-          "triangles": 670389,
+          "calls": 116,
+          "triangles": 670665,
           "pose": {
             "x": 90.39231327818355,
             "y": 0,
@@ -2374,8 +2376,8 @@
         {
           "name": "garden",
           "i": 3,
-          "calls": 113,
-          "triangles": 666835,
+          "calls": 114,
+          "triangles": 667111,
           "pose": {
             "x": 90.44633904440404,
             "y": 0,
@@ -2387,8 +2389,8 @@
         {
           "name": "garden",
           "i": 4,
-          "calls": 112,
-          "triangles": 670781,
+          "calls": 113,
+          "triangles": 671057,
           "pose": {
             "x": 90.22655729699855,
             "y": 0,
@@ -2400,8 +2402,8 @@
         {
           "name": "garden",
           "i": 5,
-          "calls": 111,
-          "triangles": 674496,
+          "calls": 112,
+          "triangles": 674772,
           "pose": {
             "x": 89.93044984682874,
             "y": 0,
@@ -2413,8 +2415,8 @@
         {
           "name": "garden",
           "i": 6,
-          "calls": 104,
-          "triangles": 670260,
+          "calls": 105,
+          "triangles": 670536,
           "pose": {
             "x": 89.72790706427733,
             "y": 0,
@@ -2426,8 +2428,8 @@
         {
           "name": "garden",
           "i": 7,
-          "calls": 98,
-          "triangles": 655898,
+          "calls": 99,
+          "triangles": 656174,
           "pose": {
             "x": 89.61451906592912,
             "y": 0,
@@ -2439,8 +2441,8 @@
         {
           "name": "garden",
           "i": 8,
-          "calls": 96,
-          "triangles": 651783,
+          "calls": 97,
+          "triangles": 652059,
           "pose": {
             "x": 89.55577625955495,
             "y": 0,
@@ -2452,8 +2454,8 @@
         {
           "name": "conservatory",
           "i": 0,
-          "calls": 133,
-          "triangles": 648770,
+          "calls": 134,
+          "triangles": 649046,
           "pose": {
             "x": 121.13189858291358,
             "y": 0,
@@ -2465,8 +2467,8 @@
         {
           "name": "conservatory",
           "i": 1,
-          "calls": 132,
-          "triangles": 645551,
+          "calls": 133,
+          "triangles": 645827,
           "pose": {
             "x": 121.26382373260344,
             "y": 0,
@@ -2478,8 +2480,8 @@
         {
           "name": "conservatory",
           "i": 2,
-          "calls": 130,
-          "triangles": 646903,
+          "calls": 131,
+          "triangles": 647179,
           "pose": {
             "x": 121.33924718134968,
             "y": 0,
@@ -2491,8 +2493,8 @@
         {
           "name": "conservatory",
           "i": 3,
-          "calls": 128,
-          "triangles": 631332,
+          "calls": 129,
+          "triangles": 631608,
           "pose": {
             "x": 121.37504323044935,
             "y": 0,
@@ -2504,8 +2506,8 @@
         {
           "name": "conservatory",
           "i": 4,
-          "calls": 126,
-          "triangles": 624110,
+          "calls": 127,
+          "triangles": 624386,
           "pose": {
             "x": 121.13490791649625,
             "y": 0,
@@ -2517,8 +2519,8 @@
         {
           "name": "conservatory",
           "i": 5,
-          "calls": 127,
-          "triangles": 622280,
+          "calls": 128,
+          "triangles": 622556,
           "pose": {
             "x": 120.87501074635209,
             "y": 0,
@@ -2530,8 +2532,8 @@
         {
           "name": "conservatory",
           "i": 6,
-          "calls": 117,
-          "triangles": 605477,
+          "calls": 118,
+          "triangles": 605753,
           "pose": {
             "x": 120.72353763011074,
             "y": 0,
@@ -2543,8 +2545,8 @@
         {
           "name": "conservatory",
           "i": 7,
-          "calls": 120,
-          "triangles": 607304,
+          "calls": 122,
+          "triangles": 607780,
           "pose": {
             "x": 120.65099404676002,
             "y": 0,
@@ -2556,8 +2558,8 @@
         {
           "name": "conservatory",
           "i": 8,
-          "calls": 122,
-          "triangles": 600561,
+          "calls": 123,
+          "triangles": 603025,
           "pose": {
             "x": 120.61975102874793,
             "y": 0,
@@ -2582,8 +2584,8 @@
         {
           "name": "east",
           "i": 1,
-          "calls": 98,
-          "triangles": 651228,
+          "calls": 99,
+          "triangles": 651504,
           "pose": {
             "x": 118.2143704693476,
             "y": 0,
@@ -2595,8 +2597,8 @@
         {
           "name": "east",
           "i": 2,
-          "calls": 102,
-          "triangles": 651914,
+          "calls": 103,
+          "triangles": 652190,
           "pose": {
             "x": 118.22505882582945,
             "y": 0,
@@ -2608,8 +2610,8 @@
         {
           "name": "east",
           "i": 3,
-          "calls": 102,
-          "triangles": 649896,
+          "calls": 103,
+          "triangles": 650172,
           "pose": {
             "x": 118.2264440368295,
             "y": 0,
@@ -2621,8 +2623,8 @@
         {
           "name": "east",
           "i": 4,
-          "calls": 103,
-          "triangles": 654910,
+          "calls": 104,
+          "triangles": 655186,
           "pose": {
             "x": 118.02002845971776,
             "y": 0,
@@ -2634,8 +2636,8 @@
         {
           "name": "east",
           "i": 5,
-          "calls": 104,
-          "triangles": 652697,
+          "calls": 105,
+          "triangles": 652973,
           "pose": {
             "x": 117.8133737098887,
             "y": 0,
@@ -2647,8 +2649,8 @@
         {
           "name": "east",
           "i": 6,
-          "calls": 106,
-          "triangles": 651344,
+          "calls": 107,
+          "triangles": 651620,
           "pose": {
             "x": 117.75694836236597,
             "y": 0,
@@ -2660,8 +2662,8 @@
         {
           "name": "east",
           "i": 7,
-          "calls": 133,
-          "triangles": 653792,
+          "calls": 134,
+          "triangles": 654068,
           "pose": {
             "x": 117.74963563732702,
             "y": 0,
@@ -2673,8 +2675,8 @@
         {
           "name": "east",
           "i": 8,
-          "calls": 133,
-          "triangles": 644997,
+          "calls": 134,
+          "triangles": 645273,
           "pose": {
             "x": 117.74868790816195,
             "y": 0,
