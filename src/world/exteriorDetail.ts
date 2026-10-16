@@ -49,7 +49,7 @@ export function frontDoorLeaf(b:Batcher,k:Kit,width:number,height:number,th:numb
   const wood=entranceTimber(k.M.wood),metal=k.M.paint;
   const mahogany=new THREE.Color(color);
   const dark=mahogany.clone().multiplyScalar(.72);
-  const edge=.027;
+  const edge=.0162; // FRONT-R04: 40% thinner swing-leaf black edge, all sides
   const charcoal='#292a27',bevel='#383630';
 
   // Backing closes the thin shadow lines: no view through the 8 mm joints.
@@ -70,8 +70,8 @@ export function frontDoorLeaf(b:Batcher,k:Kit,width:number,height:number,th:numb
   for(const y of [edge/2,height-edge/2])
     box(b,metal,charcoal,width/2,y-edge/2,0,width-2*edge,edge,th+.014,{jitter:0});
   // Fine inset reveals against the timber, rather than an oversized trim.
-  for(const x of [edge+.004,width-edge-.004])
-    box(b,metal,bevel,x,.055,0,.007,height-.11,th+.016,{jitter:0});
+  for(const x of [edge+.0024,width-edge-.0024])
+    box(b,metal,bevel,x,.055,0,.0042,height-.11,th+.016,{jitter:0});
 
   // Long contemporary pull on the outside/right. A quieter shorter inner grip
   // keeps the game door usable from both sides without duplicating the hero detail.
