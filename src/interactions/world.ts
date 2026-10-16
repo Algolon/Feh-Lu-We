@@ -518,7 +518,9 @@ export class LightPool {
       // so expanding this inexpensive graph does not add point lights or draw calls.
       // Keep the one-way outdoor/window relevance used for outdoor practicals.
       const rel = rooms ? rooms.relevant(this.here, isOpen) : null;
-      const stableRooms = rooms ? rooms.visible(this.here, isOpen, 6, () => false, () => false) : null;
+      // Closed clear-glass doors also conduct visible light; opaque closed doors
+      // do not. Window apertures are kept out of graph reachability.
+      const stableRooms = rooms ? rooms.visible(this.here, isOpen, 6, () => true, () => false) : null;
       const byId = new Map<string, LampSource>();
       const cands: LampCandidate[] = [];
       for (const l of lamps) {
