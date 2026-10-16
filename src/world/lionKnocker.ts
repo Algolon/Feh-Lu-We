@@ -4,7 +4,7 @@
 import * as THREE from 'three';
 import { geo, type Batcher } from './kit';
 
-const radial=22, segments=88;
+const radial=26, segments=88;
 const G=(x:number,y:number,cx:number,cy:number,sx:number,sy:number)=>
   Math.exp(-2*((x-cx)**2/(sx*sx)+(y-cy)**2/(sy*sy)));
 const smooth=(a:number,b:number,x:number)=>{
@@ -15,11 +15,11 @@ const smooth=(a:number,b:number,x:number)=>{
 /** Closed, indexed bas-relief: 1 connected component, organic outline and sculpted front. */
 export function lionHeadReliefGeometry():THREE.BufferGeometry {
   const positions:number[]=[], colors:number[]=[],uvs:number[]=[],indices:number[]=[];
-  const patina=new THREE.Color('#78634c');
+  const patina=new THREE.Color('#7f694f');
   const put=(x:number,y:number,z:number,light=1,shade=0)=>{
     positions.push(x,y,z);
-    const l=Math.max(.30,Math.min(1.47,light));
-    colors.push(patina.r*l*(1-shade*.35),patina.g*l*(1-shade*.45),patina.b*l*(1-shade*.56));
+    const l=Math.max(.30,Math.min(1.53,light));
+    colors.push(patina.r*l*(1-shade*.66),patina.g*l*(1-shade*.75),patina.b*l*(1-shade*.81));
     uvs.push(.5+x/.30,.5+y/.41);
   };
   const radius=(a:number)=>{
@@ -30,39 +30,62 @@ export function lionHeadReliefGeometry():THREE.BufferGeometry {
     return 1+waves+ear;
   };
   const sculpt=(x:number,y:number,r:number,a:number)=>{
-    const mane=smooth(.47,.78,r);
-    const face=G(x,y,0,.006,.081,.125);
-    const brow=G(x,y,-.031,.031,.037,.016)+G(x,y,.031,.031,.037,.016);
-    const sockets=G(x,y,-.031,.016,.019,.011)+G(x,y,.031,.016,.019,.011);
-    const nose=G(x,y,0,-.073,.030,.030);
-    const cheeks=G(x,y,-.048,-.040,.039,.043)+G(x,y,.048,-.040,.039,.043);
-    const whiskers=G(x,y,-.022,-.088,.028,.028)+G(x,y,.022,-.088,.028,.028);
-    const furFlow=Math.sin(13*a+5.6*r+.58*Math.sin(3*a+.7));
-    const furGroove=Math.pow(Math.max(0,Math.cos(13*a+5.6*r+.58*Math.sin(3*a+.7))),12);
-    const mouth=G(x,y,0,-.117,.043,.011);
-    // All volumes flow into one another. Eyes are sunk BELOW brows, not separate eyeballs.
-    let z=.008+.026*(1-r*r)+.065*face+
-      .016*G(x,y,0,.074,.056,.040)+
-      .018*brow-.023*sockets+
-      .014*G(x,y,0,-.029,.021,.065)+
-      .020*cheeks+.018*whiskers+
-      .027*nose-.021*mouth;
-    z+=mane*(.006*furFlow-.010*furGroove);
-    // Paired ears: curved cartilage and inset recesses integrated into the mane.
+    const mane=smooth(.45,.81,r);
+    const face=G(x,y,0,.003,.081,.128);
+    const brow=G(x,y,-.032,.037,.034,.020)+G(x,y,.032,.037,.034,.020);
+    const sockets=G(x,y,-.031,.017,.023,.014)+G(x,y,.031,.017,.023,.014);
+    const cheek=G(x,y,-.047,-.039,.044,.047)+G(x,y,.047,-.039,.044,.047);
+    const pads=G(x,y,-.023,-.095,.027,.028)+G(x,y,.023,-.095,.027,.028);
+    const bridge=G(x,y,0,-.033,.023,.067);
+
+    // Almond-shaped eye slits under one sharp, sculpted lid (not eyeball blobs).
+    let eyes=0,nostrils=0,earShadow=0,ears=0;
     for(const sign of [-1,1]) {
-      z+=.020*G(x,y,sign*.084,.086,.033,.035);
-      z-=.018*G(x,y,sign*.084,.090,.017,.021);
-      z-=.016*G(x,y,sign*.013,-.081,.009,.007); // nostrils
+      const xx=Math.abs(x), eyeY=.017-.14*(xx-.030);
+      const ex=(xx-.032)/.021,ey=(y-eyeY)/.0075;
+      eyes+=Math.exp(-2.3*(ex**4+ey**4));
+      nostrils+=G(x,y,sign*.014,-.084,.009,.007);
+      ears+=G(x,y,sign*.080,.083,.032,.031);
+      earShadow+=G(x,y,sign*.082,.090,.016,.017);
     }
-    // Deep mouth seam and nose bridge terminate at the actual ring attachment.
-    z-=.016*G(x,y,0,-.098,.007,.024);
-    // Subtle cast-bronze wear on high brows and mane ridges; deep eyes/nostrils nearly black.
-    const wear=.16*brow+.11*cheeks+.09*nose+.10*(Math.max(0,furFlow)*mane);
-    const shadow=Math.min(1,1.7*sockets+2*mouth+
-      1.6*(G(x,y,-.013,-.081,.009,.007)+G(x,y,.013,-.081,.009,.007))+
-      .54*furGroove*mane);
-    const light=.73+Math.max(0,z)*2.0+wear+.10*G(x,y,0,.045,.055,.055);
-    return { z,light,shadow };
+
+    // Carved nose shield tapers towards the philtrum, recognisably feline.
+    const noseT=Math.max(0,Math.min(1,(y+.097)/.040));
+    const noseW=.005+.023*noseT;
+    const noseShield=smooth(0,.004,noseW-Math.abs(x))*
+      smooth(-.098,-.091,y)*(1-smooth(-.063,-.059,y));
+    const mouthY=-.121+.12*Math.abs(x);
+    const lip=G(x,y,0,-.122,.047,.011);
+    const mouthCurve=Math.exp(-2*((y-mouthY)/.0045)**2)*
+      (1-smooth(.029,.044,Math.abs(x)));
+    const philtrum=G(x,y,0,-.108,.006,.027);
+
+    // Coherent organic locks: flowing ridges carved directly into the mane.
+    const flow=12*a+5.8*r+.65*Math.sin(3*a+.7);
+    const ridges=Math.sin(flow);
+    const grooves=Math.pow(Math.max(0,Math.cos(flow+.2)),16);
+
+    let z=.012+.026*(1-r*r)+.064*face+
+      .017*G(x,y,0,.078,.051,.042)+
+      .026*brow-.028*sockets+
+      .025*bridge+.022*cheek+.030*pads+
+      .022*G(x,y,0,-.077,.030,.029)+
+      .015*noseShield-.017*lip-
+      .010*mouthCurve-.012*philtrum+
+      .017*ears-.013*earShadow;
+    z+=mane*(.009*ridges-.015*grooves);
+
+    // The dark nostrils, almond eyes and inverted Y mouth are depressions
+    // and inlaid patina on ONE connected face.
+    z-=.012*eyes+.013*nostrils;
+
+    const wear=.25*brow+.12*cheek+.17*pads+.18*noseShield+
+      .13*Math.max(0,ridges)*mane;
+    const shadow=Math.min(1,.83*eyes+.75*noseShield+.90*nostrils+
+      .78*mouthCurve+.55*philtrum+.66*grooves*mane+.45*earShadow);
+    const light=.67+Math.max(0,z)*2.3+wear+
+      .11*G(x,y,0,.056,.055,.048);
+    return {z,light,shadow};
   };
   const centre=sculpt(0,0,0,0);
   put(0,0,centre.z,centre.light,centre.shadow);
