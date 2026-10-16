@@ -81,18 +81,18 @@ export function frontDoorLeaf(b:Batcher,k:Kit,width:number,height:number,th:numb
     const len=exterior?1.13:.66,cy=exterior?1.16:1.05;
     const handleZ=side*(th/2+.027);
     const radius=exterior?.018:.014;
-    rod(b,metal,'#b08b50',hx,cy,handleZ,radius,radius,len,12,{jitter:0});
+    rod(b,metal,'#946a43',hx,cy,handleZ,radius,radius,len,12,{jitter:0});
     for(const y of [cy-len*.40,cy+len*.40]){
       // A mounting post projecting from the leaf to the pull-bar axis.
-      rod(b,metal,'#8a6a40',hx,y,side*(th/2+.012),.012,.012,.032,8,{rx:Math.PI/2,jitter:0});
+      rod(b,metal,'#785537',hx,y,side*(th/2+.012),.012,.012,.032,8,{rx:Math.PI/2,jitter:0});
       const stud=softBox(.044,.048,.012,.006);
-      geo(b,metal,'#967649',stud,hx,y,side*(th/2+.003),{jitter:0});
+      geo(b,metal,'#8a6543',stud,hx,y,side*(th/2+.003),{jitter:0});
       stud.dispose();
     }
   }
   // Small, restrained key cylinder rather than the old interior-style lever.
   const key=new THREE.CylinderGeometry(.012,.012,.007,12);
-  geo(b,metal,'#ab874f',key,width-.245,.97,-th/2-.012,{rx:Math.PI/2,jitter:0});
+  geo(b,metal,'#a07c4d',key,width-.245,.97,-th/2-.012,{rx:Math.PI/2,jitter:0});
   key.dispose();
 
   addLionKnocker(b,metal,width/2,height*.70,th);
