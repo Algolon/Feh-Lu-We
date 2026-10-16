@@ -113,7 +113,9 @@ try {
       try{T.walkTo(...point(i),false,15);p.push({step:i,y:+g.player.y.toFixed(3)});}
       catch(e){return {pass:false,step:i,error:e.message,path:p};}
     }
-    return {pass:g.player.y<.55,final:T.pos(),path:p};
+    try{T.walkTo(82.0,103.8,false,20);}
+    catch(e){return {pass:false,step:'exit-to-ground',error:e.message,path:p};}
+    return {pass:Math.abs(g.player.y-0.15)<0.14,final:T.pos(),path:p};
   });
   checks.push({name:'spiral-downstairs-walking',data:descent,pass:descent.pass});
   console.log('LIB-R01 DESCENT',JSON.stringify(descent));
@@ -136,6 +138,17 @@ try {
   });
   checks.push({name:'dev01-b01-ds01-anchors',data:v,pass:Object.values(v).every(x=>x.exists)});
   console.log('LIB-R01 DEV01',JSON.stringify(v));
+  const targetability=await review.page.evaluate(()=>{
+    const g=window.__game,out={};
+    for(const [id,x,z] of [['b01.table',75.95,97.35],['ds01.album',75.75,106.6]]){
+      g.player.setPose({x,y:0.15,z,yaw:0,pitch:0});T.tick(8);
+      T.lookAtId(id);const m=g.metrics();
+      out[id]={target:m.target,label:m.label,pass:m.target===id};
+    }
+    return out;
+  });
+  checks.push({name:'dev01-playable-reticle-targets',data:targetability,pass:Object.values(targetability).every(x=>x.pass)});
+  console.log('LIB-R01 TARGETS',JSON.stringify(targetability));
   await review.context.close();
 } catch(e) {
   errors.push('QA script: '+e.stack);
