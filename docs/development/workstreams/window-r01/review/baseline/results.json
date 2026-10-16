@@ -1,0 +1,169 @@
+{
+  "baseline": true,
+  "collision": {
+    "physical": true,
+    "visual": true,
+    "billiardDoorSeeThrough": false
+  },
+  "frames": [
+    {
+      "quality": "low",
+      "side": "inside",
+      "door": "closed",
+      "here": "billiard",
+      "target": "out",
+      "targetVisible": false,
+      "calls": 15,
+      "triangles": 280204,
+      "buffer": [
+        480,
+        860
+      ],
+      "glError": 0
+    },
+    {
+      "quality": "low",
+      "side": "inside",
+      "door": "open",
+      "here": "billiard",
+      "target": "out",
+      "targetVisible": true,
+      "calls": 63,
+      "triangles": 470167,
+      "buffer": [
+        480,
+        860
+      ],
+      "glError": 0
+    },
+    {
+      "quality": "low",
+      "side": "outside",
+      "door": "closed",
+      "here": "out",
+      "target": "billiard",
+      "targetVisible": false,
+      "calls": 52,
+      "triangles": 474538,
+      "buffer": [
+        480,
+        860
+      ],
+      "glError": 0
+    },
+    {
+      "quality": "low",
+      "side": "outside",
+      "door": "open",
+      "here": "out",
+      "target": "billiard",
+      "targetVisible": true,
+      "calls": 71,
+      "triangles": 523120,
+      "buffer": [
+        480,
+        860
+      ],
+      "glError": 0
+    },
+    {
+      "quality": "high",
+      "side": "inside",
+      "door": "closed",
+      "here": "billiard",
+      "target": "out",
+      "targetVisible": false,
+      "calls": 40,
+      "triangles": 539134,
+      "buffer": [
+        480,
+        860
+      ],
+      "glError": 0
+    },
+    {
+      "quality": "high",
+      "side": "inside",
+      "door": "open",
+      "here": "billiard",
+      "target": "out",
+      "targetVisible": true,
+      "calls": 172,
+      "triangles": 982227,
+      "buffer": [
+        480,
+        860
+      ],
+      "glError": 0
+    },
+    {
+      "quality": "high",
+      "side": "outside",
+      "door": "closed",
+      "here": "out",
+      "target": "billiard",
+      "targetVisible": false,
+      "calls": 114,
+      "triangles": 826550,
+      "buffer": [
+        480,
+        860
+      ],
+      "glError": 0
+    },
+    {
+      "quality": "high",
+      "side": "outside",
+      "door": "open",
+      "here": "out",
+      "target": "billiard",
+      "targetVisible": true,
+      "calls": 151,
+      "triangles": 875132,
+      "buffer": [
+        480,
+        860
+      ],
+      "glError": 0
+    }
+  ],
+  "oblique": [
+    {
+      "side": "inside",
+      "here": "billiard",
+      "targetVisible": false,
+      "calls": 16,
+      "triangles": 281064,
+      "glError": 0
+    },
+    {
+      "side": "outside",
+      "here": "out",
+      "targetVisible": false,
+      "calls": 53,
+      "triangles": 483473,
+      "glError": 0
+    }
+  ],
+  "closeups": [
+    {
+      "position": "front",
+      "here": "billiard",
+      "exteriorVisible": false,
+      "calls": 15,
+      "triangles": 280204,
+      "glError": 0
+    },
+    {
+      "position": "oblique",
+      "here": "billiard",
+      "exteriorVisible": false,
+      "calls": 14,
+      "triangles": 280176,
+      "glError": 0
+    }
+  ],
+  "sillMaterial": null,
+  "errors": [],
+  "deviceValidated": false
+}

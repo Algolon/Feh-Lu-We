@@ -4,6 +4,7 @@
 // is most-specific first: attic before the attic stair, the attic stair and the split north rooms before the broad
 // upper rooms, the guest WC before the billiard room; utility and pantry do not overlap.
 import { RoomGraph, type RoomDef, type PortalDef, type RoomThreshold } from './rooms';
+import { MANOR_WINDOWS, windowAperture, type ManorWindow } from './manorWindowLayout';
 import { SHED, COTTAGE, COTTAGE_FLOOR, SAUNA, ATTIC_NOOK } from './layout';
 
 const R = (id: string, name: string, floor: RoomDef['floor'], x0: number, x1: number, z0: number, z1: number, y0: number, y1: number, map = true): RoomDef => ({ id, name, floor, x0, x1, z0, z1, y0, y1, map });
@@ -76,6 +77,21 @@ export const ROOM_THRESHOLDS: RoomThreshold[] = [
 ];
 
 const P = (a: string, b: string, kind: PortalDef['kind'], door?: string, seeThrough = false): PortalDef => ({ a, b, kind, door, seeThrough });
+
+// WINDOW-R02: resolve each window to the REAL room just behind its facade.
+// No heuristic 'one room = one window': a single room may have multiple apertures,
+// and upper/lower windows at the same X/Z must keep their actual floor identity.
+export function manorWindowRoom(site: ManorWindow): string {
+  const inset = 0.65;
+  const x = site.axis === 'x' ? site.at : site.f - site.exterior * inset;
+  const z = site.axis === 'x' ? site.f - site.exterior * inset : site.at;
+  const y = site.y0 + site.sill + site.h / 2;
+  const room = ROOMS.find(r => x >= r.x0 && x <= r.x1 && z >= r.z0 && z <= r.z1
+    && y >= r.y0 && y <= r.y1)?.id ?? 'out';
+  if (room === 'out') throw new Error('WINDOW-R02: exterior opening has no interior room: ' + site.id);
+  return room;
+}
+
 export const PORTALS: PortalDef[] = [
   P('vestibule', 'out', 'door', 'door.front'), P('vestibule', 'hall', 'arch'),
   P('hall', 'living', 'arch'), P('hall', 'dining', 'arch'), P('hall', 'kitchen', 'arch'), P('hall', 'lobby', 'arch'), P('hall', 'landing', 'stair'),
@@ -86,7 +102,7 @@ export const PORTALS: PortalDef[] = [
   P('kitchen', 'corridor', 'door', 'door.service'), P('corridor', 'workshop', 'door', 'door.workshop'), P('corridor', 'pantry', 'door', 'door.pantry'),
   P('corridor', 'cons', 'door', 'door.consWest', true), P('workshop', 'out', 'door', 'door.workshopOut'),
   // The kitchen back door has clear glass: keep the garden visible while closed and during its swing.
-  P('billiard', 'out', 'door', 'door.billiardOut'), P('kitchen', 'out', 'door', 'door.kitchenBack', true),
+  P('billiard', 'out', 'door', 'door.billiardOut', true), P('kitchen', 'out', 'door', 'door.kitchenBack', true),
   P('cons', 'out', 'door', 'door.consEast', true), P('cons', 'out', 'glass'),
   P('frontGallery', 'walkway', 'arch'), P('walkway', 'landing', 'arch'),
   P('frontGallery', 'reis', 'door', 'door.reis'), P('walkway', 'sterren', 'door', 'door.sterren'),
@@ -99,8 +115,13 @@ export const PORTALS: PortalDef[] = [
   P('descent', 'hut', 'arch'), P('hut', 'out', 'door', 'door.boslust'),
   P('sauna', 'out', 'door', 'door.sauna'), P('shed', 'out', 'door', 'door.shed'),
   P('cottageEntry', 'out', 'door', 'door.cottage'), P('cottageEntry', 'cottageRoom', 'arch'),
-  ...['living', 'dining', 'kitchen', 'billiard', 'library', 'workshop', 'pantry', 'vestibule', 'reis', 'sterren', 'study', 'botanic', 'bath', 'storage', 'landing', 'frontGallery', 'libGallery', 'cottageEntry', 'cottageRoom']
-    .map((r) => P(r, 'out', 'window')),
+  // Decorative/non-facade windows remain opaque until their architecture is reviewed.
+  ...['vestibule', 'landing', 'cottageEntry', 'cottageRoom'].map(r => P(r, 'out', 'window')),
+  // Actual wall apertures, one portal per physical window — includes upper floor and wing.
+  ...MANOR_WINDOWS.map(site => ({
+    ...P(manorWindowRoom(site), 'out', 'window', undefined, true),
+    aperture: windowAperture(site),
+  })),
   // ---------------------------------------------------------------- DEV-02 additive portals (v0.2 adjacency)
   P('lobby', 'guestWC', 'door', 'door.guestWC'), P('corridor', 'utility', 'door', 'door.utility'),
   P('ucorr', 'atticStair', 'door', 'door.atticStair'), P('rearNookEast', 'linen', 'door', 'door.linen'),

@@ -1,0 +1,290 @@
+{
+  "registry": {
+    "portals": 44,
+    "rooms": [
+      "bath",
+      "billiard",
+      "botanic",
+      "dining",
+      "kitchen",
+      "libGallery",
+      "library",
+      "linen",
+      "living",
+      "pantry",
+      "rearNook",
+      "rearNookEast",
+      "reis",
+      "sterren",
+      "study",
+      "workshop"
+    ],
+    "glassColliderTags": 0,
+    "physicallyBlocked": 44,
+    "visuallyClear": 44,
+    "obstructed": []
+  },
+  "views": [
+    {
+      "name": "south-ground",
+      "side": "inside",
+      "source": "living",
+      "target": "out",
+      "visible": true,
+      "calls": 62,
+      "triangles": 668148,
+      "glError": 0
+    },
+    {
+      "name": "south-ground",
+      "side": "outside",
+      "source": "out",
+      "target": "living",
+      "visible": true,
+      "calls": 87,
+      "triangles": 721948,
+      "glError": 0
+    },
+    {
+      "name": "north-ground",
+      "side": "inside",
+      "source": "billiard",
+      "target": "out",
+      "visible": true,
+      "calls": 61,
+      "triangles": 616222,
+      "glError": 0
+    },
+    {
+      "name": "north-ground",
+      "side": "outside",
+      "source": "out",
+      "target": "billiard",
+      "visible": true,
+      "calls": 86,
+      "triangles": 655764,
+      "glError": 0
+    },
+    {
+      "name": "west-ground",
+      "side": "inside",
+      "source": "library",
+      "target": "out",
+      "visible": true,
+      "calls": 52,
+      "triangles": 639186,
+      "glError": 0
+    },
+    {
+      "name": "west-ground",
+      "side": "outside",
+      "source": "out",
+      "target": "library",
+      "visible": true,
+      "calls": 99,
+      "triangles": 689288,
+      "glError": 0
+    },
+    {
+      "name": "east-ground",
+      "side": "inside",
+      "source": "dining",
+      "target": "out",
+      "visible": true,
+      "calls": 64,
+      "triangles": 412992,
+      "glError": 0
+    },
+    {
+      "name": "east-ground",
+      "side": "outside",
+      "source": "out",
+      "target": "dining",
+      "visible": true,
+      "calls": 85,
+      "triangles": 882524,
+      "glError": 0
+    },
+    {
+      "name": "south-upper",
+      "side": "inside",
+      "source": "botanic",
+      "target": "out",
+      "visible": true,
+      "calls": 67,
+      "triangles": 583822,
+      "glError": 0
+    },
+    {
+      "name": "south-upper",
+      "side": "outside",
+      "source": "out",
+      "target": "botanic",
+      "visible": true,
+      "calls": 113,
+      "triangles": 850628,
+      "glError": 0
+    },
+    {
+      "name": "north-upper",
+      "side": "inside",
+      "source": "rearNookEast",
+      "target": "out",
+      "visible": true,
+      "calls": 62,
+      "triangles": 627024,
+      "glError": 0
+    },
+    {
+      "name": "north-upper",
+      "side": "outside",
+      "source": "out",
+      "target": "rearNookEast",
+      "visible": true,
+      "calls": 87,
+      "triangles": 690220,
+      "glError": 0
+    },
+    {
+      "name": "west-upper",
+      "side": "inside",
+      "source": "sterren",
+      "target": "out",
+      "visible": true,
+      "calls": 56,
+      "triangles": 582972,
+      "glError": 0
+    },
+    {
+      "name": "west-upper",
+      "side": "outside",
+      "source": "out",
+      "target": "sterren",
+      "visible": true,
+      "calls": 106,
+      "triangles": 666614,
+      "glError": 0
+    },
+    {
+      "name": "east-upper",
+      "side": "inside",
+      "source": "botanic",
+      "target": "out",
+      "visible": true,
+      "calls": 70,
+      "triangles": 510658,
+      "glError": 0
+    },
+    {
+      "name": "east-upper",
+      "side": "outside",
+      "source": "out",
+      "target": "botanic",
+      "visible": true,
+      "calls": 83,
+      "triangles": 820794,
+      "glError": 0
+    },
+    {
+      "name": "wing-south",
+      "side": "inside",
+      "source": "workshop",
+      "target": "out",
+      "visible": true,
+      "calls": 62,
+      "triangles": 532744,
+      "glError": 0
+    },
+    {
+      "name": "wing-south",
+      "side": "outside",
+      "source": "out",
+      "target": "workshop",
+      "visible": true,
+      "calls": 71,
+      "triangles": 454370,
+      "glError": 0
+    },
+    {
+      "name": "wing-north",
+      "side": "inside",
+      "source": "pantry",
+      "target": "out",
+      "visible": true,
+      "calls": 44,
+      "triangles": 351572,
+      "glError": 0
+    },
+    {
+      "name": "wing-north",
+      "side": "outside",
+      "source": "out",
+      "target": "pantry",
+      "visible": true,
+      "calls": 112,
+      "triangles": 690833,
+      "glError": 0
+    }
+  ],
+  "sills": [
+    {
+      "site": "north-ground",
+      "calls": 67,
+      "triangles": 616964,
+      "glError": 0
+    },
+    {
+      "site": "west-ground",
+      "calls": 51,
+      "triangles": 629526,
+      "glError": 0
+    }
+  ],
+  "mahogany": {
+    "rgb": [
+      106.25415512465374,
+      50.53324099722992,
+      38.600415512465375
+    ],
+    "lengthwise": 0.43975069252077564,
+    "across": 0.9840720221606648
+  },
+  "errors": [],
+  "provisionalTriangleOverruns": [
+    {
+      "name": "east-ground",
+      "side": "outside",
+      "source": "out",
+      "target": "dining",
+      "visible": true,
+      "calls": 85,
+      "triangles": 882524,
+      "glError": 0
+    },
+    {
+      "name": "south-upper",
+      "side": "outside",
+      "source": "out",
+      "target": "botanic",
+      "visible": true,
+      "calls": 113,
+      "triangles": 850628,
+      "glError": 0
+    },
+    {
+      "name": "east-upper",
+      "side": "outside",
+      "source": "out",
+      "target": "botanic",
+      "visible": true,
+      "calls": 83,
+      "triangles": 820794,
+      "glError": 0
+    }
+  ],
+  "samsungValidated": false,
+  "budget": {
+    "calls": 150,
+    "triangles": 750000
+  }
+}
