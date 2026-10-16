@@ -10,7 +10,7 @@ export const EXTERIOR_DETAILS = typeof location==='undefined'||new URLSearchPara
 export const ENTRANCE_METAL={iron:'#343c37',bronze:'#9a895f',shadow:'#625b43'};
 /** Horizontal, lightly separated mahogany boards inside the existing wide door envelope. */
 export function horizontalDoorBoards(width:number,height:number,count=7) {
-  const border=.055,gap=.008;
+  const border=.025,gap=.008; // FRONT-R04: reduce wood inset so black surround really reads slim
   const h=(height-2*border-(count-1)*gap)/count;
   return Array.from({length:count},(_,i)=>({
     x0:border,x1:width-border,
