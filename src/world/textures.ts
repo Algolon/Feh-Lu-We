@@ -138,9 +138,9 @@ export function makeTextures() {
       const noise = (r() - 0.5) * 6;
       const shift = growth - pore + fine + noise;
       const i = (y * 512 + px) * 4;
-      pixels.data[i] = Math.round(153 + shift);
-      pixels.data[i + 1] = Math.round(111 + shift * 0.83);
-      pixels.data[i + 2] = Math.round(76 + shift * 0.65);
+      pixels.data[i] = Math.round(137 + shift * 0.90);
+      pixels.data[i + 1] = Math.round(99 + shift * 0.76);
+      pixels.data[i + 2] = Math.round(68 + shift * 0.60);
       pixels.data[i + 3] = 255;
     }
     x.putImageData(pixels, 0, 0);
