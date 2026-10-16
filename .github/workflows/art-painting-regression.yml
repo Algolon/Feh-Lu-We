@@ -3,6 +3,9 @@ on:
   push:
     branches: [fix/flw-paintings-permanent-r02]
   workflow_dispatch:
+concurrency:
+  group: flw-painting-regression-qa
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
@@ -28,7 +31,7 @@ jobs:
             curl -sf http://127.0.0.1:4188/Feh-Lu-We/ > /dev/null && break
             sleep 1
           done
-          ART_PROBE_OUT=art-probe/local node scripts/art-painting-regression-probe.mjs http://127.0.0.1:4188/Feh-Lu-We/
+          ART_PROBE_ASSERT=1 ART_PROBE_INJECT_FIRST=1 ART_PROBE_OUT=art-probe/local node scripts/art-painting-regression-probe.mjs http://127.0.0.1:4188/Feh-Lu-We/
       - name: Check current live GitHub Pages
         if: always()
         continue-on-error: true
