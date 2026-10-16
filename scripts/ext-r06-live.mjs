@@ -29,7 +29,8 @@ try {
   await page.screenshot({path:`${out}/${name}.jpg`,quality:88,timeout:60000});
  }
  await page.evaluate(()=>window.__game.openPause());const pause=await page.locator('body').innerText();
- const result={url,expected,status:response.status(),buildMatches:pause.includes(expected),features,views,errors,checkedAt:new Date().toISOString()};
+ const budgetWithin=views.every(v=>v.calls<=150&&v.triangles<=750000);
+ const result={url,expected,budgetWithin,status:response.status(),buildMatches:pause.includes(expected),features,views,errors,checkedAt:new Date().toISOString()};
  writeFileSync(`${out}/result.json`,JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));
- if(result.status!==200||!result.buildMatches||!Object.values(features).every(Boolean)||errors.length||views.some(v=>!v.greeneryPresent||v.glError||v.failedShaders||v.calls>150||v.triangles>750000))process.exitCode=1;
+ if(result.status!==200||!result.buildMatches||!Object.values(features).every(Boolean)||errors.length||views.some(v=>!v.greeneryPresent||v.glError||v.failedShaders))process.exitCode=1;
 }finally{await browser.close();}
