@@ -27,6 +27,36 @@ jobs:
       - run: npm run build
       - run: npx playwright-core install --with-deps chromium
       - run: node scripts/window-r01-review.mjs
+      - name: Capture matched pre-pilot baseline
+        shell: bash
+        run: |
+          git worktree add --detach /tmp/window-r01-baseline 76f410a31cc80e2617267bd3693e52aa9f55ae96
+          cp scripts/window-r01-review.mjs /tmp/window-r01-baseline/scripts/window-r01-review.mjs
+          (
+            cd /tmp/window-r01-baseline
+            npm ci
+            WINDOW_R01_BASELINE=1 node scripts/window-r01-review.mjs
+          )
+          mkdir -p docs/development/workstreams/window-r01/review/baseline
+          cp /tmp/window-r01-baseline/docs/development/workstreams/window-r01/review/baseline/* docs/development/workstreams/window-r01/review/baseline/
+      - name: Compare matched camera submissions
+        shell: bash
+        run: |
+          node --input-type=module - <<'JS'
+          import { readFileSync, writeFileSync } from 'node:fs';
+          const dir='docs/development/workstreams/window-r01/review';
+          const before=JSON.parse(readFileSync(dir+'/baseline/results.json','utf8'));
+          const after=JSON.parse(readFileSync(dir+'/results.json','utf8'));
+          const rows=after.frames.map((v,i)=>({
+            quality:v.quality,side:v.side,door:v.door,
+            callsBefore:before.frames[i].calls,callsAfter:v.calls,
+            callsDelta:v.calls-before.frames[i].calls,
+            trianglesBefore:before.frames[i].triangles,trianglesAfter:v.triangles,
+            trianglesDelta:v.triangles-before.frames[i].triangles,
+          }));
+          writeFileSync(dir+'/comparison.json',JSON.stringify({rows,baselineSha:'76f410a31cc80e2617267bd3693e52aa9f55ae96',note:'SwiftShader only, camera counts on low; high includes shadows.'},null,2));
+          console.log(JSON.stringify(rows,null,2));
+          JS
       - uses: actions/upload-artifact@v4
         if: always()
         with:
