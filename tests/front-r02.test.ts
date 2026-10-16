@@ -80,6 +80,7 @@ describe('FRONT-R04 - authored 3D lion sculpture, bronze hardware, narrow steel 
     const arch=readFileSync(new URL('../src/world/arch.ts',import.meta.url).pathname,'utf8');
     const manor=readFileSync(new URL('../src/world/manor.ts',import.meta.url).pathname,'utf8');
     expect(arch).toContain("const L=t/2+.005, lip=.0024, casing=.018");
+    expect(arch).toContain("const stoneReveal='#d7d0bf'"); // no black wall-depth tunnel
     expect(arch).not.toContain("casing=.030");
     expect(arch).toContain("if(frameStyle==='slim-metal')");
     expect(manor).toContain("frameStyle: axis==='x'&&f===80.2?'slim-metal':undefined");
