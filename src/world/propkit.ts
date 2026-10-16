@@ -118,7 +118,8 @@ export const RUG = { medallion: 0, kilim: 1, lattice: 2, field: 3, runner: 4, ru
 export type RugPattern = keyof typeof RUG;
 const RCW = 192, RCH = 288;
 function rugTex() {
-  const [c, x] = canvas(RCW * 2, RCH * 4), r = mulberry32(503);
+  const [c, x] = canvas(RCW * 4, RCH * 8), r = mulberry32(503);
+  x.scale(2, 2);
   const cell = (i: number) => [(i % 2) * RCW, Math.floor(i / 2) * RCH] as const;
   const diamond = (cx: number, cy: number, w: number, h: number) => { x.beginPath(); x.moveTo(cx, cy - h); x.lineTo(cx + w, cy); x.lineTo(cx, cy + h); x.lineTo(cx - w, cy); x.closePath(); x.fill(); };
   const frame = (X: number, Y: number, ins: number, w: number, col: string) => { x.fillStyle = col; x.fillRect(X + ins, Y + ins, RCW - 2 * ins, w); x.fillRect(X + ins, Y + RCH - ins - w, RCW - 2 * ins, w); x.fillRect(X + ins, Y + ins, w, RCH - 2 * ins); x.fillRect(X + RCW - ins - w, Y + ins, w, RCH - 2 * ins); };
@@ -126,11 +127,23 @@ function rugTex() {
   // 0 medallion: madder field, indigo border with a running lozenge, a restrained medallion
   { const [X, Y] = cell(0);
     x.fillStyle = '#8c4a3a'; x.fillRect(X, Y, RCW, RCH);
-    x.fillStyle = '#d8c8a4'; x.fillRect(X, Y, RCW, RCH); x.fillStyle = '#3e4a5c'; x.fillRect(X + 8, Y + 8, RCW - 16, RCH - 16);
+    x.fillStyle = '#d8c8a4'; x.fillRect(X, Y, RCW, RCH); x.fillStyle = '#4c5961'; x.fillRect(X + 8, Y + 8, RCW - 16, RCH - 16);
     x.fillStyle = '#8c4a3a'; x.fillRect(X + 30, Y + 30, RCW - 60, RCH - 60);
     x.fillStyle = 'rgba(210,180,122,0.8)'; for (let i = 0; i < 9; i++) { diamond(X + 24 + i * 18, Y + 19, 5, 5); diamond(X + 24 + i * 18, Y + RCH - 19, 5, 5); } for (let j = 0; j < 14; j++) { diamond(X + 19, Y + 34 + j * 17, 5, 5); diamond(X + RCW - 19, Y + 34 + j * 17, 5, 5); }
     x.save(); x.translate(X + RCW / 2, Y + RCH / 2);
-    x.fillStyle = '#3e4a5c'; diamond(0, 0, 48, 72); x.fillStyle = '#b8814a'; diamond(0, 0, 32, 48); x.fillStyle = '#8c4a3a'; diamond(0, 0, 16, 24); x.restore();
+    const rosette = (radius: number, col: string) => {
+      x.fillStyle = col; x.beginPath();
+      for (let j = 0; j < 32; j++) {
+        const a = j / 32 * Math.PI * 2, rr = radius * (j % 2 ? 0.84 : 1);
+        const px = Math.cos(a) * rr, py = Math.sin(a) * rr * 1.28;
+        if (j === 0) x.moveTo(px, py); else x.lineTo(px, py);
+      }
+      x.closePath(); x.fill();
+    };
+    rosette(50, '#c6ad81'); rosette(45, '#4c5961'); rosette(34, '#af7750');
+    rosette(26, '#d4bf94'); rosette(20, '#8c4a3a');
+    for (let j = 0; j < 8; j++) { const a = j / 8 * Math.PI * 2; x.fillStyle = '#c6ad81'; diamond(Math.cos(a) * 12, Math.sin(a) * 16, 3, 4); }
+    x.fillStyle = '#4c5961'; diamond(0, 0, 6, 8); x.restore();
     x.fillStyle = 'rgba(216,200,164,0.35)'; for (const [dx, dy] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) diamond(X + RCW / 2 + dx * 52, Y + RCH / 2 + dy * 90, 12, 18);
     pile(X, Y); }
   // 1 kilim: natural wool with horizontal bands of stepped triangles in rust / ochre / indigo
@@ -157,21 +170,25 @@ function rugTex() {
   // 3 field: an almost plain field (warm grey-brown) with one narrow border line: the calm rug for bedrooms / studies
   { const [X, Y] = cell(3);
     x.fillStyle = '#a8957a'; x.fillRect(X, Y, RCW, RCH);
-    for (let i = 0; i < 40; i++) { x.fillStyle = `rgba(${r() > 0.5 ? '255,255,255' : '0,0,0'},0.04)`; x.fillRect(X, Y + r() * RCH, RCW, 2 + r() * 6); } // abrash
-    frame(X, Y, 12, 4, '#6e5a44'); frame(X, Y, 22, 2, '#e2d4b4');
+    x.strokeStyle = 'rgba(64,49,31,0.32)'; x.lineWidth = 0.8;
+    for (let y = 6; y < RCH - 6; y += 3) for (let u = 6; u < RCW - 6; u += 4) {
+      x.beginPath(); x.moveTo(X + u, Y + y); x.lineTo(X + u + 2, Y + y + 1.5); x.lineTo(X + u + 4, Y + y); x.stroke();
+    }
+    frame(X, Y, 0, 5, '#71634e'); frame(X, Y, 5, 1, '#c9b995');
     pile(X, Y); }
   // 4 runner middle (tiles along V): madder field, repeating octagonal guls, indigo side borders only
   { const [X, Y] = cell(4);
     x.fillStyle = '#7e3c32'; x.fillRect(X, Y, RCW, RCH);
-    x.fillStyle = '#2f3b4e'; x.fillRect(X, Y, 26, RCH); x.fillRect(X + RCW - 26, Y, 26, RCH);
+    x.fillStyle = '#4b555b'; x.fillRect(X, Y, 26, RCH); x.fillRect(X + RCW - 26, Y, 26, RCH);
     x.fillStyle = '#d4bf94'; x.fillRect(X + 26, Y, 4, RCH); x.fillRect(X + RCW - 30, Y, 4, RCH);
     x.fillStyle = 'rgba(212,191,148,0.7)'; for (let j = 0; j < 9; j++) { diamond(X + 13, Y + 16 + j * 32, 5, 7); diamond(X + RCW - 13, Y + 16 + j * 32, 5, 7); }
-    for (let j = 0; j < 3; j++) { const cy = Y + 48 + j * 96; x.fillStyle = '#c99a52'; diamond(X + RCW / 2, cy, 46, 34); x.fillStyle = '#2f3b4e'; diamond(X + RCW / 2, cy, 30, 22); x.fillStyle = '#7e3c32'; diamond(X + RCW / 2, cy, 14, 10); }
+    for (let j = 0; j < 3; j++) { const cy = Y + 48 + j * 96; x.fillStyle = '#c99a52'; diamond(X + RCW / 2, cy, 46, 34); x.fillStyle = '#4b555b'; diamond(X + RCW / 2, cy, 30, 22); x.fillStyle = '#7e3c32'; diamond(X + RCW / 2, cy, 14, 10); }
     pile(X, Y); }
   // 5 runner end: the middle's side borders plus an end border (at the top of the cell = the rug's end)
   { const [X, Y] = cell(5);
-    x.drawImage(c, cell(4)[0], cell(4)[1], RCW, RCH, X, Y, RCW, RCH);
-    x.fillStyle = '#2f3b4e'; x.fillRect(X, Y, RCW, 26); x.fillStyle = '#d4bf94'; x.fillRect(X + 26, Y + 26, RCW - 52, 4);
+    x.drawImage(c, cell(4)[0] * 2, cell(4)[1] * 2, RCW * 2, RCH * 2, X, Y, RCW, RCH);
+    x.fillStyle = '#7e3c32'; x.fillRect(X + 30, Y + 30, RCW - 60, RCH - 30);
+    x.fillStyle = '#4b555b'; x.fillRect(X, Y, RCW, 26); x.fillStyle = '#d4bf94'; x.fillRect(X + 26, Y + 26, RCW - 52, 4);
     x.fillStyle = 'rgba(212,191,148,0.7)'; for (let k = 0; k < 6; k++) diamond(X + 30 + k * 26, Y + 13, 7, 5); }
   // 6 oval braided: concentric braided rings (drawn into the ellipse that the oval geometry maps)
   { const [X, Y] = cell(6);
@@ -190,6 +207,32 @@ function rugTex() {
     x.fillStyle = '#e6dcc4'; x.fillRect(X, Y + RCH - 24, RCW, 24);
     x.strokeStyle = 'rgba(120,100,70,0.6)'; x.lineWidth = 1; for (let k = 0; k < RCW; k += 3) { x.beginPath(); x.moveTo(X + k, Y + RCH - 24); x.lineTo(X + k + (r() - 0.5) * 2, Y + RCH); x.stroke(); }
     pile(X, Y, RCW, RCH - 24); }
+  // Small rosettes and branching leaves give the field a woven, authored rhythm.
+  for (const id of [0, 2, 4, 5]) {
+    const [X, Y] = cell(id);
+    x.save(); x.beginPath(); x.rect(X + 32, Y + 32, RCW - 64, RCH - 64); x.clip();
+    for (let row = 0; row < 9; row++) for (let col = 0; col < 5; col++) {
+      const cx = X + 40 + col * 28 + (row % 2) * 14, cy = Y + 38 + row * 26;
+      if (id === 0 && Math.abs(cx - X - 96) / 52 + Math.abs(cy - Y - 144) / 78 < 1.15) continue;
+      x.strokeStyle = '#b08b60'; x.lineWidth = 0.8;
+      x.beginPath(); x.moveTo(cx - 5, cy + 6); x.lineTo(cx, cy); x.lineTo(cx + 5, cy - 6); x.stroke();
+      x.fillStyle = '#c2ad83';
+      diamond(cx - 4, cy - 3, 2, 3); diamond(cx + 4, cy + 3, 2, 3);
+      x.fillStyle = '#b97550'; diamond(cx, cy, 3, 4);
+    }
+    x.restore();
+  }
+  // Warp and weft remain legible at close range; no directional wood-like streaks.
+  for (let id = 0; id < 8; id++) {
+    const [X, Y] = cell(id);
+    for (let y = 1; y < RCH; y += 1.5) {
+      x.strokeStyle = `rgba(32,23,18,${0.07 + r() * 0.06})`; x.lineWidth = 0.45;
+      x.beginPath(); x.moveTo(X, Y + y); x.lineTo(X + RCW, Y + y); x.stroke();
+    }
+    for (let u = 1; u < RCW; u += 1.5) {
+      x.fillStyle = 'rgba(248,230,191,0.10)'; x.fillRect(X + u, Y, 0.45, RCH);
+    }
+  }
   return c;
 }
 
@@ -226,8 +269,8 @@ function printTex() {
  * Each generator authors UVs in its own sheet ([0,1]², v = 1 at the sheet's top) and `toAtlas` moves them into the
  * sheet's rectangle (canvas pixels: x, y from the top, w, h); 16 px gutters keep mip levels from bleeding.
  */
-const ATLAS = 1024;
-export const SHEETS = { rug: [0, 0, 320, 960], spine: [336, 0, 288, 256], print: [336, 272, 512, 256], paper: [336, 544, 256, 16], straw: [640, 0, 384, 256] } as const;
+export const ATLAS = 2048;
+export const SHEETS = { rug: [0, 0, 640, 1920], spine: [672, 0, 576, 512], print: [672, 544, 1024, 512], paper: [672, 1088, 512, 32], straw: [1280, 0, 768, 512] } as const;
 export type Sheet = keyof typeof SHEETS;
 export function toAtlas(g: THREE.BufferGeometry, sheet: Sheet) {
   const [X, Y, W, H] = SHEETS[sheet], uv = g.attributes.uv as THREE.BufferAttribute, k = 0.5 / ATLAS;
@@ -510,7 +553,7 @@ export function addBookStack(a: Asm, r: Rng, colors: readonly string[], lx: numb
 
 // ------------------------------------------------------------------------------------------------ rugs
 /**
- * A rug: an 8 mm pile slab mapped to one atlas design (the design carries its own border), optional fringe at the
+ * A rug: a softly crowned woven slab mapped to one atlas design (the design carries its own border), optional fringe at the
  * short ends; `runner` rugs tile their middle cell along the length with an end cell at each end; `oval` is a braided
  * ellipse. Laid flat at `y` (its underside), heading `yaw`, w across × d along.
  */
@@ -519,23 +562,45 @@ export function rugGeo(pattern: RugPattern, w: number, d: number, fringe = false
     const cellUV = (i: number, u: number, v: number): [number, number] => [((i % 2) + u) / 2, 1 - (Math.floor(i / 2) + v) / 4];
     const parts: THREE.BufferGeometry[] = [];
     const slab = (x0: number, x1: number, z0: number, z1: number, cell: number, v0: number, v1: number) => {
-      const g = new THREE.BoxGeometry(x1 - x0, 0.008, z1 - z0).toNonIndexed().translate((x0 + x1) / 2, 0.004, (z0 + z1) / 2);
+      // Spend vertices on the soft perimeter; the broad woven centre needs few subdivisions.
+      const nx = Math.max(6, Math.ceil(w / 0.5) + 4), nz = Math.max(6, Math.ceil((z1 - z0) / 0.5) + 4);
+      const g = new THREE.BoxGeometry(x1 - x0, 0.024, z1 - z0, nx, 1, nz).toNonIndexed();
       const p = g.attributes.position as THREE.BufferAttribute, uv = new Float32Array(p.count * 2);
+      const edgeAxis = (t: number, size: number, n: number) => {
+        const j = Math.round((t / size + 0.5) * n);
+        const edge = Math.min(0.055, size / 6), stitch = edge / 3;
+        if (j === 0) return -size / 2;
+        if (j === 1) return -size / 2 + stitch;
+        if (j === n - 1) return size / 2 - stitch;
+        if (j === n) return size / 2;
+        return -size / 2 + edge + (j - 2) / (n - 4) * (size - 2 * edge);
+      };
+      for (let i = 0; i < p.count; i++) {
+        p.setXYZ(i, edgeAxis(p.getX(i), x1 - x0, nx) + (x0 + x1) / 2,
+          p.getY(i) + 0.012, edgeAxis(p.getZ(i), z1 - z0, nz) + (z0 + z1) / 2);
+      }
       for (let i = 0; i < p.count; i++) {
         const u = THREE.MathUtils.clamp((p.getX(i) + w / 2) / w, 0.002, 0.998), t = (p.getZ(i) - z0) / (z1 - z0);
         uv.set(cellUV(cell, u, THREE.MathUtils.clamp(v0 + (v1 - v0) * t, 0.002, 0.998)), i * 2);
       }
+      // A low cushioned crown with tiny irregularities; the perimeter stays on the floor.
+      for (let i = 0; i < p.count; i++) if (p.getY(i) > 0.02) {
+        const edge = Math.min(w / 2 - Math.abs(p.getX(i)), d / 2 - Math.abs(p.getZ(i)));
+        const crown = THREE.MathUtils.smoothstep(edge, 0, 0.055);
+        p.setY(i, 0.012 + crown * (0.013 + 0.0015 * Math.sin(p.getX(i) * 17 + p.getZ(i) * 11)));
+      }
       g.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+      g.computeVertexNormals();
       parts.push(g);
     };
     if (pattern === 'oval') {
-      const seg = 28, pos: number[] = [], uv: number[] = [];
+      const seg = 64, pos: number[] = [], uv: number[] = [];
       for (let i = 0; i < seg; i++) for (const [a0, a1] of [[i, i + 1]]) {
         const t0 = (a0 / seg) * Math.PI * 2, t1 = (a1 / seg) * Math.PI * 2;
         const pts: [number, number][] = [[0, 0], [Math.cos(t1), Math.sin(t1)], [Math.cos(t0), Math.sin(t0)]];
-        for (const [cx, cz] of pts) { pos.push((cx * w) / 2, 0.006, (cz * d) / 2); uv.push(...cellUV(RUG.oval, 0.5 + cx * 0.497, 0.5 + cz * 0.497)); }
+        for (const [cx, cz] of pts) { pos.push((cx * w) / 2, 0.022, (cz * d) / 2); uv.push(...cellUV(RUG.oval, 0.5 + cx * 0.497, 0.5 + cz * 0.497)); }
         // the rim (a 6 mm edge)
-        for (const [cx, cz, y] of [[Math.cos(t0), Math.sin(t0), 0.006], [Math.cos(t1), Math.sin(t1), 0.006], [Math.cos(t1), Math.sin(t1), 0], [Math.cos(t0), Math.sin(t0), 0.006], [Math.cos(t1), Math.sin(t1), 0], [Math.cos(t0), Math.sin(t0), 0]] as const) { pos.push((cx * w) / 2, y, (cz * d) / 2); uv.push(...cellUV(RUG.oval, 0.5 + cx * 0.49, 0.5 + cz * 0.49)); }
+        for (const [cx, cz, y] of [[Math.cos(t0), Math.sin(t0), 0.022], [Math.cos(t1), Math.sin(t1), 0.022], [Math.cos(t1), Math.sin(t1), 0], [Math.cos(t0), Math.sin(t0), 0.022], [Math.cos(t1), Math.sin(t1), 0], [Math.cos(t0), Math.sin(t0), 0]] as const) { pos.push((cx * w) / 2, y, (cz * d) / 2); uv.push(...cellUV(RUG.oval, 0.5 + cx * 0.49, 0.5 + cz * 0.49)); }
       }
       const g = new THREE.BufferGeometry();
       g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
@@ -543,16 +608,33 @@ export function rugGeo(pattern: RugPattern, w: number, d: number, fringe = false
       g.computeVertexNormals();
       parts.push(g);
     } else if (pattern === 'runner') {
-      const L = w * 1.5, ends = Math.min(L, d / 2), mid = d - 2 * ends, n = Math.max(0, Math.round(mid / L)), seg = n ? mid / n : 0;
+      const L = w * 0.85, ends = Math.min(L * 0.32, d / 2), mid = d - 2 * ends, n = mid > 0.0001 ? Math.max(1, Math.round(mid / L)) : 0, seg = n ? mid / n : 0;
       slab(-w / 2, w / 2, -d / 2, -d / 2 + ends, RUG.runnerEnd, 0, ends / L);
-      for (let i = 0; i < n; i++) slab(-w / 2, w / 2, -d / 2 + ends + i * seg, -d / 2 + ends + (i + 1) * seg, RUG.runner, 0, seg / L);
+      for (let i = 0; i < n; i++) slab(-w / 2, w / 2, -d / 2 + ends + i * seg, -d / 2 + ends + (i + 1) * seg, RUG.runner, 0, 1);
       slab(-w / 2, w / 2, d / 2 - ends, d / 2, RUG.runnerEnd, ends / L, 0);
     } else slab(-w / 2, w / 2, -d / 2, d / 2, RUG[pattern], 0, 1);
-    if (fringe && pattern !== 'oval') for (const s of [-1, 1]) {
-      const g = new THREE.PlaneGeometry(w - 0.04, 0.05).rotateX(-Math.PI / 2).translate(0, 0.002, s * (d / 2 + 0.025));
-      const uv = g.attributes.uv as THREE.BufferAttribute;
-      for (let i = 0; i < uv.count; i++) uv.setXY(i, ...cellUV(RUG.hanging, 0.05 + uv.getX(i) * 0.9, s > 0 ? 1 - uv.getY(i) * (22 / RCH) : 1 - (1 - uv.getY(i)) * (22 / RCH)));
-      parts.push(g.toNonIndexed());
+    // Narrow rolled binding: a physical seam follows the perimeter at a consistent world scale.
+    if (pattern !== 'oval') {
+      for (const [bw, bd, px, pz] of [[w, 0.018, 0, -d / 2 + 0.009], [w, 0.018, 0, d / 2 - 0.009], [0.018, d - 0.036, -w / 2 + 0.009, 0], [0.018, d - 0.036, w / 2 - 0.009, 0]]) {
+        const g = softBox(bw, 0.014, bd, 0.005, 1).toNonIndexed().translate(px, 0.012, pz);
+        const uv = new THREE.BufferAttribute(new Float32Array(g.attributes.position.count * 2), 2);
+        g.setAttribute('uv', uv);
+        for (let i = 0; i < uv.count; i++) uv.setXY(i, ...cellUV(RUG[pattern], 0.012, 0.08));
+        parts.push(g);
+      }
+    }
+    // Individual tapered yarn bundles create a broken silhouette instead of a printed strip.
+    if (fringe && pattern !== 'oval') for (const side of [-1, 1]) {
+      const count = Math.ceil(w / 0.025);
+      for (let j = 0; j < count; j++) {
+        const px = -w / 2 + (j + 0.5) * w / count;
+        const len = 0.045 + 0.013 * (0.5 + 0.5 * Math.sin(j * 2.37));
+        const g = new THREE.BoxGeometry(w / count * 0.65, 0.006, len).toNonIndexed();
+        g.rotateY(Math.sin(j * 1.7) * 0.08).translate(px, 0.006, side * (d / 2 + len / 2 - 0.004));
+        const uv = g.attributes.uv as THREE.BufferAttribute;
+        for (let i = 0; i < uv.count; i++) uv.setXY(i, ...cellUV(RUG.hanging, 0.1 + j / count * 0.8, 0.96));
+        parts.push(g);
+      }
     }
     const g = mergeGeometries(parts.map((q) => { for (const k of Object.keys(q.attributes)) if (!['position', 'normal', 'uv'].includes(k)) q.deleteAttribute(k); return q; }))!;
     parts.forEach((q) => q.dispose());

@@ -10,7 +10,7 @@ import type { HearthOpts } from './hearth';
 import { Asm, artMats, softBox, cushion, lathe, moulding, projectUV, bake, baseAO, ContactShadows, type ArtMats } from './artkit';
 import { v3, compound, box, getKit } from './kit';
 import { makeLamp, makeInspect, place } from '../interactions/props';
-import { bookshelf, plant, flwPainting } from './furniture';
+import { bookshelf, plant, flwPainting, rug } from './furniture';
 import { MANTEL, mantelSlots } from '../content/canon';
 import { GF, CEIL } from './layout';
 
@@ -578,14 +578,13 @@ export function floorLampV2(w: World, x: number, y0: number, z: number) {
  */
 export function livingRoomV2(w: World, g: GameApi, c: Ctx, sh: ContactShadows) {
   const k = c.k;
-  const M = artMats();
   // rug (calm pattern) on the floor
-  box(c.b, M.rug, '#ffffff', 77.4, GF + 0.01, 86.7, 4.2, 0.012, 5.4, { chunk: c.chunk });
+  rug(c, 77.4, 86.7, GF + 0.004, 4.2, 5.4, 0, '#ffffff', 'medallion', true);
   // seating group facing the fire: sofa (same footprint as before), two armchairs angled in
-  // contact shadows sit just above whatever is underneath: the rug (top at GF + 0.022) or the bare floor
+  // contact shadows sit just above whatever is underneath: the rug (top around GF + 0.030) or the bare floor
   const RUG = { x0: 75.3, x1: 79.5, z0: 84.0, z1: 89.4 };
   const onRug = (x: number, z: number) => x > RUG.x0 - 0.3 && x < RUG.x1 + 0.3 && z > RUG.z0 - 0.3 && z < RUG.z1 + 0.3;
-  const fy = (x: number, z: number) => GF + (onRug(x, z) ? 0.026 : 0.004);
+  const fy = (x: number, z: number) => GF + (onRug(x, z) ? 0.033 : 0.004);
   upholstered(c, sh, 79.0, 86.7, GF, -Math.PI / 2, { width: 2.3, depth: 0.9, seats: 3, color: LIV.sofa, pillows: [LIV.pillowA, LIV.pillowB], shadowY: fy(79.0, 86.7) });
   c.col.addBoxC(79.0, 86.7, 0.9, 2.6, GF, GF + 0.9); // == furniture.sofa collide() with yaw -PI/2 (swapped)
   for (const [x, z, yaw] of [[76.4, 83.0, -0.35], [76.4, 90.4, Math.PI + 0.35]] as const) {

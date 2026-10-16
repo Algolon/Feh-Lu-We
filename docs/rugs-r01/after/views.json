@@ -1,0 +1,53 @@
+{
+  "rows": [
+    {
+      "name": "hall-runner",
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 85.8,
+        "yaw": 0,
+        "pitch": -0.65
+      },
+      "high": {
+        "calls": 261,
+        "triangles": 992446
+      },
+      "room": "hall",
+      "feetY": 0.15
+    },
+    {
+      "name": "hall-mat",
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 83,
+        "yaw": 3.141592653589793,
+        "pitch": -1
+      },
+      "high": {
+        "calls": 167,
+        "triangles": 688188
+      },
+      "room": "vestibule",
+      "feetY": 0.15
+    },
+    {
+      "name": "living-rug",
+      "pose": {
+        "x": 74.9,
+        "y": 0.15,
+        "z": 89.5,
+        "yaw": 2.2,
+        "pitch": -0.65
+      },
+      "high": {
+        "calls": 110,
+        "triangles": 427460
+      },
+      "room": "living",
+      "feetY": 0.15
+    }
+  ],
+  "problems": []
+}

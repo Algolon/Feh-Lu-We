@@ -4,7 +4,7 @@
 import { describe, it, expect } from 'vitest';
 import * as THREE from 'three';
 import { logModel, splitLogModel } from '../src/world/woodkit';
-import { meshAudit, bookCoverGeo, bookBlockGeo, shelfBookGeo, bookDims, drapeGeo, openBookGeo, openCoverGeo, rugGeo, BOOK_H, BOOK_T, toAtlas, SHEETS, type BookSpec } from '../src/world/propkit';
+import { ATLAS, meshAudit, bookCoverGeo, bookBlockGeo, shelfBookGeo, bookDims, drapeGeo, openBookGeo, openCoverGeo, rugGeo, BOOK_H, BOOK_T, toAtlas, SHEETS, type BookSpec } from '../src/world/propkit';
 import { auditParts } from '../src/world/artkit';
 import { wickermanGeo, wickerHay, WICKER } from '../src/world/wickerman';
 
@@ -97,14 +97,30 @@ describe('DEV-04B bedding', () => {
 });
 
 describe('DEV-04B rugs and atlas', () => {
+  it('runners cover the floor continuously at short, intermediate and corridor lengths', () => {
+    for (const [w, d] of [[3.4, 6.5], [0.8, 3.6], [1.2, 11.4], [2, 1]]) {
+      const mesh = new THREE.Mesh(rugGeo('runner', w, d), new THREE.MeshBasicMaterial());
+      const ray = new THREE.Raycaster();
+      for (let j = 0; j < 101; j++) {
+        ray.set(new THREE.Vector3(0, 0.2, -d / 2 + d * (j + 0.5) / 101), new THREE.Vector3(0, -1, 0));
+        expect(ray.intersectObject(mesh).length).toBeGreaterThan(0);
+      }
+      mesh.material.dispose();
+    }
+  });
+
   it('every rug design maps inside its own atlas sheet', () => {
     const [X, Y, W, H] = SHEETS.rug;
     for (const pat of ['medallion', 'kilim', 'lattice', 'field', 'runner', 'oval', 'hanging'] as const) {
       const g = rugGeo(pat, 2.2, 3.4, true), uv = g.attributes.uv;
+      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
       for (let i = 0; i < uv.count; i++) {
-        expect(uv.getX(i) * 1024).toBeGreaterThanOrEqual(X - 1e-3); expect(uv.getX(i) * 1024).toBeLessThanOrEqual(X + W + 1e-3);
-        expect((1 - uv.getY(i)) * 1024).toBeGreaterThanOrEqual(Y - 1e-3); expect((1 - uv.getY(i)) * 1024).toBeLessThanOrEqual(Y + H + 1e-3);
+        const px = uv.getX(i) * ATLAS, py = (1 - uv.getY(i)) * ATLAS;
+        minX = Math.min(minX, px); maxX = Math.max(maxX, px);
+        minY = Math.min(minY, py); maxY = Math.max(maxY, py);
       }
+      expect(minX).toBeGreaterThanOrEqual(X - 1e-3); expect(maxX).toBeLessThanOrEqual(X + W + 1e-3);
+      expect(minY).toBeGreaterThanOrEqual(Y - 1e-3); expect(maxY).toBeLessThanOrEqual(Y + H + 1e-3);
     }
   });
   it('toAtlas clamps into the sheet', () => {
@@ -112,7 +128,7 @@ describe('DEV-04B rugs and atlas', () => {
     const uv = g.attributes.uv as THREE.BufferAttribute; uv.setXY(0, -2, 3);
     toAtlas(g, 'print');
     const [X, , W] = SHEETS.print;
-    expect(uv.getX(0) * 1024).toBeGreaterThanOrEqual(X); expect(uv.getX(0) * 1024).toBeLessThanOrEqual(X + W);
+    expect(uv.getX(0) * ATLAS).toBeGreaterThanOrEqual(X); expect(uv.getX(0) * ATLAS).toBeLessThanOrEqual(X + W);
   });
 });
 
