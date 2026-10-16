@@ -3,6 +3,11 @@
 // group for its display end. Construction first (every top is carried by a frame you can read), the existing art kit
 // materials only, visual only (no interactable). Origins at the floor centre, facing plan heading `yaw` (Asm: +lz forward).
 import * as THREE from 'three';
+import { INTERIOR_GREEN } from './gardenkit';
+import { addIndoorPlant, chooseIndoorFamily, indoorLeafMaterial, indoorPlantModel } from './indoorPlants';
+
+import { GARDEN_DETAIL, gardenPot, gardenSoil, gardenSoilMaterial, SOIL_TINT, gardenHouseplant } from './gardenkit';
+import { woodMats } from './woodkit';
 import type { Ctx } from './arch';
 import { Asm, artMats, lathe } from './artkit';
 import { joinery } from './furniture';
@@ -13,7 +18,7 @@ const collide = (c: Ctx, x: number, z: number, yaw: number, w: number, d: number
   const swap = Math.abs(Math.sin(yaw)) > 0.7;
   c.col.addBoxC(x, z, swap ? d : w, swap ? w : d, y0, y0 + h);
 };
-const potGeo = (r: number, h: number) => cg(`d3bPot${r},${h}`, () => lathe([[0.001, 0], [r * 0.7, 0], [r * 0.95, h * 0.8], [r * 1.08, h * 0.86], [r * 1.08, h], [r * 0.98, h], [r * 0.9, h * 0.88], [0.001, h * 0.85]], 10));
+const potGeo = (r: number, h: number) => GARDEN_DETAIL ? cg(`gardenPot${r},${h}`,()=>gardenPot(r,h)) : cg(`d3bPot${r},${h}`, () => lathe([[0.001, 0], [r * 0.7, 0], [r * 0.95, h * 0.8], [r * 1.08, h * 0.86], [r * 1.08, h], [r * 0.98, h], [r * 0.9, h * 0.88], [0.001, h * 0.85]], 10));
 const leafBall = (r: number) => cg(`d3bLeaf${r}`, () => new THREE.IcosahedronGeometry(r, 1));
 
 /**
@@ -77,11 +82,14 @@ export function pottingBench(c: Ctx, x: number, z: number, y0: number, yaw: numb
   const terr = '#b8653e';
   for (const [px, pr, ph] of [[-0.55, 0.075, 0.13], [-0.36, 0.06, 0.1], [0.4, 0.09, 0.15]] as const) {
     a.add(M.paint, terr, potGeo(pr, ph), px, H, -0.08);
-    a.add(M.paint, '#4f7a34', leafBall(pr * 1.1), px, H + ph + pr * 0.5, -0.08, { s: [1, 0.8, 1] });
+    if(GARDEN_DETAIL){
+      a.add(gardenSoilMaterial(),SOIL_TINT,gardenSoil(pr*.89),px,H+ph*.82,-.08);
+      a.add(INTERIOR_GREEN?indoorLeafMaterial():woodMats().flat,'#ffffff',INTERIOR_GREEN?indoorPlantModel(px<0?'succulent':'cactus',Math.round(Math.abs(px)*10)%3):cg('gardenBenchPlant',()=>gardenHouseplant(0)),px,H+ph*.82,-.08,{s:[pr*2,pr*2,pr*2]});
+    }else a.add(M.paint, '#4f7a34', leafBall(pr * 1.1), px, H + ph + pr * 0.5, -0.08, { s: [1, 0.8, 1] });
   }
-  for (let i = 0; i < 5; i++) a.add(M.paint, darker(terr, 0.9 + (i % 2) * 0.15), potGeo(0.05, 0.08), -0.62 + i * 0.13, 1.2, -d / 2 + 0.1); // a row of small pots on the shelf
+  for (let i = 0; i < 5; i++){a.add(M.paint, darker(terr, 0.9 + (i % 2) * 0.15), potGeo(0.05, 0.08), -0.62 + i * 0.13, 1.2, -d / 2 + 0.1);if(GARDEN_DETAIL)a.add(gardenSoilMaterial(),SOIL_TINT,gardenSoil(.0445),-.62+i*.13,1.2+.08*.82,-d/2+.1);} // a row of small pots on the shelf
   a.add(M.timber, worn, bx(0.36, 0.05, 0.24), -0.05, H + 0.025, 0.12); // seed tray
-  a.add(M.paint, '#3e2e22', bx(0.32, 0.012, 0.2), -0.05, H + 0.047, 0.12);
+  a.add(GARDEN_DETAIL?gardenSoilMaterial():M.paint, GARDEN_DETAIL?SOIL_TINT:'#3e2e22', bx(0.32, 0.012, 0.2), -0.05, H + 0.047, 0.12);
   for (let i = 0; i < 4; i++) a.add(M.paint, '#f2ead8', bx(0.012, 0.07, 0.003), -0.17 + i * 0.075, H + 0.08, 0.06 + (i % 2) * 0.1, { rz: (i - 1.5) * 0.08 });
   a.add(M.brass, '#8a8a84', bx(0.07, 0.008, 0.13), 0.12, H + 0.004, 0.2, { ry: 0.5 }); // trowel blade
   a.add(M.timber, dk, cg('d3bHandle', () => new THREE.CylinderGeometry(0.014, 0.016, 0.11, 6).rotateX(Math.PI / 2)), 0.08, H + 0.016, 0.27, { ry: 0.5 });
@@ -128,6 +136,16 @@ export function plantEtagere(c: Ctx, x: number, z: number, y0: number, yaw: numb
 export function pottedPlant(c: Ctx, x: number, z: number, y0: number, r: number, leaf = '#4f7a34', pot = '#b8653e', tall = 1) {
   const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, (x * 5.1 + z * 2.3) % 6.28);
   const ph = r * 1.6;
+  if(INTERIOR_GREEN){
+    const family=chooseIndoorFamily(x,z),v=Math.abs(Math.floor(x*13+z*17))%3;
+    addIndoorPlant(c,x,z,y0,family,v,r/.245,family==='snake'?'wicker':'clay');return;
+  }
+  if(GARDEN_DETAIL){
+    a.add(M.ceramic,pot,potGeo(r,ph),0,0,0);
+    a.add(gardenSoilMaterial(),SOIL_TINT,gardenSoil(r*.89),0,ph*.82,0);
+    const v=Math.floor(Math.abs(Math.sin(x*5.1+z))*3);
+    a.add(woodMats().flat,'#ffffff',cg(`gardenSmallPlant${v}`,()=>gardenHouseplant(v)),0,ph*.82,0,{s:[r*2.8,r*2.8*tall,r*2.8]});return;
+  }
   a.add(M.paint, pot, potGeo(r, ph), 0, 0, 0);
   a.add(M.paint, leaf, leafBall(r * 1.35), 0, ph + r * 1.1 * tall, 0, { s: [1, tall, 1] });
   a.add(M.paint, darker(leaf, 0.8), leafBall(r * 0.9), r * 0.6, ph + r * 0.7 * tall, r * 0.3, { s: [1, tall, 1] });

@@ -21,7 +21,8 @@ import { scatter, distToPolyline } from './nature';
 import { planWoodland, stream, hash01, type WoodlandSite, type SourceTree, type SourceStump, type WoodlandPlan, type PlacedTree } from './woodlandPlan';
 import { TreeBatches, PlantBatch, BOSLUST_SITE, DECAL, WOOD, stumpsV2, contactAt, inBackdrop, mat, TreeGrid } from './boslustSample';
 import { inZone } from './boslustZone';
-import { woodMats, rockModel, litterLeafModel, logModel, LEAF_TINT, type TreeSpecies, type PlantKind } from './woodkit';
+import { FULL_NATURE } from './foliageStyle';
+import { woodMats, rockModel, litterLeafModel, logModel, referenceBranchModel, LEAF_TINT, type TreeSpecies, type PlantKind } from './woodkit';
 import { CAPS } from '../core/caps';
 import { TREE_LOD_PROFILE } from './vegetationLod';
 import { ESTATE, WOODS, CLEARINGS, HILL_CUT, DRIVEWAY, WICKERMAN, GOLF_TEE, type Rect } from './layout';
@@ -194,6 +195,7 @@ export class EstateWoods {
       db.addGeo(`log${v}`, () => logModel(91 + v * 7, LOGS[v][0], LOGS[v][1]), mat(ax, ya - rad * 0.35, az, yaw, k, 0, tilt), new THREE.Color('#8a7a68').multiplyScalar(0.85 + r() * 0.25), 55, 'log');
       for (let s = 0.3; s < len - 0.2; s += 0.6) { const px = ax + Math.cos(yaw) * s, pz = az - Math.sin(yaw) * s, py = terrainHeight(px, pz); w.col.addCircle(px, pz, rad + 0.04, py - 0.2, py + rad * 1.5); }
       contactAt(x, z, rad * 5, 0.45, yaw, (len * 1.05) / (rad * 5)); // decal: long axis along the log
+      if (FULL_NATURE) db.addGeo(`branch${v%3}`,()=>referenceBranchModel(v),mat(ax,ya-.01,az,yaw+.55, .9),new THREE.Color('#7c7160'),28,'branch');
       logs++;
     }
     for (const [x, z] of scatter(stream(4006, 'boulders'), 2, ESTATE.w - 2, 2, ESTATE.d - 2, 17, 3000, (x, z) => woodOk(x, z) && thicket(x, z) < 0.6)) {

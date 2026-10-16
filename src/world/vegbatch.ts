@@ -61,6 +61,7 @@ class BatchedVeg implements VegBatch {
     let verts = 0, idx = 0;
     for (const g of geos) { verts += g.attributes.position.count; idx += g.index ? g.index.count : 0; }
     const mesh = new THREE.BatchedMesh(maxInstances, verts, Math.max(idx, 1), material);
+    if (material.userData.vegetationDepth) mesh.customDepthMaterial = material.userData.vegetationDepth;
     this.ids = geos.map((g) => mesh.addGeometry(g));
     mesh.frustumCulled = false; // three.js culls per instance inside
     mesh.receiveShadow = true;
@@ -103,6 +104,7 @@ class InstancedVeg implements VegBatch {
   }
   private makeMesh(geo: THREE.BufferGeometry, cap: number) {
     const mesh = new THREE.InstancedMesh(geo, this.material, cap);
+    if (this.material.userData.vegetationDepth) mesh.customDepthMaterial = this.material.userData.vegetationDepth;
     mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     mesh.setColorAt(0, new THREE.Color(1, 1, 1)); // creates instanceColor (vertex colours × instance colour, as in the batch)
     mesh.instanceColor!.setUsage(THREE.DynamicDrawUsage);

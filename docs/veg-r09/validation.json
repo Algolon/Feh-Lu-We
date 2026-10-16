@@ -1,0 +1,38 @@
+{
+  "verifiedAt": "2026-10-16T12:55:54.738694+00:00",
+  "base": "462a5411167dc78869a13880d20cf82948033c47",
+  "sourceHashes": {
+    "src/world/indoorPlants.ts": "fd2817c2445cf4147196a080a85459cac7ecb17f14be7fa4eeaa28c971c2a471",
+    "src/world/interiorGreenery.ts": "96edc34528acef1ee5f7a3e3febda907cb1d835d6b91e9c6cd09f28339cbfec1",
+    "src/world/gardenkit.ts": "360d33c5e47e73acfc00d58f33c237730f81de1968a77393882ecf7cefab885f",
+    "src/world/boslustSample.ts": "9ee3860db815ed26811ecd06d7dee681b2fa77859bdcddcc4029aa66eca10a59",
+    "src/world/woodkit.ts": "d9c81e936e4400f469ab70ccf2e6ffc8a6d6b6b79cedfa54eb0f59e5d1a1f309",
+    "src/world/furniture.ts": "b43ffa545055953ce7388ca4c5506189a31dfee6b6896d61446ddfc656a597ce",
+    "src/world/d3b.ts": "ec2fbb6a74a470b64f65eba9411918c7b7787533c72dfbfd6003b3025b2a76f1",
+    "src/world/homeDressing.ts": "92e55d9a9eab3f0e996be4f5818d56b6fd81398ab19c17056d327f24445bd872",
+    "src/world/estate.ts": "809285fb91dc878585b0785fe1ccdc612e95d4876aeada0d803d4e31805880bf",
+    "tests/indoorPlants.test.ts": "a3b7c7a581dbf3d120927500d5773137ebfd770a1372b386565e80d00a7dfd84",
+    "scripts/veg-r09-review.mjs": "a88a1a6947ee3b551c2e1a46158d1322d6ef46ed1798113b079f082e97adc621"
+  },
+  "unitTests": 318,
+  "budgetPolicyTests": 4,
+  "typecheck": "pass",
+  "build": "pass; existing chunk warning",
+  "whitespace": "pass",
+  "renderRecords": 117,
+  "gameRecords": 108,
+  "maxLowCalls": 142,
+  "maxLowTriangles": 619768,
+  "roomBriefs": 38,
+  "placements": 49,
+  "missingRooms": [],
+  "errors": [],
+  "deviceValidation": "not performed",
+  "unrelatedWorkingChanges": [
+    "src/world/livingSample.ts",
+    "src/world/propkit.ts",
+    "tests/dev04b.test.ts",
+    "scripts/rugs-r01-review.mjs",
+    "docs/rugs-r01/"
+  ]
+}

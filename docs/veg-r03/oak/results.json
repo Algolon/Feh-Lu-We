@@ -1,0 +1,169 @@
+{
+  "models": [
+    {
+      "v": 0,
+      "art": "recovered",
+      "wood": 896,
+      "leaves": 384
+    },
+    {
+      "v": 0,
+      "art": "oak-r03",
+      "wood": 2200,
+      "leaves": 384
+    },
+    {
+      "v": 0,
+      "art": "recovered",
+      "wood": 896,
+      "leaves": 384
+    },
+    {
+      "v": 0,
+      "art": "oak-r03",
+      "wood": 2200,
+      "leaves": 384
+    },
+    {
+      "v": 0,
+      "art": "oak-r03",
+      "wood": 2200,
+      "leaves": 384
+    },
+    {
+      "v": 1,
+      "art": "oak-r03",
+      "wood": 2140,
+      "leaves": 304
+    },
+    {
+      "v": 2,
+      "art": "oak-r03",
+      "wood": 2464,
+      "leaves": 448
+    }
+  ],
+  "results": [
+    {
+      "name": "dense",
+      "art": "recovered",
+      "path": "multi",
+      "calls": 59,
+      "triangles": 309354,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "garden",
+      "art": "recovered",
+      "path": "multi",
+      "calls": 25,
+      "triangles": 185216,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "boslust",
+      "art": "recovered",
+      "path": "multi",
+      "calls": 91,
+      "triangles": 351322,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense",
+      "art": "oak-r03",
+      "path": "multi",
+      "calls": 59,
+      "triangles": 340384,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "garden",
+      "art": "oak-r03",
+      "path": "multi",
+      "calls": 25,
+      "triangles": 192544,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "boslust",
+      "art": "oak-r03",
+      "path": "multi",
+      "calls": 91,
+      "triangles": 378718,
+      "actualPath": "multi-draw",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense",
+      "art": "recovered",
+      "path": "fallback",
+      "calls": 119,
+      "triangles": 309354,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "garden",
+      "art": "recovered",
+      "path": "fallback",
+      "calls": 52,
+      "triangles": 185216,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "boslust",
+      "art": "recovered",
+      "path": "fallback",
+      "calls": 138,
+      "triangles": 351322,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "dense",
+      "art": "oak-r03",
+      "path": "fallback",
+      "calls": 119,
+      "triangles": 340384,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "garden",
+      "art": "oak-r03",
+      "path": "fallback",
+      "calls": 52,
+      "triangles": 192544,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    },
+    {
+      "name": "boslust",
+      "art": "oak-r03",
+      "path": "fallback",
+      "calls": 138,
+      "triangles": 378718,
+      "actualPath": "instanced",
+      "glError": 0,
+      "shaderFailures": 0
+    }
+  ],
+  "errors": []
+}
