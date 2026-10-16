@@ -610,7 +610,7 @@ export class Game implements GameApi {
       : Math.min(1, elapsed / 0.43);
     const normalFov = this.camera.aspect < 1 ? 82 : 68;
     const portrait = this.camera.aspect < 0.85;
-    const distance = portrait ? 1.55 : 1.07;
+    const distance = portrait ? 1.78 : 1.07;
     const centre = f.lock.position;
     // Eye stays in front of the wall, centered on the actual mounted lock.
     const target = new THREE.Vector3(centre.x + 0.005, centre.y + 0.015, centre.z + 0.12);
