@@ -218,10 +218,12 @@ function portalThresholdOak(w: World): THREE.Material {
   canvas.height = 512; // canvas V aligns with the long (Z) axis on boxGeo's top face
   const ctx = canvas.getContext('2d')!;
   const base = ctx.createLinearGradient(0, 0, canvas.width, 0);
-  base.addColorStop(0, '#e8d3b5');
-  base.addColorStop(0.25, '#f4e5cf');
-  base.addColorStop(0.65, '#ead7bb');
-  base.addColorStop(1, '#f0dfc6');
+  // Near-white, neutral albedo: the shared frame colour controls the actual oak hue.
+  // No orange shading from the texture; just faint lengthwise tonal variation.
+  base.addColorStop(0, '#fafafa');
+  base.addColorStop(0.25, '#ffffff');
+  base.addColorStop(0.65, '#f7f7f7');
+  base.addColorStop(1, '#fdfdfd');
   ctx.fillStyle = base;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -236,7 +238,7 @@ function portalThresholdOak(w: World): THREE.Material {
     const y = -80 + random() * (canvas.height + 160);
     const len = 60 + random() * 250;
     const sway = (random() - 0.5) * 6;
-    ctx.strokeStyle = i % 4 === 0 ? 'rgba(106,65,33,0.11)' : 'rgba(116,78,45,0.065)';
+    ctx.strokeStyle = i % 4 === 0 ? 'rgba(70,70,70,0.10)' : 'rgba(90,90,90,0.055)';
     ctx.lineWidth = 0.4 + random() * 1.4;
     ctx.beginPath();
     ctx.moveTo(x, y);
@@ -310,11 +312,11 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   // (GF + 1.21, height 2.42), which made them extend above the doorway lintel.
   // Keep only the shallow head casing: no stray upright strips above the frame.
   box(c.b, k.M.wood, '#705036', 95, GF + 2.47, 96.55, 0.21, 0.095, 1.79, { chunk: c.chunk });
-  // PORTAL-R01-R03: one continuous, 19 mm oak threshold with subtle lengthwise grain.
-  // Preserve the 42 cm cover over the floor transition; a narrower 25–30 cm strip would expose the seam.
-  // Visual geometry only: do not change floor height, collision, portal or walk route.
-  boxMM(c.b, portalThresholdOak(w), '#b98556',
-    94.79, 95.21, GF + 0.003, GF + 0.022, 95.725, 97.375,
+  // PORTAL-R01-R04: one seamless 19 mm oak threshold, matched to the frame's TRIM.oak.
+  // Only 28 cm deep: spans the 16 cm wall and overhangs its faces by 6 cm each.
+  // Decorative only: no change to collision, floor heights, portal or route.
+  boxMM(c.b, portalThresholdOak(w), TRIM.oak,
+    94.86, 95.14, GF + 0.003, GF + 0.022, 95.725, 97.375,
     { chunk: c.chunk, jitter: 0 });
   wall(c, 'x', 92, 95, 107.6, GF, CEIL, { ...P, openings: [{ at: 101, w: 2.0, h: 2.5 }] }); // dining | kitchen
   // basement stairwell enclosure (west side has the sealed door; walls run down to the basement floor)
