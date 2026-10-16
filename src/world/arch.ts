@@ -186,7 +186,7 @@ function frame(c: Ctx, axis: 'x' | 'z', f: number, s: number, e: number, y0: num
   if(frameStyle==='slim-metal') {
     // FRONT-R02: approximately 40 mm steel-look casing, not recoloured oak joinery.
     // The door opening, wall colliders, head datum and hinge geometry do NOT move.
-    const L=t/2+.005, lip=.004, casing=.039;
+    const L=t/2+.005, lip=.004, casing=.030;
     const lo=(a:number,b:number)=>[Math.min(a,b),Math.max(a,b)] as [number,number];
     // 27 mm slim through-wall liner, extended only 4 mm into the clear opening.
     B(s-.027,s+lip,y0,y1,-L,L);
