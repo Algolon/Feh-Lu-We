@@ -27,19 +27,25 @@ const scenes = [
 ];
 const helpers = readFileSync(new URL('./e2e-helpers.js', import.meta.url), 'utf8');
 
-async function pageFor(viewport, mobile = false) {
+async function pageFor(viewport, mobile = false, dev01 = false) {
   const context = await browser.newContext({ viewport, deviceScaleFactor: 1, isMobile: mobile, hasTouch: mobile });
   const page = await context.newPage();
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
-  await page.goto(url);
-  await page.evaluate(() => localStorage.setItem('fehluwe.save', JSON.stringify({
-    version: 4, scene: 'estate', inventory: ['invitation', 'torch', 'matches', 'notebook', 'frontKey'],
-    flags: { leftHome: true }, unlocked: ['lock.door.front'], open: { 'door.front': true },
-    player: { home: null, estate: { x: 82.4, y: 0.15, z: 99.0, yaw: 0, pitch: 0 } },
-  })));
-  await page.reload();
-  await page.click('[data-cont]');
+  await page.goto(url + (dev01 ? '&review=dev01' : ''));
+  if (dev01) {
+    await page.evaluate(() => localStorage.clear());
+    await page.reload();
+    await page.click('[data-new]');
+  } else {
+    await page.evaluate(() => localStorage.setItem('fehluwe.save', JSON.stringify({
+      version: 4, scene: 'estate', inventory: ['invitation', 'torch', 'matches', 'notebook', 'frontKey'],
+      flags: { leftHome: true }, unlocked: ['lock.door.front'], open: { 'door.front': true },
+      player: { home: null, estate: { x: 82.4, y: 0.15, z: 99.0, yaw: 0, pitch: 0 } },
+    })));
+    await page.reload();
+    await page.click('[data-cont]');
+  }
   await page.waitForFunction(() => window.__game?.world?.id === 'estate', null, { timeout: 150000 });
   await page.evaluate(helpers);
   await page.evaluate(() => { const g=window.__game; if (T.modalOpen()) T.closeModal(); });
@@ -57,11 +63,11 @@ async function capture(page, name, pose, target, withHud=false) {
       const el=document.getElementById(id); if(el) el.style.display='none';
     }
     const m=g.metrics();
-    return {name,pose:g.player.pose(),room:g.world.hereRoom,calls:m.calls,triangles:m.triangles,glError:g.renderer.getContext().getError()};
+    return {pose:g.player.pose(),room:g.world.hereRoom,calls:m.calls,triangles:m.triangles,glError:g.renderer.getContext().getError()};
   },{pose,target,withHud});
   await page.waitForTimeout(450);
   await page.screenshot({path:`${OUT}/${name}.jpg`, type:'jpeg',quality:84});
-  records.push(stats); console.log('LIB-R01 SCREENSHOT', JSON.stringify(stats));
+  records.push({name,...stats}); console.log('LIB-R01 SCREENSHOT', JSON.stringify({name,...stats}));
 }
 
 try {
@@ -70,7 +76,7 @@ try {
   // B01 and album still exist at their corresponding *new* world locations and save identifiers.
   const puzzle = await page.evaluate(() => {
     const g=window.__game;
-    const ids=['b01.table','library.desk','pk.studyKey','ds01.album','lamp.library'];
+    const ids=['library.catalog','library.desk','pk.studyKey','lamp.library','inspect.cipherExample'];
     return Object.fromEntries(ids.map(id=>{
       const obj=g.world.byId.get(id);
       if (!obj) return [id,{exists:false}];
@@ -79,7 +85,7 @@ try {
       return [id,{exists:true,position:v?[v.x,v.y,-v.z]:null}];
     }));
   });
-  checks.push({name:'puzzle-and-album-anchors', data:puzzle,pass:Object.values(puzzle).every(v=>v.exists)});
+  checks.push({name:'production-puzzle-and-lamp-anchors', data:puzzle,pass:Object.values(puzzle).every(v=>v.exists)});
   // Walk actual steps one by one using the game's own autopilot/collision, not teleports.
   const spiral=await page.evaluate(()=>{
     const g=window.__game, steps=26,x=81.95,z=105.3;
@@ -100,6 +106,19 @@ try {
   });
   checks.push({name:'spiral-upstairs-walking',data:spiral,pass:spiral.pass});
   console.log('LIB-R01 STAIR',JSON.stringify(spiral));
+  const descent=await page.evaluate(()=>{
+    const g=window.__game, steps=26, x=81.95, z=105.3, p=[];
+    const point=i=>{const a=-Math.PI/2+(i+.5)*Math.PI*2.5/steps;return [x+.78*Math.cos(a),z+.78*Math.sin(a)]};
+    for(let i=steps-1;i>=0;i--){
+      try{T.walkTo(...point(i),false,15);p.push({step:i,y:+g.player.y.toFixed(3)});}
+      catch(e){return {pass:false,step:i,error:e.message,path:p};}
+    }
+    return {pass:g.player.y<.55,final:T.pos(),path:p};
+  });
+  checks.push({name:'spiral-downstairs-walking',data:descent,pass:descent.pass});
+  console.log('LIB-R01 DESCENT',JSON.stringify(descent));
+  await page.evaluate(()=>{const g=window.__game;g.settings.quality='low';g.applyQuality(true);});
+  await capture(page,'11-desktop-low-comparison',[83.05,0.15,100.0],[78.4,1.55,102.3]);
   await context.close();
   const {page:mobile,context:mobileContext}=await pageFor({width:390,height:844},true);
   await capture(mobile,'08-mobile-portrait-lounge',[82.6,0.15,99.4],[78.5,1.2,103.4],true);
@@ -107,6 +126,17 @@ try {
   const {page:landscape,context:landContext}=await pageFor({width:844,height:390},true);
   await capture(landscape,'09-mobile-landscape-desk',[77.3,0.15,97.35],[74.55,1.0,97.35],true);
   await landContext.close();
+  // Canonical B01+DS01 build is opt-in via review=dev01. Never confuse these
+  // optional slice interactables with the production catalogue IDs.
+  const review = await pageFor({width:1280,height:720},false,true);
+  await capture(review.page,'10-b01-review-desk',[76.65,0.15,97.35],[74.55,0.93,97.35]);
+  const v = await review.page.evaluate(()=>{
+    const g=window.__game, ids=['b01.table','library.desk','pk.studyKey','ds01.album','lamp.library'];
+    return Object.fromEntries(ids.map(id=>[id,{exists:g.world.byId.has(id)}]));
+  });
+  checks.push({name:'dev01-b01-ds01-anchors',data:v,pass:Object.values(v).every(x=>x.exists)});
+  console.log('LIB-R01 DEV01',JSON.stringify(v));
+  await review.context.close();
 } catch(e) {
   errors.push('QA script: '+e.stack);
   console.error(e.stack);
