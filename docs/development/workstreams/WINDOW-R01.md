@@ -16,3 +16,17 @@ Review branch: `window-r01-billiard-glazing-pilot` (no merge or deployment plann
 5. Compare the same poses/settings with baseline: actual camera draw calls + triangles, shadows, render buffer/DPR and GL errors. Mobile-low guidelines remain 150 draw calls and the provisional 750k submitted triangles. Run sustained frame pacing on the owner's Android before claiming stable device FPS.
 
 This commit is an implementation candidate, not device or screenshot validation. Do not roll it out to every window until the pilot passes.
+
+## WINDOW-R01-R02 — one-sash visual refinement (16 October 2026)
+
+Owner visual review identified that the pilot renders **two fully detailed window frames**, one per wall face. This refinement explicitly removes the interior `windowAt` sash only for transparent opt-in windows. The existing exterior stone surround, exterior green-painted frame and glazing bars remain, but their sash depth is pulled inward to meet one glass pane.
+
+**Billiard pilot construction** (north wall `Z=109.8`, wall thickness 0.40 m):
+- Outer wall face `Z=110.000`; one glass pane at `Z=109.915` (8.5 cm recessed).
+- Exterior green sash positioned `Z≈109.933–110.005` around that pane, no extra outside floating surface.
+- Interior finish face `Z≈109.575`; about 34 cm of exposed warm plaster reveals along the sides and lintel, **no independent interior frame or inner glazing bars**.
+- One quiet painted timber sill, 40 mm thick, extending slightly inside the room and terminating behind the exterior frame.
+- The physical glass collider follows the moved pane; visual rays still ignore that collider, while movement and picking remain blocked.
+- All other windows, shared portal logic and glass garden-door behavior remain unchanged.
+
+**Acceptance**: the exterior frame should be the single recognizable sash from either direction; the interior should read as a thick-wall opening with side/top reveals and a wood window board. Compare `review/low-inside-closed.jpg` and `review/low-outside-closed.jpg` after the latest R02 screenshot CI run. The technical screenshots are software-rendered and do not replace owner aesthetic approval. No merge/deploy.
