@@ -124,6 +124,44 @@ export function makeTextures(groundDetail = GROUND_SURFACE_DETAIL, groundVariati
     }
     T.wood = tex(c);
   }
+  { // WINDOW-R01-R04: one continuous, stained oak window board rather than repeated plank tiles.
+    // Grain runs horizontally along the width of the sill. A dedicated procedural canvas
+    // leaves other wood in the house unchanged and needs no downloaded assets.
+    const [c, x] = canvas(512);
+    const r = mulberry32(17042);
+    const pixels = x.createImageData(512, 512);
+    for (let y = 0; y < 512; y++) for (let px = 0; px < 512; px++) {
+      // Slowly wandering annual rings and fine, elongated open-pore lines:
+      // deterministic so the grain is stable between sessions and camera views.
+      const bend = 7 * Math.sin(px * 0.011 + y * 0.005) + 2.7 * Math.sin(px * 0.028 + y * 0.01);
+      const track = y + bend;
+      const growth = 7 * Math.sin(track * 0.044) + 3.5 * Math.sin(track * 0.115);
+      const pore = Math.pow(Math.max(0, Math.cos(track * 0.34)), 18) * 24;
+      const fine = 2.5 * Math.sin(track * 0.68 + px * 0.008);
+      const noise = (r() - 0.5) * 6;
+      const shift = growth - pore + fine + noise;
+      const i = (y * 512 + px) * 4;
+      pixels.data[i] = Math.round(137 + shift * 0.90);
+      pixels.data[i + 1] = Math.round(99 + shift * 0.76);
+      pixels.data[i + 2] = Math.round(68 + shift * 0.60);
+      pixels.data[i + 3] = 255;
+    }
+    x.putImageData(pixels, 0, 0);
+    // A few irregular darker grain veins, not straight tile or plank seams.
+    for (let i = 0; i < 75; i++) {
+      const y = r() * 512;
+      const phase = r() * Math.PI * 2;
+      x.beginPath();
+      for (let px = 0; px <= 512; px += 12) {
+        const yy = y + Math.sin(px * 0.015 + phase) * (1.2 + r() * 2);
+        if (px === 0) x.moveTo(px, yy); else x.lineTo(px, yy);
+      }
+      x.strokeStyle = i % 4 === 0 ? 'rgba(65,39,24,0.27)' : 'rgba(69,44,27,0.13)';
+      x.lineWidth = i % 5 === 0 ? 1.8 : 0.8;
+      x.stroke();
+    }
+    T.windowSillWood = tex(c);
+  }
   { // floor tiles (warm stone flags)
     const [c, x] = canvas(256);
     const r = mulberry32(16);

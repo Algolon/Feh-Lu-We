@@ -4,6 +4,7 @@
 // is most-specific first: attic before the attic stair, the attic stair and the split north rooms before the broad
 // upper rooms, the guest WC before the billiard room; utility and pantry do not overlap.
 import { RoomGraph, type RoomDef, type PortalDef, type RoomThreshold } from './rooms';
+import { BILLIARD_PILOT_WINDOW } from './windowPilot';
 import { SHED, COTTAGE, COTTAGE_FLOOR, SAUNA, ATTIC_NOOK } from './layout';
 
 const R = (id: string, name: string, floor: RoomDef['floor'], x0: number, x1: number, z0: number, z1: number, y0: number, y1: number, map = true): RoomDef => ({ id, name, floor, x0, x1, z0, z1, y0, y1, map });
@@ -86,7 +87,7 @@ export const PORTALS: PortalDef[] = [
   P('kitchen', 'corridor', 'door', 'door.service'), P('corridor', 'workshop', 'door', 'door.workshop'), P('corridor', 'pantry', 'door', 'door.pantry'),
   P('corridor', 'cons', 'door', 'door.consWest', true), P('workshop', 'out', 'door', 'door.workshopOut'),
   // The kitchen back door has clear glass: keep the garden visible while closed and during its swing.
-  P('billiard', 'out', 'door', 'door.billiardOut'), P('kitchen', 'out', 'door', 'door.kitchenBack', true),
+  P('billiard', 'out', 'door', 'door.billiardOut', true), P('kitchen', 'out', 'door', 'door.kitchenBack', true),
   P('cons', 'out', 'door', 'door.consEast', true), P('cons', 'out', 'glass'),
   P('frontGallery', 'walkway', 'arch'), P('walkway', 'landing', 'arch'),
   P('frontGallery', 'reis', 'door', 'door.reis'), P('walkway', 'sterren', 'door', 'door.sterren'),
@@ -100,7 +101,12 @@ export const PORTALS: PortalDef[] = [
   P('sauna', 'out', 'door', 'door.sauna'), P('shed', 'out', 'door', 'door.shed'),
   P('cottageEntry', 'out', 'door', 'door.cottage'), P('cottageEntry', 'cottageRoom', 'arch'),
   ...['living', 'dining', 'kitchen', 'billiard', 'library', 'workshop', 'pantry', 'vestibule', 'reis', 'sterren', 'study', 'botanic', 'bath', 'storage', 'landing', 'frontGallery', 'libGallery', 'cottageEntry', 'cottageRoom']
-    .map((r) => P(r, 'out', 'window')),
+    .map((r): PortalDef => r === BILLIARD_PILOT_WINDOW.room
+      ? { ...P(r, 'out', 'window', undefined, true), aperture: {
+          x: BILLIARD_PILOT_WINDOW.at, y: BILLIARD_PILOT_WINDOW.sill + BILLIARD_PILOT_WINDOW.h / 2,
+          z: BILLIARD_PILOT_WINDOW.f, width: BILLIARD_PILOT_WINDOW.w, height: BILLIARD_PILOT_WINDOW.h, axis: BILLIARD_PILOT_WINDOW.axis,
+        } }
+      : P(r, 'out', 'window')),
   // ---------------------------------------------------------------- DEV-02 additive portals (v0.2 adjacency)
   P('lobby', 'guestWC', 'door', 'door.guestWC'), P('corridor', 'utility', 'door', 'door.utility'),
   P('ucorr', 'atticStair', 'door', 'door.atticStair'), P('rearNookEast', 'linen', 'door', 'door.linen'),

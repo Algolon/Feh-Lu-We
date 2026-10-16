@@ -10,7 +10,7 @@ export const v3 = (x: number, y: number, n: number) => new THREE.Vector3(x, y, -
 
 export type MatKey =
   | 'paint' | 'plaster' | 'stone' | 'wood' | 'tile' | 'slate' | 'terracotta' | 'grass' | 'dirt'
-  | 'foliage' | 'bark' | 'glass' | 'glow' | 'poolTile' | 'rug';
+  | 'foliage' | 'bark' | 'glass' | 'windowGlass' | 'windowSillWood' | 'glow' | 'poolTile' | 'rug';
 
 export interface Kit {
   T: Record<string, THREE.Texture>;
@@ -30,6 +30,7 @@ export function getKit(): Kit {
     plaster: lam({ map: T.plaster }),
     stone: lam({ map: T.stone }),
     wood: lam({ map: T.wood }),
+    windowSillWood: lam({ map: T.windowSillWood }),
     tile: lam({ map: T.tile }),
     slate: lam({ map: T.slate }),
     terracotta: lam({ map: T.terracotta }),
@@ -38,13 +39,20 @@ export function getKit(): Kit {
     foliage: lam({ map: T.foliage }),
     bark: lam({ map: T.bark }),
     glass: new THREE.MeshLambertMaterial({ color: 0xd8efe9, transparent: true, opacity: 0.16, depthWrite: false, side: THREE.DoubleSide }),
+    // WINDOW-R01: visible glass tint and modest light response, without realtime reflections.
+    windowGlass: new THREE.MeshPhongMaterial({
+      vertexColors: true, color: 0xc4d9e0, specular: 0x879ea4, shininess: 46,
+      transparent: true, opacity: 0.22, depthWrite: false, side: THREE.DoubleSide,
+    }),
     glow: new THREE.MeshBasicMaterial({ vertexColors: true }),
     poolTile: lam({ map: T.poolTile }),
     rug: lam({ map: T.rug, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }),
   };
+  // Named distinctly for QA and reuse when the window system later expands beyond the pilot.
+  M.windowSillWood.name = 'WINDOW-R01-OakSill';
   // DEV-04C ART-01.1: broad authored value / hue breakup per material family (surfaces.ts; no extra draw calls)
   const SURF: Partial<Record<MatKey, Parameters<typeof surface>[1]>> = {
-    paint: 'paint', plaster: 'plaster', stone: 'stone', wood: 'timber', tile: 'stone', slate: 'stone', terracotta: 'stone',
+    paint: 'paint', plaster: 'plaster', stone: 'stone', wood: 'timber', windowSillWood: 'timber', tile: 'stone', slate: 'stone', terracotta: 'stone',
     grass: 'ground', dirt: 'ground', foliage: 'foliage', bark: 'timber', rug: 'fabric',
   };
   for (const [key, prof] of Object.entries(SURF)) surface(M[key as MatKey], prof);
