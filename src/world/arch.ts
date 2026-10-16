@@ -188,13 +188,13 @@ function frame(c: Ctx, axis: 'x' | 'z', f: number, s: number, e: number, y0: num
     // inner lip / liner / projection / head all follow the same visual reduction.
     const L=t/2+.005, lip=.0024, casing=.018;
     const lo=(a:number,b:number)=>[Math.min(a,b),Math.max(a,b)] as [number,number];
-    // The 40 cm wall-deep reveal is dressed stone, not an enormous black tunnel.
-    // Keep only the 18 mm *face* architrave black; otherwise the slim frame
-    // appears thick even when its actual casing width is correct.
-    const stoneReveal='#d7d0bf';
-    B(s-.0162,s+lip,y0,y1,-L,L,stoneReveal);
-    B(e-lip,e+.0162,y0,y1,-L,L,stoneReveal);
-    B(s-.0162,e+.0162,y1-lip,y1+.0162,-L,L,stoneReveal);
+    // FRONT-R04-R01: match the inner jamb and soffit to the black steel casing.
+    // Only these three narrow through-wall liner strips change colour; the stone
+    // surround outside the 18 mm face trim remains untouched.
+    const innerLiner=col;
+    B(s-.0162,s+lip,y0,y1,-L,L,innerLiner);
+    B(e-lip,e+.0162,y0,y1,-L,L,innerLiner);
+    B(s-.0162,e+.0162,y1-lip,y1+.0162,-L,L,innerLiner);
     for(const side of [-1,1]) {
       const depth=lo(side*L,side*(L+.012));
       B(s-casing,s-.001,y0,y1+.018,...depth);
