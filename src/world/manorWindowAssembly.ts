@@ -39,7 +39,7 @@ export function sillBoardGeometry(s: ManorWindow, inside: number, nearGlass: num
 export function manorLatchPose(s: ManorWindow) {
   const { exteriorFace, glazingF } = windowDepths(s);
   return {
-    along: s.at + s.w / 2 + 0.005, // centre of the existing 65 mm right-hand stile
+    along: s.at + s.w / 2 - 0.018, // near the sash's inner edge, clear of the plaster return
     y: s.y0 + s.sill + s.h * 0.63,
     sashInnerFace: exteriorFace - s.exterior * 0.067,
     glassPlane: glazingF,
@@ -52,10 +52,10 @@ export function buildManorWindowLatch(c: Ctx, s: ManorWindow) {
   const n = p.sashInnerFace, side = p.facing, a = p.along, y = p.y;
   // Narrow patinated bronze backplate, recessed into the original single sash.
   // The mounting plate overlaps that sash's actual inner plane by 4 mm.
-  segment(c, s.axis, a - 0.024, a + 0.024, y - 0.091, y + 0.091,
-    n + side * 0.004, n - side * 0.013, metal, '#58402f');
-  segment(c, s.axis, a - 0.017, a + 0.017, y - 0.078, y + 0.078,
-    n - side * 0.013, n - side * 0.017, metal, '#9b754a');
+  segment(c, s.axis, a - 0.027, a + 0.027, y - 0.091, y + 0.091,
+    n + side * 0.004, n - side * 0.013, metal, '#705038');
+  segment(c, s.axis, a - 0.019, a + 0.019, y - 0.078, y + 0.078,
+    n - side * 0.013, n - side * 0.017, metal, '#b08b5c');
   const fastenerN = n - side * 0.021;
   for (const dy of [-0.065, 0.065]) {
     const x = s.axis === 'x' ? a : fastenerN;
@@ -70,9 +70,9 @@ export function buildManorWindowLatch(c: Ctx, s: ManorWindow) {
   const leverN = n - side * 0.054;
   const lx = s.axis === 'x' ? a : leverN;
   const lz = s.axis === 'x' ? leverN : a;
-  rod(c.b, metal, '#97724b', lx, y + 0.018, lz, 0.010, 0.010, 0.111, 8,
+  rod(c.b, metal, '#b08a59', lx, y + 0.018, lz, 0.012, 0.012, 0.111, 8,
     { chunk: c.chunk, shadow: false, jitter: 0 });
-  blob(c.b, metal, '#ad895c', lx, y + 0.075, lz, 0.022, 0.023, 0.022,
+  blob(c.b, metal, '#c19a65', lx, y + 0.075, lz, 0.022, 0.023, 0.022,
     { chunk: c.chunk, shadow: false, jitter: 0 });
 }
 
