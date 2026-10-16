@@ -1,0 +1,71 @@
+{
+  "baseline": "6c52b770705389db4aa14e923123e6d569b58488",
+  "candidate": "portal-r01",
+  "renderer": "Chromium software WebGL",
+  "rows": [
+    {
+      "view": "01-hall-to-kitchen",
+      "baseline": {
+        "room": "hall",
+        "calls": 136,
+        "triangles": 346990
+      },
+      "candidate": {
+        "calls": 133,
+        "triangles": 347284
+      },
+      "delta": {
+        "calls": -3,
+        "triangles": 294
+      }
+    },
+    {
+      "view": "02-kitchen-to-hall",
+      "baseline": {
+        "room": "kitchen",
+        "calls": 182,
+        "triangles": 456400
+      },
+      "candidate": {
+        "calls": 179,
+        "triangles": 456694
+      },
+      "delta": {
+        "calls": -3,
+        "triangles": 294
+      }
+    },
+    {
+      "view": "03-kitchen-rearranged",
+      "baseline": {
+        "room": "kitchen",
+        "calls": 172,
+        "triangles": 448552
+      },
+      "candidate": {
+        "calls": 171,
+        "triangles": 448898
+      },
+      "delta": {
+        "calls": -1,
+        "triangles": 346
+      }
+    },
+    {
+      "view": "04-service-chart",
+      "baseline": {
+        "room": "kitchen",
+        "calls": 171,
+        "triangles": 453320
+      },
+      "candidate": {
+        "calls": 172,
+        "triangles": 453680
+      },
+      "delta": {
+        "calls": 1,
+        "triangles": 360
+      }
+    }
+  ]
+}

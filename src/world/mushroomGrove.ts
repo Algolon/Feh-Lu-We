@@ -6,6 +6,8 @@ import { pointAt, polylineLength, project } from './geom2d';
 import { mushroomModel, mushroomYoungModel, MUSHROOM_SPECIES } from './mushroomModels';
 import { mulberry32 } from '../core/rng';
 import { mushroomAreaDistance } from './mushroomField';
+import { makeVegBatch, onFrame } from './vegbatch';
+import { GROVE_LOD_PROFILE, rangeFade, selectTreeLod, type GroveCategory } from './vegetationLod';
 export interface MushroomPlacement { x:number; z:number; scale:number; species:number; yaw:number; zone:'approach'|'grove'|'young'; colony?:number; glow?:number; lean?:number; expansion?:boolean; lightGeometry?:boolean }
 export function mushroomPlacements(trees:readonly {x:number;z:number}[]=MUSHROOM.landmarks): MushroomPlacement[] {
   const r=mulberry32(8193), out:MushroomPlacement[]=[];
@@ -90,35 +92,98 @@ export function buildMushroomGrove(w:World,g:GameApi) {
   const mat=w.material(new T.MeshStandardMaterial({vertexColors:true,roughness:0.92,metalness:0,side:T.DoubleSide}));
   mat.onBeforeCompile=(s)=>{
     s.uniforms.grovePulse=pulse;s.uniforms.groveTime=clock;s.uniforms.groveMotion=motion;
-    s.vertexShader='attribute float glow; varying float vGroveGlow; uniform float groveTime,groveMotion;\n#ifdef USE_INSTANCING\nattribute vec2 colonyGlow;\n#endif\n'+s.vertexShader;
-    s.vertexShader=s.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvGroveGlow=glow;\n#ifdef USE_INSTANCING\nvGroveGlow *= colonyGlow.x * (1. + sin(groveTime*.63+colonyGlow.y)*.07*groveMotion*step(0.,colonyGlow.y));\n#endif');
+    s.vertexShader='attribute float glow; varying float vGroveGlow; uniform float groveTime,groveMotion;\n'+s.vertexShader;
+    // VIS-R01: a batched mushroom carries its colony glow (x) and pulse phase (y; <0: no pulse) in the VegBatch
+    // instance colour, in both render paths; it is data, not albedo, so the approved vertex paint is restored.
+    s.vertexShader=s.vertexShader.replace('#include <color_vertex>',`#include <color_vertex>
+vGroveGlow=glow;
+#if defined(USE_INSTANCING_COLOR) || defined(USE_BATCHING_COLOR)
+#ifdef USE_BATCHING_COLOR
+vec3 groveData=getBatchingColor(getIndirectIndex(gl_DrawID)).xyz;
+#else
+vec3 groveData=instanceColor.xyz;
+#endif
+vColor.xyz=color.xyz;
+vGroveGlow*=groveData.x*(1.+sin(groveTime*.63+groveData.y)*.07*groveMotion*step(0.,groveData.y));
+#endif`);
     s.fragmentShader='uniform float grovePulse; varying float vGroveGlow;\n'+s.fragmentShader;
     s.fragmentShader=s.fragmentShader.replace('#include <opaque_fragment>','outgoingLight += vColor.rgb * vGroveGlow * grovePulse;\n#include <opaque_fragment>');
   };
   const trees=(w.scene.userData.vegPlan?.trees??[]) as {x:number;z:number}[];
   const list=mushroomPlacements(trees), dummy=new T.Object3D();
+  // VIS-R01: every mushroom in ONE VegBatch (multi-draw: one call, culled per instance; fallback: one call per geometry
+  // in view), its LOD and fade per instance by its own distance (GROVE_LOD_PROFILE). Placements, transforms, species
+  // and categories are those of the twelve approved InstancedMeshes (layer = category).
+  const profile=GROVE_LOD_PROFILE, mirror=new T.Matrix4().makeScale(1,1,-1);
+  const geos:T.BufferGeometry[]=[], geoIndex=new Map<string,number>();
+  const model=(k:number,kind:string)=>{
+    const key=k+kind;
+    if(!geoIndex.has(key)){
+      const g=kind==='young'?mushroomYoungModel(k):kind==='youngFar'?mushroomYoungModel(k,true):mushroomModel(k,kind==='detailed',false,kind==='far');
+      geoIndex.set(key,geos.push(mirrorGeometry(g))-1);
+    }
+    return geoIndex.get(key)!;
+  };
+  const CATEGORY={young:'nursery',small:'medium',hero:'hero'} as const;
+  const items:GroveItem[]=[];
   for(let k=0;k<4;k++) for(const layer of ['young','small','hero'] as const) {
     const ps=list.filter(p=>p.species===k&&(layer==='young'?p.zone==='young':p.zone!=='young'&&((p.scale>.8&&!p.lightGeometry)===(layer==='hero'))));
-    const geo=layer==='young'?mushroomYoungModel(k):mushroomModel(k,layer==='hero');
-    const mesh=new T.InstancedMesh(geo,mat,ps.length),emission:number[]=[];
-    mesh.name=MUSHROOM_SPECIES[k]+'-'+layer;mesh.castShadow=false;mesh.receiveShadow=true;
+    const cat=CATEGORY[layer], lods=profile.geometry[cat].map(kind=>model(k,kind));
     ps.forEach((p,i)=>{
       dummy.position.set(p.x,terrainHeight(p.x,p.z)-0.015,p.z);
       dummy.rotation.set(p.lean??0,p.yaw,(p.lean??0)*.6);
       dummy.scale.set(p.scale*(p.zone==='young'?1+Math.sin(i*2.4)*.06:1),p.scale,p.scale);
-      dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);
-      emission.push(p.glow??1,p.zone==='young'?(p.colony??0)*1.73+k:-1);
+      dummy.updateMatrix();
+      // the old grove root mirrored plan z; mirrored geometry + this conjugated matrix give the same world vertices
+      // (and normals, winding) without a negative instance determinant
+      const m=mirror.clone().multiply(dummy.matrix).multiply(mirror);
+      items.push({cat,lods,m,p:new T.Vector3().setFromMatrixPosition(m),data:new T.Color(p.glow??1,p.zone==='young'?(p.colony??0)*1.73+k:-1,0),level:0,k:-1,id:-1,r:0,placement:list.indexOf(p),mesh:MUSHROOM_SPECIES[k]+'-'+layer});
     });
-    geo.setAttribute('colonyGlow',new T.InstancedBufferAttribute(new Float32Array(emission),2));
-    mesh.computeBoundingSphere();root.add(mesh);
   }
+  const batch=makeVegBatch(w,geos,items.length,mat,{tag:{mushrooms:true,vegPart:'mushrooms'}});
+  for(const it of items){
+    it.id=batch.addInstance(it.lods[0],it.m,it.data);batch.setVisibleAt(it.id,false);
+    geos[it.lods[0]].computeBoundingSphere();it.r=geos[it.lods[0]].boundingSphere!.radius*it.m.getMaxScaleOnAxis();
+  }
+  for(const o of batch.objects){o.name='Mushroom Grove instances';o.castShadow=false;o.receiveShadow=true;}
+  const camPos=new T.Vector3(),last=new T.Vector3(Infinity,0,0),tmp=new T.Matrix4(),shrink=new T.Matrix4();
+  let winVersion=-1,outdoors=true,force:number|null=null;
+  onFrame(w,(cam)=>{
+    camPos.setFromMatrixPosition(cam.matrixWorld);
+    const out=w.visibleRooms.has('out'),wins=w.outdoorWindows,wv=w.outdoorWindowsVersion;
+    if(camPos.distanceTo(last)<0.3&&wv===winVersion&&out===outdoors)return;
+    last.copy(camPos);winVersion=wv;outdoors=out;
+    for(const it of items){
+      const d=it.p.distanceTo(camPos),b=profile.bands[it.cat];
+      let k=out?rangeFade(d,b):0;
+      // inside, only what an open doorway can show (World.outdoorWindows), as TreeBatches
+      if(k>0&&wins&&!wins.some(q=>{const px=it.p.x-q.x,pz=-it.p.z-q.z,pd=Math.hypot(px,pz)||1;return (px*q.dx+pz*q.dz)/pd>q.cos-it.r/pd;}))k=0;
+      const level=Math.min(it.lods.length-1,force??selectTreeLod(d,it.level,b.levels,b.hysteresis));
+      if(level!==it.level){batch.setGeometryAt(it.id,it.lods[level]);it.level=level;}
+      if(k===it.k)continue;
+      if((k>0)!==(it.k>0))batch.setVisibleAt(it.id,k>0);
+      if(k>0)batch.setMatrixAt(it.id,k<1?tmp.copy(it.m).multiply(shrink.makeScale(k,k,k)):it.m);
+      it.k=k;
+    }
+  });
+  w.scene.userData.grovePath=(batch.objects[0] as T.BatchedMesh).isBatchedMesh?'multi-draw':'instanced';
+  w.scene.userData.groveProfile=profile;
+  // diagnostics for the VIS-R01 harness and tests (allocates; never called by the render loop)
+  w.scene.userData.groveForceLevel=(level:number|null)=>{force=level;last.set(Infinity,0,0);};
+  w.scene.userData.groveSnapshot=()=>items.map(it=>{
+    const g=geos[it.lods[it.level]],c=g.boundingSphere!.center.clone().applyMatrix4(it.m);
+    return {id:it.mesh+'#'+it.placement,cat:it.cat,level:it.level,k:Math.max(0,it.k),drawn:it.k>0,perInstanceCulling:true,x:c.x,y:c.y,z:c.z,r:g.boundingSphere!.radius*it.m.getMaxScaleOnAxis(),tris:g.attributes.position.count/3,placement:it.placement};
+  });
   for(const p of list.filter(p=>p.zone!=='young'&&p.scale>.8)) {
     const y=terrainHeight(p.x,p.z);
     w.col.addCircle(p.x,p.z,p.scale*.26,y,y+p.scale*1.5,{tag:'mushroom'});
   }
   // Actual light spill, only two lights for the entire grove; no shadow maps.
   const lights=[new T.PointLight('#68ebd5',0,15,2),new T.PointLight('#b98ce8',0,14,2)];
-  lights.forEach((l,i)=>{l.position.set(MUSHROOM.x+(i?5.5:-5.5),terrainHeight(MUSHROOM.x+(i?5.5:-5.5),MUSHROOM.z+2)+2.6,MUSHROOM.z+2);root.add(l);});
+  // VIS-R01: lights, pools + spores and undergrowth hang in their own groups (World's room culling owns the meshes'
+  // own visibility); the lights leave the scene where their intensity has reached zero, 45 m from the centre.
+  const lightGroup=new T.Group(),ambient=new T.Group(),undergrowth=new T.Group();root.add(lightGroup,ambient,undergrowth);
+  lights.forEach((l,i)=>{l.position.set(MUSHROOM.x+(i?5.5:-5.5),terrainHeight(MUSHROOM.x+(i?5.5:-5.5),MUSHROOM.z+2)+2.6,MUSHROOM.z+2);lightGroup.add(l);});
   // Radial pools are projected onto the existing terrain (no hovering flat disks).
   const v:number[]=[],c:number[]=[],indices:number[]=[];
   for(const p of list.filter(p=>p.zone!=='young')) {
@@ -127,7 +192,7 @@ export function buildMushroomGrove(w:World,g:GameApi) {
     for(let i=0;i<=24;i++) {const a=i/24*6.28,x=p.x+Math.cos(a)*R,z=p.z+Math.sin(a)*R;v.push(x,terrainHeight(x,z)+0.045,z);c.push(0,0.025,0.03);if(i<24)indices.push(n,n+i+2,n+i+1);}
   }
   const poolGeo=new T.BufferGeometry();poolGeo.setAttribute('position',new T.Float32BufferAttribute(v,3));poolGeo.setAttribute('color',new T.Float32BufferAttribute(c,3));poolGeo.setIndex(indices);
-  const poolMat=w.material(new T.MeshBasicMaterial({vertexColors:true,transparent:true,opacity:0.32,depthWrite:false,blending:T.AdditiveBlending,side:T.DoubleSide}));root.add(new T.Mesh(poolGeo,poolMat));
+  const poolMat=w.material(new T.MeshBasicMaterial({vertexColors:true,transparent:true,opacity:0.32,depthWrite:false,blending:T.AdditiveBlending,side:T.DoubleSide}));ambient.add(new T.Mesh(poolGeo,poolMat));
   // Authored mint undergrowth: folded, tapered leaves with dark roots and emissive tips.
   // A single merged draw; each tuft follows the original terrain rather than a flat diorama plinth.
   const lv:number[]=[],lc:number[]=[],le:number[]=[];
@@ -143,7 +208,7 @@ export function buildMushroomGrove(w:World,g:GameApi) {
       addLeaf(base,left,mid,.15);addLeaf(base,mid,right,.12);addLeaf(left,tip,mid,.65);addLeaf(mid,tip,right,.5);
     }
   }
-  const lg=new T.BufferGeometry();lg.setAttribute('position',new T.Float32BufferAttribute(lv,3));lg.setAttribute('color',new T.Float32BufferAttribute(lc,3));lg.setAttribute('glow',new T.Float32BufferAttribute(le,1));lg.computeVertexNormals();root.add(new T.Mesh(lg,mat));
+  const lg=new T.BufferGeometry();lg.setAttribute('position',new T.Float32BufferAttribute(lv,3));lg.setAttribute('color',new T.Float32BufferAttribute(lc,3));lg.setAttribute('glow',new T.Float32BufferAttribute(le,1));lg.computeVertexNormals();undergrowth.add(new T.Mesh(lg,mat));
   // One point draw for drifting spores, soft circular fragments, limited overdraw.
   const r=mulberry32(812),positions:number[]=[],phase:number[]=[];
   for(let i=0;i<64;i++){let x:number,z:number;do{x=162+r()*35;z=150+r()*27;}while(mushroomAreaDistance(x,z)<.5);positions.push(x,terrainHeight(x,z)+0.25+r()*(i%2===0?.65:3.5),z);phase.push(r()*6.28);}
@@ -152,14 +217,29 @@ export function buildMushroomGrove(w:World,g:GameApi) {
   const pm=w.material(new T.ShaderMaterial({uniforms,transparent:true,depthWrite:false,blending:T.AdditiveBlending,
     vertexShader:`attribute float phase; uniform float t,motion; varying float v; void main(){vec3 p=position;p.x+=sin(t*.14+phase)*.35*motion;p.y+=sin(t*.25+phase)*.3*motion;vec4 mv=modelViewMatrix*vec4(p,1.);gl_Position=projectionMatrix*mv;gl_PointSize=clamp(28./-mv.z,1.,7.);v=.5+.5*sin(phase+t*.4*motion);}`,
     fragmentShader:`uniform float strength;varying float v;void main(){float d=length(gl_PointCoord-.5);if(d>.5)discard;gl_FragColor=vec4(.35,.9,.82,(1.-smoothstep(.05,.5,d))*(.25+v*.45)*strength);}` }));
-  root.add(new T.Points(pg,pm));
+  ambient.add(new T.Points(pg,pm));
   w.scene.userData.mushrooms={placements:list,species:MUSHROOM_SPECIES,centre:MUSHROOM};
+  let lit=false,grown=true;
   w.onUpdate((_dt,t)=>{
-    const p=g.playerXZ(),distance=Math.hypot(p.x-MUSHROOM.x,p.z-MUSHROOM.z),active=distance<65;
-    root.visible=active;
-    if(!active){lights.forEach(l=>l.intensity=0);return;}
+    const p=g.playerXZ(),distance=Math.hypot(p.x-MUSHROOM.x,p.z-MUSHROOM.z),edge=Math.max(0,-mushroomAreaDistance(p.x,p.z));
+    lit=distance<(lit?47:45);lightGroup.visible=lit;
+    grown=edge<profile.ambient.undergrowth+(grown?3:-3);undergrowth.visible=grown;
+    const fade=Math.min(1,Math.max(0,(profile.ambient.exit-edge)/(profile.ambient.exit-profile.ambient.full)));
+    ambient.visible=fade>0;poolMat.opacity=0.32*fade;
     const reduced=w.reducedMotion,pulsing=reduced?1:1+Math.sin(t*.7)*.09;
-    pulse.value=pulsing;clock.value=t;motion.value=reduced?0:1;uniforms.t.value=t;uniforms.motion.value=reduced?0:1;
-    lights.forEach((l,i)=>l.intensity=(i?12:18)*pulsing*Math.max(0,1-(distance-10)/35));
+    pulse.value=pulsing;clock.value=t;motion.value=reduced?0:1;uniforms.t.value=t;uniforms.motion.value=reduced?0:1;uniforms.strength.value=fade;
+    lights.forEach((l,i)=>l.intensity=lit?(i?12:18)*pulsing*Math.max(0,1-(distance-10)/35):0);
   });
+}
+interface GroveItem { cat:GroveCategory; lods:number[]; m:T.Matrix4; p:T.Vector3; data:T.Color; level:number; k:number; id:number; r:number; placement:number; mesh:string }
+/** The geometry mirrored in z (positions, normals) with its winding reversed, so that front faces stay front faces. */
+export function mirrorGeometry(g:T.BufferGeometry) {
+  if(g.index)g=g.toNonIndexed();
+  for(const name of Object.keys(g.attributes)) {
+    const a=g.attributes[name] as T.BufferAttribute,n=a.itemSize,arr=a.array;
+    if(name==='position'||name==='normal')for(let i=0;i<a.count;i++)arr[i*n+2]=-arr[i*n+2];
+    for(let t=0;t<a.count;t+=3)for(let c=0;c<n;c++){const v=arr[(t+1)*n+c];arr[(t+1)*n+c]=arr[(t+2)*n+c];arr[(t+2)*n+c]=v;}
+    a.needsUpdate=true;
+  }
+  g.computeBoundingSphere();return g;
 }
