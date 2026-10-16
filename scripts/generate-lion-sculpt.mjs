@@ -4,7 +4,7 @@
 // Anatomical masses and hand-placed flowing mane locks are fused into one cast.
 import { writeFileSync } from 'node:fs';
 
-const PITCH=.004, min=[-.156,-.195,-.014],max=[.156,.187,.177];
+const PITCH=.006, min=[-.156,-.195,-.014],max=[.156,.187,.177];
 const N=min.map((x,i)=>Math.ceil((max[i]-x)/PITCH)+1);
 const [NX,NY,NZ]=N;
 const grid=new Float32Array(NX*NY*NZ);
