@@ -7,6 +7,7 @@ import { bake, projectUV } from './artkit';
 import { surface } from './surfaces';
 import { mulberry32 } from '../core/rng';
 import { EXTERIOR_FINISH, ageFacade } from './exteriorFinish';
+import { EXTERIOR_WEATHER, ageDressedStone } from './exteriorWeather';
 
 export const EXTERIOR_STUDY = typeof location === 'undefined' || new URLSearchParams(location.search).get('exterior') !== 'base';
 let materials: { wall: THREE.Material; gravel: THREE.Material; dressed: THREE.Material } | undefined;
@@ -92,6 +93,7 @@ export function exteriorMats() {
   surface(dressed, 'stone');
   surface(wall, 'stone'); surface(gravel, 'ground');
   if(EXTERIOR_FINISH)ageFacade(wall);
+  if(EXTERIOR_FINISH&&EXTERIOR_WEATHER)ageDressedStone(dressed);
   materials = { wall, gravel, dressed }; return materials;
 }
 

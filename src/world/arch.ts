@@ -407,7 +407,7 @@ export function hipRoof(c: Ctx, cx: number, cz: number, sx: number, sz: number, 
     boxMM(c.b, P, fas, cx + x0, cx + x1, y - 0.24, y + 0.03, cz + z0, cz + z1, { chunk: c.chunk, jitter: 0 });
   for (const [x0, x1, z0, z1] of [[-ax, ax, -az, -wz], [-ax, ax, wz, az], [-ax, -wx, -wz, wz], [wx, ax, -wz, wz]] as const)
     boxMM(c.b, P, sof, cx + x0, cx + x1, y - 0.22, y - 0.18, cz + z0, cz + z1, { chunk: c.chunk, shadow: false, jitter: 0 });
-  if (look.finished && look.gutter !== false) rainwater(c,cx,cz,ax,az,y,look.downpipes??[]);
+  if (look.finished && look.gutter !== false) rainwater(c,cx,cz,ax,az,y,look.downpipes??[],undefined,overhang);
   else if (look.gutter !== false) {
     const gc = look.gutter ?? '#6e6f6a', go = 0.07;
     for (const [x0, x1, z0, z1] of [[-ax - go, ax + go, -az - go - 0.06, -az - go + 0.04], [-ax - go, ax + go, az + go - 0.04, az + go + 0.06], [-ax - go - 0.06, -ax - go + 0.04, -az - go, az + go], [ax + go - 0.04, ax + go + 0.06, -az - go, az + go]] as const)

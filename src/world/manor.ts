@@ -42,6 +42,8 @@ import { SALON_LAYOUT, SALON_SITES } from '../content/gallery';
 import { buildEntrance, entranceBay } from './entrance';
 import { EXTERIOR_STUDY, exteriorMats, studyArchitecture, dressedBlock } from './exteriorStudy';
 import { buildExteriorGreenery, EXTERIOR_GREENERY } from './exteriorGreenery';
+import { EXTERIOR_DETAILS, lanternMount } from './exteriorDetail';
+import { EXTERIOR_WEATHER, houseNameplate } from './exteriorWeather';
 import { ROOF_DETAIL, gableTrimGeo } from './roofDetail';
 import { EXTERIOR_FINISH, finishedChimney, roofFlashing } from './exteriorFinish';
 import { buildKitchenJuicePouch } from './kitchenJuicePouch';
@@ -209,10 +211,14 @@ function shell(w: World, c: Ctx) {
   entranceBay(c, 86.4, 93.6, 79.55, 80.0, [87.375, 92.625], UF);
   // lanterns on wrought brackets on the bay face, between each pilaster and the door surround (they sat inside the bay)
   for (const x of [88.6, 91.4]) {
+    if(EXTERIOR_STUDY && EXTERIOR_DETAILS)lanternMount(c,x,79.55,79.36,2.15+.59*.7);
+    else {
     boxMM(c.b, k.M.paint, '#2b2622', x - 0.02, x + 0.02, 2.62, 2.66, 79.34, 79.56, { chunk: c.chunk, shadow: false }); // bracket arm
     boxMM(c.b, k.M.paint, '#2b2622', x - 0.01, x + 0.01, 2.54, 2.63, 79.35, 79.37, { chunk: c.chunk, shadow: false }); // drop to the lantern cap
+    }
     staticLantern(c, w, x, 2.15, 79.36, 0.7, 0, 2.2, 5); // out of the bay the same 4 / 7 washed the portico white
   }
+  if(EXTERIOR_STUDY&&EXTERIOR_WEATHER)houseNameplate(w,c);
   // ---------------------------------------------------------------- service wing (single storey, own roof)
   const WH = 3.9;
   wall(c, 'x', 92.2, 107.6, 116, 0, WH, { ...stone, t: 0.4, exterior: -1, skin, uv: 2.4, winStyle: 'manor', openings: [{ at: 112, w: 1.1, h: 2.3 }], windows: [{ at: 110, sill: 1.1, h: 1.3, w: 1.0 }, { at: 114.4, sill: 1.1, h: 1.3, w: 0.8 }] });
@@ -377,7 +383,7 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   stairsZ(c, 92.08, 94.92, 104.8, 99.6, BF, GF, '#6b4a2a', undefined, { mass: '#cbbd9f', runner: false });
 
   // ---------------------------------------------------------------- doors
-  makeDoor(w, g, { id: 'door.front', x: 89.15, z: 80.2, dir: 'x+', width: 1.7, height: 2.62, y0: GF, swing: 1, color: '#6b3f22', key: 'frontKey', thickness: 0.09 });
+  makeDoor(w, g, { id: 'door.front', x: 89.15, z: 80.2, dir: 'x+', width: 1.7, height: 2.62, y0: GF, swing: 1, color: '#6b3f22', key: 'frontKey', thickness: 0.09, style: EXTERIOR_STUDY && EXTERIOR_DETAILS ? 'estate' : 'panel' });
   makeDoor(w, g, { id: 'door.library', x: 85, z: 100.5, dir: 'z+', width: 1.0, height: 2.25, y0: GF, swing: -1, color: '#5a3520' });
   makeDoor(w, g, { id: 'door.billiard', x: 89.5, z: 104, dir: 'x+', width: 1.0, height: 2.25, y0: GF, swing: 1 }); // v0.2: moved east for the WC (same id/state)
   makeDoor(w, g, { id: 'door.guestWC', x: 86.05, z: 104, dir: 'x+', width: 0.9, height: 2.2, y0: GF, swing: 1, color: '#efe6d6' });
