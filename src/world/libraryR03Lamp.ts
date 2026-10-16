@@ -9,7 +9,7 @@ import { v3 } from './kit';
 export function libraryR03BankersLamp(w:World,x:number,y:number,z:number) {
   const g=new THREE.Group();
   const brass=w.material(new THREE.MeshPhongMaterial({
-    color:'#c6a24e', specular:'#f8dd91', shininess:100
+    color:'#b99345', specular:'#bb9b55', shininess:80
   }));
   const darkBrass=w.material(new THREE.MeshPhongMaterial({
     color:'#896330', specular:'#d6b36b', shininess:80
@@ -97,6 +97,9 @@ export function libraryR03BankersLamp(w:World,x:number,y:number,z:number) {
   // Small pull-chain right of the shade: low-count beads, no separate physics.
   for(let i=0;i<8;i++)sphere(.006,i%2?darkBrass:brass,[.23,.435-i*.027,.11]);
   sphere(.014,brass,[.23,.226,.11],[1,1.7,1]);
+  // Face the player approaching from the EAST: long shade axis follows the desk's north-south run.
+  // Without this quarter-turn the defining banker's-lamp silhouette is seen end-on.
+  g.rotation.y=Math.PI/2;
   g.position.copy(v3(x,y,z));
   g.userData.room='library';
   w.scene.add(g);
