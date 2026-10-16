@@ -21,8 +21,11 @@ export function cutEastHipRoofWindow(
     new THREE.Vector2(-(opening.z0-cz),opening.x1-cx),
     new THREE.Vector2(-(opening.z0-cz),opening.x0-cx),
   ];
-  const triangle=new THREE.Triangle(outside[0],outside[1],outside[2]);
-  if(!hole.every(v=>triangle.containsPoint(v)))throw Error('Attic skylight exceeds east hip face');
+  // 2D containment in the sloped triangular hip (u is local Three Z, v is local X).
+  // Do not use THREE.Triangle here: that helper requires Vector3, not Vector2.
+  if (!hole.every(p => p.y > ridge + 0.05 && p.y < ax - 0.05
+       && Math.abs(p.x) < az * (p.y - ridge)/(ax - ridge) - 0.05))
+    throw Error('Attic skylight exceeds east hip face');
   const pos=src.getAttribute('position'),uv=src.getAttribute('uv');
   const positions:number[]=[],uvs:number[]=[];
   let replaced=0;
