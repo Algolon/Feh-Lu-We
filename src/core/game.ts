@@ -23,6 +23,7 @@ import {
 import { ITEMS, ESSENTIALS, SEALS } from '../content/items';
 import { boslustDigits, setBoslustDigits, turnBoslustWheel } from '../puzzles/boslustDials';
 import { BoslustFocusHud } from '../ui/boslustFocus';
+import { tapWheelDirection } from '../ui/boslustTouch';
 import { CLUES, CLUE_GROUP, THREADS, type ThreadId } from '../content/clues';
 import { SERVICE, CATALOG, CONSOLE_SOCKETS } from '../content/canon';
 import { SYMBOLS, symbolSvg } from '../content/symbols';
@@ -551,8 +552,8 @@ export class Game implements GameApi {
     this.input?.exitPointerLock(); // pointerunlock ignored while focus is active
     document.body.classList.add('boslust-inspecting');
     this.boslustFocusHud = new BoslustFocusHud(this.ui.hud, {
-      tap: (x, y, direction) => this.boslustFocusTap(x, y, direction),
-      wheel: (x, y, direction) => this.boslustFocusTap(x, y, direction),
+      tap: (x, y, isTouch) => this.boslustFocusTap(x, y, isTouch),
+      steps: (x, y, steps, isTouch) => this.boslustFocusSteps(x, y, steps, isTouch),
       leave: () => this.leaveBoslustInspect(),
     });
   }
@@ -572,29 +573,73 @@ export class Game implements GameApi {
     this.boslustFocus.startedAt = performance.now();
   }
 
-  private turnBoslustFocusWheel(index: number, direction: 1 | -1) {
-    const digit = turnBoslustWheel(this.state, index, direction);
-    if (digit === null) return;
+  /** One sound/save per gesture detent batch; wheel state is the sole code source. */
+  private turnBoslustFocusWheel(index: number, direction: 1 | -1, isTouch = false, steps = 1) {
+    let changed = false;
+    for (let i = 0; i < Math.min(12, steps); i++) {
+      if (turnBoslustWheel(this.state, index, direction) === null) break;
+      changed = true;
+    }
+    if (!changed) return;
+    this.boslustFocusHud?.setSelected(index);
     this.sfx('click', 0.40);
-    this.changed(); // one saved digit source; also repaints 3D number atlas
+    this.changed();
+    if (isTouch && typeof navigator.vibrate === 'function') navigator.vibrate(8);
   }
 
-  private boslustFocusTap(x: number, y: number, direction?: 1 | -1) {
+  /** Sample the exact 3D collider under the *initial* touch; never change wheels mid-drag. */
+  private boslustPick(clientX: number, clientY: number) {
     const f = this.boslustFocus;
-    if (!f || f.closing || f.blend < 0.90 || this.ui.modalOpen) return;
-    const bounds = this.canvas.getBoundingClientRect();
-    const px = (x - bounds.left) / bounds.width * 2 - 1;
-    const py = -((y - bounds.top) / bounds.height * 2 - 1);
-    const found = this.pickAt(px, py);
-    const id = found?.it.id ?? '';
-    if (found?.tooFar) return;
-    if (/^boslust\.wheel\.[0-3]$/.test(id)) {
+    if (!f || f.closing || f.blend < 0.90 || this.ui.modalOpen) return null;
+    const r = this.canvas.getBoundingClientRect();
+    const hit = this.pickAt(((clientX - r.left) / r.width) * 2 - 1, -((clientY - r.top) / r.height) * 2 + 1);
+    return hit && !hit.tooFar ? hit : null;
+  }
+
+  private boslustFocusTap(x: number, y: number, isTouch: boolean) {
+    const hit = this.boslustPick(x, y);
+    if (!hit) return;
+    const id = hit.it.id;
+    if (/^boslust\\.wheel\\.[0-3]$/.test(id)) {
       const index = Number(id.slice(-1));
-      f.selected = index;
-      this.turnBoslustFocusWheel(index, direction ?? 1);
-    } else if (id === 'boslust.knob' && direction === undefined) {
+      this.boslustFocus!.selected = index;
+      const localY = hit.it.obj.worldToLocal(hit.point.clone()).y;
+      this.turnBoslustFocusWheel(index, tapWheelDirection(localY, isTouch), isTouch);
+    } else if (id === 'boslust.knob') {
+      if (isTouch && typeof navigator.vibrate === 'function') navigator.vibrate(12);
       this.tryBoslustCode();
     }
+  }
+
+  private boslustFocusSteps(x: number, y: number, steps: number, isTouch: boolean) {
+    if (!steps) return;
+    const hit = this.boslustPick(x, y);
+    if (!hit || !/^boslust\\.wheel\\.[0-3]$/.test(hit.it.id)) return;
+    const index = Number(hit.it.id.slice(-1));
+    this.boslustFocus!.selected = index;
+    this.turnBoslustFocusWheel(index, steps > 0 ? 1 : -1, isTouch, Math.abs(steps));
+  }
+
+  /** Light-touch screen affordances follow the *real* number-wheel hit targets. */
+  private updateBoslustWheelGuides() {
+    const hud = this.boslustFocusHud, f = this.boslustFocus;
+    if (!hud || !f) return;
+    if (f.blend < 0.90 || f.closing) {
+      hud.setWheelPositions([null, null, null, null]);
+      return;
+    }
+    this.camera.updateMatrixWorld(true);
+    const canvas = this.canvas.getBoundingClientRect();
+    const parent = this.ui.hud.getBoundingClientRect();
+    hud.setWheelPositions([0, 1, 2, 3].map(i => {
+      const obj = this.world?.byId.get(`boslust.wheel.${i}`)?.obj;
+      if (!obj) return null;
+      obj.updateWorldMatrix(true, false);
+      const p = obj.getWorldPosition(new THREE.Vector3()).project(this.camera);
+      if (p.z >= 1 || Math.abs(p.x) > 1 || Math.abs(p.y) > 1) return null;
+      return { x: canvas.left - parent.left + (p.x + 1) * 0.5 * canvas.width,
+        y: canvas.top - parent.top + (1 - p.y) * 0.5 * canvas.height };
+    }));
   }
 
   private updateBoslustFocusCamera() {
@@ -622,6 +667,7 @@ export class Game implements GameApi {
     this.camera.quaternion.slerp(desiredRotation, eased);
     this.camera.fov = THREE.MathUtils.lerp(normalFov, portrait ? 79 : 57, eased);
     this.camera.updateProjectionMatrix();
+    this.updateBoslustWheelGuides();
     if (f.closing && f.blend === 0) {
       this.boslustFocus = null;
       this.camera.fov = normalFov;
@@ -638,6 +684,7 @@ export class Game implements GameApi {
       if (code === 'ArrowLeft' || code === 'ArrowRight') {
         const f = this.boslustFocus;
         f.selected = (f.selected + (code === 'ArrowRight' ? 1 : 3)) % 4;
+        this.boslustFocusHud?.setSelected(f.selected);
         this.toast(`Wieltje ${f.selected + 1}: ${boslustDigits(this.state)[f.selected]}`);
         return;
       }
@@ -647,6 +694,7 @@ export class Game implements GameApi {
       }
       if (/^Digit[1-4]$/.test(code)) {
         this.boslustFocus.selected = Number(code.slice(-1)) - 1;
+        this.boslustFocusHud?.setSelected(this.boslustFocus.selected);
         this.toast(`Wieltje ${this.boslustFocus.selected + 1}`);
         return;
       }
