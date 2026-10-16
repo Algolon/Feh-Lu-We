@@ -14,6 +14,20 @@ function fixture(){
  return {scene,meshes,camera,renderer,before,after,batch};
 }
 describe('opaque render aggregation invariants',()=>{
+ it('keeps asynchronously loaded painting atlases on the native path while batching ordinary opaque props',()=>{
+  const scene=new THREE.Scene(),artMat=new THREE.MeshLambertMaterial({vertexColors:true}),propMat=new THREE.MeshLambertMaterial({vertexColors:true});
+  artMat.userData.skipOpaqueBatch=true;
+  for(const mat of [artMat,propMat])for(let i=0;i<4;i++){
+   const geometry=new THREE.BoxGeometry(.5,.5,.5);
+   geometry.setAttribute('color',new THREE.Float32BufferAttribute(new Float32Array(geometry.attributes.position.count*3).fill(1),3));
+   scene.add(new THREE.Mesh(geometry,mat));
+  }
+  installOpaqueBatches({scene} as unknown as World);
+  const aggregates=scene.children.filter(o=>o.userData.opaqueAggregate) as THREE.Mesh[];
+  expect(aggregates.map(o=>o.material)).toEqual([propMat]);
+  expect(scene.userData.opaqueBatches.sources).toBe(4);
+  expect(scene.children.filter(o=>o instanceof THREE.Mesh&&o.material===artMat)).toHaveLength(4);
+ });
  it('keeps small repeated props batched when a large material group fills the vertex budget',()=>{
   const scene=new THREE.Scene(),largeMat=new THREE.MeshLambertMaterial(),propMat=new THREE.MeshLambertMaterial();
   for(let i=0;i<20;i++){
