@@ -14,7 +14,7 @@ Scene positions, collider definitions, routes and puzzle code are retained. Mesh
 
 ## Evidence and preview
 
-`references/` retains the five supplied plant-reference sheets and five gameplay screenshots. `pots-compare.jpg` uses the actual shared furniture builder: old left/new right. `hedge-compare.jpg`: old in front/new behind. Plant `*-compare.jpg`: accepted R05 geometry in front/new R08 behind; `*-variants.jpg` and `*-closeup.jpg` show the refined models.
+`references/` retains the five supplied plant-reference sheets. The gameplay screenshots in the request guided the matched fresh captures below. `pots-compare.jpg` uses the actual shared furniture builder: old left/new right. `hedge-compare.jpg`: old in front/new behind. Plant `*-compare.jpg`: accepted R05 geometry in front/new R08 behind; `*-variants.jpg` and `*-closeup.jpg` show the refined models.
 
 Matched game `previous-*` frames use the complete accepted R07 state; `r08-*` adds this stage. Captures include the forecourt, planter close-up, hedge, hall pot, botanical room, conservatory, six established outdoor views and both home pots. The same poses/settings are used before/after.
 
