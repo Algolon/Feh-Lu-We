@@ -1,7 +1,7 @@
 // WINDOW-R02 review on the actual built gameplay scene. Software WebGL is NOT an Android FPS test.
 import { chromium } from 'playwright-core';
 import { createServer } from 'vite';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 const folder = 'docs/development/workstreams/window-r02/review';
 mkdirSync(folder, { recursive: true });
 const server = await createServer({ server: { host: '127.0.0.1', port: 5173, strictPort: false } });
@@ -10,7 +10,8 @@ const browser = await chromium.launch({
   ...(process.env.CHROME ? { executablePath: process.env.CHROME } : {}),
   args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'],
 });
-const errors = [], views = [];
+const errors = [], views = [], productionBaseline = JSON.parse(readFileSync('docs/development/workstreams/window-r02/review/production-baseline.json','utf8'));
+const budgetExceptions = [];
 // Coordinates are actual facade apertures, *not* newly invented camera locations.
 // South, north, west, east, two upstairs rooms and both faces of the wing.
 const poses = [
@@ -136,8 +137,18 @@ try {
     views.push(view);
     if (!view.visible || view.glError !== 0)
       throw Error('Failed through-window view: '+JSON.stringify(view));
-    if (view.calls > 150 || view.triangles > 750000)
-      throw Error('Exceeded provisional PB01 mobile-low ceiling: '+JSON.stringify(view));
+    const reference = productionBaseline.results.find(b => b.id === p.id && b.side === side);
+    if (!reference) throw Error('No exact production baseline for '+p.id+'/'+side);
+    const triangleDelta = view.triangles - reference.triangles;
+    const callDelta = view.calls - reference.calls;
+    if (view.calls > 150 || callDelta > 5 || triangleDelta > 35000)
+      throw Error('Window integration render regression: '+JSON.stringify({view,reference,triangleDelta,callDelta}));
+    if (view.triangles > 750000) {
+      if (reference.triangles <= 750000)
+        throw Error('New PB01 mobile-low overrun caused by windows: '+JSON.stringify({view,reference}));
+      budgetExceptions.push({view,reference,triangleDelta,callDelta});
+      console.log('Known production triangle-budget debt (not introduced by windows):',JSON.stringify({view,reference,triangleDelta}));
+    }
     await page.screenshot({ path: `${folder}/${p.id}-${side}.jpg`, type:'jpeg', quality:85 });
     console.log(JSON.stringify(view));
   }
@@ -168,7 +179,7 @@ try {
     console.log('sill', JSON.stringify(view));
   }
   if (errors.length) throw Error('Page errors: '+errors.join('\\n'));
-  writeFileSync(folder+'/results.json',JSON.stringify({registry,views,sills,mahogany,errors,
+  writeFileSync(folder+'/results.json',JSON.stringify({registry,views,sills,mahogany,productionBaselineCommit:productionBaseline.commit,budgetExceptions,errors,
     samsungValidated:false,budget:{calls:150,triangles:750000}},null,2));
 } finally {
   await browser.close();
