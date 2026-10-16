@@ -226,30 +226,18 @@
       "glError": 0
     }
   ],
-  "hardware": [
+  "sills": [
     {
       "site": "north-ground",
-      "calls": 54,
-      "triangles": 499922,
-      "glError": 0,
-      "detail": {
-        "site": "north-ground",
-        "calls": 53,
-        "triangles": 490621,
-        "glError": 0
-      }
+      "calls": 64,
+      "triangles": 509295,
+      "glError": 0
     },
     {
       "site": "west-ground",
-      "calls": 43,
-      "triangles": 521925,
-      "glError": 0,
-      "detail": {
-        "site": "west-ground",
-        "calls": 43,
-        "triangles": 519971,
-        "glError": 0
-      }
+      "calls": 46,
+      "triangles": 524863,
+      "glError": 0
     }
   ],
   "mahogany": {
