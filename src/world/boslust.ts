@@ -116,6 +116,7 @@ function entrance(w: World, g: GameApi, c0: Ctx, u: Ctx) {
 
   // The broad plate opens the enlarged mobile-friendly code panel, while
   // narrow, more-forward ray targets allow direct wheel manipulation in 3D.
+  // R05: wider knob hit target remains physically separated from wheel 1.
   makeAction(w, {
     id: 'boslust.lock', obj: lock,
     hit: [BOSLUST_LOCK_SIZE.width + 0.08, BOSLUST_LOCK_SIZE.height + 0.12, BOSLUST_LOCK_SIZE.depth + 0.05],
@@ -152,7 +153,7 @@ function entrance(w: World, g: GameApi, c0: Ctx, u: Ctx) {
   knob.position.set(-0.307, 0, 0.285);
   lock.add(knob);
   makeAction(w, {
-    id: 'boslust.knob', obj: knob, hit: [0.255, 0.25, 0.13], hitOffset: [0, 0, 0],
+    id: 'boslust.knob', obj: knob, hit: [0.34, 0.32, 0.15], hitOffset: [0, 0, 0],
     label: () => g.state.flags.boslustCover && !g.state.flags.boslustOpen ? (g.isBoslustInspecting ? 'Draai knop: probeer combinatie' : 'Bekijk het cijferslot') : null,
     run: () => { if (!g.isBoslustInspecting) g.enterBoslustInspect(); else g.tryBoslustCode(); },
   });
