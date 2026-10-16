@@ -1,0 +1,146 @@
+{
+  "views": [
+    {
+      "name": "south-ground",
+      "side": "inside",
+      "calls": 24,
+      "triangles": 384342,
+      "glError": 0
+    },
+    {
+      "name": "south-ground",
+      "side": "outside",
+      "calls": 61,
+      "triangles": 592000,
+      "glError": 0
+    },
+    {
+      "name": "north-ground",
+      "side": "inside",
+      "calls": 15,
+      "triangles": 282928,
+      "glError": 0
+    },
+    {
+      "name": "north-ground",
+      "side": "outside",
+      "calls": 58,
+      "triangles": 564316,
+      "glError": 0
+    },
+    {
+      "name": "west-ground",
+      "side": "inside",
+      "calls": 21,
+      "triangles": 388136,
+      "glError": 0
+    },
+    {
+      "name": "west-ground",
+      "side": "outside",
+      "calls": 71,
+      "triangles": 513422,
+      "glError": 0
+    },
+    {
+      "name": "east-ground",
+      "side": "inside",
+      "calls": 22,
+      "triangles": 140208,
+      "glError": 0
+    },
+    {
+      "name": "east-ground",
+      "side": "outside",
+      "calls": 51,
+      "triangles": 651160,
+      "glError": 0
+    },
+    {
+      "name": "south-upper",
+      "side": "inside",
+      "calls": 25,
+      "triangles": 230722,
+      "glError": 0
+    },
+    {
+      "name": "south-upper",
+      "side": "outside",
+      "calls": 71,
+      "triangles": 606180,
+      "glError": 0
+    },
+    {
+      "name": "north-upper",
+      "side": "inside",
+      "calls": 17,
+      "triangles": 284492,
+      "glError": 0
+    },
+    {
+      "name": "north-upper",
+      "side": "outside",
+      "calls": 56,
+      "triangles": 565170,
+      "glError": 0
+    },
+    {
+      "name": "west-upper",
+      "side": "inside",
+      "calls": 21,
+      "triangles": 295334,
+      "glError": 0
+    },
+    {
+      "name": "west-upper",
+      "side": "outside",
+      "calls": 70,
+      "triangles": 535418,
+      "glError": 0
+    },
+    {
+      "name": "east-upper",
+      "side": "inside",
+      "calls": 22,
+      "triangles": 170212,
+      "glError": 0
+    },
+    {
+      "name": "east-upper",
+      "side": "outside",
+      "calls": 49,
+      "triangles": 589414,
+      "glError": 0
+    },
+    {
+      "name": "wing-south",
+      "side": "inside",
+      "calls": 22,
+      "triangles": 193882,
+      "glError": 0
+    },
+    {
+      "name": "wing-south",
+      "side": "outside",
+      "calls": 55,
+      "triangles": 338544,
+      "glError": 0
+    },
+    {
+      "name": "wing-north",
+      "side": "inside",
+      "calls": 16,
+      "triangles": 110420,
+      "glError": 0
+    },
+    {
+      "name": "wing-north",
+      "side": "outside",
+      "calls": 90,
+      "triangles": 569283,
+      "glError": 0
+    }
+  ],
+  "errors": [],
+  "commit": "f5b27bcebaae42f0789e0694546e14d1a8ab4583"
+}
