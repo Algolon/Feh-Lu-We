@@ -24,6 +24,11 @@ const scenes = [
   ['05-north-builtins', [79.0, 0.15, 105.1], [78.5, 1.6, 109.1]],
   ['06-spiral-from-floor', [79.7, 0.15, 103.8], [81.95, 2.2, 105.3]],
   ['07-spiral-upper-gallery', [83.7, 3.35, 105.2], [81.95, 2.6, 105.3]],
+  // R02 furniture close views, fixed positions for before/after owner comparison.
+  ['12-secretary-chair-oblique', [77.4, 0.15, 96.2], [74.75, 0.89, 97.65]],
+  ['13-wing-chair-faces-rug', [78.05, 0.15, 101.4], [75.8, 0.88, 102.75]],
+  ['14-sofa-tufting-near', [78.0, 0.15, 101.45], [78.75, 0.79, 103.76]],
+  ['15-spiral-sculpted-treads', [80.6, 0.15, 102.6], [81.95, 1.75, 105.3]],
 ];
 const helpers = readFileSync(new URL('./e2e-helpers.js', import.meta.url), 'utf8');
 
