@@ -20,38 +20,41 @@ const views=[
   {name:'05-lion-detail-oblique',size:{width:1400,height:1000},pose:{x:89.80,y:.15,z:79.06,yaw:.16,pitch:.05}},
 ];
 try{
+  // FRONT-R04 QA: load the game exactly once. Six cold-start WebGL worlds
+  // needlessly delayed review and caused overlapping screenshot jobs.
+  const ctx=await browser.newContext({viewport:{width:1050,height:750},deviceScaleFactor:1});
+  const page=await ctx.newPage();
+  let currentView='startup';
+  page.on('pageerror',e=>errors.push(currentView+' pageerror '+e.message));
+  page.on('console',m=>{if(m.type()==='error')errors.push(currentView+' console '+m.text());});
+  await page.goto(BASE+'?autotest=1');
+  await page.evaluate(()=>localStorage.setItem('fehluwe.save',JSON.stringify({
+    version:4,scene:'estate',inventory:['invitation','torch','matches','notebook','frontKey'],
+    flags:{leftHome:true},unlocked:['lock.door.front'],open:{'door.front':false}
+  })));
+  await page.reload();
+  await page.click('[data-cont]');
+  await page.waitForFunction(()=>window.__game?.world?.id==='estate',null,{timeout:150000});
   for(const v of views){
-    const ctx=await browser.newContext({viewport:v.size,deviceScaleFactor:1});
-    const page=await ctx.newPage();
-    page.on('pageerror',e=>errors.push(v.name+' pageerror '+e.message));
-    page.on('console',m=>{if(m.type()==='error')errors.push(v.name+' console '+m.text());});
-    await page.goto(BASE+'?autotest=1');
-    await page.evaluate(()=>localStorage.setItem('fehluwe.save',JSON.stringify({
-      version:4,scene:'estate',inventory:['invitation','torch','matches','notebook','frontKey'],
-      flags:{leftHome:true},unlocked:['lock.door.front'],open:{'door.front':false}
-    })));
-    await page.reload();
-    await page.click('[data-cont]');
-    await page.waitForFunction(()=>window.__game?.world?.id==='estate',null,{timeout:150000});
+    currentView=v.name;
+    await page.setViewportSize(v.size);
     const metrics=await page.evaluate(pose=>{
       const g=window.__game;
       g.player.setPose(pose);
-      for(let i=0;i<100;i++)g.tick(1/30);
+      for(let i=0;i<75;i++)g.tick(1/30);
       g.renderer.render(g.world.scene,g.camera);
-      const door=g.world.interactables?.find?.(i=>i.id==='door.front');
       return {
         x:g.player.x,z:g.player.z,
         calls:g.renderer.info.render.calls,
         triangles:g.renderer.info.render.triangles,
-        doorFound:!!door,
       };
     },v.pose);
-    await page.waitForTimeout(650);
-    await page.screenshot({path:OUT+'/'+v.name+'.jpg',type:'jpeg',quality:82});
+    await page.waitForTimeout(350);
+    await page.screenshot({path:OUT+'/'+v.name+'.jpg',type:'jpeg',quality:84});
     results.push({view:v.name,pose:v.pose,...metrics});
     console.log('FRONT_R04_VIEW',JSON.stringify(results.at(-1)));
-    await ctx.close();
   }
+  await ctx.close();
   writeFileSync(OUT+'/results.json',JSON.stringify({source:'candidate branch in Chromium / software WebGL',results,errors},null,2));
   if(errors.length)throw Error(errors.slice(0,8).join('\n'));
 }finally{await browser.close();}
