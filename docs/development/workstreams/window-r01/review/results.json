@@ -22,7 +22,7 @@
       "target": "out",
       "targetVisible": true,
       "calls": 63,
-      "triangles": 297298,
+      "triangles": 297178,
       "buffer": [
         480,
         860
@@ -37,7 +37,7 @@
       "target": "out",
       "targetVisible": true,
       "calls": 63,
-      "triangles": 297298,
+      "triangles": 297178,
       "buffer": [
         480,
         860
@@ -52,7 +52,7 @@
       "target": "billiard",
       "targetVisible": true,
       "calls": 67,
-      "triangles": 317764,
+      "triangles": 317644,
       "buffer": [
         480,
         860
@@ -67,7 +67,7 @@
       "target": "billiard",
       "targetVisible": true,
       "calls": 69,
-      "triangles": 317836,
+      "triangles": 317716,
       "buffer": [
         480,
         860
@@ -81,8 +81,8 @@
       "here": "billiard",
       "target": "out",
       "targetVisible": true,
-      "calls": 171,
-      "triangles": 603986,
+      "calls": 172,
+      "triangles": 603854,
       "buffer": [
         480,
         860
@@ -96,8 +96,8 @@
       "here": "billiard",
       "target": "out",
       "targetVisible": true,
-      "calls": 171,
-      "triangles": 603986,
+      "calls": 172,
+      "triangles": 603854,
       "buffer": [
         480,
         860
@@ -111,8 +111,8 @@
       "here": "out",
       "target": "billiard",
       "targetVisible": true,
-      "calls": 146,
-      "triangles": 465108,
+      "calls": 147,
+      "triangles": 464976,
       "buffer": [
         480,
         860
@@ -126,8 +126,8 @@
       "here": "out",
       "target": "billiard",
       "targetVisible": true,
-      "calls": 149,
-      "triangles": 465180,
+      "calls": 150,
+      "triangles": 465048,
       "buffer": [
         480,
         860
