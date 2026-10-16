@@ -30,7 +30,6 @@ export function lionHeadReliefGeometry():THREE.BufferGeometry {
     return 1+waves+ear;
   };
   const sculpt=(x:number,y:number,r:number,a:number)=>{
-    const side=Math.abs(x);
     const mane=smooth(.47,.78,r);
     const face=G(x,y,0,.006,.081,.125);
     const brow=G(x,y,-.031,.031,.037,.016)+G(x,y,.031,.031,.037,.016);
@@ -65,7 +64,8 @@ export function lionHeadReliefGeometry():THREE.BufferGeometry {
     const light=.73+Math.max(0,z)*2.0+wear+.10*G(x,y,0,.045,.055,.055);
     return { z,light,shadow };
   };
-  put(0,0,.014,.85);
+  const centre=sculpt(0,0,0,0);
+  put(0,0,centre.z,centre.light,centre.shadow);
   for(let i=1;i<=radial;i++){
     const r=i/radial;
     for(let j=0;j<segments;j++){
