@@ -47,7 +47,7 @@ export function libraryR01Furniture(c: Ctx) {
   // A fitted pedestal with moulded drawer fronts, a lower cabinet and a small rear desk organizer.
   const k = c.k;
   for (const z of [d.z - 0.83, d.z + 0.83]) {
-    box(c.b, k.M.wood, '#4b2b1c', d.x - 0.31, GF + 0.34, z, 0.48, 0.62, 0.47, { chunk: c.chunk });
+    box(c.b, k.M.wood, '#4b2b1c', d.x - 0.31, GF + 0.10, z, 0.48, 0.64, 0.47, { chunk: c.chunk });
     for (const yy of [0.25, 0.46]) {
       box(c.b, k.M.wood, '#70482d', d.x - 0.052, GF + yy, z, 0.027, 0.15, 0.39, { chunk: c.chunk });
       box(c.b, k.M.paint, '#b8944a', d.x - 0.025, GF + yy, z, 0.016, 0.025, 0.055, { chunk: c.chunk });
@@ -91,16 +91,16 @@ export function libraryR01Stair(c: Ctx) {
   for (let i = 0; i < steps; i++) {
     const { angle, px, pz } = at(i), y = GF + (i + 1) * rise;
     // Rotate long axis radially, keeping a consistent readable oak nosing.
-    box(c.b, k.M.wood, '#684329', px, y - 0.042, pz, 1.00, 0.085, 0.35,
+    box(c.b, k.M.wood, '#684329', px, y - 0.085, pz, 1.00, 0.085, 0.35,
       { chunk: c.chunk, yaw: -angle });
-    box(c.b, k.M.wood, '#96633a', px, y + 0.004, pz, 1.01, 0.016, 0.032,
+    box(c.b, k.M.wood, '#96633a', px, y - 0.012, pz, 1.01, 0.016, 0.032,
       { chunk: c.chunk, yaw: -angle });
     // The collision engine samples point-foot support, so generous 0.56 m landing pads
     // bridge angular tread corners without invisible solid walls.
     c.col.addFloor(px - 0.30, px + 0.30, pz - 0.30, pz + 0.30, y);
     if (i % 2 === 0) {
       const bx = x + radius * Math.cos(angle), bz = z + radius * Math.sin(angle);
-      box(c.b, k.M.wood, '#48301f', bx, y + 0.5, bz, 0.038, 1.0, 0.038, { chunk: c.chunk });
+      box(c.b, k.M.wood, '#48301f', bx, y, bz, 0.038, 1.0, 0.038, { chunk: c.chunk });
     }
     if (i > 0) {
       const prev = at(i - 1);
