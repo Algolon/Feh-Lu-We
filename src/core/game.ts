@@ -21,7 +21,8 @@ import {
   placePiece, takePiece, slotContents, loosePieces, placeSolved, submitDigits, submitBilliard, solvedCount, REQUIRED_COUNT, activeThread, threadNext, threadDone, owns,
 } from '../puzzles/rules';
 import { ITEMS, ESSENTIALS, SEALS } from '../content/items';
-import { boslustDigits, setBoslustDigits } from '../puzzles/boslustDials';
+import { boslustDigits, setBoslustDigits, turnBoslustWheel } from '../puzzles/boslustDials';
+import { BoslustFocusHud } from '../ui/boslustFocus';
 import { CLUES, CLUE_GROUP, THREADS, type ThreadId } from '../content/clues';
 import { SERVICE, CATALOG, CONSOLE_SOCKETS } from '../content/canon';
 import { SYMBOLS, symbolSvg } from '../content/symbols';
@@ -61,6 +62,9 @@ export class Game implements GameApi {
   /** DEV-01 slice review (?review=dev01) only; null in the normal game. */
   readonly slice: SliceUI | null = SLICE ? new SliceUI(this) : null;
   private modalClosedAt = 0;
+  private boslustFocus: { lock: THREE.Object3D; blend: number; closing: boolean; selected: number } | null = null;
+  private boslustFocusHud: BoslustFocusHud | null = null;
+  get isBoslustInspecting() { return !!this.boslustFocus && !this.boslustFocus.closing; }
   readonly renderer: THREE.WebGLRenderer;
   readonly camera = new THREE.PerspectiveCamera(70, 1, 0.08, 450);
   readonly torch = new THREE.SpotLight(0xfff1d6, 0, 22, 0.5, 0.45, 1.2);
@@ -208,6 +212,7 @@ export class Game implements GameApi {
   }
 
   async loadScene(id: SceneId) {
+    this.leaveBoslustInspect(true);
     this.carry(null); // W01: a carried bundle never leaves its world
     if (this.world) {
       this.world.scene.remove(this.camera);
@@ -353,6 +358,7 @@ export class Game implements GameApi {
     const r = submitDigits(this.state, [...digits]);
     logEvent(this.state, r.ok ? 'code-ok' : 'code-wrong', 'boslust');
     this.act(r);
+    if (r.ok && this.isBoslustInspecting) this.leaveBoslustInspect();
     return r.ok;
   }
 
@@ -374,17 +380,8 @@ export class Game implements GameApi {
     } else if (kind === 'service' || kind === 'catalog' || kind === 'console') {
       this.placePanel(kind === 'service' ? 'svc' : kind === 'catalog' ? 'cat' : 'con');
     } else if (kind === 'boslust') {
-      this.ui.digitLock('Cijferslot van BOSLUST',
-        'Draai de vier wieltjes (0–9) en probeer de combinatie. Ook direct op het slot kun je wieltjes draaien en de knop proberen.',
-        4, (digits) => this.tryBoslustCode(digits), {
-          initial: boslustDigits(s),
-          onChange: (digits) => {
-            if (setBoslustDigits(s, digits)) {
-              this.sfx('click', 0.35);
-              this.changed(); // synchronizes the in-world rollers and saves the draft
-            }
-          },
-        });
+      // BOSLUST-R04: no HTML digit dialog; handle wheel gestures in the 3D scene.
+      this.enterBoslustInspect();
     } else if (kind === 'billiard') {
       this.ui.billiard((cells) => {
         const r = submitBilliard(s, cells);
@@ -542,7 +539,111 @@ export class Game implements GameApi {
       onMap: !startScreen && this.state.scene === 'estate' ? () => this.openMap(() => this.openPause()) : undefined,
     });
   }
+  // ------------------------------------------------------------------ BOSLUST-R04 diegetic lock inspection
+  enterBoslustInspect() {
+    if (this.boslustFocus || this.ui.modalOpen ||
+        !this.state.flags.boslustCover || this.state.flags.boslustOpen) return;
+    const obj = this.world?.byId.get('boslust.lock')?.obj;
+    if (!obj) return;
+    this.boslustFocus = { lock: obj, blend: 0, closing: false, selected: 0 };
+    this.target = null;
+    this.input?.setEnabled(false);
+    this.input?.exitPointerLock(); // pointerunlock ignored while focus is active
+    document.body.classList.add('boslust-inspecting');
+    this.boslustFocusHud = new BoslustFocusHud(this.ui.hud, {
+      tap: (x, y, direction) => this.boslustFocusTap(x, y, direction),
+      wheel: (x, y, direction) => this.boslustFocusTap(x, y, direction),
+      leave: () => this.leaveBoslustInspect(),
+    });
+  }
+
+  private leaveBoslustInspect(immediate = false) {
+    if (!this.boslustFocus) return;
+    this.boslustFocusHud?.destroy();
+    this.boslustFocusHud = null;
+    document.body.classList.remove('boslust-inspecting');
+    if (immediate) {
+      this.boslustFocus = null;
+      this.input?.setEnabled(!this.ui.modalOpen);
+      return;
+    }
+    this.boslustFocus.closing = true;
+  }
+
+  private turnBoslustFocusWheel(index: number, direction: 1 | -1) {
+    const digit = turnBoslustWheel(this.state, index, direction);
+    if (digit === null) return;
+    this.sfx('click', 0.40);
+    this.changed(); // one saved digit source; also repaints 3D number atlas
+  }
+
+  private boslustFocusTap(x: number, y: number, direction?: 1 | -1) {
+    const f = this.boslustFocus;
+    if (!f || f.closing || f.blend < 0.90 || this.ui.modalOpen) return;
+    const bounds = this.canvas.getBoundingClientRect();
+    const px = (x - bounds.left) / bounds.width * 2 - 1;
+    const py = -((y - bounds.top) / bounds.height * 2 - 1);
+    const found = this.pickAt(px, py);
+    const id = found?.it.id ?? '';
+    if (found?.tooFar) return;
+    if (/^boslust\.wheel\.[0-3]$/.test(id)) {
+      const index = Number(id.slice(-1));
+      f.selected = index;
+      this.turnBoslustFocusWheel(index, direction ?? 1);
+    } else if (id === 'boslust.knob' && direction === undefined) {
+      this.tryBoslustCode();
+    }
+  }
+
+  private updateBoslustFocusCamera(dt: number) {
+    const f = this.boslustFocus;
+    if (!f) return;
+    f.blend = THREE.MathUtils.clamp(f.blend + dt * (f.closing ? -5.5 : 5), 0, 1);
+    const normalFov = this.camera.aspect < 1 ? 82 : 68;
+    const portrait = this.camera.aspect < 0.85;
+    const distance = portrait ? 1.55 : 1.07;
+    const centre = f.lock.position;
+    // Eye stays in front of the wall, centered on the actual mounted lock.
+    const target = new THREE.Vector3(centre.x + 0.005, centre.y + 0.015, centre.z + 0.12);
+    const near = new THREE.Vector3(centre.x + 0.015, centre.y + 0.025, centre.z + distance);
+    const desiredRotation = new THREE.Quaternion().setFromRotationMatrix(
+      new THREE.Matrix4().lookAt(near, target, new THREE.Vector3(0, 1, 0)));
+    const eased = f.blend * f.blend * (3 - 2 * f.blend);
+    this.camera.position.lerp(near, eased);
+    this.camera.quaternion.slerp(desiredRotation, eased);
+    this.camera.fov = THREE.MathUtils.lerp(normalFov, portrait ? 79 : 57, eased);
+    this.camera.updateProjectionMatrix();
+    if (f.closing && f.blend === 0) {
+      this.boslustFocus = null;
+      this.camera.fov = normalFov;
+      this.camera.updateProjectionMatrix();
+      this.input?.setEnabled(!this.ui.modalOpen);
+    }
+  }
+
   private key(code: string) {
+    if (this.boslustFocus) {
+      if (code === 'pointerunlock') return; // exiting pointer lock for close-up must not open Pause
+      if (code === 'Escape') { this.leaveBoslustInspect(); return; }
+      if (!this.isBoslustInspecting) return;
+      if (code === 'ArrowLeft' || code === 'ArrowRight') {
+        const f = this.boslustFocus;
+        f.selected = (f.selected + (code === 'ArrowRight' ? 1 : 3)) % 4;
+        this.toast(`Wieltje ${f.selected + 1}: ${boslustDigits(this.state)[f.selected]}`);
+        return;
+      }
+      if (['ArrowUp', 'ArrowDown', 'Space'].includes(code)) {
+        this.turnBoslustFocusWheel(this.boslustFocus.selected, code === 'ArrowDown' ? -1 : 1);
+        return;
+      }
+      if (/^Digit[1-4]$/.test(code)) {
+        this.boslustFocus.selected = Number(code.slice(-1)) - 1;
+        this.toast(`Wieltje ${this.boslustFocus.selected + 1}`);
+        return;
+      }
+      if (code === 'KeyE' || code === 'Enter') { this.tryBoslustCode(); return; }
+      return; // no movement/inventory/hint/pause while leaning toward lock
+    }
     if (code === 'pointerunlock') {
       if (!this.ui.modalOpen && this.running) this.openPause();
       return;
@@ -669,7 +770,7 @@ export class Game implements GameApi {
     this.time += dt;
     const w = this.world;
     if (!w) return;
-    const paused = this.ui.modalOpen || this.switching;
+    const paused = this.ui.modalOpen || this.switching || !!this.boslustFocus;
     this.movedLastTick = false;
     if (!paused) {
       this.input.sample();
@@ -703,6 +804,7 @@ export class Game implements GameApi {
       this.movedLastTick = Math.abs(this.player.x - px) + Math.abs(this.player.z - pz) > 1e-4;
     }
     this.player.applyCamera(this.camera);
+    this.updateBoslustFocusCamera(dt);
     // Direction-only HUD; the tutorial stays uncluttered, and the compass is opt-out.
     this.ui.setCompass(this.player.yaw, this.settings.showCompass && w.id === 'estate', this.settings.reducedMotion);
     this.cullTimer -= dt;
