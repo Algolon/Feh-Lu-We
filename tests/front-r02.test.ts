@@ -5,20 +5,21 @@ import { Batcher, type Kit } from '../src/world/kit';
 import { frontDoorLeaf } from '../src/world/exteriorDetail';
 import { readFileSync } from 'node:fs';
 
-describe('FRONT-R03 - reference-led lion and coherent bronze hardware',()=>{
-  it('constructs one continuous, closed relief with authored patina, no primitive-sphere assembly',()=>{
+describe('FRONT-R04 - authored 3D lion sculpture, bronze hardware, narrow steel joinery',()=>{
+  it('loads one continuous closed volumetric sculpture with authored patina',()=>{
     const g=lionHeadReliefGeometry();
     const p=g.getAttribute('position') as THREE.BufferAttribute;
     const c=g.getAttribute('color') as THREE.BufferAttribute;
     expect(g.userData.keepColor).toBe(true);
     expect(p.count).toBeGreaterThan(1000);
-    expect(g.index!.count/3).toBeLessThan(7500); // detailed single cast, still inexpensive
+    expect(g.index!.count/3).toBeLessThan(55000); // explicit high-detail sculpt, capped for mobile
     expect(g.getAttribute('normal').count).toBe(p.count);
     const box=new THREE.Box3().setFromBufferAttribute(p);
     expect(box.max.x-box.min.x).toBeLessThan(.30);
     expect(box.max.y-box.min.y).toBeGreaterThan(.27);
     expect(box.max.y-box.min.y).toBeLessThan(.40);
-    expect(box.max.z-box.min.z).toBeGreaterThan(.10);
+    expect(box.max.z-box.min.z).toBeGreaterThan(.095);
+    expect(box.max.z-box.min.z).toBeLessThan(.22); // true volumetric profile, no excessively protruding relief
     expect(Array.from(p.array).every(Number.isFinite)).toBe(true);
     expect(Array.from(c.array).every(Number.isFinite)).toBe(true);
     // Every vertex in the sculpt belongs to the sole connected mesh.
@@ -73,6 +74,7 @@ describe('FRONT-R03 - reference-led lion and coherent bronze hardware',()=>{
     const arch=readFileSync(new URL('../src/world/arch.ts',import.meta.url).pathname,'utf8');
     const manor=readFileSync(new URL('../src/world/manor.ts',import.meta.url).pathname,'utf8');
     expect(arch).toContain("const L=t/2+.005, lip=.0024, casing=.018");
+    expect(arch).not.toContain("casing=.030");
     expect(arch).toContain("if(frameStyle==='slim-metal')");
     expect(manor).toContain("frameStyle: axis==='x'&&f===80.2?'slim-metal':undefined");
   });
