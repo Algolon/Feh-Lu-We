@@ -160,12 +160,7 @@ vGroveGlow*=groveData.x*(1.+sin(groveTime*.63+groveData.y)*.07*groveMotion*step(
   w.scene.userData.groveLodImpl=sharedLod?'shared-c1':'legacy-r01b';
   onFrame(w,(cam)=>{
     if(sharedLod){
-      sharedLod.update({
-        camera:cam,
-        outdoors:w.visibleRooms.has('out'),
-        windows:w.outdoorWindows,
-        windowsVersion:w.outdoorWindowsVersion,
-      });
+      sharedLod.updateCamera(cam,w.visibleRooms.has('out'),w.outdoorWindows,w.outdoorWindowsVersion);
       return;
     }
     camPos.setFromMatrixPosition(cam.matrixWorld);
