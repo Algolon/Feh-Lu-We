@@ -55,7 +55,7 @@ describe('FRONT-R02 - sculpted bronze lion and slim metal doorway',()=>{
   it('uses narrow front-door-specific metal joinery, not the old oak head cap and plinths',()=>{
     const arch=readFileSync(new URL('../src/world/arch.ts',import.meta.url).pathname,'utf8');
     const manor=readFileSync(new URL('../src/world/manor.ts',import.meta.url).pathname,'utf8');
-    expect(arch).toContain("const L=t/2+.005, lip=.004, casing=.039");
+    expect(arch).toContain("const L=t/2+.005, lip=.004, casing=.030");
     expect(arch).toContain("if(frameStyle==='slim-metal')");
     expect(manor).toContain("frameStyle: axis==='x'&&f===80.2?'slim-metal':undefined");
   });
