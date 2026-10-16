@@ -1,10 +1,10 @@
-name: WINDOW-R02 manor glazing review (no deploy)
+name: WINDOW-R02 production integration review (no deploy)
 on:
   push:
-    branches: [window-r02-manor-glazing-rollout]
+    branches: [window-r02-current-production-integration]
     paths: ['src/**', 'scripts/window-r02-review.mjs', '.github/workflows/window-r02-review.yml']
 concurrency:
-  group: window-r02-glazing-review
+  group: window-r02-current-prod-review
   cancel-in-progress: true
 permissions:
   contents: write
@@ -39,8 +39,8 @@ jobs:
           set -euo pipefail
           mkdir -p /tmp/window-r02-captures
           cp -a docs/development/workstreams/window-r02/review/. /tmp/window-r02-captures/
-          git fetch origin window-r02-manor-glazing-rollout
-          git worktree add --detach /tmp/window-r02-publish origin/window-r02-manor-glazing-rollout
+          git fetch origin window-r02-current-production-integration
+          git worktree add --detach /tmp/window-r02-publish origin/window-r02-current-production-integration
           cd /tmp/window-r02-publish
           mkdir -p docs/development/workstreams/window-r02/review
           cp -a /tmp/window-r02-captures/. docs/development/workstreams/window-r02/review/
@@ -49,5 +49,5 @@ jobs:
           git add docs/development/workstreams/window-r02/review/
           if ! git diff --cached --quiet; then
             git commit -m "docs(window-r02): save verified facade gameplay screenshots"
-            git push origin HEAD:window-r02-manor-glazing-rollout
+            git push origin HEAD:window-r02-current-production-integration
           fi
