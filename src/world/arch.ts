@@ -8,6 +8,7 @@ import { registerOpening } from './openings';
 import { studyWindowSite, studyWindow } from './exteriorStudy';
 import { opaqueWallRects } from './windowOpenings';
 import { slateCourseUV } from './roofDetail';
+import { seamlessWallFaceUV } from './seamlessWallFinish';
 import { rainwater, ridgeFinish } from './exteriorFinish';
 
 export interface Ctx {
@@ -50,12 +51,34 @@ export type WinStyle = 'plain' | 'manor' | 'cottage';
 /** Joinery (painted surrounds, skirting) and oak trim colours: ART_TOKENS world.joinery / world.oak family. */
 export const TRIM = { joinery: '#e2d6bc', oak: '#6e4a2c', dressed: '#efe4cb', frame: '#ece4d2', bar: '#e6dcc6' };
 
+/**
+ * A split wall panel needs the same pigment and texture coordinates as its neighbours.
+ * Used only when a transparent window requires physically slicing a wall into rectangles.
+ * Ordinary authored walls retain the existing, softly varied painterly box behaviour.
+ */
+function seamlessWallPanel(
+  c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number,
+  y0: number, y1: number, t: number, mat: THREE.Material, color: THREE.ColorRepresentation,
+  uvScale: number, shadow: boolean,
+) {
+  const cx = axis === 'x' ? (a0 + a1) / 2 : f;
+  const cz = axis === 'x' ? f : (a0 + a1) / 2;
+  const cy = (y0 + y1) / 2;
+  const g = boxGeo(axis === 'x' ? a1 - a0 : t, y1 - y0, axis === 'x' ? t : a1 - a0, uvScale);
+  seamlessWallFaceUV(g, axis, cx, cy, cz, uvScale);
+  // Disable per-part stochastic brightness. Identical finish faces must remain identical even
+  // though the wall has multiple boxes after carving out the window aperture.
+  c.b.add(mat, g, planMatrix(cx, cy, cz), color, c.chunk, shadow, 0);
+  g.dispose();
+}
+
 /** Axis-aligned wall. axis 'x': runs along x from a0..a1 at fixed z = f. axis 'z': along z at fixed x = f. */
 export function wall(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number, y0: number, y1: number, o: WallOpts = {}) {
   const t = o.t ?? 0.18;
   const mat = o.mat ?? c.k.M.plaster;
   const color = o.color ?? '#f1e8d6';
   const ops = [...(o.openings ?? [])].sort((p, q) => p.at - q.at);
+  const seamless = (o.windows ?? []).some(w => w.transparent);
   const lo = Math.min(a0, a1), hi = Math.max(a0, a1);
   const solidPiece = (s0: number, s1: number, ya: number, yb: number) => {
     if (s1 - s0 < 0.005 || yb - ya < 0.005) return;
@@ -71,12 +94,16 @@ export function wall(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number,
       }
       return;
     }
-    if (axis === 'x') {
+    if (seamless) {
+      seamlessWallPanel(c, axis, f, s0, s1, ya, yb, t, mat, color, o.uv ?? 2, true);
+    } else if (axis === 'x') {
       boxMM(c.b, mat, color, s0, s1, ya, yb, f - t / 2, f + t / 2, { uv: o.uv ?? 2, chunk: c.chunk });
-      if (o.collide !== false) c.col.addBox(s0, s1, f - t / 2, f + t / 2, ya, yb, { occludes: true });
     } else {
       boxMM(c.b, mat, color, f - t / 2, f + t / 2, ya, yb, s0, s1, { uv: o.uv ?? 2, chunk: c.chunk });
-      if (o.collide !== false) c.col.addBox(f - t / 2, f + t / 2, s0, s1, ya, yb, { occludes: true });
+    }
+    if (o.collide !== false) {
+      if (axis === 'x') c.col.addBox(s0, s1, f - t / 2, f + t / 2, ya, yb, { occludes: true });
+      else c.col.addBox(f - t / 2, f + t / 2, s0, s1, ya, yb, { occludes: true });
     }
   };
   // Only explicitly clear glazing creates real apertures; all legacy windows remain sealed.
@@ -155,12 +182,14 @@ function slantedSlab(c: Ctx, axis: 'x' | 'z', f: number, t: number, a0: number, 
 
 function wallNoFrames(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number, y0: number, y1: number, o: WallOpts) {
   const ops = [...(o.openings ?? [])].sort((p, q) => p.at - q.at);
+  const seamless = (o.windows ?? []).some(w => w.transparent);
   let cur = Math.min(a0, a1);
   const hi = Math.max(a0, a1);
   const t = o.t ?? 0.02;
   const solidPiece = (s0: number, s1: number, ya: number, yb: number) => {
     if (s1 - s0 < 0.005 || yb - ya < 0.005) return;
-    if (axis === 'x') boxMM(c.b, o.mat!, o.color!, s0, s1, ya, yb, f - t / 2, f + t / 2, { uv: 2, chunk: c.chunk, shadow: false });
+    if (seamless) seamlessWallPanel(c, axis, f, s0, s1, ya, yb, t, o.mat!, o.color!, 2, false);
+    else if (axis === 'x') boxMM(c.b, o.mat!, o.color!, s0, s1, ya, yb, f - t / 2, f + t / 2, { uv: 2, chunk: c.chunk, shadow: false });
     else boxMM(c.b, o.mat!, o.color!, f - t / 2, f + t / 2, ya, yb, s0, s1, { uv: 2, chunk: c.chunk, shadow: false });
   };
   const cuts = (o.windows ?? []).filter(w => w.transparent).map(w => ({
