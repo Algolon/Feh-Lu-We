@@ -116,6 +116,7 @@ async function main() {
       const s = summarize(r.rows);
       result.meta ??= r.meta;
       result.runs.push({ path: name, doors: doorName, mode, fps, wallSeconds: Math.round((Date.now() - t0) / 1000), summary: s, regionSets: r.regionSets, rows: r.rows });
+      writeFileSync(out, JSON.stringify(result)); // after every run: a long sweep survives an interruption
       console.log(`${name.padEnd(14)} ${doorName.padEnd(7)} ${(mode + (fpsFor.length > 1 || mode.startsWith('A') ? '@' + fps : '')).padEnd(9)} n ${String(s.frames).padStart(4)}  tris med ${s.triangles.median} p95 ${s.triangles.p95} p99 ${s.triangles.p99} max ${s.triangles.max}  calls max ${s.calls.max}  >750k ${s.over750k}  cull ms med ${s.cullMs?.median?.toFixed(2) ?? '-'} max ${s.cullMs?.max?.toFixed(2) ?? '-'}`);
     }
   }
