@@ -886,12 +886,6 @@ function libraryRest(w: World, g: GameApi, c: Ctx, tx: number, tz: number) {
   // Reading seating and floor globe are authored once by libraryR01Furniture().
 }
 
-/** DEV-04B: a small round side table by the reading chair, with a book and a candlestick. */
-function armchairSide(c: Ctx, x: number, z: number) {
-  roundTable(c, x, z, GF, 0.26, '#5a3a22');
-  tabletop(c, x, z, GF + 0.76, 0.4, ['book'], 9);
-}
-
 function drawLibraryPlan(x: CanvasRenderingContext2D, W: number, H: number) {
   x.fillStyle = '#efe2c2'; x.fillRect(0, 0, W, H);
   x.strokeStyle = '#5a4630'; x.lineWidth = 6; x.strokeRect(6, 6, W - 12, H - 12);
