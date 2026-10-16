@@ -117,9 +117,8 @@ export function sliceHall(w: World, g: GameApi, c: Ctx) {
 export function sliceLibraryTable(w: World, g: GameApi, c: Ctx, deskDrawer: { slider: THREE.Group; isOpen: () => boolean }) {
   const k = c.k, a = atlasFor(w), t = prop('b01.tableTop');
   const tx = t.x, tz = t.z, y = top(t);
-  // chairs on the west side: the east side is the reading side (pose.table)
-  chair(c, tx - 0.95, tz - 0.5, t.y, Math.PI / 2, '#3f5a6a');
-  chair(c, tx - 0.95, tz + 0.5, t.y, Math.PI / 2, '#3f5a6a');
+  // LIB-R01: two former table chairs removed; the writing desk has one visitor chair.
+  // Puzzle slots, folios, practice card, drawer and save IDs are unchanged.
   // three engraved slots on the east half; left → right for a reader facing west = south → north
   const slotZ = (i: number) => tz + (i - 1) * 0.62;
   B01_SLOTS.forEach((s, i) => flat(c, a, `slot_${s}` as CellId, tx + 0.2, y + 0.002, slotZ(i), 0.38, 0.38, -Math.PI / 2));
