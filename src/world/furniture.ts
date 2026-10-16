@@ -449,7 +449,11 @@ function flwAtlas() {
   // The atlas is fetched asynchronously. A request can hang on a cold Pages load without
   // emitting load/error (observed on live Pages, 16 Oct 2026). Never leave the 4px fallback
   // permanently just because one network request stalls. Retry using a fresh cache key.
-  const loadState = { state: 'loading', attempts: 0, error: '' };
+  // Diagnostic opt-in: smaller texture and canvas upload, useful to isolate mobile GPU limits.
+  // No change to normal gameplay until the actual device comparison confirms this path.
+  const compactAtlas = typeof location !== 'undefined'
+    && new URLSearchParams(location.search).get('artmode') === 'compact';
+  const loadState = { state: 'loading', attempts: 0, error: '', mode: compactAtlas ? 'compact-canvas' : 'full-image', textureSize: [4, 4] };
   flwMat.userData.flwAtlasLoad = loadState;
   flwReady = new Promise<void>((done) => {
     let resolved = false;
@@ -475,8 +479,22 @@ function flwAtlas() {
           failed(`unexpected atlas image size ${img.naturalWidth}x${img.naturalHeight}`, n);
           return;
         }
-        tex.image = img;
-        tex.needsUpdate = true; // upload the REAL image even if the 4px fallback was uploaded earlier
+        if (compactAtlas) {
+          // Keep UVs unchanged: exactly half-size in both axes. The canvas upload
+          // avoids a large decoded-WebP image being sent directly to mobile WebGL.
+          const canvas = document.createElement('canvas');
+          canvas.width = width / 2;
+          canvas.height = height / 2;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) { failed('compact canvas 2D context unavailable', n); return; }
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          tex.image = canvas;
+          loadState.textureSize = [canvas.width, canvas.height];
+        } else {
+          tex.image = img;
+          loadState.textureSize = [img.naturalWidth, img.naturalHeight];
+        }
+        tex.needsUpdate = true; // upload the REAL art even if the 4px placeholder was uploaded
         finish(true);
       };
       img.onerror = () => failed('image request error', n);
