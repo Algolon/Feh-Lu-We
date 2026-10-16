@@ -23,7 +23,9 @@ const main = (
 export const MANOR_WINDOW_WALLS: readonly WindowWall[] = [
   ...main('south', 'x', 80.2, 72, 108, -1,
     [{ at: 90, w: 1.7, h: 2.7 }], [75.5,79,82.5,98,101.5,105],
-    [75.5,79,82.5,87.5,92.5,98,101.5,105]),
+    // These two positions are masked by the solid projecting entrance bay (Z79.55–80.02).
+    // They must be a continuous inner wall, never two pretend transparent openings.
+    [75.5,79,82.5,98,101.5,105]),
   ...main('north', 'x', 109.8, 72, 108, 1,
     [{ at: 91.5, w: 1.2, h: 2.45 }, { at: 101, w: 1.0, h: 2.35 }],
     [75,78.5,82,88,97.5,105], [75,78.5,82,87.5,92.5,98,104]),
