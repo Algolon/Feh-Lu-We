@@ -494,7 +494,7 @@ export class LightPool {
   static readonly DWELL_FULL = 2.0;
   private dwell = new Map<string, number>();
   private sinceRank = 0;
-  update(dt: number, t: number, lamps: LampSource[], eye: THREE.Vector3, rooms?: RoomGraph, isOpen: (door: string) => boolean = () => true, view?: LightView, visibleRooms?: ReadonlySet<string>) {
+  update(dt: number, t: number, lamps: LampSource[], eye: THREE.Vector3, rooms?: RoomGraph, isOpen: (door: string) => boolean = () => true, view?: LightView, _visibleRooms?: ReadonlySet<string>) {
     this.timer -= dt;
     this.sinceRank += dt;
     if (this.timer <= 0) {
@@ -539,10 +539,9 @@ export class LightPool {
         cands.push({ id: l.id, room, d, w });
       }
       for (const [id, v] of this.dwell) if (!seen.has(id)) { const nv = v - elapsed * 0.5; if (nv <= 0) this.dwell.delete(id); else this.dwell.set(id, nv); }
-      // Room membership is a categorical label, but illumination is continuous
-      // across an open arch. Keep a very small own-room tie breaker rather than
-      // the 2.5 m penalty that reshuffled otherwise identical candidates at Z=92.
-      // The finite light budget, view priority and existing hysteresis are kept.
+      // Do not use a room-identity preference: crossing a doorway changes that
+      // identity instantly even when the eye and all fixture distances barely move.
+      // Rank the stable candidate set by distance, with held-source hysteresis.
       this.want = chooseLamps(cands, this.here, this.want, this.lights.length, 3.0, 0);
       this.lookup = byId;
     }
