@@ -4,14 +4,16 @@
 import * as THREE from 'three';
 import type { World } from '../interactions/world';
 import type { Ctx } from './arch';
-import { box, cyl, compound, v3, getKit } from './kit';
+import { box, cyl } from './kit';
 import { bookshelf, rug, table, roundTable, plant } from './furniture';
 import { libraryR02Desk, libraryR02StudyChair, libraryR02ReadingSeat, libraryR02Spiral } from './libraryR02';
 import { tabletop } from './dressing';
 import { GF } from './layout';
+export { libraryR03BankersLamp as libraryR01BankerLamp } from './libraryR03Lamp';
 
 export const LIB_R01 = {
-  desk: { x: 74.55, z: 97.35, w: 1.3, d: 2.2, h: 0.81 },
+  // Solid west wall BETWEEN windows z97 and z101; desk hutch rear sits 4-5 cm from plaster.
+  desk: { x: 73.17, z: 99.0, w: 1.3, d: 2.2, h: 0.81 },
   stair: { x: 81.95, z: 105.3, radius: 1.18, steps: 26 },
   landing: { x0: 82.52, x1: 83.43, z0: 104.93, z1: 105.69 },
 } as const;
@@ -20,7 +22,7 @@ export const LIB_R01 = {
 export const LIB_R01_BAYS = {
   west: [
     { z: 95.1, w: 1.65, pal: 'leather' },
-    { z: 99.0, w: 1.70, pal: 'olive' },
+    // LIB-R03: this previously fitted case bay is now occupied by the wall-aligned bureau.
     { z: 103.0, w: 1.70, pal: 'navy' },
     { z: 107.0, w: 1.90, pal: 'leather' },
   ],
@@ -42,10 +44,11 @@ export function libraryR01Furniture(w: World, c: Ctx) {
 
   // LIB-R01-R02: bespoke secretary writing desk with stepped edges, moulded pedestals
   // and an upholstered visitor chair genuinely tucked under the work surface.
-  // Desk/B01 puzzle and saved reward drawer coordinate contracts remain unchanged.
+  // B01/puzzle/drawer anchors use this same moved desk centre (IDs/state unchanged).
   const d=LIB_R01.desk;
   libraryR02Desk(c,d);
-  libraryR02StudyChair(c,75.10,97.84,GF,-Math.PI/2);
+  // Work chair slides below the EAST desk lip, with its back facing the player.
+  libraryR02StudyChair(c,d.x+0.76,d.z,GF,-Math.PI/2);
 
   // Central quiet reading lounge. Seating is deliberately outside B01/DS01 routes.
   rug(c, 78.35, 102.5, GF + 0.01, 4.6, 5.0, 0, '#a34f38', 'medallion', true);
@@ -120,24 +123,3 @@ export function libraryR01AntiqueGlobe(w: World, c: Ctx, x: number, z: number) {
   c.col.addCircle(x,z,0.37,y,y+1.7);
 }
 
-/** Classic green brass banker's lamp, preserving the existing lamp.library save/id contract. */
-export function libraryR01BankerLamp(w: World, x: number, y: number, z: number) {
-  const kit = getKit();
-  const obj = compound((b) => {
-    cyl(b, kit.M.paint, '#a88942', 0, 0, 0, 0.11, 0.13, 0.025, 12);
-    cyl(b, kit.M.paint, '#bd9c4d', 0, 0.025, 0, 0.017, 0.018, 0.31, 10);
-    box(b, kit.M.paint, '#aa8847', 0, 0.31, 0, 0.43, 0.022, 0.04);
-  });
-  const shadeMat = w.material(new THREE.MeshLambertMaterial({ color: '#176244', side: THREE.DoubleSide }));
-  const greenShade = new THREE.Mesh(new THREE.SphereGeometry(1, 16, 10), shadeMat);
-  greenShade.scale.set(0.29, 0.105, 0.16);
-  greenShade.position.y = 0.37;
-  obj.add(greenShade);
-  const glow = w.material(new THREE.MeshBasicMaterial({ color: '#ffd27a', side: THREE.DoubleSide }));
-  const bulb = new THREE.Mesh(new THREE.PlaneGeometry(0.32, 0.12), glow);
-  bulb.rotation.x = -Math.PI / 2; bulb.position.y = 0.307;
-  obj.add(bulb);
-  obj.position.copy(v3(x, y, z));
-  w.scene.add(obj);
-  return { obj, glow: [glow], light: v3(x, y + 0.32, z) };
-}
