@@ -21,6 +21,7 @@ import {
   placePiece, takePiece, slotContents, loosePieces, placeSolved, submitDigits, submitBilliard, solvedCount, REQUIRED_COUNT, activeThread, threadNext, threadDone, owns,
 } from '../puzzles/rules';
 import { ITEMS, ESSENTIALS, SEALS } from '../content/items';
+import { boslustDigits, setBoslustDigits } from '../puzzles/boslustDials';
 import { CLUES, CLUE_GROUP, THREADS, type ThreadId } from '../content/clues';
 import { SERVICE, CATALOG, CONSOLE_SOCKETS } from '../content/canon';
 import { SYMBOLS, symbolSvg } from '../content/symbols';
@@ -345,6 +346,16 @@ export class Game implements GameApi {
     });
   }
 
+  /** Physical knob and accessible modal use identical canonical rules and logs. */
+  tryBoslustCode(digits: readonly number[] = boslustDigits(this.state)): boolean {
+    if (digits.length !== 4 || !digits.every(n => Number.isInteger(n) && n >= 0 && n <= 9)) return false;
+    setBoslustDigits(this.state, digits); // no-op if already synchronized
+    const r = submitDigits(this.state, [...digits]);
+    logEvent(this.state, r.ok ? 'code-ok' : 'code-wrong', 'boslust');
+    this.act(r);
+    return r.ok;
+  }
+
   openPanel(kind: string) {
     const s = this.state;
     logEvent(s, 'panel', kind);
@@ -363,12 +374,17 @@ export class Game implements GameApi {
     } else if (kind === 'service' || kind === 'catalog' || kind === 'console') {
       this.placePanel(kind === 'service' ? 'svc' : kind === 'catalog' ? 'cat' : 'con');
     } else if (kind === 'boslust') {
-      this.ui.digitLock('Cijferslot van BOSLUST', 'Vier cijferwieltjes van 0 tot 9. Je ziet pas of het klopt als je het probeert.', 4, (digits) => {
-        const r = submitDigits(s, digits);
-        logEvent(s, r.ok ? 'code-ok' : 'code-wrong', 'boslust');
-        this.act(r);
-        return r.ok;
-      });
+      this.ui.digitLock('Cijferslot van BOSLUST',
+        'Draai de vier wieltjes (0–9) en probeer de combinatie. Ook direct op het slot kun je wieltjes draaien en de knop proberen.',
+        4, (digits) => this.tryBoslustCode(digits), {
+          initial: boslustDigits(s),
+          onChange: (digits) => {
+            if (setBoslustDigits(s, digits)) {
+              this.sfx('click', 0.35);
+              this.changed(); // synchronizes the in-world rollers and saves the draft
+            }
+          },
+        });
     } else if (kind === 'billiard') {
       this.ui.billiard((cells) => {
         const r = submitBilliard(s, cells);
