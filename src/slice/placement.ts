@@ -65,10 +65,10 @@ export const ROUTE = {
   toConsole: [[75.2, 88.6], [77.5, 89.2], [83, 89.2], [86.5, 88.5], [86.5, 85.5]] as [number, number][],
   toMaquette: [[87.8, 91.5], [MAQUETTE.pose.x, MAQUETTE.z + MAQUETTE.note.dz]] as [number, number][],
   toLibrary: [[88.2, 95.4], [88.7, 97.4], [88.5, 100.2], [86.4, 101]] as [number, number][], // then open door.library
-  intoLibrary: [[84.0, 101], [81.85, 101.2]] as [number, number][],
-  toAlbum: [[82.2, 102.9], [79.4, 102.9], [78.9, 105.6], [75.75, 106.6]] as [number, number][],
-  albumBack: [[78.9, 105.6], [79.4, 102.9], [82.2, 102.9], [81.85, 101.2]] as [number, number][],
-  libraryOut: [[84.0, 101], [86.4, 101], [88.5, 100.2], [88.5, 97.0]] as [number, number][],
+  intoLibrary: [[84.0, 101], [82.0, 100.1], [79.7, 99.2], [76.8, 99.2], [75.95, 97.35]] as [number, number][],
+  toAlbum: [[76.85, 99.5], [77.0, 101.0], [77.0, 104.8], [75.75, 106.6]] as [number, number][],
+  albumBack: [[77.0, 104.8], [77.0, 101.0], [76.85, 99.5], [75.95, 97.35]] as [number, number][],
+  libraryOut: [[75.95, 97.35], [76.8, 99.2], [79.7, 99.2], [82.0, 100.1], [84.0, 101], [86.4, 101], [88.5, 100.2], [88.5, 97.0]] as [number, number][],
   upstairs: [[90, 92], [94.0, 85.6], [94.0, 96.3]] as [number, number][], // proven by the iteration-3 walkthrough
   toSterren: [[90, 96.6], [85.95, 96.6], [85.95, 90.2]] as [number, number][], // then open door.sterren
   intoSterren: [[84.0, 90.2], [80.5, 91.9], [79.0, 92.35]] as [number, number][],
@@ -81,7 +81,7 @@ export const ROUTE = {
   intoBotanic: [[104.5, 94.6], [102.7, 92.0], [102.9, 84.0]] as [number, number][],
   botanicOut: [[102.7, 92.0], [104.5, 94.6], [104.5, 97.3]] as [number, number][],
   downstairs: [[98.0, 97.3], [93.0, 97.3], [94.0, 96.3], [94.0, 85.6], [90, 85.5], [90, 92], [88.5, 97.0]] as [number, number][],
-  backToTable: [[88.5, 100.2], [86.4, 101], [84.0, 101], [81.85, 101.2]] as [number, number][],
+  backToTable: [[88.5, 100.2], [86.4, 101], [84.0, 101], [82.0, 100.1], [79.7, 99.2], [76.8, 99.2], [75.95, 97.35]] as [number, number][],
 };
 
 // ------------------------------------------------------------------------------------------------ slice props (footprints)
@@ -89,8 +89,8 @@ export const PROPS: PropRec[] = [
   // G02 hall — DS01 A: the note lies at the south end of the maquette table against the hall's west wall (DEV-02),
   // away from the console (z 85.5), the mantel arch, the lobby arch and the stair
   { id: 'ds01.maquetteTable', room: 'hall', x: MAQUETTE.x, z: MAQUETTE.z, y: GF, w: MAQUETTE.w, d: MAQUETTE.d, h: MAQUETTE.h, kind: 'staging', parts: [{ id: 'ds01.note', dx: MAQUETTE.note.dx, dz: MAQUETTE.note.dz }] },
-  // G04 library — B01 table (the iteration-3 reading table, chairs moved to its west side)
-  { id: 'b01.tableTop', room: 'library', x: 80.6, z: 101.2, y: GF, w: 1.1, d: 2.2, h: 0.81, kind: 'evidence-surface', parts: [{ id: 'b01.table', dx: 0, dz: 0 }] },
+  // LIB-R01: B01 relocated intact to the south-west writing bureau, facing east.
+  { id: 'b01.tableTop', room: 'library', x: 74.55, z: 97.35, y: GF, w: 1.3, d: 2.2, h: 0.81, kind: 'evidence-surface', parts: [{ id: 'b01.table', dx: 0, dz: 0 }] },
   // G04 library — DS01 B: quiet reading plank in the reading corner, ~7 m from the B01 table; album page + loose
   // letter are one reading cluster (PD v0.2 §6.2, source OB.ds01)
   { id: 'ds01.sideTable', room: 'library', x: 74.55, z: 106.6, y: GF, w: 0.7, d: 0.9, h: 0.95, kind: 'evidence-surface', parts: [{ id: 'ds01.album', dx: 0, dz: 0 }] },
@@ -114,7 +114,7 @@ export const POSES: PoseRec[] = [
   { id: 'pose.mantel', target: 'inspect.mantel', room: 'living', x: 74.6, z: 86.7, y: GF },
   { id: 'pose.console', target: 'hall.drawer', room: 'hall', x: 86.5, z: 85.5, y: GF },
   { id: 'pose.maquette', target: 'ds01.note', room: 'hall', x: MAQUETTE.pose.x, z: MAQUETTE.z + MAQUETTE.note.dz, y: GF },
-  { id: 'pose.table', target: 'b01.table', room: 'library', x: 81.85, z: 101.2, y: GF },
+  { id: 'pose.table', target: 'b01.table', room: 'library', x: 75.95, z: 97.35, y: GF },
   { id: 'pose.album', target: 'ds01.album', room: 'library', x: 75.75, z: 106.6, y: GF },
   { id: 'pose.sterren.pair', target: 'b01.pair.sterren', room: 'sterren', x: 79.0, z: 92.35, y: UF },
   { id: 'pose.reis.pair', target: 'b01.pair.reizen', room: 'reis', x: 78.6, z: 85.3, y: UF },
