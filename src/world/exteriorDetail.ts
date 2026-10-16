@@ -4,7 +4,7 @@ import type { Ctx } from './arch';
 import { box, boxMM, boxGeo, planMatrix, geo, rod, type Batcher, type Kit, type PartOpts } from './kit';
 import { mulberry32 } from '../core/rng';
 import { softBox } from './artkit';
-import { addLionKnocker } from './lionKnocker';
+import { addLionKnocker, castBronzeMetal } from './lionKnocker';
 
 export const EXTERIOR_DETAILS = typeof location==='undefined'||new URLSearchParams(location.search).get('details')!=='base';
 export const ENTRANCE_METAL={iron:'#343c37',bronze:'#9a895f',shadow:'#625b43'};
@@ -40,8 +40,8 @@ function timber(b:Batcher,mat:THREE.Material,color:THREE.ColorRepresentation,x:n
 }
 
 /**
- * FRONT-R02: broad horizontal mahogany leaf with slim charcoal perimeter,
- * antique-brass right-hand pull and a connected, sculpted-bronze lion knocker. All fittings
+ * FRONT-R03: broad horizontal mahogany leaf with slim charcoal perimeter,
+ * matching blackened-bronze pull and a unified sculpted lion knocker. All fittings
  * are part of the hinged batch so the original save/lock/swing/collision stay intact.
  * Plan Z negative is the outdoor-facing side of the front door.
  */
@@ -81,18 +81,24 @@ export function frontDoorLeaf(b:Batcher,k:Kit,width:number,height:number,th:numb
     const len=exterior?1.13:.66,cy=exterior?1.16:1.05;
     const handleZ=side*(th/2+.027);
     const radius=exterior?.018:.014;
-    rod(b,metal,'#946a43',hx,cy,handleZ,radius,radius,len,12,{jitter:0});
+    // FRONT-R03: the same blackened cast-bronze vertex patina as the lion,
+    // with narrow rubbed-gold edge highlights instead of an orange painted rod.
+    const pull=castBronzeMetal(new THREE.CylinderGeometry(radius,radius,len,16,1));
+    geo(b,metal,'#ffffff',pull,hx,cy,handleZ,{jitter:0});pull.dispose();
     for(const y of [cy-len*.40,cy+len*.40]){
       // A mounting post projecting from the leaf to the pull-bar axis.
-      rod(b,metal,'#785537',hx,y,side*(th/2+.012),.012,.012,.032,8,{rx:Math.PI/2,jitter:0});
+      const post=castBronzeMetal(new THREE.CylinderGeometry(.012,.012,.032,12));
+      geo(b,metal,'#ffffff',post,hx,y,side*(th/2+.012),{rx:Math.PI/2,jitter:0});post.dispose();
       const stud=softBox(.044,.048,.012,.006);
-      geo(b,metal,'#8a6543',stud,hx,y,side*(th/2+.003),{jitter:0});
+      castBronzeMetal(stud);
+      geo(b,metal,'#ffffff',stud,hx,y,side*(th/2+.003),{jitter:0});
       stud.dispose();
     }
   }
   // Small, restrained key cylinder rather than the old interior-style lever.
   const key=new THREE.CylinderGeometry(.012,.012,.007,12);
-  geo(b,metal,'#a07c4d',key,width-.245,.97,-th/2-.012,{rx:Math.PI/2,jitter:0});
+  castBronzeMetal(key);
+  geo(b,metal,'#ffffff',key,width-.245,.97,-th/2-.012,{rx:Math.PI/2,jitter:0});
   key.dispose();
 
   addLionKnocker(b,metal,width/2,height*.70,th);
