@@ -20,7 +20,7 @@
           "cov": 0.231
         }
       ],
-      "renderMsMedian": 719.9
+      "renderMsMedian": 1334.7
     },
     {
       "stage": "ready",
@@ -40,7 +40,7 @@
           "cov": 0.382
         }
       ],
-      "renderMsMedian": 822.5
+      "renderMsMedian": 1410.5
     },
     {
       "stage": "ring",
@@ -68,7 +68,7 @@
           "cov": 0.464
         }
       ],
-      "renderMsMedian": 738.6
+      "renderMsMedian": 1145.6
     },
     {
       "stage": "ring",
@@ -96,7 +96,7 @@
           "cov": 0.767
         }
       ],
-      "renderMsMedian": 866
+      "renderMsMedian": 1513.6
     },
     {
       "stage": "burn:4",
@@ -136,7 +136,7 @@
           "cov": 0.464
         }
       ],
-      "renderMsMedian": 753.5
+      "renderMsMedian": 1198.6
     },
     {
       "stage": "burn:4",
@@ -180,7 +180,7 @@
           "cov": 0.767
         }
       ],
-      "renderMsMedian": 865.6
+      "renderMsMedian": 1273.6
     },
     {
       "stage": "burn:14",
@@ -224,7 +224,7 @@
           "cov": 0.464
         }
       ],
-      "renderMsMedian": 768.9
+      "renderMsMedian": 1173.1
     },
     {
       "stage": "burn:14",
@@ -268,7 +268,7 @@
           "cov": 0.767
         }
       ],
-      "renderMsMedian": 808.3
+      "renderMsMedian": 1375.5
     },
     {
       "stage": "burn:32",
@@ -312,7 +312,7 @@
           "cov": 0.464
         }
       ],
-      "renderMsMedian": 700.6
+      "renderMsMedian": 1229.9
     },
     {
       "stage": "burn:32",
@@ -356,7 +356,7 @@
           "cov": 0.767
         }
       ],
-      "renderMsMedian": 807.9
+      "renderMsMedian": 1287.7
     },
     {
       "stage": "burn:58",
@@ -400,7 +400,7 @@
           "cov": 0.464
         }
       ],
-      "renderMsMedian": 700.4
+      "renderMsMedian": 1153.7
     },
     {
       "stage": "burn:58",
@@ -444,7 +444,7 @@
           "cov": 0.767
         }
       ],
-      "renderMsMedian": 850.9
+      "renderMsMedian": 1364.2
     },
     {
       "stage": "burn:72",
@@ -492,7 +492,7 @@
           "cov": 0.464
         }
       ],
-      "renderMsMedian": 759.9
+      "renderMsMedian": 1196
     },
     {
       "stage": "burn:72",
@@ -540,7 +540,7 @@
           "cov": 0.767
         }
       ],
-      "renderMsMedian": 854
+      "renderMsMedian": 1287.1
     },
     {
       "stage": "charred",
@@ -576,7 +576,7 @@
           "cov": 0.464
         }
       ],
-      "renderMsMedian": 701.8
+      "renderMsMedian": 1331.2
     },
     {
       "stage": "charred",
@@ -612,7 +612,7 @@
           "cov": 0.767
         }
       ],
-      "renderMsMedian": 787.3
+      "renderMsMedian": 1308.8
     },
     {
       "stage": "empty",
@@ -632,7 +632,7 @@
           "cov": 0.231
         }
       ],
-      "renderMsMedian": 705.5
+      "renderMsMedian": 1089.7
     },
     {
       "stage": "empty",
@@ -652,7 +652,7 @@
           "cov": 0.382
         }
       ],
-      "renderMsMedian": 849.9
+      "renderMsMedian": 1336.7
     },
     {
       "stage": "refill:0.8",
@@ -672,7 +672,7 @@
           "cov": 0.231
         }
       ],
-      "renderMsMedian": 785.5
+      "renderMsMedian": 1276.3
     },
     {
       "stage": "refill:0.8",
@@ -692,7 +692,7 @@
           "cov": 0.382
         }
       ],
-      "renderMsMedian": 823.5
+      "renderMsMedian": 1334.3
     }
   ],
   "reducedMotion": {

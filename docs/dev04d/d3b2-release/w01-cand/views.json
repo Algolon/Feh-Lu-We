@@ -165,17 +165,17 @@
       "dusk": 0,
       "na": [],
       "calls": 41,
-      "triangles": 262599,
-      "geometries": 133,
+      "triangles": 250262,
+      "geometries": 123,
       "textures": 41,
-      "programs": 147,
+      "programs": 129,
       "lit": {
         "wicker.candles": true,
         "wicker.figure": true
       },
       "litCount": 9,
       "look": {
-        "char": 0.56,
+        "char": 0.55,
         "flameLow": 1,
         "flameHigh": 1,
         "light": 1,
@@ -189,10 +189,10 @@
       "dusk": 0,
       "na": [],
       "calls": 43,
-      "triangles": 298407,
-      "geometries": 133,
+      "triangles": 284170,
+      "geometries": 123,
       "textures": 41,
-      "programs": 147,
+      "programs": 129,
       "lit": {
         "wicker.candles": true,
         "wicker.figure": true
@@ -213,10 +213,10 @@
       "dusk": 0,
       "na": [],
       "calls": 41,
-      "triangles": 262599,
-      "geometries": 133,
+      "triangles": 250262,
+      "geometries": 123,
       "textures": 41,
-      "programs": 147,
+      "programs": 129,
       "lit": {
         "wicker.candles": true,
         "wicker.figure": true
@@ -237,10 +237,10 @@
       "dusk": 0,
       "na": [],
       "calls": 44,
-      "triangles": 265007,
-      "geometries": 135,
+      "triangles": 252670,
+      "geometries": 125,
       "textures": 41,
-      "programs": 150,
+      "programs": 132,
       "lit": {
         "wicker.candles": true,
         "wicker.figure": true
@@ -261,10 +261,10 @@
       "dusk": 0,
       "na": [],
       "calls": 39,
-      "triangles": 260165,
-      "geometries": 135,
+      "triangles": 247828,
+      "geometries": 125,
       "textures": 41,
-      "programs": 150,
+      "programs": 132,
       "lit": {
         "wicker.figure": true
       },
@@ -284,10 +284,10 @@
       "dusk": 0,
       "na": [],
       "calls": 41,
-      "triangles": 295973,
-      "geometries": 135,
+      "triangles": 281736,
+      "geometries": 125,
       "textures": 41,
-      "programs": 150,
+      "programs": 132,
       "lit": {
         "wicker.figure": true
       },
@@ -686,10 +686,10 @@
       "dusk": 0,
       "na": [],
       "calls": 28,
-      "triangles": 139678,
-      "geometries": 113,
+      "triangles": 148704,
+      "geometries": 114,
       "textures": 40,
-      "programs": 130,
+      "programs": 131,
       "lit": {
         "wicker.empty": true
       },
@@ -710,9 +710,9 @@
       "na": [],
       "calls": 28,
       "triangles": 178124,
-      "geometries": 115,
+      "geometries": 116,
       "textures": 41,
-      "programs": 133,
+      "programs": 134,
       "lit": {
         "wicker.empty": true
       },
@@ -733,9 +733,9 @@
       "na": [],
       "calls": 29,
       "triangles": 152143,
-      "geometries": 115,
+      "geometries": 116,
       "textures": 41,
-      "programs": 133,
+      "programs": 134,
       "lit": {},
       "litCount": 0,
       "look": {

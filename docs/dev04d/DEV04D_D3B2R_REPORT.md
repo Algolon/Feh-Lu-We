@@ -164,3 +164,110 @@ change does not alter the image.
 1. Accept D3-b2 + D3-b2R together for integration.
 2. At merge time, merge current production into the branch.
 3. Re-run e2e:dev04a / dev04d against the new production interactable count before deploying.
+
+## 10. Final integration and live release (D3-b2 + D3-b2R)
+
+The owner approved D3-b2 and D3-b2R together for integration and publication (planning desk / bookcase / rug,
+Sterrenkamer station and daybed, refined jacket and rucksack, sloop ×1.3, moon ×1.4, the `mUpR` / `mUpG` culling and
+the documented render-call trade-offs, subject to revalidation). This section records that integration.
+
+### 10.1 Prerequisite and integration
+
+| Item | State |
+|---|---|
+| Wickerman W01 prerequisite | **Live before this merge.** Production `295a3b4` = "Merge DEV-04D W01" (#48); Pages run 411 (build: typecheck, test, build, upload; and deploy) succeeded for it; `wicker.bale` in `src/world/wickerRitual.ts` / `wickerFire.ts`. Production then advanced to **`74610c56b697116e3fc680d49cd2864940683727`** (handpan #50, Mushroom Grove R04, EXT-R02 facade / roof detailing with per-frame opaque batching, SippyJuiz kitchen pouch, footstep levels), deployed by Pages run 451 (build + deploy succeeded). W01 is in it: e2e:dev04d-w01 27/27 on that build. |
+| Last D3-b2R head before integration | `2588b26e5d395e18e7eb4b0c8b2c65572b1aea32` |
+| Merges of production into `dev04-d3-b2` | `bb625ac` (production `295a3b4`): one conflict, `DEV04D_MASTER_PLAN.md` status table, resolved by keeping the feature's D3 row and production's D4 (W01 released) row. `ec45ebd` (production `74610c5`): no conflicts. No force push, reset, cherry-pick or wholesale file replacement; production files were taken as merged. |
+| Integration fixes | `0a584a0`, `4f13c17`, `6935122`, `3900aeb`, `6f7b4eb` (render culling only, §10.2). `6935122`'s solid-blocker step was measured as lossy and reverted in `3900aeb`. |
+| **Tested candidate** | **`6f7b4ebfa7935e5fcea4884d3019efe90649f99a`** (build `index-BbpTicvT.js`; production build `index-CY54DYVH.js`). CI on the branch: build job (typecheck, test, build) succeeded, deploy job skipped (feature branch). |
+| ID contract | Post-W01 production registry is authoritative: **135** interactables / doors, 0 undocumented, 0 missing, 0 added by D3-b2 / b2R; 21 checkpoints; save schema 4 unchanged (e2e:dev04d, e2e:dev04a id checks). The "exactly 130" expectation is not restored; no test was weakened or disabled. |
+
+### 10.2 The release blocker found on the new baseline, and its fix
+
+Re-measured against `74610c5`, the D3-b2 delta (unchanged since `295a3b4`) crossed PB01 lines production stays
+within, in the all-doors-open walks: hall **763,585** camera triangles (ceiling 750,000; production 745,521) and the
+landing **153** low calls (guide 150; production 146). The cause was not the furnishings themselves: with every
+door open the room graph reaches the Reis-, Sterren- and guest rooms from the hall and landing at depth 2–3, so their
+regions were drawn behind solid walls. Measured frame-exact, those regions contributed **0 pixels** in every one of
+these views.
+
+Fix (no geometry, material, placement or composition change):
+
+- `World.roomRegion` takes an opt-in list of a region's only doorways. From another room such a region is drawn only
+  while one is open, in the same generous view cone as the exterior-door rule, and seen through: sight lines from the
+  eye through points of the opening (three across, three heights), carried 0.35 m past the wall, must be clear of
+  walls, closed doors and walkable floor plates (an upstairs doorway is not seen from the ground floor through the
+  gallery's floor; the hall's open well has none). Standing in the doorway always counts. Every other region keeps the
+  rooms-only rule.
+- The Sterrenkamer furnishings move from `mUpR` to their own region **`mUpS`** (the two rooms share no door), so a view
+  through one doorway no longer draws both rooms. Chunk tags only.
+- Rejected on evidence: treating balustrades / furniture as sight blockers (`6935122`) culled visible content (the
+  Sterrenkamer *is* seen from the hall floor through the gallery spindles, up to 540 px; oblique gallery views lost
+  up to 4,746 px). Reverted.
+- Tests: `tests/dev04d-d3b2.test.ts` (regions, doorway rule incl. floor occlusion, wall occlusion, closed door, inside
+  the room, facing away); `e2e:dev04d` extended (mUpS; doors-open facing / away checks), not loosened.
+
+**Lossless check** (`d3b2-release/walk-exact.json`): every sample of the four walk paths, doors closed and open, plus
+a 0.35 rad look-up at each waypoint turn, rendered twice in the same frame (doorway rule on / off). Of 1,994 samples,
+717 are culled further by the rule. 20 show any pixel change: 19 are 1–7 px; the largest (101 px, Sterrenkamer
+looking at its south wall) is a pre-existing seam where the Reiskamer wardrobe back shows through the partition-wall
+joint as a dashed line. Culling the Reiskamer there removes the artefact. No furnishing disappears from any view.
+
+### 10.3 Gates on `6f7b4eb` (production `74610c5` side by side)
+
+| Gate | Candidate | Production | Class |
+|---|---|---|---|
+| typecheck / `npm test` / `test:budget` / build | clean / 389 of 389 / 4 of 4 / ok | — | — |
+| e2e:dev04d | **21/21** | 19/20 (the D3 region check cannot apply) | — |
+| e2e:dev04d-w01 | 27/27 | 27/27 | — |
+| e2e:dev04d-w01-release | 7/8 | 7/8, identical | inherited: the kitchen pouch label changed in production's own SippyJuiz commit ("Bekijk drinkpakje") |
+| e2e:dev04a / dev04c | 18/19 / 21/22 | identical failure sets | inherited: stale low budget baselines (not updated, as instructed) |
+| e2e:dev04b / dev03 / dev02 / dev01 | 9/9 / 11/11 / 34/34 / 34/34 | — | — |
+| full e2e | 89/97 | 89/97, identical failure set | inherited: seven high-quality desktop budgets, BOSLUST sample goto timeout |
+| e2e:ui-r02 | 106/112 | 106/112, identical | inherited: objective-layout checks, desktop suite timeout |
+| e2e:handpan | 10/10 | 10/10 | — |
+| F05 / touch direct-tap (full e2e) | flaky on both | flaky on both | infrastructure: reproduced alone on each build, fails then passes identically (SwiftShader frame time 180–240 ms) |
+
+Recent production work preserved: W01 ritual, audio, smoke, hay (w01 suites; clearing identical at every stage), serre
+condenser beetle, gravity bong, SippyJuiz pouch, handpan, footsteps (unit), Mushroom Grove and EXT-R02 (their geometry
+is identical in every exterior view), sky / lighting / vegetation, tutorial / HUD / compass (dev01–03, ui-r02).
+Gameplay: `mem.reis.suitcase` and `mem.sterren.telescope` targeted by walking; lamps, doors, routes, save 4 unchanged.
+
+### 10.4 Performance (matched against `74610c5`; evidence `docs/dev04d/d3b2-release/`)
+
+| Measure | Production | Candidate |
+|---|---|---|
+| 124 audit views, doors closed (low, 915 × 412) | — | Δ calls −2…+3, Δ triangles −65.5 k…+2.5 k; no view over 150 calls (max 140) |
+| 124 audit views, doors open | 4 views already over the 150-call guide (hall-a 163, corridor-b 151, cons-b 173, sauna-b 165) | same 4, +1–2 calls each, triangles equal or lower (hall-a −23 k); no new view over a PB01 line; Δ calls −2…+6 |
+| D3 room poses (38) | — | Δ calls −3…+3 (max 38) |
+| Walks, doors closed (max calls / max triangles) | 50–68 / 234–267 k | 49–67 / 221–254 k |
+| Walks, doors open: hall | 142 / **745,521** | 147 / **734,379** |
+| Walks, doors open: landing / up-east | 146 / 651 k | 147 / 643 k |
+| Walks, doors open: up-west | 134 / 635 k | 138 / 637 k |
+| Entrance hall, high-quality desktop (450 k / 270 check) | 196 / 521,280 (fails) | 199 / 494,662 (fails; inherited, lower) |
+| Wickerman clearing, READY → burn 4 / 14 / 32 / 58 / 72 s → charred → empty → refill | — | identical calls / triangles at every stage; programs 101 → 130 both; 0 problems |
+
+Inherited debt, reported separately (not caused or worsened in triangles by this release):
+
+- The frame-exact walk, which re-runs culling at every sample (the walk script samples every 0.1 s against a 0.12 s
+  culling cadence), shows production itself at **929,026 / 927,881** camera triangles in the open-door upstairs walks
+  (walkway facing east, landing). That is over the 750 k ceiling on production; the candidate is lower there
+  (920 k / 905 k).
+- Seven desktop high-quality budgets fail on production.
+- The stale dev04a / dev04c baselines.
+
+**Remaining trade-off (draw calls, guide only):** in that frame-exact set, one look-up sample in the hall with every
+door open (90, 88, looking north 0.35 rad up) is 152 calls against production's 147, because the Sterrenkamer
+doorway is seen through the open well. Triangles there are lower (721 k vs 732 k). The standard walk and audit sets
+have no new view over the guide.
+
+### 10.5 Visual check
+
+- D3 rooms: all 23 SET=d3b2r poses against the approved D3-b2R captures. Mean difference ≤ 0.7 / 255, at most 7 px
+  over 40 levels, so composition and objects are identical.
+- W01: all 33 views against production. Identical except animated flame and smoke (mean ≤ 1.32 / 255).
+- Evidence: `d3b2-release/cand/`, `prod/`, `w01-cand/`, `w01-prod/`.
+
+### 10.6 Merge, deployment and live verification
+
+Recorded after the merge in §10.7.
