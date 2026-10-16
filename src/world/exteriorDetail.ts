@@ -103,43 +103,63 @@ export function frontDoorLeaf(b:Batcher,k:Kit,width:number,height:number,th:numb
 
 /** A small readable relief, not a flat decal or an assembly of anonymous boxes. */
 function lionEntranceKnocker(b:Batcher,metal:THREE.Material,cx:number,cy:number,th:number) {
-  const front=-th/2,iron='#242522',bronze='#715b3e',lit='#a18a64';
-  const plate=softBox(.212,.29,.014,.022);
-  geo(b,metal,iron,plate,cx,cy,front-.011,{jitter:0});plate.dispose();
+  // Dark, weathered bronze: highlights catch ridges, recesses stay almost black.
+  const front=-th/2,iron='#24201e',bronze='#493b30',lit='#756149';
+  const orb=new THREE.SphereGeometry(1,12,9);
+  const swell=(dx:number,dy:number,dz:number,sx:number,sy:number,sz:number,tint:string,rz=0)=>
+    geo(b,metal,tint,orb,cx+dx,cy+dy,front-dz,{s:[sx,sy,sz],rz,jitter:0});
 
-  // Shared shape, vertex tinted and merged with the rest of the metalwork:
-  // broad mane silhouette, radial tufts, cheek planes, brows, muzzle and jaw.
-  const orb=new THREE.SphereGeometry(1,10,8);
-  const swell=(dx:number,dy:number,dz:number,sx:number,sy:number,sz:number,tint:string)=>
-    geo(b,metal,tint,orb,cx+dx,cy+dy,front-dz,{s:[sx,sy,sz],jitter:0});
-  swell(0,.005,.035,.091,.112,.029,bronze);
-  const tuft=new THREE.ConeGeometry(.023,.072,5);
-  for(let i=0;i<14;i++){
-    const a=i*Math.PI*2/14,dx=Math.sin(a)*.081,dy=Math.cos(a)*.102;
-    geo(b,metal,i%3===0?lit:bronze,tuft,cx+dx,cy+dy,front-.042,{rz:-a,jitter:0});
+  // A compact oval backing follows the silhouette. No rectangular doorbell plate.
+  swell(0,.004,.015,.095,.126,.013,iron);
+  swell(0,.010,.045,.091,.113,.030,bronze);
+
+  // Round, directional locks of mane, not spikes radiating like a sun.
+  // Raised dark grooves alternate with low bronze highlights.
+  for(let i=0;i<16;i++){
+    const a=i*Math.PI*2/16;
+    const dx=Math.sin(a)*.081,dy=Math.cos(a)*.103;
+    swell(dx,dy,.046,.023,.050,.021,i%4===0?lit:bronze,-a+.16*Math.sin(i*2.1));
+    if(i%2===0){
+      const cx2=dx+Math.sin(a)*.013,cy2=dy+Math.cos(a)*.014;
+      swell(cx2,cy2,.062,.009,.031,.009,iron,-a+.17);
+    }
   }
-  tuft.dispose();
-  // Face projects clear of the mane, with characteristic heavy brows and snout.
-  swell(0,.022,.061,.060,.073,.030,bronze);
+  // Crown and ears give the distinct lion silhouette, with a sculpted forehead.
   for(const side of [-1,1]){
-    swell(side*.030,.030,.085,.025,.013,.014,lit); // brow
-    swell(side*.029,.016,.098,.010,.007,.006,iron); // recessed eye
-    swell(side*.040,-.022,.075,.025,.039,.024,bronze); // cheek
-    swell(side*.018,-.044,.095,.026,.021,.018,lit); // whisker pad
+    swell(side*.068,.055,.059,.029,.024,.023,bronze,-side*.30);
+    swell(side*.030,.080,.068,.025,.024,.018,lit,side*.24);
   }
-  swell(0,-.048,.113,.021,.015,.014,iron); // triangular-looking nose in shadow
-  swell(0,-.070,.098,.026,.011,.012,iron); // open mouth above ring
-  swell(0,-.087,.076,.031,.022,.019,bronze); // chin below mouth
-  orb.dispose();
+  swell(0,.024,.075,.059,.072,.034,bronze);
+  swell(0,.060,.103,.037,.016,.012,lit);
+  // Heavy upper lids shadow deeply set eyes (no cartoon-white pupils).
+  for(const side of [-1,1]){
+    swell(side*.029,.029,.105,.025,.014,.013,lit,side*.16);
+    swell(side*.029,.017,.116,.010,.006,.006,iron);
+    swell(side*.044,-.020,.084,.029,.038,.027,bronze);
+    swell(side*.019,-.041,.111,.027,.022,.019,lit);
+    for(let j=0;j<2;j++){
+      const brow=new THREE.CylinderGeometry(.0035,.0035,.035,6);
+      geo(b,metal,iron,brow,cx+side*(.028+j*.006),cy-.043-j*.013,front-.133,{rz:side*(.76+j*.14),jitter:0});
+      brow.dispose();
+    }
+  }
+  // Sculpted triangular feline nose, dark lip and a jaw beneath the ring.
+  const triangle=new THREE.Shape();
+  triangle.moveTo(-.023,.008);triangle.lineTo(.023,.008);triangle.lineTo(0,-.018);triangle.closePath();
+  const nose=new THREE.ExtrudeGeometry(triangle,{depth:.007,bevelEnabled:true,bevelSegments:1,steps:1,bevelSize:.003,bevelThickness:.003});
+  geo(b,metal,iron,nose,cx,cy-.048,front-.131,{jitter:0});nose.dispose();
+  rod(b,metal,iron,cx,cy-.075,front-.132,.0035,.0035,.026,6,{jitter:0});
+  swell(0,-.077,.110,.030,.010,.011,iron);
+  swell(0,-.094,.085,.034,.021,.020,bronze);
 
-  // Ring held by the mouth, plus small strike stop. One solid circle, not
-  // a door handle: its plane faces the visitor.
-  const ring=new THREE.TorusGeometry(.059,.009,6,20);
-  geo(b,metal,'#65523b',ring,cx,cy-.139,front-.098,{jitter:0});
+  // Hanging bronze ring held just below the lion's muzzle.
+  const ring=new THREE.TorusGeometry(.057,.009,7,24);
+  geo(b,metal,'#5a4b3a',ring,cx,cy-.148,front-.106,{jitter:0});
   ring.dispose();
   const stop=new THREE.SphereGeometry(.013,8,6);
-  geo(b,metal,iron,stop,cx,cy-.205,front-.062,{jitter:0});
+  geo(b,metal,iron,stop,cx,cy-.214,front-.056,{jitter:0});
   stop.dispose();
+  orb.dispose();
 }
 /** Mounting plate → bowed arm → small hanging ring, ending at the existing lantern cap. */
 export function lanternMount(c:Ctx,x:number,wallZ:number,lanternZ:number,capY:number) {
