@@ -1,0 +1,41 @@
+name: FLW painting regression investigation
+on:
+  push:
+    branches: [fix/flw-paintings-permanent-r02]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  paint-render-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright-core install --with-deps chromium
+      - name: Preview candidate and sample actual WebGL painting pixels
+        shell: bash
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4188 > /tmp/art-probe-preview.log 2>&1 &
+          for attempt in $(seq 1 40); do
+            curl -sf http://127.0.0.1:4188/Feh-Lu-We/ > /dev/null && break
+            sleep 1
+          done
+          ART_PROBE_OUT=art-probe/local node scripts/art-painting-regression-probe.mjs http://127.0.0.1:4188/Feh-Lu-We/
+      - name: Check current live GitHub Pages
+        if: always()
+        continue-on-error: true
+        run: ART_PROBE_OUT=art-probe/live node scripts/art-painting-regression-probe.mjs https://algolon.github.io/Feh-Lu-We/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: flw-painting-qa
+          path: art-probe
+          if-no-files-found: warn
