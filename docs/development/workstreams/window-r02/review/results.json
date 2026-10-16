@@ -31,8 +31,8 @@
       "source": "living",
       "target": "out",
       "visible": true,
-      "calls": 57,
-      "triangles": 511532,
+      "calls": 62,
+      "triangles": 668148,
       "glError": 0
     },
     {
@@ -41,8 +41,8 @@
       "source": "out",
       "target": "living",
       "visible": true,
-      "calls": 79,
-      "triangles": 544925,
+      "calls": 87,
+      "triangles": 721948,
       "glError": 0
     },
     {
@@ -51,8 +51,8 @@
       "source": "billiard",
       "target": "out",
       "visible": true,
-      "calls": 56,
-      "triangles": 492678,
+      "calls": 61,
+      "triangles": 616222,
       "glError": 0
     },
     {
@@ -61,8 +61,8 @@
       "source": "out",
       "target": "billiard",
       "visible": true,
-      "calls": 75,
-      "triangles": 525116,
+      "calls": 86,
+      "triangles": 655764,
       "glError": 0
     },
     {
@@ -71,8 +71,8 @@
       "source": "library",
       "target": "out",
       "visible": true,
-      "calls": 45,
-      "triangles": 523112,
+      "calls": 52,
+      "triangles": 639186,
       "glError": 0
     },
     {
@@ -81,8 +81,8 @@
       "source": "out",
       "target": "library",
       "visible": true,
-      "calls": 90,
-      "triangles": 592782,
+      "calls": 99,
+      "triangles": 689288,
       "glError": 0
     },
     {
@@ -91,8 +91,8 @@
       "source": "dining",
       "target": "out",
       "visible": true,
-      "calls": 60,
-      "triangles": 306067,
+      "calls": 64,
+      "triangles": 412992,
       "glError": 0
     },
     {
@@ -101,8 +101,8 @@
       "source": "out",
       "target": "dining",
       "visible": true,
-      "calls": 80,
-      "triangles": 614077,
+      "calls": 85,
+      "triangles": 882524,
       "glError": 0
     },
     {
@@ -111,8 +111,8 @@
       "source": "botanic",
       "target": "out",
       "visible": true,
-      "calls": 61,
-      "triangles": 367332,
+      "calls": 67,
+      "triangles": 583822,
       "glError": 0
     },
     {
@@ -121,8 +121,8 @@
       "source": "out",
       "target": "botanic",
       "visible": true,
-      "calls": 104,
-      "triangles": 632928,
+      "calls": 113,
+      "triangles": 850628,
       "glError": 0
     },
     {
@@ -131,8 +131,8 @@
       "source": "rearNookEast",
       "target": "out",
       "visible": true,
-      "calls": 54,
-      "triangles": 501242,
+      "calls": 62,
+      "triangles": 627024,
       "glError": 0
     },
     {
@@ -141,8 +141,8 @@
       "source": "out",
       "target": "rearNookEast",
       "visible": true,
-      "calls": 86,
-      "triangles": 584604,
+      "calls": 87,
+      "triangles": 690220,
       "glError": 0
     },
     {
@@ -151,8 +151,8 @@
       "source": "sterren",
       "target": "out",
       "visible": true,
-      "calls": 51,
-      "triangles": 477851,
+      "calls": 56,
+      "triangles": 582972,
       "glError": 0
     },
     {
@@ -161,8 +161,8 @@
       "source": "out",
       "target": "sterren",
       "visible": true,
-      "calls": 94,
-      "triangles": 540350,
+      "calls": 106,
+      "triangles": 666614,
       "glError": 0
     },
     {
@@ -171,8 +171,8 @@
       "source": "botanic",
       "target": "out",
       "visible": true,
-      "calls": 65,
-      "triangles": 350571,
+      "calls": 70,
+      "triangles": 510658,
       "glError": 0
     },
     {
@@ -181,8 +181,8 @@
       "source": "out",
       "target": "botanic",
       "visible": true,
-      "calls": 79,
-      "triangles": 612487,
+      "calls": 83,
+      "triangles": 820794,
       "glError": 0
     },
     {
@@ -191,8 +191,8 @@
       "source": "workshop",
       "target": "out",
       "visible": true,
-      "calls": 55,
-      "triangles": 344353,
+      "calls": 62,
+      "triangles": 532744,
       "glError": 0
     },
     {
@@ -201,8 +201,8 @@
       "source": "out",
       "target": "workshop",
       "visible": true,
-      "calls": 67,
-      "triangles": 350165,
+      "calls": 71,
+      "triangles": 454370,
       "glError": 0
     },
     {
@@ -211,8 +211,8 @@
       "source": "pantry",
       "target": "out",
       "visible": true,
-      "calls": 39,
-      "triangles": 254968,
+      "calls": 44,
+      "triangles": 351572,
       "glError": 0
     },
     {
@@ -221,22 +221,22 @@
       "source": "out",
       "target": "pantry",
       "visible": true,
-      "calls": 109,
-      "triangles": 584268,
+      "calls": 112,
+      "triangles": 690833,
       "glError": 0
     }
   ],
   "sills": [
     {
       "site": "north-ground",
-      "calls": 64,
-      "triangles": 509295,
+      "calls": 67,
+      "triangles": 616964,
       "glError": 0
     },
     {
       "site": "west-ground",
-      "calls": 46,
-      "triangles": 524863,
+      "calls": 51,
+      "triangles": 629526,
       "glError": 0
     }
   ],
@@ -250,6 +250,38 @@
     "across": 0.9840720221606648
   },
   "errors": [],
+  "provisionalTriangleOverruns": [
+    {
+      "name": "east-ground",
+      "side": "outside",
+      "source": "out",
+      "target": "dining",
+      "visible": true,
+      "calls": 85,
+      "triangles": 882524,
+      "glError": 0
+    },
+    {
+      "name": "south-upper",
+      "side": "outside",
+      "source": "out",
+      "target": "botanic",
+      "visible": true,
+      "calls": 113,
+      "triangles": 850628,
+      "glError": 0
+    },
+    {
+      "name": "east-upper",
+      "side": "outside",
+      "source": "out",
+      "target": "botanic",
+      "visible": true,
+      "calls": 83,
+      "triangles": 820794,
+      "glError": 0
+    }
+  ],
   "samsungValidated": false,
   "budget": {
     "calls": 150,
