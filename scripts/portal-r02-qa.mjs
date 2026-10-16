@@ -30,7 +30,7 @@ try{
      tris:g.renderer.info.render.triangles,glError:g.renderer.getContext().getError()};
   },pose);
   console.log('PORTAL_R02 '+JSON.stringify(row));
-  if(row.here!==pose.expected||!row.outVisible||row.sightlineWindows===0||row.glError!==0)
+  if(row.here!==pose.expected||!row.outVisible||row.sightlineWindows<(pose.expected==='dining'?2:1)||row.glError!==0)
     throw Error('Missing visible garden sightline at threshold: '+JSON.stringify(row));
   if(row.drawCalls>150||row.tris>750000)
     console.warn('PORTAL_R02_BUDGET_WARNING '+JSON.stringify(row));
