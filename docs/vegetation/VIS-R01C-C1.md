@@ -28,6 +28,24 @@ Tracking: [#64](https://github.com/Algolon/Feh-Lu-We/issues/64). Design: [C0 dra
 5. Real Android Samsung: first and second approach, 45 m PointLight activation, Moon/Mushroom Vision effect, 10-minute warm run with `?debug=1` median FPS/p95, calls/tris and notes of >50/100 ms hitch. If recurring, add isolated opt-in frametime trace rather than making blind graphics changes.
 6. Report objective old-vs-new evidence with screenshots/video and exact SHA, request owner review. Merge only after explicit approval; maintain fast rollback by removing the URL opt-in or disabling the new controller.
 
+## Reproduceerbare same-build browserpariteit
+
+Het nieuwe script `scripts/vis-r01c-parity.mjs` voert de bestaande VIS-R01-meetroute **twee keer sequentieel** op dezelfde `dist`-build uit, met `grovelod=b` en daarna `grovelod=b&veglodshared=1`. Het checkt render calls, driehoeken, afstand, LOD-levels, zichtbare instanties en (bij `MODE=walk`) alle routeframes, popping, en gameplay-vingerafdrukken. SwiftShader render-ms wordt expliciet *niet* als gelijkheids- of mobiele FPS-criterium vergeleken.
+
+```sh
+npm run typecheck && npm test && npm run test:budget && npm run build
+MODE=views,turn,still,toggle,gameplay node scripts/vis-r01c-parity.mjs
+MODE=views,walk,turn,still,toggle,gameplay node scripts/vis-r01c-parity.mjs
+MODE=views,walk,turn,still,toggle,gameplay MULTIDRAW=0 node scripts/vis-r01c-parity.mjs
+GROVE_PROFILE=a MODE=views,turn,still,toggle,gameplay node scripts/vis-r01c-parity.mjs
+DUSK=1 VIEWPORT=portrait MODE=views node scripts/vis-r01c-parity.mjs
+QUALITY=high VIEWPORT=desktop MODE=views node scripts/vis-r01c-parity.mjs
+```
+
+Resultaten verschijnen onder `scripts/out/vis-r01c-parity/` inclusief JSON met de maximaal eerste 25 afwijkingen. Bij echte regressies breekt het script met een nonzero exitcode; voor timing- of screenshotverschillen is aanvullende gerichte visuele QA nodig.
+
+**Verificatiegrens:** dit checkpoint is via de GitHub-koppeling aangemaakt; de uitvoer van de volledige CI-/browser-/Samsung-gates is op dit moment **niet geverifieerd**. De helper is syntactisch afzonderlijk nagekeken, maar is nog geen geautoriseerde release-onderbouwing. Geen merge of default-activatie zonder de genoemde evidence.
+
 ## Follow-up
 C2 should migrate **plants first, then bushes, then trees**, preserving the separate `PlantBatch` usages for litter/rocks/deadwood and safeguarding VEG-R02 art branches. A shared API is not by itself sufficient justification to change visuals, thresholds or resource budgets.
 
