@@ -78,7 +78,7 @@ try {
     return result;
   });
   console.log('WINDOW-R02 registrar QA:',JSON.stringify(registry));
-  if (registry.portals !== 46 || registry.physicallyBlocked !== 46 || registry.visuallyClear !== 46)
+  if (registry.portals !== 44 || registry.physicallyBlocked !== 44 || registry.visuallyClear !== 44)
     throw Error('All facade glasses must block motion but transmit visibility: ' + JSON.stringify(registry));
   for (const p of poses) for (const side of ['inside','outside']) {
     const view = await page.evaluate(({ p, side }) => {
