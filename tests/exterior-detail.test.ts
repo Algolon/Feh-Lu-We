@@ -28,7 +28,7 @@ describe('FRONT-R01 horizontal timber entrance door',()=>{
     expect(closed.max.x).toBeLessThanOrEqual(1.701);
     expect(closed.min.y).toBeGreaterThanOrEqual(-.001);
     expect(closed.max.y).toBeLessThanOrEqual(2.621);
-    expect(closed.max.z-closed.min.z).toBeLessThan(.29); // bronze lion relief and pulls remain within narrow hinged envelope
+    expect(closed.max.z-closed.min.z).toBeLessThan(.35); // cast-metal relief projects beyond the previous shallow decoration
     expect(closed.max.z).toBeGreaterThan(.11); // negative plan Z faces outside (+Three.js Z)
     expect(leaf.children.length).toBeGreaterThan(0);
     expect(leaf.children.every(o=>o instanceof THREE.Mesh)).toBe(true);
