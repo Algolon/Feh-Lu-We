@@ -44,9 +44,9 @@ export function lionHeadReliefGeometry():THREE.BufferGeometry {
   // irregular instead of a symmetrical scalloped disk.
   const outline=(a:number)=>{
     const cr=.022*Math.sin(5*a+.22)+.019*Math.sin(9*a-.65)+.008*Math.sin(14*a+.4);
-    const ears=.095*Math.exp(-near(a,.77)**2/.016)+.085*Math.exp(-near(a,2.39)**2/.019);
-    const crown=.042*Math.exp(-near(a,Math.PI/2)**2/.22);
-    const chin=.078*Math.exp(-near(a,3*Math.PI/2)**2/.22);
+    const ears=.095*Math.exp(-(near(a,.77)**2)/.016)+.085*Math.exp(-(near(a,2.39)**2)/.019);
+    const crown=.042*Math.exp(-(near(a,Math.PI/2)**2)/.22);
+    const chin=.078*Math.exp(-(near(a,3*Math.PI/2)**2)/.22);
     return 1+cr+ears+crown+chin;
   };
 
