@@ -16,6 +16,10 @@ export function installOpaqueBatches(w:World) {
     const m=o as THREE.Mesh,g=m.geometry,mat=m.material as THREE.Material;
     if(!m.isMesh||(m as THREE.InstancedMesh).isInstancedMesh||(m as THREE.BatchedMesh).isBatchedMesh||(m as THREE.SkinnedMesh).isSkinnedMesh||m.morphTargetInfluences||!g||Array.isArray(m.material))return;
     if(!['MeshLambertMaterial','MeshPhongMaterial','MeshBasicMaterial','MeshStandardMaterial'].includes(mat.type)||mat.transparent||!mat.depthWrite||m.userData.hit)return;
+    // Asynchronously populated texture atlases must stay on the native render path. The
+    // FLW-D2 paintings can show the neutral placeholder after opaque aggregation even
+    // when the real atlas has loaded (production regression, Oct 2026).
+    if(mat.userData.skipOpaqueBatch===true)return;
     if(m.onBeforeRender!==THREE.Object3D.prototype.onBeforeRender||Object.keys(g.attributes).some(k=>!allowed.has(k))||g.drawRange.start!==0||g.drawRange.count!==Infinity)return;
     const n=g.attributes.position?.count;if(!n||n>MAX_SOURCE||!g.attributes.normal)return;
     let groupOrder=0;for(let p=m.parent;p;p=p.parent)if(p instanceof THREE.Group){groupOrder=p.renderOrder;break;}if(groupOrder!==0)return;
