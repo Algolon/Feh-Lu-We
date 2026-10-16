@@ -110,7 +110,7 @@ function entrance(w: World, g: GameApi, c0: Ctx, u: Ctx) {
   w.scene.add(lock);
   w.onSync(() => {
     cover.rotation.x = g.state.flags.boslustCover ? -2.05 : 0;
-    setDigits(boslustDigits(g.state));
+    setDigits(boslustDigits(g.state), !g.state.flags.boslustOpen);
   });
 
   // The broad plate opens the enlarged mobile-friendly code panel, while
