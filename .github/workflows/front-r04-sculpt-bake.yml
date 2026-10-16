@@ -29,5 +29,15 @@ jobs:
           git add src/world/lionSculptData.ts
           if ! git diff --cached --quiet; then
             git commit -m "art(front-r04): bake authored connected bronze lion sculpt mesh"
-            git push origin HEAD:front-r02-brass-slim-sculpted-lion
+            # Other QA workflows may commit screenshots while baking. Rebase safely
+            # before pushing rather than discarding a successful sculpture.
+            for attempt in 1 2 3 4; do
+              git pull --rebase origin front-r02-brass-slim-sculpted-lion
+              if git push origin HEAD:front-r02-brass-slim-sculpted-lion; then
+                exit 0
+              fi
+              sleep 2
+            done
+            echo "Could not push baked sculpture after retries" >&2
+            exit 1
           fi
