@@ -73,6 +73,25 @@ try {
    samples.push(await capture(id+'-both-on',pose,{fire:true,floor:true}));
    samples.push(await capture(id+'-both-off',pose,{fire:false,floor:false}));
  }
+ // Site-specific boundary views. A source-bound mask should light its
+ // surfaces even when seen from the hall, but should not wash the library,
+ // upstairs, kitchen or the exterior. Real fireplace meshes may still be
+ // visible through an open doorway/window; these ROIs are diagnostic rather
+ // than blindly equating every image difference to wall-light leakage.
+ const boundarySamples=[];
+ for(const [id,pose] of [
+  ['hall-away',{x:90,z:87,yaw:0}],
+  ['library-closed-door',{x:79,z:97.4,yaw:Math.PI}],
+  ['library-away',{x:78,z:102,yaw:0}],
+  ['upper-floor',{x:78,z:86.7,y:3.35,yaw:-Math.PI/2}],
+  ['outside-front',{x:80,z:76,yaw:0}],
+  ['kitchen-away',{x:101,z:99,yaw:0}]
+ ]){
+   const on=await capture(id+'-on',pose,{fire:true,floor:true});
+   const off=await capture(id+'-off',pose,{fire:false,floor:false});
+   boundarySamples.push({id,on,off,
+     change:+(on.luminance-off.luminance).toFixed(3)});
+ }
  const independent = await page.evaluate(()=>{
    const g=window.__game, pilot=g.world.scene.userData.stableLiving||null;
    const states=[];
@@ -162,7 +181,7 @@ try {
  }else{
    if(samples.some(s=>s.pilotState!==null))throw Error('baseline unexpectedly installed shader pilot');
  }
- const result={profile,quality,portrait,samples,scope:sc,independent,saved,errors};
+ const result={profile,quality,portrait,samples,boundarySamples,scope:sc,independent,saved,errors};
  console.log('LIGHT_R06_SUMMARY '+JSON.stringify(result));
  writeFileSync(output+'/results.json',JSON.stringify(result,null,2));
  if(errors.length)throw Error(errors.join('; ').slice(0,400));
