@@ -71,11 +71,12 @@ describe('authored facade greenery',()=>{
   it('gives entrance pots a distinct, broad and finite faceted leaf mesh with calm veins',()=>{
     const g=entranceLeafGeo(),p=g.attributes.position,c=g.attributes.color;
     expect(g.index).toBeNull();
-    expect(p.count/3).toBe(544); // 17 outline wedges × 16 in-mesh subdivisions × two faces
+    expect(p.count/3).toBe(320); // Ten curved longitudinal bands × eight cross bands × two sides
     expect([...p.array].every(Number.isFinite)).toBe(true);
     expect([...c.array].every(Number.isFinite)).toBe(true);
     g.computeBoundingBox();
-    expect(g.boundingBox!.max.x-g.boundingBox!.min.x).toBeCloseTo(1.52,4);
+    expect(g.boundingBox!.max.x-g.boundingBox!.min.x).toBeGreaterThan(1.0);
+    expect(g.boundingBox!.max.x-g.boundingBox!.min.x).toBeLessThan(1.2);
     expect(g.boundingBox!.max.y-g.boundingBox!.min.y).toBeGreaterThan(1.6);
     // Veins are part of the same continuous leaf, not overlaid planes.
     const central:number[]=[],outer:number[]=[];
@@ -97,8 +98,8 @@ describe('authored facade greenery',()=>{
   it('creates two deterministic, well-connected and less cluttered entrance plants',()=>{
     for(const {seed} of ENTRANCE_POTS){
       const plan=entrancePlantPlan(seed),again=entrancePlantPlan(seed);
-      expect(plan.branches).toHaveLength(6);
-      expect(plan.leaves).toHaveLength(24); // Formerly 99; size variation and open clusters.
+      expect(plan.branches).toHaveLength(7);
+      expect(plan.leaves).toHaveLength(35); // Seven staggered twigs, five distinct elliptical leaves each.
       expect(plan.leaves).toEqual(again.leaves);
       for(const branch of plan.branches){
         expect(branch.points).toHaveLength(3);
@@ -108,8 +109,8 @@ describe('authored facade greenery',()=>{
       expect(Math.max(...centers.map(v=>v.y))).toBeGreaterThan(1.15);
       expect(Math.min(...centers.map(v=>v.y))).toBeLessThan(1.0);
       for(const leaf of plan.leaves){
-        expect(leaf.size).toBeGreaterThanOrEqual(.195);
-        expect(leaf.size).toBeLessThan(.27);
+        expect(leaf.size).toBeGreaterThanOrEqual(.172);
+        expect(leaf.size).toBeLessThan(.23);
         expect(leaf.attachment.distanceTo(leaf.base)).toBeLessThan(.3);
         expect(leaf.tilt).toBeLessThan(-.1);
       }
