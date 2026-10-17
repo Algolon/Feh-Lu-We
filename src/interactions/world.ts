@@ -484,13 +484,31 @@ export class LightPool {
     }
   }
   private roomCache = new Map<LampSource, string>();
+  private rankedEye: THREE.Vector3 | null = null;
+  private rankedDt = 0;
+  /** LIGHT-R05: physical movement alone pre-warms the next fixtures before they reach the camera. */
+  private readonly leadSeconds = 1.7;
   /** Global multiplier for fixture light (art-refresh lighting comparison; 1 = original behaviour). */
   gain = 1;
   // There is intentionally no gaze/dwell priority. Direction changes must not alter lighting.
   update(dt: number, t: number, lamps: LampSource[], eye: THREE.Vector3, rooms?: RoomGraph, isOpen: (door: string) => boolean = () => true, _view?: LightView, _visibleRooms?: ReadonlySet<string>) {
     this.timer -= dt;
+    this.rankedDt += dt;
     if (this.timer <= 0) {
       this.timer = 0.25;
+      // Predict only from translation, never camera orientation. This is a priority
+      // hint, NOT a moved light: attenuation still uses the fixture's true position.
+      // Sampling at 0.25s avoids frame-to-frame velocity jitter on mobile.
+      const ahead = eye.clone();
+      if (this.rankedEye && this.rankedDt > 0) {
+        const move = eye.clone().sub(this.rankedEye);
+        // Teleports and scene transitions must not preselect distant fixtures.
+        if (move.length() < 1.5) ahead.add(move.multiplyScalar(
+          Math.min(this.leadSeconds / this.rankedDt, 3.2 / Math.max(0.001, move.length()))
+        ));
+      }
+      this.rankedEye = eye.clone();
+      this.rankedDt = 0;
       const roomOf = (l: LampSource) => {
         let r = this.roomCache.get(l);
         if (r === undefined) { r = l.room ?? (rooms ? rooms.roomAt(l.pos.x, l.pos.y, -l.pos.z) : 'out'); this.roomCache.set(l, r); }
@@ -517,16 +535,20 @@ export class LightPool {
         const room = roomOf(l);
         if (stableRooms && !stableRooms.has(room) && !(rel && rel.has(room))) continue;
         const d = l.pos.distanceTo(eye);
-        // A stationary viewpoint has a stationary lamp ranking, regardless of
-        // whether the fixture is inside the camera cone or how long it is watched.
-        const w = 0.2 * l.intensity;
+        const leadD = l.pos.distanceTo(ahead);
+        // LIGHT-R05: start the slot handover while approaching, not after the
+        // bright source has entered the illuminated region. Both distance and
+        // intensity/range matter; never use a camera/view/culling condition.
+        // Range must not be moved or extended on the physical THREE.PointLight.
+        const priorityDistance = Math.min(d, leadD);
+        const w = l.intensity + 0.35 * l.distance;
         byId.set(l.id, l);
-        cands.push({ id: l.id, room, d, w });
+        cands.push({ id: l.id, room, d: priorityDistance, w });
       }
       // Do not use a room-identity or gaze preference: these change discretely
       // at door thresholds and during camera rotation. Rank by physical distance
       // with held-source hysteresis instead.
-      this.want = chooseLamps(cands, this.here, this.want, this.lights.length, 2.3, 0);
+      this.want = chooseLamps(cands, this.here, this.want, this.lights.length, 1.0, 0);
       this.lookup = byId;
     }
     for (let i = 0; i < this.lights.length; i++) {
