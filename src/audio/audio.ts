@@ -3,6 +3,7 @@
 // The context is created/resumed only from the Start button (user gesture), and suspended when hidden.
 
 import type { RitualMix } from '../world/wickerRitual';
+import { FAMILY_EDITION } from '../core/edition';
 import { renderOutdoorFootstep, selectOutdoorFootstepVariant, selectGrassPitchVariant, GRASS_PITCH_RATIOS, type FootstepSurface, type OutdoorFootstepSurface } from './footsteps';
 import { FIELD_FOOTSTEPS_MP3, FIELD_FOOTSTEP_CLIPS } from './fieldFootsteps';
 import { GRASS_R04_MP3, GRASS_R04_CLIPS, DIRT_PATH_GAIN } from './grassR04';
@@ -76,7 +77,7 @@ export class Audio {
         this.grassR04Loading = this.loadGrassR04().finally(() => { this.grassR04Loading = null; });
       }
       if (this.grassR04Loading) await this.grassR04Loading;
-      this.preloadBongRippie();
+      if (!FAMILY_EDITION) this.preloadBongRippie();
     } catch {
       /* audio is optional */
     }
@@ -333,7 +334,7 @@ export class Audio {
       case 'crank': for (let i = 0; i < 8; i++) this.noise(0.04, 'bandpass', 1800, 6, 0.12, i * 0.11); break;
       case 'steam': this.noise(1.5, 'highpass', 3000, 0.5, 0.15, 0, 0.2); break;
       case 'water': this.noise(0.5, 'lowpass', 700, 1, 0.1, 0, 0.1); break;
-      case 'bongHit': void this.playBongRippie(); break;
+      case 'bongHit': if (!FAMILY_EDITION) void this.playBongRippie(); break;
       case 'electric-zap': {
         // Audible "bzzz—bzz": one short pitched buzz for each synchronized lightning pulse.
         const v = Number.isFinite(gain) ? Math.max(0, Math.min(1, gain)) : 0;
@@ -346,7 +347,7 @@ export class Audio {
 
   /** Decode the bundled original MP3 exactly once, independent of Myinstants uptime. */
   private preloadBongRippie() {
-    if (this.bongRippieLoading || !this.ctx) return;
+    if (FAMILY_EDITION || this.bongRippieLoading || !this.ctx) return;
     const ctx = this.ctx;
     const url = `${import.meta.env.BASE_URL}${BONG_RIPPIE_ASSET}`;
     this.bongRippieLoading = (async () => {

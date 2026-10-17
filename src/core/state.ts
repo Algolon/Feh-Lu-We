@@ -7,14 +7,17 @@ import { CLUES } from '../content/clues';
 import { SYMBOLS } from '../content/symbols';
 import { SERVICE, CATALOG, CONSOLE_SOCKETS } from '../content/canon';
 import { ESTATE } from '../world/layout';
+import { FAMILY_EDITION } from './edition';
 
 /** Valid saved-pose box for every scene (the home scene lies inside it): the estate extent with a 5 m margin. */
 export const POSE_BOUNDS = { x0: -5, x1: ESTATE.w + 5, z0: -5, z1: ESTATE.d + 5 };
 
-export const SAVE_KEY = 'fehluwe.save';
-export const SETTINGS_KEY = 'fehluwe.settings';
+// Separate namespaces prevent family play sessions, backups or settings from altering the full game.
+const STORAGE_PREFIX = FAMILY_EDITION ? 'fehluwe.family' : 'fehluwe';
+export const SAVE_KEY = `${STORAGE_PREFIX}.save`;
+export const SETTINGS_KEY = `${STORAGE_PREFIX}.settings`;
 export const STATE_VERSION = 4;
-export const BACKUP_KEY = 'fehluwe.save.prev';
+export const BACKUP_KEY = `${STORAGE_PREFIX}.save.prev`;
 
 export type SceneId = 'home' | 'estate';
 
@@ -108,11 +111,12 @@ export function defaultState(now = Date.now()): GameState {
   };
 }
 
-export function defaultSettings(coarsePointer = false): Settings {
+// The family route prioritises presentation quality even on touch devices; players may still override it.
+export function defaultSettings(coarsePointer = false, familyEdition = FAMILY_EDITION): Settings {
   return {
     lookSensitivity: 1,
     moveSensitivity: 1,
-    quality: coarsePointer ? 'low' : 'high',
+    quality: familyEdition || !coarsePointer ? 'high' : 'low',
     reducedMotion: false,
     mushroomDistortion: true,
     muted: false,
