@@ -111,7 +111,13 @@ export function climberLeafGeo(): THREE.BufferGeometry {
       colors.push(t*1.005,t*1.04,t*.97);
     }
   }
-  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(p,3));g.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(p.length/3*2,2));g.computeVertexNormals();
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(p,3));g.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));// UVs are authored BEFORE rotateZ, tracking the approved outline and existing
+  // centre-fold/vein triangles. Vertex positions and triangle order remain exact.
+  const uv:number[]=[];
+  for(let i=0;i<p.length;i+=3)uv.push(
+    THREE.MathUtils.clamp((p[i]+.90)/1.80,0,1),
+    THREE.MathUtils.clamp((p[i+1]+.70)/1.70,0,1));
+  g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));g.computeVertexNormals();
   const normals=g.attributes.normal as THREE.BufferAttribute;
   for(let i=0;i<normals.count;i++) {
     const sign=Math.floor(i/3)%2===0?1:-1,n=new THREE.Vector3(-p[i*3]*.35,-p[i*3+1]*.12,1).normalize().multiplyScalar(sign);
@@ -119,6 +125,47 @@ export function climberLeafGeo(): THREE.BufferGeometry {
   }
   g.rotateZ(Math.PI);g.userData.keepColor=true;return g;
 }
+/** A tiny opaque botanical atlas for the approved five-lobed ivy silhouette.
+ * All light-green veins are within the existing mesh; no overlays or geometry changes.
+ */
+let ivyLeafMat:THREE.MeshLambertMaterial|null=null;
+export function ivyLeafMaterial():THREE.MeshLambertMaterial {
+  if(ivyLeafMat)return ivyLeafMat;
+  const canvas=document.createElement('canvas');canvas.width=256;canvas.height=256;
+  const x=canvas.getContext('2d')!;
+  // Mostly neutral albedo preserves the established four foliage colour variants.
+  const ground=x.createLinearGradient(0,0,256,0);
+  ground.addColorStop(0,'#dfe9d4');
+  ground.addColorStop(.42,'#edf4e2');
+  ground.addColorStop(.52,'#f1f5e9');
+  ground.addColorStop(1,'#dee9d3');
+  x.fillStyle=ground;x.fillRect(0,0,256,256);
+  x.lineCap='round';x.lineJoin='round';
+  // Along the petiole and central lobe: soft olive underpaint and light sage highlight.
+  x.beginPath();x.moveTo(128,238);x.bezierCurveTo(126,168,130,77,128,11);
+  x.strokeStyle='rgba(95,127,75,.16)';x.lineWidth=8.5;x.stroke();
+  x.strokeStyle='rgba(252,255,218,.96)';x.lineWidth=3.7;x.stroke();
+  // Side veins reach the lateral lobes, rather than forming a generic leaf ladder.
+  const paths=[
+    {y:183,reach:75,rise:23},{y:134,reach:94,rise:20},
+    {y:89,reach:69,rise:32}
+  ];
+  for(const side of [-1,1])for(const {y,reach,rise} of paths){
+    x.beginPath();x.moveTo(128,y);
+    x.bezierCurveTo(128+side*reach*.28,y-7,128+side*reach*.65,y-rise*.73,128+side*reach,y-rise);
+    x.strokeStyle='rgba(90,126,71,.14)';x.lineWidth=6;x.stroke();
+    x.strokeStyle='rgba(250,255,212,.88)';x.lineWidth=2.8;x.stroke();
+  }
+  // A few low-contrast fibres avoid perfectly digital straight-line surfaces.
+  const rand=mulberry32(10431);
+  for(let i=0;i<130;i++){
+    x.fillStyle=rand()<.5?'rgba(77,117,71,.034)':'rgba(255,255,233,.065)';
+    x.fillRect(rand()*256,rand()*256,.65,1.5+rand()*3);
+  }
+  const map=new THREE.CanvasTexture(canvas);map.colorSpace=THREE.SRGBColorSpace;map.anisotropy=4;
+  return ivyLeafMat=surface(new THREE.MeshLambertMaterial({map,vertexColors:true,side:THREE.DoubleSide}),'foliage');
+}
+
 /** Authored botanical albedo in the same spirit as the indoor plant atlas.
  * The curved leaf mesh owns the silhouette; texture contributes only calm venation.
  */
@@ -275,7 +322,7 @@ function climbers(c:Ctx) {
     // Local X is the distance along the facade; Z is proud of its outer face.
     const matrix=new THREE.Matrix4().makeRotationY(site.face==='W'?-Math.PI/2:Math.PI);
     matrix.setPosition(site.face==='W'?72:0,0,site.face==='W'?0:-110);
-    submit(c,site.leaves.map(l=>placeLeaf(raw,{...l,at:-l.at,angle:-l.angle})),c.k.M.paint,'#ffffff',matrix);
+    submit(c,site.leaves.map(l=>placeLeaf(raw,{...l,at:-l.at,angle:-l.angle})),ivyLeafMaterial(),'#ffffff',matrix);
     submit(c,site.stems.map(s=>tube(s.points.map(p=>new THREE.Vector3(-p.x,p.y,p.z)),s.radius)),c.k.M.paint,'#675740',matrix);
     // Planting pocket gives each group a visible origin; thin footprint stays against the wall.
     if(site.face==='W') box(c.b,c.k.M.paint,'#514b37',71.88,.025,site.root,.25,.045,.65,{chunk:c.chunk,jitter:0});
