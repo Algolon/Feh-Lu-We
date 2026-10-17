@@ -16,6 +16,7 @@ import { referenceHedgeModel, referenceHedgeCore, referenceTopiaryModel, woodMat
 
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { World, type GameApi } from '../interactions/world';
+import { bindStableLiving, installStableLivingMaterials } from './stableLighting';
 import type { SceneExtras } from '../core/game';
 import { makeCtx, floor, type Ctx } from './arch';
 import { Batcher, box, boxMM, cyl, blob, compound, getKit, v3, geo, supportWarnings } from './kit';
@@ -206,7 +207,12 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
     if (onOutdoorPath(x, z, pathLines) || Math.hypot(x - SITES.forecourt.x, z - SITES.forecourt.z) < 8) return 'dirt';
     return 'grass';
   };
+  // LIGHT-R06B: only cloned, relevant interior materials gain the pilot
+  // shader. Install before opaque aggregation so the batches retain the
+  // exact material variant and avoid extra per-frame material switches.
+  installStableLivingMaterials(w);
   installOpaqueBatches(w);
+  bindStableLiving(w);
   return { world: w, extras: { env, isIndoor, surfaceAt, rooms: R } };
 }
 
