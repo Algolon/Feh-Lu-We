@@ -16,6 +16,11 @@ export const LIB_STAIR = {
   bridge: { x0: 82.64, x1: 83.2, z0: 104.66, z1: 105.99 },
   guardEndsAtStep: 24,
 } as const;
+/** Small upper corner deck and its L-shaped guarded edges; outside the stair lane. */
+export const LIB_STAIR_TOP_CAP = {
+  x0:LIB_STAIR.bridge.x0-.26,x1:LIB_STAIR.bridge.x0,
+  z0:LIB_STAIR.bridge.z1-.37,z1:LIB_STAIR.bridge.z1,
+} as const;
 export const LIB_STAIR_RISE = (UF-GF)/LIB_STAIR.steps;
 /** World height of the centre of the curved rail at an exact spiral angle. */
 export const spiralRailWorldY=(angle:number)=>GF+LIB_STAIR_RISE*((angle-LIB_STAIR.start)/(LIB_STAIR.sweep/LIB_STAIR.steps)+1)+.92;
@@ -226,10 +231,7 @@ export function libraryStairR01(c:Ctx) {
   // platform is a protected, single-piece oak corner infill, NOT part of the
   // central staircase walkway. Keep the normal upper exit at z=105.26 free.
   // The L-shaped return connects to the existing north-gallery rail.
-  const northCap={
-    x0:b.x0-.26,x1:b.x0,
-    z0:b.z1-.37,z1:b.z1,
-  };
+  const northCap=LIB_STAIR_TOP_CAP;
   box(c.b,wood,'#88603d',(northCap.x0+northCap.x1)/2,UF-.20,(northCap.z0+northCap.z1)/2,
     northCap.x1-northCap.x0,.20,northCap.z1-northCap.z0,{chunk:c.chunk,uv:1.1,jitter:0});
   c.col.addFloor(northCap.x0,northCap.x1,northCap.z0,northCap.z1,UF);
