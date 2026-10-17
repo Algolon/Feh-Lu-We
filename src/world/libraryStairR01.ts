@@ -36,13 +36,17 @@ export function solidGalleryStairLanding():THREE.BufferGeometry {
   const b=LIB_STAIR.bridge;
   // One tapered, flush gallery-floor transition. The north-west edge follows
   // the SINGLE newel-to-gallery rail; no little rectangular raised cap.
+  // R06: fill the missing SOUTH-WEST triangle below the existing staircase
+  // balusters. Previously the final point [b.x0,LIB_STAIR.z] cut this corner
+  // out, leaving daylight between landing boards and the right-hand rail.
+  // Removing that notch makes the north and south triangular regions part of
+  // the SAME 20cm solid gallery-floor extrusion, not a second coplanar patch.
   const outline:[number,number][]=[
     [LIB_STAIR.x,LIB_STAIR.z],
     [b.x0,b.z1],
     [b.x1,b.z1],
     [b.x1,b.z0],
     [b.x0,b.z0],
-    [b.x0,LIB_STAIR.z],
   ];
   const shape=new THREE.Shape();
   outline.forEach(([px,pz],i)=>{
@@ -172,7 +176,11 @@ export function libraryStairR01(c:Ctx) {
   for(let i=0;i<steps;i++){
     const p=stairStepPoint(i);
     const tread=solidSpiralTread(i);
-    c.b.add(boardMat,tread,planMatrix(x,p.y-LIB_STAIR_TREAD_THICKNESS,z),oak,c.chunk,true,0);
+    // The top (26th) wedge is beneath the R06 continuous gallery infill.
+    // Keep its closed single-board geometry and 2.5D walking support, but recess
+    // its top 5mm so no coplanar mesh z-fights with the new triangular floor.
+    const overlapInset=i===steps-1?.005:0;
+    c.b.add(boardMat,tread,planMatrix(x,p.y-LIB_STAIR_TREAD_THICKNESS-overlapInset,z),oak,c.chunk,true,0);
     tread.dispose();
     // No separate short nose-boxes: each step is one contiguous solid oak board.
     const a=stairStepAngle(i);
