@@ -16,7 +16,7 @@ export const POSE_BOUNDS = { x0: -5, x1: ESTATE.w + 5, z0: -5, z1: ESTATE.d + 5 
 // Browser review shares the GitHub Pages origin with production. It MUST NOT
 // read/overwrite the normal or family saves and settings.
 const R06D_REVIEW_ROUTE = typeof location !== 'undefined' &&
-  /\\/light-r06d(?:\\/|$)/.test(location.pathname);
+  (location.pathname.includes('/light-r06d/') || location.pathname.endsWith('/light-r06d'));
 const STORAGE_PREFIX = FAMILY_EDITION ? 'fehluwe.family' :
   R06D_REVIEW_ROUTE ? 'fehluwe.light-r06d' : 'fehluwe';
 export const SAVE_KEY = `${STORAGE_PREFIX}.save`;
