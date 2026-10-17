@@ -1,0 +1,492 @@
+{
+ "base": "http://localhost:4204/Feh-Lu-We/",
+ "meta": {
+  "build": "index-BxdgDNuQ.js",
+  "viewport": [
+   915,
+   412
+  ],
+  "buffer": [
+   915,
+   412
+  ],
+  "dpr": 1,
+  "quality": "low",
+  "shadows": false,
+  "batching": true
+ },
+ "poses": [
+  {
+   "name": "hall-max-B-closed",
+   "doors": "closed",
+   "x": 89.5,
+   "y": 0.15,
+   "z": 95,
+   "yaw": 3.141592653589793,
+   "pitch": 0,
+   "room": "hall",
+   "calls": 71,
+   "tris": 571064,
+   "unbatched": {
+    "calls": 109,
+    "triangles": 571064
+   },
+   "regions": [
+    "green.vestibule",
+    "green.hall",
+    "green.living",
+    "green.dining",
+    "green.kitchen",
+    "green.lobby",
+    "green.frontGallery",
+    "green.walkway",
+    "green.landing",
+    "green.ucorr",
+    "green.rearNook",
+    "green.rearNookEast",
+    "frontHedge.left",
+    "frontHedge.right",
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mWing",
+    "mUp"
+   ],
+   "by": [
+    {
+     "k": "chunk:manor",
+     "calls": 10,
+     "triangles": 249954,
+     "visiblePx": 42310,
+     "visiblePct": 11.223,
+     "box": [
+      271,
+      0,
+      914,
+      240
+     ],
+     "objects": 10
+    },
+    {
+     "k": "chunk:mWing",
+     "calls": 7,
+     "triangles": 62100,
+     "visiblePx": 131,
+     "visiblePct": 0.035,
+     "box": [
+      275,
+      223,
+      297,
+      235
+     ],
+     "objects": 7
+    },
+    {
+     "k": "chunk:frontHedge.left",
+     "calls": 1,
+     "triangles": 59296,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:frontHedge.right",
+     "calls": 1,
+     "triangles": 59296,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mLiv",
+     "calls": 10,
+     "triangles": 42118,
+     "visiblePx": 2865,
+     "visiblePct": 0.76,
+     "box": [
+      633,
+      154,
+      725,
+      240
+     ],
+     "objects": 10
+    },
+    {
+     "k": "chunk:mIn",
+     "calls": 8,
+     "triangles": 27480,
+     "visiblePx": 277325,
+     "visiblePct": 73.565,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mHall",
+     "calls": 10,
+     "triangles": 22324,
+     "visiblePx": 44383,
+     "visiblePct": 11.773,
+     "box": [
+      96,
+      0,
+      638,
+      411
+     ],
+     "objects": 10
+    },
+    {
+     "k": "chunk:mUp",
+     "calls": 7,
+     "triangles": 14092,
+     "visiblePx": 198,
+     "visiblePct": 0.053,
+     "box": [
+      424,
+      129,
+      465,
+      162
+     ],
+     "objects": 7
+    },
+    {
+     "k": "chunk:green.dining",
+     "calls": 4,
+     "triangles": 7808,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 4
+    },
+    {
+     "k": "chunk:green.vestibule",
+     "calls": 3,
+     "triangles": 6520,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.hall",
+     "calls": 4,
+     "triangles": 4552,
+     "visiblePx": 711,
+     "visiblePct": 0.189,
+     "box": [
+      520,
+      184,
+      546,
+      256
+     ],
+     "objects": 4
+    },
+    {
+     "k": "chunk:main",
+     "calls": 21,
+     "triangles": 4536,
+     "visiblePx": 5384,
+     "visiblePct": 1.428,
+     "box": [
+      374,
+      0,
+      767,
+      242
+     ],
+     "objects": 21
+    },
+    {
+     "k": "chunk:green.living",
+     "calls": 4,
+     "triangles": 3952,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 4
+    },
+    {
+     "k": "region:mHall/Group",
+     "calls": 3,
+     "triangles": 2268,
+     "visiblePx": 60,
+     "visiblePct": 0.016,
+     "box": [
+      377,
+      0,
+      489,
+      58
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.frontGallery",
+     "calls": 3,
+     "triangles": 1672
+    },
+    {
+     "k": "region:mWing/Group",
+     "calls": 3,
+     "triangles": 1134
+    },
+    {
+     "k": "chunk:lamp",
+     "calls": 1,
+     "triangles": 808
+    },
+    {
+     "k": "obj:Group",
+     "calls": 5,
+     "triangles": 570
+    },
+    {
+     "k": "obj:Mesh",
+     "calls": 3,
+     "triangles": 564
+    },
+    {
+     "k": "region:mLiv/Mesh",
+     "calls": 1,
+     "triangles": 20
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "hall-max-A-closed",
+   "doors": "closed",
+   "x": 90,
+   "y": 0.15,
+   "z": 84.6373,
+   "yaw": 0,
+   "pitch": 0,
+   "room": "hall",
+   "calls": 69,
+   "tris": 479490,
+   "unbatched": {
+    "calls": 139,
+    "triangles": 479490
+   },
+   "regions": [
+    "green.vestibule",
+    "green.hall",
+    "green.living",
+    "green.dining",
+    "green.kitchen",
+    "green.lobby",
+    "green.frontGallery",
+    "green.walkway",
+    "green.landing",
+    "green.ucorr",
+    "green.rearNook",
+    "green.rearNookEast",
+    "frontHedge.left",
+    "frontHedge.right",
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mWing",
+    "mUp"
+   ],
+   "by": [
+    {
+     "k": "chunk:manor",
+     "calls": 9,
+     "triangles": 249250,
+     "visiblePx": 23491,
+     "visiblePct": 6.231,
+     "box": [
+      0,
+      0,
+      543,
+      196
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:mWing",
+     "calls": 11,
+     "triangles": 63020,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 11
+    },
+    {
+     "k": "chunk:mLiv",
+     "calls": 8,
+     "triangles": 44978,
+     "visiblePx": 7394,
+     "visiblePct": 1.961,
+     "box": [
+      0,
+      121,
+      166,
+      263
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mIn",
+     "calls": 9,
+     "triangles": 27492,
+     "visiblePx": 282135,
+     "visiblePct": 74.841,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:mUp",
+     "calls": 14,
+     "triangles": 23344,
+     "visiblePx": 434,
+     "visiblePct": 0.115,
+     "box": [
+      383,
+      146,
+      471,
+      162
+     ],
+     "objects": 14
+    },
+    {
+     "k": "chunk:mHall",
+     "calls": 11,
+     "triangles": 22204,
+     "visiblePx": 45897,
+     "visiblePct": 12.175,
+     "box": [
+      243,
+      0,
+      883,
+      411
+     ],
+     "objects": 11
+    },
+    {
+     "k": "chunk:green.walkway",
+     "calls": 3,
+     "triangles": 9448,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.ucorr",
+     "calls": 3,
+     "triangles": 9448,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.rearNookEast",
+     "calls": 3,
+     "triangles": 6520,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:mBil",
+     "calls": 5,
+     "triangles": 5744,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 5
+    },
+    {
+     "k": "chunk:main",
+     "calls": 38,
+     "triangles": 3716,
+     "visiblePx": 8319,
+     "visiblePct": 2.207,
+     "box": [
+      72,
+      0,
+      516,
+      259
+     ],
+     "objects": 37
+    },
+    {
+     "k": "chunk:green.landing",
+     "calls": 3,
+     "triangles": 3352,
+     "visiblePx": 4,
+     "visiblePct": 0.001,
+     "box": [
+      529,
+      159,
+      534,
+      162
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.rearNook",
+     "calls": 3,
+     "triangles": 3256,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.kitchen",
+     "calls": 3,
+     "triangles": 3256,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "region:mHall/Group",
+     "calls": 3,
+     "triangles": 2268
+    },
+    {
+     "k": "chunk:green.lobby",
+     "calls": 3,
+     "triangles": 1560
+    },
+    {
+     "k": "obj:Mesh",
+     "calls": 3,
+     "triangles": 564
+    },
+    {
+     "k": "obj:Group",
+     "calls": 6,
+     "triangles": 50
+    },
+    {
+     "k": "region:mLiv/Mesh",
+     "calls": 1,
+     "triangles": 20
+    }
+   ],
+   "reconciled": true
+  }
+ ],
+ "problems": []
+}

@@ -1,0 +1,2296 @@
+{
+ "base": "http://localhost:4190/Feh-Lu-We/",
+ "meta": {
+  "build": "index-B2a-hSQD.js",
+  "viewport": [
+   915,
+   412
+  ],
+  "buffer": [
+   915,
+   412
+  ],
+  "dpr": 1,
+  "quality": "low",
+  "shadows": false,
+  "batching": true
+ },
+ "poses": [
+  {
+   "name": "stair-max-open",
+   "doors": "open",
+   "x": 89,
+   "y": 3.35,
+   "z": 100,
+   "yaw": 2.68441,
+   "pitch": 0,
+   "room": "landing",
+   "calls": 127,
+   "tris": 641084,
+   "unbatched": {
+    "calls": 242,
+    "triangles": 641084
+   },
+   "regions": [
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mLib",
+    "mWing",
+    "mUp",
+    "mUpE",
+    "mUpR",
+    "mUpS",
+    "mAttic",
+    "mB",
+    "glass+cons",
+    "cottage",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "chunk:mLib",
+     "calls": 3,
+     "triangles": 103114,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:mWing",
+     "calls": 10,
+     "triangles": 63382,
+     "visiblePx": 120,
+     "visiblePct": 0.032,
+     "box": [
+      332,
+      241,
+      483,
+      276
+     ],
+     "objects": 10
+    },
+    {
+     "k": "chunk:mUpE",
+     "calls": 10,
+     "triangles": 55714,
+     "visiblePx": 7,
+     "visiblePct": 0.002,
+     "box": [
+      201,
+      233,
+      202,
+      257
+     ],
+     "objects": 10
+    },
+    {
+     "k": "chunk:grounds",
+     "calls": 9,
+     "triangles": 49656,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 8
+    },
+    {
+     "k": "veg:trees/multi-draw",
+     "calls": 1,
+     "triangles": 46943,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor",
+     "calls": 8,
+     "triangles": 44546,
+     "visiblePx": 96120,
+     "visiblePct": 25.497,
+     "box": [
+      0,
+      183,
+      914,
+      411
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mLiv",
+     "calls": 9,
+     "triangles": 42354,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 9
+    },
+    {
+     "k": "region:outdoor/Mesh",
+     "calls": 5,
+     "triangles": 34284,
+     "visiblePx": 3,
+     "visiblePct": 0.001,
+     "box": [
+      398,
+      227,
+      730,
+      229
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:mIn",
+     "calls": 8,
+     "triangles": 27228,
+     "visiblePx": 266941,
+     "visiblePct": 70.81,
+     "box": [
+      0,
+      0,
+      914,
+      374
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mAttic",
+     "calls": 13,
+     "triangles": 25200,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 12
+    },
+    {
+     "k": "chunk:forest",
+     "calls": 10,
+     "triangles": 19510,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 10
+    },
+    {
+     "k": "chunk:mUpR",
+     "calls": 7,
+     "triangles": 15820,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 7
+    },
+    {
+     "k": "chunk:mUp",
+     "calls": 9,
+     "triangles": 13664,
+     "visiblePx": 4385,
+     "visiblePct": 1.163,
+     "box": [
+      121,
+      198,
+      605,
+      411
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:paths",
+     "calls": 4,
+     "triangles": 13496,
+     "visiblePx": 482,
+     "visiblePct": 0.128,
+     "box": [
+      574,
+      249,
+      601,
+      282
+     ],
+     "objects": 4
+    },
+    {
+     "k": "chunk:mUpS",
+     "calls": 5,
+     "triangles": 11956
+    },
+    {
+     "k": "chunk:mHall",
+     "calls": 9,
+     "triangles": 10842
+    },
+    {
+     "k": "chunk:garden",
+     "calls": 8,
+     "triangles": 10364
+    },
+    {
+     "k": "chunk:mB",
+     "calls": 7,
+     "triangles": 10260
+    },
+    {
+     "k": "chunk:cons",
+     "calls": 9,
+     "triangles": 9036
+    },
+    {
+     "k": "chunk:main",
+     "calls": 45,
+     "triangles": 8365
+    },
+    {
+     "k": "chunk:fence",
+     "calls": 1,
+     "triangles": 8100
+    },
+    {
+     "k": "region:outdoor/grass|gr3_2",
+     "calls": 1,
+     "triangles": 2340
+    },
+    {
+     "k": "region:mHall/Group",
+     "calls": 3,
+     "triangles": 2268
+    },
+    {
+     "k": "chunk:hills",
+     "calls": 1,
+     "triangles": 1600
+    },
+    {
+     "k": "region:outdoor/cap|f2_1",
+     "calls": 1,
+     "triangles": 1386
+    },
+    {
+     "k": "region:mWing/Group",
+     "calls": 3,
+     "triangles": 1134
+    },
+    {
+     "k": "region:outdoor/cap|f1_1",
+     "calls": 1,
+     "triangles": 882
+    },
+    {
+     "k": "chunk:lamp",
+     "calls": 1,
+     "triangles": 808
+    },
+    {
+     "k": "chunk:ground",
+     "calls": 4,
+     "triangles": 752
+    },
+    {
+     "k": "veg:plants/multi-draw",
+     "calls": 1,
+     "triangles": 744
+    },
+    {
+     "k": "veg:/multi-draw",
+     "calls": 2,
+     "triangles": 714
+    },
+    {
+     "k": "obj:Group",
+     "calls": 17,
+     "triangles": 684
+    },
+    {
+     "k": "region:outdoor/grass|gr1_1",
+     "calls": 1,
+     "triangles": 600
+    },
+    {
+     "k": "region:outdoor/grass|gr3_1",
+     "calls": 1,
+     "triangles": 600
+    },
+    {
+     "k": "chunk:airco",
+     "calls": 1,
+     "triangles": 568
+    },
+    {
+     "k": "obj:Mesh",
+     "calls": 3,
+     "triangles": 564
+    },
+    {
+     "k": "region:outdoor/stem|f2_1",
+     "calls": 1,
+     "triangles": 528
+    },
+    {
+     "k": "region:outdoor/stem|f1_1",
+     "calls": 1,
+     "triangles": 336
+    },
+    {
+     "k": "region:outdoor/grass|gr2_1",
+     "calls": 1,
+     "triangles": 210
+    },
+    {
+     "k": "chunk:glass",
+     "calls": 4,
+     "triangles": 196
+    },
+    {
+     "k": "region:outdoor/trunk|garden",
+     "calls": 1,
+     "triangles": 140
+    },
+    {
+     "k": "chunk:wall",
+     "calls": 1,
+     "triangles": 96
+    },
+    {
+     "k": "region:outdoor/cone|garden",
+     "calls": 1,
+     "triangles": 80
+    },
+    {
+     "k": "region:mLiv/Mesh",
+     "calls": 1,
+     "triangles": 20
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "landing-max-open",
+   "doors": "open",
+   "x": 90,
+   "y": 3.35,
+   "z": 99.5,
+   "yaw": 3.141592653589793,
+   "pitch": 0,
+   "room": "landing",
+   "calls": 119,
+   "tris": 636855,
+   "unbatched": {
+    "calls": 232,
+    "triangles": 636855
+   },
+   "regions": [
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mLib",
+    "mWing",
+    "mUp",
+    "mUpE",
+    "mUpR",
+    "mUpS",
+    "mAttic",
+    "mB",
+    "glass+cons",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "chunk:mLib",
+     "calls": 4,
+     "triangles": 103522,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 4
+    },
+    {
+     "k": "chunk:mWing",
+     "calls": 8,
+     "triangles": 62536,
+     "visiblePx": 139,
+     "visiblePct": 0.037,
+     "box": [
+      345,
+      270,
+      354,
+      283
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mUpE",
+     "calls": 10,
+     "triangles": 55714,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 10
+    },
+    {
+     "k": "chunk:grounds",
+     "calls": 9,
+     "triangles": 49656,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 8
+    },
+    {
+     "k": "chunk:mLiv",
+     "calls": 13,
+     "triangles": 47968,
+     "visiblePx": 24,
+     "visiblePct": 0.006,
+     "box": [
+      581,
+      281,
+      591,
+      323
+     ],
+     "objects": 13
+    },
+    {
+     "k": "veg:trees/multi-draw",
+     "calls": 1,
+     "triangles": 45587,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor",
+     "calls": 8,
+     "triangles": 44546,
+     "visiblePx": 82226,
+     "visiblePct": 21.812,
+     "box": [
+      0,
+      186,
+      914,
+      411
+     ],
+     "objects": 8
+    },
+    {
+     "k": "region:outdoor/Mesh",
+     "calls": 5,
+     "triangles": 34284,
+     "visiblePx": 1,
+     "visiblePct": 0,
+     "box": [
+      233,
+      232,
+      233,
+      232
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:mIn",
+     "calls": 8,
+     "triangles": 27228,
+     "visiblePx": 291292,
+     "visiblePct": 77.27,
+     "box": [
+      0,
+      0,
+      914,
+      377
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mAttic",
+     "calls": 10,
+     "triangles": 24196,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 10
+    },
+    {
+     "k": "chunk:forest",
+     "calls": 14,
+     "triangles": 19858,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 14
+    },
+    {
+     "k": "chunk:mUpR",
+     "calls": 7,
+     "triangles": 15820,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 7
+    },
+    {
+     "k": "chunk:mUp",
+     "calls": 9,
+     "triangles": 13664,
+     "visiblePx": 218,
+     "visiblePct": 0.058,
+     "box": [
+      440,
+      199,
+      471,
+      233
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:paths",
+     "calls": 4,
+     "triangles": 13496,
+     "visiblePx": 454,
+     "visiblePct": 0.12,
+     "box": [
+      444,
+      247,
+      470,
+      276
+     ],
+     "objects": 4
+    },
+    {
+     "k": "chunk:mUpS",
+     "calls": 5,
+     "triangles": 11956
+    },
+    {
+     "k": "chunk:mHall",
+     "calls": 11,
+     "triangles": 11154
+    },
+    {
+     "k": "chunk:mB",
+     "calls": 8,
+     "triangles": 10272
+    },
+    {
+     "k": "chunk:garden",
+     "calls": 7,
+     "triangles": 10140
+    },
+    {
+     "k": "chunk:fence",
+     "calls": 1,
+     "triangles": 8100
+    },
+    {
+     "k": "chunk:main",
+     "calls": 44,
+     "triangles": 7408
+    },
+    {
+     "k": "region:outdoor/grass|gr1_2",
+     "calls": 1,
+     "triangles": 2880
+    },
+    {
+     "k": "region:mLiv/Group",
+     "calls": 4,
+     "triangles": 2728
+    },
+    {
+     "k": "region:mHall/Group",
+     "calls": 3,
+     "triangles": 2268
+    },
+    {
+     "k": "chunk:hills",
+     "calls": 1,
+     "triangles": 1600
+    },
+    {
+     "k": "region:outdoor/cap|f2_1",
+     "calls": 1,
+     "triangles": 1386
+    },
+    {
+     "k": "region:mWing/Group",
+     "calls": 3,
+     "triangles": 1134
+    },
+    {
+     "k": "region:outdoor/cap|f1_1",
+     "calls": 1,
+     "triangles": 882
+    },
+    {
+     "k": "chunk:lamp",
+     "calls": 1,
+     "triangles": 808
+    },
+    {
+     "k": "chunk:ground",
+     "calls": 4,
+     "triangles": 752
+    },
+    {
+     "k": "veg:plants/multi-draw",
+     "calls": 1,
+     "triangles": 744
+    },
+    {
+     "k": "veg:/multi-draw",
+     "calls": 2,
+     "triangles": 732
+    },
+    {
+     "k": "obj:Group",
+     "calls": 12,
+     "triangles": 662
+    },
+    {
+     "k": "region:outdoor/grass|gr1_1",
+     "calls": 1,
+     "triangles": 600
+    },
+    {
+     "k": "region:outdoor/grass|gr3_1",
+     "calls": 1,
+     "triangles": 600
+    },
+    {
+     "k": "obj:Mesh",
+     "calls": 3,
+     "triangles": 564
+    },
+    {
+     "k": "region:outdoor/stem|f2_1",
+     "calls": 1,
+     "triangles": 528
+    },
+    {
+     "k": "region:outdoor/stem|f1_1",
+     "calls": 1,
+     "triangles": 336
+    },
+    {
+     "k": "region:outdoor/grass|gr2_1",
+     "calls": 1,
+     "triangles": 210
+    },
+    {
+     "k": "region:outdoor/trunk|garden",
+     "calls": 1,
+     "triangles": 140
+    },
+    {
+     "k": "chunk:wall",
+     "calls": 1,
+     "triangles": 96
+    },
+    {
+     "k": "region:outdoor/cone|garden",
+     "calls": 1,
+     "triangles": 80
+    },
+    {
+     "k": "region:mLiv/Mesh",
+     "calls": 1,
+     "triangles": 20
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "well-max-open",
+   "doors": "open",
+   "x": 90,
+   "y": 0.15,
+   "z": 84.5,
+   "yaw": 0,
+   "pitch": -0.04,
+   "room": "hall",
+   "calls": 147,
+   "tris": 734590,
+   "unbatched": {
+    "calls": 306,
+    "triangles": 734590
+   },
+   "regions": [
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mLib",
+    "mWing",
+    "mServ",
+    "mUp",
+    "mUpE",
+    "mUpS",
+    "mAttic",
+    "mB",
+    "ug",
+    "glass+cons",
+    "cottageIn",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "chunk:mLib",
+     "calls": 8,
+     "triangles": 107638,
+     "visiblePx": 111,
+     "visiblePct": 0.029,
+     "box": [
+      81,
+      170,
+      118,
+      173
+     ],
+     "objects": 8
+    },
+    {
+     "k": "veg:trees/multi-draw",
+     "calls": 1,
+     "triangles": 71152,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:grounds",
+     "calls": 26,
+     "triangles": 66692,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 23
+    },
+    {
+     "k": "chunk:mWing",
+     "calls": 11,
+     "triangles": 62628,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 11
+    },
+    {
+     "k": "chunk:mUpE",
+     "calls": 9,
+     "triangles": 55438,
+     "visiblePx": 1,
+     "visiblePct": 0,
+     "box": [
+      679,
+      55,
+      679,
+      55
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:mLiv",
+     "calls": 8,
+     "triangles": 44598,
+     "visiblePx": 7733,
+     "visiblePct": 2.051,
+     "box": [
+      0,
+      110,
+      175,
+      249
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:manor",
+     "calls": 8,
+     "triangles": 44546,
+     "visiblePx": 23473,
+     "visiblePct": 6.227,
+     "box": [
+      0,
+      0,
+      543,
+      213
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mServ",
+     "calls": 8,
+     "triangles": 34678,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 8
+    },
+    {
+     "k": "region:outdoor/Mesh",
+     "calls": 4,
+     "triangles": 31206,
+     "visiblePx": 1,
+     "visiblePct": 0,
+     "box": [
+      381,
+      197,
+      381,
+      197
+     ],
+     "objects": 4
+    },
+    {
+     "k": "chunk:mIn",
+     "calls": 8,
+     "triangles": 27228,
+     "visiblePx": 277751,
+     "visiblePct": 73.678,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mAttic",
+     "calls": 14,
+     "triangles": 25488,
+     "visiblePx": 4,
+     "visiblePct": 0.001,
+     "box": [
+      510,
+      105,
+      510,
+      111
+     ],
+     "objects": 13
+    },
+    {
+     "k": "chunk:mUp",
+     "calls": 13,
+     "triangles": 18378,
+     "visiblePx": 445,
+     "visiblePct": 0.118,
+     "box": [
+      383,
+      133,
+      471,
+      150
+     ],
+     "objects": 13
+    },
+    {
+     "k": "chunk:garden",
+     "calls": 10,
+     "triangles": 15060,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 10
+    },
+    {
+     "k": "chunk:cons",
+     "calls": 13,
+     "triangles": 14248,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 12
+    },
+    {
+     "k": "chunk:paths",
+     "calls": 3,
+     "triangles": 13256
+    },
+    {
+     "k": "chunk:cottageIn",
+     "calls": 13,
+     "triangles": 12358
+    },
+    {
+     "k": "chunk:mB",
+     "calls": 10,
+     "triangles": 12144
+    },
+    {
+     "k": "chunk:mUpS",
+     "calls": 6,
+     "triangles": 12020
+    },
+    {
+     "k": "chunk:mHall",
+     "calls": 10,
+     "triangles": 10722
+    },
+    {
+     "k": "chunk:forest",
+     "calls": 4,
+     "triangles": 8880
+    },
+    {
+     "k": "chunk:fence",
+     "calls": 1,
+     "triangles": 8100
+    },
+    {
+     "k": "chunk:main",
+     "calls": 66,
+     "triangles": 6872
+    },
+    {
+     "k": "chunk:mBil",
+     "calls": 5,
+     "triangles": 5744
+    },
+    {
+     "k": "veg:plants/multi-draw",
+     "calls": 1,
+     "triangles": 3200
+    },
+    {
+     "k": "chunk:ug",
+     "calls": 5,
+     "triangles": 3004
+    },
+    {
+     "k": "region:outdoor/grass|gr1_2",
+     "calls": 1,
+     "triangles": 2880
+    },
+    {
+     "k": "region:outdoor/grass|gr2_3",
+     "calls": 1,
+     "triangles": 2610
+    },
+    {
+     "k": "region:outdoor/grass|gr3_2",
+     "calls": 1,
+     "triangles": 2340
+    },
+    {
+     "k": "region:mHall/Group",
+     "calls": 3,
+     "triangles": 2268
+    },
+    {
+     "k": "region:mLib/Group",
+     "calls": 3,
+     "triangles": 2268
+    },
+    {
+     "k": "region:outdoor/grass|gr1_3",
+     "calls": 1,
+     "triangles": 1980
+    },
+    {
+     "k": "region:outdoor/grass|gr0_2",
+     "calls": 1,
+     "triangles": 1890
+    },
+    {
+     "k": "chunk:hills",
+     "calls": 1,
+     "triangles": 1600
+    },
+    {
+     "k": "obj:Mesh",
+     "calls": 3,
+     "triangles": 564
+    },
+    {
+     "k": "region:outdoor/grass|gr2_2",
+     "calls": 1,
+     "triangles": 210
+    },
+    {
+     "k": "chunk:glass",
+     "calls": 4,
+     "triangles": 196
+    },
+    {
+     "k": "region:outdoor/trunk|garden",
+     "calls": 1,
+     "triangles": 140
+    },
+    {
+     "k": "obj:Group",
+     "calls": 16,
+     "triangles": 122
+    },
+    {
+     "k": "chunk:wall",
+     "calls": 1,
+     "triangles": 96
+    },
+    {
+     "k": "region:outdoor/cone|garden",
+     "calls": 1,
+     "triangles": 80
+    },
+    {
+     "k": "veg:/multi-draw",
+     "calls": 1,
+     "triangles": 48
+    },
+    {
+     "k": "region:mLiv/Mesh",
+     "calls": 1,
+     "triangles": 20
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "stair-max-partial",
+   "doors": "partial",
+   "x": 89,
+   "y": 3.35,
+   "z": 100,
+   "yaw": 2.68441,
+   "pitch": 0,
+   "room": "landing",
+   "calls": 75,
+   "tris": 425950,
+   "unbatched": {
+    "calls": 150,
+    "triangles": 425950
+   },
+   "regions": [
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mLib",
+    "mWing",
+    "mUp",
+    "mUpE",
+    "mUpR",
+    "mUpS",
+    "mAttic"
+   ],
+   "by": [
+    {
+     "k": "chunk:mLib",
+     "calls": 3,
+     "triangles": 103114,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:mWing",
+     "calls": 10,
+     "triangles": 63382,
+     "visiblePx": 120,
+     "visiblePct": 0.032,
+     "box": [
+      332,
+      241,
+      483,
+      276
+     ],
+     "objects": 10
+    },
+    {
+     "k": "chunk:mUpE",
+     "calls": 10,
+     "triangles": 55714,
+     "visiblePx": 7,
+     "visiblePct": 0.002,
+     "box": [
+      201,
+      233,
+      202,
+      257
+     ],
+     "objects": 10
+    },
+    {
+     "k": "chunk:manor",
+     "calls": 8,
+     "triangles": 44546,
+     "visiblePx": 95822,
+     "visiblePct": 25.418,
+     "box": [
+      0,
+      183,
+      914,
+      411
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mLiv",
+     "calls": 9,
+     "triangles": 42354,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 9
+    },
+    {
+     "k": "chunk:mIn",
+     "calls": 8,
+     "triangles": 27228,
+     "visiblePx": 270542,
+     "visiblePct": 71.766,
+     "box": [
+      0,
+      0,
+      914,
+      374
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mAttic",
+     "calls": 13,
+     "triangles": 25200,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 12
+    },
+    {
+     "k": "chunk:mUpR",
+     "calls": 7,
+     "triangles": 15820,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 7
+    },
+    {
+     "k": "chunk:mUp",
+     "calls": 9,
+     "triangles": 13664,
+     "visiblePx": 4382,
+     "visiblePct": 1.162,
+     "box": [
+      121,
+      198,
+      605,
+      411
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:mUpS",
+     "calls": 5,
+     "triangles": 11956,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 5
+    },
+    {
+     "k": "chunk:mHall",
+     "calls": 9,
+     "triangles": 10842,
+     "visiblePx": 1393,
+     "visiblePct": 0.37,
+     "box": [
+      428,
+      193,
+      739,
+      341
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:main",
+     "calls": 36,
+     "triangles": 6688,
+     "visiblePx": 5470,
+     "visiblePct": 1.451,
+     "box": [
+      543,
+      167,
+      786,
+      324
+     ],
+     "objects": 36
+    },
+    {
+     "k": "region:mHall/Group",
+     "calls": 3,
+     "triangles": 2268,
+     "visiblePx": 27,
+     "visiblePct": 0.007,
+     "box": [
+      544,
+      216,
+      608,
+      220
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:mWing/Group",
+     "calls": 3,
+     "triangles": 1134,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:lamp",
+     "calls": 1,
+     "triangles": 808
+    },
+    {
+     "k": "obj:Group",
+     "calls": 12,
+     "triangles": 648
+    },
+    {
+     "k": "obj:Mesh",
+     "calls": 3,
+     "triangles": 564
+    },
+    {
+     "k": "region:mLiv/Mesh",
+     "calls": 1,
+     "triangles": 20
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "landing-max-partial",
+   "doors": "partial",
+   "x": 90,
+   "y": 3.35,
+   "z": 99.5,
+   "yaw": 3.141592653589793,
+   "pitch": 0,
+   "room": "landing",
+   "calls": 76,
+   "tris": 433402,
+   "unbatched": {
+    "calls": 158,
+    "triangles": 433402
+   },
+   "regions": [
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mLib",
+    "mWing",
+    "mUp",
+    "mUpE",
+    "mUpR",
+    "mUpS",
+    "mAttic"
+   ],
+   "by": [
+    {
+     "k": "chunk:mLib",
+     "calls": 4,
+     "triangles": 103522,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 4
+    },
+    {
+     "k": "chunk:mWing",
+     "calls": 8,
+     "triangles": 62536,
+     "visiblePx": 139,
+     "visiblePct": 0.037,
+     "box": [
+      345,
+      270,
+      354,
+      283
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mUpE",
+     "calls": 10,
+     "triangles": 55714,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 10
+    },
+    {
+     "k": "chunk:mLiv",
+     "calls": 13,
+     "triangles": 47968,
+     "visiblePx": 24,
+     "visiblePct": 0.006,
+     "box": [
+      581,
+      281,
+      591,
+      323
+     ],
+     "objects": 13
+    },
+    {
+     "k": "chunk:manor",
+     "calls": 8,
+     "triangles": 44546,
+     "visiblePx": 82154,
+     "visiblePct": 21.793,
+     "box": [
+      0,
+      186,
+      914,
+      411
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mIn",
+     "calls": 8,
+     "triangles": 27228,
+     "visiblePx": 290905,
+     "visiblePct": 77.167,
+     "box": [
+      0,
+      0,
+      914,
+      377
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mAttic",
+     "calls": 10,
+     "triangles": 24196,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 10
+    },
+    {
+     "k": "chunk:mUpR",
+     "calls": 7,
+     "triangles": 15820,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 7
+    },
+    {
+     "k": "chunk:mUp",
+     "calls": 9,
+     "triangles": 13664,
+     "visiblePx": 218,
+     "visiblePct": 0.058,
+     "box": [
+      440,
+      199,
+      471,
+      233
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:mUpS",
+     "calls": 5,
+     "triangles": 11956,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 5
+    },
+    {
+     "k": "chunk:mHall",
+     "calls": 11,
+     "triangles": 11154,
+     "visiblePx": 1714,
+     "visiblePct": 0.455,
+     "box": [
+      292,
+      191,
+      582,
+      331
+     ],
+     "objects": 11
+    },
+    {
+     "k": "chunk:main",
+     "calls": 40,
+     "triangles": 6944,
+     "visiblePx": 3364,
+     "visiblePct": 0.892,
+     "box": [
+      426,
+      167,
+      610,
+      300
+     ],
+     "objects": 40
+    },
+    {
+     "k": "region:mLiv/Group",
+     "calls": 4,
+     "triangles": 2728,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "region:mHall/Group",
+     "calls": 3,
+     "triangles": 2268,
+     "visiblePx": 26,
+     "visiblePct": 0.007,
+     "box": [
+      431,
+      216,
+      490,
+      220
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:mWing/Group",
+     "calls": 3,
+     "triangles": 1134
+    },
+    {
+     "k": "chunk:lamp",
+     "calls": 1,
+     "triangles": 808
+    },
+    {
+     "k": "obj:Group",
+     "calls": 10,
+     "triangles": 632
+    },
+    {
+     "k": "obj:Mesh",
+     "calls": 3,
+     "triangles": 564
+    },
+    {
+     "k": "region:mLiv/Mesh",
+     "calls": 1,
+     "triangles": 20
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "well-max-partial",
+   "doors": "partial",
+   "x": 90,
+   "y": 0.15,
+   "z": 84.5,
+   "yaw": 0,
+   "pitch": -0.04,
+   "room": "hall",
+   "calls": 79,
+   "tris": 426118,
+   "unbatched": {
+    "calls": 181,
+    "triangles": 426118
+   },
+   "regions": [
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mLib",
+    "mWing",
+    "mUp",
+    "mUpE",
+    "mUpS",
+    "mAttic"
+   ],
+   "by": [
+    {
+     "k": "chunk:mLib",
+     "calls": 8,
+     "triangles": 107638,
+     "visiblePx": 111,
+     "visiblePct": 0.029,
+     "box": [
+      81,
+      170,
+      118,
+      173
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mWing",
+     "calls": 11,
+     "triangles": 62628,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 11
+    },
+    {
+     "k": "chunk:mUpE",
+     "calls": 9,
+     "triangles": 55438,
+     "visiblePx": 1,
+     "visiblePct": 0,
+     "box": [
+      679,
+      55,
+      679,
+      55
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:mLiv",
+     "calls": 8,
+     "triangles": 44598,
+     "visiblePx": 7745,
+     "visiblePct": 2.054,
+     "box": [
+      0,
+      110,
+      175,
+      249
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:manor",
+     "calls": 8,
+     "triangles": 44546,
+     "visiblePx": 23111,
+     "visiblePct": 6.131,
+     "box": [
+      0,
+      0,
+      543,
+      184
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mIn",
+     "calls": 8,
+     "triangles": 27228,
+     "visiblePx": 279358,
+     "visiblePct": 74.104,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mAttic",
+     "calls": 14,
+     "triangles": 25488,
+     "visiblePx": 4,
+     "visiblePct": 0.001,
+     "box": [
+      510,
+      105,
+      510,
+      111
+     ],
+     "objects": 13
+    },
+    {
+     "k": "chunk:mUp",
+     "calls": 13,
+     "triangles": 18378,
+     "visiblePx": 445,
+     "visiblePct": 0.118,
+     "box": [
+      383,
+      133,
+      471,
+      150
+     ],
+     "objects": 13
+    },
+    {
+     "k": "chunk:mUpS",
+     "calls": 6,
+     "triangles": 12020,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 6
+    },
+    {
+     "k": "chunk:mHall",
+     "calls": 10,
+     "triangles": 10722,
+     "visiblePx": 50772,
+     "visiblePct": 13.468,
+     "box": [
+      233,
+      0,
+      870,
+      410
+     ],
+     "objects": 10
+    },
+    {
+     "k": "chunk:main",
+     "calls": 56,
+     "triangles": 6476,
+     "visiblePx": 8114,
+     "visiblePct": 2.152,
+     "box": [
+      78,
+      0,
+      517,
+      246
+     ],
+     "objects": 55
+    },
+    {
+     "k": "chunk:mBil",
+     "calls": 5,
+     "triangles": 5744,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 5
+    },
+    {
+     "k": "region:mHall/Group",
+     "calls": 3,
+     "triangles": 2268,
+     "visiblePx": 65,
+     "visiblePct": 0.017,
+     "box": [
+      399,
+      4,
+      503,
+      55
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:mLib/Group",
+     "calls": 3,
+     "triangles": 2268,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "obj:Mesh",
+     "calls": 3,
+     "triangles": 564
+    },
+    {
+     "k": "obj:Group",
+     "calls": 15,
+     "triangles": 94
+    },
+    {
+     "k": "region:mLiv/Mesh",
+     "calls": 1,
+     "triangles": 20
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "stair-max-closed",
+   "doors": "closed",
+   "x": 89,
+   "y": 3.35,
+   "z": 100,
+   "yaw": 2.68441,
+   "pitch": 0,
+   "room": "landing",
+   "calls": 54,
+   "tris": 211944,
+   "unbatched": {
+    "calls": 99,
+    "triangles": 211944
+   },
+   "regions": [
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mWing",
+    "mUp"
+   ],
+   "by": [
+    {
+     "k": "chunk:mWing",
+     "calls": 10,
+     "triangles": 63382,
+     "visiblePx": 120,
+     "visiblePct": 0.032,
+     "box": [
+      332,
+      241,
+      483,
+      276
+     ],
+     "objects": 10
+    },
+    {
+     "k": "chunk:manor",
+     "calls": 8,
+     "triangles": 44546,
+     "visiblePx": 96126,
+     "visiblePct": 25.499,
+     "box": [
+      0,
+      183,
+      914,
+      411
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mLiv",
+     "calls": 9,
+     "triangles": 42354,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 9
+    },
+    {
+     "k": "chunk:mIn",
+     "calls": 8,
+     "triangles": 27228,
+     "visiblePx": 271463,
+     "visiblePct": 72.01,
+     "box": [
+      0,
+      0,
+      914,
+      374
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mUp",
+     "calls": 9,
+     "triangles": 13664,
+     "visiblePx": 4381,
+     "visiblePct": 1.162,
+     "box": [
+      121,
+      198,
+      605,
+      411
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:mHall",
+     "calls": 9,
+     "triangles": 10842,
+     "visiblePx": 1642,
+     "visiblePct": 0.436,
+     "box": [
+      428,
+      192,
+      747,
+      341
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:main",
+     "calls": 25,
+     "triangles": 4516,
+     "visiblePx": 4297,
+     "visiblePct": 1.14,
+     "box": [
+      186,
+      167,
+      806,
+      324
+     ],
+     "objects": 25
+    },
+    {
+     "k": "region:mHall/Group",
+     "calls": 3,
+     "triangles": 2268,
+     "visiblePx": 28,
+     "visiblePct": 0.007,
+     "box": [
+      544,
+      216,
+      608,
+      220
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:mWing/Group",
+     "calls": 3,
+     "triangles": 1134,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:lamp",
+     "calls": 1,
+     "triangles": 808,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group",
+     "calls": 10,
+     "triangles": 618,
+     "visiblePx": 1039,
+     "visiblePct": 0.276,
+     "box": [
+      430,
+      196,
+      728,
+      309
+     ],
+     "objects": 10
+    },
+    {
+     "k": "obj:Mesh",
+     "calls": 3,
+     "triangles": 564,
+     "visiblePx": 286,
+     "visiblePct": 0.076,
+     "box": [
+      694,
+      317,
+      780,
+      337
+     ],
+     "objects": 3
+    },
+    {
+     "k": "region:mLiv/Mesh",
+     "calls": 1,
+     "triangles": 20,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "landing-max-closed",
+   "doors": "closed",
+   "x": 90,
+   "y": 3.35,
+   "z": 99.5,
+   "yaw": 3.141592653589793,
+   "pitch": 0,
+   "room": "landing",
+   "calls": 55,
+   "tris": 219786,
+   "unbatched": {
+    "calls": 103,
+    "triangles": 219786
+   },
+   "regions": [
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mWing",
+    "mUp"
+   ],
+   "by": [
+    {
+     "k": "chunk:mWing",
+     "calls": 8,
+     "triangles": 62536,
+     "visiblePx": 139,
+     "visiblePct": 0.037,
+     "box": [
+      345,
+      270,
+      354,
+      283
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mLiv",
+     "calls": 13,
+     "triangles": 47968,
+     "visiblePx": 24,
+     "visiblePct": 0.006,
+     "box": [
+      581,
+      281,
+      591,
+      323
+     ],
+     "objects": 13
+    },
+    {
+     "k": "chunk:manor",
+     "calls": 8,
+     "triangles": 44546,
+     "visiblePx": 82343,
+     "visiblePct": 21.843,
+     "box": [
+      0,
+      186,
+      914,
+      411
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mIn",
+     "calls": 8,
+     "triangles": 27228,
+     "visiblePx": 291855,
+     "visiblePct": 77.419,
+     "box": [
+      0,
+      0,
+      914,
+      377
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mUp",
+     "calls": 9,
+     "triangles": 13664,
+     "visiblePx": 218,
+     "visiblePct": 0.058,
+     "box": [
+      440,
+      199,
+      471,
+      233
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:mHall",
+     "calls": 11,
+     "triangles": 11154,
+     "visiblePx": 1714,
+     "visiblePct": 0.455,
+     "box": [
+      292,
+      191,
+      582,
+      331
+     ],
+     "objects": 11
+    },
+    {
+     "k": "chunk:main",
+     "calls": 25,
+     "triangles": 4596,
+     "visiblePx": 2235,
+     "visiblePct": 0.593,
+     "box": [
+      426,
+      167,
+      626,
+      300
+     ],
+     "objects": 25
+    },
+    {
+     "k": "region:mLiv/Group",
+     "calls": 4,
+     "triangles": 2728,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "region:mHall/Group",
+     "calls": 3,
+     "triangles": 2268,
+     "visiblePx": 24,
+     "visiblePct": 0.006,
+     "box": [
+      431,
+      216,
+      490,
+      220
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:mWing/Group",
+     "calls": 3,
+     "triangles": 1134,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:lamp",
+     "calls": 1,
+     "triangles": 808,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group",
+     "calls": 6,
+     "triangles": 572,
+     "visiblePx": 1280,
+     "visiblePct": 0.34,
+     "box": [
+      296,
+      194,
+      568,
+      289
+     ],
+     "objects": 6
+    },
+    {
+     "k": "obj:Mesh",
+     "calls": 3,
+     "triangles": 564,
+     "visiblePx": 315,
+     "visiblePct": 0.084,
+     "box": [
+      421,
+      294,
+      598,
+      331
+     ],
+     "objects": 3
+    },
+    {
+     "k": "region:mLiv/Mesh",
+     "calls": 1,
+     "triangles": 20,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "well-max-closed",
+   "doors": "closed",
+   "x": 90,
+   "y": 0.15,
+   "z": 84.5,
+   "yaw": 0,
+   "pitch": -0.04,
+   "room": "hall",
+   "calls": 49,
+   "tris": 220462,
+   "unbatched": {
+    "calls": 114,
+    "triangles": 220462
+   },
+   "regions": [
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mWing",
+    "mUp"
+   ],
+   "by": [
+    {
+     "k": "chunk:mWing",
+     "calls": 11,
+     "triangles": 62628,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 11
+    },
+    {
+     "k": "chunk:mLiv",
+     "calls": 8,
+     "triangles": 44598,
+     "visiblePx": 7747,
+     "visiblePct": 2.055,
+     "box": [
+      0,
+      110,
+      175,
+      249
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:manor",
+     "calls": 8,
+     "triangles": 44546,
+     "visiblePx": 22934,
+     "visiblePct": 6.084,
+     "box": [
+      0,
+      0,
+      543,
+      184
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mIn",
+     "calls": 8,
+     "triangles": 27228,
+     "visiblePx": 280118,
+     "visiblePct": 74.306,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mUp",
+     "calls": 13,
+     "triangles": 18378,
+     "visiblePx": 445,
+     "visiblePct": 0.118,
+     "box": [
+      383,
+      133,
+      471,
+      150
+     ],
+     "objects": 13
+    },
+    {
+     "k": "chunk:mHall",
+     "calls": 10,
+     "triangles": 10722,
+     "visiblePx": 50814,
+     "visiblePct": 13.479,
+     "box": [
+      233,
+      0,
+      870,
+      410
+     ],
+     "objects": 10
+    },
+    {
+     "k": "chunk:mBil",
+     "calls": 5,
+     "triangles": 5744,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 5
+    },
+    {
+     "k": "chunk:main",
+     "calls": 38,
+     "triangles": 3716,
+     "visiblePx": 7917,
+     "visiblePct": 2.1,
+     "box": [
+      78,
+      0,
+      517,
+      246
+     ],
+     "objects": 37
+    },
+    {
+     "k": "region:mHall/Group",
+     "calls": 3,
+     "triangles": 2268,
+     "visiblePx": 60,
+     "visiblePct": 0.016,
+     "box": [
+      399,
+      4,
+      503,
+      55
+     ],
+     "objects": 2
+    },
+    {
+     "k": "obj:Mesh",
+     "calls": 3,
+     "triangles": 564,
+     "visiblePx": 29725,
+     "visiblePct": 7.885,
+     "box": [
+      282,
+      254,
+      618,
+      365
+     ],
+     "objects": 3
+    },
+    {
+     "k": "obj:Group",
+     "calls": 6,
+     "triangles": 50,
+     "visiblePx": 6600,
+     "visiblePct": 1.751,
+     "box": [
+      515,
+      0,
+      851,
+      138
+     ],
+     "objects": 6
+    },
+    {
+     "k": "region:mLiv/Mesh",
+     "calls": 1,
+     "triangles": 20,
+     "visiblePx": 178,
+     "visiblePct": 0.047,
+     "box": [
+      120,
+      248,
+      175,
+      251
+     ],
+     "objects": 1
+    }
+   ],
+   "reconciled": true
+  }
+ ],
+ "problems": []
+}

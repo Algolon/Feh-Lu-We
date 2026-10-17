@@ -1,0 +1,83 @@
+[
+ {
+  "name": "stair-max-open",
+  "doors": "open",
+  "x": 89,
+  "y": 3.35,
+  "z": 100,
+  "yaw": 2.68441,
+  "pitch": 0
+ },
+ {
+  "name": "landing-max-open",
+  "doors": "open",
+  "x": 90,
+  "y": 3.35,
+  "z": 99.5,
+  "yaw": 3.141592653589793,
+  "pitch": 0
+ },
+ {
+  "name": "well-max-open",
+  "doors": "open",
+  "x": 90,
+  "y": 0.15,
+  "z": 84.5,
+  "yaw": 0,
+  "pitch": -0.04
+ },
+ {
+  "name": "stair-max-partial",
+  "doors": "partial",
+  "x": 89,
+  "y": 3.35,
+  "z": 100,
+  "yaw": 2.68441,
+  "pitch": 0
+ },
+ {
+  "name": "landing-max-partial",
+  "doors": "partial",
+  "x": 90,
+  "y": 3.35,
+  "z": 99.5,
+  "yaw": 3.141592653589793,
+  "pitch": 0
+ },
+ {
+  "name": "well-max-partial",
+  "doors": "partial",
+  "x": 90,
+  "y": 0.15,
+  "z": 84.5,
+  "yaw": 0,
+  "pitch": -0.04
+ },
+ {
+  "name": "stair-max-closed",
+  "doors": "closed",
+  "x": 89,
+  "y": 3.35,
+  "z": 100,
+  "yaw": 2.68441,
+  "pitch": 0
+ },
+ {
+  "name": "landing-max-closed",
+  "doors": "closed",
+  "x": 90,
+  "y": 3.35,
+  "z": 99.5,
+  "yaw": 3.141592653589793,
+  "pitch": 0
+ },
+ {
+  "name": "well-max-closed",
+  "doors": "closed",
+  "x": 90,
+  "y": 0.15,
+  "z": 84.5,
+  "yaw": 0,
+  "pitch": -0.04
+ }
+]

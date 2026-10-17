@@ -39,7 +39,7 @@ export async function openEstate(base, { width = 915, height = 412, exe = env.CH
   const problems = [];
   page.on('pageerror', (e) => problems.push(`pageerror: ${e.message}`));
   page.on('console', (m) => { if (m.type() === 'error') problems.push(`console: ${m.text()}`); });
-  await page.goto(base + '?autotest=1');
+  await page.goto(base + '?autotest=1' + (env.QUERY ? '&' + env.QUERY : '')); // QUERY: diagnostic URL flags (e.g. greenery=base)
   await page.evaluate(() => localStorage.setItem('fehluwe.save', JSON.stringify({ version: 4, scene: 'estate', inventory: ['invitation', 'torch', 'matches', 'notebook', 'frontKey', 'consKey'], flags: { leftHome: true, basementOpen: true, boslustOpen: true } })));
   await page.reload();
   await page.click('[data-cont]');

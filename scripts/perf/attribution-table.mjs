@@ -17,7 +17,7 @@ export const GROUPS = [
   ['conservatory & glass (cons, glass)', (k) => /^chunk:(cons|glass)/.test(k)],
 ];
 export const group = (k) => (GROUPS.find(([, f]) => f(k)) ?? ['other'])[0];
-const files = process.argv.slice(2);
+const files = import.meta.url === `file://${process.argv[1]}` ? process.argv.slice(2) : [];
 if (files.length) {
   const builds = files.map((f) => JSON.parse(readFileSync(f, 'utf8')));
   const names = files.map((f) => f.replace(/.*-([A-Z])\.json$/, '$1'));
