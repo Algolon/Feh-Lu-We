@@ -254,10 +254,13 @@ export function libraryStairR01(c:Ctx) {
   }
   // Same physical limits as the visible L, and no collision across the
   // eastern walk-through to the upper gallery.
+  // These rails stand on the UPPER deck. Their collision must begin at
+  // its floor level, not 14cm below: players on the spiral almost 2m below
+  // were hitting the underside of the railing with their 1.75m capsule.
   c.col.addBox(northCap.x0-.045,northCap.x0+.045,northCap.z0,northCap.z1,
-    UF-.14,UF+1.12,{tag:'lib-stair.r03-northwest-west'});
+    UF+.015,UF+1.12,{tag:'lib-stair.r03-northwest-west'});
   c.col.addBox(northCap.x0,northCap.x1,northCap.z0-.045,northCap.z0+.045,
-    UF-.14,UF+1.12,{tag:'lib-stair.r03-northwest-south'});
+    UF+.015,UF+1.12,{tag:'lib-stair.r03-northwest-south'});
   
   // Gallery-side guards: continuous top rail and infill instead of only two
   // huge wooden posts. SOUTH side connects to the spiral handrail via
