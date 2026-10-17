@@ -6,7 +6,8 @@ const base = (process.argv[2] ?? 'http://127.0.0.1:4188/Feh-Lu-We/').replace(/\/
 const browser = await chromium.launch({
   args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'],
 });
-const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
+// Emulate a touch device: previously it booted in low quality unless the player changed it.
+const page = await browser.newPage({ viewport: { width: 844, height: 390 }, hasTouch: true, isMobile: true, deviceScaleFactor: 1 });
 const errors = [], audioRequests = [];
 page.on('pageerror', e => errors.push(e.message));
 page.on('request', req => { if (req.url().includes('bong-rippie')) audioRequests.push(req.url()); });
@@ -27,12 +28,14 @@ try {
   await page.waitForFunction(() => window.__game?.world?.id === 'estate', null, { timeout: 120000 });
   const checks = await page.evaluate(() => ({
     scene: window.__game.state.scene,
+    isCoarsePointer: matchMedia('(pointer: coarse)').matches,
+    quality: window.__game.settings.quality,
     bongAction: window.__game.world.byId.has('garden.gravityBong.hit'),
     handpan: window.__game.world.byId.has('play.handpan'),
     rootSave: JSON.parse(localStorage.getItem('fehluwe.save') ?? 'null')?.scene,
     familySave: !!localStorage.getItem('fehluwe.family.save'),
   }));
-  if (checks.scene !== 'estate' || checks.bongAction || !checks.handpan || checks.rootSave !== 'home' || !checks.familySave || audioRequests.length || errors.length) {
+  if (checks.scene !== 'estate' || !checks.isCoarsePointer || checks.quality !== 'high' || checks.bongAction || !checks.handpan || checks.rootSave !== 'home' || !checks.familySave || audioRequests.length || errors.length) {
     throw Error(JSON.stringify({ checks, audioRequests, errors }));
   }
   console.log('FAMILY_EDITION_SMOKE_PASS ' + JSON.stringify(checks));

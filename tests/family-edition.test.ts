@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { isFamilyEditionPath } from '../src/core/edition';
-import { BACKUP_KEY, SAVE_KEY, SETTINGS_KEY } from '../src/core/state';
+import { BACKUP_KEY, SAVE_KEY, SETTINGS_KEY, defaultSettings } from '../src/core/state';
 
 const read = (path: string) => readFileSync(path, 'utf8');
 
@@ -14,6 +14,13 @@ describe('family edition: independent /game/ route', () => {
       expect(isFamilyEditionPath(path, '/Feh-Lu-We/')).toBe(false);
     }
     expect(isFamilyEditionPath('/preview/game/', '/preview/')).toBe(true);
+  });
+
+  it('defaults to high on phones in the family edition, without changing full-game defaults', () => {
+    expect(defaultSettings(true, true).quality).toBe('high');
+    expect(defaultSettings(false, true).quality).toBe('high');
+    expect(defaultSettings(true, false).quality).toBe('low');
+    expect(defaultSettings(false, false).quality).toBe('high');
   });
 
   it('preserves legacy storage keys in the full edition', () => {
