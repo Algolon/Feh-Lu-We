@@ -60,7 +60,7 @@ try{
     g.settings.quality=q;g.settings.reducedMotion=true;g.applyQuality(true);
  },quality);
  const capture=async(testCase,phase,lamps,doors)=>{
-  return await page.evaluate(({pose,phase,lamps,doors})=>{
+  return await page.evaluate(({pose,phase,lamps,doors,withPool})=>{
     const g=window.__game,w=g.world;
     const ids=['lamp.hallChandelier','lamp.hallConsole','lamp.libraryChandelier','lamp.library'];
     ids.forEach((id,i)=>g.state.lit[id]=lamps[i]);
@@ -71,7 +71,7 @@ try{
     w.updateCulling(g.camera.position,g.camera);
     for(let i=0;i<5;i++)g.tick(.05);
     const pool=g.pool.lights,prior=pool.map(l=>l.intensity);
-    if(!WITH_POOL)pool.forEach(l=>l.intensity=0);
+    if(!withPool)pool.forEach(l=>l.intensity=0);
     g.extras.env.update(phase,g.camera.position,1);
     const renderer=g.renderer,gl=renderer.getContext();
     try{
@@ -94,7 +94,7 @@ try{
         programs:renderer.info.programs?.length??null,
         activePool:g.pool.assigned?.()??null,glError:gl.getError()};
     }finally{pool.forEach((l,i)=>l.intensity=prior[i]);}
-  },{pose:testCase.pose,phase:phase.v,lamps:lamps.bits,doors});
+  },{pose:testCase.pose,phase:phase.v,lamps:lamps.bits,doors,withPool:WITH_POOL});
  };
  for(const phase of (FAST?phases.filter(x=>x.id==='day'):phases))
  for(const site of (FAST?cases.filter(x=>['hall-chandelier','hall-console','library-reading','library-to-living'].includes(x.id)):cases)){
