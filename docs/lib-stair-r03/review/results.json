@@ -1,6 +1,6 @@
 {
   "source": "Real candidate game scene (Chromium / SwiftShader); not a real Android device",
-  "commit": "238f2d985f7250bf1f2de064e24f2a6315d6ae15",
+  "commit": "58c0b8afa6ff1fa1e629c748e9dd429c91757663",
   "checks": [
     {
       "name": "entrance-to-gallery-and-return",
@@ -248,15 +248,15 @@
           "z": 105.63799999999999
         },
         "southGuardSolid": true,
-        "lowerStairHeadroom": false,
+        "lowerStairHeadroom": true,
         "aisle": {
           "x": 83.42999999999999,
           "y": 3.35,
           "z": 105.24
         },
-        "pass": false
+        "pass": true
       },
-      "pass": false
+      "pass": true
     }
   ],
   "screens": [
@@ -304,7 +304,7 @@
     },
     {
       "name": "08-r02-baluster-under-handrail",
-      "calls": 389,
+      "calls": 388,
       "triangles": 1642440,
       "room": "libGallery",
       "glError": 0
