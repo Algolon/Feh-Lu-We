@@ -1,6 +1,6 @@
 {
   "source": "actual candidate branch Vite/Chromium SwiftShader",
-  "commit": "ca1499e76e4c6e1633f698d67d9cdbead1a433d3",
+  "commit": "8d5a68673c3c628e390806917437c7e7efd1facf",
   "records": [
     {
       "name": "01-entrance-wide",
@@ -96,8 +96,8 @@
         "pitch": -0.939986256830184
       },
       "room": "libGallery",
-      "calls": 269,
-      "triangles": 1474325,
+      "calls": 263,
+      "triangles": 1473445,
       "glError": 0
     },
     {
@@ -182,6 +182,34 @@
       "room": "library",
       "calls": 263,
       "triangles": 1713584,
+      "glError": 0
+    },
+    {
+      "name": "18-r04-lamp-books-swap-front",
+      "pose": {
+        "x": 75.65,
+        "y": 0.15,
+        "z": 99,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.2892710056091406
+      },
+      "room": "library",
+      "calls": 244,
+      "triangles": 1567632,
+      "glError": 0
+    },
+    {
+      "name": "19-r04-lamp-books-swap-angle",
+      "pose": {
+        "x": 75.05,
+        "y": 0.15,
+        "z": 100.45,
+        "yaw": -1.9629823165488653,
+        "pitch": -0.29142171694846525
+      },
+      "room": "library",
+      "calls": 247,
+      "triangles": 1633532,
       "glError": 0
     },
     {
@@ -272,9 +300,9 @@
         "lamp.library": {
           "exists": true,
           "position": [
-            73.33,
+            73.04,
             1.31,
-            99.83
+            99.72
           ]
         },
         "inspect.cipherExample": {
@@ -287,6 +315,21 @@
         }
       },
       "pass": true
+    },
+    {
+      "name": "r04-banker-lamp-moved-to-desk-right-rear",
+      "pass": true,
+      "data": {
+        "actual": [
+          73.04,
+          1.31,
+          99.72
+        ],
+        "expected": [
+          73.04,
+          99.72
+        ]
+      }
     },
     {
       "name": "r03-library-door-to-wall-desk-walk",
