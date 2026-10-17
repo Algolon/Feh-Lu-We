@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { LIB_R01, LIB_R01_BAYS } from '../src/world/libraryR01';
 import { prop, POSES, validatePlacement } from '../src/slice/placement';
 import { GF, UF } from '../src/world/layout';
-import { LIB_STAIR, LIB_STAIR_RISE, LIB_STAIR_TREAD_THICKNESS, solidSpiralTread, stairStepPoint } from '../src/world/libraryStairR01';
+import { LIB_STAIR, LIB_STAIR_RISE, LIB_STAIR_TREAD_THICKNESS, solidSpiralTread, stairStepPoint, stairStepAngle, spiralRailWorldY } from '../src/world/libraryStairR01';
 
 describe('LIB-R01: fitted shelves, puzzle and spiral access', () => {
   it('leaves the ground-floor glazing bays unobstructed', () => {
@@ -87,11 +87,30 @@ describe('LIB-R01: fitted shelves, puzzle and spiral access', () => {
     expect(last.y).toBeCloseTo(UF,5);
     expect(last.x).toBeLessThan(83.2);
   });
+  it('LIB-STAIR-R02: every iron baluster penetrates its shared curved handrail', () => {
+    for (const i of [0, 3, 8, 13, 18, 23]) {
+      const angle=stairStepAngle(i),p=stairStepPoint(i);
+      const spindleBase=p.y-.06;
+      const spindleTop=spiralRailWorldY(angle)+.018;
+      expect(spindleTop-spindleBase).toBeGreaterThan(.95);
+      expect(spindleTop-spindleBase).toBeLessThan(1.08);
+      expect(spindleTop-spiralRailWorldY(angle)).toBeCloseTo(.018,5);
+    }
+  });
+  it('LIB-STAIR-R02: transfer platform is distinct and protects a clear upstairs path', () => {
+    const b=LIB_STAIR.bridge;
+    expect(b.x1-b.x0).toBeGreaterThanOrEqual(.55);
+    expect(b.z1-b.z0).toBeGreaterThan(1.25);
+    // No barrier across the east exit x=83.2; southern/northern rails stand
+    // outside the safe approach centre z=105.26.
+    expect(105.26-b.z0).toBeGreaterThan(.5);
+    expect(b.z1-105.26).toBeGreaterThan(.6);
+  });
   it('LIB-STAIR-R01: flush oak bridge joins existing slab without top overlap', () => {
     expect(LIB_STAIR.bridge.x1).toBe(83.2);
-    expect(LIB_STAIR.bridge.x0).toBeGreaterThan(82.5);
-    expect(LIB_STAIR.bridge.z0).toBe(104.76);
-    expect(LIB_STAIR.bridge.z1).toBe(105.76);
+    expect(LIB_STAIR.bridge.x0).toBeGreaterThan(82.6);
+    expect(LIB_STAIR.bridge.z0).toBe(104.66);
+    expect(LIB_STAIR.bridge.z1).toBe(105.99);
   });
   it('ends the spiral on the upstairs east-gallery line with climbable rises', () => {
     const { x, z, radius, steps } = LIB_R01.stair;
@@ -102,6 +121,6 @@ describe('LIB-R01: fitted shelves, puzzle and spiral access', () => {
     expect(LIB_R01.landing.x0).toBeLessThan(83.2);
     expect(LIB_R01.landing.x1).toBe(83.2);
     expect(LIB_R01.landing.z0).toBeGreaterThan(104.6);
-    expect(LIB_R01.landing.z1).toBeLessThan(105.9);
+    expect(LIB_R01.landing.z1).toBeLessThan(106.0);
   });
 });
