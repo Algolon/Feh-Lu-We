@@ -93,4 +93,17 @@ describe('LIGHT-R05 route and mobile slot safety',()=>{
   expect(pool.assigned()).toEqual(['local-library']);
   expect(pool.lights[0].intensity).toBeGreaterThan(0.5);
  });
+ it('keeps a prewarmed fireplace light stable after stopping near its influence edge',()=>{
+  const pool=new LightPool(new THREE.Scene(),3);
+  walk(pool,92,82.5);
+  expect(pool.assigned()).toContain('fire.living');
+  for(let i=0;i<120;i++)tick(pool,82.5);
+  expect(pool.assigned()).toContain('fire.living');
+  const slot=pool.assigned().indexOf('fire.living');
+  expect(pool.lights[slot].intensity).toBeGreaterThan(7);
+  const before=pool.lights[slot].intensity;
+  for(let i=0;i<80;i++)tick(pool,82.5);
+  expect(pool.assigned()).toContain('fire.living');
+  expect(Math.abs(pool.lights[slot].intensity-before)).toBeLessThan(.5);
+ });
 });
