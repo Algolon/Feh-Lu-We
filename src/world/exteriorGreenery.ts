@@ -135,16 +135,16 @@ export function ivyLeafMaterial():THREE.MeshLambertMaterial {
   const x=canvas.getContext('2d')!;
   // Mostly neutral albedo preserves the established four foliage colour variants.
   const ground=x.createLinearGradient(0,0,256,0);
-  ground.addColorStop(0,'#dfe9d4');
-  ground.addColorStop(.42,'#edf4e2');
-  ground.addColorStop(.52,'#f1f5e9');
-  ground.addColorStop(1,'#dee9d3');
+  ground.addColorStop(0,'#d3dfc4');
+  ground.addColorStop(.42,'#e0ecd2');
+  ground.addColorStop(.52,'#e6f0dc');
+  ground.addColorStop(1,'#d3dfc4');
   x.fillStyle=ground;x.fillRect(0,0,256,256);
   x.lineCap='round';x.lineJoin='round';
   // Along the petiole and central lobe: soft olive underpaint and light sage highlight.
   x.beginPath();x.moveTo(128,238);x.bezierCurveTo(126,168,130,77,128,11);
-  x.strokeStyle='rgba(95,127,75,.16)';x.lineWidth=8.5;x.stroke();
-  x.strokeStyle='rgba(252,255,218,.96)';x.lineWidth=3.7;x.stroke();
+  x.strokeStyle='rgba(225,247,174,.42)';x.lineWidth=15;x.stroke();
+  x.strokeStyle='#faffc6';x.lineWidth=7.5;x.stroke();
   // Side veins reach the lateral lobes, rather than forming a generic leaf ladder.
   const paths=[
     {y:183,reach:75,rise:23},{y:134,reach:94,rise:20},
@@ -153,8 +153,8 @@ export function ivyLeafMaterial():THREE.MeshLambertMaterial {
   for(const side of [-1,1])for(const {y,reach,rise} of paths){
     x.beginPath();x.moveTo(128,y);
     x.bezierCurveTo(128+side*reach*.28,y-7,128+side*reach*.65,y-rise*.73,128+side*reach,y-rise);
-    x.strokeStyle='rgba(90,126,71,.14)';x.lineWidth=6;x.stroke();
-    x.strokeStyle='rgba(250,255,212,.88)';x.lineWidth=2.8;x.stroke();
+    x.strokeStyle='rgba(223,245,163,.43)';x.lineWidth=12;x.stroke();
+    x.strokeStyle='#f8ffbe';x.lineWidth=6.5;x.stroke();
   }
   // A few low-contrast fibres avoid perfectly digital straight-line surfaces.
   const rand=mulberry32(10431);
