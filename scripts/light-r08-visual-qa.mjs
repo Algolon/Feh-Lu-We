@@ -31,6 +31,9 @@ const cases=[
  {id:'hall-console',pose:{x:90,z:87,y:.15,yaw:-Math.PI/2,pitch:-.02}},
  {id:'hall-through-living',pose:{x:87,z:88.5,y:.15,yaw:-Math.PI/2,pitch:0}},
  {id:'library-reading',pose:{x:78,z:103.5,y:.15,yaw:Math.PI,pitch:-.04}},
+ // Directly face the banker's lamp at the rear of the west-wall bureau.
+ // The general library-reading ROI is too far from this small task light.
+ {id:'library-desk',pose:{x:76.2,z:99.65,y:.15,yaw:-Math.PI/2,pitch:-.10}},
  {id:'library-gallery',pose:{x:79,z:102,y:3.6,yaw:Math.PI,pitch:-.16}},
  {id:'library-to-living',pose:{x:79,z:96.6,y:.15,yaw:Math.PI,pitch:0}},
  {id:'lobby-to-library',pose:{x:89,z:100.7,y:.15,yaw:-Math.PI/2,pitch:0}},
@@ -97,7 +100,7 @@ try{
   },{pose:testCase.pose,phase:phase.v,lamps:lamps.bits,doors,withPool:WITH_POOL});
  };
  for(const phase of (FAST?phases.filter(x=>x.id==='day'):phases))
- for(const site of (FAST?cases.filter(x=>['hall-chandelier','hall-console','library-reading','library-to-living'].includes(x.id)):cases)){
+ for(const site of (FAST?cases.filter(x=>['hall-chandelier','hall-console','library-reading','library-desk','library-to-living'].includes(x.id)):cases)){
    const doors={library:false,livLib:false};
    for(const state of lights){
       const r=await capture(site,phase,state,doors);
@@ -184,7 +187,9 @@ try{
      // Additional table sources each need their OWN visible contribution.
      if(!WITH_POOL && delta('day','hall-console','console')<.25)
        throw Error('Hall console lamp contributes no perceptible authored light');
-     if(!WITH_POOL && delta('day','library-reading','desk')<.2)
+     // The small task light is deliberately judged from its actual desk
+     // sightline, not from the opposite side of the reading lounge.
+     if(!WITH_POOL && Math.max(delta('day','library-reading','desk'),delta('day','library-desk','desk'))<.2)
        throw Error('Library reading lamp contributes no perceptible authored light');
    }
    // A shut library door must not let a separate room's source illuminate
