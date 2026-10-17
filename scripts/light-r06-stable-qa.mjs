@@ -69,10 +69,55 @@ try {
    samples.push(await capture(id+'-both-on',pose,{fire:true,floor:true}));
    samples.push(await capture(id+'-both-off',pose,{fire:false,floor:false}));
  }
+ const independent = await page.evaluate(()=>{
+   const g=window.__game, pilot=g.world.scene.userData.stableLiving||null;
+   const states=[];
+   for(const [fire,floor] of [[false,false],[true,false],[false,true],[true,true]]){
+     g.state.lit['fire.living']=fire;
+     g.state.lit['lamp.livingFloor']=floor;
+     g.changed();
+     states.push({fire,floor,weights:pilot?.state?.()??null,
+       hearth:pilot?.contribution?.(75,.9,-86.7)??null,
+       floorArea:pilot?.contribution?.(82,1.2,-84)??null});
+   }
+   g.player.setPose({x:80.5,y:.15,z:86.7,yaw:0,pitch:0});
+   const invariant = pilot?.state?.()??null;
+   for(let i=0;i<90;i++){
+     g.player.yaw=i*Math.PI/45;
+     g.player.applyCamera(g.camera);
+     g.tick(.05);
+     if(pilot?.state?.()?.some((v,j)=>Math.abs(v-invariant[j])>1e-9))
+       throw Error('base source state was changed by camera rotation');
+   }
+   return {states,invariant};
+ });
+ if(profile==='pilot'){
+   const q=independent.states;
+   if(q.length!==4||q.some(t=>!t.weights||t.weights.length!==2))
+     throw Error('independent base fixture state not available');
+   if(q[0].weights.some(v=>v!==0)||q[1].weights[0]<=0||q[1].weights[1]!==0||
+       q[2].weights[0]!==0||q[2].weights[1]<=0||q[3].weights.some(v=>v<=0))
+     throw Error('source-bound weights not independent across fire/floor lamp toggles');
+   if(!(q[0].hearth.every(v=>v===0)&&q[1].hearth.some(v=>v>0)&&
+        q[2].floorArea.some(v=>v>0)&&q[3].hearth.some(v=>v>0)))
+     throw Error('individual fixed surface probes did not track their lamp');
+ }
  const saved=await page.evaluate(()=>{
    const g=window.__game;g.state.lit['fire.living']=false;g.state.lit['lamp.livingFloor']=true;g.changed();
+   g.saveNow();
    return g.world.scene.userData.stableLiving?.state?.() ?? null;
  });
+ if(profile==='pilot'){
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.locator('[data-cont]').click({timeout:45000});
+   await page.waitForFunction(()=>window.__game?.world?.id==='estate',null,{timeout:120000});
+   const recovered=await page.evaluate(()=>{
+     const g=window.__game,p=g.world.scene.userData.stableLiving;
+     return {fire:g.state.lit['fire.living'],floor:g.state.lit['lamp.livingFloor'],weights:p?.state?.()};
+   });
+   if(recovered.fire!==false||recovered.floor!==true||recovered.weights?.[0]!==0||recovered.weights?.[1]<=0)
+     throw Error('source-bound illumination was not restored from save: '+JSON.stringify(recovered));
+ }
  // QA: physical PointLights were always removed during the render; the pilot
  // still distinguishes a logically lit from an unlit fireplace/floor-lamp.
  if(profile==='pilot'){
@@ -88,7 +133,7 @@ try {
  }else{
    if(samples.some(s=>s.pilotState!==null))throw Error('baseline unexpectedly installed shader pilot');
  }
- const result={profile,samples,saved,errors};
+ const result={profile,samples,independent,saved,errors};
  console.log('LIGHT_R06_SUMMARY '+JSON.stringify(result));
  writeFileSync(output+'/results.json',JSON.stringify(result,null,2));
  if(errors.length)throw Error(errors.join('; ').slice(0,400));
