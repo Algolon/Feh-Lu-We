@@ -128,9 +128,9 @@ export function entranceLeafMaterial():THREE.MeshLambertMaterial {
   const canvas=document.createElement('canvas');canvas.width=256;canvas.height=512;
   const x=canvas.getContext('2d')!;
   const ground=x.createLinearGradient(0,0,256,0);
-  ground.addColorStop(0,'#b5c3aa');ground.addColorStop(.33,'#e5ebd6');
-  ground.addColorStop(.49,'#f5f7e8');ground.addColorStop(.55,'#edf1dd');
-  ground.addColorStop(1,'#b7c7ad');
+  ground.addColorStop(0,'#9db28f');ground.addColorStop(.33,'#bfd0ac');
+  ground.addColorStop(.49,'#d6e0bd');ground.addColorStop(.55,'#cbdab4');
+  ground.addColorStop(1,'#9eb58f');
   x.fillStyle=ground;x.fillRect(0,0,256,512);
   const fade=x.createLinearGradient(0,0,0,512);
   fade.addColorStop(0,'rgba(244,251,224,.08)');
@@ -139,15 +139,15 @@ export function entranceLeafMaterial():THREE.MeshLambertMaterial {
   x.fillStyle=fade;x.fillRect(0,0,256,512);
   x.lineCap='round';
   x.beginPath();x.moveTo(127,499);x.bezierCurveTo(123,362,131,161,128,15);
-  x.strokeStyle='rgba(57,89,52,.14)';x.lineWidth=7;x.stroke();
+  x.strokeStyle='rgba(68,101,55,.22)';x.lineWidth=7;x.stroke();
   x.beginPath();x.moveTo(129,495);x.bezierCurveTo(126,360,130,162,129,19);
-  x.strokeStyle='#f5f7bf';x.lineWidth=5.1;x.stroke();
+  x.strokeStyle='#f8ffcc';x.lineWidth=4.4;x.stroke();
   for(const side of [-1,1])for(const [u,reach] of [[.23,67],[.47,83],[.70,64]]){
     const cy=512*(1-u+side*.015),h=reach*.29;
     x.beginPath();x.moveTo(128,cy);
     x.bezierCurveTo(128+side*reach*.30,cy-5,128+side*reach*.72,cy-h*.78,128+side*reach,cy-h);
-    x.strokeStyle='rgba(62,105,52,.16)';x.lineWidth=5;x.stroke();
-    x.strokeStyle='#e4efaa';x.lineWidth=2.6;x.stroke();
+    x.strokeStyle='rgba(61,104,58,.20)';x.lineWidth=4.8;x.stroke();
+    x.strokeStyle='#f1fac5';x.lineWidth=2.8;x.stroke();
   }
   const rand=mulberry32(7345);
   for(let i=0;i<180;i++){
@@ -211,7 +211,7 @@ export function entranceLeafGeo():THREE.BufferGeometry {
   g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
   g.userData.keepColor=true;return g;
 }
-const ENTRANCE_GREEN=['#9bbd80','#aecb92','#89aa70','#b8d09e'] as const;
+const ENTRANCE_GREEN=['#a1c382','#b2d098','#94b375','#bed7a4'] as const;
 export interface EntranceBranch { points:THREE.Vector3[]; radius:number }
 export interface EntranceLeaf { centre:THREE.Vector3; base:THREE.Vector3; attachment:THREE.Vector3; size:number; angle:number; tilt:number; yaw:number; tone:number }
 /** Deliberate branched crown: staggered leaf pairs orbit a seed-specific
