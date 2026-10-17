@@ -55,7 +55,7 @@ vec3 flwStableLiving(vec3 p) {
 /** Called once for each existing lit surface material, before shader compilation. */
 export function stableMaterial<T extends THREE.Material>(mat: T): T {
   if (!STABLE_LIVING_PILOT || mat.userData.stableLiving) return mat;
-  const lit = mat as THREE.MeshLambertMaterial | THREE.MeshPhongMaterial | THREE.MeshStandardMaterial;
+  const lit = mat as unknown as THREE.MeshLambertMaterial | THREE.MeshPhongMaterial | THREE.MeshStandardMaterial;
   if (!(mat instanceof THREE.MeshLambertMaterial || mat instanceof THREE.MeshPhongMaterial || mat instanceof THREE.MeshStandardMaterial)) return mat;
   lit.defines = { ...(lit.defines ?? {}), FLW_STABLE_LIVING: 1 };
   const previous = mat.onBeforeCompile;
