@@ -12,7 +12,7 @@ const query = typeof location === 'undefined' ? new URLSearchParams() : new URLS
 // The normal production URL and family edition do not use this source bundle.
 export const STABLE_LIVING_PILOT = query.get('stableLiving') === '1' ||
   (query.get('stableLiving') !== '0' && typeof location !== 'undefined' &&
-   /\\/light-r06d(?:\\/|$)/.test(location.pathname));
+   (location.pathname.includes('/light-r06d/') || location.pathname.endsWith('/light-r06d')));
 /** Review-only A/B: all pooled point lights off, but this local lamp-bound baseline remains. */
 export const STABLE_NO_POOL = STABLE_LIVING_PILOT && query.get('noPoint') === '1';
 export const STABLE_LIVING_IDS = new Set(['fire.living', 'lamp.livingFloor']);
