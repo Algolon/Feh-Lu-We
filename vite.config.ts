@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitest/config';
 import { execSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 
 // Build identifier shown in the pause menu and in playtest feedback, so reports name the tested build.
 function buildId() {
@@ -15,6 +16,13 @@ export default defineConfig({
   build: {
     target: 'es2020',
     chunkSizeWarningLimit: 1200,
+    // Publish / and /game/ from one shared codebase, under the existing Pages artifact.
+    rollupOptions: {
+      input: {
+        main: fileURLToPath(new URL('./index.html', import.meta.url)),
+        family: fileURLToPath(new URL('./game/index.html', import.meta.url)),
+      },
+    },
   },
   test: {
     environment: 'node',
