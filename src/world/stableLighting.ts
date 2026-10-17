@@ -81,12 +81,28 @@ export function stableRoomMaskAt(x:number,y:number,z:number):number{
     *smooth(m.y0out,m.y0in,y)*(1-smooth(m.y1in,m.y1out,y));
 }
 
+/** Three.js Material.clone() does not reliably preserve optional custom
+ * 'defines' added by surface(). Without FLW_SURFACE the world-position varying
+ * is compiled out, and the new shader crashes with undeclared vFlwP.
+ */
+export function cloneSurfaceWithDefines<T extends THREE.Material>(source:T):T{
+  const clone=source.clone();
+  type Defined=THREE.Material&{defines?:Record<string,number|boolean|string>};
+  const original=(source as Defined).defines;
+  if(original)(clone as Defined).defines={...original};
+  return clone;
+}
+
 /** Only called on *cloned, scoped* world materials, never globally in surface(). */
 export function stableMaterial<T extends THREE.Material>(mat: T): T {
   if (!STABLE_LIVING_PILOT || mat.userData.stableLiving) return mat;
   const lit = mat as unknown as THREE.MeshLambertMaterial | THREE.MeshPhongMaterial | THREE.MeshStandardMaterial;
   if (!(mat instanceof THREE.MeshLambertMaterial || mat instanceof THREE.MeshPhongMaterial || mat instanceof THREE.MeshStandardMaterial)) return mat;
   if (!mat.userData.surface) return mat; // vFlwP is provided by the existing surface() shader contract
+  // Guard against silently shipping an invalid fragment shader when the
+  // custom surface define was dropped by a material clone.
+  if (!(lit.defines as Record<string,unknown>|undefined)?.FLW_SURFACE)
+    throw new Error('LIGHT-R06B: missing FLW_SURFACE define for scoped material');
   lit.defines = { ...(lit.defines ?? {}), FLW_STABLE_LIVING: 1 };
   const previous = mat.onBeforeCompile;
   mat.onBeforeCompile = (shader, renderer) => {
@@ -157,7 +173,7 @@ export function installStableLivingMaterials(w:World){
     if(!mat.userData.surface){untouched++;return;}
     let clone=clones.get(mat);
     if(!clone){
-      clone=w.material(mat.clone());
+      clone=w.material(cloneSurfaceWithDefines(mat));
       stableMaterial(clone);
       clones.set(mat,clone);
     }
