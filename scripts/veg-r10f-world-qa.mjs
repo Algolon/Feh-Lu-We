@@ -78,17 +78,16 @@ try{
    g.dusk=0;g.extras.env?.update(0,g.camera.position,0);
    w.updateCulling(g.camera.position,g.camera);
    ivy.forEach(o=>{o.material=baseline;});
+   window.__vegR10f={ivy,current,baseline};
    g.renderer.render(w.scene,g.camera);
    return {meshCount:ivy.length,baselineMaterial:baseline.uuid,originalMaterial:current.uuid};
  });
  results.push({type:'material-compare',...compare});
  await page.screenshot({path:`${out}/north-before-texture.jpg`,type:'jpeg',quality:86});
  await page.evaluate(async()=>{
-   const E=await import('/Feh-Lu-We/src/world/exteriorGreenery.ts');
-   const g=window.__game,w=g.world,mat=E.ivyLeafMaterial();
-   w.scene.traverse(o=>{
-     if(o.isMesh&&o.material?.uuid!==mat.uuid&&o.material?.map===null&&o.userData.chunk==='manor'&&o.geometry?.attributes?.position?.count>100000)o.material=mat;
-   });
+   const {ivy,current}=window.__vegR10f;
+   const g=window.__game,w=g.world;
+   ivy.forEach(o=>{o.material=current;});
    // Above selection deliberately checks geometry to avoid touching wall/architecture.
    g.extras.env?.update(0,g.camera.position,0);
    g.renderer.render(w.scene,g.camera);
