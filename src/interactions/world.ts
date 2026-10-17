@@ -471,6 +471,8 @@ export class LightPool {
   private timer = 0;
   private want: (string | null)[] = [];
   private shown: (LampSource | null)[] = [];
+  /** Slot transfer rises more gently than first activation, preventing a late bright flash. */
+  private switched: boolean[] = [];
   reducedMotion = false;
   here = 'out';
   constructor(scene: THREE.Scene, count: number) {
@@ -481,6 +483,7 @@ export class LightPool {
       this.lights.push(l);
       this.want.push(null);
       this.shown.push(null);
+      this.switched.push(false);
     }
   }
   private roomCache = new Map<LampSource, string>();
@@ -564,13 +567,18 @@ export class LightPool {
         l.intensity = Math.max(0, l.intensity - dt * fadeRate);
         if (l.intensity > 0.05 && cur) continue;
         this.shown[i] = target;
+        this.switched[i] = !!(target && cur);
         if (target) { l.position.copy(target.pos); l.color.set(target.color); l.distance = target.distance; }
         l.intensity = 0;
         continue;
       }
       if (!cur || !cur.on()) { l.intensity = Math.max(0, l.intensity - dt * Math.max(3.5, (cur?.intensity ?? 4) * this.gain * 0.95)); continue; }
       const f = cur.flicker && !this.reducedMotion ? 1 - cur.flicker * (0.5 + 0.5 * Math.sin(t * 13.1 + i) * Math.sin(t * 7.3)) : 1;
-      l.intensity += (cur.intensity * f * this.gain - l.intensity) * (1 - Math.exp(-dt * 2.0));
+      // LIGHT-R05: a reassigned slot has just faded its prior lamp completely out.
+      // Let the newly visible wall pool grow gradually; initial fixtures still use
+      // the historic 2/s ramp so loads and switch-on responsiveness do not regress.
+      const rise = this.switched[i] ? 1.15 : 2.0;
+      l.intensity += (cur.intensity * f * this.gain - l.intensity) * (1 - Math.exp(-dt * rise));
     }
   }
   private lookup = new Map<string, LampSource>();
