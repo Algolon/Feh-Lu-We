@@ -98,11 +98,11 @@ export function bindStableLiving(w: World) {
   const lamps = STABLE_SOURCE_IDS.map(id => w.lamps.find(l => l.id === id));
   if (lamps.some(x=>!x)) throw new Error('LIGHT-R06 missing living room source contract');
   lamps.forEach((lamp,i)=>{
-    positions[i].set(lamp!.pos.x,lamp!.pos.y,lamp!.pos.z,Math.min(8.0,lamp!.distance));
+    positions[i].set(lamp!.pos.x,lamp!.pos.y,lamp!.pos.z,Math.min(i === 0 ? 6.7 : 5.7, lamp!.distance));
   });
   const sync = () => {
-    contributions[0].w = lamps[0]!.on() ? 0.85 : 0;
-    contributions[1].w = lamps[1]!.on() ? 0.58 : 0;
+    contributions[0].w = lamps[0]!.on() ? 0.19 : 0;
+    contributions[1].w = lamps[1]!.on() ? 0.13 : 0;
   };
   w.onSync(sync);
   sync();
