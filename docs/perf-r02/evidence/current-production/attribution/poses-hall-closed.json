@@ -1,0 +1,20 @@
+[
+ {
+  "name": "hall-max-B-closed",
+  "doors": "closed",
+  "x": 89.5,
+  "y": 0.15,
+  "z": 95,
+  "yaw": 3.141592653589793,
+  "pitch": 0
+ },
+ {
+  "name": "hall-max-A-closed",
+  "doors": "closed",
+  "x": 90,
+  "y": 0.15,
+  "z": 84.6373,
+  "yaw": 0,
+  "pitch": 0
+ }
+]

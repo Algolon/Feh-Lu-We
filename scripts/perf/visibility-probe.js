@@ -17,15 +17,16 @@
   // --- per-draw attribution ------------------------------------------------------------------------------------
   // The exact renderer.info delta of every renderBufferDirect call is attributed to a category, so the categories
   // always sum to the renderer's own counters.
-  let attrib = null;
+  let attrib = null, attribObjs = null, fineAttrib = false;
   {
     const r = g().renderer, orig = r.renderBufferDirect.bind(r);
     r.renderBufferDirect = (camera, scene, geometry, material, object, group) => {
       if (!attrib) return orig(camera, scene, geometry, material, object, group);
       const i = r.info.render, c0 = i.calls, t0 = i.triangles;
       orig(camera, scene, geometry, material, object, group);
-      const k = category(object), e = (attrib[k] ??= { calls: 0, triangles: 0 });
+      const k = fineAttrib ? `${category(object)} | ${object.name || object.type} | ${material?.name || material?.type || ''}` : category(object), e = (attrib[k] ??= { calls: 0, triangles: 0 });
       e.calls += i.calls - c0; e.triangles += i.triangles - t0;
+      if (attribObjs) (attribObjs[k] ??= new Set()).add(object);
     };
   }
   function category(o) {
@@ -57,7 +58,7 @@
   const activeRegions = () => regionState().filter((r) => r.on).map((r) => r.chunks.join('+')).filter(Boolean);
 
   /** Render one frame exactly as the game does (the post path included) and read the camera counters. */
-  function renderFrame({ breakdown = false } = {}) {
+  function renderFrame({ breakdown = false, fine = false } = {}) {
     const G = g(), r = G.renderer;
     G.mushroomVision.render(r, w().scene, G.camera, G.time, G.settings.reducedMotion, G.settings.mushroomDistortion, G.settings.quality === 'high');
     const i = r.info.render, out = { calls: i.calls, triangles: i.triangles };
@@ -66,12 +67,39 @@
       // triangles are identical), every draw attributed. Restored immediately.
       const ob = w().scene.userData.opaqueBatches, was = ob?.enabled;
       if (ob) ob.enabled = false;
-      attrib = {};
+      attrib = {}; attribObjs = {}; fineAttrib = fine;
       G.mushroomVision.render(r, w().scene, G.camera, G.time, G.settings.reducedMotion, G.settings.mushroomDistortion, G.settings.quality === 'high');
       out.unbatched = { calls: r.info.render.calls, triangles: r.info.render.triangles };
-      out.by = attrib; attrib = null;
+      out.by = attrib; attrib = null; lastObjs = attribObjs; attribObjs = null; fineAttrib = false;
       if (ob) ob.enabled = was;
     }
+    return out;
+  }
+  // the drawn objects of each category in the last attribution frame (diagnostic visibility tests hide them)
+  let lastObjs = {};
+  /**
+   * Diagnostic only: is a category's submitted geometry visible in the current frame? Renders the attribution frame
+   * (batching off), then again with that category's drawn objects hidden, and counts the pixels that change (any
+   * channel > th). 0 px = drawn but contributes nothing to the image (occluded or outside it). State is restored.
+   */
+  function hideTest(cats, th = 6) {
+    const G = g(), r = G.renderer, gl = r.getContext(), W = gl.drawingBufferWidth, H = gl.drawingBufferHeight;
+    const ob = w().scene.userData.opaqueBatches, was = ob?.enabled;
+    if (ob) ob.enabled = false;
+    const a = new Uint8Array(W * H * 4), b = new Uint8Array(W * H * 4);
+    const draw = (buf) => { G.mushroomVision.render(r, w().scene, G.camera, G.time, G.settings.reducedMotion, G.settings.mushroomDistortion, G.settings.quality === 'high'); gl.readPixels(0, 0, W, H, gl.RGBA, gl.UNSIGNED_BYTE, buf); };
+    draw(a);
+    const out = {};
+    for (const c of cats) {
+      const objs = [...(lastObjs[c] || [])], vis = objs.map((o) => o.visible);
+      for (const o of objs) o.visible = false;
+      draw(b);
+      objs.forEach((o, i) => { o.visible = vis[i]; });
+      let n = 0, x0 = 1e9, y0 = 1e9, x1 = -1, y1 = -1;
+      for (let i = 0, q = 0; i < a.length; i += 4, q++) if (Math.abs(a[i] - b[i]) > th || Math.abs(a[i + 1] - b[i + 1]) > th || Math.abs(a[i + 2] - b[i + 2]) > th) { n++; const x = q % W, y = H - 1 - Math.floor(q / W); if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+      out[c] = { objects: objs.length, px: n, pct: +(100 * n / (W * H)).toFixed(3), box: n ? [x0, y0, x1, y1] : null };
+    }
+    if (ob) ob.enabled = was;
     return out;
   }
   const meta = () => {
@@ -81,7 +109,7 @@
   const poseNow = () => { const pl = g().player; return { x: +pl.x.toFixed(3), y: +pl.y.toFixed(3), z: +pl.z.toFixed(3), yaw: +pl.yaw.toFixed(4), pitch: +pl.pitch.toFixed(4) }; };
 
   window.VP = {
-    meta, setPose, setDoors, tick, renderFrame, regionState, activeRegions, poseNow,
+    meta, setPose, setDoors, tick, renderFrame, regionState, activeRegions, poseNow, hideTest,
     cullStats: () => ({ calls: cull.calls, last: cull.last }),
     takeCullMs: () => { const a = cull.ms.slice(); cull.ms.length = 0; return a; },
     /** Force the next tick to run the game's culling for the current pose (the game's own order inside tick). */

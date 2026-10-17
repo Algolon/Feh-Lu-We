@@ -1,0 +1,651 @@
+{
+ "base": "http://localhost:4190/Feh-Lu-We/",
+ "meta": {
+  "build": "index-B2a-hSQD.js",
+  "viewport": [
+   915,
+   412
+  ],
+  "buffer": [
+   915,
+   412
+  ],
+  "dpr": 1,
+  "quality": "low",
+  "shadows": false,
+  "batching": true
+ },
+ "poses": [
+  {
+   "name": "hall-max-B-closed",
+   "doors": "closed",
+   "x": 89.5,
+   "y": 0.15,
+   "z": 95,
+   "yaw": 3.141592653589793,
+   "pitch": 0,
+   "room": "hall",
+   "calls": 48,
+   "tris": 209910,
+   "unbatched": {
+    "calls": 85,
+    "triangles": 209910
+   },
+   "regions": [
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mWing",
+    "mUp"
+   ],
+   "by": [
+    {
+     "k": "chunk:manor | Mesh | MeshLambertMaterial",
+     "calls": 7,
+     "triangles": 43684,
+     "visiblePx": 40627,
+     "visiblePct": 10.777,
+     "box": [
+      271,
+      0,
+      914,
+      240
+     ],
+     "objects": 7
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 40340,
+     "visiblePx": 131,
+     "visiblePct": 0.035,
+     "box": [
+      275,
+      223,
+      297,
+      235
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshLambertMaterial",
+     "calls": 7,
+     "triangles": 37338,
+     "visiblePx": 2863,
+     "visiblePct": 0.759,
+     "box": [
+      633,
+      154,
+      725,
+      240
+     ],
+     "objects": 7
+    },
+    {
+     "k": "chunk:mIn | Mesh | MeshLambertMaterial",
+     "calls": 8,
+     "triangles": 27228,
+     "visiblePx": 277770,
+     "visiblePct": 73.683,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 21368,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshLambertMaterial",
+     "calls": 7,
+     "triangles": 9786,
+     "visiblePx": 41988,
+     "visiblePct": 11.138,
+     "box": [
+      180,
+      56,
+      638,
+      411
+     ],
+     "objects": 7
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 9384,
+     "visiblePx": 199,
+     "visiblePct": 0.053,
+     "box": [
+      424,
+      129,
+      465,
+      162
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 5016,
+     "visiblePx": 49,
+     "visiblePct": 0.013,
+     "box": [
+      701,
+      191,
+      725,
+      208
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 3948,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:main | Mesh | MeshLambertMaterial",
+     "calls": 19,
+     "triangles": 2808,
+     "visiblePx": 5247,
+     "visiblePct": 1.392,
+     "box": [
+      375,
+      0,
+      767,
+      242
+     ],
+     "objects": 19
+    },
+    {
+     "k": "region:mHall/Group | Mesh | MeshBasicMaterial",
+     "calls": 3,
+     "triangles": 2268,
+     "visiblePx": 58,
+     "visiblePct": 0.015,
+     "box": [
+      377,
+      0,
+      489,
+      58
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:main | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 1728,
+     "visiblePx": 190,
+     "visiblePct": 0.05,
+     "box": [
+      374,
+      12,
+      491,
+      69
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:mWing/Group | Mesh | MeshBasicMaterial",
+     "calls": 3,
+     "triangles": 1134,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 896,
+     "visiblePx": 2267,
+     "visiblePct": 0.601,
+     "box": [
+      96,
+      0,
+      585,
+      247
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 862,
+     "visiblePx": 2480,
+     "visiblePct": 0.658,
+     "box": [
+      271,
+      125,
+      689,
+      221
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:lamp | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 808,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 402,
+     "visiblePx": 7655,
+     "visiblePct": 2.031,
+     "box": [
+      106,
+      0,
+      210,
+      106
+     ],
+     "objects": 3
+    },
+    {
+     "k": "obj:Group | Mesh | MeshBasicMaterial",
+     "calls": 2,
+     "triangles": 168,
+     "visiblePx": 144,
+     "visiblePct": 0.038,
+     "box": [
+      590,
+      212,
+      606,
+      221
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 160,
+     "visiblePx": 62,
+     "visiblePct": 0.016,
+     "box": [
+      218,
+      178,
+      229,
+      185
+     ],
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | MeshBasicMaterial",
+     "calls": 2,
+     "triangles": 36,
+     "visiblePx": 44976,
+     "visiblePct": 11.931,
+     "box": [
+      228,
+      247,
+      646,
+      411
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:mLiv/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 20,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "hall-max-A-closed",
+   "doors": "closed",
+   "x": 90,
+   "y": 0.15,
+   "z": 84.6373,
+   "yaw": 0,
+   "pitch": 0,
+   "room": "hall",
+   "calls": 49,
+   "tris": 220462,
+   "unbatched": {
+    "calls": 114,
+    "triangles": 220462
+   },
+   "regions": [
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mWing",
+    "mUp"
+   ],
+   "by": [
+    {
+     "k": "chunk:manor | Mesh | MeshLambertMaterial",
+     "calls": 7,
+     "triangles": 43684,
+     "visiblePx": 23469,
+     "visiblePct": 6.226,
+     "box": [
+      0,
+      0,
+      543,
+      196
+     ],
+     "objects": 7
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshLambertMaterial",
+     "calls": 8,
+     "triangles": 41220,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 8
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshLambertMaterial",
+     "calls": 6,
+     "triangles": 39582,
+     "visiblePx": 7393,
+     "visiblePct": 1.961,
+     "box": [
+      0,
+      121,
+      166,
+      263
+     ],
+     "objects": 6
+    },
+    {
+     "k": "chunk:mIn | Mesh | MeshLambertMaterial",
+     "calls": 8,
+     "triangles": 27228,
+     "visiblePx": 281880,
+     "visiblePct": 74.773,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 21368,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshLambertMaterial",
+     "calls": 10,
+     "triangles": 14218,
+     "visiblePx": 424,
+     "visiblePct": 0.112,
+     "box": [
+      383,
+      146,
+      471,
+      162
+     ],
+     "objects": 10
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshLambertMaterial",
+     "calls": 8,
+     "triangles": 9666,
+     "visiblePx": 43421,
+     "visiblePct": 11.518,
+     "box": [
+      243,
+      156,
+      883,
+      411
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mBil | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 5744,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 5
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 5016,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 3948,
+     "visiblePx": 20,
+     "visiblePct": 0.005,
+     "box": [
+      445,
+      147,
+      470,
+      147
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:main | Mesh | MeshLambertMaterial",
+     "calls": 34,
+     "triangles": 2392,
+     "visiblePx": 8250,
+     "visiblePct": 2.188,
+     "box": [
+      72,
+      0,
+      516,
+      259
+     ],
+     "objects": 33
+    },
+    {
+     "k": "region:mHall/Group | Mesh | MeshBasicMaterial",
+     "calls": 3,
+     "triangles": 2268,
+     "visiblePx": 57,
+     "visiblePct": 0.015,
+     "box": [
+      399,
+      15,
+      504,
+      67
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:main | Mesh | MeshPhongMaterial",
+     "calls": 3,
+     "triangles": 1312,
+     "visiblePx": 159,
+     "visiblePct": 0.042,
+     "box": [
+      397,
+      27,
+      506,
+      77
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 896,
+     "visiblePx": 2332,
+     "visiblePct": 0.619,
+     "box": [
+      711,
+      0,
+      869,
+      97
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 862,
+     "visiblePx": 43,
+     "visiblePct": 0.011,
+     "box": [
+      482,
+      158,
+      494,
+      162
+     ],
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 212,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 160,
+     "visiblePx": 427,
+     "visiblePct": 0.113,
+     "box": [
+      323,
+      152,
+      876,
+      194
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 40,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 40,
+     "visiblePx": 8,
+     "visiblePct": 0.002,
+     "box": [
+      516,
+      148,
+      518,
+      150
+     ],
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | MeshBasicMaterial",
+     "calls": 2,
+     "triangles": 36,
+     "visiblePx": 34323,
+     "visiblePct": 9.105,
+     "box": [
+      273,
+      267,
+      626,
+      390
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:mLiv/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 20,
+     "visiblePx": 140,
+     "visiblePct": 0.037,
+     "box": [
+      113,
+      261,
+      166,
+      264
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:main | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 12,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 10,
+     "visiblePx": 8137,
+     "visiblePct": 2.158,
+     "box": [
+      718,
+      0,
+      856,
+      90
+     ],
+     "objects": 5
+    }
+   ],
+   "reconciled": true
+  }
+ ],
+ "problems": []
+}

@@ -1,0 +1,9 @@
+[
+ { "name": "hall-max-B-open", "doors": "open", "x": 89.5, "y": 0.15, "z": 95, "yaw": 3.141592653589793, "pitch": 0 },
+ { "name": "hall-max-A-open", "doors": "open", "x": 90, "y": 0.15, "z": 84.6373, "yaw": 0, "pitch": 0 },
+ { "name": "hall-median-open", "doors": "open", "x": 90, "y": 0.15, "z": 88, "yaw": -0.0713, "pitch": -0.04 },
+ { "name": "hall-max-B-partial", "doors": "partial", "x": 89.5, "y": 0.15, "z": 95, "yaw": 3.141592653589793, "pitch": 0 },
+ { "name": "hall-max-A-partial", "doors": "partial", "x": 90, "y": 0.15, "z": 84.6373, "yaw": 0, "pitch": 0 },
+ { "name": "hall-max-B-closed", "doors": "closed", "x": 89.5, "y": 0.15, "z": 95, "yaw": 3.141592653589793, "pitch": 0 },
+ { "name": "hall-max-A-closed", "doors": "closed", "x": 90, "y": 0.15, "z": 84.6373, "yaw": 0, "pitch": 0 }
+]
