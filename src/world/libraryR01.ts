@@ -14,6 +14,14 @@ export { libraryR03BankersLamp as libraryR01BankerLamp } from './libraryR03Lamp'
 export const LIB_R01 = {
   // Solid west wall BETWEEN windows z97 and z101; desk hutch rear sits 4-5 cm from plaster.
   desk: { x: 73.17, z: 99.0, w: 1.3, d: 2.2, h: 0.81 },
+  // LIB-R04: view from the desk chair faces WEST, so screen-right is +Z.
+  // Negative X is toward the rear hutch; keep the lamp base clear of its front edge
+  // (-0.35 X) and its long shade inside the +1.17 Z desk-top boundary.
+  // The movable CATALOG books start front-right, where the lamp used to stand.
+  deskObjects: {
+    lamp: { dx: -0.13, dz: 0.72 },
+    looseBooks: { dx: 0.42, dz: 0.84 },
+  },
   stair: { x: 81.95, z: 105.3, radius: 1.18, steps: 26 },
   landing: { x0: 82.52, x1: 83.43, z0: 104.93, z1: 105.69 },
 } as const;
