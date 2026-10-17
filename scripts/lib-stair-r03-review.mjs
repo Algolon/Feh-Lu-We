@@ -128,7 +128,11 @@ try{
     // Don't start a push-test INSIDE its west collision box: inspect the
     // south rail directly, and push from the gallery walkable side instead.
     const southGuardSolid=col.overlaps(82.67,105.61,3.35,.30,1.75,.42);
-    const lowerStairHeadroom=!col.overlaps(82.3735,105.955,1.50,.30,1.75,.42);
+    // Only check NEW R03 railboxes for low-stair headroom. An older,
+    // unrelated gallery collider is near this same x/z projection.
+    const r03Guards=col.colliders.filter(c=>c.tag?.startsWith('lib-stair.r03'));
+    const lowerStairHeadroom=r03Guards.length===2 &&
+      r03Guards.every(c=>c.minY>=1.50+1.75);
     const aisle={x:82.85,y:3.35,z:105.24};
     col.move(aisle,.58,0,.30,1.75,.42);
     return {west,southGuardSolid,lowerStairHeadroom,aisle,
