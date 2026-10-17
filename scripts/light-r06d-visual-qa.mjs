@@ -152,6 +152,12 @@ try{
  if(profile==='pilot'){
   if(obs.some(s=>s.stable===null||s.stable.length!==2))
    throw Error('Missing persistent source-bound light in candidate');
+  for(const entry of obs){
+   const spec=variants.find(v=>v.id===entry.variant);
+   const expected=[spec.fire?.14:0,spec.floor?.10:0];
+   if(entry.stable.some((w,i)=>Math.abs(w-expected[i])>1e-8))
+    throw Error('Independent logical-source weights are incorrect in '+entry.site+'/'+entry.variant+'/'+entry.period);
+  }
   if(motion.some(s=>!s.stable||Math.abs(s.stable[0]-.14)>1e-8||
      Math.abs(s.stable[1]-.10)>1e-8))
    throw Error('Lighting source strength changed while moving, rotating or reversing');
@@ -162,6 +168,33 @@ try{
   if((lampFacing.find(x=>x.variant==='floor')?.lum??0)-
      (lampFacing.find(x=>x.variant==='off')?.lum??0)<1)
    throw Error('Standing lamp has no independently visible room contribution from its facing view');
+ }
+ // Perform a real save/reload after the visual matrix. UI/game loop is
+ // intentionally paused for the deterministic renderer, so temporarily
+ // allow the normal synchronous persistence path before reloading.
+ let persistence=null;
+ if(profile==='pilot'){
+  const before=await page.evaluate(()=>{
+    const g=window.__game;
+    g.state.lit['fire.living']=false;
+    g.state.lit['lamp.livingFloor']=true;
+    g.changed();
+    const wasRunning=g.running;
+    g.running=true;g.saveNow();g.running=wasRunning;
+    return g.world.scene.userData.stableLiving?.state()??null;
+  });
+  await page.reload({waitUntil:'domcontentloaded'});
+  await page.locator('[data-cont]').click({timeout:45000});
+  await page.waitForFunction(()=>window.__game?.world?.id==='estate',null,{timeout:120000});
+  const after=await page.evaluate(()=>{
+   const g=window.__game;
+   return {fire:g.state.lit['fire.living'],floor:g.state.lit['lamp.livingFloor'],
+    stable:g.world.scene.userData.stableLiving?.state()??null};
+  });
+  persistence={before,after};
+  if(before?.[0]!==0||before?.[1]<=0||after.fire!==false||after.floor!==true||
+     after.stable?.[0]!==0||after.stable?.[1]<=0)
+   throw Error('State-bound light did not persist after save/reload: '+JSON.stringify(persistence));
  }
  const compare={};
  for(const period of periods)for(const site of candidates){
@@ -178,7 +211,7 @@ try{
    msMedian:round(get('both').frameMs)
   };
  }
- const result={profile,quality,portrait,suite,obs,boundary,motion,compare,errors:faults};
+ const result={profile,quality,portrait,suite,obs,boundary,motion,persistence,compare,errors:faults};
  writeFileSync(dir+'/results.json',JSON.stringify(result,null,2));
  console.log('LIGHT_R06D_MATRIX '+JSON.stringify({profile,quality,portrait,compare,
   boundary:boundary.map(x=>({doorOpen:x.doorOpen,variant:x.variant,lum:round(x.lum),room:x.room})),
