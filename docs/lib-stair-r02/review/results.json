@@ -1,6 +1,6 @@
 {
   "source": "Real candidate game scene (Chromium / SwiftShader); not a real Android device",
-  "commit": "818f189121bc6e44d70494c39ecd8cd74135343c",
+  "commit": "052bdadef0f6faac8a187e297ad8c28b7557d508",
   "checks": [
     {
       "name": "entrance-to-gallery-and-return",
@@ -186,23 +186,23 @@
         "results": [
           {
             "step": 3,
-            "radial": 0.8195346630499197
+            "radial": 0.7689422313115073
           },
           {
             "step": 8,
-            "radial": 0.8081738224300717
+            "radial": 0.7624608530220691
           },
           {
             "step": 13,
-            "radial": 0.7942751029056393
+            "radial": 0.7595193451307404
           },
           {
             "step": 18,
-            "radial": 0.7812024370240074
+            "radial": 0.7599559735497874
           },
           {
             "step": 22,
-            "radial": 0.7359637882806376
+            "radial": 0.7619999732941255
           }
         ],
         "topNorth": {
@@ -220,15 +220,15 @@
     {
       "name": "r02-top-two-treads-guarded-gallery-opening-clear",
       "data": {
-        "pass": false,
+        "pass": true,
         "results": [
           {
             "step": 22,
-            "radius": 0.7348609808807017
+            "radius": 0.7607611245538257
           },
           {
             "step": 23,
-            "radius": 1.0933616100409325
+            "radius": 0.5749248381524142
           }
         ],
         "opening": {
@@ -237,7 +237,7 @@
           "z": 105.28
         }
       },
-      "pass": false
+      "pass": true
     }
   ],
   "screens": [
