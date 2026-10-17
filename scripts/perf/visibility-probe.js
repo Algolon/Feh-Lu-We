@@ -104,7 +104,7 @@
   }
   const meta = () => {
     const G = g(), r = G.renderer, gl = r.getContext();
-    return { build: (document.querySelector('script[src*="index-"]')?.src || '').split('/').pop(), viewport: [innerWidth, innerHeight], buffer: [gl.drawingBufferWidth, gl.drawingBufferHeight], dpr: r.getPixelRatio(), quality: G.settings.quality, shadows: r.shadowMap.enabled, batching: !!w().scene.userData.opaqueBatches?.enabled };
+    return { build: ((document.querySelector('script[src*="/assets/index-"]') || document.querySelector('script[src*="/assets/main-"]'))?.src || '').split('/').pop(), viewport: [innerWidth, innerHeight], buffer: [gl.drawingBufferWidth, gl.drawingBufferHeight], dpr: r.getPixelRatio(), quality: G.settings.quality, shadows: r.shadowMap.enabled, batching: !!w().scene.userData.opaqueBatches?.enabled };
   };
   const poseNow = () => { const pl = g().player; return { x: +pl.x.toFixed(3), y: +pl.y.toFixed(3), z: +pl.z.toFixed(3), yaw: +pl.yaw.toFixed(4), pitch: +pl.pitch.toFixed(4) }; };
 

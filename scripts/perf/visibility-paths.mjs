@@ -29,7 +29,17 @@ export const WINDOW_PATHS = [
   ['win-south', 0, [[96.0, 74.0], [101.5, 74.0], [106.0, 74.0], [113.5, 80.0], [113.5, 87.0], [113.5, 93.0]]],
 ];
 
-export const ALL_PATHS = [...LEGACY_PATHS, ...PERF_PATHS, ...WINDOW_PATHS];
+// PERF-R03-A (exterior greenery): the front approach and forecourt (hedges, both sides), the ground-floor front rooms
+// and the kitchen with their windows / back door, and the upstairs front and west rooms (windows over the hedges and
+// along the climber walls). Look-arounds at every waypoint (legacy samples) face each window.
+export const EXT_PATHS = [
+  ['front-approach', 0, [[90.0, 62.0], [90.0, 72.0], [78.0, 75.5], [102.0, 75.5], [90.0, 77.5]]],
+  ['ground-front', 0.15, [[78.5, 84.0], [80.0, 90.5], [90.0, 86.0], [101.0, 84.0], [101.0, 90.0]]],
+  ['kitchen', 0.15, [[101.0, 96.0], [101.0, 106.0], [97.0, 108.5]]],
+  ['upper-rooms', 3.35, [[78.0, 83.5], [76.0, 91.0], [98.0, 86.0], [104.0, 86.0], [75.0, 104.0]]],
+];
+
+export const ALL_PATHS = [...LEGACY_PATHS, ...PERF_PATHS, ...WINDOW_PATHS, ...EXT_PATHS];
 
 /** Door states: every door shut; every door open (stress); a realistic set (the rooms a player walks into upstairs). */
 export const DOOR_SETS = {
