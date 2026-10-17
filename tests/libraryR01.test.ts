@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { LIB_R01, LIB_R01_BAYS } from '../src/world/libraryR01';
 import { prop, POSES, validatePlacement } from '../src/slice/placement';
 import { GF, UF } from '../src/world/layout';
-import { LIB_STAIR, LIB_STAIR_RISE, LIB_STAIR_TREAD_THICKNESS, solidSpiralTread, stairStepPoint, stairStepAngle, spiralRailWorldY } from '../src/world/libraryStairR01';
+import { LIB_STAIR, LIB_STAIR_RISE, LIB_STAIR_TREAD_THICKNESS, solidSpiralTread, stairStepPoint, stairStepAngle, spiralRailWorldY, LIB_STAIR_TOP_CAP } from '../src/world/libraryStairR01';
 
 describe('LIB-R01: fitted shelves, puzzle and spiral access', () => {
   it('leaves the ground-floor glazing bays unobstructed', () => {
@@ -76,6 +76,40 @@ describe('LIB-R01: fitted shelves, puzzle and spiral access', () => {
     expect(lastX).toBeLessThan(LIB_STAIR.bridge.x0);
     expect(LIB_STAIR.bridge.x0-lastX).toBeLessThan(.01);
     g.dispose();
+  });
+  it('LIB-STAIR-R03: each step UV maps one entire solid board without tiled plank seams', () => {
+    for(const i of [0,9,17,25]){
+      const g=solidSpiralTread(i);
+      const uv=g.getAttribute('uv');
+      expect(uv.count).toBe(g.getAttribute('position').count);
+      let loU=Infinity,hiU=-Infinity,loV=Infinity,hiV=-Infinity;
+      for(let v=0;v<uv.count;v++){
+        loU=Math.min(loU,uv.getX(v));hiU=Math.max(hiU,uv.getX(v));
+        loV=Math.min(loV,uv.getY(v));hiV=Math.max(hiV,uv.getY(v));
+      }
+      expect(loU).toBeGreaterThanOrEqual(.039);
+      expect(hiU).toBeLessThanOrEqual(.961);
+      expect(loV).toBeGreaterThanOrEqual(.039);
+      expect(hiV).toBeLessThanOrEqual(.961);
+      // A radial board samples one texture once, not eight plank strips.
+      expect(hiU-loU).toBeLessThan(.5);
+      expect(hiV-loV).toBeLessThan(1);
+      g.dispose();
+    }
+  });
+  it('LIB-STAIR-R03: upper north-west corner is decked and fenced without closing the stair mouth', () => {
+    const c=LIB_STAIR_TOP_CAP,b=LIB_STAIR.bridge;
+    expect(c.x1).toBe(b.x0);
+    expect(c.z1).toBe(b.z1);
+    expect(c.x1-c.x0).toBeCloseTo(.26);
+    expect(c.z1-c.z0).toBeCloseTo(.37);
+    const last=stairStepPoint(LIB_STAIR.steps-1);
+    // Guarded cap stays NORTH of the spiral's final player centreline,
+    // at least 30cm + clearance away from their route to the gallery.
+    expect(c.z0-last.z).toBeGreaterThan(.35);
+    expect(b.x1).toBe(83.2);
+    expect(105.26).toBeGreaterThan(b.z0+.35);
+    expect(105.26).toBeLessThan(c.z0-.30);
   });
   it('LIB-STAIR-R01: guard encloses usable tread without sealing the exit', () => {
     expect(LIB_STAIR.guardEndsAtStep).toBeLessThan(LIB_STAIR.steps);
