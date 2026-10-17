@@ -44,6 +44,8 @@ jobs:
           # Regression: the 4px fallback has been uploaded to WebGL before the real atlas arrives.
           # A completely new texture object is required to allocate correctly sized storage.
           node scripts/art-gpu-reallocation-qa.mjs http://127.0.0.1:4188/Feh-Lu-We/
+          # Independent family route: no bong action, no audio request, separate save and working handpan.
+          node scripts/family-edition-smoke.mjs http://127.0.0.1:4188/Feh-Lu-We/
       - uses: actions/upload-artifact@v4
         if: always() && github.ref_name == github.event.repository.default_branch
         with:

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#2b2118" />
+    <meta name="description" content="Feh Lu We — een mysterieus puzzelavontuur op een landgoed op de Veluwe." />
+    <title>Feh Lu We — Familie-editie</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/Feh-Lu-We/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/Feh-Lu-We/favicon-192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/Feh-Lu-We/apple-touch-icon.png" />
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="game" aria-label="Spelwereld"></canvas>
+      <div id="zone-move" class="zone" aria-hidden="true"></div>
+      <div id="zone-look" class="zone" aria-hidden="true"></div>
+      <div id="stick" aria-hidden="true"><div id="stick-knob"></div></div>
+      <div id="hud" hidden></div>
+      <div id="overlay" hidden></div>
+      <div id="start"></div>
+      <noscript>Feh Lu We heeft JavaScript nodig.</noscript>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

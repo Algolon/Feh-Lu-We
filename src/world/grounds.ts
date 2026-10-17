@@ -17,6 +17,7 @@ import { baleGeo, twineGeo, besomGeo, looseStrawGeo, BALE } from './hayBale';
 import { propMats } from './propkit';
 import { makeInspect, place } from '../interactions/props';
 import { registerGravityBongAction } from './gravityBongInteraction';
+import { FAMILY_EDITION } from '../core/edition';
 import type { Vegetation } from './nature';
 import {
   ARRIVAL_GRAVEL, PARKING, BBQ, OUTDOOR_DINING, MUSIC_BONG, BALLOON_NOOK, LAKE, LAKE_VIEW, GOLF_TEE, GOLF_CHUTE, GOLF_MAT, WICKERMAN, WICKER_BALE, GF, type Rect,
@@ -118,12 +119,14 @@ function socialGarden(w: World, g: GameApi, c: Ctx) {
   }
   for (let i = 0; i < 6; i++) { const a = new Asm(c.b, c.chunk, 97.75 + (i % 2) * 0.5, GF + 0.76, 118.4 + i * 0.6, 0); a.add(M.ceramic, '#f2ead8', cg('plate', () => new THREE.CylinderGeometry(0.12, 0.11, 0.018, 16)), 0, 0.009, 0); a.add(M.ceramic, '#6f91a6', cg('plateRim', () => new THREE.TorusGeometry(0.105, 0.006, 4, 16).rotateX(Math.PI / 2)), 0, 0.018, 0); }
   festoon(c, [[95.1, 117.4], [100.9, 122.6]], GF);
-  // gravity bong + handpan: a low table with the instrument on its own stand, an outdoor rug, poufs (no mechanic)
+  // Family edition keeps the music corner, rug, poufs and playable handpan, but no bong or bong table.
   platform(c, MUSIC_BONG, '#d8ccb0');
   boxMM(c.b, k.M.rug, '#c8b898', 79.6, 84.4, GF + 0.005, GF + 0.012, 118.5, 122.5, { chunk: c.chunk, shadow: false });
-  table(c, 81.6, 120.6, GF, 1.1, 0.8, 0, '#7a5a3a', 0.4);
-  buildGravityBong(c, 81.58, GF + 0.4, 120.56);
-  registerGravityBongAction(w, g, 81.58, GF + 0.4, 120.56);
+  if (!FAMILY_EDITION) {
+    table(c, 81.6, 120.6, GF, 1.1, 0.8, 0, '#7a5a3a', 0.4);
+    buildGravityBong(c, 81.58, GF + 0.4, 120.56);
+    registerGravityBongAction(w, g, 81.58, GF + 0.4, 120.56);
+  }
   // Asset 01: the handpan on its walnut stand (FLW-S3-035), standing on the rug (top at GF + 0.012), same spot as before
   const handpanTop = buildHandpan(c, 83.4, GF + 0.012, 121.6, 0.4);
   addHandpanPlay(w, g, 83.4, GF + 0.012, 121.6, 0.4); // aim at a tone field (or tap it) to play that note
