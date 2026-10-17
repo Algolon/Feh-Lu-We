@@ -450,19 +450,19 @@ export class World {
   }
 }
 
-/** What the light pool may know about the view (DEV-04C-R): the view direction, the cone, and a line-of-sight test. */
+/** Legacy view data accepted by LightPool callers but no longer used for ranking (LIGHT-R04). */
 export interface LightView { dir: THREE.Vector3; cosHalf: number; blocked: (x0: number, y0: number, z0: number, x1: number, y1: number, z1: number) => boolean }
 
 /**
  * A small, fixed pool of point lights (no shader recompiles). Logical lamp state and the emissive fixture never depend
  * on this: losing a pooled light only fades its illumination, the source stays visibly lit.
  *
- * LIGHT-R03: eligibility follows up to six *open and optically transparent* physical portals,
- * never the renderer's camera-dependent room / distance culling. Closed opaque doors still block
- * reachability. Nearby physical fixtures are ranked primarily by metric distance and source
- * strength; looking at one is only a small tie-breaker, not an excuse to switch to a 17 m distant
- * fireplace. A held source gets hysteresis across thresholds, and switching between the limited
- * mobile slots fades both ends gradually. Its visible fixture is always independent of pooled light.
+ * LIGHT-R04: eligibility follows up to six open or optically transparent portals,
+ * independent of camera culling. Selection is based on metric distance, source strength and
+ * incumbent hysteresis ONLY. Gaze/dwell must never reassign a point-light slot: the player
+ * can look around a stationary room without the walls brightening after two seconds.
+ * Closed opaque doors still block reachability; moving far enough can transfer a slot
+ * using the existing fade-out/fade-in. Fixtures stay emissive independently of the pool.
  * No extra shader light slots are created.
 
  */
@@ -486,23 +486,11 @@ export class LightPool {
   private roomCache = new Map<LampSource, string>();
   /** Global multiplier for fixture light (art-refresh lighting comparison; 1 = original behaviour). */
   gain = 1;
-  /** Ranking weights (DEV-04C-R). */
-  static readonly VIEW_BONUS = 2.0; // Gaze is a tie-breaker, not a 16 m teleport of real illumination.
-  static readonly VIEW_RANGE = 24;
-  static readonly TWO_STEP_PENALTY = 0; // Physical distance, not categorical room membership, controls score.
-  /** Attention: seconds of continuous viewing before the bonus starts / is full. */
-  static readonly DWELL_START = 1.2;
-  static readonly DWELL_FULL = 2.0;
-  private dwell = new Map<string, number>();
-  private sinceRank = 0;
-  update(dt: number, t: number, lamps: LampSource[], eye: THREE.Vector3, rooms?: RoomGraph, isOpen: (door: string) => boolean = () => true, view?: LightView, _visibleRooms?: ReadonlySet<string>) {
+  // There is intentionally no gaze/dwell priority. Direction changes must not alter lighting.
+  update(dt: number, t: number, lamps: LampSource[], eye: THREE.Vector3, rooms?: RoomGraph, isOpen: (door: string) => boolean = () => true, _view?: LightView, _visibleRooms?: ReadonlySet<string>) {
     this.timer -= dt;
-    this.sinceRank += dt;
     if (this.timer <= 0) {
       this.timer = 0.25;
-      const elapsed = Math.min(0.5, this.sinceRank);
-      this.sinceRank = 0;
-      const seen = new Set<string>();
       const roomOf = (l: LampSource) => {
         let r = this.roomCache.get(l);
         if (r === undefined) { r = l.room ?? (rooms ? rooms.roomAt(l.pos.x, l.pos.y, -l.pos.z) : 'out'); this.roomCache.set(l, r); }
@@ -529,22 +517,15 @@ export class LightPool {
         const room = roomOf(l);
         if (stableRooms && !stableRooms.has(room) && !(rel && rel.has(room))) continue;
         const d = l.pos.distanceTo(eye);
-        let inView = false;
-        if (view && d < LightPool.VIEW_RANGE && d > 0.01) {
-          const c = (view.dir.x * (l.pos.x - eye.x) + view.dir.y * (l.pos.y - eye.y) + view.dir.z * (l.pos.z - eye.z)) / d;
-          inView = c > view.cosHalf && !view.blocked(eye.x, eye.y, -eye.z, l.pos.x, l.pos.y, -l.pos.z);
-        }
-        if (inView) { this.dwell.set(l.id, Math.min(3, (this.dwell.get(l.id) ?? 0) + elapsed)); seen.add(l.id); }
-        const att = THREE.MathUtils.smoothstep(this.dwell.get(l.id) ?? 0, LightPool.DWELL_START, LightPool.DWELL_FULL);
-        // a source you keep looking at ranks first and is not penalised for being two rooms away
-        const w = 0.2 * l.intensity + att * LightPool.VIEW_BONUS - (rel && !rel.has(room) ? (1 - att) * LightPool.TWO_STEP_PENALTY : 0);
+        // A stationary viewpoint has a stationary lamp ranking, regardless of
+        // whether the fixture is inside the camera cone or how long it is watched.
+        const w = 0.2 * l.intensity;
         byId.set(l.id, l);
         cands.push({ id: l.id, room, d, w });
       }
-      for (const [id, v] of this.dwell) if (!seen.has(id)) { const nv = v - elapsed * 0.5; if (nv <= 0) this.dwell.delete(id); else this.dwell.set(id, nv); }
-      // Do not use a room-identity preference: crossing a doorway changes that
-      // identity instantly even when the eye and all fixture distances barely move.
-      // Rank the stable candidate set by distance, with held-source hysteresis.
+      // Do not use a room-identity or gaze preference: these change discretely
+      // at door thresholds and during camera rotation. Rank by physical distance
+      // with held-source hysteresis instead.
       this.want = chooseLamps(cands, this.here, this.want, this.lights.length, 2.3, 0);
       this.lookup = byId;
     }
