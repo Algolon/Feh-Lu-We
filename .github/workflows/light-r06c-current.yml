@@ -1,0 +1,82 @@
+name: LIGHT-R06C current-production base light integration QA
+on:
+  push:
+    branches: [lighting/r06c-production-integration]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run test:budget
+      - run: npm run build
+  real-scene:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - profile: baseline
+            quality: low
+            portrait: '0'
+            ref: 2e2bab141adc7a0687f8a458981463a019cdc201
+          - profile: pilot
+            quality: low
+            portrait: '0'
+            ref: ${{ github.sha }}
+          - profile: baseline
+            quality: high
+            portrait: '1'
+            ref: 2e2bab141adc7a0687f8a458981463a019cdc201
+          - profile: pilot
+            quality: high
+            portrait: '1'
+            ref: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: qa
+          ref: ${{ github.sha }}
+      - uses: actions/checkout@v4
+        with:
+          path: game
+          ref: ${{ matrix.ref }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: game/package-lock.json
+      - name: Build and run real-scene A/B with all pooled lights disabled
+        working-directory: game
+        env:
+          LIGHT_R06_PROFILE: ${{ matrix.profile }}
+          LIGHT_R06_QUALITY: ${{ matrix.quality }}
+          LIGHT_R06_PORTRAIT: ${{ matrix.portrait }}
+        run: |
+          cp ../qa/scripts/light-r06-stable-qa.mjs scripts/light-r06-stable-qa.mjs
+          npm ci
+          npm run build
+          npx playwright-core install --with-deps chromium
+          npm run preview -- --host 127.0.0.1 --port 4188 > /tmp/r06c-preview.log 2>&1 &
+          for i in $(seq 1 40); do
+            curl -sf http://127.0.0.1:4188/Feh-Lu-We/ >/dev/null && break
+            sleep 1
+          done
+          node scripts/light-r06-stable-qa.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: light-r06c-${{ matrix.profile }}-${{ matrix.quality }}-${{ matrix.portrait }}
+          path: game/light-r06-qa/
+          if-no-files-found: warn
