@@ -16,16 +16,11 @@ export const LIB_STAIR = {
   bridge: { x0: 82.64, x1: 83.2, z0: 104.66, z1: 105.99 },
   guardEndsAtStep: 24,
 } as const;
-/** Small upper corner deck and its L-shaped guarded edges; outside the stair lane. */
-export const LIB_STAIR_TOP_CAP = {
-  x0:LIB_STAIR.bridge.x0-.26,x1:LIB_STAIR.bridge.x0,
-  z0:LIB_STAIR.bridge.z1-.37,z1:LIB_STAIR.bridge.z1,
-} as const;
-/** R04 closure joins the existing north cap to the CENTER post.
- * These are the real endpoints; the upper stair path is south of the closing line. */
-export const LIB_STAIR_R04_POST_RAIL = {
+/** A single rail at the exposed edge of the upper landing, terminating in
+ * the existing north gallery post. No L-shaped secondary gate (photo reference). */
+export const LIB_STAIR_TOP_GUARD = {
   from: {x:LIB_STAIR.x,z:LIB_STAIR.z},
-  to: {x:LIB_STAIR_TOP_CAP.x0,z:LIB_STAIR_TOP_CAP.z0},
+  to: {x:LIB_STAIR.bridge.x0,z:LIB_STAIR.bridge.z1},
   y:UF+1.045,
 } as const;
 
@@ -35,14 +30,18 @@ export const LIB_STAIR_R04_POST_RAIL = {
 export function libraryGalleryFloorUV(x:number,z:number): [number,number] {
   return [(x-83.2)/2.2,(107.8-z)/2.2];
 }
-/** One contiguous floor piece: rectangular gallery bridge + north cap +
- * tapered fill to the newel. Top and sides are REAL, closed geometry.
- * The 4 overlay board meshes previously created the mismatched mini-planks. */
+/** One simple upper-floor segment, edged by a single diagonal newel rail.
+ * Its gallery-top face uses exactly the existing slab's timber UV language. */
 export function solidGalleryStairLanding():THREE.BufferGeometry {
-  const b=LIB_STAIR.bridge,n=LIB_STAIR_TOP_CAP;
+  const b=LIB_STAIR.bridge;
+  // One tapered, flush gallery-floor transition. The north-west edge follows
+  // the SINGLE newel-to-gallery rail; no little rectangular raised cap.
   const outline:[number,number][]=[
-    [LIB_STAIR.x,LIB_STAIR.z], [n.x0,n.z0], [n.x0,n.z1],
-    [b.x1,b.z1], [b.x1,b.z0], [b.x0,b.z0],
+    [LIB_STAIR.x,LIB_STAIR.z],
+    [b.x0,b.z1],
+    [b.x1,b.z1],
+    [b.x1,b.z0],
+    [b.x0,b.z0],
     [b.x0,LIB_STAIR.z],
   ];
   const shape=new THREE.Shape();
@@ -250,9 +249,8 @@ export function libraryStairR01(c:Ctx) {
     cyl(c.b,metal,iron,bx,UF-.055,bz,.017,.017,top-(UF-.055),8,{chunk:c.chunk});
   }
 
-  // R04: one seamless UPPER-GALLERY floor across bridge, north corner and
-  // newel-side tapered wedge. The parent gallery uses #8a5a34, k.M.wood and uv=2.2.
-  // The polygon shares those values exactly and replaces all small overlay boards.
+  // R05: single tapered upper landing, like the reference. Same floor atlas,
+  // tint and UV pitch as gallery; no freestanding cap or overlay boards.
   const b=bridge;
   const upperFloor=solidGalleryStairLanding();
   c.b.add(wood,upperFloor,planMatrix(x,UF-.20,z),'#8a5a34',c.chunk,true,0);
@@ -264,74 +262,34 @@ export function libraryStairR01(c:Ctx) {
   }
   box(c.b,wood,edge,b.x0,UF-.205,(b.z0+b.z1)/2,.035,.205,b.z1-b.z0,{chunk:c.chunk});
 
-  // LIB-STAIR-R03: the previously open NORTH-WEST pocket of the transfer
-  // platform is a protected, single-piece oak corner infill, NOT part of the
-  // central staircase walkway. Keep the normal upper exit at z=105.26 free.
-  // The L-shaped return connects to the existing north-gallery rail.
-  const northCap=LIB_STAIR_TOP_CAP;
-  // Geometry of the cap is part of the SAME closed R04 gallery-floor mesh.
-  c.col.addFloor(northCap.x0,northCap.x1,northCap.z0,northCap.z1,UF);
-  // Close the last OPEN wedge from the small deck back into the CENTRAL
-  // SPINDLE. Its handrail joins the dark newel at exactly gallery rail height,
-  // and ends at the existing R03 cap corner. No free-standing rail end.
-  // The path from the last stair tread to the east gallery is south of this.
-  const join=LIB_STAIR_R04_POST_RAIL;
-  const dx=join.to.x-join.from.x,dz=join.to.z-join.from.z;
-  const length=Math.hypot(dx,dz);
-  const rail=new THREE.CylinderGeometry(.035,.035,length,8);
-  rail.rotateZ(Math.PI/2);
-  // Axis after Z rotation lies along local X; world yaw turns it into line dx/dz.
-  c.b.add(wood,rail,planMatrix((join.from.x+join.to.x)/2,join.y,
-    (join.from.z+join.to.z)/2,Math.atan2(-dz,dx)),walnut,c.chunk,true,0);
-  rail.dispose();
-  // Timber newel cap already sits at centre; use infill on THIS guard segment,
-  // not a transverse beam through the player exit.
-  for(const t of [.30,.53,.76]){
-    const px=join.from.x+dx*t,pz=join.from.z+dz*t;
-    cyl(c.b,metal,iron,px,UF-.04,pz,.017,.017,1.14,8,{chunk:c.chunk});
+  // R05 — follow the reference: one simple, uninterrupted rail from the
+  // central newel to the existing north-gallery guard. No redundant L-posts,
+  // overhead rails, double fences or piles of dangling spindles.
+  const link=LIB_STAIR_TOP_GUARD;
+  const dx=link.to.x-link.from.x,dz=link.to.z-link.from.z;
+  const len=Math.hypot(dx,dz);
+  const woodRail=new THREE.CylinderGeometry(.035,.035,len,8);
+  woodRail.rotateZ(Math.PI/2);
+  c.b.add(wood,woodRail,planMatrix((link.from.x+link.to.x)/2,link.y,
+    (link.from.z+link.to.z)/2,Math.atan2(-dz,dx)),walnut,c.chunk,true,0);
+  woodRail.dispose();
+  for(let i=1;i<=5;i++){
+    const t=i/6,px=link.from.x+dx*t,pz=link.from.z+dz*t;
+    cyl(c.b,metal,iron,px,UF-.045,pz,.017,.017,1.13,8,{chunk:c.chunk});
   }
-  // 2.5D colliders trace the diagonal guard at UPPER FLOOR level only. These
-  // do not close the passage near z=105.26 and don't obstruct lower headroom.
-  const sections=6;
-  for(let i=0;i<sections;i++){
-    const t0=i/sections,t1=(i+1)/sections;
-    const ax=join.from.x+dx*t0,az=join.from.z+dz*t0;
-    const bx=join.from.x+dx*t1,bz=join.from.z+dz*t1;
-    c.col.addBox(Math.min(ax,bx)-.025,Math.max(ax,bx)+.025,
-      Math.min(az,bz)-.025,Math.max(az,bz)+.025,
-      UF+.015,UF+1.12,{tag:'lib-stair.r04-post-closure'});
+  // Match collision exactly to the rail, only above the upper floor.
+  // Preserve lower-flight head clearance and the open route into gallery.
+  for(let i=0;i<6;i++){
+    const t0=i/6,t1=(i+1)/6;
+    const ax=link.from.x+dx*t0,az=link.from.z+dz*t0;
+    const bx=link.from.x+dx*t1,bz=link.from.z+dz*t1;
+    c.col.addBox(Math.min(ax,bx)-.028,Math.max(ax,bx)+.028,
+      Math.min(az,bz)-.028,Math.max(az,bz)+.028,
+      UF+.015,UF+1.12,{tag:'lib-stair.r05-simple-north-guard'});
   }
 
-  // Closed L-shaped balustrade on its exposed WEST and SOUTH sides; north
-  // continues directly into the gallery-side rail already drawn below.
-  const railHeight=1.045;
-  const westX=northCap.x0,southZ=northCap.z0;
-  box(c.b,wood,walnut,westX,UF+railHeight,(northCap.z0+northCap.z1)/2,
-    .073,.07,northCap.z1-northCap.z0+.068,{chunk:c.chunk,jitter:0});
-  box(c.b,wood,walnut,(northCap.x0+northCap.x1)/2,UF+railHeight,southZ,
-    northCap.x1-northCap.x0+.070,.07,.073,{chunk:c.chunk,jitter:0});
-  for(const zz of [northCap.z0+.10,northCap.z0+.22,northCap.z0+.33]){
-    cyl(c.b,metal,iron,westX,UF-.055,zz,.016,.016,1.155,8,{chunk:c.chunk});
-  }
-  for(const xx of [northCap.x0+.08,northCap.x0+.18]){
-    cyl(c.b,metal,iron,xx,UF-.055,southZ,.016,.016,1.155,8,{chunk:c.chunk});
-  }
-  for(const [px,pz] of [[westX,southZ],[westX,northCap.z1]]){
-    cyl(c.b,wood,walnut,px,UF,pz,.049,.052,1.09,8,{chunk:c.chunk});
-  }
-  // Same physical limits as the visible L, and no collision across the
-  // eastern walk-through to the upper gallery.
-  // These rails stand on the UPPER deck. Their collision must begin at
-  // its floor level, not 14cm below: players on the spiral almost 2m below
-  // were hitting the underside of the railing with their 1.75m capsule.
-  c.col.addBox(northCap.x0-.045,northCap.x0+.045,northCap.z0,northCap.z1,
-    UF+.015,UF+1.12,{tag:'lib-stair.r03-northwest-west'});
-  c.col.addBox(northCap.x0,northCap.x1,northCap.z0-.045,northCap.z0+.045,
-    UF+.015,UF+1.12,{tag:'lib-stair.r03-northwest-south'});
-  
-  // Gallery-side guards: continuous top rail and infill instead of only two
-  // huge wooden posts. SOUTH side connects to the spiral handrail via
-  // the upperCurve; north side is the separate short oak return.
+  // Gallery side guards continue the two stair rails, without any tertiary
+  // L-shaped frames. The R05 north rail shares the existing north corner post.
   for(const zz of [b.z0,b.z1]){
     // Reinforced newel at the outer edge; the east end already meets the
     // gallery's own balustrade and needs no overlapping double newel.
