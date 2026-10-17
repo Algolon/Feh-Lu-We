@@ -49,7 +49,7 @@ try{
       for(const m of meshes)m.material=after?newMat:oldMat;
       one.material=after?newMat:oldMat;
       if(single){one.scale.set(1.28,1.28,1.28);camera.position.set(.1,1.45,5.2);camera.lookAt(0,1.5,0);}
-      else{camera.position.set(0,2.25,4.4);camera.lookAt(0,2.0,0);}
+      else{camera.position.set(0,2.25,2.6);camera.lookAt(0,2.0,0);}
       renderer.render(scene,camera);
       return {type,after,leaves:single?1:meshes.length,calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,glError:renderer.getContext().getError(),posCount:raw.attributes.position.count,uvCount:raw.attributes.uv.count};
     };
