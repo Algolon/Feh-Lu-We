@@ -119,70 +119,73 @@ export function climberLeafGeo(): THREE.BufferGeometry {
   }
   g.rotateZ(Math.PI);g.userData.keepColor=true;return g;
 }
-/** A separate, calmer broad-lobed leaf for the two entrance urns. No climber geometry is reused. */
+/** Broad, recognisable foliage for entrance urns. Unlike the ivy this uses an
+ * in-mesh colour field for veins, never z-fighting overlay strips or alpha cards.
+ * Subdivision is intentionally limited to the 21 entrance leaves per urn.
+ */
 export function entranceLeafGeo():THREE.BufferGeometry {
-  // Full broad shoulders and soft notches, without the five jagged climber points.
-  // Local Y runs from the stem socket to the terminal tip.
   const outline=[
     [-.12,-.70],[-.35,-.43],[-.67,-.18],[-.76,.09],[-.53,.28],
     [-.31,.22],[-.37,.52],[-.15,.44],[0,.91],[.15,.44],
     [.37,.52],[.31,.22],[.53,.28],[.76,.09],[.67,-.18],
     [.35,-.43],[.12,-.70]
   ].reverse();
-  const p:number[]=[],colors:number[]=[];
-  const triangle=(v:number[][],tone:number,back:boolean,tipTone=tone)=>{
-    for(let i=0;i<3;i++){
-      p.push(...v[i]);
-      const shade=(i===2?tipTone:tone)*(back?.94:1);
-      colors.push(shade,shade*1.012,shade*.988);
+  const positions:number[]=[],colors:number[]=[],normals:number[]=[];
+  const width=.76;
+  const sq=(x:number)=>x*x;
+  const veinDistance=(x:number,y:number,x0:number,y0:number,x1:number,y1:number)=>{
+    const vx=x1-x0,vy=y1-y0;
+    const t=THREE.MathUtils.clamp(((x-x0)*vx+(y-y0)*vy)/(vx*vx+vy*vy),0,1);
+    return Math.hypot(x-x0-vx*t,y-y0-vy*t);
+  };
+  const vertex=(x:number,y:number,back:boolean)=>{
+    const ridge=.035+.045*(1-THREE.MathUtils.clamp(Math.abs(x)/width,0,1));
+    const z=back?-ridge:ridge;
+    const centreVein=.23*Math.exp(-sq(x/.075))*(.75+.25*THREE.MathUtils.clamp((y+.6)/1.4,0,1));
+    let smallVeins=0;
+    for(const side of [-1,1]){
+      const lower=veinDistance(x,y,side*.04,-.01,side*.49,.18);
+      const upper=veinDistance(x,y,side*.03,.28,side*.25,.48);
+      smallVeins=Math.max(smallVeins,.11*Math.exp(-sq(lower/.064)),.075*Math.exp(-sq(upper/.064)));
+    }
+    const sideFacet=(x<0?1.015:.975)*(y>.3?1.018:1);
+    const tone=sideFacet*(1+centreVein+smallVeins)*(back?.96:1);
+    return {p:[x,y,z],c:[tone*1.005,tone*1.045,tone*.955],n:new THREE.Vector3(-x*.18,0,back?-1:1).normalize().toArray()};
+  };
+  const emit=(a:number[],b:number[],d:number[],back:boolean)=>{
+    for(const xy of (back?[a,d,b]:[a,b,d])){
+      const v=vertex(xy[0],xy[1],back);
+      positions.push(...v.p);colors.push(...v.c);normals.push(...v.n);
     }
   };
-  // Two-sided opaque facets with a restrained centre fold.
-  for(let i=0;i<outline.length;i++){
-    const a=outline[i],b=outline[(i+1)%outline.length];
-    const right=(a[0]+b[0])*.5>0;
-    const tone=(right?.98:1.035)*(a[1]+b[1]>.30?1.018:1);
-    for(const back of [false,true]){
-      const core=[0,.04,back?-.060:.060];
-      triangle(back?[core,[...b,0],[...a,0]]:[core,[...a,0],[...b,0]],tone,back,1.04);
-    }
-  }
-  // Calm, tapered midrib: leaf-green rather than white.
-  for(const back of [false,true]){
-    const z=back?-.092:.092;
-    const a=[-.025,-.53,z],b=[.025,-.53,z],t=[0,.84,z];
-    triangle(back?[b,a,t]:[a,b,t],1.19,back,1.08);
-  }
-  // Two short secondary veins per half, only on the upper portion.
-  for(const side of [-1,1])for(const offset of [0,.27])for(const back of [false,true]){
-    const y=.10+offset,z=back?-.091:.091;
-    const a=[side*.030,y,z],b=[side*.051,y+.029,z],t=[side*(offset? .28:.44),y+.17,z];
-    triangle(back?[b,a,t]:[a,b,t],1.095,back,1.055);
-  }
+  // Two rounds of subdivision give sufficient colour samples for narrow leaf
+  // nerves without extra material/shader/state changes.
+  const subdivide=(a:number[],b:number[],d:number[],depth:number)=>{
+    if(!depth){emit(a,b,d,false);emit(a,b,d,true);return;}
+    const ab=[(a[0]+b[0])/2,(a[1]+b[1])/2];
+    const bd=[(b[0]+d[0])/2,(b[1]+d[1])/2];
+    const da=[(d[0]+a[0])/2,(d[1]+a[1])/2];
+    subdivide(a,ab,da,depth-1);
+    subdivide(ab,b,bd,depth-1);
+    subdivide(da,bd,d,depth-1);
+    subdivide(ab,bd,da,depth-1);
+  };
+  for(let i=0;i<outline.length;i++)subdivide([0,.04],outline[i],outline[(i+1)%outline.length],2);
   const g=new THREE.BufferGeometry();
-  g.setAttribute('position',new THREE.Float32BufferAttribute(p,3));
+  g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));
   g.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
-  g.setAttribute('uv',new THREE.Float32BufferAttribute(p.length/3*2,2));
-  g.computeVertexNormals();
-  // Match the existing leaf normal convention and avoid flipped mobile backfaces.
-  const normals=g.attributes.normal as THREE.BufferAttribute;
-  for(let i=0;i<normals.count;i++){
-    const sign=Math.floor(i/3)%2===0?1:-1;
-    const n=new THREE.Vector3(-p[i*3]*.20,-p[i*3+1]*.07,1).normalize().multiplyScalar(sign);
-    normals.setXYZ(i,n.x,n.y,n.z);
-  }
-  g.userData.keepColor=true;
-  return g;
+  g.setAttribute('normal',new THREE.Float32BufferAttribute(normals,3));
+  g.setAttribute('uv',new THREE.Float32BufferAttribute(positions.length/3*2,2));
+  g.userData.keepColor=true;return g;
 }
-
-const ENTRANCE_GREEN=['#769e5b','#86a968','#6c9455','#92b073'] as const;
+const ENTRANCE_GREEN=['#83a766','#96b877','#789f60','#a2c084'] as const;
 export interface EntranceBranch { points:THREE.Vector3[]; radius:number }
 export interface EntranceLeaf { centre:THREE.Vector3; base:THREE.Vector3; attachment:THREE.Vector3; size:number; angle:number; tilt:number; yaw:number; tone:number }
 /** Seeded, game-space growth layout. No camera-facing billboard or random runtime state. */
 export function entrancePlantPlan(seed:number):{branches:EntranceBranch[];leaves:EntranceLeaf[]} {
   const r=mulberry32(seed),branches:EntranceBranch[]=[],leaves:EntranceLeaf[]=[];
   const Y=new THREE.Vector3(0,1,0),X=new THREE.Vector3(1,0,0),origin=new THREE.Vector3(0,.65,0);
-  const n=8;
+  const n=7;
   for(let j=0;j<n;j++){
     const a=(j+.16)/n*Math.PI*2+(r()-.5)*.19,reach=.23+r()*.12;
     const height=.52+r()*.27;
@@ -190,14 +193,14 @@ export function entrancePlantPlan(seed:number):{branches:EntranceBranch[];leaves
     const mid=origin.clone().addScaledVector(outward,reach*.42).addScaledVector(Y,height*.48);
     const end=origin.clone().addScaledVector(outward,reach).addScaledVector(Y,height);
     branches.push({points:[origin.clone(),mid,end],radius:.011});
-    for(let k=0;k<4;k++){
-      const t=.23+k*.225;
+    for(let k=0;k<3;k++){
+      const t=.24+k*.31;
       const anchor=origin.clone().lerp(end,t);
-      const splay=(k%2===0?-1:1),size=.225+r()*.037;
-      const yaw=a+Math.PI/2+(r()-.5)*.45;
-      const angle=splay*(.38+r()*.28);
-      const tilt=-.18-r()*.24;
-      const centre=anchor.clone().addScaledVector(outward,.075+r()*.040).addScaledVector(Y,.045+r()*.040);
+      const splay=(k%2===0?-1:k===1?1:-1),size=.245+r()*.043;
+      const yaw=Math.PI+(r()-.5)*1.02+Math.sin(a)*.20;
+      const angle=splay*(.24+r()*.28);
+      const tilt=-.13-r()*.24;
+      const centre=anchor.clone().addScaledVector(outward,.11+r()*.055).addScaledVector(Y,.035+r()*.050);
       // Rotate the attachment precisely as placeLeaf does: X, Z, then Y.
       const base=new THREE.Vector3(0,-.65*size,0).applyAxisAngle(X,tilt).applyAxisAngle(new THREE.Vector3(0,0,1),angle).applyAxisAngle(Y,yaw).add(centre);
       leaves.push({centre,base,attachment:anchor,size,angle,tilt,yaw,tone:Math.floor(r()*ENTRANCE_GREEN.length)});
