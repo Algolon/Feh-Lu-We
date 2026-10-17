@@ -119,13 +119,52 @@ export function climberLeafGeo(): THREE.BufferGeometry {
   }
   g.rotateZ(Math.PI);g.userData.keepColor=true;return g;
 }
+/** Authored botanical albedo in the same spirit as the indoor plant atlas.
+ * The curved leaf mesh owns the silhouette; texture contributes only calm venation.
+ */
+let entranceLeafMat:THREE.MeshLambertMaterial|null=null;
+export function entranceLeafMaterial():THREE.MeshLambertMaterial {
+  if(entranceLeafMat)return entranceLeafMat;
+  const canvas=document.createElement('canvas');canvas.width=256;canvas.height=512;
+  const x=canvas.getContext('2d')!;
+  const ground=x.createLinearGradient(0,0,256,0);
+  ground.addColorStop(0,'#b5c3aa');ground.addColorStop(.33,'#e5ebd6');
+  ground.addColorStop(.49,'#f5f7e8');ground.addColorStop(.55,'#edf1dd');
+  ground.addColorStop(1,'#b7c7ad');
+  x.fillStyle=ground;x.fillRect(0,0,256,512);
+  const fade=x.createLinearGradient(0,0,0,512);
+  fade.addColorStop(0,'rgba(244,251,224,.08)');
+  fade.addColorStop(.5,'rgba(255,255,255,0)');
+  fade.addColorStop(1,'rgba(65,92,58,.10)');
+  x.fillStyle=fade;x.fillRect(0,0,256,512);
+  x.lineCap='round';
+  x.beginPath();x.moveTo(127,499);x.bezierCurveTo(123,362,131,161,128,15);
+  x.strokeStyle='rgba(74,99,68,.34)';x.lineWidth=10;x.stroke();
+  x.beginPath();x.moveTo(129,495);x.bezierCurveTo(126,360,130,162,129,19);
+  x.strokeStyle='rgba(246,252,208,.94)';x.lineWidth=4;x.stroke();
+  for(const side of [-1,1])for(const [u,reach] of [[.22,65],[.40,83],[.59,80],[.76,56]]){
+    const cy=512*(1-u),h=reach*.28;
+    x.beginPath();x.moveTo(128,cy);
+    x.bezierCurveTo(128+side*reach*.30,cy-5,128+side*reach*.72,cy-h*.78,128+side*reach,cy-h);
+    x.strokeStyle='rgba(64,94,59,.27)';x.lineWidth=5;x.stroke();
+    x.strokeStyle='rgba(242,251,204,.80)';x.lineWidth=2;x.stroke();
+  }
+  const rand=mulberry32(7345);
+  for(let i=0;i<180;i++){
+    x.fillStyle=rand()<.5?'rgba(61,91,66,.045)':'rgba(253,255,234,.11)';
+    x.fillRect(rand()*256,rand()*512,.6,2+rand()*4);
+  }
+  const map=new THREE.CanvasTexture(canvas);map.colorSpace=THREE.SRGBColorSpace;map.anisotropy=4;
+  return entranceLeafMat=surface(new THREE.MeshLambertMaterial({map,vertexColors:true,side:THREE.DoubleSide}), 'foliage');
+}
+
 /** Small evergreen laurel-like leaves for the formal entrance urns.
  * Gently cupped, pointed and clearly veined on both sides, in one batched mesh.
  * This botanical family deliberately differs from the five-lobed wall ivy.
  */
 export function entranceLeafGeo():THREE.BufferGeometry {
   const p:number[]=[],colors:number[]=[],normals:number[]=[];
-  const along=10,across=8;
+  const along=8,across=6;
   // Smooth tapered oval, slight asymmetry and natural upward-curling tip.
   const cross=(u:number,s:number,back:boolean)=>{
     const envelope=Math.pow(Math.max(0,Math.sin(Math.PI*u)),.82);
@@ -144,7 +183,7 @@ export function entranceLeafGeo():THREE.BufferGeometry {
     const secondary=Math.max(vein(.27,.16),vein(.57,.16));
     const folded=(s<0?1.028:.976)*(1-.065*Math.abs(s))*(.96+.06*u);
     const light=folded*(back?.93:1);
-    const tone=light*(1+.21*rib+.105*secondary);
+    const tone=light*(1+.055*rib+.035*secondary);
     const color:[number,number,number]=[tone*.96,tone*1.065,tone*.91];
     // The built-in normals follow the slight transverse fold, not flat cards.
     const n=new THREE.Vector3(-.18*s*envelope,.028*Math.cos(Math.PI*u),back?-1:1).normalize();
@@ -167,7 +206,9 @@ export function entranceLeafGeo():THREE.BufferGeometry {
   g.setAttribute('position',new THREE.Float32BufferAttribute(p,3));
   g.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
   g.setAttribute('normal',new THREE.Float32BufferAttribute(normals,3));
-  g.setAttribute('uv',new THREE.Float32BufferAttribute(p.length/3*2,2));
+  const uv:number[]=[];
+  for(let i=0;i<p.length;i+=3)uv.push(THREE.MathUtils.clamp(p[i]/1.08+.5,0,1),THREE.MathUtils.clamp((p[i+1]+.76)/1.62,0,1));
+  g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
   g.userData.keepColor=true;return g;
 }
 const ENTRANCE_GREEN=['#769758','#85a467','#648650','#96ad75'] as const;
@@ -254,7 +295,7 @@ function entrancePot(c:Ctx,x:number,z:number,seed:number,dressed:THREE.Material)
     stems.push(tube([leaf.attachment,leaf.base],.0032));
   }
   submit(c,stems,c.k.M.paint,'#66543c',planMatrix(x,0,z).clone());
-  submit(c,leaves,c.k.M.paint,'#ffffff',planMatrix(x,0,z).clone());raw.dispose();
+  submit(c,leaves,entranceLeafMaterial(),'#ffffff',planMatrix(x,0,z).clone());raw.dispose();
   // Pots have physical bodies; do not add collision for their soft foliage.
   c.col.addCircle(x,z,.39,0,.78);
 }
