@@ -141,16 +141,16 @@ export function entranceLeafGeo():THREE.BufferGeometry {
   const vertex=(x:number,y:number,back:boolean)=>{
     const ridge=.035+.045*(1-THREE.MathUtils.clamp(Math.abs(x)/width,0,1));
     const z=back?-ridge:ridge;
-    const centreVein=.23*Math.exp(-sq(x/.075))*(.75+.25*THREE.MathUtils.clamp((y+.6)/1.4,0,1));
+    const centreVein=.41*Math.exp(-sq(x/.088))*(.78+.22*THREE.MathUtils.clamp((y+.6)/1.4,0,1));
     let smallVeins=0;
     for(const side of [-1,1]){
       const lower=veinDistance(x,y,side*.04,-.01,side*.49,.18);
       const upper=veinDistance(x,y,side*.03,.28,side*.25,.48);
-      smallVeins=Math.max(smallVeins,.11*Math.exp(-sq(lower/.064)),.075*Math.exp(-sq(upper/.064)));
+      smallVeins=Math.max(smallVeins,.21*Math.exp(-sq(lower/.073)),.14*Math.exp(-sq(upper/.073)));
     }
-    const sideFacet=(x<0?1.015:.975)*(y>.3?1.018:1);
-    const tone=sideFacet*(1+centreVein+smallVeins)*(back?.96:1);
-    return {p:[x,y,z],c:[tone*1.005,tone*1.045,tone*.955],n:new THREE.Vector3(-x*.18,0,back?-1:1).normalize().toArray()};
+    const sideFacet=(x<0?1.035:.965)*(y>.3?1.018:1);
+    const base=sideFacet*(back?.96:1),vein=Math.max(centreVein,smallVeins);
+    return {p:[x,y,z],c:[base*(1+vein*.72),base*(1+vein*1.12),base*(1+vein*.43)],n:new THREE.Vector3(-x*.18,0,back?-1:1).normalize().toArray()};
   };
   const emit=(a:number[],b:number[],d:number[],back:boolean)=>{
     for(const xy of (back?[a,d,b]:[a,b,d])){
@@ -185,7 +185,7 @@ export interface EntranceLeaf { centre:THREE.Vector3; base:THREE.Vector3; attach
 export function entrancePlantPlan(seed:number):{branches:EntranceBranch[];leaves:EntranceLeaf[]} {
   const r=mulberry32(seed),branches:EntranceBranch[]=[],leaves:EntranceLeaf[]=[];
   const Y=new THREE.Vector3(0,1,0),X=new THREE.Vector3(1,0,0),origin=new THREE.Vector3(0,.65,0);
-  const n=7;
+  const n=6;
   for(let j=0;j<n;j++){
     const a=(j+.16)/n*Math.PI*2+(r()-.5)*.19,reach=.23+r()*.12;
     const height=.52+r()*.27;
@@ -193,11 +193,11 @@ export function entrancePlantPlan(seed:number):{branches:EntranceBranch[];leaves
     const mid=origin.clone().addScaledVector(outward,reach*.42).addScaledVector(Y,height*.48);
     const end=origin.clone().addScaledVector(outward,reach).addScaledVector(Y,height);
     branches.push({points:[origin.clone(),mid,end],radius:.011});
-    for(let k=0;k<3;k++){
-      const t=.24+k*.31;
+    for(let k=0;k<4;k++){
+      const t=.20+k*.23;
       const anchor=origin.clone().lerp(end,t);
-      const splay=(k%2===0?-1:k===1?1:-1),size=.245+r()*.043;
-      const yaw=Math.PI+(r()-.5)*1.02+Math.sin(a)*.20;
+      const splay=(k%2===0?-1:1),size=[.195,.215,.245,.225][k]+r()*.020;
+      const yaw=Math.PI+(r()-.5)*1.38+Math.sin(a)*.20;
       const angle=splay*(.24+r()*.28);
       const tilt=-.13-r()*.24;
       const centre=anchor.clone().addScaledVector(outward,.11+r()*.055).addScaledVector(Y,.035+r()*.050);
