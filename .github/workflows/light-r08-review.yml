@@ -20,7 +20,41 @@ jobs:
       - run: npm test
       - run: npm run test:budget
       - run: npm run build
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [r06d, r08]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci && npm run build && npx playwright-core install --with-deps chromium
+      - name: Fast WebGL shader, lamp and room-boundary smoke
+        env:
+          LIGHT_R08_PROFILE: ${{ matrix.profile }}
+          LIGHT_R08_QUALITY: low
+          LIGHT_R08_PORTRAIT: '0'
+          LIGHT_R08_FAST: '1'
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4188 > /tmp/flw-r08-smoke.log 2>&1 &
+          for i in $(seq 1 40); do
+            curl -sf http://127.0.0.1:4188/Feh-Lu-We/ >/dev/null && break
+            sleep 1
+          done
+          node scripts/light-r08-visual-qa.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: light-r08-smoke-${{ matrix.profile }}
+          path: light-r08-evidence/
+          if-no-files-found: warn
   scenes:
+    needs: [checks, smoke]
     runs-on: ubuntu-latest
     timeout-minutes: 40
     strategy:
