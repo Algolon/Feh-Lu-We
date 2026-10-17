@@ -405,3 +405,302 @@ exterior and interior greenery, the lion knocker, the BOSLUST lock, foliage and 
 - **Checkpoint B:** `7f51e0f` `mUpE`, `f7ee08a` `mLib`, `e4684ca` `mAttic` → reverted `31c2971`, `88382b3` test,
   `79be2d0` evidence.
 - **Checkpoint C:** `ea17064` smoke fix; this report and evidence (final SHA in the handover).
+
+## 12. Current Production Regression — Budget Attribution and Release Decision
+
+**Status: diagnostic hold. Nothing merged or deployed.** The conditional release authorization was suspended by the
+owner pending this investigation.
+
+| Item | SHA / build |
+|---|---|
+| Historical PERF-R02 baseline (H) | `436e106` · `index-B2a-hSQD.js` (the build §4 measured) |
+| Current production measured (P) | **`2404d85`** · `index-Ch5jjV5W.js` (LIB-R01-R04; Pages run 951 succeeded) |
+| Combined candidate (C) | **`b359a71`** · `index-CMkVQDx_.js` = P + PERF-R02 + the window exemption (§12.6); later commits change only tooling and docs |
+| Production at the end of this step | `d7b304d` (LIB-STAIR-R01/R02: `libraryR01.ts`, `libraryStairR01.ts`, 8 lines of `manor.ts`; library-only, not measured) |
+| Feature branch head | the commit that carries this section (handover) |
+
+Method: the PERF-R02 harness on all three builds, unchanged: same fixture save, viewport 915 × 412, DPR 1, low quality,
+no shadows, batching on, the same paths and door sets. Mode B for every door state; Mode A at 30 FPS where collected.
+H rows come from the §4 evidence files, measured by the same harness on the same paths. They are a matched
+comparison, not an approximation. Evidence: `docs/perf-r02/evidence/release/` (smoke and targeted runs) and
+`docs/perf-r02/evidence/current-production/` (attribution).
+
+### 12.1 Severity: the violation is not limited to the all-doors-open stress state
+
+Production now exceeds 750 k camera triangles **with every door closed**, on every hotspot path. In `436e106` the
+same paths and poses stayed under 255 k with every door closed and under 446 k with the partial set.
+
+Matched runs: H = `436e106` (§4 evidence), P = `2404d85`, C = `b359a71`. Mode A is the 30 FPS runtime simulation, Mode B the pose-synchronized one.
+
+| path | doors | mode | build | frames | median | p95 | p99 | max | calls max | > 750 k | > 150 calls |
+|---|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| hall | closed | A@30 | P | 289 | 516,392 | 822,278 | 847,586 | 853,724 | 151 | 96 (33 %) | 2 (1 %) |
+| hall | closed | A@30 | C | 289 | 516,392 | 822,278 | 847,586 | 853,724 | 151 | 96 (33 %) | 2 (1 %) |
+| hall | closed | B@30 | H | 77 | 188,768 | 221,568 | 221,916 | 222,902 | 59 | 0 (0 %) | 0 (0 %) |
+| hall | closed | B@30 | P | 77 | 734,120 | 867,808 | 932,918 | 1,074,646 | 156 | 34 (44 %) | 1 (1 %) |
+| hall | closed | B@30 | C | 77 | 734,120 | 867,808 | 932,918 | 1,074,646 | 156 | 34 (44 %) | 1 (1 %) |
+| hall | partial | A@30 | H | 289 | 337,350 | 410,150 | 426,118 | 426,118 | 82 | 0 (0 %) | 0 (0 %) |
+| hall | partial | A@30 | P | 289 | 903,368 | 1,104,132 | 1,137,648 | 1,138,104 | 202 | 190 (66 %) | 121 (42 %) |
+| hall | partial | A@30 | C | 289 | 882,678 | 998,180 | 1,027,452 | 1,034,528 | 194 | 185 (64 %) | 117 (40 %) |
+| hall | partial | B@30 | H | 77 | 343,496 | 410,150 | 426,118 | 426,118 | 82 | 0 (0 %) | 0 (0 %) |
+| hall | partial | B@30 | P | 77 | 931,300 | 1,112,186 | 1,138,346 | 1,264,650 | 202 | 59 (77 %) | 37 (48 %) |
+| hall | partial | B@30 | C | 77 | 909,836 | 1,005,002 | 1,043,936 | 1,155,218 | 194 | 58 (75 %) | 35 (45 %) |
+| hall | open | A@30 | H | 289 | 626,386 | 719,415 | 734,379 | 734,379 | 147 | 0 (0 %) | 0 (0 %) |
+| hall | open | A@30 | P | 289 | 1,059,346 | 1,197,486 | 1,231,002 | 1,231,458 | 226 | 289 (100 %) | 215 (74 %) |
+| hall | open | A@30 | C | 289 | 1,015,010 | 1,113,604 | 1,132,912 | 1,140,998 | 221 | 289 (100 %) | 215 (74 %) |
+| hall | open | B@30 | H | 77 | 630,364 | 719,247 | 734,232 | 734,590 | 147 | 0 (0 %) | 0 (0 %) |
+| hall | open | B@30 | P | 77 | 1,075,470 | 1,201,184 | 1,231,900 | 1,329,960 | 226 | 77 (100 %) | 63 (82 %) |
+| hall | open | B@30 | C | 77 | 1,030,528 | 1,101,434 | 1,121,704 | 1,220,528 | 218 | 77 (100 %) | 63 (82 %) |
+| stair | closed | B@30 | H | 108 | 175,412 | 219,846 | 226,254 | 226,728 | 60 | 0 (0 %) | 0 (0 %) |
+| stair | closed | B@30 | P | 108 | 704,238 | 868,860 | 906,094 | 907,148 | 157 | 31 (29 %) | 8 (7 %) |
+| stair | closed | B@30 | C | 108 | 704,238 | 868,860 | 906,094 | 907,148 | 157 | 31 (29 %) | 8 (7 %) |
+| stair | partial | A@30 | H | 459 | 356,478 | 430,608 | 443,836 | 446,698 | 99 | 0 (0 %) | 0 (0 %) |
+| stair | partial | B@30 | H | 108 | 356,698 | 434,180 | 441,658 | 444,970 | 90 | 0 (0 %) | 0 (0 %) |
+| stair | partial | B@30 | P | 108 | 960,442 | 1,142,344 | 1,222,342 | 1,236,708 | 210 | 87 (81 %) | 43 (40 %) |
+| stair | partial | B@30 | C | 108 | 884,646 | 1,069,932 | 1,158,162 | 1,172,804 | 202 | 83 (77 %) | 39 (36 %) |
+| stair | open | A@30 | H | 459 | 562,513 | 707,611 | 729,211 | 735,955 | 158 | 0 (0 %) | 27 (6 %) |
+| stair | open | A@30 | P | 459 | 1,060,336 | 1,193,320 | 1,259,494 | 1,274,005 | 235 | 444 (97 %) | 349 (76 %) |
+| stair | open | A@30 | C | 459 | 983,076 | 1,136,706 | 1,236,054 | 1,272,536 | 227 | 443 (97 %) | 331 (72 %) |
+| stair | open | B@30 | H | 108 | 557,260 | 707,451 | 724,402 | 736,268 | 157 | 0 (0 %) | 6 (6 %) |
+| stair | open | B@30 | P | 108 | 1,073,024 | 1,221,184 | 1,295,164 | 1,300,702 | 235 | 107 (99 %) | 88 (81 %) |
+| stair | open | B@30 | C | 108 | 997,648 | 1,163,876 | 1,236,522 | 1,239,598 | 227 | 107 (99 %) | 83 (77 %) |
+| well | closed | B@30 | H | 64 | 200,520 | 220,462 | 220,462 | 221,624 | 58 | 0 (0 %) | 0 (0 %) |
+| well | closed | B@30 | P | 64 | 760,454 | 921,542 | 969,556 | 1,054,128 | 157 | 33 (52 %) | 2 (3 %) |
+| well | closed | B@30 | C | 64 | 760,454 | 921,542 | 969,556 | 1,054,128 | 156 | 33 (52 %) | 2 (3 %) |
+| well | partial | A@30 | H | 425 | 365,966 | 426,118 | 426,134 | 428,434 | 89 | 0 (0 %) | 0 (0 %) |
+| well | partial | B@30 | H | 64 | 365,046 | 413,406 | 426,118 | 426,118 | 82 | 0 (0 %) | 0 (0 %) |
+| well | partial | B@30 | P | 64 | 975,136 | 1,138,346 | 1,159,492 | 1,210,632 | 202 | 52 (81 %) | 39 (61 %) |
+| well | partial | B@30 | C | 64 | 915,708 | 1,050,060 | 1,101,200 | 1,108,410 | 194 | 46 (72 %) | 33 (52 %) |
+| well | open | A@30 | H | 425 | 607,825 | 734,099 | 734,590 | 737,860 | 154 | 0 (0 %) | 13 (3 %) |
+| well | open | A@30 | P | 425 | 1,059,224 | 1,231,898 | 1,312,374 | 1,362,296 | 233 | 425 (100 %) | 376 (88 %) |
+| well | open | A@30 | C | 425 | 966,826 | 1,132,696 | 1,179,776 | 1,202,942 | 225 | 425 (100 %) | 307 (72 %) |
+| well | open | B@30 | H | 64 | 625,142 | 719,415 | 734,590 | 734,590 | 147 | 0 (0 %) | 0 (0 %) |
+| well | open | B@30 | P | 64 | 1,064,682 | 1,231,900 | 1,256,046 | 1,305,906 | 226 | 64 (100 %) | 55 (86 %) |
+| well | open | B@30 | C | 64 | 989,932 | 1,146,614 | 1,194,382 | 1,196,474 | 218 | 64 (100 %) | 49 (77 %) |
+| up-west | closed | B@30 | H | 291 | 106,686 | 211,124 | 220,306 | 221,248 | 60 | 0 (0 %) | 0 (0 %) |
+| up-west | closed | B@30 | P | 291 | 625,944 | 1,012,776 | 1,088,676 | 1,095,792 | 169 | 108 (37 %) | 21 (7 %) |
+| up-west | closed | B@30 | C | 291 | 625,944 | 1,012,776 | 1,088,676 | 1,095,792 | 169 | 108 (37 %) | 21 (7 %) |
+| up-west | partial | A@30 | H | 1350 | 265,622 | 393,834 | 420,380 | 434,578 | 83 | 0 (0 %) | 0 (0 %) |
+| up-west | partial | B@30 | H | 291 | 240,610 | 394,490 | 419,674 | 433,402 | 78 | 0 (0 %) | 0 (0 %) |
+| up-west | partial | B@30 | P | 291 | 820,868 | 1,061,374 | 1,117,020 | 1,120,644 | 188 | 198 (68 %) | 50 (17 %) |
+| up-west | partial | B@30 | C | 291 | 763,256 | 1,061,184 | 1,113,284 | 1,120,400 | 188 | 164 (56 %) | 44 (15 %) |
+| up-west | open | A@30 | H | 1350 | 287,062 | 580,743 | 621,799 | 637,773 | 138 | 0 (0 %) | 0 (0 %) |
+| up-west | open | B@30 | H | 291 | 240,622 | 574,577 | 620,310 | 636,855 | 138 | 0 (0 %) | 0 (0 %) |
+| up-west | open | B@30 | P | 291 | 881,502 | 1,121,620 | 1,211,362 | 1,234,154 | 207 | 214 (74 %) | 64 (22 %) |
+| up-west | open | B@30 | C | 291 | 823,138 | 1,091,590 | 1,128,608 | 1,234,154 | 207 | 197 (68 %) | 59 (20 %) |
+
+H has no doors-closed Mode A run (§4 measured doors closed in Modes B / C only). The 60 FPS stress sweeps and the remaining all-open paths
+(`up-east`, `library`, `gallery`, garden windows) were not run on P / C. The all-open state already exceeds 750 k on 97–100 % of frames, so they
+would add hours and no decision value. Generator: `node scripts/perf/consolidate.mjs H=… P=… C=…`.
+
+Reading the table:
+
+- **Doors closed** (the state of a fresh game, and of most play):
+  - production exceeds 750 k on 29–52 % of the Mode B poses of the hall, stair, well and upper-west paths, and on 33 % of
+    the 30 FPS frames of the hall walk (Mode A);
+  - medians are 626 k–760 k; maxima 0.91 M–1.10 M;
+  - 1–7 % of poses exceed 150 calls.
+- **Partial set** (nine doors a player opens upstairs):
+  - production exceeds 750 k on 68–81 % of the Mode B poses and on 66 % of the hall walk's Mode A frames;
+  - the combined candidate does on 56–77 % and 64 %, with 15–45 % of poses over 150 calls;
+  - combined medians are 763 k–916 k.
+- **All open:** 97–100 % of frames exceed 750 k; 72–88 % exceed 150 calls.
+
+PERF-R02 changes nothing with doors closed, by design: the doorway rule can only hide a region whose door is open.
+The 750 k ceiling is therefore exceeded in ordinary play **by production itself**, independently of PERF-R02.
+
+### 12.2 What changed: attribution at fixed poses
+
+Every pose below was rendered on H, P and C, with culling synchronized inside `Game.tick`
+(`scripts/perf/pose-breakdown.mjs`). Each pose is attributed per drawn object; the categories sum exactly to the
+renderer's counters in every frame (`reconciled: true`). "Visible px" comes from a diagnostic visibility test: the
+category's drawn objects are hidden for one render, and the changed pixels are counted (frame: 376,980 px).
+
+| Pose (Mode B) | H | P | C |
+|---|---:|---:|---:|
+| hall (89.5, 95), facing south, doors closed | 209,910 | 1,074,646 | 1,074,646 |
+| hall (90, 84.6), facing north, doors closed | 220,462 | 818,052 | 818,052 |
+| landing (90, 99.5), facing south, doors closed | 219,786 | 654,768 | 654,768 |
+| well (90, 84.5), doors closed | 220,462 | 821,984 | 821,984 |
+| hall (89.5, 95), facing south, partial | 319,848 | 1,264,650 | 1,155,218 |
+| well (90, 84.5), partial | 426,118 | 1,138,346 | 1,028,150 |
+| stair maximum (89, 100), all open | 641,084 | 1,274,005 | 1,189,729 |
+| hall (89.5, 95), facing south, all open | 552,858 | 1,322,254 | 1,212,822 |
+
+Tables per pose: `current-production/attribution/hall-table.md` and `upper-table.md`.
+
+**Which merge added what.** The two doors-closed hall poses were measured at nine production checkpoints between H
+and P. Each checkpoint was built from its own commit, and the served bundle was checked against that commit's build
+before measuring. Source: `current-production/attribution/steps-hall-closed.md`.
+
+| Checkpoint (first-parent merge) | Hall (89.5, 95) closed | Hall (90, 84.6) closed | What grew |
+|---|---:|---:|---|
+| `436e106` PERF-R02 baseline | 209,910 | 220,462 | |
+| `ba56ad1` hall–kitchen portal | +264 | +276 | — |
+| `be9a9e2` exterior greenery R04 (#58) | **+205,408** | **+204,704** | the `manor` shell batch |
+| `73a3cb6` VEG-R09 (#68) | **+155,482** | +54,048 | front hedges 118,592; indoor plants 24–37 k; rooms 11–12 k |
+| `55f6da6` exterior weather R06 (#69) | +27,410 | +20,320 | spread over the room chunks |
+| `6830ddd` WINDOW-R02 | +7,428 | +8,428 | window sashes / sills |
+| `b548361` WINDOW-FIX-R02 | +30,308 | −4,164 | the unowned `main` batch (+33 k) |
+| `e61520d` PORTAL-R02 | **+431,482** | **+314,730** | the whole outdoors: grounds / woodland 201–223 k, tree batches 67–230 k, conservatory 21 k |
+| `2e6b8f9` VEG-R10 | −792 | −792 | — |
+| `2404d85` LIB-R01-R04 | +7,746 | +40 | — |
+| **Total** | **+864,736** | **+597,590** | |
+
+Three merges explain 82–97 % of the increase at these poses: PORTAL-R02, exterior greenery R04 and VEG-R09.
+
+### 12.3 Ranked contributors
+
+| # | Contributor (region / chunk) | Submitted now (tris / calls) | In H | Δ | Visible in the rendered frame? | Safe to cull? | Workstream / module |
+|---|---|---|---:|---:|---|---|---|
+| 1 | **Outdoors through windows**: `forest`, `grounds`, `garden`, `paths`, `fence`, `outdoor` regions, `veg:trees`, `veg:plants`, `cons` | 240–457 k / ≈ 60–70 | 0 (closed doors) | +240–457 k | **0–1,598 px** (≤ 0.4 % of the frame; 0–5 px at 7 of 9 poses) | Partly: a few hundred pixels are genuinely visible through a living/dining window, so the content cannot simply be hidden | PORTAL-R02, `World.clearWindowInView` / `updateCulling` (`src/interactions/world.ts`) |
+| 2 | **Wall climbers** merged into the `manor` shell batch | ≈ 204–205 k / 0 extra | 0 | +205 k | **0 px of foliage** from the hall (with vs without `?greenery=base`; the 3,241 px that changed are lamp flicker, not foliage) | Yes, from inside the house: they are on the house's own west / north facades | Exterior greenery R04 (#58), `exteriorGreenery.ts` (built into the `manor` chunk by `manor.ts`) |
+| 3 | **Front hedges** `frontHedge.left` / `.right` | 118,592 / 2 | 0 | +119 k | **0 px** at every pose tested (hall, landing, stair) | Yes, from inside except through the front door: the region lists *every* room, so it is drawn from anywhere within 25 m | VEG-R09 (#68), `estate.ts` line 137 |
+| 4 | Indoor plants `green.<room>` | 24–88 k / 18–60 | 0 | +24–88 k | mostly in other rooms (0 px where tested) | Already room-based; follows the room graph | VEG-R09, `interiorGreenery.ts` |
+| 5 | `main` (the batch builder's default chunk: geometry without region ownership, never culled) | 46–58 k / 20–45 | 2.8–15 k | +33–43 k | 2–5 k px (some window sashes are in view) | Needs region ownership, not hiding | WINDOW-FIX-R02 (`kit.ts` default `chunk = 'main'`) |
+| 6 | `mUpE` study wing (heavier since D3) | 64–110 k / 7–12 | 53–56 k | +11–55 k | 0–7 px from the hall / landing | **PERF-R02 removes it** when no doorway or window of it is in view | D3-b2, D1 art |
+| 7 | Room chunks `mHall`, `mLiv`, `mWing`, `mUp*` | +7 k to +35 k each | | | visible | No | weather R06, windows |
+| 8 | `mLib` (library) | 84–112 k | 103–108 k | −18 k to +4 k | 0 px from the hall and landing | **PERF-R02 removes it** (same rule) | LIB-R01-R04 (no material growth) |
+
+Not material at these poses: lighting (no geometry), the library redesign (−18 k to +8 k), the Mushroom Grove
+(0–200 triangles).
+
+### 12.4 The visibility relationship behind contributor 1
+
+Before PORTAL-R02, a clear window could reveal the outdoors only from inside its own room. PORTAL-R02 (12 added
+lines) accepts any window in a room reachable through up to three open interior portals, if it passes:
+
+- the generous view cone (half the field of view + 32°);
+- five line-of-sight rays.
+
+**One** such window anywhere puts `out` into the visible set, and with it every outdoor region of the estate: the
+woodland, grounds, garden, paths and the conservatory. The tree batches are then limited to the window's plan cone, but
+the region chunks are drawn whole.
+
+The hall has no windows of its own. Through its arches it reaches the living, dining and kitchen windows, so from the
+hall the outdoors is on in almost every heading, even with every door closed. At the hall pose facing north, 290,842
+outdoor triangles are drawn for 3 visible pixels; the qualifying window lies inside the +32° margin but outside the
+frame.
+
+This is the largest single contributor. It is a legitimate sightline at some poses (1,598 px through the dining arch),
+so a correct fix is a rule change, not a removal: for example, limit content seen only through windows to the
+window's frustum and a distance, or drop the +32° margin for windows (it exists for doorways at the 0.12 s cadence).
+
+### 12.5 PERF-R02 on current production
+
+- **Benefit with doors open:**
+  - hall −45 k to −110 k (max 1,329,960 → 1,220,528 in Mode B);
+  - well −75 k to −160 k;
+  - stair median −77 k;
+  - every metric lower or equal in every matched run (§12.1 table).
+- **Doors closed:** identical.
+- **Draw calls:** −2 to −8 at the maxima.
+- **Smoke** (`npm run perf:visibility:smoke` on P and C):
+  - determinism and synchronization pass on both;
+  - PB01 fails on both: the walkway slice is 1,234,154 on both (the peak pose shows no doorway region); the hall-well
+    slice is 1,231,900 on P and 1,121,704 on C.
+  - The grove check was updated for VIS-R01 (§12.7) and now passes on both.
+- **Integration fix (window exemption, `d9a8503`):** WINDOW-R02 made 44 windows transparent. Without the fix, the
+  doorway rule would have hidden the library, botanic room and study when seen through their own windows from the
+  garden (no doorway in view). `World.updateCulling` now keeps a doorway region drawn while one of its rooms' clear
+  windows is in view.
+  - Unit tests: 485 / 485, including a new window-exemption test that fails without the fix.
+  - The exemption reuses PORTAL-R02's generous window test, so it also re-enables `mUpE` / `mLib` at some poses where
+    they are invisible: at the partial-door landing pose, 195 k at 0 px. That is the conservative direction (more drawn,
+    never less), and it shrinks PERF-R02's saving there.
+- **Pixel proof on current production:** see §12.8.
+
+### 12.6 Risks
+
+- **Visual:** none found from PERF-R02 in the attributed frames. The H/P/C screenshots at the doors-closed hall poses
+  are identical apart from production's own content changes (`sheet-*.jpg`).
+- **Interaction:** unchanged. Region culling still removes pick eligibility only for culled roots, and no interactable
+  in `mUpE` / `mLib` is reachable from a pose where the rule hides it. The library's B01 puzzle anchors sit inside
+  `library`, where the region is always drawn.
+- **Lighting:** LIGHT-R03/R04 select point lights from room connectivity and distance only (`LightPool.update`), not
+  from region state or gaze, so PERF-R02 cannot change illumination. No lighting code was touched.
+- **Fixing contributors 2 and 3** would hide geometry that is visible from outside. Both need a pixel proof along the
+  garden window paths (`win-north`, `win-west`, `win-south`, added to `visibility-paths.mjs`) and through the front door.
+
+### 12.7 Tooling corrections made in this step
+
+- `perf-visibility.mjs` (smoke): the grove check read the grove root's `visible` flag. Since VIS-R01 the root stays
+  visible and the grove hides each instance, so on production the old check failed on both P and C.
+  - It now reads `groveSnapshot()`: an out-of-order `World.updateCulling` must not change what the grove draws in the
+    next frame, and the grove must draw < 5 k triangles there.
+  - Production draws 0–2 instances (≤ 200 triangles) at those poses.
+- `visibility-probe.js`: `hideTest()` (the diagnostic visibility test) and fine attribution per object and material.
+- `pose-breakdown.mjs`, `attribution-table.mjs`, `attribution-steps.mjs`, `consolidate.mjs`: attributed poses, H/P/C
+  tables, checkpoint steps, matched run tables.
+- `visibility-harness.mjs`: `QUERY` env for diagnostic URL flags (e.g. `greenery=base`).
+- `visibility-paths.mjs`: the garden window paths.
+- A preview server left running by the first checkpoint script served the wrong build to four checkpoints. Those
+  results were discarded, and the script now checks the served bundle against the checkpoint's own build before it
+  measures.
+
+### 12.8 Release recommendation
+
+**Recommended outcome: C — a separate, bounded PERF-R03 remediation. PERF-R02 is kept ready and released with it
+(or before it, if the owner explicitly names an exception).**
+
+Why not A:
+- The exceedance is not limited to an exceptional stress state.
+- With every door closed, 29–52 % of the hotspot poses exceed 750 k (maximum 1.07 M); with the partial set, 56–77 %
+  (combined candidate).
+- PERF-R02 is non-regressive and saves 45–160 k with doors open, but it cannot touch the closed-door state.
+- Merging it now would still be safe: it never draws more, and nothing visual or interactive changed. But it would be
+  under a named exception, and the owner asked not to treat the production violation as an automatic waiver.
+
+Why not B:
+- Two contributors are clearly invisible from inside the house and small to fix:
+  - the wall climbers (≈ 205 k, in every manor view);
+  - the front hedges (118.6 k within 25 m).
+- Together they remove ≈ 205–324 k from the interior views measured: the doors-closed hall worst case goes from
+  1,074,646 to ≈ 750 k, other closed-door poses to ≈ 410–615 k.
+- That is real headroom, but it does not restore compliance:
+  - the largest contributor, the outdoors switched on through windows (240–457 k), remains;
+  - the partial-door hall would remain ≈ 830 k.
+- The window rule is the core of PORTAL-R02's intent (keep windows transparent across thresholds) and is partly
+  legitimately visible. Changing it needs its own design and a pixel proof, not a quick cull.
+
+Why C:
+- Realistic gameplay substantially exceeds PB01.
+- The excess comes from three separate workstreams (PORTAL-R02, exterior greenery R04, VEG-R09) plus smaller ownership
+  issues.
+- Each fix is small, but each has its own visual risk and needs its own proof.
+
+**Proposed PERF-R03 scope** (bounded; no vegetation LOD, quality, DPR or budget changes):
+
+1. **Ownership of exterior geometry that is invisible from inside** (expected −205 k to −324 k in interior views):
+   - **Wall climbers:** move them out of the `manor` shell batch into their own exterior region (`exteriorGreenery.ts`
+     builds them; `manor.ts` calls it). The region is drawn from outside, and from inside only while a window or
+     doorway that can show that facade is in view.
+   - **Front hedges:** replace "every room within 25 m" with the doorway rule on `door.front`, plus the front-facade
+     windows that look at them.
+   - Proof: pixel comparison along `win-north` / `win-west` / `win-south`, through the front door, and at the H/P/C
+     poses above.
+2. **Outdoors seen only through windows** (PORTAL-R02, expected the largest share of the remaining 240–457 k):
+   - when the outdoors is visible only through windows, not through an open exterior door, draw the outdoor regions
+     only within the windows' frusta, without the +32° doorway margin, and within a distance;
+   - the tree batches already follow the window cones.
+   - Proof: PORTAL-R02's own sightline tests plus a pixel comparison on the hall / dining / living / kitchen paths.
+3. **Region ownership for the `main` batch** (≈ 46–58 k never culled; window sashes since WINDOW-FIX-R02) and a check
+   of the `green.*` indoor plants (24–88 k).
+4. **Release** together with PERF-R02 (already integrated with `2404d85`), with the matched P-vs-C harness tables of
+   §12.1 as the acceptance gate: doors closed and partial within 750 k.
+
+What would falsify this: a device measurement showing the Samsung sustains these counts at ≥ 30 FPS. PB01's ceiling
+is provisional (device validation pending). The owner may then prefer to accept the current workload and merge
+PERF-R02 as-is under a named, time-bounded exception.
+
+### 12.9 Smallest safe next step
+
+Approve **PERF-R03 step 1**:
+
+- Give the EXT-R04 wall climbers and the VEG-R09 front hedges their own exterior regions, drawn from inside only
+  through a doorway or window that can show them.
+- Prove it pixel-identical from inside, along the garden window paths and through the front door.
+- Re-run the §12.1 tables on P and C.
+
+It is two region registrations and one chunk tag, and should remove ≈ 205–324 k from interior views. Step 2 (the
+window rule) follows as a separate, measured decision.
