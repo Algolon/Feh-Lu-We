@@ -154,7 +154,7 @@ try{
    throw Error('Missing persistent source-bound light in candidate');
   for(const entry of obs){
    const spec=variants.find(v=>v.id===entry.variant);
-   const expected=[spec.fire?.14:0,spec.floor?.10:0];
+   const expected=[spec.fire ? 0.14 : 0,spec.floor ? 0.10 : 0];
    if(entry.stable.some((w,i)=>Math.abs(w-expected[i])>1e-8))
     throw Error('Independent logical-source weights are incorrect in '+entry.site+'/'+entry.variant+'/'+entry.period);
   }
