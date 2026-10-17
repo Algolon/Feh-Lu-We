@@ -61,6 +61,39 @@ try{
    results.push({type:'view',name,...row});
    await page.screenshot({path:`${out}/${name}.jpg`,type:'jpeg',quality:79});
  }
+ // Same in-game camera, same geometry, same light: isolate the actual venation material.
+ const compare=await page.evaluate(async()=>{
+   const E=await import('/Feh-Lu-We/src/world/exteriorGreenery.ts');
+   const T=await import('/Feh-Lu-We/node_modules/.vite/deps/three.js');
+   const g=window.__game,w=g.world;
+   const current=E.ivyLeafMaterial();
+   const ivy=[];
+   w.scene.traverse(o=>{if(o.isMesh&&o.material===current)ivy.push(o);});
+   const baseline=current.clone();baseline.map=null;baseline.needsUpdate=true;
+   const x=85.1,z=112,tx=85.1,tz=109.8;
+   const ground=w.col.supportHeight(x,z,20,.42);
+   const y=Number.isFinite(ground)?ground:g.player.pos.y;
+   g.player.setPose({x,z,y,yaw:Math.atan2(tx-x,tz-z),pitch:-.12});
+   for(let i=0;i<10;i++)g.tick(1/30);
+   g.dusk=0;g.extras.env?.update(0,g.camera.position,0);
+   w.updateCulling(g.camera.position,g.camera);
+   ivy.forEach(o=>{o.material=baseline;});
+   g.renderer.render(w.scene,g.camera);
+   return {meshCount:ivy.length,baselineMaterial:baseline.uuid,originalMaterial:current.uuid};
+ });
+ results.push({type:'material-compare',...compare});
+ await page.screenshot({path:`${out}/north-before-texture.jpg`,type:'jpeg',quality:86});
+ await page.evaluate(async()=>{
+   const E=await import('/Feh-Lu-We/src/world/exteriorGreenery.ts');
+   const g=window.__game,w=g.world,mat=E.ivyLeafMaterial();
+   w.scene.traverse(o=>{
+     if(o.isMesh&&o.material?.uuid!==mat.uuid&&o.material?.map===null&&o.userData.chunk==='manor'&&o.geometry?.attributes?.position?.count>100000)o.material=mat;
+   });
+   // Above selection deliberately checks geometry to avoid touching wall/architecture.
+   g.extras.env?.update(0,g.camera.position,0);
+   g.renderer.render(w.scene,g.camera);
+ });
+ await page.screenshot({path:`${out}/north-after-texture.jpg`,type:'jpeg',quality:86});
  await page.close();
  writeFileSync(`${out}/results.json`,JSON.stringify({errors,results},null,2));
  if(process.env.VEG_R10F_PRINT_EVIDENCE==='1')for(const name of ['west-exterior','north-exterior']){
