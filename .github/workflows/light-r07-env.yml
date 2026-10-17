@@ -1,0 +1,54 @@
+name: LIGHT-R07 fixed-camera global environment investigation
+on:
+  push:
+    branches: [diagnostics/light-r07-worldspace-env]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  analysis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: current-production
+            ref: 2e2bab141adc7a0687f8a458981463a019cdc201
+          - label: light-r06b
+            ref: d2ddd83a46486a0726877773f5e174718d8428db
+    steps:
+      - name: Checkout diagnostic
+        uses: actions/checkout@v4
+        with:
+          path: diagnostic
+      - name: Checkout actual game baseline
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.ref }}
+          path: game
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: game/package-lock.json
+      - name: Run actual estate environment diagnosis
+        working-directory: game
+        run: |
+          cp ../diagnostic/scripts/light-r07-env-qa.mjs scripts/light-r07-env-qa.mjs
+          npm ci
+          npm run typecheck
+          npm run build
+          npx playwright-core install --with-deps chromium
+          npm run preview -- --host 127.0.0.1 --port 4188 > /tmp/r07-preview.log 2>&1 &
+          for i in $(seq 1 40); do
+            curl -sf http://127.0.0.1:4188/Feh-Lu-We/ >/dev/null && break
+            sleep 1
+          done
+          node scripts/light-r07-env-qa.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: light-r07-environment-${{ matrix.label }}
+          path: game/light-r07-env-evidence
+          if-no-files-found: warn
