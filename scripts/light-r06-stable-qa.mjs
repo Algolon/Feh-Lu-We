@@ -4,13 +4,15 @@
 import { chromium } from 'playwright-core';
 import { mkdirSync, writeFileSync } from 'node:fs';
 const profile = process.env.LIGHT_R06_PROFILE || 'pilot';
+const quality=process.env.LIGHT_R06_QUALITY || 'low';
+const portrait=process.env.LIGHT_R06_PORTRAIT === '1';
 const root = process.argv[2] || 'http://127.0.0.1:4188/Feh-Lu-We/';
-const output = 'light-r06-qa/'+profile;
+const output = 'light-r06-qa/'+profile+'-'+quality+(portrait?'-portrait':'-landscape');
 mkdirSync(output,{recursive:true});
 const browser = await chromium.launch({headless:true,args:[
   '--use-angle=swiftshader','--enable-unsafe-swiftshader','--ignore-gpu-blocklist','--disable-dev-shm-usage'
 ]});
-const page=await browser.newPage({viewport:{width:915,height:412},deviceScaleFactor:1});
+const page=await browser.newPage({viewport:portrait?{width:412,height:915}:{width:915,height:412},deviceScaleFactor:1});
 const errors=[];
 page.on('pageerror', e=>errors.push('page:'+e.message));
 page.on('console', e=>{if(e.type()==='error')errors.push('console:'+e.text())});
@@ -22,19 +24,19 @@ try {
  await page.goto(url,{waitUntil:'domcontentloaded'});
  await page.evaluate(s=>{
    localStorage.setItem('fehluwe.save',JSON.stringify(s));
-   localStorage.setItem('fehluwe.settings',JSON.stringify({quality:'low',reducedMotion:true}));
+   localStorage.setItem('fehluwe.settings',JSON.stringify({quality,reducedMotion:true}));
  },SAVE);
  await page.reload({waitUntil:'domcontentloaded'});
  await page.locator('[data-cont]').click({timeout:45000});
  await page.waitForFunction(()=>window.__game?.world?.id==='estate',null,{timeout:120000});
- await page.evaluate(()=>{const g=window.__game;g.running=false;g.settings.quality='low';g.applyQuality(true);});
+ await page.evaluate(q=>{const g=window.__game;g.running=false;g.settings.quality=q;g.applyQuality(true);},quality);
  const capture = async(key,pose,lit) => {
   const result=await page.evaluate(({pose,lit})=>{
     const g=window.__game;
     g.state.lit['fire.living']=lit.fire;
     g.state.lit['lamp.livingFloor']=lit.floor;
     g.changed();
-    g.player.setPose({...pose,y:.15,pitch:0});
+    g.player.setPose({...pose,y:pose.y??.15,pitch:0});
     for(let i=0;i<40;i++)g.tick(.05);
     // The baseline also runs the same no-PointLight ablation as the pilot:
     // isolate how much geometry receives logical-source light independently.
@@ -52,7 +54,9 @@ try {
     const out={room:g.world.hereRoom,luminance:luminance/(bytes.length/4),calls:g.renderer.info.render.calls,
       triangles:g.renderer.info.render.triangles,pointLights:g.pool.lights.length,
       pointIntensity:0,pilotState:pilot?.state?.()??null,
-      cpuProbe:pilot?.contribution?.(76,.9,-86.7)??null};
+      cpuProbe:pilot?.contribution?.(76,.9,-86.7)??null,
+      scope:g.world.scene.userData.stableScope??null,
+      shaderVariants:g.renderer.info.programs?.length??null};
     g.pool.lights.forEach((l,i)=>l.intensity=old[i]);
     return out;
   },{pose,lit});
@@ -91,6 +95,28 @@ try {
    }
    return {states,invariant};
  });
+ // The two sources must be tied to existing, scoped room meshes only.
+ // Outdoor, vegetation and unrelated hall/wing materials must retain their
+ // original shader variant (important for mobile fill rate).
+ const sc=await page.evaluate(()=>{
+   const w=window.__game.world,info=w.scene.userData.stableScope||null;
+   const unexpectedlyScoped=[];
+   let scoped=0;
+   w.scene.traverse(obj=>{
+     if(!obj.isMesh||!obj.material||Array.isArray(obj.material))return;
+     if(!obj.material.userData?.stableLiving)return;
+     scoped++;
+     const ch=obj.userData.chunk;
+     if(!['mLiv','mIn','manor'].includes(ch))unexpectedlyScoped.push(ch||'unspecified');
+   });
+   return {info,scoped,unexpectedlyScoped};
+ });
+ if(profile==='pilot'){
+   if(!sc.info||sc.info.createdMaterialClones<2||
+       !sc.info.chunks.mLiv||!sc.info.chunks.mIn||sc.unexpectedlyScoped.length)
+     throw Error('stable material leak into unrelated chunks / missing interior clone: '+JSON.stringify(sc));
+ }else if(sc.info||sc.scoped)throw Error('normal profile changed shared material shaders');
+
  if(profile==='pilot'){
    const q=independent.states;
    if(q.length!==4||q.some(t=>!t.weights||t.weights.length!==2))
@@ -136,7 +162,7 @@ try {
  }else{
    if(samples.some(s=>s.pilotState!==null))throw Error('baseline unexpectedly installed shader pilot');
  }
- const result={profile,samples,independent,saved,errors};
+ const result={profile,quality,portrait,samples,scope:sc,independent,saved,errors};
  console.log('LIGHT_R06_SUMMARY '+JSON.stringify(result));
  writeFileSync(output+'/results.json',JSON.stringify(result,null,2));
  if(errors.length)throw Error(errors.join('; ').slice(0,400));
