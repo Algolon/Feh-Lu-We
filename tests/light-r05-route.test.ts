@@ -72,8 +72,10 @@ describe('LIGHT-R05 route and mobile slot safety',()=>{
  it('does not give an out-of-range hall chandelier a slot deep inside living', () => {
   const pool = new LightPool(new THREE.Scene(), 3);
   walk(pool,92,77);
-  // At x=77 the ceiling chandelier at (89.9,4.5,90) is 13.60 m away,
-  // beyond its physically lit radius (13 m). Movement is away from it.
+  // At x=77 the hall chandelier is 13.60m away, beyond its 13m range.
+  // The desired slot is already released, but the physical old light still
+  // fades out before a new light can take it. Allow the expected fade to settle.
+  for(let i=0;i<40;i++)tick(pool,77);
   expect(pool.assigned()).not.toContain('lamp.hallChandelier');
   expect(pool.assigned()).toContain('fire.living');
  });
