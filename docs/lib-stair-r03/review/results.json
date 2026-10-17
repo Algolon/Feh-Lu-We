@@ -1,0 +1,341 @@
+{
+  "source": "Real candidate game scene (Chromium / SwiftShader); not a real Android device",
+  "commit": "b7ccc1ed083038eebaf15799897d9d7a6ce6948a",
+  "checks": [
+    {
+      "name": "entrance-to-gallery-and-return",
+      "pass": false,
+      "data": {
+        "pass": false,
+        "error": "stuck walking to (82.37350020611716,105.95501723291737) at {\"x\":82.03,\"y\":1.5,\"z\":105.96}",
+        "pos": {
+          "x": 82.03,
+          "y": 1.5,
+          "z": 105.96
+        },
+        "positions": [
+          {
+            "step": 0,
+            "x": 81.88,
+            "y": 0.27,
+            "z": 104.5
+          },
+          {
+            "step": 1,
+            "x": 82.07,
+            "y": 0.4,
+            "z": 104.55
+          },
+          {
+            "step": 2,
+            "x": 82.27,
+            "y": 0.52,
+            "z": 104.63
+          },
+          {
+            "step": 3,
+            "x": 82.44,
+            "y": 0.64,
+            "z": 104.76
+          },
+          {
+            "step": 4,
+            "x": 82.57,
+            "y": 0.77,
+            "z": 104.94
+          },
+          {
+            "step": 5,
+            "x": 82.65,
+            "y": 0.89,
+            "z": 105.14
+          },
+          {
+            "step": 6,
+            "x": 82.66,
+            "y": 1.01,
+            "z": 105.35
+          },
+          {
+            "step": 7,
+            "x": 82.61,
+            "y": 1.13,
+            "z": 105.56
+          },
+          {
+            "step": 8,
+            "x": 82.5,
+            "y": 1.26,
+            "z": 105.75
+          },
+          {
+            "step": 9,
+            "x": 82.34,
+            "y": 1.38,
+            "z": 105.89
+          },
+          {
+            "step": 10,
+            "x": 82.03,
+            "y": 1.5,
+            "z": 105.98
+          },
+          {
+            "step": 11,
+            "x": 81.94,
+            "y": 1.63,
+            "z": 106
+          },
+          {
+            "step": 12,
+            "x": 81.73,
+            "y": 1.75,
+            "z": 105.97
+          },
+          {
+            "step": 13,
+            "x": 81.54,
+            "y": 1.87,
+            "z": 105.88
+          },
+          {
+            "step": 14,
+            "x": 81.38,
+            "y": 2,
+            "z": 105.73
+          },
+          {
+            "step": 15,
+            "x": 81.28,
+            "y": 2.12,
+            "z": 105.54
+          },
+          {
+            "step": 16,
+            "x": 81.24,
+            "y": 2.24,
+            "z": 105.33
+          },
+          {
+            "step": 17,
+            "x": 81.26,
+            "y": 2.37,
+            "z": 105.12
+          },
+          {
+            "step": 18,
+            "x": 81.35,
+            "y": 2.49,
+            "z": 104.92
+          },
+          {
+            "step": 19,
+            "x": 81.49,
+            "y": 2.61,
+            "z": 104.76
+          },
+          {
+            "step": 20,
+            "x": 81.67,
+            "y": 2.73,
+            "z": 104.65
+          },
+          {
+            "step": 21,
+            "x": 81.88,
+            "y": 2.86,
+            "z": 104.59
+          },
+          {
+            "step": 22,
+            "x": 82.09,
+            "y": 2.98,
+            "z": 104.6
+          },
+          {
+            "step": 23,
+            "x": 82.29,
+            "y": 3.1,
+            "z": 104.68
+          },
+          {
+            "step": 24,
+            "x": 82.39,
+            "y": 3.23,
+            "z": 104.93
+          },
+          {
+            "step": 25,
+            "x": 82.55,
+            "y": 3.35,
+            "z": 105.05
+          }
+        ]
+      }
+    },
+    {
+      "name": "physical-outer-rail-and-upper-sides",
+      "pass": true,
+      "data": {
+        "pass": true,
+        "results": [
+          {
+            "step": 3,
+            "radial": 0.7689422313115073
+          },
+          {
+            "step": 8,
+            "radial": 0.7624608530220691
+          },
+          {
+            "step": 13,
+            "radial": 0.7595193451307404
+          },
+          {
+            "step": 18,
+            "radial": 0.7599559735497874
+          },
+          {
+            "step": 22,
+            "radial": 0.7619999732941255
+          }
+        ],
+        "topNorth": {
+          "x": 82.94,
+          "y": 3.35,
+          "z": 105.63799999999999
+        },
+        "topSouth": {
+          "x": 82.92976939043524,
+          "y": 3.35,
+          "z": 105.012
+        }
+      }
+    },
+    {
+      "name": "r02-top-two-treads-guarded-gallery-opening-clear",
+      "data": {
+        "pass": true,
+        "results": [
+          {
+            "step": 22,
+            "radius": 0.7607611245538257
+          },
+          {
+            "step": 23,
+            "radius": 0.5749248381524142
+          }
+        ],
+        "opening": {
+          "x": 83.22999999999999,
+          "y": 3.35,
+          "z": 105.28
+        }
+      },
+      "pass": true
+    },
+    {
+      "name": "r03-top-closure-west-and-south-guards-stair-passage-open",
+      "data": {
+        "west": {
+          "x": 82.94,
+          "y": 3.35,
+          "z": 105.63799999999999
+        },
+        "southern": {
+          "x": 82.94,
+          "y": 3.35,
+          "z": 105.012
+        },
+        "aisle": {
+          "x": 83.42999999999999,
+          "y": 3.35,
+          "z": 105.24
+        },
+        "pass": false
+      },
+      "pass": false
+    }
+  ],
+  "screens": [
+    {
+      "name": "01-full-stair-below",
+      "calls": 354,
+      "triangles": 1685047,
+      "room": "library",
+      "glError": 0
+    },
+    {
+      "name": "02-closed-treads-and-post",
+      "calls": 353,
+      "triangles": 1684610,
+      "room": "library",
+      "glError": 0
+    },
+    {
+      "name": "03-upper-bridge-from-gallery",
+      "calls": 286,
+      "triangles": 1552047,
+      "room": "libGallery",
+      "glError": 0
+    },
+    {
+      "name": "04-stair-from-landing",
+      "calls": 235,
+      "triangles": 1504318,
+      "room": "libGallery",
+      "glError": 0
+    },
+    {
+      "name": "06-r02-upper-landing-from-gallery",
+      "calls": 302,
+      "triangles": 1580909,
+      "room": "libGallery",
+      "glError": 0
+    },
+    {
+      "name": "07-r02-transition-railing",
+      "calls": 331,
+      "triangles": 1661768,
+      "room": "libGallery",
+      "glError": 0
+    },
+    {
+      "name": "08-r02-baluster-under-handrail",
+      "calls": 388,
+      "triangles": 1642440,
+      "room": "libGallery",
+      "glError": 0
+    },
+    {
+      "name": "09-r03-top-corner-closure",
+      "calls": 301,
+      "triangles": 1676189,
+      "room": "libGallery",
+      "glError": 0
+    },
+    {
+      "name": "10-r03-single-solid-treads",
+      "calls": 220,
+      "triangles": 1467126,
+      "room": "library",
+      "glError": 0
+    },
+    {
+      "name": "11-r03-north-guard-looking-down",
+      "calls": 243,
+      "triangles": 1514892,
+      "room": "libGallery",
+      "glError": 0
+    },
+    {
+      "name": "05-mobile-portrait-stair",
+      "calls": 79,
+      "triangles": 740402,
+      "room": "library",
+      "glError": 0
+    }
+  ],
+  "errors": [],
+  "realAndroidVerified": false
+}
