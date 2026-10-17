@@ -124,12 +124,15 @@ try{
     const col=window.__game.world.col;
     const west={x:83.10,y:3.35,z:105.77};
     col.move(west,-1.0,0,.30,1.75,.42);
-    const southern={x:82.48,y:3.35,z:105.96};
-    col.move(southern,0,-.80,.30,1.75,.42);
+    // The 26cm corner cap is intentionally narrower than a player body.
+    // Don't start a push-test INSIDE its west collision box: inspect the
+    // south rail directly, and push from the gallery walkable side instead.
+    const southGuardSolid=col.overlaps(82.67,105.61,3.35,.30,1.75,.42);
+    const lowerStairHeadroom=!col.overlaps(82.3735,105.955,1.50,.30,1.75,.42);
     const aisle={x:82.85,y:3.35,z:105.24};
     col.move(aisle,.58,0,.30,1.75,.42);
-    return {west,southern,aisle,
-      pass:west.x>82.60&&southern.z>105.57&&aisle.x>83.18};
+    return {west,southGuardSolid,lowerStairHeadroom,aisle,
+      pass:west.x>82.60&&southGuardSolid&&lowerStairHeadroom&&aisle.x>83.18};
   });
   checks.push({name:'r03-top-closure-west-and-south-guards-stair-passage-open',data:closure,pass:closure.pass});
   console.log('STAIR R03 CLOSURE',JSON.stringify(closure));
