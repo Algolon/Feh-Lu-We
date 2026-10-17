@@ -40,6 +40,7 @@ import { pressLantern } from '../puzzles/rules';
 import { addClue } from '../core/state';
 import { drawSymbol, SYMBOLS } from '../content/symbols';
 import { mulberry32 } from '../core/rng';
+import { CLIMBERS_CHUNK } from './exteriorGreenery';
 import { estateRooms } from './roomdefs';
 import { ESTATE, SITES, DRIVEWAY, TERRACE, GF, HILL, WOODS, lakeQ, COTTAGE_PAD, WELLNESS } from './layout';
 import { FOREST_PATHS, TCELL, TERRAIN_DIMS, gridAt, gridHeight, inHole, terrainHeight, walkHeight, entranceMound } from './terrain';
@@ -134,7 +135,10 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   // whole-room culling: chunks are shown only while one of their rooms can be seen from the player's room
   const R = estateRooms();
   // Keep dense clipped hedge leaves out of distant woodland views and unrelated coarse garden batches.
-  for(const chunk of ['frontHedge.left','frontHedge.right'])w.roomRegion([chunk],['out',...R.rooms.map(r=>r.id)],25);
+  // PERF-R03-A: the front hedges and the wall climbers are exterior regions: drawn from outside within their distance
+  // (hedges 25 m, climbers 130 m as the manor shell), from inside only through a door or window that shows them
+  for(const chunk of ['frontHedge.left','frontHedge.right'])w.exteriorRegion([chunk],25);
+  w.exteriorRegion([CLIMBERS_CHUNK], 130);
   const manorRooms = R.rooms.filter((r) => r.floor === 'g' || r.floor === 'u' || r.floor === 'a').filter((r) => r.x0 >= 72 && r.x1 <= 116 && r.id !== 'cons').map((r) => r.id);
   const atticRooms = ['atticLanding', 'atticCommon', 'atticStore', 'atticLookout'];
   const basementRooms = ['bstair', 'bLobby', 'archive', 'boiler', 'route', 'tunnel2', 'tunnel'];

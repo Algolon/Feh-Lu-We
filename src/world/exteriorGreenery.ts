@@ -13,6 +13,8 @@ export type GreenFace = 'W' | 'N';
 export interface GreenLeaf { at: number; y: number; depth: number; size: number; angle: number; tilt: number; tone: number }
 export interface GreenStem { points: THREE.Vector3[]; radius: number }
 export interface Climber { face: GreenFace; root: number; leaves: GreenLeaf[]; stems: GreenStem[] }
+/** PERF-R03-A: region chunk of the wall climbers (estate.ts registers it with World.exteriorRegion). */
+export const CLIMBERS_CHUNK = 'extGreen.climbers';
 export const ENTRANCE_POTS = [{ x: 86.7, z: 78.15, seed: 231 }, { x: 93.3, z: 78.15, seed: 427 }] as const;
 
 const WINDOWS = {
@@ -180,7 +182,10 @@ export function buildExteriorGreenery(parent:THREE.Object3D,c:Ctx) {
   const paint=c.k.M.paint.clone();surface(paint,'foliage');
   const dressed=exteriorMats().dressed.clone();surface(dressed,'stone');
   const local:Ctx={...c,b:new Batcher(),k:{...c.k,M:{...c.k.M,paint}}};
-  climbers(local);
+  // PERF-R03-A: the wall climbers are their own exterior region (World.exteriorRegion), not manor architecture: they
+  // stand on the outside of the west and north walls and are hidden from inside unless a window or door shows them.
+  // The entrance pots keep the caller's chunk and its visibility. Same batcher and order: identical geometry.
+  climbers({...local,chunk:CLIMBERS_CHUNK});
   for(const pot of ENTRANCE_POTS)entrancePot(local,pot.x,pot.z,pot.seed,dressed);
   local.b.build(parent);
 }

@@ -74,6 +74,8 @@ const tmpFwd = new THREE.Vector3(), tmpTo = new THREE.Vector3();
 const DOOR_SAMPLES: [number, number][] = [[0, 0], [0.7, 0], [-0.7, 0], [0, 0.7], [0, -0.7]];
 /** A region doorway (plan centre; `n` = the plan direction into the region's room, found on first use). */
 interface RegionDoor { door: string; x: number; y: number; z: number; r: number; n?: [number, number] | null }
+/** Plan-coordinate (x east, z north) bounding rectangle. */
+interface PlanBox { x0: number; x1: number; z0: number; z1: number }
 
 export class World {
   readonly scene = new THREE.Scene();
@@ -101,7 +103,7 @@ export class World {
   /** Room-based visibility (estate): regions are static chunks that belong to a set of rooms ('out' = outdoors). */
   rooms: RoomGraph | null = null;
   isOpen: (door: string) => boolean = () => false;
-  private regions: { meshes: THREE.Object3D[]; rooms: Set<string>; on: boolean; far: number; outFar: number; sph: THREE.Sphere; shade?: boolean; doors?: RegionDoor[] }[] = [];
+  private regions: { meshes: THREE.Object3D[]; rooms: Set<string>; on: boolean; far: number; outFar: number; sph: THREE.Sphere; shade?: boolean; doors?: RegionDoor[]; ext?: PlanBox }[] = [];
   visibleRooms = new Set<string>(['out']);
   hereRoom = 'out';
   constructor(public readonly id: SceneId) {}
@@ -180,6 +182,56 @@ export class World {
       return [{ door, x: v.x, y: v.y, z: -v.z, r: 0.9 }];
     });
     this.regions.push({ meshes, rooms: new Set(rooms), on: true, far, outFar, sph, doors: ds?.length === doors?.length ? ds : undefined });
+  }
+  /**
+   * PERF-R03-A: an exterior region (plants on or against the house's own walls). From outside it is drawn within `far`,
+   * as before. From inside, it is drawn only while an exterior aperture that can show it is in view: an open (or glass)
+   * exterior door, or a clear window, that passes the usual view-cone and line-of-sight tests (World.outdoorInView,
+   * World.clearWindowInView), with the region's plan footprint inside the wedge the eye sees through that aperture.
+   * The wedge ignores height and is widened by 0.5 m either side (conservative). The glass room counts as outdoors.
+   */
+  exteriorRegion(chunks: string[], far = Infinity) {
+    this.roomRegion(chunks, ['out'], far);
+    const r = this.regions[this.regions.length - 1], box = new THREE.Box3();
+    for (const m of r.meshes) box.expandByObject(m);
+    r.ext = box.isEmpty() ? { x0: 0, x1: 0, z0: 0, z1: 0 } : { x0: box.min.x, x1: box.max.x, z0: -box.max.z, z1: -box.min.z };
+  }
+  /** The exterior apertures in view from inside (plan centre, outward normal, half width); see exteriorRegion. */
+  private exteriorApertures(eye: THREE.Vector3, cam: THREE.PerspectiveCamera | undefined, clearWindows: PortalDef[]) {
+    const out: { x: number; z: number; nx: number; nz: number; half: number }[] = [];
+    if (!this.rooms) return out;
+    for (const p of clearWindows) {
+      const a = p.aperture!, room = this.rooms.get(p.a === 'out' ? p.b : p.a);
+      if (!room) continue;
+      out.push({ x: a.x, z: a.z, nx: a.axis === 'z' ? Math.sign(a.x - (room.x0 + room.x1) / 2) : 0, nz: a.axis === 'x' ? Math.sign(a.z - (room.z0 + room.z1) / 2) : 0, half: a.width / 2 });
+    }
+    for (const d of this.exteriorDoors) {
+      if (d.door && !d.seeThrough && !this.isOpen(d.door)) continue;
+      if (!this.outdoorInView(eye, cam, 26, false, d.door)) continue;
+      const p = this.rooms.portals.find((q) => q.door === d.door);
+      // the house side of the opening (a glass room's door: the room it leads from)
+      const side = p && [p.a, p.b].find((id) => id !== 'out' && !this.rooms!.portals.some((q) => q.kind === 'glass' && (q.a === id || q.b === id)));
+      const n = side ? this.doorInward({ door: d.door, x: d.x, y: d.y, z: d.z, r: d.r }, new Set([side])) : null;
+      // unknown orientation: every direction (conservative)
+      if (!n) { out.push({ x: d.x, z: d.z, nx: 0, nz: 0, half: Infinity }); continue; }
+      out.push({ x: d.x, z: d.z, nx: -n[0], nz: -n[1], half: d.r });
+    }
+    return out;
+  }
+  /** Can the eye see any of the plan box through this aperture (the wedge from the eye through its width)? */
+  private apertureShows(eye: THREE.Vector3, a: { x: number; z: number; nx: number; nz: number; half: number }, b: PlanBox) {
+    if (a.half === Infinity || (a.nx === 0 && a.nz === 0)) return true;
+    const ex = eye.x, ez = -eye.z, tx = -a.nz, tz = a.nx;
+    const eu = (ex - a.x) * a.nx + (ez - a.z) * a.nz, ev = (ex - a.x) * tx + (ez - a.z) * tz;
+    if (eu > -0.05) return true; // the eye is in the opening (or beyond it)
+    let lo = Infinity, hi = -Infinity, front = false;
+    for (const cx of [b.x0, b.x1]) for (const cz of [b.z0, b.z1]) {
+      const u = (cx - a.x) * a.nx + (cz - a.z) * a.nz, v = (cx - a.x) * tx + (cz - a.z) * tz;
+      if (u > 0) front = true;
+      const uc = Math.max(u, 0.02), vc = ev + ((v - ev) * -eu) / (uc - eu); // where the eye's ray to the corner crosses the aperture plane
+      if (vc < lo) lo = vc; if (vc > hi) hi = vc;
+    }
+    return front && lo <= a.half + 0.5 && hi >= -a.half - 0.5;
   }
   /**
    * A region doorway that is open, in the cone round the view and seen through: sight lines from the eye through points
@@ -364,9 +416,13 @@ export class World {
       if (key !== this.windowsKey) { this.windowsKey = key; this.outdoorWindows = wins; this.outdoorWindowsVersion++; }
       // from outside, interiors are drawn only through an open doorway within 22 m in (the cone round) the view
       this.interiorThroughDoor = this.hereRoom !== 'out' || this.outdoorInView(eye, cam, 22) || clearWindows.length > 0;
+      let apertures: ReturnType<World['exteriorApertures']> | null = null;
       for (const r of this.regions) {
         let on = false;
-        for (const id of r.rooms) if (this.visibleRooms.has(id)) { on = true; break; }
+        if (r.ext) { // PERF-R03-A: exterior region (exteriorRegion)
+          const b = r.ext;
+          on = this.hereRoom === 'out' || this.hereRoom === 'cons' || (apertures ??= this.exteriorApertures(eye, cam, clearWindows)).some((a) => this.apertureShows(eye, a, b));
+        } else for (const id of r.rooms) if (this.visibleRooms.has(id)) { on = true; break; }
         // PERF-R02 integration (WINDOW-R02): a doorway region seen through one of its own clear windows is drawn
         // whatever its doorways show (the doorway rule only removes rooms that are behind solid walls)
         if (on && r.doors && !r.rooms.has(this.hereRoom) && !clearWindows.some((p) => r.rooms.has(p.a === 'out' ? p.b : p.a))) on = this.doorwayInView(eye, cam, r.doors, r.rooms);
