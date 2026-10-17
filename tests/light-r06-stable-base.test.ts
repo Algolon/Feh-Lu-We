@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
 import { World } from '../src/interactions/world';
-import { bindStableLiving, stableContributionAt, stableRoomMaskAt, STABLE_LIVING_MASK, STABLE_LIVING_PILOT, STABLE_SOURCE_IDS } from '../src/world/stableLighting';
+import { surface } from '../src/world/surfaces';
+import { bindStableLiving, stableContributionAt, stableRoomMaskAt, STABLE_LIVING_MASK, cloneSurfaceWithDefines, STABLE_LIVING_PILOT, STABLE_SOURCE_IDS } from '../src/world/stableLighting';
 
 describe('LIGHT-R06 source-bound living-room base light', () => {
   it('does not alter ordinary game rendering without explicit opt-in', () => {
@@ -60,6 +61,17 @@ describe('LIGHT-R06 source-bound living-room base light', () => {
       const original=stableRoomMaskAt(x,y,z);
       for(let i=0;i<100;i++)expect(stableRoomMaskAt(x,y,z)).toBe(original);
     }
+  });
+
+  it('retains the FLW_SURFACE define when cloning material shader variants',()=>{
+    const original=surface(new THREE.MeshLambertMaterial({vertexColors:true}),'plaster');
+    const cloned=cloneSurfaceWithDefines(original);
+    const defs=(cloned as THREE.MeshLambertMaterial&{defines?:Record<string,number>}).defines;
+    expect(defs?.FLW_SURFACE).toBe(2);
+    expect(cloned.userData.surface).toBe('plaster');
+    expect(cloned).not.toBe(original);
+    expect(cloned.userData).not.toBe(original.userData);
+    cloned.dispose();original.dispose();
   });
 
 });
