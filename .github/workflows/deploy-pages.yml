@@ -52,6 +52,54 @@ jobs:
           name: painting-atlas-release-evidence
           path: art-probe
           if-no-files-found: warn
+      # LIGHT-R06D: build and append a *separate* browser-playable review route.
+      # DO NOT merge or publish PR #115 itself. Its reviewed lighting stays in
+      # a pinned source snapshot; normal '/' and '/game/' retain production code.
+      # Explicitly run this on feature branches too to validate before release.
+      - name: Checkout pinned LIGHT-R06D review source
+        uses: actions/checkout@v7
+        with:
+          ref: 1a2fba2ff9ab88880e796a5559d71081a6091ecc
+          path: r06d-preview-source
+          persist-credentials: false
+      - name: Build isolated LIGHT-R06D URL without altering main game
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd r06d-preview-source
+          npm ci
+          npm run typecheck
+          npm run build -- --base /Feh-Lu-We/light-r06d/
+          cd ..
+          mkdir -p dist/light-r06d
+          cp -a r06d-preview-source/dist/. dist/light-r06d/
+          cp r06d-preview-source/scripts/light-r06d-device-probe.js dist/light-r06d/light-r06d-device-probe.js
+          python3 - <<'PY'
+          from pathlib import Path
+          f=Path('dist/light-r06d/index.html')
+          html=f.read_text()
+          assert '</body>' in html, 'review index missing body'
+          assert '/Feh-Lu-We/light-r06d/assets/' in html, 'review asset base not nested'
+          tag='<script defer src="/Feh-Lu-We/light-r06d/light-r06d-device-probe.js"></script>'
+          f.write_text(html.replace('</body>',tag+'</body>'))
+          PY
+          test -f dist/index.html
+          test -f dist/game/index.html
+          test -f dist/light-r06d/index.html
+          test -f dist/light-r06d/light-r06d-device-probe.js
+      - name: Smoke test both main and LIGHT-R06D URLs, asset base and saves
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx playwright-core install --with-deps chromium
+          if ! curl -sf http://127.0.0.1:4188/Feh-Lu-We/ >/dev/null; then
+            npm run preview -- --host 127.0.0.1 --port 4188 >/tmp/flw-pages-preview.log 2>&1 &
+          fi
+          for i in $(seq 1 40); do
+            curl -sf http://127.0.0.1:4188/Feh-Lu-We/light-r06d/ >/dev/null && break
+            sleep 1
+          done
+          node scripts/light-r06d-pages-smoke.mjs http://127.0.0.1:4188/Feh-Lu-We/
       - uses: actions/upload-pages-artifact@v5
         with:
           path: dist

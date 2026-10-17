@@ -1,0 +1,36 @@
+name: VEG-R10E ivy visual review
+on:
+  push:
+    branches:
+      - fix/veg-r10e-ivy-venation-shape-locked
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: veg-r10e-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  ivy-visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright-core install --with-deps chromium
+      - name: Capture approved ivy geometry before and after texture
+        run: node scripts/veg-r10e-review.mjs
+        env:
+          VEG_R10E_PRINT_EVIDENCE: '1'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: veg-r10e-review
+          path: docs/veg-r10e/review/
+          if-no-files-found: warn

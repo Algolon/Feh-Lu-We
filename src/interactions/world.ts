@@ -197,8 +197,15 @@ export class World {
     this.roomRegion(chunks, ['out'], far);
     const r = this.regions[this.regions.length - 1];
     const plan = (b: THREE.Box3): PlanBox => ({ x0: b.min.x, x1: b.max.x, z0: -b.max.z, z1: -b.min.z, y0: b.min.y, y1: b.max.y });
-    // a mesh may list the world boxes of its separate parts (userData.visibilityBoxes, e.g. one per climber site)
-    r.ext = r.meshes.flatMap((m) => (m.userData.visibilityBoxes as THREE.Box3[] | undefined)?.map(plan) ?? (new THREE.Box3().expandByObject(m).isEmpty() ? [] : [plan(new THREE.Box3().expandByObject(m))]));
+    // a mesh may list the world boxes of its separate parts (userData.visibilityBoxes, e.g. one per climber site; the
+    // meshes of one group, one per material, share the same list: each list is used once)
+    const lists = new Set<THREE.Box3[]>();
+    r.ext = r.meshes.flatMap((m) => {
+      const list = m.userData.visibilityBoxes as THREE.Box3[] | undefined;
+      if (list) { if (lists.has(list)) return []; lists.add(list); return list.map(plan); }
+      const b = new THREE.Box3().expandByObject(m);
+      return b.isEmpty() ? [] : [plan(b)];
+    });
   }
   /** The exterior apertures in view from inside (plan centre, outward normal, half width); see exteriorRegion. */
   private exteriorApertures(eye: THREE.Vector3, cam: THREE.PerspectiveCamera | undefined, clearWindows: PortalDef[]) {

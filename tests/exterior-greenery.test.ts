@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { climberLeafGeo, climberPlan, greenClear, ENTRANCE_POTS } from '../src/world/exteriorGreenery';
+import { climberLeafGeo, climberPlan, greenClear, ENTRANCE_POTS, entranceLeafGeo, entrancePlantPlan } from '../src/world/exteriorGreenery';
 
 describe('authored facade greenery',()=>{
   it('has real basal growth on both elevations and keeps every leaf clear of window/door reveals',()=>{
@@ -23,7 +23,7 @@ describe('authored facade greenery',()=>{
     expect(climberPlan().reduce((n,s)=>n+s.leaves.length*34,0)).toBeLessThan(175000);
     for(const site of climberPlan())for(const l of site.leaves)expect(l.size*1.64).toBeLessThan(.21);
   });
-  it('restores the exact owner-approved leaf outline for ivy and entrance pots',()=>{
+  it('restores the exact owner-approved leaf outline for wall ivy',()=>{
     const g=climberLeafGeo(),position=g.attributes.position;
     // These are the 13 original contour vertices from before VEG-R10, prior to the final 180-degree rotation.
     const original=[[-.15,-.58],[-.67,-.26],[-.82,.13],[-.34,.12],[-.48,.57],[-.12,.43],[0,.92],[.12,.43],[.48,.57],[.34,.12],[.82,.13],[.67,-.26],[.15,-.58]];
@@ -34,6 +34,24 @@ describe('authored facade greenery',()=>{
     }
     // 13 unchanged doubled wedges, four midrib and four secondary-vein triangles.
     expect(position.count/3).toBe(34);
+    g.dispose();
+  });
+  it('maps botanical texture onto the exact approved ivy mesh without displacing a vertex',()=>{
+    const g=climberLeafGeo(),p=g.attributes.position,uv=g.attributes.uv;
+    expect(p.count).toBe(34*3);
+    expect(uv.count).toBe(p.count);
+    for(let i=0;i<p.count;i++){
+      const x=p.getX(i),y=p.getY(i),u=uv.getX(i),v=uv.getY(i);
+      expect(u).toBeGreaterThanOrEqual(0);expect(u).toBeLessThanOrEqual(1);
+      expect(v).toBeGreaterThanOrEqual(0);expect(v).toBeLessThanOrEqual(1);
+      expect(u).toBeCloseTo(Math.max(0,Math.min(1,(.90-x)/1.80)),5);
+      expect(v).toBeCloseTo(Math.max(0,Math.min(1,(.70-y)/1.70)),5);
+    }
+    // The original tip, stem base and lateral lobes must still be present.
+    const original=[[0,-.92],[.15,.58],[-.15,.58],[.82,-.13],[-.82,-.13]];
+    for(const [x,y] of original){
+      expect(Array.from({length:p.count},(_,i)=>i).some(i=>Math.abs(p.getX(i)-x)<1e-5&&Math.abs(p.getY(i)-y)<1e-5)).toBe(true);
+    }
     g.dispose();
   });
   it('has a visible, tapered two-sided midrib with a contrasting green tint',()=>{
@@ -67,6 +85,57 @@ describe('authored facade greenery',()=>{
     expect(tips.some(t=>t.z<-.01)).toBe(true);
     expect(position.count/3).toBe(34);
     g.dispose();
+  });
+  it('gives entrance pots a distinct, broad and finite faceted leaf mesh with calm veins',()=>{
+    const g=entranceLeafGeo(),p=g.attributes.position,c=g.attributes.color;
+    expect(g.index).toBeNull();
+    expect(p.count/3).toBe(192); // Eight curved longitudinal bands × six cross bands × two sides
+    expect([...p.array].every(Number.isFinite)).toBe(true);
+    expect([...c.array].every(Number.isFinite)).toBe(true);
+    const uv=g.attributes.uv;
+    expect(uv.count).toBe(p.count);
+    expect([...uv.array].every(n=>n>=0&&n<=1)).toBe(true);
+    g.computeBoundingBox();
+    expect(g.boundingBox!.max.x-g.boundingBox!.min.x).toBeGreaterThan(1.0);
+    expect(g.boundingBox!.max.x-g.boundingBox!.min.x).toBeLessThan(1.2);
+    expect(g.boundingBox!.max.y-g.boundingBox!.min.y).toBeGreaterThan(1.6);
+    // Veins are part of the same continuous leaf, not overlaid planes.
+    const central:number[]=[],outer:number[]=[];
+    let front=false,back=false;
+    for(let i=0;i<p.count;i++){
+      const x=p.getX(i),y=p.getY(i),z=p.getZ(i);
+      if(Math.abs(x)<.065&&Math.abs(y)<.48)central.push(c.getY(i));
+      if(Math.abs(x)>.52&&Math.abs(y)<.3)outer.push(c.getY(i));
+      front ||= z>.05; back ||= z<-.05;
+      const n=g.attributes.normal;
+      expect(Math.hypot(n.getX(i),n.getY(i),n.getZ(i))).toBeCloseTo(1,5);
+    }
+    expect(front).toBe(true);expect(back).toBe(true);
+    expect(central.length).toBeGreaterThan(5);expect(outer.length).toBeGreaterThan(5);
+    const mean=(a:number[])=>a.reduce((s,v)=>s+v,0)/a.length;
+    expect(mean(central)).toBeGreaterThan(mean(outer)*1.1);
+    g.dispose();
+  });
+  it('creates two deterministic, well-connected and less cluttered entrance plants',()=>{
+    for(const {seed} of ENTRANCE_POTS){
+      const plan=entrancePlantPlan(seed),again=entrancePlantPlan(seed);
+      expect(plan.branches).toHaveLength(8);
+      expect(plan.leaves).toHaveLength(40); // Eight staggered twigs, five distinct smaller leaves each.
+      expect(plan.leaves).toEqual(again.leaves);
+      for(const branch of plan.branches){
+        expect(branch.points).toHaveLength(3);
+        expect(branch.points[0].y).toBeCloseTo(.65);
+      }
+      const centers=plan.leaves.map(l=>l.centre);
+      expect(Math.max(...centers.map(v=>v.y))).toBeGreaterThan(1.15);
+      expect(Math.min(...centers.map(v=>v.y))).toBeLessThan(1.0);
+      for(const leaf of plan.leaves){
+        expect(leaf.size).toBeGreaterThanOrEqual(.145);
+        expect(leaf.size).toBeLessThan(.20);
+        expect(leaf.attachment.distanceTo(leaf.base)).toBeLessThan(.3);
+        expect(leaf.tilt).toBeLessThan(-.1);
+      }
+    }
   });
   it('puts solid planters outside the entrance step footprint and central walking line',()=>{
     for(const p of ENTRANCE_POTS){
