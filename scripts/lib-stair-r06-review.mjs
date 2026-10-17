@@ -47,7 +47,7 @@ try{
   const {page,context}=await open({width:1280,height:720});
   for(const [name,pose,target] of [
     ['01-r06-stair-overview',[79.9,.15,103.5],[81.95,2.0,105.3]],
-    ['02-r06-top-post-removed',[82.98,3.35,105.24],[82.99,3.95,104.65]],
+    ['02-r06-top-post-removed',[82.98,3.35,105.24],[82.64,3.90,104.66]],
     ['03-r06-triangle-from-above',[83.15,3.35,105.18],[82.30,3.30,105.07]],
     ['04-r06-landing-from-gallery',[83.65,3.35,105.20],[82.28,3.35,105.17]],
     ['05-r06-right-baluster-foot',[82.87,3.35,105.29],[82.47,3.12,105.01]],
@@ -154,7 +154,7 @@ try{
   const {page:mobile,context:mobileContext}=await open({width:390,height:844},true);
   await shot(mobile,'05-mobile-portrait-stair',[79.95,.15,103.5],[81.95,2.0,105.3],true);
   await shot(mobile,'06-r06-mobile-top',[83.18,3.35,105.23],[82.18,3.26,105.07],true);
-  await shot(mobile,'07-r06-mobile-south-post',[83.18,3.35,105.23],[83.15,3.65,104.60],true);
+  await shot(mobile,'07-r06-mobile-south-post',[83.18,3.35,105.23],[82.64,3.65,104.66],true);
   await mobileContext.close();
 }catch(e){errors.push('QA: '+e.stack);console.error(e.stack);}
 finally{
