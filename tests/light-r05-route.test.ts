@@ -39,7 +39,7 @@ describe('LIGHT-R05 route and mobile slot safety',()=>{
   expect(pool.lights).toHaveLength(3);
   expect(near.ids).toContain('fire.living');
   expect(closer.fire).toBeGreaterThan(2);
-  expect(trace.at(-1)!.fire).toBeGreaterThan(7);
+  expect(trace.at(-1)!.fire).toBeGreaterThan(6.9); // target is 7; exponential easing asymptotically approaches it
  });
  it('never selects a different fixture just because the camera rotates',()=>{
   const pool=new LightPool(new THREE.Scene(),3);
