@@ -71,3 +71,29 @@ jobs:
           name: light-r05-${{ matrix.profile }}-evidence
           path: game/light-r05-qa
           if-no-files-found: warn
+
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci && npm run build
+      - run: npx playwright-core install --with-deps chromium
+      - name: Android-shaped viewport, high/low and state persistence
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4188 > /tmp/flw-r05-smoke.log 2>&1 &
+          for attempt in $(seq 1 40); do
+            curl -sf http://127.0.0.1:4188/Feh-Lu-We/ >/dev/null && break
+            sleep 1
+          done
+          node scripts/light-r05-smoke.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: light-r05-quality-mobile-smoke
+          path: light-r05-qa/smoke
+          if-no-files-found: warn
