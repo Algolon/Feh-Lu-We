@@ -119,10 +119,142 @@ export function climberLeafGeo(): THREE.BufferGeometry {
   }
   g.rotateZ(Math.PI);g.userData.keepColor=true;return g;
 }
+/** Authored botanical albedo in the same spirit as the indoor plant atlas.
+ * The curved leaf mesh owns the silhouette; texture contributes only calm venation.
+ */
+let entranceLeafMat:THREE.MeshLambertMaterial|null=null;
+export function entranceLeafMaterial():THREE.MeshLambertMaterial {
+  if(entranceLeafMat)return entranceLeafMat;
+  const canvas=document.createElement('canvas');canvas.width=256;canvas.height=512;
+  const x=canvas.getContext('2d')!;
+  const ground=x.createLinearGradient(0,0,256,0);
+  ground.addColorStop(0,'#9db28f');ground.addColorStop(.33,'#bfd0ac');
+  ground.addColorStop(.49,'#d6e0bd');ground.addColorStop(.55,'#cbdab4');
+  ground.addColorStop(1,'#9eb58f');
+  x.fillStyle=ground;x.fillRect(0,0,256,512);
+  const fade=x.createLinearGradient(0,0,0,512);
+  fade.addColorStop(0,'rgba(244,251,224,.08)');
+  fade.addColorStop(.5,'rgba(255,255,255,0)');
+  fade.addColorStop(1,'rgba(65,92,58,.10)');
+  x.fillStyle=fade;x.fillRect(0,0,256,512);
+  x.lineCap='round';
+  x.beginPath();x.moveTo(127,499);x.bezierCurveTo(123,362,131,161,128,15);
+  x.strokeStyle='rgba(68,101,55,.22)';x.lineWidth=7;x.stroke();
+  x.beginPath();x.moveTo(129,495);x.bezierCurveTo(126,360,130,162,129,19);
+  x.strokeStyle='#f8ffcc';x.lineWidth=4.4;x.stroke();
+  for(const side of [-1,1])for(const [u,reach] of [[.23,67],[.47,83],[.70,64]]){
+    const cy=512*(1-u+side*.015),h=reach*.29;
+    x.beginPath();x.moveTo(128,cy);
+    x.bezierCurveTo(128+side*reach*.30,cy-5,128+side*reach*.72,cy-h*.78,128+side*reach,cy-h);
+    x.strokeStyle='rgba(61,104,58,.20)';x.lineWidth=4.8;x.stroke();
+    x.strokeStyle='#f1fac5';x.lineWidth=2.8;x.stroke();
+  }
+  const rand=mulberry32(7345);
+  for(let i=0;i<180;i++){
+    x.fillStyle=rand()<.5?'rgba(61,91,66,.045)':'rgba(253,255,234,.11)';
+    x.fillRect(rand()*256,rand()*512,.6,2+rand()*4);
+  }
+  const map=new THREE.CanvasTexture(canvas);map.colorSpace=THREE.SRGBColorSpace;map.anisotropy=4;
+  return entranceLeafMat=surface(new THREE.MeshLambertMaterial({map,vertexColors:true,side:THREE.DoubleSide}), 'foliage');
+}
+
+/** Small evergreen laurel-like leaves for the formal entrance urns.
+ * Gently cupped, pointed and clearly veined on both sides, in one batched mesh.
+ * This botanical family deliberately differs from the five-lobed wall ivy.
+ */
+export function entranceLeafGeo():THREE.BufferGeometry {
+  const p:number[]=[],colors:number[]=[],normals:number[]=[];
+  const along=8,across=6;
+  // Smooth tapered oval, slight asymmetry and natural upward-curling tip.
+  const cross=(u:number,s:number,back:boolean)=>{
+    const envelope=Math.pow(Math.max(0,Math.sin(Math.PI*u)),.82);
+    const width=.54*envelope*(.93+.12*u);
+    const x=s*width*(1+.04*Math.sin(u*Math.PI*1.8));
+    const y=-.76+1.62*u;
+    const curl=.055*Math.sin(Math.PI*u)*(1-s*s)+.032*u*u;
+    const fold=.052*(1-Math.abs(s))*envelope;
+    const z=(back?-1:1)*(curl+fold+.006);
+    // Narrow green-gold centre rib, two paired veins lifting towards the edge.
+    const rib=Math.exp(-Math.pow(s/.17,2))*(.55+.45*envelope);
+    const vein=(a:number,b:number)=>{
+      const d=Math.abs(u-(a+b*Math.abs(s)));
+      return Math.exp(-Math.pow(d/.075,2))*Math.max(0,1-Math.abs(s)*.72);
+    };
+    const secondary=Math.max(vein(.27,.16),vein(.57,.16));
+    const folded=(s<0?1.028:.976)*(1-.065*Math.abs(s))*(.96+.06*u);
+    const light=folded*(back?.93:1);
+    const tone=light*(1+.055*rib+.035*secondary);
+    const color:[number,number,number]=[tone*.96,tone*1.065,tone*.91];
+    // The built-in normals follow the slight transverse fold, not flat cards.
+    const n=new THREE.Vector3(-.18*s*envelope,.028*Math.cos(Math.PI*u),back?-1:1).normalize();
+    return {pos:[x,y,z],color,normal:n.toArray()};
+  };
+  for(const back of [false,true]){
+    for(let i=0;i<along;i++)for(let j=0;j<across;j++){
+      const u0=i/along,u1=(i+1)/along,s0=j/across*2-1,s1=(j+1)/across*2-1;
+      const tris=back?[
+        [[u0,s0],[u1,s1],[u1,s0]],[[u0,s0],[u0,s1],[u1,s1]]
+      ]:[
+        [[u0,s0],[u1,s0],[u1,s1]],[[u0,s0],[u1,s1],[u0,s1]]
+      ];
+      for(const tri of tris)for(const [u,s] of tri){
+        const v=cross(u,s,back);p.push(...v.pos);colors.push(...v.color);normals.push(...v.normal);
+      }
+    }
+  }
+  const g=new THREE.BufferGeometry();
+  g.setAttribute('position',new THREE.Float32BufferAttribute(p,3));
+  g.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
+  g.setAttribute('normal',new THREE.Float32BufferAttribute(normals,3));
+  const uv:number[]=[];
+  for(let i=0;i<p.length;i+=3)uv.push(THREE.MathUtils.clamp(p[i]/1.08+.5,0,1),THREE.MathUtils.clamp((p[i+1]+.76)/1.62,0,1));
+  g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
+  g.userData.keepColor=true;return g;
+}
+const ENTRANCE_GREEN=['#a1c382','#b2d098','#94b375','#bed7a4'] as const;
+export interface EntranceBranch { points:THREE.Vector3[]; radius:number }
+export interface EntranceLeaf { centre:THREE.Vector3; base:THREE.Vector3; attachment:THREE.Vector3; size:number; angle:number; tilt:number; yaw:number; tone:number }
+/** Deliberate branched crown: staggered leaf pairs orbit a seed-specific
+ * centre, revealing stems and distinct individual leaves in normal game views.
+ */
+export function entrancePlantPlan(seed:number):{branches:EntranceBranch[];leaves:EntranceLeaf[]} {
+  const r=mulberry32(seed),branches:EntranceBranch[]=[],leaves:EntranceLeaf[]=[];
+  const origin=new THREE.Vector3(0,.65,0),Y=new THREE.Vector3(0,1,0);
+  const X=new THREE.Vector3(1,0,0),Z=new THREE.Vector3(0,0,1);
+  for(let j=0;j<8;j++){
+    const a=(j+.14+r()*.12)/8*Math.PI*2;
+    const outward=new THREE.Vector3(Math.cos(a),0,Math.sin(a));
+    const reach=.215+r()*.10,height=.50+r()*.25;
+    const mid=origin.clone().addScaledVector(outward,reach*.42).addScaledVector(Y,height*.52);
+    const end=origin.clone().addScaledVector(outward,reach).addScaledVector(Y,height);
+    branches.push({points:[origin.clone(),mid,end],radius:.009});
+    for(let k=0;k<5;k++){
+      const t=.30+k*.166;
+      const anchor=origin.clone().lerp(end,t);
+      const side=k%2===0?-1:1;
+      const lateral=new THREE.Vector3(-outward.z,0,outward.x);
+      const centre=anchor.clone()
+        .addScaledVector(outward,.095+r()*.034)
+        .addScaledVector(lateral,side*(.055+r()*.030))
+        .addScaledVector(Y,.05+r()*.038);
+      const size=[.145,.158,.174,.18,.166][k]+r()*.016;
+      const yaw=Math.PI/2-a+side*(.28+r()*.29)+(r()-.5)*.24;
+      const angle=side*(.32+r()*.30);
+      const tilt= -.15-r()*.22;
+      // Respect the exact mesh transform order used in placeLeaf.
+      const base=new THREE.Vector3(0,-.74*size,0)
+        .applyAxisAngle(X,tilt).applyAxisAngle(Z,angle)
+        .applyAxisAngle(Y,yaw).add(centre);
+      leaves.push({centre,base,attachment:anchor,size,angle,tilt,yaw,tone:Math.floor(r()*ENTRANCE_GREEN.length)});
+    }
+  }
+  return {branches,leaves};
+}
+
 const GREEN=['#63834e','#6b8d54','#78965b','#587749'];
-function placeLeaf(raw:THREE.BufferGeometry,l:GreenLeaf,yaw=0) {
+function placeLeaf(raw:THREE.BufferGeometry,l:GreenLeaf,yaw=0,palette:readonly string[]=GREEN) {
   const g=raw.clone();g.scale(l.size,l.size,l.size);g.rotateX(l.tilt);g.rotateZ(l.angle);g.rotateY(yaw);g.translate(l.at,l.y,l.depth);
-  const col=new THREE.Color(GREEN[l.tone]),a=g.attributes.color as THREE.BufferAttribute;
+  const col=new THREE.Color(palette[l.tone]),a=g.attributes.color as THREE.BufferAttribute;
   for(let i=0;i<a.count;i++)a.setXYZ(i,a.getX(i)*col.r,a.getY(i)*col.g,a.getZ(i)*col.b);
   return g;
 }
@@ -155,22 +287,15 @@ function entrancePot(c:Ctx,x:number,z:number,seed:number,dressed:THREE.Material)
   const profile:[[number,number],...[number,number][]]=[[.001,0],[.39,0],[.39,.10],[.32,.13],[.28,.23],[.30,.59],[.38,.66],[.39,.75],[.31,.75],[.29,.67],[.27,.61],[.001,.61]];
   const g=dressedLatheUV(lathe(profile,16));geo(c.b,dressed,'#d8d2bf',g,x,.03,z,{chunk:c.chunk,jitter:0});g.dispose();
   const soil=new THREE.CylinderGeometry(.275,.275,.02,16);geo(c.b,c.k.M.paint,'#514735',soil,x,.65,z,{chunk:c.chunk,jitter:0});soil.dispose();
-  const r=mulberry32(seed), raw=climberLeafGeo(),leaves:THREE.BufferGeometry[]=[],stems:THREE.BufferGeometry[]=[];
-  for(let j=0;j<9;j++) {
-    const a=j/9*Math.PI*2+.3,reach=.20+r()*.13,h=.55+r()*.28;
-    const end=new THREE.Vector3(Math.cos(a)*reach,.69+h,Math.sin(a)*reach);
-    stems.push(tube([new THREE.Vector3(0,.64,0),new THREE.Vector3(end.x*.45,.94,end.z*.45),end],.012));
-    for(let k=0;k<11;k++) {
-      const t=.28+k/15,angle=a+k*2.4;
-      const leaf=placeLeaf(raw,{at:end.x*t+Math.cos(angle)*.12,y:.72+h*t,depth:end.z*t+Math.sin(angle)*.12,size:.13+r()*.055,angle:(r()-.5)*1.8,tilt:(r()-.5)*1.2,tone:Math.floor(r()*4)},angle);
-      const lp=leaf.attributes.position;
-      // Connect the visible leaf stalk to the shrub stem rather than floating the leaf cluster.
-      stems.push(tube([new THREE.Vector3(end.x*t,.72+h*t,end.z*t),new THREE.Vector3(lp.getX(0),lp.getY(0)-.08,lp.getZ(0))],.0035));
-      leaves.push(leaf);
-    }
+  const raw=entranceLeafGeo(),plan=entrancePlantPlan(seed),leaves:THREE.BufferGeometry[]=[],stems:THREE.BufferGeometry[]=[];
+  for(const branch of plan.branches)stems.push(tube(branch.points,branch.radius));
+  for(const leaf of plan.leaves){
+    const placement:GreenLeaf={at:leaf.centre.x,y:leaf.centre.y,depth:leaf.centre.z,size:leaf.size,angle:leaf.angle,tilt:leaf.tilt,tone:leaf.tone};
+    leaves.push(placeLeaf(raw,placement,leaf.yaw,ENTRANCE_GREEN));
+    stems.push(tube([leaf.attachment,leaf.base],.0032));
   }
   submit(c,stems,c.k.M.paint,'#66543c',planMatrix(x,0,z).clone());
-  submit(c,leaves,c.k.M.paint,'#ffffff',planMatrix(x,0,z).clone());raw.dispose();
+  submit(c,leaves,entranceLeafMaterial(),'#ffffff',planMatrix(x,0,z).clone());raw.dispose();
   // Pots have physical bodies; do not add collision for their soft foliage.
   c.col.addCircle(x,z,.39,0,.78);
 }
