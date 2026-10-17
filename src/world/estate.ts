@@ -16,6 +16,7 @@ import { referenceHedgeModel, referenceHedgeCore, referenceTopiaryModel, woodMat
 
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { World, type GameApi } from '../interactions/world';
+import { bindStableLiving } from './stableLighting';
 import type { SceneExtras } from '../core/game';
 import { makeCtx, floor, type Ctx } from './arch';
 import { Batcher, box, boxMM, cyl, blob, compound, getKit, v3, geo, supportWarnings } from './kit';
@@ -207,6 +208,9 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
     return 'grass';
   };
   installOpaqueBatches(w);
+  // REVIEW ONLY: source-bound living-room base light; state is attached before
+  // Game.loadScene() performs its first world.syncAll().
+  bindStableLiving(w);
   return { world: w, extras: { env, isIndoor, surfaceAt, rooms: R } };
 }
 
