@@ -75,7 +75,7 @@ describe('authored facade greenery',()=>{
     expect([...p.array].every(Number.isFinite)).toBe(true);
     expect([...c.array].every(Number.isFinite)).toBe(true);
     g.computeBoundingBox();
-    expect(g.boundingBox!.max.x-g.boundingBox!.min.x).toBeCloseTo(1.44,4);
+    expect(g.boundingBox!.max.x-g.boundingBox!.min.x).toBeCloseTo(1.52,4);
     expect(g.boundingBox!.max.y-g.boundingBox!.min.y).toBeGreaterThan(1.6);
     const veinStart=17*2*3;
     for(let i=veinStart;i<p.count;i++)expect(Math.abs(p.getX(i))).toBeLessThanOrEqual(.5);
@@ -88,8 +88,8 @@ describe('authored facade greenery',()=>{
   it('creates two deterministic, well-connected and less cluttered entrance plants',()=>{
     for(const {seed} of ENTRANCE_POTS){
       const plan=entrancePlantPlan(seed),again=entrancePlantPlan(seed);
-      expect(plan.branches).toHaveLength(7);
-      expect(plan.leaves).toHaveLength(42); // Formerly 99.
+      expect(plan.branches).toHaveLength(8);
+      expect(plan.leaves).toHaveLength(32); // Formerly 99; open canopy instead of overlapping leaves.
       expect(plan.leaves).toEqual(again.leaves);
       for(const branch of plan.branches){
         expect(branch.points).toHaveLength(3);
@@ -99,8 +99,8 @@ describe('authored facade greenery',()=>{
       expect(Math.max(...centers.map(v=>v.y))).toBeGreaterThan(1.15);
       expect(Math.min(...centers.map(v=>v.y))).toBeLessThan(1.0);
       for(const leaf of plan.leaves){
-        expect(leaf.size).toBeGreaterThanOrEqual(.19);
-        expect(leaf.size).toBeLessThan(.24);
+        expect(leaf.size).toBeGreaterThanOrEqual(.225);
+        expect(leaf.size).toBeLessThan(.27);
         expect(leaf.attachment.distanceTo(leaf.base)).toBeLessThan(.3);
         expect(leaf.tilt).toBeLessThan(-.1);
       }
