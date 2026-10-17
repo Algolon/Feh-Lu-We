@@ -1,9 +1,16 @@
 import {describe,expect,it} from 'vitest';
 import {ROOM_SOURCE_IDS,STABLE_HALL_MASK,STABLE_LIBRARY_MASK,
- stableHallMaskAt,stableLibraryMaskAt,STABLE_ROOMS_PILOT,STABLE_LIVING_IDS} from '../src/world/stableLighting';
+ stableHallMaskAt,stableLibraryMaskAt,STABLE_ROOMS_PILOT,STABLE_LIVING_IDS,glslFloat} from '../src/world/stableLighting';
 import {ROOMS,PORTALS} from '../src/world/roomdefs';
 
 describe('LIGHT-R08: authored, world-fixed hall/library light masks',()=>{
+ it('emits float-typed GLSL constants even for integer wall coordinates',()=>{
+   expect(glslFloat(85)).toBe('85.0');
+   expect(glslFloat(-94)).toBe('-94.0');
+   expect(glslFloat(0)).toBe('0.0');
+   expect(glslFloat(85.02)).toBe('85.02');
+   expect(glslFloat(-109.68)).toBe('-109.68');
+ });
  const hall=ROOMS.find(r=>r.id==='hall')!;
  const library=ROOMS.find(r=>r.id==='library')!;
  it('remains opt-in by default; keeps R06D in isolated mode',()=>{
