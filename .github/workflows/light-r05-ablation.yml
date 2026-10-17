@@ -1,0 +1,53 @@
+name: LIGHT-R05 point-light contribution isolation
+on:
+  push:
+    branches: [fix/light-r05-stable-illumination]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  isolate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - profile: current-production
+            ref: 0cbf2fc16b9812d1b29475e7996b949e8e9791a6
+          - profile: candidate
+            ref: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          path: qa
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ matrix.ref }}
+          path: game
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: game/package-lock.json
+      - name: Prepare diagnostic against unmodified game
+        run: cp qa/scripts/light-r05-ablation.mjs game/scripts/light-r05-ablation.mjs
+      - name: Build actual game
+        working-directory: game
+        run: npm ci && npm run build && npx playwright-core install --with-deps chromium
+      - name: Render identical moving poses with and without pooled lights
+        working-directory: game
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4188 > /tmp/flw-light-r05.log 2>&1 &
+          for i in $(seq 1 40); do
+            curl -sf http://127.0.0.1:4188/Feh-Lu-We/ >/dev/null && break
+            sleep 1
+          done
+          node scripts/light-r05-ablation.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: light-r05-ablation-${{ matrix.profile }}
+          path: game/light-r05-ablation
+          if-no-files-found: warn
