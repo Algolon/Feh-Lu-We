@@ -95,9 +95,9 @@ try{
   },{pose:testCase.pose,phase:phase.v,lamps:lamps.bits,doors});
  };
  for(const phase of (FAST?phases.filter(x=>x.id==='day'):phases))
- for(const site of (FAST?cases.filter(x=>['hall-chandelier','library-reading','library-to-living'].includes(x.id)):cases)){
+ for(const site of (FAST?cases.filter(x=>['hall-chandelier','hall-console','library-reading','library-to-living'].includes(x.id)):cases)){
    const doors={library:false,livLib:false};
-   for(const state of (FAST?lights.filter(x=>['off','hall','library','both'].includes(x.id)):lights)){
+   for(const state of lights){
       const r=await capture(site,phase,state,doors);
       all.push({phase:phase.id,view:site.id,source:state.id,...r});
       if(['off','hall','library','both'].includes(state.id) &&
