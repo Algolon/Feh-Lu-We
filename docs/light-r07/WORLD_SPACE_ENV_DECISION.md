@@ -33,6 +33,20 @@ Daylight `sun.intensity` switches from 2.1 → 1.05 and `hemi.intensity` from 1.
 
 **New hypothesis to verify:** if a path between two indoor rooms has momentary `RoomGraph.roomAt()` = `out` due doorway gaps, the global light factor might change even on an interior-only route. The diagnostic now records room classifications at ~0.1 m increments along hall→living, dining→kitchen, two hall→library legs, living→library and outdoor→hall; do not infer this without these measurements.
 
+### Doorway room-classification check completed
+
+The diagnostics also sampled `RoomGraph.roomAt(x,0.95,z)` at ~0.1-m intervals along normal routes in the current production snapshot and the unmodified R06B snapshot:
+
+| Route | Unexpected `out` samples | Actual room changes |
+|---|---:|---|
+| Hall → living | **0** | hall → living at approximately x=84.9, z=86.7 |
+| Dining → kitchen | **0** | dining → kitchen at approximately x=102, z=92.1 |
+| Hall → lobby → library (two legs) | **0** | hall → lobby; lobby → library near x=84.9 |
+| Living → library | **0** | living → library near z=94.1 |
+| Outside → vestibule → hall | expected `out` only outdoors | outside → vestibule near z=80.4; vestibule → hall near z=84.1 |
+
+**Implication:** the player-conditioned global `indoor` factor is an important independent defect at **outdoor↔interior** transitions, but does **not** explain the tested **interior↔interior** jumps. Do not conflate this work with the earlier LIGHT-R05 slot-assignment problem or possible room-culling/geometry popping. This narrower causal attribution is decisive: keep lighting and visibility regressions as separate measured gates.
+
 ## Architecture decision for subsequent implementation
 
 **Adopt a world-space lighting model, rather than changing scene lights based on the player.**
