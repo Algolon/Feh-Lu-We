@@ -832,7 +832,14 @@ function libraryCatalogue(w: World, g: GameApi, c: Ctx, tx: number, tz: number, 
       const slot = Object.entries(cur).find(([, v]) => v === b.id)?.[0];
       const grp = bookGrp[b.id];
       if (slot) { const i = CATALOG.sockets.findIndex((s) => s.id === slot); grp.position.set(0, 0.004, -socketZ(i)); grp.rotation.y = 0; }
-      else { grp.position.set(-0.3, 0.004 + loose * 0.055, -0.95); grp.rotation.y = 0.3 + loose * 0.4; loose++; }
+      else {
+        // LIB-R04: move only UNSLOTTED catalogue books to the former lamp area,
+        // not books already placed in B01 catalogue puzzle slots.
+        const p = LIB_R01.deskObjects.looseBooks;
+        grp.position.set(p.dx, 0.004 + loose * 0.055, -p.dz);
+        grp.rotation.y = 0.3 + loose * 0.4;
+        loose++;
+      }
     });
   });
   makeAction(w, {
@@ -875,7 +882,9 @@ function libraryRest(w: World, g: GameApi, c: Ctx, tx: number, tz: number) {
   place(nt, lec2.x, lec2.y, lec2.z, -Math.PI / 2);
   w.scene.add(nt);
   makeInspect(w, g, { id: 'inspect.cipherExample', obj: nt, clue: 'c.cipherExample', hit: [0.5, 0.4, 0.45], hitOffset: [0, 0.1, 0], label: 'Lezen: notitie' });
-  const rl = libraryR01BankerLamp(w, tx + 0.16, GF + LIB_R01.desk.h, tz + 0.83);
+  // LIB-R04: banker's lamp sits RIGHT-REAR, just in front of the desk hutch.
+  const lampPose = LIB_R01.deskObjects.lamp;
+  const rl = libraryR01BankerLamp(w, tx + lampPose.dx, GF + LIB_R01.desk.h, tz + lampPose.dz);
   makeLamp(w, g, { id: 'lamp.library', ...rl, name: 'leeslamp', defaultOn: true, hit: [0.4, 0.7, 0.4], intensity: 5, distance: 8, patch: { y: GF + 0.82, r: 0.8, strength: 0.3 } });
   const lch = chandelier(w, 78.4, UCEIL, 101, 0.8, 1.6, 'mLib'); // DEV-04C: owned by the library batch
   const lsw = compound((b) => box(b, k.M.paint, '#c9a44c', 0, 0, 0, 0.12, 0.18, 0.03));
