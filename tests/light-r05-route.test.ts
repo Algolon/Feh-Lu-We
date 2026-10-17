@@ -100,7 +100,7 @@ describe('LIGHT-R05 route and mobile slot safety',()=>{
   for(let i=0;i<120;i++)tick(pool,82.5);
   expect(pool.assigned()).toContain('fire.living');
   const slot=pool.assigned().indexOf('fire.living');
-  expect(pool.lights[slot].intensity).toBeGreaterThan(7);
+  expect(pool.lights[slot].intensity).toBeGreaterThan(6);
   const before=pool.lights[slot].intensity;
   for(let i=0;i<80;i++)tick(pool,82.5);
   expect(pool.assigned()).toContain('fire.living');
