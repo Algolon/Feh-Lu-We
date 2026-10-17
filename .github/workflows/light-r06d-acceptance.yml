@@ -101,6 +101,15 @@ jobs:
         run: |
           mkdir -p preview-package/Feh-Lu-We
           cp -a dist/. preview-package/Feh-Lu-We/
+          cp scripts/light-r06d-device-probe.js preview-package/Feh-Lu-We/light-r06d-device-probe.js
+          python3 - <<'PY'
+          from pathlib import Path
+          f=Path('preview-package/Feh-Lu-We/index.html')
+          text=f.read_text()
+          assert '</body>' in text
+          text=text.replace('</body>','<script defer src="/Feh-Lu-We/light-r06d-device-probe.js"></script></body>')
+          f.write_text(text)
+          PY
           cat > preview-package/README.txt <<'TXT'
           LIGHT-R06D isolated review build — NOT DEPLOYED to production.
           The entire Feh-Lu-We/ folder is compiled static game content.
@@ -111,7 +120,13 @@ jobs:
           The source-bound lighting pilot is OFF unless stableLiving=1 is present.
           For the strict light-pool-disabled proof append &noPoint=1.
           For local-network Android testing, while on the same trusted Wi-Fi,
-          open http://YOUR_COMPUTER_LAN_IP:4188/Feh-Lu-We/?stableLiving=1
+          open http://YOUR_COMPUTER_LAN_IP:4188/Feh-Lu-We/?stableLiving=1&r06dDevice=1
+          Tap START 60 s on the in-game meter, traverse the hall/living route,
+          and collect the downloaded JSON. Repeat after removing stableLiving=1
+          for the matched normal-lighting baseline and with Low/High quality.
+          The overlay records actual phone/browser frame timing and game counters.
+          It does NOT measure GPU milliseconds, battery watts or temperatures;
+          use Chrome DevTools/Android tools for those separate metrics.
           NOTE: This is a local test server; do not expose to the public internet.
           Compare against normal production with identical quality, phase and route.
           No GitHub Pages deployment is part of this workflow.
