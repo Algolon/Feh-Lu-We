@@ -115,6 +115,20 @@ try{
         };
       },{pose:scene.p,phase});
       all.push({id:scene.id,...measures});
+      if(phase===0 && ['hall-facing-living','living-middle','kitchen'].includes(scene.id)){
+        for(const indoor of [0,1]){
+          await page.evaluate(({phase,indoor})=>{
+            const g=window.__game;
+            const old=g.pool.lights.map(x=>x.intensity);
+            g.pool.lights.forEach(x=>x.intensity=0);
+            g.extras.env.update(phase,g.camera.position,indoor);
+            g.renderer.render(g.world.scene,g.camera);
+            g.pool.lights.forEach((x,i)=>x.intensity=old[i]);
+          },{phase,indoor});
+          // Screenshot of the exact fixed pose; only global environment changes.
+          await page.screenshot({path:output+'/'+scene.id+'-env'+indoor+'.jpg',type:'jpeg',quality:84});
+        }
+      }
       console.log('LIGHT_R07_ENV '+JSON.stringify({
         id:scene.id,phase,room:measures.actualRoom,
         delta:+measures.signedRoiChange.toFixed(3),
