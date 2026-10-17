@@ -430,7 +430,7 @@ export function segBox(c: Ctx, mat: THREE.Material, col: THREE.ColorRepresentati
   c.b.add(mat, g, m, col, c.chunk, o.shadow ?? true, 0);
 }
 /** Turned balusters + rounded handrail + bottom rail along a straight line, from (a, ya) to (b, yb) at x/z = f. */
-export function balustrade(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number, y0: number, y1: number, color: THREE.ColorRepresentation, h = 0.95, spacing = 0.19) {
+export function balustrade(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number, y0: number, y1: number, color: THREE.ColorRepresentation, h = 0.95, spacing = 0.19, omitEndNewel = false) {
   const P = (a: number, y: number): [number, number, number] => (axis === 'x' ? [a, y, f] : [f, y, a]);
   segBox(c, c.k.M.wood, color, P(a0, y0 + h), P(a1, y1 + h), 1, 1, { g: handrailGeo() });
   segBox(c, c.k.M.wood, color, P(a0, y0 + 0.06), P(a1, y1 + 0.06), 0.05, 0.05);
@@ -440,7 +440,10 @@ export function balustrade(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: n
     const [x, yy, z] = P(a, y + 0.08);
     c.b.add(c.k.M.wood, balusterGeo(), planMatrix(x, yy, z, 0, 1, h - 0.11, 1), color, c.chunk, false, 0);
   }
-  for (const [a, y] of [[a0, y0], [a1, y1]] as const) newel(c, ...P(a, y), color, h + 0.12);
+  newel(c, ...P(a0, y0), color, h + 0.12);
+  // The library south stair landing already has the continuous spiral handrail;
+  // its duplicate gallery-end post was an isolated visual obstruction.
+  if (!omitEndNewel) newel(c, ...P(a1, y1), color, h + 0.12);
 }
 /** Square newel post with a cap and a ball finial. */
 export function newel(c: Ctx, x: number, y: number, z: number, color: THREE.ColorRepresentation, h = 1.1) {
@@ -450,8 +453,8 @@ export function newel(c: Ctx, x: number, y: number, z: number, color: THREE.Colo
 }
 
 /** Railing (visual + collider at the given floor height). axis like wall(). */
-export function railing(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number, y0: number, color = '#5e3b1f') {
-  balustrade(c, axis, f, a0, a1, y0, y0, color, 1.0);
+export function railing(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number, y0: number, color = '#5e3b1f', options: {omitEndNewel?: boolean} = {}) {
+  balustrade(c, axis, f, a0, a1, y0, y0, color, 1.0, 0.19, options.omitEndNewel ?? false);
   if (axis === 'x') c.col.addBox(a0, a1, f - 0.08, f + 0.08, y0, y0 + 1.6);
   else c.col.addBox(f - 0.08, f + 0.08, a0, a1, y0, y0 + 1.6);
 }
