@@ -7,7 +7,7 @@
 | C — P + PERF-R02 | **`417f4ec`** (`perf-r02-frame-accurate-culling` `2f12128` merged with `2e2bab1`) · `main-C4vW_v2v.js` |
 | R — C + PERF-R03-A | **`4abdedd`** source · `main-DyvcGhyD.js` (§3 – §6) |
 | R2 — R merged with production `263362d` | **`c80681a`** · `main-Dg6JHwFi.js` (§8; P2 = `263362d` · `main-DdA-I-EV.js`) |
-| Final PERF-R03-A SHA | **`edec508`** (evidence and report; product source unchanged since `4abdedd`) |
+| Final PERF-R03-A SHA | **`2b7ad90`** (branch head; product source = `c80681a`) |
 | Merge / deploy | **not done**; owner review. PERF-R02 and PERF-R03-A are to be released together later |
 
 **Settings and method.**
