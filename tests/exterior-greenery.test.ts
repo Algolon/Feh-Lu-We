@@ -36,6 +36,24 @@ describe('authored facade greenery',()=>{
     expect(position.count/3).toBe(34);
     g.dispose();
   });
+  it('maps botanical texture onto the exact approved ivy mesh without displacing a vertex',()=>{
+    const g=climberLeafGeo(),p=g.attributes.position,uv=g.attributes.uv;
+    expect(p.count).toBe(34*3);
+    expect(uv.count).toBe(p.count);
+    for(let i=0;i<p.count;i++){
+      const x=p.getX(i),y=p.getY(i),u=uv.getX(i),v=uv.getY(i);
+      expect(u).toBeGreaterThanOrEqual(0);expect(u).toBeLessThanOrEqual(1);
+      expect(v).toBeGreaterThanOrEqual(0);expect(v).toBeLessThanOrEqual(1);
+      expect(u).toBeCloseTo(Math.max(0,Math.min(1,(.90-x)/1.80)),5);
+      expect(v).toBeCloseTo(Math.max(0,Math.min(1,(.70-y)/1.70)),5);
+    }
+    // The original tip, stem base and lateral lobes must still be present.
+    const original=[[0,-.92],[.15,.58],[-.15,.58],[.82,-.13],[-.82,-.13]];
+    for(const [x,y] of original){
+      expect(Array.from({length:p.count},(_,i)=>i).some(i=>Math.abs(p.getX(i)-x)<1e-5&&Math.abs(p.getY(i)-y)<1e-5)).toBe(true);
+    }
+    g.dispose();
+  });
   it('has a visible, tapered two-sided midrib with a contrasting green tint',()=>{
     const g=climberLeafGeo(),position=g.attributes.position,color=g.attributes.color;
     const start=13*2*3,end=start+4*3; // 26 original front/back wedges, 4 midrib triangles
