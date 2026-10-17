@@ -13,7 +13,11 @@ import { FAMILY_EDITION } from './edition';
 export const POSE_BOUNDS = { x0: -5, x1: ESTATE.w + 5, z0: -5, z1: ESTATE.d + 5 };
 
 // Separate namespaces prevent family play sessions, backups or settings from altering the full game.
-const STORAGE_PREFIX = FAMILY_EDITION ? 'fehluwe.family' : 'fehluwe';
+// Only the published LIGHT-R06D browser review gets an isolated save namespace.
+const R06D_REVIEW_ROUTE = typeof location !== 'undefined' &&
+  (location.pathname.includes('/light-r06d/') || location.pathname.endsWith('/light-r06d'));
+const STORAGE_PREFIX = FAMILY_EDITION ? 'fehluwe.family' :
+  R06D_REVIEW_ROUTE ? 'fehluwe.light-r06d' : 'fehluwe';
 export const SAVE_KEY = `${STORAGE_PREFIX}.save`;
 export const SETTINGS_KEY = `${STORAGE_PREFIX}.settings`;
 export const STATE_VERSION = 4;
