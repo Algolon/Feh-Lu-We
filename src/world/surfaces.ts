@@ -16,6 +16,7 @@
 // FLW_SURFACE`, and a material opts in with `surface(mat, profile)` (one define → one program variant per profile).
 // Everything is static (no time / light dependence), so it never fights the realtime lighting.
 import * as THREE from 'three';
+import { STABLE_LIVING_PILOT, stableMaterial } from './stableLighting';
 
 export const SURFACE_PROFILES = { timber: 1, plaster: 2, stone: 3, fabric: 4, paint: 5, ground: 6, foliage: 7, metal: 8, tree: 9 } as const;
 export type SurfaceProfile = keyof typeof SURFACE_PROFILES;
@@ -104,6 +105,9 @@ export function surface<T extends THREE.Material>(m: T, profile: SurfaceProfile)
   if (!(m instanceof THREE.MeshLambertMaterial || m instanceof THREE.MeshPhongMaterial || m instanceof THREE.MeshStandardMaterial)) return m;
   mm.defines = { ...(mm.defines ?? {}), FLW_SURFACE: SURFACE_PROFILES[profile] };
   m.userData.surface = profile;
+  // LIGHT-R06 review-only shader extension uses the same shared materials.
+  // Never active in normal production, no new geometry or draw calls.
+  if (STABLE_LIVING_PILOT) stableMaterial(m);
   m.needsUpdate = true;
   return m;
 }
