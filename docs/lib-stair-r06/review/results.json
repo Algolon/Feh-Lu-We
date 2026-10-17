@@ -1,6 +1,6 @@
 {
   "source": "Real candidate game scene (Chromium / SwiftShader); not a real Android device",
-  "commit": "b91d40eea3eec3a8b72742eccb4353faac10d45c",
+  "commit": "8c2deb58b7baf4c4e72ee47da043ac72daabdb11",
   "checks": [
     {
       "name": "entrance-to-gallery-and-return",
@@ -280,56 +280,56 @@
     {
       "name": "01-r06-stair-overview",
       "calls": 354,
-      "triangles": 1726879,
+      "triangles": 1726823,
       "room": "library",
       "glError": 0
     },
     {
       "name": "02-r06-top-post-removed",
       "calls": 269,
-      "triangles": 1715280,
+      "triangles": 1715224,
       "room": "libGallery",
       "glError": 0
     },
     {
       "name": "03-r06-triangle-from-above",
       "calls": 242,
-      "triangles": 1569669,
+      "triangles": 1569613,
       "room": "libGallery",
       "glError": 0
     },
     {
       "name": "04-r06-landing-from-gallery",
       "calls": 282,
-      "triangles": 1592173,
+      "triangles": 1592117,
       "room": "libGallery",
       "glError": 0
     },
     {
       "name": "05-r06-right-baluster-foot",
       "calls": 242,
-      "triangles": 1577186,
+      "triangles": 1577130,
       "room": "libGallery",
       "glError": 0
     },
     {
       "name": "05-mobile-portrait-stair",
       "calls": 79,
-      "triangles": 761318,
+      "triangles": 761262,
       "room": "library",
       "glError": 0
     },
     {
       "name": "06-r06-mobile-top",
       "calls": 61,
-      "triangles": 691086,
+      "triangles": 691030,
       "room": "libGallery",
       "glError": 0
     },
     {
       "name": "07-r06-mobile-south-post",
       "calls": 81,
-      "triangles": 723710,
+      "triangles": 723654,
       "room": "libGallery",
       "glError": 0
     }
