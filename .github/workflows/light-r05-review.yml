@@ -1,0 +1,73 @@
+name: LIGHT-R05 actual-scene review gate
+on:
+  push:
+    branches: [fix/light-r05-stable-illumination]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run test:budget
+      - run: npm run build
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - profile: baseline
+            ref: d7b304d5aedb669e677c0a58af3aaeb1754fd5cc
+          - profile: candidate
+            ref: fix/light-r05-stable-illumination
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: fix/light-r05-stable-illumination
+          path: qa
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ matrix.ref }}
+          path: game
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: game/package-lock.json
+      - name: Prepare identical QA script
+        run: cp qa/scripts/light-r05-qa.mjs game/scripts/light-r05-qa.mjs
+      - name: Dependencies and production build
+        working-directory: game
+        run: npm ci && npm run build
+      - name: Browser
+        working-directory: game
+        run: npx playwright-core install --with-deps chromium
+      - name: Actual world-path and rendered-pixel sampling
+        working-directory: game
+        env:
+          LIGHT_R05_PROFILE: ${{ matrix.profile }}
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4188 > /tmp/flw-r05-preview.log 2>&1 &
+          for attempt in $(seq 1 40); do
+            curl -sf http://127.0.0.1:4188/Feh-Lu-We/ >/dev/null && break
+            sleep 1
+          done
+          node scripts/light-r05-qa.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: light-r05-${{ matrix.profile }}-evidence
+          path: game/light-r05-qa
+          if-no-files-found: warn
