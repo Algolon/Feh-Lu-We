@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { LIB_R01, LIB_R01_BAYS } from '../src/world/libraryR01';
 import { prop, POSES, validatePlacement } from '../src/slice/placement';
 import { GF, UF } from '../src/world/layout';
-import { LIB_STAIR, LIB_STAIR_RISE, LIB_STAIR_TREAD_THICKNESS, solidSpiralTread, stairStepPoint, stairStepAngle, spiralRailWorldY, LIB_STAIR_TOP_CAP } from '../src/world/libraryStairR01';
+import { LIB_STAIR, LIB_STAIR_RISE, LIB_STAIR_TREAD_THICKNESS, solidSpiralTread, stairStepPoint, stairStepAngle, spiralRailWorldY, LIB_STAIR_TOP_CAP, LIB_STAIR_R04_POST_RAIL, libraryGalleryFloorUV, solidGalleryStairLanding } from '../src/world/libraryStairR01';
 
 describe('LIB-R01: fitted shelves, puzzle and spiral access', () => {
   it('leaves the ground-floor glazing bays unobstructed', () => {
@@ -110,6 +110,38 @@ describe('LIB-R01: fitted shelves, puzzle and spiral access', () => {
     expect(b.x1).toBe(83.2);
     expect(105.26).toBeGreaterThan(b.z0+.35);
     expect(105.26).toBeLessThan(c.z0-.30);
+  });
+  it('LIB-STAIR-R04: the top handrail links the center newel to the existing cap corner', () => {
+    const rail=LIB_STAIR_R04_POST_RAIL,n=LIB_STAIR_TOP_CAP;
+    expect(rail.from.x).toBe(LIB_STAIR.x);
+    expect(rail.from.z).toBe(LIB_STAIR.z);
+    expect(rail.to.x).toBe(n.x0);
+    expect(rail.to.z).toBe(n.z0);
+    expect(rail.y).toBeCloseTo(UF+1.045,5);
+    // The player's 30-cm capsule can pass to the east of the closing rail.
+    expect(Math.hypot(82.85-rail.to.x,105.24-rail.to.z)).toBeGreaterThan(.55);
+  });
+  it('LIB-STAIR-R04: one solid gallery-floor surface joins spindle, north cap and upper slab', () => {
+    const g=solidGalleryStairLanding(),p=g.getAttribute('position'),norm=g.getAttribute('normal'),uv=g.getAttribute('uv');
+    expect(g.getAttribute('position').count).toBe(uv.count);
+    let hasPost=false,hasGallery=false,hasNorth=false,matchCount=0;
+    for(let i=0;i<p.count;i++){
+      const wx=LIB_STAIR.x+p.getX(i),wz=LIB_STAIR.z+p.getZ(i);
+      if(Math.hypot(wx-LIB_STAIR.x,wz-LIB_STAIR.z)<.015)hasPost=true;
+      if(Math.abs(wx-83.2)<.015)hasGallery=true;
+      if(Math.abs(wx-LIB_STAIR_TOP_CAP.x0)<.015&&Math.abs(wz-LIB_STAIR_TOP_CAP.z1)<.015)hasNorth=true;
+      if(norm.getY(i)>.5){
+        const [u,v]=libraryGalleryFloorUV(wx,wz);
+        expect(uv.getX(i)).toBeCloseTo(u,5);
+        expect(uv.getY(i)).toBeCloseTo(v,5);
+        matchCount++;
+      }
+    }
+    expect(hasPost&&hasGallery&&hasNorth).toBe(true);
+    expect(matchCount).toBeGreaterThan(6);
+    // UVs continue the gallery slab's 2.2-metre texture grid on both sides.
+    expect(libraryGalleryFloorUV(83.2,107.8)).toEqual([0,0]);
+    g.dispose();
   });
   it('LIB-STAIR-R01: guard encloses usable tread without sealing the exit', () => {
     expect(LIB_STAIR.guardEndsAtStep).toBeLessThan(LIB_STAIR.steps);
