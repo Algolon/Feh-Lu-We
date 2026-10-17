@@ -170,7 +170,10 @@ export function installStableLivingMaterials(w:World){
     if(!m.geometry.boundingBox){untouched++;return;}
     bounds.copy(m.geometry.boundingBox).applyMatrix4(m.matrixWorld);
     if(!bounds.intersectsBox(area)){skippedByBox++;return;}
-    if(!mat.userData.surface){untouched++;return;}
+    // Large architectural, timber, stone and upholstery surfaces carry the
+    // stable bounce. Small painted ornaments/metalwork keep their original
+    // shaders: they neither need an orange wash nor another program variant.
+    if(!['plaster','timber','stone','fabric'].includes(mat.userData.surface)){untouched++;return;}
     let clone=clones.get(mat);
     if(!clone){
       clone=w.material(cloneSurfaceWithDefines(mat));
@@ -198,8 +201,8 @@ export function bindStableLiving(w: World) {
     positions[i].set(lamp!.pos.x,lamp!.pos.y,lamp!.pos.z,Math.min(i === 0 ? 6.7 : 5.7, lamp!.distance));
   });
   const sync = () => {
-    contributions[0].w = lamps[0]!.on() ? 0.19 : 0;
-    contributions[1].w = lamps[1]!.on() ? 0.13 : 0;
+    contributions[0].w = lamps[0]!.on() ? 0.14 : 0;
+    contributions[1].w = lamps[1]!.on() ? 0.10 : 0;
   };
   w.onSync(sync);
   sync();
