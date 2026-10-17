@@ -7,9 +7,10 @@ import {mkdirSync,writeFileSync} from 'node:fs';
 const base=process.argv[2]??'http://127.0.0.1:4188/Feh-Lu-We/';
 const variant=process.env.LIGHT_R08_PROFILE??'r08';
 const FAST=process.env.LIGHT_R08_FAST==='1';
+const WITH_POOL=process.env.LIGHT_R08_WITH_POOL==='1';
 const quality=process.env.LIGHT_R08_QUALITY??'low';
 const portrait=process.env.LIGHT_R08_PORTRAIT==='1';
-const out='light-r08-evidence/'+variant+'-'+quality+(portrait?'-portrait':'-landscape');
+const out='light-r08-evidence/'+variant+'-'+quality+(portrait?'-portrait':'-landscape')+(WITH_POOL?'-normal-gameplay':'-isolated');
 mkdirSync(out,{recursive:true});
 const browser=await chromium.launch({headless:true,args:[
  '--use-angle=swiftshader','--enable-unsafe-swiftshader','--ignore-gpu-blocklist',
@@ -46,7 +47,7 @@ const lights=[
 const all=[];const round=x=>+x.toFixed(3);
 try{
  const suffix=variant==='r08'?'&stableRooms=1':'&stableLiving=1';
- await page.goto(base+'?autotest=1'+suffix+'&noPoint=1',{waitUntil:'domcontentloaded'});
+ await page.goto(base+'?autotest=1'+suffix+(WITH_POOL?'':'&noPoint=1'),{waitUntil:'domcontentloaded'});
  await page.evaluate(({save,quality})=>{
    localStorage.setItem('fehluwe.save',JSON.stringify(save));
    localStorage.setItem('fehluwe.settings',JSON.stringify({quality,reducedMotion:true}));
@@ -70,7 +71,7 @@ try{
     w.updateCulling(g.camera.position,g.camera);
     for(let i=0;i<5;i++)g.tick(.05);
     const pool=g.pool.lights,prior=pool.map(l=>l.intensity);
-    pool.forEach(l=>l.intensity=0);
+    if(!WITH_POOL)pool.forEach(l=>l.intensity=0);
     g.extras.env.update(phase,g.camera.position,1);
     const renderer=g.renderer,gl=renderer.getContext();
     try{
@@ -90,7 +91,8 @@ try{
         living:w.scene.userData.stableLiving?.state?.()??null,
         chunks:scope?.chunks??null,clones:scope?.createdMaterialClones??null,
         calls:renderer.info.render.calls,tris:renderer.info.render.triangles,
-        programs:renderer.info.programs?.length??null,glError:gl.getError()};
+        programs:renderer.info.programs?.length??null,
+        activePool:g.pool.assigned?.()??null,glError:gl.getError()};
     }finally{pool.forEach((l,i)=>l.intensity=prior[i]);}
   },{pose:testCase.pose,phase:phase.v,lamps:lamps.bits,doors});
  };
@@ -152,9 +154,9 @@ try{
  }
  // Write and print raw visual evidence BEFORE enforcing thresholds, so a
  // failing artistic gate never discards the actual on/off measurements.
- const result={variant,quality,portrait,fast:FAST,all,portals,movement:move,summary,errors};
+ const result={variant,quality,portrait,fast:FAST,normalGameplay:WITH_POOL,all,portals,movement:move,summary,errors};
  writeFileSync(out+'/results.json',JSON.stringify(result,null,2));
- console.log('LIGHT_R08_SUMMARY '+JSON.stringify({variant,quality,portrait,fast:FAST,summary,
+ console.log('LIGHT_R08_SUMMARY '+JSON.stringify({variant,quality,portrait,fast:FAST,normalGameplay:WITH_POOL,summary,
     scope:all[0]?.chunks,clones:all[0]?.clones,movementStable:move.every(x=>!x.state||x.state.join(',')===move[0].state?.join(',')),
     portals:portals.map(x=>({open:x.door,view:x.view,source:x.source,lum:round(x.lum)})),
     errors
@@ -175,19 +177,19 @@ try{
    // orange light wash. Gate against realistically VIEWED source surfaces at
    // Low/landscape; on High/portrait the central ROI sees different surfaces.
    if(quality==='low'&&!portrait){
-     if(Math.max(delta('day','hall-chandelier','hall'),delta('day','hall-console','hall'))<1.4)
+     if(!WITH_POOL && Math.max(delta('day','hall-chandelier','hall'),delta('day','hall-console','hall'))<1.4)
        throw Error('Hall chandelier base light not visible from a source-facing camera');
-     if(Math.max(delta('day','library-reading','library'),delta('day','library-gallery','library'))<1.5)
+     if(!WITH_POOL && Math.max(delta('day','library-reading','library'),delta('day','library-gallery','library'))<1.5)
        throw Error('Library chandelier base light not visible with PointLights OFF');
      // Additional table sources each need their OWN visible contribution.
-     if(delta('day','hall-console','console')<.25)
+     if(!WITH_POOL && delta('day','hall-console','console')<.25)
        throw Error('Hall console lamp contributes no perceptible authored light');
-     if(delta('day','library-reading','desk')<.2)
+     if(!WITH_POOL && delta('day','library-reading','desk')<.2)
        throw Error('Library reading lamp contributes no perceptible authored light');
    }
    // A shut library door must not let a separate room's source illuminate
    // the wall on our side. The open portal should reveal the lit room beyond.
-   for(const view of ['library-to-living','lobby-to-library']){
+   for(const view of (!WITH_POOL?['library-to-living','lobby-to-library']:[])){
      const dark=portals.find(x=>!x.door&&x.view===view&&x.source==='off');
      const otherSource=view==='library-to-living'?'hall':'library';
      const occluded=portals.find(x=>!x.door&&x.view===view&&x.source===otherSource);
