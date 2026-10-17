@@ -139,15 +139,15 @@ export function entranceLeafMaterial():THREE.MeshLambertMaterial {
   x.fillStyle=fade;x.fillRect(0,0,256,512);
   x.lineCap='round';
   x.beginPath();x.moveTo(127,499);x.bezierCurveTo(123,362,131,161,128,15);
-  x.strokeStyle='rgba(74,99,68,.34)';x.lineWidth=10;x.stroke();
+  x.strokeStyle='rgba(77,101,69,.15)';x.lineWidth=5.5;x.stroke();
   x.beginPath();x.moveTo(129,495);x.bezierCurveTo(126,360,130,162,129,19);
-  x.strokeStyle='rgba(246,252,208,.94)';x.lineWidth=4;x.stroke();
-  for(const side of [-1,1])for(const [u,reach] of [[.22,65],[.40,83],[.59,80],[.76,56]]){
-    const cy=512*(1-u),h=reach*.28;
+  x.strokeStyle='rgba(239,249,204,.90)';x.lineWidth=3.2;x.stroke();
+  for(const side of [-1,1])for(const [u,reach] of [[.23,67],[.47,83],[.70,64]]){
+    const cy=512*(1-u+side*.015),h=reach*.29;
     x.beginPath();x.moveTo(128,cy);
     x.bezierCurveTo(128+side*reach*.30,cy-5,128+side*reach*.72,cy-h*.78,128+side*reach,cy-h);
-    x.strokeStyle='rgba(64,94,59,.27)';x.lineWidth=5;x.stroke();
-    x.strokeStyle='rgba(242,251,204,.80)';x.lineWidth=2;x.stroke();
+    x.strokeStyle='rgba(71,108,68,.13)';x.lineWidth=3.5;x.stroke();
+    x.strokeStyle='rgba(233,248,195,.76)';x.lineWidth=1.6;x.stroke();
   }
   const rand=mulberry32(7345);
   for(let i=0;i<180;i++){
@@ -211,7 +211,7 @@ export function entranceLeafGeo():THREE.BufferGeometry {
   g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
   g.userData.keepColor=true;return g;
 }
-const ENTRANCE_GREEN=['#769758','#85a467','#648650','#96ad75'] as const;
+const ENTRANCE_GREEN=['#8bae70','#9ab77e','#7a9d62','#a8c28a'] as const;
 export interface EntranceBranch { points:THREE.Vector3[]; radius:number }
 export interface EntranceLeaf { centre:THREE.Vector3; base:THREE.Vector3; attachment:THREE.Vector3; size:number; angle:number; tilt:number; yaw:number; tone:number }
 /** Deliberate branched crown: staggered leaf pairs orbit a seed-specific
@@ -238,8 +238,8 @@ export function entrancePlantPlan(seed:number):{branches:EntranceBranch[];leaves
         .addScaledVector(lateral,side*(.055+r()*.030))
         .addScaledVector(Y,.05+r()*.038);
       const size=.172+r()*.033+(k===4?.014:0);
-      const yaw=Math.PI/2-a+side*(.27+r()*.24);
-      const angle=side*(.36+r()*.28);
+      const yaw=Math.PI/2-a+side*(.25+r()*.30)+(r()-.5)*.20;
+      const angle=side*(.32+r()*.30);
       const tilt= -.15-r()*.22;
       // Respect the exact mesh transform order used in placeLeaf.
       const base=new THREE.Vector3(0,-.74*size,0)
