@@ -1,0 +1,89 @@
+[
+ {
+  "p": {
+   "x": 85.9,
+   "y": 3.35,
+   "z": 95,
+   "yaw": 0,
+   "pitch": 0
+  },
+  "room": "walkway",
+  "calls": 93,
+  "tris": 657960,
+  "regions": "green.vestibule green.hall green.living green.library green.dining green.kitchen green.lobby green.billiard green.guestWC green.corridor green.reis green.sterren green.study green.botanic green.storage green.bath green.frontGallery green.walkway green.landing green.libGallery green.ucorr green.rearNook green.rearNookEast frontHedge.left frontHedge.right manor mIn mHall mLiv mBil mLib mWing mServ mUp mUpE mUpG mAttic mB glass+cons",
+  "top": [
+   "chunk:manor 252610/13",
+   "chunk:mLib 111884/9",
+   "chunk:mWing 64724/8",
+   "chunk:mUpE 34084/2",
+   "chunk:mUp 31912/13",
+   "chunk:mAttic 28796/11",
+   "chunk:mIn 27580/8",
+   "chunk:mHall 20960/7",
+   "chunk:mUpG 12156/4",
+   "chunk:mB 12084/8",
+   "chunk:green.billiard 9448/3",
+   "chunk:green.bath 7552/5",
+   "chunk:green.rearNookEast 6520/3",
+   "chunk:green.library 6520/3"
+  ]
+ },
+ {
+  "p": {
+   "x": 85.9,
+   "y": 3.35,
+   "z": 95,
+   "yaw": 3.1416,
+   "pitch": 0
+  },
+  "room": "walkway",
+  "calls": 154,
+  "tris": 1211362,
+  "regions": "green.vestibule green.hall green.living green.library green.dining green.kitchen green.lobby green.billiard green.guestWC green.corridor green.reis green.sterren green.study green.botanic green.storage green.bath green.frontGallery green.walkway green.landing green.libGallery green.ucorr green.rearNook green.rearNookEast frontHedge.left frontHedge.right manor mIn mHall mLiv mBil mLib mWing mServ mUp mUpE mUpS mAttic mB glass+cons outdoor+hills+paths+ground+wall+fence+forest+garden+grounds",
+  "top": [
+   "chunk:manor 253316/15",
+   "chunk:mUpE 109432/10",
+   "veg:trees/multi-draw 93668/1",
+   "chunk:mLib 84276/3",
+   "chunk:mWing 68296/7",
+   "chunk:forest 63120/14",
+   "chunk:frontHedge.right 59296/1",
+   "chunk:frontHedge.left 59296/1",
+   "chunk:grounds 49620/8",
+   "chunk:main 48000/30",
+   "chunk:mLiv 44262/11",
+   "region:outdoor/Mesh 34284/5",
+   "chunk:mAttic 28012/9",
+   "chunk:mIn 27580/8"
+  ]
+ },
+ {
+  "p": {
+   "x": 85.9,
+   "y": 3.35,
+   "z": 92,
+   "yaw": -1.5708,
+   "pitch": 0
+  },
+  "room": "walkway",
+  "calls": 98,
+  "tris": 677590,
+  "regions": "green.vestibule green.hall green.living green.library green.dining green.kitchen green.lobby green.billiard green.guestWC green.corridor green.reis green.sterren green.study green.botanic green.storage green.bath green.frontGallery green.walkway green.landing green.libGallery green.ucorr green.rearNook green.rearNookEast frontHedge.left frontHedge.right manor mIn mHall mLiv mBil mLib mWing mServ mUp mUpE mUpS mAttic mB glass+cons",
+  "top": [
+   "chunk:manor 252610/13",
+   "chunk:mLib 111884/9",
+   "chunk:frontHedge.left 59296/1",
+   "chunk:mWing 56876/5",
+   "chunk:mLiv 47244/12",
+   "chunk:mIn 27580/8",
+   "chunk:mHall 23688/8",
+   "chunk:mAttic 23600/8",
+   "chunk:mUp 13992/6",
+   "chunk:mUpS 12944/6",
+   "chunk:mB 12084/8",
+   "chunk:mUpE 7996/1",
+   "chunk:green.library 6520/3",
+   "obj:Group 4820/35"
+  ]
+ }
+]

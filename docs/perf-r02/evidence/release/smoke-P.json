@@ -1,0 +1,612 @@
+{
+ "base": "http://localhost:4191/Feh-Lu-We/",
+ "runs": [
+  {
+   "path": "smoke-walkway",
+   "B": {
+    "frames": 51,
+    "triangles": {
+     "n": 51,
+     "min": 588220,
+     "median": 1079574,
+     "p95": 1214026,
+     "p99": 1234154,
+     "max": 1234154
+    },
+    "calls": {
+     "n": 51,
+     "min": 90,
+     "median": 149,
+     "p95": 191,
+     "p99": 197,
+     "max": 197
+    },
+    "cullMs": {
+     "n": 51,
+     "min": 1,
+     "median": 1.6,
+     "p95": 2.9,
+     "p99": 3.5,
+     "max": 3.5
+    },
+    "renderMs": {
+     "n": 51,
+     "min": 2.5,
+     "median": 4.8,
+     "p95": 4023.7,
+     "p99": 348731.4,
+     "max": 348731.4
+    },
+    "over750k": 47,
+    "over150calls": 23,
+    "top": [
+     {
+      "i": 4,
+      "x": 90,
+      "z": 99.5,
+      "yaw": 3.141592653589793,
+      "pitch": 0,
+      "room": "landing",
+      "tag": "turn",
+      "calls": 178,
+      "tris": 1234154
+     },
+     {
+      "i": 8,
+      "x": 90,
+      "z": 99.5,
+      "yaw": -2.4026726215433483,
+      "pitch": -0.04,
+      "room": "landing",
+      "tag": "step",
+      "calls": 191,
+      "tris": 1226062
+     },
+     {
+      "i": 31,
+      "x": 85.9,
+      "z": 95,
+      "yaw": 3.141592653589793,
+      "pitch": -0.04,
+      "room": "walkway",
+      "tag": "step",
+      "calls": 156,
+      "tris": 1214026
+     },
+     {
+      "i": 27,
+      "x": 85.9,
+      "z": 95,
+      "yaw": 3.141592653589793,
+      "pitch": 0,
+      "room": "walkway",
+      "tag": "turn",
+      "calls": 154,
+      "tris": 1211362
+     },
+     {
+      "i": 32,
+      "x": 85.9,
+      "z": 94.6,
+      "yaw": 3.141592653589793,
+      "pitch": -0.04,
+      "room": "walkway",
+      "tag": "step",
+      "calls": 151,
+      "tris": 1206710
+     }
+    ]
+   },
+   "A": {
+    "frames": 172,
+    "triangles": {
+     "n": 172,
+     "min": 574688,
+     "median": 1083816,
+     "p95": 1224212,
+     "p99": 1258554,
+     "max": 1278282
+    },
+    "calls": {
+     "n": 172,
+     "min": 76,
+     "median": 146,
+     "p95": 187,
+     "p99": 190,
+     "max": 192
+    },
+    "cullMs": {
+     "n": 43,
+     "min": 1.1,
+     "median": 1.7,
+     "p95": 4.4,
+     "p99": 5,
+     "max": 5
+    },
+    "renderMs": {
+     "n": 172,
+     "min": 2,
+     "median": 3.7,
+     "p95": 7.9,
+     "p99": 46.8,
+     "max": 349955.7
+    },
+    "over750k": 156,
+    "over150calls": 70,
+    "top": [
+     {
+      "i": 58,
+      "x": 90,
+      "z": 99.5,
+      "yaw": -2.61211,
+      "pitch": 0,
+      "room": "landing",
+      "tag": "look",
+      "calls": 182,
+      "tris": 1278282
+     },
+     {
+      "i": 57,
+      "x": 90,
+      "z": 99.5,
+      "yaw": -2.71683,
+      "pitch": 0,
+      "room": "landing",
+      "tag": "look",
+      "calls": 179,
+      "tris": 1258974
+     },
+     {
+      "i": 56,
+      "x": 90,
+      "z": 99.5,
+      "yaw": -2.82155,
+      "pitch": 0,
+      "room": "landing",
+      "tag": "look",
+      "calls": 184,
+      "tris": 1258554
+     },
+     {
+      "i": 59,
+      "x": 90,
+      "z": 99.5,
+      "yaw": -2.50739,
+      "pitch": 0,
+      "room": "landing",
+      "tag": "look",
+      "calls": 192,
+      "tris": 1250072
+     },
+     {
+      "i": 55,
+      "x": 90,
+      "z": 99.5,
+      "yaw": -2.92627,
+      "pitch": 0,
+      "room": "landing",
+      "tag": "look",
+      "calls": 177,
+      "tris": 1241332
+     }
+    ]
+   },
+   "C": {
+    "frames": 51,
+    "triangles": {
+     "n": 51,
+     "min": 588220,
+     "median": 1066032,
+     "p95": 1211362,
+     "p99": 1234154,
+     "max": 1234154
+    },
+    "calls": {
+     "n": 51,
+     "min": 90,
+     "median": 148,
+     "p95": 191,
+     "p99": 196,
+     "max": 196
+    },
+    "cullMs": {
+     "n": 39,
+     "min": 1,
+     "median": 1.8,
+     "p95": 2.6,
+     "p99": 3,
+     "max": 3
+    },
+    "renderMs": {
+     "n": 51,
+     "min": 2.8,
+     "median": 4.2,
+     "p95": 7.7,
+     "p99": 897313.7,
+     "max": 897313.7
+    },
+    "over750k": 48,
+    "over150calls": 22,
+    "top": [
+     {
+      "i": 4,
+      "x": 90,
+      "z": 99.5,
+      "yaw": 3.141592653589793,
+      "pitch": 0,
+      "room": "landing",
+      "tag": "turn",
+      "calls": 178,
+      "tris": 1234154
+     },
+     {
+      "i": 8,
+      "x": 90,
+      "z": 99.5,
+      "yaw": -2.4026726215433483,
+      "pitch": -0.04,
+      "room": "landing",
+      "tag": "step",
+      "calls": 191,
+      "tris": 1226062
+     },
+     {
+      "i": 27,
+      "x": 85.9,
+      "z": 95,
+      "yaw": 3.141592653589793,
+      "pitch": 0,
+      "room": "walkway",
+      "tag": "turn",
+      "calls": 154,
+      "tris": 1211362
+     },
+     {
+      "i": 32,
+      "x": 85.9,
+      "z": 94.6,
+      "yaw": 3.141592653589793,
+      "pitch": -0.04,
+      "room": "walkway",
+      "tag": "step",
+      "calls": 151,
+      "tris": 1205202
+     },
+     {
+      "i": 9,
+      "x": 89.72666666666667,
+      "z": 99.2,
+      "yaw": -2.4026726215433483,
+      "pitch": -0.04,
+      "room": "landing",
+      "tag": "step",
+      "calls": 189,
+      "tris": 1164530
+     }
+    ]
+   }
+  },
+  {
+   "path": "smoke-well",
+   "B": {
+    "frames": 25,
+    "triangles": {
+     "n": 25,
+     "min": 911766,
+     "median": 1107678,
+     "p95": 1231898,
+     "p99": 1231900,
+     "max": 1231900
+    },
+    "calls": {
+     "n": 25,
+     "min": 109,
+     "median": 203,
+     "p95": 225,
+     "p99": 226,
+     "max": 226
+    },
+    "cullMs": {
+     "n": 25,
+     "min": 0.8,
+     "median": 2.1,
+     "p95": 2.8,
+     "p99": 5,
+     "max": 5
+    },
+    "renderMs": {
+     "n": 25,
+     "min": 3.7,
+     "median": 4.9,
+     "p95": 10.9,
+     "p99": 97552.6,
+     "max": 97552.6
+    },
+    "over750k": 25,
+    "over150calls": 19,
+    "top": [
+     {
+      "i": 8,
+      "x": 90,
+      "z": 84.5,
+      "yaw": 0,
+      "pitch": -0.04,
+      "room": "hall",
+      "tag": "step",
+      "calls": 226,
+      "tris": 1231900
+     },
+     {
+      "i": 0,
+      "x": 90,
+      "z": 84.5,
+      "yaw": 0,
+      "pitch": 0,
+      "room": "hall",
+      "tag": "turn",
+      "calls": 225,
+      "tris": 1231898
+     },
+     {
+      "i": 9,
+      "x": 90,
+      "z": 84.88888888888889,
+      "yaw": 0,
+      "pitch": -0.04,
+      "room": "hall",
+      "tag": "step",
+      "calls": 224,
+      "tris": 1205540
+     },
+     {
+      "i": 11,
+      "x": 90,
+      "z": 85.66666666666667,
+      "yaw": 0,
+      "pitch": -0.04,
+      "room": "hall",
+      "tag": "step",
+      "calls": 223,
+      "tris": 1201184
+     },
+     {
+      "i": 12,
+      "x": 90,
+      "z": 86.05555555555556,
+      "yaw": 0,
+      "pitch": -0.04,
+      "room": "hall",
+      "tag": "step",
+      "calls": 222,
+      "tris": 1199542
+     }
+    ]
+   },
+   "A": {
+    "frames": 122,
+    "triangles": {
+     "n": 122,
+     "min": 878000,
+     "median": 1183970,
+     "p95": 1231898,
+     "p99": 1231900,
+     "max": 1231900
+    },
+    "calls": {
+     "n": 122,
+     "min": 104,
+     "median": 217,
+     "p95": 225,
+     "p99": 228,
+     "max": 233
+    },
+    "cullMs": {
+     "n": 31,
+     "min": 0.8,
+     "median": 2.1,
+     "p95": 3.7,
+     "p99": 3.8,
+     "max": 3.8
+    },
+    "renderMs": {
+     "n": 122,
+     "min": 2.4,
+     "median": 3.9,
+     "p95": 6.3,
+     "p99": 13.2,
+     "max": 99102.5
+    },
+    "over750k": 122,
+    "over150calls": 98,
+    "top": [
+     {
+      "i": 77,
+      "x": 90,
+      "z": 84.5,
+      "yaw": 0,
+      "pitch": -0.06549,
+      "room": "hall",
+      "tag": "down",
+      "calls": 226,
+      "tris": 1231900
+     },
+     {
+      "i": 87,
+      "x": 90,
+      "z": 84.5,
+      "yaw": 0,
+      "pitch": -0.03584,
+      "room": "hall",
+      "tag": "level",
+      "calls": 226,
+      "tris": 1231900
+     },
+     {
+      "i": 0,
+      "x": 90,
+      "z": 84.5,
+      "yaw": 0,
+      "pitch": 0,
+      "room": "hall",
+      "tag": "start",
+      "calls": 225,
+      "tris": 1231898
+     },
+     {
+      "i": 60,
+      "x": 90,
+      "z": 84.5,
+      "yaw": 0,
+      "pitch": 0,
+      "room": "hall",
+      "tag": "look",
+      "calls": 225,
+      "tris": 1231898
+     },
+     {
+      "i": 61,
+      "x": 90,
+      "z": 84.5,
+      "yaw": 0,
+      "pitch": 0.06283,
+      "room": "hall",
+      "tag": "up",
+      "calls": 225,
+      "tris": 1231898
+     }
+    ]
+   },
+   "C": {
+    "frames": 25,
+    "triangles": {
+     "n": 25,
+     "min": 911766,
+     "median": 1107678,
+     "p95": 1231898,
+     "p99": 1231900,
+     "max": 1231900
+    },
+    "calls": {
+     "n": 25,
+     "min": 109,
+     "median": 203,
+     "p95": 225,
+     "p99": 226,
+     "max": 226
+    },
+    "cullMs": {
+     "n": 19,
+     "min": 0.8,
+     "median": 1.8,
+     "p95": 2.3,
+     "p99": 2.4,
+     "max": 2.4
+    },
+    "renderMs": {
+     "n": 25,
+     "min": 3.1,
+     "median": 4.8,
+     "p95": 8.3,
+     "p99": 478239.1,
+     "max": 478239.1
+    },
+    "over750k": 25,
+    "over150calls": 19,
+    "top": [
+     {
+      "i": 8,
+      "x": 90,
+      "z": 84.5,
+      "yaw": 0,
+      "pitch": -0.04,
+      "room": "hall",
+      "tag": "step",
+      "calls": 226,
+      "tris": 1231900
+     },
+     {
+      "i": 0,
+      "x": 90,
+      "z": 84.5,
+      "yaw": 0,
+      "pitch": 0,
+      "room": "hall",
+      "tag": "turn",
+      "calls": 225,
+      "tris": 1231898
+     },
+     {
+      "i": 9,
+      "x": 90,
+      "z": 84.88888888888889,
+      "yaw": 0,
+      "pitch": -0.04,
+      "room": "hall",
+      "tag": "step",
+      "calls": 224,
+      "tris": 1205540
+     },
+     {
+      "i": 12,
+      "x": 90,
+      "z": 86.05555555555556,
+      "yaw": 0,
+      "pitch": -0.04,
+      "room": "hall",
+      "tag": "step",
+      "calls": 222,
+      "tris": 1199542
+     },
+     {
+      "i": 1,
+      "x": 90,
+      "z": 84.5,
+      "yaw": 0.7853981633974483,
+      "pitch": 0,
+      "room": "hall",
+      "tag": "turn",
+      "calls": 203,
+      "tris": 1199442
+     }
+    ]
+   }
+  }
+ ],
+ "results": [
+  {
+   "name": "smoke-walkway: Mode B is deterministic (two runs with the same history: identical triangles and regions per pose, calls ±1)",
+   "ok": true,
+   "detail": "51 poses, max call difference 1"
+  },
+  {
+   "name": "smoke-walkway: Mode B within PB01 (750,000 camera triangles)",
+   "ok": false,
+   "detail": "max 1234154, p95 1214026; calls max 197 (23 poses over the 150-call guide)"
+  },
+  {
+   "name": "smoke-well: Mode B is deterministic (two runs with the same history: identical triangles and regions per pose, calls ±1)",
+   "ok": true,
+   "detail": "25 poses, max call difference 1"
+  },
+  {
+   "name": "smoke-well: Mode B within PB01 (750,000 camera triangles)",
+   "ok": false,
+   "detail": "max 1231900, p95 1231898; calls max 226 (19 poses over the 150-call guide)"
+  },
+  {
+   "name": "synchronization: a culling update forced inside Game.tick is idempotent for its pose",
+   "ok": true,
+   "detail": "[[\"landing\",926606],[\"walkway\",998948],[\"hall\",1231104]]"
+  },
+  {
+   "name": "no updater leak: the Mushroom Grove (> 65 m) is never visible in a rendered manor frame",
+   "ok": false,
+   "detail": "[false,false,false]"
+  },
+  {
+   "name": "no page / console errors",
+   "ok": true,
+   "detail": ""
+  }
+ ]
+}

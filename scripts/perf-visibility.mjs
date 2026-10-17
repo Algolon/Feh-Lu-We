@@ -2,8 +2,8 @@
 // (scripts/perf/visibility-harness.mjs: walkway and hall-well slices, every door open) and asserts:
 //   - synchronization: a culling update forced inside Game.tick for a pose is idempotent (forcing it again for the
 //     same pose changes no region and no submitted counts), and the region set matches the pose's room;
-//   - no world updater's own visibility leaks past region culling (the Mushroom Grove is hidden whenever the player
-//     is > 65 m from it, in every measured frame and after an out-of-order World.updateCulling);
+//   - no world updater's own visibility leaks past region culling (an out-of-order World.updateCulling does not change
+//     what the Mushroom Grove draws in the next manor frame, and it draws < 5 k of its 364 k triangles there);
 //   - determinism: two runs of Mode B over the same poses, with the same history (after a warm-up run: vegetation LOD
 //     has 3 m hysteresis), give identical triangles and regions (calls ±1: opaque-batching state);
 //   - PB01: every Mode B (fully synchronized) sample stays within 750,000 camera triangles; calls over the 150 guide
@@ -47,24 +47,28 @@ try {
   // synchronization + updater leakage, at the poses of the release diagnostic's spikes
   const sync = await page.evaluate(() => {
     const G = window.__game, w = G.world, grove = w.scene.children.find((o) => o.name === 'Mushroom Grove');
+    // VIS-R01 (production since PERF-R02's baseline): the grove root stays visible and each mushroom instance is shown
+    // or hidden by the grove's own updater (a few may be drawn through an opening): the leak is a change in what it
+    // draws after the out-of-order call, or a grove anywhere near its full 364 k triangles in a manor frame
+    const groveDrawn = () => { const snap = w.scene.userData.groveSnapshot; if (!grove?.visible) return { n: 0, tris: 0 }; if (!snap) return { n: Infinity, tris: Infinity }; const d = snap().filter((m) => m.drawn); return { n: d.length, tris: d.reduce((a, m) => a + m.tris, 0) }; };
     VP.setDoors('open');
     const poses = [{ x: 90, y: 3.35, z: 99.5, yaw: 1.571, pitch: 0 }, { x: 85.9, y: 3.35, z: 90.2, yaw: 1.571, pitch: 0 }, { x: 90, y: 0.15, z: 84.5, yaw: 0, pitch: 0.35 }];
     const out = [];
     for (const p of poses) {
       VP.setPose({ ...p, yaw: p.yaw - 0.785 }); VP.forceCullNextTick(); VP.tick(1 / 30);
       VP.setPose(p); VP.forceCullNextTick(); VP.tick(1 / 30);
-      const a = VP.renderFrame(), ra = VP.activeRegions().join(' '), groveA = grove?.visible ?? false;
+      const a = VP.renderFrame(), ra = VP.activeRegions().join(' '), groveA = groveDrawn();
       VP.forceCullNextTick(); VP.tick(1 / 30);
       const b = VP.renderFrame(), rb = VP.activeRegions().join(' ');
       // the out-of-order call the release diagnostic made: it must not leak the grove into the next game frame
       w.updateCulling(G.camera.position, G.camera); VP.tick(1 / 30);
-      const groveAfter = grove?.visible ?? false;
-      out.push({ p, room: VP.room(), idempotent: a.calls === b.calls && a.triangles === b.triangles && ra === rb, groveHidden: !groveA && !groveAfter, tris: a.triangles });
+      const groveAfter = groveDrawn();
+      out.push({ p, room: VP.room(), idempotent: a.calls === b.calls && a.triangles === b.triangles && ra === rb, groveHidden: groveAfter.n === groveA.n && groveA.tris < 5000, grove: [groveA.n, groveAfter.n, groveA.tris], tris: a.triangles });
     }
     return out;
   });
   log('synchronization: a culling update forced inside Game.tick is idempotent for its pose', sync.every((s) => s.idempotent), JSON.stringify(sync.map((s) => [s.room, s.tris])));
-  log('no updater leak: the Mushroom Grove (> 65 m) is never visible in a rendered manor frame', sync.every((s) => s.groveHidden), JSON.stringify(sync.map((s) => s.groveHidden)));
+  log('no updater leak: an out-of-order World.updateCulling does not change what the Mushroom Grove draws in the next manor frame (and it draws < 5 k triangles there)', sync.every((s) => s.groveHidden), JSON.stringify(sync.map((s) => s.grove)));
   log('no page / console errors', problems.length === 0, problems.slice(0, 3).join(' | '));
 } catch (e) {
   log('perf-visibility smoke', false, String(e.message).split('\n')[0]);
