@@ -36,13 +36,17 @@ export function solidGalleryStairLanding():THREE.BufferGeometry {
   const b=LIB_STAIR.bridge;
   // One tapered, flush gallery-floor transition. The north-west edge follows
   // the SINGLE newel-to-gallery rail; no little rectangular raised cap.
+  // R06: fill the missing SOUTH-WEST triangle below the existing staircase
+  // balusters. Previously the final point [b.x0,LIB_STAIR.z] cut this corner
+  // out, leaving daylight between landing boards and the right-hand rail.
+  // Removing that notch makes the north and south triangular regions part of
+  // the SAME 20cm solid gallery-floor extrusion, not a second coplanar patch.
   const outline:[number,number][]=[
     [LIB_STAIR.x,LIB_STAIR.z],
     [b.x0,b.z1],
     [b.x1,b.z1],
     [b.x1,b.z0],
     [b.x0,b.z0],
-    [b.x0,LIB_STAIR.z],
   ];
   const shape=new THREE.Shape();
   outline.forEach(([px,pz],i)=>{
@@ -172,7 +176,11 @@ export function libraryStairR01(c:Ctx) {
   for(let i=0;i<steps;i++){
     const p=stairStepPoint(i);
     const tread=solidSpiralTread(i);
-    c.b.add(boardMat,tread,planMatrix(x,p.y-LIB_STAIR_TREAD_THICKNESS,z),oak,c.chunk,true,0);
+    // The top (26th) wedge is beneath the R06 continuous gallery infill.
+    // Keep its closed single-board geometry and 2.5D walking support, but recess
+    // its top 5mm so no coplanar mesh z-fights with the new triangular floor.
+    const overlapInset=i===steps-1?.005:0;
+    c.b.add(boardMat,tread,planMatrix(x,p.y-LIB_STAIR_TREAD_THICKNESS-overlapInset,z),oak,c.chunk,true,0);
     tread.dispose();
     // No separate short nose-boxes: each step is one contiguous solid oak board.
     const a=stairStepAngle(i);
@@ -256,6 +264,14 @@ export function libraryStairR01(c:Ctx) {
   c.b.add(wood,upperFloor,planMatrix(x,UF-.20,z),'#8a5a34',c.chunk,true,0);
   upperFloor.dispose();
   c.col.addFloor(b.x0-.12,b.x1+.02,b.z0,b.z1,UF);
+  // Only the inscribed rectangles of the R06 triangle are walkable. The 2.5D
+  // floor solver cannot represent polygons, so constrain each patch INSIDE
+  // the visible wedge; prevent stepping into invisible floor over the void.
+  for(const [x0,x1,z0,z1] of [
+    [82.16,82.28,105.16,105.28],
+    [82.28,82.44,105.06,105.25],
+    [82.44,82.61,104.88,105.24],
+  ] as const) c.col.addFloor(x0,x1,z0,z1,UF);
   // Readable oak joists underneath the bridge, and a single finished lip at void edge.
   for(const zz of [b.z0+.035,b.z1-.035]){
     box(c.b,wood,'#5c3c28',(b.x0+b.x1)/2,UF-.25,zz,b.x1-b.x0,.12,.075,{chunk:c.chunk});
@@ -293,8 +309,11 @@ export function libraryStairR01(c:Ctx) {
   for(const zz of [b.z0,b.z1]){
     // Reinforced newel at the outer edge; the east end already meets the
     // gallery's own balustrade and needs no overlapping double newel.
-    cyl(c.b,wood,walnut,b.x0,UF,zz,.048,.05,1.09,8,{chunk:c.chunk});
+    // R06: the southern x0/z0 post is an orphan visually (blue marking).
+    // Only the NORTHERN x0/z1 post actually anchors the newel-to-gallery
+    // rail. Keep that one, the central spindle, all infill and guard collision.
     if(zz===b.z1){
+      cyl(c.b,wood,walnut,b.x0,UF,zz,.048,.05,1.09,8,{chunk:c.chunk});
       box(c.b,wood,walnut,(b.x0+b.x1)/2,UF+1.045,zz,
         b.x1-b.x0+.06,.070,.073,{chunk:c.chunk});
       for(const xx of [b.x0+.14,b.x0+.28,b.x0+.42]){

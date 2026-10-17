@@ -1,5 +1,6 @@
 // LIB-R01 static layout contracts. Runtime traversal and screenshots remain separate acceptance gates.
 import { describe, expect, it } from 'vitest';
+import * as THREE from 'three';
 import { LIB_R01, LIB_R01_BAYS } from '../src/world/libraryR01';
 import { prop, POSES, validatePlacement } from '../src/slice/placement';
 import { GF, UF } from '../src/world/layout';
@@ -127,6 +128,37 @@ describe('LIB-R01: fitted shelves, puzzle and spiral access', () => {
     // UVs continue the gallery slab's 2.2-metre texture grid on both sides.
     expect(libraryGalleryFloorUV(83.2,107.8)).toEqual([0,0]);
     g.dispose();
+  });
+  it('LIB-STAIR-R06: the missing south triangular landing is a real solid at gallery height', () => {
+    const b=LIB_STAIR.bridge,x=LIB_STAIR.x,z=LIB_STAIR.z;
+    const g=solidGalleryStairLanding();
+    // This specific triangle is what was EXCLUDED from R05 by its inward
+    // point at (b.x0,z). It now has the same physical top as the gallery.
+    const triangle:[[number,number],[number,number],[number,number]]=[
+      [x,z],[b.x0,z],[b.x0,b.z0],
+    ];
+    const centroid={
+      x:triangle.reduce((sum,p)=>sum+p[0],0)/3,
+      z:triangle.reduce((sum,p)=>sum+p[1],0)/3,
+    };
+    const mesh=new THREE.Mesh(g,new THREE.MeshBasicMaterial({side:THREE.DoubleSide}));
+    mesh.position.set(x,UF-.2,z);
+    mesh.updateMatrixWorld(true);
+    const down=new THREE.Raycaster(
+      new THREE.Vector3(centroid.x,UF+.8,centroid.z),
+      new THREE.Vector3(0,-1,0),0,2);
+    const hits=down.intersectObject(mesh);
+    expect(hits.length).toBeGreaterThan(0);
+    expect(hits[0].point.y).toBeCloseTo(UF,4);
+    // Southwest of the infill diagonal must remain open above lower treads.
+    const outside=new THREE.Raycaster(
+      new THREE.Vector3(x+.20,UF+.8,z-.48),
+      new THREE.Vector3(0,-1,0),0,2).intersectObject(mesh);
+    expect(outside.length).toBe(0);
+    const geoUV=g.getAttribute('uv');
+    expect(geoUV.count).toBe(g.getAttribute('position').count);
+    mesh.geometry.dispose();
+    (mesh.material as THREE.Material).dispose();
   });
   it('LIB-STAIR-R01: guard encloses usable tread without sealing the exit', () => {
     expect(LIB_STAIR.guardEndsAtStep).toBeLessThan(LIB_STAIR.steps);
