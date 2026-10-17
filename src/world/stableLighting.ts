@@ -113,13 +113,19 @@ vec3 flwStableLiving(vec3 p) {
 // Object.freeze retains literal number types: widen values so the function
 // accepts every authored room geometry (not only the hall's exact literals).
 type RoomMaskBounds={ [K in keyof typeof STABLE_HALL_MASK]: number };
+/** GLSL numeric literals used by smoothstep must be float typed.
+ * JS string interpolation writes 85 rather than 85.0, which failed to
+ * compile on actual WebGL/SwiftShader even when TypeScript passed.
+ */
+export const glslFloat=(v:number)=>Number.isInteger(v)?v.toFixed(1):String(v);
 function roomMaskShader(m:RoomMaskBounds){
- return `(smoothstep(${m.x0out},${m.x0in},p.x) *
- (1.0-smoothstep(${m.x1in},${m.x1out},p.x)) *
- smoothstep(${m.z0out},${m.z0in},p.z) *
- (1.0-smoothstep(${m.z1in},${m.z1out},p.z)) *
- smoothstep(${m.y0out},${m.y0in},p.y) *
- (1.0-smoothstep(${m.y1in},${m.y1out},p.y)))`;
+ const f=glslFloat;
+ return `(smoothstep(${f(m.x0out)},${f(m.x0in)},p.x) *
+ (1.0-smoothstep(${f(m.x1in)},${f(m.x1out)},p.x)) *
+ smoothstep(${f(m.z0out)},${f(m.z0in)},p.z) *
+ (1.0-smoothstep(${f(m.z1in)},${f(m.z1out)},p.z)) *
+ smoothstep(${f(m.y0out)},${f(m.y0in)},p.y) *
+ (1.0-smoothstep(${f(m.y1in)},${f(m.y1out)},p.y)))`;
 }
 const ROOMS_GLSL = /*glsl*/ `
 uniform vec4 flwRoomSources[4];
