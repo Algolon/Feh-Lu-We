@@ -1,6 +1,6 @@
 {
   "source": "Real candidate game scene (Chromium / SwiftShader); not a real Android device",
-  "commit": "e2464e6869e8723d22e96bd8d354fc6f87f74107",
+  "commit": "bc4d6b8758dff49c27a58d70b9f6b20e03168799",
   "checks": [
     {
       "name": "entrance-to-gallery-and-return",
@@ -222,35 +222,35 @@
     {
       "name": "01-full-stair-below",
       "calls": 352,
-      "triangles": 1641943,
+      "triangles": 1641919,
       "room": "library",
       "glError": 0
     },
     {
       "name": "02-closed-treads-and-post",
       "calls": 351,
-      "triangles": 1641506,
+      "triangles": 1641482,
       "room": "library",
       "glError": 0
     },
     {
       "name": "03-upper-bridge-from-gallery",
       "calls": 284,
-      "triangles": 1508943,
+      "triangles": 1508919,
       "room": "libGallery",
       "glError": 0
     },
     {
       "name": "04-stair-from-landing",
       "calls": 233,
-      "triangles": 1461214,
+      "triangles": 1461190,
       "room": "libGallery",
       "glError": 0
     },
     {
       "name": "05-mobile-portrait-stair",
       "calls": 78,
-      "triangles": 718898,
+      "triangles": 718886,
       "room": "library",
       "glError": 0
     }
