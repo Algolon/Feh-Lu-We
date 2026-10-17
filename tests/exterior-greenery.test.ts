@@ -97,8 +97,8 @@ describe('authored facade greenery',()=>{
   it('creates two deterministic, well-connected and less cluttered entrance plants',()=>{
     for(const {seed} of ENTRANCE_POTS){
       const plan=entrancePlantPlan(seed),again=entrancePlantPlan(seed);
-      expect(plan.branches).toHaveLength(7);
-      expect(plan.leaves).toHaveLength(21); // Formerly 99; fewer, more readable leaves.
+      expect(plan.branches).toHaveLength(6);
+      expect(plan.leaves).toHaveLength(24); // Formerly 99; size variation and open clusters.
       expect(plan.leaves).toEqual(again.leaves);
       for(const branch of plan.branches){
         expect(branch.points).toHaveLength(3);
@@ -108,8 +108,8 @@ describe('authored facade greenery',()=>{
       expect(Math.max(...centers.map(v=>v.y))).toBeGreaterThan(1.15);
       expect(Math.min(...centers.map(v=>v.y))).toBeLessThan(1.0);
       for(const leaf of plan.leaves){
-        expect(leaf.size).toBeGreaterThanOrEqual(.245);
-        expect(leaf.size).toBeLessThan(.29);
+        expect(leaf.size).toBeGreaterThanOrEqual(.195);
+        expect(leaf.size).toBeLessThan(.27);
         expect(leaf.attachment.distanceTo(leaf.base)).toBeLessThan(.3);
         expect(leaf.tilt).toBeLessThan(-.1);
       }
