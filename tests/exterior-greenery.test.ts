@@ -71,9 +71,12 @@ describe('authored facade greenery',()=>{
   it('gives entrance pots a distinct, broad and finite faceted leaf mesh with calm veins',()=>{
     const g=entranceLeafGeo(),p=g.attributes.position,c=g.attributes.color;
     expect(g.index).toBeNull();
-    expect(p.count/3).toBe(320); // Ten curved longitudinal bands × eight cross bands × two sides
+    expect(p.count/3).toBe(192); // Eight curved longitudinal bands × six cross bands × two sides
     expect([...p.array].every(Number.isFinite)).toBe(true);
     expect([...c.array].every(Number.isFinite)).toBe(true);
+    const uv=g.attributes.uv;
+    expect(uv.count).toBe(p.count);
+    expect([...uv.array].every(n=>n>=0&&n<=1)).toBe(true);
     g.computeBoundingBox();
     expect(g.boundingBox!.max.x-g.boundingBox!.min.x).toBeGreaterThan(1.0);
     expect(g.boundingBox!.max.x-g.boundingBox!.min.x).toBeLessThan(1.2);
