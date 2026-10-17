@@ -24,7 +24,7 @@ try{
    scene.add(new T.HemisphereLight('#e6f0dd','#6e7258',2.1));
    const sun=new T.DirectionalLight('#fff4da',2.4);sun.position.set(-2,7,5);scene.add(sun);
    const stone=new T.MeshLambertMaterial({color:'#ded8c9'}),soilMat=new T.MeshLambertMaterial({color:'#514735'});
-   const foliage=new T.MeshLambertMaterial({vertexColors:true,side:T.DoubleSide});
+   const foliage=E.entranceLeafMaterial().clone();foliage.side=T.DoubleSide;
    const bark=new T.MeshLambertMaterial({color:'#66543c'});
    const profile=[[.001,0],[.39,0],[.39,.10],[.32,.13],[.28,.23],[.30,.59],[.38,.66],[.39,.75],[.31,.75],[.29,.67],[.27,.61],[.001,.61]];
    const urn=new T.Mesh(new T.LatheGeometry(profile.map(([r,y])=>new T.Vector2(r,y)),16),stone);
