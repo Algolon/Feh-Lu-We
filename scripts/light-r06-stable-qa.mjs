@@ -65,7 +65,10 @@ try {
  };
  const samples=[];
  for(const [id,pose] of [
-  ['hall-view',{x:84.2,z:86.7,yaw:-Math.PI/2}],
+  // True portal views FROM THE HALL, not merely inside the living room.
+  ['hall-through-arch',{x:87,z:88.5,yaw:-Math.PI/2}],
+  ['hall-far',{x:90,z:88.5,yaw:-Math.PI/2}],
+  ['living-entrance',{x:84.2,z:86.7,yaw:-Math.PI/2}],
   ['living-close',{x:78.8,z:86.7,yaw:-Math.PI/2}],
   ['living-middle',{x:80.5,z:86.7,yaw:-Math.PI/2}],
   ['floorlamp',{x:82.3,z:84.3,yaw:-Math.PI/2}]
