@@ -92,7 +92,7 @@ jobs:
       - name: Checkout LIGHT-R08 source on current production baseline
         uses: actions/checkout@v7
         with:
-          ref: 756bb3120da5176f1fa37bf3153235f444391e2a
+          ref: 4a13ec6cd0bf246ca2fa25e0a62761fbbe7e27cd
           path: r08-preview-source
           persist-credentials: false
       - name: Build isolated LIGHT-R08 browser route and device recorder
