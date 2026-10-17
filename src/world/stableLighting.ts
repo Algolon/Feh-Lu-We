@@ -110,7 +110,10 @@ vec3 flwStableLiving(vec3 p) {
 
 // These are explicitly room-local masks. Closed doors are not transmissive:
 // no room's local sources contribute to the surface on the other side of a wall.
-function roomMaskShader(m:typeof STABLE_HALL_MASK){
+// Object.freeze retains literal number types: widen values so the function
+// accepts every authored room geometry (not only the hall's exact literals).
+type RoomMaskBounds={ [K in keyof typeof STABLE_HALL_MASK]: number };
+function roomMaskShader(m:RoomMaskBounds){
  return `(smoothstep(${m.x0out},${m.x0in},p.x) *
  (1.0-smoothstep(${m.x1in},${m.x1out},p.x)) *
  smoothstep(${m.z0out},${m.z0in},p.z) *
@@ -151,7 +154,7 @@ export function stableRoomMaskAt(x:number,y:number,z:number):number{
     *smooth(m.z0out,m.z0in,z)*(1-smooth(m.z1in,m.z1out,z))
     *smooth(m.y0out,m.y0in,y)*(1-smooth(m.y1in,m.y1out,y));
 }
-function maskAt(m:typeof STABLE_HALL_MASK,x:number,y:number,z:number):number{
+function maskAt(m:RoomMaskBounds,x:number,y:number,z:number):number{
  return smooth(m.x0out,m.x0in,x)*(1-smooth(m.x1in,m.x1out,x))*
  smooth(m.z0out,m.z0in,z)*(1-smooth(m.z1in,m.z1out,z))*
  smooth(m.y0out,m.y0in,y)*(1-smooth(m.y1in,m.y1out,y));
