@@ -48,7 +48,7 @@ describe('authored facade greenery',()=>{
       expect(v).toBeCloseTo(Math.max(0,Math.min(1,(.70-y)/1.70)),5);
     }
     // The original tip, stem base and lateral lobes must still be present.
-    const original=[[0,-.92],[0,.58],[.82,-.13],[-.82,-.13]];
+    const original=[[0,-.92],[.15,.58],[-.15,.58],[.82,-.13],[-.82,-.13]];
     for(const [x,y] of original){
       expect(Array.from({length:p.count},(_,i)=>i).some(i=>Math.abs(p.getX(i)-x)<1e-5&&Math.abs(p.getY(i)-y)<1e-5)).toBe(true);
     }
