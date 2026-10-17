@@ -6,6 +6,7 @@ import { chromium } from 'playwright-core';
 import {mkdirSync,writeFileSync} from 'node:fs';
 const base=process.argv[2]??'http://127.0.0.1:4188/Feh-Lu-We/';
 const variant=process.env.LIGHT_R08_PROFILE??'r08';
+const FAST=process.env.LIGHT_R08_FAST==='1';
 const quality=process.env.LIGHT_R08_QUALITY??'low';
 const portrait=process.env.LIGHT_R08_PORTRAIT==='1';
 const out='light-r08-evidence/'+variant+'-'+quality+(portrait?'-portrait':'-landscape');
@@ -91,12 +92,14 @@ try{
     }finally{pool.forEach((l,i)=>l.intensity=prior[i]);}
   },{pose:testCase.pose,phase:phase.v,lamps:lamps.bits,doors});
  };
- for(const phase of phases)for(const site of cases){
+ for(const phase of (FAST?phases.filter(x=>x.id==='day'):phases))
+ for(const site of (FAST?cases.filter(x=>['hall-chandelier','library-reading','library-to-living'].includes(x.id)):cases)){
    const doors={library:false,livLib:false};
-   for(const state of lights){
+   for(const state of (FAST?lights.filter(x=>['off','hall','library','both'].includes(x.id)):lights)){
       const r=await capture(site,phase,state,doors);
       all.push({phase:phase.id,view:site.id,source:state.id,...r});
       if(['off','hall','library','both'].includes(state.id) &&
+           (!FAST || ['off','both'].includes(state.id)) &&
            (phase.id!=='dusk'||state.id==='both')){
         await page.screenshot({path:out+'/'+phase.id+'-'+site.id+'-'+state.id+'.jpg',
           type:'jpeg',quality:82,timeout:120000});
@@ -159,9 +162,9 @@ try{
    if(Math.max(delta('day','library-reading','library'),delta('day','library-gallery','library'))<3)
       throw Error('Library base light not visible with physical PointLights OFF');
  }
- const result={variant,quality,portrait,all,portals,movement:move,summary,errors};
+ const result={variant,quality,portrait,fast:FAST,all,portals,movement:move,summary,errors};
  writeFileSync(out+'/results.json',JSON.stringify(result,null,2));
- console.log('LIGHT_R08_SUMMARY '+JSON.stringify({variant,quality,portrait,summary,
+ console.log('LIGHT_R08_SUMMARY '+JSON.stringify({variant,quality,portrait,fast:FAST,summary,
     scope:all[0]?.chunks,clones:all[0]?.clones,movementStable:move.every(x=>!x.state||x.state.join(',')===move[0].state?.join(',')),
     portals:portals.map(x=>({open:x.door,view:x.view,source:x.source,lum:round(x.lum)})),
     errors
