@@ -6,9 +6,10 @@ import type { World } from '../interactions/world';
 import type { Ctx } from './arch';
 import { box, cyl } from './kit';
 import { bookshelf, rug, table, roundTable, plant } from './furniture';
-import { libraryR02Desk, libraryR02StudyChair, libraryR02ReadingSeat, libraryR02Spiral } from './libraryR02';
+import { libraryR02Desk, libraryR02StudyChair, libraryR02ReadingSeat } from './libraryR02';
 import { tabletop } from './dressing';
 import { GF } from './layout';
+import { libraryStairR01, LIB_STAIR } from './libraryStairR01';
 export { libraryR03BankersLamp as libraryR01BankerLamp } from './libraryR03Lamp';
 
 export const LIB_R01 = {
@@ -22,8 +23,8 @@ export const LIB_R01 = {
     lamp: { dx: -0.13, dz: 0.72 },
     looseBooks: { dx: 0.42, dz: 0.84 },
   },
-  stair: { x: 81.95, z: 105.3, radius: 1.18, steps: 26 },
-  landing: { x0: 82.52, x1: 83.43, z0: 104.93, z1: 105.69 },
+  stair: { x: LIB_STAIR.x, z: LIB_STAIR.z, radius: LIB_STAIR.radius, steps: LIB_STAIR.steps },
+  landing: { x0: LIB_STAIR.bridge.x0, x1: LIB_STAIR.bridge.x1, z0: LIB_STAIR.bridge.z0, z1: LIB_STAIR.bridge.z1 },
 } as const;
 
 /** Sized specifically to the ground-floor window bays: no shelving across glazing. */
@@ -75,11 +76,9 @@ export function libraryR01Furniture(w: World, c: Ctx) {
     tabletop(c, x, z, GF + 0.022, 0, ['stack', 'book'], seed);
 }
 
-/** Sculpted wedge-tread spiral. Collision centres, rises and landing are unchanged,
- * to preserve the already-proven path to the libGallery and back. */
+/** LIB-STAIR-R01 closed oak stair with matching gallery landing and true guards. */
 export function libraryR01Stair(c: Ctx) {
-  const s=LIB_R01.stair;
-  libraryR02Spiral(c,s.x,s.z,s.radius,s.steps,LIB_R01.landing);
+  libraryStairR01(c);
 }
 
 /** Vintage standing globe: hand-authored sepia equirectangular map rather than
