@@ -42,8 +42,9 @@
   const d=current.frames.filter(v=>Number.isFinite(v)&&v>0&&v<5000);
   const out={
    test:'LIGHT-R06D physical-device frame-time capture',
-   hardwareVerified:matchMedia('(pointer:coarse)').matches,
-   caveat:'rAF timings measure browser frame pacing, NOT exclusive GPU time or thermal wattage.',
+   hardwareVerified:false,
+   touchPointerObserved:matchMedia('(pointer:coarse)').matches,
+   caveat:'This JSON alone cannot verify a physical device: record actual hardware/model outside the test. rAF timing is browser frame pacing, NOT exclusive GPU time or thermal wattage.',
    created:new Date().toISOString(),elapsedSeconds:round((performance.now()-current.start)/1000),
    URL:location.pathname+location.search,
    device:{userAgent:navigator.userAgent,dpr:devicePixelRatio,
