@@ -113,7 +113,10 @@ export function stableMaterial<T extends THREE.Material>(mat: T): T {
     const injection = '#include <emissivemap_fragment>';
     if (!shader.fragmentShader.includes(injection)) throw new Error('LIGHT-R06 requires emissivemap_fragment for this material');
     shader.fragmentShader = shader.fragmentShader.replace(injection,
-      injection + '\n totalEmissiveRadiance += flwStableLiving(vFlwP);');
+      // Apply the authored bounce through existing material albedo, preserving
+      // plaster/stone/timber variations instead of an identical orange wash.
+      // No player/camera/gaze or LightPool dependence is introduced.
+      injection + '\n totalEmissiveRadiance += flwStableLiving(vFlwP) * mix(vec3(0.35), clamp(diffuseColor.rgb, vec3(0.0), vec3(1.0)), 0.65);');
   };
   mat.userData.stableLiving = true;
   mat.needsUpdate = true;
