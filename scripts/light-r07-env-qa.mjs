@@ -45,6 +45,34 @@ try{
     g.settings.reducedMotion=true;
     g.applyQuality(true);
   });
+  // Independently test whether the route resolver temporarily says 'out'
+  // while walking between two nominally indoor rooms. The global k factor
+  // should stay 1 on these routes unless room classification has gaps.
+  const roomScans=await page.evaluate(()=>{
+    const graph=window.__game.extras.rooms;
+    const paths=[
+      {id:'hall-to-living',from:[92,86.7],to:[78,86.7],expectInside:true},
+      {id:'dining-to-kitchen',from:[102,87],to:[102,96],expectInside:true},
+      {id:'hall-to-library-first-leg',from:[90,95],to:[90,100.5],expectInside:true},
+      {id:'hall-to-library-second-leg',from:[90,100.5],to:[80.5,100.5],expectInside:true},
+      {id:'living-to-library',from:[79,92.5],to:[79,97.5],expectInside:true},
+      {id:'front-outside-to-hall',from:[90,78],to:[90,85],expectInside:false}
+    ];
+    return paths.map(path=>{
+      const n=Math.ceil(Math.hypot(path.to[0]-path.from[0],path.to[1]-path.from[1])/.1);
+      const samples=Array.from({length:n+1},(_,i)=>{
+        const t=i/n,x=path.from[0]+(path.to[0]-path.from[0])*t,
+          z=path.from[1]+(path.to[1]-path.from[1])*t;
+        return {x:+x.toFixed(3),z:+z.toFixed(3),room:graph.roomAt(x,.95,z)};
+      });
+      const changes=samples.filter((x,i)=>!i||x.room!==samples[i-1].room);
+      const out=samples.filter(x=>x.room==='out');
+      return {id:path.id,expectInside:path.expectInside,sampleCount:samples.length,
+        changes,unexpectedOut:path.expectInside?out:[],
+        outCount:out.length};
+    });
+  });
+  console.log('LIGHT_R07_ROOMS '+JSON.stringify(roomScans));
   const all=[];
   for(const scene of scenes){
     for(const phase of [0,0.65]){
@@ -145,7 +173,7 @@ try{
   // the indoor-dependent global sun/hemi/fog logic.
   if(!all.some(x=>x.roiMeanAbsDelta>2))throw Error('no measurable environment effect: invalid diagnostic');
   if(errors.length)throw Error(errors.slice(0,3).join(' | '));
-  writeFileSync(output+'/results.json',JSON.stringify({commit:process.env.GITHUB_SHA??null,all,errors},null,2));
+  writeFileSync(output+'/results.json',JSON.stringify({commit:process.env.GITHUB_SHA??null,roomScans,all,errors},null,2));
   console.log('LIGHT_R07_VERDICT '+JSON.stringify({
     cases:all.length,meanAbsMax:Math.max(...all.map(x=>x.roiMeanAbsDelta)),
     maxSigned:Math.max(...all.map(x=>Math.abs(x.signedRoiChange))),
