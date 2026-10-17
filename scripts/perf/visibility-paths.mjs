@@ -21,7 +21,15 @@ export const PERF_PATHS = [
   ['well', 0.15, [[90, 84.5], [90, 88.0], [88.0, 92.0], [91.5, 95.0]]],
 ];
 
-export const ALL_PATHS = [...LEGACY_PATHS, ...PERF_PATHS];
+// PERF-R02 release (WINDOW-R02 see-through windows): garden walks past the doorway regions' windows, 5–7 m out,
+// facing the facade (the study / botanic / library / gallery / linen interiors are seen only through the glass)
+export const WINDOW_PATHS = [
+  ['win-north', 0, [[70.0, 116.0], [78.5, 116.0], [86.0, 116.0], [98.0, 116.0], [104.0, 116.0]]],
+  ['win-west', 0, [[65.5, 94.0], [65.5, 101.0], [65.5, 108.0]]],
+  ['win-south', 0, [[96.0, 74.0], [101.5, 74.0], [106.0, 74.0], [113.5, 80.0], [113.5, 87.0], [113.5, 93.0]]],
+];
+
+export const ALL_PATHS = [...LEGACY_PATHS, ...PERF_PATHS, ...WINDOW_PATHS];
 
 /** Door states: every door shut; every door open (stress); a realistic set (the rooms a player walks into upstairs). */
 export const DOOR_SETS = {
