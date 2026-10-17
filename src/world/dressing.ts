@@ -142,18 +142,105 @@ export function floorGlobe(c: Ctx, x: number, z: number, y0: number, yaw = 0.6, 
   c.col.addCircle(x, z, 0.3, y0, y0 + 0.75 + 2 * r);
 }
 
-/** A woven log basket by a hearth: a wicker tub (rim, bands) with split logs standing in it. */
+/** Rustic woven firewood basket: an open wicker vessel with interlaced reeds, handles and stacked logs. */
 export function logBasket(c: Ctx, x: number, z: number, y0: number, yaw = 0) {
   const M = artMats(), a = new Asm(c.b, c.chunk, x, y0, z, yaw).begin('logBasket');
-  a.add(M.upholstery, '#a8844a', cg('basket', () => projectUV(lathe([[0.001, 0], [0.2, 0], [0.24, 0.05], [0.26, 0.36], [0.27, 0.38], [0.255, 0.4], [0.24, 0.37], [0.001, 0.37]], 12), 0.25)), 0, 0, 0);
-  for (const yy of [0.12, 0.26]) a.add(M.upholstery, '#8a6a3a', cg(`basketBand${yy}`, () => new THREE.TorusGeometry(0.243 + yy * 0.05, 0.012, 3, 12).rotateX(Math.PI / 2)), 0, yy, 0);
-  const logs = cg('basketLogs', () => {
-    const parts = [0, 1, 2, 3, 4, 5].map((i) => { const an = i * 1.1, rr = i ? 0.12 : 0; return new THREE.CylinderGeometry(0.055, 0.06, 0.5 - (i % 3) * 0.05, 7).translate(Math.cos(an) * rr, 0.25, Math.sin(an) * rr).toNonIndexed(); });
-    const g = parts[0].clone(); void g;
+  // All components use cached, merged geometries so this stays a small batched decorative prop.
+  const unindex = (g: THREE.BufferGeometry) => {
+    if (!g.index) return g;
+    const flat = g.toNonIndexed();
+    g.dispose();
+    return flat;
+  };
+
+  // A dark, genuinely open basket liner: inside and outside walls, not a capped barrel top.
+  a.add(M.upholstery, '#856037', cg('woodBasketR07Liner', () => projectUV(lathe([
+    [0.001, 0.006], [0.177, 0.006], [0.213, 0.025], [0.244, 0.305],
+    [0.256, 0.366], [0.24, 0.373], [0.224, 0.322], [0.191, 0.071],
+    [0.001, 0.071],
+  ], 16), 0.28)), 0, 0, 0);
+
+  // Horizontal strands alternately pass in front of and behind the upright stakes.
+  // The alternating wave is deliberately large enough to read on mobile, without a dense texture.
+  a.add(M.timber, '#c09359', cg('woodBasketR07Weave', () => {
+    const strands: THREE.BufferGeometry[] = [];
+    for (let row = 0; row < 8; row++) {
+      const yy = 0.066 + row * 0.039;
+      const pts = Array.from({ length: 48 }, (_, j) => {
+        const t = j * Math.PI * 2 / 48;
+        const r = 0.224 + 0.038 * (yy / 0.37) + 0.008 * Math.cos(t * 12 + (row % 2) * Math.PI);
+        return new THREE.Vector3(Math.cos(t) * r, yy, Math.sin(t) * r);
+      });
+      strands.push(unindex(new THREE.TubeGeometry(
+        new THREE.CatmullRomCurve3(pts, true, 'centripetal'), 48, 0.012, 4, true,
+      )));
+    }
+    return mergeAll(strands);
+  }), 0, 0, 0);
+
+  a.add(M.timber, '#9d703d', cg('woodBasketR07Stakes', () => {
+    const reeds: THREE.BufferGeometry[] = [];
+    for (let j = 0; j < 12; j++) {
+      const theta = j * Math.PI / 6, sn = Math.sin(theta), cs = Math.cos(theta);
+      const pts = [
+        new THREE.Vector3(cs * 0.222, 0.045, sn * 0.222),
+        new THREE.Vector3(cs * 0.236, 0.21, sn * 0.236),
+        new THREE.Vector3(cs * 0.258, 0.36, sn * 0.258),
+      ];
+      reeds.push(unindex(new THREE.TubeGeometry(
+        new THREE.CatmullRomCurve3(pts), 6, 0.011, 4, false,
+      )));
+    }
+    return mergeAll(reeds);
+  }), 0, 0, 0);
+
+  // Rolled lip and base ring provide a believable solid basket edge; small arched side handles.
+  const rim = cg('woodBasketR07Rim', () =>
+    new THREE.TorusGeometry(0.259, 0.017, 5, 16).rotateX(Math.PI / 2));
+  a.add(M.timber, '#d0a46b', rim, 0, 0.371, 0);
+  a.add(M.timber, '#a67842', cg('woodBasketR07Foot', () =>
+    new THREE.TorusGeometry(0.211, 0.012, 4, 16).rotateX(Math.PI / 2)), 0, 0.039, 0);
+  const handle = cg('woodBasketR07Handle', () =>
+    new THREE.TorusGeometry(0.081, 0.014, 4, 12, Math.PI).rotateY(Math.PI / 2));
+  for (const sx of [-1, 1]) a.add(M.timber, '#b6844b', handle, sx * 0.257, 0.355, 0);
+
+  // Split and round hearth logs lie across one another, rather than standing like six pegs.
+  // Specs: centre x/y/z, length, radius, heading (radians about the up axis).
+  const specs: [number, number, number, number, number, number][] = [
+    [-0.112, 0.298, 0.013, 0.32, 0.056, -0.26],
+    [ 0.026, 0.295, 0.003, 0.35, 0.062,  0.29],
+    [ 0.127, 0.308, 0.012, 0.30, 0.051,  0.55],
+    [-0.097, 0.388,-0.036, 0.35, 0.059,  0.40],
+    [ 0.078, 0.387,-0.048, 0.34, 0.060, -0.44],
+    [-0.012, 0.468, 0.015, 0.34, 0.057,  0.14],
+  ];
+
+  a.add(M.timber, '#715139', cg('woodBasketR07Bark', () =>
+    mergeAll(specs.map(([lx, ly, lz, len, rad, heading]) =>
+      unindex(new THREE.CylinderGeometry(rad * 0.89, rad, len, 7, 1)
+        .rotateX(Math.PI / 2).rotateY(heading).translate(lx, ly, lz))))), 0, 0, 0);
+
+  const ends = (rings: boolean) => {
+    const parts: THREE.BufferGeometry[] = [];
+    for (const [lx, ly, lz, len, rad, heading] of specs) for (const sign of [-1, 1]) {
+      const dir = heading + (sign < 0 ? Math.PI : 0);
+      const d = sign * (len / 2 + (rings ? 0.0032 : 0.0016));
+      const px = lx + Math.sin(heading) * d, pz = lz + Math.cos(heading) * d;
+      if (rings) {
+        for (const scale of [0.3, 0.59]) parts.push(unindex(
+          new THREE.TorusGeometry(rad * scale, 0.0026, 3, 8)
+            .rotateY(dir).translate(px, ly, pz)));
+      } else {
+        parts.push(unindex(new THREE.CircleGeometry(rad * 0.88, 8)
+          .rotateY(dir).translate(px, ly, pz)));
+      }
+    }
     return mergeAll(parts);
-  });
-  a.add(M.timber, '#8a6a4a', logs, 0, 0.03, 0);
-  a.end({ gap: 0.02 });
+  };
+  a.add(M.paint, '#c8a277', cg('woodBasketR07CutEnds', () => ends(false)), 0, 0, 0);
+  a.add(M.paint, '#987048', cg('woodBasketR07GrowthRings', () => ends(true)), 0, 0, 0);
+
+  a.end({ gap: 0.025 });
   c.col.addCircle(x, z, 0.28, y0, y0 + 0.55);
 }
 function mergeAll(parts: THREE.BufferGeometry[]) {
