@@ -82,7 +82,7 @@ export function stableContributionAt(x: number, y: number, z: number) {
   };
   const room=s(72.15,73.2,x)*(1-s(84,85.15,x))*s(-94.5,-93.8,z)*
     (1-s(-80.9,-80.2,z))*s(-.12,.15,y)*(1-s(3,3.45,y));
-  const col = new THREE.Color();
+  const col = new THREE.Color(0, 0, 0);
   for(let i=0;i<2;i++) {
     const p=positions[i],q=contributions[i];
     const dist=Math.hypot(x-p.x,y-p.y,z-p.z);
