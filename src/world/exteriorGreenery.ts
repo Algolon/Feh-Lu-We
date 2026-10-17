@@ -62,22 +62,27 @@ export function climberPlan(): Climber[] {
   });
 }
 
-/** Five-lobed leaf, folded at its centre; explicit back faces avoid alpha cards and one-sided holes. */
-export function climberLeafGeo(): THREE.BufferGeometry {
-  const outline=[[-.15,-.58],[-.67,-.26],[-.82,.13],[-.34,.12],[-.48,.57],[-.12,.43],[0,.92],[.12,.43],[.48,.57],[.34,.12],[.82,.13],[.67,-.26],[.15,-.58]].reverse();
+/** Two authored, opaque low-poly silhouettes: pointed climbing ivy and a broad three-lobed entrance shrub. */
+export function climberLeafGeo(style:'climber'|'entrance'='climber'): THREE.BufferGeometry {
+  // Wide, connected lobes replace the thin zig-zag spikes. No additional leaves or draw calls.
+  const outline=(style==='entrance'
+    ? [[-.12,-.72],[-.48,-.40],[-.85,-.15],[-.63,.35],[-.26,.39],[0,.95],[.26,.39],[.63,.35],[.85,-.15],[.48,-.40],[.12,-.72]]
+    : [[-.12,-.72],[-.44,-.51],[-.77,-.33],[-.73,.08],[-.38,.16],[-.48,.57],[0,.98],[.48,.57],[.38,.16],[.73,.08],[.77,-.33],[.44,-.51],[.12,-.72]]).reverse();
   const p:number[]=[], colors:number[]=[];
   for(let i=0;i<outline.length;i++) {
     const a=outline[i],b=outline[(i+1)%outline.length];
     for(const back of [false,true]) {
-      const tri=back?[[0,.05,.055],[b[0],b[1],0],[a[0],a[1],0]]:[[0,.05,.055],[a[0],a[1],0],[b[0],b[1],0]];
-      for(let j=0;j<3;j++){p.push(...tri[j]);const v=(j===0?1:.93)*(back?.94:1);colors.push(v,v,v);}
+      const tri=back?[[0,.05,.085],[b[0],b[1],0],[a[0],a[1],0]]:[[0,.05,.085],[a[0],a[1],0],[b[0],b[1],0]];
+      // A gentle two-plane fold keeps the leaf readable in both shadow and daylight.
+      const side=(a[0]+b[0])*.5<0?.90:1.06;
+      for(let j=0;j<3;j++){p.push(...tri[j]);const v=(j===0?1.07:.94)*(back?.94:1)*side;colors.push(v,v,v);}
     }
   }
   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(p,3));g.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(p.length/3*2,2));g.computeVertexNormals();
   // Broad, smooth leaf folds; the fan triangulation must not read as a ring of sharp cones.
   const normals=g.attributes.normal as THREE.BufferAttribute;
   for(let i=0;i<normals.count;i++) {
-    const sign=Math.floor(i/3)%2===0?1:-1, n=new THREE.Vector3(-p[i*3]*.35,-p[i*3+1]*.12,1).normalize().multiplyScalar(sign);
+    const sign=Math.floor(i/3)%2===0?1:-1, n=new THREE.Vector3(-p[i*3]*.44,-p[i*3+1]*.14,1).normalize().multiplyScalar(sign);
     normals.setXYZ(i,n.x,n.y,n.z);
   }
   g.rotateZ(Math.PI);g.userData.keepColor=true;return g;
@@ -118,7 +123,7 @@ function entrancePot(c:Ctx,x:number,z:number,seed:number,dressed:THREE.Material)
   const profile:[[number,number],...[number,number][]]=[[.001,0],[.39,0],[.39,.10],[.32,.13],[.28,.23],[.30,.59],[.38,.66],[.39,.75],[.31,.75],[.29,.67],[.27,.61],[.001,.61]];
   const g=dressedLatheUV(lathe(profile,16));geo(c.b,dressed,'#d8d2bf',g,x,.03,z,{chunk:c.chunk,jitter:0});g.dispose();
   const soil=new THREE.CylinderGeometry(.275,.275,.02,16);geo(c.b,c.k.M.paint,'#514735',soil,x,.65,z,{chunk:c.chunk,jitter:0});soil.dispose();
-  const r=mulberry32(seed), raw=climberLeafGeo(),leaves:THREE.BufferGeometry[]=[],stems:THREE.BufferGeometry[]=[];
+  const r=mulberry32(seed), raw=climberLeafGeo('entrance'),leaves:THREE.BufferGeometry[]=[],stems:THREE.BufferGeometry[]=[];
   for(let j=0;j<9;j++) {
     const a=j/9*Math.PI*2+.3,reach=.20+r()*.13,h=.55+r()*.28;
     const end=new THREE.Vector3(Math.cos(a)*reach,.69+h,Math.sin(a)*reach);
