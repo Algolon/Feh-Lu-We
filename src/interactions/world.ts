@@ -367,7 +367,9 @@ export class World {
       for (const r of this.regions) {
         let on = false;
         for (const id of r.rooms) if (this.visibleRooms.has(id)) { on = true; break; }
-        if (on && r.doors && !r.rooms.has(this.hereRoom)) on = this.doorwayInView(eye, cam, r.doors, r.rooms);
+        // PERF-R02 integration (WINDOW-R02): a doorway region seen through one of its own clear windows is drawn
+        // whatever its doorways show (the doorway rule only removes rooms that are behind solid walls)
+        if (on && r.doors && !r.rooms.has(this.hereRoom) && !clearWindows.some((p) => r.rooms.has(p.a === 'out' ? p.b : p.a))) on = this.doorwayInView(eye, cam, r.doors, r.rooms);
         if (on && r.far < Infinity) on = r.sph.center.distanceTo(eye) - r.sph.radius < r.far;
         if (on && r.outFar < Infinity && this.hereRoom === 'out') on = this.interiorThroughDoor && r.sph.center.distanceTo(eye) - r.sph.radius < r.outFar;
         if (on !== r.on) { r.on = on; for (const m of r.meshes) { m.visible = on; m.userData.regionOff = !on; } }

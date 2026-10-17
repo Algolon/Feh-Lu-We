@@ -1,5 +1,5 @@
 // PERF-R02: frame-accurate visibility. Pure checks under node: which regions use the doorway rule and that their
-// topology allows it (every opening to the rest of the house is a listed door; windows are opaque to culling), the
+// topology allows it (every opening to the rest of the house is a listed door; a clear window (WINDOW-R02) exempts its room from the rule), the
 // rule's behaviour in a bare World (inside, in the doorway, facing away, shut, behind a floor plate, turning), and the
 // measurement harness's determinism. Frame-level evidence (Modes A / A* / B / C, pixel comparisons) is browser work:
 // scripts/perf/visibility-harness.mjs, scripts/perf/visibility-lossless.mjs, npm run perf:visibility:smoke.
@@ -7,6 +7,7 @@ import { describe, it, expect } from 'vitest';
 import * as THREE from 'three';
 import { readFileSync } from 'node:fs';
 import { estateRooms } from '../src/world/roomdefs';
+import { RoomGraph } from '../src/world/rooms';
 import { World } from '../src/interactions/world';
 // @ts-expect-error untyped tooling module (plain .mjs)
 import { ALL_PATHS, LEGACY_PATHS, legacySamples, trajectory } from '../scripts/perf/visibility-paths.mjs';
@@ -27,7 +28,7 @@ const DOORWAY_REGIONS: Record<string, { rooms: string[]; doors: string[] }> = {
 // geometry fix instead (PERF-R02 §6.3).
 describe('PERF-R02: doorway regions', () => {
   const est = readFileSync('src/world/estate.ts', 'utf8');
-  it('exactly these six regions use the doorway rule, each with its full door list; every other region is rooms-only', () => {
+  it('exactly these five regions use the doorway rule, each with its full door list; every other region is rooms-only', () => {
     const lines = est.split('\n').filter((l) => /w\.roomRegion\(.*\['door\./.test(l));
     expect(lines.length).toBe(Object.keys(DOORWAY_REGIONS).length);
     for (const [chunk, { doors }] of Object.entries(DOORWAY_REGIONS)) {
@@ -39,7 +40,7 @@ describe('PERF-R02: doorway regions', () => {
   it('mAttic keeps the rooms-only rule (the doorway rule would only mask an attic-floor / ceiling overlap)', () => {
     expect(est).toMatch(/w\.roomRegion\(\['mAttic'\], \[\.\.\.atticRooms, 'atticStair'\], Infinity, IN_FAR\);/);
   });
-  it('each doorway region is enclosed: every portal from its rooms to the rest of the house is one of its listed doors (windows are opaque to culling)', () => {
+  it('each doorway region is enclosed: every portal from its rooms to the rest of the house is one of its listed doors (windows lead outdoors and exempt the region while seen through)', () => {
     const R = estateRooms();
     for (const [chunk, { rooms, doors }] of Object.entries(DOORWAY_REGIONS)) {
       const external = R.portals.filter((p) => rooms.includes(p.a) !== rooms.includes(p.b) && p.kind !== 'window');
@@ -52,8 +53,11 @@ describe('PERF-R02: doorway regions', () => {
 
 describe('PERF-R02: the doorway rule on the study (mUpE)', () => {
   // door.study as built: plan (98.19, 96), leaf centre 4.45 m; the study lies south of the upper corridor
-  const setup = () => {
-    const w = new World('estate'); w.rooms = estateRooms();
+  // the bare World has no wall colliders, so every clear window (WINDOW-R02) would count as seen through: the doorway
+  // tests use the room graph without its window portals, the window test the full graph
+  const setup = (windows = false) => {
+    const R = estateRooms();
+    const w = new World('estate'); w.rooms = windows ? R : new RoomGraph(R.rooms, R.portals.filter((p) => p.kind !== 'window'), R.thresholds);
     const leaf = new THREE.Object3D(); leaf.position.set(98.19, 4.45, -96); w.scene.add(leaf);
     (w.byId as Map<string, unknown>).set('door.study', { id: 'door.study', hit: [leaf] });
     const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial());
@@ -87,6 +91,13 @@ describe('PERF-R02: the doorway rule on the study (mUpE)', () => {
     // facing the door, then turned 70° away (the doorway is still inside half FOV + 32°): still drawn
     look(98.2, 5.0, 97.6, 98.2, 4.4, 90); cam.rotateY(THREE.MathUtils.degToRad(70)); cam.updateMatrixWorld(); w.updateCulling(cam.position, cam);
     expect(mesh.visible).toBe(true);
+    w.dispose();
+  });
+  it('seen through one of its own clear windows (WINDOW-R02) the region is drawn, whatever its doorways show', () => {
+    const { w, mesh, look } = setup(true); w.isOpen = () => false; // every door shut: no doorway is seen through
+    // the study's south window (plan aperture 98, 4.75, 80.2), from the garden in front of it
+    look(98, 4.8, 74, 98, 4.75, 85); expect(w.hereRoom).toBe('out'); expect(w.visibleRooms.has('study')).toBe(true); expect(mesh.visible).toBe(true);
+    look(98, 4.8, 74, 98, 4.75, 60); expect(mesh.visible).toBe(false); // turned away: neither window nor doorway in view
     w.dispose();
   });
 });
