@@ -14,21 +14,33 @@ const errors=[];
 page.on('pageerror',e=>errors.push(e.message));
 page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
 const SOURCE='fire.living';
-const route=(id,a,b,z,n=61)=>({id,n,points:Array.from({length:n},(_,i)=>({x:a+(b-a)*i/(n-1),z}))});
+const route=(id,a,b,z,n=61)=>({id,n,yaw:-Math.PI/2,points:Array.from({length:n},(_,i)=>({x:a+(b-a)*i/(n-1),z}))});
+const path=(id,waypoints,yaw,opens=[])=>{
+ const points=[];
+ for(let p=1;p<waypoints.length;p++){
+  const a=waypoints[p-1],b=waypoints[p],n=Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/.25);
+  for(let i=p===1?0:1;i<=n;i++)points.push({x:a[0]+(b[0]-a[0])*i/n,z:a[1]+(b[1]-a[1])*i/n});
+ }
+ return {id,points,yaw,opens};
+};
 const ROUTES=[
  route('hall-to-living',92,77,86.7),
  route('living-to-hall',77,92,86.7),
- route('hall-to-billiard',92,89,100),
+ // Door is at X 89.5..90.5, Z=104, connecting the lobby to billiard.
+ // The prior straight-X test at Z=100 crossed a solid wall into the basement stair.
+ path('hall-to-billiard',[[90.0,95.0],[90.0,100.5],[90.0,107.0]],0,['door.billiard']),
  route('dining-to-hall',97.2,92.5,85.2),
- route('hall-to-library',86,76,99)
+ // Library door at X=85, Z=100.5; travel through rear lobby, not through the west wall.
+ path('hall-to-library',[[90.0,95.0],[90.0,100.5],[78.0,100.5]],-Math.PI/2,['door.library']),
+ path('dining-to-kitchen',[[102,87],[102,96]],0)
 ];
 const save={version:4,scene:'estate',inventory:['invitation','torch','matches','notebook'],
  lit:{'fire.living':true,'lamp.hallChandelier':true,'lamp.livingFloor':true,
  'lamp.library':true,'lamp.libraryChandelier':true},flags:{leftHome:true},unlocked:[],open:{}};
-const read=async (x,z,t,shot=false)=>{
- return await page.evaluate(({x,z,t,shot})=>{
+const read=async (x,z,t,shot=false,yaw=-Math.PI/2)=>{
+ return await page.evaluate(({x,z,t,shot,yaw})=>{
   const g=window.__game, w=g.world;
-  g.player.setPose({x,y:.15,z,yaw:-Math.PI/2,pitch:-.02});
+  g.player.setPose({x,y:.15,z,yaw,pitch:-.02});
   g.tick(.05);
   const slots=g.pool.assigned(), lights=g.pool.lights;
   const ids=slots.map((id,i)=>({id,strength:+lights[i].intensity.toFixed(3)}));
@@ -48,7 +60,7 @@ const read=async (x,z,t,shot=false)=>{
   return {x,z,t,room:w.hereRoom,visible:[...w.visibleRooms],fire:+(fire<0?0:lights[fire].intensity).toFixed(3),
    slots:ids,pixels,indoor:+g.indoor.toFixed(3),gain:+g.pool.gain.toFixed(3),
    calls:g.renderer.info.render.calls,triangles:g.renderer.info.render.triangles};
- },{x,z,t,shot});
+ },{x,z,t,shot,yaw});
 };
 try {
  await page.goto(url+'?autotest=1',{waitUntil:'domcontentloaded'});
@@ -65,11 +77,15 @@ try {
   await page.reload({waitUntil:'domcontentloaded'});
   await page.locator('[data-cont]').click({timeout:45000});
   await page.waitForFunction(()=>window.__game?.world?.id==='estate',null,{timeout:120000});
-  await page.evaluate(()=>{const g=window.__game;g.running=false;g.settings.quality='low';g.applyQuality(true);});
+  await page.evaluate(opens=>{
+    const g=window.__game;g.running=false;g.settings.quality='low';g.applyQuality(true);
+    for(const door of opens)g.state.open[door]=true;
+    if(opens.length)g.changed();
+  },r.opens||[]);
   const rows=[];
   for(let i=0;i<r.points.length;i++){
    const p=r.points[i];
-   for(let f=0;f<3;f++) rows.push(await read(p.x,p.z,(i*3+f)*.05,f===2));
+   for(let f=0;f<3;f++) rows.push(await read(p.x,p.z,(i*3+f)*.05,f===2,r.yaw));
    if(i%12===0){
     await page.screenshot({path:out+'/'+r.id+'-'+String(i).padStart(2,'0')+'.jpg',
      type:'jpeg',quality:68,timeout:60000});
