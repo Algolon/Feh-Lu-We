@@ -22,10 +22,10 @@ const suffix=profile==='pilot'?'&stableLiving=1&noPoint=1':'';
 const url=root+'?autotest=1'+suffix;
 try {
  await page.goto(url,{waitUntil:'domcontentloaded'});
- await page.evaluate(s=>{
-   localStorage.setItem('fehluwe.save',JSON.stringify(s));
+ await page.evaluate(({save,quality})=>{
+   localStorage.setItem('fehluwe.save',JSON.stringify(save));
    localStorage.setItem('fehluwe.settings',JSON.stringify({quality,reducedMotion:true}));
- },SAVE);
+ },{save:SAVE,quality});
  await page.reload({waitUntil:'domcontentloaded'});
  await page.locator('[data-cont]').click({timeout:45000});
  await page.waitForFunction(()=>window.__game?.world?.id==='estate',null,{timeout:120000});
