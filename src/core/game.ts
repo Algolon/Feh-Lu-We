@@ -12,7 +12,7 @@ import {
 } from './state';
 import { Input } from '../player/input';
 import { Player, PLAYER } from '../player/player';
-import { World, LightPool, type GameApi, type Interactable, type LightView } from '../interactions/world';
+import { World, LightPool, type GameApi, type Interactable } from '../interactions/world';
 import { UI } from '../ui/ui';
 import { Audio } from '../audio/audio';
 import type { FootstepSurface } from '../audio/footsteps';
@@ -872,10 +872,9 @@ export class Game implements GameApi {
     }
     w.update(dt, this.time);
     if (this.pool) {
-      // LIGHT-R03: view/LOS only provides a small tie-breaker; room culling never gates illumination.
-      const half = Math.atan(Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2)) * this.camera.aspect) + THREE.MathUtils.degToRad(10);
-      this.lightView.dir.copy(this.camera.getWorldDirection(this.lightView.dir)); this.lightView.cosHalf = Math.cos(Math.min(Math.PI * 0.95, half));
-      this.pool.update(dt, this.time, w.lamps, this.camera.position, this.extras.rooms, (d) => this.state.open[d] === true, this.lightView);
+      // LIGHT-R04: point-light allocation is spatial only. Camera rotation or
+      // watching a fixture cannot change the scene's illumination.
+      this.pool.update(dt, this.time, w.lamps, this.camera.position, this.extras.rooms, (d) => this.state.open[d] === true);
     }
     tickFires(this.time, this.settings.reducedMotion);
     const targetDusk = Math.min(1, (solvedCount(this.state) / REQUIRED_COUNT) * 0.85 + (this.state.finished ? 0.15 : 0));
@@ -1007,7 +1006,6 @@ export class Game implements GameApi {
     return 'Alles ingepakt. Vertrek via de voordeur.';
   }
   private lookAcc = 0;
-  private readonly lightView: LightView = { dir: new THREE.Vector3(0, 0, -1), cosHalf: 0.5, blocked: (x0, y0, z0, x1, y1, z1) => !!this.world?.col.segmentBlocked(x0, y0, z0, x1, y1, z1) };
 
   saveSoon() {
     clearTimeout(this.saveTimer);
