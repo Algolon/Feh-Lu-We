@@ -1,0 +1,171 @@
+[
+ {
+  "name": "1-living-south-window",
+  "doors": "closed",
+  "x": 79,
+  "y": 0.15,
+  "z": 82.2,
+  "yaw": 3.1416,
+  "pitch": -0.3,
+  "room": "living",
+  "on": {
+   "frontHedge.left": true,
+   "frontHedge.right": false,
+   "extGreen.climbers": false
+  },
+  "cand": {
+   "tris": 692136,
+   "calls": 74
+  },
+  "ref": {
+   "tris": 928156,
+   "calls": 75
+  },
+  "px": 0
+ },
+ {
+  "name": "2-dining-south-window",
+  "doors": "closed",
+  "x": 101.5,
+  "y": 0.15,
+  "z": 82,
+  "yaw": 3.1416,
+  "pitch": -0.3,
+  "room": "dining",
+  "on": {
+   "frontHedge.left": false,
+   "frontHedge.right": true,
+   "extGreen.climbers": false
+  },
+  "cand": {
+   "tris": 693132,
+   "calls": 77
+  },
+  "ref": {
+   "tris": 693132,
+   "calls": 77
+  },
+  "px": 0
+ },
+ {
+  "name": "3-front-door-open",
+  "doors": "open",
+  "x": 89.3,
+  "y": 0.15,
+  "z": 81.6,
+  "yaw": 3.1416,
+  "pitch": -0.15,
+  "room": "vestibule",
+  "on": {
+   "frontHedge.left": false,
+   "frontHedge.right": false,
+   "extGreen.climbers": false
+  },
+  "cand": {
+   "tris": 628328,
+   "calls": 93
+  },
+  "ref": {
+   "tris": 982940,
+   "calls": 96
+  },
+  "px": 0
+ },
+ {
+  "name": "4-west-garden-climbers",
+  "doors": "closed",
+  "x": 64,
+  "y": 0,
+  "z": 94,
+  "yaw": 1.5708,
+  "pitch": 0.1,
+  "room": "out",
+  "on": {
+   "frontHedge.left": true,
+   "frontHedge.right": false,
+   "extGreen.climbers": true
+  },
+  "cand": {
+   "tris": 1040514,
+   "calls": 165
+  },
+  "ref": {
+   "tris": 1099810,
+   "calls": 166
+  },
+  "px": 0
+ },
+ {
+  "name": "5-north-garden-climbers-dusk",
+  "doors": "closed",
+  "x": 85,
+  "y": 0,
+  "z": 118,
+  "yaw": 3.1416,
+  "pitch": 0.1,
+  "dusk": 0.85,
+  "room": "out",
+  "on": {
+   "frontHedge.left": false,
+   "frontHedge.right": false,
+   "extGreen.climbers": true
+  },
+  "cand": {
+   "tris": 1204021,
+   "calls": 160
+  },
+  "ref": {
+   "tris": 1322613,
+   "calls": 162
+  },
+  "px": 0
+ },
+ {
+  "name": "6-hall-doors-closed",
+  "doors": "closed",
+  "x": 89.5,
+  "y": 0.15,
+  "z": 95,
+  "yaw": 3.1416,
+  "pitch": 0,
+  "room": "hall",
+  "on": {
+   "frontHedge.left": false,
+   "frontHedge.right": false,
+   "extGreen.climbers": false
+  },
+  "cand": {
+   "tris": 755184,
+   "calls": 123
+  },
+  "ref": {
+   "tris": 1109796,
+   "calls": 126
+  },
+  "px": 0
+ },
+ {
+  "name": "7-reis-west-window",
+  "doors": "closed",
+  "x": 74,
+  "y": 3.35,
+  "z": 83.5,
+  "yaw": -1.5708,
+  "pitch": -0.1,
+  "room": "reis",
+  "on": {
+   "frontHedge.left": false,
+   "frontHedge.right": false,
+   "extGreen.climbers": false
+  },
+  "cand": {
+   "tris": 529476,
+   "calls": 70
+  },
+  "ref": {
+   "tris": 765496,
+   "calls": 71
+  },
+  "px": 4
+ }
+]
