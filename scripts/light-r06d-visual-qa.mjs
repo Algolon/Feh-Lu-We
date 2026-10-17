@@ -30,7 +30,10 @@ const candidates=[
  {id:'hall-far',pose:{x:90,z:88.5,y:.15,yaw:-Math.PI/2}},
  {id:'living-mid',pose:{x:80.5,z:86.7,y:.15,yaw:-Math.PI/2}},
  {id:'living-close',pose:{x:77.6,z:86.7,y:.15,yaw:-Math.PI/2}},
- {id:'living-floor',pose:{x:82.3,z:84.3,y:.15,yaw:-Math.PI/2}}
+ {id:'living-floor',pose:{x:82.3,z:84.3,y:.15,yaw:-Math.PI/2}},
+ // Look TOWARDS the floor lamp/east wall: prior west-facing view gave a
+ // near-zero screen delta despite correct logical source-bound uniforms.
+ {id:'floor-facing-east',pose:{x:79.5,z:83.6,y:.15,yaw:Math.PI/2}}
 ];
 const periods=[{id:'day',dusk:0},{id:'dusk',dusk:.53},{id:'dark',dusk:.96}];
 const variants=[
@@ -155,6 +158,10 @@ try{
   const hallDay=obs.filter(s=>s.period==='day'&&s.site==='hall-near');
   if(hallDay.find(x=>x.variant==='both').lum-hallDay.find(x=>x.variant==='off').lum<4)
    throw Error('Living room no longer visibly illuminated from hall with PointLights off');
+  const lampFacing=obs.filter(s=>s.period==='day'&&s.site==='floor-facing-east');
+  if((lampFacing.find(x=>x.variant==='floor')?.lum??0)-
+     (lampFacing.find(x=>x.variant==='off')?.lum??0)<1)
+   throw Error('Standing lamp has no independently visible room contribution from its facing view');
  }
  const compare={};
  for(const period of periods)for(const site of candidates){
