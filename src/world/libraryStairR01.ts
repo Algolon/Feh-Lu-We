@@ -27,6 +27,49 @@ export const stairStepPoint=(i:number,r=LIB_STAIR.walkRadius)=>{
 
 /** Shape extrusion is a CLOSED solid with top, bottom and six side faces.
  * The inboard nose penetrates the post slightly: there is no daylight gap at the pivot. */
+// One seamless timber board per stair tread. The general house wood atlas
+// intentionally contains EIGHT separated floor boards; sampling that material
+// on the small wedge made each individual stair tread look like a miniature floor.
+let treadBoardMaterial: THREE.MeshLambertMaterial | undefined;
+function singleBoardTreadMaterial(): THREE.MeshLambertMaterial {
+  if (treadBoardMaterial) return treadBoardMaterial;
+  const cv=document.createElement('canvas');cv.width=cv.height=256;
+  const ctx=cv.getContext('2d');
+  if(!ctx) throw new Error('LIB-STAIR-R03: canvas context unavailable');
+  ctx.fillStyle='#e5d5bc';ctx.fillRect(0,0,256,256);
+  // A stable, quiet long-grain figure with NO transverse joints or plank seams.
+  let seed=19337;const rnd=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+  for(let i=0;i<72;i++){
+    const x=8+rnd()*240, y=rnd()*220, length=18+rnd()*110;
+    ctx.beginPath();ctx.moveTo(x,y);
+    ctx.bezierCurveTo(x-2+rnd()*4,y+length*.35,x-2+rnd()*4,y+length*.7,x+(rnd()-.5)*5,Math.min(256,y+length));
+    ctx.strokeStyle=i%4===0?'rgba(112,81,54,0.085)':'rgba(105,78,48,0.045)';
+    ctx.lineWidth=.55+rnd()*1.35;ctx.stroke();
+  }
+  const tex=new THREE.CanvasTexture(cv);tex.colorSpace=THREE.SRGBColorSpace;
+  tex.wrapS=THREE.ClampToEdgeWrapping;tex.wrapT=THREE.ClampToEdgeWrapping;
+  tex.name='LIB-STAIR-R03-SingleOakBoard-NoPlankSeams';
+  treadBoardMaterial=new THREE.MeshLambertMaterial({map:tex,vertexColors:true});
+  treadBoardMaterial.name='LIB-STAIR-R03-SingleBoard';
+  return treadBoardMaterial;
+}
+
+/** UV-map ONE wood board over ONE complete wedge. The grain follows its radial
+ * length, turning with the tread; UVs stay within a single, non-repeating image. */
+export function mapSingleTreadBoardUV(g:THREE.BufferGeometry,a:number): THREE.BufferGeometry {
+  const pos=g.getAttribute('position') as THREE.BufferAttribute;
+  const uv=g.getAttribute('uv') as THREE.BufferAttribute;
+  for(let i=0;i<pos.count;i++){
+    const px=pos.getX(i), pz=-pos.getZ(i);
+    const radial=Math.hypot(px,pz);
+    const across=-px*Math.sin(a)+pz*Math.cos(a);
+    const u=THREE.MathUtils.clamp(.5+across*.62,.04,.96);
+    const v=THREE.MathUtils.clamp(.08+.84*(radial-LIB_STAIR.inner)/(LIB_STAIR.outer-LIB_STAIR.inner),.04,.96);
+    uv.setXY(i,u,v);
+  }
+  uv.needsUpdate=true;
+  return g;
+}
 export const LIB_STAIR_TREAD_THICKNESS = .090;
 export function solidSpiralTread(i:number):THREE.BufferGeometry {
   const a=stairStepAngle(i),d=LIB_STAIR.sweep/LIB_STAIR.steps/2+.014;
@@ -63,13 +106,14 @@ export function solidSpiralTread(i:number):THREE.BufferGeometry {
   // Extrusion's +Z becomes world +Y; shape Y becomes -world Z (plan coordinates).
   g.rotateX(-Math.PI/2);
   g.computeVertexNormals();
-  return g;
+  return mapSingleTreadBoardUV(g,a);
 }
 
 export function libraryStairR01(c:Ctx) {
   const {x,z,radius,steps,start,sweep,bridge}=LIB_STAIR;
   const k=c.k,rise=LIB_STAIR_RISE,wood=k.M.wood,metal=k.M.paint;
   const walnut='#432b1d',oak='#795032',edge='#926844',iron='#282724';
+  const boardMat=singleBoardTreadMaterial();
 
   // Full-height cylindrical newel and timber cap, rather than a disconnected dark column.
   cyl(c.b,wood,walnut,x,GF,z,.078,.078,UF-GF+1.08,12,{chunk:c.chunk});
@@ -80,12 +124,10 @@ export function libraryStairR01(c:Ctx) {
   for(let i=0;i<steps;i++){
     const p=stairStepPoint(i);
     const tread=solidSpiralTread(i);
-    c.b.add(wood,tread,planMatrix(x,p.y-LIB_STAIR_TREAD_THICKNESS,z),oak,c.chunk,true,0);
+    c.b.add(boardMat,tread,planMatrix(x,p.y-LIB_STAIR_TREAD_THICKNESS,z),oak,c.chunk,true,0);
     tread.dispose();
-    // Narrow dark oak riser/nosing ring at the outer edge (thin so it reads at phone DPR).
-    const a=stairStepAngle(i),r=LIB_STAIR.outer-.035;
-    box(c.b,wood,edge,x+r*Math.cos(a),p.y-.023,z+r*Math.sin(a),
-      .17,.024,.024,{chunk:c.chunk,yaw:-a});
+    // No separate short nose-boxes: each step is one contiguous solid oak board.
+    const a=stairStepAngle(i);
     // Three overlapping strips approximate a sector for the game's 2.5D floor engine.
     // They follow the actual tread, rather than only a tiny walkable patch in open space.
     for(const rad of [.60,.78,.94]){
@@ -180,6 +222,41 @@ export function libraryStairR01(c:Ctx) {
   }
   box(c.b,wood,edge,b.x0,UF-.205,(b.z0+b.z1)/2,.035,.205,b.z1-b.z0,{chunk:c.chunk});
 
+  // LIB-STAIR-R03: the previously open NORTH-WEST pocket of the transfer
+  // platform is a protected, single-piece oak corner infill, NOT part of the
+  // central staircase walkway. Keep the normal upper exit at z=105.26 free.
+  // The L-shaped return connects to the existing north-gallery rail.
+  const northCap={
+    x0:b.x0-.26,x1:b.x0,
+    z0:b.z1-.37,z1:b.z1,
+  };
+  box(c.b,wood,'#88603d',(northCap.x0+northCap.x1)/2,UF-.20,(northCap.z0+northCap.z1)/2,
+    northCap.x1-northCap.x0,.20,northCap.z1-northCap.z0,{chunk:c.chunk,uv:1.1,jitter:0});
+  c.col.addFloor(northCap.x0,northCap.x1,northCap.z0,northCap.z1,UF);
+  // Closed L-shaped balustrade on its exposed WEST and SOUTH sides; north
+  // continues directly into the gallery-side rail already drawn below.
+  const railHeight=1.045;
+  const westX=northCap.x0,southZ=northCap.z0;
+  box(c.b,wood,walnut,westX,UF+railHeight,(northCap.z0+northCap.z1)/2,
+    .073,.07,northCap.z1-northCap.z0+.068,{chunk:c.chunk,jitter:0});
+  box(c.b,wood,walnut,(northCap.x0+northCap.x1)/2,UF+railHeight,southZ,
+    northCap.x1-northCap.x0+.070,.07,.073,{chunk:c.chunk,jitter:0});
+  for(const zz of [northCap.z0+.10,northCap.z0+.22,northCap.z0+.33]){
+    cyl(c.b,metal,iron,westX,UF-.055,zz,.016,.016,1.155,8,{chunk:c.chunk});
+  }
+  for(const xx of [northCap.x0+.08,northCap.x0+.18]){
+    cyl(c.b,metal,iron,xx,UF-.055,southZ,.016,.016,1.155,8,{chunk:c.chunk});
+  }
+  for(const [px,pz] of [[westX,southZ],[westX,northCap.z1]]){
+    cyl(c.b,wood,walnut,px,UF,pz,.049,.052,1.09,8,{chunk:c.chunk});
+  }
+  // Same physical limits as the visible L, and no collision across the
+  // eastern walk-through to the upper gallery.
+  c.col.addBox(northCap.x0-.045,northCap.x0+.045,northCap.z0,northCap.z1,
+    UF-.14,UF+1.12,{tag:'lib-stair.r03-northwest-west'});
+  c.col.addBox(northCap.x0,northCap.x1,northCap.z0-.045,northCap.z0+.045,
+    UF-.14,UF+1.12,{tag:'lib-stair.r03-northwest-south'});
+  
   // Gallery-side guards: continuous top rail and infill instead of only two
   // huge wooden posts. SOUTH side connects to the spiral handrail via
   // the upperCurve; north side is the separate short oak return.
