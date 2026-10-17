@@ -321,7 +321,9 @@ export function bindStableLiving(w: World) {
     const radii=[9,5,9,4.5];
     sources.forEach((lamp,i)=>roomPositions[i].set(lamp!.pos.x,lamp!.pos.y,lamp!.pos.z,
       Math.min(radii[i],lamp!.distance)));
-    const strength=[0.105,0.085,0.11,0.095];
+    // Hall chandelier must read from the actual arch, while library carpet
+    // and plaster retain texture rather than flattening into an orange patch.
+    const strength=[0.16,0.085,0.095,0.095];
     const update=()=>sources.forEach((lamp,i)=>{
       roomColors[i].w=lamp!.on()?strength[i]:0;
     });
