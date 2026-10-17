@@ -69,4 +69,26 @@ describe('LIGHT-R05 route and mobile slot safety',()=>{
   expect(pool.assigned()).toContain('remote');
   expect(pool.lights).toHaveLength(3);
  });
+ it('does not give an out-of-range hall chandelier a slot deep inside living', () => {
+  const pool = new LightPool(new THREE.Scene(), 3);
+  walk(pool,92,77);
+  // At x=77 the ceiling chandelier at (89.9,4.5,90) is 13.60 m away,
+  // beyond its physically lit radius (13 m). Movement is away from it.
+  expect(pool.assigned()).not.toContain('lamp.hallChandelier');
+  expect(pool.assigned()).toContain('fire.living');
+ });
+ it('releases a strong but irrelevant hall light as the player moves into library',()=>{
+  const graph = new RoomGraph([
+   {id:'hall',name:'Hall',floor:'g',x0:85,x1:96,z0:85,z1:100,y0:0,y1:6},
+   {id:'library',name:'Library',floor:'g',x0:75,x1:85,z0:96,z1:110,y0:0,y1:6},
+  ],[{a:'hall',b:'library',kind:'arch'}]);
+  const hall=fixture('hall-ceiling',89.9,4.5,90,9,13,'hall');
+  const library=fixture('local-library',78.4,2.5,101,5,8,'library');
+  const pool=new LightPool(new THREE.Scene(),1);
+  for(let x=90;x>=80.5;x-=.25)for(let f=0;f<3;f++)
+   pool.update(.05,0,[hall,library],new THREE.Vector3(x,1.75,-100.5),graph,()=>true);
+  // The hall source is 14.36 m away and the player is walking farther away.
+  expect(pool.assigned()).toEqual(['local-library']);
+  expect(pool.lights[0].intensity).toBeGreaterThan(0.5);
+ });
 });
