@@ -1,0 +1,66 @@
+name: LIGHT-R06B state-bound material and room-boundary QA
+on:
+  push:
+    branches: [lighting/r06b-room-scoped-pilot]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run test:budget
+      - run: npm run build
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - profile: baseline
+            quality: low
+            portrait: '0'
+          - profile: pilot
+            quality: low
+            portrait: '0'
+          - profile: baseline
+            quality: high
+            portrait: '1'
+          - profile: pilot
+            quality: high
+            portrait: '1'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci && npm run build && npx playwright-core install --with-deps chromium
+      - name: Render real game with and without room-specific switched lighting
+        env:
+          LIGHT_R06_PROFILE: ${{ matrix.profile }}
+          LIGHT_R06_QUALITY: ${{ matrix.quality }}
+          LIGHT_R06_PORTRAIT: ${{ matrix.portrait }}
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4188 > /tmp/flw-r06b-preview.log 2>&1 &
+          for i in $(seq 1 40); do
+            curl -sf http://127.0.0.1:4188/Feh-Lu-We/ >/dev/null && break
+            sleep 1
+          done
+          node scripts/light-r06-stable-qa.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r06b-${{ matrix.profile }}-${{ matrix.quality }}-${{ matrix.portrait }}-screenshots
+          path: light-r06-qa/
+          if-no-files-found: warn
