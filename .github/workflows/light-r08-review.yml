@@ -1,0 +1,97 @@
+name: LIGHT-R08 source-bound hall + library candidate (review only)
+on:
+  push:
+    branches: [lighting/r08-hall-library-prototype]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run test:budget
+      - run: npm run build
+  scenes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: r06d-low
+            profile: r06d
+            quality: low
+            portrait: '0'
+          - label: r08-low
+            profile: r08
+            quality: low
+            portrait: '0'
+          - label: r06d-high
+            profile: r06d
+            quality: high
+            portrait: '1'
+          - label: r08-high
+            profile: r08
+            quality: high
+            portrait: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci && npm run build && npx playwright-core install --with-deps chromium
+      - name: Independent lamp and room-boundary gameplay render QA
+        env:
+          LIGHT_R08_PROFILE: ${{ matrix.profile }}
+          LIGHT_R08_QUALITY: ${{ matrix.quality }}
+          LIGHT_R08_PORTRAIT: ${{ matrix.portrait }}
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4188 > /tmp/flw-r08-preview.log 2>&1 &
+          for i in $(seq 1 40); do
+            curl -sf http://127.0.0.1:4188/Feh-Lu-We/ >/dev/null && break
+            sleep 1
+          done
+          node scripts/light-r08-visual-qa.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: light-r08-${{ matrix.label }}-evidence
+          path: light-r08-evidence/
+          if-no-files-found: warn
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci && npm run build
+      - name: Unpublished R08 local playable artifact
+        run: |
+          mkdir -p package/Feh-Lu-We
+          cp -a dist/. package/Feh-Lu-We/
+          cat > package/README.txt <<'TXT'
+          LIGHT-R08 prototype: isolated review package, NOT deployed.
+          Start a local server from this directory: python3 -m http.server 4188
+          Open http://localhost:4188/Feh-Lu-We/?stableRooms=1
+          Compare with approved R06D baseline ?stableLiving=1
+          Prove room lighting with no pooled point lights: &noPoint=1
+          The public Feh Lu We website is NOT changed by this artifact.
+          TXT
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LIGHT-R08-local-review-build-NOT-deployed
+          path: package/
+          if-no-files-found: error
