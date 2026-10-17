@@ -111,11 +111,12 @@ export function defaultState(now = Date.now()): GameState {
   };
 }
 
-export function defaultSettings(coarsePointer = false): Settings {
+// The family route prioritises presentation quality even on touch devices; players may still override it.
+export function defaultSettings(coarsePointer = false, familyEdition = FAMILY_EDITION): Settings {
   return {
     lookSensitivity: 1,
     moveSensitivity: 1,
-    quality: coarsePointer ? 'low' : 'high',
+    quality: familyEdition || !coarsePointer ? 'high' : 'low',
     reducedMotion: false,
     mushroomDistortion: true,
     muted: false,
