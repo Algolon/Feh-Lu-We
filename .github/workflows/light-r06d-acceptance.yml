@@ -87,6 +87,72 @@ jobs:
           name: light-r06d-${{ matrix.label }}
           path: game/light-r06d-evidence/
           if-no-files-found: warn
+  gameplay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: original-low
+            ref: 06263c3902ca008f727d81b82b270450d352e099
+            profile: production
+            quality: low
+            portrait: '0'
+          - label: pilot-low
+            ref: ${{ github.sha }}
+            profile: pilot
+            quality: low
+            portrait: '0'
+          - label: original-high
+            ref: 06263c3902ca008f727d81b82b270450d352e099
+            profile: production
+            quality: high
+            portrait: '1'
+          - label: pilot-high
+            ref: ${{ github.sha }}
+            profile: pilot
+            quality: high
+            portrait: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          path: qa
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.ref }}
+          path: game
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: game/package-lock.json
+      - working-directory: game
+        run: |
+          cp ../qa/scripts/light-r06d-gameplay-smoke.mjs scripts/light-r06d-gameplay-smoke.mjs
+          npm ci
+          npm run build
+          npx playwright-core install --with-deps chromium
+      - name: Capture phase/on-off without suppressing other pointlights
+        working-directory: game
+        env:
+          LIGHT_R06D_PROFILE: ${{ matrix.profile }}
+          LIGHT_R06D_QUALITY: ${{ matrix.quality }}
+          LIGHT_R06D_PORTRAIT: ${{ matrix.portrait }}
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4188 > /tmp/flw-gameplay.log 2>&1 &
+          for i in $(seq 1 40); do
+            curl -sf http://127.0.0.1:4188/Feh-Lu-We/ >/dev/null && break
+            sleep 1
+          done
+          node scripts/light-r06d-gameplay-smoke.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r06d-real-gameplay-${{ matrix.label }}
+          path: game/light-r06d-gameplay/
+          if-no-files-found: warn
   preview-build:
     runs-on: ubuntu-latest
     timeout-minutes: 20
