@@ -1,0 +1,696 @@
+{
+  "source": "actual candidate branch Vite/Chromium SwiftShader",
+  "commit": "8d5a68673c3c628e390806917437c7e7efd1facf",
+  "records": [
+    {
+      "name": "01-entrance-wide",
+      "pose": {
+        "x": 83.05,
+        "y": 0.15,
+        "z": 100,
+        "yaw": -1.1114590359279042,
+        "pitch": -0.048153419375853976
+      },
+      "room": "library",
+      "calls": 290,
+      "triangles": 1694630,
+      "glError": 0
+    },
+    {
+      "name": "02-reading-lounge",
+      "pose": {
+        "x": 81.4,
+        "y": 0.15,
+        "z": 99.5,
+        "yaw": -0.7720656201033034,
+        "pitch": -0.16808937839086718
+      },
+      "room": "library",
+      "calls": 297,
+      "triangles": 1725792,
+      "glError": 0
+    },
+    {
+      "name": "03-puzzle-bureau",
+      "pose": {
+        "x": 76.2,
+        "y": 0.15,
+        "z": 98.35,
+        "yaw": -1.3594776160686397,
+        "pitch": -0.23745277077708069
+      },
+      "room": "library",
+      "calls": 250,
+      "triangles": 1561500,
+      "glError": 0
+    },
+    {
+      "name": "04-window-bay-shelves",
+      "pose": {
+        "x": 81.25,
+        "y": 0.15,
+        "z": 102,
+        "yaw": -1.687905071361761,
+        "pitch": -0.029202008317641335
+      },
+      "room": "library",
+      "calls": 287,
+      "triangles": 1722034,
+      "glError": 0
+    },
+    {
+      "name": "05-north-builtins",
+      "pose": {
+        "x": 79,
+        "y": 0.15,
+        "z": 105.1,
+        "yaw": -0.12435499454676144,
+        "pitch": -0.049573245018024625
+      },
+      "room": "library",
+      "calls": 259,
+      "triangles": 1624432,
+      "glError": 0
+    },
+    {
+      "name": "06-spiral-from-floor",
+      "pose": {
+        "x": 79.7,
+        "y": 0.15,
+        "z": 103.8,
+        "yaw": 0.982793723247329,
+        "pitch": 0.14685515089236043
+      },
+      "room": "library",
+      "calls": 349,
+      "triangles": 1634948,
+      "glError": 0
+    },
+    {
+      "name": "07-spiral-upper-gallery",
+      "pose": {
+        "x": 83.7,
+        "y": 3.35,
+        "z": 105.2,
+        "yaw": -1.5137155443886352,
+        "pitch": -0.939986256830184
+      },
+      "room": "libGallery",
+      "calls": 263,
+      "triangles": 1473445,
+      "glError": 0
+    },
+    {
+      "name": "12-secretary-chair-oblique",
+      "pose": {
+        "x": 75.45,
+        "y": 0.15,
+        "z": 96.9,
+        "yaw": -0.7971623265472098,
+        "pitch": -0.2756246770321939
+      },
+      "room": "library",
+      "calls": 258,
+      "triangles": 1587880,
+      "glError": 0
+    },
+    {
+      "name": "13-wing-chair-faces-rug",
+      "pose": {
+        "x": 78.05,
+        "y": 0.15,
+        "z": 101.4,
+        "yaw": -1.0303768265243143,
+        "pitch": -0.3372264541186275
+      },
+      "room": "library",
+      "calls": 253,
+      "triangles": 1604194,
+      "glError": 0
+    },
+    {
+      "name": "14-sofa-tufting-near",
+      "pose": {
+        "x": 78,
+        "y": 0.15,
+        "z": 101.45,
+        "yaw": 0.31393821333654076,
+        "pitch": -0.3941033826028476
+      },
+      "room": "library",
+      "calls": 277,
+      "triangles": 1656468,
+      "glError": 0
+    },
+    {
+      "name": "15-spiral-sculpted-treads",
+      "pose": {
+        "x": 80.6,
+        "y": 0.15,
+        "z": 102.6,
+        "yaw": 0.46364760900080826,
+        "pitch": -0.01656195202898439
+      },
+      "room": "library",
+      "calls": 303,
+      "triangles": 1679750,
+      "glError": 0
+    },
+    {
+      "name": "16-r03-banker-lamp-close",
+      "pose": {
+        "x": 74.82,
+        "y": 0.15,
+        "z": 99.87,
+        "yaw": -1.5976355180541164,
+        "pitch": -0.2621823492465336
+      },
+      "room": "library",
+      "calls": 241,
+      "triangles": 1571296,
+      "glError": 0
+    },
+    {
+      "name": "17-r03-desk-wall-fit",
+      "pose": {
+        "x": 75.45,
+        "y": 0.15,
+        "z": 100.85,
+        "yaw": -2.1339841691274297,
+        "pitch": -0.2131517713784055
+      },
+      "room": "library",
+      "calls": 263,
+      "triangles": 1713584,
+      "glError": 0
+    },
+    {
+      "name": "18-r04-lamp-books-swap-front",
+      "pose": {
+        "x": 75.65,
+        "y": 0.15,
+        "z": 99,
+        "yaw": -1.5707963267948966,
+        "pitch": -0.2892710056091406
+      },
+      "room": "library",
+      "calls": 244,
+      "triangles": 1567632,
+      "glError": 0
+    },
+    {
+      "name": "19-r04-lamp-books-swap-angle",
+      "pose": {
+        "x": 75.05,
+        "y": 0.15,
+        "z": 100.45,
+        "yaw": -1.9629823165488653,
+        "pitch": -0.29142171694846525
+      },
+      "room": "library",
+      "calls": 247,
+      "triangles": 1633532,
+      "glError": 0
+    },
+    {
+      "name": "11-desktop-low-comparison",
+      "pose": {
+        "x": 83.05,
+        "y": 0.15,
+        "z": 100,
+        "yaw": -1.1114590359279042,
+        "pitch": -0.048153419375853976
+      },
+      "room": "library",
+      "calls": 92,
+      "triangles": 830222,
+      "glError": 0
+    },
+    {
+      "name": "08-mobile-portrait-lounge",
+      "pose": {
+        "x": 82.6,
+        "y": 0.15,
+        "z": 99.4,
+        "yaw": -0.7977432152416721,
+        "pitch": -0.10436797065772957
+      },
+      "room": "library",
+      "calls": 72,
+      "triangles": 716490,
+      "glError": 0
+    },
+    {
+      "name": "09-mobile-landscape-desk",
+      "pose": {
+        "x": 76,
+        "y": 0.15,
+        "z": 99.5,
+        "yaw": -1.745670098064063,
+        "pitch": -0.2715004049354145
+      },
+      "room": "library",
+      "calls": 82,
+      "triangles": 820518,
+      "glError": 0
+    },
+    {
+      "name": "10-b01-review-desk",
+      "pose": {
+        "x": 75.3,
+        "y": 0.15,
+        "z": 98.85,
+        "yaw": -1.5004898626762693,
+        "pitch": -0.38690507196560553
+      },
+      "room": "library",
+      "calls": 242,
+      "triangles": 1545776,
+      "glError": 0
+    }
+  ],
+  "checks": [
+    {
+      "name": "production-puzzle-and-lamp-anchors",
+      "data": {
+        "library.catalog": {
+          "exists": true,
+          "position": [
+            73.17,
+            1.06,
+            99
+          ]
+        },
+        "library.desk": {
+          "exists": true,
+          "position": [
+            73.83,
+            0.8300000000000001,
+            99
+          ]
+        },
+        "pk.studyKey": {
+          "exists": true,
+          "position": [
+            73.43,
+            0.8660000000000001,
+            98.95
+          ]
+        },
+        "lamp.library": {
+          "exists": true,
+          "position": [
+            73.04,
+            1.31,
+            99.72
+          ]
+        },
+        "inspect.cipherExample": {
+          "exists": true,
+          "position": [
+            73.8,
+            1.31,
+            101.1
+          ]
+        }
+      },
+      "pass": true
+    },
+    {
+      "name": "r04-banker-lamp-moved-to-desk-right-rear",
+      "pass": true,
+      "data": {
+        "actual": [
+          73.04,
+          1.31,
+          99.72
+        ],
+        "expected": [
+          73.04,
+          99.72
+        ]
+      }
+    },
+    {
+      "name": "r03-library-door-to-wall-desk-walk",
+      "data": {
+        "pass": true,
+        "final": {
+          "x": 74.77,
+          "y": 0.15,
+          "z": 99.02
+        },
+        "visited": [
+          {
+            "x": 82.17,
+            "y": 0.15,
+            "z": 100.23
+          },
+          {
+            "x": 79.89,
+            "y": 0.15,
+            "z": 99.28
+          },
+          {
+            "x": 77.01,
+            "y": 0.15,
+            "z": 99.2
+          },
+          {
+            "x": 74.77,
+            "y": 0.15,
+            "z": 99.02
+          }
+        ]
+      },
+      "pass": true
+    },
+    {
+      "name": "spiral-upstairs-walking",
+      "data": {
+        "pass": true,
+        "final": {
+          "x": 83.17,
+          "y": 3.35,
+          "z": 105.24
+        },
+        "steps": [
+          {
+            "i": 0,
+            "feet": 0.396,
+            "x": 82.067,
+            "z": 104.308
+          },
+          {
+            "i": 1,
+            "feet": 0.396,
+            "x": 82.144,
+            "z": 104.411
+          },
+          {
+            "i": 2,
+            "feet": 0.519,
+            "x": 82.331,
+            "z": 104.589
+          },
+          {
+            "i": 3,
+            "feet": 0.642,
+            "x": 82.472,
+            "z": 104.743
+          },
+          {
+            "i": 4,
+            "feet": 0.765,
+            "x": 82.586,
+            "z": 104.926
+          },
+          {
+            "i": 5,
+            "feet": 0.888,
+            "x": 82.667,
+            "z": 105.173
+          },
+          {
+            "i": 6,
+            "feet": 1.012,
+            "x": 82.672,
+            "z": 105.373
+          },
+          {
+            "i": 7,
+            "feet": 1.135,
+            "x": 82.617,
+            "z": 105.573
+          },
+          {
+            "i": 8,
+            "feet": 1.258,
+            "x": 82.506,
+            "z": 105.754
+          },
+          {
+            "i": 9,
+            "feet": 1.381,
+            "x": 82.346,
+            "z": 105.896
+          },
+          {
+            "i": 10,
+            "feet": 1.504,
+            "x": 82.15,
+            "z": 105.985
+          },
+          {
+            "i": 11,
+            "feet": 1.627,
+            "x": 81.938,
+            "z": 106.013
+          },
+          {
+            "i": 12,
+            "feet": 1.75,
+            "x": 81.726,
+            "z": 105.976
+          },
+          {
+            "i": 13,
+            "feet": 1.873,
+            "x": 81.535,
+            "z": 105.879
+          },
+          {
+            "i": 14,
+            "feet": 1.996,
+            "x": 81.382,
+            "z": 105.729
+          },
+          {
+            "i": 15,
+            "feet": 2.119,
+            "x": 81.28,
+            "z": 105.541
+          },
+          {
+            "i": 16,
+            "feet": 2.242,
+            "x": 81.238,
+            "z": 105.33
+          },
+          {
+            "i": 17,
+            "feet": 2.365,
+            "x": 81.262,
+            "z": 105.117
+          },
+          {
+            "i": 18,
+            "feet": 2.488,
+            "x": 81.347,
+            "z": 104.921
+          },
+          {
+            "i": 19,
+            "feet": 2.612,
+            "x": 81.487,
+            "z": 104.758
+          },
+          {
+            "i": 20,
+            "feet": 2.735,
+            "x": 81.669,
+            "z": 104.645
+          },
+          {
+            "i": 21,
+            "feet": 2.858,
+            "x": 81.877,
+            "z": 104.591
+          },
+          {
+            "i": 22,
+            "feet": 2.981,
+            "x": 82.091,
+            "z": 104.602
+          },
+          {
+            "i": 23,
+            "feet": 3.104,
+            "x": 82.292,
+            "z": 104.675
+          },
+          {
+            "i": 24,
+            "feet": 3.227,
+            "x": 82.463,
+            "z": 104.805
+          },
+          {
+            "i": 25,
+            "feet": 3.35,
+            "x": 82.587,
+            "z": 104.98
+          }
+        ]
+      },
+      "pass": true
+    },
+    {
+      "name": "spiral-downstairs-walking",
+      "data": {
+        "pass": true,
+        "final": {
+          "x": 82.05,
+          "y": 0.15,
+          "z": 103.99
+        },
+        "path": [
+          {
+            "step": 25,
+            "y": 3.35
+          },
+          {
+            "step": 24,
+            "y": 3.35
+          },
+          {
+            "step": 23,
+            "y": 3.35
+          },
+          {
+            "step": 22,
+            "y": 3.227
+          },
+          {
+            "step": 21,
+            "y": 3.107
+          },
+          {
+            "step": 20,
+            "y": 2.981
+          },
+          {
+            "step": 19,
+            "y": 2.858
+          },
+          {
+            "step": 18,
+            "y": 2.735
+          },
+          {
+            "step": 17,
+            "y": 2.612
+          },
+          {
+            "step": 16,
+            "y": 2.492
+          },
+          {
+            "step": 15,
+            "y": 2.365
+          },
+          {
+            "step": 14,
+            "y": 2.242
+          },
+          {
+            "step": 13,
+            "y": 2.119
+          },
+          {
+            "step": 12,
+            "y": 1.996
+          },
+          {
+            "step": 11,
+            "y": 1.936
+          },
+          {
+            "step": 10,
+            "y": 1.75
+          },
+          {
+            "step": 9,
+            "y": 1.627
+          },
+          {
+            "step": 8,
+            "y": 1.504
+          },
+          {
+            "step": 7,
+            "y": 1.381
+          },
+          {
+            "step": 6,
+            "y": 1.261
+          },
+          {
+            "step": 5,
+            "y": 1.135
+          },
+          {
+            "step": 4,
+            "y": 1.012
+          },
+          {
+            "step": 3,
+            "y": 0.888
+          },
+          {
+            "step": 2,
+            "y": 0.765
+          },
+          {
+            "step": 1,
+            "y": 0.642
+          },
+          {
+            "step": 0,
+            "y": 0.519
+          }
+        ]
+      },
+      "pass": true
+    },
+    {
+      "name": "dev01-b01-ds01-anchors",
+      "data": {
+        "b01.table": {
+          "exists": true
+        },
+        "library.desk": {
+          "exists": true
+        },
+        "pk.studyKey": {
+          "exists": true
+        },
+        "ds01.album": {
+          "exists": true
+        },
+        "lamp.library": {
+          "exists": true
+        }
+      },
+      "pass": true
+    },
+    {
+      "name": "dev01-playable-reticle-targets",
+      "data": {
+        "b01.table": {
+          "target": "b01.table",
+          "label": "Bekijken: tekenbladen en vakken",
+          "pass": true
+        },
+        "ds01.album": {
+          "target": "ds01.album",
+          "label": "Bekijken: album",
+          "pass": true
+        }
+      },
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "realDeviceVerified": false
+}

@@ -49,6 +49,7 @@ import { EXTERIOR_WEATHER, houseNameplate } from './exteriorWeather';
 import { ROOF_DETAIL, gableTrimGeo } from './roofDetail';
 import { EXTERIOR_FINISH, finishedChimney, roofFlashing } from './exteriorFinish';
 import { buildKitchenJuicePouch } from './kitchenJuicePouch';
+import { libraryR01Furniture, libraryR01Stair, libraryR01BankerLamp, LIB_R01 } from './libraryR01';
 import { planChest, pottingBench, plantStand, plantEtagere, pottedPlant } from './d3b';
 import { coatStand, holdall, rucksack, deskTravelSet, jacketOverChair, planningDesk, daybed, observingTable, binoculars, stoolThrow, sweaterOverChest, washShelf, towelRing, bathCaddy } from './d3b2';
 import { wainscot, refectoryTable, gamesCabinet, dartboard, servingConsole, chinaCabinet, wallCupboards, splashback, enamelPendant, pegRailClock, panelDoor } from './d3a';
@@ -381,7 +382,10 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   railing(c, 'z', 86.8, 84, 95.5, UF);
   railing(c, 'x', 84, 86.8, 95, UF);
   railing(c, 'x', 95.5, 86.8, 93, UF);
-  railing(c, 'z', 83.2, 94, 107.8, UF, '#4a2f1a');
+  // LIB-R01: split only the east library railing for a real landing from the new spiral.
+  // The remaining gallery edge stays protected by the existing collider-bearing railing().
+  railing(c, 'z', 83.2, 94, 104.6, UF, '#4a2f1a');
+  railing(c, 'z', 83.2, 105.9, 107.8, UF, '#4a2f1a');
   railing(c, 'x', 107.8, 72.4, 83.2, UF, '#4a2f1a');
   // grand stair along the hall's east wall, with a sloped handrail on its open side
   stairsZ(c, 93.05, 94.92, 86.5, 95.5, GF, UF);
@@ -762,22 +766,18 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
 
 // ---------------------------------------------------------------- library
 function library(w: World, g: GameApi, c: Ctx) {
-  rug(c, 78.4, 101, GF + 0.01, 4.4, 5.8, 0, '#d8d4e0', 'medallion', true);
-  for (const [z, pal] of [[95.6, 'leather'], [99.0, 'olive'], [103.0, 'navy'], [107.0, 'leather']] as const) bookshelf(c, 72.75, z, GF, Math.PI / 2, 1.9, 2.9, pal);
-  for (const [x, pal] of [[74.5, 'navy'], [77.9, 'leather'], [81.3, 'olive']] as const) bookshelf(c, x, 109.25, GF, Math.PI, 2.0, 2.9, pal);
-  // two free-standing double-sided stacks form aisles (walk between them)
-  for (const z of [97.6, 104.4]) {
-    bookshelf(c, 76.6, z + 0.2, GF, 0, 3.2, 2.3, z < 100 ? 'olive' : 'navy', 0.3);
-    bookshelf(c, 76.6, z - 0.2, GF, Math.PI, 3.2, 2.3, z < 100 ? 'leather' : 'linen', 0.3);
-  }
+  // LIB-R01: fitted shelving, central reading lounge, corner bureau and a traversable
+  // spiral staircase replacing the two freestanding double-sided stack aisles.
+  libraryR01Furniture(w, c);
+  libraryR01Stair(c);
+  // The upstairs library collection and its rolling ladder remain accessible from the gallery.
   for (const [x, pal] of [[75.0, 'linen'], [79.0, 'leather']] as const) bookshelf(c, x, 109.3, UF, Math.PI, 2.6, 2.4, pal, 0.25);
   bookshelf(c, 84.75, 97.0, UF, -Math.PI / 2, 2.4, 2.4, 'navy', 0.25);
   bookshelf(c, 84.75, 103.6, UF, -Math.PI / 2, 2.4, 2.4, 'olive', 0.25);
   ladder(c, 74.0, 108.85, GF, Math.PI, 3.3);
-  // reading table with the three catalogue sockets (thread B) + its drawer (study key + archive card)
-  const tx = 80.6, tz = 101.2;
-  // DEV-04B: the reading table is the joinery table (top 0.81, aprons, tapered legs); its east apron is the drawer
-  table(c, tx, tz, GF, 1.1, 2.2, 0, '#5a3a22', 0.81, { openSide: 1 });
+  // Retain the same puzzle IDs and solution, but physically anchor B01 and the
+  // locked reward drawer to the new south-west bureau rather than the removed table.
+  const tx = LIB_R01.desk.x, tz = LIB_R01.desk.z;
   const deskDrawer = makeDrawer(w, g, { id: 'library.desk', x: tx + 0.36, y: GF + 0.68, z: tz, yaw: Math.PI / 2, w: 0.9, h: 0.12, d: 0.6, color: '#6b4426', unlock: 'lock.libraryDesk', lockedLabel: 'Lade (dicht)', onLocked: () => g.toast(SLICE ? 'De lade van de leestafel zit dicht. Er zit geen sleutelgat in.' : 'De lade van de leestafel zit dicht. Een kaartje op tafel: “Elk boek terug in het vak van zijn kamer.”') });
   if (SLICE) sliceLibraryTable(w, g, c, deskDrawer); // DEV-01 B01 v0.2 table + DS01 B (album, drying letter)
   else libraryCatalogue(w, g, c, tx, tz, deskDrawer);
@@ -787,8 +787,7 @@ function library(w: World, g: GameApi, c: Ctx) {
 /** Iteration-3 catalogue (emblem → room → tab). Replaced by B01 v0.2 in the DEV-01 review build. */
 function libraryCatalogue(w: World, g: GameApi, c: Ctx, tx: number, tz: number, deskDrawer: ReturnType<typeof makeDrawer>) {
   const k = c.k;
-  chair(c, tx + 0.95, tz - 0.5, GF, -Math.PI / 2, '#3f5a6a');
-  chair(c, tx + 0.95, tz + 0.5, GF, -Math.PI / 2, '#3f5a6a');
+  // LIB-R01: no duplicate catalogue chairs — one separate upholstered desk chair exists.
   const sockets = new THREE.Group();
   place(sockets, tx, GF + 0.81, tz, 0);
   w.scene.add(sockets);
@@ -833,7 +832,14 @@ function libraryCatalogue(w: World, g: GameApi, c: Ctx, tx: number, tz: number, 
       const slot = Object.entries(cur).find(([, v]) => v === b.id)?.[0];
       const grp = bookGrp[b.id];
       if (slot) { const i = CATALOG.sockets.findIndex((s) => s.id === slot); grp.position.set(0, 0.004, -socketZ(i)); grp.rotation.y = 0; }
-      else { grp.position.set(-0.3, 0.004 + loose * 0.055, -0.95); grp.rotation.y = 0.3 + loose * 0.4; loose++; }
+      else {
+        // LIB-R04: move only UNSLOTTED catalogue books to the former lamp area,
+        // not books already placed in B01 catalogue puzzle slots.
+        const p = LIB_R01.deskObjects.looseBooks;
+        grp.position.set(p.dx, 0.004 + loose * 0.055, -p.dz);
+        grp.rotation.y = 0.3 + loose * 0.4;
+        loose++;
+      }
     });
   });
   makeAction(w, {
@@ -852,12 +858,12 @@ function libraryCatalogue(w: World, g: GameApi, c: Ctx, tx: number, tz: number, 
   card.position.set(0.05, -0.03 + LINER_TOP.blotter, 0.1);
   deskDrawer.slider.add(card);
   makePickup(w, g, { id: 'pk.studyKey', item: 'studyKey', obj: card, available: deskDrawer.isOpen, hit: [0.3, 0.12, 0.3], label: 'Pakken: messing sleutel en kaart', after: () => g.inspect('c.archiveCard') });
-  // framed floor plan with the room emblems, on the east wall facing into the library
-  canvasPanel(w, 84.82, GF + 1.75, 96.6, -Math.PI / 2, 1.3, 1.0, (x, W, H) => drawLibraryPlan(x, W, H), 512);
-  const planHit = new THREE.Group(); place(planHit, 84.7, GF + 1.25, 96.6, 0); w.scene.add(planHit);
+  // LIB-R01: relocation to an empty south wall section. The former east wall is now a filled book bay.
+  canvasPanel(w, 82.0, GF + 1.75, 94.16, 0, 1.3, 1.0, (x, W, H) => drawLibraryPlan(x, W, H), 512);
+  const planHit = new THREE.Group(); place(planHit, 82.0, GF + 1.25, 94.30, 0); w.scene.add(planHit);
   makeInspect(w, g, { id: 'inspect.libraryPlan', obj: planHit, clue: 'c.libraryPlan', hit: [0.3, 1.0, 1.4], hitOffset: [0, 0.5, 0], label: 'Bekijken: plattegrond' });
   // lectern with the big guestbook (page tabs)
-  const lec = lectern(c, 82.8, 105.6, GF, -Math.PI / 2);
+  const lec = lectern(c, 78.1, 107.0, GF, -Math.PI / 2); // clear of the new spiral
   // DEV-04B: the guestbook is an open book from the book family (boards, gutter, curving pages) with its page tabs
   const gbk = compound((b) => {
     addOpenBook(new Asm(b, 'main', 0, -0.035, 0, Math.PI / 2), '#5a2a22', 0, 0, 0, { size: 'tall', rx: -0.45 });
@@ -876,22 +882,16 @@ function libraryRest(w: World, g: GameApi, c: Ctx, tx: number, tz: number) {
   place(nt, lec2.x, lec2.y, lec2.z, -Math.PI / 2);
   w.scene.add(nt);
   makeInspect(w, g, { id: 'inspect.cipherExample', obj: nt, clue: 'c.cipherExample', hit: [0.5, 0.4, 0.45], hitOffset: [0, 0.1, 0], label: 'Lezen: notitie' });
-  const rl = tableLamp(w, tx - 0.3, GF + 0.81, tz + 0.9);
+  // LIB-R04: banker's lamp sits RIGHT-REAR, just in front of the desk hutch.
+  const lampPose = LIB_R01.deskObjects.lamp;
+  const rl = libraryR01BankerLamp(w, tx + lampPose.dx, GF + LIB_R01.desk.h, tz + lampPose.dz);
   makeLamp(w, g, { id: 'lamp.library', ...rl, name: 'leeslamp', defaultOn: true, hit: [0.4, 0.7, 0.4], intensity: 5, distance: 8, patch: { y: GF + 0.82, r: 0.8, strength: 0.3 } });
   const lch = chandelier(w, 78.4, UCEIL, 101, 0.8, 1.6, 'mLib'); // DEV-04C: owned by the library batch
   const lsw = compound((b) => box(b, k.M.paint, '#c9a44c', 0, 0, 0, 0.12, 0.18, 0.03));
   place(lsw, 84.9, 1.35, 99.4, -Math.PI / 2);
   w.scene.add(lsw);
   makeLamp(w, g, { id: 'lamp.libraryChandelier', obj: lsw, glow: lch.glow, light: lch.light, flames: lch.flames, name: 'kroonluchter', defaultOn: true, intensity: 7, distance: 12, hit: [0.3, 0.4, 0.4], hitOffset: [0, 0.05, 0], patch: { y: GF + 0.03, r: 2.6 } });
-  armchair(c, 74.4, 105.4, GF, Math.PI / 2, '#7a3a3a', true); // DEV-04B: a wing reading chair
-  floorGlobe(c, 82.4, 108.2, GF, 0.6);
-  armchairSide(c, 74.4, 104.6);
-}
-
-/** DEV-04B: a small round side table by the reading chair, with a book and a candlestick. */
-function armchairSide(c: Ctx, x: number, z: number) {
-  roundTable(c, x, z, GF, 0.26, '#5a3a22');
-  tabletop(c, x, z, GF + 0.76, 0.4, ['book'], 9);
+  // Reading seating and floor globe are authored once by libraryR01Furniture().
 }
 
 function drawLibraryPlan(x: CanvasRenderingContext2D, W: number, H: number) {
