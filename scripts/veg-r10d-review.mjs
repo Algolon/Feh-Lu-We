@@ -31,7 +31,7 @@ try{
    urn.position.y=.03;group.add(urn);
    const earth=new T.Mesh(new T.CylinderGeometry(.275,.275,.02,16),soilMat);earth.position.y=.65;group.add(earth);
    const plan=E.entrancePlantPlan(231),raw=E.entranceLeafGeo();
-   const greens=['#769e5b','#86a968','#6c9455','#92b073'];
+   const greens=['#83a766','#96b877','#789f60','#a2c084'];
    for(const b of plan.branches){const g=new T.TubeGeometry(new T.CatmullRomCurve3(b.points),8,b.radius,5,false);group.add(new T.Mesh(g,bark));}
    for(const l of plan.leaves){
      const g=raw.clone();g.scale(l.size,l.size,l.size);g.rotateX(l.tilt);g.rotateZ(l.angle);g.rotateY(l.yaw);g.translate(l.centre.x,l.centre.y,l.centre.z);
