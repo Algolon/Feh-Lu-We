@@ -503,11 +503,13 @@ export class LightPool {
       // hint, NOT a moved light: attenuation still uses the fixture's true position.
       // Sampling at 0.25s avoids frame-to-frame velocity jitter on mobile.
       const ahead = eye.clone();
+      let sampledMovement = 0;
       if (this.rankedEye && this.rankedDt > 0) {
         const move = eye.clone().sub(this.rankedEye);
+        sampledMovement = move.length();
         // Teleports and scene transitions must not preselect distant fixtures.
-        if (move.length() < 1.5) ahead.add(move.multiplyScalar(
-          Math.min(this.leadSeconds / this.rankedDt, 3.2 / Math.max(0.001, move.length()))
+        if (sampledMovement < 1.5) ahead.add(move.multiplyScalar(
+          Math.min(this.leadSeconds / this.rankedDt, 3.2 / Math.max(0.001, sampledMovement))
         ));
       }
       this.rankedEye = eye.clone();
@@ -548,7 +550,13 @@ export class LightPool {
         // outside both its real and movement-predicted influence. A small margin
         // reserves time for the existing fade before the source begins to matter.
         // Three.js PointLight.distance=0 means unlimited reach, hence the guard.
-        if (l.distance > 0 && priorityDistance > l.distance + 0.35) continue;
+        // If the player stops immediately after approaching a source, keep the
+        // already-planned source while near its recently predicted influence area.
+        // Otherwise velocity going to zero would revoke its slot after ~250 ms,
+        // making a lit fireplace visibly dim at rest. Walking away still releases it.
+        const heldAtRest = sampledMovement < 0.05 && this.want.includes(l.id)
+          && d <= l.distance + 3.2;
+        if (l.distance > 0 && priorityDistance > l.distance + 0.35 && !heldAtRest) continue;
         const w = l.intensity + 0.35 * l.distance;
         byId.set(l.id, l);
         cands.push({ id: l.id, room, d: priorityDistance, w });
