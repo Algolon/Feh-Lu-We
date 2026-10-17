@@ -16,8 +16,11 @@ export const POSE_BOUNDS = { x0: -5, x1: ESTATE.w + 5, z0: -5, z1: ESTATE.d + 5 
 // Isolated LIGHT-R08 browser review shares Pages origin with production.
 const R08_REVIEW_ROUTE = typeof location !== 'undefined' &&
   (location.pathname.includes('/light-r08/') || location.pathname.endsWith('/light-r08'));
-const STORAGE_PREFIX = FAMILY_EDITION ? 'fehluwe.family' :
-  R08_REVIEW_ROUTE ? 'fehluwe.light-r08' : 'fehluwe';
+// Keep the original main/family namespace expression byte-for-byte: its
+// runtime semantics are part of a separate family-edition contract.
+const PRIMARY_STORAGE_PREFIX = FAMILY_EDITION ? 'fehluwe.family' : 'fehluwe';
+const STORAGE_PREFIX = !FAMILY_EDITION && R08_REVIEW_ROUTE
+  ? 'fehluwe.light-r08' : PRIMARY_STORAGE_PREFIX;
 export const SAVE_KEY = `${STORAGE_PREFIX}.save`;
 export const SETTINGS_KEY = `${STORAGE_PREFIX}.settings`;
 export const STATE_VERSION = 4;
