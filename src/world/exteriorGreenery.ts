@@ -131,27 +131,33 @@ function placeLeaf(raw:THREE.BufferGeometry,l:GreenLeaf,yaw=0) {
 function tube(points:THREE.Vector3[],radius:number) {
   return new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points),points.length===2?1:Math.max(3,(points.length-1)*2),radius,5,false);
 }
-function submit(c:Ctx,parts:THREE.BufferGeometry[],mat:THREE.Material,color:string,matrix:THREE.Matrix4) {
+function submit(c:Ctx,parts:THREE.BufferGeometry[],mat:THREE.Material,color:string,matrix:THREE.Matrix4,bounds?:THREE.Box3) {
   if(!parts.length)return;
   // BufferGeometryUtils requires consistent indexed/non-indexed and attribute layouts.
   const geos=parts.map(g=>g.index?g.toNonIndexed():g);
   const merged=mergeGeometries(geos)!;merged.userData.keepColor=!!merged.attributes.color;
+  if(bounds){merged.computeBoundingBox();bounds.union(merged.boundingBox!.clone().applyMatrix4(matrix));}
   c.b.add(mat,merged,matrix,color,c.chunk,true,0);merged.dispose();
   parts.forEach(g=>g.dispose());geos.forEach((g,i)=>{if(g!==parts[i])g.dispose();});
 }
-function climbers(c:Ctx) {
-  const raw=climberLeafGeo();
+/** The world-space bounds of each climber site (leaves, stems, planting pocket): World.exteriorRegion's visibility boxes. */
+function climbers(c:Ctx):THREE.Box3[] {
+  const raw=climberLeafGeo(),sites:THREE.Box3[]=[];
   for(const site of climberPlan()) {
+    const bounds=new THREE.Box3();sites.push(bounds);
     // Local X is the distance along the facade; Z is proud of its outer face.
     const matrix=new THREE.Matrix4().makeRotationY(site.face==='W'?-Math.PI/2:Math.PI);
     matrix.setPosition(site.face==='W'?72:0,0,site.face==='W'?0:-110);
-    submit(c,site.leaves.map(l=>placeLeaf(raw,{...l,at:-l.at,angle:-l.angle})),c.k.M.paint,'#ffffff',matrix);
-    submit(c,site.stems.map(s=>tube(s.points.map(p=>new THREE.Vector3(-p.x,p.y,p.z)),s.radius)),c.k.M.paint,'#675740',matrix);
+    submit(c,site.leaves.map(l=>placeLeaf(raw,{...l,at:-l.at,angle:-l.angle})),c.k.M.paint,'#ffffff',matrix,bounds);
+    submit(c,site.stems.map(s=>tube(s.points.map(p=>new THREE.Vector3(-p.x,p.y,p.z)),s.radius)),c.k.M.paint,'#675740',matrix,bounds);
     // Planting pocket gives each group a visible origin; thin footprint stays against the wall.
     if(site.face==='W') box(c.b,c.k.M.paint,'#514b37',71.88,.025,site.root,.25,.045,.65,{chunk:c.chunk,jitter:0});
     else box(c.b,c.k.M.paint,'#514b37',site.root,.025,110.12,.65,.045,.25,{chunk:c.chunk,jitter:0});
+    // the pocket (plan centre ± half size, 4.5 cm tall); world z is −plan z
+    bounds.union(site.face==='W'?new THREE.Box3(new THREE.Vector3(71.755,.025,-site.root-.325),new THREE.Vector3(72.005,.07,-site.root+.325)):new THREE.Box3(new THREE.Vector3(site.root-.325,.025,-110.245),new THREE.Vector3(site.root+.325,.07,-109.995)));
   }
   raw.dispose();
+  return sites;
 }
 function entrancePot(c:Ctx,x:number,z:number,seed:number,dressed:THREE.Material) {
   const profile:[[number,number],...[number,number][]]=[[.001,0],[.39,0],[.39,.10],[.32,.13],[.28,.23],[.30,.59],[.38,.66],[.39,.75],[.31,.75],[.29,.67],[.27,.61],[.001,.61]];
@@ -185,7 +191,8 @@ export function buildExteriorGreenery(parent:THREE.Object3D,c:Ctx) {
   // PERF-R03-A: the wall climbers are their own exterior region (World.exteriorRegion), not manor architecture: they
   // stand on the outside of the west and north walls and are hidden from inside unless a window or door shows them.
   // The entrance pots keep the caller's chunk and its visibility. Same batcher and order: identical geometry.
-  climbers({...local,chunk:CLIMBERS_CHUNK});
+  const sites=climbers({...local,chunk:CLIMBERS_CHUNK});
   for(const pot of ENTRANCE_POTS)entrancePot(local,pot.x,pot.z,pot.seed,dressed);
-  local.b.build(parent);
+  // the climbers' visibility is tested per site (between the windows), not with one box spanning both facades
+  for(const m of local.b.build(parent))if(m.userData.chunk===CLIMBERS_CHUNK)m.userData.visibilityBoxes=sites;
 }

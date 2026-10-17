@@ -75,7 +75,7 @@ const DOOR_SAMPLES: [number, number][] = [[0, 0], [0.7, 0], [-0.7, 0], [0, 0.7],
 /** A region doorway (plan centre; `n` = the plan direction into the region's room, found on first use). */
 interface RegionDoor { door: string; x: number; y: number; z: number; r: number; n?: [number, number] | null }
 /** An exterior opening in plan: centre, outward normal, half width, and its height range (world y). */
-interface Aperture { x: number; z: number; nx: number; nz: number; half: number; y0: number; y1: number }
+interface Aperture { x: number; z: number; nx: number; nz: number; half: number; y0: number; y1: number; depth: number }
 /** A bounding box in plan coordinates (x east, z north) with its world height range. */
 interface PlanBox { x0: number; x1: number; z0: number; z1: number; y0: number; y1: number }
 
@@ -105,7 +105,7 @@ export class World {
   /** Room-based visibility (estate): regions are static chunks that belong to a set of rooms ('out' = outdoors). */
   rooms: RoomGraph | null = null;
   isOpen: (door: string) => boolean = () => false;
-  private regions: { meshes: THREE.Object3D[]; rooms: Set<string>; on: boolean; far: number; outFar: number; sph: THREE.Sphere; shade?: boolean; doors?: RegionDoor[]; ext?: PlanBox }[] = [];
+  private regions: { meshes: THREE.Object3D[]; rooms: Set<string>; on: boolean; far: number; outFar: number; sph: THREE.Sphere; shade?: boolean; doors?: RegionDoor[]; ext?: PlanBox[] }[] = [];
   visibleRooms = new Set<string>(['out']);
   hereRoom = 'out';
   constructor(public readonly id: SceneId) {}
@@ -190,13 +190,15 @@ export class World {
    * as before. From inside, it is drawn only while an exterior aperture that can show it is in view: an open (or glass)
    * exterior door, or a clear window, that passes the usual view-cone and line-of-sight tests (World.outdoorInView,
    * World.clearWindowInView), with the region's plan footprint inside the wedge the eye sees through that aperture.
-   * The wedge is widened by 0.5 m either side and 0.1 m above and below (conservative); the glass room counts as outdoors.
+   * The wedge is widened by 0.5 m either side and 0.1 m above and below; a window is a tunnel through the wall, only
+   * ±0.15 m deep here (the manor walls are 0.4 m thick); all conservative. The glass room counts as outdoors.
    */
   exteriorRegion(chunks: string[], far = Infinity) {
     this.roomRegion(chunks, ['out'], far);
-    const r = this.regions[this.regions.length - 1], box = new THREE.Box3();
-    for (const m of r.meshes) box.expandByObject(m);
-    r.ext = box.isEmpty() ? { x0: 0, x1: 0, z0: 0, z1: 0, y0: 0, y1: 0 } : { x0: box.min.x, x1: box.max.x, z0: -box.max.z, z1: -box.min.z, y0: box.min.y, y1: box.max.y };
+    const r = this.regions[this.regions.length - 1];
+    const plan = (b: THREE.Box3): PlanBox => ({ x0: b.min.x, x1: b.max.x, z0: -b.max.z, z1: -b.min.z, y0: b.min.y, y1: b.max.y });
+    // a mesh may list the world boxes of its separate parts (userData.visibilityBoxes, e.g. one per climber site)
+    r.ext = r.meshes.flatMap((m) => (m.userData.visibilityBoxes as THREE.Box3[] | undefined)?.map(plan) ?? (new THREE.Box3().expandByObject(m).isEmpty() ? [] : [plan(new THREE.Box3().expandByObject(m))]));
   }
   /** The exterior apertures in view from inside (plan centre, outward normal, half width); see exteriorRegion. */
   private exteriorApertures(eye: THREE.Vector3, cam: THREE.PerspectiveCamera | undefined, clearWindows: PortalDef[]) {
@@ -205,7 +207,7 @@ export class World {
     for (const p of clearWindows) {
       const a = p.aperture!, room = this.rooms.get(p.a === 'out' ? p.b : p.a);
       if (!room) continue;
-      out.push({ x: a.x, z: a.z, nx: a.axis === 'z' ? Math.sign(a.x - (room.x0 + room.x1) / 2) : 0, nz: a.axis === 'x' ? Math.sign(a.z - (room.z0 + room.z1) / 2) : 0, half: a.width / 2, y0: a.y - a.height / 2, y1: a.y + a.height / 2 });
+      out.push({ x: a.x, z: a.z, nx: a.axis === 'z' ? Math.sign(a.x - (room.x0 + room.x1) / 2) : 0, nz: a.axis === 'x' ? Math.sign(a.z - (room.z0 + room.z1) / 2) : 0, half: a.width / 2, y0: a.y - a.height / 2, y1: a.y + a.height / 2, depth: 0.15 });
     }
     for (const d of this.exteriorDoors) {
       if (d.door && !d.seeThrough && !this.isOpen(d.door)) continue;
@@ -215,9 +217,9 @@ export class World {
       const side = p && [p.a, p.b].find((id) => id !== 'out' && !this.rooms!.portals.some((q) => q.kind === 'glass' && (q.a === id || q.b === id)));
       const n = side ? this.doorInward({ door: d.door, x: d.x, y: d.y, z: d.z, r: d.r }, new Set([side])) : null;
       // unknown orientation: every direction (conservative)
-      if (!n) { out.push({ x: d.x, z: d.z, nx: 0, nz: 0, half: Infinity, y0: -Infinity, y1: Infinity }); continue; }
+      if (!n) { out.push({ x: d.x, z: d.z, nx: 0, nz: 0, half: Infinity, y0: -Infinity, y1: Infinity, depth: 0 }); continue; }
       // a door's height is not recorded: its leaf centre ± 1.5 m (conservative)
-      out.push({ x: d.x, z: d.z, nx: -n[0], nz: -n[1], half: d.r, y0: d.y - 1.5, y1: d.y + 1.5 });
+      out.push({ x: d.x, z: d.z, nx: -n[0], nz: -n[1], half: d.r, y0: d.y - 1.5, y1: d.y + 1.5, depth: 0 });
     }
     return out;
   }
@@ -227,14 +229,20 @@ export class World {
     const ex = eye.x, ez = -eye.z, tx = -a.nz, tz = a.nx;
     const eu = (ex - a.x) * a.nx + (ez - a.z) * a.nz, ev = (ex - a.x) * tx + (ez - a.z) * tz;
     if (eu > -0.05) return true; // the eye is in the opening (or beyond it)
-    let lo = Infinity, hi = -Infinity, u0 = Infinity, u1 = -Infinity;
-    for (const cx of [b.x0, b.x1]) for (const cz of [b.z0, b.z1]) {
-      const u = Math.max((cx - a.x) * a.nx + (cz - a.z) * a.nz, 0.02), v = (cx - a.x) * tx + (cz - a.z) * tz;
-      if ((cx - a.x) * a.nx + (cz - a.z) * a.nz > 0) { if (u < u0) u0 = u; if (u > u1) u1 = u; }
-      const vc = ev + ((v - ev) * -eu) / (u - eu); // where the eye's ray to the corner crosses the aperture plane
-      if (vc < lo) lo = vc; if (vc > hi) hi = vc;
-    }
-    if (u0 === Infinity || lo > a.half + 0.5 || hi < -a.half - 0.5) return false; // behind the opening, or outside its width
+    let u0 = Infinity, u1 = -Infinity;
+    // where the eye's rays to the box corners cross the plane at depth p (the opening's inner and outer faces)
+    const across = (p: number) => {
+      let lo = Infinity, hi = -Infinity;
+      for (const cx of [b.x0, b.x1]) for (const cz of [b.z0, b.z1]) {
+        const u = Math.max((cx - a.x) * a.nx + (cz - a.z) * a.nz, p + 0.02), v = (cx - a.x) * tx + (cz - a.z) * tz;
+        const vc = ev + ((v - ev) * (p - eu)) / (u - eu);
+        if (vc < lo) lo = vc; if (vc > hi) hi = vc;
+      }
+      return lo <= a.half + 0.5 && hi >= -a.half - 0.5;
+    };
+    for (const cx of [b.x0, b.x1]) for (const cz of [b.z0, b.z1]) { const u = (cx - a.x) * a.nx + (cz - a.z) * a.nz; if (u > 0) { if (u < u0) u0 = u; if (u > u1) u1 = u; } }
+    // behind the opening, or outside its width at either face of the wall
+    if (u0 === Infinity || !across(-a.depth) || !across(a.depth)) return false;
     // height: the rays through the opening's bottom and top edges, at the box's nearest and farthest depth beyond it
     let yb = Infinity, yt = -Infinity;
     for (const u of [u0, u1]) { const k = (u - eu) / -eu; yb = Math.min(yb, eye.y + (a.y0 - eye.y) * k); yt = Math.max(yt, eye.y + (a.y1 - eye.y) * k); }
@@ -427,8 +435,8 @@ export class World {
       for (const r of this.regions) {
         let on = false;
         if (r.ext) { // PERF-R03-A: exterior region (exteriorRegion)
-          const b = r.ext;
-          on = this.hereRoom === 'out' || this.hereRoom === 'cons' || (apertures ??= this.exteriorApertures(eye, cam, clearWindows)).some((a) => this.apertureShows(eye, a, b));
+          const boxes = r.ext;
+          on = this.hereRoom === 'out' || this.hereRoom === 'cons' || (apertures ??= this.exteriorApertures(eye, cam, clearWindows)).some((a) => boxes.some((b) => this.apertureShows(eye, a, b)));
         } else for (const id of r.rooms) if (this.visibleRooms.has(id)) { on = true; break; }
         // PERF-R02 integration (WINDOW-R02): a doorway region seen through one of its own clear windows is drawn
         // whatever its doorways show (the doorway rule only removes rooms that are behind solid walls)

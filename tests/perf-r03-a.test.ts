@@ -72,6 +72,21 @@ describe('PERF-R03-A: World.exteriorRegion', () => {
     look(89.5, 1.75, 95, 101.5, 1.2, 80.2); expect(w.hereRoom).toBe('hall'); expect(mesh.visible).toBe(false);
     w.dispose();
   });
+  it('per-part boxes and wall depth: a climber site between two windows of its own wall is not seen through them', () => {
+    const R = estateRooms(), w = new World('estate'); w.rooms = R; w.isOpen = () => false;
+    // one mesh with two parts: a site on the living room's west wall between its windows (z 83 and 90.5), and one far
+    // north on the same wall (z 106–108, outside the living room's windows' reach)
+    const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial());
+    mesh.position.set(71.85, 2.5, -95); mesh.userData.chunk = 'climbT'; w.scene.add(mesh); mesh.updateMatrixWorld();
+    mesh.userData.visibilityBoxes = [new THREE.Box3(new THREE.Vector3(71.7, 0, -87.5), new THREE.Vector3(72.0, 5, -85.5)), new THREE.Box3(new THREE.Vector3(71.7, 0, -108), new THREE.Vector3(72.0, 5, -106))];
+    w.exteriorRegion(['climbT'], 130);
+    const cam = new THREE.PerspectiveCamera(65, 915 / 412, 0.05, 200);
+    const look = (x: number, y: number, z: number, tx: number, ty: number, tz: number) => { cam.position.set(x, y, -z); cam.lookAt(tx, ty, -tz); cam.updateMatrixWorld(); w.updateCulling(cam.position, cam); };
+    look(90, 1.75, 86, 72.2, 1.8, 86); expect(w.hereRoom).toBe('hall'); expect(mesh.visible).toBe(false); // through the arch, west
+    look(73.5, 1.75, 84, 72.2, 1.8, 86.5); expect(w.hereRoom).toBe('living'); expect(mesh.visible).toBe(false); // oblique, at the glass
+    look(64, 1.7, 86.5, 72, 2, 86.5); expect(w.hereRoom).toBe('out'); expect(mesh.visible).toBe(true); // from the garden
+    w.dispose();
+  });
   it('a region is never shown through an opening it lies behind', () => {
     const { w, mesh, look } = setup(true); w.isOpen = () => false;
     // the dining room's east windows (x 107.8, facing east): the hedge is west of that wall plane
