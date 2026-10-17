@@ -102,6 +102,57 @@ jobs:
           name: light-r08-${{ matrix.label }}-evidence
           path: light-r08-evidence/
           if-no-files-found: warn
+  normal-gameplay:
+    needs: [checks, smoke]
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: r06d-low
+            profile: r06d
+            quality: low
+            portrait: '0'
+          - label: r08-low
+            profile: r08
+            quality: low
+            portrait: '0'
+          - label: r06d-high
+            profile: r06d
+            quality: high
+            portrait: '1'
+          - label: r08-high
+            profile: r08
+            quality: high
+            portrait: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci && npm run build && npx playwright-core install --with-deps chromium
+      - name: Actual gameplay — dynamic pool enabled
+        env:
+          LIGHT_R08_PROFILE: ${{ matrix.profile }}
+          LIGHT_R08_QUALITY: ${{ matrix.quality }}
+          LIGHT_R08_PORTRAIT: ${{ matrix.portrait }}
+          LIGHT_R08_FAST: '1'
+          LIGHT_R08_WITH_POOL: '1'
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4188 > /tmp/flw-r08-normal.log 2>&1 &
+          for i in $(seq 1 40); do
+            curl -sf http://127.0.0.1:4188/Feh-Lu-We/ >/dev/null && break
+            sleep 1
+          done
+          node scripts/light-r08-visual-qa.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: light-r08-normal-${{ matrix.label }}
+          path: light-r08-evidence/
+          if-no-files-found: warn
   preview:
     runs-on: ubuntu-latest
     timeout-minutes: 15
