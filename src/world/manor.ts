@@ -382,10 +382,10 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   railing(c, 'z', 86.8, 84, 95.5, UF);
   railing(c, 'x', 84, 86.8, 95, UF);
   railing(c, 'x', 95.5, 86.8, 93, UF);
-  // LIB-R01: split only the east library railing for a real landing from the new spiral.
-  // The remaining gallery edge stays protected by the existing collider-bearing railing().
-  railing(c, 'z', 83.2, 94, 104.6, UF, '#4a2f1a');
-  railing(c, 'z', 83.2, 105.9, 107.8, UF, '#4a2f1a');
+  // LIB-STAIR-R01: both gallery rail segments end flush at the enclosed 1 m stair bridge.
+  // This creates a protected upper approach WITHOUT erecting a barrier across the exit.
+  railing(c, 'z', 83.2, 94, 104.76, UF, '#4a2f1a');
+  railing(c, 'z', 83.2, 105.76, 107.8, UF, '#4a2f1a');
   railing(c, 'x', 107.8, 72.4, 83.2, UF, '#4a2f1a');
   // grand stair along the hall's east wall, with a sloped handrail on its open side
   stairsZ(c, 93.05, 94.92, 86.5, 95.5, GF, UF);
