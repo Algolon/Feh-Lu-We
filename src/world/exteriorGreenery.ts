@@ -119,10 +119,97 @@ export function climberLeafGeo(): THREE.BufferGeometry {
   }
   g.rotateZ(Math.PI);g.userData.keepColor=true;return g;
 }
+/** A separate, calmer broad-lobed leaf for the two entrance urns. No climber geometry is reused. */
+export function entranceLeafGeo():THREE.BufferGeometry {
+  // Full broad shoulders and soft notches, without the five jagged climber points.
+  // Local Y runs from the stem socket to the terminal tip.
+  const outline=[
+    [-.12,-.72],[-.36,-.48],[-.59,-.25],[-.72,.05],[-.66,.25],
+    [-.48,.37],[-.29,.33],[-.21,.68],[0,.99],[.21,.68],
+    [.29,.33],[.48,.37],[.66,.25],[.72,.05],[.59,-.25],
+    [.36,-.48],[.12,-.72]
+  ].reverse();
+  const p:number[]=[],colors:number[]=[];
+  const triangle=(v:number[][],tone:number,back:boolean,tipTone=tone)=>{
+    for(let i=0;i<3;i++){
+      p.push(...v[i]);
+      const shade=(i===2?tipTone:tone)*(back?.94:1);
+      colors.push(shade,shade*1.012,shade*.988);
+    }
+  };
+  // Two-sided opaque facets with a restrained centre fold.
+  for(let i=0;i<outline.length;i++){
+    const a=outline[i],b=outline[(i+1)%outline.length];
+    const right=(a[0]+b[0])*.5>0;
+    const tone=(right?.985:1.02)*(a[1]+b[1]>.30?1.015:1);
+    for(const back of [false,true]){
+      const core=[0,.04,back?-.065:.065];
+      triangle(back?[core,[...b,0],[...a,0]]:[core,[...a,0],[...b,0]],tone,back,1.04);
+    }
+  }
+  // Calm, tapered midrib: leaf-green rather than white.
+  for(const back of [false,true]){
+    const z=back?-.080:.080,zt=back?-.010:.010;
+    const a=[-.034,-.48,z],b=[.034,-.48,z],t=[0,.89,zt];
+    triangle(back?[b,a,t]:[a,b,t],1.12,back,1.04);
+  }
+  // Two short secondary veins per half, only on the upper portion.
+  for(const side of [-1,1])for(const offset of [0,.27])for(const back of [false,true]){
+    const y=.08+offset,z=back?-.079:.079;
+    const a=[side*.018,y,z],b=[side*.052,y+.035,z],t=[side*(offset? .31:.47),y+.19,back?-.009:.009];
+    triangle(back?[b,a,t]:[a,b,t],1.085,back,1.025);
+  }
+  const g=new THREE.BufferGeometry();
+  g.setAttribute('position',new THREE.Float32BufferAttribute(p,3));
+  g.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
+  g.setAttribute('uv',new THREE.Float32BufferAttribute(p.length/3*2,2));
+  g.computeVertexNormals();
+  // Match the existing leaf normal convention and avoid flipped mobile backfaces.
+  const normals=g.attributes.normal as THREE.BufferAttribute;
+  for(let i=0;i<normals.count;i++){
+    const sign=Math.floor(i/3)%2===0?1:-1;
+    const n=new THREE.Vector3(-p[i*3]*.20,-p[i*3+1]*.07,1).normalize().multiplyScalar(sign);
+    normals.setXYZ(i,n.x,n.y,n.z);
+  }
+  g.userData.keepColor=true;
+  return g;
+}
+
+const ENTRANCE_GREEN=['#739653','#7fa05f','#648b50','#87a768'] as const;
+export interface EntranceBranch { points:THREE.Vector3[]; radius:number }
+export interface EntranceLeaf { centre:THREE.Vector3; base:THREE.Vector3; attachment:THREE.Vector3; size:number; angle:number; tilt:number; yaw:number; tone:number }
+/** Seeded, game-space growth layout. No camera-facing billboard or random runtime state. */
+export function entrancePlantPlan(seed:number):{branches:EntranceBranch[];leaves:EntranceLeaf[]} {
+  const r=mulberry32(seed),branches:EntranceBranch[]=[],leaves:EntranceLeaf[]=[];
+  const Y=new THREE.Vector3(0,1,0),X=new THREE.Vector3(1,0,0),origin=new THREE.Vector3(0,.65,0);
+  const n=7;
+  for(let j=0;j<n;j++){
+    const a=(j+.16)/n*Math.PI*2+(r()-.5)*.22,reach=.20+r()*.10;
+    const height=.55+r()*.27;
+    const outward=new THREE.Vector3(Math.cos(a),0,Math.sin(a));
+    const mid=origin.clone().addScaledVector(outward,reach*.42).addScaledVector(Y,height*.48);
+    const end=origin.clone().addScaledVector(outward,reach).addScaledVector(Y,height);
+    branches.push({points:[origin.clone(),mid,end],radius:.011});
+    for(let k=0;k<6;k++){
+      const t=.22+k*.136;
+      const anchor=origin.clone().lerp(end,t);
+      const splay=(k%2===0?-1:1),size=.19+r()*.045;
+      const yaw=a+Math.PI/2+(r()-.5)*.30;
+      const angle=splay*(.20+r()*.26);
+      const tilt=-.12-r()*.20;
+      const centre=anchor.clone().addScaledVector(outward,.055+r()*.035).addScaledVector(Y,.055+r()*.035);
+      // Rotate the attachment precisely as placeLeaf does: X, Z, then Y.
+      const base=new THREE.Vector3(0,-.65*size,0).applyAxisAngle(X,tilt).applyAxisAngle(new THREE.Vector3(0,0,1),angle).applyAxisAngle(Y,yaw).add(centre);
+      leaves.push({centre,base,attachment:anchor,size,angle,tilt,yaw,tone:Math.floor(r()*ENTRANCE_GREEN.length)});
+    }
+  }
+  return {branches,leaves};
+}
+
 const GREEN=['#63834e','#6b8d54','#78965b','#587749'];
-function placeLeaf(raw:THREE.BufferGeometry,l:GreenLeaf,yaw=0) {
+function placeLeaf(raw:THREE.BufferGeometry,l:GreenLeaf,yaw=0,palette:readonly string[]=GREEN) {
   const g=raw.clone();g.scale(l.size,l.size,l.size);g.rotateX(l.tilt);g.rotateZ(l.angle);g.rotateY(yaw);g.translate(l.at,l.y,l.depth);
-  const col=new THREE.Color(GREEN[l.tone]),a=g.attributes.color as THREE.BufferAttribute;
+  const col=new THREE.Color(palette[l.tone]),a=g.attributes.color as THREE.BufferAttribute;
   for(let i=0;i<a.count;i++)a.setXYZ(i,a.getX(i)*col.r,a.getY(i)*col.g,a.getZ(i)*col.b);
   return g;
 }
@@ -155,19 +242,12 @@ function entrancePot(c:Ctx,x:number,z:number,seed:number,dressed:THREE.Material)
   const profile:[[number,number],...[number,number][]]=[[.001,0],[.39,0],[.39,.10],[.32,.13],[.28,.23],[.30,.59],[.38,.66],[.39,.75],[.31,.75],[.29,.67],[.27,.61],[.001,.61]];
   const g=dressedLatheUV(lathe(profile,16));geo(c.b,dressed,'#d8d2bf',g,x,.03,z,{chunk:c.chunk,jitter:0});g.dispose();
   const soil=new THREE.CylinderGeometry(.275,.275,.02,16);geo(c.b,c.k.M.paint,'#514735',soil,x,.65,z,{chunk:c.chunk,jitter:0});soil.dispose();
-  const r=mulberry32(seed), raw=climberLeafGeo(),leaves:THREE.BufferGeometry[]=[],stems:THREE.BufferGeometry[]=[];
-  for(let j=0;j<9;j++) {
-    const a=j/9*Math.PI*2+.3,reach=.20+r()*.13,h=.55+r()*.28;
-    const end=new THREE.Vector3(Math.cos(a)*reach,.69+h,Math.sin(a)*reach);
-    stems.push(tube([new THREE.Vector3(0,.64,0),new THREE.Vector3(end.x*.45,.94,end.z*.45),end],.012));
-    for(let k=0;k<11;k++) {
-      const t=.28+k/15,angle=a+k*2.4;
-      const leaf=placeLeaf(raw,{at:end.x*t+Math.cos(angle)*.12,y:.72+h*t,depth:end.z*t+Math.sin(angle)*.12,size:.13+r()*.055,angle:(r()-.5)*1.8,tilt:(r()-.5)*1.2,tone:Math.floor(r()*4)},angle);
-      const lp=leaf.attributes.position;
-      // Connect the visible leaf stalk to the shrub stem rather than floating the leaf cluster.
-      stems.push(tube([new THREE.Vector3(end.x*t,.72+h*t,end.z*t),new THREE.Vector3(lp.getX(0),lp.getY(0)-.08,lp.getZ(0))],.0035));
-      leaves.push(leaf);
-    }
+  const raw=entranceLeafGeo(),plan=entrancePlantPlan(seed),leaves:THREE.BufferGeometry[]=[],stems:THREE.BufferGeometry[]=[];
+  for(const branch of plan.branches)stems.push(tube(branch.points,branch.radius));
+  for(const leaf of plan.leaves){
+    const placement:GreenLeaf={at:leaf.centre.x,y:leaf.centre.y,depth:leaf.centre.z,size:leaf.size,angle:leaf.angle,tilt:leaf.tilt,tone:leaf.tone};
+    leaves.push(placeLeaf(raw,placement,leaf.yaw,ENTRANCE_GREEN));
+    stems.push(tube([leaf.attachment,leaf.base],.0032));
   }
   submit(c,stems,c.k.M.paint,'#66543c',planMatrix(x,0,z).clone());
   submit(c,leaves,c.k.M.paint,'#ffffff',planMatrix(x,0,z).clone());raw.dispose();
