@@ -544,6 +544,11 @@ export class LightPool {
         // intensity/range matter; never use a camera/view/culling condition.
         // Range must not be moved or extended on the physical THREE.PointLight.
         const priorityDistance = Math.min(d, leadD);
+        // R05 follow-up: do not spend one of three mobile slots on a source
+        // outside both its real and movement-predicted influence. A small margin
+        // reserves time for the existing fade before the source begins to matter.
+        // Three.js PointLight.distance=0 means unlimited reach, hence the guard.
+        if (l.distance > 0 && priorityDistance > l.distance + 0.35) continue;
         const w = l.intensity + 0.35 * l.distance;
         byId.set(l.id, l);
         cands.push({ id: l.id, room, d: priorityDistance, w });
