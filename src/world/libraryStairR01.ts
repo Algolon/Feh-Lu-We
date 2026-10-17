@@ -309,8 +309,11 @@ export function libraryStairR01(c:Ctx) {
   for(const zz of [b.z0,b.z1]){
     // Reinforced newel at the outer edge; the east end already meets the
     // gallery's own balustrade and needs no overlapping double newel.
-    cyl(c.b,wood,walnut,b.x0,UF,zz,.048,.05,1.09,8,{chunk:c.chunk});
+    // R06: the southern x0/z0 post is an orphan visually (blue marking).
+    // Only the NORTHERN x0/z1 post actually anchors the newel-to-gallery
+    // rail. Keep that one, the central spindle, all infill and guard collision.
     if(zz===b.z1){
+      cyl(c.b,wood,walnut,b.x0,UF,zz,.048,.05,1.09,8,{chunk:c.chunk});
       box(c.b,wood,walnut,(b.x0+b.x1)/2,UF+1.045,zz,
         b.x1-b.x0+.06,.070,.073,{chunk:c.chunk});
       for(const xx of [b.x0+.14,b.x0+.28,b.x0+.42]){
