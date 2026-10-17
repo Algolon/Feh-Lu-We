@@ -10,12 +10,20 @@ const query = typeof location === 'undefined' ? new URLSearchParams() : new URLS
 // Default ON only on the isolated published LIGHT-R06D review URL.
 // Explicit ?stableLiving=0 remains available as a same-build A/B baseline.
 // The normal production URL and family edition do not use this source bundle.
-export const STABLE_LIVING_PILOT = query.get('stableLiving') === '1' ||
+// LIGHT-R08: opt-in only. The original /light-r06d/ review stays unchanged.
+export const STABLE_ROOMS_PILOT = query.get('stableRooms') === '1' ||
+  (query.get('stableRooms') !== '0' && typeof location !== 'undefined' &&
+    (location.pathname.includes('/light-r08/') || location.pathname.endsWith('/light-r08')));
+export const STABLE_LIVING_PILOT = STABLE_ROOMS_PILOT || query.get('stableLiving') === '1' ||
   (query.get('stableLiving') !== '0' && typeof location !== 'undefined' &&
    (location.pathname.includes('/light-r06d/') || location.pathname.endsWith('/light-r06d')));
 /** Review-only A/B: all pooled point lights off, but this local lamp-bound baseline remains. */
 export const STABLE_NO_POOL = STABLE_LIVING_PILOT && query.get('noPoint') === '1';
-export const STABLE_LIVING_IDS = new Set(['fire.living', 'lamp.livingFloor']);
+export const ROOM_SOURCE_IDS = ['lamp.hallChandelier','lamp.hallConsole','lamp.libraryChandelier','lamp.library'] as const;
+export const STABLE_LIVING_IDS = new Set([
+  'fire.living', 'lamp.livingFloor',
+  ...(STABLE_ROOMS_PILOT ? [...ROOM_SOURCE_IDS] : []),
+]);
 
 export type StableSourceId = 'fire.living' | 'lamp.livingFloor';
 export const STABLE_SOURCE_IDS: readonly StableSourceId[] = ['fire.living', 'lamp.livingFloor'];
@@ -29,6 +37,33 @@ const contributions = [
 ];
 const sourceUniform = { value: positions };
 const colorUniform = { value: contributions };
+
+/** LIGHT-R08: steady source-bound hall/library ambient. No player's room involved. */
+const roomPositions = Array.from({length:4},()=>new THREE.Vector4());
+const roomColors = [
+  new THREE.Vector4(new THREE.Color('#ffe1b1').r,new THREE.Color('#ffe1b1').g,new THREE.Color('#ffe1b1').b,0),
+  new THREE.Vector4(new THREE.Color('#ffc77f').r,new THREE.Color('#ffc77f').g,new THREE.Color('#ffc77f').b,0),
+  new THREE.Vector4(new THREE.Color('#f9d2a0').r,new THREE.Color('#f9d2a0').g,new THREE.Color('#f9d2a0').b,0),
+  new THREE.Vector4(new THREE.Color('#ffe0a5').r,new THREE.Color('#ffe0a5').g,new THREE.Color('#ffe0a5').b,0),
+];
+const roomPositionUniform = {value:roomPositions};
+const roomColorUniform = {value:roomColors};
+
+/** Between two independently lit rooms, the boundary corresponds to the
+ * *actual wall*, not to where the player stands. Library gallery spans two
+ * floors; the double-height hall also needs an upper light footprint.
+ */
+export const STABLE_HALL_MASK = Object.freeze({
+ x0out:85.02,x0in:85.14,x1in:94.86,x1out:94.98,
+ z0out:-98.10,z0in:-97.88,z1in:-84.14,z1out:-83.98,
+ y0out:0.04,y0in:0.13,y1in:6.23,y1out:6.40,
+});
+export const STABLE_LIBRARY_MASK = Object.freeze({
+ x0out:72.30,x0in:72.42,x1in:84.90,x1out:85.00,
+ z0out:-109.68,z0in:-109.50,z1in:-94.16,z1out:-94.04,
+ y0out:0.04,y0in:0.13,y1in:6.23,y1out:6.40,
+});
+
 
 // Frag-level world position already exists on every material using surface().
 // The probe adds *stable emissive bounce* rather than a THREE.PointLight: its
@@ -73,6 +108,37 @@ vec3 flwStableLiving(vec3 p) {
 }
 `;
 
+// These are explicitly room-local masks. Closed doors are not transmissive:
+// no room's local sources contribute to the surface on the other side of a wall.
+function roomMaskShader(m:typeof STABLE_HALL_MASK){
+ return `(smoothstep(${m.x0out},${m.x0in},p.x) *
+ (1.0-smoothstep(${m.x1in},${m.x1out},p.x)) *
+ smoothstep(${m.z0out},${m.z0in},p.z) *
+ (1.0-smoothstep(${m.z1in},${m.z1out},p.z)) *
+ smoothstep(${m.y0out},${m.y0in},p.y) *
+ (1.0-smoothstep(${m.y1in},${m.y1out},p.y)))`;
+}
+const ROOMS_GLSL = /*glsl*/ `
+uniform vec4 flwRoomSources[4];
+uniform vec4 flwRoomColors[4];
+vec3 flwStableOtherRooms(vec3 p) {
+  // Evaluate a source only if it belongs to this authored space, never
+  // when the player or camera happens to be near it.
+  float hall=${roomMaskShader(STABLE_HALL_MASK)};
+  float library=${roomMaskShader(STABLE_LIBRARY_MASK)};
+  if(hall<0.0001 && library<0.0001)return vec3(0.0);
+  vec3 outLight=vec3(0.0);
+  for(int i=0;i<4;i++){
+    float maskValue=(i<2)?hall:library;
+    if(maskValue<0.0001)continue;
+    vec4 source=flwRoomSources[i],tint=flwRoomColors[i];
+    float falloff=1.0-smoothstep(0.0,max(0.1,source.w),length(p-source.xyz));
+    outLight+=tint.rgb*tint.w*falloff*maskValue;
+  }
+  return outLight;
+}
+`;
+
 // Keep a CPU mirror of the *same authored boundary* for reproducible leakage
 // checks. View/camera/roomOf(player) are never inputs to this mask.
 const smooth=(a:number,b:number,p:number)=>{
@@ -85,6 +151,14 @@ export function stableRoomMaskAt(x:number,y:number,z:number):number{
     *smooth(m.z0out,m.z0in,z)*(1-smooth(m.z1in,m.z1out,z))
     *smooth(m.y0out,m.y0in,y)*(1-smooth(m.y1in,m.y1out,y));
 }
+function maskAt(m:typeof STABLE_HALL_MASK,x:number,y:number,z:number):number{
+ return smooth(m.x0out,m.x0in,x)*(1-smooth(m.x1in,m.x1out,x))*
+ smooth(m.z0out,m.z0in,z)*(1-smooth(m.z1in,m.z1out,z))*
+ smooth(m.y0out,m.y0in,y)*(1-smooth(m.y1in,m.y1out,y));
+}
+export const stableHallMaskAt=(x:number,y:number,z:number)=>maskAt(STABLE_HALL_MASK,x,y,z);
+export const stableLibraryMaskAt=(x:number,y:number,z:number)=>maskAt(STABLE_LIBRARY_MASK,x,y,z);
+
 
 /** Three.js Material.clone() does not reliably preserve optional custom
  * 'defines' added by surface(). Without FLW_SURFACE the world-position varying
@@ -108,20 +182,26 @@ export function stableMaterial<T extends THREE.Material>(mat: T): T {
   // custom surface define was dropped by a material clone.
   if (!(lit.defines as Record<string,unknown>|undefined)?.FLW_SURFACE)
     throw new Error('LIGHT-R06B: missing FLW_SURFACE define for scoped material');
-  lit.defines = { ...(lit.defines ?? {}), FLW_STABLE_LIVING: 1 };
+  lit.defines = { ...(lit.defines ?? {}), FLW_STABLE_LIVING: 1, ...(STABLE_ROOMS_PILOT ? {FLW_STABLE_ROOMS:1} : {}) };
   const previous = mat.onBeforeCompile;
   mat.onBeforeCompile = (shader, renderer) => {
     previous.call(mat, shader, renderer);
     shader.uniforms.flwStableSources = sourceUniform;
     shader.uniforms.flwStableColors = colorUniform;
-    shader.fragmentShader = GLSL + '\n' + shader.fragmentShader;
+    if(STABLE_ROOMS_PILOT){
+      shader.uniforms.flwRoomSources=roomPositionUniform;
+      shader.uniforms.flwRoomColors=roomColorUniform;
+    }
+    shader.fragmentShader = GLSL + (STABLE_ROOMS_PILOT ? ROOMS_GLSL : '') + '\n' + shader.fragmentShader;
     const injection = '#include <emissivemap_fragment>';
     if (!shader.fragmentShader.includes(injection)) throw new Error('LIGHT-R06 requires emissivemap_fragment for this material');
     shader.fragmentShader = shader.fragmentShader.replace(injection,
       // Apply the authored bounce through existing material albedo, preserving
       // plaster/stone/timber variations instead of an identical orange wash.
       // No player/camera/gaze or LightPool dependence is introduced.
-      injection + '\n totalEmissiveRadiance += flwStableLiving(vFlwP) * mix(vec3(0.55), clamp(diffuseColor.rgb, vec3(0.0), vec3(1.0)), 0.45);');
+      injection + '\n totalEmissiveRadiance += (flwStableLiving(vFlwP)' +
+      (STABLE_ROOMS_PILOT ? ' + flwStableOtherRooms(vFlwP)' : '') +
+      ') * mix(vec3(0.55), clamp(diffuseColor.rgb, vec3(0.0), vec3(1.0)), 0.45);');
   };
   mat.userData.stableLiving = true;
   mat.needsUpdate = true;
@@ -155,9 +235,13 @@ export function stableContributionAt(x: number, y: number, z: number) {
 export function installStableLivingMaterials(w:World){
   if(!STABLE_LIVING_PILOT||w.id!=='estate')return;
   const kit=getKit();
-  const area=new THREE.Box3(
-    new THREE.Vector3(72.20,0,-94.2),
-    new THREE.Vector3(85.20,3.45,-80.20));
+  const areas = [
+    new THREE.Box3(new THREE.Vector3(72.20,0,-94.2),new THREE.Vector3(85.20,3.45,-80.20)),
+    ...(STABLE_ROOMS_PILOT ? [
+      new THREE.Box3(new THREE.Vector3(84.95,0,-98.2),new THREE.Vector3(95.05,6.50,-83.9)),
+      new THREE.Box3(new THREE.Vector3(72.20,0,-109.8),new THREE.Vector3(85.20,6.50,-93.9)),
+    ] : []),
+  ];
   const clones=new Map<THREE.Material,THREE.Material>();
   const counts:Record<string,number>={};
   let meshes=0,untouched=0,skippedByBox=0;
@@ -169,6 +253,7 @@ export function installStableLivingMaterials(w:World){
     const chunk=m.userData.chunk as string|undefined;
     const mat=m.material as THREE.Material;
     const relevant=chunk==='mLiv'||chunk==='mIn'||
+      (STABLE_ROOMS_PILOT && (chunk==='mHall'||chunk==='mLib'))||
       (chunk==='manor'&&mat===kit.M.plaster);
     if(!relevant){untouched++;return;}
     // Avoid transforming detached/instanced geometries by an incomplete bbox:
@@ -177,7 +262,7 @@ export function installStableLivingMaterials(w:World){
     if(!m.geometry.boundingBox)m.geometry.computeBoundingBox();
     if(!m.geometry.boundingBox){untouched++;return;}
     bounds.copy(m.geometry.boundingBox).applyMatrix4(m.matrixWorld);
-    if(!bounds.intersectsBox(area)){skippedByBox++;return;}
+    if(!areas.some(area=>bounds.intersectsBox(area))){skippedByBox++;return;}
     // Large architectural, timber, stone and upholstery surfaces carry the
     // stable bounce. Small painted ornaments/metalwork keep their original
     // shaders: they neither need an orange wash nor another program variant.
@@ -221,4 +306,24 @@ export function bindStableLiving(w: World) {
     // QA only; the production build never enables the pilot from ordinary URLs.
     contribution:(x:number,y:number,z:number)=>stableContributionAt(x,y,z).toArray(),
   };
+  if(STABLE_ROOMS_PILOT){
+    const sources=ROOM_SOURCE_IDS.map(id=>w.lamps.find(l=>l.id===id));
+    if(sources.some(l=>!l))throw new Error('LIGHT-R08: missing hall/library fixture');
+    const radii=[9,5,9,4.5];
+    sources.forEach((lamp,i)=>roomPositions[i].set(lamp!.pos.x,lamp!.pos.y,lamp!.pos.z,
+      Math.min(radii[i],lamp!.distance)));
+    const strength=[0.105,0.085,0.11,0.095];
+    const update=()=>sources.forEach((lamp,i)=>{
+      roomColors[i].w=lamp!.on()?strength[i]:0;
+    });
+    w.onSync(update);
+    update();
+    w.scene.userData.stableRooms={
+      mode:'source-bound-hall-library',
+      sources:[...ROOM_SOURCE_IDS],
+      state:()=>roomColors.map(col=>col.w),
+      hallMask:(x:number,y:number,z:number)=>stableHallMaskAt(x,y,z),
+      libraryMask:(x:number,y:number,z:number)=>stableLibraryMaskAt(x,y,z),
+    };
+  }
 }
