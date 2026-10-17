@@ -119,90 +119,91 @@ export function climberLeafGeo(): THREE.BufferGeometry {
   }
   g.rotateZ(Math.PI);g.userData.keepColor=true;return g;
 }
-/** Broad, recognisable foliage for entrance urns. Unlike the ivy this uses an
- * in-mesh colour field for veins, never z-fighting overlay strips or alpha cards.
- * Subdivision is intentionally limited to the 21 entrance leaves per urn.
+/** Small evergreen laurel-like leaves for the formal entrance urns.
+ * Gently cupped, pointed and clearly veined on both sides, in one batched mesh.
+ * This botanical family deliberately differs from the five-lobed wall ivy.
  */
 export function entranceLeafGeo():THREE.BufferGeometry {
-  const outline=[
-    [-.12,-.70],[-.35,-.43],[-.67,-.18],[-.76,.09],[-.53,.28],
-    [-.31,.22],[-.37,.52],[-.15,.44],[0,.91],[.15,.44],
-    [.37,.52],[.31,.22],[.53,.28],[.76,.09],[.67,-.18],
-    [.35,-.43],[.12,-.70]
-  ].reverse();
-  const positions:number[]=[],colors:number[]=[],normals:number[]=[];
-  const width=.76;
-  const sq=(x:number)=>x*x;
-  const veinDistance=(x:number,y:number,x0:number,y0:number,x1:number,y1:number)=>{
-    const vx=x1-x0,vy=y1-y0;
-    const t=THREE.MathUtils.clamp(((x-x0)*vx+(y-y0)*vy)/(vx*vx+vy*vy),0,1);
-    return Math.hypot(x-x0-vx*t,y-y0-vy*t);
+  const p:number[]=[],colors:number[]=[],normals:number[]=[];
+  const along=10,across=8;
+  // Smooth tapered oval, slight asymmetry and natural upward-curling tip.
+  const cross=(u:number,s:number,back:boolean)=>{
+    const envelope=Math.pow(Math.max(0,Math.sin(Math.PI*u)),.82);
+    const width=.54*envelope*(.93+.12*u);
+    const x=s*width*(1+.04*Math.sin(u*Math.PI*1.8));
+    const y=-.76+1.62*u;
+    const curl=.055*Math.sin(Math.PI*u)*(1-s*s)+.032*u*u;
+    const fold=.052*(1-Math.abs(s))*envelope;
+    const z=(back?-1:1)*(curl+fold+.006);
+    // Narrow green-gold centre rib, two paired veins lifting towards the edge.
+    const rib=Math.exp(-Math.pow(s/.17,2))*(.55+.45*envelope);
+    const vein=(a:number,b:number)=>{
+      const d=Math.abs(u-(a+b*Math.abs(s)));
+      return Math.exp(-Math.pow(d/.075,2))*Math.max(0,1-Math.abs(s)*.72);
+    };
+    const secondary=Math.max(vein(.27,.16),vein(.57,.16));
+    const folded=(s<0?1.028:.976)*(1-.065*Math.abs(s))*(.96+.06*u);
+    const light=folded*(back?.93:1);
+    const tone=light*(1+.21*rib+.105*secondary);
+    const color:[number,number,number]=[tone*.96,tone*1.065,tone*.91];
+    // The built-in normals follow the slight transverse fold, not flat cards.
+    const n=new THREE.Vector3(-.18*s*envelope,.028*Math.cos(Math.PI*u),back?-1:1).normalize();
+    return {pos:[x,y,z],color,normal:n.toArray()};
   };
-  const vertex=(x:number,y:number,back:boolean)=>{
-    const ridge=.035+.045*(1-THREE.MathUtils.clamp(Math.abs(x)/width,0,1));
-    const z=back?-ridge:ridge;
-    const centreVein=.41*Math.exp(-sq(x/.088))*(.78+.22*THREE.MathUtils.clamp((y+.6)/1.4,0,1));
-    let smallVeins=0;
-    for(const side of [-1,1]){
-      const lower=veinDistance(x,y,side*.04,-.01,side*.49,.18);
-      const upper=veinDistance(x,y,side*.03,.28,side*.25,.48);
-      smallVeins=Math.max(smallVeins,.21*Math.exp(-sq(lower/.073)),.14*Math.exp(-sq(upper/.073)));
+  for(const back of [false,true]){
+    for(let i=0;i<along;i++)for(let j=0;j<across;j++){
+      const u0=i/along,u1=(i+1)/along,s0=j/across*2-1,s1=(j+1)/across*2-1;
+      const tris=back?[
+        [[u0,s0],[u1,s1],[u1,s0]],[[u0,s0],[u0,s1],[u1,s1]]
+      ]:[
+        [[u0,s0],[u1,s0],[u1,s1]],[[u0,s0],[u1,s1],[u0,s1]]
+      ];
+      for(const tri of tris)for(const [u,s] of tri){
+        const v=cross(u,s,back);p.push(...v.pos);colors.push(...v.color);normals.push(...v.normal);
+      }
     }
-    const sideFacet=(x<0?1.035:.965)*(y>.3?1.018:1);
-    const base=sideFacet*(back?.96:1),vein=Math.max(centreVein,smallVeins);
-    return {p:[x,y,z],c:[base*(1+vein*.72),base*(1+vein*1.12),base*(1+vein*.43)],n:new THREE.Vector3(-x*.18,0,back?-1:1).normalize().toArray()};
-  };
-  const emit=(a:number[],b:number[],d:number[],back:boolean)=>{
-    for(const xy of (back?[a,d,b]:[a,b,d])){
-      const v=vertex(xy[0],xy[1],back);
-      positions.push(...v.p);colors.push(...v.c);normals.push(...v.n);
-    }
-  };
-  // Two rounds of subdivision give sufficient colour samples for narrow leaf
-  // nerves without extra material/shader/state changes.
-  const subdivide=(a:number[],b:number[],d:number[],depth:number)=>{
-    if(!depth){emit(a,b,d,false);emit(a,b,d,true);return;}
-    const ab=[(a[0]+b[0])/2,(a[1]+b[1])/2];
-    const bd=[(b[0]+d[0])/2,(b[1]+d[1])/2];
-    const da=[(d[0]+a[0])/2,(d[1]+a[1])/2];
-    subdivide(a,ab,da,depth-1);
-    subdivide(ab,b,bd,depth-1);
-    subdivide(da,bd,d,depth-1);
-    subdivide(ab,bd,da,depth-1);
-  };
-  for(let i=0;i<outline.length;i++)subdivide([0,.04],outline[i],outline[(i+1)%outline.length],2);
+  }
   const g=new THREE.BufferGeometry();
-  g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));
+  g.setAttribute('position',new THREE.Float32BufferAttribute(p,3));
   g.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
   g.setAttribute('normal',new THREE.Float32BufferAttribute(normals,3));
-  g.setAttribute('uv',new THREE.Float32BufferAttribute(positions.length/3*2,2));
+  g.setAttribute('uv',new THREE.Float32BufferAttribute(p.length/3*2,2));
   g.userData.keepColor=true;return g;
 }
-const ENTRANCE_GREEN=['#83a766','#96b877','#789f60','#a2c084'] as const;
+const ENTRANCE_GREEN=['#769758','#85a467','#648650','#96ad75'] as const;
 export interface EntranceBranch { points:THREE.Vector3[]; radius:number }
 export interface EntranceLeaf { centre:THREE.Vector3; base:THREE.Vector3; attachment:THREE.Vector3; size:number; angle:number; tilt:number; yaw:number; tone:number }
-/** Seeded, game-space growth layout. No camera-facing billboard or random runtime state. */
+/** Deliberate branched crown: staggered leaf pairs orbit a seed-specific
+ * centre, revealing stems and distinct individual leaves in normal game views.
+ */
 export function entrancePlantPlan(seed:number):{branches:EntranceBranch[];leaves:EntranceLeaf[]} {
   const r=mulberry32(seed),branches:EntranceBranch[]=[],leaves:EntranceLeaf[]=[];
-  const Y=new THREE.Vector3(0,1,0),X=new THREE.Vector3(1,0,0),origin=new THREE.Vector3(0,.65,0);
-  const n=6;
-  for(let j=0;j<n;j++){
-    const a=(j+.16)/n*Math.PI*2+(r()-.5)*.19,reach=.23+r()*.12;
-    const height=.52+r()*.27;
+  const origin=new THREE.Vector3(0,.65,0),Y=new THREE.Vector3(0,1,0);
+  const X=new THREE.Vector3(1,0,0),Z=new THREE.Vector3(0,0,1);
+  for(let j=0;j<7;j++){
+    const a=(j+.14+r()*.12)/7*Math.PI*2;
     const outward=new THREE.Vector3(Math.cos(a),0,Math.sin(a));
-    const mid=origin.clone().addScaledVector(outward,reach*.42).addScaledVector(Y,height*.48);
+    const reach=.205+r()*.105,height=.52+r()*.22;
+    const mid=origin.clone().addScaledVector(outward,reach*.42).addScaledVector(Y,height*.52);
     const end=origin.clone().addScaledVector(outward,reach).addScaledVector(Y,height);
-    branches.push({points:[origin.clone(),mid,end],radius:.011});
-    for(let k=0;k<4;k++){
-      const t=.20+k*.23;
+    branches.push({points:[origin.clone(),mid,end],radius:.009});
+    for(let k=0;k<5;k++){
+      const t=.30+k*.166;
       const anchor=origin.clone().lerp(end,t);
-      const splay=(k%2===0?-1:1),size=[.195,.215,.245,.225][k]+r()*.020;
-      const yaw=Math.PI+(r()-.5)*1.38+Math.sin(a)*.20;
-      const angle=splay*(.24+r()*.28);
-      const tilt=-.13-r()*.24;
-      const centre=anchor.clone().addScaledVector(outward,.11+r()*.055).addScaledVector(Y,.035+r()*.050);
-      // Rotate the attachment precisely as placeLeaf does: X, Z, then Y.
-      const base=new THREE.Vector3(0,-.65*size,0).applyAxisAngle(X,tilt).applyAxisAngle(new THREE.Vector3(0,0,1),angle).applyAxisAngle(Y,yaw).add(centre);
+      const side=k%2===0?-1:1;
+      const lateral=new THREE.Vector3(-outward.z,0,outward.x);
+      const centre=anchor.clone()
+        .addScaledVector(outward,.095+r()*.034)
+        .addScaledVector(lateral,side*(.055+r()*.030))
+        .addScaledVector(Y,.05+r()*.038);
+      const size=.172+r()*.033+(k===4?.014:0);
+      const yaw=Math.PI/2-a+side*(.27+r()*.24);
+      const angle=side*(.36+r()*.28);
+      const tilt= -.15-r()*.22;
+      // Respect the exact mesh transform order used in placeLeaf.
+      const base=new THREE.Vector3(0,-.74*size,0)
+        .applyAxisAngle(X,tilt).applyAxisAngle(Z,angle)
+        .applyAxisAngle(Y,yaw).add(centre);
       leaves.push({centre,base,attachment:anchor,size,angle,tilt,yaw,tone:Math.floor(r()*ENTRANCE_GREEN.length)});
     }
   }
