@@ -1,3 +1,4 @@
+import { STABLE_LIVING_PILOT, STABLE_LIVING_IDS, STABLE_NO_POOL } from '../world/stableLighting';
 import { MushroomVision } from './mushroomVision';
 import { mushroomIntensity, easeMushroom } from '../world/mushroomField';
 // Game orchestrator: renderer + loop, input → player, interaction picking, save/restore, scenes, UI glue.
@@ -874,7 +875,13 @@ export class Game implements GameApi {
     if (this.pool) {
       // LIGHT-R04: point-light allocation is spatial only. Camera rotation or
       // watching a fixture cannot change the scene's illumination.
-      this.pool.update(dt, this.time, w.lamps, this.camera.position, this.extras.rooms, (d) => this.state.open[d] === true);
+      // LIGHT-R06 pilot: the living fireplace and floor lamp ALWAYS illuminate
+      // through their state-bound material contribution, never scarce pool slots.
+      // ?noPoint=1 is a review-only ablation (all pooled lights disabled).
+      const lamps = STABLE_LIVING_PILOT && w.id === 'estate'
+        ? (STABLE_NO_POOL ? [] : w.lamps.filter(l => !STABLE_LIVING_IDS.has(l.id)))
+        : w.lamps;
+      this.pool.update(dt, this.time, lamps, this.camera.position, this.extras.rooms, (d) => this.state.open[d] === true);
     }
     tickFires(this.time, this.settings.reducedMotion);
     const targetDusk = Math.min(1, (solvedCount(this.state) / REQUIRED_COUNT) * 0.85 + (this.state.finished ? 0.15 : 0));
