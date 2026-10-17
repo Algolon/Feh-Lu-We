@@ -29,6 +29,25 @@ describe('LIB-R01: fitted shelves, puzzle and spiral access', () => {
     expect(pose.x-chairX).toBeGreaterThan(.3+.245);
     expect(Math.abs(pose.z-d.z)).toBeLessThan(.05);
   });
+  it('LIB-R04: banker lamp is right-rear and loose catalogue books are safely front-right', () => {
+    const desk=LIB_R01.desk, {lamp,looseBooks}=LIB_R01.deskObjects;
+    // Looking west from the chair, right is +Z. Rear is west / negative X.
+    expect(lamp.dz).toBeGreaterThan(0.5);
+    expect(lamp.dx).toBeLessThan(0);
+    expect(looseBooks.dx).toBeGreaterThan(lamp.dx + 0.45);
+    expect(looseBooks.dz).toBeGreaterThan(0.55);
+
+    // Rear hutch's front edge is x=-0.35, lamp base radius ~0.168.
+    expect(lamp.dx - 0.168).toBeGreaterThan(-0.35);
+    // Green dome extends ~0.37 along +Z; keep it inside the north desk-top lip.
+    expect(lamp.dz + 0.37).toBeLessThan((desk.d + 0.14) / 2);
+
+    // Loose books are not located on top of the right-most catalogue slot,
+    // whose east extent is x=+0.21; a tilted book reaches ~0.205 to its west.
+    expect(looseBooks.dx - 0.205).toBeGreaterThan(0.21);
+    expect(looseBooks.dx + 0.205).toBeLessThan((desk.w + 0.14) / 2);
+    expect(looseBooks.dz + 0.205).toBeLessThan((desk.d + 0.14) / 2);
+  });
   it('keeps the B01 IDs and standing pose aligned on the new bureau, clear of slice keepouts', () => {
     const p = prop('b01.tableTop'), pose = POSES.find(v => v.id === 'pose.table')!;
     expect([p.x, p.z, p.w, p.d, p.h]).toEqual([LIB_R01.desk.x, LIB_R01.desk.z, LIB_R01.desk.w, LIB_R01.desk.d, LIB_R01.desk.h]);
