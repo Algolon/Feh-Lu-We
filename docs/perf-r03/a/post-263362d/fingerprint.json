@@ -1,0 +1,84 @@
+[
+ {
+  "build": "main-DdA-I-EV.js",
+  "total": {
+   "meshes": 18,
+   "verts": 1264980,
+   "pos": -10823003.391,
+   "nrm": 143994.157,
+   "col": 595632.063,
+   "vhash": 981397873
+  },
+  "per": {
+   "manor": {
+    "meshes": 16,
+    "verts": 909204,
+    "pos": -14823179.782,
+    "nrm": 3136.928,
+    "col": 542132.477,
+    "vhash": 3251568445
+   },
+   "frontHedge.left": {
+    "meshes": 1,
+    "verts": 177888,
+    "pos": -1151.805,
+    "nrm": 70428.615,
+    "col": 27074.545,
+    "vhash": 3793043042
+   },
+   "frontHedge.right": {
+    "meshes": 1,
+    "verts": 177888,
+    "pos": 4001328.195,
+    "nrm": 70428.615,
+    "col": 26425.041,
+    "vhash": 2526720978
+   }
+  }
+ },
+ {
+  "build": "main-Dg6JHwFi.js",
+  "total": {
+   "meshes": 19,
+   "verts": 1264980,
+   "pos": -10823003.391,
+   "nrm": 143994.157,
+   "col": 595632.063,
+   "vhash": 981397873
+  },
+  "per": {
+   "extGreen.climbers": {
+    "meshes": 2,
+    "verts": 708060,
+    "pos": -15803862.707,
+    "nrm": 0,
+    "col": 298142.874,
+    "vhash": 655503521
+   },
+   "manor": {
+    "meshes": 15,
+    "verts": 201144,
+    "pos": 980682.925,
+    "nrm": 3136.928,
+    "col": 243989.603,
+    "vhash": 2596064924
+   },
+   "frontHedge.left": {
+    "meshes": 1,
+    "verts": 177888,
+    "pos": -1151.805,
+    "nrm": 70428.615,
+    "col": 27074.545,
+    "vhash": 3793043042
+   },
+   "frontHedge.right": {
+    "meshes": 1,
+    "verts": 177888,
+    "pos": 4001328.195,
+    "nrm": 70428.615,
+    "col": 26425.041,
+    "vhash": 2526720978
+   }
+  }
+ }
+]

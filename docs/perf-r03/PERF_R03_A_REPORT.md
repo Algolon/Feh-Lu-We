@@ -5,7 +5,8 @@
 | Branch | `perf-r03-exterior-greenery-visibility` |
 | P — production | **`2e2bab1`** (LIB-STAIR-R06) · `main-MAbDny00.js` |
 | C — P + PERF-R02 | **`417f4ec`** (`perf-r02-frame-accurate-culling` `2f12128` merged with `2e2bab1`) · `main-C4vW_v2v.js` |
-| R — C + PERF-R03-A | **`4abdedd`** source · `main-DyvcGhyD.js` (later commits: tests, tooling, evidence, docs only) |
+| R — C + PERF-R03-A | **`4abdedd`** source · `main-DyvcGhyD.js` (§3 – §6) |
+| R2 — R merged with production `263362d` | **`c80681a`** · `main-Dg6JHwFi.js` (§8; P2 = `263362d` · `main-DdA-I-EV.js`) |
 | Final PERF-R03-A SHA | **`edec508`** (evidence and report; product source unchanged since `4abdedd`) |
 | Merge / deploy | **not done**; owner review. PERF-R02 and PERF-R03-A are to be released together later |
 
@@ -314,7 +315,42 @@ New unit tests (`tests/perf-r03-a.test.ts`, 9):
 - **Not covered:** the pixel proof covers the listed paths, door states and the dusk phase, not every possible pose.
   Mode A covers walking and turning at 30 FPS on six paths.
 
-## 8. Recommendation for PERF-R03-B
+## 8. Production moved during this step: `263362d`
+
+At handover production is **`263362d`**: VEG-R10D (entrance planter redesign), VEG-R10E (ivy vein texture on the
+climbers, `ivyLeafMaterial()`), PROP-R07 (fireplace basket) and the LIGHT-R06D preview route. VEG-R10D and VEG-R10E edit
+`exteriorGreenery.ts`, which conflicted with this branch.
+
+- **Merge `c80681a`:** production merged in. The conflict is resolved with VEG-R10E's leaf material, keeping the
+  per-site bounds. The climbers are now two meshes (leaves with the ivy material, stems with paint), both in the
+  climbers' chunk. `World.exteriorRegion` uses each shared box list once.
+  - Typecheck is clean; 514 / 514 unit tests pass, including VEG-R10D/E's.
+- **Art** (`a/post-263362d/fingerprint.json`), P2 = `263362d` `main-DdA-I-EV.js` against R2 = `c80681a`
+  `main-Dg6JHwFi.js`:
+  - the totals are identical: 1,264,980 vertices, vertex hash 981397873;
+  - the climbers' hash (655503521) is unchanged from §4, because VEG-R10E changed only their material;
+  - in R2, the climbers' hash plus `manor` equals P2's `manor`.
+- **Hall, Mode B** (`a/post-263362d/measure-{P,R}.json`):
+
+  | Doors | P2 median / max / > 750 k | R2 median / max / > 750 k |
+  |---|---|---|
+  | closed | 772,836 / 1,130,190 / 39 of 77 | 507,568 / 775,578 / **1** of 77 |
+  | partial | 966,896 / 1,320,194 / 59 of 77 | 718,142 / 1,013,908 / 30 of 77 |
+
+- **Pixel proof on R2** (`a/post-263362d/lossless`, `classify.log`):
+
+  | Path | Doors | Frames | Culled | Diff frames | Max px |
+  |---|---|---:|---:|---:|---:|
+  | ground-front | closed | 167 | 167 | 19 | 4 |
+  | entrance | open | 67 | 64 | 3 | 4 |
+
+  All 43 changed pixels classify as bleed-through; 0 px of visible foliage is lost. The results are identical to §5
+  on `2e2bab1`.
+- **Not repeated on `263362d`:** the full matched P / C / R sweep (§3) and the remaining pixel paths. The merged
+  changes add planter and ivy-material detail but no new visibility relationships, and the §3 – §5 comparisons (on
+  `2e2bab1`) are the matched evidence. Re-run them before the combined release.
+
+## 9. Recommendation for PERF-R03-B
 
 The remaining doors-closed and partial-set excess is the PORTAL-R02 window rule (PERF-R02 §12.4): one clear window in a
 reachable room puts the whole outdoors (grounds, woodland, garden, tree batches; ≈ 240–457 k) into an indoor view, for
