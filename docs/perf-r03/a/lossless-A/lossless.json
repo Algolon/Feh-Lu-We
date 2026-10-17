@@ -1,0 +1,22 @@
+{
+ "base": "http://localhost:4193/Feh-Lu-We/",
+ "regions": [
+  "extGreen.climbers",
+  "frontHedge.left",
+  "frontHedge.right"
+ ],
+ "threshold": 6,
+ "runs": [
+  {
+   "path": "front-approach",
+   "doors": "open",
+   "mode": "A",
+   "frames": 923,
+   "culledFrames": 0,
+   "savedTris": 0,
+   "maxSaved": 0,
+   "diffs": [],
+   "maxPx": 0
+  }
+ ]
+}

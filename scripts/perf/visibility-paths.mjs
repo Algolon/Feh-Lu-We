@@ -37,6 +37,8 @@ export const EXT_PATHS = [
   ['ground-front', 0.15, [[78.5, 84.0], [80.0, 90.5], [90.0, 86.0], [101.0, 84.0], [101.0, 90.0]]],
   ['kitchen', 0.15, [[101.0, 96.0], [101.0, 106.0], [97.0, 108.5]]],
   ['upper-rooms', 3.35, [[78.0, 83.5], [76.0, 91.0], [98.0, 86.0], [104.0, 86.0], [75.0, 104.0]]],
+  // inside the front door: vestibule, the doorway (both hedges within reach through the open door), the hall
+  ['entrance', 0.15, [[90.0, 83.0], [89.2, 80.7], [90.0, 86.0]]],
 ];
 
 export const ALL_PATHS = [...LEGACY_PATHS, ...PERF_PATHS, ...WINDOW_PATHS, ...EXT_PATHS];

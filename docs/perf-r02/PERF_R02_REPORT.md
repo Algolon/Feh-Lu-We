@@ -716,3 +716,9 @@ Approve **PERF-R03 step 1**:
 
 It is two region registrations and one chunk tag, and should remove ≈ 205–324 k from interior views. Step 2 (the
 window rule) follows as a separate, measured decision.
+
+### 12.10 Follow-up: PERF-R03-A
+
+PERF-R03 step 1 (contributors 2 and 3 of §12.3, the wall climbers and the front hedges) is implemented on branch
+`perf-r03-exterior-greenery-visibility`. The report is `docs/perf-r03/PERF_R03_A_REPORT.md`. The measurements above
+remain the historical record for `2404d85`.
