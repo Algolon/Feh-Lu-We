@@ -99,6 +99,9 @@ export function libraryStairR01(c:Ctx) {
       // angle/height. The old hard-coded 1.09m shaft stopped visibly short.
       const base=p.y-.06,top=spiralRailWorldY(a)+.018;
       cyl(c.b,metal,iron,bx,base,bz,.018,.018,top-base,8,{chunk:c.chunk});
+      // Collision analogue of each baluster: the previous segmented boxes
+      // permitted outward slipping at the final tangential corner (step 23).
+      c.col.addCircle(bx,bz,.065,base,top,{tag:'lib-stair.outer-baluster'});
     }
   }
 
@@ -137,14 +140,14 @@ export function libraryStairR01(c:Ctx) {
       y-.13,y+1.20,{tag:'lib-stair.outer-guard'});
   }
 
-  // LIB-STAIR-R02: a continuous timber return from the final spiral rail to
-  // the upper gallery, rather than an abruptly dangling curved handrail.
-  // The matching dark steel balusters land on the new oak transfer deck.
-  const finish=new THREE.Vector3(bridge.x1-x,UF+1.045-GF,-(bridge.z1-z));
+  // LIB-STAIR-R02: the 450-degree spiral finishes at the SOUTH edge.
+  // Continue this rail into the SOUTH gallery newel (NOT across the walkway).
+  // Dark steel balusters are fixed through the real timber landing.
+  const finish=new THREE.Vector3(bridge.x1-x,UF+1.045-GF,-(bridge.z0-z));
   const startJoin=path[path.length-1].clone();
   const upperCurve=new THREE.CatmullRomCurve3([
     startJoin,
-    new THREE.Vector3(bridge.x0-x+.27,UF+.97-GF,-(bridge.z1-z+.012)),
+    new THREE.Vector3(bridge.x0-x+.36,UF+.97-GF,-(bridge.z0-z-.014)),
     finish
   ]);
   const upperTube=new THREE.TubeGeometry(upperCurve,14,.035,8,false);
@@ -178,13 +181,13 @@ export function libraryStairR01(c:Ctx) {
   box(c.b,wood,edge,b.x0,UF-.205,(b.z0+b.z1)/2,.035,.205,b.z1-b.z0,{chunk:c.chunk});
 
   // Gallery-side guards: continuous top rail and infill instead of only two
-  // huge wooden posts. North side is already linked to the spiral handrail
-  // by the upperCurve above. South side is a separate short oak return.
+  // huge wooden posts. SOUTH side connects to the spiral handrail via
+  // the upperCurve; north side is the separate short oak return.
   for(const zz of [b.z0,b.z1]){
     // Reinforced newel at the outer edge; the east end already meets the
     // gallery's own balustrade and needs no overlapping double newel.
     cyl(c.b,wood,walnut,b.x0,UF,zz,.048,.05,1.09,8,{chunk:c.chunk});
-    if(zz===b.z0){
+    if(zz===b.z1){
       box(c.b,wood,walnut,(b.x0+b.x1)/2,UF+1.045,zz,
         b.x1-b.x0+.06,.070,.073,{chunk:c.chunk});
       for(const xx of [b.x0+.14,b.x0+.28,b.x0+.42]){
