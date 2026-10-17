@@ -7,7 +7,7 @@
 | Checkpoint A (measurement) | harness `0bcc75d` … `9de478b`, `055dfca`; baseline evidence and §1–§5 of this report |
 | Checkpoint B (culling) | `7f51e0f` (`mUpE`), `f7ee08a` (`mLib`); `mAttic` `e4684ca` reverted in `31c2971` (§6) |
 | Final feature SHA | **`92bf875fac12de30faa71c3b9e56756b91ec8d20`** (source identical to the measured candidate `88382b3`: only tests, tooling and docs changed after it) |
-| Merge / deploy | **not done**; owner review required |
+| Merge / deploy | **not done**; owner review required. Current production integration: **diagnostic hold** (§12) |
 
 All numbers are SwiftShader (software WebGL) in headless Chromium at mobile low quality: 915 × 412 CSS = drawing
 buffer, DPR 1, no shadows, opaque batching on (`meta` in every evidence file). Triangle and draw-call counts are
@@ -608,7 +608,19 @@ window's frustum and a distance, or drop the +32° margin for windows (it exists
   - The exemption reuses PORTAL-R02's generous window test, so it also re-enables `mUpE` / `mLib` at some poses where
     they are invisible: at the partial-door landing pose, 195 k at 0 px. That is the conservative direction (more drawn,
     never less), and it shrinks PERF-R02's saving there.
-- **Pixel proof on current production:** see §12.8.
+- **Pixel proof on current production** (`scripts/perf/visibility-lossless.mjs` on C, Mode B). Each frame is compared
+  with a reference in which the ruled regions are switched back to the rooms-only rule; evidence:
+  `current-production/lossless/`.
+
+  | Paths (regions tested) | Doors | Culled frames | Diff frames | Max diff |
+  |---|---|---|---|---|
+  | `up-east`, `gallery` (`mUpE`, `mLib`) | open, partial | 363 per door state | 34–37 | **20 px**, all seam bleed-through (sheet `sheet-up-east-269-seam.jpg`: dashed specks of the library through the guest-room wall seam, removed by the rule) |
+  | Garden window paths `win-north` / `win-west` / `win-south` (`mUpE`, `mLib`, `mUpR`, `mUpS`) | open | 0 of 427 | 0 | 0 px: the window exemption keeps every doorway region drawn while seen through its windows from the garden |
+
+  - **Rule savings in those frames:** 35–80 k on average, up to 226 k.
+  - **Not repeated on P / C:** the Mode A runs, the hall / stair / well paths and dusk lighting. The §7 proof on
+    `436e106` covers them, and production did not change the rule's inputs: doors, walls and floors in these areas.
+    The library staircase (`d7b304d`, after P) sits inside `mLib`.
 
 ### 12.6 Risks
 

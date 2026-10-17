@@ -1,0 +1,46 @@
+{
+ "base": "http://localhost:4192/Feh-Lu-We/",
+ "regions": [
+  "mUpE",
+  "mLib",
+  "mUpR",
+  "mUpS"
+ ],
+ "threshold": 6,
+ "runs": [
+  {
+   "path": "win-north",
+   "doors": "open",
+   "mode": "B",
+   "frames": 165,
+   "culledFrames": 0,
+   "savedTris": 0,
+   "maxSaved": 0,
+   "diffs": [],
+   "maxPx": 0
+  },
+  {
+   "path": "win-west",
+   "doors": "open",
+   "mode": "B",
+   "frames": 84,
+   "culledFrames": 0,
+   "savedTris": 0,
+   "maxSaved": 0,
+   "diffs": [],
+   "maxPx": 0
+  },
+  {
+   "path": "win-south",
+   "doors": "open",
+   "mode": "B",
+   "frames": 178,
+   "culledFrames": 0,
+   "savedTris": 0,
+   "maxSaved": 0,
+   "diffs": [],
+   "maxPx": 0
+  }
+ ],
+ "problems": []
+}
