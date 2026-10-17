@@ -71,25 +71,34 @@ describe('authored facade greenery',()=>{
   it('gives entrance pots a distinct, broad and finite faceted leaf mesh with calm veins',()=>{
     const g=entranceLeafGeo(),p=g.attributes.position,c=g.attributes.color;
     expect(g.index).toBeNull();
-    expect(p.count/3).toBe(44); // 17 contour wedges front/back + 2 midrib + 8 short secondary-vein triangles
+    expect(p.count/3).toBe(544); // 17 outline wedges × 16 in-mesh subdivisions × two faces
     expect([...p.array].every(Number.isFinite)).toBe(true);
     expect([...c.array].every(Number.isFinite)).toBe(true);
     g.computeBoundingBox();
     expect(g.boundingBox!.max.x-g.boundingBox!.min.x).toBeCloseTo(1.52,4);
     expect(g.boundingBox!.max.y-g.boundingBox!.min.y).toBeGreaterThan(1.6);
-    const veinStart=17*2*3;
-    for(let i=veinStart;i<p.count;i++)expect(Math.abs(p.getX(i))).toBeLessThanOrEqual(.5);
-    for(let i=0;i<g.attributes.normal.count;i++) {
+    // Veins are part of the same continuous leaf, not overlaid planes.
+    const central:number[]=[],outer:number[]=[];
+    let front=false,back=false;
+    for(let i=0;i<p.count;i++){
+      const x=p.getX(i),y=p.getY(i),z=p.getZ(i);
+      if(Math.abs(x)<.065&&Math.abs(y)<.48)central.push(c.getY(i));
+      if(Math.abs(x)>.52&&Math.abs(y)<.3)outer.push(c.getY(i));
+      front ||= z>.05; back ||= z<-.05;
       const n=g.attributes.normal;
       expect(Math.hypot(n.getX(i),n.getY(i),n.getZ(i))).toBeCloseTo(1,5);
     }
+    expect(front).toBe(true);expect(back).toBe(true);
+    expect(central.length).toBeGreaterThan(5);expect(outer.length).toBeGreaterThan(5);
+    const mean=(a:number[])=>a.reduce((s,v)=>s+v,0)/a.length;
+    expect(mean(central)).toBeGreaterThan(mean(outer)*1.1);
     g.dispose();
   });
   it('creates two deterministic, well-connected and less cluttered entrance plants',()=>{
     for(const {seed} of ENTRANCE_POTS){
       const plan=entrancePlantPlan(seed),again=entrancePlantPlan(seed);
-      expect(plan.branches).toHaveLength(8);
-      expect(plan.leaves).toHaveLength(32); // Formerly 99; open canopy instead of overlapping leaves.
+      expect(plan.branches).toHaveLength(7);
+      expect(plan.leaves).toHaveLength(21); // Formerly 99; fewer, more readable leaves.
       expect(plan.leaves).toEqual(again.leaves);
       for(const branch of plan.branches){
         expect(branch.points).toHaveLength(3);
@@ -99,8 +108,8 @@ describe('authored facade greenery',()=>{
       expect(Math.max(...centers.map(v=>v.y))).toBeGreaterThan(1.15);
       expect(Math.min(...centers.map(v=>v.y))).toBeLessThan(1.0);
       for(const leaf of plan.leaves){
-        expect(leaf.size).toBeGreaterThanOrEqual(.225);
-        expect(leaf.size).toBeLessThan(.27);
+        expect(leaf.size).toBeGreaterThanOrEqual(.245);
+        expect(leaf.size).toBeLessThan(.29);
         expect(leaf.attachment.distanceTo(leaf.base)).toBeLessThan(.3);
         expect(leaf.tilt).toBeLessThan(-.1);
       }
