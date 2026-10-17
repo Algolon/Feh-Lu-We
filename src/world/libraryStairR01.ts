@@ -25,20 +25,39 @@ export const stairStepPoint=(i:number,r=LIB_STAIR.walkRadius)=>{
 
 /** Shape extrusion is a CLOSED solid with top, bottom and six side faces.
  * The inboard nose penetrates the post slightly: there is no daylight gap at the pivot. */
+export const LIB_STAIR_TREAD_THICKNESS = .090;
 export function solidSpiralTread(i:number):THREE.BufferGeometry {
   const a=stairStepAngle(i),d=LIB_STAIR.sweep/LIB_STAIR.steps/2+.014;
-  const shape=new THREE.Shape();
+  type Pt={x:number;z:number};
+  let polygon:Pt[]=[];
   for(let j=0;j<=4;j++){
     const t=a-d+2*d*j/4;
-    const x=LIB_STAIR.outer*Math.cos(t), z=LIB_STAIR.outer*Math.sin(t);
-    if(j===0)shape.moveTo(x,z);else shape.lineTo(x,z);
+    polygon.push({x:LIB_STAIR.outer*Math.cos(t),z:LIB_STAIR.outer*Math.sin(t)});
   }
   for(let j=4;j>=0;j--){
     const t=a-d+2*d*j/4;
-    shape.lineTo(LIB_STAIR.inner*Math.cos(t),LIB_STAIR.inner*Math.sin(t));
+    polygon.push({x:LIB_STAIR.inner*Math.cos(t),z:LIB_STAIR.inner*Math.sin(t)});
   }
+  if(i===LIB_STAIR.steps-1){
+    // Gallery oak and upper tread share the exact same height. Avoid coplanar
+    // overlap at the lip by finishing this final tread at the bridge edge.
+    const limit=LIB_STAIR.bridge.x0-LIB_STAIR.x-.004;
+    const clipped:Pt[]=[];
+    for(let j=0;j<polygon.length;j++){
+      const A=polygon[j],B=polygon[(j+1)%polygon.length];
+      const ain=A.x<=limit,bin=B.x<=limit;
+      if(ain)clipped.push(A);
+      if(ain!==bin){
+        const t=(limit-A.x)/(B.x-A.x);
+        clipped.push({x:limit,z:A.z+(B.z-A.z)*t});
+      }
+    }
+    polygon=clipped;
+  }
+  const shape=new THREE.Shape();
+  polygon.forEach((p,j)=>{if(j===0)shape.moveTo(p.x,p.z);else shape.lineTo(p.x,p.z);});
   shape.closePath();
-  const g=new THREE.ExtrudeGeometry(shape,{depth:.125,bevelEnabled:false,steps:1,curveSegments:1});
+  const g=new THREE.ExtrudeGeometry(shape,{depth:LIB_STAIR_TREAD_THICKNESS,bevelEnabled:false,steps:1,curveSegments:1});
   // Extrusion's +Z becomes world +Y; shape Y becomes -world Z (plan coordinates).
   g.rotateX(-Math.PI/2);
   g.computeVertexNormals();
@@ -55,11 +74,11 @@ export function libraryStairR01(c:Ctx) {
   cyl(c.b,wood,edge,x,UF+.92,z,.103,.103,.10,12,{chunk:c.chunk});
   c.col.addCircle(x,z,.18,GF,UF+1.11,{tag:'lib-stair.inner-post'});
 
-  // 26 solid treads: accurately closed skirt, coloured oak, contact to the central spindle.
+  // 26 closed 90 mm treads: visible underside gaps, sound sidewalls and contact with the spindle.
   for(let i=0;i<steps;i++){
     const p=stairStepPoint(i);
     const tread=solidSpiralTread(i);
-    c.b.add(wood,tread,planMatrix(x,p.y-.125,z),oak,c.chunk,true,0);
+    c.b.add(wood,tread,planMatrix(x,p.y-LIB_STAIR_TREAD_THICKNESS,z),oak,c.chunk,true,0);
     tread.dispose();
     // Narrow dark oak riser/nosing ring at the outer edge (thin so it reads at phone DPR).
     const a=stairStepAngle(i),r=LIB_STAIR.outer-.035;
