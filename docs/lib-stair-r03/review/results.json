@@ -1,17 +1,21 @@
 {
   "source": "Real candidate game scene (Chromium / SwiftShader); not a real Android device",
-  "commit": "b7ccc1ed083038eebaf15799897d9d7a6ce6948a",
+  "commit": "238f2d985f7250bf1f2de064e24f2a6315d6ae15",
   "checks": [
     {
       "name": "entrance-to-gallery-and-return",
-      "pass": false,
+      "pass": true,
       "data": {
-        "pass": false,
-        "error": "stuck walking to (82.37350020611716,105.95501723291737) at {\"x\":82.03,\"y\":1.5,\"z\":105.96}",
-        "pos": {
-          "x": 82.03,
-          "y": 1.5,
-          "z": 105.96
+        "pass": true,
+        "up": {
+          "x": 83.26,
+          "y": 3.35,
+          "z": 105.21
+        },
+        "down": {
+          "x": 81.55,
+          "y": 0.15,
+          "z": 104.48
         },
         "positions": [
           {
@@ -76,7 +80,7 @@
           },
           {
             "step": 10,
-            "x": 82.03,
+            "x": 82.15,
             "y": 1.5,
             "z": 105.98
           },
@@ -84,17 +88,17 @@
             "step": 11,
             "x": 81.94,
             "y": 1.63,
-            "z": 106
+            "z": 106.01
           },
           {
             "step": 12,
             "x": 81.73,
             "y": 1.75,
-            "z": 105.97
+            "z": 105.98
           },
           {
             "step": 13,
-            "x": 81.54,
+            "x": 81.53,
             "y": 1.87,
             "z": 105.88
           },
@@ -170,7 +174,8 @@
             "y": 3.35,
             "z": 105.05
           }
-        ]
+        ],
+        "expectedRise": 0.12307692307692308
       }
     },
     {
@@ -242,11 +247,8 @@
           "y": 3.35,
           "z": 105.63799999999999
         },
-        "southern": {
-          "x": 82.94,
-          "y": 3.35,
-          "z": 105.012
-        },
+        "southGuardSolid": true,
+        "lowerStairHeadroom": false,
         "aisle": {
           "x": 83.42999999999999,
           "y": 3.35,
@@ -302,7 +304,7 @@
     },
     {
       "name": "08-r02-baluster-under-handrail",
-      "calls": 388,
+      "calls": 389,
       "triangles": 1642440,
       "room": "libGallery",
       "glError": 0
