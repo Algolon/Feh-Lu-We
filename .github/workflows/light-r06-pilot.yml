@@ -1,0 +1,54 @@
+name: LIGHT-R06 state-bound living room pilot
+on:
+  push:
+    branches: [lighting/r06-state-bound-living-pilot]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run test:budget
+      - run: npm run build
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - profile: baseline
+          - profile: pilot
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci && npm run build && npx playwright-core install --with-deps chromium
+      - name: Start actual built game and compare logically lit fixtures with pooled lights disabled
+        env:
+          LIGHT_R06_PROFILE: ${{ matrix.profile }}
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4188 > /tmp/flw-r06-preview.log 2>&1 &
+          for attempt in $(seq 1 40); do
+            curl -sf http://127.0.0.1:4188/Feh-Lu-We/ >/dev/null && break
+            sleep 1
+          done
+          node scripts/light-r06-stable-qa.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: light-r06-${{ matrix.profile }}-actual-scene
+          path: light-r06-qa/${{ matrix.profile }}
+          if-no-files-found: warn
