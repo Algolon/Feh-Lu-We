@@ -31,6 +31,8 @@ const scenes = [
   ['15-spiral-sculpted-treads', [80.6, 0.15, 102.6], [81.95, 1.75, 105.3]],
   ['16-r03-banker-lamp-close', [74.82, 0.15, 99.87], [73.33, 1.40, 99.83]],
   ['17-r03-desk-wall-fit', [75.45, 0.15, 100.85], [72.52, 1.05, 99.0]],
+  ['18-r04-lamp-books-swap-front', [75.65, 0.15, 99.0], [73.13, 1.05, 99.0]],
+  ['19-r04-lamp-books-swap-angle', [75.05, 0.15, 100.45], [73.14, 1.18, 99.66]],
 ];
 const helpers = readFileSync(new URL('./e2e-helpers.js', import.meta.url), 'utf8');
 
@@ -93,6 +95,14 @@ try {
     }));
   });
   checks.push({name:'production-puzzle-and-lamp-anchors', data:puzzle,pass:Object.values(puzzle).every(v=>v.exists)});
+  // LIB-R04 verify that the existing lamp.library interaction follows its new right-rear model.
+  const lampPlacement = puzzle['lamp.library']?.position;
+  checks.push({
+    name: 'r04-banker-lamp-moved-to-desk-right-rear',
+    pass: !!lampPlacement && Math.abs(lampPlacement[0] - 73.04) < .025 &&
+          Math.abs(lampPlacement[2] - 99.72) < .025,
+    data: { actual: lampPlacement, expected: [73.04, 99.72] },
+  });
   // R03: use real locomotion from library entrance to the relocated bureau, not a teleport.
   const deskApproach=await page.evaluate(()=>{
     const g=window.__game;
