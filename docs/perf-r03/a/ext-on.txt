@@ -1,0 +1,15 @@
+up-west closed B@30 291 climbers 0 hedgeL 0 hedgeR 10 cull ms med 0.5 max 14.4
+hall closed B@30 77 climbers 0 hedgeL 0 hedgeR 0 cull ms med 0.7 max 10.1
+stair closed B@30 108 climbers 2 hedgeL 0 hedgeR 0 cull ms med 0.8 max 28.7
+well closed B@30 64 climbers 0 hedgeL 0 hedgeR 0 cull ms med 0.8 max 3
+hall closed A@30 289 climbers 0 hedgeL 0 hedgeR 0 cull ms med 0.9 max 5.2
+up-west partial B@30 291 climbers 5 hedgeL 0 hedgeR 10 cull ms med 1 max 83.6
+hall partial B@30 77 climbers 12 hedgeL 0 hedgeR 0 cull ms med 2 max 119.6
+stair partial B@30 108 climbers 11 hedgeL 0 hedgeR 0 cull ms med 1.6 max 5.8
+well partial B@30 64 climbers 4 hedgeL 0 hedgeR 0 cull ms med 1.9 max 9
+hall partial A@30 289 climbers 52 hedgeL 0 hedgeR 0 cull ms med 2 max 9.5
+up-west open B@30 291 climbers 5 hedgeL 0 hedgeR 10 cull ms med 1.1 max 8.2
+hall open B@30 77 climbers 15 hedgeL 3 hedgeR 3 cull ms med 2.2 max 21.4
+stair open B@30 108 climbers 17 hedgeL 8 hedgeR 8 cull ms med 2.1 max 8.3
+well open B@30 64 climbers 9 hedgeL 5 hedgeR 5 cull ms med 2.7 max 58.6
+hall open A@30 289 climbers 60 hedgeL 8 hedgeR 8 cull ms med 2.5 max 10.4

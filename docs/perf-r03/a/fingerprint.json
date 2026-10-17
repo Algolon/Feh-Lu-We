@@ -1,0 +1,121 @@
+[
+ {
+  "build": "main-MAbDny00.js",
+  "total": {
+   "meshes": 16,
+   "verts": 1242876,
+   "pos": -11109795.468,
+   "nrm": 143994.157,
+   "col": 551303.581,
+   "vhash": 1948924300
+  },
+  "per": {
+   "manor": {
+    "meshes": 14,
+    "verts": 887100,
+    "pos": -15109971.859,
+    "nrm": 3136.928,
+    "col": 497803.995,
+    "vhash": 4219094872
+   },
+   "frontHedge.left": {
+    "meshes": 1,
+    "verts": 177888,
+    "pos": -1151.805,
+    "nrm": 70428.615,
+    "col": 27074.545,
+    "vhash": 3793043042
+   },
+   "frontHedge.right": {
+    "meshes": 1,
+    "verts": 177888,
+    "pos": 4001328.195,
+    "nrm": 70428.615,
+    "col": 26425.041,
+    "vhash": 2526720978
+   }
+  }
+ },
+ {
+  "build": "main-C4vW_v2v.js",
+  "total": {
+   "meshes": 16,
+   "verts": 1242876,
+   "pos": -11109795.468,
+   "nrm": 143994.157,
+   "col": 551303.581,
+   "vhash": 1948924300
+  },
+  "per": {
+   "manor": {
+    "meshes": 14,
+    "verts": 887100,
+    "pos": -15109971.859,
+    "nrm": 3136.928,
+    "col": 497803.995,
+    "vhash": 4219094872
+   },
+   "frontHedge.left": {
+    "meshes": 1,
+    "verts": 177888,
+    "pos": -1151.805,
+    "nrm": 70428.615,
+    "col": 27074.545,
+    "vhash": 3793043042
+   },
+   "frontHedge.right": {
+    "meshes": 1,
+    "verts": 177888,
+    "pos": 4001328.195,
+    "nrm": 70428.615,
+    "col": 26425.041,
+    "vhash": 2526720978
+   }
+  }
+ },
+ {
+  "build": "main-DyvcGhyD.js",
+  "total": {
+   "meshes": 17,
+   "verts": 1242876,
+   "pos": -11109795.468,
+   "nrm": 143994.157,
+   "col": 551303.581,
+   "vhash": 1948924300
+  },
+  "per": {
+   "extGreen.climbers": {
+    "meshes": 1,
+    "verts": 708060,
+    "pos": -15803862.707,
+    "nrm": 0,
+    "col": 298142.874,
+    "vhash": 655503521
+   },
+   "manor": {
+    "meshes": 14,
+    "verts": 179040,
+    "pos": 693890.849,
+    "nrm": 3136.928,
+    "col": 199661.121,
+    "vhash": 3563591351
+   },
+   "frontHedge.left": {
+    "meshes": 1,
+    "verts": 177888,
+    "pos": -1151.805,
+    "nrm": 70428.615,
+    "col": 27074.545,
+    "vhash": 3793043042
+   },
+   "frontHedge.right": {
+    "meshes": 1,
+    "verts": 177888,
+    "pos": 4001328.195,
+    "nrm": 70428.615,
+    "col": 26425.041,
+    "vhash": 2526720978
+   }
+  }
+ }
+]
