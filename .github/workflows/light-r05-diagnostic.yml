@@ -1,0 +1,36 @@
+name: LIGHT-R05 hall living lighting diagnostic
+on:
+  push:
+    branches:
+      - diagnostics/light-r05-hall-living
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright-core install --with-deps chromium
+      - name: Measure genuine hall to fireplace point-light trace
+        shell: bash
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4188 > /tmp/light-r05-preview.log 2>&1 &
+          for i in $(seq 1 40); do
+            curl -fsS http://127.0.0.1:4188/Feh-Lu-We/ >/dev/null && break
+            sleep 1
+          done
+          node scripts/light-r05-hall-living-qa.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: light-r05-real-scene-diagnostic
+          path: light-r05-qa
+          if-no-files-found: warn
