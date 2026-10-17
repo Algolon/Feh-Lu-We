@@ -104,7 +104,10 @@ try {
  }
  const saved=await page.evaluate(()=>{
    const g=window.__game;g.state.lit['fire.living']=false;g.state.lit['lamp.livingFloor']=true;g.changed();
-   g.saveNow();
+   // The QA harness pauses the frame loop (g.running=false) for deterministic
+   // rendering. Game.saveNow intentionally ignores paused/start-screen states.
+   // Temporarily set running for this synchronous save, then restore the pause.
+   const wasRunning=g.running;g.running=true;g.saveNow();g.running=wasRunning;
    return g.world.scene.userData.stableLiving?.state?.() ?? null;
  });
  if(profile==='pilot'){
