@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { LIB_R01, LIB_R01_BAYS } from '../src/world/libraryR01';
 import { prop, POSES, validatePlacement } from '../src/slice/placement';
 import { GF, UF } from '../src/world/layout';
-import { LIB_STAIR, LIB_STAIR_RISE, solidSpiralTread, stairStepPoint } from '../src/world/libraryStairR01';
+import { LIB_STAIR, LIB_STAIR_RISE, LIB_STAIR_TREAD_THICKNESS, solidSpiralTread, stairStepPoint } from '../src/world/libraryStairR01';
 
 describe('LIB-R01: fitted shelves, puzzle and spiral access', () => {
   it('leaves the ground-floor glazing bays unobstructed', () => {
@@ -64,11 +64,18 @@ describe('LIB-R01: fitted shelves, puzzle and spiral access', () => {
   it('LIB-STAIR-R01: solid tread actually meets the spindle and has a closed wooden underside', () => {
     const g=solidSpiralTread(9);
     g.computeBoundingBox();
-    // A true extrusion has side/underside triangles; the old open wedge was 49 mm.
-    expect(g.boundingBox!.max.y-g.boundingBox!.min.y).toBeGreaterThan(.115);
+    // Full 90 mm oak, with an actual underside and closed riser walls.
+    expect(g.boundingBox!.max.y-g.boundingBox!.min.y).toBeCloseTo(LIB_STAIR_TREAD_THICKNESS,4);
     expect(g.index?.count ?? g.getAttribute('position').count).toBeGreaterThan(40);
     g.dispose();
     expect(LIB_STAIR.inner).toBeLessThan(.078); // spindle is .078 radius
+  });
+  it('LIB-STAIR-R01: last tread ends before flush gallery bridge, preventing coplanar faces', () => {
+    const g=solidSpiralTread(LIB_STAIR.steps-1);g.computeBoundingBox();
+    const lastX=LIB_STAIR.x+g.boundingBox!.max.x;
+    expect(lastX).toBeLessThan(LIB_STAIR.bridge.x0);
+    expect(LIB_STAIR.bridge.x0-lastX).toBeLessThan(.01);
+    g.dispose();
   });
   it('LIB-STAIR-R01: guard encloses usable tread without sealing the exit', () => {
     expect(LIB_STAIR.guardEndsAtStep).toBeLessThan(LIB_STAIR.steps);
