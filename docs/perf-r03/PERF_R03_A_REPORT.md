@@ -6,7 +6,7 @@
 | P — production | **`2e2bab1`** (LIB-STAIR-R06) · `main-MAbDny00.js` |
 | C — P + PERF-R02 | **`417f4ec`** (`perf-r02-frame-accurate-culling` `2f12128` merged with `2e2bab1`) · `main-C4vW_v2v.js` |
 | R — C + PERF-R03-A | **`4abdedd`** source · `main-DyvcGhyD.js` (later commits: tests, tooling, evidence, docs only) |
-| Final PERF-R03-A SHA | @@FINAL@@ |
+| Final PERF-R03-A SHA | **`edec508`** (evidence and report; product source unchanged since `4abdedd`) |
 | Merge / deploy | **not done**; owner review. PERF-R02 and PERF-R03-A are to be released together later |
 
 **Settings and method.**
