@@ -1,0 +1,124 @@
+name: LIGHT-R06D visual + mobile-profile acceptance (review only)
+on:
+  push:
+    branches: [lighting/r06d-visual-android-acceptance]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run test:budget
+      - run: npm run build
+  visuals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: production-low-landscape
+            ref: 06263c3902ca008f727d81b82b270450d352e099
+            profile: production
+            quality: low
+            portrait: '0'
+          - label: candidate-low-landscape
+            ref: ${{ github.sha }}
+            profile: pilot
+            quality: low
+            portrait: '0'
+          - label: production-high-portrait
+            ref: 06263c3902ca008f727d81b82b270450d352e099
+            profile: production
+            quality: high
+            portrait: '1'
+          - label: candidate-high-portrait
+            ref: ${{ github.sha }}
+            profile: pilot
+            quality: high
+            portrait: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          path: qa
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.ref }}
+          path: game
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: game/package-lock.json
+      - name: Build original real game and install visual test
+        working-directory: game
+        run: |
+          cp ../qa/scripts/light-r06d-visual-qa.mjs scripts/light-r06d-visual-qa.mjs
+          npm ci
+          npm run build
+          npx playwright-core install --with-deps chromium
+      - name: Run fixture, room, motion and lighting-phase matrix
+        working-directory: game
+        env:
+          LIGHT_R06D_PROFILE: ${{ matrix.profile }}
+          LIGHT_R06D_QUALITY: ${{ matrix.quality }}
+          LIGHT_R06D_PORTRAIT: ${{ matrix.portrait }}
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4188 > /tmp/flw-r06d.log 2>&1 &
+          for i in $(seq 1 40); do
+            curl -sf http://127.0.0.1:4188/Feh-Lu-We/ >/dev/null && break
+            sleep 1
+          done
+          node scripts/light-r06d-visual-qa.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: light-r06d-${{ matrix.label }}
+          path: game/light-r06d-evidence/
+          if-no-files-found: warn
+  preview-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci && npm run build
+      - name: Package playable offline-review build without publishing to GitHub Pages
+        run: |
+          mkdir -p preview-package/Feh-Lu-We
+          cp -a dist/. preview-package/Feh-Lu-We/
+          cat > preview-package/README.txt <<'TXT'
+          LIGHT-R06D isolated review build — NOT DEPLOYED to production.
+          The entire Feh-Lu-We/ folder is compiled static game content.
+          To run on a computer:
+          1. Extract the ZIP from the GitHub Actions artifact.
+          2. In the extracted folder, run: python3 -m http.server 4188 --bind 0.0.0.0
+          3. Visit: http://localhost:4188/Feh-Lu-We/?stableLiving=1
+          The source-bound lighting pilot is OFF unless stableLiving=1 is present.
+          For the strict light-pool-disabled proof append &noPoint=1.
+          For local-network Android testing, while on the same trusted Wi-Fi,
+          open http://YOUR_COMPUTER_LAN_IP:4188/Feh-Lu-We/?stableLiving=1
+          NOTE: This is a local test server; do not expose to the public internet.
+          Compare against normal production with identical quality, phase and route.
+          No GitHub Pages deployment is part of this workflow.
+          TXT
+          test -f preview-package/Feh-Lu-We/index.html
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LIGHT-R06D-playable-review-build-NOT-deployed
+          path: preview-package/
+          if-no-files-found: error
