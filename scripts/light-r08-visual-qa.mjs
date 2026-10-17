@@ -140,7 +140,10 @@ try{
  const summary={};
  for(const phase of phases)for(const site of cases){
   const rows=all.filter(x=>x.phase===phase.id&&x.view===site.id);
+  // The short real-WebGL smoke deliberately skips other phases and views.
+  if(!rows.length)continue;
   const off=rows.find(x=>x.source==='off');
+  if(!off)throw Error('R08 missing OFF reference for '+phase.id+'/'+site.id);
   const entries={};
   for(const row of rows)entries[row.source]=round(row.lum-off.lum);
   summary[phase.id+'/'+site.id]={
