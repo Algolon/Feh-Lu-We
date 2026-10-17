@@ -384,7 +384,9 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   railing(c, 'x', 95.5, 86.8, 93, UF);
   // LIB-STAIR-R02: upper gallery opening matches the enlarged oak transfer deck
   // precisely; there is no hidden railing collider across the stair exit.
-  railing(c, 'z', 83.2, 94, 104.66, UF, '#4a2f1a');
+  // R06: suppress only the loose south-end post; preserve handrail, spindles,
+  // collision and the post on the far/north side of the stair.
+  railing(c, 'z', 83.2, 94, 104.66, UF, '#4a2f1a', {omitEndNewel:true});
   railing(c, 'z', 83.2, 105.99, 107.8, UF, '#4a2f1a');
   railing(c, 'x', 107.8, 72.4, 83.2, UF, '#4a2f1a');
   // grand stair along the hall's east wall, with a sloped handrail on its open side
