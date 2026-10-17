@@ -187,7 +187,11 @@ describe('DEV-04D D3-b2: culled regions', () => {
   it('release: a doorway region is drawn inside its rooms, or from outside only with an open doorway in view and in sight', async () => {
     const { World } = await import('../src/interactions/world');
     const { estateRooms } = await import('../src/world/roomdefs');
-    const w = new World('estate'); w.rooms = estateRooms();
+    const { RoomGraph } = await import('../src/world/rooms');
+    // the bare World has no wall colliders, so every clear window (WINDOW-R02) would count as seen through and exempt the
+    // region (PERF-R02 integration): this test isolates the doorway rule on the graph without its window portals
+    const R = estateRooms();
+    const w = new World('estate'); w.rooms = new RoomGraph(R.rooms, R.portals.filter((p) => p.kind !== 'window'), R.thresholds);
     const leaf = new THREE.Object3D(); leaf.position.set(85, 4.45, -82.19); w.scene.add(leaf); // door.reis, as in the build
     (w.byId as Map<string, unknown>).set('door.reis', { id: 'door.reis', hit: [leaf] });
     const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial());
