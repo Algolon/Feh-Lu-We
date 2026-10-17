@@ -1,0 +1,52 @@
+name: LIB-STAIR-R01 integration and visual QA (no deploy)
+on:
+  push:
+    branches: [lib-stair-r01-integrity]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'scripts/lib-stair-r01-review.mjs'
+      - '.github/workflows/lib-stair-r01-review.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: lib-stair-r01-review
+  cancel-in-progress: true
+jobs:
+  stair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright-core install --with-deps chromium
+      - name: Real-game render, walk and collision checks
+        run: node scripts/lib-stair-r01-review.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lib-stair-r01-in-game-screenshots
+          path: docs/lib-stair-r01/review/
+          if-no-files-found: warn
+      - name: Preserve candidate evidence on branch only
+        if: always()
+        shell: bash
+        run: |
+          if [ ! -d docs/lib-stair-r01/review ]; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/lib-stair-r01/review
+          if ! git diff --cached --quiet; then
+            git commit -m "docs(lib-stair-r01): record real-game screenshots and collision results"
+            git push origin HEAD:lib-stair-r01-integrity
+          fi
