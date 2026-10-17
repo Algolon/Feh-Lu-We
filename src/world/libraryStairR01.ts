@@ -13,10 +13,12 @@ export const LIB_STAIR = {
   start: -Math.PI / 2, sweep: 2.5 * Math.PI,
   inner: 0.063, outer: 1.13, walkRadius: 0.78,
   // Gallery slab begins at x=83.2. Bridge only occupies the missing strip.
-  bridge: { x0: 82.74, x1: 83.2, z0: 104.76, z1: 105.76 },
+  bridge: { x0: 82.64, x1: 83.2, z0: 104.66, z1: 105.99 },
   guardEndsAtStep: 24,
 } as const;
 export const LIB_STAIR_RISE = (UF-GF)/LIB_STAIR.steps;
+/** World height of the centre of the curved rail at an exact spiral angle. */
+export const spiralRailWorldY=(angle:number)=>GF+LIB_STAIR_RISE*((angle-LIB_STAIR.start)/(LIB_STAIR.sweep/LIB_STAIR.steps)+1)+.92;
 export const stairStepAngle=(i:number)=>LIB_STAIR.start+(i+.5)*LIB_STAIR.sweep/LIB_STAIR.steps;
 export const stairStepPoint=(i:number,r=LIB_STAIR.walkRadius)=>{
   const a=stairStepAngle(i);
@@ -93,8 +95,10 @@ export function libraryStairR01(c:Ctx) {
     // An outer vertical stave on EVERY step; old version drew one every other tread.
     if(i<LIB_STAIR.guardEndsAtStep){
       const bx=x+(radius-.012)*Math.cos(a),bz=z+(radius-.012)*Math.sin(a);
-      cyl(c.b,metal,iron,bx,p.y-.06,bz,.018,.018,1.09,7,{chunk:c.chunk});
-      cyl(c.b,wood,walnut,bx,p.y+1.00,bz,.025,.026,.06,7,{chunk:c.chunk});
+      // Embed the top of each spindle INSIDE the rail tube, using its exact
+      // angle/height. The old hard-coded 1.09m shaft stopped visibly short.
+      const base=p.y-.06,top=spiralRailWorldY(a)+.018;
+      cyl(c.b,metal,iron,bx,base,bz,.018,.018,top-base,8,{chunk:c.chunk});
     }
   }
 
@@ -107,9 +111,10 @@ export function libraryStairR01(c:Ctx) {
   const samples=guardSteps*5;
   for(let j=0;j<=samples;j++){
     const t=j/samples,ang=first+(last-first)*t;
-    const index=(ang-start)/(sweep/steps);
-    const yy=GF+rise*(index+1)+.92;
-    path.push(new THREE.Vector3(radius*Math.cos(ang),yy,-radius*Math.sin(ang)));
+    // The batch transform contributes GF once. The old rail had GF twice,
+    // raising it 15cm above the spindle connection at every step.
+    const localY=spiralRailWorldY(ang)-GF;
+    path.push(new THREE.Vector3(radius*Math.cos(ang),localY,-radius*Math.sin(ang)));
   }
   const curve=new THREE.CatmullRomCurve3(path);
   const handrail=new THREE.TubeGeometry(curve,samples,.035,7,false);
@@ -132,28 +137,62 @@ export function libraryStairR01(c:Ctx) {
       y-.13,y+1.20,{tag:'lib-stair.outer-guard'});
   }
 
-  // Landing: match upper gallery oak and thickness, end FLUSH with the slab at X83.2.
-  // The old 0.91 m square plate floated across already-present floor; only the gap
-  // outside the slab is bridged now. There is no duplicated coplanar surface.
+  // LIB-STAIR-R02: a continuous timber return from the final spiral rail to
+  // the upper gallery, rather than an abruptly dangling curved handrail.
+  // The matching dark steel balusters land on the new oak transfer deck.
+  const finish=new THREE.Vector3(bridge.x1-x,UF+1.045-GF,-(bridge.z1-z));
+  const startJoin=path[path.length-1].clone();
+  const upperCurve=new THREE.CatmullRomCurve3([
+    startJoin,
+    new THREE.Vector3(bridge.x0-x+.27,UF+.97-GF,-(bridge.z1-z+.012)),
+    finish
+  ]);
+  const upperTube=new THREE.TubeGeometry(upperCurve,14,.035,8,false);
+  c.b.add(wood,upperTube,planMatrix(x,GF,z),walnut,c.chunk,true,0);
+  upperTube.dispose();
+  for(const t of [.43,.68,.88]) {
+    const at=upperCurve.getPoint(t);
+    const bx=x+at.x,bz=z-at.z,top=GF+at.y+.018;
+    cyl(c.b,metal,iron,bx,UF-.055,bz,.017,.017,top-(UF-.055),8,{chunk:c.chunk});
+  }
+
+  // R02 transfer landing: 56cm deep and 133cm wide, a distinct safe wood deck
+  // with finished planks, sized exactly to the interruption in the gallery rail.
+  // It ends FLUSH with the existing slab at X83.2 (no double-floor geometry).
   const b=bridge;
   box(c.b,wood,'#8a5a34',(b.x0+b.x1)/2,UF-.20,(b.z0+b.z1)/2,
     b.x1-b.x0,.20,b.z1-b.z0,{chunk:c.chunk,uv:1.1});
   c.col.addFloor(b.x0-.12,b.x1+.02,b.z0,b.z1,UF);
+  // Four shallow oak floorboards make this read as a real landing rather than
+  // the former undifferentiated slab. Their top is only 3mm above the walkway.
+  const count=4,boardLength=(b.z1-b.z0)/count;
+  for(let i=0;i<count;i++){
+    const zz=b.z0+(i+.5)*boardLength;
+    box(c.b,wood,i%2===0?'#8e6040':'#855936',(b.x0+b.x1)/2,UF+.001,zz,
+      b.x1-b.x0-.014,.003,boardLength-.012,{chunk:c.chunk,uv:1.1});
+  }
   // Readable oak joists underneath the bridge, and a single finished lip at void edge.
   for(const zz of [b.z0+.035,b.z1-.035]){
     box(c.b,wood,'#5c3c28',(b.x0+b.x1)/2,UF-.25,zz,b.x1-b.x0,.12,.075,{chunk:c.chunk});
   }
   box(c.b,wood,edge,b.x0,UF-.205,(b.z0+b.z1)/2,.035,.205,b.z1-b.z0,{chunk:c.chunk});
 
-  // Two short, enclosed gallery approach sides. Critically NO barrier across the
-  // passage at X83.2: one can actually walk through to the established gallery.
+  // Gallery-side guards: continuous top rail and infill instead of only two
+  // huge wooden posts. North side is already linked to the spiral handrail
+  // by the upperCurve above. South side is a separate short oak return.
   for(const zz of [b.z0,b.z1]){
-    for(const xx of [b.x0,b.x1]){
-      cyl(c.b,wood,walnut,xx,UF,zz,.044,.047,1.08,8,{chunk:c.chunk});
+    // Reinforced newel at the outer edge; the east end already meets the
+    // gallery's own balustrade and needs no overlapping double newel.
+    cyl(c.b,wood,walnut,b.x0,UF,zz,.048,.05,1.09,8,{chunk:c.chunk});
+    if(zz===b.z0){
+      box(c.b,wood,walnut,(b.x0+b.x1)/2,UF+1.045,zz,
+        b.x1-b.x0+.06,.070,.073,{chunk:c.chunk});
+      for(const xx of [b.x0+.14,b.x0+.28,b.x0+.42]){
+        cyl(c.b,metal,iron,xx,UF-.04,zz,.018,.018,1.13,8,{chunk:c.chunk});
+      }
     }
-    box(c.b,wood,walnut,(b.x0+b.x1)/2,UF+1.045,zz,
-      b.x1-b.x0+.09,.065,.065,{chunk:c.chunk});
-    c.col.addBox(b.x0-.075,b.x1+.055,zz-.05,zz+.05,UF-.14,UF+1.12,
+    // This guard is a physical boundary as well as a visual one.
+    c.col.addBox(b.x0-.045,b.x1+.055,zz-.052,zz+.052,UF-.14,UF+1.12,
       {tag:'lib-stair.gallery-side-guard'});
   }
 }
