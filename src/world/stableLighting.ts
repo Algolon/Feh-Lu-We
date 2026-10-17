@@ -7,7 +7,12 @@ import type { World } from '../interactions/world';
 import { getKit } from './kit';
 
 const query = typeof location === 'undefined' ? new URLSearchParams() : new URLSearchParams(location.search);
-export const STABLE_LIVING_PILOT = query.get('stableLiving') === '1';
+// Default ON only on the isolated published LIGHT-R06D review URL.
+// Explicit ?stableLiving=0 remains available as a same-build A/B baseline.
+// The normal production URL and family edition do not use this source bundle.
+export const STABLE_LIVING_PILOT = query.get('stableLiving') === '1' ||
+  (query.get('stableLiving') !== '0' && typeof location !== 'undefined' &&
+   /\\/light-r06d(?:\\/|$)/.test(location.pathname));
 /** Review-only A/B: all pooled point lights off, but this local lamp-bound baseline remains. */
 export const STABLE_NO_POOL = STABLE_LIVING_PILOT && query.get('noPoint') === '1';
 export const STABLE_LIVING_IDS = new Set(['fire.living', 'lamp.livingFloor']);
