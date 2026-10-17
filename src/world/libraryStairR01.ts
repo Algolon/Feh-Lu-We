@@ -264,6 +264,14 @@ export function libraryStairR01(c:Ctx) {
   c.b.add(wood,upperFloor,planMatrix(x,UF-.20,z),'#8a5a34',c.chunk,true,0);
   upperFloor.dispose();
   c.col.addFloor(b.x0-.12,b.x1+.02,b.z0,b.z1,UF);
+  // Only the inscribed rectangles of the R06 triangle are walkable. The 2.5D
+  // floor solver cannot represent polygons, so constrain each patch INSIDE
+  // the visible wedge; prevent stepping into invisible floor over the void.
+  for(const [x0,x1,z0,z1] of [
+    [82.16,82.28,105.16,105.28],
+    [82.28,82.44,105.06,105.25],
+    [82.44,82.61,104.88,105.24],
+  ] as const) c.col.addFloor(x0,x1,z0,z1,UF);
   // Readable oak joists underneath the bridge, and a single finished lip at void edge.
   for(const zz of [b.z0+.035,b.z1-.035]){
     box(c.b,wood,'#5c3c28',(b.x0+b.x1)/2,UF-.25,zz,b.x1-b.x0,.12,.075,{chunk:c.chunk});
