@@ -139,15 +139,15 @@ export function entranceLeafMaterial():THREE.MeshLambertMaterial {
   x.fillStyle=fade;x.fillRect(0,0,256,512);
   x.lineCap='round';
   x.beginPath();x.moveTo(127,499);x.bezierCurveTo(123,362,131,161,128,15);
-  x.strokeStyle='rgba(77,101,69,.15)';x.lineWidth=5.5;x.stroke();
+  x.strokeStyle='rgba(57,89,52,.14)';x.lineWidth=7;x.stroke();
   x.beginPath();x.moveTo(129,495);x.bezierCurveTo(126,360,130,162,129,19);
-  x.strokeStyle='rgba(239,249,204,.90)';x.lineWidth=3.2;x.stroke();
+  x.strokeStyle='#f5f7bf';x.lineWidth=5.1;x.stroke();
   for(const side of [-1,1])for(const [u,reach] of [[.23,67],[.47,83],[.70,64]]){
     const cy=512*(1-u+side*.015),h=reach*.29;
     x.beginPath();x.moveTo(128,cy);
     x.bezierCurveTo(128+side*reach*.30,cy-5,128+side*reach*.72,cy-h*.78,128+side*reach,cy-h);
-    x.strokeStyle='rgba(71,108,68,.13)';x.lineWidth=3.5;x.stroke();
-    x.strokeStyle='rgba(233,248,195,.76)';x.lineWidth=1.6;x.stroke();
+    x.strokeStyle='rgba(62,105,52,.16)';x.lineWidth=5;x.stroke();
+    x.strokeStyle='#e4efaa';x.lineWidth=2.6;x.stroke();
   }
   const rand=mulberry32(7345);
   for(let i=0;i<180;i++){
@@ -211,7 +211,7 @@ export function entranceLeafGeo():THREE.BufferGeometry {
   g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
   g.userData.keepColor=true;return g;
 }
-const ENTRANCE_GREEN=['#8bae70','#9ab77e','#7a9d62','#a8c28a'] as const;
+const ENTRANCE_GREEN=['#9bbd80','#aecb92','#89aa70','#b8d09e'] as const;
 export interface EntranceBranch { points:THREE.Vector3[]; radius:number }
 export interface EntranceLeaf { centre:THREE.Vector3; base:THREE.Vector3; attachment:THREE.Vector3; size:number; angle:number; tilt:number; yaw:number; tone:number }
 /** Deliberate branched crown: staggered leaf pairs orbit a seed-specific
@@ -221,10 +221,10 @@ export function entrancePlantPlan(seed:number):{branches:EntranceBranch[];leaves
   const r=mulberry32(seed),branches:EntranceBranch[]=[],leaves:EntranceLeaf[]=[];
   const origin=new THREE.Vector3(0,.65,0),Y=new THREE.Vector3(0,1,0);
   const X=new THREE.Vector3(1,0,0),Z=new THREE.Vector3(0,0,1);
-  for(let j=0;j<7;j++){
-    const a=(j+.14+r()*.12)/7*Math.PI*2;
+  for(let j=0;j<8;j++){
+    const a=(j+.14+r()*.12)/8*Math.PI*2;
     const outward=new THREE.Vector3(Math.cos(a),0,Math.sin(a));
-    const reach=.205+r()*.105,height=.52+r()*.22;
+    const reach=.215+r()*.10,height=.50+r()*.25;
     const mid=origin.clone().addScaledVector(outward,reach*.42).addScaledVector(Y,height*.52);
     const end=origin.clone().addScaledVector(outward,reach).addScaledVector(Y,height);
     branches.push({points:[origin.clone(),mid,end],radius:.009});
@@ -237,8 +237,8 @@ export function entrancePlantPlan(seed:number):{branches:EntranceBranch[];leaves
         .addScaledVector(outward,.095+r()*.034)
         .addScaledVector(lateral,side*(.055+r()*.030))
         .addScaledVector(Y,.05+r()*.038);
-      const size=.172+r()*.033+(k===4?.014:0);
-      const yaw=Math.PI/2-a+side*(.25+r()*.30)+(r()-.5)*.20;
+      const size=[.145,.158,.174,.18,.166][k]+r()*.016;
+      const yaw=Math.PI/2-a+side*(.28+r()*.29)+(r()-.5)*.24;
       const angle=side*(.32+r()*.30);
       const tilt= -.15-r()*.22;
       // Respect the exact mesh transform order used in placeLeaf.
