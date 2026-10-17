@@ -15,6 +15,18 @@ describe('botanical families and interior planting',()=>{
       expect(g.attributes.position.count/3).toBeLessThan(14000);
     }expect(signatures.size).toBe(3);}
   });
+  it('keeps all cactus variants readable as green rather than almost-black silhouettes',()=>{
+    for(let v=0;v<3;v++){
+      const color=indoorPlantModel('cactus',v).attributes.color;
+      const bodyGreens:number[]=[];
+      for(let i=0;i<color.count;i++){
+        const red=color.getX(i),green=color.getY(i),blue=color.getZ(i);
+        if(green>red*1.5&&green>blue*1.5)bodyGreens.push(green);
+      }
+      expect(bodyGreens.length).toBeGreaterThan(0);
+      expect(Math.min(...bodyGreens)).toBeGreaterThan(.25);
+    }
+  });
   it('authors at least one anchor for every domestic room, with groups concentrated in larger rooms',()=>{
     const excluded=['bstair','atticStair'];
     const domestic=ROOMS.filter(r=>['g','u','a'].includes(r.floor)&&!excluded.includes(r.id));

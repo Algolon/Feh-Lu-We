@@ -92,11 +92,13 @@ export function indoorPlantModel(family:IndoorFamily,variant=0) {
       const a=i*Math.PI/3+ring*.45+j,base=V(clumps===3?Math.cos(j*2.1)*.12:0,ring*.025,clumps===3?Math.sin(j*2.1)*.12:0),d=V(Math.cos(a),0,Math.sin(a));leaf(base,d,(v===2?.32:.25)*(1-ring*.21),.055*(1-ring*.18),.10+ring*.02,.12+ring*.18);
     }
   }else{
+    // Cactus-specific, brighter mid-green; the older generic foliage tint made ribs disappear indoors.
+    const cactusGreen=new THREE.Color(['#569a54','#5ca45b','#68a65c'][v]);
     const cactus=(pos:THREE.Vector3,rad:number,h:number,ball=false)=>{
       const g=ball?new THREE.SphereGeometry(rad,20,12):new THREE.CapsuleGeometry(rad,h-rad*2,5,20),p=g.attributes.position,uv=g.attributes.uv,col:number[]=[];
-      for(let i=0;i<p.count;i++){const a=Math.atan2(p.getZ(i),p.getX(i)),k=1+.075*Math.cos(a*10);p.setXYZ(i,p.getX(i)*k,p.getY(i)+(ball?rad:h/2),p.getZ(i)*k);uv.setXY(i,(tile%4+THREE.MathUtils.clamp(uv.getX(i),.01,.99))/4,(1-Math.floor(tile/4)+THREE.MathUtils.clamp(uv.getY(i),.01,.99))/2);col.push(c0.r*.9,c0.g*1.1,c0.b*1.1);}
+      for(let i=0;i<p.count;i++){const a=Math.atan2(p.getZ(i),p.getX(i)),k=1+.075*Math.cos(a*10);p.setXYZ(i,p.getX(i)*k,p.getY(i)+(ball?rad:h/2),p.getZ(i)*k);uv.setXY(i,(tile%4+THREE.MathUtils.clamp(uv.getX(i),.01,.99))/4,(1-Math.floor(tile/4)+THREE.MathUtils.clamp(uv.getY(i),.01,.99))/2);const ribLight=.91+.16*(.5+.5*Math.cos(a*10));col.push(cactusGreen.r*ribLight,cactusGreen.g*ribLight,cactusGreen.b*ribLight);}
       g.computeVertexNormals();g.translate(pos.x,pos.y,pos.z);g.setAttribute('color',new THREE.Float32BufferAttribute(col,3));parts.push(g.toNonIndexed());g.dispose();
-      for(let row=0;row<5;row++)for(let k=0;k<8;k++){const a=k*Math.PI/4+row*.3,p=pos.clone().add(V(Math.cos(a)*rad,.08+row*(ball?rad*.25:h*.17),Math.sin(a)*rad));rod(p,p.clone().add(V(Math.cos(a)*.017,.012,Math.sin(a)*.017)),.0015,new THREE.Color('#cabd88'));}
+      for(let row=0;row<5;row++)for(let k=0;k<8;k++){const a=k*Math.PI/4+row*.3,p=pos.clone().add(V(Math.cos(a)*rad,.08+row*(ball?rad*.25:h*.17),Math.sin(a)*rad));rod(p,p.clone().add(V(Math.cos(a)*.017,.012,Math.sin(a)*.017)),.0015,new THREE.Color('#e0d5a6'));}
     };
     if(v===0)cactus(V(),.10,.78);else if(v===1){cactus(V(),.085,.9);cactus(V(.14,0,.025),.06,.48);cactus(V(-.13,0,-.04),.05,.35);}else{cactus(V(),.16,.3,true);cactus(V(.18,0,.08),.095,.2,true);}
   }

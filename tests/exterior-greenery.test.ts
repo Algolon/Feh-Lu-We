@@ -23,6 +23,18 @@ describe('authored facade greenery',()=>{
     expect(climberPlan().reduce((n,s)=>n+s.leaves.length*26,0)).toBeLessThan(150000);
     for(const site of climberPlan())for(const l of site.leaves)expect(l.size*1.64).toBeLessThan(.21);
   });
+  it('gives wall ivy and entrance planters distinct, faceted opaque leaf silhouettes',()=>{
+    const ivy=climberLeafGeo(),planter=climberLeafGeo('entrance');
+    expect(planter.attributes.position.count).toBeLessThan(ivy.attributes.position.count);
+    for(const leaf of [ivy,planter]){
+      expect(leaf.attributes.position.count/3).toBeLessThanOrEqual(28);
+      leaf.computeBoundingBox();
+      expect(leaf.boundingBox!.max.z).toBeGreaterThan(.08);
+      const tones=new Set(Array.from(leaf.attributes.color.array).map(n=>n.toFixed(3)));
+      expect(tones.size).toBeGreaterThan(2);
+      leaf.dispose();
+    }
+  });
   it('puts solid planters outside the entrance step footprint and central walking line',()=>{
     for(const p of ENTRANCE_POTS){
       expect(Math.abs(p.x-90)).toBeGreaterThan(3);
