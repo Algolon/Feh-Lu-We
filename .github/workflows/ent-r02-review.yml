@@ -9,6 +9,7 @@ on:
       - tests/ent-r02.test.ts
       - tests/dev02.test.ts
       - scripts/ent-r02-review.mjs
+      - scripts/ent-r02-profiler.mjs
       - .github/workflows/ent-r02-review.yml
 permissions:
   contents: write # review branch only: publish screenshots as ordinary browsable repo files
@@ -56,6 +57,12 @@ jobs:
           fs.writeFileSync(path+'performance-compare.json',JSON.stringify({views,baselineCommit:'1f9563b31cbdd44fdc1fd17c29750d74440ad9d1',note:'matched high-quality software-WebGL poses; not a mobile hardware FPS measurement'},null,2));
           console.log(JSON.stringify(views));
           NODE
+      - name: Profile high-quality gallery cost by mesh group
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/ent-r02-profiler.mjs
       - name: Publish browseable screenshots to ENT-R02 branch
         if: always()
         shell: bash
@@ -66,6 +73,9 @@ jobs:
           if compgen -G 'docs/development/workstreams/ent-r02/review/*.jpg' >/dev/null; then
             cp docs/development/workstreams/ent-r02/review/*.jpg "$dir/"
             cp docs/development/workstreams/ent-r02/review/results.json "$dir/" || true
+          fi
+          if test -f docs/development/workstreams/ent-r02/profiler/render-by-group.json; then
+            cp docs/development/workstreams/ent-r02/profiler/render-by-group.json "$dir/"
           fi
           if test -f docs/development/workstreams/ent-r02/performance-compare.json; then
             cp docs/development/workstreams/ent-r02/performance-compare.json "$dir/"
@@ -85,4 +95,5 @@ jobs:
             docs/development/workstreams/ent-r02/review
             docs/development/workstreams/ent-r02/baseline
             docs/development/workstreams/ent-r02/performance-compare.json
+            docs/development/workstreams/ent-r02/profiler
           if-no-files-found: warn
