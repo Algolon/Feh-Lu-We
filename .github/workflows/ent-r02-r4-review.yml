@@ -1,0 +1,54 @@
+name: ENT-R02-R4 entrance polish review
+on:
+  push:
+    branches:
+      - fix/ent-r02-r4-corners-ceiling-paving-planters
+    paths:
+      - src/world/manor.ts
+      - src/world/arrivalStudy.ts
+      - src/world/exteriorGreenery.ts
+      - tests/ent-r02-r4.test.ts
+      - tests/ent-r02.test.ts
+      - scripts/ent-r02-r4-review.mjs
+      - .github/workflows/ent-r02-r4-review.yml
+permissions:
+  contents: write
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright-core install --with-deps chromium
+      - name: In-game entrance and gallery screenshots
+        run: ENT_R02_R4_THUMB=1 node scripts/ent-r02-r4-review.mjs
+      - name: Publish direct screenshot links on review branch
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          folder=docs/development/workstreams/ent-r02/r4-images
+          mkdir -p "$folder"
+          cp docs/development/workstreams/ent-r02/r4-review/*.jpg "$folder/"
+          cp docs/development/workstreams/ent-r02/r4-review/results.json "$folder/"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$folder"
+          if ! git diff --cached --quiet; then
+            git commit -m "docs(ent-r02-r4): publish entrance/paving screenshots [skip ci]"
+            git push origin HEAD:fix/ent-r02-r4-corners-ceiling-paving-planters
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ent-r02-r4-review
+          path: docs/development/workstreams/ent-r02/r4-review/
+          if-no-files-found: warn
