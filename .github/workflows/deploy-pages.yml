@@ -185,19 +185,21 @@ jobs:
           assert source.count(head)==1
           source=source.replace(head,head+"\nimport { defaultState } from './core/state';")
           orig="function boot() {\n  const canvas = document.getElementById('game') as HTMLCanvasElement;"
-          injected="""function boot() {
-  // Isolated review route, explicit opt-in. NEVER overwrite an existing preview save.
-  if (new URLSearchParams(location.search).has('entreeTour')
-      && !localStorage.getItem('fehluwe.ent-r02.save')) {
-    const tour=defaultState();
-    tour.scene='estate';
-    tour.flags.leftHome=true;
-    tour.inventory=['invitation','torch','matches','notebook','frontKey'];
-    tour.unlocked=['lock.door.front'];
-    tour.player.estate={ x:90, y:0, z:73.5, yaw:0, pitch:0 };
-    localStorage.setItem('fehluwe.ent-r02.save',JSON.stringify(tour));
-  }
-  const canvas = document.getElementById('game') as HTMLCanvasElement;"""
+          injected=(
+            "function boot() {\n"
+            "  // First-time opt-in. No existing ENT-R02 save is replaced.\n"
+            "  if (new URLSearchParams(location.search).has('entreeTour')\n"
+            "      && !localStorage.getItem('fehluwe.ent-r02.save')) {\n"
+            "    const tour=defaultState();\n"
+            "    tour.scene='estate';\n"
+            "    tour.flags.leftHome=true;\n"
+            "    tour.inventory=['invitation','torch','matches','notebook','frontKey'];\n"
+            "    tour.unlocked=['lock.door.front'];\n"
+            "    tour.player.estate={ x:90, y:0, z:73.5, yaw:0, pitch:0 };\n"
+            "    localStorage.setItem('fehluwe.ent-r02.save',JSON.stringify(tour));\n"
+            "  }\n"
+            "  const canvas = document.getElementById('game') as HTMLCanvasElement;"
+          )
           assert source.count(orig)==1, 'ENT-R02 review boot hook moved'
           p.write_text(source.replace(orig,injected))
           PY
