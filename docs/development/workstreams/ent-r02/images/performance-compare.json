@@ -69,26 +69,26 @@
       "name": "gallery-to-window",
       "calls": {
         "baseline": 136,
-        "prototype": 232,
-        "delta": 96
+        "prototype": 225,
+        "delta": 89
       },
       "triangles": {
         "baseline": 1075680,
-        "prototype": 1550540,
-        "delta": 474860
+        "prototype": 1541004,
+        "delta": 465324
       }
     },
     {
       "name": "gallery-wide",
       "calls": {
         "baseline": 142,
-        "prototype": 248,
-        "delta": 106
+        "prototype": 241,
+        "delta": 99
       },
       "triangles": {
         "baseline": 1152566,
-        "prototype": 1635240,
-        "delta": 482674
+        "prototype": 1625704,
+        "delta": 473138
       }
     },
     {

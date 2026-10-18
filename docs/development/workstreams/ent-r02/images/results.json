@@ -93,8 +93,8 @@
         "pitch": -0.029857676298925124
       },
       "room": "frontGallery",
-      "calls": 232,
-      "triangles": 1550540,
+      "calls": 225,
+      "triangles": 1541004,
       "glError": 0,
       "failedShaders": 0,
       "frontDoor": true
@@ -109,8 +109,8 @@
         "pitch": -0.08083827912194298
       },
       "room": "frontGallery",
-      "calls": 248,
-      "triangles": 1635240,
+      "calls": 241,
+      "triangles": 1625704,
       "glError": 0,
       "failedShaders": 0,
       "frontDoor": true
