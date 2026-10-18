@@ -35,7 +35,7 @@ describe('ENT-R02-R4 finished join and entrance exterior apron', () => {
     const s=readFileSync('src/world/manor.ts','utf8');
     expect(s).toContain('slab(ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, 84)');
     expect(s).not.toContain('slab(85, 95, 80.4, 84)');
-    expect(s).toContain('const ceilingSolid = new THREE.ExtrudeGeometry(ceilingPlan)');
+    expect(s).toContain('const ceilingSolid = new THREE.ExtrudeGeometry(ceilingPlan, {');
     expect(s).toContain('ceilingPlan.lineTo(ENTRANCE_R02.x0, ENTRANCE_R02.faceZ)');
     expect(s).toContain('ceilingPlan.lineTo(ENTRANCE_R02.x1, ENTRANCE_R02.faceZ)');
     expect(s).toContain('ceilingSolid.rotateX(Math.PI / 2)');
