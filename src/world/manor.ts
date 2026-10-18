@@ -193,6 +193,7 @@ function shell(w: World, c: Ctx) {
   // Two side-bearing walls reach the former main facade; a large opening at Z80.2
   // connects it to the old vestibule and frontGallery. New and old gallery slabs join.
   const E = ENTRANCE_R02, face = E.faceZ;
+  const facadeStone = EXTERIOR_STUDY ? '#ffffff' : '#f6ead0';
   // ENT-R02-R3: one genuine contiguous front wall, from floor to upper cornice.
   // Earlier disconnected 0.5 m-high panels left floor-level daylight beside the door.
   // The clear 1.7 m door opening coincides exactly with door.front's hinge/leaf,
