@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
+import { readFileSync } from 'node:fs';
 import { buildEntranceGalleryCeilingGeometry, ENTRANCE_CEILING_BOUNDS as B } from '../src/world/entranceCeiling';
 import { UCEIL } from '../src/world/layout';
 
@@ -37,4 +38,14 @@ describe('ENT-R02-R5B real world-aligned continuous gallery ceiling', () => {
     mesh.material.dispose();
     geometry.dispose();
   });
+  it('omits only the original outside eave that would cut through the gallery ceiling',()=>{
+    const manor=readFileSync('src/world/manor.ts','utf8');
+    const arch=readFileSync('src/world/arch.ts','utf8');
+    const drains=readFileSync('src/world/exteriorFinish.ts','utf8');
+    expect(manor).toContain('omitSouthSpan: [ENTRANCE_R02.x0 - 0.22, ENTRANCE_R02.x1 + 0.22]');
+    expect(arch).toContain('const southIntervals: [number,number][]');
+    expect(arch).toContain('look.omitSouthSpan');
+    expect(drains).toContain('omitSouthSpan?:readonly[number,number]');
+  });
+
 });
