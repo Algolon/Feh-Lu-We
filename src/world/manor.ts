@@ -156,7 +156,7 @@ function shell(w: World, c: Ctx) {
   }
   if (EXTERIOR_STUDY) studyArchitecture(c, TOP, UF);
   // roof (≈30°) with a real eave (fascia, soffit, gutter, caps) and downpipes at the corners and either side of the bay
-  hipRoof(c, 90, 95, 36, 30, TOP, 8.2, k.M.slate, '#a39f9a', 0.7, { finished: EXTERIOR_STUDY && EXTERIOR_FINISH, courses: EXTERIOR_STUDY && ROOF_DETAIL, downpipes: [[71.86, 80.5], [108.14, 80.5], [71.86, 109.5], [108.14, 109.5], [85.85, 79.88], [94.15, 79.88]] });
+  hipRoof(c, 90, 95, 36, 30, TOP, 8.2, k.M.slate, '#a39f9a', 0.7, { finished: EXTERIOR_STUDY && EXTERIOR_FINISH, courses: EXTERIOR_STUDY && ROOF_DETAIL, downpipes: [[71.86, 80.5], [108.14, 80.5], [71.86, 109.5], [108.14, 109.5], [85.85, 79.88], [94.15, 79.88]], omitSouthSpan: [ENTRANCE_R02.x0 - 0.22, ENTRANCE_R02.x1 + 0.22] });
   roofWindowOutside(c); // DEV-04A: the attic observation window in the east slope (inside: attic())
   // chimneys: stack with a projecting band and a cap, two pots each
   for (const [x, z] of [[72.9, 86.7], [100, 101], [86, 106]] as const) {
