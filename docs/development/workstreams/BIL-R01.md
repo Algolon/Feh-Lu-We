@@ -1,6 +1,6 @@
 # BIL-R01 — bestaande biljarttafel naar de vide
 
-**Scope:** alleen de bestaande biljarttafel, vier gekleurde ballen, witte bal en de losse keu gaan van de oude biljartkamer naar de doorlopende bovengalerij. Geen aanpassingen aan puzzel, meubels of kamerindeling.
+**Scope:** alleen de bestaande biljarttafel, drie gekleurde ballen, één witte bal en de losse keu gaan van de oude biljartkamer naar de doorlopende bovengalerij. Geen aanpassingen aan puzzel, meubels of kamerindeling.
 
 **Geometrie:** gecentraliseerde plaatsing uit `BILLIARD_GALLERY_R02` (X90.35, Z80.55, Y=UF3.35), tafel 1.9 × 3.5 m met de lange zijde in de Z-richting. Een 1.4m keu-clearance past binnen de oude/nieuwe galerij (X87.99–92.70, Z77.40–83.70), met de westelijke galerijdoorloop vrij. De echte tafelkollider is op de bovenverdieping gezet; de oude vloerkollider is verwijderd.
 
