@@ -689,11 +689,12 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   // PROP-R08: place the existing FLW-S3-033 screen once in mLiv, shared by sample and normal
   // room variants. It stands beyond the RIGHT edge of the fireplace and clear of the curtain.
   S3_BUILDERS['FLW-S3-033'](c);
-  // PROP-R11: owner-marked yellow spot BETWEEN the basket and hearth edge.
-  // Shift the existing set rightward, just outside the hearth's full collider:
-  // hearth x <= 73.2; tool radius 0.215, leftmost x = 73.335.
-  // Both sample and default art share this single mLiv instance.
-  fireplaceToolSet(c, 73.55, 85.12, GF, 0);
+  // PROP-R12: beside the rear wall and LEFT of the hearth, behind the firewood basket.
+  // True clearance to the western wall x=72.4: 72.72-0.215-72.4 = 10.5 cm.
+  // True clearance to hearth's side z=86.7-1.75=84.95:
+  // 84.95-(84.63+0.215) = 10.5 cm; no overlap with the basket at (73.43,84.48).
+  // Single shared mLiv placement for both sample and default room styles.
+  fireplaceToolSet(c, 72.72, 84.63, GF, 0);
   c.chunk = 'mHall';
 
   c.chunk = 'mLib';
