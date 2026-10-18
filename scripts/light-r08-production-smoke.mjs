@@ -4,7 +4,8 @@
 // Chromium SwiftShader is not a physical Android GPU timing test.
 import { chromium } from 'playwright-core';
 import { mkdirSync, writeFileSync } from 'node:fs';
-const URLROOT=(process.argv[2]??'http://127.0.0.1:4188/Feh-Lu-We/').replace(/\\/?$/,'/');
+const inputBase=process.argv[2]??'http://127.0.0.1:4188/Feh-Lu-We/';
+const URLROOT=inputBase.endsWith('/')?inputBase:inputBase+'/';
 const quality=process.env.LIGHT_R08_LIVE_QUALITY??'low';
 const portrait=process.env.LIGHT_R08_LIVE_PORTRAIT==='1';
 const out='light-r08-live-evidence/'+quality+(portrait?'-portrait':'-landscape');
