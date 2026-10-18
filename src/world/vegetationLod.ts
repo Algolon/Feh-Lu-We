@@ -72,15 +72,3 @@ export function groveLodProfile(name: string | null = null): GroveLodProfile {
 }
 const gq = typeof location === 'undefined' ? null : new URLSearchParams(location.search).get('grovelod');
 export const GROVE_LOD_PROFILE = groveLodProfile(gq);
-
-/** Conservative plan-space view-cone clipping for near-ground outside detail seen through
- * doors/windows. The caller supplies real LOS-tested apertures; this only reduces foliage
- * that lies far outside their angular silhouette. r gives leaves/rocks edge allowance.
- * Never use this to classify an outdoor player view. */
-export interface ExteriorSightCone { x: number; z: number; dx: number; dz: number; cos: number }
-export function inExteriorSightCone(x: number, z: number, r: number, cones: readonly ExteriorSightCone[]) {
-  return cones.some(q => {
-    const px = x - q.x, pz = z - q.z, d = Math.hypot(px, pz);
-    return d < 0.01 || (px * q.dx + pz * q.dz) / d >= q.cos - Math.min(0.18, r / d);
-  });
-}
