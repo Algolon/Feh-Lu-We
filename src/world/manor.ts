@@ -89,6 +89,8 @@ function shell(w: World, c: Ctx) {
     wall(c, face.axis, face.f, face.a0, face.a1, face.y0, face.y1, {
       ...facade, t: 0.4, exterior: face.exterior, frameColor: face.axis==='x'&&face.f===80.2?'#252725':undefined, frameStyle: face.axis==='x'&&face.f===80.2?'slim-metal':undefined, skin, uv: 2.4, winStyle: 'manor',
       openings: face.openings, windows: face.windows.map(v => ({ ...v, transparent: true })),
+      // Old facade full-height cut-through is not an actual doorway. No decorative jamb/header.
+      frameOpenings: !face.id.startsWith('south-'),
     });
   }
   for (const site of MANOR_WINDOWS) buildManorWindow(w, c, site);
@@ -210,6 +212,18 @@ function shell(w: World, c: Ctx) {
   const sideWallJoinZ = 80.54;
   wall(c, 'z', E.x0, E.zWindow, sideWallJoinZ, 0, TOP, { ...stone, t: 0.4, exterior: -1, skin, uv: 2.4 });
   wall(c, 'z', E.x1, E.zWindow, sideWallJoinZ, 0, TOP, { ...stone, t: 0.4, exterior: 1, skin, uv: 2.4 });
+  // Finish the exposed ends of the old south ashlar at the four internal
+  // new/old corners. A low-width plaster return is preferable to visible
+  // masonry, a black void or a fake solid partition across the walk route.
+  for (const x of [E.x0, E.x1]) {
+    for (const [y0, y1] of [[GF, SLAB_UNDERSIDE], [UF, UCEIL]] as const) {
+      const inward = x < 90 ? 1 : -1;
+      const xa = x - (inward < 0 ? .28 : .10);
+      const xb = x + (inward > 0 ? .28 : .10);
+      boxMM(c.b, k.M.plaster, '#f1e6cf', xa, xb, y0, y1, 79.98, 80.54,
+        { chunk: c.chunk, uv: 2.4, jitter: 0, shadow: false });
+    }
+  }
   for (const x of [E.x0, E.x1]) for (let i = 0, y = 0.7; y < TOP - 0.5; i++, y += 0.42) {
     const la = i % 2 ? 0.3 : 0.55;
     if (EXTERIOR_STUDY) {
