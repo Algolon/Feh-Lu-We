@@ -22,9 +22,18 @@ function gutterGeo(length:number) {
   for(let i=8;i>=0;i--){const a=Math.PI+i*Math.PI/8;pts.push(new THREE.Vector2(Math.cos(a)*(r-t),Math.sin(a)*(r-t)));}
   const g=new THREE.ExtrudeGeometry(new THREE.Shape(pts),{depth:length,bevelEnabled:false,curveSegments:1});g.translate(0,0,-length/2);g.rotateY(Math.PI/2);return g;
 }
-export function rainwater(c:Ctx,cx:number,cz:number,ax:number,az:number,y:number,sites:readonly [number,number][],col='#76817e',overhang=.7) {
+export function rainwater(c:Ctx,cx:number,cz:number,ax:number,az:number,y:number,sites:readonly [number,number][],col='#76817e',overhang=.7,omitSouthSpan?:readonly[number,number]) {
   for(const sign of [-1,1]) {
-    add(c,gutterGeo(2*ax+.16),cx,y-.035,cz+sign*(az+.06),col);
+    if(sign===-1 && omitSouthSpan) {
+      // Stop the old main-roof gutter at the new foyer/gallery extension.
+      // Segments remain physically on either exterior wing, never inside it.
+      for(const [x0,x1] of [
+        [cx-ax-.08, Math.min(cx+ax,omitSouthSpan[0])],
+        [Math.max(cx-ax,omitSouthSpan[1]), cx+ax+.08],
+      ] as const) {
+        if(x1-x0>.02)add(c,gutterGeo(x1-x0),(x0+x1)/2,y-.035,cz-(az+.06),col);
+      }
+    } else add(c,gutterGeo(2*ax+.16),cx,y-.035,cz+sign*(az+.06),col);
     const side=gutterGeo(2*az+.16);side.rotateY(Math.PI/2);add(c,side,cx+sign*(ax+.06),y-.035,cz,col);
   }
   for(const [x,z] of sites) {
