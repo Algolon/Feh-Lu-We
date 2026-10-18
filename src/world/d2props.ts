@@ -193,7 +193,7 @@ export function carvedBird(c: Ctx) {
 }
 
 /** FLW-S3-017 Terracotta bloemmedaillon: a shallow terracotta disc (Ø 35 cm) with a raised bud on paired leaves. */
-/** FLW-S3-033 Smeedijzeren BBQ-haardplaat: a wrought-iron screen with a shouldered arch, scrollwork, A-frame feet. */
+/** FLW-S3-033 Smeedijzeren haardscherm (original BBQ plate): shouldered arch, scrollwork and A-frame feet. */
 export function fireScreen(c: Ctx) {
   const p = anchor('FLW-S3-033'), M = artMats(), iron = '#2a2724', iron2 = '#5a534c'; // the raised scrollwork catches light
   const a = new Asm(c.b, c.chunk, p.x, p.y, p.z, p.yaw).begin(p.id);
@@ -216,7 +216,18 @@ export function fireScreen(c: Ctx) {
     a.add(M.paint, iron2, bx(0.034, 0.03, 0.34), s * 0.3, 0.015, -0.1); // foot runner (front-to-back)
     put(a, M.paint, iron2, strut([s * 0.3, 0.03, -0.24], [s * 0.3, 0.45, -0.012], 0.009, 0.009, 4)); // A-frame stay
   }
-  c.col.addBox(p.x - 0.4, p.x + 0.36, p.z - 0.12, p.z + 0.32, p.y, p.y + 0.95); // facing ≈ −z (turned 20°): the feet run back to +z
+  // PROP-R08: oriented collision bounds follow the artwork (screen width 0.7 m and A-frame stays).
+  // This keeps the inner-room passage sensible at yaw = π/2 and works for future placements too.
+  const corners = ([-0.38, 0.38] as const).flatMap(lx =>
+    ([-0.28, 0.09] as const).map(lz => ({
+      x: p.x + lx * Math.cos(p.yaw) + lz * Math.sin(p.yaw),
+      z: p.z - lx * Math.sin(p.yaw) + lz * Math.cos(p.yaw),
+    })));
+  c.col.addBox(
+    Math.min(...corners.map(v => v.x)), Math.max(...corners.map(v => v.x)),
+    Math.min(...corners.map(v => v.z)), Math.max(...corners.map(v => v.z)),
+    p.y, p.y + 0.95,
+  );
   a.end();
 }
 

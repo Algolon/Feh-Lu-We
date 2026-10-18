@@ -87,6 +87,46 @@ jobs:
           test -f dist/game/index.html
           test -f dist/light-r06d/index.html
           test -f dist/light-r06d/light-r06d-device-probe.js
+      # LIGHT-R08 is a separate opted-in review, preserving both production
+      # and the approved /light-r06d/ route. Do not merge PR #118 itself.
+      - name: Checkout LIGHT-R08 source on current production baseline
+        uses: actions/checkout@v7
+        with:
+          # Verified library desk task-light fix + scoped painted desk surfaces.
+          ref: a1e87494c89d91adc63f439ae0e03c78363b5dae
+          path: r08-preview-source
+          persist-credentials: false
+      - name: Build isolated LIGHT-R08 browser route and device recorder
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd r08-preview-source
+          # Release must include the reviewed local banker's-lamp fix:
+          # a bounded desk-only contribution and scoped author-paint materials.
+          grep -Fq 'task=2.0*tabletop*downward;' src/world/stableLighting.ts
+          grep -Fq "chunk==='mLib' && profile==='paint'" src/world/stableLighting.ts
+          npm ci
+          npm run typecheck
+          npm test
+          npm run build -- --base /Feh-Lu-We/light-r08/
+          cd ..
+          mkdir -p dist/light-r08
+          cp -a r08-preview-source/dist/. dist/light-r08/
+          cp r08-preview-source/scripts/light-r08-device-probe.js dist/light-r08/light-r08-device-probe.js
+          python3 - <<'PY'
+          from pathlib import Path
+          f=Path('dist/light-r08/index.html')
+          html=f.read_text()
+          assert '</body>' in html,'R08 nested index is incomplete'
+          assert '/Feh-Lu-We/light-r08/assets/' in html,'R08 asset URLs not path-scoped'
+          snippet='<script defer src="/Feh-Lu-We/light-r08/light-r08-device-probe.js"></script>'
+          f.write_text(html.replace('</body>',snippet+'</body>'))
+          PY
+          test -f dist/index.html
+          test -f dist/game/index.html
+          test -f dist/light-r06d/index.html
+          test -f dist/light-r08/index.html
+          test -f dist/light-r08/light-r08-device-probe.js
       - name: Smoke test both main and LIGHT-R06D URLs, asset base and saves
         shell: bash
         run: |
@@ -100,6 +140,15 @@ jobs:
             sleep 1
           done
           node scripts/light-r06d-pages-smoke.mjs http://127.0.0.1:4188/Feh-Lu-We/
+      - name: LIGHT-R08 separate route real browser/save/fixture regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 40); do
+            curl -sf http://127.0.0.1:4188/Feh-Lu-We/light-r08/ >/dev/null && break
+            sleep 1
+          done
+          node scripts/light-r08-pages-smoke.mjs http://127.0.0.1:4188/Feh-Lu-We/
       - uses: actions/upload-pages-artifact@v5
         with:
           path: dist

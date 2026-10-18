@@ -71,9 +71,10 @@ export const PROPS3D: Prop3D[] = [
   { id: 'FLW-S3-030', title: 'Papier-maché wandmasker', basis: 'OWNER_GROUP_A', room: 'cottageRoom', mount: 'wall', x: 20.3, y: CF + 1.62, z: 161.0, yaw: Math.PI / 2, maxTris: 1500 }, // D2-R: over the sideboard (west wall face x 20.30), with the azulejo plates; clear of the window at z 162.3
   // Portugal terrace (D2-R): the façade pier east of the window, behind the game table and over the bench end
   { id: 'FLW-S3-031', title: 'Keramisch tegelreliëf', basis: 'OWNER_GROUP_A', room: 'cottageTerrace', mount: 'wall', x: 29.35, y: CF + 1.5, z: 157.0, yaw: Math.PI, maxTris: 1500 }, // D2-R: azulejo panel on the façade pier behind the table / bench (face z 157.0)
-  // BBQ: the grill's backdrop, set back-left of it (straight behind, the kettle hid it from every approach) and turned
-  // towards the way in from the house; the gas bottle stays clear on its west side, the feet stay on the platform
-  { id: 'FLW-S3-033', title: 'Smeedijzeren BBQ-haardplaat', basis: 'OWNER_GROUP_A', room: 'bbq', mount: 'ground', x: 106.15, y: GF, z: 118.5, yaw: Math.PI + 0.35, maxTris: 600 },
+  // PROP-R08: same approved wrought-iron fire screen moved from the outdoor BBQ into the living room:
+  // beside the RIGHT edge of the western hearth (z 86.7), between the surround and red curtain (z 90.5).
+  // Faces into the living room; the screen's arched scrollwork and both feet remain unchanged.
+  { id: 'FLW-S3-033', title: 'Smeedijzeren BBQ-haardplaat', basis: 'OWNER_GROUP_A', room: 'living', mount: 'ground', x: 73.1, y: GF, z: 88.95, yaw: Math.PI / 2, maxTris: 600 },
   // lake viewpoint (D2-R): at the water's edge, front-right of the bench; frames the view west, never stands in it
   { id: 'FLW-S3-037', title: 'Houten reigerbeeld', basis: 'OWNER_GROUP_A', room: 'lakeView', mount: 'ground', x: 77.25, y: 0.04, z: 141.6, yaw: -Math.PI / 2 + 0.3, maxTris: 1500 }, // D2-R: ×1.45 at the bay's lakeside corner, front-right of the bench, clear of its silhouette from the path
 ];
