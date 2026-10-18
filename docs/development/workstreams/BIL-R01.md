@@ -18,3 +18,6 @@
 - Galerij renderkosten blijven boven de oude voorlopige guidance, die eerder voor live-iteratie is geaccepteerd; BIL-R01 claimt geen performanceoptimalisatie.
 
 [Bekijk de echte gamebeelden](bil-r01/screenshots/) van vóór de tafel, zijkant, vanaf de hal en de lege oude kamer. Na eigenaarstest kunnen de wandkeuen, lampen en het optionele paneel als tweede pakket volgen.
+
+## Release
+De ruimtelijke eerste stap is samengevoegd via [PR #136](https://github.com/Algolon/Feh-Lu-We/pull/136) (commit `199a13da`). De normale productie-releaseworkflow valideert de hoofdgame en familieversie; een merge geldt niet als live totdat de Pages-deployment is geslaagd.
