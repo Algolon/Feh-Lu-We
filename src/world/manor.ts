@@ -50,6 +50,7 @@ import { ROOF_DETAIL, gableTrimGeo } from './roofDetail';
 import { EXTERIOR_FINISH, finishedChimney, roofFlashing } from './exteriorFinish';
 import { buildKitchenJuicePouch } from './kitchenJuicePouch';
 import { libraryR01Furniture, libraryR01Stair, libraryR01BankerLamp, LIB_R01 } from './libraryR01';
+import { R08_SURFACE_FIX } from './stableLighting';
 import { planChest, pottingBench, plantStand, plantEtagere, pottedPlant } from './d3b';
 import { coatStand, holdall, rucksack, deskTravelSet, jacketOverChair, planningDesk, daybed, observingTable, binoculars, stoolThrow, sweaterOverChest, washShelf, towelRing, bathCaddy } from './d3b2';
 import { wainscot, refectoryTable, gamesCabinet, dartboard, servingConsole, chinaCabinet, wallCupboards, splashback, enamelPendant, pegRailClock, panelDoor } from './d3a';
@@ -887,12 +888,19 @@ function libraryRest(w: World, g: GameApi, c: Ctx, tx: number, tz: number) {
   // LIB-R04: banker's lamp sits RIGHT-REAR, just in front of the desk hutch.
   const lampPose = LIB_R01.deskObjects.lamp;
   const rl = libraryR01BankerLamp(w, tx + lampPose.dx, GF + LIB_R01.desk.h, tz + lampPose.dz);
-  makeLamp(w, g, { id: 'lamp.library', ...rl, name: 'leeslamp', defaultOn: true, hit: [0.4, 0.7, 0.4], intensity: 5, distance: 8, patch: { y: GF + 0.82, r: 0.8, strength: 0.3 } });
+  makeLamp(w, g, { id: 'lamp.library', ...rl, name: 'leeslamp', defaultOn: true, hit: [0.4, 0.7, 0.4], intensity: 5, distance: 8,
+    // R08B: the former 80 cm transparent disc floated over the desk edge.
+    // The desk surface itself now receives a bounded state-controlled light.
+    patch: R08_SURFACE_FIX ? undefined : { y: GF + 0.82, r: 0.8, strength: 0.3 } });
   const lch = chandelier(w, 78.4, UCEIL, 101, 0.8, 1.6, 'mLib'); // DEV-04C: owned by the library batch
   const lsw = compound((b) => box(b, k.M.paint, '#c9a44c', 0, 0, 0, 0.12, 0.18, 0.03));
   place(lsw, 84.9, 1.35, 99.4, -Math.PI / 2);
   w.scene.add(lsw);
-  makeLamp(w, g, { id: 'lamp.libraryChandelier', obj: lsw, glow: lch.glow, light: lch.light, flames: lch.flames, name: 'kroonluchter', defaultOn: true, intensity: 7, distance: 12, hit: [0.3, 0.4, 0.4], hitOffset: [0, 0.05, 0], patch: { y: GF + 0.03, r: 2.6 } });
+  makeLamp(w, g, { id: 'lamp.libraryChandelier', obj: lsw, glow: lch.glow, light: lch.light, flames: lch.flames, name: 'kroonluchter', defaultOn: true, intensity: 7, distance: 12, hit: [0.3, 0.4, 0.4], hitOffset: [0, 0.05, 0],
+    // R08B: y=GF+.03 intersected the crowned rug (.022–.035) and produced
+    // wandering bright/dark triangles, i.e. intersecting transparent planes.
+    // Its source-bound room light remains; only the fake floor disc is removed.
+    patch: R08_SURFACE_FIX ? undefined : { y: GF + 0.03, r: 2.6 } });
   // Reading seating and floor globe are authored once by libraryR01Furniture().
 }
 

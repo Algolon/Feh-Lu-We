@@ -12,6 +12,8 @@ import { Asm, artMats, softBox, lathe, projectUV, bake, baseAO, cushion, type Co
 import { upholstered } from './livingSample';
 import { bushModel, BARK_TINT, LEAF_TINT, woodMats } from './woodkit';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import { surface } from './surfaces';
+import { R08_SURFACE_FIX } from './stableLighting';
 import { paintingTexture } from './textures';
 import { ART, FRAME_RAIL, type FrameStyle } from '../content/art';
 import { frameBox, FINISH, type SalonFrame } from '../content/gallery';
@@ -338,8 +340,23 @@ export function farmhouseSink(c: Ctx, x: number, z: number, y0: number, yaw: num
  * carries its own border structure; `tint` only shifts its palette. A rug marks a furniture zone; DEV-04B removed
  * the ones that only filled floor area.
  */
+// The rug atlas is normally shared with books/prints (profile 'paint'). In
+// the LIGHT-R08B library ONLY, let the *actual carpet triangles* receive the
+// chandelier's steady room light. The previous transparent floor disc sat
+// through the rug and caused moving bright/dark triangles. One dedicated
+// material/batched group avoids changing any unrelated atlas users.
+let libraryLitRugMat: THREE.MeshLambertMaterial | null = null;
+function libraryLitRugMaterial(): THREE.MeshLambertMaterial {
+  if(!libraryLitRugMat){
+    // Keep the exact atlas, UV design, tint and vertex colours. Only its
+    // lighting profile differs, so carpet motif remains the same.
+    libraryLitRugMat=surface(propMats().rug.clone(), 'fabric');
+  }
+  return libraryLitRugMat;
+}
 export function rug(c: Ctx, x: number, z: number, y: number, w: number, d: number, yaw = 0, tint = '#ffffff', pattern: RugPattern = 'medallion', fringe = false) {
-  new Asm(c.b, c.chunk, x, y, z, yaw).add(propMats().rug, tint, rugGeo(pattern, w, d, fringe), 0, 0, 0, { shadow: false });
+  const material=R08_SURFACE_FIX && c.chunk==='mLib' ? libraryLitRugMaterial() : propMats().rug;
+  new Asm(c.b, c.chunk, x, y, z, yaw).add(material, tint, rugGeo(pattern, w, d, fringe), 0, 0, 0, { shadow: false });
 }
 
 export function plant(c: Ctx, x: number, z: number, y0: number, s = 1, pot = '#c9774a', detail = GARDEN_DETAIL) {
