@@ -64,7 +64,7 @@ describe('ENT-R02 unified foyer and billiard-ready gallery blockout', () => {
     expect(w).toContain("[{ at: 90, w: 7.2, h: 3.2 }]");
     expect(w).toContain("id === 'south' ? [{ at: 90, w: 7.2, h: 3.2 }]");
     expect(m).toContain("slab(ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, 84)");
-    expect(m).toContain("const ceilingSolid = new THREE.ExtrudeGeometry(ceilingPlan)");
+    expect(m).toContain("const ceilingSolid = new THREE.ExtrudeGeometry(ceilingPlan, {");
     expect(m).toContain("const sideWallJoinZ = 80.54");
     expect(m).toContain("wall(c, 'x', E.zWindow, E.x0, E.x1, 0, TOP");
     expect(m).toContain("openings: [{ at: 90, w: 1.7, h: 2.62 }]");
