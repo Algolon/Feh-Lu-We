@@ -202,10 +202,14 @@
     "frontRightLow": true,
     "frontRightMid": true,
     "frontDoorOpen": true,
-    "hallDoorClosed": false,
+    "hallDoorClosed": true,
+    "hallDoorLeftClosed": true,
+    "hallDoorRightClosed": true,
     "westInteriorWall": true,
     "eastInteriorWall": true,
-    "hallDoorOpen": true
+    "hallDoorOpen": true,
+    "hallDoorLeftOpen": true,
+    "hallDoorRightOpen": true
   },
   "travel": [
     {
