@@ -36,6 +36,30 @@ describe('DEV-04D D2 ship rule', () => {
   });
 });
 
+describe('PROP-R09 wrought-iron hearth tool set', () => {
+  it('places exactly one tool set to the LEFT of the living hearth, for both art variants', () => {
+    const manor = readFileSync('src/world/manor.ts', 'utf8');
+    const dress = readFileSync('src/world/dressing.ts', 'utf8');
+    const call = 'fireplaceToolSet(c, 73.05, 84.99, GF, 0)';
+    expect(manor.split(call)).toHaveLength(2);
+    expect(manor.indexOf(call)).toBeGreaterThan(manor.indexOf("S3_BUILDERS['FLW-S3-033'](c)"));
+    expect(manor.indexOf(call)).toBeLessThan(manor.indexOf("c.chunk = 'mHall';", manor.indexOf("S3_BUILDERS['FLW-S3-033'](c)")));
+    expect(manor.indexOf(call)).toBeGreaterThan(manor.indexOf("logBasket(c, 73.05, 84.45, GF, 0.3); // DEV-04B: as in the sample room"));
+    expect(dress).toContain("export function fireplaceToolSet");
+    expect(dress).toContain("a.end({ gap: 0.025 })");
+  });
+  it('keeps the tool set separated from the basket and the hearth, with no new interaction', () => {
+    const basketZ = 84.45, setZ = 84.99, hearthZ = 86.7;
+    const basketR = 0.28, setR = 0.215, surroundLeft = hearthZ - 1.38;
+    expect(setZ - basketZ - basketR - setR).toBeGreaterThan(0.03);
+    expect(surroundLeft - (setZ + setR)).toBeGreaterThan(0.1);
+    const src = readFileSync('src/world/dressing.ts', 'utf8');
+    const builder = src.slice(src.indexOf('export function fireplaceToolSet'), src.indexOf('function mergeAll'));
+    for (const part of ['ShovelBlade', 'BrushBlock', 'PokerHook', 'Tongs', 'Pedestal']) expect(builder).toContain(part);
+    expect(builder).not.toMatch(/make(Inspect|Action|Pickup|Lamp)/);
+  });
+});
+
 describe('PROP-R08 fireplace screen relocation', () => {
   it('places the one approved FLW-S3-033 beside the interior living hearth, not the BBQ', () => {
     const screen = PROPS3D.find(p => p.id === 'FLW-S3-033')!;
