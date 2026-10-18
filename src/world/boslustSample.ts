@@ -8,7 +8,7 @@ import { INTERIOR_GREEN } from './gardenkit';
 import { indoorLeafMaterial, whitePlantUV } from './indoorPlants';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { makeVegBatch, onFrame, type VegBatch } from './vegbatch';
-import { TREE_LOD_PROFILE, selectTreeLod } from './vegetationLod';
+import { TREE_LOD_PROFILE, selectTreeLod, inExteriorSightCone } from './vegetationLod';
 import type { World, GameApi } from '../interactions/world';
 import type { Ctx } from './arch';
 import { Batcher, compound, getKit, v3 } from './kit';
@@ -350,6 +350,11 @@ export class PlantBatch {
   private batch: VegBatch | null = null;
   private last = new THREE.Vector3(Infinity, 0, 0);
   private count = new Map<string, number>();
+  // ENT-R02-P1: near-ground outdoor batches previously used distance-only selection
+  // and leaked behind interior walls when a single upstairs window made 'out' visible.
+  private w: World | null = null;
+  private windowVersion = -1;
+  private visibilityKey = '';
   shown = 0;
   /** DEV-03: any material and tag (the same range-faded batch draws litter, verge stones and dead wood). */
   constructor(private fade = 4, private material?: THREE.Material, private tag: Record<string, unknown> = { understory: true, vegPart: 'plants' }) {}
@@ -366,19 +371,34 @@ export class PlantBatch {
   counts() { return Object.fromEntries(this.count); }
   build(w: World) {
     if (!this.items.length) return;
+    this.w = w;
     this.batch = makeVegBatch(w, this.geos, this.items.length, this.material ?? (INTERIOR_GREEN?indoorLeafMaterial():woodMats().flat), { sortObjects: false, tag: this.tag, preserveRegions: TREE_LOD_PROFILE.id !== 'baseline' });
     for (const it of this.items) { it.id = this.batch.addInstance(it.geo, it.m, it.c); this.batch.setVisibleAt(it.id, false); }
     onFrame(w, (cam) => this.update(cam));
   }
   update(camera: THREE.Camera) {
     camPos.setFromMatrixPosition(camera.matrixWorld);
-    if (camPos.distanceTo(this.last) < 0.25) return;
+    const w = this.w;
+    const indoors = !!w && w.hereRoom !== 'out' && w.hereRoom !== 'cons';
+    const windows = indoors ? w!.outdoorWindows : null;
+    const outsideVisible = !indoors || w!.visibleRooms.has('out');
+    const visibilityKey = indoors ? String(outsideVisible) + ':' + String(windows?.length ?? 0) : 'outside';
+    const windowVersion = w?.outdoorWindowsVersion ?? 0;
+    if (camPos.distanceTo(this.last) < 0.25 &&
+        this.windowVersion === windowVersion && this.visibilityKey === visibilityKey) return;
     this.last.copy(camPos);
+    this.windowVersion = windowVersion;
+    this.visibilityKey = visibilityKey;
     const b = this.batch!;
     let shown = 0;
     for (const it of this.items) {
       const d = it.p.distanceTo(camPos);
-      const k = d > it.show ? 0 : Math.min(1, (it.show - d) / this.fade);
+      // Foliage through a real opening remains visible, with a generous radius
+      // allowance; outdoor players / glass conservatory retain their full detail.
+      // A room behind solid walls must not make every plant on the estate visible.
+      const throughAperture = !indoors || (outsideVisible && !!windows?.length &&
+        inExteriorSightCone(it.p.x, -it.p.z, 0.8, windows));
+      const k = !throughAperture || d > it.show ? 0 : Math.min(1, (it.show - d) / this.fade);
       const kq = Math.round(k * 12) / 12; // quantised: rewrite a matrix only when its scale step changes
       if (kq > 0) shown++;
       if (kq === it.k) continue;
