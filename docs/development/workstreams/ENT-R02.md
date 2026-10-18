@@ -117,3 +117,16 @@ Owner correction: entree en voormalige vestibule vormen **één vergrote ontvang
 - De gesloten deur cullt de grote hal vanaf de vestibule: vanuit `foyer-to-hall-closed` zijn 144 draw calls gemeten. De **oude, nog niet opgeloste galerij-performanceblokker** blijft bestaan (gallery-window 225 calls/~1.54M tris, gallery-wide 241 calls/~1.63M tris). Daarom heeft de ENT-R02-reviewworkflow nog een rode budgetgate; deze run is **niet mislukt wegens de nieuwe scheidingswand of gevelgaten**, maar wegens het bekende absolute budget.
 
 **Releasebesluit: nog niet mergen of deployen.** Owner corrections R3 zijn functioneel en visueel bewezen; architecturale afwerking, opening-width/frame-overlap controle, high/low mobiel performance en bovenverdieping-biljart loop/keutests blijven vóór vrijgave vereist.
+
+## Productiebesluit — eigenaar accepteert live iteratie (18 oktober 2026)
+
+De eigenaar heeft de geïsoleerde `/ent-r02/`-preview zelf op een telefoon getest en bevestigd dat de **ruimtelijke verbouwing nu live mag**, ook al moet inrichting/afwerking via live iteraties nog gebeuren. Nieuwe entree met dichte gevelzijden; afgesloten vestibule plus afsluitbare binnendeur naar hal; één lange, doorlopende bovengalerij. De **biljarttafel en bijbehorende interacties verhuizen nog niet**: eerst de nieuwe galerij inrichten, vrije keuslag/proximity en puzzelrelaties afzonderlijk testen.
+
+**Bewust geaccepteerde afwijkingen voor deze specifieke release:**
+- Galerij-window en gallery-wide blijven op ~225–241 draw calls en 1,54–1,63 miljoen triangles in high-quality software-WebGL (boven voorlopige 150 / 750k guidance; zelfs eerdere productiestandpunten overschrijden soms de absolute budgetten).
+- Buitenwereld-culling/batching vanaf de galerij, dak-/metselwerkdetails, afwerkingsniveau en nauwkeurige biljart-clearance zijn backlog. Niet presenteren als afgerond.
+- De gebruiker rapporteert zelf dat de proefversie op zijn toestel prettig werkt; dit vervangt geen formele prestatietest op alle telefoons.
+
+**Release-checks**: feature laatste codecommit `646d0f65433f8c40cfa8cf01a5cb86ecfc33ac65` heeft volledige unit tests/typecheck/Pages-build groen in run [39127784070](https://github.com/Algolon/Feh-Lu-We/actions/runs/39127784070). De gescheiden browserreview met gesloten entree, dicht front en doorloop/vloer heeft de geometrische checks gehaald, maar de absolute performance-budgetgate blijft bewust rood. Vóór publiek als reguliere game zetten controleren of de huidige default branch conflictvrij integreert en alle Pages checks slagen.
+
+**Nieuw besluit:** eigenaarautoriseerde **LIVE ITERATION** (niet langer `DO NOT MERGE` voor de *bestaande architectuur*). Prioriteit na de merge: visuele afwerking en optimalisatie, daarna biljartopstelling en herbestemming oude kamer.
