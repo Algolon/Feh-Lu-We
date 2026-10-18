@@ -81,3 +81,21 @@ Vervolgrun: [39116977523](https://github.com/Algolon/Feh-Lu-We/actions/runs/3911
 Deze vergelijking gebruikt software-WebGL *high* op identieke locaties. Absolute bovengrenzen worden in de bestaande productiebaseline soms al overschreden; de **extra galerijkosten** zijn echter specifiek een ENT-R02 regressie. Nog niet geoptimaliseerd.
 
 **Eindstatus R1:** DRAFT / BLOCKED. Niet mergen, niet deployen. Architecturale blockout is echt gerealiseerd en de basale navigatie bewezen; performance-optimalisatie, visuele afwerking, bovenverdiepinglooptest inclusief keu, en high/low mobiele continuïteit volgen. 
+
+## R02-P2 voortgang — directe screenshots en terminale raamzichtlijnen
+
+**Direct bekijkbare in-game screenshots:** [bekijk alle screenshots](images/), op de featurebranch gepubliceerd uit de echte mobiele software-WebGL run. De afbeeldingen zijn geen ontwerp-renders; ze tonen de feitelijke onafgewerkte blockout.
+
+De P1-experimentfix (kort maaiveldgroen op buitenraam-kegels filteren) leverde op de kritieke galerijcamera's geen meetbaar rendement op en is **volledig teruggedraaid**. Geen onnodige wijziging in `boslustSample.ts` / `vegetationLod.ts` behouden.
+
+Met `scripts/ent-r02-profiler.mjs` is per groep werkelijk in WebGL gemeten. In `gallery-wide` zijn o.a. `manor` ca. 593k tris, `mWing` ca. 122k, `forest` ca. 114k en `grounds` ca. 109k; deze maskermetingen zijn een *kostensplitsing* en geen geaccepteerd alternatief (we mogen die geometrie niet zomaar verbergen). De actieve set van zichtbare kamers bevatte via één transparant raam o.a. `out`, `cons`, `dining`, `kitchen` en `billiard`.
+
+P2 heeft een functionele fout verholpen: voor een speler **binnen** wordt een werkelijke transparante raamportal alleen gebruikt om `out` toe te voegen aan de gewone arch/deur-zichtverzameling; `out` is geen doorlooproute naar andere kamers. In `src/interactions/world.ts` wordt de reguliere 3-staps deur/arch-visibiliteit berekend zonder window transit, gevolgd door `visibleRooms.add('out')` wanneer echt vrij glas in beeld en LOS-vrij is. `tests/ent-r02-portal-terminal.test.ts` controleert dit, samen met de bestaande WINDOW-R02-reeks.
+
+**Gemeten impact P2** in identieke software-WebGL high-quality views, run [39124079348](https://github.com/Algolon/Feh-Lu-We/actions/runs/39124079348):
+| Standpunt | R1 (calls / tris) | P2 (calls / tris) | Delta |
+|---|---:|---:|---:|
+| Gallery-to-window | 232 / 1,550,540 | 225 / 1,541,004 | −7 calls / −9,536 tris |
+| Gallery-wide | 248 / 1,635,240 | 241 / 1,625,704 | −7 calls / −9,536 tris |
+
+**P2 verbetert de logica, maar voldoet nog niet aan het performancebudget.** Nog **geen merge of deploy**. Volgende performanceproef moet expliciet de batch- en scene-culling van werkelijk zichtbare buitenwereld en zijvleugel onderzoeken, met beeld/pixelbewijs dat de ramen nog correct functioneren. Daarna architectonische afwerking en echte bovenverdiepingslooprondgang incl. biljarttafel en keu.
