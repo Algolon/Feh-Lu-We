@@ -16,15 +16,16 @@ const main = (
 ): WindowWall[] => [
   { id: id + '-g', axis, f, a0, a1, exterior, y0: 0, y1: 3.2, openings,
     windows: ground.map(at => ({ at, w: 1.1, sill: 1.05, h: 1.6 })), facade: 'manor' },
-  { id: id + '-u', axis, f, a0, a1, exterior, y0: 3.2, y1: 6.4, openings: [],
+  { id: id + '-u', axis, f, a0, a1, exterior, y0: 3.2, y1: 6.4,
+    openings: id === 'south' ? [{ at: 90, w: 7.2, h: 3.2 }] : [],
     windows: upper.map(at => ({ at, w: 1.0, sill: 0.8, h: 1.5 })), facade: 'manor' },
 ];
 
 export const MANOR_WINDOW_WALLS: readonly WindowWall[] = [
   ...main('south', 'x', 80.2, 72, 108, -1,
-    [{ at: 90, w: 1.7, h: 2.7 }], [75.5,79,82.5,98,101.5,105],
-    // These two positions are masked by the solid projecting entrance bay (Z79.55–80.02).
-    // They must be a continuous inner wall, never two pretend transparent openings.
+    [{ at: 90, w: 7.2, h: 3.2 }], [75.5,79,82.5,98,101.5,105],
+    // ENT-R02: the expanded entrance connects through a full-height 7.2 m opening.
+    // The front-gallery glazing belongs to the new facade; normal facade windows stay outside the bay.
     [75.5,79,82.5,98,101.5,105]),
   ...main('north', 'x', 109.8, 72, 108, 1,
     [{ at: 91.5, w: 1.2, h: 2.45 }, { at: 101, w: 1.0, h: 2.35 }],
