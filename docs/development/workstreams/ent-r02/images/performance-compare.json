@@ -1,0 +1,110 @@
+{
+  "views": [
+    {
+      "name": "front-approach",
+      "calls": {
+        "baseline": 209,
+        "prototype": 207,
+        "delta": -2
+      },
+      "triangles": {
+        "baseline": 1526008,
+        "prototype": 1526742,
+        "delta": 734
+      }
+    },
+    {
+      "name": "front-oblique",
+      "calls": {
+        "baseline": 149,
+        "prototype": 140,
+        "delta": -9
+      },
+      "triangles": {
+        "baseline": 1385090,
+        "prototype": 1384236,
+        "delta": -854
+      }
+    },
+    {
+      "name": "portico",
+      "calls": {
+        "baseline": 102,
+        "prototype": 123,
+        "delta": 21
+      },
+      "triangles": {
+        "baseline": 1125848,
+        "prototype": 1229412,
+        "delta": 103564
+      }
+    },
+    {
+      "name": "entry-to-hall",
+      "calls": {
+        "baseline": 168,
+        "prototype": 233,
+        "delta": 65
+      },
+      "triangles": {
+        "baseline": 1303638,
+        "prototype": 1216840,
+        "delta": -86798
+      }
+    },
+    {
+      "name": "hall-to-entry",
+      "calls": {
+        "baseline": 243,
+        "prototype": 255,
+        "delta": 12
+      },
+      "triangles": {
+        "baseline": 1587118,
+        "prototype": 1600844,
+        "delta": 13726
+      }
+    },
+    {
+      "name": "gallery-to-window",
+      "calls": {
+        "baseline": 136,
+        "prototype": 232,
+        "delta": 96
+      },
+      "triangles": {
+        "baseline": 1075680,
+        "prototype": 1550540,
+        "delta": 474860
+      }
+    },
+    {
+      "name": "gallery-wide",
+      "calls": {
+        "baseline": 142,
+        "prototype": 248,
+        "delta": 106
+      },
+      "triangles": {
+        "baseline": 1152566,
+        "prototype": 1635240,
+        "delta": 482674
+      }
+    },
+    {
+      "name": "gallery-to-hall",
+      "calls": {
+        "baseline": 167,
+        "prototype": 198,
+        "delta": 31
+      },
+      "triangles": {
+        "baseline": 1289570,
+        "prototype": 1107454,
+        "delta": -182116
+      }
+    }
+  ],
+  "baselineCommit": "1f9563b31cbdd44fdc1fd17c29750d74440ad9d1",
+  "note": "matched high-quality software-WebGL poses; not a mobile hardware FPS measurement"
+}
