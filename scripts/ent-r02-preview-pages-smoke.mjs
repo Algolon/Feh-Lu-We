@@ -61,6 +61,27 @@ try{
     const response=await page.goto(BASE+path,{waitUntil:'domcontentloaded',timeout:45000});
     if(!response?.ok())throw Error('Existing URL broken: '+path);
  }
+ // Independent fresh browser context: the opt-in deep link creates a save near
+ // the entrance exactly once, without changing a regular preview session.
+ const tourPage=await browser.newPage({viewport:{width:412,height:915},isMobile:true,hasTouch:true});
+ tourPage.on('pageerror',e=>errors.push('tour:'+e.message));
+ try {
+   const tour=await tourPage.goto(PREVIEW+'?autotest=1&entreeTour=1',{waitUntil:'domcontentloaded',timeout:45000});
+   if(!tour?.ok())throw Error('Opt-in entrance tour route returned bad response');
+   const hasTour=await tourPage.evaluate(()=>{
+     const raw=localStorage.getItem('fehluwe.ent-r02.save');
+     const data=raw?JSON.parse(raw):null;
+     return data?.scene==='estate'&&Math.abs(data.player?.estate?.x-90)<.1&&
+       Math.abs(data.player?.estate?.z-73.5)<.1&&
+       localStorage.getItem('fehluwe.save')===null&&
+       localStorage.getItem('fehluwe.family.save')===null;
+   });
+   if(!hasTour)throw Error('Deep link failed to initialize an independent entrance save');
+   await tourPage.locator('[data-cont]').click({timeout:45000});
+   await tourPage.waitForFunction(()=>window.__game?.world?.id==='estate',null,{timeout:120000});
+   const spot=await tourPage.evaluate(()=>({x:window.__game.player.x,z:window.__game.player.z}));
+   if(Math.hypot(spot.x-90,spot.z-73.5)>1)throw Error('Entrance tour did not spawn near front door: '+JSON.stringify(spot));
+ }finally{await tourPage.close();}
  if(errors.length||missing.length)throw Error(JSON.stringify({errors,missing:missing.slice(0,7)}));
  console.log('ENT_R02_PUBLIC_PREVIEW_PASS '+JSON.stringify({url:PREVIEW,reviewSaveIsolated:true,rootFamilyAndLightRoutesIntact:true,evidence,errors,missing}));
 }finally{await browser.close();}
