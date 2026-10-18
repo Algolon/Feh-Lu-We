@@ -14,7 +14,7 @@ export interface GreenLeaf { at: number; y: number; depth: number; size: number;
 export interface GreenStem { points: THREE.Vector3[]; radius: number }
 export interface Climber { face: GreenFace; root: number; leaves: GreenLeaf[]; stems: GreenStem[] }
 // ENT-R02: urns flank the relocated portico without occupying the new entry floor.
-export const ENTRANCE_POTS = [{ x: 86.7, z: 75.75, seed: 231 }, { x: 93.3, z: 75.75, seed: 427 }] as const;
+export const ENTRANCE_POTS = [{ x: 86.7, z: 75.15, seed: 231 }, { x: 93.3, z: 75.15, seed: 427 }] as const;
 
 const WINDOWS = {
   W: [{ ats: [83,90.5,97,101,105], lo: 1.05, hi: 2.65 }, { ats: [82.5,90,97,101,105], lo: 4.15, hi: 5.65 }],
