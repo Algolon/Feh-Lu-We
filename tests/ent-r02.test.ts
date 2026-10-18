@@ -6,7 +6,7 @@ import { ROOMS, PORTALS, estateRooms } from '../src/world/roomdefs';
 describe('ENT-R02 unified foyer and billiard-ready gallery blockout', () => {
   it('reserves a REAL, level two-storey extension while preserving the old rooms', () => {
     expect(E.faceZ).toBeLessThan(E.formerFaceZ);
-    expect(E.formerFaceZ - E.faceZ).toBeCloseTo(2.4, 6);
+    expect(E.formerFaceZ - E.faceZ).toBeCloseTo(3.0, 6);
     const eg = ROOMS.find(r => r.id === 'entryExtension')!;
     const up = ROOMS.find(r => r.id === 'frontGalleryExt')!;
     const old = ROOMS.find(r => r.id === 'frontGallery')!;
@@ -35,17 +35,19 @@ describe('ENT-R02 unified foyer and billiard-ready gallery blockout', () => {
     expect(R.roomAt(90, 1.0, 78.2)).toBe('entryExtension');
   });
   it('fits the existing 3.5 x 1.9 table plus 1.4m cue envelope without taking the west walkway', () => {
-    const tableLongX = B.length + 2 * B.cueClearance; // rotated across the front bay
-    const tableShortZ = B.width + 2 * B.cueClearance;
-    const x0 = B.tableX - tableLongX / 2, x1 = B.tableX + tableLongX / 2;
-    const z0 = B.tableZ - tableShortZ / 2, z1 = B.tableZ + tableShortZ / 2;
-    expect(tableLongX).toBeCloseTo(6.3, 6);
-    expect(tableShortZ).toBeCloseTo(4.7, 6);
-    expect(x0).toBeGreaterThan(B.westWalkwayMaxX);
-    expect(x0).toBeGreaterThan(E.x0 + .20);
-    expect(x1).toBeLessThan(E.x1 - .20);
-    expect(z0).toBeGreaterThan(E.faceZ + .20);
-    expect(z1).toBeLessThan(84 - .20);
+    // Corrected orientation: long axis along Z, giving a usable uninterrupted western circulation strip.
+    const playX = B.width + 2 * B.cueClearance;
+    const playZ = B.length + 2 * B.cueClearance;
+    const x0 = B.tableX - playX / 2, x1 = B.tableX + playX / 2;
+    const z0 = B.tableZ - playZ / 2, z1 = B.tableZ + playZ / 2;
+    expect(playX).toBeCloseTo(4.7, 6);
+    expect(playZ).toBeCloseTo(6.3, 6);
+    // 40 cm side walls and 47 cm front facade count as solid, not playable air.
+    expect(x0 - B.westWalkwayMaxX).toBeGreaterThanOrEqual(1.1);
+    expect(x0).toBeGreaterThan(E.x0 + .4 + .15);
+    expect(x1).toBeLessThan(E.x1 - .4 - .1);
+    expect(z0).toBeGreaterThan(E.frontWallBackZ + .25);
+    expect(z1).toBeLessThan(84 - .25);
   });
   it('opens the old facade on BOTH levels and models the new glass as a physical wall aperture', () => {
     const w = readFileSync('src/world/manorWindowLayout.ts', 'utf8');
