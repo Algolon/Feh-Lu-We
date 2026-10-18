@@ -1,0 +1,375 @@
+{
+  "all": [
+    {
+      "name": "gallery-wide",
+      "pose": {
+        "x": 93,
+        "y": 3.35,
+        "z": 83,
+        "yaw": -2.4364813054753616,
+        "pitch": -0.08083827912194298
+      },
+      "room": "frontGallery",
+      "visibleRooms": [
+        "frontGallery",
+        "hall",
+        "frontGalleryExt",
+        "walkway",
+        "vestibule",
+        "living",
+        "dining",
+        "kitchen",
+        "lobby",
+        "landing",
+        "out",
+        "entryExtension",
+        "ucorr",
+        "rearNook",
+        "billiard",
+        "cons"
+      ],
+      "outdoorWindows": [
+        {
+          "x": 93,
+          "z": 83,
+          "dx": -0.43470854289749083,
+          "dz": -0.900571198035969,
+          "cos": 0.9576233910971977
+        }
+      ],
+      "vegetation": {
+        "trees": {
+          "near": 0,
+          "mid": 6,
+          "far": 57,
+          "xfar": 96,
+          "nearInView": 0,
+          "midInView": 5,
+          "farInView": 45,
+          "xfarInView": 76
+        },
+        "bushes": {
+          "near": 0,
+          "mid": 0,
+          "far": 14,
+          "xfar": 0,
+          "nearInView": 0,
+          "midInView": 0,
+          "farInView": 13,
+          "xfarInView": 0
+        },
+        "plantsShown": 37
+      },
+      "base": {
+        "calls": 248,
+        "tris": 1627776
+      },
+      "meshCount": 350,
+      "tags": {
+        "unclassified:Mesh": 30,
+        "region:outdoor": 30,
+        "chunk:manor": 16,
+        "chunk:main": 68,
+        "chunk:lamp": 1,
+        "region:mLiv": 1,
+        "chunk:glass": 2,
+        "chunk:airco": 1,
+        "vegetation:trees": 1,
+        "vegetation:plants": 1,
+        "vegetation:rocks": 1,
+        "vegetation:deadwood": 1,
+        "vegetation:mushrooms": 1,
+        "chunk:hills": 1,
+        "chunk:paths": 5,
+        "chunk:ground": 4,
+        "chunk:wall": 1,
+        "chunk:fence": 1,
+        "chunk:mIn": 9,
+        "chunk:mHall": 12,
+        "chunk:mLiv": 14,
+        "chunk:mBil": 5,
+        "chunk:mWing": 13,
+        "chunk:mUp": 14,
+        "chunk:green.vestibule": 3,
+        "chunk:green.entryExtension": 3,
+        "chunk:green.frontGalleryExt": 3,
+        "chunk:green.hall": 4,
+        "chunk:green.living": 4,
+        "chunk:green.dining": 4,
+        "chunk:green.kitchen": 3,
+        "chunk:green.lobby": 3,
+        "chunk:green.billiard": 3,
+        "chunk:green.cons": 4,
+        "chunk:green.frontGallery": 3,
+        "chunk:green.walkway": 3,
+        "chunk:green.landing": 3,
+        "chunk:green.ucorr": 3,
+        "chunk:green.rearNook": 3,
+        "chunk:cons": 15,
+        "chunk:forest": 14,
+        "chunk:garden": 14,
+        "chunk:frontHedge.left": 1,
+        "chunk:frontHedge.right": 1,
+        "chunk:grounds": 23
+      },
+      "measurements": [
+        {
+          "key": "chunk:manor",
+          "meshes": 16,
+          "savedCalls": 25,
+          "savedTriangles": 593198,
+          "restored": true
+        },
+        {
+          "key": "chunk:forest",
+          "meshes": 14,
+          "savedCalls": 15,
+          "savedTriangles": 113840,
+          "restored": true
+        },
+        {
+          "key": "chunk:grounds",
+          "meshes": 23,
+          "savedCalls": 17,
+          "savedTriangles": 109428,
+          "restored": true
+        },
+        {
+          "key": "chunk:mLiv",
+          "meshes": 14,
+          "savedCalls": 12,
+          "savedTriangles": 48290,
+          "restored": true
+        },
+        {
+          "key": "chunk:main",
+          "meshes": 68,
+          "savedCalls": 5,
+          "savedTriangles": 43704,
+          "restored": true
+        },
+        {
+          "key": "region:outdoor",
+          "meshes": 30,
+          "savedCalls": 13,
+          "savedTriangles": 40590,
+          "restored": true
+        },
+        {
+          "key": "chunk:mUp",
+          "meshes": 14,
+          "savedCalls": 14,
+          "savedTriangles": 32980,
+          "restored": true
+        },
+        {
+          "key": "chunk:garden",
+          "meshes": 14,
+          "savedCalls": 12,
+          "savedTriangles": 17796,
+          "restored": true
+        },
+        {
+          "key": "chunk:cons",
+          "meshes": 15,
+          "savedCalls": 12,
+          "savedTriangles": 17580,
+          "restored": true
+        },
+        {
+          "key": "unclassified:Mesh",
+          "meshes": 30,
+          "savedCalls": 3,
+          "savedTriangles": 564,
+          "restored": true
+        }
+      ]
+    },
+    {
+      "name": "gallery-to-window",
+      "pose": {
+        "x": 88.2,
+        "y": 3.35,
+        "z": 83,
+        "yaw": 2.8694467630586065,
+        "pitch": -0.029857676298925124
+      },
+      "room": "frontGallery",
+      "visibleRooms": [
+        "frontGallery",
+        "hall",
+        "frontGalleryExt",
+        "walkway",
+        "vestibule",
+        "living",
+        "dining",
+        "kitchen",
+        "lobby",
+        "landing",
+        "out",
+        "entryExtension",
+        "ucorr",
+        "rearNook",
+        "billiard",
+        "cons"
+      ],
+      "outdoorWindows": [
+        {
+          "x": 88.2,
+          "z": 83,
+          "dx": 0.27818941647771567,
+          "dz": -0.9605262352272259,
+          "cos": 0.9543333315018003
+        }
+      ],
+      "vegetation": {
+        "trees": {
+          "near": 0,
+          "mid": 7,
+          "far": 56,
+          "xfar": 109,
+          "nearInView": 0,
+          "midInView": 6,
+          "farInView": 47,
+          "xfarInView": 97
+        },
+        "bushes": {
+          "near": 0,
+          "mid": 0,
+          "far": 15,
+          "xfar": 0,
+          "nearInView": 0,
+          "midInView": 0,
+          "farInView": 12,
+          "xfarInView": 0
+        },
+        "plantsShown": 40
+      },
+      "base": {
+        "calls": 232,
+        "tris": 1547980
+      },
+      "meshCount": 346,
+      "tags": {
+        "unclassified:Mesh": 29,
+        "region:outdoor": 29,
+        "chunk:manor": 16,
+        "chunk:main": 66,
+        "chunk:lamp": 1,
+        "region:mLiv": 1,
+        "chunk:glass": 2,
+        "chunk:airco": 1,
+        "vegetation:trees": 1,
+        "vegetation:plants": 1,
+        "vegetation:rocks": 1,
+        "vegetation:deadwood": 1,
+        "vegetation:mushrooms": 1,
+        "chunk:hills": 1,
+        "chunk:paths": 5,
+        "chunk:ground": 4,
+        "chunk:wall": 1,
+        "chunk:fence": 1,
+        "chunk:mIn": 9,
+        "chunk:mHall": 12,
+        "chunk:mLiv": 14,
+        "chunk:mBil": 5,
+        "chunk:mWing": 13,
+        "chunk:mUp": 14,
+        "chunk:green.vestibule": 3,
+        "chunk:green.entryExtension": 3,
+        "chunk:green.frontGalleryExt": 3,
+        "chunk:green.hall": 4,
+        "chunk:green.living": 4,
+        "chunk:green.dining": 4,
+        "chunk:green.kitchen": 3,
+        "chunk:green.lobby": 3,
+        "chunk:green.billiard": 3,
+        "chunk:green.cons": 4,
+        "chunk:green.frontGallery": 3,
+        "chunk:green.walkway": 3,
+        "chunk:green.landing": 3,
+        "chunk:green.ucorr": 3,
+        "chunk:green.rearNook": 3,
+        "chunk:cons": 15,
+        "chunk:forest": 14,
+        "chunk:garden": 14,
+        "chunk:frontHedge.left": 1,
+        "chunk:frontHedge.right": 1,
+        "chunk:grounds": 23
+      },
+      "measurements": [
+        {
+          "key": "chunk:manor",
+          "meshes": 16,
+          "savedCalls": 26,
+          "savedTriangles": 593200,
+          "restored": true
+        },
+        {
+          "key": "chunk:grounds",
+          "meshes": 23,
+          "savedCalls": 18,
+          "savedTriangles": 110468,
+          "restored": true
+        },
+        {
+          "key": "chunk:forest",
+          "meshes": 14,
+          "savedCalls": 9,
+          "savedTriangles": 105596,
+          "restored": true
+        },
+        {
+          "key": "chunk:mLiv",
+          "meshes": 14,
+          "savedCalls": 12,
+          "savedTriangles": 48290,
+          "restored": true
+        },
+        {
+          "key": "chunk:main",
+          "meshes": 66,
+          "savedCalls": 2,
+          "savedTriangles": 43384,
+          "restored": true
+        },
+        {
+          "key": "region:outdoor",
+          "meshes": 29,
+          "savedCalls": 11,
+          "savedTriangles": 40390,
+          "restored": true
+        },
+        {
+          "key": "chunk:mUp",
+          "meshes": 14,
+          "savedCalls": 14,
+          "savedTriangles": 32980,
+          "restored": true
+        },
+        {
+          "key": "chunk:garden",
+          "meshes": 14,
+          "savedCalls": 12,
+          "savedTriangles": 17796,
+          "restored": true
+        },
+        {
+          "key": "chunk:cons",
+          "meshes": 15,
+          "savedCalls": 11,
+          "savedTriangles": 17356,
+          "restored": true
+        },
+        {
+          "key": "unclassified:Mesh",
+          "meshes": 29,
+          "savedCalls": 3,
+          "savedTriangles": 564,
+          "restored": true
+        }
+      ]
+    }
+  ],
+  "errors": []
+}
