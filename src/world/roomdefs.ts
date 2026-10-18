@@ -5,7 +5,7 @@
 // upper rooms, the guest WC before the billiard room; utility and pantry do not overlap.
 import { RoomGraph, type RoomDef, type PortalDef, type RoomThreshold } from './rooms';
 import { MANOR_WINDOWS, windowAperture, type ManorWindow } from './manorWindowLayout';
-import { SHED, COTTAGE, COTTAGE_FLOOR, SAUNA, ATTIC_NOOK } from './layout';
+import { SHED, COTTAGE, COTTAGE_FLOOR, SAUNA, ATTIC_NOOK, ENTRANCE_R02 } from './layout';
 
 const R = (id: string, name: string, floor: RoomDef['floor'], x0: number, x1: number, z0: number, z1: number, y0: number, y1: number, map = true): RoomDef => ({ id, name, floor, x0, x1, z0, z1, y0, y1, map });
 const G0 = -0.5, G1 = 3.2, U0 = 3.2, U1 = 6.4, B0 = -3.7, B1 = -0.2, A0 = 6.55, A1 = 9.8;
@@ -21,6 +21,8 @@ export const ROOMS: RoomDef[] = [
   R('rearNookEast', 'Zitnis', 'u', 95, 99, 105.6, 109.6, U0, U1),
   R('rearNook', 'Achteroverloop', 'u', 90, 95, 104, 109.6, U0, U1),
   R('linen', 'Linnenkast', 'u', 99, 107.6, 106.6, 109.6, U0, U1),
+  // Separate visibility region, one physical floor with frontGallery (no wall or sill at Z80.4).
+  R('frontGalleryExt', 'Biljartgalerij', 'u', ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, ENTRANCE_R02.joinZ, U0, U1),
   R('frontGallery', 'Galerij', 'u', 85, 95, 80.4, 84, U0, U1),
   R('walkway', 'Galerij', 'u', 85, 86.8, 84, 95.5, U0, U1),
   R('landing', 'Overloop', 'u', 85, 95, 95.5, 104, U0, U1),
@@ -33,6 +35,7 @@ export const ROOMS: RoomDef[] = [
   R('botanic', 'Botanische kamer', 'u', 101.3, 107.6, 80.4, 96, U0, U1),
   R('storage', 'Noordgastenkamer', 'u', 99, 107.6, 98.6, 106.6, U0, U1), // source id kept (door.storage)
   // ---------------------------------------------------------------- ground floor
+  R('entryExtension', 'Entree', 'g', ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, ENTRANCE_R02.joinZ, G0, G1),
   R('vestibule', 'Vestibule', 'g', 85, 95, 80.4, 84, G0, G1),
   R('bstair', 'Keldertrap', 'g', 92, 95, 98, 104.8, B0, G1),
   R('hall', 'Hal', 'g', 85, 95, 84, 98, G0, U1),
@@ -93,7 +96,9 @@ export function manorWindowRoom(site: ManorWindow): string {
 }
 
 export const PORTALS: PortalDef[] = [
-  P('vestibule', 'out', 'door', 'door.front'), P('vestibule', 'hall', 'arch'),
+  // The door keeps its persistent id; the new foyer and former vestibule have no visual division.
+  P('entryExtension', 'out', 'door', 'door.front'), P('entryExtension', 'vestibule', 'arch'),
+  P('vestibule', 'hall', 'arch'),
   P('hall', 'living', 'arch'), P('hall', 'dining', 'arch'), P('hall', 'kitchen', 'arch'), P('hall', 'lobby', 'arch'), P('hall', 'landing', 'stair'),
   P('hall', 'frontGallery', 'arch'), P('hall', 'walkway', 'arch'),
   P('lobby', 'library', 'door', 'door.library'), P('lobby', 'billiard', 'door', 'door.billiard'), P('lobby', 'bstair', 'door', 'door.basement'),
@@ -104,6 +109,10 @@ export const PORTALS: PortalDef[] = [
   // The kitchen back door has clear glass: keep the garden visible while closed and during its swing.
   P('billiard', 'out', 'door', 'door.billiardOut', true), P('kitchen', 'out', 'door', 'door.kitchenBack', true),
   P('cons', 'out', 'door', 'door.consEast', true), P('cons', 'out', 'glass'),
+  P('frontGalleryExt', 'frontGallery', 'arch'),
+  { ...P('frontGalleryExt', 'out', 'window', undefined, true),
+    aperture: { x: 90, y: ENTRANCE_R02.windowY0 + ENTRANCE_R02.windowH / 2,
+      z: ENTRANCE_R02.zWindow, width: ENTRANCE_R02.windowW, height: ENTRANCE_R02.windowH, axis: 'x' as const } },
   P('frontGallery', 'walkway', 'arch'), P('walkway', 'landing', 'arch'),
   P('frontGallery', 'reis', 'door', 'door.reis'), P('walkway', 'sterren', 'door', 'door.sterren'),
   P('landing', 'libGallery', 'door', 'door.libGallery'), P('libGallery', 'library', 'arch'),
@@ -116,7 +125,7 @@ export const PORTALS: PortalDef[] = [
   P('sauna', 'out', 'door', 'door.sauna'), P('shed', 'out', 'door', 'door.shed'),
   P('cottageEntry', 'out', 'door', 'door.cottage'), P('cottageEntry', 'cottageRoom', 'arch'),
   // Decorative/non-facade windows remain opaque until their architecture is reviewed.
-  ...['vestibule', 'landing', 'cottageEntry', 'cottageRoom'].map(r => P(r, 'out', 'window')),
+  ...['landing', 'cottageEntry', 'cottageRoom'].map(r => P(r, 'out', 'window')),
   // Actual wall apertures, one portal per physical window — includes upper floor and wing.
   ...MANOR_WINDOWS.map(site => ({
     ...P(manorWindowRoom(site), 'out', 'window', undefined, true),
