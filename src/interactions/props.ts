@@ -20,7 +20,7 @@ export interface DoorOpts {
   width: number; height: number; y0: number;
   swing: 1 | -1; // +1 = counter-clockwise seen from above
   color?: THREE.ColorRepresentation;
-  style?: 'panel' | 'plank' | 'glass' | 'gate' | 'estate';
+  style?: 'panel' | 'plank' | 'glass' | 'foyer-glass' | 'gate' | 'estate';
   key?: string; // key item that unlocks (lock id = lock.<id>, or lockId when doors share one lock)
   lockId?: string;
   unlock?: string; // OR a lock id set by a puzzle (no key)
@@ -47,6 +47,34 @@ export function makeDoor(w: World, g: GameApi, o: DoorOpts) {
     // local leaf frame: built at plan origin, spanning +X; local plan z ≡ thickness
     if (o.style === 'estate') {
       frontDoorLeaf(b,k,o.width,o.height,th,col);
+    } else if (o.style === 'foyer-glass') {
+      // ENT-GLASS-R01: thin bronze-black double-door joinery, with inset rectangles and long pulls.
+      // All detailing belongs to the moving leaves; no disconnected static bars remain when open.
+      const metal = '#302b29';
+      const rail = 0.055;
+      box(b, k.M.paint, metal, o.width / 2, 0, 0, o.width - 2 * rail, rail, th);
+      box(b, k.M.paint, metal, o.width / 2, o.height - rail, 0, o.width - 2 * rail, rail, th);
+      box(b, k.M.paint, metal, rail / 2, 0, 0, rail, o.height, th + 0.004);
+      box(b, k.M.paint, metal, o.width - rail / 2, 0, 0, rail, o.height, th + 0.004);
+      // The pane remains physically present and transparent while closed.
+      box(b, k.M.glass, '#f1dfc8', o.width / 2, rail, 0, o.width - 2 * rail, o.height - 2 * rail, 0.014);
+      const insetW = o.width * 0.38, insetL = (o.width - insetW) / 2;
+      const low = 0.38, high = o.height - 0.34, strip = 0.021;
+      // Slim rectangular ornament on both faces, with end-to-end joints (no coplanar overlap).
+      for (const side of [-1, 1]) {
+        const face = side * (th / 2 + 0.004);
+        box(b, k.M.paint, metal, insetL + strip / 2, low, face, strip, high - low, 0.018);
+        box(b, k.M.paint, metal, insetL + insetW - strip / 2, low, face, strip, high - low, 0.018);
+        box(b, k.M.paint, metal, insetL + insetW / 2, low, face, insetW - 2 * strip, strip, 0.018);
+        box(b, k.M.paint, metal, insetL + insetW / 2, high - strip, face, insetW - 2 * strip, strip, 0.018);
+        // Each handle sits near the meeting stile (on the second leaf this mirrors automatically).
+        const handleX = o.width - 0.145;
+        const gripZ = side * (th / 2 + 0.069);
+        box(b, k.M.paint, metal, handleX, 0.97, gripZ, 0.035, 0.87, 0.029);
+        for (const y of [1.07, 1.72]) {
+          box(b, k.M.paint, metal, handleX, y, side * (th / 2 + 0.029), 0.045, 0.039, 0.07);
+        }
+      }
     } else if (o.style === 'glass') {
       // DEV-04A: rails run BETWEEN the stiles (they overlapped them, sharing end, top and bottom faces: z-fighting), and
       // the stiles are 4 mm thicker so the joint faces never share a plane
@@ -88,7 +116,10 @@ export function makeDoor(w: World, g: GameApi, o: DoorOpts) {
   pivot.userData.cullCentre = v3(o.x + (dx * o.width) / 2, o.y0 + o.height / 2, o.z + (dz * o.width) / 2);
 
   const leafCollider = (hx: number, hz: number, ddx: number, ddz: number) => {
-    const sx = ddx ? o.width : th + 0.08, sz = ddz ? o.width : th + 0.08;
+    // ENT-GLASS-R01: physical leaves overlap by 24 mm only in their closed collider.
+    // The visible stiles still meet exactly at X90; a zero-width seam must never allow a centre ray/player through.
+    const seamOverlap = o.style === 'foyer-glass' && o.pair ? 0.024 : 0;
+    const sx = ddx ? o.width + seamOverlap : th + 0.08, sz = ddz ? o.width + seamOverlap : th + 0.08;
     return w.col.addBoxC(hx + (ddx * o.width) / 2, hz + (ddz * o.width) / 2, sx, sz, o.y0, o.y0 + o.height, { occludes: true, tag: o.id });
   };
   let cx = o.x + (dx * o.width) / 2, cz = o.z + (dz * o.width) / 2;
@@ -116,7 +147,7 @@ export function makeDoor(w: World, g: GameApi, o: DoorOpts) {
     return { pv, pbase, phb, pcol, sweep, k: o.pair.swing / o.swing };
   })() : null;
   if (pair) { cx = (cx + o.pair!.x + (DIRS[o.pair!.dir][0] * o.width) / 2) / 2; cz = (cz + o.pair!.z + (DIRS[o.pair!.dir][1] * o.width) / 2) / 2; }
-  if (o.style === 'glass') {
+  if (o.style === 'glass' || o.style === 'foyer-glass') {
     w.visualPassThrough.add(collider);
     if (pair) w.visualPassThrough.add(pair.pcol);
   }

@@ -1,0 +1,79 @@
+name: ENT-GLASS-R01 mobile WebGL review
+on:
+  push:
+    branches:
+      - feature/ent-glass-r01-double-hall-door
+    paths:
+      - src/interactions/props.ts
+      - src/world/manor.ts
+      - src/world/roomdefs.ts
+      - tests/ent-glass-r01.test.ts
+      - .github/workflows/ent-glass-r01-review.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  glass-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npx vitest run tests/ent-r02.test.ts tests/ent-glass-r01.test.ts
+      - run: npm run build
+      - run: npx playwright-core install --with-deps chromium
+      - name: Capture actual high-quality mobile WebGL doorway views
+        shell: bash
+        run: |
+          set +e
+          ENT_R02_THUMBS=0 node scripts/ent-r02-review.mjs
+          status=$?
+          echo "Existing ENT-R02 holistic QA exit: $status (includes pre-existing gallery budget gate)"
+          test -s docs/development/workstreams/ent-r02/review/results.json || exit 1
+          node --input-type=module - <<'NODE'
+          import fs from 'node:fs';
+          const report = JSON.parse(fs.readFileSync('docs/development/workstreams/ent-r02/review/results.json'));
+          const names = ['entry-to-hall', 'hall-to-entry', 'foyer-to-hall-closed', 'hall-to-foyer-closed'];
+          const views = report.results.filter(v => names.includes(v.name));
+          if (views.length !== 4 || report.errors.length || views.some(v => v.glError !== 0 || v.failedShaders !== 0)) {
+            console.error('ENT-GLASS WebGL doorway capture failed:', JSON.stringify({ errors: report.errors, views }));
+            process.exit(1);
+          }
+          const essential = ['hallDoorClosed', 'hallDoorLeftClosed', 'hallDoorRightClosed', 'hallDoorOpen', 'hallDoorLeftOpen', 'hallDoorRightOpen', 'westInteriorWall', 'eastInteriorWall'];
+          if (essential.some(key => !report.seals[key])) {
+            console.error('ENT-GLASS physical doorway/wall check failed:', report.seals);
+            process.exit(1);
+          }
+          console.log('ENT-GLASS doorway evidence:', JSON.stringify({ views, seals: report.seals, holisticGatePassed: report.passed }));
+          NODE
+      - name: Publish four review views to branch (not production)
+        if: always()
+        shell: bash
+        run: |
+          src=docs/development/workstreams/ent-r02/review
+          dst=docs/development/workstreams/ent-glass-r01/images
+          mkdir -p "$dst"
+          for view in entry-to-hall hall-to-entry foyer-to-hall-closed hall-to-foyer-closed; do
+            if test -f "$src/$view.jpg"; then cp "$src/$view.jpg" "$dst/"; fi
+          done
+          if test -f "$src/results.json"; then cp "$src/results.json" "$dst/"; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$dst"
+          if ! git diff --cached --quiet; then
+            git commit -m 'docs(ENT-GLASS-R01): publish mobile WebGL review [skip ci]'
+            git push origin HEAD:feature/ent-glass-r01-double-hall-door
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ent-glass-r01-review
+          path: |
+            docs/development/workstreams/ent-r02/review
+            docs/development/workstreams/ent-glass-r01/images
+          if-no-files-found: warn

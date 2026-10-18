@@ -98,7 +98,7 @@ export function manorWindowRoom(site: ManorWindow): string {
 export const PORTALS: PortalDef[] = [
   // The door keeps its persistent id; the new foyer and former vestibule have no visual division.
   P('entryExtension', 'out', 'door', 'door.front'), P('entryExtension', 'vestibule', 'arch'),
-  P('vestibule', 'hall', 'door', 'door.entranceHall'), // ENT-R02-R3: enclosed entry; existing upper gallery stays open
+  P('vestibule', 'hall', 'door', 'door.entranceHall', true), // ENT-GLASS-R01: glass remains visible when shut; collision stays closed
   P('hall', 'living', 'arch'), P('hall', 'dining', 'arch'), P('hall', 'kitchen', 'arch'), P('hall', 'lobby', 'arch'), P('hall', 'landing', 'stair'),
   P('hall', 'frontGallery', 'arch'), P('hall', 'walkway', 'arch'),
   P('lobby', 'library', 'door', 'door.library'), P('lobby', 'billiard', 'door', 'door.billiard'), P('lobby', 'bstair', 'door', 'door.basement'),

@@ -99,12 +99,16 @@ try {
       frontRightMid:ray(91.2,1.45,75.8,77.85),
       frontDoorOpen:!ray(90,1.5,75.8,77.85),
       hallDoorClosed:ray(90,1.5,83.4,84.6),
+      hallDoorLeftClosed:ray(89.45,1.5,83.4,84.6),
+      hallDoorRightClosed:ray(90.55,1.5,83.4,84.6),
       westInteriorWall:ray(87.25,1.5,83.4,84.6),
       eastInteriorWall:ray(92.75,1.5,83.4,84.6),
     };
     g.state.open['door.entranceHall']=true;w.syncAll();
     for(let i=0;i<75;i++)g.tick(1/30);
     state.hallDoorOpen=!ray(90,1.5,83.4,84.6);
+    state.hallDoorLeftOpen=!ray(89.45,1.5,83.4,84.6);
+    state.hallDoorRightOpen=!ray(90.55,1.5,83.4,84.6);
     return state;
   });
   console.log('ENT_R02_SEAL_PROOF',JSON.stringify(seals));

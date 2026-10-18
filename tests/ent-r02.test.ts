@@ -25,12 +25,13 @@ describe('ENT-R02 unified foyer and billiard-ready gallery blockout', () => {
     expect(p('entryExtension', 'vestibule')?.kind).toBe('arch');
     expect(p('vestibule', 'hall')?.kind).toBe('door');
     expect(p('vestibule', 'hall')?.door).toBe('door.entranceHall');
+    expect(p('vestibule', 'hall')?.seeThrough).toBe(true);
     expect(p('frontGalleryExt', 'frontGallery')?.kind).toBe('arch');
-    // Visibility and lighting must no longer bleed through the hall wall while shut.
+    // The physical wall still encloses the foyer; the new glass must not hide the hall when shut.
     const Rclosed = estateRooms();
     const closed = Rclosed.visible('vestibule', door => door === 'door.front');
     expect(closed.has('entryExtension')).toBe(true);
-    expect(closed.has('hall')).toBe(false);
+    expect(closed.has('hall')).toBe(true);
     const open = Rclosed.visible('vestibule', door => ['door.front', 'door.entranceHall'].includes(door));
     expect(open.has('hall')).toBe(true);
     expect(PORTALS.filter(p => p.door === 'door.front')).toHaveLength(1);
@@ -66,7 +67,9 @@ describe('ENT-R02 unified foyer and billiard-ready gallery blockout', () => {
     expect(m).toContain("wall(c, 'x', E.zWindow, E.x0, E.x1, 0, TOP");
     expect(m).toContain("openings: [{ at: 90, w: 1.7, h: 2.62 }]");
     expect(m).toContain("sill: E.windowY0, h: E.windowH, transparent: true");
-    expect(m).toContain("w: 1.5, h: 2.35");
+    expect(m).toContain("w: 2.4, h: 2.7");
+    expect(m).toContain("frameStyle: 'slim-metal'");
+    expect(m).toContain("pair: { x: 91.2, z: 84, dir: 'x-', swing: 1 }");
     expect(m).toContain("id: 'door.entranceHall'");
     expect(m).not.toContain("windowAt(c, 'x', 79.55, -1, 90");
   });
