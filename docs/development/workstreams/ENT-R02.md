@@ -146,3 +146,5 @@ De eigenaar heeft de geïsoleerde `/ent-r02/`-preview zelf op een telefoon getes
 **Accepted non-goals:** do not reintroduce old paving under the house, remove the circular planter courses, alter doors or save state, move the billiard table, or solve the already owner-waived 150-draw/750k-triangle render limits in this small polish package.
 
 **Release plan:** owner requested implementation in chat and earlier authorized incremental live refinements. Merge after PR review and deploy to both full and family routes; verify GitHub Pages green. No gaming/puzzle migration.
+
+**ENT-R02-R4 final release record (18 October 2026).** PR [#128](https://github.com/Algolon/Feh-Lu-We/pull/128) merged on the default branch as `aa0b0cd72772089b64df0b4acdc527689aa82b8d`. Full geometry, doorway, and screenshot checks passed in [run 39134712313](https://github.com/Algolon/Feh-Lu-We/actions/runs/39134712313). The remaining task is to confirm a successful default-branch GitHub Pages deployment of the merged code. Live pavers and planted pots have not been relocated into the interior. Existing billiard/puzzle content remains unchanged.
