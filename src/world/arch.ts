@@ -34,6 +34,9 @@ export interface WallOpts {
   frameColor?: THREE.ColorRepresentation;
   /** Opt-in narrow metal casing only for the estate's exterior front door. */
   frameStyle?: 'traditional' | 'slim-metal';
+  /** A floor-to-ceiling structural opening is not a framed doorway.
+   * Suppress only its decorative jamb/lintel, keeping the physical opening. */
+  frameOpenings?: boolean;
   windows?: Win[];
   t?: number;
   collide?: boolean;
@@ -125,8 +128,8 @@ export function wall(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number,
     registerOpening({ kind: 'door', axis, f, t, a0: s, a1: e, y0, y1: y0 + (op.h ?? 2.3) });
     piece(cur, s, y0, y1);
     piece(s, e, y0 + (op.h ?? 2.3), y1); // lintel
-    // door frame (visual only)
-    frame(c, axis, f, s, e, y0, y0 + (op.h ?? 2.3), t, o.frameColor, o.frameStyle);
+    // door frame (visual only); the ENT-R02 old façade opening is deliberately unframed.
+    if(o.frameOpenings!==false) frame(c, axis, f, s, e, y0, y0 + (op.h ?? 2.3), t, o.frameColor, o.frameStyle);
     cur = e;
   }
   piece(cur, hi, y0, y1);
