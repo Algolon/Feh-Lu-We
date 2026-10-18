@@ -31,25 +31,31 @@ describe('ENT-R02-R4 finished join and entrance exterior apron', () => {
       expect(shoulder).toBeDefined();
     }
   });
-  it('makes uninterrupted entrance soffit and upstairs plaster ceiling without old Z80.4 join',()=>{
+  it('builds one continuous upper ceiling using world-Z coordinates', () => {
     const s=readFileSync('src/world/manor.ts','utf8');
-    expect(s).toContain('slab(ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, 84)');
-    expect(s).not.toContain('slab(85, 95, 80.4, 84)');
-    expect(s).toContain('[ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, 99.8]');
-    expect(s).not.toContain('ceiling(c, ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, ENTRANCE_R02.joinZ');
+    expect(s).toContain('const entranceCeiling = buildEntranceGalleryCeilingGeometry()');
+    expect(s).not.toContain("slab(85, 95, 80.4, 84)");
+    expect(s).not.toContain("ceiling(c, ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, ENTRANCE_R02.joinZ");
   });
   it('connects inner-wall returns on both stories but does not change exterior door/colliders',()=>{
     const s=readFileSync('src/world/manor.ts','utf8');
     expect(s).toContain('const sideWallJoinZ = 80.54');
-    expect(s).toContain('sideWallJoinZ + 0.032');
-    expect(s).toContain('sideX - 0.222, sideX + 0.222');
+    // R5B integrates the finish INTO the true side-wall geometry rather than
+    // covering it with an additional volume or pillar.
+    expect(s).toContain('const plasterReturnStartZ = 80.39');
+    expect(s).toContain("wall(c, 'z', x, plasterReturnStartZ, sideWallJoinZ, 0, TOP");
+    expect(s).toContain("mat: k.M.plaster, color: '#f1e6cf', t: 0.4");
+
+    expect(s).not.toContain('sideWallJoinZ + 0.032');
+    expect(s).not.toContain('sideX - 0.222, sideX + 0.222');
     expect(s).not.toContain('a genuine plaster corner pier');
     expect(s).toContain("frameOpenings: !face.id.startsWith('south-')");
     const walls=readFileSync('src/world/arch.ts','utf8');
     expect(walls).toContain('A 100%-height structural arch has no wall ABOVE it');
     expect(walls).toContain('PLASTER END CAPS');
-    expect(s).toContain('[GF, SLAB_UNDERSIDE], [UF, UCEIL]');
-    expect(s).toContain('innerFaceX - 0.018, innerFaceX + 0.018');
+    expect(s).not.toContain('[GF, SLAB_UNDERSIDE], [UF, UCEIL]');
+    expect(s).not.toContain('innerFaceX - 0.018, innerFaceX + 0.018');
+    expect(s).toContain('never add artificial');
     expect(s).toContain("id: 'door.entranceHall'");
     expect(s).toContain("id: 'door.front'");
   });

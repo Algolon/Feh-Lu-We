@@ -24,6 +24,13 @@ const views=[
   ['gallery-left-corner',{x:87.2,y:3.35,z:81.25},[86.45,4.9,80.4]],
   ['gallery-right-corner',{x:92.8,y:3.35,z:81.25},[93.56,4.9,80.4]],
   ['gallery-ceiling',{x:90,y:3.35,z:79.2},[90,6.2,80.45]],
+  ['gallery-ceiling-from-front',{x:90,y:3.35,z:77.4},[90,6.17,82.4]],
+  ['gallery-ceiling-from-rear',{x:90,y:3.35,z:82.65},[90,6.17,77.7]],
+  ['swallows-from-gallery',{x:90.6,y:3.35,z:79.3},[93.37,5.07,79.30]],
+  ['swallows-from-rear',{x:90.8,y:3.35,z:82.2},[93.37,5.07,79.30]],
+  ['old-new-gallery-wide',{x:90,y:3.35,z:78.25},[90,4.75,82.45]],
+  ['exterior-roof-junction',{x:90,z:69.5},[90,7.1,80.2]],
+  ['exterior-roof-oblique',{x:99,z:72},[90,6.9,79.4]],
   ['outdoor-right-urn',{x:95.3,z:73.3},[93.3,.43,75.75]],
   ['outdoor-paving-wide',{x:90,z:70.8},[90,.13,75.3]],
   ['outdoor-left-urn',{x:84.7,z:73.3},[86.7,.43,75.75]],
@@ -68,7 +75,7 @@ for(const [name,stand,target] of views){
   console.log('ENT_R02_R4_VIEW '+JSON.stringify({name,...data}));
   const img=await page.screenshot({path:output+'/'+name+'.jpg',type:'jpeg',quality:82,timeout:60000});
   if(process.env.ENT_R02_R4_THUMB==='1' &&
-     ['entrance-wide-return-right','gallery-wide-return-left','entrance-right-corner','gallery-right-corner','outdoor-right-urn','entrance-soffit'].includes(name))
+     ['gallery-ceiling-from-front','gallery-ceiling-from-rear','swallows-from-gallery','swallows-from-rear','old-new-gallery-wide','exterior-roof-junction','exterior-roof-oblique','entrance-wide-return-right','gallery-wide-return-left','entrance-right-corner','gallery-right-corner','entrance-soffit'].includes(name))
     console.log('ENT_R02_R4_IMAGE_'+name+' '+img.toString('base64'));
 }
 const seals=await page.evaluate(()=>{

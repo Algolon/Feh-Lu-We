@@ -497,7 +497,7 @@ export function stairRail(c: Ctx, f: number, a0: number, a1: number, y0: number,
   c.col.addBox(side < 0 ? f - t : f, side < 0 ? f : f + t, Math.min(a0, a1), Math.max(a0, a1), yFloor, Math.max(y0, y1) + 1.1, { tag: 'railing' });
 }
 
-export interface EaveLook { finished?: boolean; courses?: boolean; fascia?: THREE.ColorRepresentation; soffit?: THREE.ColorRepresentation; gutter?: THREE.ColorRepresentation | false; cap?: THREE.ColorRepresentation; downpipes?: [number, number][] }
+export interface EaveLook { finished?: boolean; courses?: boolean; fascia?: THREE.ColorRepresentation; soffit?: THREE.ColorRepresentation; gutter?: THREE.ColorRepresentation | false; cap?: THREE.ColorRepresentation; downpipes?: [number, number][]; /** Omit former exterior south fascia/soffit/gutter where an extension connects. Plan world X coordinates. */ omitSouthSpan?: readonly [number,number] }
 /**
  * Hip roof with a real eave: fascia boards round the edge, a soffit closing the overhang underneath, a half-round
  * gutter, ridge and hip caps, optional downpipes (plan points at the wall). DEV-03 fix: the old "fascia" was a solid
@@ -511,15 +511,35 @@ export function hipRoof(c: Ctx, cx: number, cz: number, sx: number, sz: number, 
   g.dispose();
   const P = c.k.M.paint, fas = look.fascia ?? '#5a4636', sof = look.soffit ?? '#d9ccb0', cap = look.cap ?? '#5d5a58';
   const ax = sx / 2 + overhang, az = sz / 2 + overhang, wx = sx / 2, wz = sz / 2;
-  // fascia ring (outer edge) and soffit ring (closing the overhang from below)
-  for (const [x0, x1, z0, z1] of [[-ax, ax, -az, -az + 0.05], [-ax, ax, az - 0.05, az], [-ax, -ax + 0.05, -az, az], [ax - 0.05, ax, -az, az]] as const)
+  // ENT-R02-R5C: the original south eave is now INSIDE the extended gallery.
+  // The old full-width fascia, soffit and gutter hung below the new ceiling,
+  // reading as the diagonal black/white beams in the owner screenshots.
+  // Only clip the central connection span; all other eaves remain untouched.
+  const southSpan = look.omitSouthSpan;
+  const southIntervals: [number,number][] = southSpan
+    ? [[-ax, Math.min(ax, southSpan[0] - cx)],
+       [Math.max(-ax, southSpan[1] - cx), ax]]
+    : [[-ax, ax]];
+  for (const [u,v] of southIntervals) {
+    if (v-u <= 0.005) continue;
+    boxMM(c.b, P, fas, cx+u, cx+v, y-0.24, y+0.03, cz-az, cz-az+0.05,
+      { chunk:c.chunk, jitter:0 });
+    boxMM(c.b, P, sof, cx+u, cx+v, y-0.22, y-0.18, cz-az, cz-wz,
+      { chunk:c.chunk, shadow:false, jitter:0 });
+  }
+  for (const [x0, x1, z0, z1] of [[-ax, ax, az - 0.05, az], [-ax, -ax + 0.05, -az, az], [ax - 0.05, ax, -az, az]] as const)
     boxMM(c.b, P, fas, cx + x0, cx + x1, y - 0.24, y + 0.03, cz + z0, cz + z1, { chunk: c.chunk, jitter: 0 });
-  for (const [x0, x1, z0, z1] of [[-ax, ax, -az, -wz], [-ax, ax, wz, az], [-ax, -wx, -wz, wz], [wx, ax, -wz, wz]] as const)
+  for (const [x0, x1, z0, z1] of [[-ax, ax, wz, az], [-ax, -wx, -wz, wz], [wx, ax, -wz, wz]] as const)
     boxMM(c.b, P, sof, cx + x0, cx + x1, y - 0.22, y - 0.18, cz + z0, cz + z1, { chunk: c.chunk, shadow: false, jitter: 0 });
-  if (look.finished && look.gutter !== false) rainwater(c,cx,cz,ax,az,y,look.downpipes??[],undefined,overhang);
+  if (look.finished && look.gutter !== false) rainwater(c,cx,cz,ax,az,y,look.downpipes??[],undefined,overhang,look.omitSouthSpan);
   else if (look.gutter !== false) {
     const gc = look.gutter ?? '#6e6f6a', go = 0.07;
-    for (const [x0, x1, z0, z1] of [[-ax - go, ax + go, -az - go - 0.06, -az - go + 0.04], [-ax - go, ax + go, az + go - 0.04, az + go + 0.06], [-ax - go - 0.06, -ax - go + 0.04, -az - go, az + go], [ax + go - 0.04, ax + go + 0.06, -az - go, az + go]] as const)
+    for (const [u,v] of southIntervals) {
+      if (v-u <= 0.005) continue;
+      boxMM(c.b, P, gc, cx+u, cx+v, y-0.16, y-0.04,
+        cz-az-go-0.06, cz-az-go+0.04, { chunk:c.chunk, jitter:0 });
+    }
+    for (const [x0, x1, z0, z1] of [[-ax - go, ax + go, az + go - 0.04, az + go + 0.06], [-ax - go - 0.06, -ax - go + 0.04, -az - go, az + go], [ax + go - 0.04, ax + go + 0.06, -az - go, az + go]] as const)
       boxMM(c.b, P, gc, cx + x0, cx + x1, y - 0.16, y - 0.04, cz + z0, cz + z1, { chunk: c.chunk, jitter: 0 });
     for (const [px, pz] of look.downpipes ?? []) {
       cyl(c.b, P, gc, px, 0.1, pz, 0.045, 0.045, y - 0.25, 6, { chunk: c.chunk, jitter: 0 });
