@@ -19,7 +19,7 @@
       },
       "room": "entryExtension",
       "calls": 233,
-      "triangles": 1233212,
+      "triangles": 1233188,
       "glError": 0,
       "frontDoor": true,
       "hallDoor": true
@@ -35,7 +35,7 @@
       },
       "room": "entryExtension",
       "calls": 227,
-      "triangles": 1309922,
+      "triangles": 1309898,
       "glError": 0,
       "frontDoor": true,
       "hallDoor": true
@@ -51,7 +51,7 @@
       },
       "room": "frontGalleryExt",
       "calls": 201,
-      "triangles": 1112218,
+      "triangles": 1112194,
       "glError": 0,
       "frontDoor": true,
       "hallDoor": true
@@ -67,7 +67,7 @@
       },
       "room": "frontGalleryExt",
       "calls": 164,
-      "triangles": 1137918,
+      "triangles": 1137894,
       "glError": 0,
       "frontDoor": true,
       "hallDoor": true
@@ -83,7 +83,7 @@
       },
       "room": "vestibule",
       "calls": 150,
-      "triangles": 1120080,
+      "triangles": 1120056,
       "glError": 0,
       "frontDoor": true,
       "hallDoor": true
@@ -99,7 +99,7 @@
       },
       "room": "vestibule",
       "calls": 143,
-      "triangles": 1116460,
+      "triangles": 1116436,
       "glError": 0,
       "frontDoor": true,
       "hallDoor": true
@@ -115,7 +115,7 @@
       },
       "room": "entryExtension",
       "calls": 178,
-      "triangles": 1162302,
+      "triangles": 1162278,
       "glError": 0,
       "frontDoor": true,
       "hallDoor": true
@@ -131,7 +131,7 @@
       },
       "room": "frontGallery",
       "calls": 144,
-      "triangles": 1107572,
+      "triangles": 1107548,
       "glError": 0,
       "frontDoor": true,
       "hallDoor": true
@@ -147,7 +147,7 @@
       },
       "room": "frontGallery",
       "calls": 136,
-      "triangles": 903746,
+      "triangles": 903722,
       "glError": 0,
       "frontDoor": true,
       "hallDoor": true
@@ -163,7 +163,7 @@
       },
       "room": "frontGalleryExt",
       "calls": 149,
-      "triangles": 1086472,
+      "triangles": 1086448,
       "glError": 0,
       "frontDoor": true,
       "hallDoor": true
@@ -179,7 +179,7 @@
       },
       "room": "out",
       "calls": 148,
-      "triangles": 1351578,
+      "triangles": 1351554,
       "glError": 0,
       "frontDoor": true,
       "hallDoor": true
@@ -195,7 +195,7 @@
       },
       "room": "out",
       "calls": 213,
-      "triangles": 1538090,
+      "triangles": 1538066,
       "glError": 0,
       "frontDoor": true,
       "hallDoor": true
@@ -211,7 +211,7 @@
       },
       "room": "out",
       "calls": 182,
-      "triangles": 1389146,
+      "triangles": 1389122,
       "glError": 0,
       "frontDoor": true,
       "hallDoor": true
