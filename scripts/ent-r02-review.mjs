@@ -16,12 +16,12 @@ const browser = await chromium.launch({
 });
 const errors = [], results = [];
 const views = [
-  ['front-approach', { x: 90, z: 71.5 }, [90, 4.6, 77.15]],
-  ['front-oblique', { x: 98, z: 71.5 }, [90, 5.1, 77.15]],
-  ['portico', { x: 90, z: 75.5 }, [90, 4.7, 77.15]],
+  ['front-approach', { x: 90, z: 71.5 }, [90, 4.6, 76.55]],
+  ['front-oblique', { x: 98, z: 71.5 }, [90, 5.1, 76.55]],
+  ['portico', { x: 90, z: 75.5 }, [90, 4.7, 76.55]],
   ['entry-to-hall', { x: 90, z: 79 }, [90, 2.2, 89]],
-  ['hall-to-entry', { x: 90, z: 87 }, [90, 4.6, 77.15]],
-  ['gallery-to-window', { x: 88.2, y: 3.35, z: 83 }, [90, 4.8, 77.15]],
+  ['hall-to-entry', { x: 90, z: 87 }, [90, 4.6, 76.55]],
+  ['gallery-to-window', { x: 88.2, y: 3.35, z: 83 }, [90, 4.8, 76.55]],
   ['gallery-wide', { x: 93, y: 3.35, z: 83 }, [89, 4.5, 78.3]],
   ['gallery-to-hall', { x: 90, y: 3.35, z: 78.7 }, [90, 3.4, 91]],
 ];
