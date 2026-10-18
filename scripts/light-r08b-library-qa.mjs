@@ -66,9 +66,11 @@ try{
    const find=(x,z,y)=>patches.filter(p=>
       Math.abs(p.x-x)<.04&&Math.abs(p.z-z)<.04&&Math.abs(p.y-y)<.04);
    return {
+    // The estate ground floor starts at GF=0.15, so the legacy disc elevations
+    // are 0.97 (GF+0.82) above desk and 0.18 (GF+0.03) over the rug.
     // LightPatches receives PLAN coordinates; model coordinates use negative z.
-    banker:find(73.04,99.72,.82).map(p=>({r:p.r,y:p.y,soft:p.soft})),
-    chandelier:find(78.4,101,.03).map(p=>({r:p.r,y:p.y,soft:p.soft})),
+    banker:find(73.04,99.72,.97).map(p=>({r:p.r,y:p.y,soft:p.soft})),
+    chandelier:find(78.4,101,.18).map(p=>({r:p.r,y:p.y,soft:p.soft})),
     totalPatches:patches.length,
     scope:g.world.scene.userData.stableScope??null,
     roomLights:g.world.scene.userData.stableRooms?.state?.()??null
