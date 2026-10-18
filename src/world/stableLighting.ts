@@ -7,16 +7,20 @@ import type { World } from '../interactions/world';
 import { getKit } from './kit';
 
 const query = typeof location === 'undefined' ? new URLSearchParams() : new URLSearchParams(location.search);
-// Default ON only on the isolated published LIGHT-R06D review URL.
-// Explicit ?stableLiving=0 remains available as a same-build A/B baseline.
-// The normal production URL and family edition do not use this source bundle.
-// LIGHT-R08: opt-in only. The original /light-r06d/ review stays unchanged.
+// LIGHT-R08 release uses the source-bound room light by default; separate
+// older review build outputs stay pinned to their own commit.
 // Deployed release: source-bound lighting is the DEFAULT for both normal and
 // family gameplay. The separate review snapshots remain pinned and unchanged.
 // ?stableRooms=0 is an emergency same-build rollback switch.
 // In non-browser unit tests (no window/location), opt-in remains explicit.
-const deployedRoute = typeof location !== 'undefined' &&
-  /^\\/Feh-Lu-We\\/(?:$|index\\.html$|game(?:\\/|$)|light-r08(?:\\/|$))/.test(location.pathname);
+const deployedRoute = typeof location !== 'undefined' && (
+  location.pathname === '/Feh-Lu-We/' ||
+  location.pathname === '/Feh-Lu-We/index.html' ||
+  location.pathname === '/Feh-Lu-We/game' ||
+  location.pathname.startsWith('/Feh-Lu-We/game/') ||
+  location.pathname === '/Feh-Lu-We/light-r08' ||
+  location.pathname.startsWith('/Feh-Lu-We/light-r08/')
+);
 export const STABLE_ROOMS_PILOT = query.get('stableRooms') === '1' ||
   (query.get('stableRooms') !== '0' && deployedRoute);
 export const STABLE_LIVING_PILOT = STABLE_ROOMS_PILOT || query.get('stableLiving') === '1' ||
