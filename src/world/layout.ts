@@ -53,20 +53,20 @@ export const CLEARINGS = [
 // Buildings (outer footprints). Main block + service wing + conservatory form the manor complex.
 export const MANOR = { x0: 72, x1: 108, z0: 80, z1: 110 };
 /**
- * ENT-R02 blockout: the existing portico/front bay moves 2.4 m south.
+ * ENT-R02-R1 blockout: the existing portico/front bay moves 3.0 m south.
  * Keep one source for geometry, player clearance and room portals.
  * The new and old upstairs surfaces are level: they read as ONE continuous gallery.
  * Actual billiard-table relocation is deliberately out of scope until movement QA.
  */
 export const ENTRANCE_R02 = {
   x0: 86.4, x1: 93.6,
-  faceZ: 77.15, frontWallBackZ: 77.62, joinZ: 80.4, formerFaceZ: 79.55,
-  zWindow: 77.385, windowY0: 4.0, windowW: 1.2, windowH: 1.6,
-  porticoColumnZ: 76.45,
+  faceZ: 76.55, frontWallBackZ: 77.02, joinZ: 80.4, formerFaceZ: 79.55,
+  zWindow: 76.785, windowY0: 4.0, windowW: 1.2, windowH: 1.6,
+  porticoColumnZ: 75.85,
 } as const;
 export const BILLIARD_GALLERY_R02 = {
-  tableX: 90, tableZ: 80.4, width: 1.9, length: 3.5, cueClearance: 1.4,
-  // The long table axis is across X (90 degree yaw). West: the uninterrupted walkway
+  tableX: 90.35, tableZ: 80.55, width: 1.9, length: 3.5, cueClearance: 1.4,
+  // The long table axis is along Z (zero yaw). West: the uninterrupted walkway
   // between the Reiskamer door and the hall remains 85–86.8.
   westWalkwayMaxX: 86.8,
 } as const;
