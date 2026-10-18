@@ -106,7 +106,6 @@ function socialGarden(w: World, g: GameApi, c: Ctx) {
     a.add(M.paint, '#8a8a86', bx(0.32, 0.02, 0.04), 0.35, 0.91, 0.05, { ry: -0.3 });
   }
   w.col.addBox(106.3, 107.7, 117.25, 117.95, 0, GF + 1.2);
-  S3_BUILDERS['FLW-S3-033'](c); // DEV-04D D2: wrought-iron fire screen behind the grill
   w.col.addCircle(105.0, 118.5, 0.2, 0, 0.8);
   // outdoor dining: one long table with slatted garden benches; a festoon of warm bulbs on two posts; plates set
   platform(c, OUTDOOR_DINING, '#e2d6bc');
