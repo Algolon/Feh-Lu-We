@@ -14,6 +14,11 @@ const browser=await chromium.launch({
 });
 const errors=[],results=[];
 const views=[
+  // Full-space views prevent a close-up-only "fix" that creates an oversized pier.
+  ['entrance-wide-to-old-facade',{x:90,z:78.55},[90,1.65,80.40]],
+  ['entrance-wide-return-right',{x:90.8,z:77.6},[93.6,1.55,80.4]],
+  ['gallery-wide-to-old-facade',{x:90,y:3.35,z:78.05},[90,4.9,80.4]],
+  ['gallery-wide-return-left',{x:89.1,y:3.35,z:77.7},[86.4,4.95,80.4]],
   ['entrance-left-corner',{x:87.2,z:80.95},[86.45,1.55,80.4]],
   ['entrance-right-corner',{x:92.8,z:80.95},[93.56,1.55,80.4]],
   ['entrance-soffit',{x:90,z:79.35},[90,3.15,80.4]],
@@ -64,7 +69,7 @@ for(const [name,stand,target] of views){
   console.log('ENT_R02_R4_VIEW '+JSON.stringify({name,...data}));
   const img=await page.screenshot({path:output+'/'+name+'.jpg',type:'jpeg',quality:82,timeout:60000});
   if(process.env.ENT_R02_R4_THUMB==='1' &&
-     ['entrance-right-corner','gallery-right-corner','outdoor-right-urn','entrance-soffit'].includes(name))
+     ['entrance-wide-return-right','gallery-wide-return-left','entrance-right-corner','gallery-right-corner','outdoor-right-urn','entrance-soffit'].includes(name))
     console.log('ENT_R02_R4_IMAGE_'+name+' '+img.toString('base64'));
 }
 const seals=await page.evaluate(()=>{
