@@ -212,17 +212,11 @@ function shell(w: World, c: Ctx) {
   const sideWallJoinZ = 80.54;
   wall(c, 'z', E.x0, E.zWindow, sideWallJoinZ, 0, TOP, { ...stone, t: 0.4, exterior: -1, skin, uv: 2.4 });
   wall(c, 'z', E.x1, E.zWindow, sideWallJoinZ, 0, TOP, { ...stone, t: 0.4, exterior: 1, skin, uv: 2.4 });
-  // ENT-R02-R4E: finish the actual exposed rear cut faces of the new
-  // side walls. The earlier 0.66 m deep faux corner pillars obscured the
-  // masonry but made the entrance and upstairs gallery unnecessarily bulky.
-  // A 40 mm plaster end cap on each 0.4 m wall closes the join cleanly while
-  // retaining full reception/gallery walking and furnishing clearance.
-  for (const sideX of [E.x0, E.x1]) {
-    boxMM(c.b, k.M.plaster, '#f1e6cf',
-      sideX - 0.222, sideX + 0.222, 0, TOP,
-      sideWallJoinZ - 0.008, sideWallJoinZ + 0.032,
-      { chunk: c.chunk, uv: 2.4, jitter: 0, shadow: false });
-  }
+  // ENT-R02-R5: the side walls meet the actual carved old facade. There are
+  // NO additional finish-boxes here: the wall builder already skins the inner
+  // face, and its full-height unframed opening has genuine cut-face plaster.
+  // R4's extra caps masked the sculptural swallows at X93.37 and R4D's
+  // piers changed the room proportions. Keep the corner free of filler.
   for (const x of [E.x0, E.x1]) for (let i = 0, y = 0.7; y < TOP - 0.5; i++, y += 0.42) {
     const la = i % 2 ? 0.3 : 0.55;
     if (EXTERIOR_STUDY) {
@@ -378,34 +372,36 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
         boxMM(c.b, k.M.wood, '#6b4426', x - 0.1, x + 0.1, CEIL - 0.22, CEIL, z0, z1, { chunk: c.chunk, uv: 1.5 });
     }
   }
-  // upper ceiling with the S03 stairwell left open (X 95–99 / Z 99.8–105.6; the upper landing covers Z 98.6–99.8)
+  // ENT-R02-R5: one triangulated T-shaped UNDERSIDE, with shared world UVs.
+  // The previous six ceiling boxes had separate coplanar edge faces, which
+  // left a visible old/new line in the gallery at Z80.4 (and at X86.4/93.6).
+  // This non-colliding single surface spans the new gallery and the old manor
+  // through Z99.8 while leaving the same attic-stairwell opening farther north.
+  // Wall/roof solids above it remain unchanged.
+  const ceilingPlan = new THREE.Shape();
+  ceilingPlan.moveTo(72.4, 80.4);
+  ceilingPlan.lineTo(ENTRANCE_R02.x0, 80.4);
+  ceilingPlan.lineTo(ENTRANCE_R02.x0, ENTRANCE_R02.faceZ);
+  ceilingPlan.lineTo(ENTRANCE_R02.x1, ENTRANCE_R02.faceZ);
+  ceilingPlan.lineTo(ENTRANCE_R02.x1, 80.4);
+  ceilingPlan.lineTo(107.6, 80.4);
+  ceilingPlan.lineTo(107.6, 99.8);
+  ceilingPlan.lineTo(72.4, 99.8);
+  ceilingPlan.closePath();
+  const ceilingMesh = new THREE.ShapeGeometry(ceilingPlan);
+  ceilingMesh.rotateX(Math.PI / 2); // front face downward, seen from the gallery
+  geo(c.b, k.M.plaster, '#efe4cc', ceilingMesh, 0, UCEIL, 0,
+    { chunk: c.chunk, jitter: 0, shadow: false });
+  ceilingMesh.dispose();
+  // Preserve precisely the former stair void north of Z99.8.
   for (const [x0, x1, z0, z1] of [
-    [72.4, ENTRANCE_R02.x0, 80.4, 99.8],
-    [ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, 99.8],
-    [ENTRANCE_R02.x1, 107.6, 80.4, 99.8],
     [72.4, 95, 99.8, 109.6], [99, 107.6, 99.8, 109.6], [95, 99, 105.6, 109.6],
   ] as const) ceiling(c, x0, x1, z0, z1, UCEIL, '#efe4cc');
   ceiling(c, 108, 115.6, 92.4, 109.6, CEIL + 0.4, '#efe4cc');
 
-  // ENT-R02-R4: line the four exposed old/new side-wall corners in plaster.
-  // The old main wall has an interior finish face near Z80.412, while the
-  // projecting new wall has its own inward finish at X86.612/X93.388.
-  // Small face/return strips meet across that 21 cm offset without adding
-  // colliders, blocking the gallery, or leaving outside ashlar visible.
-  for (const [sideX, innerFaceX] of [
-    [ENTRANCE_R02.x0, ENTRANCE_R02.x0 + 0.212],
-    [ENTRANCE_R02.x1, ENTRANCE_R02.x1 - 0.212],
-  ] as const) {
-    for (const [y0,y1] of [[GF, SLAB_UNDERSIDE], [UF, UCEIL]] as const) {
-      boxMM(c.b, k.M.plaster, '#f1e6cf',
-        innerFaceX - 0.018, innerFaceX + 0.018, y0, y1,
-        80.10, 80.56, { chunk: c.chunk, uv: 2.4, jitter: 0, shadow: false });
-      const bx0 = Math.min(sideX, innerFaceX) - 0.015;
-      const bx1 = Math.max(sideX, innerFaceX) + 0.015;
-      boxMM(c.b, k.M.plaster, '#f1e6cf', bx0, bx1, y0, y1,
-        80.408, 80.438, { chunk: c.chunk, uv: 2.4, jitter: 0, shadow: false });
-    }
-  }
+  // ENT-R02-R5: the old-to-new walls have no fabricated corner pillars or
+  // surface strips. Their true junction is formed by the intersecting walls
+  // and the old facade's cut-face finishing in arch.ts; keep swallow art clear.
   // ---------------------------------------------------------------- ground-floor partitions
   const P = { t: 0.16, mat: k.M.plaster, color: '#f3e9d4', uv: 2.4 };
   wall(c, 'z', 85, 80.4, 94, GF, CEIL, { ...P, openings: [{ at: 88.5, w: 3.0, h: 2.6 }] }); // living | hall
