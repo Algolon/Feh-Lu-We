@@ -281,7 +281,7 @@ export function fireplaceToolSet(c: Ctx, x: number, z: number, y0: number, yaw =
     mergeAll(places.map(pz => flat(tube([
       pt(0, 0.854, 0), pt(0.033, 0.860, -pz * 0.72),
       pt(0.075, 0.846, -pz), pt(0.077, 0.815, -pz),
-    ], 0.011, 10)))), 0, 0, 0);
+    ], 0.011, 10))))), 0, 0, 0);
 
   const gripGeo = cg('flwFireToolsR09TurnedHandle', () => lathe([
     [0.012, 0], [0.016, 0.014], [0.022, 0.037], [0.020, 0.085],
