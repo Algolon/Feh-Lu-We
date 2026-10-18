@@ -149,6 +149,56 @@ jobs:
             sleep 1
           done
           node scripts/light-r08-pages-smoke.mjs http://127.0.0.1:4188/Feh-Lu-We/
+      # ENT-R02: isolated, explicitly experimental live walk-through.
+      # Important: build from pinned draft PR snapshot; root and /game are unchanged.
+      # The preview gets a distinct save namespace, never touching full/family saves.
+      - name: Build independent ENT-R02 preview (no production gameplay changes)
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --quiet || true
+          test -f dist/index.html
+          test -f dist/game/index.html
+      - name: Checkout ENT-R02 approved prototype snapshot
+        uses: actions/checkout@v7
+        with:
+          ref: 3c6d4fba87ae808d6c57435cabf664da75e21b7f
+          path: ent-r02-preview-source
+          persist-credentials: false
+      - name: Build isolated ENT-R02 with independent save namespace
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd ent-r02-preview-source
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('src/core/state.ts')
+          source=p.read_text()
+          old="const STORAGE_PREFIX = FAMILY_EDITION ? 'fehluwe.family' : 'fehluwe';"
+          new="const STORAGE_PREFIX = typeof location !== 'undefined' && location.pathname.startsWith('/Feh-Lu-We/ent-r02/') ? 'fehluwe.ent-r02' : FAMILY_EDITION ? 'fehluwe.family' : 'fehluwe';"
+          assert source.count(old)==1, 'isolated preview save-prefix contract changed'
+          p.write_text(source.replace(old,new))
+          PY
+          npm ci
+          npm run typecheck
+          npx vitest run tests/ent-r02.test.ts tests/ent-r02-portal-terminal.test.ts tests/cross-room-window-visibility.test.ts
+          npm run build -- --base /Feh-Lu-We/ent-r02/
+          cd ..
+          mkdir -p dist/ent-r02
+          cp -a ent-r02-preview-source/dist/. dist/ent-r02/
+          test -f dist/ent-r02/index.html
+          grep -Fq '/Feh-Lu-We/ent-r02/assets/' dist/ent-r02/index.html
+          grep -Fq '/Feh-Lu-We/assets/' dist/index.html
+          grep -Fq '/Feh-Lu-We/assets/' dist/game/index.html
+      - name: ENT-R02 preview smoke: route, isolated save and scene
+        shell: bash
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 40); do
+            curl -sf http://127.0.0.1:4188/Feh-Lu-We/ent-r02/ > /dev/null && break
+            sleep 1
+          done
+          node scripts/ent-r02-preview-pages-smoke.mjs http://127.0.0.1:4188/Feh-Lu-We/ent-r02/
       - uses: actions/upload-pages-artifact@v5
         with:
           path: dist
