@@ -35,21 +35,27 @@ describe('ENT-R02-R4 finished join and entrance exterior apron', () => {
     const s=readFileSync('src/world/manor.ts','utf8');
     expect(s).toContain('slab(ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, 84)');
     expect(s).not.toContain('slab(85, 95, 80.4, 84)');
-    expect(s).toContain('[ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, 99.8]');
+    expect(s).toContain('const ceilingMesh = new THREE.ShapeGeometry(ceilingPlan)');
+    expect(s).toContain('ceilingPlan.lineTo(ENTRANCE_R02.x0, ENTRANCE_R02.faceZ)');
+    expect(s).toContain('ceilingPlan.lineTo(ENTRANCE_R02.x1, ENTRANCE_R02.faceZ)');
+    expect(s).toContain('ceilingMesh.rotateX(Math.PI / 2)');
     expect(s).not.toContain('ceiling(c, ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, ENTRANCE_R02.joinZ');
   });
   it('connects inner-wall returns on both stories but does not change exterior door/colliders',()=>{
     const s=readFileSync('src/world/manor.ts','utf8');
     expect(s).toContain('const sideWallJoinZ = 80.54');
-    expect(s).toContain('sideWallJoinZ + 0.032');
-    expect(s).toContain('sideX - 0.222, sideX + 0.222');
+    expect(s).not.toContain('sideX - 0.222, sideX + 0.222');
+    expect(s).not.toContain('sideWallJoinZ + 0.032');
+    expect(s).not.toContain('innerFaceX - 0.018, innerFaceX + 0.018');
     expect(s).not.toContain('a genuine plaster corner pier');
     expect(s).toContain("frameOpenings: !face.id.startsWith('south-')");
     const walls=readFileSync('src/world/arch.ts','utf8');
     expect(walls).toContain('A 100%-height structural arch has no wall ABOVE it');
     expect(walls).toContain('PLASTER END CAPS');
-    expect(s).toContain('[GF, SLAB_UNDERSIDE], [UF, UCEIL]');
-    expect(s).toContain('innerFaceX - 0.018, innerFaceX + 0.018');
+    // The carved swallows extend into the old/new rear-wall junction:
+    // any fake finish boxes here will hide part of the sculpture.
+    const art=readFileSync('src/content/props3d.ts','utf8');
+    expect(art).toContain("x: 93.37, y: UF + 1.72, z: 79.30");
     expect(s).toContain("id: 'door.entranceHall'");
     expect(s).toContain("id: 'door.front'");
   });
