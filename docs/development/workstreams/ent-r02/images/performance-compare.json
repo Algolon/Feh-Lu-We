@@ -1,0 +1,162 @@
+{
+  "views": [
+    {
+      "name": "front-approach",
+      "calls": {
+        "baseline": 209,
+        "prototype": 208,
+        "delta": -1
+      },
+      "triangles": {
+        "baseline": 1526008,
+        "prototype": 1527198,
+        "delta": 1190
+      }
+    },
+    {
+      "name": "front-oblique",
+      "calls": {
+        "baseline": 149,
+        "prototype": 141,
+        "delta": -8
+      },
+      "triangles": {
+        "baseline": 1385090,
+        "prototype": 1384692,
+        "delta": -398
+      }
+    },
+    {
+      "name": "portico",
+      "calls": {
+        "baseline": 102,
+        "prototype": 123,
+        "delta": 21
+      },
+      "triangles": {
+        "baseline": 1125848,
+        "prototype": 1229808,
+        "delta": 103960
+      }
+    },
+    {
+      "name": "entry-to-hall",
+      "calls": {
+        "baseline": 168,
+        "prototype": 234,
+        "delta": 66
+      },
+      "triangles": {
+        "baseline": 1303638,
+        "prototype": 1217296,
+        "delta": -86342
+      }
+    },
+    {
+      "name": "hall-to-entry",
+      "calls": {
+        "baseline": 243,
+        "prototype": 256,
+        "delta": 13
+      },
+      "triangles": {
+        "baseline": 1587118,
+        "prototype": 1601300,
+        "delta": 14182
+      }
+    },
+    {
+      "name": "gallery-to-window",
+      "calls": {
+        "baseline": 136,
+        "prototype": 225,
+        "delta": 89
+      },
+      "triangles": {
+        "baseline": 1075680,
+        "prototype": 1541400,
+        "delta": 465720
+      }
+    },
+    {
+      "name": "gallery-wide",
+      "calls": {
+        "baseline": 142,
+        "prototype": 241,
+        "delta": 99
+      },
+      "triangles": {
+        "baseline": 1152566,
+        "prototype": 1626100,
+        "delta": 473534
+      }
+    },
+    {
+      "name": "gallery-to-hall",
+      "calls": {
+        "baseline": 167,
+        "prototype": 199,
+        "delta": 32
+      },
+      "triangles": {
+        "baseline": 1291678,
+        "prototype": 1107910,
+        "delta": -183768
+      }
+    },
+    {
+      "name": "foyer-to-hall-closed",
+      "calls": {
+        "baseline": 344,
+        "prototype": 144,
+        "delta": -200
+      },
+      "triangles": {
+        "baseline": 1735856,
+        "prototype": 1020784,
+        "delta": -715072
+      }
+    },
+    {
+      "name": "hall-to-foyer-closed",
+      "calls": {
+        "baseline": 243,
+        "prototype": 156,
+        "delta": -87
+      },
+      "triangles": {
+        "baseline": 1589998,
+        "prototype": 1127674,
+        "delta": -462324
+      }
+    },
+    {
+      "name": "front-left-jamb",
+      "calls": {
+        "baseline": 227,
+        "prototype": 184,
+        "delta": -43
+      },
+      "triangles": {
+        "baseline": 1560452,
+        "prototype": 1375520,
+        "delta": -184932
+      }
+    },
+    {
+      "name": "front-right-jamb",
+      "calls": {
+        "baseline": 161,
+        "prototype": 141,
+        "delta": -20
+      },
+      "triangles": {
+        "baseline": 1331506,
+        "prototype": 1329112,
+        "delta": -2394
+      }
+    }
+  ],
+  "baselineCommit": "1f9563b31cbdd44fdc1fd17c29750d74440ad9d1",
+  "note": "matched high-quality software-WebGL poses; not a mobile hardware FPS measurement"
+}

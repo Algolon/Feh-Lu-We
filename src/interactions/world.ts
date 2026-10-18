@@ -337,8 +337,13 @@ export class World {
         this.visibleRooms = behindDoors;
         for (const p of clearWindows) this.visibleRooms.add(p.a === 'out' ? p.b : p.a);
       } else {
+        // ENT-R02-P2 / WINDOW-R02: a clear window reveals OUTSIDE, not a new
+        // transitive path through the global 'out' hub into the conservatory,
+        // other windows, and remote rooms. The normal arch/open-door traversal
+        // still sees physically connected rooms. Window/door LOS controls 'out'.
         this.visibleRooms = this.rooms.visible(this.hereRoom, this.isOpen, 3,
-          undefined, p => clearWindows.includes(p));
+          undefined, () => false);
+        if (clearWindows.length) this.visibleRooms.add('out');
       }
       // the outdoors and the glass Copacabana Room (whose walls show the outdoors) count as one view: from inside the
       // house they are drawn only while an open doorway to them is in (a generous cone round) the view

@@ -37,7 +37,7 @@ import { makeFire } from './fire';
 import { drawSymbol } from '../content/symbols';
 import { EMBLEMS, SERVICE, CATALOG, CONSOLE_SOCKETS, ROUTE_LINES } from '../content/canon';
 import { addClue, has } from '../core/state';
-import { GF, CEIL, UF, UCEIL, TOP, BF, BCEIL, AF, S03, SLAB_UNDERSIDE, roofUnderside, ATTIC_NOOK, ATTIC_ROOF_WINDOW } from './layout';
+import { GF, CEIL, UF, UCEIL, TOP, BF, BCEIL, AF, S03, SLAB_UNDERSIDE, roofUnderside, ATTIC_NOOK, ATTIC_ROOF_WINDOW, ENTRANCE_R02 } from './layout';
 import { buildMaquette } from './maquette';
 import { addKey, presentKey, keyLiner, linerWhenOpen, hatchDish, LINER_TOP, HATCH_DISH_FLOOR, S3_BUILDERS } from './d2props';
 import { SALON_LAYOUT, SALON_SITES } from '../content/gallery';
@@ -103,7 +103,14 @@ function shell(w: World, c: Ctx) {
       if (EXTERIOR_STUDY) dressedBlock(c,(xa+xb)/2,(y0+y1)/2,(za+zb)/2,xb-xa,y1-y0,zb-za,palette[col]??col,Math.min(.018,(y1-y0)/4));
       else boxMM(c.b,mat,col,xa,xb,y0,y1,za,zb,o);
     };
-    for (const [a,b] of runs.S??[[x0-proud,x1+proud]]) part(a,b,z0-proud,z0);
+    // ENT-R02: the former central facade is now a full-height interior opening.
+    // Clip ALL legacy south bands (plinth, string course, cornice), not only wall meshes.
+    const south = runs.S ?? [[x0-proud, x1+proud]];
+    for (const [a,b] of south) {
+      if (x0 !== 72 || z0 !== 80) { part(a,b,z0-proud,z0); continue; }
+      if (a < 86.38) part(a, Math.min(b,86.38),z0-proud,z0);
+      if (b > 93.62) part(Math.max(a,93.62), b,z0-proud,z0);
+    }
     for (const [a,b] of runs.N??[[x0-proud,x1+proud]]) part(a,b,z1,z1+proud);
     for (const [a,b] of runs.W??[[z0,z1]]) part(x0-proud,x0,a,b);
     for (const [a,b] of runs.E??[[z0,z1]]) part(x1,x1+proud,a,b);
@@ -130,7 +137,7 @@ function shell(w: World, c: Ctx) {
   ring(-0.1, 0.62, 0.1, sand, 72, 108, 80, 110, k.M.stone, mainRuns(0.1)); // plinth
   ring(0.62, 0.7, 0.06, '#d9c9a6', 72, 108, 80, 110, k.M.paint, mainRuns(0.06)); // weathered plinth top
   // stone thresholds through the wall depth of the ground-floor exterior doors (flush walking line, no knee-high sill)
-  for (const [x0, x1, z0, z1] of [[89.15, 90.85, 79.9, 80.42], [90.9, 92.1, 109.58, 110.1], [100.5, 101.5, 109.58, 110.1], [107.58, 108.42, 102, 103]] as const) threshold(c, x0, x1, z0, z1, GF, EXTERIOR_STUDY ? '#d6d1bd' : '#d6c8a8', EXTERIOR_STUDY ? exteriorMats().dressed : k.M.stone);
+  for (const [x0, x1, z0, z1] of [[89.15, 90.85, ENTRANCE_R02.faceZ - 0.02, ENTRANCE_R02.frontWallBackZ], [90.9, 92.1, 109.58, 110.1], [100.5, 101.5, 109.58, 110.1], [107.58, 108.42, 102, 103]] as const) threshold(c, x0, x1, z0, z1, GF, EXTERIOR_STUDY ? '#d6d1bd' : '#d6c8a8', EXTERIOR_STUDY ? exteriorMats().dressed : k.M.stone);
   ring(UF - 0.12, UF + 0.08, 0.07, dressed, 72, 108, 80, 110, k.M.paint); // string course
   ring(TOP - 0.42, TOP - 0.26, 0.06, dressed, 72, 108, 80, 110, k.M.paint); // cornice: frieze band
   ring(TOP - 0.26, TOP - 0.12, 0.13, '#e9dcc0', 72, 108, 80, 110, k.M.paint); // corona
@@ -182,46 +189,68 @@ function shell(w: World, c: Ctx) {
   };
   for (const x of [78, 102]) { dormer(x, 79.6, 'S'); dormer(x, 110.4, 'N'); }
   for (const z of [88, 98]) { dormer(71.6, z, 'W'); dormer(108.4, z, 'E'); }
-  // projecting central entrance bay with pediment, round window and porch
-  const bay = (x0: number, x1: number, y0: number, y1: number) => {
-    boxMM(c.b, stone.mat, EXTERIOR_STUDY ? '#ffffff' : '#f6ead0', x0, x1, y0, y1, 79.55, 80.02, { chunk: c.chunk, uv: 2.4 });
-    if (y0 < 2) c.col.addBox(x0, x1, 79.55, 80.02, 0, y1, { occludes: true });
-  };
-  bay(86.4, 89.05, 0.5, TOP);
-  bay(90.95, 93.6, 0.5, TOP);
-  bay(89.05, 90.95, 3.0, TOP);
-  for (const x of [86.4, 93.6]) for (let i = 0, y = 0.7; y < TOP - 0.5; i++, y += 0.42) { // quoins on the bay
+  // ENT-R02: a REAL two-storey extension, not a translated decorative face.
+  // Two side-bearing walls reach the former main facade; a large opening at Z80.2
+  // connects it to the old vestibule and frontGallery. New and old gallery slabs join.
+  const E = ENTRANCE_R02, face = E.faceZ;
+  const facadeStone = EXTERIOR_STUDY ? '#ffffff' : '#f6ead0';
+  // ENT-R02-R3: one genuine contiguous front wall, from floor to upper cornice.
+  // Earlier disconnected 0.5 m-high panels left floor-level daylight beside the door.
+  // The clear 1.7 m door opening coincides exactly with door.front's hinge/leaf,
+  // and the upper aperture remains a physically transparent 1.2 x 1.6 m window.
+  wall(c, 'x', E.zWindow, E.x0, E.x1, 0, TOP, {
+    ...stone, t: E.frontWallBackZ - face, exterior: -1, skin, uv: 2.4,
+    winStyle: 'manor',
+    openings: [{ at: 90, w: 1.7, h: 2.62 }],
+    windows: [{ at: 90, w: E.windowW, sill: E.windowY0, h: E.windowH, transparent: true }],
+  });
+  // Side walls join the front wall at its full thickness all the way to the floor;
+  // no slivers into the exterior along the return corners.
+  wall(c, 'z', E.x0, E.zWindow, 80.2, 0, TOP, { ...stone, t: 0.4, exterior: -1, skin, uv: 2.4 });
+  wall(c, 'z', E.x1, E.zWindow, 80.2, 0, TOP, { ...stone, t: 0.4, exterior: 1, skin, uv: 2.4 });
+  for (const x of [E.x0, E.x1]) for (let i = 0, y = 0.7; y < TOP - 0.5; i++, y += 0.42) {
     const la = i % 2 ? 0.3 : 0.55;
     if (EXTERIOR_STUDY) {
-      dressedBlock(c, x < 90 ? x + (la - .04) / 2 : x - (la - .04) / 2, y + .18, 79.53, la + .04, .36, .06, i % 3 === 0 ? '#d1cfba' : '#dfd8c2', .012);
+      dressedBlock(c, x < 90 ? x + (la - .04) / 2 : x - (la - .04) / 2, y + .18, face - .02, la + .04, .36, .06, i % 3 === 0 ? '#d1cfba' : '#dfd8c2', .012);
       continue;
     }
-    boxMM(c.b, k.M.stone, dressed, x < 90 ? x - 0.04 : x - la, x < 90 ? x + la : x + 0.04, y, y + 0.36, 79.5, 79.56, { chunk: c.chunk, uv: 1.2, jitter: 0.02 });
+    boxMM(c.b, k.M.stone, dressed, x < 90 ? x - 0.04 : x - la, x < 90 ? x + la : x + 0.04,
+      y, y + 0.36, face - 0.05, face + 0.01, { chunk: c.chunk, uv: 1.2, jitter: 0.02 });
   }
-  boxMM(c.b, EXTERIOR_STUDY ? exteriorMats().dressed : k.M.stone, EXTERIOR_STUDY ? '#dfd8c2' : '#e2d2b2', 86.2, 93.8, TOP, TOP + 0.25, 79.45, 80.05, { chunk: c.chunk });
-  gableRoof(c, 90, 79.8, 0.6, 7.8, TOP + 0.25, 2.6, false, stone.mat, EXTERIOR_STUDY ? '#ffffff' : '#f6ead0', false);
+  boxMM(c.b, EXTERIOR_STUDY ? exteriorMats().dressed : k.M.stone, EXTERIOR_STUDY ? '#dfd8c2' : '#e2d2b2',
+    E.x0 - .2, E.x1 + .2, TOP, TOP + .25, face - .1, face + .5, { chunk: c.chunk });
+  // Continuous extension of the gable roof back into the existing hipped roof.
+  // The seam with the existing roof/fascia is a visual QA gate, not an assumed success.
+  const roofBackZ = 80.55;
+  gableRoof(c, 90, (face + roofBackZ) / 2, roofBackZ - face, 7.8, TOP + .25, 2.6,
+    false, stone.mat, facadeStone, false);
   const cornice = gableTrimGeo(7.9, 2.7, .26, .12);
-  geo(c.b, k.M.paint, '#ecdfc4', cornice, 90, TOP + .2, 79.42, { chunk: c.chunk, jitter: 0 });
+  geo(c.b, k.M.paint, '#ecdfc4', cornice, 90, TOP + .2, face - .13, { chunk: c.chunk, jitter: 0 });
   cornice.dispose();
-  cyl(c.b, k.M.paint, dressed, 90, TOP + 1.0, 79.46, 0.62, 0.62, 0.06, 20, { chunk: c.chunk, rx: Math.PI / 2 }); // oculus ring
-  cyl(c.b, k.M.glow, '#5f6f78', 90, TOP + 1.0, 79.44, 0.5, 0.5, 0.05, 16, { chunk: c.chunk, rx: Math.PI / 2, shadow: false, jitter: 0 });
-  windowAt(c, 'x', 79.55, -1, 90, 4.0, 1.2, 1.6, true, { kind: 'manor' });
-  // porch (DEV-04D D3-A2, entrance.ts): the walk surfaces and colliders stay exactly as before (the landing floor at GF,
-  // the 7.5 cm step, the column circles); the portico, doorway surround, steps and bay base are rebuilt as construction
-  floor(c, 87.8, 92.2, 78.6, 80.0, GF, EXTERIOR_STUDY ? exteriorMats().dressed : k.M.stone, EXTERIOR_STUDY ? '#d8d2bf' : '#d9ccb0', 0.4, true, EXTERIOR_STUDY ? .6 : 2);
-  for (const x of [88.1, 91.9]) c.col.addCircle(x, 78.85, 0.2, 0, 3);
-  buildEntrance(c, { x: 90, bayZ: 79.55, colZ: 78.85, colX: [88.1, 91.9], gf: GF });
-  entranceBay(c, 86.4, 93.6, 79.55, 80.0, [87.375, 92.625], UF);
-  // lanterns on wrought brackets on the bay face, between each pilaster and the door surround (they sat inside the bay)
+  cyl(c.b, k.M.paint, dressed, 90, TOP + 1.0, face - .09, .62, .62, .06, 20,
+    { chunk: c.chunk, rx: Math.PI / 2 });
+  cyl(c.b, k.M.glow, '#5f6f78', 90, TOP + 1.0, face - .11, .5, .5, .05, 16,
+    { chunk: c.chunk, rx: Math.PI / 2, shadow: false, jitter: 0 });
+  // Portico and approach move WITH the door; its two-column order stays untouched.
+  const zShift = E.formerFaceZ - E.faceZ;
+  floor(c, 87.8, 92.2, 78.6 - zShift, 80 - zShift, GF,
+    EXTERIOR_STUDY ? exteriorMats().dressed : k.M.stone,
+    EXTERIOR_STUDY ? '#d8d2bf' : '#d9ccb0', 0.4, true, EXTERIOR_STUDY ? .6 : 2);
+  for (const x of [88.1, 91.9]) c.col.addCircle(x, E.porticoColumnZ, .2, 0, 3);
+  buildEntrance(c, { x: 90, bayZ: face, colZ: E.porticoColumnZ, colX: [88.1, 91.9], gf: GF });
+  entranceBay(c, E.x0, E.x1, face, E.frontWallBackZ, [87.375, 92.625], UF);
   for (const x of [88.6, 91.4]) {
-    if(EXTERIOR_STUDY && EXTERIOR_DETAILS)lanternMount(c,x,79.55,79.36,2.15+.59*.7);
+    const lampZ = face - .19;
+    if (EXTERIOR_STUDY && EXTERIOR_DETAILS) lanternMount(c, x, face, lampZ, 2.15 + .59 * .7);
     else {
-    boxMM(c.b, k.M.paint, '#2b2622', x - 0.02, x + 0.02, 2.62, 2.66, 79.34, 79.56, { chunk: c.chunk, shadow: false }); // bracket arm
-    boxMM(c.b, k.M.paint, '#2b2622', x - 0.01, x + 0.01, 2.54, 2.63, 79.35, 79.37, { chunk: c.chunk, shadow: false }); // drop to the lantern cap
+      boxMM(c.b, k.M.paint, '#2b2622', x - .02, x + .02, 2.62, 2.66,
+        face - .21, face + .01, { chunk: c.chunk, shadow: false });
+      boxMM(c.b, k.M.paint, '#2b2622', x - .01, x + .01, 2.54, 2.63,
+        face - .20, face - .18, { chunk: c.chunk, shadow: false });
     }
-    staticLantern(c, w, x, 2.15, 79.36, 0.7, 0, 2.2, 5); // out of the bay the same 4 / 7 washed the portico white
+    staticLantern(c, w, x, 2.15, lampZ, .7, 0, 2.2, 5);
   }
-  if(EXTERIOR_STUDY&&EXTERIOR_WEATHER)houseNameplate(w,c);
+  if (EXTERIOR_STUDY && EXTERIOR_WEATHER) houseNameplate(w, c, face);
   // ---------------------------------------------------------------- service wing (single storey, own roof)
   const WH = 3.9;
   for (const face of MANOR_WINDOW_WALLS.filter(face => face.id.startsWith('wing-'))) {
@@ -287,6 +316,9 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   const k = c.k;
   // ---------------------------------------------------------------- ground floor surfaces
   floor(c, 85, 95, 80.4, 98, GF, k.M.tile, '#efe4cc', 0.2, false, 1.6); // vestibule + hall
+  // ENT-R02: a seamless ground surface linking the new front door, vestibule and main hall.
+  floor(c, ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, ENTRANCE_R02.joinZ, GF,
+    k.M.tile, '#efe4cc', 0.2, false, 1.6);
   floor(c, 85, 92, 98, 104, GF, k.M.tile, '#e8dcc0', 0.2, false, 1.6); // back lobby
   floor(c, 92, 95, 98, 99.6, GF, k.M.wood, '#7a5232', 0.2, false, 1.2); // basement stair landing
   floor(c, 85, 95, 104.8, 109.6, GF, k.M.wood, '#9a6a3e', 0.2, false, 2.2); // billiard
@@ -298,6 +330,7 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   floor(c, 108, 115.6, 92.4, 109.6, GF, k.M.tile, '#d8c8a8', 0.2, false, 1.2); // wing: meet the existing manor wall face at X108
   // walkable regions (the basement stair opening is left out)
   for (const [x0, x1, z0, z1] of [[72.4, 92, 80.4, 109.6], [92, 95, 80.4, 99.6], [92, 95, 104.8, 109.6], [95, 107.6, 80.4, 109.6], [108, 115.6, 92.4, 109.6], [107.4, 108.6, 101.9, 103.1], [111.3, 112.7, 91.6, 92.6], [115.4, 116.4, 101.7, 103.3]] as const) w.col.addFloor(x0, x1, z0, z1, GF);
+  w.col.addFloor(ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, ENTRANCE_R02.joinZ, GF);
   // ---------------------------------------------------------------- slabs between storeys (walk above, occlude interaction)
   const slab = (x0: number, x1: number, z0: number, z1: number) => {
     boxMM(c.b, k.M.wood, '#8a5a34', x0, x1, SLAB_UNDERSIDE, UF, z0, z1, { uv: 2.2, chunk: 'manor' }); // slightly buried over wall/beam heads, no coplanar ceiling strips
@@ -306,12 +339,16 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   };
   slab(72.4, 85, 80.4, 94); // bedrooms
   slab(85, 95, 80.4, 84); // front gallery
+  slab(ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, ENTRANCE_R02.joinZ); // one enlarged billiard-ready gallery
   slab(85, 86.8, 84, 95.5); // walkway
   slab(85, 95, 95.5, 104); // landing
   slab(85, 95, 104, 109.6); // bath + linen
   slab(95, 107.6, 80.4, 109.6); // east upstairs
   slab(83.2, 85, 94, 107.8); // library gallery (east side)
   slab(72.4, 85, 107.8, 109.6); // library gallery (north side)
+  // Plaster upper ceiling matches the new roof footprint; the entrance below stays at one storey
+  // while the existing central hall retains its original double-height void.
+  ceiling(c, ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, ENTRANCE_R02.joinZ, UCEIL, '#efe4cc');
   // beams under ground-floor ceilings (not in the double-height spaces)
   for (let x = 74; x < 107; x += 2.4) {
     if (x < 85 && ART.set !== 'sample') boxMM(c.b, k.M.wood, '#6b4426', x - 0.1, x + 0.1, CEIL - 0.22, CEIL, 80.4, 94, { chunk: c.chunk, uv: 1.5 }); // sample: livingSample beams
@@ -330,7 +367,7 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   const P = { t: 0.16, mat: k.M.plaster, color: '#f3e9d4', uv: 2.4 };
   wall(c, 'z', 85, 80.4, 94, GF, CEIL, { ...P, openings: [{ at: 88.5, w: 3.0, h: 2.6 }] }); // living | hall
   wall(c, 'z', 95, 80.4, 92, GF, CEIL, { ...P, openings: [{ at: 85.2, w: 1.9, h: 2.6 }] }); // hall | dining (south of the stair foot)
-  wall(c, 'x', 84, 85, 95, GF, CEIL, { ...P, openings: [{ at: 90, w: 2.4, h: 2.75 }] }); // vestibule | hall
+  wall(c, 'x', 84, 85, 95, GF, CEIL, { ...P, openings: [{ at: 90, w: 1.5, h: 2.35 }] }); // ENT-R02-R3: enclosed entry/vestibule, single closable interior door to the grand hall
   wall(c, 'x', 98, 85, 92, GF, CEIL, { ...P, openings: [{ at: 88.5, w: 4.2, h: 2.7 }] }); // hall | lobby
   wall(c, 'z', 85, 94, 109.6, GF, CEIL, { ...P, openings: [{ at: 101, w: 1.0, h: 2.3 }] }); // library | lobby/billiard
   wall(c, 'x', 94, 72.4, 85, GF, CEIL, { ...P, openings: [{ at: 79, w: 1.6, h: 2.4 }] }); // living | library
@@ -400,7 +437,10 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   stairsZ(c, 92.08, 94.92, 104.8, 99.6, BF, GF, '#6b4a2a', undefined, { mass: '#cbbd9f', runner: false });
 
   // ---------------------------------------------------------------- doors
-  makeDoor(w, g, { id: 'door.front', x: 89.15, z: 80.2, dir: 'x+', width: 1.7, height: 2.62, y0: GF, swing: 1, color: '#6b3f22', key: 'frontKey', thickness: 0.09, style: EXTERIOR_STUDY && EXTERIOR_DETAILS ? 'estate' : 'panel' });
+  makeDoor(w, g, { id: 'door.front', x: 89.15, z: ENTRANCE_R02.zWindow, dir: 'x+', width: 1.7, height: 2.62, y0: GF, swing: 1, color: '#6b3f22', key: 'frontKey', thickness: 0.09, style: EXTERIOR_STUDY && EXTERIOR_DETAILS ? 'estate' : 'panel' });
+  // This door closes the full-width vestibule-to-hall wall. No lock or puzzle item.
+  // The exterior expansion and old vestibule remain one interior zone until here.
+  makeDoor(w, g, { id: 'door.entranceHall', x: 89.25, z: 84, dir: 'x+', width: 1.5, height: 2.35, y0: GF, swing: -1, color: '#6b4426', style: 'panel' });
   makeDoor(w, g, { id: 'door.library', x: 85, z: 100.5, dir: 'z+', width: 1.0, height: 2.25, y0: GF, swing: -1, color: '#5a3520' });
   makeDoor(w, g, { id: 'door.billiard', x: 89.5, z: 104, dir: 'x+', width: 1.0, height: 2.25, y0: GF, swing: 1 }); // v0.2: moved east for the WC (same id/state)
   makeDoor(w, g, { id: 'door.guestWC', x: 86.05, z: 104, dir: 'x+', width: 0.9, height: 2.2, y0: GF, swing: 1, color: '#efe6d6' });
@@ -1223,7 +1263,8 @@ function upperRooms(w: World, g: GameApi, c: Ctx) {
   // DEV-04B: the gallery bench is the joinery bench; the gallery walkway carries no rug (it only filled floor)
   // DEV-04D D3-b1: the bench moves under the swallows (Track 01 ×1.15): one seat-and-sculpture composition on the pier
   // between the windows, on the walking line; it stood alone by the east window
-  slatBench(c, 90.0, 81.0, UF, 0, 1.4, '#6b4426');
+  // ENT-R02: clear the future billiard play envelope; the bench parks near the east rear pier.
+  slatBench(c, 94.25, 82.65, UF, Math.PI / 2, 1.4, '#6b4426');
   S3_BUILDERS['FLW-S3-014'](c);
   // DEV-04D D3-b2: the Reis- and Sterrenkamer furnishings are their own culled region (estate.ts `mUpR`): drawn while
   // either room is visible, no longer from the hall, living room, library and attic, which drew them through the

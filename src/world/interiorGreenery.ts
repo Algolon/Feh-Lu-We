@@ -11,6 +11,8 @@ interface Brief { room:string;x:number;z:number;family:IndoorFamily;scale:number
 const B=(room:string,x:number,z:number,family:IndoorFamily,scale:number,style:ContainerStyle,reason:string,group=false,hang=false):Brief=>({room,x,z,family,scale,style,reason,group,hang});
 export const GREEN_BRIEFS:Brief[]=[
   B('vestibule',93.9,83.0,'zz',.70,'ceramic','Rustig groen naast de entree; de centrale doorgang blijft open.'),
+  B('entryExtension',87.2,79.0,'snake',.47,'ceramic','Kleine hoekplant links van de nieuwe ontvangstzone, vrij van de centrale entreeas.'),
+  B('frontGalleryExt',87.2,77.9,'zz',.42,'ceramic','Klein bladaccent aan de zuidwestelijke galerijrand, buiten het gereserveerde biljartvlak.'),
   B('hall',94.0,94.8,'ficus',1.25,'stand','Een hoog groen anker aan de rand van de dubbelhoge hal.'),
   B('living',73.3,81.4,'alocasia',1.15,'wicker','Bladvolume bij het raam als tegenwicht voor de zithoek.',true),
   B('library',73.3,108.6,'zz',1.05,'ceramic','Donker glanzend blad bij het leeslicht, los van de catalogus.'),
