@@ -9,6 +9,7 @@ Owner request 18 oktober 2026: vervang de enkele houten scheidingsdeur met een d
 - Smalle metalen deuromlijsting, geen dubbele houten architraven.
 - Bestaande ID `door.entranceHall` blijft hetzelfde, één open/dicht-status, geen nieuw slot of puzzel.
 - Culling: hal zichtbaar door gesloten glas, maar deur houdt fysiek botsing tegen totdat geopend. Het bestaande lichtselectiesysteem verandert niet.
+- Na eerste WebGL-QA: beide gesloten colliders hebben 24 mm totale overlap in hun **onzichtbare** botsingsvolume: centrum-ray op exact X90 mag niet door het sluitvlak vallen. De zichtbare stiles worden niet verbreed.
 - Geen wijzigingen aan voordeur, bovenverdieping, entreevloer, meubels of puzzles.
 
 ## QA / acceptatie

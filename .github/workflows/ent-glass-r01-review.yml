@@ -44,7 +44,7 @@ jobs:
             console.error('ENT-GLASS WebGL doorway capture failed:', JSON.stringify({ errors: report.errors, views }));
             process.exit(1);
           }
-          const essential = ['hallDoorClosed', 'hallDoorOpen', 'westInteriorWall', 'eastInteriorWall'];
+          const essential = ['hallDoorClosed', 'hallDoorLeftClosed', 'hallDoorRightClosed', 'hallDoorOpen', 'hallDoorLeftOpen', 'hallDoorRightOpen', 'westInteriorWall', 'eastInteriorWall'];
           if (essential.some(key => !report.seals[key])) {
             console.error('ENT-GLASS physical doorway/wall check failed:', report.seals);
             process.exit(1);

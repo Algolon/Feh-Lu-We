@@ -116,7 +116,10 @@ export function makeDoor(w: World, g: GameApi, o: DoorOpts) {
   pivot.userData.cullCentre = v3(o.x + (dx * o.width) / 2, o.y0 + o.height / 2, o.z + (dz * o.width) / 2);
 
   const leafCollider = (hx: number, hz: number, ddx: number, ddz: number) => {
-    const sx = ddx ? o.width : th + 0.08, sz = ddz ? o.width : th + 0.08;
+    // ENT-GLASS-R01: physical leaves overlap by 24 mm only in their closed collider.
+    // The visible stiles still meet exactly at X90; a zero-width seam must never allow a centre ray/player through.
+    const seamOverlap = o.style === 'foyer-glass' && o.pair ? 0.024 : 0;
+    const sx = ddx ? o.width + seamOverlap : th + 0.08, sz = ddz ? o.width + seamOverlap : th + 0.08;
     return w.col.addBoxC(hx + (ddx * o.width) / 2, hz + (ddz * o.width) / 2, sx, sz, o.y0, o.y0 + o.height, { occludes: true, tag: o.id });
   };
   let cx = o.x + (dx * o.width) / 2, cz = o.z + (dz * o.width) / 2;

@@ -22,6 +22,7 @@ describe('ENT-GLASS-R01 double glass doors between vestibule and hall', () => {
     expect(doors).toContain("if (o.style === 'glass' || o.style === 'foyer-glass')");
     expect(doors).toContain("const pair = o.pair ?");
     expect(doors).toContain("const pcol = leafCollider");
+    expect(doors).toContain("const seamOverlap = o.style === 'foyer-glass' && o.pair ? 0.024 : 0;");
   });
 
   it('sees hall geometry through shut glass but keeps it as a door portal', () => {
