@@ -142,7 +142,18 @@ vec3 flwStableOtherRooms(vec3 p) {
     if(maskValue<0.0001)continue;
     vec4 source=flwRoomSources[i],tint=flwRoomColors[i];
     float falloff=1.0-smoothstep(0.0,max(0.1,source.w),length(p-source.xyz));
-    outLight+=tint.rgb*tint.w*falloff*maskValue;
+    // Banker's lamp: keep a small, down-facing work-surface pool even when
+    // this fixture is not selected by the scarce real-time LightPool. Unlike
+    // a global intensity increase, the accent fades within the actual desk
+    // footprint and cannot illuminate the whole library rug/walls.
+    float task=0.0;
+    if(i==3){
+      vec3 below=p-(source.xyz-vec3(0.0,0.38,0.0));
+      float tabletop=1.0-smoothstep(0.18,1.58,length(below));
+      float downward=1.0-smoothstep(-0.05,0.35,p.y-source.y);
+      task=2.0*tabletop*downward;
+    }
+    outLight+=tint.rgb*tint.w*(falloff+task)*maskValue;
   }
   return outLight;
 }
@@ -275,7 +286,13 @@ export function installStableLivingMaterials(w:World){
     // Large architectural, timber, stone and upholstery surfaces carry the
     // stable bounce. Small painted ornaments/metalwork keep their original
     // shaders: they neither need an orange wash nor another program variant.
-    if(!['plaster','timber','stone','fabric'].includes(mat.userData.surface)){untouched++;return;}
+    // Local library desk details are authored as painted objects. Include
+    // only mLib paint (not world-wide paint) in the source-bound desk pool.
+    const profile=mat.userData.surface;
+    if(!['plaster','timber','stone','fabric'].includes(profile) &&
+       !(STABLE_ROOMS_PILOT && chunk==='mLib' && profile==='paint')){
+       untouched++;return;
+    }
     let clone=clones.get(mat);
     if(!clone){
       clone=w.material(cloneSurfaceWithDefines(mat));
