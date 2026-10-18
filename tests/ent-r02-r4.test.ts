@@ -35,10 +35,10 @@ describe('ENT-R02-R4 finished join and entrance exterior apron', () => {
     const s=readFileSync('src/world/manor.ts','utf8');
     expect(s).toContain('slab(ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, 84)');
     expect(s).not.toContain('slab(85, 95, 80.4, 84)');
-    expect(s).toContain('const ceilingMesh = new THREE.ShapeGeometry(ceilingPlan)');
+    expect(s).toContain('const ceilingSolid = new THREE.ExtrudeGeometry(ceilingPlan)');
     expect(s).toContain('ceilingPlan.lineTo(ENTRANCE_R02.x0, ENTRANCE_R02.faceZ)');
     expect(s).toContain('ceilingPlan.lineTo(ENTRANCE_R02.x1, ENTRANCE_R02.faceZ)');
-    expect(s).toContain('ceilingMesh.rotateX(Math.PI / 2)');
+    expect(s).toContain('ceilingSolid.rotateX(Math.PI / 2)');
     expect(s).not.toContain('ceiling(c, ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, ENTRANCE_R02.joinZ');
   });
   it('connects inner-wall returns on both stories but does not change exterior door/colliders',()=>{
