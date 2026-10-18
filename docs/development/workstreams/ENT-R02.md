@@ -58,3 +58,26 @@ De high-quality 412x915 software-WebGL vergelijker gebruikte dezelfde camerapose
 **Geen merge of deploy.** Het nieuwe transparante bovenraam activeert buiten-rendering vanuit de galerij en laat nog te veel buitenwereld door het renderpad. Volgende taak: zichtkegelgebonden buitenwereld-/vegetatieculling gericht optimaliseren, zonder het raam weer dicht te zetten; high/low/mobile meten en de buitenaanzicht-assets/documentatie op een tweede QA reviewen. De +3.0m en geroteerde biljartreservering zijn een vervolgrevisie en krijgen een nieuwe browsermeting.
 
 Publieke productie, familieversie en eerdere licht-reviewroutes blijven onaangeroerd.
+
+## ENT-R02-R1 verificatie (aangepaste uitbouw, +3.0 m)
+
+Vervolgrun: [39116977523](https://github.com/Algolon/Feh-Lu-We/actions/runs/39116977523), screenshots/JSON via CI-artifact. Deze herziening is gecontroleerd op acht echte high-quality 412×915-browserbeelden.
+
+**Functionele checks**
+- `typecheck`, de gerichte kamertests, bouw en JavaScript/WebGL-rendering slagen.
+- Alle drie fysieke beneden-loopdoelen bereikt (Z78.6, 82.1, 86.2).
+- Alle vijf vloerhoogtemetingen op de vergrote galerij = Y3.35.
+- Het frame toont de verruimde ontvangsthal, de galerijvloer en het buitenraam. Afwerking van ruwe metselwerk-aansluitingen, dakvoet, plint en portico-plaatsing niet definitief geaccepteerd.
+- De nieuwe tafeloriëntatie is als maatcontract getest, niet als daadwerkelijke keuslag/looptour rond de tafel.
+
+**Performanceblokker blijft**
+| Pose | Baseline calls/tris | R1 calls/tris | Delta |
+|---|---:|---:|---:|
+| gallery-to-window | 136 / 1,075,680 | 232 / 1,550,540 | +96 / +474,860 |
+| gallery-wide | 142 / 1,152,566 | 248 / 1,635,240 | +106 / +482,674 |
+| hall-to-entry | 243 / 1,587,118 | 255 / 1,600,844 | +12 / +13,726 |
+| front-approach | 209 / 1,526,008 | 207 / 1,526,742 | −2 / +734 |
+
+Deze vergelijking gebruikt software-WebGL *high* op identieke locaties. Absolute bovengrenzen worden in de bestaande productiebaseline soms al overschreden; de **extra galerijkosten** zijn echter specifiek een ENT-R02 regressie. Nog niet geoptimaliseerd.
+
+**Eindstatus R1:** DRAFT / BLOCKED. Niet mergen, niet deployen. Architecturale blockout is echt gerealiseerd en de basale navigatie bewezen; performance-optimalisatie, visuele afwerking, bovenverdiepinglooptest inclusief keu, en high/low mobiele continuïteit volgen. 
