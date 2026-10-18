@@ -59,8 +59,8 @@ const UF = 3.35, GF = 0.15, CF = 4.15;
 export const PROPS3D: Prop3D[] = [
   // rear nook side table (round table, top at +0.76), beside the book stack, looking towards the landing
   { id: 'FLW-S3-004', title: 'Houten vogelbeeld', basis: 'APPROVED_3D_REF', room: 'rearNook', mount: 'surface', x: 92.55, y: UF + 0.76, z: 108.84, yaw: Math.PI - 0.45, maxTris: 600 },
-  // front gallery: the south wall pier between the windows, over the bench (face z 80.422)
-  { id: 'FLW-S3-014', title: 'Gesneden zwaluwen', basis: 'OWNER_GROUP_A', room: 'frontGallery', mount: 'wall', x: 90.0, y: UF + 1.72, z: 80.422, yaw: 0, maxTris: 3200, scale: 1.15 }, // D3-b1: Track 01 build ×1.15 (≈ 2.0 × 0.69 m), centred on the pier between the windows, over the gallery bench
+  // ENT-R02: swallow sculpture relocates to the new gallery's east interior wall; former south pier is now an opening
+  { id: 'FLW-S3-014', title: 'Gesneden zwaluwen', basis: 'OWNER_GROUP_A', room: 'frontGallery', mount: 'wall', x: 93.37, y: UF + 1.72, z: 79.30, yaw: -Math.PI / 2, maxTris: 3200, scale: 1.15 }, // D3-b1: Track 01 build ×1.15 (≈ 2.0 × 0.69 m), centred on the pier between the windows, over the gallery bench
   // Reiskamer writing desk (top at +0.76), east half; the open book keeps the west half
   { id: 'FLW-S3-015', title: 'Miniatuurzeilboot', basis: 'OWNER_GROUP_A', room: 'reis', mount: 'surface', x: 79.25, y: UF + 0.76, z: 80.92, yaw: Math.PI / 2, maxTris: 1500, scale: 1.3 }, // D3-b2R: Track 01 build ×1.3 (0.47 m hull, ≈ 0.74 m to the masthead) on the 1.4 m planning desk (×1.15 was set for the 1.1 m desk), the bow east
   // Sterrenkamer: the free bedside (window side), facing into the room
