@@ -4,26 +4,26 @@
       "name": "front-approach",
       "calls": {
         "baseline": 209,
-        "prototype": 207,
-        "delta": -2
+        "prototype": 208,
+        "delta": -1
       },
       "triangles": {
         "baseline": 1526008,
-        "prototype": 1526742,
-        "delta": 734
+        "prototype": 1527198,
+        "delta": 1190
       }
     },
     {
       "name": "front-oblique",
       "calls": {
         "baseline": 149,
-        "prototype": 140,
-        "delta": -9
+        "prototype": 141,
+        "delta": -8
       },
       "triangles": {
         "baseline": 1385090,
-        "prototype": 1384236,
-        "delta": -854
+        "prototype": 1384692,
+        "delta": -398
       }
     },
     {
@@ -35,34 +35,34 @@
       },
       "triangles": {
         "baseline": 1125848,
-        "prototype": 1229412,
-        "delta": 103564
+        "prototype": 1229808,
+        "delta": 103960
       }
     },
     {
       "name": "entry-to-hall",
       "calls": {
         "baseline": 168,
-        "prototype": 233,
-        "delta": 65
+        "prototype": 234,
+        "delta": 66
       },
       "triangles": {
         "baseline": 1303638,
-        "prototype": 1216840,
-        "delta": -86798
+        "prototype": 1217296,
+        "delta": -86342
       }
     },
     {
       "name": "hall-to-entry",
       "calls": {
         "baseline": 243,
-        "prototype": 255,
-        "delta": 12
+        "prototype": 256,
+        "delta": 13
       },
       "triangles": {
         "baseline": 1587118,
-        "prototype": 1600844,
-        "delta": 13726
+        "prototype": 1601300,
+        "delta": 14182
       }
     },
     {
@@ -74,8 +74,8 @@
       },
       "triangles": {
         "baseline": 1075680,
-        "prototype": 1541004,
-        "delta": 465324
+        "prototype": 1541400,
+        "delta": 465720
       }
     },
     {
@@ -87,21 +87,73 @@
       },
       "triangles": {
         "baseline": 1152566,
-        "prototype": 1625704,
-        "delta": 473138
+        "prototype": 1626100,
+        "delta": 473534
       }
     },
     {
       "name": "gallery-to-hall",
       "calls": {
         "baseline": 167,
-        "prototype": 198,
-        "delta": 31
+        "prototype": 199,
+        "delta": 32
       },
       "triangles": {
-        "baseline": 1289570,
-        "prototype": 1107454,
-        "delta": -182116
+        "baseline": 1291678,
+        "prototype": 1107910,
+        "delta": -183768
+      }
+    },
+    {
+      "name": "foyer-to-hall-closed",
+      "calls": {
+        "baseline": 344,
+        "prototype": 144,
+        "delta": -200
+      },
+      "triangles": {
+        "baseline": 1735856,
+        "prototype": 1020784,
+        "delta": -715072
+      }
+    },
+    {
+      "name": "hall-to-foyer-closed",
+      "calls": {
+        "baseline": 243,
+        "prototype": 156,
+        "delta": -87
+      },
+      "triangles": {
+        "baseline": 1589998,
+        "prototype": 1127674,
+        "delta": -462324
+      }
+    },
+    {
+      "name": "front-left-jamb",
+      "calls": {
+        "baseline": 227,
+        "prototype": 184,
+        "delta": -43
+      },
+      "triangles": {
+        "baseline": 1560452,
+        "prototype": 1375520,
+        "delta": -184932
+      }
+    },
+    {
+      "name": "front-right-jamb",
+      "calls": {
+        "baseline": 161,
+        "prototype": 141,
+        "delta": -20
+      },
+      "triangles": {
+        "baseline": 1331506,
+        "prototype": 1329112,
+        "delta": -2394
       }
     }
   ],

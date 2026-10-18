@@ -13,8 +13,8 @@
         "pitch": 0.5286898329640628
       },
       "room": "out",
-      "calls": 207,
-      "triangles": 1526742,
+      "calls": 208,
+      "triangles": 1527198,
       "glError": 0,
       "failedShaders": 0,
       "frontDoor": true
@@ -29,8 +29,8 @@
         "pitch": 0.34968471315675764
       },
       "room": "out",
-      "calls": 140,
-      "triangles": 1384236,
+      "calls": 141,
+      "triangles": 1384692,
       "glError": 0,
       "failedShaders": 0,
       "frontDoor": true
@@ -46,7 +46,7 @@
       },
       "room": "out",
       "calls": 123,
-      "triangles": 1229412,
+      "triangles": 1229808,
       "glError": 0,
       "failedShaders": 0,
       "frontDoor": true
@@ -61,8 +61,8 @@
         "pitch": 0.03997868712329008
       },
       "room": "entryExtension",
-      "calls": 233,
-      "triangles": 1216840,
+      "calls": 234,
+      "triangles": 1217296,
       "glError": 0,
       "failedShaders": 0,
       "frontDoor": true
@@ -77,8 +77,8 @@
         "pitch": 0.2617932217887912
       },
       "room": "hall",
-      "calls": 255,
-      "triangles": 1600844,
+      "calls": 256,
+      "triangles": 1601300,
       "glError": 0,
       "failedShaders": 0,
       "frontDoor": true
@@ -94,7 +94,7 @@
       },
       "room": "frontGallery",
       "calls": 225,
-      "triangles": 1541004,
+      "triangles": 1541400,
       "glError": 0,
       "failedShaders": 0,
       "frontDoor": true
@@ -110,7 +110,7 @@
       },
       "room": "frontGallery",
       "calls": 241,
-      "triangles": 1625704,
+      "triangles": 1626100,
       "glError": 0,
       "failedShaders": 0,
       "frontDoor": true
@@ -125,13 +125,88 @@
         "pitch": -0.1293549528807198
       },
       "room": "frontGalleryExt",
-      "calls": 198,
-      "triangles": 1107454,
+      "calls": 199,
+      "triangles": 1107910,
+      "glError": 0,
+      "failedShaders": 0,
+      "frontDoor": true
+    },
+    {
+      "name": "foyer-to-hall-closed",
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 81.1,
+        "yaw": 0,
+        "pitch": -0.006329029416201829
+      },
+      "room": "vestibule",
+      "calls": 144,
+      "triangles": 1020784,
+      "glError": 0,
+      "failedShaders": 0,
+      "frontDoor": true
+    },
+    {
+      "name": "hall-to-foyer-closed",
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 87,
+        "yaw": 3.141592653589793,
+        "pitch": -0.006666567903868205
+      },
+      "room": "hall",
+      "calls": 156,
+      "triangles": 1127674,
+      "glError": 0,
+      "failedShaders": 0,
+      "frontDoor": true
+    },
+    {
+      "name": "front-left-jamb",
+      "pose": {
+        "x": 87.35,
+        "y": 0,
+        "z": 74.8,
+        "yaw": 0.6617385790306615,
+        "pitch": -0.11837736436109618
+      },
+      "room": "out",
+      "calls": 184,
+      "triangles": 1375520,
+      "glError": 0,
+      "failedShaders": 0,
+      "frontDoor": true
+    },
+    {
+      "name": "front-right-jamb",
+      "pose": {
+        "x": 92.65,
+        "y": 0,
+        "z": 74.8,
+        "yaw": -0.6617385790306615,
+        "pitch": -0.11837736436109618
+      },
+      "room": "out",
+      "calls": 141,
+      "triangles": 1329112,
       "glError": 0,
       "failedShaders": 0,
       "frontDoor": true
     }
   ],
+  "seals": {
+    "frontLeftLow": true,
+    "frontLeftMid": true,
+    "frontRightLow": true,
+    "frontRightMid": true,
+    "frontDoorOpen": true,
+    "hallDoorClosed": true,
+    "westInteriorWall": true,
+    "eastInteriorWall": true,
+    "hallDoorOpen": true
+  },
   "travel": [
     {
       "destination": [
