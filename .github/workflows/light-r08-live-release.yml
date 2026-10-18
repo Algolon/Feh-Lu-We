@@ -1,0 +1,62 @@
+name: LIGHT-R08 live production release gate
+on:
+  push:
+    branches: [release/light-r08-default-production]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run test:budget
+      - run: npm run build
+      - name: Check banker's lamp fix was not dropped
+        run: |
+          grep -Fq 'task=2.0*tabletop*downward;' src/world/stableLighting.ts
+          grep -Fq "chunk==='mLib' && profile==='paint'" src/world/stableLighting.ts
+  live-browser:
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - quality: low
+            portrait: '0'
+          - quality: high
+            portrait: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci && npm run build && npx playwright-core install --with-deps chromium
+      - name: Real WebGL on default homepage and family, sources and rollback
+        env:
+          LIGHT_R08_LIVE_QUALITY: ${{ matrix.quality }}
+          LIGHT_R08_LIVE_PORTRAIT: ${{ matrix.portrait }}
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4188 > /tmp/light-r08-live-preview.log 2>&1 &
+          for i in $(seq 1 40); do
+            curl -sf http://127.0.0.1:4188/Feh-Lu-We/ >/dev/null && break
+            sleep 1
+          done
+          node scripts/light-r08-production-smoke.mjs http://127.0.0.1:4188/Feh-Lu-We/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: light-r08-live-${{ matrix.quality }}-${{ matrix.portrait }}
+          path: light-r08-live-evidence/
+          if-no-files-found: warn
