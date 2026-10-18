@@ -1,0 +1,37 @@
+name: ENT-R02 isolated entry / gallery WebGL review
+on:
+  push:
+    branches:
+      - feature/ent-r02-open-entrance-billiard-gallery
+    paths:
+      - src/world/**
+      - src/content/props3d.ts
+      - tests/ent-r02.test.ts
+      - tests/dev02.test.ts
+      - scripts/ent-r02-review.mjs
+      - .github/workflows/ent-r02-review.yml
+permissions:
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npx vitest run tests/ent-r02.test.ts tests/dev02.test.ts tests/indoorPlants.test.ts
+      - run: npm run build
+      - run: npx playwright-core install --with-deps chromium
+      - name: Capture real in-game views and collision/path evidence
+        run: node scripts/ent-r02-review.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ent-r02-blockout-review
+          path: docs/development/workstreams/ent-r02/review
+          if-no-files-found: warn
