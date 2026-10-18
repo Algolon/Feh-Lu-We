@@ -11,7 +11,7 @@ on:
       - scripts/ent-r02-review.mjs
       - .github/workflows/ent-r02-review.yml
 permissions:
-  contents: read
+  contents: write # review branch only: publish screenshots as ordinary browsable repo files
 jobs:
   review:
     runs-on: ubuntu-latest
@@ -56,6 +56,27 @@ jobs:
           fs.writeFileSync(path+'performance-compare.json',JSON.stringify({views,baselineCommit:'1f9563b31cbdd44fdc1fd17c29750d74440ad9d1',note:'matched high-quality software-WebGL poses; not a mobile hardware FPS measurement'},null,2));
           console.log(JSON.stringify(views));
           NODE
+      - name: Publish browseable screenshots to ENT-R02 branch
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          dir=docs/development/workstreams/ent-r02/images
+          mkdir -p "$dir"
+          if compgen -G 'docs/development/workstreams/ent-r02/review/*.jpg' >/dev/null; then
+            cp docs/development/workstreams/ent-r02/review/*.jpg "$dir/"
+            cp docs/development/workstreams/ent-r02/review/results.json "$dir/" || true
+          fi
+          if test -f docs/development/workstreams/ent-r02/performance-compare.json; then
+            cp docs/development/workstreams/ent-r02/performance-compare.json "$dir/"
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$dir"
+          if ! git diff --cached --quiet; then
+            git commit -m "docs(ent-r02): publish actual in-game review screenshots [skip ci]"
+            git push origin HEAD:feature/ent-r02-open-entrance-billiard-gallery
+          fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:
