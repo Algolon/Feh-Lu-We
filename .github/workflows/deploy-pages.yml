@@ -92,7 +92,8 @@ jobs:
       - name: Checkout LIGHT-R08 source on current production baseline
         uses: actions/checkout@v7
         with:
-          ref: 4a13ec6cd0bf246ca2fa25e0a62761fbbe7e27cd
+          # Verified library desk task-light fix + scoped painted desk surfaces.
+          ref: a1e87494c89d91adc63f439ae0e03c78363b5dae
           path: r08-preview-source
           persist-credentials: false
       - name: Build isolated LIGHT-R08 browser route and device recorder
@@ -100,6 +101,10 @@ jobs:
         run: |
           set -euo pipefail
           cd r08-preview-source
+          # Release must include the reviewed local banker's-lamp fix:
+          # a bounded desk-only contribution and scoped author-paint materials.
+          grep -Fq 'task=2.0*tabletop*downward;' src/world/stableLighting.ts
+          grep -Fq "chunk==='mLib' && profile==='paint'" src/world/stableLighting.ts
           npm ci
           npm run typecheck
           npm test
