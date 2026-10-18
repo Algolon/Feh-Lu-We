@@ -66,7 +66,7 @@ for (const doorName of DOORS) for (const [name, y, pts] of paths) for (const mod
         meshes(false); glass(true, ga); render(cand); crops.push({ k, n: d.n, ref: refPng, cand: G.renderer.domElement.toDataURL('image/png') });
       }
       meshes(false); glass(true, ga); // back to the candidate state
-      if (d.n) rows.push({ k, x: p.x, z: p.z, yaw: p.yaw, pitch: p.pitch, room: w.hereRoom, n: d.n, box: d.box, by, cand: tc, ref: tr, windows: ga.map((a) => [a.x, a.z, a.y0]) });
+      if (d.n) rows.push({ k, x: p.x, y: p.y, z: p.z, yaw: p.yaw, pitch: p.pitch, room: w.hereRoom, n: d.n, box: d.box, by, cand: tc, ref: tr, windows: ga.map((a) => [a.x, a.z, a.y0]) });
     }
     return { frames: poses.length, glassFrames, avgSaved: glassFrames ? Math.round(saved / glassFrames) : 0, maxSaved, diffs: rows, crops };
   }, { poses, mode, doors: DOOR_SETS[doorName], fps: FPS, TH, DUSK });

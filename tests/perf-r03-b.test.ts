@@ -67,6 +67,12 @@ describe('PERF-R03-B: World.windowConstrained', () => {
     expect(lawn.visible || grove.visible || wood.visible).toBe(false);
     w.dispose();
   });
+  it('a neighbour\'s window that runs along the room\'s own wall is in the wedges (botanic window seen from the study through the corner)', () => {
+    const { w, look } = setup((a) => a.z === 80.2 && a.y === 4.75 && (a.x === 98 || a.x === 101.5)); w.isOpen = () => false;
+    look(97.61, 5, 86.09, 98.59, 4.96, 85.87); expect(w.hereRoom).toBe('study');
+    expect(w.glassApertures?.map((a) => a.x).sort()).toEqual([101.5, 98]); // the botanic room is behind a closed door
+    w.dispose();
+  });
   it('glassShows: an instance in the window\'s wedge is shown, one far to its side is not', () => {
     const { w, look } = setup(diningSouth); w.isOpen = () => false;
     look(101.5, 1.75, 83, 101.5, 1.2, 70);

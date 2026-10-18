@@ -371,6 +371,18 @@ export class World {
   /** WINDOW-R01: both sides of a physically open window, limited by actual aperture, view cone and LOS.
    * The glass collider remains solid for movement and picking; only these visual rays skip it.
    */
+  /**
+   * PERF-R03-B: a window whose opening runs along a reachable room's wall (the upstairs botanic room's west window
+   * reaches 0.3 m past the study partition: it is seen from the study through the corner) counts for the wedges too.
+   */
+  private besideReachable(p: NonNullable<PortalDef['aperture']>, reachable: ReadonlySet<string>) {
+    const h = p.width / 2, x0 = p.axis === 'x' ? p.x - h : p.x, x1 = p.axis === 'x' ? p.x + h : p.x;
+    const z0 = p.axis === 'z' ? p.z - h : p.z, z1 = p.axis === 'z' ? p.z + h : p.z, wall = 0.4;
+    return !!this.rooms?.rooms.some((r) => reachable.has(r.id) && p.y >= r.y0 && p.y <= r.y1
+      && x1 > r.x0 - wall && x0 < r.x1 + wall && z1 > r.z0 - wall && z0 < r.z1 + wall
+      // the opening itself must lie beside the room, not only touch its corner
+      && (p.axis === 'x' ? Math.min(x1, r.x1) - Math.max(x0, r.x0) > 0.05 : Math.min(z1, r.z1) - Math.max(z0, r.z0) > 0.05));
+  }
   private clearWindowInView(eye: THREE.Vector3, cam: THREE.PerspectiveCamera | undefined, portal: PortalDef, reachable: ReadonlySet<string>, los = true) {
     const p = portal.aperture;
     // Do not require the camera to already be INSIDE this window's room: a kitchen
@@ -378,7 +390,7 @@ export class World {
     // Limit candidates to rooms reachable via OPEN interior portals (no glass/window
     // shortcuts), then retain the aperture cone + physical LOS below.
     const windowRoom = portal.a === 'out' ? portal.b : portal.a;
-    if (!cam || !portal.seeThrough || !p || (this.hereRoom !== 'out' && !reachable.has(windowRoom))) return false;
+    if (!cam || !portal.seeThrough || !p || (this.hereRoom !== 'out' && !reachable.has(windowRoom) && (los || !this.besideReachable(p, reachable)))) return false;
     tmpTo.set(p.x - eye.x, p.y - eye.y, -p.z - eye.z);
     const dist = tmpTo.length();
     if (dist < 0.01 || dist > (this.hereRoom === 'out' ? 25 : 40)) return false;
