@@ -281,6 +281,8 @@ export class TreeBatches {
       if (vis && wins) {
         vis = false;
         for (const q of wins) { const px = it.p.x - q.x, pz = -it.p.z - q.z, pd = Math.hypot(px, pz) || 1; if ((px * q.dx + pz * q.dz) / pd > q.cos - it.r / pd) { vis = true; break; } }
+        // PERF-R03-B: seen only through glass, the window's own wedge (plan and height) instead of its plan cone
+        if (vis && this.w?.glassApertures) vis = this.w.glassShows(camPos, it.p, it.r);
       }
       // the LOD whose band holds d, with 3 m hysteresis: a tree keeps its current LOD until 3 m past a boundary
       const profile = TREE_LOD_PROFILE;

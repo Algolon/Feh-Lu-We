@@ -105,7 +105,7 @@ export class World {
   /** Room-based visibility (estate): regions are static chunks that belong to a set of rooms ('out' = outdoors). */
   rooms: RoomGraph | null = null;
   isOpen: (door: string) => boolean = () => false;
-  private regions: { meshes: THREE.Object3D[]; rooms: Set<string>; on: boolean; far: number; outFar: number; sph: THREE.Sphere; shade?: boolean; doors?: RegionDoor[]; ext?: PlanBox[] }[] = [];
+  private regions: { meshes: THREE.Object3D[]; rooms: Set<string>; on: boolean; far: number; outFar: number; sph: THREE.Sphere; shade?: boolean; doors?: RegionDoor[]; ext?: PlanBox[]; win?: (PlanBox | null)[]; meshOn?: boolean[] }[] = [];
   visibleRooms = new Set<string>(['out']);
   hereRoom = 'out';
   constructor(public readonly id: SceneId) {}
@@ -207,6 +207,40 @@ export class World {
       return b.isEmpty() ? [] : [plan(b)];
     });
   }
+  /**
+   * PERF-R03-B: outdoor regions whose meshes are culled per mesh while the outdoors is seen ONLY through glass (inside,
+   * no exterior door or glass door in view: World.outdoorInView). Each mesh is then drawn only while its bounds lie in
+   * the wedge the eye sees through one of the clear windows of a reachable room in the view cone (World.clearWindowInView
+   * without its sampled line of sight, which can miss a sliver of glass), tested as
+   * for exterior regions (apertureShows: the opening as a tunnel through the wall, plan and height) with margins for
+   * the eye's movement between culling updates. No distance limit: a mesh in a window's wedge is drawn at any range.
+   * With an exterior door in view, outside, or in the glass room, every mesh follows its region as before.
+   */
+  windowConstrained(chunks: string[]) {
+    const box = new THREE.Box3();
+    for (const r of this.regions) {
+      if (r.ext || !r.meshes.some((m) => chunks.includes(m.userData.chunk) || chunks.includes(m.userData.region))) continue;
+      r.win = r.meshes.map((m) => {
+        box.makeEmpty().expandByObject(m);
+        return box.isEmpty() ? null : { x0: box.min.x, x1: box.max.x, z0: -box.max.z, z1: -box.min.z, y0: box.min.y, y1: box.max.y };
+      });
+      r.meshOn = r.meshes.map(() => r.on);
+    }
+  }
+  /** PERF-R03-B: the clear windows in view while the outdoors is seen only through glass (else null). */
+  glassApertures: Aperture[] | null = null;
+  private glassKey = '';
+  /**
+   * PERF-R03-B: through glass only, can one of the windows in view show this object (world position of its base,
+   * bounding radius)? Its box is ± r across and from r below to 2 r above the base (a crown above its foot), with the
+   * window-constrained margins. Always true while the outdoors is not seen through glass only.
+   */
+  glassShows(eye: THREE.Vector3, p: THREE.Vector3, r: number) {
+    const a = this.glassApertures;
+    if (!a) return true;
+    const b = { x0: p.x - r, x1: p.x + r, z0: -p.z - r, z1: -p.z + r, y0: p.y - r, y1: p.y + 2 * r };
+    return a.some((q) => this.apertureShows(eye, q, b, 1.0, 0.6));
+  }
   /** The exterior apertures in view from inside (plan centre, outward normal, half width); see exteriorRegion. */
   private exteriorApertures(eye: THREE.Vector3, cam: THREE.PerspectiveCamera | undefined, clearWindows: PortalDef[]) {
     const out: Aperture[] = [];
@@ -231,7 +265,7 @@ export class World {
     return out;
   }
   /** Can the eye see any of the box through this aperture (the wedge from the eye through its width and height)? */
-  private apertureShows(eye: THREE.Vector3, a: Aperture, b: PlanBox) {
+  private apertureShows(eye: THREE.Vector3, a: Aperture, b: PlanBox, mw = 0.5, mh = 0.1) {
     if (a.half === Infinity || (a.nx === 0 && a.nz === 0)) return true;
     const ex = eye.x, ez = -eye.z, tx = -a.nz, tz = a.nx;
     const eu = (ex - a.x) * a.nx + (ez - a.z) * a.nz, ev = (ex - a.x) * tx + (ez - a.z) * tz;
@@ -245,15 +279,18 @@ export class World {
         const vc = ev + ((v - ev) * (p - eu)) / (u - eu);
         if (vc < lo) lo = vc; if (vc > hi) hi = vc;
       }
-      return lo <= a.half + 0.5 && hi >= -a.half - 0.5;
+      return lo <= a.half + mw && hi >= -a.half - mw;
     };
-    for (const cx of [b.x0, b.x1]) for (const cz of [b.z0, b.z1]) { const u = (cx - a.x) * a.nx + (cz - a.z) * a.nz; if (u > 0) { if (u < u0) u0 = u; if (u > u1) u1 = u; } }
+    let behind = false;
+    for (const cx of [b.x0, b.x1]) for (const cz of [b.z0, b.z1]) { const u = (cx - a.x) * a.nx + (cz - a.z) * a.nz; if (u > 0) { if (u < u0) u0 = u; if (u > u1) u1 = u; } else behind = true; }
+    // a box that straddles the opening's plane reaches right up to the glass: its nearest depth beyond it is ~0
+    if (behind && u0 !== Infinity) u0 = 0.02;
     // behind the opening, or outside its width at either face of the wall
     if (u0 === Infinity || !across(-a.depth) || !across(a.depth)) return false;
     // height: the rays through the opening's bottom and top edges, at the box's nearest and farthest depth beyond it
     let yb = Infinity, yt = -Infinity;
     for (const u of [u0, u1]) { const k = (u - eu) / -eu; yb = Math.min(yb, eye.y + (a.y0 - eye.y) * k); yt = Math.max(yt, eye.y + (a.y1 - eye.y) * k); }
-    return yb - 0.1 <= b.y1 && yt + 0.1 >= b.y0;
+    return yb - mh <= b.y1 && yt + mh >= b.y0;
   }
   /**
    * A region doorway that is open, in the cone round the view and seen through: sight lines from the eye through points
@@ -334,7 +371,7 @@ export class World {
   /** WINDOW-R01: both sides of a physically open window, limited by actual aperture, view cone and LOS.
    * The glass collider remains solid for movement and picking; only these visual rays skip it.
    */
-  private clearWindowInView(eye: THREE.Vector3, cam: THREE.PerspectiveCamera | undefined, portal: PortalDef, reachable: ReadonlySet<string>) {
+  private clearWindowInView(eye: THREE.Vector3, cam: THREE.PerspectiveCamera | undefined, portal: PortalDef, reachable: ReadonlySet<string>, los = true) {
     const p = portal.aperture;
     // Do not require the camera to already be INSIDE this window's room: a kitchen
     // window must remain transparent when seen through the dining/kitchen arch.
@@ -349,6 +386,7 @@ export class World {
     const half = Math.atan(Math.tan(THREE.MathUtils.degToRad(cam.fov / 2)) * cam.aspect) + THREE.MathUtils.degToRad(32);
     const angular = Math.acos(THREE.MathUtils.clamp(tmpTo.dot(forward) / dist, -1, 1));
     if (angular - Math.asin(Math.min(1, Math.hypot(p.width, p.height) / (2 * dist))) > half) return false;
+    if (!los) return true; // PERF-R03-B: the window-constrained wedges (a sliver of a window can be visible between rays)
     // Sample the centre and four offsets, and continue past the wall thickness to avoid false positives.
     for (const across of [0, -0.27, 0.27]) for (const up of [0, -0.25, 0.25]) {
       const tx = p.x + (p.axis === 'x' ? across * p.width : 0);
@@ -439,6 +477,16 @@ export class World {
       // from outside, interiors are drawn only through an open doorway within 22 m in (the cone round) the view
       this.interiorThroughDoor = this.hereRoom !== 'out' || this.outdoorInView(eye, cam, 22) || clearWindows.length > 0;
       let apertures: ReturnType<World['exteriorApertures']> | null = null;
+      // PERF-R03-B: the outdoors seen only through glass (no exterior door in view): window-constrained regions are
+      // then culled per mesh (windowConstrained)
+      const glassOnly = this.hereRoom !== 'out' && this.hereRoom !== 'cons' && this.visibleRooms.has('out') && clearWindows.length > 0 && !this.outdoorInView(eye, cam, 26);
+      // the same windows for per-instance culling (tree batches: World.glassShows); a new set re-runs their culling
+      // the wedges use every clear window of a reachable room in the view cone, without the sampled line of sight that
+      // qualifies a window above (it can miss a sliver of glass seen between balusters or past a jamb)
+      const glass = glassOnly ? this.exteriorApertures(eye, cam, this.rooms.portals.filter((p) => p.kind === 'window' && p.seeThrough && this.clearWindowInView(eye, cam, p, reachable, false))) : null;
+      const glassKey = glass ? glass.map((a) => `${a.x},${a.z},${a.y0}`).join('|') : '';
+      this.glassApertures = glass;
+      if (glassKey !== this.glassKey) { this.glassKey = glassKey; this.outdoorWindowsVersion++; }
       for (const r of this.regions) {
         let on = false;
         if (r.ext) { // PERF-R03-A: exterior region (exteriorRegion)
@@ -450,7 +498,15 @@ export class World {
         if (on && r.doors && !r.rooms.has(this.hereRoom) && !clearWindows.some((p) => r.rooms.has(p.a === 'out' ? p.b : p.a))) on = this.doorwayInView(eye, cam, r.doors, r.rooms);
         if (on && r.far < Infinity) on = r.sph.center.distanceTo(eye) - r.sph.radius < r.far;
         if (on && r.outFar < Infinity && this.hereRoom === 'out') on = this.interiorThroughDoor && r.sph.center.distanceTo(eye) - r.sph.radius < r.outFar;
-        if (on !== r.on) { r.on = on; for (const m of r.meshes) { m.visible = on; m.userData.regionOff = !on; } }
+        if (r.win) {
+          // per mesh: through glass only, a mesh is drawn while one of the windows in view can show it; margins 1.0 m
+          // across and 0.6 m up / down at the opening cover the eye's movement until the next culling update (0.12 s)
+          r.on = on;
+          for (let i = 0; i < r.meshes.length; i++) {
+            const b = r.win[i], v = on && (!glass || !b || glass.some((a) => this.apertureShows(eye, a, b, 1.0, 0.6)));
+            if (v !== r.meshOn![i]) { r.meshOn![i] = v; const m = r.meshes[i]; m.visible = v; m.userData.regionOff = !v; }
+          }
+        } else if (on !== r.on) { r.on = on; for (const m of r.meshes) { m.visible = on; m.userData.regionOff = !on; } }
         // an interior seen from outside (through a doorway) lies under its own roof: it casts no sun shadow worth a
         // second render of its furniture in the shadow pass; inside, its casters are restored
         const shade = this.hereRoom !== 'out' || r.rooms.has('out');

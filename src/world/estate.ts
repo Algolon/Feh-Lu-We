@@ -170,6 +170,8 @@ export function buildEstate(g: GameApi): { world: World; extras: SceneExtras } {
   w.roomRegion(['ground', 'paths', 'wall', 'fence', 'garden', 'grounds', 'forest', 'outdoor', 'hills'], ['out', 'cons', 'sauna', 'shed', 'cottageEntry', 'cottageRoom']);
   w.roomRegion(['wick'], ['out', 'cons', 'sauna', 'shed', 'cottageEntry', 'cottageRoom'], 40);
   for (const ch of ['fireCamp', 'well']) w.roomRegion([ch], ['out', 'shed'], 55); // DEV-04B hero places // DEV-04A: the enclosed wickerman clearing (screened by woodland: drawn within ~47 m of its centre)
+  // PERF-R03-B: seen from inside only through glass, the outdoors is drawn per mesh within the windows' wedges
+  w.windowConstrained(['ground', 'paths', 'wall', 'fence', 'garden', 'grounds', 'forest', 'outdoor', 'hills', 'wick', 'fireCamp', 'well', 'cottage', 'cons', 'glass']);
 
   w.spawn = { x: SITES.gate.x, y: 0, z: 3, yaw: 0, pitch: 0.02 };
   w.checkpoints.push(

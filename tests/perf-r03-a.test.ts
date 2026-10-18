@@ -87,6 +87,21 @@ describe('PERF-R03-A: World.exteriorRegion', () => {
     look(64, 1.7, 86.5, 72, 2, 86.5); expect(w.hereRoom).toBe('out'); expect(mesh.visible).toBe(true); // from the garden
     w.dispose();
   });
+  it('a region straddling the opening\'s plane is tested from the glass outward (PERF-R03-B fix)', () => {
+    // a box from 120 m behind the dining south window to 100 m in front of it, 0–18 m tall; the eye high above the
+    // window (looking down from the upper landing) sees the ground just outside through it
+    // only that window in the graph (the bare World has no walls: any other window would also qualify)
+    const R = estateRooms(), w = new World('estate'); w.isOpen = () => true;
+    w.rooms = new RoomGraph(R.rooms, R.portals.filter((p) => p.kind !== 'window' || (p.aperture?.x === 98 && p.aperture?.z === 80.2 && p.aperture?.y === 1.85)), R.thresholds);
+    const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial());
+    mesh.position.set(100, 9, -90); mesh.userData.chunk = 'bigT'; w.scene.add(mesh); mesh.updateMatrixWorld();
+    mesh.userData.visibilityBoxes = [new THREE.Box3(new THREE.Vector3(-20, -0.5, -200), new THREE.Vector3(220, 18, 20))];
+    w.exteriorRegion(['bigT'], Infinity);
+    const cam = new THREE.PerspectiveCamera(65, 915 / 412, 0.05, 200);
+    cam.position.set(87.81, 5, -97.1); cam.lookAt(98, 1.8, -80.2); cam.updateMatrixWorld(); w.updateCulling(cam.position, cam);
+    expect(w.hereRoom).toBe('landing'); expect(mesh.visible).toBe(true);
+    w.dispose();
+  });
   it('a region is never shown through an opening it lies behind', () => {
     const { w, mesh, look } = setup(true); w.isOpen = () => false;
     // the dining room's east windows (x 107.8, facing east): the hedge is west of that wall plane
