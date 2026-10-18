@@ -36,15 +36,18 @@ describe('DEV-04D D2 ship rule', () => {
   });
 });
 
-describe('PROP-R10 living-room hearth corner composition', () => {
+describe('PROP-R12 fireplace tool stand clearance by rear wall', () => {
+  // Derive the exclusion zone from the actual buildHearth collider corners,
+  // not only from the visible stone jamb (PROP-R11's placement error).
+  const wallX = 72.4;
+  const hearth = { x: 72.4, z: 86.7, halfSpanZ: 1.75, depth: 0.8 };
   const basket = { x: 73.43, z: 84.48, radius: 0.28 };
-  const tools = { x: 73.55, z: 85.12, radius: 0.215 };
-  const hearth = { x: 72.4, z: 86.7, leftEdgeZ: 86.7 - 1.38 };
+  const tools = { x: 72.72, z: 84.63, radius: 0.215 };
 
-  it('places exactly one set and one basket in both art variants, without touching interactions', () => {
+  it('positions a single stand behind the unchanged basket in both room styles', () => {
     const manor = readFileSync('src/world/manor.ts', 'utf8');
     const dress = readFileSync('src/world/dressing.ts', 'utf8');
-    const toolCall = 'fireplaceToolSet(c, 73.55, 85.12, GF, 0)';
+    const toolCall = 'fireplaceToolSet(c, 72.72, 84.63, GF, 0)';
     const basketCall = 'logBasket(c, 73.43, 84.48, GF, 0.3)';
     expect(manor.split(toolCall)).toHaveLength(2);
     expect(manor.split(basketCall)).toHaveLength(3);
@@ -55,17 +58,31 @@ describe('PROP-R10 living-room hearth corner composition', () => {
     const builder = dress.slice(dress.indexOf('export function fireplaceToolSet'), dress.indexOf('function mergeAll'));
     for (const part of ['ShovelBlade', 'BrushBlock', 'PokerHook', 'Tongs', 'Pedestal']) expect(builder).toContain(part);
     expect(builder).not.toMatch(/make(Inspect|Action|Pickup|Lamp)/);
+    expect(tools.x).toBeLessThan(basket.x); // behind the basket, towards the wall
+    expect(tools.z).toBeGreaterThan(basket.z); // just to its right, closer to the hearth
   });
 
-  it('places tools at the marked spot between basket and hearth without intersecting either collider', () => {
-    expect(tools.x).toBeGreaterThan(basket.x); // slightly roomward of the wood basket
-    expect(tools.z).toBeGreaterThan(basket.z); // between the basket and fireplace
-    expect(tools.x - tools.radius).toBeGreaterThan(hearth.x + 0.8 + 0.1); // actual fireplace collider extends x to 73.2
-    expect(hearth.leftEdgeZ - (basket.z + basket.radius)).toBeGreaterThan(0.2);
-    expect(tools.z - tools.radius).toBeLessThan(hearth.leftEdgeZ); // beside the outside corner, not against the wall
+  it('has ~10 cm physical clearance to wall and hearth collision footprint, without clipping the basket', () => {
+    const wallClearance = tools.x - tools.radius - wallX;
+    // Facing PI/2: hearth collider extends from z=86.7-1.75 to z=86.7+1.75.
+    const hearthSideZ = hearth.z - hearth.halfSpanZ;
+    const hearthClearance = hearthSideZ - (tools.z + tools.radius);
+    expect(wallClearance).toBeGreaterThanOrEqual(0.09);
+    expect(wallClearance).toBeLessThanOrEqual(0.13);
+    expect(hearthClearance).toBeGreaterThanOrEqual(0.09);
+    expect(hearthClearance).toBeLessThanOrEqual(0.13);
     const separation = Math.hypot(tools.x - basket.x, tools.z - basket.z);
-    expect(separation - tools.radius - basket.radius).toBeGreaterThan(0.12);
-    expect(tools.z - tools.radius).toBeGreaterThan(83.55); // clear of the red curtain near z 83
+    expect(separation - basket.radius - tools.radius).toBeGreaterThan(0.18);
+    expect(tools.z - tools.radius).toBeGreaterThan(83.55); // clear of the curtain near z 83
+
+    // Keep assertions coupled to actual gameplay dimensions, to catch another
+    // regression from assuming the narrow visual mantel is the collider.
+    const hearthSource = readFileSync('src/world/hearth.ts', 'utf8');
+    const dressingSource = readFileSync('src/world/dressing.ts', 'utf8');
+    expect(hearthSource).toContain('P(0.8, -1.75)');
+    expect(hearthSource).toContain('P(0.8, 1.75)');
+    expect(dressingSource).toContain('c.col.addCircle(x, z, 0.215, y0, y0 + 0.96)');
+    expect(hearth.depth).toBe(0.8);
   });
 });
 
