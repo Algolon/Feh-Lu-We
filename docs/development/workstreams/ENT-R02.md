@@ -99,3 +99,21 @@ P2 heeft een functionele fout verholpen: voor een speler **binnen** wordt een we
 | Gallery-wide | 248 / 1,635,240 | 241 / 1,625,704 | −7 calls / −9,536 tris |
 
 **P2 verbetert de logica, maar voldoet nog niet aan het performancebudget.** Nog **geen merge of deploy**. Volgende performanceproef moet expliciet de batch- en scene-culling van werkelijk zichtbare buitenwereld en zijvleugel onderzoeken, met beeld/pixelbewijs dat de ramen nog correct functioneren. Daarna architectonische afwerking en echte bovenverdiepingslooprondgang incl. biljarttafel en keu.
+
+## ENT-R02-R3 — Afgesloten entree + dichte gevel naast voordeur (owner review 18 oktober 2026)
+
+Owner correction: entree en voormalige vestibule vormen **één vergrote ontvangstzone**, maar de grote hal moet daarvan **door een volledige scheidingswand gescheiden** blijven. De galerij boven blijft één doorlopende biljartgeschikte ruimte. Aan weerszijden van de voordeur mogen geen buitengevelgaten zitten.
+
+**Implementatie**:
+- `manor.ts`: de gevelopbouw met links/rechts losse stenen vlakken die pas op Y0.5 begonnen is vervangen door **één doorlopende voorgevel** vanaf Y0.0 tot `TOP`, met precies één deurdoorgang (1.7×2.62 m, gelijk aan `door.front`) en één werkelijk transparante raamuitsparing op de verdieping. Beide zijretouren sluiten aan op de volledige muurdikte. Plint, portico en bovenraam blijven behouden.
+- `manor.ts`: de 7.6 m brede open hal-/vestibuleboog op Z84 is weer een **volledige binnenwand** met doorgang 1.5×2.35 m en een normaal werkende, aan beide zijden te bedienen binnendeur `door.entranceHall`, standaard dicht maar zonder puzzelslot.
+- `roomdefs.ts`: `vestibule ↔ hall` is nu een deurportal, en verbreekt in gesloten toestand de directe licht-/zichtdoorloop. `entryExtension ↔ vestibule` blijft een open archportal. `frontGalleryExt ↔ frontGallery` blijft ongehinderd.
+- Tests: `tests/ent-r02.test.ts` controleert de nieuwe wand/portal, de standaard gesloten zichtrelatie en een open route.
+
+**Werkelijke high-quality browserreview** [run 39126650154](https://github.com/Algolon/Feh-Lu-We/actions/runs/39126650154):
+- Binnenaanzicht van de **gesloten haldeur**, buitenaanzicht en beide zijstijlen zijn vastgelegd en [direct bekijkbaar](images/).
+- **9/9 collider- en raytests geslaagd**: beide zijvlakken naast de voordeur zijn vanaf 35 cm boven maaiveld dicht; ook op 1.45 m hoogte dicht; front door kan wél open; gesloten haldeur blokkeert, open haldeur laat door; beide flankerende binnenmuren zijn dicht.
+- De looproute voor de deur in open toestand bereikt alle drie bestemmingen; vijf vloerhoogtepunten van de bovengalerij zijn Y3.35; geen nieuwe WebGL-/shaderfouten.
+- De gesloten deur cullt de grote hal vanaf de vestibule: vanuit `foyer-to-hall-closed` zijn 144 draw calls gemeten. De **oude, nog niet opgeloste galerij-performanceblokker** blijft bestaan (gallery-window 225 calls/~1.54M tris, gallery-wide 241 calls/~1.63M tris). Daarom heeft de ENT-R02-reviewworkflow nog een rode budgetgate; deze run is **niet mislukt wegens de nieuwe scheidingswand of gevelgaten**, maar wegens het bekende absolute budget.
+
+**Releasebesluit: nog niet mergen of deployen.** Owner corrections R3 zijn functioneel en visueel bewezen; architecturale afwerking, opening-width/frame-overlap controle, high/low mobiel performance en bovenverdieping-biljart loop/keutests blijven vóór vrijgave vereist.
