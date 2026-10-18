@@ -48,15 +48,17 @@ export function corniceRun(c: Ctx, x0: number, x1: number, z0: number, zW: numbe
 export function buildEntrance(c: Ctx, s: EntranceSite) {
   const k = c.k, stone = EXTERIOR_STUDY ? exteriorMats().dressed : k.M.stone, o = { chunk: c.chunk }, oj = { chunk: c.chunk, jitter: 0.015 }, gf = s.gf;
   const [cx0, cx1] = s.colX, cz = s.colZ, bay = s.bayZ;
+  // ENT-R02: retain the complete approved portico vocabulary while moving its authored ground treads.
+  const zShift = 79.55 - bay, Z = (original: number) => original - zShift;
   const ABACUS = gf + 2.76; // the old abacus top: the beam datum is unchanged
 
   // ---- steps and landing (the walk surfaces stay the shell's floor + step heights: 0.075 and GF)
-  boxMM(c.b, stone, STONE.riser, 87.4, 92.6, -0.1, 0.045, 78.2, 80.0, { ...oj, uv: 1 }); // step body (riser in the darker base stone)
-  boxMM(c.b, stone, STONE.tread, 87.375, 92.625, 0.045, 0.075, 78.175, 78.6, { ...oj, uv: 1 }); // tread with a 2.5 cm nosing
-  boxMM(c.b, stone, STONE.tread, 87.375, 87.8, 0.045, 0.075, 78.6, 79.95, { ...oj, uv: 1 }); // tread returns at the ends
-  boxMM(c.b, stone, STONE.tread, 92.2, 92.625, 0.045, 0.075, 78.6, 79.95, { ...oj, uv: 1 });
-  boxMM(c.b, stone, STONE.riser, 87.8, 92.2, 0.075, 0.118, 78.59, 78.62, o); // landing riser band (1 cm proud of the slab's own face: no shared plane)
-  boxMM(c.b, stone, STONE.tread, 87.775, 92.225, 0.118, 0.15, 78.575, 78.6, oj); // landing nosing lip (top flush with GF)
+  boxMM(c.b, stone, STONE.riser, 87.4, 92.6, -0.1, 0.045, Z(78.2), Z(80.0), { ...oj, uv: 1 }); // step body (riser in the darker base stone)
+  boxMM(c.b, stone, STONE.tread, 87.375, 92.625, 0.045, 0.075, Z(78.175), Z(78.6), { ...oj, uv: 1 }); // tread with a 2.5 cm nosing
+  boxMM(c.b, stone, STONE.tread, 87.375, 87.8, 0.045, 0.075, Z(78.6), Z(79.95), { ...oj, uv: 1 }); // tread returns at the ends
+  boxMM(c.b, stone, STONE.tread, 92.2, 92.625, 0.045, 0.075, Z(78.6), Z(79.95), { ...oj, uv: 1 });
+  boxMM(c.b, stone, STONE.riser, 87.8, 92.2, 0.075, 0.118, Z(78.59), Z(78.62), o); // landing riser band (1 cm proud of the slab's own face: no shared plane)
+  boxMM(c.b, stone, STONE.tread, 87.775, 92.225, 0.118, 0.15, Z(78.575), Z(78.6), oj); // landing nosing lip (top flush with GF)
   for (const x of [87.775, 92.2]) boxMM(c.b, stone, STONE.tread, x, x + 0.025, 0.118, 0.15, 78.6, 79.95, oj);
 
   // ---- columns on plinth blocks
@@ -102,8 +104,8 @@ export function buildEntrance(c: Ctx, s: EntranceSite) {
     boxMM(c.b, stone, STONE.baseTop, a - 0.02, b2 + 0.02, gf, gf + 0.3, bay - 0.09, bay + 0.01, { ...oj, uv: 0.8 }); // jamb plinth
   }
   boxMM(c.b, k.M.paint, STONE.dressed, dx0 - 0.2, dx1 + 0.2, DH, DH + 0.14, bay - 0.06, bay + 0.01, oj); // lintel: the surround's head
-  for (const [a, b2] of [[dx0, dx0 + 0.03], [dx1 - 0.03, dx1]] as const) boxMM(c.b, k.M.paint, STONE.shadowed, a, b2, gf, DH, bay + 0.01, 79.99, o); // reveal linings
-  boxMM(c.b, k.M.paint, STONE.shadowed, dx0, dx1, DH, DH + 0.02, bay + 0.01, 79.99, o); // soffit of the reveal under the lintel
+  for (const [a, b2] of [[dx0, dx0 + 0.03], [dx1 - 0.03, dx1]] as const) boxMM(c.b, k.M.paint, STONE.shadowed, a, b2, gf, DH, bay + 0.01, Z(79.99), o); // reveal linings
+  boxMM(c.b, k.M.paint, STONE.shadowed, dx0, dx1, DH, DH + 0.02, bay + 0.01, Z(79.99), o); // soffit of the reveal under the lintel
 }
 
 /**
