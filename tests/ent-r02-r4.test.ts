@@ -41,6 +41,8 @@ describe('ENT-R02-R4 finished join and entrance exterior apron', () => {
   it('connects inner-wall returns on both stories but does not change exterior door/colliders',()=>{
     const s=readFileSync('src/world/manor.ts','utf8');
     expect(s).toContain('const sideWallJoinZ = 80.54');
+    expect(s).toContain("frameOpenings: !face.id.startsWith('south-')");
+    expect(s).toContain("boxMM(c.b, k.M.plaster, '#f1e6cf', xa, xb, y0, y1, 79.98, 80.54");
     expect(s).toContain('[GF, SLAB_UNDERSIDE], [UF, UCEIL]');
     expect(s).toContain('innerFaceX - 0.018, innerFaceX + 0.018');
     expect(s).toContain("id: 'door.entranceHall'");
