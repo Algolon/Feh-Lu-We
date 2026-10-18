@@ -54,40 +54,67 @@ const stat=()=>page.evaluate(()=>{
      family:localStorage.getItem('fehluwe.family.save')!=null}
  };
 });
-async function sample(id,pose,source,active){
- const reading=await page.evaluate(({pose,source,active})=>{
+// Freeze ONE rendered scene and compare light OFF/ON without advancing game
+// time, player position, visibility, global indoor mix, or the dynamic pool.
+async function measurePair(id,pose,source){
+ const pair=await page.evaluate(({pose,source})=>{
    const g=window.__game,w=g.world;
-   for(const id of ['lamp.hallChandelier','lamp.hallConsole','lamp.libraryChandelier','lamp.library'])
-     g.state.lit[id]=id===source?active:false;
-   g.changed();
+   const sourceIds=['lamp.hallChandelier','lamp.hallConsole','lamp.libraryChandelier','lamp.library'];
+   const savedLit=Object.fromEntries(sourceIds.map(id=>[id,g.state.lit[id]]));
    g.player.setPose({...pose,pitch:pose.pitch??0});
    g.player.applyCamera(g.camera);
    w.updateCulling(g.camera.position,g.camera);
-   for(let n=0;n<4;n++)g.tick(.05);
-   const lights=g.pool.lights;
-   const original=lights.map(l=>l.intensity);
-   lights.forEach(l=>l.intensity=0);
+   for(let i=0;i<3;i++)g.tick(.05);
+   const pool=g.pool.lights,prior=pool.map(l=>l.intensity);
+   pool.forEach(l=>l.intensity=0);
    const renderer=g.renderer,gl=renderer.getContext();
-   try{
+   // Global lighting is a separately known variable: hold it constant
+   // while measuring the source contribution across the same exact pixels.
+   g.extras.env.update(0,g.camera.position,1);
+   const W=gl.drawingBufferWidth,H=gl.drawingBufferHeight;
+   const x0=Math.floor(W*.22),x1=Math.floor(W*.78),y0=Math.floor(H*.22),y1=Math.floor(H*.78);
+   const read=active=>{
+     for(const id of sourceIds)g.state.lit[id]=id===source?active:false;
+     g.changed();
      renderer.render(w.scene,g.camera);
-     const W=gl.drawingBufferWidth,H=gl.drawingBufferHeight;
-     const rgb=new Uint8Array(W*H*4);gl.readPixels(0,0,W,H,gl.RGBA,gl.UNSIGNED_BYTE,rgb);
-     let value=0,count=0;
-     for(let y=Math.floor(H*.22);y<Math.floor(H*.78);y++)
-       for(let x=Math.floor(W*.22);x<Math.floor(W*.78);x++){
-         const a=(y*W+x)*4;
-         value+=rgb[a]*.2126+rgb[a+1]*.7152+rgb[a+2]*.0722;count++;
-       }
-     return {luminance:value/count,room:w.hereRoom,
-       states:w.scene.userData.stableRooms?.state?.(),
+     renderer.render(w.scene,g.camera);
+     const pixels=new Uint8Array(W*H*4);
+     gl.readPixels(0,0,W,H,gl.RGBA,gl.UNSIGNED_BYTE,pixels);
+     let lum=0,n=0;
+     for(let y=y0;y<y1;y++)for(let x=x0;x<x1;x++){
+       const i=(y*W+x)*4;
+       lum+=pixels[i]*.2126+pixels[i+1]*.7152+pixels[i+2]*.0722;n++;
+     }
+     return {pixels,luminance:lum/n,states:w.scene.userData.stableRooms?.state?.()??null,
        calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,
        programs:renderer.info.programs?.length??null,glError:gl.getError()};
-   }finally{lights.forEach((l,i)=>l.intensity=original[i]);}
- },{pose,source,active});
- if(reading.glError!==0)throw Error('WebGL error at '+id+': '+reading.glError);
- if(active)await page.screenshot({path:out+'/'+id+'.jpg',type:'jpeg',quality:82,timeout:120000});
- return reading;
+   };
+   try{
+      const off=read(false),on=read(true);
+      let delta=0,maxDelta=0,count=0,changed=0;
+      for(let y=y0;y<y1;y++)for(let x=x0;x<x1;x++){
+        const i=(y*W+x)*4;
+        const a=off.pixels[i]*.2126+off.pixels[i+1]*.7152+off.pixels[i+2]*.0722;
+        const b=on.pixels[i]*.2126+on.pixels[i+1]*.7152+on.pixels[i+2]*.0722;
+        const d=Math.abs(b-a);
+        delta+=d;maxDelta=Math.max(maxDelta,d);if(d>2)changed++;count++;
+      }
+      return {off:{...off,pixels:undefined},on:{...on,pixels:undefined},
+        deltaLum:on.luminance-off.luminance,meanAbsDelta:delta/count,
+        maxDelta,pctChangedOver2:100*changed/count,room:w.hereRoom};
+   }finally{
+      for(const id of sourceIds)g.state.lit[id]=savedLit[id];
+      g.changed();
+      pool.forEach((l,i)=>l.intensity=prior[i]);
+   }
+ },{pose,source});
+ if(pair.off.glError!==0||pair.on.glError!==0)
+   throw Error('WebGL error at '+id+': '+JSON.stringify(pair));
+ // Keep the last drawn ON frame as screenshot evidence.
+ await page.screenshot({path:out+'/'+id+'.jpg',type:'jpeg',quality:82,timeout:120000});
+ return pair;
 }
+
 try{
  await boot('','fehluwe.save');
  const ready=await stat();
@@ -98,16 +125,22 @@ try{
   {id:'hall',pose:{x:89.9,z:94,y:.15,yaw:Math.PI,pitch:.19},source:'lamp.hallChandelier',min:1},
   {id:'hall-console',pose:{x:90,z:87,y:.15,yaw:-Math.PI/2,pitch:0},source:'lamp.hallConsole',min:.5},
   {id:'library',pose:{x:78,z:103.5,y:.15,yaw:Math.PI,pitch:0},source:'lamp.libraryChandelier',min:.45},
-  {id:'library-desk',pose:{x:75,z:99,y:.15,yaw:Math.PI/2,pitch:0},source:'lamp.library',min:0}
+  {id:'library-desk',pose:{x:75,z:99,y:.15,yaw:-Math.PI/2,pitch:-.1},source:'lamp.library',min:0}
  ];
  for(const item of poses){
-   const off=await sample(item.id+'-off',item.pose,item.source,false);
-   const on=await sample(item.id+'-on',item.pose,item.source,true);
-   const diff=on.luminance-off.luminance;
-   if(diff<item.min)throw Error('No independent stable light from '+item.source+': '+diff);
-   states.push({id:item.id,source:item.source,delta:+diff.toFixed(3),
-      calls:on.calls,tris:on.triangles,programs:on.programs,
-      sourceState:on.states});
+   const pair=await measurePair(item.id,item.pose,item.source);
+   const idx=['lamp.hallChandelier','lamp.hallConsole','lamp.libraryChandelier','lamp.library'].indexOf(item.source);
+   const dark=pair.off.states,lit=pair.on.states;
+   if(!dark||!lit||dark[idx]!==0||!(lit[idx]>0))
+     throw Error('No independent source-bound state for '+item.source+': '+JSON.stringify({dark,lit}));
+   if(pair.meanAbsDelta<Math.min(item.min*.15,.10))
+     throw Error('No visible world-surface response from '+item.source+': '+JSON.stringify(pair));
+   states.push({id:item.id,source:item.source,
+      signedDelta:+pair.deltaLum.toFixed(3),
+      meanAbsDelta:+pair.meanAbsDelta.toFixed(3),
+      changedPixelsOver2:+pair.pctChangedOver2.toFixed(2),
+      calls:pair.on.calls,tris:pair.on.triangles,programs:pair.on.programs,
+      sourceState:lit});
  }
  const mainSave=await page.evaluate(()=>localStorage.getItem('fehluwe.save'));
  await boot('game/','fehluwe.family.save');
