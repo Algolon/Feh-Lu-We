@@ -14,6 +14,8 @@ const query = typeof location === 'undefined' ? new URLSearchParams() : new URLS
 export const STABLE_ROOMS_PILOT = query.get('stableRooms') === '1' ||
   (query.get('stableRooms') !== '0' && typeof location !== 'undefined' &&
     (location.pathname.includes('/light-r08/') || location.pathname.endsWith('/light-r08')));
+/** Surface-corrected R08 lighting (same-build baseline: ?r08SurfaceFix=0). */
+export const R08_SURFACE_FIX=STABLE_ROOMS_PILOT && query.get('r08SurfaceFix')!=='0';
 export const STABLE_LIVING_PILOT = STABLE_ROOMS_PILOT || query.get('stableLiving') === '1' ||
   (query.get('stableLiving') !== '0' && typeof location !== 'undefined' &&
    (location.pathname.includes('/light-r06d/') || location.pathname.endsWith('/light-r06d')));
@@ -118,6 +120,31 @@ type RoomMaskBounds={ [K in keyof typeof STABLE_HALL_MASK]: number };
  * compile on actual WebGL/SwiftShader even when TypeScript passed.
  */
 export const glslFloat=(v:number)=>Number.isInteger(v)?v.toFixed(1):String(v);
+
+/** Source: LIB_R01.desk in libraryR01.ts: x73.17/z99, 1.3×2.2 m, top y0.81.
+ * The light exists on actual desktop geometry, not as a transparent disc at
+ * the same height as the floor or crossing the front edge of the desk.
+ */
+export const LIBRARY_DESK_LIGHT_SURFACE = Object.freeze({
+ xMin:72.52,xInside:72.60,xEndInside:73.75,xMax:73.84,
+ zMin:-100.16,zInside:-100.09,zEndInside:-97.91,zMax:-97.84,
+ yMin:0.78,yInside:0.803,yEndInside:0.842,yMax:0.872,
+});
+const deskBounds=LIBRARY_DESK_LIGHT_SURFACE;
+const DESK_GLSL = /*glsl*/ `
+float flwDeskSurface(vec3 p, vec3 src) {
+ float region=
+ smoothstep(${glslFloat(deskBounds.xMin)},${glslFloat(deskBounds.xInside)},p.x)*
+ (1.0-smoothstep(${glslFloat(deskBounds.xEndInside)},${glslFloat(deskBounds.xMax)},p.x))*
+ smoothstep(${glslFloat(deskBounds.zMin)},${glslFloat(deskBounds.zInside)},p.z)*
+ (1.0-smoothstep(${glslFloat(deskBounds.zEndInside)},${glslFloat(deskBounds.zMax)},p.z))*
+ smoothstep(${glslFloat(deskBounds.yMin)},${glslFloat(deskBounds.yInside)},p.y)*
+ (1.0-smoothstep(${glslFloat(deskBounds.yEndInside)},${glslFloat(deskBounds.yMax)},p.y));
+ vec2 d=(p.xz-src.xz)/vec2(0.66,0.92);
+ return region*(1.0-smoothstep(0.0,1.0,length(d)));
+}
+`;
+
 function roomMaskShader(m:RoomMaskBounds){
  const f=glslFloat;
  return `(smoothstep(${f(m.x0out)},${f(m.x0in)},p.x) *
@@ -130,6 +157,7 @@ function roomMaskShader(m:RoomMaskBounds){
 const ROOMS_GLSL = /*glsl*/ `
 uniform vec4 flwRoomSources[4];
 uniform vec4 flwRoomColors[4];
+${R08_SURFACE_FIX ? DESK_GLSL : ''}
 vec3 flwStableOtherRooms(vec3 p) {
   // Evaluate a source only if it belongs to this authored space, never
   // when the player or camera happens to be near it.
@@ -148,10 +176,9 @@ vec3 flwStableOtherRooms(vec3 p) {
     // footprint and cannot illuminate the whole library rug/walls.
     float task=0.0;
     if(i==3){
-      vec3 below=p-(source.xyz-vec3(0.0,0.38,0.0));
-      float tabletop=1.0-smoothstep(0.18,1.58,length(below));
-      float downward=1.0-smoothstep(-0.05,0.35,p.y-source.y);
-      task=2.0*tabletop*downward;
+      ${R08_SURFACE_FIX
+        ? 'task=1.9*flwDeskSurface(p,source.xyz);'
+        : 'vec3 below=p-(source.xyz-vec3(0.0,0.38,0.0)); float tabletop=1.0-smoothstep(0.18,1.58,length(below)); float downward=1.0-smoothstep(-0.05,0.35,p.y-source.y); task=2.0*tabletop*downward;'}
     }
     outLight+=tint.rgb*tint.w*(falloff+task)*maskValue;
   }
@@ -175,6 +202,17 @@ function maskAt(m:RoomMaskBounds,x:number,y:number,z:number):number{
  return smooth(m.x0out,m.x0in,x)*(1-smooth(m.x1in,m.x1out,x))*
  smooth(m.z0out,m.z0in,z)*(1-smooth(m.z1in,m.z1out,z))*
  smooth(m.y0out,m.y0in,y)*(1-smooth(m.y1in,m.y1out,y));
+}
+/** CPU analogue of the bounded desktop patch; never contributes to floor,
+ * a rug, desk vertical edges, a neighbouring room or beyond the desk lip.
+ */
+export function stableDeskSurfaceAt(x:number,y:number,z:number,sourceX=73.04,sourceZ=-99.72):number{
+ const b=LIBRARY_DESK_LIGHT_SURFACE;
+ const area=smooth(b.xMin,b.xInside,x)*(1-smooth(b.xEndInside,b.xMax,x))*
+ smooth(b.zMin,b.zInside,z)*(1-smooth(b.zEndInside,b.zMax,z))*
+ smooth(b.yMin,b.yInside,y)*(1-smooth(b.yEndInside,b.yMax,y));
+ const d=Math.hypot((x-sourceX)/.66,(z-sourceZ)/.92);
+ return area*(1-smooth(0,1,d));
 }
 export const stableHallMaskAt=(x:number,y:number,z:number)=>maskAt(STABLE_HALL_MASK,x,y,z);
 export const stableLibraryMaskAt=(x:number,y:number,z:number)=>maskAt(STABLE_LIBRARY_MASK,x,y,z);
