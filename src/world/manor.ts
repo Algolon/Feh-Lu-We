@@ -678,7 +678,7 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
     const sh = new ContactShadows();
     buildHearth(w, g, c, { id: 'fire.living', x: 72.4, z: 86.7, y: GF, facing: Math.PI / 2, ceil: CEIL, mantel: true, defaultLit: true, style: 'v2', shadows: sh });
     livingRoomV2(w, g, c, sh);
-    logBasket(c, 73.05, 84.45, GF, 0.3); // DEV-04B: firewood by the hearth
+    logBasket(c, 73.43, 84.48, GF, 0.3); // PROP-R10: wood basket in front of the tool stand
     sh.build(w.scene, c.chunk);
   } else {
   buildHearth(w, g, c, { id: 'fire.living', x: 72.4, z: 86.7, y: GF, facing: Math.PI / 2, ceil: CEIL, mantel: true, defaultLit: true });
@@ -698,15 +698,15 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   const fl = floorLamp(w, 84.2, GF, 83.6);
   makeLamp(w, g, { id: 'lamp.livingFloor', ...fl, name: 'staande lamp', defaultOn: true, hit: [0.5, 1.9, 0.5], intensity: 5, distance: 8, patch: { y: GF + 0.03, r: 1.5 } });
   for (const z of [83, 90.5]) curtains(c, 72.45, z, GF + 0.85, Math.PI / 2, 1.1, 2.0, '#7a3a3a');
-  logBasket(c, 73.05, 84.45, GF, 0.3); // DEV-04B: as in the sample room (both sets keep identical colliders)
+  logBasket(c, 73.43, 84.48, GF, 0.3); // PROP-R10: same basket placement in default/sample variants
   }
   // PROP-R08: place the existing FLW-S3-033 screen once in mLiv, shared by sample and normal
   // room variants. It stands beyond the RIGHT edge of the fireplace and clear of the curtain.
   S3_BUILDERS['FLW-S3-033'](c);
-  // PROP-R09: low-footprint four-tool stand to the LEFT of the hearth, between
-  // the firewood basket (z 84.45) and the hearth surround (edge z ≈ 85.32).
-  // Called once outside the sample/default fork, so both game variants share it.
-  fireplaceToolSet(c, 73.05, 84.99, GF, 0);
+  // PROP-R10: move the tool set nearer the western wall and away from the
+  // hearth; the firewood basket stands in FRONT of it, towards the room.
+  // One shared mLiv call for normal/sample variants; no additional draw calls.
+  fireplaceToolSet(c, 72.75, 84.15, GF, 0);
   c.chunk = 'mHall';
 
   c.chunk = 'mLib';
