@@ -3,9 +3,13 @@ import { preview } from 'vite';
 import { chromium } from 'playwright-core';
 import { mkdirSync, writeFileSync } from 'node:fs';
 
-const out = 'docs/development/workstreams/ent-r02/review';
+const baseline = process.env.ENT_R02_BASELINE === '1';
+const out = baseline ? 'docs/development/workstreams/ent-r02/baseline' : 'docs/development/workstreams/ent-r02/review';
 mkdirSync(out, { recursive: true });
-const server = await preview({ preview: { host: '127.0.0.1', port: 4229, strictPort: true } });
+const server = await preview({
+  root: process.env.ENT_R02_ROOT || process.cwd(),
+  preview: { host: '127.0.0.1', port: 4229, strictPort: true },
+});
 const browser = await chromium.launch({
   executablePath: process.env.CHROME || chromium.executablePath(),
   args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'],
@@ -66,7 +70,12 @@ try {
       };
     }, { stand, target });
     results.push({ name, ...stats });
-    await page.screenshot({ path: `${out}/${name}.jpg`, quality: 88, timeout: 60000 });
+    const shot = await page.screenshot({ path: `${out}/${name}.jpg`, quality: 82, timeout: 60000 });
+    if (process.env.ENT_R02_THUMBS === '1' && ['front-approach', 'entry-to-hall', 'gallery-wide', 'hall-to-entry'].includes(name)) {
+      // Low-res data comes back through the job log; the original full screenshots remain in the artifact.
+      const tiny = await page.screenshot({ type: 'jpeg', quality: 40, timeout: 60000 });
+      console.log('ENT_R02_IMAGE_' + name + ' ' + tiny.toString('base64'));
+    }
     console.log(name, JSON.stringify(stats));
   }
   const travel = await page.evaluate(() => {
@@ -92,12 +101,12 @@ try {
     }
     return probes;
   });
-  const passed = errors.length === 0
-    && results.every(x => x.glError === 0 && x.failedShaders === 0 && x.frontDoor
-      && x.calls <= 150 && x.triangles <= 750000)
+  const basic = errors.length === 0 && results.every(x => x.glError === 0 && x.failedShaders === 0 && x.frontDoor);
+  const passed = baseline ? basic : basic
+    && results.every(x => x.calls <= 150 && x.triangles <= 750000)
     && travel.every(x => x.reached)
     && gallerySupport.every(x => Math.abs(x.y - 3.35) < .06);
-  const report = { passed, errors, results, travel, gallerySupport,
+  const report = { passed, baseline, errors, results, travel, gallerySupport,
     scope: 'Software WebGL, high-quality 412x915, isolated branch. Roof join and gameplay still require visual owner review.' };
   writeFileSync(`${out}/results.json`, JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify({ passed, errors, travel, gallerySupport }));
