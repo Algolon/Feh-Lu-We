@@ -212,21 +212,16 @@ function shell(w: World, c: Ctx) {
   const sideWallJoinZ = 80.54;
   wall(c, 'z', E.x0, E.zWindow, sideWallJoinZ, 0, TOP, { ...stone, t: 0.4, exterior: -1, skin, uv: 2.4 });
   wall(c, 'z', E.x1, E.zWindow, sideWallJoinZ, 0, TOP, { ...stone, t: 0.4, exterior: 1, skin, uv: 2.4 });
-  // ENT-R02-R4D: a genuine plaster corner pier. Merely skinning the cut
-  // of the old south-wall masonry proved insufficient: the visible ashlar
-  // lies proud of its end grain. These compact finished return piers sit
-  // in front of it at BOTH floor levels, with no overlapping coplanar
-  // plaster planes. Their footprint occupies the existing wall corner,
-  // never the new lobby's central walking/billiard play envelope.
-  for (const side of [
-    { x0: E.x0-.16, x1: E.x0+.45 },
-    { x0: E.x1-.45, x1: E.x1+.16 },
-  ] as const) {
-    for (const [y0,y1] of [[GF,SLAB_UNDERSIDE],[UF,UCEIL]] as const) {
-      boxMM(c.b, k.M.plaster, '#f1e6cf', side.x0, side.x1,
-        y0, y1, 79.94, 80.60,
-        {chunk:c.chunk,uv:2.4,jitter:0,shadow:false});
-    }
+  // ENT-R02-R4E: finish the *rear cut face* of each projecting side wall,
+  // which is what exposed the exterior ashlar when viewed from either floor.
+  // A narrow plaster end cap follows the existing wall thickness. Unlike the
+  // temporary R4D 0.66 m deep filler pier this projects only 30 mm into the
+  // room, keeping the original entrance/gallery proportions and walkway.
+  for (const sideX of [E.x0, E.x1]) {
+    boxMM(c.b, k.M.plaster, '#f1e6cf',
+      sideX - 0.222, sideX + 0.222, 0, TOP,
+      sideWallJoinZ - 0.008, sideWallJoinZ + 0.032,
+      { chunk: c.chunk, uv: 2.4, jitter: 0, shadow: false });
   }
   for (const x of [E.x0, E.x1]) for (let i = 0, y = 0.7; y < TOP - 0.5; i++, y += 0.42) {
     const la = i % 2 ? 0.3 : 0.55;
