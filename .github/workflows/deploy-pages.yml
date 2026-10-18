@@ -190,7 +190,7 @@ jobs:
           grep -Fq '/Feh-Lu-We/ent-r02/assets/' dist/ent-r02/index.html
           grep -Fq '/Feh-Lu-We/assets/' dist/index.html
           grep -Fq '/Feh-Lu-We/assets/' dist/game/index.html
-      - name: ENT-R02 preview smoke: route, isolated save and scene
+      - name: 'ENT-R02 preview smoke: route, isolated save and scene'
         shell: bash
         run: |
           set -euo pipefail
