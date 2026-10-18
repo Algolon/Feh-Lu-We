@@ -2,6 +2,7 @@ import { MushroomVision } from './mushroomVision';
 import { mushroomIntensity, easeMushroom } from '../world/mushroomField';
 // Game orchestrator: renderer + loop, input → player, interaction picking, save/restore, scenes, UI glue.
 import * as THREE from 'three';
+import { STABLE_LIVING_PILOT, STABLE_LIVING_IDS, STABLE_NO_POOL } from '../world/stableLighting';
 import { ART, SLICE } from './artflags';
 import { legacyRelocation } from './relocate';
 import { SliceUI } from '../slice/ui';
@@ -874,7 +875,12 @@ export class Game implements GameApi {
     if (this.pool) {
       // LIGHT-R04: point-light allocation is spatial only. Camera rotation or
       // watching a fixture cannot change the scene's illumination.
-      this.pool.update(dt, this.time, w.lamps, this.camera.position, this.extras.rooms, (d) => this.state.open[d] === true);
+      // LIGHT-R08 live: fixtures always illuminate their authored surfaces
+      // when ON; only other/effect lights participate in dynamic slot tuning.
+      const lampCandidates=STABLE_LIVING_PILOT&&w.id==='estate'
+        ? (STABLE_NO_POOL?[]:w.lamps.filter(l=>!STABLE_LIVING_IDS.has(l.id)))
+        : w.lamps;
+      this.pool.update(dt, this.time, lampCandidates, this.camera.position, this.extras.rooms, (d) => this.state.open[d] === true);
     }
     tickFires(this.time, this.settings.reducedMotion);
     const targetDusk = Math.min(1, (solvedCount(this.state) / REQUIRED_COUNT) * 0.85 + (this.state.finished ? 0.15 : 0));
