@@ -1,0 +1,35 @@
+name: ENT-R02-R5 real joints and ceiling review
+on:
+  push:
+    branches: [fix/ent-r02-r5-real-joins-and-gallery-ceiling]
+    paths:
+      - src/world/manor.ts
+      - tests/ent-r02-r4.test.ts
+      - tests/ent-r02.test.ts
+      - scripts/ent-r02-r4-review.mjs
+      - .github/workflows/ent-r02-r5-review.yml
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright-core install --with-deps chromium
+      - name: Render real mobile gallery artwork and ceilings
+        run: ENT_R02_R4_THUMB=1 node scripts/ent-r02-r4-review.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ent-r02-r5-in-game-proof
+          path: docs/development/workstreams/ent-r02/r4-review/
+          if-no-files-found: warn
