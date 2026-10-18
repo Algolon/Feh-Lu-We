@@ -193,22 +193,20 @@ function shell(w: World, c: Ctx) {
   // Two side-bearing walls reach the former main facade; a large opening at Z80.2
   // connects it to the old vestibule and frontGallery. New and old gallery slabs join.
   const E = ENTRANCE_R02, face = E.faceZ;
-  const facadeStone = EXTERIOR_STUDY ? '#ffffff' : '#f6ead0';
-  const bay = (x0: number, x1: number, y0: number, y1: number) => {
-    boxMM(c.b, stone.mat, facadeStone, x0, x1, y0, y1, face, E.frontWallBackZ, { chunk: c.chunk, uv: 2.4 });
-    if (y0 < 2) c.col.addBox(x0, x1, face, E.frontWallBackZ, 0, y1, { occludes: true });
-  };
-  // Side wings enclose the whole extension; facing planes share one material family.
-  wall(c, 'z', E.x0, face, 80.2, 0, TOP, { ...stone, t: 0.4, exterior: -1, skin, uv: 2.4 });
-  wall(c, 'z', E.x1, face, 80.2, 0, TOP, { ...stone, t: 0.4, exterior: 1, skin, uv: 2.4 });
-  bay(E.x0, 89.05, 0.5, TOP);
-  bay(90.95, E.x1, 0.5, TOP);
-  // The dressed central opening below is still the SAME front door (door.front).
-  // Over it, physical window geometry and an aperture replace decorative opaque glass.
-  wall(c, 'x', E.zWindow, 89.05, 90.95, 3.0, TOP, {
-    ...stone, t: E.frontWallBackZ - face, exterior: -1, skin, uv: 2.4, winStyle: 'manor',
-    windows: [{ at: 90, w: E.windowW, sill: E.windowY0 - 3.0, h: E.windowH, transparent: true }],
+  // ENT-R02-R3: one genuine contiguous front wall, from floor to upper cornice.
+  // Earlier disconnected 0.5 m-high panels left floor-level daylight beside the door.
+  // The clear 1.7 m door opening coincides exactly with door.front's hinge/leaf,
+  // and the upper aperture remains a physically transparent 1.2 x 1.6 m window.
+  wall(c, 'x', E.zWindow, E.x0, E.x1, 0, TOP, {
+    ...stone, t: E.frontWallBackZ - face, exterior: -1, skin, uv: 2.4,
+    winStyle: 'manor',
+    openings: [{ at: 90, w: 1.7, h: 2.62 }],
+    windows: [{ at: 90, w: E.windowW, sill: E.windowY0, h: E.windowH, transparent: true }],
   });
+  // Side walls join the front wall at its full thickness all the way to the floor;
+  // no slivers into the exterior along the return corners.
+  wall(c, 'z', E.x0, E.zWindow, 80.2, 0, TOP, { ...stone, t: 0.4, exterior: -1, skin, uv: 2.4 });
+  wall(c, 'z', E.x1, E.zWindow, 80.2, 0, TOP, { ...stone, t: 0.4, exterior: 1, skin, uv: 2.4 });
   for (const x of [E.x0, E.x1]) for (let i = 0, y = 0.7; y < TOP - 0.5; i++, y += 0.42) {
     const la = i % 2 ? 0.3 : 0.55;
     if (EXTERIOR_STUDY) {
@@ -368,7 +366,7 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   const P = { t: 0.16, mat: k.M.plaster, color: '#f3e9d4', uv: 2.4 };
   wall(c, 'z', 85, 80.4, 94, GF, CEIL, { ...P, openings: [{ at: 88.5, w: 3.0, h: 2.6 }] }); // living | hall
   wall(c, 'z', 95, 80.4, 92, GF, CEIL, { ...P, openings: [{ at: 85.2, w: 1.9, h: 2.6 }] }); // hall | dining (south of the stair foot)
-  wall(c, 'x', 84, 85, 95, GF, CEIL, { ...P, openings: [{ at: 90, w: 7.6, h: 2.94 }] }); // ENT-R02: open foyer | grand hall, narrow bearing piers retained
+  wall(c, 'x', 84, 85, 95, GF, CEIL, { ...P, openings: [{ at: 90, w: 1.5, h: 2.35 }] }); // ENT-R02-R3: enclosed entry/vestibule, single closable interior door to the grand hall
   wall(c, 'x', 98, 85, 92, GF, CEIL, { ...P, openings: [{ at: 88.5, w: 4.2, h: 2.7 }] }); // hall | lobby
   wall(c, 'z', 85, 94, 109.6, GF, CEIL, { ...P, openings: [{ at: 101, w: 1.0, h: 2.3 }] }); // library | lobby/billiard
   wall(c, 'x', 94, 72.4, 85, GF, CEIL, { ...P, openings: [{ at: 79, w: 1.6, h: 2.4 }] }); // living | library
@@ -439,6 +437,9 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
 
   // ---------------------------------------------------------------- doors
   makeDoor(w, g, { id: 'door.front', x: 89.15, z: ENTRANCE_R02.zWindow, dir: 'x+', width: 1.7, height: 2.62, y0: GF, swing: 1, color: '#6b3f22', key: 'frontKey', thickness: 0.09, style: EXTERIOR_STUDY && EXTERIOR_DETAILS ? 'estate' : 'panel' });
+  // This door closes the full-width vestibule-to-hall wall. No lock or puzzle item.
+  // The exterior expansion and old vestibule remain one interior zone until here.
+  makeDoor(w, g, { id: 'door.entranceHall', x: 89.25, z: 84, dir: 'x+', width: 1.5, height: 2.35, y0: GF, swing: -1, color: '#6b4426', style: 'panel' });
   makeDoor(w, g, { id: 'door.library', x: 85, z: 100.5, dir: 'z+', width: 1.0, height: 2.25, y0: GF, swing: -1, color: '#5a3520' });
   makeDoor(w, g, { id: 'door.billiard', x: 89.5, z: 104, dir: 'x+', width: 1.0, height: 2.25, y0: GF, swing: 1 }); // v0.2: moved east for the WC (same id/state)
   makeDoor(w, g, { id: 'door.guestWC', x: 86.05, z: 104, dir: 'x+', width: 0.9, height: 2.2, y0: GF, swing: 1, color: '#efe6d6' });
