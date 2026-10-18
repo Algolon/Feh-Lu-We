@@ -36,47 +36,57 @@ describe('DEV-04D D2 ship rule', () => {
   });
 });
 
-describe('PROP-R09 wrought-iron hearth tool set', () => {
-  it('places exactly one tool set to the LEFT of the living hearth, for both art variants', () => {
+describe('PROP-R10 living-room hearth corner composition', () => {
+  const basket = { x: 73.43, z: 84.48, radius: 0.28 };
+  const tools = { x: 72.75, z: 84.15, radius: 0.215 };
+  const hearth = { x: 72.4, z: 86.7, leftEdgeZ: 86.7 - 1.38 };
+
+  it('places exactly one set and one basket in both art variants, without touching interactions', () => {
     const manor = readFileSync('src/world/manor.ts', 'utf8');
     const dress = readFileSync('src/world/dressing.ts', 'utf8');
-    const call = 'fireplaceToolSet(c, 73.05, 84.99, GF, 0)';
-    expect(manor.split(call)).toHaveLength(2);
-    expect(manor.indexOf(call)).toBeGreaterThan(manor.indexOf("S3_BUILDERS['FLW-S3-033'](c)"));
-    expect(manor.indexOf(call)).toBeLessThan(manor.indexOf("c.chunk = 'mHall';", manor.indexOf("S3_BUILDERS['FLW-S3-033'](c)")));
-    expect(manor.indexOf(call)).toBeGreaterThan(manor.indexOf("logBasket(c, 73.05, 84.45, GF, 0.3); // DEV-04B: as in the sample room"));
-    expect(dress).toContain("export function fireplaceToolSet");
-    expect(dress).toContain("a.end({ gap: 0.025 })");
-  });
-  it('keeps the tool set separated from the basket and the hearth, with no new interaction', () => {
-    const basketZ = 84.45, setZ = 84.99, hearthZ = 86.7;
-    const basketR = 0.28, setR = 0.215, surroundLeft = hearthZ - 1.38;
-    expect(setZ - basketZ - basketR - setR).toBeGreaterThan(0.03);
-    expect(surroundLeft - (setZ + setR)).toBeGreaterThan(0.1);
-    const src = readFileSync('src/world/dressing.ts', 'utf8');
-    const builder = src.slice(src.indexOf('export function fireplaceToolSet'), src.indexOf('function mergeAll'));
+    const toolCall = 'fireplaceToolSet(c, 72.75, 84.15, GF, 0)';
+    const basketCall = 'logBasket(c, 73.43, 84.48, GF, 0.3)';
+    expect(manor.split(toolCall)).toHaveLength(2);
+    expect(manor.split(basketCall)).toHaveLength(3);
+    expect(manor.indexOf(toolCall)).toBeGreaterThan(manor.indexOf("S3_BUILDERS['FLW-S3-033'](c)"));
+    expect(manor.indexOf(toolCall)).toBeLessThan(manor.indexOf("c.chunk = 'mHall';", manor.indexOf("S3_BUILDERS['FLW-S3-033'](c)")));
+    expect(dress).toContain('export function fireplaceToolSet');
+    expect(dress).toContain('export function logBasket');
+    const builder = dress.slice(dress.indexOf('export function fireplaceToolSet'), dress.indexOf('function mergeAll'));
     for (const part of ['ShovelBlade', 'BrushBlock', 'PokerHook', 'Tongs', 'Pedestal']) expect(builder).toContain(part);
     expect(builder).not.toMatch(/make(Inspect|Action|Pickup|Lamp)/);
   });
+
+  it('puts the tools behind the basket nearer the wall and farther from the fire, with collision clearance', () => {
+    expect(tools.x).toBeLessThan(basket.x); // the wall is west (smaller X)
+    expect(tools.z).toBeLessThan(basket.z); // the fire is north (larger Z)
+    expect(tools.x - tools.radius).toBeGreaterThan(hearth.x); // wall clearance
+    expect(hearth.leftEdgeZ - (basket.z + basket.radius)).toBeGreaterThan(0.2);
+    expect(hearth.leftEdgeZ - (tools.z + tools.radius)).toBeGreaterThan(0.2);
+    const separation = Math.hypot(tools.x - basket.x, tools.z - basket.z);
+    expect(separation - tools.radius - basket.radius).toBeGreaterThan(0.12);
+    expect(tools.z - tools.radius).toBeGreaterThan(83.55); // clear of the red curtain near z 83
+  });
 });
 
-describe('PROP-R08 fireplace screen relocation', () => {
-  it('places the one approved FLW-S3-033 beside the interior living hearth, not the BBQ', () => {
+describe('PROP-R10 fire screen orientation', () => {
+  it('keeps the single approved interior fire screen and turns it 30 degrees toward the hearth', () => {
     const screen = PROPS3D.find(p => p.id === 'FLW-S3-033')!;
     expect(screen.room).toBe('living');
     expect(screen.mount).toBe('ground');
-    expect(screen.yaw).toBeCloseTo(Math.PI / 2);
-    expect(screen.x).toBeGreaterThan(72.8);
-    expect(screen.x).toBeLessThan(73.45);
-    expect(screen.z).toBeGreaterThan(88.4); // past the hearth's right-hand edge
-    expect(screen.z).toBeLessThan(89.5); // before the curtain at 90.5
-
+    expect(screen.yaw).toBeCloseTo((2 * Math.PI) / 3, 8);
+    expect(screen.x).toBeCloseTo(73.1);
+    expect(screen.z).toBeCloseTo(88.95);
+    const halfWidthZ = 0.38 * Math.sin(screen.yaw);
+    expect(screen.z + halfWidthZ).toBeLessThan(90.5 - 0.55);
+    const innerEdgeX = screen.x - 0.38 * Math.abs(Math.cos(screen.yaw));
+    expect(innerEdgeX).toBeGreaterThan(72.4);
     const manor = readFileSync('src/world/manor.ts', 'utf8');
     const grounds = readFileSync('src/world/grounds.ts', 'utf8');
     const call = "S3_BUILDERS['FLW-S3-033'](c)";
-    expect(manor.split(call)).toHaveLength(2); // exactly once, outside the normal/sample branch
+    expect(manor.split(call)).toHaveLength(2);
     expect(manor.indexOf(call)).toBeGreaterThan(manor.indexOf("if (ART.set === 'sample')"));
-    expect(manor.indexOf(call)).toBeGreaterThan(manor.indexOf("} else {\n  buildHearth"));
+    expect(manor.indexOf(call)).toBeGreaterThan(manor.indexOf("} else {\\n  buildHearth".replace('\\n', '\n')));
     expect(grounds).not.toContain(call);
   });
 });
