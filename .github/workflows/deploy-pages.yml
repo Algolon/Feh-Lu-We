@@ -162,7 +162,7 @@ jobs:
       - name: Checkout ENT-R02 approved prototype snapshot
         uses: actions/checkout@v7
         with:
-          ref: 3c6d4fba87ae808d6c57435cabf664da75e21b7f
+          ref: 646d0f65433f8c40cfa8cf01a5cb86ecfc33ac65
           path: ent-r02-preview-source
           persist-credentials: false
       - name: Build isolated ENT-R02 with independent save namespace
@@ -178,6 +178,28 @@ jobs:
           new="const STORAGE_PREFIX = typeof location !== 'undefined' && location.pathname.startsWith('/Feh-Lu-We/ent-r02/') ? 'fehluwe.ent-r02' : FAMILY_EDITION ? 'fehluwe.family' : 'fehluwe';"
           assert source.count(old)==1, 'isolated preview save-prefix contract changed'
           p.write_text(source.replace(old,new))
+          # First-time-only direct entrance test; ordinary /ent-r02/ is untouched.
+          p=Path('src/main.ts')
+          source=p.read_text()
+          head="import './ui/style.css';"
+          assert source.count(head)==1
+          source=source.replace(head,head+"\nimport { defaultState } from './core/state';")
+          orig="function boot() {\n  const canvas = document.getElementById('game') as HTMLCanvasElement;"
+          injected="""function boot() {
+  // Isolated review route, explicit opt-in. NEVER overwrite an existing preview save.
+  if (new URLSearchParams(location.search).has('entreeTour')
+      && !localStorage.getItem('fehluwe.ent-r02.save')) {
+    const tour=defaultState();
+    tour.scene='estate';
+    tour.flags.leftHome=true;
+    tour.inventory=['invitation','torch','matches','notebook','frontKey'];
+    tour.unlocked=['lock.door.front'];
+    tour.player.estate={ x:90, y:0, z:73.5, yaw:0, pitch:0 };
+    localStorage.setItem('fehluwe.ent-r02.save',JSON.stringify(tour));
+  }
+  const canvas = document.getElementById('game') as HTMLCanvasElement;"""
+          assert source.count(orig)==1, 'ENT-R02 review boot hook moved'
+          p.write_text(source.replace(orig,injected))
           PY
           npm ci
           npm run typecheck
