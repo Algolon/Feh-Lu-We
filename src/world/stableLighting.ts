@@ -5,6 +5,7 @@
 import * as THREE from 'three';
 import type { World } from '../interactions/world';
 import { getKit } from './kit';
+import { GF } from './layout';
 
 const query = typeof location === 'undefined' ? new URLSearchParams() : new URLSearchParams(location.search);
 // Default ON only on the isolated published LIGHT-R06D review URL.
@@ -128,7 +129,7 @@ export const glslFloat=(v:number)=>Number.isInteger(v)?v.toFixed(1):String(v);
 export const LIBRARY_DESK_LIGHT_SURFACE = Object.freeze({
  xMin:72.52,xInside:72.60,xEndInside:73.75,xMax:73.84,
  zMin:-100.16,zInside:-100.09,zEndInside:-97.91,zMax:-97.84,
- yMin:0.78,yInside:0.803,yEndInside:0.842,yMax:0.872,
+ yMin:GF+0.78,yInside:GF+0.803,yEndInside:GF+0.842,yMax:GF+0.872,
 });
 const deskBounds=LIBRARY_DESK_LIGHT_SURFACE;
 const DESK_GLSL = /*glsl*/ `
