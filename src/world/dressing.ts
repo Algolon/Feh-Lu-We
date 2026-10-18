@@ -276,7 +276,7 @@ export function fireplaceToolSet(c: Ctx, x: number, z: number, y0: number, yaw =
 
   // Four real hanger arms sweep out from the central post and catch the tool handles.
   // Coordinates inside THREE geometry use -z because the game's plan z is reversed.
-  const places = [-0.126, -0.042, 0.042, 0.126] as const;
+  const places = [-0.155, -0.047, 0.059, 0.164] as const;
   a.add(M.paint, edge, cg('flwFireToolsR09HangerArms', () =>
     mergeAll(places.map(pz => flat(tube([
       pt(0, 0.854, 0), pt(0.033, 0.860, -pz * 0.72),
