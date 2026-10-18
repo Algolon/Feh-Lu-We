@@ -243,6 +243,106 @@ export function logBasket(c: Ctx, x: number, z: number, y0: number, yaw = 0) {
   a.end({ gap: 0.025 });
   c.col.addCircle(x, z, 0.28, y0, y0 + 0.55);
 }
+/**
+ * PROP-R09 — forged-iron companion set for the living-room hearth.
+ * One real stand and four distinguishable hanging implements (shovel, brush, poker, tongs).
+ * Geometry uses the established shared paint material and mLiv batching; no interactions.
+ * The floor stand is ~0.95 m high with a 0.35 m footprint.
+ */
+export function fireplaceToolSet(c: Ctx, x: number, z: number, y0: number, yaw = 0) {
+  const M = artMats();
+  const a = new Asm(c.b, c.chunk, x, y0, z, yaw).begin('fireplaceToolSet');
+  const iron = '#393a39', edge = '#696762', handle = '#525251';
+  const flat = (g: THREE.BufferGeometry) => {
+    if (!g.index) return g;
+    const out = g.toNonIndexed();
+    g.dispose();
+    return out;
+  };
+  const tube = (points: THREE.Vector3[], radius: number, segments = 10) =>
+    new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points), segments, radius, 5, false);
+  const pt = (x: number, y: number, z: number) => new THREE.Vector3(x, y, z);
+
+  // A solid low cast-iron pedestal, collar and the central upright.
+  a.add(M.paint, iron, cg('flwFireToolsR09Pedestal', () =>
+    new THREE.CylinderGeometry(0.145, 0.175, 0.053, 8)), 0, 0.0265, 0);
+  a.add(M.paint, edge, cg('flwFireToolsR09FootCollar', () =>
+    lathe([[0.001, 0], [0.095, 0.003], [0.105, 0.035], [0.059, 0.060],
+      [0.028, 0.094], [0.001, 0.098]], 10)), 0, 0, 0);
+  a.add(M.paint, iron, cg('flwFireToolsR09Upright', () =>
+    new THREE.CylinderGeometry(0.017, 0.025, 0.83, 8)), 0, 0.475, 0);
+  a.add(M.paint, edge, cg('flwFireToolsR09TopKnob', () =>
+    new THREE.SphereGeometry(0.030, 8, 6)), 0, 0.918, 0);
+
+  // Four real hanger arms sweep out from the central post and catch the tool handles.
+  // Coordinates inside THREE geometry use -z because the game's plan z is reversed.
+  const places = [-0.126, -0.042, 0.042, 0.126] as const;
+  a.add(M.paint, edge, cg('flwFireToolsR09HangerArms', () =>
+    mergeAll(places.map(pz => flat(tube([
+      pt(0, 0.854, 0), pt(0.033, 0.860, -pz * 0.72),
+      pt(0.075, 0.846, -pz), pt(0.077, 0.815, -pz),
+    ], 0.011, 10)))), 0, 0, 0);
+
+  const gripGeo = cg('flwFireToolsR09TurnedHandle', () => lathe([
+    [0.012, 0], [0.016, 0.014], [0.022, 0.037], [0.020, 0.085],
+    [0.014, 0.103], [0.020, 0.129], [0.012, 0.147], [0.001, 0.148],
+  ], 9));
+  const tipGeo = cg('flwFireToolsR09HandleFinial', () =>
+    new THREE.SphereGeometry(0.023, 8, 6));
+  const shaftGeo = cg('flwFireToolsR09ToolShaft', () =>
+    new THREE.CylinderGeometry(0.009, 0.012, 0.553, 7));
+
+  for (const pz of places) {
+    a.add(M.paint, handle, gripGeo, 0.077, 0.735, pz);
+    a.add(M.paint, edge, tipGeo, 0.077, 0.883, pz);
+    a.add(M.paint, iron, shaftGeo, 0.077, 0.464, pz);
+  }
+
+  // 1. Schep: a genuine tapered, slightly pointed shovel blade, broadside facing the player.
+  a.add(M.paint, edge, cg('flwFireToolsR09ShovelBlade', () => {
+    const shape = new THREE.Shape([
+      new THREE.Vector2(-0.055, 0.216), new THREE.Vector2(0.055, 0.216),
+      new THREE.Vector2(0.055, 0.122), new THREE.Vector2(0.040, 0.074),
+      new THREE.Vector2(0, 0.049), new THREE.Vector2(-0.040, 0.074),
+      new THREE.Vector2(-0.055, 0.122),
+    ]);
+    return new THREE.ExtrudeGeometry(shape, { depth: 0.012, bevelEnabled: false })
+      .rotateY(Math.PI / 2);
+  }), 0.077, 0, places[0]);
+
+  // 2. Borstel: a transverse bristle block and nine individually readable stiff tufts.
+  a.add(M.paint, iron, cg('flwFireToolsR09BrushBlock', () =>
+    new THREE.BoxGeometry(0.034, 0.047, 0.119)), 0.077, 0.204, places[1]);
+  const bristle = cg('flwFireToolsR09BrushTuft', () =>
+    new THREE.CylinderGeometry(0.0025, 0.0055, 0.083, 4));
+  for (let i = -4; i <= 4; i++)
+    a.add(M.paint, i % 2 ? '#77736e' : '#8a8175',
+      bristle, 0.079, 0.139, places[1] + i * 0.012);
+
+  // 3. Pook: narrow shaft and a legible sideways return-hook at the working end.
+  a.add(M.paint, edge, cg('flwFireToolsR09PokerHook', () => tube([
+    pt(0, 0.218, 0), pt(0, 0.139, 0), pt(0, 0.112, -0.015),
+    pt(0, 0.115, -0.054), pt(0, 0.133, -0.060),
+  ], 0.009, 12)), 0.077, 0, places[2]);
+
+  // 4. Tang: two independent curved jaws split at a pivot, closing inward at the tips.
+  a.add(M.paint, edge, cg('flwFireToolsR09Tongs', () => mergeAll([
+    flat(tube([
+      pt(0, 0.398, 0), pt(0, 0.326, -0.024),
+      pt(0.004, 0.199, -0.044), pt(0.015, 0.127, -0.030),
+    ], 0.009, 12)),
+    flat(tube([
+      pt(0, 0.398, 0), pt(0, 0.326, 0.024),
+      pt(0.004, 0.199, 0.044), pt(0.015, 0.127, 0.030),
+    ], 0.009, 12)),
+  ])), 0.077, 0, places[3]);
+  a.add(M.paint, edge, cg('flwFireToolsR09TongRivet', () =>
+    new THREE.SphereGeometry(0.015, 6, 5)), 0.079, 0.392, places[3]);
+
+  a.end({ gap: 0.025 });
+  c.col.addCircle(x, z, 0.18, y0, y0 + 0.96);
+}
+
 function mergeAll(parts: THREE.BufferGeometry[]) {
   const pos: number[] = [], nor: number[] = [], uv: number[] = [];
   for (const g of parts) { pos.push(...(g.attributes.position.array as Float32Array)); nor.push(...(g.attributes.normal.array as Float32Array)); uv.push(...(g.attributes.uv.array as Float32Array)); g.dispose(); }
