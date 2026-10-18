@@ -5,6 +5,8 @@ on:
       - feature/ent-r02-open-entrance-billiard-gallery
     paths:
       - src/world/**
+      - src/interactions/world.ts
+      - tests/ent-r02-portal-terminal.test.ts
       - src/content/props3d.ts
       - tests/ent-r02.test.ts
       - tests/dev02.test.ts
@@ -25,7 +27,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run typecheck
-      - run: npx vitest run tests/ent-r02.test.ts tests/dev02.test.ts tests/indoorPlants.test.ts
+      - run: npx vitest run tests/ent-r02.test.ts tests/ent-r02-portal-terminal.test.ts tests/cross-room-window-visibility.test.ts tests/dev02.test.ts tests/indoorPlants.test.ts
       - run: npm run build
       - run: npx playwright-core install --with-deps chromium
       - name: Capture real in-game views and collision/path evidence
