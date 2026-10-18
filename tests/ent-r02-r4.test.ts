@@ -41,6 +41,9 @@ describe('ENT-R02-R4 finished join and entrance exterior apron', () => {
   it('connects inner-wall returns on both stories but does not change exterior door/colliders',()=>{
     const s=readFileSync('src/world/manor.ts','utf8');
     expect(s).toContain('const sideWallJoinZ = 80.54');
+    expect(s).toContain('sideWallJoinZ + 0.032');
+    expect(s).toContain('sideX - 0.222, sideX + 0.222');
+    expect(s).not.toContain('a genuine plaster corner pier');
     expect(s).toContain("frameOpenings: !face.id.startsWith('south-')");
     const walls=readFileSync('src/world/arch.ts','utf8');
     expect(walls).toContain('A 100%-height structural arch has no wall ABOVE it');
