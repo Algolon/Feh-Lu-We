@@ -33,9 +33,9 @@ export function ageDressedStone(mat:THREE.MeshLambertMaterial) {
 }
 
 /** Enamel house sign fitted into the flat bay wall between the door surround (x=91.15) and pilaster (x=91.70). */
-export function houseNameplate(w:World,c:Ctx) {
-  // The 2.5 cm backing ends at z=79.5475, just 2.5 mm in front of the bay wall (z=79.55).
-  const x=91.425,y=1.62,z=79.535,o={chunk:c.chunk,shadow:false,jitter:0};
+export function houseNameplate(w:World,c:Ctx, bayFaceZ=79.55) {
+  // ENT-R02: sign follows the front-facing bay, with unchanged frame and offset.
+  const x=91.425,y=1.62,z=bayFaceZ-0.015,o={chunk:c.chunk,shadow:false,jitter:0};
   const backing=softBox(.47,.20,.025,.025);
   geo(c.b,c.k.M.paint,'#7f806d',backing,x,y,z,o);backing.dispose();
   const cv=document.createElement('canvas');cv.width=512;cv.height=192;
