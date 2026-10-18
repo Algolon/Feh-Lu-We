@@ -14,7 +14,6 @@ const browser=await chromium.launch({
 const poses=[
   ['gallery-wide',93,3.35,83,89,4.5,78.3],
   ['gallery-to-window',88.2,3.35,83,90,4.8,76.55],
-  ['entry-to-hall',90,0.15,79,90,2.2,89],
 ];
 try{
 const page=await browser.newPage({viewport:{width:412,height:915},deviceScaleFactor:1,isMobile:true,hasTouch:true});
@@ -68,7 +67,7 @@ for(const [name,x,y,z,tx,ty,tz] of poses){
       shown.push(o);
     });
     const measurements=[];
-    const sorted=[...groups].sort((a,b)=>b[1].length-a[1].length).slice(0,28);
+    const sorted=[...groups].sort((a,b)=>b[1].length-a[1].length).slice(0,10);
     for(const [key,objects] of sorted){
       for(const o of objects)o.visible=false;
       const off=render();
