@@ -38,13 +38,13 @@ describe('DEV-04D D2 ship rule', () => {
 
 describe('PROP-R10 living-room hearth corner composition', () => {
   const basket = { x: 73.43, z: 84.48, radius: 0.28 };
-  const tools = { x: 72.75, z: 84.15, radius: 0.215 };
+  const tools = { x: 73.55, z: 85.12, radius: 0.215 };
   const hearth = { x: 72.4, z: 86.7, leftEdgeZ: 86.7 - 1.38 };
 
   it('places exactly one set and one basket in both art variants, without touching interactions', () => {
     const manor = readFileSync('src/world/manor.ts', 'utf8');
     const dress = readFileSync('src/world/dressing.ts', 'utf8');
-    const toolCall = 'fireplaceToolSet(c, 72.75, 84.15, GF, 0)';
+    const toolCall = 'fireplaceToolSet(c, 73.55, 85.12, GF, 0)';
     const basketCall = 'logBasket(c, 73.43, 84.48, GF, 0.3)';
     expect(manor.split(toolCall)).toHaveLength(2);
     expect(manor.split(basketCall)).toHaveLength(3);
@@ -57,12 +57,12 @@ describe('PROP-R10 living-room hearth corner composition', () => {
     expect(builder).not.toMatch(/make(Inspect|Action|Pickup|Lamp)/);
   });
 
-  it('puts the tools behind the basket nearer the wall and farther from the fire, with collision clearance', () => {
-    expect(tools.x).toBeLessThan(basket.x); // the wall is west (smaller X)
-    expect(tools.z).toBeLessThan(basket.z); // the fire is north (larger Z)
-    expect(tools.x - tools.radius).toBeGreaterThan(hearth.x); // wall clearance
+  it('places tools at the marked spot between basket and hearth without intersecting either collider', () => {
+    expect(tools.x).toBeGreaterThan(basket.x); // slightly roomward of the wood basket
+    expect(tools.z).toBeGreaterThan(basket.z); // between the basket and fireplace
+    expect(tools.x - tools.radius).toBeGreaterThan(hearth.x + 0.8 + 0.1); // actual fireplace collider extends x to 73.2
     expect(hearth.leftEdgeZ - (basket.z + basket.radius)).toBeGreaterThan(0.2);
-    expect(hearth.leftEdgeZ - (tools.z + tools.radius)).toBeGreaterThan(0.2);
+    expect(tools.z - tools.radius).toBeLessThan(hearth.leftEdgeZ); // beside the outside corner, not against the wall
     const separation = Math.hypot(tools.x - basket.x, tools.z - basket.z);
     expect(separation - tools.radius - basket.radius).toBeGreaterThan(0.12);
     expect(tools.z - tools.radius).toBeGreaterThan(83.55); // clear of the red curtain near z 83
