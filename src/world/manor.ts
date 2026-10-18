@@ -372,7 +372,7 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
         boxMM(c.b, k.M.wood, '#6b4426', x - 0.1, x + 0.1, CEIL - 0.22, CEIL, z0, z1, { chunk: c.chunk, uv: 1.5 });
     }
   }
-  // ENT-R02-R5: one triangulated T-shaped UNDERSIDE, with shared world UVs.
+  // ENT-R02-R5: one extruded T-shaped ceiling volume, with shared world UVs.
   // The previous six ceiling boxes had separate coplanar edge faces, which
   // left a visible old/new line in the gallery at Z80.4 (and at X86.4/93.6).
   // This non-colliding single surface spans the new gallery and the old manor
@@ -388,11 +388,16 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
   ceilingPlan.lineTo(107.6, 99.8);
   ceilingPlan.lineTo(72.4, 99.8);
   ceilingPlan.closePath();
-  const ceilingMesh = new THREE.ShapeGeometry(ceilingPlan);
-  ceilingMesh.rotateX(Math.PI / 2); // front face downward, seen from the gallery
-  geo(c.b, k.M.plaster, '#efe4cc', ceilingMesh, 0, UCEIL, 0,
+  // A closed solid: a single-sided ShapeGeometry disappears from reverse
+  // grazing angles on mobile and exposed the exterior gable and sky in QA.
+  // Extrude 20 cm towards the roof; underside is exactly at UCEIL=6.2 m.
+  const ceilingSolid = new THREE.ExtrudeGeometry(ceilingPlan, {
+    depth: 0.2, bevelEnabled: false, curveSegments: 1,
+  });
+  ceilingSolid.rotateX(Math.PI / 2);
+  geo(c.b, k.M.plaster, '#efe4cc', ceilingSolid, 0, UCEIL + 0.2, 0,
     { chunk: c.chunk, jitter: 0, shadow: false });
-  ceilingMesh.dispose();
+  ceilingSolid.dispose();
   // Preserve precisely the former stair void north of Z99.8.
   for (const [x0, x1, z0, z1] of [
     [72.4, 95, 99.8, 109.6], [99, 107.6, 99.8, 109.6], [95, 99, 105.6, 109.6],
