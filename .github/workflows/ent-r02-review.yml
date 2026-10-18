@@ -28,10 +28,40 @@ jobs:
       - run: npm run build
       - run: npx playwright-core install --with-deps chromium
       - name: Capture real in-game views and collision/path evidence
-        run: node scripts/ent-r02-review.mjs
+        run: ENT_R02_THUMBS=1 node scripts/ent-r02-review.mjs
+      - name: Checkout pinned unchanged production baseline
+        if: always()
+        uses: actions/checkout@v7
+        with:
+          ref: 1f9563b31cbdd44fdc1fd17c29750d74440ad9d1
+          path: ent-r02-production-baseline
+          persist-credentials: false
+      - name: Compare matched high-quality views with production
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd ent-r02-production-baseline
+          npm ci
+          npm run build
+          cd ..
+          ENT_R02_BASELINE=1 ENT_R02_ROOT=ent-r02-production-baseline node scripts/ent-r02-review.mjs
+          node - <<'NODE'
+          const fs=require('fs');
+          const path='docs/development/workstreams/ent-r02/';
+          const now=JSON.parse(fs.readFileSync(path+'review/results.json'));
+          const base=JSON.parse(fs.readFileSync(path+'baseline/results.json'));
+          const by=new Map(base.results.map(x=>[x.name,x]));
+          const views=now.results.map(x=>{const b=by.get(x.name);return {name:x.name,calls:{baseline:b.calls,prototype:x.calls,delta:x.calls-b.calls},triangles:{baseline:b.triangles,prototype:x.triangles,delta:x.triangles-b.triangles}};});
+          fs.writeFileSync(path+'performance-compare.json',JSON.stringify({views,baselineCommit:'1f9563b31cbdd44fdc1fd17c29750d74440ad9d1',note:'matched high-quality software-WebGL poses; not a mobile hardware FPS measurement'},null,2));
+          console.log(JSON.stringify(views));
+          NODE
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: ent-r02-blockout-review
-          path: docs/development/workstreams/ent-r02/review
+          path: |
+            docs/development/workstreams/ent-r02/review
+            docs/development/workstreams/ent-r02/baseline
+            docs/development/workstreams/ent-r02/performance-compare.json
           if-no-files-found: warn
