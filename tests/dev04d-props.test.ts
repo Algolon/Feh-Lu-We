@@ -36,6 +36,27 @@ describe('DEV-04D D2 ship rule', () => {
   });
 });
 
+describe('PROP-R08 fireplace screen relocation', () => {
+  it('places the one approved FLW-S3-033 beside the interior living hearth, not the BBQ', () => {
+    const screen = PROPS3D.find(p => p.id === 'FLW-S3-033')!;
+    expect(screen.room).toBe('living');
+    expect(screen.mount).toBe('ground');
+    expect(screen.yaw).toBeCloseTo(Math.PI / 2);
+    expect(screen.x).toBeGreaterThan(72.8);
+    expect(screen.x).toBeLessThan(73.45);
+    expect(screen.z).toBeGreaterThan(88.4); // past the hearth's right-hand edge
+    expect(screen.z).toBeLessThan(89.5); // before the curtain at 90.5
+
+    const manor = readFileSync('src/world/manor.ts', 'utf8');
+    const grounds = readFileSync('src/world/grounds.ts', 'utf8');
+    const call = "S3_BUILDERS['FLW-S3-033'](c)";
+    expect(manor.split(call)).toHaveLength(2); // exactly once, outside the normal/sample branch
+    expect(manor.indexOf(call)).toBeGreaterThan(manor.indexOf("if (ART.set === 'sample')"));
+    expect(manor.indexOf(call)).toBeGreaterThan(manor.indexOf("} else {\n  buildHearth"));
+    expect(grounds).not.toContain(call);
+  });
+});
+
 describe('DEV-04D D2 key family', () => {
   it('maps the four gameplay keys to the approved K3 references; item ids unchanged', () => {
     expect(Object.keys(KEY_REF).sort()).toEqual(['consKey', 'frontKey', 'shedKey', 'studyKey']);

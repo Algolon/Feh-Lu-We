@@ -608,6 +608,9 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   for (const z of [83, 90.5]) curtains(c, 72.45, z, GF + 0.85, Math.PI / 2, 1.1, 2.0, '#7a3a3a');
   logBasket(c, 73.05, 84.45, GF, 0.3); // DEV-04B: as in the sample room (both sets keep identical colliders)
   }
+  // PROP-R08: place the existing FLW-S3-033 screen once in mLiv, shared by sample and normal
+  // room variants. It stands beyond the RIGHT edge of the fireplace and clear of the curtain.
+  S3_BUILDERS['FLW-S3-033'](c);
   c.chunk = 'mHall';
 
   c.chunk = 'mLib';
