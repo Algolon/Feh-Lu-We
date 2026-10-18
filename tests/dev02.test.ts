@@ -82,7 +82,9 @@ describe('DEV-02 rooms and portals', () => {
       const x0 = ['corridor', 'workshop', 'pantry'].includes(d.id) ? 108 : d.bounds.x0;
       expect([r!.x0, r!.x1, r!.z0, r!.z1]).toEqual([x0, x1, d.bounds.z0, d.bounds.z1]);
     }
-    expect(ROOMS.length).toBe(P.rooms.length); // 49
+    // ENT-R02 adds two visible entry/gallery zones beyond the 49 frozen DEV-02 rooms.
+    // Their continuity is tested in ent-r02.test.ts; the original source rooms remain unchanged.
+    expect(ROOMS.length).toBe(P.rooms.length + 2);
   });
   it('every portal names existing rooms; every v0.2 door id is wired', () => {
     const ids = new Set([...ROOMS.map((r) => r.id), 'out']);
