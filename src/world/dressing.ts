@@ -340,7 +340,7 @@ export function fireplaceToolSet(c: Ctx, x: number, z: number, y0: number, yaw =
     new THREE.SphereGeometry(0.015, 6, 5)), 0.079, 0.392, places[3]);
 
   a.end({ gap: 0.025 });
-  c.col.addCircle(x, z, 0.18, y0, y0 + 0.96);
+  c.col.addCircle(x, z, 0.215, y0, y0 + 0.96);
 }
 
 function mergeAll(parts: THREE.BufferGeometry[]) {
