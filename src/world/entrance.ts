@@ -59,7 +59,7 @@ export function buildEntrance(c: Ctx, s: EntranceSite) {
   boxMM(c.b, stone, STONE.tread, 92.2, 92.625, 0.045, 0.075, Z(78.6), Z(79.95), { ...oj, uv: 1 });
   boxMM(c.b, stone, STONE.riser, 87.8, 92.2, 0.075, 0.118, Z(78.59), Z(78.62), o); // landing riser band (1 cm proud of the slab's own face: no shared plane)
   boxMM(c.b, stone, STONE.tread, 87.775, 92.225, 0.118, 0.15, Z(78.575), Z(78.6), oj); // landing nosing lip (top flush with GF)
-  for (const x of [87.775, 92.2]) boxMM(c.b, stone, STONE.tread, x, x + 0.025, 0.118, 0.15, 78.6, 79.95, oj);
+  for (const x of [87.775, 92.2]) boxMM(c.b, stone, STONE.tread, x, x + 0.025, 0.118, 0.15, Z(78.6), Z(79.95), oj); // ENT-R02: shift both lateral tread returns with the portico
 
   // ---- columns on plinth blocks
   const PL = 0.14, colH = ABACUS - 0.1 - (gf + PL);
