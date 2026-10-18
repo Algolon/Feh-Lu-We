@@ -59,12 +59,6 @@ jobs:
           fs.writeFileSync(path+'performance-compare.json',JSON.stringify({views,baselineCommit:'1f9563b31cbdd44fdc1fd17c29750d74440ad9d1',note:'matched high-quality software-WebGL poses; not a mobile hardware FPS measurement'},null,2));
           console.log(JSON.stringify(views));
           NODE
-      - name: Profile high-quality gallery cost by mesh group
-        if: always()
-        shell: bash
-        run: |
-          set -euo pipefail
-          node scripts/ent-r02-profiler.mjs
       - name: Publish browseable screenshots to ENT-R02 branch
         if: always()
         shell: bash
