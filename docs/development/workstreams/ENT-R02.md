@@ -1,6 +1,6 @@
 # ENT-R02 — Open ontvangstzone + aaneengesloten biljartgalerij
 
-Status: **geïsoleerde architectonische blockout; nog niet goedgekeurd, gemerged of gedeployed**.
+Status: **owner-approved LIVE ITERATION; architectuur gemerged naar de hoofdbranch op 18 oktober 2026. Afwerking, performance en biljartinrichting volgen.**
 Branch: `feature/ent-r02-open-entrance-billiard-gallery`.
 Owner brief 18 oktober 2026: trek entreevolume naar voren, breek de vestibule open en maak van beide bovenste galerijdelen **één open speelruimte**. De biljarttafel moet daar uiteindelijk naartoe kunnen. Laat de huidige biljartkamer en voortgang voorlopig intact.
 
