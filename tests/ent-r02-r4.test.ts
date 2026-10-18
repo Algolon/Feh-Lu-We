@@ -40,6 +40,12 @@ describe('ENT-R02-R4 finished join and entrance exterior apron', () => {
   it('connects inner-wall returns on both stories but does not change exterior door/colliders',()=>{
     const s=readFileSync('src/world/manor.ts','utf8');
     expect(s).toContain('const sideWallJoinZ = 80.54');
+    // R5B integrates the finish INTO the true side-wall geometry rather than
+    // covering it with an additional volume or pillar.
+    expect(s).toContain('const plasterReturnStartZ = 80.39');
+    expect(s).toContain("wall(c, 'z', x, plasterReturnStartZ, sideWallJoinZ, 0, TOP");
+    expect(s).toContain("mat: k.M.plaster, color: '#f1e6cf', t: 0.4");
+
     expect(s).not.toContain('sideWallJoinZ + 0.032');
     expect(s).not.toContain('sideX - 0.222, sideX + 0.222');
     expect(s).not.toContain('a genuine plaster corner pier');
