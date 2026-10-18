@@ -13,6 +13,14 @@ const inside = (x: number, z: number) => ARRIVAL_GRAVEL.some(r=>x>r.x0-1e-5&&x<r
 const stone = ['#c4c1af','#d0cbbb','#bcbcad','#d9d1bd','#c8c5b3'];
 function hash(x:number,z:number) { return Math.abs(Math.sin(x*37.21+z*11.39)*43758.5453)%1; }
 
+/** ENT-R02-R4: three non-overlapping paver areas, all OUTSIDE the revised front
+ * wall (Z76.55). Kept explicit for geometry/planter overlap regression tests. */
+export const ENTRANCE_APRON_R4 = [
+  { x0: 85.9, x1: 94.1, z0: 73.14, z1: 75.14 },
+  { x0: 85.9, x1: 87.36, z0: 75.14, z1: 76.44 },
+  { x0: 92.64, x1: 94.1, z0: 75.14, z1: 76.44 },
+] as const;
+
 export function arrivalGravel(c: Ctx) {
   for (const r of ARRIVAL_GRAVEL) {
     // Subdivision gives broad authored wear zones without another overlaid transparent material.
@@ -35,10 +43,7 @@ export function arrivalGravel(c: Ctx) {
   // ended at Z78.16, buried 1.61 m underneath the new house.
   // Approach first, then two short return wings around the portico steps;
   // the wings also give both entrance urns a composed paving footprint.
-  const frontApron = { x0: 85.9, x1: 94.1, z0: 73.14, z1: 75.14 };
-  const westReturn = { x0: 85.9, x1: 87.36, z0: 75.14, z1: 76.44 };
-  const eastReturn = { x0: 92.64, x1: 94.1, z0: 75.14, z1: 76.44 };
-  for (const area of [frontApron, westReturn, eastReturn]) paving(c,area,.94,.60);
+  for (const area of ENTRANCE_APRON_R4) paving(c,area,.94,.60);
   // Three concentric courses form an intentional frame around the existing circular planter.
   for(let row=0;row<3;row++)for(let i=0;i<48;i++) {
     const a0=(i/48)*Math.PI*2+.006,a1=((i+1)/48)*Math.PI*2-.006;
