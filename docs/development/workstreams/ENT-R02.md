@@ -130,3 +130,19 @@ De eigenaar heeft de geïsoleerde `/ent-r02/`-preview zelf op een telefoon getes
 **Release-checks**: feature laatste codecommit `646d0f65433f8c40cfa8cf01a5cb86ecfc33ac65` heeft volledige unit tests/typecheck/Pages-build groen in run [39127784070](https://github.com/Algolon/Feh-Lu-We/actions/runs/39127784070). De gescheiden browserreview met gesloten entree, dicht front en doorloop/vloer heeft de geometrische checks gehaald, maar de absolute performance-budgetgate blijft bewust rood. Vóór publiek als reguliere game zetten controleren of de huidige default branch conflictvrij integreert en alle Pages checks slagen.
 
 **Nieuw besluit:** eigenaarautoriseerde **LIVE ITERATION** (niet langer `DO NOT MERGE` voor de *bestaande architectuur*). Prioriteit na de merge: visuele afwerking en optimalisatie, daarna biljartopstelling en herbestemming oude kamer.
+
+## ENT-R02-R4 — Live polish: corners, ceilings, outside paving and urns (18 October 2026)
+
+**Owner intent:** retain the existing hand-dressed exterior flagstone material and visual composition, but relocate the section left under the expanded house. The blue circle marks the NEW RIGHT PLANTER POSITION, not a stone to remove. Make the remaining paving match the larger front entrance.
+
+**Implemented:**
+- `arrivalStudy.ts`: previous apron X86–94/Z75.15–78.16 was partly under the new front wall (Z76.55). Re-laid as a central path X85.9–94.1/Z73.14–75.14, two lateral shoulder areas up to Z76.44. Old stone material, irregular/bevelled shapes and planter ring preserved; the staircase clear.
+- `exteriorGreenery.ts`: outdoor planter coordinates mirror the blue-circled spot (X93.3,Z75.75) and left (X86.7,Z75.75), both moved 0.60m nearer the house. Each 0.39m-radius pot fits fully on its stone wing.
+- `manor.ts`: side walls meet the old facade's inner finish; continuous single upper oak slab across the front and old gallery, and continuous upper plaster ceiling. Local plaster-covered return piers hide the former exterior stone cuts at ground and upper levels; keep all corridor space and furniture use unchanged.
+- `arch.ts`: all ordinary doors still get frames, but floor-to-ceiling unframed architectural cut-throughs now receive correctly finished plaster endcaps and a split cornice, **never a floating decorative trim across the opening**. This removed the pale line through the entrance timber ceiling without removing normal internal trim.
+
+**Validation:** [ENT-R02-R4 review CI](https://github.com/Algolon/Feh-Lu-We/actions/runs/39134712313) **passed**: full npm test, typecheck, build, 9 real in-game mobile-portrait camera views, no WebGL/console errors, closed front facade at both side jambs and upper-gallery support at old/new locations. Final visual inspection of rendered screenshot thumbnails confirms no visible external masonry or black gap in the tested new interior corners and no pale strip across entrance ceiling. [Actual in-game screenshots](ent-r02/r4-images/), available directly as GitHub image files; not synthetic renders.
+
+**Accepted non-goals:** do not reintroduce old paving under the house, remove the circular planter courses, alter doors or save state, move the billiard table, or solve the already owner-waived 150-draw/750k-triangle render limits in this small polish package.
+
+**Release plan:** owner requested implementation in chat and earlier authorized incremental live refinements. Merge after PR review and deploy to both full and family routes; verify GitHub Pages green. No gaming/puzzle migration.

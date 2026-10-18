@@ -89,6 +89,8 @@ function shell(w: World, c: Ctx) {
     wall(c, face.axis, face.f, face.a0, face.a1, face.y0, face.y1, {
       ...facade, t: 0.4, exterior: face.exterior, frameColor: face.axis==='x'&&face.f===80.2?'#252725':undefined, frameStyle: face.axis==='x'&&face.f===80.2?'slim-metal':undefined, skin, uv: 2.4, winStyle: 'manor',
       openings: face.openings, windows: face.windows.map(v => ({ ...v, transparent: true })),
+      // Old facade full-height cut-through is not an actual doorway. No decorative jamb/header.
+      frameOpenings: !face.id.startsWith('south-'),
     });
   }
   for (const site of MANOR_WINDOWS) buildManorWindow(w, c, site);
@@ -204,10 +206,28 @@ function shell(w: World, c: Ctx) {
     openings: [{ at: 90, w: 1.7, h: 2.62 }],
     windows: [{ at: 90, w: E.windowW, sill: E.windowY0, h: E.windowH, transparent: true }],
   });
-  // Side walls join the front wall at its full thickness all the way to the floor;
-  // no slivers into the exterior along the return corners.
-  wall(c, 'z', E.x0, E.zWindow, 80.2, 0, TOP, { ...stone, t: 0.4, exterior: -1, skin, uv: 2.4 });
-  wall(c, 'z', E.x1, E.zWindow, 80.2, 0, TOP, { ...stone, t: 0.4, exterior: 1, skin, uv: 2.4 });
+  // ENT-R02-R4: tie side walls THROUGH the old south wall's inner plaster face
+  // (z=80.412). Stopping at the former exterior axis z80.2 exposed a dark gap
+  // and raw stone/quoin face at the L-joint on BOTH floors.
+  const sideWallJoinZ = 80.54;
+  wall(c, 'z', E.x0, E.zWindow, sideWallJoinZ, 0, TOP, { ...stone, t: 0.4, exterior: -1, skin, uv: 2.4 });
+  wall(c, 'z', E.x1, E.zWindow, sideWallJoinZ, 0, TOP, { ...stone, t: 0.4, exterior: 1, skin, uv: 2.4 });
+  // ENT-R02-R4D: a genuine plaster corner pier. Merely skinning the cut
+  // of the old south-wall masonry proved insufficient: the visible ashlar
+  // lies proud of its end grain. These compact finished return piers sit
+  // in front of it at BOTH floor levels, with no overlapping coplanar
+  // plaster planes. Their footprint occupies the existing wall corner,
+  // never the new lobby's central walking/billiard play envelope.
+  for (const side of [
+    { x0: E.x0-.16, x1: E.x0+.45 },
+    { x0: E.x1-.45, x1: E.x1+.16 },
+  ] as const) {
+    for (const [y0,y1] of [[GF,SLAB_UNDERSIDE],[UF,UCEIL]] as const) {
+      boxMM(c.b, k.M.plaster, '#f1e6cf', side.x0, side.x1,
+        y0, y1, 79.94, 80.60,
+        {chunk:c.chunk,uv:2.4,jitter:0,shadow:false});
+    }
+  }
   for (const x of [E.x0, E.x1]) for (let i = 0, y = 0.7; y < TOP - 0.5; i++, y += 0.42) {
     const la = i % 2 ? 0.3 : 0.55;
     if (EXTERIOR_STUDY) {
@@ -338,17 +358,21 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
     w.col.addOccluder(x0, x1, z0, z1, SLAB_UNDERSIDE, UF);
   };
   slab(72.4, 85, 80.4, 94); // bedrooms
-  slab(85, 95, 80.4, 84); // front gallery
-  slab(ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, ENTRANCE_R02.joinZ); // one enlarged billiard-ready gallery
+  // ENT-R02-R4: T-shaped upper floor, built as NON-OVERLAPPING rectangles.
+  // One unbroken central slab spans the old/new frontage: no visible overhead
+  // timber seam across the downstairs entrance at the former Z80.4 boundary.
+  slab(85, ENTRANCE_R02.x0, 80.4, 84);
+  slab(ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, 84);
+  slab(ENTRANCE_R02.x1, 95, 80.4, 84);
   slab(85, 86.8, 84, 95.5); // walkway
   slab(85, 95, 95.5, 104); // landing
   slab(85, 95, 104, 109.6); // bath + linen
   slab(95, 107.6, 80.4, 109.6); // east upstairs
   slab(83.2, 85, 94, 107.8); // library gallery (east side)
   slab(72.4, 85, 107.8, 109.6); // library gallery (north side)
-  // Plaster upper ceiling matches the new roof footprint; the entrance below stays at one storey
-  // while the existing central hall retains its original double-height void.
-  ceiling(c, ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, ENTRANCE_R02.joinZ, UCEIL, '#efe4cc');
+  // ENT-R02-R4: the exposed plaster of the upper gallery ceiling is ONE
+  // central panel from the front glass to the original manor, not a separate
+  // patch ending at Z80.4. See split main ceiling layout below.
   // beams under ground-floor ceilings (not in the double-height spaces)
   for (let x = 74; x < 107; x += 2.4) {
     if (x < 85 && ART.set !== 'sample') boxMM(c.b, k.M.wood, '#6b4426', x - 0.1, x + 0.1, CEIL - 0.22, CEIL, 80.4, 94, { chunk: c.chunk, uv: 1.5 }); // sample: livingSample beams
@@ -360,9 +384,33 @@ function interiorStructure(w: World, g: GameApi, c: Ctx) {
     }
   }
   // upper ceiling with the S03 stairwell left open (X 95–99 / Z 99.8–105.6; the upper landing covers Z 98.6–99.8)
-  for (const [x0, x1, z0, z1] of [[72.4, 107.6, 80.4, 99.8], [72.4, 95, 99.8, 109.6], [99, 107.6, 99.8, 109.6], [95, 99, 105.6, 109.6]] as const) ceiling(c, x0, x1, z0, z1, UCEIL, '#efe4cc');
+  for (const [x0, x1, z0, z1] of [
+    [72.4, ENTRANCE_R02.x0, 80.4, 99.8],
+    [ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, 99.8],
+    [ENTRANCE_R02.x1, 107.6, 80.4, 99.8],
+    [72.4, 95, 99.8, 109.6], [99, 107.6, 99.8, 109.6], [95, 99, 105.6, 109.6],
+  ] as const) ceiling(c, x0, x1, z0, z1, UCEIL, '#efe4cc');
   ceiling(c, 108, 115.6, 92.4, 109.6, CEIL + 0.4, '#efe4cc');
 
+  // ENT-R02-R4: line the four exposed old/new side-wall corners in plaster.
+  // The old main wall has an interior finish face near Z80.412, while the
+  // projecting new wall has its own inward finish at X86.612/X93.388.
+  // Small face/return strips meet across that 21 cm offset without adding
+  // colliders, blocking the gallery, or leaving outside ashlar visible.
+  for (const [sideX, innerFaceX] of [
+    [ENTRANCE_R02.x0, ENTRANCE_R02.x0 + 0.212],
+    [ENTRANCE_R02.x1, ENTRANCE_R02.x1 - 0.212],
+  ] as const) {
+    for (const [y0,y1] of [[GF, SLAB_UNDERSIDE], [UF, UCEIL]] as const) {
+      boxMM(c.b, k.M.plaster, '#f1e6cf',
+        innerFaceX - 0.018, innerFaceX + 0.018, y0, y1,
+        80.10, 80.56, { chunk: c.chunk, uv: 2.4, jitter: 0, shadow: false });
+      const bx0 = Math.min(sideX, innerFaceX) - 0.015;
+      const bx1 = Math.max(sideX, innerFaceX) + 0.015;
+      boxMM(c.b, k.M.plaster, '#f1e6cf', bx0, bx1, y0, y1,
+        80.408, 80.438, { chunk: c.chunk, uv: 2.4, jitter: 0, shadow: false });
+    }
+  }
   // ---------------------------------------------------------------- ground-floor partitions
   const P = { t: 0.16, mat: k.M.plaster, color: '#f3e9d4', uv: 2.4 };
   wall(c, 'z', 85, 80.4, 94, GF, CEIL, { ...P, openings: [{ at: 88.5, w: 3.0, h: 2.6 }] }); // living | hall

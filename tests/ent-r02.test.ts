@@ -63,7 +63,9 @@ describe('ENT-R02 unified foyer and billiard-ready gallery blockout', () => {
     const m = readFileSync('src/world/manor.ts', 'utf8');
     expect(w).toContain("[{ at: 90, w: 7.2, h: 3.2 }]");
     expect(w).toContain("id === 'south' ? [{ at: 90, w: 7.2, h: 3.2 }]");
-    expect(m).toContain("slab(ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, ENTRANCE_R02.joinZ)");
+    expect(m).toContain("slab(ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, 84)");
+    expect(m).toContain("[ENTRANCE_R02.x0, ENTRANCE_R02.x1, ENTRANCE_R02.faceZ, 99.8]");
+    expect(m).toContain("const sideWallJoinZ = 80.54");
     expect(m).toContain("wall(c, 'x', E.zWindow, E.x0, E.x1, 0, TOP");
     expect(m).toContain("openings: [{ at: 90, w: 1.7, h: 2.62 }]");
     expect(m).toContain("sill: E.windowY0, h: E.windowH, transparent: true");

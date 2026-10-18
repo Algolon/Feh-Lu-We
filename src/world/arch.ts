@@ -34,6 +34,9 @@ export interface WallOpts {
   frameColor?: THREE.ColorRepresentation;
   /** Opt-in narrow metal casing only for the estate's exterior front door. */
   frameStyle?: 'traditional' | 'slim-metal';
+  /** A floor-to-ceiling structural opening is not a framed doorway.
+   * Suppress only its decorative jamb/lintel, keeping the physical opening. */
+  frameOpenings?: boolean;
   windows?: Win[];
   t?: number;
   collide?: boolean;
@@ -125,8 +128,21 @@ export function wall(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number,
     registerOpening({ kind: 'door', axis, f, t, a0: s, a1: e, y0, y1: y0 + (op.h ?? 2.3) });
     piece(cur, s, y0, y1);
     piece(s, e, y0 + (op.h ?? 2.3), y1); // lintel
-    // door frame (visual only)
-    frame(c, axis, f, s, e, y0, y0 + (op.h ?? 2.3), t, o.frameColor, o.frameStyle);
+    // Full-height unframed openings between former exterior and new rooms need
+    // PLASTER END CAPS on the original masonry wall's cut faces. Without them
+    // the stone end grain remains visibly sandwiched between two finished walls.
+    // Thin raised finish in the opening, never a structural collider.
+    if (o.frameOpenings === false && (op.h ?? 2.3) >= y1 - y0 - .015) {
+      const mat = o.skin?.mat ?? c.k.M.plaster, col = o.skin?.color ?? '#f1e6cf';
+      for (const [v0,v1] of [[s-.006,s+.032],[e-.032,e+.006]] as const) {
+        if (axis === 'x') boxMM(c.b, mat,col,v0,v1,y0,y1,f-t/2-.024,f+t/2+.024,
+          { chunk:c.chunk, uv:2.4,jitter:0,shadow:false });
+        else boxMM(c.b, mat,col,f-t/2-.024,f+t/2+.024,y0,y1,v0,v1,
+          { chunk:c.chunk, uv:2.4,jitter:0,shadow:false });
+      }
+    }
+    // Normal doors keep their joinery. The old full-height south-wall opening does not.
+    if(o.frameOpenings!==false) frame(c, axis, f, s, e, y0, y0 + (op.h ?? 2.3), t, o.frameColor, o.frameStyle);
     cur = e;
   }
   piece(cur, hi, y0, y1);
@@ -143,7 +159,19 @@ export function wall(c: Ctx, axis: 'x' | 'z', f: number, a0: number, a1: number,
       for (const op of ops) { runs.push([c0, op.at - op.w / 2 - 0.09]); c0 = op.at + op.w / 2 + 0.09; }
       runs.push([c0, hi]);
       for (const [s0, s1] of runs) if (s1 - s0 > 0.05) trimRun(c, axis, ff, sd, s0, s1, y0, 0.14, 0.022, tc.skirting ?? TRIM.joinery);
-      if (tc.cornice !== false && !o.top) trimRun(c, axis, ff, sd, lo, hi, y1 - 0.09, 0.09, 0.035, TRIM.joinery, true);
+      if (tc.cornice !== false && !o.top) {
+        // A 100%-height structural arch has no wall ABOVE it. The original
+        // cornice ran ACROSS this opening and looked like a white line through
+        // the new entrance's wooden ceiling. Split trim around those gaps.
+        const fullHeight = ops.filter(op => (op.h ?? 2.3) >= y1 - y0 - .015);
+        let t0 = lo;
+        for(const op of fullHeight) {
+          const cut0 = op.at-op.w/2, cut1 = op.at+op.w/2;
+          if(cut0-t0>.05) trimRun(c,axis,ff,sd,t0,cut0,y1-.09,.09,.035,TRIM.joinery,true);
+          t0=Math.max(t0,cut1);
+        }
+        if(hi-t0>.05) trimRun(c,axis,ff,sd,t0,hi,y1-.09,.09,.035,TRIM.joinery,true);
+      }
     }
   }
   if (o.skin) {

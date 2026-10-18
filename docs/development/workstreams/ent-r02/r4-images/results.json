@@ -1,0 +1,157 @@
+{
+  "passed": true,
+  "errors": [],
+  "seals": {
+    "frontLeft": true,
+    "frontRight": true,
+    "floorAtNewGallery": true,
+    "floorAtOldGallery": true
+  },
+  "results": [
+    {
+      "name": "entrance-left-corner",
+      "pose": {
+        "x": 87.2,
+        "y": 0.15,
+        "z": 80.95,
+        "yaw": -2.203545161797077,
+        "pitch": -0.26259458616115283
+      },
+      "room": "vestibule",
+      "calls": 150,
+      "triangles": 1120080,
+      "glError": 0,
+      "frontDoor": true,
+      "hallDoor": true
+    },
+    {
+      "name": "entrance-right-corner",
+      "pose": {
+        "x": 92.8,
+        "y": 0.15,
+        "z": 80.95,
+        "yaw": 2.1972415203636464,
+        "pitch": -0.2604334828701965
+      },
+      "room": "vestibule",
+      "calls": 143,
+      "triangles": 1116460,
+      "glError": 0,
+      "frontDoor": true,
+      "hallDoor": true
+    },
+    {
+      "name": "entrance-soffit",
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 79.35,
+        "yaw": 0,
+        "pitch": 0.9097531579442045
+      },
+      "room": "entryExtension",
+      "calls": 178,
+      "triangles": 1162302,
+      "glError": 0,
+      "frontDoor": true,
+      "hallDoor": true
+    },
+    {
+      "name": "gallery-left-corner",
+      "pose": {
+        "x": 87.2,
+        "y": 3.35,
+        "z": 81.25,
+        "yaw": -2.418613300188299,
+        "pitch": -0.0879884450237282
+      },
+      "room": "frontGallery",
+      "calls": 144,
+      "triangles": 1107572,
+      "glError": 0,
+      "frontDoor": true,
+      "hallDoor": true
+    },
+    {
+      "name": "gallery-right-corner",
+      "pose": {
+        "x": 92.8,
+        "y": 3.35,
+        "z": 81.25,
+        "yaw": 2.4120369926725083,
+        "pitch": -0.08747860017095885
+      },
+      "room": "frontGallery",
+      "calls": 136,
+      "triangles": 903746,
+      "glError": 0,
+      "frontDoor": true,
+      "hallDoor": true
+    },
+    {
+      "name": "gallery-ceiling",
+      "pose": {
+        "x": 90,
+        "y": 3.35,
+        "z": 79.2,
+        "yaw": 0,
+        "pitch": 0.7649928327109103
+      },
+      "room": "frontGalleryExt",
+      "calls": 149,
+      "triangles": 1086472,
+      "glError": 0,
+      "frontDoor": true,
+      "hallDoor": true
+    },
+    {
+      "name": "outdoor-right-urn",
+      "pose": {
+        "x": 95.3,
+        "y": 0,
+        "z": 73.3,
+        "yaw": -0.68461716431278,
+        "pitch": -0.3681615629913756
+      },
+      "room": "out",
+      "calls": 148,
+      "triangles": 1351578,
+      "glError": 0,
+      "frontDoor": true,
+      "hallDoor": true
+    },
+    {
+      "name": "outdoor-paving-wide",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 70.8,
+        "yaw": 0,
+        "pitch": -0.3257452069169275
+      },
+      "room": "out",
+      "calls": 213,
+      "triangles": 1538090,
+      "glError": 0,
+      "frontDoor": true,
+      "hallDoor": true
+    },
+    {
+      "name": "outdoor-left-urn",
+      "pose": {
+        "x": 84.7,
+        "y": 0,
+        "z": 73.3,
+        "yaw": 0.68461716431278,
+        "pitch": -0.3681615629913756
+      },
+      "room": "out",
+      "calls": 181,
+      "triangles": 1389146,
+      "glError": 0,
+      "frontDoor": true,
+      "hallDoor": true
+    }
+  ],
+  "note": "ENT-R02 legacy upper-gallery draw/triangle exceptions deliberately measured, not used as a release-failing gate; see owner acceptance in ENT-R02.md"
+}
