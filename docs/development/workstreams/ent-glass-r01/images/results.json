@@ -1,0 +1,276 @@
+{
+  "passed": false,
+  "baseline": false,
+  "errors": [],
+  "results": [
+    {
+      "name": "front-approach",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 71.5,
+        "yaw": 0,
+        "pitch": 0.5286898329640628
+      },
+      "room": "out",
+      "calls": 213,
+      "triangles": 1527546,
+      "glError": 0,
+      "failedShaders": 0,
+      "frontDoor": true
+    },
+    {
+      "name": "front-oblique",
+      "pose": {
+        "x": 98,
+        "y": 0,
+        "z": 71.5,
+        "yaw": -1.0077152487416783,
+        "pitch": 0.34968471315675764
+      },
+      "room": "out",
+      "calls": 143,
+      "triangles": 1384800,
+      "glError": 0,
+      "failedShaders": 0,
+      "frontDoor": true
+    },
+    {
+      "name": "portico",
+      "pose": {
+        "x": 90,
+        "y": 0,
+        "z": 75.5,
+        "yaw": 0,
+        "pitch": 1.2392421649189593
+      },
+      "room": "out",
+      "calls": 123,
+      "triangles": 1229736,
+      "glError": 0,
+      "failedShaders": 0,
+      "frontDoor": true
+    },
+    {
+      "name": "entry-to-hall",
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 79,
+        "yaw": 0,
+        "pitch": 0.03997868712329008
+      },
+      "room": "entryExtension",
+      "calls": 239,
+      "triangles": 1219812,
+      "glError": 0,
+      "failedShaders": 0,
+      "frontDoor": true
+    },
+    {
+      "name": "hall-to-entry",
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 87,
+        "yaw": 3.141592653589793,
+        "pitch": 0.2617932217887912
+      },
+      "room": "hall",
+      "calls": 261,
+      "triangles": 1603816,
+      "glError": 0,
+      "failedShaders": 0,
+      "frontDoor": true
+    },
+    {
+      "name": "gallery-to-window",
+      "pose": {
+        "x": 88.2,
+        "y": 3.35,
+        "z": 83,
+        "yaw": 2.8694467630586065,
+        "pitch": -0.029857676298925124
+      },
+      "room": "frontGallery",
+      "calls": 225,
+      "triangles": 1543496,
+      "glError": 0,
+      "failedShaders": 0,
+      "frontDoor": true
+    },
+    {
+      "name": "gallery-wide",
+      "pose": {
+        "x": 93,
+        "y": 3.35,
+        "z": 83,
+        "yaw": -2.4364813054753616,
+        "pitch": -0.08083827912194298
+      },
+      "room": "frontGallery",
+      "calls": 241,
+      "triangles": 1628196,
+      "glError": 0,
+      "failedShaders": 0,
+      "frontDoor": true
+    },
+    {
+      "name": "gallery-to-hall",
+      "pose": {
+        "x": 90,
+        "y": 3.35,
+        "z": 78.7,
+        "yaw": 0,
+        "pitch": -0.1293549528807198
+      },
+      "room": "frontGalleryExt",
+      "calls": 204,
+      "triangles": 1110426,
+      "glError": 0,
+      "failedShaders": 0,
+      "frontDoor": true
+    },
+    {
+      "name": "foyer-to-hall-closed",
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 81.1,
+        "yaw": 0,
+        "pitch": -0.006329029416201829
+      },
+      "room": "vestibule",
+      "calls": 227,
+      "triangles": 1151216,
+      "glError": 0,
+      "failedShaders": 0,
+      "frontDoor": true
+    },
+    {
+      "name": "hall-to-foyer-closed",
+      "pose": {
+        "x": 90,
+        "y": 0.15,
+        "z": 87,
+        "yaw": 3.141592653589793,
+        "pitch": -0.006666567903868205
+      },
+      "room": "hall",
+      "calls": 261,
+      "triangles": 1605004,
+      "glError": 0,
+      "failedShaders": 0,
+      "frontDoor": true
+    },
+    {
+      "name": "front-left-jamb",
+      "pose": {
+        "x": 87.35,
+        "y": 0,
+        "z": 74.8,
+        "yaw": 0.6617385790306615,
+        "pitch": -0.11837736436109618
+      },
+      "room": "out",
+      "calls": 189,
+      "triangles": 1375868,
+      "glError": 0,
+      "failedShaders": 0,
+      "frontDoor": true
+    },
+    {
+      "name": "front-right-jamb",
+      "pose": {
+        "x": 92.65,
+        "y": 0,
+        "z": 74.8,
+        "yaw": -0.6617385790306615,
+        "pitch": -0.11837736436109618
+      },
+      "room": "out",
+      "calls": 146,
+      "triangles": 1329460,
+      "glError": 0,
+      "failedShaders": 0,
+      "frontDoor": true
+    }
+  ],
+  "seals": {
+    "frontLeftLow": true,
+    "frontLeftMid": true,
+    "frontRightLow": true,
+    "frontRightMid": true,
+    "frontDoorOpen": true,
+    "hallDoorClosed": false,
+    "westInteriorWall": true,
+    "eastInteriorWall": true,
+    "hallDoorOpen": true
+  },
+  "travel": [
+    {
+      "destination": [
+        90,
+        78.6
+      ],
+      "reached": true,
+      "actual": {
+        "x": 90,
+        "y": 0.15,
+        "z": 78.30701408586214
+      }
+    },
+    {
+      "destination": [
+        90,
+        82.1
+      ],
+      "reached": true,
+      "actual": {
+        "x": 90,
+        "y": 0.15,
+        "z": 81.77305338187107
+      }
+    },
+    {
+      "destination": [
+        90,
+        86.2
+      ],
+      "reached": true,
+      "actual": {
+        "x": 90,
+        "y": 0.15,
+        "z": 85.88135576116396
+      }
+    }
+  ],
+  "gallerySupport": [
+    {
+      "x": 90,
+      "z": 78.2,
+      "y": 3.35
+    },
+    {
+      "x": 90,
+      "z": 80.35,
+      "y": 3.35
+    },
+    {
+      "x": 90,
+      "z": 80.45,
+      "y": 3.35
+    },
+    {
+      "x": 90,
+      "z": 82.2,
+      "y": 3.35
+    },
+    {
+      "x": 86.1,
+      "z": 82.4,
+      "y": 3.35
+    }
+  ],
+  "scope": "Software WebGL, high-quality 412x915, isolated branch. Roof join and gameplay still require visual owner review."
+}
