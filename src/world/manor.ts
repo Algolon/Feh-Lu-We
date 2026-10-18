@@ -37,7 +37,7 @@ import { makeFire } from './fire';
 import { drawSymbol } from '../content/symbols';
 import { EMBLEMS, SERVICE, CATALOG, CONSOLE_SOCKETS, ROUTE_LINES } from '../content/canon';
 import { addClue, has } from '../core/state';
-import { GF, CEIL, UF, UCEIL, TOP, BF, BCEIL, AF, S03, SLAB_UNDERSIDE, roofUnderside, ATTIC_NOOK, ATTIC_ROOF_WINDOW, ENTRANCE_R02 } from './layout';
+import { GF, CEIL, UF, UCEIL, TOP, BF, BCEIL, AF, S03, SLAB_UNDERSIDE, roofUnderside, ATTIC_NOOK, ATTIC_ROOF_WINDOW, ENTRANCE_R02, BILLIARD_GALLERY_R02 } from './layout';
 import { buildMaquette } from './maquette';
 import { addKey, presentKey, keyLiner, linerWhenOpen, hatchDish, LINER_TOP, HATCH_DISH_FLOOR, S3_BUILDERS } from './d2props';
 import { SALON_LAYOUT, SALON_SITES } from '../content/gallery';
@@ -709,6 +709,7 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   c.chunk = 'mBil'; // DEV-04B: the billiard room is its own batch (it is not seen from the hall or the forecourt)
   billiard(w, g, c);
   c.chunk = 'mHall';
+  billiardGalleryTable(c); // BIL-R01: render and collide on the unified upper gallery
 
   // ---------------------------------------------------------------- dining room (thread A: damaged hosting plan)
   c.chunk = 'mWing';
@@ -1000,18 +1001,37 @@ function drawLibraryPlan(x: CanvasRenderingContext2D, W: number, H: number) {
   });
 }
 
+// BIL-R01: stand-alone table + playing pieces, built with the UPPER gallery
+// batch so they are visible from the foyer, the hall and while walking upstairs.
+// Do not render these in mBil, whose visibility is scoped to the old room.
+function billiardGalleryTable(c: Ctx) {
+  const { tableX: x, tableZ: z, width: w, length: L } = BILLIARD_GALLERY_R02;
+  billiardTable(c, x, z, UF, 0, w, L);
+  // Physical table top is y0 + ~0.9. Retain old collision dimensions but put
+  // them ABOVE the new level: no invisible blocker in the old billiard room.
+  c.col.addBox(x - w / 2, x + w / 2, z - L / 2, z + L / 2, UF, UF + 0.95);
+  // Preserve the old arrangement of four balls, now measured in local cloth
+  // coordinates; no world-space residue from the old ground-floor location.
+  const ball = (r: number, cc: number, col: string) =>
+    blob(c.b, c.k.M.paint, col,
+      x - 0.8 + ((cc + 0.5) * 1.6) / 3, UF + 0.88,
+      z + 1.6 - ((r + 0.5) * 3.2) / 3,
+      0.045, 0.045, 0.045, { chunk: c.chunk, jitter: 0 });
+  ball(0, 0, '#d33'); ball(1, 2, '#e8c547'); ball(2, 2, '#36c'); ball(2, 1, '#ffffff');
+  box(c.b, c.k.M.wood, '#c9a46a', x + 0.4, UF + 0.85, z - 0.8,
+    0.03, 0.03, 1.4, { chunk: c.chunk, yaw: 0.5 });
+}
+
 // ---------------------------------------------------------------- billiard room
 function billiard(w: World, g: GameApi, c: Ctx) {
   const k = c.k;
   // DEV-04B: a billiard table (turned legs, apron, cloth bed, cushion and capping rails, pockets) instead of a slab on
   // four posts; no carpet under it; a cue rack on the wall; the armchair faces the table (it faced the corner)
-  const bx0 = 89.3, bx1 = 90.9, bz0 = 105.4, bz1 = 108.6;
-  billiardTable(c, (bx0 + bx1) / 2, (bz0 + bz1) / 2, GF, 0, bx1 - bx0 + 0.3, bz1 - bz0 + 0.3);
+  // BIL-R01: the actual table, coloured balls and the loose cue now live
+  // upstairs (mHall), not inside this independently culled mBil room.
+  // Keep the rack/puzzle clues/lighting here until a separate owner-approved
+  // billiard-setup move; IDs, hints, panel state and saves stay unchanged.
   cueRack(c, 93.6, 104.08, GF, 0);
-  c.col.addBox(bx0 - 0.15, bx1 + 0.15, bz0 - 0.15, bz1 + 0.15, 0, 0.95);
-  const ball = (r: number, cc: number, col: string) => blob(c.b, k.M.paint, col, bx0 + ((cc + 0.5) * (bx1 - bx0)) / 3, GF + 0.88, bz1 - ((r + 0.5) * (bz1 - bz0)) / 3, 0.045, 0.045, 0.045, { chunk: c.chunk, jitter: 0 });
-  ball(0, 0, '#d33'); ball(1, 2, '#e8c547'); ball(2, 2, '#36c'); ball(2, 1, '#ffffff');
-  box(c.b, k.M.wood, '#c9a46a', 90.5, GF + 0.85, 106.2, 0.03, 0.03, 1.4, { chunk: c.chunk, yaw: 0.5 });
   armchair(c, 86.0, 108.6, GF, Math.PI * 0.64, '#7a3a3a');
   const pnl = compound((b) => {
     box(b, k.M.wood, '#4a2f1a', 0, 0, 0, 0.6, 0.6, 0.05);
