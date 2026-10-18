@@ -211,8 +211,18 @@ function shell(w: World, c: Ctx) {
   // (z=80.412). Stopping at the former exterior axis z80.2 exposed a dark gap
   // and raw stone/quoin face at the L-joint on BOTH floors.
   const sideWallJoinZ = 80.54;
-  wall(c, 'z', E.x0, E.zWindow, sideWallJoinZ, 0, TOP, { ...stone, t: 0.4, exterior: -1, skin, uv: 2.4 });
-  wall(c, 'z', E.x1, E.zWindow, sideWallJoinZ, 0, TOP, { ...stone, t: 0.4, exterior: 1, skin, uv: 2.4 });
+  // The last 15 cm are INSIDE the old facade. Give this integral segment the
+  // actual plaster finish instead of leaving an exposed stone end face, or
+  // concealing it behind another artificial wall/pier. Geometry and colliders
+  // keep their exact original wall thickness and position.
+  const plasterReturnStartZ = 80.39;
+  for (const [x,exterior] of [[E.x0,-1],[E.x1,1]] as const) {
+    wall(c, 'z', x, E.zWindow, plasterReturnStartZ, 0, TOP,
+      { ...stone, t: 0.4, exterior, skin, uv: 2.4 });
+    wall(c, 'z', x, plasterReturnStartZ, sideWallJoinZ, 0, TOP,
+      { mat: k.M.plaster, color: '#f1e6cf', t: 0.4, exterior, skin,
+        uv: 2.4, trim: false });
+  }
   // ENT-R02-R5B: no fabricated pillars, overlay walls or blocks here.
   // The two existing side walls meet the carved old facade; the full-height
   // opening's real plaster cut faces are built by wall() in arch.ts.
