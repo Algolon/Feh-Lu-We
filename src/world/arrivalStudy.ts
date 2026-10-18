@@ -30,7 +30,15 @@ export function arrivalGravel(c: Ctx) {
     c.b.add(exteriorMats().gravel,g,new THREE.Matrix4(),'#f2f0e7','paths',false,0);g.dispose();
   }
   edging(c);
-  paving(c,{x0:86,x1:94,z0:75.15,z1:78.16},.94,.60);
+  // ENT-R02-R4: KEEP the hand-dressed entrance flagstones, but re-lay them
+  // OUTSIDE the relocated south facade (now at Z76.55). The historical apron
+  // ended at Z78.16, buried 1.61 m underneath the new house.
+  // Approach first, then two short return wings around the portico steps;
+  // the wings also give both entrance urns a composed paving footprint.
+  const frontApron = { x0: 85.9, x1: 94.1, z0: 73.14, z1: 75.14 };
+  const westReturn = { x0: 85.9, x1: 87.36, z0: 75.14, z1: 76.44 };
+  const eastReturn = { x0: 92.64, x1: 94.1, z0: 75.14, z1: 76.44 };
+  for (const area of [frontApron, westReturn, eastReturn]) paving(c,area,.94,.60);
   // Three concentric courses form an intentional frame around the existing circular planter.
   for(let row=0;row<3;row++)for(let i=0;i<48;i++) {
     const a0=(i/48)*Math.PI*2+.006,a1=((i+1)/48)*Math.PI*2-.006;
