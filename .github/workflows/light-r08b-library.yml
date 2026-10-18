@@ -1,0 +1,97 @@
+name: LIGHT-R08B library desk/rug lighting regression review
+on:
+  push:
+    branches: [fix/light-r08b-library-light-surfaces]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run test:budget
+      - run: npm run build
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: original-low
+            profile: original
+            quality: low
+            portrait: '0'
+          - name: corrected-low
+            profile: fixed
+            quality: low
+            portrait: '0'
+          - name: original-high
+            profile: original
+            quality: high
+            portrait: '1'
+          - name: corrected-high
+            profile: fixed
+            quality: high
+            portrait: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci && npm run build && npx playwright-core install --with-deps chromium
+      - name: Real estate library desk/rug light physics A/B
+        env:
+          LIGHT_R08B_VARIANT: ${{ matrix.profile }}
+          LIGHT_R08B_QUALITY: ${{ matrix.quality }}
+          LIGHT_R08B_PORTRAIT: ${{ matrix.portrait }}
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4188 >/tmp/r08b-preview.log 2>&1 &
+          for i in $(seq 1 40); do
+            curl -sf http://127.0.0.1:4188/Feh-Lu-We/ >/dev/null && break
+            sleep 1
+          done
+          node scripts/light-r08b-library-qa.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r08b-${{ matrix.name }}-screenshots
+          path: light-r08b-evidence/
+          if-no-files-found: warn
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci && npm run build
+      - name: Isolated, nonpublished playable build
+        run: |
+          mkdir -p package/Feh-Lu-We
+          cp -a dist/. package/Feh-Lu-We/
+          cat > package/README.txt <<'TXT'
+          LIGHT-R08B local comparison build — NOT published or merged.
+          Start from this folder: python3 -m http.server 4188
+          FIX: http://localhost:4188/Feh-Lu-We/?stableRooms=1
+          BEFORE: http://localhost:4188/Feh-Lu-We/?stableRooms=1&r08SurfaceFix=0
+          Both share the exact same game build to isolate the desk/rug correction.
+          No changes to production, R06D or existing live R08 preview.
+          TXT
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LIGHT-R08B-local-playable-review-NOT-deployed
+          path: package/
+          if-no-files-found: error
