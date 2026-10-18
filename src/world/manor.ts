@@ -24,7 +24,7 @@ import {
   flwPainting, wallMirror, salonWall,
 } from './furniture';
 import { makeDoor, makeDrawer, makePickup, makeLamp, makeInspect, makeAction, place } from '../interactions/props';
-import { sideboard, billiardTable, cueRack, shelvingUnit, toolWall, floorGlobe, logBasket, coatRail, pedestalBasin, towelRail, luggageRack, writingDesk, tabletop, larder, boardGameSet } from './dressing';
+import { sideboard, billiardTable, cueRack, shelvingUnit, toolWall, floorGlobe, logBasket, fireplaceToolSet, coatRail, pedestalBasin, towelRail, luggageRack, writingDesk, tabletop, larder, boardGameSet } from './dressing';
 import { addBeerCrate, addShoppingCrate, addOpenBook, addBook, PAPER, bottleGeoOf, capGeo, bottleTop, type CrateLoad } from './propkit';
 import { forestMapTexture, drawManorLandscape } from './textures';
 import { buildHearth } from './hearth';
@@ -611,6 +611,10 @@ function groundRooms(w: World, g: GameApi, c: Ctx) {
   // PROP-R08: place the existing FLW-S3-033 screen once in mLiv, shared by sample and normal
   // room variants. It stands beyond the RIGHT edge of the fireplace and clear of the curtain.
   S3_BUILDERS['FLW-S3-033'](c);
+  // PROP-R09: low-footprint four-tool stand to the LEFT of the hearth, between
+  // the firewood basket (z 84.45) and the hearth surround (edge z ≈ 85.32).
+  // Called once outside the sample/default fork, so both game variants share it.
+  fireplaceToolSet(c, 73.05, 84.99, GF, 0);
   c.chunk = 'mHall';
 
   c.chunk = 'mLib';
