@@ -1,0 +1,8246 @@
+{
+ "base": "http://localhost:4193/Feh-Lu-We/",
+ "meta": {
+  "build": "main-D0UYWOgO.js",
+  "viewport": [
+   915,
+   412
+  ],
+  "buffer": [
+   915,
+   412
+  ],
+  "dpr": 1,
+  "quality": "low",
+  "shadows": false,
+  "batching": true
+ },
+ "poses": [
+  {
+   "name": "up-west-closed-max",
+   "doors": "closed",
+   "x": 76.2,
+   "y": 3.35,
+   "z": 83,
+   "yaw": 1.4157995848709555,
+   "pitch": -0.04,
+   "ref": 784036,
+   "room": "reis",
+   "calls": 146,
+   "tris": 707008,
+   "unbatched": {
+    "calls": 226,
+    "triangles": 707008
+   },
+   "regions": [
+    "green.hall",
+    "green.dining",
+    "green.kitchen",
+    "green.billiard",
+    "green.corridor",
+    "green.cons",
+    "green.reis",
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mWing",
+    "mServ",
+    "mUp",
+    "mUpR",
+    "glass+cons",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "veg:trees/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 91712,
+     "visiblePx": 3364,
+     "visiblePct": 0.892,
+     "box": [
+      861,
+      127,
+      914,
+      275
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshLambertMaterial",
+     "calls": 11,
+     "triangles": 59002,
+     "visiblePx": 116819,
+     "visiblePct": 30.988,
+     "box": [
+      7,
+      5,
+      914,
+      411
+     ],
+     "objects": 11
+    },
+    {
+     "k": "chunk:forest | Mesh | MeshLambertMaterial",
+     "calls": 6,
+     "triangles": 53484,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 6
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshLambertMaterial",
+     "calls": 10,
+     "triangles": 50644,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 10
+    },
+    {
+     "k": "chunk:main | Mesh | MeshLambertMaterial",
+     "calls": 40,
+     "triangles": 49085,
+     "visiblePx": 7337,
+     "visiblePct": 1.946,
+     "box": [
+      15,
+      144,
+      551,
+      255
+     ],
+     "objects": 37
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshLambertMaterial",
+     "calls": 9,
+     "triangles": 45826,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 9
+    },
+    {
+     "k": "chunk:grounds | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 43164,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 4
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 30818,
+     "visiblePx": 1680,
+     "visiblePct": 0.446,
+     "box": [
+      858,
+      218,
+      914,
+      288
+     ],
+     "objects": 4
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshLambertMaterial",
+     "calls": 11,
+     "triangles": 27840,
+     "visiblePx": 1028,
+     "visiblePct": 0.273,
+     "box": [
+      736,
+      300,
+      830,
+      326
+     ],
+     "objects": 11
+    },
+    {
+     "k": "chunk:mIn | Mesh | MeshLambertMaterial",
+     "calls": 9,
+     "triangles": 27536,
+     "visiblePx": 178340,
+     "visiblePct": 47.308,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshLambertMaterial",
+     "calls": 10,
+     "triangles": 24272,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 10
+    },
+    {
+     "k": "chunk:mServ | Mesh | MeshLambertMaterial",
+     "calls": 6,
+     "triangles": 23348,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 6
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 21380,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "veg:plants/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 19380,
+     "visiblePx": 124,
+     "visiblePct": 0.033,
+     "box": [
+      858,
+      298,
+      914,
+      322
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:mUpR | Mesh | MeshLambertMaterial",
+     "calls": 6,
+     "triangles": 17300,
+     "visiblePx": 49736,
+     "visiblePct": 13.193,
+     "box": [
+      285,
+      132,
+      914,
+      411
+     ],
+     "objects": 6
+    },
+    {
+     "k": "chunk:paths | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 13496,
+     "visiblePx": 1074,
+     "visiblePct": 0.285,
+     "box": [
+      858,
+      223,
+      914,
+      317
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:mServ | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 11256,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.billiard | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 8832,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:fence | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 8100,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.dining | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 7808,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 4
+    },
+    {
+     "k": "chunk:green.reis | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 6880,
+     "visiblePx": 935,
+     "visiblePct": 0.248,
+     "box": [
+      553,
+      225,
+      602,
+      274
+     ],
+     "objects": 4
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-FIX-R02-ConnectedSash",
+     "calls": 1,
+     "triangles": 6864,
+     "visiblePx": 6027,
+     "visiblePct": 1.599,
+     "box": [
+      823,
+      126,
+      914,
+      331
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:grounds | Mesh | MeshPhongMaterial",
+     "calls": 4,
+     "triangles": 5924,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 5632,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.hall | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 4552,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 4
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 3948,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mBil | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 3704,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 4
+    },
+    {
+     "k": "chunk:green.kitchen | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 3256,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 3202,
+     "visiblePx": 317,
+     "visiblePct": 0.084,
+     "box": [
+      860,
+      227,
+      914,
+      275
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/capSpots|f2_1 | capSpots|f2_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 3080,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.cons | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 2448,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:mUpR | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 2296,
+     "visiblePx": 396,
+     "visiblePct": 0.105,
+     "box": [
+      343,
+      126,
+      771,
+      405
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:mHall/Group | Mesh | MeshBasicMaterial",
+     "calls": 3,
+     "triangles": 2268,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:main | Mesh | MeshPhongMaterial",
+     "calls": 3,
+     "triangles": 1764,
+     "visiblePx": 11,
+     "visiblePct": 0.003,
+     "box": [
+      438,
+      231,
+      462,
+      236
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.corridor | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 1672,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:hills | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1600,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/cap|f2_1 | cap|f2_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1386,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:garden | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1272,
+     "visiblePx": 180,
+     "visiblePct": 0.048,
+     "box": [
+      857,
+      289,
+      871,
+      307
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:mWing/Group | Mesh | MeshBasicMaterial",
+     "calls": 3,
+     "triangles": 1134,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 1056,
+     "visiblePx": 16449,
+     "visiblePct": 4.363,
+     "box": [
+      821,
+      126,
+      914,
+      331
+     ],
+     "objects": 1
+    },
+    {
+     "k": "veg:/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 1020,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 896,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 789,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.reis | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 78,
+     "visiblePct": 0.021,
+     "box": [
+      558,
+      251,
+      566,
+      262
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.billiard | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.cons | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:airco | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 568,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/cone|garden | cone|garden | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 560,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 254,
+     "visiblePct": 0.067,
+     "box": [
+      865,
+      132,
+      914,
+      159
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-R02-MahoganySill",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 909,
+     "visiblePct": 0.241,
+     "box": [
+      623,
+      240,
+      914,
+      361
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:ground | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 528,
+     "visiblePx": 139,
+     "visiblePct": 0.037,
+     "box": [
+      867,
+      305,
+      914,
+      322
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:outdoor/stem|f2_1 | stem|f2_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 212,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 160,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 126,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:forest | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 120,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:wall | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 96,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshBasicMaterial",
+     "calls": 3,
+     "triangles": 96,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:mServ | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 76,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 40,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | MeshBasicMaterial",
+     "calls": 2,
+     "triangles": 36,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "region:mLiv/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 20,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshLambertMaterial",
+     "calls": 6,
+     "triangles": 12,
+     "visiblePx": 12086,
+     "visiblePct": 3.206,
+     "box": [
+      30,
+      152,
+      181,
+      247
+     ],
+     "objects": 6
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "up-west-closed-p90",
+   "doors": "closed",
+   "x": 79.4,
+   "y": 3.35,
+   "z": 82.4,
+   "yaw": 3.9269908169872414,
+   "pitch": 0,
+   "ref": 606896,
+   "room": "reis",
+   "calls": 72,
+   "tris": 602310,
+   "unbatched": {
+    "calls": 93,
+    "triangles": 602310
+   },
+   "regions": [
+    "green.hall",
+    "green.dining",
+    "green.kitchen",
+    "green.billiard",
+    "green.corridor",
+    "green.cons",
+    "green.reis",
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mWing",
+    "mServ",
+    "mUp",
+    "mUpR",
+    "glass+cons",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "veg:trees/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 234746,
+     "visiblePx": 23265,
+     "visiblePct": 6.171,
+     "box": [
+      132,
+      119,
+      814,
+      298
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:forest | Mesh | MeshLambertMaterial",
+     "calls": 11,
+     "triangles": 62464,
+     "visiblePx": 19,
+     "visiblePct": 0.005,
+     "box": [
+      143,
+      254,
+      308,
+      264
+     ],
+     "objects": 11
+    },
+    {
+     "k": "chunk:grounds | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 43164,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 4
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshLambertMaterial",
+     "calls": 6,
+     "triangles": 40120,
+     "visiblePx": 217176,
+     "visiblePct": 57.609,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 6
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 36494,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 5
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 31082,
+     "visiblePx": 5898,
+     "visiblePct": 1.565,
+     "box": [
+      132,
+      211,
+      814,
+      340
+     ],
+     "objects": 4
+    },
+    {
+     "k": "veg:plants/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 25732,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mIn | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 22156,
+     "visiblePx": 63111,
+     "visiblePct": 16.741,
+     "box": [
+      283,
+      0,
+      914,
+      147
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:mUpR | Mesh | MeshLambertMaterial",
+     "calls": 6,
+     "triangles": 17300,
+     "visiblePx": 45229,
+     "visiblePct": 11.998,
+     "box": [
+      90,
+      119,
+      914,
+      411
+     ],
+     "objects": 6
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 10044,
+     "visiblePx": 2940,
+     "visiblePct": 0.78,
+     "box": [
+      270,
+      367,
+      389,
+      411
+     ],
+     "objects": 4
+    },
+    {
+     "k": "chunk:paths | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 9968,
+     "visiblePx": 4777,
+     "visiblePct": 1.267,
+     "box": [
+      132,
+      280,
+      310,
+      378
+     ],
+     "objects": 4
+    },
+    {
+     "k": "chunk:fence | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 8100,
+     "visiblePx": 3,
+     "visiblePct": 0.001,
+     "box": [
+      734,
+      229,
+      769,
+      230
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-FIX-R02-ConnectedSash",
+     "calls": 1,
+     "triangles": 6864,
+     "visiblePx": 10727,
+     "visiblePct": 2.846,
+     "box": [
+      128,
+      112,
+      815,
+      398
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/grass|gr2_4 | grass|gr2_4 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 6696,
+     "visiblePx": 2,
+     "visiblePct": 0.001,
+     "box": [
+      779,
+      263,
+      780,
+      264
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/grass|gr1_4 | grass|gr1_4 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 6696,
+     "visiblePx": 4,
+     "visiblePct": 0.001,
+     "box": [
+      782,
+      248,
+      786,
+      254
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:grounds | Mesh | MeshPhongMaterial",
+     "calls": 4,
+     "triangles": 5924,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 5632,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "region:outdoor/capSpots|f0_1 | capSpots|f0_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 4200,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 3202,
+     "visiblePx": 1630,
+     "visiblePct": 0.432,
+     "box": [
+      132,
+      225,
+      743,
+      301
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/grass|gr2_3 | grass|gr2_3 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 2592,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/grass|gr1_3 | grass|gr1_3 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 2592,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mUpR | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 2296,
+     "visiblePx": 371,
+     "visiblePct": 0.098,
+     "box": [
+      185,
+      109,
+      594,
+      411
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/capSpots|f1_1 | capSpots|f1_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1960,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "veg:/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 1928,
+     "visiblePx": 115,
+     "visiblePct": 0.031,
+     "box": [
+      216,
+      274,
+      271,
+      281
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:outdoor/cap|f0_1 | cap|f0_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1890,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:hills | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1600,
+     "visiblePx": 32,
+     "visiblePct": 0.008,
+     "box": [
+      744,
+      193,
+      754,
+      199
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:garden | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1272,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 1056,
+     "visiblePx": 49990,
+     "visiblePct": 13.261,
+     "box": [
+      128,
+      111,
+      815,
+      398
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/cap|f1_1 | cap|f1_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 882,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/stem|f0_1 | stem|f0_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 720,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/cone|garden | cone|garden | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 560,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 2648,
+     "visiblePct": 0.702,
+     "box": [
+      132,
+      114,
+      773,
+      199
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-R02-MahoganySill",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 2290,
+     "visiblePct": 0.607,
+     "box": [
+      128,
+      261,
+      832,
+      402
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:main | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 360,
+     "visiblePx": 399,
+     "visiblePct": 0.106,
+     "box": [
+      897,
+      266,
+      914,
+      292
+     ],
+     "objects": 4
+    },
+    {
+     "k": "region:outdoor/stem|f1_1 | stem|f1_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 336,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:ground | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 176,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 126,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:forest | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 120,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:wall | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 96,
+     "visiblePx": 20,
+     "visiblePct": 0.005,
+     "box": [
+      133,
+      224,
+      178,
+      231
+     ],
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | MeshBasicMaterial",
+     "calls": 2,
+     "triangles": 36,
+     "visiblePx": 2381,
+     "visiblePct": 0.632,
+     "box": [
+      800,
+      310,
+      914,
+      355
+     ],
+     "objects": 2
+    },
+    {
+     "k": "obj:Group | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 28,
+     "visiblePx": 602,
+     "visiblePct": 0.16,
+     "box": [
+      883,
+      243,
+      914,
+      267
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:ground | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 24,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:mLiv/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 20,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "hall-closed-max",
+   "doors": "closed",
+   "x": 89.5,
+   "y": 0.15,
+   "z": 95,
+   "yaw": 3.141592653589793,
+   "pitch": 0,
+   "ref": 762890,
+   "room": "hall",
+   "calls": 111,
+   "tris": 613974,
+   "unbatched": {
+    "calls": 156,
+    "triangles": 613974
+   },
+   "regions": [
+    "green.vestibule",
+    "green.hall",
+    "green.living",
+    "green.dining",
+    "green.kitchen",
+    "green.lobby",
+    "green.billiard",
+    "green.cons",
+    "green.frontGallery",
+    "green.walkway",
+    "green.landing",
+    "green.ucorr",
+    "green.rearNook",
+    "green.rearNookEast",
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mWing",
+    "mUp",
+    "glass+cons",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "veg:trees/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 96316,
+     "visiblePx": 516,
+     "visiblePct": 0.137,
+     "box": [
+      275,
+      189,
+      679,
+      214
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshLambertMaterial",
+     "calls": 11,
+     "triangles": 59002,
+     "visiblePx": 41173,
+     "visiblePct": 10.922,
+     "box": [
+      271,
+      0,
+      914,
+      240
+     ],
+     "objects": 11
+    },
+    {
+     "k": "chunk:forest | Mesh | MeshLambertMaterial",
+     "calls": 9,
+     "triangles": 54628,
+     "visiblePx": 2,
+     "visiblePct": 0.001,
+     "box": [
+      666,
+      207,
+      667,
+      207
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 46916,
+     "visiblePx": 145,
+     "visiblePct": 0.038,
+     "box": [
+      274,
+      223,
+      297,
+      235
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:main | Mesh | MeshLambertMaterial",
+     "calls": 20,
+     "triangles": 46132,
+     "visiblePx": 4992,
+     "visiblePct": 1.324,
+     "box": [
+      375,
+      0,
+      767,
+      242
+     ],
+     "objects": 20
+    },
+    {
+     "k": "chunk:grounds | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 43164,
+     "visiblePx": 260,
+     "visiblePct": 0.069,
+     "box": [
+      275,
+      203,
+      679,
+      220
+     ],
+     "objects": 4
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshLambertMaterial",
+     "calls": 8,
+     "triangles": 42402,
+     "visiblePx": 2512,
+     "visiblePct": 0.666,
+     "box": [
+      633,
+      153,
+      725,
+      240
+     ],
+     "objects": 8
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 30794,
+     "visiblePx": 3,
+     "visiblePct": 0.001,
+     "box": [
+      670,
+      213,
+      671,
+      214
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:mIn | Mesh | MeshLambertMaterial",
+     "calls": 8,
+     "triangles": 27524,
+     "visiblePx": 265209,
+     "visiblePct": 70.351,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshLambertMaterial",
+     "calls": 8,
+     "triangles": 23960,
+     "visiblePx": 42168,
+     "visiblePct": 11.186,
+     "box": [
+      179,
+      56,
+      638,
+      411
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 21380,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 18800,
+     "visiblePx": 197,
+     "visiblePct": 0.052,
+     "box": [
+      424,
+      129,
+      465,
+      162
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:paths | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 9728,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:fence | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 8100,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.dining | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 7808,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 4
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-FIX-R02-ConnectedSash",
+     "calls": 1,
+     "triangles": 6864,
+     "visiblePx": 242,
+     "visiblePct": 0.064,
+     "box": [
+      272,
+      189,
+      683,
+      221
+     ],
+     "objects": 1
+    },
+    {
+     "k": "veg:plants/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 6080,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:grounds | Mesh | MeshPhongMaterial",
+     "calls": 4,
+     "triangles": 5924,
+     "visiblePx": 121,
+     "visiblePct": 0.032,
+     "box": [
+      275,
+      205,
+      679,
+      218
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.vestibule | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 5904,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 5632,
+     "visiblePx": 49,
+     "visiblePct": 0.013,
+     "box": [
+      701,
+      191,
+      725,
+      208
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.hall | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 4552,
+     "visiblePx": 710,
+     "visiblePct": 0.188,
+     "box": [
+      520,
+      184,
+      546,
+      256
+     ],
+     "objects": 4
+    },
+    {
+     "k": "veg:/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 4056,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 3948,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.living | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 3336,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 3202,
+     "visiblePx": 12,
+     "visiblePct": 0.003,
+     "box": [
+      666,
+      210,
+      766,
+      217
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/capSpots|f2_1 | capSpots|f2_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 3080,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:mHall/Group | Mesh | MeshBasicMaterial",
+     "calls": 3,
+     "triangles": 2268,
+     "visiblePx": 56,
+     "visiblePct": 0.015,
+     "box": [
+      377,
+      0,
+      489,
+      58
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:outdoor/capSpots|f1_1 | capSpots|f1_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1960,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:main | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 1728,
+     "visiblePx": 176,
+     "visiblePct": 0.047,
+     "box": [
+      374,
+      12,
+      491,
+      68
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:outdoor/grass|gr3_3 | grass|gr3_3 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1728,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:hills | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1600,
+     "visiblePx": 5,
+     "visiblePct": 0.001,
+     "box": [
+      670,
+      205,
+      674,
+      206
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/grass|gr5_3 | grass|gr5_3 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1512,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/cap|f2_1 | cap|f2_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1386,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:garden | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1272,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:mWing/Group | Mesh | MeshBasicMaterial",
+     "calls": 3,
+     "triangles": 1134,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.frontGallery | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 1056,
+     "visiblePx": 37,
+     "visiblePct": 0.01,
+     "box": [
+      350,
+      154,
+      361,
+      162
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 1056,
+     "visiblePx": 1025,
+     "visiblePct": 0.272,
+     "box": [
+      272,
+      189,
+      683,
+      221
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 896,
+     "visiblePx": 2266,
+     "visiblePct": 0.601,
+     "box": [
+      96,
+      0,
+      585,
+      247
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/cap|f1_1 | cap|f1_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 882,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:lamp | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 808,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.vestibule | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.living | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.frontGallery | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/cone|garden | cone|garden | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 560,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-R02-MahoganySill",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 93,
+     "visiblePct": 0.025,
+     "box": [
+      271,
+      221,
+      692,
+      222
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/stem|f2_1 | stem|f2_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 402,
+     "visiblePx": 7645,
+     "visiblePct": 2.028,
+     "box": [
+      106,
+      0,
+      210,
+      106
+     ],
+     "objects": 3
+    },
+    {
+     "k": "region:outdoor/stem|f1_1 | stem|f1_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 336,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshBasicMaterial",
+     "calls": 2,
+     "triangles": 168,
+     "visiblePx": 128,
+     "visiblePct": 0.034,
+     "box": [
+      590,
+      212,
+      606,
+      221
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 160,
+     "visiblePx": 69,
+     "visiblePct": 0.018,
+     "box": [
+      218,
+      178,
+      229,
+      185
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 126,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:forest | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 120,
+     "visiblePx": 3,
+     "visiblePct": 0.001,
+     "box": [
+      666,
+      207,
+      666,
+      209
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:wall | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 96,
+     "visiblePx": 9,
+     "visiblePct": 0.002,
+     "box": [
+      670,
+      207,
+      674,
+      209
+     ],
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | MeshBasicMaterial",
+     "calls": 2,
+     "triangles": 36,
+     "visiblePx": 44976,
+     "visiblePct": 11.931,
+     "box": [
+      228,
+      247,
+      646,
+      411
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:mLiv/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 20,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "hall-closed-p90",
+   "doors": "closed",
+   "x": 90,
+   "y": 0.15,
+   "z": 81.8,
+   "yaw": 0,
+   "pitch": -0.04,
+   "ref": 612534,
+   "room": "vestibule",
+   "calls": 95,
+   "tris": 421740,
+   "unbatched": {
+    "calls": 168,
+    "triangles": 421740
+   },
+   "regions": [
+    "green.vestibule",
+    "green.hall",
+    "green.living",
+    "green.dining",
+    "green.kitchen",
+    "green.lobby",
+    "green.frontGallery",
+    "green.walkway",
+    "green.landing",
+    "green.ucorr",
+    "green.rearNook",
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mWing",
+    "mUp",
+    "glass+cons",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "chunk:manor | Mesh | MeshLambertMaterial",
+     "calls": 9,
+     "triangles": 57432,
+     "visiblePx": 3948,
+     "visiblePct": 1.047,
+     "box": [
+      296,
+      116,
+      526,
+      185
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshLambertMaterial",
+     "calls": 10,
+     "triangles": 50644,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 10
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshLambertMaterial",
+     "calls": 6,
+     "triangles": 41982,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 6
+    },
+    {
+     "k": "chunk:grounds | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 39740,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshLambertMaterial",
+     "calls": 11,
+     "triangles": 27840,
+     "visiblePx": 401,
+     "visiblePct": 0.106,
+     "box": [
+      392,
+      141,
+      469,
+      158
+     ],
+     "objects": 11
+    },
+    {
+     "k": "chunk:mIn | Mesh | MeshLambertMaterial",
+     "calls": 9,
+     "triangles": 27536,
+     "visiblePx": 357250,
+     "visiblePct": 94.766,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 9
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 27516,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshLambertMaterial",
+     "calls": 9,
+     "triangles": 23840,
+     "visiblePx": 9724,
+     "visiblePct": 2.579,
+     "box": [
+      330,
+      177,
+      560,
+      293
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 21380,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "veg:trees/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 16220,
+     "visiblePx": 38,
+     "visiblePct": 0.01,
+     "box": [
+      479,
+      153,
+      489,
+      158
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.walkway | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 8832,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.ucorr | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 8832,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:fence | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 8100,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-FIX-R02-ConnectedSash",
+     "calls": 1,
+     "triangles": 6864,
+     "visiblePx": 2,
+     "visiblePct": 0.001,
+     "box": [
+      484,
+      155,
+      484,
+      156
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:mBil | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 5744,
+     "visiblePx": 1,
+     "visiblePct": 0,
+     "box": [
+      448,
+      203,
+      448,
+      203
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 5632,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.hall | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 4552,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 4
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 3948,
+     "visiblePx": 32,
+     "visiblePct": 0.008,
+     "box": [
+      446,
+      142,
+      468,
+      155
+     ],
+     "objects": 2
+    },
+    {
+     "k": "veg:plants/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 3672,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.landing | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 3352,
+     "visiblePx": 4,
+     "visiblePct": 0.001,
+     "box": [
+      521,
+      156,
+      522,
+      158
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.rearNook | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 3256,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.kitchen | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 3256,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 3202,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:paths | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 3108,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:main | Mesh | MeshLambertMaterial",
+     "calls": 43,
+     "triangles": 2996,
+     "visiblePx": 1624,
+     "visiblePct": 0.431,
+     "box": [
+      372,
+      45,
+      509,
+      216
+     ],
+     "objects": 41
+    },
+    {
+     "k": "region:mHall/Group | Mesh | MeshBasicMaterial",
+     "calls": 3,
+     "triangles": 2268,
+     "visiblePx": 31,
+     "visiblePct": 0.008,
+     "box": [
+      419,
+      74,
+      488,
+      97
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:hills | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1600,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.lobby | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 1560,
+     "visiblePx": 77,
+     "visiblePct": 0.02,
+     "box": [
+      402,
+      202,
+      408,
+      217
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:main | Mesh | MeshPhongMaterial",
+     "calls": 3,
+     "triangles": 1312,
+     "visiblePx": 71,
+     "visiblePct": 0.019,
+     "box": [
+      417,
+      82,
+      489,
+      104
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 1056,
+     "visiblePx": 49,
+     "visiblePct": 0.013,
+     "box": [
+      479,
+      153,
+      489,
+      158
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 896,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.walkway | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.ucorr | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/cone|garden | cone|garden | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 560,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 16,
+     "visiblePct": 0.004,
+     "box": [
+      479,
+      153,
+      489,
+      158
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-R02-MahoganySill",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 212,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 160,
+     "visiblePx": 19,
+     "visiblePct": 0.005,
+     "box": [
+      351,
+      181,
+      355,
+      184
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 126,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshBasicMaterial",
+     "calls": 3,
+     "triangles": 108,
+     "visiblePx": 9,
+     "visiblePct": 0.002,
+     "box": [
+      508,
+      143,
+      510,
+      145
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 40,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | MeshBasicMaterial",
+     "calls": 2,
+     "triangles": 36,
+     "visiblePx": 7201,
+     "visiblePct": 1.91,
+     "box": [
+      348,
+      239,
+      558,
+      282
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:mLiv/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 20,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:main | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 12,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 10,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 5
+    },
+    {
+     "k": "veg:/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 0,
+     "triangles": 0,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "well-closed-max",
+   "doors": "closed",
+   "x": 88,
+   "y": 0.15,
+   "z": 92,
+   "yaw": 3.141592653589793,
+   "pitch": 0,
+   "ref": 742372,
+   "room": "hall",
+   "calls": 97,
+   "tris": 634836,
+   "unbatched": {
+    "calls": 136,
+    "triangles": 634836
+   },
+   "regions": [
+    "green.vestibule",
+    "green.hall",
+    "green.living",
+    "green.dining",
+    "green.kitchen",
+    "green.lobby",
+    "green.billiard",
+    "green.cons",
+    "green.frontGallery",
+    "green.walkway",
+    "green.landing",
+    "green.ucorr",
+    "green.rearNook",
+    "green.rearNookEast",
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mWing",
+    "mUp",
+    "glass+cons",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "veg:trees/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 127706,
+     "visiblePx": 899,
+     "visiblePct": 0.238,
+     "box": [
+      105,
+      184,
+      783,
+      223
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshLambertMaterial",
+     "calls": 11,
+     "triangles": 59002,
+     "visiblePx": 63586,
+     "visiblePct": 16.867,
+     "box": [
+      97,
+      0,
+      907,
+      249
+     ],
+     "objects": 11
+    },
+    {
+     "k": "chunk:forest | Mesh | MeshLambertMaterial",
+     "calls": 10,
+     "triangles": 54964,
+     "visiblePx": 9,
+     "visiblePct": 0.002,
+     "box": [
+      113,
+      209,
+      115,
+      212
+     ],
+     "objects": 10
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 46916,
+     "visiblePx": 2585,
+     "visiblePct": 0.686,
+     "box": [
+      97,
+      190,
+      174,
+      249
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:main | Mesh | MeshLambertMaterial",
+     "calls": 15,
+     "triangles": 44464,
+     "visiblePx": 3320,
+     "visiblePct": 0.881,
+     "box": [
+      319,
+      182,
+      599,
+      261
+     ],
+     "objects": 15
+    },
+    {
+     "k": "chunk:grounds | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 43164,
+     "visiblePx": 328,
+     "visiblePct": 0.087,
+     "box": [
+      680,
+      202,
+      783,
+      224
+     ],
+     "objects": 4
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshLambertMaterial",
+     "calls": 8,
+     "triangles": 42402,
+     "visiblePx": 19598,
+     "visiblePct": 5.199,
+     "box": [
+      647,
+      71,
+      898,
+      290
+     ],
+     "objects": 8
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 30794,
+     "visiblePx": 61,
+     "visiblePct": 0.016,
+     "box": [
+      106,
+      212,
+      783,
+      224
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:mIn | Mesh | MeshLambertMaterial",
+     "calls": 8,
+     "triangles": 27524,
+     "visiblePx": 242192,
+     "visiblePct": 64.245,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshLambertMaterial",
+     "calls": 8,
+     "triangles": 23960,
+     "visiblePx": 36712,
+     "visiblePct": 9.738,
+     "box": [
+      0,
+      238,
+      609,
+      411
+     ],
+     "objects": 8
+    },
+    {
+     "k": "veg:plants/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 22504,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 21380,
+     "visiblePx": 262,
+     "visiblePct": 0.069,
+     "box": [
+      130,
+      201,
+      150,
+      224
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 10044,
+     "visiblePx": 276,
+     "visiblePct": 0.073,
+     "box": [
+      375,
+      110,
+      427,
+      125
+     ],
+     "objects": 4
+    },
+    {
+     "k": "chunk:paths | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 9728,
+     "visiblePx": 3,
+     "visiblePct": 0.001,
+     "box": [
+      114,
+      217,
+      115,
+      218
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:fence | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 8100,
+     "visiblePx": 2,
+     "visiblePct": 0.001,
+     "box": [
+      778,
+      208,
+      779,
+      208
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-FIX-R02-ConnectedSash",
+     "calls": 1,
+     "triangles": 6864,
+     "visiblePx": 759,
+     "visiblePct": 0.201,
+     "box": [
+      98,
+      184,
+      791,
+      224
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:grounds | Mesh | MeshPhongMaterial",
+     "calls": 4,
+     "triangles": 5924,
+     "visiblePx": 177,
+     "visiblePct": 0.047,
+     "box": [
+      680,
+      205,
+      783,
+      220
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.vestibule | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 5904,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 5632,
+     "visiblePx": 98,
+     "visiblePct": 0.026,
+     "box": [
+      724,
+      187,
+      762,
+      208
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.hall | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 4552,
+     "visiblePx": 1321,
+     "visiblePct": 0.35,
+     "box": [
+      484,
+      176,
+      521,
+      278
+     ],
+     "objects": 4
+    },
+    {
+     "k": "veg:/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 4080,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.living | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 3336,
+     "visiblePx": 305,
+     "visiblePct": 0.081,
+     "box": [
+      854,
+      221,
+      898,
+      240
+     ],
+     "objects": 3
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 3202,
+     "visiblePx": 39,
+     "visiblePct": 0.01,
+     "box": [
+      106,
+      210,
+      783,
+      223
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/capSpots|f2_1 | capSpots|f2_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 3080,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/capSpots|f1_1 | capSpots|f1_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1960,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/grass|gr3_3 | grass|gr3_3 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1728,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:hills | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1600,
+     "visiblePx": 11,
+     "visiblePct": 0.003,
+     "box": [
+      113,
+      206,
+      779,
+      209
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/grass|gr5_3 | grass|gr5_3 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1512,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/cap|f2_1 | cap|f2_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1386,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:garden | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1272,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.frontGallery | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 1056,
+     "visiblePx": 24,
+     "visiblePct": 0.006,
+     "box": [
+      278,
+      140,
+      292,
+      146
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 1056,
+     "visiblePx": 2380,
+     "visiblePct": 0.631,
+     "box": [
+      98,
+      184,
+      791,
+      224
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 896,
+     "visiblePx": 4,
+     "visiblePct": 0.001,
+     "box": [
+      572,
+      265,
+      574,
+      267
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/cap|f1_1 | cap|f1_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 882,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:lamp | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 808,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.vestibule | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.living | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.frontGallery | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/cone|garden | cone|garden | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 560,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-R02-MahoganySill",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 187,
+     "visiblePct": 0.05,
+     "box": [
+      99,
+      225,
+      807,
+      226
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/stem|f2_1 | stem|f2_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 400,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "region:outdoor/stem|f1_1 | stem|f1_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 336,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshBasicMaterial",
+     "calls": 2,
+     "triangles": 168,
+     "visiblePx": 302,
+     "visiblePct": 0.08,
+     "box": [
+      580,
+      215,
+      605,
+      228
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 160,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 126,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:forest | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 120,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:wall | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 96,
+     "visiblePx": 12,
+     "visiblePct": 0.003,
+     "box": [
+      113,
+      207,
+      682,
+      209
+     ],
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | MeshBasicMaterial",
+     "calls": 2,
+     "triangles": 36,
+     "visiblePx": 42085,
+     "visiblePct": 11.164,
+     "box": [
+      0,
+      264,
+      658,
+      411
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:mLiv/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 20,
+     "visiblePx": 387,
+     "visiblePct": 0.103,
+     "box": [
+      812,
+      258,
+      898,
+      290
+     ],
+     "objects": 1
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "well-closed-p90",
+   "doors": "closed",
+   "x": 90,
+   "y": 0.15,
+   "z": 84.5,
+   "yaw": 0,
+   "pitch": -0.04,
+   "ref": 619260,
+   "room": "hall",
+   "calls": 104,
+   "tris": 412434,
+   "unbatched": {
+    "calls": 191,
+    "triangles": 412434
+   },
+   "regions": [
+    "green.vestibule",
+    "green.hall",
+    "green.living",
+    "green.dining",
+    "green.kitchen",
+    "green.lobby",
+    "green.billiard",
+    "green.cons",
+    "green.frontGallery",
+    "green.walkway",
+    "green.landing",
+    "green.ucorr",
+    "green.rearNook",
+    "green.rearNookEast",
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mWing",
+    "mUp",
+    "glass+cons",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "chunk:mWing | Mesh | MeshLambertMaterial",
+     "calls": 8,
+     "triangles": 47796,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 8
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshLambertMaterial",
+     "calls": 7,
+     "triangles": 41368,
+     "visiblePx": 23711,
+     "visiblePct": 6.29,
+     "box": [
+      0,
+      0,
+      543,
+      184
+     ],
+     "objects": 7
+    },
+    {
+     "k": "chunk:grounds | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 39740,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 36626,
+     "visiblePx": 7945,
+     "visiblePct": 2.108,
+     "box": [
+      0,
+      109,
+      175,
+      249
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshLambertMaterial",
+     "calls": 11,
+     "triangles": 27840,
+     "visiblePx": 452,
+     "visiblePct": 0.12,
+     "box": [
+      383,
+      133,
+      471,
+      150
+     ],
+     "objects": 11
+    },
+    {
+     "k": "chunk:mIn | Mesh | MeshLambertMaterial",
+     "calls": 9,
+     "triangles": 27536,
+     "visiblePx": 278128,
+     "visiblePct": 73.778,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 9
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 27524,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshLambertMaterial",
+     "calls": 9,
+     "triangles": 23840,
+     "visiblePx": 48417,
+     "visiblePct": 12.843,
+     "box": [
+      233,
+      145,
+      870,
+      410
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 21380,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:cons | Mesh | MeshLambertMaterial",
+     "calls": 8,
+     "triangles": 10788,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 8
+    },
+    {
+     "k": "chunk:green.walkway | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 8832,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.ucorr | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 8832,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.billiard | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 8832,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:fence | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 8100,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "veg:plants/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 7344,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-FIX-R02-ConnectedSash",
+     "calls": 1,
+     "triangles": 6864,
+     "visiblePx": 5,
+     "visiblePct": 0.001,
+     "box": [
+      481,
+      149,
+      493,
+      150
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.rearNookEast | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 5904,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mBil | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 5744,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 5
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 5632,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 3948,
+     "visiblePx": 20,
+     "visiblePct": 0.005,
+     "box": [
+      444,
+      135,
+      469,
+      135
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.landing | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 3352,
+     "visiblePx": 5,
+     "visiblePct": 0.001,
+     "box": [
+      529,
+      147,
+      534,
+      150
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.rearNook | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 3256,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.kitchen | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 3256,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 3202,
+     "visiblePx": 1,
+     "visiblePct": 0,
+     "box": [
+      381,
+      197,
+      381,
+      197
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:paths | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 3108,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:main | Mesh | MeshLambertMaterial",
+     "calls": 42,
+     "triangles": 2696,
+     "visiblePx": 7754,
+     "visiblePct": 2.057,
+     "box": [
+      78,
+      0,
+      517,
+      246
+     ],
+     "objects": 39
+    },
+    {
+     "k": "chunk:green.cons | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 2448,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "region:mHall/Group | Mesh | MeshBasicMaterial",
+     "calls": 3,
+     "triangles": 2268,
+     "visiblePx": 63,
+     "visiblePct": 0.017,
+     "box": [
+      399,
+      4,
+      503,
+      55
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:hills | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1600,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.lobby | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 1560,
+     "visiblePx": 100,
+     "visiblePct": 0.027,
+     "box": [
+      394,
+      203,
+      402,
+      221
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:main | Mesh | MeshPhongMaterial",
+     "calls": 3,
+     "triangles": 1312,
+     "visiblePx": 170,
+     "visiblePct": 0.045,
+     "box": [
+      397,
+      16,
+      506,
+      65
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:cons | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 1232,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 1056,
+     "visiblePx": 20,
+     "visiblePct": 0.005,
+     "box": [
+      482,
+      149,
+      492,
+      150
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 896,
+     "visiblePx": 1983,
+     "visiblePct": 0.526,
+     "box": [
+      709,
+      0,
+      864,
+      86
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:garden | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 820,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.walkway | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.ucorr | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.rearNookEast | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.billiard | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.cons | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/cone|garden | cone|garden | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 560,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 23,
+     "visiblePct": 0.006,
+     "box": [
+      482,
+      149,
+      493,
+      150
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-R02-MahoganySill",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 212,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:glass | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 196,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 160,
+     "visiblePx": 402,
+     "visiblePct": 0.107,
+     "box": [
+      325,
+      142,
+      862,
+      182
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/trunk|garden | trunk|garden | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 140,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 126,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshBasicMaterial",
+     "calls": 3,
+     "triangles": 80,
+     "visiblePx": 12,
+     "visiblePct": 0.003,
+     "box": [
+      515,
+      135,
+      518,
+      138
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:cons | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 60,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:garden | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 60,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "veg:/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 48,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 40,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | MeshBasicMaterial",
+     "calls": 2,
+     "triangles": 36,
+     "visiblePx": 29725,
+     "visiblePct": 7.885,
+     "box": [
+      282,
+      254,
+      618,
+      365
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:mLiv/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 20,
+     "visiblePx": 177,
+     "visiblePct": 0.047,
+     "box": [
+      120,
+      248,
+      175,
+      251
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:main | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 12,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 10,
+     "visiblePx": 6586,
+     "visiblePct": 1.747,
+     "box": [
+      716,
+      0,
+      851,
+      78
+     ],
+     "objects": 5
+    },
+    {
+     "k": "obj:Mesh | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 6,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "veg:trees/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 0,
+     "triangles": 0,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "up-west-partial-max",
+   "doors": "partial",
+   "x": 90,
+   "y": 3.35,
+   "z": 82.2,
+   "yaw": 5.497787143782138,
+   "pitch": 0,
+   "ref": 1042646,
+   "room": "frontGallery",
+   "calls": 146,
+   "tris": 861046,
+   "unbatched": {
+    "calls": 252,
+    "triangles": 861046
+   },
+   "regions": [
+    "green.vestibule",
+    "green.hall",
+    "green.living",
+    "green.library",
+    "green.dining",
+    "green.kitchen",
+    "green.lobby",
+    "green.billiard",
+    "green.cons",
+    "green.reis",
+    "green.sterren",
+    "green.bath",
+    "green.frontGallery",
+    "green.walkway",
+    "green.landing",
+    "green.libGallery",
+    "green.ucorr",
+    "green.rearNook",
+    "extGreen.climbers",
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mLib",
+    "mWing",
+    "mUp",
+    "mUpR",
+    "mUpS",
+    "glass+cons",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "chunk:extGreen.climbers | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 236020,
+     "visiblePx": 2,
+     "visiblePct": 0.001,
+     "box": [
+      912,
+      215,
+      913,
+      230
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:mLib | Mesh | MeshLambertMaterial",
+     "calls": 8,
+     "triangles": 107332,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 8
+    },
+    {
+     "k": "veg:trees/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 52098,
+     "visiblePx": 1675,
+     "visiblePct": 0.444,
+     "box": [
+      146,
+      194,
+      836,
+      229
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshLambertMaterial",
+     "calls": 10,
+     "triangles": 47464,
+     "visiblePx": 99,
+     "visiblePct": 0.026,
+     "box": [
+      505,
+      306,
+      521,
+      367
+     ],
+     "objects": 10
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 43304,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 5
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshLambertMaterial",
+     "calls": 7,
+     "triangles": 41368,
+     "visiblePx": 68368,
+     "visiblePct": 18.136,
+     "box": [
+      0,
+      115,
+      914,
+      411
+     ],
+     "objects": 7
+    },
+    {
+     "k": "chunk:grounds | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 40192,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 4
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshLambertMaterial",
+     "calls": 10,
+     "triangles": 27752,
+     "visiblePx": 2237,
+     "visiblePct": 0.593,
+     "box": [
+      651,
+      194,
+      848,
+      255
+     ],
+     "objects": 10
+    },
+    {
+     "k": "chunk:mIn | Mesh | MeshLambertMaterial",
+     "calls": 8,
+     "triangles": 27524,
+     "visiblePx": 282946,
+     "visiblePct": 75.056,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 8
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 27524,
+     "visiblePx": 131,
+     "visiblePct": 0.035,
+     "box": [
+      146,
+      215,
+      836,
+      228
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshLambertMaterial",
+     "calls": 9,
+     "triangles": 23840,
+     "visiblePx": 6804,
+     "visiblePct": 1.805,
+     "box": [
+      426,
+      185,
+      853,
+      411
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 21380,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mUpR | Mesh | MeshLambertMaterial",
+     "calls": 6,
+     "triangles": 17300,
+     "visiblePx": 1885,
+     "visiblePct": 0.5,
+     "box": [
+      92,
+      230,
+      203,
+      285
+     ],
+     "objects": 6
+    },
+    {
+     "k": "chunk:mUpS | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 11144,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 5
+    },
+    {
+     "k": "chunk:green.walkway | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 8832,
+     "visiblePx": 16,
+     "visiblePct": 0.004,
+     "box": [
+      600,
+      241,
+      603,
+      245
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.billiard | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 8832,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:fence | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 8100,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.reis | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 6880,
+     "visiblePx": 390,
+     "visiblePct": 0.103,
+     "box": [
+      92,
+      249,
+      125,
+      316
+     ],
+     "objects": 4
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-FIX-R02-ConnectedSash",
+     "calls": 1,
+     "triangles": 6864,
+     "visiblePx": 313,
+     "visiblePct": 0.083,
+     "box": [
+      145,
+      194,
+      836,
+      229
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.bath | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 6816,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.library | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 5904,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mBil | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 5744,
+     "visiblePx": 14,
+     "visiblePct": 0.004,
+     "box": [
+      749,
+      269,
+      749,
+      282
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 5632,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:main | Mesh | MeshLambertMaterial",
+     "calls": 43,
+     "triangles": 4856,
+     "visiblePx": 14056,
+     "visiblePct": 3.729,
+     "box": [
+      47,
+      138,
+      890,
+      408
+     ],
+     "objects": 42
+    },
+    {
+     "k": "obj:Group | Mesh | MeshPhongMaterial",
+     "calls": 22,
+     "triangles": 4576,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 22
+    },
+    {
+     "k": "chunk:mLib | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 4360,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 3948,
+     "visiblePx": 123,
+     "visiblePct": 0.033,
+     "box": [
+      650,
+      196,
+      786,
+      232
+     ],
+     "objects": 2
+    },
+    {
+     "k": "veg:plants/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 3672,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.hall | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 3528,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.living | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 3336,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.rearNook | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 3256,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 3202,
+     "visiblePx": 40,
+     "visiblePct": 0.011,
+     "box": [
+      811,
+      215,
+      835,
+      222
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:paths | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 3108,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:mLiv/Group | Mesh | MeshBasicMaterial",
+     "calls": 4,
+     "triangles": 2728,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.landing | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 2688,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mUpR | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 2296,
+     "visiblePx": 10,
+     "visiblePct": 0.003,
+     "box": [
+      95,
+      233,
+      202,
+      256
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:mHall/Group | Mesh | MeshBasicMaterial",
+     "calls": 3,
+     "triangles": 2268,
+     "visiblePx": 75,
+     "visiblePct": 0.02,
+     "box": [
+      692,
+      222,
+      834,
+      232
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:mLib/Group | Mesh | MeshBasicMaterial",
+     "calls": 3,
+     "triangles": 2268,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:main | Mesh | MeshPhongMaterial",
+     "calls": 4,
+     "triangles": 2060,
+     "visiblePx": 154,
+     "visiblePct": 0.041,
+     "box": [
+      689,
+      231,
+      838,
+      244
+     ],
+     "objects": 4
+    },
+    {
+     "k": "obj:Group | Mesh | MeshLambertMaterial",
+     "calls": 15,
+     "triangles": 2004,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 15
+    },
+    {
+     "k": "chunk:mUpS | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 1800,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.sterren | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 1728,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:hills | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1600,
+     "visiblePx": 20,
+     "visiblePct": 0.005,
+     "box": [
+      708,
+      201,
+      826,
+      214
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.lobby | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 1560,
+     "visiblePx": 131,
+     "visiblePct": 0.035,
+     "box": [
+      666,
+      273,
+      677,
+      292
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.libGallery | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 1560,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 1056,
+     "visiblePx": 1953,
+     "visiblePct": 0.518,
+     "box": [
+      145,
+      194,
+      836,
+      229
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:mLib | Mesh | LIB-STAIR-R03-SingleBoard",
+     "calls": 1,
+     "triangles": 924,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 896,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:lamp | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 808,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.bath | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 736,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.reis | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 72,
+     "visiblePct": 0.019,
+     "box": [
+      92,
+      316,
+      96,
+      332
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.living | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.walkway | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 21,
+     "visiblePct": 0.006,
+     "box": [
+      598,
+      245,
+      603,
+      250
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.sterren | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.billiard | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.library | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/cone|garden | cone|garden | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 560,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 41,
+     "visiblePct": 0.011,
+     "box": [
+      146,
+      194,
+      158,
+      200
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-R02-MahoganySill",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 149,
+     "visiblePct": 0.04,
+     "box": [
+      141,
+      220,
+      840,
+      231
+     ],
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshBasicMaterial",
+     "calls": 7,
+     "triangles": 460,
+     "visiblePx": 130,
+     "visiblePct": 0.034,
+     "box": [
+      195,
+      196,
+      893,
+      389
+     ],
+     "objects": 7
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 212,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 160,
+     "visiblePx": 12,
+     "visiblePct": 0.003,
+     "box": [
+      602,
+      271,
+      606,
+      273
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 126,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 40,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | MeshBasicMaterial",
+     "calls": 2,
+     "triangles": 36,
+     "visiblePx": 3384,
+     "visiblePct": 0.898,
+     "box": [
+      170,
+      241,
+      914,
+      411
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:mLiv/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 20,
+     "visiblePx": 69,
+     "visiblePct": 0.018,
+     "box": [
+      501,
+      312,
+      520,
+      334
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:main | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 12,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "veg:/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 0,
+     "triangles": 0,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "up-west-partial-p90",
+   "doors": "partial",
+   "x": 87.81333333333333,
+   "y": 3.35,
+   "z": 97.1,
+   "yaw": -2.4026726215433483,
+   "pitch": -0.04,
+   "ref": 710090,
+   "room": "landing",
+   "calls": 131,
+   "tris": 648306,
+   "unbatched": {
+    "calls": 192,
+    "triangles": 648306
+   },
+   "regions": [
+    "green.vestibule",
+    "green.hall",
+    "green.living",
+    "green.library",
+    "green.dining",
+    "green.kitchen",
+    "green.lobby",
+    "green.reis",
+    "green.sterren",
+    "green.study",
+    "green.storage",
+    "green.bath",
+    "green.frontGallery",
+    "green.walkway",
+    "green.landing",
+    "green.libGallery",
+    "green.ucorr",
+    "green.rearNook",
+    "green.rearNookEast",
+    "green.atticLanding",
+    "frontHedge.right",
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mLib",
+    "mWing",
+    "mUp",
+    "mUpS",
+    "mAttic",
+    "glass+cons",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "chunk:mLib | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 91636,
+     "visiblePx": 48,
+     "visiblePct": 0.013,
+     "box": [
+      779,
+      113,
+      796,
+      411
+     ],
+     "objects": 4
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshLambertMaterial",
+     "calls": 11,
+     "triangles": 59002,
+     "visiblePx": 45236,
+     "visiblePct": 12,
+     "box": [
+      0,
+      155,
+      674,
+      411
+     ],
+     "objects": 11
+    },
+    {
+     "k": "chunk:forest | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 50916,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshLambertMaterial",
+     "calls": 12,
+     "triangles": 48016,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 12
+    },
+    {
+     "k": "chunk:main | Mesh | MeshLambertMaterial",
+     "calls": 30,
+     "triangles": 47112,
+     "visiblePx": 9149,
+     "visiblePct": 2.427,
+     "box": [
+      0,
+      168,
+      337,
+      333
+     ],
+     "objects": 30
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 42476,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 4
+    },
+    {
+     "k": "chunk:grounds | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 39740,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 30794,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:mAttic | Mesh | MeshLambertMaterial",
+     "calls": 9,
+     "triangles": 28448,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 9
+    },
+    {
+     "k": "chunk:mIn | Mesh | MeshLambertMaterial",
+     "calls": 8,
+     "triangles": 27524,
+     "visiblePx": 316620,
+     "visiblePct": 83.989,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshLambertMaterial",
+     "calls": 7,
+     "triangles": 23528,
+     "visiblePx": 1560,
+     "visiblePct": 0.414,
+     "box": [
+      51,
+      180,
+      293,
+      411
+     ],
+     "objects": 7
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 21380,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 18800,
+     "visiblePx": 860,
+     "visiblePct": 0.228,
+     "box": [
+      45,
+      182,
+      131,
+      244
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:mUpS | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 11144,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 5
+    },
+    {
+     "k": "chunk:paths | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 9728,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.walkway | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 8832,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:fence | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 8100,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.reis | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 6880,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 4
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-FIX-R02-ConnectedSash",
+     "calls": 1,
+     "triangles": 6864,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "veg:plants/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 6080,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:grounds | Mesh | MeshPhongMaterial",
+     "calls": 4,
+     "triangles": 5924,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 5632,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.hall | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 4552,
+     "visiblePx": 1017,
+     "visiblePct": 0.27,
+     "box": [
+      203,
+      268,
+      237,
+      343
+     ],
+     "objects": 4
+    },
+    {
+     "k": "chunk:mLib | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 4360,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 3948,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.living | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 3336,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 3202,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/capSpots|f2_1 | capSpots|f2_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 3080,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:mLiv/Group | Mesh | MeshBasicMaterial",
+     "calls": 4,
+     "triangles": 2728,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "region:mHall/Group | Mesh | MeshBasicMaterial",
+     "calls": 3,
+     "triangles": 2268,
+     "visiblePx": 41,
+     "visiblePct": 0.011,
+     "box": [
+      34,
+      215,
+      71,
+      222
+     ],
+     "objects": 2
+    },
+    {
+     "k": "veg:/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 2040,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mUpS | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 1800,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.sterren | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 1728,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:hills | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1600,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshPhongMaterial",
+     "calls": 6,
+     "triangles": 1592,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 6
+    },
+    {
+     "k": "region:outdoor/cap|f2_1 | cap|f2_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1386,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:garden | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1272,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "veg:trees/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1242,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:main | Mesh | MeshPhongMaterial",
+     "calls": 3,
+     "triangles": 1196,
+     "visiblePx": 89,
+     "visiblePct": 0.024,
+     "box": [
+      0,
+      228,
+      77,
+      243
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 1056,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 896,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:lamp | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 808,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.walkway | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.reis | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.sterren | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.living | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/cone|garden | cone|garden | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 560,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-R02-MahoganySill",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/stem|f2_1 | stem|f2_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshLambertMaterial",
+     "calls": 9,
+     "triangles": 414,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 9
+    },
+    {
+     "k": "obj:Group | Mesh | MeshBasicMaterial",
+     "calls": 4,
+     "triangles": 224,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 4
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 160,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 126,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mAttic | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 60,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | MeshBasicMaterial",
+     "calls": 2,
+     "triangles": 36,
+     "visiblePx": 46,
+     "visiblePct": 0.012,
+     "box": [
+      261,
+      318,
+      271,
+      324
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:mLiv/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 20,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:main | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 12,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "hall-partial-max",
+   "doors": "partial",
+   "x": 90,
+   "y": 0.15,
+   "z": 82.96249999999999,
+   "yaw": 0,
+   "pitch": -0.04,
+   "ref": 1009836,
+   "room": "vestibule",
+   "calls": 144,
+   "tris": 813820,
+   "unbatched": {
+    "calls": 255,
+    "triangles": 813820
+   },
+   "regions": [
+    "green.vestibule",
+    "green.hall",
+    "green.living",
+    "green.library",
+    "green.dining",
+    "green.kitchen",
+    "green.lobby",
+    "green.reis",
+    "green.sterren",
+    "green.bath",
+    "green.frontGallery",
+    "green.walkway",
+    "green.landing",
+    "green.libGallery",
+    "green.ucorr",
+    "green.rearNook",
+    "extGreen.climbers",
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mLib",
+    "mWing",
+    "mUp",
+    "mUpS",
+    "glass+cons",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "chunk:extGreen.climbers | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 236020,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mLib | Mesh | MeshLambertMaterial",
+     "calls": 8,
+     "triangles": 107332,
+     "visiblePx": 1,
+     "visiblePct": 0,
+     "box": [
+      345,
+      174,
+      345,
+      174
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshLambertMaterial",
+     "calls": 10,
+     "triangles": 50644,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 10
+    },
+    {
+     "k": "chunk:grounds | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 43580,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 5
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshLambertMaterial",
+     "calls": 7,
+     "triangles": 41368,
+     "visiblePx": 13305,
+     "visiblePct": 3.529,
+     "box": [
+      131,
+      35,
+      532,
+      220
+     ],
+     "objects": 7
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 36626,
+     "visiblePx": 5433,
+     "visiblePct": 1.441,
+     "box": [
+      135,
+      134,
+      238,
+      258
+     ],
+     "objects": 5
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 28004,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshLambertMaterial",
+     "calls": 11,
+     "triangles": 27840,
+     "visiblePx": 440,
+     "visiblePct": 0.117,
+     "box": [
+      389,
+      138,
+      470,
+      155
+     ],
+     "objects": 11
+    },
+    {
+     "k": "chunk:mIn | Mesh | MeshLambertMaterial",
+     "calls": 9,
+     "triangles": 27536,
+     "visiblePx": 325188,
+     "visiblePct": 86.261,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 9
+    },
+    {
+     "k": "veg:trees/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 26682,
+     "visiblePx": 27,
+     "visiblePct": 0.007,
+     "box": [
+      425,
+      151,
+      491,
+      155
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshLambertMaterial",
+     "calls": 9,
+     "triangles": 23840,
+     "visiblePx": 17054,
+     "visiblePct": 4.524,
+     "box": [
+      129,
+      0,
+      747,
+      323
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 21380,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mUpS | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 11144,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 5
+    },
+    {
+     "k": "chunk:green.walkway | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 8832,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.ucorr | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 8832,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:fence | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 8100,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/grass|gr2_5 | grass|gr2_5 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 6912,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-FIX-R02-ConnectedSash",
+     "calls": 1,
+     "triangles": 6864,
+     "visiblePx": 13,
+     "visiblePct": 0.003,
+     "box": [
+      423,
+      151,
+      491,
+      155
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.bath | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 6816,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.library | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 5904,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mBil | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 5744,
+     "visiblePx": 5,
+     "visiblePct": 0.001,
+     "box": [
+      464,
+      203,
+      464,
+      207
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 5632,
+     "visiblePx": 42,
+     "visiblePct": 0.011,
+     "box": [
+      215,
+      182,
+      228,
+      224
+     ],
+     "objects": 2
+    },
+    {
+     "k": "obj:Group | Mesh | MeshPhongMaterial",
+     "calls": 22,
+     "triangles": 4576,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 22
+    },
+    {
+     "k": "chunk:green.hall | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 4552,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 4
+    },
+    {
+     "k": "chunk:mLib | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 4360,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:main | Mesh | MeshLambertMaterial",
+     "calls": 53,
+     "triangles": 4016,
+     "visiblePx": 6037,
+     "visiblePct": 1.601,
+     "box": [
+      137,
+      0,
+      512,
+      238
+     ],
+     "objects": 51
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 3948,
+     "visiblePx": 34,
+     "visiblePct": 0.009,
+     "box": [
+      445,
+      139,
+      469,
+      153
+     ],
+     "objects": 2
+    },
+    {
+     "k": "veg:plants/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 3672,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/grass|gr3_5 | grass|gr3_5 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 3456,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.landing | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 3352,
+     "visiblePx": 8,
+     "visiblePct": 0.002,
+     "box": [
+      523,
+      151,
+      528,
+      155
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.rearNook | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 3256,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.kitchen | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 3256,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 3202,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:paths | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 3108,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:main | Mesh | MeshPhongMaterial",
+     "calls": 5,
+     "triangles": 2472,
+     "visiblePx": 97,
+     "visiblePct": 0.026,
+     "box": [
+      410,
+      61,
+      495,
+      90
+     ],
+     "objects": 5
+    },
+    {
+     "k": "region:mHall/Group | Mesh | MeshBasicMaterial",
+     "calls": 3,
+     "triangles": 2268,
+     "visiblePx": 42,
+     "visiblePct": 0.011,
+     "box": [
+      412,
+      51,
+      493,
+      82
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:mLib/Group | Mesh | MeshBasicMaterial",
+     "calls": 3,
+     "triangles": 2268,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mUpS | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 1800,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshLambertMaterial",
+     "calls": 17,
+     "triangles": 1612,
+     "visiblePx": 5226,
+     "visiblePct": 1.386,
+     "box": [
+      662,
+      0,
+      738,
+      102
+     ],
+     "objects": 17
+    },
+    {
+     "k": "chunk:hills | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1600,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.lobby | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 1560,
+     "visiblePx": 85,
+     "visiblePct": 0.023,
+     "box": [
+      399,
+      203,
+      405,
+      219
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.libGallery | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 1560,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 1056,
+     "visiblePx": 55,
+     "visiblePct": 0.015,
+     "box": [
+      423,
+      151,
+      491,
+      155
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:mLib | Mesh | LIB-STAIR-R03-SingleBoard",
+     "calls": 1,
+     "triangles": 924,
+     "visiblePx": 1,
+     "visiblePct": 0,
+     "box": [
+      347,
+      177,
+      347,
+      177
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 896,
+     "visiblePx": 1750,
+     "visiblePct": 0.464,
+     "box": [
+      657,
+      0,
+      746,
+      108
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.bath | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 736,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.walkway | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.ucorr | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.library | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/cone|garden | cone|garden | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 560,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 30,
+     "visiblePct": 0.008,
+     "box": [
+      423,
+      151,
+      490,
+      155
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-R02-MahoganySill",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshBasicMaterial",
+     "calls": 4,
+     "triangles": 276,
+     "visiblePx": 10,
+     "visiblePct": 0.003,
+     "box": [
+      510,
+      140,
+      513,
+      142
+     ],
+     "objects": 4
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 212,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:grounds | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 172,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 160,
+     "visiblePx": 179,
+     "visiblePct": 0.047,
+     "box": [
+      341,
+      157,
+      741,
+      184
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/trunk|garden | trunk|garden | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 140,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 126,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 40,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | MeshBasicMaterial",
+     "calls": 2,
+     "triangles": 36,
+     "visiblePx": 12092,
+     "visiblePct": 3.208,
+     "box": [
+      327,
+      244,
+      576,
+      305
+     ],
+     "objects": 2
+    },
+    {
+     "k": "veg:/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 24,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "region:mLiv/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 20,
+     "visiblePx": 155,
+     "visiblePct": 0.041,
+     "box": [
+      170,
+      240,
+      236,
+      242
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:main | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 12,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "hall-partial-p90",
+   "doors": "partial",
+   "x": 89.68181818181819,
+   "y": 0.15,
+   "z": 96.63636363636364,
+   "yaw": 0.11065722117389563,
+   "pitch": -0.04,
+   "ref": 896534,
+   "room": "hall",
+   "calls": 116,
+   "tris": 758642,
+   "unbatched": {
+    "calls": 184,
+    "triangles": 758642
+   },
+   "regions": [
+    "green.vestibule",
+    "green.hall",
+    "green.living",
+    "green.library",
+    "green.dining",
+    "green.kitchen",
+    "green.lobby",
+    "green.billiard",
+    "green.cons",
+    "green.reis",
+    "green.sterren",
+    "green.study",
+    "green.storage",
+    "green.bath",
+    "green.frontGallery",
+    "green.walkway",
+    "green.landing",
+    "green.libGallery",
+    "green.ucorr",
+    "green.rearNook",
+    "green.rearNookEast",
+    "extGreen.climbers",
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mLib",
+    "mWing",
+    "mUp",
+    "mAttic",
+    "glass+cons",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "chunk:extGreen.climbers | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 236020,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mLib | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 90492,
+     "visiblePx": 7,
+     "visiblePct": 0.002,
+     "box": [
+      0,
+      136,
+      7,
+      137
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:grounds | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 43580,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 5
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 43304,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 5
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshLambertMaterial",
+     "calls": 7,
+     "triangles": 41368,
+     "visiblePx": 71370,
+     "visiblePct": 18.932,
+     "box": [
+      0,
+      0,
+      607,
+      232
+     ],
+     "objects": 7
+    },
+    {
+     "k": "veg:plants/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 37240,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mAttic | Mesh | MeshLambertMaterial",
+     "calls": 9,
+     "triangles": 28448,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 9
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 28004,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshLambertMaterial",
+     "calls": 10,
+     "triangles": 27752,
+     "visiblePx": 1,
+     "visiblePct": 0,
+     "box": [
+      427,
+      133,
+      427,
+      133
+     ],
+     "objects": 10
+    },
+    {
+     "k": "chunk:mIn | Mesh | MeshLambertMaterial",
+     "calls": 8,
+     "triangles": 27524,
+     "visiblePx": 268006,
+     "visiblePct": 71.093,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 21380,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 20796,
+     "visiblePx": 1633,
+     "visiblePct": 0.433,
+     "box": [
+      153,
+      162,
+      557,
+      291
+     ],
+     "objects": 5
+    },
+    {
+     "k": "veg:trees/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 11784,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.billiard | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 8832,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:fence | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 8100,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-FIX-R02-ConnectedSash",
+     "calls": 1,
+     "triangles": 6864,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.bath | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 6816,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "region:outdoor/grass|gr3_6 | grass|gr3_6 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 6048,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.rearNookEast | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 5904,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "region:outdoor/grass|gr2_6 | grass|gr2_6 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 5832,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mBil | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 5744,
+     "visiblePx": 14,
+     "visiblePct": 0.004,
+     "box": [
+      416,
+      215,
+      416,
+      228
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:mLib | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 4360,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 3948,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "region:outdoor/grass|gr3_5 | grass|gr3_5 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 3456,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.landing | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 3352,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.rearNook | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 3256,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.kitchen | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 3256,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 3202,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:paths | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 3108,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:main | Mesh | MeshLambertMaterial",
+     "calls": 34,
+     "triangles": 2140,
+     "visiblePx": 24196,
+     "visiblePct": 6.418,
+     "box": [
+      0,
+      138,
+      457,
+      343
+     ],
+     "objects": 32
+    },
+    {
+     "k": "chunk:green.cons | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1848,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.storage | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 1728,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:hills | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1600,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshLambertMaterial",
+     "calls": 7,
+     "triangles": 1592,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 7
+    },
+    {
+     "k": "chunk:green.lobby | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 1560,
+     "visiblePx": 905,
+     "visiblePct": 0.24,
+     "box": [
+      235,
+      224,
+      269,
+      281
+     ],
+     "objects": 3
+    },
+    {
+     "k": "obj:kitchen-sippyjuiz-pouch | Mesh | MeshLambertMaterial",
+     "calls": 13,
+     "triangles": 1080,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 11
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 1056,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mLib | Mesh | LIB-STAIR-R03-SingleBoard",
+     "calls": 1,
+     "triangles": 924,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.bath | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 736,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.storage | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.billiard | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.rearNookEast | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/cone|garden | cone|garden | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 560,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-R02-MahoganySill",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 212,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:grounds | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 172,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 160,
+     "visiblePx": 123,
+     "visiblePct": 0.033,
+     "box": [
+      538,
+      160,
+      551,
+      170
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/trunk|garden | trunk|garden | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 140,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshBasicMaterial",
+     "calls": 8,
+     "triangles": 132,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 8
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 126,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "veg:/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 72,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mAttic | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 60,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 40,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 30,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "well-partial-max",
+   "doors": "partial",
+   "x": 91.5,
+   "y": 0.15,
+   "z": 95,
+   "yaw": 3.9269908169872414,
+   "pitch": 0,
+   "ref": 1090658,
+   "room": "hall",
+   "calls": 140,
+   "tris": 990306,
+   "unbatched": {
+    "calls": 212,
+    "triangles": 990306
+   },
+   "regions": [
+    "green.vestibule",
+    "green.hall",
+    "green.living",
+    "green.library",
+    "green.dining",
+    "green.kitchen",
+    "green.lobby",
+    "green.billiard",
+    "green.cons",
+    "green.reis",
+    "green.sterren",
+    "green.study",
+    "green.storage",
+    "green.bath",
+    "green.frontGallery",
+    "green.walkway",
+    "green.landing",
+    "green.libGallery",
+    "green.ucorr",
+    "green.rearNook",
+    "green.rearNookEast",
+    "extGreen.climbers",
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mLib",
+    "mWing",
+    "mUp",
+    "mUpR",
+    "mUpS",
+    "mAttic",
+    "glass+cons",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "chunk:extGreen.climbers | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 236020,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mLib | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 91636,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 4
+    },
+    {
+     "k": "veg:trees/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 69820,
+     "visiblePx": 147,
+     "visiblePct": 0.039,
+     "box": [
+      428,
+      192,
+      470,
+      212
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshLambertMaterial",
+     "calls": 11,
+     "triangles": 59002,
+     "visiblePx": 55294,
+     "visiblePct": 14.668,
+     "box": [
+      0,
+      0,
+      914,
+      253
+     ],
+     "objects": 11
+    },
+    {
+     "k": "chunk:forest | Mesh | MeshLambertMaterial",
+     "calls": 9,
+     "triangles": 54628,
+     "visiblePx": 1,
+     "visiblePct": 0,
+     "box": [
+      432,
+      208,
+      432,
+      208
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshLambertMaterial",
+     "calls": 12,
+     "triangles": 48016,
+     "visiblePx": 1386,
+     "visiblePct": 0.368,
+     "box": [
+      428,
+      172,
+      494,
+      239
+     ],
+     "objects": 12
+    },
+    {
+     "k": "chunk:main | Mesh | MeshLambertMaterial",
+     "calls": 28,
+     "triangles": 47016,
+     "visiblePx": 7980,
+     "visiblePct": 2.117,
+     "box": [
+      148,
+      0,
+      487,
+      251
+     ],
+     "objects": 28
+    },
+    {
+     "k": "chunk:grounds | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 43164,
+     "visiblePx": 70,
+     "visiblePct": 0.019,
+     "box": [
+      428,
+      203,
+      470,
+      217
+     ],
+     "objects": 4
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 42476,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 4
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 30794,
+     "visiblePx": 2,
+     "visiblePct": 0.001,
+     "box": [
+      468,
+      210,
+      468,
+      211
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:mAttic | Mesh | MeshLambertMaterial",
+     "calls": 9,
+     "triangles": 28448,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 9
+    },
+    {
+     "k": "chunk:mIn | Mesh | MeshLambertMaterial",
+     "calls": 8,
+     "triangles": 27524,
+     "visiblePx": 256404,
+     "visiblePct": 68.015,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshLambertMaterial",
+     "calls": 10,
+     "triangles": 24272,
+     "visiblePx": 59037,
+     "visiblePct": 15.661,
+     "box": [
+      116,
+      91,
+      914,
+      411
+     ],
+     "objects": 10
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 21380,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 18800,
+     "visiblePx": 437,
+     "visiblePct": 0.116,
+     "box": [
+      170,
+      104,
+      238,
+      153
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:mUpR | Mesh | MeshLambertMaterial",
+     "calls": 6,
+     "triangles": 17300,
+     "visiblePx": 43,
+     "visiblePct": 0.011,
+     "box": [
+      355,
+      134,
+      360,
+      157
+     ],
+     "objects": 6
+    },
+    {
+     "k": "chunk:mUpS | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 11144,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 5
+    },
+    {
+     "k": "chunk:paths | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 9728,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.walkway | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 8832,
+     "visiblePx": 23,
+     "visiblePct": 0.006,
+     "box": [
+      657,
+      83,
+      670,
+      88
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:fence | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 8100,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.reis | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 6880,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 4
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-FIX-R02-ConnectedSash",
+     "calls": 1,
+     "triangles": 6864,
+     "visiblePx": 113,
+     "visiblePct": 0.03,
+     "box": [
+      428,
+      193,
+      472,
+      217
+     ],
+     "objects": 1
+    },
+    {
+     "k": "veg:plants/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 6080,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:grounds | Mesh | MeshPhongMaterial",
+     "calls": 4,
+     "triangles": 5924,
+     "visiblePx": 36,
+     "visiblePct": 0.01,
+     "box": [
+      428,
+      206,
+      470,
+      213
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.vestibule | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 5904,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 5632,
+     "visiblePx": 31,
+     "visiblePct": 0.008,
+     "box": [
+      447,
+      195,
+      462,
+      207
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.hall | Mesh | MeshLambertMaterial",
+     "calls": 4,
+     "triangles": 4552,
+     "visiblePx": 692,
+     "visiblePct": 0.184,
+     "box": [
+      325,
+      184,
+      352,
+      255
+     ],
+     "objects": 4
+    },
+    {
+     "k": "chunk:mLib | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 4360,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 3948,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "region:outdoor/grass|gr3_5 | grass|gr3_5 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 3456,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.living | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 3336,
+     "visiblePx": 2,
+     "visiblePct": 0.001,
+     "box": [
+      493,
+      216,
+      494,
+      216
+     ],
+     "objects": 3
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 3202,
+     "visiblePx": 14,
+     "visiblePct": 0.004,
+     "box": [
+      239,
+      210,
+      474,
+      214
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:mLiv/Group | Mesh | MeshBasicMaterial",
+     "calls": 4,
+     "triangles": 2728,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:mUpR | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 2296,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:mHall/Group | Mesh | MeshBasicMaterial",
+     "calls": 3,
+     "triangles": 2268,
+     "visiblePx": 46,
+     "visiblePct": 0.012,
+     "box": [
+      252,
+      9,
+      356,
+      51
+     ],
+     "objects": 2
+    },
+    {
+     "k": "veg:/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 2040,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "region:outdoor/capSpots|f1_1 | capSpots|f1_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1960,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mUpS | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 1800,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.sterren | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 1728,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "region:outdoor/grass|gr3_3 | grass|gr3_3 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1728,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:hills | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1600,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:garden | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1272,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.frontGallery | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 1056,
+     "visiblePx": 92,
+     "visiblePct": 0.024,
+     "box": [
+      3,
+      119,
+      25,
+      131
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 1056,
+     "visiblePx": 383,
+     "visiblePct": 0.102,
+     "box": [
+      428,
+      192,
+      472,
+      217
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:main | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 900,
+     "visiblePx": 181,
+     "visiblePct": 0.048,
+     "box": [
+      221,
+      3,
+      359,
+      62
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 896,
+     "visiblePx": 2,
+     "visiblePct": 0.001,
+     "box": [
+      386,
+      241,
+      388,
+      242
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/cap|f1_1 | cap|f1_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 882,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:lamp | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 808,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.walkway | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.vestibule | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.frontGallery | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.reis | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.sterren | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.living | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/cone|garden | cone|garden | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 560,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-R02-MahoganySill",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 49,
+     "visiblePct": 0.013,
+     "box": [
+      428,
+      216,
+      478,
+      218
+     ],
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshLambertMaterial",
+     "calls": 6,
+     "triangles": 408,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 6
+    },
+    {
+     "k": "region:outdoor/stem|f1_1 | stem|f1_1 | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 336,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshBasicMaterial",
+     "calls": 4,
+     "triangles": 224,
+     "visiblePx": 94,
+     "visiblePct": 0.025,
+     "box": [
+      393,
+      211,
+      406,
+      218
+     ],
+     "objects": 4
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 160,
+     "visiblePx": 295,
+     "visiblePct": 0.078,
+     "box": [
+      815,
+      162,
+      841,
+      175
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/trunk|garden | trunk|garden | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 140,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 126,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:forest | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 120,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:wall | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 96,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mAttic | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 60,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | MeshBasicMaterial",
+     "calls": 2,
+     "triangles": 36,
+     "visiblePx": 49565,
+     "visiblePct": 13.148,
+     "box": [
+      0,
+      242,
+      475,
+      411
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:mLiv/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 20,
+     "visiblePx": 34,
+     "visiblePct": 0.009,
+     "box": [
+      480,
+      231,
+      494,
+      238
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:main | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 12,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "well-partial-p90",
+   "doors": "partial",
+   "x": 90,
+   "y": 0.15,
+   "z": 84.88888888888889,
+   "yaw": 0,
+   "pitch": -0.04,
+   "ref": 799998,
+   "room": "hall",
+   "calls": 148,
+   "tris": 584170,
+   "unbatched": {
+    "calls": 273,
+    "triangles": 584170
+   },
+   "regions": [
+    "green.vestibule",
+    "green.hall",
+    "green.living",
+    "green.library",
+    "green.dining",
+    "green.kitchen",
+    "green.lobby",
+    "green.billiard",
+    "green.cons",
+    "green.reis",
+    "green.sterren",
+    "green.study",
+    "green.storage",
+    "green.bath",
+    "green.frontGallery",
+    "green.walkway",
+    "green.landing",
+    "green.libGallery",
+    "green.ucorr",
+    "green.rearNook",
+    "green.rearNookEast",
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mLib",
+    "mWing",
+    "mUp",
+    "mUpS",
+    "mAttic",
+    "glass+cons",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "chunk:mLib | Mesh | MeshLambertMaterial",
+     "calls": 8,
+     "triangles": 107332,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 8
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshLambertMaterial",
+     "calls": 8,
+     "triangles": 47796,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 8
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshLambertMaterial",
+     "calls": 7,
+     "triangles": 41368,
+     "visiblePx": 24291,
+     "visiblePct": 6.444,
+     "box": [
+      0,
+      0,
+      546,
+      214
+     ],
+     "objects": 7
+    },
+    {
+     "k": "chunk:grounds | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 39740,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 36626,
+     "visiblePx": 6766,
+     "visiblePct": 1.795,
+     "box": [
+      0,
+      109,
+      154,
+      252
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:mAttic | Mesh | MeshLambertMaterial",
+     "calls": 11,
+     "triangles": 28452,
+     "visiblePx": 1,
+     "visiblePct": 0,
+     "box": [
+      409,
+      89,
+      409,
+      89
+     ],
+     "objects": 10
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshLambertMaterial",
+     "calls": 11,
+     "triangles": 27840,
+     "visiblePx": 397,
+     "visiblePct": 0.105,
+     "box": [
+      382,
+      132,
+      471,
+      148
+     ],
+     "objects": 11
+    },
+    {
+     "k": "chunk:mIn | Mesh | MeshLambertMaterial",
+     "calls": 9,
+     "triangles": 27536,
+     "visiblePx": 279001,
+     "visiblePct": 74.009,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 9
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 27524,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshLambertMaterial",
+     "calls": 9,
+     "triangles": 23840,
+     "visiblePx": 48739,
+     "visiblePct": 12.929,
+     "box": [
+      229,
+      140,
+      914,
+      411
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 21380,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mUpS | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 11144,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 5
+    },
+    {
+     "k": "chunk:green.walkway | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 8832,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.ucorr | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 8832,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.billiard | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 8832,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:fence | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 8100,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "veg:plants/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 7344,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-FIX-R02-ConnectedSash",
+     "calls": 1,
+     "triangles": 6864,
+     "visiblePx": 1,
+     "visiblePct": 0,
+     "box": [
+      420,
+      148,
+      420,
+      148
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.bath | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 6816,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.rearNookEast | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 5904,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.library | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 5904,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mBil | Mesh | MeshLambertMaterial",
+     "calls": 5,
+     "triangles": 5744,
+     "visiblePx": 11,
+     "visiblePct": 0.003,
+     "box": [
+      449,
+      203,
+      465,
+      208
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:mLiv | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 5632,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "obj:Group | Mesh | MeshPhongMaterial",
+     "calls": 22,
+     "triangles": 4576,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 22
+    },
+    {
+     "k": "chunk:mLib | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 4360,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:main | Mesh | MeshLambertMaterial",
+     "calls": 57,
+     "triangles": 4256,
+     "visiblePx": 8510,
+     "visiblePct": 2.257,
+     "box": [
+      62,
+      0,
+      518,
+      248
+     ],
+     "objects": 54
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 3948,
+     "visiblePx": 26,
+     "visiblePct": 0.007,
+     "box": [
+      444,
+      134,
+      470,
+      148
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.landing | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 3352,
+     "visiblePx": 2,
+     "visiblePct": 0.001,
+     "box": [
+      535,
+      148,
+      536,
+      148
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.rearNook | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 3256,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.kitchen | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 3256,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "region:outdoor/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 3202,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:paths | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 3108,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:main | Mesh | MeshPhongMaterial",
+     "calls": 5,
+     "triangles": 2472,
+     "visiblePx": 196,
+     "visiblePct": 0.052,
+     "box": [
+      392,
+      0,
+      509,
+      56
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:green.cons | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 2448,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "region:mHall/Group | Mesh | MeshBasicMaterial",
+     "calls": 3,
+     "triangles": 2268,
+     "visiblePx": 38,
+     "visiblePct": 0.01,
+     "box": [
+      395,
+      18,
+      507,
+      46
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:mLib/Group | Mesh | MeshBasicMaterial",
+     "calls": 3,
+     "triangles": 2268,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mUpS | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 1800,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.storage | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 1728,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "obj:Group | Mesh | MeshLambertMaterial",
+     "calls": 17,
+     "triangles": 1612,
+     "visiblePx": 5607,
+     "visiblePct": 1.487,
+     "box": [
+      735,
+      0,
+      893,
+      70
+     ],
+     "objects": 17
+    },
+    {
+     "k": "chunk:hills | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 1600,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.lobby | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 1560,
+     "visiblePx": 103,
+     "visiblePct": 0.027,
+     "box": [
+      392,
+      204,
+      400,
+      221
+     ],
+     "objects": 3
+    },
+    {
+     "k": "chunk:green.libGallery | Mesh | MeshLambertMaterial",
+     "calls": 3,
+     "triangles": 1560,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 3
+    },
+    {
+     "k": "chunk:mAttic | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 1288,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 1056,
+     "visiblePx": 16,
+     "visiblePct": 0.004,
+     "box": [
+      420,
+      148,
+      493,
+      148
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:mLib | Mesh | LIB-STAIR-R03-SingleBoard",
+     "calls": 1,
+     "triangles": 924,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 896,
+     "visiblePx": 2057,
+     "visiblePct": 0.546,
+     "box": [
+      727,
+      0,
+      911,
+      78
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.bath | Mesh | MeshPhongMaterial",
+     "calls": 2,
+     "triangles": 736,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:green.walkway | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.ucorr | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.storage | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.rearNookEast | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.library | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.billiard | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:green.cons | Mesh | MeshPhongMaterial",
+     "calls": 1,
+     "triangles": 616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/cone|garden | cone|garden | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 560,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 15,
+     "visiblePct": 0.004,
+     "box": [
+      421,
+      148,
+      493,
+      148
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | WINDOW-R02-MahoganySill",
+     "calls": 1,
+     "triangles": 528,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Group | Mesh | MeshBasicMaterial",
+     "calls": 4,
+     "triangles": 248,
+     "visiblePx": 8,
+     "visiblePct": 0.002,
+     "box": [
+      516,
+      134,
+      519,
+      137
+     ],
+     "objects": 4
+    },
+    {
+     "k": "chunk:garden | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 224,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mUp | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 212,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mHall | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 160,
+     "visiblePx": 525,
+     "visiblePct": 0.139,
+     "box": [
+      320,
+      135,
+      911,
+      182
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/trunk|garden | trunk|garden | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 140,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 126,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:mAttic | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 60,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "veg:/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 1,
+     "triangles": 48,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mWing | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 40,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | MeshBasicMaterial",
+     "calls": 2,
+     "triangles": 36,
+     "visiblePx": 39721,
+     "visiblePct": 10.537,
+     "box": [
+      263,
+      257,
+      634,
+      392
+     ],
+     "objects": 2
+    },
+    {
+     "k": "region:mLiv/Mesh | Mesh | ShaderMaterial",
+     "calls": 1,
+     "triangles": 20,
+     "visiblePx": 162,
+     "visiblePct": 0.043,
+     "box": [
+      106,
+      250,
+      154,
+      254
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:main | Mesh | MeshBasicMaterial",
+     "calls": 1,
+     "triangles": 12,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "obj:Mesh | Mesh | MeshLambertMaterial",
+     "calls": 2,
+     "triangles": 4,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "veg:trees/multi-draw | Mesh | MeshLambertMaterial",
+     "calls": 0,
+     "triangles": 0,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    }
+   ],
+   "reconciled": true
+  }
+ ],
+ "problems": []
+}

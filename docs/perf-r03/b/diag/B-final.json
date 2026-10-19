@@ -1,0 +1,2674 @@
+{
+ "base": "http://localhost:4193/Feh-Lu-We/",
+ "meta": {
+  "build": "main-ClDpAs6w.js",
+  "viewport": [
+   915,
+   412
+  ],
+  "buffer": [
+   915,
+   412
+  ],
+  "dpr": 1,
+  "quality": "low",
+  "shadows": false,
+  "batching": true
+ },
+ "poses": [
+  {
+   "name": "library-closed-max",
+   "doors": "closed",
+   "x": 74.2,
+   "y": 0.15,
+   "z": 106,
+   "yaw": 2.356194490192345,
+   "pitch": 0,
+   "tris": 954156,
+   "room": "library",
+   "calls": 172,
+   "unbatched": {
+    "calls": 286,
+    "triangles": 954156
+   },
+   "regions": [
+    "green.hall",
+    "green.library",
+    "green.dining",
+    "green.kitchen",
+    "green.billiard",
+    "green.corridor",
+    "green.cons",
+    "green.libGallery",
+    "extGreen.climbers",
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mLib",
+    "mWing",
+    "mServ",
+    "mUp",
+    "glass+cons",
+    "cottage",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "chunk:extGreen.climbers",
+     "calls": 2,
+     "triangles": 236020,
+     "visiblePx": 2,
+     "visiblePct": 0.001,
+     "box": [
+      913,
+      207,
+      914,
+      217
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:mLib",
+     "calls": 9,
+     "triangles": 103784,
+     "visiblePx": 98172,
+     "visiblePct": 26.042,
+     "box": [
+      0,
+      56,
+      914,
+      411
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:mWing",
+     "calls": 13,
+     "triangles": 72064,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 13
+    },
+    {
+     "k": "chunk:manor",
+     "calls": 16,
+     "triangles": 67576,
+     "visiblePx": 16879,
+     "visiblePct": 4.477,
+     "box": [
+      0,
+      0,
+      914,
+      259
+     ],
+     "objects": 15
+    },
+    {
+     "k": "chunk:forest",
+     "calls": 8,
+     "triangles": 62504,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 8
+    },
+    {
+     "k": "chunk:mLiv",
+     "calls": 14,
+     "triangles": 53648,
+     "visiblePx": 33,
+     "visiblePct": 0.009,
+     "box": [
+      570,
+      173,
+      767,
+      188
+     ],
+     "objects": 14
+    },
+    {
+     "k": "chunk:main",
+     "calls": 59,
+     "triangles": 52685,
+     "visiblePx": 6486,
+     "visiblePct": 1.721,
+     "box": [
+      0,
+      0,
+      855,
+      290
+     ],
+     "objects": 56
+    },
+    {
+     "k": "chunk:grounds",
+     "calls": 7,
+     "triangles": 43468,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 7
+    },
+    {
+     "k": "chunk:mServ",
+     "calls": 9,
+     "triangles": 34680,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 9
+    },
+    {
+     "k": "region:outdoor/Mesh",
+     "calls": 5,
+     "triangles": 34020,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 5
+    },
+    {
+     "k": "chunk:mUp",
+     "calls": 14,
+     "triangles": 32000
+    },
+    {
+     "k": "chunk:mIn",
+     "calls": 9,
+     "triangles": 27536
+    },
+    {
+     "k": "chunk:mHall",
+     "calls": 12,
+     "triangles": 25328
+    },
+    {
+     "k": "veg:trees/multi-draw",
+     "calls": 1,
+     "triangles": 16052
+    },
+    {
+     "k": "chunk:garden",
+     "calls": 8,
+     "triangles": 14100
+    },
+    {
+     "k": "chunk:green.billiard",
+     "calls": 3,
+     "triangles": 9448
+    },
+    {
+     "k": "chunk:fence",
+     "calls": 1,
+     "triangles": 8100
+    },
+    {
+     "k": "chunk:green.dining",
+     "calls": 4,
+     "triangles": 7808
+    },
+    {
+     "k": "chunk:mBil",
+     "calls": 5,
+     "triangles": 5744
+    },
+    {
+     "k": "obj:Group",
+     "calls": 38,
+     "triangles": 4826
+    },
+    {
+     "k": "chunk:green.hall",
+     "calls": 4,
+     "triangles": 4552
+    },
+    {
+     "k": "region:outdoor/grass|gr3_4",
+     "calls": 1,
+     "triangles": 3672
+    },
+    {
+     "k": "region:outdoor/grass|gr3_5",
+     "calls": 1,
+     "triangles": 3456
+    },
+    {
+     "k": "chunk:green.kitchen",
+     "calls": 3,
+     "triangles": 3256
+    },
+    {
+     "k": "chunk:paths",
+     "calls": 1,
+     "triangles": 3108
+    },
+    {
+     "k": "chunk:green.cons",
+     "calls": 4,
+     "triangles": 3064
+    },
+    {
+     "k": "region:mLiv/Group",
+     "calls": 4,
+     "triangles": 2728
+    },
+    {
+     "k": "region:mLib/Group",
+     "calls": 3,
+     "triangles": 2268
+    },
+    {
+     "k": "region:mHall/Group",
+     "calls": 3,
+     "triangles": 2268
+    },
+    {
+     "k": "region:outdoor/capSpots|f1_1",
+     "calls": 1,
+     "triangles": 1960
+    },
+    {
+     "k": "region:outdoor/grass|gr3_3",
+     "calls": 1,
+     "triangles": 1728
+    },
+    {
+     "k": "chunk:green.corridor",
+     "calls": 3,
+     "triangles": 1672
+    },
+    {
+     "k": "chunk:hills",
+     "calls": 1,
+     "triangles": 1600
+    },
+    {
+     "k": "obj:Mesh",
+     "calls": 6,
+     "triangles": 1353
+    },
+    {
+     "k": "region:outdoor/grass|gr5_5",
+     "calls": 1,
+     "triangles": 1296
+    },
+    {
+     "k": "region:mWing/Group",
+     "calls": 3,
+     "triangles": 1134
+    },
+    {
+     "k": "veg:/multi-draw",
+     "calls": 2,
+     "triangles": 1048
+    },
+    {
+     "k": "region:outdoor/cap|f1_1",
+     "calls": 1,
+     "triangles": 882
+    },
+    {
+     "k": "chunk:airco",
+     "calls": 1,
+     "triangles": 568
+    },
+    {
+     "k": "region:outdoor/cone|garden",
+     "calls": 1,
+     "triangles": 560
+    },
+    {
+     "k": "region:outdoor/stem|f1_1",
+     "calls": 1,
+     "triangles": 336
+    },
+    {
+     "k": "region:outdoor/trunk|garden",
+     "calls": 1,
+     "triangles": 140
+    },
+    {
+     "k": "chunk:wall",
+     "calls": 1,
+     "triangles": 96
+    },
+    {
+     "k": "region:mLiv/Mesh",
+     "calls": 1,
+     "triangles": 20
+    },
+    {
+     "k": "veg:plants/multi-draw",
+     "calls": 0,
+     "triangles": 0
+    },
+    {
+     "k": "veg:mushrooms/multi-draw",
+     "calls": 0,
+     "triangles": 0
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "kitchen-closed-max",
+   "doors": "closed",
+   "x": 97,
+   "y": 0.15,
+   "z": 108.5,
+   "yaw": 2.356194490192345,
+   "pitch": 0,
+   "tris": 906658,
+   "room": "kitchen",
+   "calls": 164,
+   "unbatched": {
+    "calls": 252,
+    "triangles": 906658
+   },
+   "regions": [
+    "green.vestibule",
+    "green.hall",
+    "green.living",
+    "green.dining",
+    "green.kitchen",
+    "green.lobby",
+    "green.billiard",
+    "green.corridor",
+    "green.cons",
+    "green.frontGallery",
+    "green.walkway",
+    "green.landing",
+    "green.ucorr",
+    "green.rearNook",
+    "extGreen.climbers",
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mWing",
+    "mServ",
+    "mUp",
+    "glass+cons",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "chunk:extGreen.climbers",
+     "calls": 2,
+     "triangles": 236020,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "veg:trees/multi-draw",
+     "calls": 1,
+     "triangles": 115500,
+     "visiblePx": 221,
+     "visiblePct": 0.059,
+     "box": [
+      622,
+      196,
+      634,
+      214
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:mWing",
+     "calls": 12,
+     "triangles": 72024,
+     "visiblePx": 72512,
+     "visiblePct": 19.235,
+     "box": [
+      0,
+      78,
+      914,
+      411
+     ],
+     "objects": 12
+    },
+    {
+     "k": "chunk:manor",
+     "calls": 16,
+     "triangles": 67576,
+     "visiblePx": 138389,
+     "visiblePct": 36.71,
+     "box": [
+      0,
+      0,
+      914,
+      282
+     ],
+     "objects": 15
+    },
+    {
+     "k": "chunk:forest",
+     "calls": 7,
+     "triangles": 53604,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 7
+    },
+    {
+     "k": "chunk:grounds",
+     "calls": 10,
+     "triangles": 49220,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 9
+    },
+    {
+     "k": "chunk:main",
+     "calls": 47,
+     "triangles": 48489,
+     "visiblePx": 1690,
+     "visiblePct": 0.448,
+     "box": [
+      361,
+      189,
+      897,
+      255
+     ],
+     "objects": 41
+    },
+    {
+     "k": "chunk:mServ",
+     "calls": 9,
+     "triangles": 34680,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 9
+    },
+    {
+     "k": "region:outdoor/Mesh",
+     "calls": 5,
+     "triangles": 34020,
+     "visiblePx": 16,
+     "visiblePct": 0.004,
+     "box": [
+      495,
+      211,
+      648,
+      214
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:mIn",
+     "calls": 9,
+     "triangles": 27536,
+     "visiblePx": 155695,
+     "visiblePct": 41.301,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:mHall",
+     "calls": 9,
+     "triangles": 25012
+    },
+    {
+     "k": "chunk:mUp",
+     "calls": 10,
+     "triangles": 23168
+    },
+    {
+     "k": "chunk:cons",
+     "calls": 16,
+     "triangles": 20676
+    },
+    {
+     "k": "chunk:garden",
+     "calls": 15,
+     "triangles": 17152
+    },
+    {
+     "k": "chunk:paths",
+     "calls": 5,
+     "triangles": 13496
+    },
+    {
+     "k": "chunk:green.ucorr",
+     "calls": 3,
+     "triangles": 9448
+    },
+    {
+     "k": "chunk:fence",
+     "calls": 1,
+     "triangles": 8100
+    },
+    {
+     "k": "chunk:green.dining",
+     "calls": 4,
+     "triangles": 7808
+    },
+    {
+     "k": "chunk:green.vestibule",
+     "calls": 3,
+     "triangles": 6520
+    },
+    {
+     "k": "region:outdoor/grass|gr7_5",
+     "calls": 1,
+     "triangles": 5184
+    },
+    {
+     "k": "chunk:green.kitchen",
+     "calls": 3,
+     "triangles": 3256
+    },
+    {
+     "k": "region:outdoor/capSpots|f2_1",
+     "calls": 1,
+     "triangles": 3080
+    },
+    {
+     "k": "chunk:green.cons",
+     "calls": 4,
+     "triangles": 3064
+    },
+    {
+     "k": "region:outdoor/grass|gr6_3",
+     "calls": 1,
+     "triangles": 2592
+    },
+    {
+     "k": "region:outdoor/grass|gr6_4",
+     "calls": 1,
+     "triangles": 2376
+    },
+    {
+     "k": "region:outdoor/grass|gr6_5",
+     "calls": 1,
+     "triangles": 1728
+    },
+    {
+     "k": "chunk:green.corridor",
+     "calls": 3,
+     "triangles": 1672
+    },
+    {
+     "k": "chunk:green.frontGallery",
+     "calls": 3,
+     "triangles": 1672
+    },
+    {
+     "k": "chunk:hills",
+     "calls": 1,
+     "triangles": 1600
+    },
+    {
+     "k": "region:outdoor/grass|gr5_3",
+     "calls": 1,
+     "triangles": 1512
+    },
+    {
+     "k": "region:outdoor/cap|f2_1",
+     "calls": 1,
+     "triangles": 1386
+    },
+    {
+     "k": "obj:Mesh",
+     "calls": 12,
+     "triangles": 1365
+    },
+    {
+     "k": "region:mWing/Group",
+     "calls": 3,
+     "triangles": 1134
+    },
+    {
+     "k": "obj:kitchen-sippyjuiz-pouch",
+     "calls": 13,
+     "triangles": 1080
+    },
+    {
+     "k": "veg:/multi-draw",
+     "calls": 2,
+     "triangles": 1046
+    },
+    {
+     "k": "chunk:ground",
+     "calls": 4,
+     "triangles": 728
+    },
+    {
+     "k": "chunk:airco",
+     "calls": 1,
+     "triangles": 568
+    },
+    {
+     "k": "region:outdoor/cone|garden",
+     "calls": 1,
+     "triangles": 560
+    },
+    {
+     "k": "region:outdoor/stem|f2_1",
+     "calls": 1,
+     "triangles": 528
+    },
+    {
+     "k": "chunk:glass",
+     "calls": 4,
+     "triangles": 196
+    },
+    {
+     "k": "region:outdoor/trunk|garden",
+     "calls": 1,
+     "triangles": 140
+    },
+    {
+     "k": "chunk:wall",
+     "calls": 1,
+     "triangles": 96
+    },
+    {
+     "k": "obj:Group",
+     "calls": 4,
+     "triangles": 46
+    },
+    {
+     "k": "veg:plants/multi-draw",
+     "calls": 0,
+     "triangles": 0
+    },
+    {
+     "k": "veg:mushrooms/multi-draw",
+     "calls": 0,
+     "triangles": 0
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "gallery-closed-max",
+   "doors": "closed",
+   "x": 76,
+   "y": 3.35,
+   "z": 104,
+   "yaw": 3.141592653589793,
+   "pitch": 0,
+   "tris": 940564,
+   "room": "library",
+   "calls": 125,
+   "unbatched": {
+    "calls": 195,
+    "triangles": 940564
+   },
+   "regions": [
+    "green.hall",
+    "green.library",
+    "green.dining",
+    "green.kitchen",
+    "green.billiard",
+    "green.corridor",
+    "green.cons",
+    "green.libGallery",
+    "extGreen.climbers",
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mLib",
+    "mWing",
+    "mServ",
+    "mUp",
+    "glass+cons",
+    "cottage",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "chunk:extGreen.climbers",
+     "calls": 2,
+     "triangles": 236020,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mLib",
+     "calls": 7,
+     "triangles": 101740,
+     "visiblePx": 89375,
+     "visiblePct": 23.708,
+     "box": [
+      0,
+      94,
+      741,
+      411
+     ],
+     "objects": 7
+    },
+    {
+     "k": "veg:trees/multi-draw",
+     "calls": 1,
+     "triangles": 97022,
+     "visiblePx": 5851,
+     "visiblePct": 1.552,
+     "box": [
+      818,
+      113,
+      900,
+      222
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:mWing",
+     "calls": 7,
+     "triangles": 68296,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 7
+    },
+    {
+     "k": "chunk:manor",
+     "calls": 16,
+     "triangles": 67576,
+     "visiblePx": 146497,
+     "visiblePct": 38.861,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 15
+    },
+    {
+     "k": "chunk:mLiv",
+     "calls": 14,
+     "triangles": 53648,
+     "visiblePx": 66,
+     "visiblePct": 0.018,
+     "box": [
+      342,
+      168,
+      448,
+      184
+     ],
+     "objects": 14
+    },
+    {
+     "k": "chunk:forest",
+     "calls": 8,
+     "triangles": 53456,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 8
+    },
+    {
+     "k": "chunk:main",
+     "calls": 33,
+     "triangles": 50000,
+     "visiblePx": 4637,
+     "visiblePct": 1.23,
+     "box": [
+      249,
+      184,
+      689,
+      279
+     ],
+     "objects": 33
+    },
+    {
+     "k": "chunk:grounds",
+     "calls": 5,
+     "triangles": 43336,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 5
+    },
+    {
+     "k": "region:outdoor/Mesh",
+     "calls": 4,
+     "triangles": 33996,
+     "visiblePx": 4223,
+     "visiblePct": 1.12,
+     "box": [
+      284,
+      211,
+      900,
+      286
+     ],
+     "objects": 4
+    },
+    {
+     "k": "chunk:mIn",
+     "calls": 8,
+     "triangles": 27524
+    },
+    {
+     "k": "chunk:mHall",
+     "calls": 12,
+     "triangles": 25328
+    },
+    {
+     "k": "chunk:mUp",
+     "calls": 7,
+     "triangles": 22748
+    },
+    {
+     "k": "chunk:fence",
+     "calls": 1,
+     "triangles": 8100
+    },
+    {
+     "k": "chunk:green.dining",
+     "calls": 4,
+     "triangles": 7808
+    },
+    {
+     "k": "region:outdoor/grass|gr2_4",
+     "calls": 1,
+     "triangles": 6696
+    },
+    {
+     "k": "obj:Group",
+     "calls": 33,
+     "triangles": 4790
+    },
+    {
+     "k": "chunk:green.hall",
+     "calls": 4,
+     "triangles": 4552
+    },
+    {
+     "k": "region:outdoor/grass|gr3_4",
+     "calls": 1,
+     "triangles": 3672
+    },
+    {
+     "k": "veg:plants/multi-draw",
+     "calls": 1,
+     "triangles": 3448
+    },
+    {
+     "k": "chunk:paths",
+     "calls": 1,
+     "triangles": 3108
+    },
+    {
+     "k": "region:mLiv/Group",
+     "calls": 4,
+     "triangles": 2728
+    },
+    {
+     "k": "region:outdoor/grass|gr2_3",
+     "calls": 1,
+     "triangles": 2592
+    },
+    {
+     "k": "region:mHall/Group",
+     "calls": 3,
+     "triangles": 2268
+    },
+    {
+     "k": "region:outdoor/capSpots|f1_1",
+     "calls": 1,
+     "triangles": 1960
+    },
+    {
+     "k": "region:outdoor/grass|gr3_3",
+     "calls": 1,
+     "triangles": 1728
+    },
+    {
+     "k": "chunk:hills",
+     "calls": 1,
+     "triangles": 1600
+    },
+    {
+     "k": "region:mWing/Group",
+     "calls": 3,
+     "triangles": 1134
+    },
+    {
+     "k": "veg:/multi-draw",
+     "calls": 2,
+     "triangles": 1092
+    },
+    {
+     "k": "region:outdoor/cap|f1_1",
+     "calls": 1,
+     "triangles": 882
+    },
+    {
+     "k": "obj:Mesh",
+     "calls": 3,
+     "triangles": 564
+    },
+    {
+     "k": "region:outdoor/cone|garden",
+     "calls": 1,
+     "triangles": 560
+    },
+    {
+     "k": "region:outdoor/stem|f1_1",
+     "calls": 1,
+     "triangles": 336
+    },
+    {
+     "k": "region:outdoor/trunk|garden",
+     "calls": 1,
+     "triangles": 140
+    },
+    {
+     "k": "chunk:wall",
+     "calls": 1,
+     "triangles": 96
+    },
+    {
+     "k": "region:mLiv/Mesh",
+     "calls": 1,
+     "triangles": 20
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "ground-front-closed-max",
+   "doors": "closed",
+   "x": 101,
+   "y": 0.15,
+   "z": 86.4,
+   "yaw": 0,
+   "pitch": -0.04,
+   "tris": 869374,
+   "room": "dining",
+   "calls": 172,
+   "unbatched": {
+    "calls": 273,
+    "triangles": 869374
+   },
+   "regions": [
+    "green.vestibule",
+    "green.hall",
+    "green.living",
+    "green.dining",
+    "green.kitchen",
+    "green.lobby",
+    "green.billiard",
+    "green.corridor",
+    "green.cons",
+    "green.frontGallery",
+    "green.walkway",
+    "green.landing",
+    "green.ucorr",
+    "green.rearNook",
+    "extGreen.climbers",
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mWing",
+    "mServ",
+    "mUp",
+    "glass+cons",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "chunk:extGreen.climbers",
+     "calls": 2,
+     "triangles": 236020,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "veg:trees/multi-draw",
+     "calls": 1,
+     "triangles": 93290,
+     "visiblePx": 178,
+     "visiblePct": 0.047,
+     "box": [
+      405,
+      183,
+      511,
+      203
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:mWing",
+     "calls": 13,
+     "triangles": 72064,
+     "visiblePx": 96720,
+     "visiblePct": 25.657,
+     "box": [
+      0,
+      105,
+      914,
+      411
+     ],
+     "objects": 13
+    },
+    {
+     "k": "chunk:grounds",
+     "calls": 23,
+     "triangles": 60408,
+     "visiblePx": 25,
+     "visiblePct": 0.007,
+     "box": [
+      405,
+      185,
+      456,
+      204
+     ],
+     "objects": 21
+    },
+    {
+     "k": "chunk:forest",
+     "calls": 4,
+     "triangles": 51788,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 4
+    },
+    {
+     "k": "chunk:manor",
+     "calls": 12,
+     "triangles": 49942,
+     "visiblePx": 94827,
+     "visiblePct": 25.154,
+     "box": [
+      0,
+      0,
+      914,
+      252
+     ],
+     "objects": 11
+    },
+    {
+     "k": "chunk:mServ",
+     "calls": 9,
+     "triangles": 34680,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 9
+    },
+    {
+     "k": "region:outdoor/Mesh",
+     "calls": 5,
+     "triangles": 34476,
+     "visiblePx": 453,
+     "visiblePct": 0.12,
+     "box": [
+      405,
+      183,
+      510,
+      204
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:mUp",
+     "calls": 14,
+     "triangles": 32000,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 14
+    },
+    {
+     "k": "chunk:mIn",
+     "calls": 9,
+     "triangles": 27536,
+     "visiblePx": 177166,
+     "visiblePct": 46.996,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 9
+    },
+    {
+     "k": "chunk:mHall",
+     "calls": 8,
+     "triangles": 24580
+    },
+    {
+     "k": "chunk:cons",
+     "calls": 16,
+     "triangles": 20676
+    },
+    {
+     "k": "chunk:garden",
+     "calls": 13,
+     "triangles": 17024
+    },
+    {
+     "k": "chunk:paths",
+     "calls": 3,
+     "triangles": 9728
+    },
+    {
+     "k": "chunk:green.ucorr",
+     "calls": 3,
+     "triangles": 9448
+    },
+    {
+     "k": "chunk:green.billiard",
+     "calls": 3,
+     "triangles": 9448
+    },
+    {
+     "k": "chunk:fence",
+     "calls": 1,
+     "triangles": 8100
+    },
+    {
+     "k": "veg:mushrooms/multi-draw",
+     "calls": 1,
+     "triangles": 7800
+    },
+    {
+     "k": "region:outdoor/grass|gr5_6",
+     "calls": 1,
+     "triangles": 6264
+    },
+    {
+     "k": "region:outdoor/grass|gr3_6",
+     "calls": 1,
+     "triangles": 6048
+    },
+    {
+     "k": "chunk:mBil",
+     "calls": 5,
+     "triangles": 5744
+    },
+    {
+     "k": "region:outdoor/grass|gr6_6",
+     "calls": 1,
+     "triangles": 5616
+    },
+    {
+     "k": "region:outdoor/grass|gr4_6",
+     "calls": 1,
+     "triangles": 5400
+    },
+    {
+     "k": "region:outdoor/grass|gr7_5",
+     "calls": 1,
+     "triangles": 5184
+    },
+    {
+     "k": "chunk:main",
+     "calls": 52,
+     "triangles": 4028
+    },
+    {
+     "k": "veg:plants/multi-draw",
+     "calls": 1,
+     "triangles": 3672
+    },
+    {
+     "k": "region:outdoor/grass|gr3_5",
+     "calls": 1,
+     "triangles": 3456
+    },
+    {
+     "k": "chunk:green.landing",
+     "calls": 3,
+     "triangles": 3352
+    },
+    {
+     "k": "chunk:green.rearNook",
+     "calls": 3,
+     "triangles": 3256
+    },
+    {
+     "k": "chunk:green.kitchen",
+     "calls": 3,
+     "triangles": 3256
+    },
+    {
+     "k": "chunk:green.cons",
+     "calls": 4,
+     "triangles": 3064
+    },
+    {
+     "k": "region:outdoor/grass|gr6_5",
+     "calls": 1,
+     "triangles": 1728
+    },
+    {
+     "k": "chunk:green.corridor",
+     "calls": 3,
+     "triangles": 1672
+    },
+    {
+     "k": "chunk:hills",
+     "calls": 1,
+     "triangles": 1600
+    },
+    {
+     "k": "chunk:green.lobby",
+     "calls": 3,
+     "triangles": 1560
+    },
+    {
+     "k": "region:outdoor/grass|gr5_5",
+     "calls": 1,
+     "triangles": 1296
+    },
+    {
+     "k": "region:mWing/Group",
+     "calls": 3,
+     "triangles": 1134
+    },
+    {
+     "k": "obj:kitchen-sippyjuiz-pouch",
+     "calls": 13,
+     "triangles": 1080
+    },
+    {
+     "k": "obj:Mesh",
+     "calls": 7,
+     "triangles": 568
+    },
+    {
+     "k": "region:outdoor/cone|garden",
+     "calls": 1,
+     "triangles": 560
+    },
+    {
+     "k": "region:outdoor/grass|gr4_5",
+     "calls": 1,
+     "triangles": 216
+    },
+    {
+     "k": "chunk:glass",
+     "calls": 4,
+     "triangles": 196
+    },
+    {
+     "k": "region:outdoor/trunk|garden",
+     "calls": 1,
+     "triangles": 140
+    },
+    {
+     "k": "obj:Group",
+     "calls": 15,
+     "triangles": 132
+    },
+    {
+     "k": "chunk:wall",
+     "calls": 1,
+     "triangles": 96
+    },
+    {
+     "k": "veg:/multi-draw",
+     "calls": 1,
+     "triangles": 48
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "upper-rooms-closed-max",
+   "doors": "closed",
+   "x": 75,
+   "y": 3.35,
+   "z": 104,
+   "yaw": 3.141592653589793,
+   "pitch": 0,
+   "tris": 965146,
+   "room": "library",
+   "calls": 127,
+   "unbatched": {
+    "calls": 198,
+    "triangles": 965146
+   },
+   "regions": [
+    "green.hall",
+    "green.library",
+    "green.dining",
+    "green.kitchen",
+    "green.billiard",
+    "green.corridor",
+    "green.cons",
+    "green.libGallery",
+    "extGreen.climbers",
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mLib",
+    "mWing",
+    "mServ",
+    "mUp",
+    "glass+cons",
+    "cottage",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "chunk:extGreen.climbers",
+     "calls": 2,
+     "triangles": 236020,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "veg:trees/multi-draw",
+     "calls": 1,
+     "triangles": 114624,
+     "visiblePx": 2284,
+     "visiblePct": 0.606,
+     "box": [
+      733,
+      130,
+      776,
+      221
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:mLib",
+     "calls": 7,
+     "triangles": 101740,
+     "visiblePx": 111506,
+     "visiblePct": 29.579,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 7
+    },
+    {
+     "k": "chunk:mWing",
+     "calls": 7,
+     "triangles": 68296,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 7
+    },
+    {
+     "k": "chunk:manor",
+     "calls": 16,
+     "triangles": 67576,
+     "visiblePx": 120188,
+     "visiblePct": 31.882,
+     "box": [
+      0,
+      0,
+      802,
+      411
+     ],
+     "objects": 15
+    },
+    {
+     "k": "chunk:forest",
+     "calls": 10,
+     "triangles": 54748,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 10
+    },
+    {
+     "k": "chunk:mLiv",
+     "calls": 14,
+     "triangles": 53648,
+     "visiblePx": 55,
+     "visiblePct": 0.015,
+     "box": [
+      312,
+      173,
+      488,
+      184
+     ],
+     "objects": 14
+    },
+    {
+     "k": "chunk:main",
+     "calls": 33,
+     "triangles": 50000,
+     "visiblePx": 4409,
+     "visiblePct": 1.17,
+     "box": [
+      218,
+      184,
+      606,
+      279
+     ],
+     "objects": 33
+    },
+    {
+     "k": "chunk:grounds",
+     "calls": 5,
+     "triangles": 43336,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 5
+    },
+    {
+     "k": "region:outdoor/Mesh",
+     "calls": 4,
+     "triangles": 33996,
+     "visiblePx": 2092,
+     "visiblePct": 0.555,
+     "box": [
+      485,
+      210,
+      776,
+      282
+     ],
+     "objects": 4
+    },
+    {
+     "k": "chunk:mIn",
+     "calls": 8,
+     "triangles": 27524
+    },
+    {
+     "k": "chunk:mHall",
+     "calls": 12,
+     "triangles": 25328
+    },
+    {
+     "k": "chunk:mUp",
+     "calls": 7,
+     "triangles": 22748
+    },
+    {
+     "k": "chunk:fence",
+     "calls": 1,
+     "triangles": 8100
+    },
+    {
+     "k": "chunk:green.dining",
+     "calls": 4,
+     "triangles": 7808
+    },
+    {
+     "k": "region:outdoor/grass|gr2_4",
+     "calls": 1,
+     "triangles": 6696
+    },
+    {
+     "k": "veg:plants/multi-draw",
+     "calls": 1,
+     "triangles": 5680
+    },
+    {
+     "k": "obj:Group",
+     "calls": 33,
+     "triangles": 4790
+    },
+    {
+     "k": "chunk:green.hall",
+     "calls": 4,
+     "triangles": 4552
+    },
+    {
+     "k": "region:outdoor/grass|gr3_4",
+     "calls": 1,
+     "triangles": 3672
+    },
+    {
+     "k": "region:outdoor/grass|gr3_5",
+     "calls": 1,
+     "triangles": 3456
+    },
+    {
+     "k": "chunk:paths",
+     "calls": 1,
+     "triangles": 3108
+    },
+    {
+     "k": "region:mLiv/Group",
+     "calls": 4,
+     "triangles": 2728
+    },
+    {
+     "k": "region:outdoor/grass|gr2_3",
+     "calls": 1,
+     "triangles": 2592
+    },
+    {
+     "k": "region:mHall/Group",
+     "calls": 3,
+     "triangles": 2268
+    },
+    {
+     "k": "region:outdoor/capSpots|f1_1",
+     "calls": 1,
+     "triangles": 1960
+    },
+    {
+     "k": "region:outdoor/grass|gr3_3",
+     "calls": 1,
+     "triangles": 1728
+    },
+    {
+     "k": "chunk:hills",
+     "calls": 1,
+     "triangles": 1600
+    },
+    {
+     "k": "region:mWing/Group",
+     "calls": 3,
+     "triangles": 1134
+    },
+    {
+     "k": "veg:/multi-draw",
+     "calls": 2,
+     "triangles": 1092
+    },
+    {
+     "k": "region:outdoor/cap|f1_1",
+     "calls": 1,
+     "triangles": 882
+    },
+    {
+     "k": "obj:Mesh",
+     "calls": 3,
+     "triangles": 564
+    },
+    {
+     "k": "region:outdoor/cone|garden",
+     "calls": 1,
+     "triangles": 560
+    },
+    {
+     "k": "region:outdoor/stem|f1_1",
+     "calls": 1,
+     "triangles": 336
+    },
+    {
+     "k": "region:outdoor/trunk|garden",
+     "calls": 1,
+     "triangles": 140
+    },
+    {
+     "k": "chunk:wall",
+     "calls": 1,
+     "triangles": 96
+    },
+    {
+     "k": "region:mLiv/Mesh",
+     "calls": 1,
+     "triangles": 20
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "stair-closed-max",
+   "doors": "closed",
+   "x": 93.2,
+   "y": 0.15,
+   "z": 85.47999999999999,
+   "yaw": 1.4219063791854007,
+   "pitch": -0.04,
+   "tris": 826750,
+   "room": "hall",
+   "calls": 111,
+   "unbatched": {
+    "calls": 165,
+    "triangles": 826750
+   },
+   "regions": [
+    "green.vestibule",
+    "green.hall",
+    "green.living",
+    "green.dining",
+    "green.kitchen",
+    "green.lobby",
+    "green.billiard",
+    "green.cons",
+    "green.frontGallery",
+    "green.walkway",
+    "green.landing",
+    "green.ucorr",
+    "green.rearNook",
+    "green.rearNookEast",
+    "extGreen.climbers",
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mWing",
+    "mUp",
+    "glass+cons",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "chunk:extGreen.climbers",
+     "calls": 2,
+     "triangles": 236020,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "veg:trees/multi-draw",
+     "calls": 1,
+     "triangles": 162570,
+     "visiblePx": 737,
+     "visiblePct": 0.196,
+     "box": [
+      465,
+      159,
+      727,
+      208
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:mWing",
+     "calls": 11,
+     "triangles": 71976,
+     "visiblePx": 17033,
+     "visiblePct": 4.518,
+     "box": [
+      398,
+      165,
+      727,
+      275
+     ],
+     "objects": 11
+    },
+    {
+     "k": "chunk:forest",
+     "calls": 6,
+     "triangles": 52324,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 6
+    },
+    {
+     "k": "chunk:manor",
+     "calls": 12,
+     "triangles": 49942,
+     "visiblePx": 42706,
+     "visiblePct": 11.328,
+     "box": [
+      397,
+      35,
+      731,
+      232
+     ],
+     "objects": 11
+    },
+    {
+     "k": "chunk:grounds",
+     "calls": 8,
+     "triangles": 45796,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 7
+    },
+    {
+     "k": "region:outdoor/Mesh",
+     "calls": 5,
+     "triangles": 34020,
+     "visiblePx": 705,
+     "visiblePct": 0.187,
+     "box": [
+      465,
+      185,
+      725,
+      222
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:mIn",
+     "calls": 8,
+     "triangles": 27524,
+     "visiblePx": 293116,
+     "visiblePct": 77.754,
+     "box": [
+      0,
+      0,
+      914,
+      411
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mHall",
+     "calls": 8,
+     "triangles": 24580,
+     "visiblePx": 2370,
+     "visiblePct": 0.629,
+     "box": [
+      23,
+      89,
+      103,
+      145
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:mUp",
+     "calls": 8,
+     "triangles": 19220,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 8
+    },
+    {
+     "k": "chunk:cons",
+     "calls": 10,
+     "triangles": 12080
+    },
+    {
+     "k": "chunk:garden",
+     "calls": 9,
+     "triangles": 10400
+    },
+    {
+     "k": "chunk:paths",
+     "calls": 3,
+     "triangles": 9728
+    },
+    {
+     "k": "chunk:green.ucorr",
+     "calls": 3,
+     "triangles": 9448
+    },
+    {
+     "k": "veg:plants/multi-draw",
+     "calls": 1,
+     "triangles": 9328
+    },
+    {
+     "k": "chunk:fence",
+     "calls": 1,
+     "triangles": 8100
+    },
+    {
+     "k": "chunk:green.dining",
+     "calls": 4,
+     "triangles": 7808
+    },
+    {
+     "k": "region:outdoor/grass|gr5_6",
+     "calls": 1,
+     "triangles": 6264
+    },
+    {
+     "k": "chunk:main",
+     "calls": 24,
+     "triangles": 3773
+    },
+    {
+     "k": "chunk:green.kitchen",
+     "calls": 3,
+     "triangles": 3256
+    },
+    {
+     "k": "region:outdoor/capSpots|f2_1",
+     "calls": 1,
+     "triangles": 3080
+    },
+    {
+     "k": "chunk:green.cons",
+     "calls": 4,
+     "triangles": 3064
+    },
+    {
+     "k": "region:outdoor/grass|gr6_3",
+     "calls": 1,
+     "triangles": 2592
+    },
+    {
+     "k": "region:outdoor/grass|gr6_4",
+     "calls": 1,
+     "triangles": 2376
+    },
+    {
+     "k": "chunk:hills",
+     "calls": 1,
+     "triangles": 1600
+    },
+    {
+     "k": "region:outdoor/grass|gr5_3",
+     "calls": 1,
+     "triangles": 1512
+    },
+    {
+     "k": "region:outdoor/cap|f2_1",
+     "calls": 1,
+     "triangles": 1386
+    },
+    {
+     "k": "obj:Mesh",
+     "calls": 11,
+     "triangles": 1363
+    },
+    {
+     "k": "region:outdoor/grass|gr5_5",
+     "calls": 1,
+     "triangles": 1296
+    },
+    {
+     "k": "region:mWing/Group",
+     "calls": 3,
+     "triangles": 1134
+    },
+    {
+     "k": "veg:/multi-draw",
+     "calls": 2,
+     "triangles": 1062
+    },
+    {
+     "k": "chunk:airco",
+     "calls": 1,
+     "triangles": 568
+    },
+    {
+     "k": "region:outdoor/cone|garden",
+     "calls": 1,
+     "triangles": 560
+    },
+    {
+     "k": "region:outdoor/stem|f2_1",
+     "calls": 1,
+     "triangles": 528
+    },
+    {
+     "k": "chunk:glass",
+     "calls": 4,
+     "triangles": 196
+    },
+    {
+     "k": "region:outdoor/trunk|garden",
+     "calls": 1,
+     "triangles": 140
+    },
+    {
+     "k": "chunk:wall",
+     "calls": 1,
+     "triangles": 96
+    },
+    {
+     "k": "obj:Group",
+     "calls": 1,
+     "triangles": 40
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "hall-partial-max",
+   "doors": "partial",
+   "x": 90,
+   "y": 0.15,
+   "z": 81.8,
+   "yaw": 5.497787143782138,
+   "pitch": 0,
+   "tris": 966638,
+   "room": "vestibule",
+   "calls": 163,
+   "unbatched": {
+    "calls": 282,
+    "triangles": 966638
+   },
+   "regions": [
+    "green.vestibule",
+    "green.hall",
+    "green.living",
+    "green.library",
+    "green.dining",
+    "green.kitchen",
+    "green.lobby",
+    "green.reis",
+    "green.sterren",
+    "green.bath",
+    "green.frontGallery",
+    "green.walkway",
+    "green.landing",
+    "green.libGallery",
+    "green.ucorr",
+    "green.rearNook",
+    "extGreen.climbers",
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mLib",
+    "mWing",
+    "mUp",
+    "glass+cons",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "chunk:extGreen.climbers",
+     "calls": 2,
+     "triangles": 236020,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 2
+    },
+    {
+     "k": "chunk:mLib",
+     "calls": 11,
+     "triangles": 112616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 11
+    },
+    {
+     "k": "chunk:manor",
+     "calls": 15,
+     "triangles": 67574,
+     "visiblePx": 53062,
+     "visiblePct": 14.076,
+     "box": [
+      0,
+      0,
+      914,
+      227
+     ],
+     "objects": 14
+    },
+    {
+     "k": "chunk:mWing",
+     "calls": 8,
+     "triangles": 64724,
+     "visiblePx": 1,
+     "visiblePct": 0,
+     "box": [
+      701,
+      219,
+      701,
+      219
+     ],
+     "objects": 8
+    },
+    {
+     "k": "chunk:grounds",
+     "calls": 14,
+     "triangles": 61932,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 14
+    },
+    {
+     "k": "chunk:mLiv",
+     "calls": 14,
+     "triangles": 53648,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 14
+    },
+    {
+     "k": "chunk:forest",
+     "calls": 1,
+     "triangles": 50552,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "veg:trees/multi-draw",
+     "calls": 1,
+     "triangles": 37396,
+     "visiblePx": 140,
+     "visiblePct": 0.037,
+     "box": [
+      704,
+      142,
+      834,
+      161
+     ],
+     "objects": 1
+    },
+    {
+     "k": "region:outdoor/Mesh",
+     "calls": 5,
+     "triangles": 34476,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 5
+    },
+    {
+     "k": "chunk:mUp",
+     "calls": 13,
+     "triangles": 31912,
+     "visiblePx": 1004,
+     "visiblePct": 0.266,
+     "box": [
+      655,
+      129,
+      787,
+      165
+     ],
+     "objects": 13
+    },
+    {
+     "k": "chunk:mIn",
+     "calls": 8,
+     "triangles": 27524
+    },
+    {
+     "k": "chunk:mHall",
+     "calls": 11,
+     "triangles": 24896
+    },
+    {
+     "k": "chunk:garden",
+     "calls": 11,
+     "triangles": 15872
+    },
+    {
+     "k": "chunk:paths",
+     "calls": 3,
+     "triangles": 9728
+    },
+    {
+     "k": "chunk:green.walkway",
+     "calls": 3,
+     "triangles": 9448
+    },
+    {
+     "k": "chunk:fence",
+     "calls": 1,
+     "triangles": 8100
+    },
+    {
+     "k": "chunk:green.bath",
+     "calls": 5,
+     "triangles": 7552
+    },
+    {
+     "k": "chunk:green.reis",
+     "calls": 5,
+     "triangles": 7496
+    },
+    {
+     "k": "chunk:main",
+     "calls": 51,
+     "triangles": 7372
+    },
+    {
+     "k": "obj:Group",
+     "calls": 43,
+     "triangles": 7012
+    },
+    {
+     "k": "region:outdoor/grass|gr2_5",
+     "calls": 1,
+     "triangles": 6912
+    },
+    {
+     "k": "region:outdoor/grass|gr2_4",
+     "calls": 1,
+     "triangles": 6696
+    },
+    {
+     "k": "chunk:green.library",
+     "calls": 3,
+     "triangles": 6520
+    },
+    {
+     "k": "region:outdoor/grass|gr5_6",
+     "calls": 1,
+     "triangles": 6264
+    },
+    {
+     "k": "region:outdoor/grass|gr3_6",
+     "calls": 1,
+     "triangles": 6048
+    },
+    {
+     "k": "chunk:mBil",
+     "calls": 5,
+     "triangles": 5744
+    },
+    {
+     "k": "region:outdoor/grass|gr4_6",
+     "calls": 1,
+     "triangles": 5400
+    },
+    {
+     "k": "veg:plants/multi-draw",
+     "calls": 1,
+     "triangles": 4888
+    },
+    {
+     "k": "chunk:green.hall",
+     "calls": 4,
+     "triangles": 4552
+    },
+    {
+     "k": "chunk:green.living",
+     "calls": 4,
+     "triangles": 3952
+    },
+    {
+     "k": "region:outdoor/grass|gr3_4",
+     "calls": 1,
+     "triangles": 3672
+    },
+    {
+     "k": "region:outdoor/grass|gr3_5",
+     "calls": 1,
+     "triangles": 3456
+    },
+    {
+     "k": "chunk:green.rearNook",
+     "calls": 3,
+     "triangles": 3256
+    },
+    {
+     "k": "region:mLiv/Group",
+     "calls": 4,
+     "triangles": 2728
+    },
+    {
+     "k": "chunk:green.landing",
+     "calls": 1,
+     "triangles": 2688
+    },
+    {
+     "k": "region:outdoor/grass|gr2_3",
+     "calls": 1,
+     "triangles": 2592
+    },
+    {
+     "k": "chunk:green.sterren",
+     "calls": 3,
+     "triangles": 2344
+    },
+    {
+     "k": "region:mHall/Group",
+     "calls": 3,
+     "triangles": 2268
+    },
+    {
+     "k": "region:mLib/Group",
+     "calls": 3,
+     "triangles": 2268
+    },
+    {
+     "k": "region:outdoor/grass|gr3_3",
+     "calls": 1,
+     "triangles": 1728
+    },
+    {
+     "k": "chunk:hills",
+     "calls": 1,
+     "triangles": 1600
+    },
+    {
+     "k": "chunk:green.lobby",
+     "calls": 3,
+     "triangles": 1560
+    },
+    {
+     "k": "chunk:green.libGallery",
+     "calls": 3,
+     "triangles": 1560
+    },
+    {
+     "k": "chunk:lamp",
+     "calls": 1,
+     "triangles": 808
+    },
+    {
+     "k": "obj:Mesh",
+     "calls": 3,
+     "triangles": 564
+    },
+    {
+     "k": "region:outdoor/cone|garden",
+     "calls": 1,
+     "triangles": 560
+    },
+    {
+     "k": "region:outdoor/trunk|garden",
+     "calls": 1,
+     "triangles": 140
+    },
+    {
+     "k": "region:mLiv/Mesh",
+     "calls": 1,
+     "triangles": 20
+    },
+    {
+     "k": "veg:/multi-draw",
+     "calls": 0,
+     "triangles": 0
+    }
+   ],
+   "reconciled": true
+  },
+  {
+   "name": "up-west-partial-max",
+   "doors": "partial",
+   "x": 90,
+   "y": 3.35,
+   "z": 82.2,
+   "yaw": 5.497787143782138,
+   "pitch": 0,
+   "tris": 1031176,
+   "room": "frontGallery",
+   "calls": 172,
+   "unbatched": {
+    "calls": 290,
+    "triangles": 1031176
+   },
+   "regions": [
+    "green.vestibule",
+    "green.hall",
+    "green.living",
+    "green.library",
+    "green.dining",
+    "green.kitchen",
+    "green.lobby",
+    "green.billiard",
+    "green.cons",
+    "green.reis",
+    "green.sterren",
+    "green.bath",
+    "green.frontGallery",
+    "green.walkway",
+    "green.landing",
+    "green.libGallery",
+    "green.ucorr",
+    "green.rearNook",
+    "extGreen.climbers",
+    "manor",
+    "mIn",
+    "mHall",
+    "mLiv",
+    "mBil",
+    "mLib",
+    "mWing",
+    "mUp",
+    "mUpR",
+    "mUpS",
+    "glass+cons",
+    "outdoor+hills+paths+ground+wall+fence+forest+garden+grounds"
+   ],
+   "by": [
+    {
+     "k": "chunk:extGreen.climbers",
+     "calls": 2,
+     "triangles": 236020,
+     "visiblePx": 2,
+     "visiblePct": 0.001,
+     "box": [
+      912,
+      215,
+      913,
+      230
+     ],
+     "objects": 2
+    },
+    {
+     "k": "chunk:mLib",
+     "calls": 11,
+     "triangles": 112616,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 11
+    },
+    {
+     "k": "veg:trees/multi-draw",
+     "calls": 1,
+     "triangles": 80666,
+     "visiblePx": 1675,
+     "visiblePct": 0.444,
+     "box": [
+      146,
+      194,
+      836,
+      229
+     ],
+     "objects": 1
+    },
+    {
+     "k": "chunk:mWing",
+     "calls": 8,
+     "triangles": 64724,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 8
+    },
+    {
+     "k": "chunk:grounds",
+     "calls": 16,
+     "triangles": 62052,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 15
+    },
+    {
+     "k": "chunk:mLiv",
+     "calls": 12,
+     "triangles": 53096,
+     "visiblePx": 94,
+     "visiblePct": 0.025,
+     "box": [
+      505,
+      306,
+      520,
+      317
+     ],
+     "objects": 12
+    },
+    {
+     "k": "chunk:forest",
+     "calls": 1,
+     "triangles": 50552,
+     "visiblePx": 0,
+     "visiblePct": 0,
+     "box": null,
+     "objects": 1
+    },
+    {
+     "k": "chunk:manor",
+     "calls": 12,
+     "triangles": 49942,
+     "visiblePx": 69804,
+     "visiblePct": 18.517,
+     "box": [
+      0,
+      115,
+      914,
+      411
+     ],
+     "objects": 11
+    },
+    {
+     "k": "region:outdoor/Mesh",
+     "calls": 5,
+     "triangles": 34476,
+     "visiblePx": 142,
+     "visiblePct": 0.038,
+     "box": [
+      146,
+      215,
+      836,
+      228
+     ],
+     "objects": 5
+    },
+    {
+     "k": "chunk:mUp",
+     "calls": 13,
+     "triangles": 31912,
+     "visiblePx": 2268,
+     "visiblePct": 0.602,
+     "box": [
+      650,
+      194,
+      848,
+      255
+     ],
+     "objects": 13
+    },
+    {
+     "k": "chunk:mIn",
+     "calls": 8,
+     "triangles": 27524
+    },
+    {
+     "k": "chunk:mHall",
+     "calls": 11,
+     "triangles": 24896
+    },
+    {
+     "k": "chunk:mUpR",
+     "calls": 7,
+     "triangles": 19596
+    },
+    {
+     "k": "chunk:garden",
+     "calls": 11,
+     "triangles": 15872
+    },
+    {
+     "k": "chunk:mUpS",
+     "calls": 6,
+     "triangles": 12944
+    },
+    {
+     "k": "chunk:paths",
+     "calls": 3,
+     "triangles": 9728
+    },
+    {
+     "k": "chunk:green.walkway",
+     "calls": 3,
+     "triangles": 9448
+    },
+    {
+     "k": "chunk:green.billiard",
+     "calls": 3,
+     "triangles": 9448
+    },
+    {
+     "k": "chunk:fence",
+     "calls": 1,
+     "triangles": 8100
+    },
+    {
+     "k": "chunk:green.bath",
+     "calls": 5,
+     "triangles": 7552
+    },
+    {
+     "k": "chunk:green.reis",
+     "calls": 5,
+     "triangles": 7496
+    },
+    {
+     "k": "obj:Group",
+     "calls": 44,
+     "triangles": 7040
+    },
+    {
+     "k": "chunk:main",
+     "calls": 48,
+     "triangles": 6928
+    },
+    {
+     "k": "region:outdoor/grass|gr2_5",
+     "calls": 1,
+     "triangles": 6912
+    },
+    {
+     "k": "region:outdoor/grass|gr2_4",
+     "calls": 1,
+     "triangles": 6696
+    },
+    {
+     "k": "chunk:green.library",
+     "calls": 3,
+     "triangles": 6520
+    },
+    {
+     "k": "region:outdoor/grass|gr5_6",
+     "calls": 1,
+     "triangles": 6264
+    },
+    {
+     "k": "region:outdoor/grass|gr3_6",
+     "calls": 1,
+     "triangles": 6048
+    },
+    {
+     "k": "chunk:mBil",
+     "calls": 5,
+     "triangles": 5744
+    },
+    {
+     "k": "region:outdoor/grass|gr4_6",
+     "calls": 1,
+     "triangles": 5400
+    },
+    {
+     "k": "chunk:green.living",
+     "calls": 4,
+     "triangles": 3952
+    },
+    {
+     "k": "veg:plants/multi-draw",
+     "calls": 1,
+     "triangles": 3672
+    },
+    {
+     "k": "region:outdoor/grass|gr3_4",
+     "calls": 1,
+     "triangles": 3672
+    },
+    {
+     "k": "chunk:green.hall",
+     "calls": 1,
+     "triangles": 3528
+    },
+    {
+     "k": "region:outdoor/grass|gr3_5",
+     "calls": 1,
+     "triangles": 3456
+    },
+    {
+     "k": "chunk:green.rearNook",
+     "calls": 3,
+     "triangles": 3256
+    },
+    {
+     "k": "region:mLiv/Group",
+     "calls": 4,
+     "triangles": 2728
+    },
+    {
+     "k": "chunk:green.landing",
+     "calls": 1,
+     "triangles": 2688
+    },
+    {
+     "k": "region:outdoor/grass|gr2_3",
+     "calls": 1,
+     "triangles": 2592
+    },
+    {
+     "k": "chunk:green.sterren",
+     "calls": 3,
+     "triangles": 2344
+    },
+    {
+     "k": "region:mHall/Group",
+     "calls": 3,
+     "triangles": 2268
+    },
+    {
+     "k": "region:mLib/Group",
+     "calls": 3,
+     "triangles": 2268
+    },
+    {
+     "k": "region:outdoor/grass|gr3_3",
+     "calls": 1,
+     "triangles": 1728
+    },
+    {
+     "k": "chunk:hills",
+     "calls": 1,
+     "triangles": 1600
+    },
+    {
+     "k": "chunk:green.lobby",
+     "calls": 3,
+     "triangles": 1560
+    },
+    {
+     "k": "chunk:green.libGallery",
+     "calls": 3,
+     "triangles": 1560
+    },
+    {
+     "k": "chunk:lamp",
+     "calls": 1,
+     "triangles": 808
+    },
+    {
+     "k": "obj:Mesh",
+     "calls": 3,
+     "triangles": 564
+    },
+    {
+     "k": "region:outdoor/cone|garden",
+     "calls": 1,
+     "triangles": 560
+    },
+    {
+     "k": "region:outdoor/trunk|garden",
+     "calls": 1,
+     "triangles": 140
+    },
+    {
+     "k": "region:mLiv/Mesh",
+     "calls": 1,
+     "triangles": 20
+    },
+    {
+     "k": "veg:/multi-draw",
+     "calls": 0,
+     "triangles": 0
+    }
+   ],
+   "reconciled": true
+  }
+ ],
+ "problems": []
+}

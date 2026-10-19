@@ -62,5 +62,6 @@ for (const f of frames) {
   const last = out[out.length - 1], kinds = {}; for (const p of last.px) kinds[p.kind] = (kinds[p.kind] || 0) + 1;
   console.log(`${f.tag ?? ''}${f.path} ${f.doors} ${f.mode} k=${f.k} n=${f.n} ${last.room} glass=${last.glass} ${JSON.stringify(kinds)}`);
 }
+if (process.env.DUMP) console.log(JSON.stringify(out.map((f) => ({ k: f.k, path: f.path, px: f.px }))));
 console.log(JSON.stringify(out.flatMap((f) => f.px.filter((p) => p.kind === 'VISIBLE').map((p) => ({ path: f.path, doors: f.doors, k: f.k, ...p })))));
 await browser.close();

@@ -1,0 +1,90 @@
+[
+ {
+  "name": "library-closed-max",
+  "doors": "closed",
+  "x": 74.2,
+  "y": 0.15,
+  "z": 106,
+  "yaw": 2.356194490192345,
+  "pitch": 0,
+  "tris": 955114,
+  "room": "library"
+ },
+ {
+  "name": "kitchen-closed-max",
+  "doors": "closed",
+  "x": 97,
+  "y": 0.15,
+  "z": 108.5,
+  "yaw": 2.356194490192345,
+  "pitch": 0,
+  "tris": 907030,
+  "room": "kitchen"
+ },
+ {
+  "name": "gallery-closed-max",
+  "doors": "closed",
+  "x": 76,
+  "y": 3.35,
+  "z": 104,
+  "yaw": 3.141592653589793,
+  "pitch": 0,
+  "tris": 940564,
+  "room": "library"
+ },
+ {
+  "name": "ground-front-closed-max",
+  "doors": "closed",
+  "x": 101,
+  "y": 0.15,
+  "z": 86.4,
+  "yaw": 0,
+  "pitch": -0.04,
+  "tris": 869374,
+  "room": "dining"
+ },
+ {
+  "name": "upper-rooms-closed-max",
+  "doors": "closed",
+  "x": 75,
+  "y": 3.35,
+  "z": 104,
+  "yaw": 3.141592653589793,
+  "pitch": 0,
+  "tris": 965146,
+  "room": "library"
+ },
+ {
+  "name": "stair-closed-max",
+  "doors": "closed",
+  "x": 93.2,
+  "y": 0.15,
+  "z": 85.47999999999999,
+  "yaw": 1.4219063791854007,
+  "pitch": -0.04,
+  "tris": 826750,
+  "room": "hall"
+ },
+ {
+  "name": "hall-partial-max",
+  "doors": "partial",
+  "x": 90,
+  "y": 0.15,
+  "z": 81.8,
+  "yaw": 5.497787143782138,
+  "pitch": 0,
+  "tris": 966638,
+  "room": "vestibule"
+ },
+ {
+  "name": "up-west-partial-max",
+  "doors": "partial",
+  "x": 90,
+  "y": 3.35,
+  "z": 82.2,
+  "yaw": 5.497787143782138,
+  "pitch": 0,
+  "tris": 1031516,
+  "room": "frontGallery"
+ }
+]
