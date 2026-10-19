@@ -242,7 +242,7 @@ export class World {
     return a.some((q) => this.apertureShows(eye, q, b, 1.0, 0.6));
   }
   /** The exterior apertures in view from inside (plan centre, outward normal, half width); see exteriorRegion. */
-  private exteriorApertures(eye: THREE.Vector3, cam: THREE.PerspectiveCamera | undefined, clearWindows: PortalDef[]) {
+  private exteriorApertures(eye: THREE.Vector3, cam: THREE.PerspectiveCamera | undefined, clearWindows: PortalDef[], anyDoor = false) {
     const out: Aperture[] = [];
     if (!this.rooms) return out;
     for (const p of clearWindows) {
@@ -252,7 +252,9 @@ export class World {
     }
     for (const d of this.exteriorDoors) {
       if (d.door && !d.seeThrough && !this.isOpen(d.door)) continue;
-      if (!this.outdoorInView(eye, cam, 26, false, d.door)) continue;
+      // PERF-R03-B (anyDoor): every open doorway in line of sight within 60 m, in any direction, as the tree cones
+      // (outdoorWindows) take them: a turn can bring one into view before the next cull
+      if (anyDoor ? !this.doorSeen(eye, d, 60) : !this.outdoorInView(eye, cam, 26, false, d.door)) continue;
       const p = this.rooms.portals.find((q) => q.door === d.door);
       // the house side of the opening (a glass room's door: the room it leads from)
       const side = p && [p.a, p.b].find((id) => id !== 'out' && !this.rooms!.portals.some((q) => q.kind === 'glass' && (q.a === id || q.b === id)));
@@ -395,7 +397,8 @@ export class World {
     const dist = tmpTo.length();
     if (dist < 0.01 || dist > (this.hereRoom === 'out' ? 25 : 40)) return false;
     const forward = cam.getWorldDirection(tmpFwd);
-    const half = Math.atan(Math.tan(THREE.MathUtils.degToRad(cam.fov / 2)) * cam.aspect) + THREE.MathUtils.degToRad(32);
+    // PERF-R03-B: the wedges (no line of sight) add a turn allowance: a 6.3 rad/s turn sweeps 43° between two culls
+    const half = Math.atan(Math.tan(THREE.MathUtils.degToRad(cam.fov / 2)) * cam.aspect) + THREE.MathUtils.degToRad(los ? 32 : 77);
     const angular = Math.acos(THREE.MathUtils.clamp(tmpTo.dot(forward) / dist, -1, 1));
     if (angular - Math.asin(Math.min(1, Math.hypot(p.width, p.height) / (2 * dist))) > half) return false;
     if (!los) return true; // PERF-R03-B: the window-constrained wedges (a sliver of a window can be visible between rays)
@@ -412,6 +415,12 @@ export class World {
       if (!this.col.segmentBlocked(eye.x, eye.y, -eye.z, endX, endY, endZ, this.visualPassThrough)
           && !this.floorBetween(eye.x, eye.y, -eye.z, endX, endY, endZ)) return true;
     }
+    return false;
+  }
+  /** An exterior doorway within maxDist with part of its opening in line of sight (any view direction). */
+  private doorSeen(eye: THREE.Vector3, d: { x: number; y: number; z: number }, maxDist: number) {
+    if (Math.hypot(d.x - eye.x, d.y - eye.y, -d.z - eye.z) > maxDist) return false;
+    for (const [ox, oz] of DOOR_SAMPLES) if (!this.col.segmentBlocked(eye.x, eye.y, -eye.z, d.x + ox, d.y, d.z + oz, this.visualPassThrough)) return true;
     return false;
   }
   private outdoorInView(eye: THREE.Vector3, cam?: THREE.PerspectiveCamera, maxDist = Infinity, all = false, onlyDoor?: string) {
@@ -493,9 +502,10 @@ export class World {
       // then culled per mesh (windowConstrained)
       const glassOnly = this.hereRoom !== 'out' && this.hereRoom !== 'cons' && this.visibleRooms.has('out') && clearWindows.length > 0 && !this.outdoorInView(eye, cam, 26);
       // the same windows for per-instance culling (tree batches: World.glassShows); a new set re-runs their culling
-      // the wedges use every clear window of a reachable room in the view cone, without the sampled line of sight that
-      // qualifies a window above (it can miss a sliver of glass seen between balusters or past a jamb)
-      const glass = glassOnly ? this.exteriorApertures(eye, cam, this.rooms.portals.filter((p) => p.kind === 'window' && p.seeThrough && this.clearWindowInView(eye, cam, p, reachable, false))) : null;
+      // the wedges use every clear window of a reachable room in the view cone (plus a turn allowance), without the
+      // sampled line of sight that qualifies a window above (it can miss a sliver of glass seen between balusters or
+      // past a jamb), and every open doorway in line of sight in any direction
+      const glass = glassOnly ? this.exteriorApertures(eye, cam, this.rooms.portals.filter((p) => p.kind === 'window' && p.seeThrough && this.clearWindowInView(eye, cam, p, reachable, false)), true) : null;
       const glassKey = glass ? glass.map((a) => `${a.x},${a.z},${a.y0}`).join('|') : '';
       this.glassApertures = glass;
       if (glassKey !== this.glassKey) { this.glassKey = glassKey; this.outdoorWindowsVersion++; }
