@@ -163,11 +163,11 @@ for (const k of ['family', 'palette', 'view'] as const) {
   el.addEventListener('change', () => nextUrl(k, el.value));
 }
 const metrics = document.getElementById('metrics')!;
-let last = performance.now(), interval = 0, elapsed = 0, frames = 0;
+let last = performance.now(), interval = 0, frames = 0;
 function animate(now: number) {
   interval += now - last;
   last = now;
-  frames++; elapsed++;
+  frames++;
   renderer.render(scene, camera);
   if (interval > 600) {
     const fps = Math.round(1000 * frames / interval);
